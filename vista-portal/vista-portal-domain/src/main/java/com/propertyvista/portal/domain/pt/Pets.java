@@ -30,4 +30,10 @@ public interface Pets extends IApplicationEntity {
 
     @Transient
     IPrimitive<Integer> petsMaximum();
+
+    /**
+     * This limit is expressed in Kg.
+     */
+    @Transient
+    IPrimitive<Integer> petWeightMaximum();
 }

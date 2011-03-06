@@ -18,9 +18,11 @@ import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
+import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public class DomainUtil {
 
@@ -73,5 +75,34 @@ public class DomainUtil {
         tc.percentage().setValue(percentage);
 
         return tc;
+    }
+
+    public static int getWeightKgToUnit(IPrimitive<Integer> weight, IPrimitive<WeightUnit> weightUnit) {
+        if (weight.isNull() || weightUnit.isNull()) {
+            return 0;
+        }
+        switch (weightUnit.getValue()) {
+        case lb:
+            return (int) (1.0 * weight.getValue() / 0.45359237d);
+        default:
+            return weight.getValue();
+        }
+    }
+
+    public static int getWeightKg(int value, WeightUnit unit) {
+        switch (unit) {
+        case lb:
+            return (int) (0.45359237d * value);
+        default:
+            return value;
+        }
+
+    }
+
+    public static Integer getWeightKg(IPrimitive<Integer> weight, IPrimitive<WeightUnit> weightUnit) {
+        if (weight.isNull() || weightUnit.isNull()) {
+            return 0;
+        }
+        return getWeightKg(weight.getValue(), weightUnit.getValue());
     }
 }

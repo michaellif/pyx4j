@@ -20,6 +20,8 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -31,6 +33,7 @@ import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
 import com.propertyvista.portal.domain.pt.Pets;
+import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
@@ -168,6 +171,40 @@ public class PetsViewForm extends CEntityForm<Pets> {
                         }
                     }
 
+                    @Override
+                    public IsWidget createContent() {
+                        IsWidget w = super.createContent();
+                        addValidations();
+                        return w;
+                    }
+
+                    private void addValidations() {
+                        EditableValueValidator<Integer> weightValidator = new EditableValueValidator<Integer>() {
+
+                            @Override
+                            public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
+                                return DomainUtil.getWeightKg(getValue().weight(), getValue().weightUnit()) <= PetsViewForm.this.getValue().petWeightMaximum()
+                                        .getValue();
+                            }
+
+                            @Override
+                            public String getValidationMessage(CEditableComponent<Integer, ?> component, Integer value) {
+                                return i18n.tr("Max allowed weight {0} {1} ", DomainUtil.getWeightKgToUnit(PetsViewForm.this.getValue().petWeightMaximum(),
+                                        getValue().weightUnit()), getValue().weightUnit().getStringView());
+                            }
+                        };
+
+                        get(proto().weight()).addValueValidator(weightValidator);
+                        get(proto().weightUnit()).addValueChangeHandler(new ValueChangeHandler<WeightUnit>() {
+
+                            @Override
+                            public void onValueChange(ValueChangeEvent<WeightUnit> event) {
+                                // Fire revalidation
+                                get(proto().weight()).onEditingStop();
+                            }
+                        });
+                    }
+
                 };
             }
 
@@ -181,5 +218,4 @@ public class PetsViewForm extends CEntityForm<Pets> {
         };
 
     }
-
 }
