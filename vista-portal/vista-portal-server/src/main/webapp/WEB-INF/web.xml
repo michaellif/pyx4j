@@ -147,6 +147,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>DBResetServlet</servlet-name>
+        <servlet-class>com.propertyvista.portal.server.preloader.DBResetServlet</servlet-class>
+    </servlet>
+   
+    <servlet-mapping>
+        <servlet-name>DBResetServlet</servlet-name>
+        <url-pattern>/o/db-reset</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>DeferredProcessTaskWorkerServlet</servlet-name>
         <servlet-class>com.pyx4j.essentials.server.deferred.DeferredProcessTaskWorkerServlet</servlet-class>
     </servlet>

@@ -249,7 +249,7 @@
             <id>deploy-www33</id>
             <properties>
                 <deployContext>vista33</deployContext>
-                 <vista-app-ping-url>http://www33.birchwoodsoftwaregroup.com</vista-app-ping-url>
+                <vista-app-ping-url>http://www33.birchwoodsoftwaregroup.com</vista-app-ping-url>
             </properties>
         </profile>
 
@@ -257,7 +257,7 @@
             <id>deploy-www44</id>
             <properties>
                 <deployContext>vista44</deployContext>
-                 <vista-app-ping-url>http://www44.birchwoodsoftwaregroup.com</vista-app-ping-url>
+                <vista-app-ping-url>http://www44.birchwoodsoftwaregroup.com</vista-app-ping-url>
             </properties>
         </profile>
 
@@ -311,13 +311,29 @@
                                         <pingURL>${vista-app-ping-url}/o/status</pingURL>
                                         <pingTimeout>180000</pingTimeout>
                                         <properties>
-                                            <context>${deployableName}</context>
+                                            <context>${deployContext}</context>
                                         </properties>
                                     </deployable>
                                 </deployables>
                             </deployer>
 
                         </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install.db-reset</id>
+                                <phase>install</phase>
+                                <goals><goal>run</goal></goals>
+                                <configuration>
+                                    <target>
+                                        <get src="${vista-app-ping-url}/o/db-reset" dest="${project.build.directory}/db-reset.txt"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
 
                 </plugins>
