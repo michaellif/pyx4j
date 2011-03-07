@@ -50,6 +50,8 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
         main.add(parent.inject(proto.city()), 15);
         main.add(parent.inject(proto.province()), 15);
         main.add(parent.inject(proto.postalCode()), 7);
+
+        parent.get(proto.postalCode()).addValueValidator(new ZipCodeValueValidator());
     }
 
 }

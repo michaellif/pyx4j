@@ -38,6 +38,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
+import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Vehicle;
 
@@ -53,7 +54,9 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 @Singleton
 public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
@@ -191,7 +194,6 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 enablePreviousAddress();
             }
         });
-
     }
 
     private void enablePreviousAddress() {
@@ -267,6 +269,9 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 main.add(inject(proto().address().province()), 10);
                 main.add(inject(proto().address().postalCode()), 7);
                 main.add(new HTML());
+
+                get(proto().address().postalCode()).addValueValidator(new ZipCodeValueValidator());
+
                 return main;
 
             }
