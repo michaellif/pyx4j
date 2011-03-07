@@ -5,18 +5,18 @@
 
 2. Unzip it to directory: eclipse-3.6.1   (Optionally)
 
-3. Create Shortcut, provide path to JDK (for example -vm "C:\My\Programs\Java\jdk1.6.0_20\bin\javaw.exe")
+3. Create Shortcut, provide path to JDK (for example -vm "C:\My\Programs\Java\jdk1.6.0_24\bin\javaw.exe")
    Or full Target on Windows 32:
         D:\prog\dev\eclipse\eclipse-3.6.1\eclipse.exe -vm D:/jdk1.6.0/bin/javaw.exe -vmargs -Xmx456M
 
    On Windows 64 When using 64-bit JDK set -Xmx1024M:
 
 4. Install Eclipse Plugins.
-    - Subclipse                  (From Eclipse Marketplace)
-    - Google plugins for Eclipse (From Eclipse Marketplace)
-    - Google Web Toolkin SDK     (From Eclipse Marketplace)
-    - Google App Engine SDK      (From Eclipse Marketplace)
-    - M2-Eclipse **
+    - Subclipse     (latest)               (From Eclipse Marketplace)
+    - Google plugins for Eclipse v2.2.0    (From Eclipse Marketplace)
+    - Google Web Toolkin SDK v2.2.0        (From Eclipse Marketplace)
+    - Google App Engine SDK                (From Eclipse Marketplace)
+    - M2-Eclipse ** (latest)
 
 ========= Install Subclipse =========
 
@@ -55,7 +55,7 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k -XX:ReservedCodeCacheSize=64m
 
 ========= Install Google App Engine SDK for Java =========
 
-1. Install "Google plugins for Eclipse 3.6 version 1.4.1"
+1. Install "Google plugins for Eclipse 3.6 version 2.2.0.v201102111811"
     site url: http://dl.google.com/eclipse/plugin/3.6
 
     You may install SDKs bundle for GAE and GWT from google site for faster download.
