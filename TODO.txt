@@ -42,3 +42,21 @@ public interface OrderCriteria extends Order, ICriteria<Order> {
     DateWithCriteria completedDate();
 
 }
+
+
+---- GWT Compile speed verifications ---
+   dev on i7 / CC are different
+GWT 2.1.1  (March 2011)
+------------------------------------------
+                |   mvn    |  mvn(CC) |  Eclipse Dev
+  Examples      |   58     |          |  38
+  Entree        |   60     |          |  38
+  MEF           |   77     |          |  37
+  VISTA Portal  |   67     |          |  37
+-----------------------------------------------------
+GWT 2.2.0
+-----------------------------------------------------
+  Examples      |   59     |          |  34
+  Entree        |   60     |          |  34
+  MEF           |   76     |          |  36
+  VISTA Portal  |   67     |          |  34

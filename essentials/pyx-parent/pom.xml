@@ -150,7 +150,7 @@
         <buildLabel>${project.version}</buildLabel>
 
         <gwtVersion>2.2.0</gwtVersion>
-        <gaeVersion>1.4.0</gaeVersion>
+        <gaeVersion>1.4.2</gaeVersion>
         <gae.version>${gaeVersion}</gae.version>
         <pyx4jGwtVersion>0.5.6-SNAPSHOT</pyx4jGwtVersion>
 
@@ -466,7 +466,7 @@
                 <plugin>
                     <groupId>net.kindleit</groupId>
                     <artifactId>maven-gae-plugin</artifactId>
-                    <version>0.7.3</version>
+                    <version>0.8.2</version>
                     <configuration>
                         <serverId>${gaeDeployServerId}</serverId>
                         <sdkDir>${appengine.sdk.root}</sdkDir>
