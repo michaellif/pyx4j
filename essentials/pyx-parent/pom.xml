@@ -149,7 +149,7 @@
     <properties>
         <buildLabel>${project.version}</buildLabel>
 
-        <gwtVersion>2.1.1</gwtVersion>
+        <gwtVersion>2.2.0</gwtVersion>
         <gaeVersion>1.4.0</gaeVersion>
         <gae.version>${gaeVersion}</gae.version>
         <pyx4jGwtVersion>0.5.6-SNAPSHOT</pyx4jGwtVersion>
@@ -292,7 +292,7 @@
             <dependency>
                 <groupId>com.google.gwt.google-apis</groupId>
                 <artifactId>gwt-maps</artifactId>
-                <version>1.1.0</version>
+                <version>1.1.0-gwt.2.2</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.google.gwt</groupId>
@@ -394,9 +394,9 @@
             </dependency>
 
             <dependency>
-                <groupId>com.googlecode.gwt.inject</groupId>
+                <groupId>com.google.gwt.inject</groupId>
                 <artifactId>gin</artifactId>
-                <version>1.0</version>
+                <version>1.5.0</version>
             </dependency>
 
             <dependency>
