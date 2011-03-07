@@ -154,10 +154,6 @@ public class Center3ActivityMapper implements ActivityMapper {
             return summaryActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Completion) {
             return completionActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.TermsAndConditions) {
-            return staticContentActivity.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.PrivacyPolicy) {
-            return staticContentActivity.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.GenericMessage) {
             return genericMessageActivity.get().withPlace((AppPlace) place);
         }

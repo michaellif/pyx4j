@@ -84,14 +84,6 @@ public class SiteMap {
     public static class Completion extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Application Form", staticContent = "privacyPolicy")
-    public static class PrivacyPolicy extends AppPlace {
-    }
-
-    @PlaceProperties(caption = "Application Form", staticContent = "termsAndConditions")
-    public static class TermsAndConditions extends AppPlace {
-    }
-
     @PlaceProperties(caption = "")
     public static class GenericMessage extends AppPlace {
     }

@@ -89,15 +89,6 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
         themes.setDebugId(new StringDebugId("themes"));
         topLinksPanel.add(themes);
-
-        NavigLink link = new NavigLink("Privacy Policy", new SiteMap.PrivacyPolicy());
-        bottomLinksPanel.add(link);
-
-        bottomLinksPanel.add(new HTML("&nbsp;-&nbsp;"));
-
-        link = new NavigLink("Terms & Conditions", new SiteMap.TermsAndConditions());
-        bottomLinksPanel.add(link);
-
     }
 
     @Override

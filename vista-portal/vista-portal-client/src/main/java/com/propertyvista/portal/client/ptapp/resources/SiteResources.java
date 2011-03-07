@@ -20,12 +20,6 @@ public interface SiteResources extends ClientBundleWithLookup {
 
     SiteResources INSTANCE = GWT.create(SiteResources.class);
 
-    @Source("privacyPolicy.html")
-    TextResource privacyPolicy();
-
-    @Source("termsAndConditions.html")
-    TextResource termsAndConditions();
-
     @Source("dont_worry.html")
     TextResource dontWorry();
 
