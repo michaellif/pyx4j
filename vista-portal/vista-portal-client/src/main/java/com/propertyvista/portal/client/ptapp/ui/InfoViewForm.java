@@ -291,7 +291,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 columns.add(new EntityFolderColumnDescriptor(proto.year(), "5em", "1em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.make(), "5em", "1em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.model(), "5em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.province(), "5em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.province(), "10em", "1em"));
             }
 
             @Override
