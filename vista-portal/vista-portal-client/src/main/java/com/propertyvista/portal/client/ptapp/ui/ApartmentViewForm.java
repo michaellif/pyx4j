@@ -172,6 +172,24 @@ public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
 
         this.get(proto().rentStart()).addValueValidator(new EditableValueValidator<Date>() {
 
+            @Override
+            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                Date avalableForRent = getValue().selectedUnit().avalableForRent().getValue();
+                if ((avalableForRent == null) || (value == null)) {
+                    return true;
+                } else {
+                    return (value.compareTo(avalableForRent) >= 0);
+                }
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                return i18n.tr("Start Rent Date for this unit can not be before {0,date,medium}", getValue().selectedUnit().avalableForRent().getValue());
+            }
+        });
+
+        this.get(proto().rentStart()).addValueValidator(new EditableValueValidator<Date>() {
+
             @SuppressWarnings("deprecation")
             private Date getLastAvailableDay(Date avalableForRent) {
                 if (avalableForRent == null) {
@@ -199,6 +217,5 @@ public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
                         .avalableForRent().getValue()));
             }
         });
-
     }
 }
