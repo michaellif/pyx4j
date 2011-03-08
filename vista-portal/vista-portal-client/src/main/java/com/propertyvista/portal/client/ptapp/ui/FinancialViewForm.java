@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.xnap.commons.i18n.I18n;
@@ -35,7 +36,9 @@ import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.TenantIncome;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -273,6 +276,25 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         }
                     }
 
+                    @Override
+                    public void attachContent() {
+                        super.attachContent();
+                        get(proto().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+                            @Override
+                            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                                Date now = new Date();
+                                @SuppressWarnings("deprecation")
+                                Date y18 = TimeUtils.createDate(now.getYear() - 18, now.getMonth(), now.getDay());
+                                return value.before(y18);
+                            }
+
+                            @Override
+                            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                                return i18n.tr("Guarantor should be at least 18 years old");
+                            }
+                        });
+                    }
                 };
             }
 
