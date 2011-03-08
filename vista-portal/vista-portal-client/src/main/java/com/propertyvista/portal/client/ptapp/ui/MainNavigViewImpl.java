@@ -29,14 +29,16 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.WizardStep;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
+import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
@@ -128,8 +130,10 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
-            label = new Label(presenter.getNavigLabel(step.getPlace()));
+            this.place = step.getPlace();
+            label = new Label(presenter.getNavigLabel(place));
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
+            label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));
             statusHolder.add(label);
 
             switch (step.getStatus()) {
@@ -146,11 +150,10 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                 break;
             }
 
-            if (step.getPlace().equals(presenter.getWhere())) {
+            if (place.equals(presenter.getWhere())) {
                 label.addStyleDependentName(StyleDependent.current.name());
             }
 
-            this.place = step.getPlace();
             getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
             getElement().getStyle().setCursor(Cursor.DEFAULT);

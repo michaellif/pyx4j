@@ -38,11 +38,12 @@ import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.widgets.client.Button;
+import com.google.gwt.user.client.ui.Button;
 
 public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
 
@@ -78,6 +79,7 @@ public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
         header.add(new VistaWidgetDecorator(inject(proto().selectionCriteria().availableTo()), decorData));
 
         Button changeBtn = new Button(i18n.tr("Change"));
+        changeBtn.ensureDebugId(VistaFormsDebugId.Available_Units_Change.getDebugIdString());
         changeBtn.getElement().getStyle().setMargin(5, Unit.PX);
         changeBtn.addClickHandler(new ClickHandler() {
 

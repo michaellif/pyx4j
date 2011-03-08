@@ -46,6 +46,7 @@ import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.util.DomainUtil;
+import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
@@ -154,6 +155,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
             if (proto.floorplan().name() == column.getObject()) {
                 widgetToInsert = new Image(SiteImages.INSTANCE.floorplan());
+                widgetToInsert.ensureDebugId(VistaFormsDebugId.Available_Units_ViewPlan.getDebugIdString());
             } else if (proto.unitType() == column.getObject()) {
                 caption = availableUnits.floorplan().name().getStringView();
             } else {

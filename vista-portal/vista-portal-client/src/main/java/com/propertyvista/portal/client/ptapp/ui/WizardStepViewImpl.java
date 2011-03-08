@@ -44,7 +44,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         add(form);
 
         Button saveButton = new Button(actionName());
-        saveButton.ensureDebugId(CrudDebugId.Crud_Save.toString());
+        saveButton.ensureDebugId(CrudDebugId.Crud_Save.getDebugIdString());
         saveButton.addClickHandler(new ClickHandler() {
 
             @Override
