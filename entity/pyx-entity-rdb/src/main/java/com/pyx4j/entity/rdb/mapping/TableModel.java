@@ -132,9 +132,20 @@ public class TableModel {
     }
 
     public void dropTable(ConnectionProvider connectionProvider) throws SQLException {
+        Connection connection = connectionProvider.getConnection();
         List<String> sqls = new Vector<String>();
-        sqls.add("drop table " + tableName);
-        execute(connectionProvider, sqls);
+        try {
+            for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
+                TableMetadata memberTableMetadata = TableMetadata.getTableMetadata(connection, member.sqlName());
+                if (memberTableMetadata != null) {
+                    sqls.add("drop table " + member.sqlName());
+                }
+            }
+            sqls.add("drop table " + tableName);
+            execute(connection, sqls);
+        } finally {
+            SQLUtils.closeQuietly(connection);
+        }
     }
 
     public void execute(ConnectionProvider connectionProvider, List<String> sqls) throws SQLException {
