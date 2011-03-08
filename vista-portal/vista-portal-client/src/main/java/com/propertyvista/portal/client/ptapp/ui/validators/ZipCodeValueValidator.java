@@ -25,24 +25,41 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
 
     private static I18n i18n = I18nFactory.getI18n(ZipCodeValueValidator.class);
 
+    private CEditableComponent<Country, ?> country;
+
     public ZipCodeValueValidator() {
 
     }
 
     public ZipCodeValueValidator(CEditableComponent<Country, ?> country) {
-
+        this.country = country;
     }
 
     @Override
     public boolean isValid(CEditableComponent<String, ?> component, String value) {
-        // see http://en.wikipedia.org/wiki/Postal_codes_in_Canada#Number_of_possible_postal_codes
-        return (value.trim().toUpperCase().matches("^[ABCEGHJKLMNPRSTVXY]{1}\\d{1}[A-Z]{1} *\\d{1}[A-Z]{1}\\d{1}$") && !value.trim().toUpperCase()
-                .matches(".*[DFIOQU].*"))
-                || value.trim().matches("^\\d{5}(-\\d{4})?$"); // this is US zip... 
+        if ((!country.isValueEmpty()) && (value != null)) {
+            String c = country.getValue().name().getValue();
+            if ("Canada".equals(c)) {
+                // see http://en.wikipedia.org/wiki/Postal_codes_in_Canada#Number_of_possible_postal_codes
+                return value.toUpperCase().matches("^[ABCEGHJKLMNPRSTVXY]{1}\\d{1}[A-Z]{1} *\\d{1}[A-Z]{1}\\d{1}$")
+                        && !value.toUpperCase().matches(".*[DFIOQU].*");
+            } else if ("United States".equals(c)) {
+                return value.matches("^\\d{5}(-\\d{4})?$");
+            }
+        }
+        return true;
     }
 
     @Override
     public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
-        return i18n.tr("Invalid Postal/Zip code.");
+        if ((!country.isValueEmpty()) && (value != null)) {
+            String c = country.getValue().name().getValue();
+            if ("Canada".equals(c)) {
+                return i18n.tr("Invalid Canadian Postal code.");
+            } else if ("United States".equals(c)) {
+                return i18n.tr("Invalid US Zip code.");
+            }
+        }
+        return null;
     }
 }
