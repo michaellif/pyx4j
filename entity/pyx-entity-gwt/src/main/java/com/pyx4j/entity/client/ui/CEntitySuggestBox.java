@@ -299,7 +299,11 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
 
         @Override
         public String format(E value) {
-            return value.getMember(stringViewMemberName).getStringView();
+            if (stringViewMemberName != null) {
+                return value.getMember(stringViewMemberName).getStringView();
+            } else {
+                return value.getStringView();
+            }
         }
 
         @Override
