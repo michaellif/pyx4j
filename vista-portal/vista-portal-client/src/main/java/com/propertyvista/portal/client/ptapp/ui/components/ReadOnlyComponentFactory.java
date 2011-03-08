@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui.components;
 import java.util.Date;
 
 import com.propertyvista.portal.domain.Money;
+import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
@@ -53,7 +54,7 @@ public class ReadOnlyComponentFactory extends EntityFormComponentFactory {
             } else {
                 return super.create(member);
             }
-        } else if (member.getValueClass().equals(Province.class)) {
+        } else if ((member.getValueClass().equals(Province.class)) || (member.getValueClass().equals(Country.class))) {
             return new CEntityLabel();
         } else if (member.getValueClass().equals(Money.class)) {
             return new ReadOnlyMoneyForm();

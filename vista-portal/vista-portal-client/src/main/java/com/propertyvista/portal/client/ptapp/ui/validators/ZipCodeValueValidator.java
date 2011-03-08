@@ -16,12 +16,22 @@ package com.propertyvista.portal.client.ptapp.ui.validators;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.propertyvista.portal.domain.ref.Country;
+
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 public class ZipCodeValueValidator implements EditableValueValidator<String> {
 
     private static I18n i18n = I18nFactory.getI18n(ZipCodeValueValidator.class);
+
+    public ZipCodeValueValidator() {
+
+    }
+
+    public ZipCodeValueValidator(CEditableComponent<Country, ?> country) {
+
+    }
 
     @Override
     public boolean isValid(CEditableComponent<String, ?> component, String value) {

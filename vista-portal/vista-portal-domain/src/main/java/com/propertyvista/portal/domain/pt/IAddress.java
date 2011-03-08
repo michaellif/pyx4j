@@ -42,8 +42,7 @@ public interface IAddress {
     Province province();
 
     @Editor(type = EditorType.suggest)
-    //TODO
-    //@NotNull
+    @NotNull
     @Reference(adapter = CountryReferenceAdapter.class)
     Country country();
 

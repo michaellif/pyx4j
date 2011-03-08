@@ -36,7 +36,6 @@ import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.TenantIncome;
-import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.EditableComponentFactory;

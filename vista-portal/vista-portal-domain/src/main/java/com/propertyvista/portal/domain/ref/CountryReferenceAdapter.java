@@ -23,7 +23,11 @@ public class CountryReferenceAdapter implements ReferenceAdapter<Country> {
     @Override
     public EntityQueryCriteria<Country> getMergeCriteria(Country newEntity) {
         EntityQueryCriteria<Country> c = EntityQueryCriteria.create(Country.class);
-        c.add(PropertyCriterion.eq(c.proto().name().getFieldName() + IndexAdapter.SECONDARY_PRROPERTY_SUFIX, newEntity.name().getValue().toLowerCase()));
+        String name = newEntity.name().getValue().toLowerCase();
+        if (name.equals("us") || name.equals("usa")) {
+            name = "united states";
+        }
+        c.add(PropertyCriterion.eq(c.proto().name().getFieldName() + IndexAdapter.SECONDARY_PRROPERTY_SUFIX, name));
         return c;
     }
 

@@ -15,17 +15,23 @@ package com.propertyvista.portal.client.ptapp.ui;
 
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyMoneyForm;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.portal.client.ptapp.ui.validators.ProvinceContryFilters;
 import com.propertyvista.portal.client.ptapp.ui.validators.RevalidationTrigger;
 import com.propertyvista.portal.client.ptapp.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.IAddress;
+import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.portal.domain.ref.Province;
 
+import com.pyx4j.entity.client.ui.CEntitySuggestBox;
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.IFormat;
 
 public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
 
@@ -41,6 +47,28 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(Money.class)) {
             return new ReadOnlyMoneyForm();
+        } else if (member.getValueClass().equals(Country.class)) {
+            final CEntitySuggestBox<Country> c = new CEntitySuggestBox<Country>(Country.class);
+            c.setFormat(new IFormat<Country>() {
+
+                @Override
+                public String format(Country value) {
+                    return value.getStringView();
+                }
+
+                @Override
+                public Country parse(String string) {
+                    for (Country option : c.getOptions()) {
+                        if (c.getOptionName(option).equals(string)) {
+                            return option;
+                        }
+                    }
+                    Country entity = EntityFactory.create(Country.class);
+                    entity.name().setValue(string);
+                    return entity;
+                }
+            });
+            return c;
         } else {
             return super.create(member);
         }
@@ -51,13 +79,21 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
         main.add(parent.inject(proto.street1()), 20);
         main.add(parent.inject(proto.street2()), 20);
         main.add(parent.inject(proto.city()), 15);
-        main.add(parent.inject(proto.province()), 15);
-        main.add(parent.inject(proto.country()), 15);
-        main.add(parent.inject(proto.postalCode()), 7);
 
-        parent.get(proto.postalCode()).addValueValidator(new ZipCodeValueValidator());
+        // Need local variables to avoid extended casting that make the code unreadable
+        CEditableComponent<Province, ?> province;
+        main.add(province = (CEditableComponent<Province, ?>) parent.inject(proto.province()), 15);
 
-        parent.getRaw(proto.country()).addValueChangeHandler(new RevalidationTrigger(parent.get(proto.postalCode())));
+        CEditableComponent<Country, ?> country;
+        main.add(country = (CEditableComponent<Country, ?>) parent.inject(proto.country()), 15);
+
+        CEditableComponent<String, ?> postalCode;
+        main.add(postalCode = (CEditableComponent<String, ?>) parent.inject(proto.postalCode()), 7);
+
+        postalCode.addValueValidator(new ZipCodeValueValidator(country));
+        country.addValueChangeHandler(new RevalidationTrigger(postalCode));
+
+        ProvinceContryFilters.attachFilters(province, country);
     }
 
 }
