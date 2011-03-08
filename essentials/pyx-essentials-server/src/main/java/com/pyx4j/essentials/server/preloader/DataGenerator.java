@@ -39,9 +39,13 @@ public class DataGenerator {
 
     static List<AddressInfo> adresses;
 
-    static Random random = new Random();
+    protected static Random random = new Random();
 
     private static int areCodes[] = { 416, 905, 647 };
+
+    public static void setRandomSeed(long seed) {
+        random.setSeed(seed);
+    }
 
     public static String randomLetters(int count) {
         StringBuilder b = new StringBuilder();
