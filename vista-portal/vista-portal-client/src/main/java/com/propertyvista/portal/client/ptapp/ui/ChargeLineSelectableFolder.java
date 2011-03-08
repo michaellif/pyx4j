@@ -68,7 +68,7 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
 
                 String width = "300px";
                 if (valueChangeHandler != null) {
-                    main.add(DecorationUtils.inline(inject(proto().selected()), "50px"));
+                    main.add(DecorationUtils.inline(inject(proto().selected()), "25px"));
                     CEditableComponent<Boolean, ?> cb = get(proto().selected());
                     if (cb instanceof CCheckBox) {
                         cb.addValueChangeHandler(valueChangeHandler);
@@ -76,7 +76,7 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
                         //TODO this is hack for Misha to fix.
                         cb.asWidget().setStyleName(null);
                     }
-                    width = "250px";
+                    width = "275px";
                 }
 
                 main.add(DecorationUtils.inline(inject(proto().label()), width));
