@@ -53,6 +53,7 @@ public class ProvinceContryFilters {
         final CEntitySuggestBox<Country> countrySuggest = (CEntitySuggestBox<Country>) country;
         @SuppressWarnings("unchecked")
         final CEntityComboBox<Province> provinceCombo = (CEntityComboBox<Province>) province;
+        final boolean provinceComboIsMandatoryInitialy = provinceCombo.isMandatory();
         provinceCombo.setUseNamesComparison(true);
         provinceCombo.setOptionsComparator(new Comparator<Province>() {
 
@@ -76,7 +77,9 @@ public class ProvinceContryFilters {
                 if ((event.getValue() != null) && (provinceCombo.getValue() != null)
                         && (!EqualsHelper.equals(event.getValue().name().getValue(), provinceCombo.getValue().country().name().getValue()))) {
                     provinceCombo.setValue(null);
-                    provinceCombo.setMandatory(countryProvinceRequired.contains((event.getValue().name().getValue().toLowerCase())));
+                    if (provinceComboIsMandatoryInitialy) {
+                        provinceCombo.setMandatory(countryProvinceRequired.contains((event.getValue().name().getValue().toLowerCase())));
+                    }
                 }
                 provinceCombo.resetOptions();
                 provinceCombo.retriveOptions(null);
