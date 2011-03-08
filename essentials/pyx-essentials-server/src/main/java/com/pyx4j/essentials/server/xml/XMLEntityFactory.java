@@ -21,10 +21,9 @@
 package com.pyx4j.essentials.server.xml;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
 
 public interface XMLEntityFactory {
 
-    <T extends IEntity> T createInstance(String xmlName, Class<? extends IObject<?>> objectClass);
+    <T extends IEntity> T createInstance(String xmlName, Class<T> objectClass);
 
 }

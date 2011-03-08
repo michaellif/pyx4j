@@ -28,7 +28,6 @@ import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
 
 public class XMLEntityFactoryDefault implements XMLEntityFactory {
 
@@ -45,7 +44,7 @@ public class XMLEntityFactoryDefault implements XMLEntityFactory {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IEntity> T createInstance(String xmlName, Class<? extends IObject<?>> objectClass) {
+    public <T extends IEntity> T createInstance(String xmlName, Class<T> objectClass) {
         Class<T> entityClass;
         if (xmlName != null) {
             String entityClassName = names.get(xmlName);
@@ -54,7 +53,7 @@ public class XMLEntityFactoryDefault implements XMLEntityFactory {
             }
             entityClass = ServerEntityFactory.entityClass(entityClassName);
         } else {
-            entityClass = (Class<T>) objectClass;
+            entityClass = objectClass;
         }
         return EntityFactory.create(entityClass);
     }

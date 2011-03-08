@@ -42,15 +42,15 @@ public class XMLEntityConverter {
     }
 
     @Deprecated
-    public static <T extends IEntity> T pars(Element node) {
+    public static IEntity pars(Element node) {
         return new XMLEntityParser().parse(node);
     }
 
-    public static <T extends IEntity> T parse(Element node) {
+    public static IEntity parse(Element node) {
         return new XMLEntityParser().parse(node);
     }
 
-    public static <T extends IEntity> T parse(String xml) throws ParserConfigurationException, SAXException, IOException {
+    public static IEntity parse(String xml) throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setIgnoringComments(true);
         factory.setValidating(false);

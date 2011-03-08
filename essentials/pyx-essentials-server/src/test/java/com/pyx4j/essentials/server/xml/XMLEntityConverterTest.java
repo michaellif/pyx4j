@@ -108,7 +108,7 @@ public class XMLEntityConverterTest extends TestCase {
     public void testParser() throws Exception {
         Employee employee1 = createData();
 
-        Employee employee2 = XMLEntityConverter.parse(getDom(getXML(employee1)).getDocumentElement());
+        Employee employee2 = (Employee) XMLEntityConverter.parse(getDom(getXML(employee1)).getDocumentElement());
 
         assertEquals("Level 1 value", employee1.firstName().getValue(), employee2.firstName().getValue());
         assertEquals("Level 1 enum value", employee1.employmentStatus().getValue(), employee2.employmentStatus().getValue());
@@ -129,7 +129,7 @@ public class XMLEntityConverterTest extends TestCase {
 
         String xml = getXML(ent1);
         System.out.println(xml);
-        ConcreteEntity ent2 = XMLEntityConverter.parse(getDom(xml).getDocumentElement());
+        ConcreteEntity ent2 = (ConcreteEntity) XMLEntityConverter.parse(getDom(xml).getDocumentElement());
 
         assertTrue("item1 Not Same data\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
     }
@@ -152,7 +152,7 @@ public class XMLEntityConverterTest extends TestCase {
 
         String xml = getXML(rootEntity);
         //System.out.println(xml);
-        RefferenceEntity rootEntity2 = XMLEntityConverter.parse(getDom(xml).getDocumentElement());
+        RefferenceEntity rootEntity2 = (RefferenceEntity) XMLEntityConverter.parse(getDom(xml).getDocumentElement());
 
         Iterator<Base1Entity> it = rootEntity2.refferences().iterator();
 

@@ -50,8 +50,8 @@ public class XMLEntityParser {
         this.factory = factory;
     }
 
-    public <T extends IEntity> T parse(Element node) {
-        return parse(null, node);
+    public IEntity parse(Element node) {
+        return parse((Class<IEntity>) null, node);
     }
 
     public <T extends IEntity> T parse(Class<T> entityClass, Element node) {
@@ -63,7 +63,7 @@ public class XMLEntityParser {
         return parse(node, entity);
     }
 
-    private <T extends IEntity> T createInstance(Element node, Class<? extends IObject<?>> objectClass) {
+    private <T extends IEntity> T createInstance(Element node, Class<T> objectClass) {
         String xmlName = node.getAttribute("type");
         if (!CommonsStringUtils.isStringSet(xmlName)) {
             return null;
@@ -87,7 +87,7 @@ public class XMLEntityParser {
                 IObject<?> member = entity.getMember(memberName);
                 MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
                 if (memberMeta.isEntity()) {
-                    IEntity concreteInctance = createInstance((Element) valueNode, memberMeta.getObjectClass());
+                    IEntity concreteInctance = createInstance((Element) valueNode, (Class<IEntity>) memberMeta.getObjectClass());
                     if (concreteInctance == null) {
                         parse((Element) valueNode, (IEntity) member);
                     } else {
