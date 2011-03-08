@@ -37,29 +37,44 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
 
     @Override
     public boolean isValid(CEditableComponent<String, ?> component, String value) {
-        if ((!country.isValueEmpty()) && (value != null)) {
-            String c = country.getValue().name().getValue();
-            if ("Canada".equals(c)) {
-                // see http://en.wikipedia.org/wiki/Postal_codes_in_Canada#Number_of_possible_postal_codes
-                return value.toUpperCase().matches("^[ABCEGHJKLMNPRSTVXY]{1}\\d{1}[A-Z]{1} *\\d{1}[A-Z]{1}\\d{1}$")
-                        && !value.toUpperCase().matches(".*[DFIOQU].*");
-            } else if ("United States".equals(c)) {
-                return value.matches("^\\d{5}(-\\d{4})?$");
+        if (country != null) {
+            if ((!country.isValueEmpty()) && (value != null)) {
+                String c = country.getValue().name().getValue();
+                if ("Canada".equals(c)) {
+                    // see http://en.wikipedia.org/wiki/Postal_codes_in_Canada#Number_of_possible_postal_codes
+                    return canadianPostalCodeValidation(value);
+                } else if ("United States".equals(c)) {
+                    return usZipCodeValidation(value);
+                }
             }
+            return true;
+        } else {
+            return canadianPostalCodeValidation(value) || usZipCodeValidation(value);
         }
-        return true;
     }
 
     @Override
     public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
-        if ((!country.isValueEmpty()) && (value != null)) {
-            String c = country.getValue().name().getValue();
-            if ("Canada".equals(c)) {
-                return i18n.tr("Invalid Canadian Postal code.");
-            } else if ("United States".equals(c)) {
-                return i18n.tr("Invalid US Zip code.");
+        if (country != null) {
+            if ((!country.isValueEmpty()) && (value != null)) {
+                String c = country.getValue().name().getValue();
+                if ("Canada".equals(c)) {
+                    return i18n.tr("Invalid Canadian Postal code.");
+                } else if ("United States".equals(c)) {
+                    return i18n.tr("Invalid US Zip code.");
+                }
             }
+            return null;
+        } else {
+            return i18n.tr("Invalid Postal/Zip code.");
         }
-        return null;
+    }
+
+    private boolean canadianPostalCodeValidation(String value) {
+        return value.toUpperCase().matches("^[ABCEGHJKLMNPRSTVXY]{1}\\d{1}[A-Z]{1} *\\d{1}[A-Z]{1}\\d{1}$") && !value.toUpperCase().matches(".*[DFIOQU].*");
+    }
+
+    private boolean usZipCodeValidation(String value) {
+        return value.matches("^\\d{5}(-\\d{4})?$");
     }
 }
