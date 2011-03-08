@@ -13,15 +13,16 @@
  */
 package com.propertyvista.portal.domain.ref;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.adapters.index.CaseInsensitiveIndexAdapter;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@EmbeddedEntity
 public interface Country extends IEntity {
 
     @ToString
+    @Indexed(adapters = CaseInsensitiveIndexAdapter.class)
     IPrimitive<String> name();
 
 }

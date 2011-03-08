@@ -20,8 +20,6 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -29,6 +27,7 @@ import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
+import com.propertyvista.portal.client.ptapp.ui.validators.RevalidationTrigger;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
@@ -195,14 +194,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
                         };
 
                         get(proto().weight()).addValueValidator(weightValidator);
-                        get(proto().weightUnit()).addValueChangeHandler(new ValueChangeHandler<WeightUnit>() {
-
-                            @Override
-                            public void onValueChange(ValueChangeEvent<WeightUnit> event) {
-                                // Fire revalidation
-                                get(proto().weight()).onEditingStop();
-                            }
-                        });
+                        get(proto().weightUnit()).addValueChangeHandler(new RevalidationTrigger<WeightUnit>(get(proto().weight())));
                     }
 
                 };

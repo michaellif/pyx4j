@@ -15,6 +15,8 @@ package com.propertyvista.portal.client.ptapp.ui;
 
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyMoneyForm;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.portal.client.ptapp.ui.validators.RevalidationTrigger;
+import com.propertyvista.portal.client.ptapp.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.IAddress;
 
@@ -44,14 +46,18 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
         }
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected static void injectIAddress(VistaDecoratorsFlowPanel main, IAddress proto, CEntityEditableComponent<?> parent) {
         main.add(parent.inject(proto.street1()), 20);
         main.add(parent.inject(proto.street2()), 20);
         main.add(parent.inject(proto.city()), 15);
         main.add(parent.inject(proto.province()), 15);
+        main.add(parent.inject(proto.country()), 15);
         main.add(parent.inject(proto.postalCode()), 7);
 
         parent.get(proto.postalCode()).addValueValidator(new ZipCodeValueValidator());
+
+        parent.getRaw(proto.country()).addValueChangeHandler(new RevalidationTrigger(parent.get(proto.postalCode())));
     }
 
 }

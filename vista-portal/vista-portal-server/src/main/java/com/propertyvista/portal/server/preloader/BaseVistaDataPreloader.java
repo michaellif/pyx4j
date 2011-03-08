@@ -7,26 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 13, 2011
- * @author dmitry
+ * Created on Mar 7, 2011
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.server.preloader;
 
 import com.propertyvista.portal.domain.Address;
 import com.propertyvista.portal.domain.Address.AddressType;
+import com.propertyvista.portal.domain.ref.Country;
 
+import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
-public class PreloadUtil {
-    public static Address createAddress(String line1, String zip) {
+abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
+
+    public Address createAddress(String line1, String zip) {
         Address address = EntityFactory.create(Address.class);
 
         address.addressType().setValue(AddressType.property);
         address.addressLine1().setValue(line1);
         address.city().setValue("Toronto");
         address.state().setValue("ON");
-        address.country().name().setValue("Canada");
+        address.country().set(retrieveNamed(Country.class, "Canada"));
         address.zip().setValue(zip);
 
         return address;

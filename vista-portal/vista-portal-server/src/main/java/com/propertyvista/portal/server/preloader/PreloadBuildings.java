@@ -51,7 +51,6 @@ import com.propertyvista.portal.domain.util.DomainUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -60,7 +59,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
-public class PreloadBuildings extends AbstractDataPreloader {
+public class PreloadBuildings extends BaseVistaDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(PreloadBuildings.class);
 
@@ -384,7 +383,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
             // address
             String street = RandomUtil.randomInt(10000) + " Yonge St";
             String zip = "L" + (b + 1 % 10) + "C " + (b + 5 % 10) + "M" + (b + 7 % 10);
-            Address address = PreloadUtil.createAddress(street, zip);
+            Address address = createAddress(street, zip);
 
             // phones
             List<Phone> phones = new ArrayList<Phone>();

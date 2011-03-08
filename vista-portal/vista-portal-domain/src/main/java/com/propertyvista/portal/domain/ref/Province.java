@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.domain.ref;
 
-
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -28,6 +28,7 @@ public interface Province extends IEntity {
     @Indexed
     IPrimitive<String> code();
 
+    @EmbeddedEntity
     Country country();
 
 }
