@@ -22,6 +22,8 @@ package com.pyx4j.site.rpc;
 
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.site.shared.meta.NavigNode;
 
 public class AppPlaceInfo {
@@ -68,6 +70,14 @@ public class AppPlaceInfo {
             }
         }
         return builder.toString();
+    }
+
+    public static IDebugId getPlaceIDebugId(Place place) {
+        return getPlaceIDebugId(place.getClass());
+    }
+
+    public static IDebugId getPlaceIDebugId(Class<? extends Place> clazz) {
+        return new StringDebugId(getPlaceId(clazz));
     }
 
     public static String absoluteUrl(String appUrl, Class<? extends Place> placeClass, String... encodedComponentsNameValue) {
