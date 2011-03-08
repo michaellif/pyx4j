@@ -1,0 +1,156 @@
+/*
+ * Pyx4j framework
+ * Copyright (C) 2008-2011 pyx4j.com.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ *
+ * Created on 2011-03-08
+ * @author vlads
+ * @version $Id$
+ */
+package com.pyx4j.essentials.server.xml;
+
+import java.util.Date;
+
+import org.apache.commons.codec.binary.Base64;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ICollection;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.shared.impl.PrimitiveHandler;
+import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.gwt.server.DateUtils;
+
+public class XMLEntityParser {
+
+    public XMLEntityParser() {
+
+    }
+
+    public <T extends IEntity> T pars(Element node) {
+        String entityClassName = node.getAttribute("type");
+        if (!CommonsStringUtils.isStringSet(entityClassName)) {
+            entityClassName = node.getNodeName();
+        }
+        Class<T> entityClass = ServerEntityFactory.entityClass(entityClassName);
+        return pars(node, entityClass);
+    }
+
+    public <T extends IEntity> T pars(Element node, Class<T> entityClass) {
+        T entity = EntityFactory.create(entityClass);
+        return pars(node, entity);
+    }
+
+    private <T extends IEntity> T createInstance(Element node) {
+        String entityClassName = node.getAttribute("type");
+        if (!CommonsStringUtils.isStringSet(entityClassName)) {
+            return null;
+        } else {
+            Class<T> entityClass = ServerEntityFactory.entityClass(entityClassName);
+            return EntityFactory.create(entityClass);
+        }
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public <T extends IEntity> T pars(Element node, T entity) {
+        String id = node.getAttribute("id");
+        if (CommonsStringUtils.isStringSet(id)) {
+            entity.setPrimaryKey(Long.valueOf(id));
+        }
+
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node valueNode = nodeList.item(i);
+            if (valueNode instanceof Element) {
+                String memberName = valueNode.getNodeName();
+                IObject<?> member = entity.getMember(memberName);
+                MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
+                if (memberMeta.isEntity()) {
+                    IEntity concreteInctance = createInstance((Element) valueNode);
+                    if (concreteInctance == null) {
+                        pars((Element) valueNode, (IEntity) member);
+                    } else {
+                        pars((Element) valueNode, concreteInctance);
+                        ((IEntity) member).set(concreteInctance);
+                    }
+                } else if (member instanceof ICollection<?, ?>) {
+                    NodeList collectionNodeList = valueNode.getChildNodes();
+                    for (int ci = 0; ci < collectionNodeList.getLength(); ci++) {
+                        Node itemNode = collectionNodeList.item(ci);
+                        if ((itemNode instanceof Element) && ("item".equals(itemNode.getNodeName()))) {
+                            IEntity item = createInstance((Element) itemNode);
+                            if (item == null) {
+                                item = ((ICollection<?, ?>) member).$();
+                            }
+                            pars((Element) itemNode, item);
+                            ((ICollection) member).add(item);
+                        }
+                    }
+                } else if (member instanceof IPrimitiveSet<?>) {
+                    NodeList collectionNodeList = valueNode.getChildNodes();
+                    for (int ci = 0; ci < collectionNodeList.getLength(); ci++) {
+                        Node itemNode = collectionNodeList.item(ci);
+                        if ((itemNode instanceof Element) && ("item".equals(itemNode.getNodeName()))) {
+                            ((IPrimitiveSet) member).add(parsPrimitive((Element) itemNode, memberMeta.getValueClass()));
+                        }
+                    }
+                } else {
+                    entity.setMemberValue(memberName, parsValueNode((Element) valueNode, memberMeta, member));
+                }
+            }
+        }
+
+        return entity;
+    }
+
+    private Object parsPrimitive(Element valueNode, Class<?> valueClass) {
+        String str = valueNode.getTextContent();
+        if (valueClass.isAssignableFrom(byte[].class)) {
+            return new Base64().decode(str);
+        } else if (valueClass.isAssignableFrom(Date.class)) {
+            return DateUtils.detectDateformat(str);
+        } else if (valueClass.equals(GeoPoint.class)) {
+            return GeoPoint.valueOf(str);
+        } else {
+            return PrimitiveHandler.parsString(valueClass, str);
+        }
+    }
+
+    private Object parsValueNode(Element valueNode, MemberMeta memberMeta, IObject<?> member) {
+        String str = valueNode.getTextContent();
+        if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
+            Class<?> valueClass = member.getValueClass();
+            if (valueClass.isAssignableFrom(byte[].class)) {
+                return new Base64().decode(str);
+            } else if (valueClass.isAssignableFrom(Date.class)) {
+                return DateUtils.detectDateformat(str);
+            } else if (valueClass.equals(GeoPoint.class)) {
+                return GeoPoint.valueOf(str);
+            } else {
+                return ((IPrimitive<?>) member).pars(str);
+            }
+        } else {
+            throw new Error("Pars of " + member.getFieldName() + " (" + memberMeta.getValueClass() + ") '" + str + "' Not yet implemented");
+        }
+    }
+
+}

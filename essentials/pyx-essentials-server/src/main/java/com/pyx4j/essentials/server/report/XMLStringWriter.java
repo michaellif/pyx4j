@@ -20,12 +20,15 @@
  */
 package com.pyx4j.essentials.server.report;
 
+import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Stack;
 
 import com.pyx4j.entity.shared.IPrimitive;
 
 public class XMLStringWriter {
+
+    private final Charset charset;
 
     private final StringBuilder out = new StringBuilder();
 
@@ -34,6 +37,12 @@ public class XMLStringWriter {
     private final Stack<String> openItems = new Stack<String>();
 
     public XMLStringWriter() {
+        charset = null;
+    }
+
+    public XMLStringWriter(Charset charset) {
+        this.charset = charset;
+        out.append("<?xml version=\"1.0\" encoding=\"").append(charset.displayName()).append("\"?>\n");
     }
 
     public void idented() {
@@ -139,4 +148,13 @@ public class XMLStringWriter {
     public String toString() {
         return out.toString();
     }
+
+    public byte[] getBytes() {
+        if (charset != null) {
+            return out.toString().getBytes(charset);
+        } else {
+            return out.toString().getBytes();
+        }
+    }
+
 }
