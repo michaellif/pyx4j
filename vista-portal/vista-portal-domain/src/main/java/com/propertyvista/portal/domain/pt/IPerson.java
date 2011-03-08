@@ -29,7 +29,7 @@ public interface IPerson {
     @BusinessEqualValue
     IPrimitive<String> firstName();
 
-    @Caption(name = "Middle")
+    @Caption(name = "Middle Name")
     IPrimitive<String> middleName();
 
     @Caption(name = "Last Name")
@@ -39,19 +39,19 @@ public interface IPerson {
     IPrimitive<String> lastName();
 
     @Editor(type = EditorType.phone)
-    @Caption(name = "Home")
+    @Caption(name = "Home Phone")
     IPrimitive<String> homePhone();
 
     @Editor(type = EditorType.phone)
-    @Caption(name = "Mobile")
+    @Caption(name = "Mobile Phone")
     IPrimitive<String> mobilePhone();
 
     @Editor(type = EditorType.phone)
-    @Caption(name = "Work")
+    @Caption(name = "Work Phone")
     IPrimitive<String> workPhone();
 
     @Editor(type = EditorType.email)
-    @Caption(name = "Email")
+    @Caption(name = "Email Address")
     IPrimitive<String> email();
 
 }
