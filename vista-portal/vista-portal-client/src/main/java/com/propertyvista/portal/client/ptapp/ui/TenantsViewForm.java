@@ -23,6 +23,8 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Singleton;
@@ -43,6 +45,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -193,10 +196,35 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                             comp = textComp;
                         } else {
                             comp = super.createCell(column);
+
                             if (proto.relationship() == column.getObject()) {
                                 Collection<Relationship> relationships = EnumSet.allOf(Relationship.class);
                                 relationships.remove(Relationship.Applicant);
                                 ((CComboBox) comp).setOptions(relationships);
+                                ((CComboBox) comp).addValueChangeHandler(new ValueChangeHandler<Relationship>() {
+
+                                    @Override
+                                    public void onValueChange(ValueChangeEvent<Relationship> event) {
+                                        if (event.getValue() == Relationship.CoApplicant) {
+                                            get(proto.dependant()).asWidget().setEnabled(false);
+                                            get(proto.dependant()).setValue(false);
+                                        } else {
+                                            get(proto.dependant()).asWidget().setEnabled(true);
+                                        }
+                                    }
+                                });
+                            } else if (proto.dependant() == column.getObject()) {
+                                ((CCheckBox) comp).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+                                    @Override
+                                    public void onValueChange(ValueChangeEvent<Boolean> event) {
+                                        if (event.getValue() == true) {
+                                            ((CComboBox) get(proto.relationship())).removeOption(Relationship.CoApplicant);
+                                        } else {
+                                            ((CComboBox) get(proto.relationship())).updateOption(Relationship.CoApplicant);
+                                        }
+                                    }
+                                });
                             }
                         }
                         return comp;
@@ -212,5 +240,4 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
         };
     }
-
 }
