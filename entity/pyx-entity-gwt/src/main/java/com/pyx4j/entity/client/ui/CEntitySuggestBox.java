@@ -34,6 +34,7 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -314,7 +315,9 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
                 }
             }
             E entity = EntityFactory.create(entityClass);
-            entity.setMemberValue(stringViewMemberName, string);
+            if (stringViewMemberName != null) {
+                entity.setMemberValue(stringViewMemberName, string);
+            }
             return entity;
         }
 
@@ -325,8 +328,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
         if (super.isValueEmpty() || getValue().isNull()) {
             return true;
         }
-        String value = (String) getValue().getMemberValue(stringViewMemberName);
-        return value == null || value.trim().equals("");
+        return CommonsStringUtils.isEmpty(getFormat().format(getValue()));
     }
 
 }
