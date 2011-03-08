@@ -27,6 +27,7 @@ import junit.framework.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IObject;
@@ -87,6 +88,10 @@ public class SeleniumExtended extends WebDriverWrapper {
         return By.id(gwtLocator(debugId.getDebugIdString()));
     }
 
+    public By by(IDebugId parent, IDebugId child) {
+        return By.id(gwtLocator(CompositeDebugId.debugId(parent, child)));
+    }
+
     public By by(IObject<?> member) {
         return By.id(gwtLocator(member.getPath().getDebugIdString()));
     }
@@ -138,6 +143,10 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     public void click(IDebugId debugId) {
         driver.findElement(by(debugId)).click();
+    }
+
+    public void click(IDebugId parent, IDebugId child) {
+        driver.findElement(by(parent, child)).click();
     }
 
     public void click(IObject<?> member) {
