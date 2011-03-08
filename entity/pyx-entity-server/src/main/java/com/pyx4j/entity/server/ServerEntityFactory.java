@@ -68,7 +68,7 @@ public class ServerEntityFactory implements IEntityFactory {
         try {
             return (Class<T>) Class.forName(domainName, true, Thread.currentThread().getContextClassLoader());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Not an Entity");
+            throw new RuntimeException("'" + domainName + "' Not an Entity");
         }
     }
 

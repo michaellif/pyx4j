@@ -28,8 +28,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.server.ServerEntityFactory;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -42,36 +40,40 @@ import com.pyx4j.gwt.server.DateUtils;
 
 public class XMLEntityParser {
 
+    private final XMLEntityFactory factory;
+
     public XMLEntityParser() {
-
+        this(new XMLEntityFactoryDefault());
     }
 
-    public <T extends IEntity> T pars(Element node) {
-        String entityClassName = node.getAttribute("type");
-        if (!CommonsStringUtils.isStringSet(entityClassName)) {
-            entityClassName = node.getNodeName();
+    public XMLEntityParser(XMLEntityFactory factory) {
+        this.factory = factory;
+    }
+
+    public <T extends IEntity> T parse(Element node) {
+        return parse(null, node);
+    }
+
+    public <T extends IEntity> T parse(Class<T> entityClass, Element node) {
+        String xmlName = node.getAttribute("type");
+        if (!CommonsStringUtils.isStringSet(xmlName)) {
+            xmlName = node.getNodeName();
         }
-        Class<T> entityClass = ServerEntityFactory.entityClass(entityClassName);
-        return pars(node, entityClass);
+        T entity = factory.createInstance(xmlName, entityClass);
+        return parse(node, entity);
     }
 
-    public <T extends IEntity> T pars(Element node, Class<T> entityClass) {
-        T entity = EntityFactory.create(entityClass);
-        return pars(node, entity);
-    }
-
-    private <T extends IEntity> T createInstance(Element node) {
-        String entityClassName = node.getAttribute("type");
-        if (!CommonsStringUtils.isStringSet(entityClassName)) {
+    private <T extends IEntity> T createInstance(Element node, Class<? extends IObject<?>> objectClass) {
+        String xmlName = node.getAttribute("type");
+        if (!CommonsStringUtils.isStringSet(xmlName)) {
             return null;
         } else {
-            Class<T> entityClass = ServerEntityFactory.entityClass(entityClassName);
-            return EntityFactory.create(entityClass);
+            return factory.createInstance(xmlName, objectClass);
         }
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public <T extends IEntity> T pars(Element node, T entity) {
+    public <T extends IEntity> T parse(Element node, T entity) {
         String id = node.getAttribute("id");
         if (CommonsStringUtils.isStringSet(id)) {
             entity.setPrimaryKey(Long.valueOf(id));
@@ -85,11 +87,11 @@ public class XMLEntityParser {
                 IObject<?> member = entity.getMember(memberName);
                 MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
                 if (memberMeta.isEntity()) {
-                    IEntity concreteInctance = createInstance((Element) valueNode);
+                    IEntity concreteInctance = createInstance((Element) valueNode, memberMeta.getObjectClass());
                     if (concreteInctance == null) {
-                        pars((Element) valueNode, (IEntity) member);
+                        parse((Element) valueNode, (IEntity) member);
                     } else {
-                        pars((Element) valueNode, concreteInctance);
+                        parse((Element) valueNode, concreteInctance);
                         ((IEntity) member).set(concreteInctance);
                     }
                 } else if (member instanceof ICollection<?, ?>) {
@@ -97,11 +99,11 @@ public class XMLEntityParser {
                     for (int ci = 0; ci < collectionNodeList.getLength(); ci++) {
                         Node itemNode = collectionNodeList.item(ci);
                         if ((itemNode instanceof Element) && ("item".equals(itemNode.getNodeName()))) {
-                            IEntity item = createInstance((Element) itemNode);
+                            IEntity item = createInstance((Element) itemNode, ((ICollection<?, ?>) member).getValueClass());
                             if (item == null) {
                                 item = ((ICollection<?, ?>) member).$();
                             }
-                            pars((Element) itemNode, item);
+                            parse((Element) itemNode, item);
                             ((ICollection) member).add(item);
                         }
                     }
@@ -110,11 +112,11 @@ public class XMLEntityParser {
                     for (int ci = 0; ci < collectionNodeList.getLength(); ci++) {
                         Node itemNode = collectionNodeList.item(ci);
                         if ((itemNode instanceof Element) && ("item".equals(itemNode.getNodeName()))) {
-                            ((IPrimitiveSet) member).add(parsPrimitive((Element) itemNode, memberMeta.getValueClass()));
+                            ((IPrimitiveSet) member).add(parsePrimitive((Element) itemNode, memberMeta.getValueClass()));
                         }
                     }
                 } else {
-                    entity.setMemberValue(memberName, parsValueNode((Element) valueNode, memberMeta, member));
+                    entity.setMemberValue(memberName, parseValueNode((Element) valueNode, memberMeta, member));
                 }
             }
         }
@@ -122,7 +124,7 @@ public class XMLEntityParser {
         return entity;
     }
 
-    private Object parsPrimitive(Element valueNode, Class<?> valueClass) {
+    private Object parsePrimitive(Element valueNode, Class<?> valueClass) {
         String str = valueNode.getTextContent();
         if (valueClass.isAssignableFrom(byte[].class)) {
             return new Base64().decode(str);
@@ -135,7 +137,7 @@ public class XMLEntityParser {
         }
     }
 
-    private Object parsValueNode(Element valueNode, MemberMeta memberMeta, IObject<?> member) {
+    private Object parseValueNode(Element valueNode, MemberMeta memberMeta, IObject<?> member) {
         String str = valueNode.getTextContent();
         if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
             Class<?> valueClass = member.getValueClass();
@@ -146,7 +148,7 @@ public class XMLEntityParser {
             } else if (valueClass.equals(GeoPoint.class)) {
                 return GeoPoint.valueOf(str);
             } else {
-                return ((IPrimitive<?>) member).pars(str);
+                return ((IPrimitive<?>) member).parse(str);
             }
         } else {
             throw new Error("Pars of " + member.getFieldName() + " (" + memberMeta.getValueClass() + ") '" + str + "' Not yet implemented");

@@ -52,7 +52,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
     }
 
     @Override
-    public TYPE pars(String value) {
+    public TYPE parse(String value) {
         return parsString(valueClass, value);
     }
 

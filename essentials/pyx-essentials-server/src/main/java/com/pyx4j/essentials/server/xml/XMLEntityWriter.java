@@ -41,22 +41,42 @@ public class XMLEntityWriter {
 
     protected final XMLStringWriter xml;
 
+    private boolean emitId = true;
+
+    private final XMLEntityName entityName;
+
     public XMLEntityWriter(XMLStringWriter xml) {
+        this(xml, new XMLEntityNameDefault());
+    }
+
+    public XMLEntityWriter(XMLStringWriter xml, XMLEntityName entityName) {
         this.xml = xml;
+        this.entityName = entityName;
+    }
+
+    public void writeRoot(IEntity entity, Map<String, String> attributes) {
+        write(entity, entityName.getXMLName(entity.getObjectClass()), attributes, null, new HashSet<Map<String, Object>>());
+    }
+
+    public void write(IEntity entity) {
+        write(entity, entityName.getXMLName(entity.getObjectClass()));
     }
 
     public void write(IEntity entity, String name) {
-        write(entity, name, null, new HashSet<Map<String, Object>>());
+        write(entity, name, null, null, new HashSet<Map<String, Object>>());
     }
 
-    private void write(IEntity entity, String name, @SuppressWarnings("rawtypes") Class<? extends IObject> declaredObjectClass,
+    private void write(IEntity entity, String name, Map<String, String> attributes, @SuppressWarnings("rawtypes") Class<? extends IObject> declaredObjectClass,
             Set<Map<String, Object>> processed) {
         Map<String, String> entityAttributes = new LinkedHashMap<String, String>();
-        if (entity.getPrimaryKey() != null) {
+        if (attributes != null) {
+            entityAttributes.putAll(attributes);
+        }
+        if (isEmitId() && (entity.getPrimaryKey() != null)) {
             entityAttributes.put("id", String.valueOf(entity.getPrimaryKey()));
         }
         if ((declaredObjectClass != null) && (!entity.getObjectClass().equals(declaredObjectClass))) {
-            entityAttributes.put("type", entity.getObjectClass().getName());
+            entityAttributes.put("type", entityName.getXMLName(entity.getObjectClass()));
         }
         xml.startIdented(name, entityAttributes);
 
@@ -80,13 +100,13 @@ public class XMLEntityWriter {
                 if (!member.isObjectClassSameAsDef()) {
                     member = member.cast();
                 }
-                write(member, propertyName, entity.getEntityMeta().getMemberMeta(propertyName).getObjectClass(), processed);
+                write(member, propertyName, null, entity.getEntityMeta().getMemberMeta(propertyName).getObjectClass(), processed);
             } else if (value instanceof Collection) {
                 xml.startIdented(propertyName);
                 IObject<?> member = entity.getMember(propertyName);
                 if (member instanceof ICollection<?, ?>) {
                     for (Object item : (ICollection<?, ?>) member) {
-                        write((IEntity) item, "item", entity.getEntityMeta().getMemberMeta(propertyName).getObjectClass(), processed);
+                        write((IEntity) item, "item", null, entity.getEntityMeta().getMemberMeta(propertyName).getObjectClass(), processed);
                     }
                 } else {
                     for (Object item : (Collection<?>) value) {
@@ -120,6 +140,14 @@ public class XMLEntityWriter {
         } else {
             return value.toString();
         }
+    }
+
+    public boolean isEmitId() {
+        return emitId;
+    }
+
+    public void setEmitId(boolean emitId) {
+        this.emitId = emitId;
     }
 
 }

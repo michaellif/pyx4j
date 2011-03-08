@@ -133,9 +133,9 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
             return DateUtils.detectDateformat(value);
         } else if (Number.class.isAssignableFrom(primitive.getValueClass())) {
             // Is Local English?
-            return primitive.pars(value.replaceAll(",", ""));
+            return primitive.parse(value.replaceAll(",", ""));
         } else {
-            return primitive.pars(value);
+            return primitive.parse(value);
         }
     }
 

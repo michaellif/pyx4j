@@ -20,7 +20,17 @@
  */
 package com.pyx4j.essentials.server.xml;
 
+import java.io.IOException;
+import java.io.StringReader;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.report.XMLStringWriter;
@@ -28,11 +38,26 @@ import com.pyx4j.essentials.server.report.XMLStringWriter;
 public class XMLEntityConverter {
 
     public static void write(XMLStringWriter xml, IEntity entity) {
-        new XMLEntityWriter(xml).write(entity, entity.getEntityMeta().getEntityClass().getName());
+        new XMLEntityWriter(xml).write(entity);
     }
 
+    @Deprecated
     public static <T extends IEntity> T pars(Element node) {
-        return new XMLEntityParser().pars(node);
+        return new XMLEntityParser().parse(node);
+    }
+
+    public static <T extends IEntity> T parse(Element node) {
+        return new XMLEntityParser().parse(node);
+    }
+
+    public static <T extends IEntity> T parse(String xml) throws ParserConfigurationException, SAXException, IOException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setIgnoringComments(true);
+        factory.setValidating(false);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        builder.setErrorHandler(null);
+        Document doc = builder.parse(new InputSource(new StringReader(xml)));
+        return parse(doc.getDocumentElement());
     }
 
 }

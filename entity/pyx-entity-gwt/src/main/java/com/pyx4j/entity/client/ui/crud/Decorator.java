@@ -96,7 +96,7 @@ public class Decorator implements IPrimitive<String> {
     }
 
     @Override
-    public String pars(String value) {
+    public String parse(String value) {
         return null;
     }
 
