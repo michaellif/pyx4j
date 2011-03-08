@@ -16,11 +16,17 @@ package com.propertyvista.portal.server.preloader;
 import com.propertyvista.portal.domain.Address;
 import com.propertyvista.portal.domain.Address.AddressType;
 import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.portal.domain.ref.Province;
 
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
+
+    protected BaseVistaDataPreloader() {
+        DataGenerator.setRandomSeed(100);
+    }
 
     public Address createAddress(String line1, String zip) {
         Address address = EntityFactory.create(Address.class);
@@ -28,7 +34,7 @@ abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
         address.addressType().setValue(AddressType.property);
         address.addressLine1().setValue(line1);
         address.city().setValue("Toronto");
-        address.state().setValue("ON");
+        address.state().set(retrieveByMemeber(Province.class, address.state().code(), "ON"));
         address.country().set(retrieveNamed(Country.class, "Canada"));
         address.zip().setValue(zip);
 

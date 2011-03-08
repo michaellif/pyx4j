@@ -14,8 +14,11 @@
 package com.propertyvista.portal.domain;
 
 import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.portal.domain.ref.Province;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -71,7 +74,8 @@ public interface Address extends IEntity {
 
     @Caption(name = "Province/State")
     @ToString(index = 3)
-    IPrimitive<String> state();
+    @Editor(type = EditorType.combo)
+    Province state();
 
     /**
      * (max 12 char)
@@ -82,8 +86,6 @@ public interface Address extends IEntity {
 
     @ToString(index = 5)
     Country country();
-
-    IPrimitive<String> countyName();
 
     //    IPrimitive<GeoPoint> location(); for now the database complains about this unknown type
 

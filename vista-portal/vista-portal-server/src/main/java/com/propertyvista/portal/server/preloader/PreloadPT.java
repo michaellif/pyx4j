@@ -72,7 +72,6 @@ import com.propertyvista.portal.server.pt.PotentialTenantServicesImpl;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -81,7 +80,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-public class PreloadPT extends AbstractDataPreloader {
+public class PreloadPT extends BaseVistaDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(PreloadPT.class);
 
@@ -305,7 +304,7 @@ public class PreloadPT extends AbstractDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(PotentialTenantList.class, PotentialTenant.class, PotentialTenantFinancial.class, PotentialTenantInfo.class, Charges.class,
                     ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class, UnitSelection.class,
-                    ApplicationProgress.class, Pets.class, Address.class, EmergencyContact.class, Summary.class);
+                    ApplicationProgress.class, Pets.class, EmergencyContact.class, Summary.class, Address.class);
         } else {
             return "This is production";
         }

@@ -15,12 +15,10 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
 
-public class RandomUtil {
+import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-    //	private static Random random = new Random(System.currentTimeMillis());
-    private static Random random = new Random(100); // we want pseudo-randomness, same results each time
+public class RandomUtil extends DataGenerator {
 
     public static Date randomDate() {
         return randomDate(1930, 2020);
@@ -44,8 +42,9 @@ public class RandomUtil {
     }
 
     public static <T> T random(T[] array) {
-        if (array.length == 0)
+        if (array.length == 0) {
             return null;
+        }
         int index = random.nextInt(array.length);
         return array[index];
     }
