@@ -29,7 +29,7 @@ public class CMonthYearPicker extends CEditableComponent<Date, NativeMonthYearPi
     private final boolean yearOnly;
 
     @SuppressWarnings("deprecation")
-    private Range yearRange = new Range(1900, new Date().getYear() + 7 - 1900);
+    private Range yearRange = new Range(1900, new Date().getYear() + 7 + 1900);
 
     public CMonthYearPicker(boolean yearOnly) {
         this.yearOnly = yearOnly;
