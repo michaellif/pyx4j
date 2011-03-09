@@ -77,8 +77,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     private TenantsTable tenantsTable;
 
-    private TenantsView tenantsView;
-
     public SummaryViewForm() {
         super(Summary.class, new ReadOnlyComponentFactory());
     }
@@ -107,7 +105,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(inject(proto().tenants().tenants()));
 
         main.add(createHeaderWithEditLink(i18n.tr("Info"), new SiteMap.Info()));
-        main.add(tenantsView = new TenantsView());
         main.add(inject(proto().tenants2().tenants()));
 
         main.add(createHeaderWithEditLink(i18n.tr("Financial"), new SiteMap.Financial()));
@@ -137,9 +134,9 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     public CEditableComponent<?, ?> create(IObject<?> member) {
 
         if (member == proto().tenants().tenants()) {
-            return tenantsTable.CreateTenantFolder();
+            return tenantsTable.createTenantTable();
         } else if (member == proto().tenants2().tenants()) {
-            return tenantsView.CreateTenantFolder();
+            return createTenantView();
         } else if (member.getValueClass().equals(PotentialTenantFinancial.class)) {
             return new FinancialViewForm(this);
         } else if (member.getValueClass().equals(Pets.class)) {
@@ -325,7 +322,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             content.add(cellContent);
         }
 
-        public CEntityFolder<PotentialTenantInfo> CreateTenantFolder() {
+        public CEntityFolder<PotentialTenantInfo> createTenantTable() {
 
             return new CEntityFolder<PotentialTenantInfo>() {
 
@@ -373,30 +370,20 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     /*
      * Tenants detailed information view implementation
      */
-    private class TenantsView extends FlowPanel {
+    public CEntityFolder<PotentialTenantInfo> createTenantView() {
 
-        public TenantsView() {
+        return new CEntityFolder<PotentialTenantInfo>() {
 
-            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            upperLevelElementElignment(this);
-        }
+            @Override
+            protected CEntityFolderItem<PotentialTenantInfo> createItem() {
+                return new SummaryViewTenantInfo(PotentialTenantInfo.class);
+            }
 
-        public CEntityFolder<PotentialTenantInfo> CreateTenantFolder() {
-
-            return new CEntityFolder<PotentialTenantInfo>() {
-
-                @Override
-                protected CEntityFolderItem<PotentialTenantInfo> createItem() {
-                    return new SummaryViewTenantInfo(PotentialTenantInfo.class);
-                }
-
-                @Override
-                protected FolderDecorator<PotentialTenantInfo> createFolderDecorator() {
-                    return new BoxReadOnlyFolderDecorator<PotentialTenantInfo>();
-                }
-            };
-        }
-
+            @Override
+            protected FolderDecorator<PotentialTenantInfo> createFolderDecorator() {
+                return new BoxReadOnlyFolderDecorator<PotentialTenantInfo>();
+            }
+        };
     }
 
     /*
@@ -426,6 +413,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             leaseTerms.getElement().getStyle().setPosition(Position.RELATIVE);
             leaseTerms.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             leaseTerms.getElement().getStyle().setPaddingRight(1, Unit.EM);
+            leaseTerms.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
+            leaseTerms.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
             leaseTerms.setHeight("20em");
             container.add(leaseTerms);
             add(container);

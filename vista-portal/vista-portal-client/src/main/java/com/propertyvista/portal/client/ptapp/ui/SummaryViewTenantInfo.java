@@ -86,27 +86,24 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
 
         FlowPanel main = new FlowPanel();
 
-        SimplePanel padder = new SimplePanel();
-        padder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        padder.getElement().getStyle().setBackgroundColor("white");
+        main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        main.getElement().getStyle().setBackgroundColor("white");
 
-        padder.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        padder.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        padder.getElement().getStyle().setBorderColor("#bbb");
-        padder.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
+        main.getElement().getStyle().setBorderWidth(1, Unit.PX);
+        main.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+        main.getElement().getStyle().setBorderColor("#bbb");
+        main.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
 
         main.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
         main.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
         main.getElement().getStyle().setPaddingLeft(15, Unit.PX);
         main.getElement().getStyle().setPaddingRight(15, Unit.PX);
-        main.setWidth("670");
+        main.setWidth("670px");
 
         main.add(bindCompactView());
         main.add(bindFullView());
 
-        padder.setWidget(main);
-        padder.setWidth("700px");
-        return padder;
+        return main;
     }
 
     private FlowPanel formFullName(IPerson person) {
