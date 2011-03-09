@@ -26,6 +26,12 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
+            <artifactId>vista-portal-rpc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.propertyvista</groupId>
             <artifactId>vista-portal-tester</artifactId>
             <version>${project.version}</version>
         </dependency>
