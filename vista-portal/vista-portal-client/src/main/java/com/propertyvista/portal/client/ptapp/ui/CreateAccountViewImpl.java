@@ -21,6 +21,7 @@ import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
@@ -104,16 +105,7 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
 
             @Override
             public void onClick(ClickEvent event) {
-                form.setVisited(true);
-                if (!form.isValid()) {
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
-                }
-
-                CCaptcha captcha = ((CCaptcha) form.get(form.proto().captcha()));
-                // Captcha do not have events is Google component. We need to fix this! 
-                captcha.retrieveValue();
-
-                presenter.createAccount(form.getValue());
+                submit();
             }
 
         });
@@ -165,19 +157,33 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
         this.presenter = presenter;
     }
 
+    private void submit() {
+        form.setVisited(true);
+        if (!form.isValid()) {
+            throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+        }
+
+        CCaptcha captcha = ((CCaptcha) form.get(form.proto().captcha()));
+        // Captcha do not have events is Google component. We need to fix this! 
+        captcha.retrieveValue();
+
+        presenter.createAccount(form.getValue());
+    }
+
     @Override
     protected void onLoad() {
         super.onLoad();
-        if (ApplicationMode.isDevelopment()) {
-            handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
-                @Override
-                public void onPreviewNativeEvent(NativePreviewEvent event) {
-                    if (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey()) {
-                        setDevLoginValues(event.getNativeEvent(), event.getNativeEvent().getKeyCode());
-                    }
+        handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+            @Override
+            public void onPreviewNativeEvent(NativePreviewEvent event) {
+                if ((ApplicationMode.isDevelopment()) && (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey())) {
+                    setDevLoginValues(event.getNativeEvent(), event.getNativeEvent().getKeyCode());
                 }
-            });
-        }
+                if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
+                    submit();
+                }
+            }
+        });
     }
 
     private void setDevLoginValues(NativeEvent event, int nativeKeyCode) {
@@ -212,8 +218,6 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
     @Override
     protected void onUnload() {
         super.onUnload();
-        if (ApplicationMode.isDevelopment()) {
-            handlerRegistration.removeHandler();
-        }
+        handlerRegistration.removeHandler();
     }
 }

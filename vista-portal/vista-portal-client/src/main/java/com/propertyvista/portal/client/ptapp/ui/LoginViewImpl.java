@@ -20,6 +20,7 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
@@ -66,11 +67,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
             @Override
             public void onClick(ClickEvent event) {
-                form.setVisited(true);
-                if (!form.isValid()) {
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
-                }
-                presenter.login(form.getValue());
+                submit();
             }
 
         });
@@ -111,19 +108,28 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         this.presenter = presenter;
     }
 
+    private void submit() {
+        form.setVisited(true);
+        if (!form.isValid()) {
+            throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+        }
+        presenter.login(form.getValue());
+    }
+
     @Override
     protected void onLoad() {
         super.onLoad();
-        if (ApplicationMode.isDevelopment()) {
-            handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
-                @Override
-                public void onPreviewNativeEvent(NativePreviewEvent event) {
-                    if (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey()) {
-                        setDevLoginValues(event.getNativeEvent(), event.getNativeEvent().getKeyCode());
-                    }
+        handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+            @Override
+            public void onPreviewNativeEvent(NativePreviewEvent event) {
+                if ((ApplicationMode.isDevelopment()) && (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey())) {
+                    setDevLoginValues(event.getNativeEvent(), event.getNativeEvent().getKeyCode());
                 }
-            });
-        }
+                if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
+                    submit();
+                }
+            }
+        });
     }
 
     private void setDevLoginValues(NativeEvent event, int nativeKeyCode) {
@@ -158,10 +164,8 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
     @Override
     protected void onUnload() {
         super.onUnload();
-        if (ApplicationMode.isDevelopment()) {
-            handlerRegistration.removeHandler();
-            devCount = 1;
-        }
+        handlerRegistration.removeHandler();
+        devCount = 1;
     }
 
 }
