@@ -64,6 +64,7 @@ import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.pt.Vehicle;
+import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.SiteMap;
@@ -191,6 +192,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         address.city().setValue(RandomUtil.random(DemoData.CITIES));
         address.province().set(retrieveByMemeber(Province.class, address.province().code(), RandomUtil.random(DemoData.PROVINCES)));
         address.postalCode().setValue(zip);
+        address.country().set(retrieveNamed(Country.class, "Canada"));
     }
 
     public static void loadAddress(IAddress address, StringBuilder sb) {
