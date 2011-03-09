@@ -60,10 +60,10 @@ public class XMLEntityParser {
             xmlName = node.getNodeName();
         }
         T entity = factory.createInstance(xmlName, entityClass);
-        return parse(node, entity);
+        return parse(entity, node);
     }
 
-    private <T extends IEntity> T createInstance(Element node, Class<T> objectClass) {
+    private <T extends IEntity> T createInstance(Class<T> objectClass, Element node) {
         String xmlName = node.getAttribute("type");
         if (!CommonsStringUtils.isStringSet(xmlName)) {
             return null;
@@ -73,7 +73,7 @@ public class XMLEntityParser {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public <T extends IEntity> T parse(Element node, T entity) {
+    private <T extends IEntity> T parse(T entity, Element node) {
         String id = node.getAttribute("id");
         if (CommonsStringUtils.isStringSet(id)) {
             entity.setPrimaryKey(Long.valueOf(id));
@@ -87,23 +87,19 @@ public class XMLEntityParser {
                 IObject<?> member = entity.getMember(memberName);
                 MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
                 if (memberMeta.isEntity()) {
-                    IEntity concreteInctance = createInstance((Element) valueNode, (Class<IEntity>) memberMeta.getObjectClass());
+                    IEntity concreteInctance = createInstance((Class<IEntity>) memberMeta.getObjectClass(), (Element) valueNode);
                     if (concreteInctance == null) {
-                        parse((Element) valueNode, (IEntity) member);
+                        parse((IEntity) member, (Element) valueNode);
                     } else {
-                        parse((Element) valueNode, concreteInctance);
+                        parse(concreteInctance, (Element) valueNode);
                         ((IEntity) member).set(concreteInctance);
                     }
                 } else if (member instanceof ICollection<?, ?>) {
                     NodeList collectionNodeList = valueNode.getChildNodes();
                     for (int ci = 0; ci < collectionNodeList.getLength(); ci++) {
                         Node itemNode = collectionNodeList.item(ci);
-                        if ((itemNode instanceof Element) && ("item".equals(itemNode.getNodeName()))) {
-                            IEntity item = createInstance((Element) itemNode, ((ICollection<?, ?>) member).getValueClass());
-                            if (item == null) {
-                                item = ((ICollection<?, ?>) member).$();
-                            }
-                            parse((Element) itemNode, item);
+                        if (itemNode instanceof Element) {
+                            IEntity item = parse(((ICollection<?, ?>) member).getValueClass(), (Element) itemNode);
                             ((ICollection) member).add(item);
                         }
                     }

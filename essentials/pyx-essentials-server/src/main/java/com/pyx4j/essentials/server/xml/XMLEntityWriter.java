@@ -76,7 +76,10 @@ public class XMLEntityWriter {
             entityAttributes.put("id", String.valueOf(entity.getPrimaryKey()));
         }
         if ((declaredObjectClass != null) && (!entity.getObjectClass().equals(declaredObjectClass))) {
-            entityAttributes.put("type", entityName.getXMLName(entity.getObjectClass()));
+            String typeName = entityName.getXMLName(entity.getObjectClass());
+            if (!typeName.equals(name)) {
+                entityAttributes.put("type", typeName);
+            }
         }
         xml.startIdented(name, entityAttributes);
 
@@ -106,7 +109,8 @@ public class XMLEntityWriter {
                 IObject<?> member = entity.getMember(propertyName);
                 if (member instanceof ICollection<?, ?>) {
                     for (Object item : (ICollection<?, ?>) member) {
-                        write((IEntity) item, "item", null, entity.getEntityMeta().getMemberMeta(propertyName).getObjectClass(), processed);
+                        write((IEntity) item, entityName.getXMLName(((IEntity) item).getObjectClass()), null, entity.getEntityMeta()
+                                .getMemberMeta(propertyName).getObjectClass(), processed);
                     }
                 } else {
                     for (Object item : (Collection<?>) value) {
