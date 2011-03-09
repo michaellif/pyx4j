@@ -13,65 +13,29 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyMoneyForm;
+import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.validators.ProvinceContryFilters;
 import com.propertyvista.portal.client.ptapp.ui.validators.RevalidationTrigger;
 import com.propertyvista.portal.client.ptapp.ui.validators.ZipCodeValueValidator;
-import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
 
-import com.pyx4j.entity.client.ui.CEntitySuggestBox;
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.IFormat;
 
 public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     public BaseEntityForm(Class<E> clazz) {
-        super(clazz);
+        super(clazz, new VistaEditorsComponentFactory());
     }
 
     public BaseEntityForm(Class<E> rootClass, EditableComponentFactory factory) {
         super(rootClass, factory);
-    }
-
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(Money.class)) {
-            return new ReadOnlyMoneyForm();
-        } else if (member.getValueClass().equals(Country.class)) {
-            final CEntitySuggestBox<Country> c = new CEntitySuggestBox<Country>(Country.class);
-            c.setFormat(new IFormat<Country>() {
-
-                @Override
-                public String format(Country value) {
-                    return value.getStringView();
-                }
-
-                @Override
-                public Country parse(String string) {
-                    for (Country option : c.getOptions()) {
-                        if (c.getOptionName(option).equals(string)) {
-                            return option;
-                        }
-                    }
-                    Country entity = EntityFactory.create(Country.class);
-                    entity.name().setValue(string);
-                    return entity;
-                }
-            });
-            return c;
-        } else {
-            return super.create(member);
-        }
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
