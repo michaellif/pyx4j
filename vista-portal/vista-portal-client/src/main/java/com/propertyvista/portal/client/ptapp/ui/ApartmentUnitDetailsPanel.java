@@ -36,6 +36,8 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.MarketRent;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupInteger;
 
@@ -47,7 +49,8 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
 
     }
 
-    public void showUnitDetail(final ApptUnit unit, final MarketRent selectedmarketRent, final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler) {
+    public void showUnitDetail(final ApptUnit unit, final MarketRent selectedmarketRent, final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler,
+            IDebugId debugId) {
         this.clear();
 
         FlowPanel unitDetailPanel = new FlowPanel();
@@ -104,6 +107,8 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
             options.put(mr.leaseTerm().getValue(), mr.leaseTerm().getStringView() + " month " + mr.rent().getStringView());
         }
         CRadioGroupInteger mr = new CRadioGroupInteger(CRadioGroup.Layout.VERTICAL, options);
+        mr.setDebugId(new CompositeDebugId(debugId, "leaseTerm"));
+
         if (unit.marketRent().contains(selectedmarketRent)) {
             mr.populate(selectedmarketRent.leaseTerm().getValue());
         }

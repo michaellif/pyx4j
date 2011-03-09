@@ -267,7 +267,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
         }
 
         private void showDetails(ApptUnit unit) {
-            unitDetailsPanel.showUnitDetail(unit, selectedmarketRent, selectedMarketRentChangeHandler);
+            unitDetailsPanel.showUnitDetail(unit, selectedmarketRent, selectedMarketRentChangeHandler, this.getDebugId());
             unitDetailsPanelShown = unitDetailsPanel;
         }
 
