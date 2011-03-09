@@ -21,6 +21,8 @@
 package com.pyx4j.essentials.server.xml;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.w3c.dom.Element;
@@ -41,6 +43,8 @@ import com.pyx4j.gwt.server.DateUtils;
 public class XMLEntityParser {
 
     private final XMLEntityFactory factory;
+
+    private final Map<String, IEntity> processed = new HashMap<String, IEntity>();
 
     public XMLEntityParser() {
         this(new XMLEntityFactoryDefault());
@@ -72,10 +76,21 @@ public class XMLEntityParser {
         }
     }
 
+    protected void onEntityParsed(IEntity entity) {
+        if (entity.getPrimaryKey() != null) {
+            processed.put(entity.getObjectClass() + "-" + entity.getPrimaryKey(), entity);
+        }
+    }
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private <T extends IEntity> T parse(T entity, Element node) {
         String id = node.getAttribute("id");
         if (CommonsStringUtils.isStringSet(id)) {
+            T exists = (T) processed.get(entity.getObjectClass() + "-" + id);
+            if (exists != null) {
+                entity.set(exists);
+                return entity;
+            }
             entity.setPrimaryKey(Long.valueOf(id));
         }
 
@@ -116,7 +131,7 @@ public class XMLEntityParser {
                 }
             }
         }
-
+        onEntityParsed(entity);
         return entity;
     }
 
