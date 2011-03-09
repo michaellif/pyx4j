@@ -84,8 +84,6 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
     @Override
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
-        //TODO use inheritance of objects
-        //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
         if (image != null) {
             image.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Remove.getDebugIdString());
         }

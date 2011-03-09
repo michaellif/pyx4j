@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.client.ui.DelegatingEntityEditableComponent;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -180,6 +182,12 @@ public class EntityBinder<E extends IEntity> {
                         + e.getMessage());
             }
 
+        }
+    }
+
+    public void setComponentsDebugId(IDebugId debugId) {
+        for (Map.Entry<CEditableComponent<?, ?>, Path> me : binding.entrySet()) {
+            me.getKey().setDebugId(new CompositeDebugId(debugId, me.getValue()));
         }
     }
 

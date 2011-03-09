@@ -24,6 +24,7 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -116,6 +117,12 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
         if (component instanceof IFlexContentComponent) {
             ((IFlexContentComponent) component).onBound(this);
         }
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        super.setDebugId(debugId);
+        binder.setComponentsDebugId(this.getDebugId());
     }
 
     @Override

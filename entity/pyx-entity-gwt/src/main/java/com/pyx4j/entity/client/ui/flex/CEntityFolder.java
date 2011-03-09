@@ -32,6 +32,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -123,7 +124,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         }
 
         final CEntityFolderItem<E> comp = createItem();
-        comp.setRowDebugId(++currentRowDebugId);
 
         @SuppressWarnings("unchecked")
         E newEntity = (E) EntityFactory.create(comp.proto().getValueClass());
@@ -172,7 +172,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         content.clear();
         for (E item : value) {
             CEntityFolderItem<E> comp = createItem();
-            comp.setRowDebugId(++currentRowDebugId);
             comp.setFirst(content.getWidgetCount() == 0);
             comp.onBound(this);
             comp.populate(item);
@@ -194,6 +193,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         component.addAccessAdapter(containerHelper);
         content.add(component);
         itemsMap.put(component.getValue(), component);
+
+        currentRowDebugId++;
+        component.setDebugId(new CompositeDebugId(this.getDebugId(), "row-" + currentRowDebugId));
+        folderItemDecorator.asWidget().ensureDebugId(new CompositeDebugId(this.getDebugId(), "row-" + currentRowDebugId).getDebugIdString());
+
         ValueChangeEvent.fire(this, getValue());
 
         folderItemDecorator.addItemRemoveClickHandler(new ClickHandler() {

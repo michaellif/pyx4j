@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 
 public class TableFolderItemDecorator extends BaseFolderItemDecorator {
 
