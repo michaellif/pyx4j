@@ -36,7 +36,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
@@ -58,7 +57,6 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.widgets.client.Button;
 
 public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo> {
 
@@ -266,6 +264,7 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         FlowPanel addressPanel = new FlowPanel();
 
         addressPanel.add(new HTML(h3(currentAddress.getMeta().getCaption())));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.country()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.postalCode()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.city()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.province()), dd2ColumnsTable));

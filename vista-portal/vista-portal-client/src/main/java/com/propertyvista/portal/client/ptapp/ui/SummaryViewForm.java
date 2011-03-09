@@ -23,6 +23,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -402,22 +403,17 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             leaseTermContent.setWordWrap(true);
             bind(leaseTermContent, proto().leaseTerms().text());
 
-            SimplePanel container = new SimplePanel();
-            container.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            container.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            container.getElement().getStyle().setBorderColor("#bbb");
-            container.getElement().getStyle().setBackgroundColor("white");
-            container.getElement().getStyle().setColor("black");
-
             ScrollPanel leaseTerms = new ScrollPanel(leaseTermContent.asWidget());
-            leaseTerms.getElement().getStyle().setPosition(Position.RELATIVE);
-            leaseTerms.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-            leaseTerms.getElement().getStyle().setPaddingRight(1, Unit.EM);
-            leaseTerms.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
-            leaseTerms.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
+            leaseTerms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            leaseTerms.getElement().getStyle().setBorderWidth(1, Unit.PX);
+            leaseTerms.getElement().getStyle().setBorderColor("#bbb");
+
+            leaseTerms.getElement().getStyle().setBackgroundColor("white");
+            leaseTerms.getElement().getStyle().setColor("black");
+
+            leaseTerms.getElement().getStyle().setPaddingLeft(0.5, Unit.EM);
             leaseTerms.setHeight("20em");
-            container.add(leaseTerms);
-            add(container);
+            add(leaseTerms);
 
             // "I Agree" check-box:
             CCheckBox check = new CCheckBox();
