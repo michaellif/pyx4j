@@ -226,7 +226,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
             pti.relationship().setValue(RandomUtil.random(DemoData.RELATIONSHIPS));
         }
 
-        populatePotentialTenant(pti);
+        populatePotentialTenant(pti, pti.relationship().getValue());
 
         String driversLicense = "JTVMX" + RandomUtil.randomInt(10) + "VMIEK";
         pti.driversLicense().setValue(driversLicense);
@@ -268,7 +268,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         return pti;
     }
 
-    private void populatePotentialTenant(PotentialTenant pt) {
+    private void populatePotentialTenant(PotentialTenant pt, Relationship relationship) {
         pt.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
         pt.middleName().setValue(RandomUtil.randomInt(100) % 4 == 0 ? "M" : "");
         pt.lastName().setValue(RandomUtil.random(DemoData.LAST_NAMES));
@@ -283,20 +283,23 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
         pt.payment().setValue(1.0d + RandomUtil.randomInt(3000));
 
-        pt.dependant().setValue(RandomUtil.randomBoolean());
+        pt.dependant().setValue(false);
+        if (relationship == Relationship.Daughter || relationship == Relationship.Son) {
+            pt.dependant().setValue(true);
+        }
         pt.takeOwnership().setValue(RandomUtil.randomBoolean());
     }
 
-    @SuppressWarnings("unused")
-    private PotentialTenant createPotentialTenant(int index) {
-        PotentialTenant pt = EntityFactory.create(PotentialTenant.class);
-
-        populatePotentialTenant(pt);
-
-        PersistenceServicesFactory.getPersistenceService().persist(pt);
-
-        return pt;
-    }
+    //    @SuppressWarnings("unused")
+    //    private PotentialTenant createPotentialTenant(int index) {
+    //        PotentialTenant pt = EntityFactory.create(PotentialTenant.class);
+    //
+    //        populatePotentialTenant(pt);
+    //
+    //        PersistenceServicesFactory.getPersistenceService().persist(pt);
+    //
+    //        return pt;
+    //    }
 
     @SuppressWarnings("unchecked")
     @Override
