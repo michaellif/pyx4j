@@ -35,6 +35,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.portal.client.ptapp.ui.validators.CanadianSinValidator;
 import com.propertyvista.portal.client.ptapp.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
@@ -192,6 +193,8 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 enablePreviousAddress();
             }
         });
+
+        get(proto().secureIdentifier()).addValueValidator(new CanadianSinValidator());
     }
 
     private void enablePreviousAddress() {
