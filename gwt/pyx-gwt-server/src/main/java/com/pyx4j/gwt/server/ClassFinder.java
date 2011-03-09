@@ -22,6 +22,7 @@ package com.pyx4j.gwt.server;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -75,6 +76,8 @@ public class ClassFinder {
                 readJarLocation();
             } else if (baseURL.startsWith("file:")) {
                 readFileLocation();
+            } else if (baseURL.startsWith("bundleresource:")) {
+                readOSGiBundle();
             } else {
                 log.error("unsupporte URL {}", baseURL);
             }
@@ -112,6 +115,27 @@ public class ClassFinder {
                 jar.close();
             } catch (IOException ignore) {
             }
+        }
+    }
+
+    private void readOSGiBundle() {
+        try {
+            Class<?> fileLocatorClass = this.getClass().getClassLoader().loadClass("org.eclipse.core.runtime.FileLocator");
+            Method equinoxResolveMethod = fileLocatorClass.getMethod("resolve", new Class[] { URL.class });
+            URL url = new URL(baseURL);
+            URL resolvedUrl = (URL) equinoxResolveMethod.invoke(null, url);
+            log.debug("resolved bundle Url {} ", resolvedUrl);
+            String urlExternalForm = resolvedUrl.toExternalForm();
+            baseURL = urlExternalForm.substring(0, urlExternalForm.lastIndexOf("/") + 1);
+            if (baseURL.startsWith("jar:")) {
+                readJarLocation();
+            } else if (baseURL.startsWith("file:")) {
+                readFileLocation();
+            } else {
+                log.error("unsupporte URL {}", baseURL);
+            }
+        } catch (Throwable e) {
+            log.error("Can't open OSGi URL [" + baseURL + "]", e);
         }
     }
 

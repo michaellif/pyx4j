@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -31,10 +34,13 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class XMLEntityFactoryDefault implements XMLEntityFactory {
 
+    private static final Logger log = LoggerFactory.getLogger(XMLEntityFactoryDefault.class);
+
     private final Map<String, String> names = new HashMap<String, String>();
 
     public XMLEntityFactoryDefault() {
         List<String> allClasses = EntityClassFinder.findEntityClasses();
+        log.debug("has {} entity classes", allClasses.size());
         for (String className : allClasses) {
             // strip the package name
             String simpleName = className.substring(className.lastIndexOf(".") + 1);
@@ -42,7 +48,6 @@ public class XMLEntityFactoryDefault implements XMLEntityFactory {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <T extends IEntity> T createInstance(String xmlName, Class<T> objectClass) {
         Class<T> entityClass;
