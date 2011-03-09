@@ -91,7 +91,7 @@ public class EntitySerializationGWTTest extends TestCase {
                 Assert.assertEquals("Double Class of Value", Double.class, emp2.salary().getValue().getClass());
                 Assert.assertEquals("Double Value", 77.8, emp2.salary().getValue());
 
-                // This filed is RpcTransient
+                // This field is RpcTransient
                 Assert.assertEquals("Enum Ext Class of Value", Status.class, emp2.accessStatus().getValueClass());
                 Assert.assertNull("Enum Ext Value", emp2.accessStatus().getValue());
 
@@ -223,7 +223,7 @@ public class EntitySerializationGWTTest extends TestCase {
                 Assert.assertEquals("String Class of Value", String.class, emp2.firstName().getValue().getClass());
                 Assert.assertEquals("String Value", emp.firstName().getValue(), emp2.firstName().getValue());
 
-                // This filed is RpcTransient
+                // This field is RpcTransient
                 Assert.assertEquals("Enum Ext Class of Value", Status.class, emp2.accessStatus().getValueClass());
                 Assert.assertNull("Enum Ext Value", emp2.accessStatus().getValue());
 
