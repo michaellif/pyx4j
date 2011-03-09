@@ -49,7 +49,7 @@ public class BidirectionalRelationshipTest extends InitializerTestCase {
         assertEquals("Same value", c1Name, m.child().name().getValue());
 
         assertNull("Owner Entity FieldName", m.getFieldName());
-        assertNotNull("Owner Filed Entity FieldName", c1.master().getFieldName());
+        assertNotNull("Owner Field Entity FieldName", c1.master().getFieldName());
 
         assertEquals("Owner the same value", m.getValue(), c1.getMemberValue(c1.master().getFieldName()));
         assertTrue("Owner refferes to the same value", c1.getMemberValue(c1.master().getFieldName()) == m.getValue());

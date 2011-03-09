@@ -76,8 +76,8 @@ public class TableModel {
         } else {
             primaryKeyStrategy = Table.PrimaryKeyStrategy.AUTO;
         }
-        tableName = dialect.sqlName(entityMeta.getPersistenceName());
-        entityOperationsMeta = new EntityOperationsMeta(dialect, entityMeta);
+        tableName = dialect.getNamingConvention().sqlTableName(entityMeta.getPersistenceName());
+        entityOperationsMeta = new EntityOperationsMeta(dialect.getNamingConvention(), entityMeta);
     }
 
     public void ensureExists(ConnectionProvider connectionProvider) throws SQLException {

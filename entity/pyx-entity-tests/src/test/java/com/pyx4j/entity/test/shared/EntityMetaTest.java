@@ -122,7 +122,7 @@ public class EntityMetaTest extends InitializerTestCase {
         AddressExt addressExt = EntityFactory.create(AddressExt.class);
         EntityMeta meta = EntityFactory.getEntityMeta(AddressExt.class);
 
-        assertTrue("has filed city", meta.getMemberNames().contains(addressExt.city().getFieldName()));
+        assertTrue("has field city", meta.getMemberNames().contains(addressExt.city().getFieldName()));
 
         assertEquals("caption", "inherited city", meta.getMemberMeta(new Path(addressExt.city())).getCaption());
     }

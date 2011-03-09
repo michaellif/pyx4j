@@ -96,7 +96,7 @@ public class QueryBuilder<T extends IEntity> {
                         break;
                     default:
                         sql.append(alias).append('.');
-                        sql.append(dialect.sqlName(memberPersistenceName));
+                        sql.append(dialect.getNamingConvention().sqlFieldName(memberPersistenceName));
                     }
 
                     if (valueIsNull(propertyCriterion.getValue())) {

@@ -23,6 +23,11 @@ package com.pyx4j.entity.rdb.dialect;
 public class HSQLDialect extends Dialect {
 
     public HSQLDialect() {
+        this(new NamingConventionOracle());
+    }
+
+    public HSQLDialect(NamingConvention namingConvention) {
+        super(namingConvention);
         addTypeMeta(Short.class, "smallint");
         addTypeMeta(Long.class, "bigint");
         addTypeMeta(Double.class, "double");

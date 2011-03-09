@@ -22,7 +22,6 @@ package com.pyx4j.entity.rdb.dialect;
 
 import java.sql.Types;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -31,7 +30,10 @@ public abstract class Dialect {
 
     protected final Map<Class<?>, TypeMeta> typeNames = new HashMap<Class<?>, TypeMeta>();
 
-    protected Dialect() {
+    private final NamingConvention namingConvention;
+
+    protected Dialect(NamingConvention namingConvention) {
+        this.namingConvention = namingConvention;
         addTypeMeta(Integer.class, "integer");
         addTypeMeta(Character.class, "char");
         addTypeMeta(String.class, "varchar");
@@ -41,8 +43,8 @@ public abstract class Dialect {
         addTypeMeta(java.sql.Date.class, "date");
     }
 
-    public String sqlName(String name) {
-        return name.replace("-", "_").toUpperCase(Locale.ENGLISH);
+    public NamingConvention getNamingConvention() {
+        return namingConvention;
     }
 
     protected void addTypeMeta(Class<?> javaClass, String sqlType) {

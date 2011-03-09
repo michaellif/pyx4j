@@ -23,7 +23,6 @@ package com.pyx4j.entity.rdb.mapping;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -57,9 +56,8 @@ public class Mappings {
             TableModel model = tables.get(entityMeta.getEntityClass());
             if (model == null) {
                 model = new TableModel(dialect, entityMeta);
-                String tableName = entityMeta.getPersistenceName().toUpperCase(Locale.ENGLISH);
-                if (usedTableNames.contains(tableName)) {
-                    log.warn("redefining/extending table {} for class {}", tableName, entityMeta.getEntityClass());
+                if (usedTableNames.contains(model.getTableName())) {
+                    log.warn("redefining/extending table {} for class {}", model.getTableName(), entityMeta.getEntityClass());
                 }
                 try {
                     model.ensureExists(connectionProvider);
@@ -68,15 +66,18 @@ public class Mappings {
                     throw new RuntimeException(e);
                 }
                 tables.put(entityMeta.getEntityClass(), model);
-                usedTableNames.add(tableName);
+                usedTableNames.add(model.getTableName());
             }
             return model;
         }
     }
 
-    public void droppedTable(EntityMeta entityMeta) {
-        String tableName = entityMeta.getPersistenceName().toUpperCase(Locale.ENGLISH);
-        usedTableNames.remove(tableName);
+    public void droppedTable(Dialect dialect, EntityMeta entityMeta) {
+        TableModel model = tables.get(entityMeta.getEntityClass());
+        if (model == null) {
+            model = new TableModel(dialect, entityMeta);
+        }
+        usedTableNames.remove(model.getTableName());
         tables.remove(entityMeta.getEntityClass());
     }
 }

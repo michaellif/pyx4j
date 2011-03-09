@@ -201,7 +201,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     }
 
     /**
-     * @return true when any filed in Entity has been changes.
+     * @return true when any field in Entity has been changes.
      */
     public boolean isChanged() {
         return !EntityFormBinder.equalRecursive(form.getOrigValue(), getEntityForSave());

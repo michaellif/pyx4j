@@ -26,10 +26,15 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.entity.shared.IEntity;
 
 public class DataPreloaderCollection extends AbstractDataPreloader {
+
+    private final static Logger log = LoggerFactory.getLogger(DataPreloaderCollection.class);
 
     protected final List<DataPreloader> childPreloaders = new Vector<DataPreloader>();
 
@@ -124,6 +129,7 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
         StringBuilder b = new StringBuilder();
         for (DataPreloader preloader : childPreloaders) {
             preloader.setParametersValues(parameters);
+            log.debug("create preloader {}", preloader.getClass());
             String txt = preloader.create();
             if (txt != null) {
                 b.append(txt).append('\n');
@@ -139,6 +145,7 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
         while (rit.hasPrevious()) {
             DataPreloader preloader = rit.previous();
             preloader.setParametersValues(parameters);
+            log.debug("delete preloader {}", preloader.getClass());
             String txt = preloader.delete();
             if (txt != null) {
                 b.append(txt).append('\n');

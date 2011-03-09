@@ -14,31 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-07-08
+ * Created on Mar 9, 2011
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.rdb.dialect;
 
-public class MySQLDialect extends Dialect {
+import java.util.List;
 
-    public MySQLDialect() {
-        this(new NamingConventionOracle());
-    }
+public interface NamingConvention {
 
-    public MySQLDialect(NamingConvention namingConvention) {
-        super(namingConvention);
-        addTypeMeta(Integer.class, "int");
-        addTypeMeta(Short.class, "smallint");
-        addTypeMeta(Long.class, "bigint");
-        addTypeMeta(Double.class, "double");
-        addTypeMeta(Boolean.class, "bit");
-        addTypeMeta(byte[].class, "blob");
-        addTypeMeta(java.util.Date.class, "datetime");
-    }
+    public String sqlTableName(String javaPersistenceName);
 
-    @Override
-    public String getGeneratedIdColumnString() {
-        return "NOT NULL AUTO_INCREMENT";
-    }
+    public String sqlChildTableName(String javaPersistenceTableName, String javaPersistenceChildTableName);
+
+    public String sqlFieldName(String javaPersistenceFieldName);
+
+    public String sqlEmbededFieldName(List<String> path, String javaPersistenceFieldName);
+
+    public String sqlEmbededTableName(String javaPersistenceTableName, List<String> path, String javaPersistenceFieldName);
+
 }
