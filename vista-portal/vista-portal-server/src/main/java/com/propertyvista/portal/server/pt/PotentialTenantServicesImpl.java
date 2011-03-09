@@ -186,6 +186,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                     } else if (request.proto() instanceof PaymentInfo) {
                         ret = EntityFactory.create(PaymentInfo.class);
                         ((PaymentInfo) ret).type().setValue(PaymentType.Echeck);
+                        ((PaymentInfo) ret).preauthorised().setValue(Boolean.TRUE);
                     }
                 }
             } else {
