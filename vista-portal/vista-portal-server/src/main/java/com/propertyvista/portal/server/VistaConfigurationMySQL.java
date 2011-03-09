@@ -20,9 +20,13 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
         return "localhost";
     }
 
+    private boolean showSql() {
+        return false;
+    }
+
     @Override
     public String connectionUrl() {
-        return super.connectionUrl() + "?autoReconnect=true";
+        return super.connectionUrl() + "?autoReconnect=true" + (showSql() ? "&autoGenerateTestcaseScript=true" : "");
     }
 
     @Override
