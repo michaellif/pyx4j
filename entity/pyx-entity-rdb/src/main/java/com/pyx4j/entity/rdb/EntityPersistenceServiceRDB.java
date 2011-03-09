@@ -679,7 +679,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         TableModel tm = tableModel(entityMeta);
 
         if (cascadedeleteDataEntity != null) {
-            for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
+            for (MemberOperationsMeta member : tm.operationsMeta().getCascadeDeleteMembers()) {
                 IEntity childEntity = (IEntity) member.getMember(cascadedeleteDataEntity);
                 if (childEntity.getPrimaryKey() != null) {
                     cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);

@@ -48,6 +48,8 @@ public class EntityOperationsMeta {
 
     private final List<MemberOperationsMeta> cascadePersistMembers = new Vector<MemberOperationsMeta>();
 
+    private final List<MemberOperationsMeta> cascadeDeleteMembers = new Vector<MemberOperationsMeta>();
+
     private final List<MemberOperationsMeta> cascadeRetrieveMembers = new Vector<MemberOperationsMeta>();
 
     private final List<MemberOperationsMeta> collectionMembers = new Vector<MemberOperationsMeta>();
@@ -87,6 +89,7 @@ public class EntityOperationsMeta {
                     allMembers.add(member);
                     if (memberMeta.isOwnedRelationships()) {
                         cascadePersistMembers.add(member);
+                        cascadeDeleteMembers.add(member);
                     } else if (memberMeta.getAnnotation(Reference.class) != null) {
                         cascadePersistMembers.add(member);
                     }
@@ -150,6 +153,7 @@ public class EntityOperationsMeta {
                     allMembers.add(member);
                     if (memberMeta.isOwnedRelationships()) {
                         cascadePersistMembers.add(member);
+                        cascadeDeleteMembers.add(member);
                     } else if (memberMeta.getAnnotation(Reference.class) != null) {
                         cascadePersistMembers.add(member);
                     }
@@ -180,6 +184,10 @@ public class EntityOperationsMeta {
 
     public List<MemberOperationsMeta> getCascadePersistMembers() {
         return cascadePersistMembers;
+    }
+
+    public List<MemberOperationsMeta> getCascadeDeleteMembers() {
+        return cascadeDeleteMembers;
     }
 
     public List<MemberOperationsMeta> getCascadeRetrieveMembers() {
