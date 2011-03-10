@@ -27,6 +27,7 @@ import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
+import com.propertyvista.portal.client.ptapp.ui.validators.BirthdayDateValidator;
 import com.propertyvista.portal.client.ptapp.ui.validators.RevalidationTrigger;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.Pet;
@@ -195,6 +196,8 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
                         get(proto().weight()).addValueValidator(weightValidator);
                         get(proto().weightUnit()).addValueChangeHandler(new RevalidationTrigger<WeightUnit>(get(proto().weight())));
+
+                        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
                     }
 
                 };

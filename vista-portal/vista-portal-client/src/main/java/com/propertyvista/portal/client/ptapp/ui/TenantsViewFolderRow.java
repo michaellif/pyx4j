@@ -23,6 +23,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.validators.BirthdayDateValidator;
 import com.propertyvista.portal.client.ptapp.ui.validators.ValidationUtils;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
@@ -69,6 +70,8 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
     @Override
     public void attachContent() {
         super.attachContent();
+
+        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
 
         get(proto().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
 
