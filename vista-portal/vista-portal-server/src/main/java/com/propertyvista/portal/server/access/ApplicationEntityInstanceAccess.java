@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.server.access;
 
-import com.propertyvista.portal.domain.pt.IApplicationEntity;
+import com.propertyvista.portal.domain.pt.IBoundToApplication;
 import com.propertyvista.portal.server.pt.PtUserDataAccess;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -26,8 +26,8 @@ public class ApplicationEntityInstanceAccess implements InstanceAccess {
 
     @Override
     public boolean allow(IEntity entity) {
-        return (entity instanceof IApplicationEntity)
-                && (EqualsHelper.equals(((IApplicationEntity) entity).application().getPrimaryKey(), PtUserDataAccess.getCurrentUserApplication()));
+        return (entity instanceof IBoundToApplication)
+                && (EqualsHelper.equals(((IBoundToApplication) entity).application().getPrimaryKey(), PtUserDataAccess.getCurrentUserApplication()));
     }
 
 }

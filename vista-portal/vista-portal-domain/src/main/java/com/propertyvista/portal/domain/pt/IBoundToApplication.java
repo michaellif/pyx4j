@@ -20,8 +20,24 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
+/**
+ * Mark that IEntity is only bound to one PotentialTenant Application.
+ * 
+ * Use for security and retrieval of data by application
+ * 
+ * TODO suggest better name
+ * 
+ * Strictly speaking this should not extends IEntity but used here for convenience of
+ * query criteria creations.
+ * 
+ * example:
+ * 
+ * <pre>
+ * EntityQueryCriteria&lt;IBoundToApplication&gt; criteria = EntityQueryCriteria.create((Class&lt;IBoundToApplication&gt;) request.getEntityClass());
+ * </pre>
+ */
 @AbstractEntity
-public interface IApplicationEntity extends IEntity {
+public interface IBoundToApplication extends IEntity {
 
     @ReadOnly
     @Detached

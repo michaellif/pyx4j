@@ -35,7 +35,7 @@ import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
-import com.propertyvista.portal.domain.pt.IApplicationEntity;
+import com.propertyvista.portal.domain.pt.IBoundToApplication;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
 import com.propertyvista.portal.domain.pt.PaymentInfo;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
@@ -172,7 +172,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             IEntity ret;
             if (request.getPrimaryKey() == 0) {
                 // Find first Entity of that type in Application 
-                EntityQueryCriteria<IApplicationEntity> criteria = EntityQueryCriteria.create((Class<IApplicationEntity>) request.getEntityClass());
+                EntityQueryCriteria<IBoundToApplication> criteria = EntityQueryCriteria.create((Class<IBoundToApplication>) request.getEntityClass());
                 criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
                 ret = secureRetrieve(criteria);
                 if (ret == null) {
@@ -274,7 +274,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                             summary.unitSelection().selectedUnit().newLeaseTerms().getPrimaryKey()));
         }
 
-        private <T extends IApplicationEntity> void retrieveApplicationEntity(T entity) {
+        private <T extends IBoundToApplication> void retrieveApplicationEntity(T entity) {
             @SuppressWarnings("unchecked")
             EntityQueryCriteria<T> criteria = (EntityQueryCriteria<T>) EntityQueryCriteria.create(entity.getValueClass());
             criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
@@ -328,7 +328,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             final User currentUser = PtUserDataAccess.getCurrentUser();
             final Application application = PtUserDataAccess.getCurrentUserApplication();
 
-            if ((request instanceof IUserEntity) || (request instanceof IApplicationEntity)) {
+            if ((request instanceof IUserEntity) || (request instanceof IBoundToApplication)) {
                 // update Owned Members
                 EntityGraph.applyRecursively(request, new EntityGraph.ApplyMethod() {
 
@@ -336,8 +336,8 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                     public void apply(IEntity entity) {
                         if (entity instanceof IUserEntity) {
                             ((IUserEntity) entity).user().set(currentUser);
-                        } else if (entity instanceof IApplicationEntity) {
-                            ((IApplicationEntity) entity).application().set(application);
+                        } else if (entity instanceof IBoundToApplication) {
+                            ((IBoundToApplication) entity).application().set(application);
                         }
                     }
                 });

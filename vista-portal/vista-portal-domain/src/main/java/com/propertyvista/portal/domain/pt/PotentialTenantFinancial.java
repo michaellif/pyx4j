@@ -15,9 +15,10 @@ package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-public interface PotentialTenantFinancial extends IApplicationEntity {
+public interface PotentialTenantFinancial extends IEntity, IBoundToApplication {
 
     //TODO @Detached
     // TODO Back-end to retrieve only values for ToString

@@ -20,7 +20,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Summary extends IEntity, IApplicationEntity {
+public interface Summary extends IEntity, IBoundToApplication {
 
     @Transient
     UnitSelection unitSelection();

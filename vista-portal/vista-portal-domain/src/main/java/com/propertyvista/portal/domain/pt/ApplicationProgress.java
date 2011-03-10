@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-public interface ApplicationProgress extends IEntity, IApplicationEntity {
+public interface ApplicationProgress extends IEntity, IBoundToApplication {
 
     @Owned
     IList<ApplicationWizardStep> steps();

@@ -22,11 +22,12 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @AbstractEntity
 @ToStringFormat("{0} {1} {2}")
-public interface PotentialTenant extends IPerson, IApplicationEntity {
+public interface PotentialTenant extends IEntity, IPerson, IBoundToApplication {
 
     public enum Relationship implements Serializable {
 

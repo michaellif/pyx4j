@@ -24,9 +24,10 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface PaymentInfo extends IApplicationEntity {
+public interface PaymentInfo extends IEntity, IBoundToApplication {
 
     @Transient
     ChargeLineList applicationCharges();
