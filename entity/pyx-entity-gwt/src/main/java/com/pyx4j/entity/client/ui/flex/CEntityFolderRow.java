@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderItem<E> {
 
-    private final List<EntityFolderColumnDescriptor> columns;
+    protected final List<EntityFolderColumnDescriptor> columns;
 
     public CEntityFolderRow(Class<E> clazz, List<EntityFolderColumnDescriptor> columns) {
         super(clazz);
