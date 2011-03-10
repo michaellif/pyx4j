@@ -62,10 +62,34 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     private final EditableComponentsContainerHelper containerHelper;
 
+    private final E entityPrototype;
+
+    /**
+     * @Deprecated use constructor with row item class
+     */
+    @Deprecated
     public CEntityFolder() {
+        this(null);
+    }
+
+    public CEntityFolder(Class<E> rowClass) {
         content = new FlowPanel();
         itemsMap = new LinkedHashMap<E, CEntityFolderItem<E>>();
         containerHelper = new EditableComponentsContainerHelper(this);
+        if (rowClass != null) {
+            entityPrototype = EntityFactory.getEntityPrototype(rowClass);
+        } else {
+            entityPrototype = null;
+        }
+    }
+
+    /**
+     * This mainly use for columns creation when TableFolderDecorator is used
+     * 
+     * @return
+     */
+    public E proto() {
+        return entityPrototype;
     }
 
     @Override
