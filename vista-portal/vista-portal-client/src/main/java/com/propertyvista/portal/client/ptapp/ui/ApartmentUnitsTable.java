@@ -85,6 +85,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
     private final ApptUnit proto;
 
+    @SuppressWarnings("deprecation")
     public ApartmentUnitsTable(ValueChangeHandler<ApptUnit> selectedUnitChangeHandler, ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler) {
         super();
         this.selectedUnitChangeHandler = selectedUnitChangeHandler;
@@ -226,7 +227,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
                         unitDetailsPanelShown.hide();
                     }
 
-                    getContent().addStyleDependentName(VistaStyles.ApartmentUnits.StylePrefix + VistaStyles.ApartmentUnits.StyleDependent.selected.name());
+                    getContent().addStyleDependentName(VistaStyles.ApartmentUnits.StyleDependent.selected.name());
                     setSelected(getValue());
                     selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApptUnit>(getValue()) {
                     });
