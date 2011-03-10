@@ -85,7 +85,7 @@
 
     <filter>
         <filter-name>OpenIdFilter</filter-name>
-        <filter-class>com.propertyvista.portal.server.access.openId.OpenIdFilter</filter-class>
+        <filter-class>com.propertyvista.server.security.openId.OpenIdFilter</filter-class>
     </filter>
 
     <filter-mapping>
@@ -108,7 +108,7 @@
 
     <servlet>
         <servlet-name>OpenIdServlet</servlet-name>
-        <servlet-class>com.propertyvista.portal.server.access.openId.OpenIdServlet</servlet-class>
+        <servlet-class>com.propertyvista.server.security.openId.OpenIdServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
