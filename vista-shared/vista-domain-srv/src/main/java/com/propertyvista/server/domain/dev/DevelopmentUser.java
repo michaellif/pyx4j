@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.shared.domain.dev;
+package com.propertyvista.server.domain.dev;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;

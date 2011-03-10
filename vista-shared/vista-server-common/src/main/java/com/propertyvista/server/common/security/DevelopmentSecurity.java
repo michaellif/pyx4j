@@ -14,7 +14,7 @@
 package com.propertyvista.server.common.security;
 
 import com.propertyvista.config.SystemConfig;
-import com.propertyvista.server.shared.domain.dev.DevelopmentUser;
+import com.propertyvista.server.domain.dev.DevelopmentUser;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
