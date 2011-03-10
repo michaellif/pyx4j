@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.server;
 
+import com.pyx4j.entity.rdb.dialect.NamingConvention;
+import com.pyx4j.entity.rdb.dialect.NamingConventionModern;
+
 public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.ConfigurationMySQL {
 
     @Override
@@ -42,6 +45,11 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
     @Override
     public String password() {
         return "vista";
+    }
+
+    @Override
+    public NamingConvention namingConvention() {
+        return new NamingConventionModern();
     }
 
 }
