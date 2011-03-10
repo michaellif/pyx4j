@@ -34,7 +34,6 @@ import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -190,13 +189,13 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                                     if (ValidationUtils.isOlderThen18(event.getValue())) {
                                         get(proto.takeOwnership()).setVisible(true);
                                         if (!get(proto.dependant()).getValue())
-                                            updateCoApplicantRelation();
+                                            showCoApplicantRelation();
                                     } else {
                                         get(proto.dependant()).setValue(true);
 
                                         get(proto.takeOwnership()).setValue(false);
                                         get(proto.takeOwnership()).setVisible(false);
-                                        removeCoApplicantRelation();
+                                        hideCoApplicantRelation();
                                     }
                                 }
                             });
@@ -218,9 +217,9 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                                 @Override
                                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                                     if (event.getValue() == true) {
-                                        removeCoApplicantRelation();
+                                        hideCoApplicantRelation();
                                     } else {
-                                        updateCoApplicantRelation();
+                                        showCoApplicantRelation();
                                     }
                                 }
                             });
@@ -235,7 +234,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                             if (ValidationUtils.isOlderThen18(value.birthDate().getValue())) {
                                 get(proto.takeOwnership()).setVisible(true);
                                 if (!value.dependant().getValue()) {
-                                    updateCoApplicantRelation();
+                                    showCoApplicantRelation();
                                 }
 
                             } else {
@@ -243,7 +242,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
                                 get(proto.takeOwnership()).setValue(false);
                                 get(proto.takeOwnership()).setVisible(false);
-                                removeCoApplicantRelation();
+                                hideCoApplicantRelation();
                             }
                         }
                     }
@@ -274,7 +273,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                     }
 
                     @SuppressWarnings("unchecked")
-                    private void removeCoApplicantRelation() {
+                    private void hideCoApplicantRelation() {
                         ((CComboBox<Relationship>) get(proto.relationship())).removeOption(Relationship.CoApplicant);
                         if (get(proto.relationship()).isValueEmpty()) {
                             get(proto.relationship()).setValue(Relationship.Other);
@@ -282,7 +281,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                     }
 
                     @SuppressWarnings("unchecked")
-                    private void updateCoApplicantRelation() {
+                    private void showCoApplicantRelation() {
                         ((CComboBox<Relationship>) get(proto.relationship())).updateOption(Relationship.CoApplicant);
                     }
                 };
