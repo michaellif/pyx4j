@@ -92,14 +92,14 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
             private List<EntityFolderColumnDescriptor> columns;
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().firstName(), "10em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().middleName(), "6em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().lastName(), "10em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "7.2em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().email(), "11em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().dependant(), "7em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "7em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().firstName(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().middleName(), "6em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().lastName(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "7.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().email(), "11em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().dependant(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "7em"));
             }
 
             @Override

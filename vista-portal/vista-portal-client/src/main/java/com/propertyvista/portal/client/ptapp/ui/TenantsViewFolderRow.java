@@ -18,10 +18,9 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.validators.ValidationUtils;
@@ -47,26 +46,23 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
     @SuppressWarnings("rawtypes")
     @Override
     public IsWidget createContent() {
-        if (!isFirst()) {
-            return super.createContent();
-        } else {
-            FlowPanel main = new FlowPanel();
-            main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        if (isFirst()) {
+            HorizontalPanel main = new HorizontalPanel();
             main.setWidth("100%");
             for (EntityFolderColumnDescriptor column : columns) {
                 // Don't show dependent and takeOwnership 
                 if (column.getObject() == proto().dependant() || column.getObject() == proto().takeOwnership()) {
                     continue;
                 }
-                //|| column.getObject() == proto.relationship()
                 CComponent<?> component = createCell(column);
-                //                                component.setWidth("100%");
                 if (column.getObject() == proto().email()) {
                     ((CEditableComponent) component).setEditable(false);
                 }
                 main.add(createDecorator(component, column.getWidth()));
             }
             return main;
+        } else {
+            return super.createContent();
         }
     }
 
@@ -147,7 +143,6 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
                 if (!value.dependant().getValue()) {
                     showCoApplicantRelation();
                 }
-
             } else {
                 get(proto().dependant()).setValue(true);
 

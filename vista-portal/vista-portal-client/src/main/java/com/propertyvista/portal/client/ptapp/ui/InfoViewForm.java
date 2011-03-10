@@ -267,7 +267,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 main.add(inject(proto().address().street1()), 20);
                 main.add(inject(proto().address().street2()), 20);
                 main.add(inject(proto().address().city()), 15);
-                main.add(inject(proto().address().province()), 10);
+                main.add(inject(proto().address().province()), 17);
                 main.add(inject(proto().address().postalCode()), 7);
                 main.add(new HTML());
 
@@ -280,18 +280,18 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
     }
 
     private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {
-        return new CEntityFolder<Vehicle>() {
+        return new CEntityFolder<Vehicle>(Vehicle.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
 
             {
                 Vehicle proto = EntityFactory.getEntityPrototype(Vehicle.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.plateNumber(), "5em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.year(), "5em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.make(), "5em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.model(), "5em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.province(), "10em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.plateNumber(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.year(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.make(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.model(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.province(), "17em"));
             }
 
             @Override

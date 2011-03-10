@@ -81,7 +81,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
     private MarketRent selectedmarketRent;
 
-    private FlowPanel floorplanRawPanel;
+    private HorizontalPanel floorplanRawPanel;
 
     private final ApptUnit proto;
 
@@ -91,8 +91,6 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
         this.selectedMarketRentChangeHandler = selectedMarketRentChangeHandler;
 
         proto = EntityFactory.getEntityPrototype(ApptUnit.class);
-
-        this.setWidth("700px");
 
         columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto.floorplan().name(), "70px"));
@@ -124,7 +122,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
         TableFolderDecorator<ApptUnit> tfd = new TableFolderDecorator<ApptUnit>(columns);
         tfd.getHeader().setStyleName(VistaStyles.ApartmentUnits.StylePrefix + VistaStyles.ApartmentUnits.StyleSuffix.UnitListHeader);
 
-        floorplanRawPanel = new FlowPanel();
+        floorplanRawPanel = new HorizontalPanel();
         floorplanRawPanel.setWidth("100%");
         floorplanRawPanel.getElement().getStyle().setDisplay(Style.Display.INLINE_BLOCK);
         tfd.insert(floorplanRawPanel, tfd.getWidgetIndex(tfd.getHeader()) + 1);
@@ -145,7 +143,6 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
         floorplanRawPanel.clear();
         for (EntityFolderColumnDescriptor column : columns) {
             HorizontalPanel cellPanel = new HorizontalPanel();
-            cellPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
             cellPanel.getElement().getStyle().setMarginLeft(3, Style.Unit.PX);
             cellPanel.getElement().getStyle().setMarginRight(3, Style.Unit.PX);
             cellPanel.setWidth(column.getWidth());

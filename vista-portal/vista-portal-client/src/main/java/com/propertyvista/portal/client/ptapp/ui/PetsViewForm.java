@@ -120,15 +120,15 @@ public class PetsViewForm extends CEntityForm<Pets> {
             {
                 Pet proto = EntityFactory.getEntityPrototype(Pet.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.type(), "5em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.name(), "14em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.color(), "6em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.breed(), "13em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weight(), "4em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "4em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7.2em", "0.5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.type(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.name(), "14em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.color(), "6em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.breed(), "13em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.weight(), "4em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "4em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7.2em"));
                 if (!isSummaryViewMode()) {
-                    columns.add(new EntityFolderColumnDescriptor(proto.chargeLine(), "7em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.chargeLine(), "7em"));
                 }
             }
 
