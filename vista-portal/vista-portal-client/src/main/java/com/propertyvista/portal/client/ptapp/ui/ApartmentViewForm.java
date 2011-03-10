@@ -23,6 +23,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -43,7 +44,6 @@ import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.google.gwt.user.client.ui.Button;
 
 public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
 
@@ -125,8 +125,6 @@ public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
         captionDecoration.labelStyle = ViewHeaderDecorator.DEFAULT_STYLE_PREFIX + ViewHeaderDecorator.StyleSuffix.Caption.name();
         main.add(new VistaWidgetDecorator(inject(proto().rentStart()), captionDecoration));
 
-        addValidations();
-
         main.setWidth("700px");
 
         FlowPanel buildingView = new FlowPanel();
@@ -145,7 +143,8 @@ public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
         ((ApartmentUnitsTable) getRaw(value.availableUnits().units())).populate(getValue());
     }
 
-    private void addValidations() {
+    @Override
+    public void addValidations() {
         this.addValueValidator(new EditableValueValidator<UnitSelection>() {
 
             @Override

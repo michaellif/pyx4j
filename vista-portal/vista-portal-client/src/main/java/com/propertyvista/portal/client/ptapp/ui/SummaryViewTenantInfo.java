@@ -56,7 +56,6 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
-import com.pyx4j.entity.shared.EntityFactory;
 
 public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo> {
 
@@ -321,18 +320,17 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
     }
 
     private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {
-        return new CEntityFolder<Vehicle>() {
+        return new CEntityFolder<Vehicle>(Vehicle.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
 
             {
-                Vehicle proto = EntityFactory.getEntityPrototype(Vehicle.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.plateNumber(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.year(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.make(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.model(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.province(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto().plateNumber(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto().year(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto().make(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto().model(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto().province(), "100px"));
             }
 
             @Override

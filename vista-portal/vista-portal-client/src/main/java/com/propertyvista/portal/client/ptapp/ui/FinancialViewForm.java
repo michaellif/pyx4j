@@ -39,7 +39,6 @@ import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -50,7 +49,6 @@ import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -108,7 +106,6 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
         padder.setWidget(main);
         padder.setWidth("700px");
-        addValidations();
         return padder;
     }
 
@@ -120,7 +117,8 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         }
     }
 
-    private void addValidations() {
+    @Override
+    public void addValidations() {
         this.addValueValidator(new EditableValueValidator<PotentialTenantFinancial>() {
 
             @Override
@@ -137,7 +135,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
     private CEntityFolder<TenantIncome> createIncomeFolderEditor() {
 
-        return new CEntityFolder<TenantIncome>() {
+        return new CEntityFolder<TenantIncome>(TenantIncome.class) {
 
             @Override
             protected FolderDecorator<TenantIncome> createFolderDecorator() {
@@ -163,15 +161,14 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
     }
 
     private CEntityFolder<TenantAsset> createAssetFolderEditorColumns() {
-        return new CEntityFolder<TenantAsset>() {
+        return new CEntityFolder<TenantAsset>(TenantAsset.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
-                TenantAsset proto = EntityFactory.getEntityPrototype(TenantAsset.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.assetType(), "180px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.percent(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.assetValue(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto().assetType(), "180px"));
+                columns.add(new EntityFolderColumnDescriptor(proto().percent(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto().assetValue(), "120px"));
             }
 
             @Override
@@ -213,8 +210,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                     }
 
                     @Override
-                    public void attachContent() {
-                        super.attachContent();
+                    public void addValidations() {
                         get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
 
                             @Override
@@ -237,18 +233,17 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
     }
 
     private CEntityFolder<TenantGuarantor> createGuarantorFolderEditorColumns() {
-        return new CEntityFolder<TenantGuarantor>() {
+        return new CEntityFolder<TenantGuarantor>(TenantGuarantor.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
-                TenantGuarantor proto = EntityFactory.getEntityPrototype(TenantGuarantor.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.relationship(), "9em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.middleName(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "12em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7.2em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.email(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().firstName(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().middleName(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().lastName(), "12em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "7.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().email(), "10em"));
             }
 
             @Override
@@ -284,8 +279,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                     }
 
                     @Override
-                    public void attachContent() {
-                        super.attachContent();
+                    public void addValidations() {
 
                         get(proto().email()).setMandatory(true);
 

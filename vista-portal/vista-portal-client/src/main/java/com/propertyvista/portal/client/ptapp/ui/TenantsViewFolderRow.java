@@ -68,8 +68,7 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
     }
 
     @Override
-    public void attachContent() {
-        super.attachContent();
+    public void addValidations() {
 
         get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
 

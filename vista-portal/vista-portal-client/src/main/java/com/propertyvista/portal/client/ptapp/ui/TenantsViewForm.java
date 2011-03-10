@@ -51,11 +51,11 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
         main.add(inject(proto().tenants(), createTenantsEditorColumns()));
-        addValidations();
         return main;
     }
 
-    private void addValidations() {
+    @Override
+    public void addValidations() {
         super.addValueValidator(new EditableValueValidator<PotentialTenantList>() {
 
             @Override

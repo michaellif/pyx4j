@@ -88,7 +88,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         }
 
         private CEntityFolder<Employee> createEmployeeFolderEditorColumns() {
-            return new CEntityFolder<Employee>() {
+            return new CEntityFolder<Employee>(Employee.class) {
 
                 private List<EntityFolderColumnDescriptor> columns;
 
@@ -127,7 +127,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         }
 
         private CEntityFolder<Employee> createEmployeeFolderEditorForms() {
-            return new CEntityFolder<Employee>() {
+            return new CEntityFolder<Employee>(Employee.class) {
 
                 @Override
                 protected FolderDecorator<Employee> createFolderDecorator() {

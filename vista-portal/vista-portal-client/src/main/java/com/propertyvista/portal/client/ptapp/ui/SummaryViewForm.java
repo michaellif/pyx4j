@@ -23,8 +23,6 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -34,7 +32,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
@@ -325,10 +322,11 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
         public CEntityFolder<PotentialTenantInfo> createTenantTable() {
 
-            return new CEntityFolder<PotentialTenantInfo>() {
+            return new CEntityFolder<PotentialTenantInfo>(PotentialTenantInfo.class) {
 
                 @Override
                 protected CEntityFolderItem<PotentialTenantInfo> createItem() {
+
                     return new CEntityFolderItem<PotentialTenantInfo>(PotentialTenantInfo.class) {
 
                         @Override
@@ -373,7 +371,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
      */
     public CEntityFolder<PotentialTenantInfo> createTenantView() {
 
-        return new CEntityFolder<PotentialTenantInfo>() {
+        return new CEntityFolder<PotentialTenantInfo>(PotentialTenantInfo.class) {
 
             @Override
             protected CEntityFolderItem<PotentialTenantInfo> createItem() {

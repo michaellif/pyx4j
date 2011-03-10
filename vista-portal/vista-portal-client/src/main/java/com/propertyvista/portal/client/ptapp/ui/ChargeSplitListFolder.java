@@ -43,6 +43,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
     @SuppressWarnings("rawtypes")
     ChargeSplitListFolder(ValueChangeHandler valueChangeHandler) {
+        super(TenantCharge.class);
         this.valueChangeHandler = valueChangeHandler;
     }
 

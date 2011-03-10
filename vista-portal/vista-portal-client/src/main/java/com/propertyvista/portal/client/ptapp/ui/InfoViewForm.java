@@ -53,7 +53,6 @@ import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
@@ -183,7 +182,8 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         }
     }
 
-    private void addValidations() {
+    @Override
+    public void addValidations() {
         @SuppressWarnings("unchecked")
         CEntityEditableComponent<Address> currentAddressForm = ((CEntityEditableComponent<Address>) getRaw(proto().currentAddress()));
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<Date>() {
@@ -254,6 +254,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
     }
 
     private CEntityEditableComponent<EmergencyContact> createEmergencyContactEditor() {
+
         return new CEntityEditableComponent<EmergencyContact>(EmergencyContact.class) {
             @Override
             public IsWidget createContent() {
@@ -270,11 +271,12 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 main.add(inject(proto().address().province()), 17);
                 main.add(inject(proto().address().postalCode()), 7);
                 main.add(new HTML());
-
-                get(proto().address().postalCode()).addValueValidator(new ZipCodeValueValidator());
-
                 return main;
+            }
 
+            @Override
+            public void addValidations() {
+                get(proto().address().postalCode()).addValueValidator(new ZipCodeValueValidator());
             }
         };
     }
@@ -285,13 +287,12 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
             private List<EntityFolderColumnDescriptor> columns;
 
             {
-                Vehicle proto = EntityFactory.getEntityPrototype(Vehicle.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.plateNumber(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.year(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.make(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.model(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.province(), "17em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().plateNumber(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().year(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().make(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().model(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().province(), "17em"));
             }
 
             @Override

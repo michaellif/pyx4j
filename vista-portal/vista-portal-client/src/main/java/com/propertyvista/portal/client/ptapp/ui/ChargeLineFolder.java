@@ -28,6 +28,10 @@ import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 
 public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
 
+    public ChargeLineFolder() {
+        super(ChargeLine.class);
+    }
+
     @Override
     protected FolderDecorator<ChargeLine> createFolderDecorator() {
         return new BoxReadOnlyFolderDecorator<ChargeLine>() {

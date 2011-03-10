@@ -47,7 +47,6 @@ import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -79,11 +78,11 @@ public class PetsViewForm extends CEntityForm<Pets> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
         main.add(inject(proto().pets(), createPetsEditorColumns()));
-        addValidations();
         return main;
     }
 
-    private void addValidations() {
+    @Override
+    public void addValidations() {
         super.addValueValidator(new EditableValueValidator<Pets>() {
 
             @Override
@@ -115,21 +114,20 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
     private CEntityFolder<Pet> createPetsEditorColumns() {
 
-        return new CEntityFolder<Pet>() {
+        return new CEntityFolder<Pet>(Pet.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
-                Pet proto = EntityFactory.getEntityPrototype(Pet.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.type(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.name(), "14em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.color(), "6em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.breed(), "13em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weight(), "4em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "4em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "14em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().color(), "6em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().breed(), "13em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().weight(), "4em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().weightUnit(), "4em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "7.2em"));
                 if (!isSummaryViewMode()) {
-                    columns.add(new EntityFolderColumnDescriptor(proto.chargeLine(), "7em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto().chargeLine(), "7em"));
                 }
             }
 
@@ -174,11 +172,11 @@ public class PetsViewForm extends CEntityForm<Pets> {
                     @Override
                     public IsWidget createContent() {
                         IsWidget w = super.createContent();
-                        addValidations();
                         return w;
                     }
 
-                    private void addValidations() {
+                    @Override
+                    public void addValidations() {
                         EditableValueValidator<Integer> weightValidator = new EditableValueValidator<Integer>() {
 
                             @Override

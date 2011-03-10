@@ -35,6 +35,7 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
     final ValueChangeHandler valueChangeHandler;
 
     ChargeLineSelectableFolder(@SuppressWarnings("rawtypes") ValueChangeHandler valueChangeHandler) {
+        super(ChargeLineSelectable.class);
         this.valueChangeHandler = valueChangeHandler;
     }
 

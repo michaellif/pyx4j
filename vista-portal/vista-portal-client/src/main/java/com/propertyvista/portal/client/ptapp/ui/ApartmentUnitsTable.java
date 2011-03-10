@@ -56,7 +56,6 @@ import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CAbstractLabel;
@@ -83,25 +82,21 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
     private HorizontalPanel floorplanRawPanel;
 
-    private final ApptUnit proto;
-
     @SuppressWarnings("deprecation")
     public ApartmentUnitsTable(ValueChangeHandler<ApptUnit> selectedUnitChangeHandler, ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler) {
-        super();
+        super(ApptUnit.class);
         this.selectedUnitChangeHandler = selectedUnitChangeHandler;
         this.selectedMarketRentChangeHandler = selectedMarketRentChangeHandler;
 
-        proto = EntityFactory.getEntityPrototype(ApptUnit.class);
-
         columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto.floorplan().name(), "70px"));
-        columns.add(new EntityFolderColumnDescriptor(proto.unitType(), "100px"));
-        columns.add(new EntityFolderColumnDescriptor(proto.marketRent(), "70px"));
-        columns.add(new EntityFolderColumnDescriptor(proto.requiredDeposit(), "70px"));
-        columns.add(new EntityFolderColumnDescriptor(proto.bedrooms(), "60px"));
-        columns.add(new EntityFolderColumnDescriptor(proto.bathrooms(), "60px"));
-        columns.add(new EntityFolderColumnDescriptor(proto.area(), "60px"));
-        columns.add(new EntityFolderColumnDescriptor(proto.avalableForRent(), "140px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().floorplan().name(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().unitType(), "100px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().marketRent(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().requiredDeposit(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().bedrooms(), "60px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().bathrooms(), "60px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().area(), "60px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().avalableForRent(), "140px"));
     }
 
     @Override
@@ -151,27 +146,27 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
             String caption = "&nbsp";
             Widget widgetToInsert = null;
 
-            if (proto.floorplan().name() == column.getObject()) {
+            if (proto().floorplan().name() == column.getObject()) {
                 widgetToInsert = new Image(SiteImages.INSTANCE.floorplan());
                 widgetToInsert.ensureDebugId(VistaFormsDebugId.Available_Units_ViewPlan.getDebugIdString());
-            } else if (proto.unitType() == column.getObject()) {
+            } else if (proto().unitType() == column.getObject()) {
                 caption = availableUnits.floorplan().name().getStringView();
             } else {
                 if (availableUnits.units().size() != 0) {
                     UnitsDataCalc calcs = new UnitsDataCalc(availableUnits.units());
                     // fill the row:
-                    if (proto.marketRent() == column.getObject()) {
+                    if (proto().marketRent() == column.getObject()) {
                         caption = "From <br />" + DomainUtil.createMoney(calcs.minRent).getStringView();
-                    } else if (proto.requiredDeposit() == column.getObject()) {
+                    } else if (proto().requiredDeposit() == column.getObject()) {
                         caption = "<br />" + DomainUtil.createMoney(calcs.minDeposit).getStringView();
-                    } else if (proto.bedrooms() == column.getObject()) {
+                    } else if (proto().bedrooms() == column.getObject()) {
                         caption = "<br />" + formatDoubleAsInt(calcs.minBed);
-                    } else if (proto.bathrooms() == column.getObject()) {
+                    } else if (proto().bathrooms() == column.getObject()) {
                         caption = "<br />" + formatDoubleAsInt(calcs.minBath);
-                    } else if (proto.area() == column.getObject()) {
+                    } else if (proto().area() == column.getObject()) {
                         caption = "<br />" + availableUnits.floorplan().area().getStringView();
-                    } else if (proto.avalableForRent() == column.getObject()) {
-                        caption = "<br />" + DateTimeFormat.getFormat(proto.avalableForRent().getMeta().getFormat()).format(calcs.minAvalableForRent);
+                    } else if (proto().avalableForRent() == column.getObject()) {
+                        caption = "<br />" + DateTimeFormat.getFormat(proto().avalableForRent().getMeta().getFormat()).format(calcs.minAvalableForRent);
                     }
                 }
             }
@@ -271,7 +266,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
         @Override
         protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-            if (column.getObject() == proto.floorplan().name()) {
+            if (column.getObject() == proto().floorplan().name()) {
                 CLabel l = new CLabel();
                 l.setAllowHtml(true);
                 l.setValue("&nbsp");
