@@ -19,6 +19,8 @@
 
     <modules>
         <module>vista-server-config</module>
+        <module>vista-shared-domain-srv</module>
+        <module>vista-server-common</module>
         <module>vista-callfire</module>
         <module>vista-payment</module>
         <module>vista-integration</module>

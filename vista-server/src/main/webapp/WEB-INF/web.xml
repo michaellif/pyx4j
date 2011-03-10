@@ -11,7 +11,7 @@
 
     <context-param>
         <param-name>com.pyx4j.config.server.ServerSideConfiguration</param-name>
-        <param-value>com.propertyvista.portal.server.VistaServerSideConfiguration</param-value>
+        <param-value>com.propertyvista.server.config.VistaServerSideConfiguration</param-value>
     </context-param>
 
     <listener>
@@ -67,12 +67,12 @@
             <param-value>20</param-value>
         </init-param>
     </filter>
-    
+
     <filter-mapping>
         <filter-name>GWTCacheFilter</filter-name>
 	    <url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
     <filter>
         <filter-name>LifecycleFilter</filter-name>
         <filter-class>com.pyx4j.server.contexts.LifecycleFilter</filter-class>
@@ -92,7 +92,7 @@
         <filter-name>OpenIdFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+
     <!-- Servlets -->
 <!--
     <servlet>
@@ -115,17 +115,17 @@
         <servlet-name>OpenIdServlet</servlet-name>
         <url-pattern>/o/openid</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>StatusServlet</servlet-name>
-        <servlet-class>com.propertyvista.portal.server.VistaStatusServlet</servlet-class>
+        <servlet-class>com.propertyvista.server.ci.VistaStatusServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>StatusServlet</servlet-name>
         <url-pattern>/status</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
         <servlet-name>StatusServlet</servlet-name>
         <url-pattern>/o/status</url-pattern>
@@ -140,7 +140,7 @@
         <servlet-name>DebugServlet</servlet-name>
         <url-pattern>/debug/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
         <servlet-name>DebugServlet</servlet-name>
         <url-pattern>/o/debug/*</url-pattern>
@@ -148,14 +148,14 @@
 
     <servlet>
         <servlet-name>DBResetServlet</servlet-name>
-        <servlet-class>com.propertyvista.portal.server.preloader.DBResetServlet</servlet-class>
+        <servlet-class>com.propertyvista.server.ci.DBResetServlet</servlet-class>
     </servlet>
-   
+
     <servlet-mapping>
         <servlet-name>DBResetServlet</servlet-name>
         <url-pattern>/o/db-reset</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>DeferredProcessTaskWorkerServlet</servlet-name>
         <servlet-class>com.pyx4j.essentials.server.deferred.DeferredProcessTaskWorkerServlet</servlet-class>
@@ -224,5 +224,5 @@
     <session-config>
             <session-timeout>240</session-timeout>
     </session-config>
-    
+
 </web-app>

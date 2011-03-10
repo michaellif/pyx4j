@@ -18,7 +18,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.portal.server.VistaServerSideConfiguration;
+import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;

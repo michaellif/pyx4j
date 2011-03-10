@@ -31,10 +31,10 @@ import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.ActivationServices;
 import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
-import com.propertyvista.portal.server.access.AccessKey;
-import com.propertyvista.portal.server.access.AntiBot;
-import com.propertyvista.portal.server.access.VistaAuthenticationServicesImpl;
 import com.propertyvista.portal.server.mail.MessageTemplates;
+import com.propertyvista.server.common.security.AccessKey;
+import com.propertyvista.server.common.security.AntiBot;
+import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;
@@ -95,7 +95,7 @@ public class ActivationServicesImpl implements ActivationServices {
             user.email().setValue(email);
             user.name().setValue(request.email().getValue());
 
-            credential.credential().setValue(VistaAuthenticationServicesImpl.encryptPassword(request.password().getValue()));
+            credential.credential().setValue(PasswordEncryptor.encryptPassword(request.password().getValue()));
             credential.enabled().setValue(Boolean.TRUE);
             credential.behavior().setValue(VistaBehavior.POTENCIAL_TENANT);
 
@@ -194,7 +194,7 @@ public class ActivationServicesImpl implements ActivationServices {
             if ((new Date().after(cr.accessKeyExpire().getValue()))) {
                 throw new RuntimeExceptionSerializable(i18n.tr("Token has expired."));
             }
-            cr.credential().setValue(VistaAuthenticationServicesImpl.encryptPassword(request.newPassword().getValue()));
+            cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
             cr.accessKey().setValue(null);
             PersistenceServicesFactory.getPersistenceService().persist(cr);
 

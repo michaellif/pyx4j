@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.rdb;
 
-import com.propertyvista.portal.server.VistaServerSideConfiguration;
+import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;

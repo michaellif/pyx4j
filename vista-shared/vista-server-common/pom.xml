@@ -19,6 +19,18 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-server-config</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-shared-domain-srv</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-j2se</artifactId>
             <version>${pyxVersion}</version>
@@ -28,6 +40,12 @@
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-mail-server</artifactId>
             <version>${pyxVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

@@ -23,7 +23,7 @@ import com.propertyvista.callfire.CallFire;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
-import com.propertyvista.portal.server.access.DevelopmentSecurity;
+import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.domain.CampaignHistory;
 import com.propertyvista.server.domain.CampaignTriger;
 import com.propertyvista.server.domain.PhoneCallCampaign;
