@@ -32,4 +32,12 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
     public AbstractAntiBot getAntiBot() {
         return new ReCaptchaAntiBot();
     }
+
+    public String getReCaptchaPrivateKey() {
+        return null;
+    }
+
+    public String getReCaptchaPublicKey() {
+        return null;
+    }
 }
