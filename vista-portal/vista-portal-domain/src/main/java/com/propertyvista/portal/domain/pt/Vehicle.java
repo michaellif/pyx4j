@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import com.propertyvista.portal.domain.ref.Province;
 
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Table;
@@ -24,6 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Table(name = "pt_vehicle")
 public interface Vehicle extends IEntity {
 
+    @BusinessEqualValue
     IPrimitive<String> plateNumber();
 
     IPrimitive<Integer> year();
