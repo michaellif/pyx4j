@@ -46,7 +46,7 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
 
         // Need local variables to avoid extended casting that make the code unreadable
         CEditableComponent<Province, ?> province;
-        main.add(province = (CEditableComponent<Province, ?>) parent.inject(proto.province()), 15);
+        main.add(province = (CEditableComponent<Province, ?>) parent.inject(proto.province()), 17);
 
         CEditableComponent<Country, ?> country;
         main.add(country = (CEditableComponent<Country, ?>) parent.inject(proto.country()), 15);
