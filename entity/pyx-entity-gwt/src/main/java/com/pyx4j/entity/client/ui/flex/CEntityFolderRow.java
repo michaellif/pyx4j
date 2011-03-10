@@ -22,10 +22,8 @@ package com.pyx4j.entity.client.ui.flex;
 
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -44,8 +42,7 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
 
     @Override
     public IsWidget createContent() {
-        FlowPanel main = new FlowPanel();
-        main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        HorizontalPanel main = new HorizontalPanel();
         main.setWidth("100%");
         for (EntityFolderColumnDescriptor column : columns) {
             CComponent<?> component = createCell(column);
@@ -59,7 +56,6 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
         SimplePanel wrapper = new SimplePanel();
         wrapper.getElement().getStyle().setPaddingLeft(3, Unit.PX);
         wrapper.getElement().getStyle().setPaddingRight(3, Unit.PX);
-        wrapper.getElement().getStyle().setFloat(Float.LEFT);
         wrapper.setWidth(width);
         wrapper.setWidget(component);
         return wrapper;

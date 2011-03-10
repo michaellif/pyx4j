@@ -27,7 +27,6 @@ import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -40,7 +39,7 @@ import com.pyx4j.widgets.client.Tooltip;
 
 public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {
 
-    private final FlowPanel header;
+    private final HorizontalPanel header;
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns) {
         this(columns, null, null, false);
@@ -57,7 +56,8 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title, boolean addable) {
         super(addButton, title, addable);
 
-        header = new FlowPanel();
+        header = new HorizontalPanel();
+        header.getElement().getStyle().setMarginBottom(3, Unit.PX);
         setHeaderVisible(false);
         header.setWidth("100%");
         if (addImage != null) {
@@ -76,7 +76,9 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
                 caption = "&nbsp";
             }
             HTML label = new HTML(caption);
+            label.getElement().getStyle().setMarginLeft(3, Unit.PX);
             cellPanel.add(label);
+            cellPanel.setCellVerticalAlignment(label, HorizontalPanel.ALIGN_BOTTOM);
 
             String descr = column.getObject().getMeta().getDescription();
             if ((descr != null) && !descr.trim().equals("")) {
@@ -84,10 +86,12 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
 
                 info.getElement().getStyle().setPaddingRight(2, Unit.PX);
                 cellPanel.add(info);
+                cellPanel.setCellVerticalAlignment(info, HorizontalPanel.ALIGN_BOTTOM);
                 Tooltip.tooltip(info, column.getObject().getMeta().getDescription());
             }
 
             header.add(cellPanel);
+            header.setCellVerticalAlignment(cellPanel, HorizontalPanel.ALIGN_BOTTOM);
         }
 
         add(header);

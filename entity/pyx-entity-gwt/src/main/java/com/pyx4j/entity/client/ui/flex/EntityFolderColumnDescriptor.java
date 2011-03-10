@@ -28,20 +28,10 @@ public class EntityFolderColumnDescriptor {
 
     private final String width;
 
-    private final String gap;
-
     public EntityFolderColumnDescriptor(IObject<?> object, String width) {
         super();
         this.object = object;
         this.width = width;
-        this.gap = "";
-    }
-
-    public EntityFolderColumnDescriptor(IObject<?> object, String width, String gap) {
-        super();
-        this.object = object;
-        this.width = width;
-        this.gap = gap;
     }
 
     public IObject<?> getObject() {
@@ -52,7 +42,4 @@ public class EntityFolderColumnDescriptor {
         return width;
     }
 
-    public String getGap() {
-        return gap;
-    }
 }
