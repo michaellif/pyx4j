@@ -132,7 +132,7 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
         initContent();
     }
 
-    private final void initContent() {
+    final void initContent() {
         attachContent();
         addValidations();
     }

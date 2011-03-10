@@ -46,7 +46,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityEditableComp
     }
 
     public void initialize() {
-        attachContent();
+        initContent();
     }
 
     @Override
