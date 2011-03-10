@@ -22,10 +22,6 @@ package com.pyx4j.entity.rdb.dialect;
 
 public class MySQLDialect extends Dialect {
 
-    public MySQLDialect() {
-        this(new NamingConventionOracle());
-    }
-
     public MySQLDialect(NamingConvention namingConvention) {
         super(namingConvention);
         addTypeMeta(Integer.class, "int");

@@ -26,6 +26,11 @@ public interface NamingConvention {
 
     public String sqlTableName(String javaPersistenceName);
 
+    /**
+     * Defines the name for table use in OneToMany associations.
+     * 
+     * TODO find a better name
+     */
     public String sqlChildTableName(String javaPersistenceTableName, String javaPersistenceChildTableName);
 
     public String sqlFieldName(String javaPersistenceFieldName);

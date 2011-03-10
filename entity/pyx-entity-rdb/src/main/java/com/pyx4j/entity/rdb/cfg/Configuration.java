@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb.cfg;
 
 import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
 public interface Configuration extends IPersistenceConfiguration {
 
@@ -28,15 +29,21 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public String dbHost();
 
-    public abstract String dbName();
+    public String dbName();
 
-    public abstract String connectionUrl();
+    public String connectionUrl();
 
-    public abstract String userName();
+    public String userName();
 
-    public abstract String password();
+    public String password();
 
-    public abstract String connectionValidationQuery();
+    public String connectionValidationQuery();
 
-    public abstract boolean readOnly();
+    public boolean readOnly();
+
+    /**
+     * 
+     * @return return null to use framework default
+     */
+    public NamingConvention namingConvention();
 }

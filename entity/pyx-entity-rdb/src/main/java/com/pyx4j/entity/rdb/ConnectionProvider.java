@@ -42,6 +42,8 @@ import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.HSQLDialect;
 import com.pyx4j.entity.rdb.dialect.MySQLDialect;
+import com.pyx4j.entity.rdb.dialect.NamingConvention;
+import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 
 public class ConnectionProvider {
 
@@ -75,10 +77,14 @@ public class ConnectionProvider {
 
         dataSource = new PoolingDataSource(connectionPool);
 
+        NamingConvention namingConvention = cfg.namingConvention();
+        if (namingConvention == null) {
+            namingConvention = new NamingConventionOracle();
+        }
         if (cfg.driverClass().contains("mysql")) {
-            dialect = new MySQLDialect();
+            dialect = new MySQLDialect(namingConvention);
         } else if (cfg.driverClass().contains("hsqldb")) {
-            dialect = new HSQLDialect();
+            dialect = new HSQLDialect(namingConvention);
         } else {
             throw new Error("Unsupported driver Dialect " + cfg.driverClass());
         }

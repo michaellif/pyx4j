@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.cfg;
 
+import com.pyx4j.entity.rdb.dialect.NamingConvention;
+
 public abstract class ConfigurationMySQL implements Configuration {
 
     @Override
@@ -44,5 +46,10 @@ public abstract class ConfigurationMySQL implements Configuration {
     @Override
     public boolean readOnly() {
         return false;
+    }
+
+    @Override
+    public NamingConvention namingConvention() {
+        return null;
     }
 }
