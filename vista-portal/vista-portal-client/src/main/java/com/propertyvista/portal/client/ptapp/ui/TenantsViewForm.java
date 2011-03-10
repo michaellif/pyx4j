@@ -45,7 +45,6 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -112,7 +111,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                 columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "10em", "1em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.middleName(), "6em", "1em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "10em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7.2em", "1em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.email(), "11em", "1em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.relationship(), "9em", "1em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.dependant(), "7em", "1em"));
@@ -163,16 +162,14 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                     @Override
                     public void attachContent() {
                         super.attachContent();
+
                         get(proto.birthDate()).addValueValidator(new EditableValueValidator<Date>() {
 
                             @Override
                             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
                                 Relationship relationship = getValue().relationship().getValue();
                                 if ((relationship == Relationship.Applicant) || (relationship == Relationship.CoApplicant)) {
-                                    Date now = new Date();
-                                    @SuppressWarnings("deprecation")
-                                    Date y18 = TimeUtils.createDate(now.getYear() - 18, now.getMonth(), now.getDay());
-                                    return value.before(y18);
+                                    return isOlderThen18(value);
                                 } else {
                                     return true;
                                 }
@@ -183,6 +180,71 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                                 return i18n.tr("Applicant and co-applicant should be at least 18 years old");
                             }
                         });
+
+                        if (!isFirst()) { // all this stuff isn't for primary applicant:  
+                            get(proto.birthDate()).addValueChangeHandler(new ValueChangeHandler<Date>() {
+
+                                @Override
+                                public void onValueChange(ValueChangeEvent<Date> event) {
+                                    if (isOlderThen18(event.getValue())) {
+                                        get(proto.takeOwnership()).setVisible(true);
+                                        if (!get(proto.dependant()).getValue())
+                                            updateCoApplicantRelation();
+                                    } else {
+                                        get(proto.dependant()).setValue(true);
+
+                                        get(proto.takeOwnership()).setValue(false);
+                                        get(proto.takeOwnership()).setVisible(false);
+                                        removeCoApplicantRelation();
+                                    }
+                                }
+                            });
+
+                            get(proto.relationship()).addValueChangeHandler(new ValueChangeHandler<Relationship>() {
+                                @Override
+                                public void onValueChange(ValueChangeEvent<Relationship> event) {
+                                    if (event.getValue() == Relationship.CoApplicant) {
+                                        get(proto.dependant()).setValue(false);
+                                        get(proto.dependant()).setVisible(false);
+                                    } else {
+                                        get(proto.dependant()).setVisible(true);
+                                    }
+                                }
+                            });
+
+                            get(proto.dependant()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+                                @Override
+                                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                                    if (event.getValue() == true) {
+                                        removeCoApplicantRelation();
+                                    } else {
+                                        updateCoApplicantRelation();
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void populate(PotentialTenantInfo value) {
+                        super.populate(value);
+
+                        if (!isFirst()) {
+                            if (isOlderThen18(value.birthDate().getValue())) {
+                                get(proto.takeOwnership()).setVisible(true);
+                                if (!value.dependant().getValue()) {
+                                    updateCoApplicantRelation();
+                                }
+
+                            } else {
+                                get(proto.dependant()).setValue(true);
+
+                                get(proto.takeOwnership()).setValue(false);
+                                get(proto.takeOwnership()).setVisible(false);
+                                removeCoApplicantRelation();
+                            }
+                        }
                     }
 
                     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -196,35 +258,10 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                             comp = textComp;
                         } else {
                             comp = super.createCell(column);
-
                             if (proto.relationship() == column.getObject()) {
                                 Collection<Relationship> relationships = EnumSet.allOf(Relationship.class);
                                 relationships.remove(Relationship.Applicant);
                                 ((CComboBox) comp).setOptions(relationships);
-                                ((CComboBox) comp).addValueChangeHandler(new ValueChangeHandler<Relationship>() {
-
-                                    @Override
-                                    public void onValueChange(ValueChangeEvent<Relationship> event) {
-                                        if (event.getValue() == Relationship.CoApplicant) {
-                                            get(proto.dependant()).asWidget().setEnabled(false);
-                                            get(proto.dependant()).setValue(false);
-                                        } else {
-                                            get(proto.dependant()).asWidget().setEnabled(true);
-                                        }
-                                    }
-                                });
-                            } else if (proto.dependant() == column.getObject()) {
-                                ((CCheckBox) comp).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-
-                                    @Override
-                                    public void onValueChange(ValueChangeEvent<Boolean> event) {
-                                        if (event.getValue() == true) {
-                                            ((CComboBox) get(proto.relationship())).removeOption(Relationship.CoApplicant);
-                                        } else {
-                                            ((CComboBox) get(proto.relationship())).updateOption(Relationship.CoApplicant);
-                                        }
-                                    }
-                                });
                             }
                         }
                         return comp;
@@ -235,9 +272,27 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                         return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove person"), !isFirst());
                     }
 
+                    private boolean isOlderThen18(final Date bithday) {
+                        Date now = new Date();
+                        @SuppressWarnings("deprecation")
+                        Date y18 = TimeUtils.createDate(now.getYear() - 18, now.getMonth(), now.getDay());
+                        return bithday.before(y18);
+                    }
+
+                    @SuppressWarnings("unchecked")
+                    private void removeCoApplicantRelation() {
+                        ((CComboBox<Relationship>) get(proto.relationship())).removeOption(Relationship.CoApplicant);
+                        if (get(proto.relationship()).isValueEmpty()) {
+                            get(proto.relationship()).setValue(Relationship.Other);
+                        }
+                    }
+
+                    @SuppressWarnings("unchecked")
+                    private void updateCoApplicantRelation() {
+                        ((CComboBox<Relationship>) get(proto.relationship())).updateOption(Relationship.CoApplicant);
+                    }
                 };
             }
-
         };
     }
 }
