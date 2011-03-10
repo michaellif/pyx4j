@@ -28,8 +28,14 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.widgets.client.CaptchaComposite;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.Selector;
 
 public class NativeCaptcha extends CaptchaComposite implements INativeEditableComponent<Pair<String, String>> {
+
+    public static enum StyleDependent implements IStyleDependent {
+        invalid
+    }
 
     public NativeCaptcha(final CCaptcha component) {
         addResponseValueChangeHandler(new ValueChangeHandler<String>() {
@@ -81,6 +87,12 @@ public class NativeCaptcha extends CaptchaComposite implements INativeEditableCo
 
     @Override
     public void setValid(boolean valid) {
+        String dependentSuffix = Selector.getDependentName(StyleDependent.invalid);
+        if (valid) {
+            getResponseTextBox().removeStyleDependentName(dependentSuffix);
+        } else {
+            getResponseTextBox().addStyleDependentName(dependentSuffix);
+        }
     }
 
     @Override
