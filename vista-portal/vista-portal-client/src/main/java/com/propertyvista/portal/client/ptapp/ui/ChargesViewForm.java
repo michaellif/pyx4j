@@ -19,6 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
@@ -37,6 +38,8 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 
 @Singleton
 public class ChargesViewForm extends BaseEntityForm<Charges> {
+
+    private final FlowPanel splitCharges = new FlowPanel();
 
     @SuppressWarnings("rawtypes")
     private final ValueChangeHandler valueChangeHandler;
@@ -85,13 +88,22 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
         main.add(inject(proto().applicationCharges().charges()));
         main.add(createTotal(proto().applicationCharges().total()));
 
-        main.add(new ViewHeaderDecorator(proto().paymentSplitCharges()));
-        main.add(inject(proto().paymentSplitCharges().charges()));
-        main.add(createTotal(proto().paymentSplitCharges().total()));
+        // could be hided from resulting form:
+        splitCharges.add(new ViewHeaderDecorator(proto().paymentSplitCharges()));
+        splitCharges.add(inject(proto().paymentSplitCharges().charges()));
+        splitCharges.add(createTotal(proto().paymentSplitCharges().total()));
+        main.add(splitCharges);
 
         main.setWidth("700px");
 
         return main;
+    }
+
+    @Override
+    public void populate(Charges value) {
+        super.populate(value);
+
+        splitCharges.setVisible(value.paymentSplitCharges().charges().size() > 1);
     }
 
     private Widget createHeader2(IObject<?> member) {
