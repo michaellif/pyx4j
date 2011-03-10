@@ -381,6 +381,11 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
             }
 
+            //TODO we missed values for Pets see the same code in RetrieveByPKImpl
+            //            (ret).petChargeRule().set(petCharge);
+            //            (ret).petWeightMaximum().setValue(25);
+            //            (ret).petsMaximum().setValue(3);
+
             return ret;
         }
 
