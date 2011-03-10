@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-portal-server</artifactId>
-    <name>vista-portal-server</name>
+    <artifactId>vista-crm-server</artifactId>
+    <name>vista-crm-server</name>
 
     <dependencies>
 
@@ -26,7 +26,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-portal-rpc</artifactId>
+            <artifactId>vista-crm-rpc</artifactId>
             <version>${project.version}</version>
         </dependency>
 
