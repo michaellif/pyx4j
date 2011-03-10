@@ -28,6 +28,8 @@ public interface IFlexContentComponent extends EditableComponentFactory {
 
     IsWidget createContent();
 
+    void addValidations();
+
     void onBound(IFlexContentComponent parent);
 
 }

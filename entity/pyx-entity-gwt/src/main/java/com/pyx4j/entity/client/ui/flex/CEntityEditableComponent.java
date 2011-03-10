@@ -129,7 +129,17 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
     public void onBound(IFlexContentComponent parent) {
         assert (bindParent == null) : "Flex Component " + this.getClass().getName() + " is already bound to " + bindParent;
         bindParent = parent;
+        initContent();
+    }
+
+    private final void initContent() {
         attachContent();
+        addValidations();
+    }
+
+    @Override
+    public void addValidations() {
+
     }
 
     public void attachContent() {

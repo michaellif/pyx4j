@@ -64,14 +64,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     private final E entityPrototype;
 
-    /**
-     * @Deprecated use constructor with row item class
-     */
-    @Deprecated
-    public CEntityFolder() {
-        this(null);
-    }
-
     public CEntityFolder(Class<E> rowClass) {
         content = new FlowPanel();
         itemsMap = new LinkedHashMap<E, CEntityFolderItem<E>>();
@@ -96,6 +88,12 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     public void onBound(IFlexContentComponent parent) {
         bindParent = parent;
         setFolderDecorator(createContent());
+        addValidations();
+    }
+
+    @Override
+    public void addValidations() {
+
     }
 
     @Override
