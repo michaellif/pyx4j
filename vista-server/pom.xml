@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+         <groupId>com.propertyvista</groupId>
+        <artifactId>vista</artifactId>
+        <version>1.0.0-SNAPSHOT</version><!--vista-version-->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>vista-server</artifactId>
+    <name>vista-server</name>
+    <packaging>war</packaging>
+
+    <dependencies>
+
+		<!-- ensure proper version, NOT from gwt-dev.jar -->
+		<dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		</dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-portal-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-payment</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-callfire</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-rdb</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.tanesha.recaptcha4j</groupId>
+	        <artifactId>recaptcha4j</artifactId>
+	    </dependency>
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jasypt</groupId>
+            <artifactId>jasypt</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openid4java</groupId>
+            <artifactId>openid4java-consumer</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-jetty-runtime</artifactId>
+            <version>${pyxVersion}</version>
+            <optional>true</optional>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <properties>
+        <deployableName>vista</deployableName>
+        <deployContext>vista</deployContext>
+        <vista-tomcat-url>http://ve.kvrmmdsf.vesrv.com</vista-tomcat-url>
+        <vista-tomcat-username>vista</vista-tomcat-username>
+        <vista-tomcat-pwd>Vista1102</vista-tomcat-pwd>
+
+        <vista-app-ping-url>http://www22.birchwoodsoftwaregroup.com</vista-app-ping-url>
+
+        <!--vista-tomcat-url>http://localhost:9000</vista-tomcat-url>
+        <vista-tomcat-username>admin</vista-tomcat-username>
+        <vista-tomcat-pwd>123456</vista-tomcat-pwd-->
+    </properties>
+
+    <build>
+        <finalName>${deployableName}</finalName>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources-generated</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/webapp</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>WEB-INF/web.xml</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <archive>
+                        <compress>${compressJars}</compress>
+                        <manifestEntries>
+                            <Version>${label}</Version>
+                            <Revision>${scm.revision}</Revision>
+                            <Build-Time>${cctimestamp}</Build-Time>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                    <archiveClasses>true</archiveClasses>
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                     <!-- Processed by maven -->
+                    <webXml>${project.build.directory}/classes/WEB-INF/web.xml</webXml>
+                    <webResources>
+                        <resource>
+                            <directory>${basedir}/src/main/webapp/</directory>
+                            <includes>
+                                <include>*.html</include>
+                                <include>favicon.ico</include>
+                                <include>admin/**</include>
+                                <include>portal/**</include>
+                                <include>tester/**</include>
+                                <include>images/**</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.zeroturnaround</groupId>
+                <artifactId>jrebel-maven-plugin</artifactId>
+                <configuration>
+                    <packaging>war</packaging>
+                    <classesDirectory>target/classes</classesDirectory>
+                    <war>
+                        <path>${basedir}/src/main/webapp/</path>
+                    </war>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <profiles>
+
+        <profile>
+            <id>prod</id>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <id>IEntity-generate</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>com.pyx4j.entity.server.impl.EntityImplGenerator</mainClass>
+                                    <includePluginDependencies>true</includePluginDependencies>
+                                    <arguments>
+                                        <argument>${project.build.directory}/classes</argument>
+                                   </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>javax.servlet</groupId>
+                                <artifactId>servlet-api</artifactId>
+                                <version>2.5</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>deploy-www33</id>
+            <properties>
+                <deployContext>vista33</deployContext>
+                <vista-app-ping-url>http://www33.birchwoodsoftwaregroup.com</vista-app-ping-url>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>deploy-www44</id>
+            <properties>
+                <deployContext>vista44</deployContext>
+                <vista-app-ping-url>http://www44.birchwoodsoftwaregroup.com</vista-app-ping-url>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>deploy</id>
+            <build>
+                <plugins>
+
+                    <!-- See http://cargo.codehaus.org/Maven2+plugin -->
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>1.0.6</version>
+                        <executions>
+                            <execution>
+                                <id>verify-deploy</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>deployer-deploy</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>clean-undeploy</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>deployer-undeploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+
+                        <configuration>
+                            <container>
+                                <containerId>tomcat6x</containerId>
+                                <type>remote</type>
+                            </container>
+                            <configuration>
+                                <type>runtime</type>
+                                <properties>
+                                    <cargo.tomcat.manager.url>${vista-tomcat-url}/manager</cargo.tomcat.manager.url>
+                                    <cargo.remote.username>${vista-tomcat-username}</cargo.remote.username>
+                                    <cargo.remote.password>${vista-tomcat-pwd}</cargo.remote.password>
+                                </properties>
+                            </configuration>
+                            <deployer>
+                                <type>remote</type>
+                                <deployables>
+                                    <deployable>
+                                        <groupId>${project.groupId}</groupId>
+                                        <artifactId>${project.artifactId}</artifactId>
+                                        <type>war</type>
+                                        <pingURL>${vista-app-ping-url}/o/status</pingURL>
+                                        <pingTimeout>180000</pingTimeout>
+                                        <properties>
+                                            <context>${deployContext}</context>
+                                        </properties>
+                                    </deployable>
+                                </deployables>
+                            </deployer>
+
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install.db-reset</id>
+                                <phase>install</phase>
+                                <goals><goal>run</goal></goals>
+                                <configuration>
+                                    <target>
+                                        <get src="${vista-app-ping-url}/o/db-reset" dest="${project.build.directory}/db-reset.txt"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+</project>
