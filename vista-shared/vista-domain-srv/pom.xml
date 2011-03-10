@@ -13,14 +13,15 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-shared-domain-srv</artifactId>
-    <name>vista-shared-domain-srv</name>
+    <artifactId>vista-domain-srv</artifactId>
+    <name>vista-domain-srv</name>
 
     <dependencies>
 
         <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-entity-shared</artifactId>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-domain</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>

@@ -26,7 +26,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-shared-domain-srv</artifactId>
+            <artifactId>vista-domain-srv</artifactId>
             <version>${project.version}</version>
         </dependency>
 

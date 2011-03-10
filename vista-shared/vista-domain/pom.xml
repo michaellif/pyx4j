@@ -8,23 +8,27 @@
 
     <parent>
          <groupId>com.propertyvista</groupId>
-        <artifactId>vista</artifactId>
+        <artifactId>vista-shared</artifactId>
         <version>1.0.0-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-shared</artifactId>
-    <name>vista-shared</name>
-    <packaging>pom</packaging>
+    <artifactId>vista-domain</artifactId>
+    <name>vista-domain</name>
 
-    <modules>
-        <module>vista-server-config</module>
-        <module>vista-domain</module>
-        <module>vista-domain-srv</module>
-        <module>vista-server-common</module>
-        <module>vista-callfire</module>
-        <module>vista-payment</module>
-        <module>vista-integration</module>
-    </modules>
+    <dependencies>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-shared</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-portal-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+    </dependencies>
 
 </project>
