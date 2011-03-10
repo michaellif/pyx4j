@@ -32,7 +32,6 @@ import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -88,20 +87,19 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
     private CEntityFolder<PotentialTenantInfo> createTenantsEditorColumns() {
 
-        return new CEntityFolder<PotentialTenantInfo>() {
+        return new CEntityFolder<PotentialTenantInfo>(PotentialTenantInfo.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
-                PotentialTenantInfo proto = EntityFactory.getEntityPrototype(PotentialTenantInfo.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "10em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.middleName(), "6em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "10em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7.2em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.email(), "11em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.relationship(), "9em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.dependant(), "7em", "1em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.takeOwnership(), "7em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().firstName(), "10em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().middleName(), "6em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().lastName(), "10em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "7.2em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().email(), "11em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().dependant(), "7em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "7em", "1em"));
             }
 
             @Override
