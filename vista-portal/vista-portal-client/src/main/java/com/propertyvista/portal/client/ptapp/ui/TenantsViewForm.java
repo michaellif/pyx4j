@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.validators.ValidationUtils;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
@@ -169,7 +170,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
                                 Relationship relationship = getValue().relationship().getValue();
                                 if ((relationship == Relationship.Applicant) || (relationship == Relationship.CoApplicant)) {
-                                    return isOlderThen18(value);
+                                    return ValidationUtils.isOlderThen18(value);
                                 } else {
                                     return true;
                                 }
@@ -186,7 +187,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
                                 @Override
                                 public void onValueChange(ValueChangeEvent<Date> event) {
-                                    if (isOlderThen18(event.getValue())) {
+                                    if (ValidationUtils.isOlderThen18(event.getValue())) {
                                         get(proto.takeOwnership()).setVisible(true);
                                         if (!get(proto.dependant()).getValue())
                                             updateCoApplicantRelation();
@@ -231,7 +232,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                         super.populate(value);
 
                         if (!isFirst()) {
-                            if (isOlderThen18(value.birthDate().getValue())) {
+                            if (ValidationUtils.isOlderThen18(value.birthDate().getValue())) {
                                 get(proto.takeOwnership()).setVisible(true);
                                 if (!value.dependant().getValue()) {
                                     updateCoApplicantRelation();
@@ -270,13 +271,6 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
                         return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove person"), !isFirst());
-                    }
-
-                    private boolean isOlderThen18(final Date bithday) {
-                        Date now = new Date();
-                        @SuppressWarnings("deprecation")
-                        Date y18 = TimeUtils.createDate(now.getYear() - 18, now.getMonth(), now.getDay());
-                        return bithday.before(y18);
                     }
 
                     @SuppressWarnings("unchecked")

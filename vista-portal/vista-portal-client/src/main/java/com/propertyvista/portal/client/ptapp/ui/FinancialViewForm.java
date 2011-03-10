@@ -32,6 +32,7 @@ import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.validators.ValidationUtils;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantGuarantor;
@@ -235,12 +236,12 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
             {
                 TenantGuarantor proto = EntityFactory.getEntityPrototype(TenantGuarantor.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.relationship(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.middleName(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.email(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.relationship(), "9em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.middleName(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "12em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.email(), "10em"));
             }
 
             @Override
@@ -278,14 +279,14 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                     @Override
                     public void attachContent() {
                         super.attachContent();
+
+                        get(proto().email()).setMandatory(true);
+
                         get(proto().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
 
                             @Override
                             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                                Date now = new Date();
-                                @SuppressWarnings("deprecation")
-                                Date y18 = TimeUtils.createDate(now.getYear() - 18, now.getMonth(), now.getDay());
-                                return value.before(y18);
+                                return ValidationUtils.isOlderThen18(value);
                             }
 
                             @Override

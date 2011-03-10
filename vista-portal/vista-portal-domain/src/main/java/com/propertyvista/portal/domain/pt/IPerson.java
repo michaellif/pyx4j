@@ -29,7 +29,7 @@ public interface IPerson {
     @BusinessEqualValue
     IPrimitive<String> firstName();
 
-    @Caption(name = "Middle Name")
+    @Caption(name = "Middle")
     IPrimitive<String> middleName();
 
     @Caption(name = "Last Name")

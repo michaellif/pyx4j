@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface TenantGuarantor extends IEntity, IPerson {
 
     public enum Relationship {
-        Mother, Father, Grandfather, Grandmother, Uncle, Aunt, Other
+        Mother, Father, Grandfather, Grandmother, Uncle, Aunt, Friend, Other
     }
 
     @ToString(index = 0)
