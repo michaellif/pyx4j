@@ -7,23 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 17, 2011
+ * Created on Feb 6, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server;
+package com.propertyvista.server.rdb;
+
+import com.propertyvista.portal.server.VistaServerSideConfiguration;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
-public class VistaDBClear {
+public class VistaDBPreload {
 
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
-        System.out.println("Remove All data");
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
-        System.out.println(conf.getDataPreloaders().delete());
+        System.out.println(conf.getDataPreloaders().preloadAll());
         System.out.println("Total time: " + TimeUtils.secSince(start));
     }
 

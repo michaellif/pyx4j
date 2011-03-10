@@ -16,7 +16,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="com.google.gdt.eclipse.maven.mavenClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.DevMode"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-codeServerPort 9997 -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -startupUrl http://localhost:8888/vista/index.html -logLevel INFO -noserver -extra &quot;${workspace_loc:vista-portal-client}/target/hosted-extra&quot; -gen &quot;${workspace_loc:vista-portal-client}/target/hosted-gen&quot; -war &quot;${workspace_loc:vista-portal-server}/src/main/webapp&quot; vista.portalDeveloper"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-codeServerPort 9997 -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -startupUrl http://localhost:8888/vista/index.html -logLevel INFO -noserver -extra &quot;${workspace_loc:vista-portal-client}/target/hosted-extra&quot; -gen &quot;${workspace_loc:vista-portal-client}/target/hosted-gen&quot; -war &quot;${workspace_loc:vista-server}/src/main/webapp&quot; vista.portalDeveloper"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="vista-portal-client"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m"/>
 </launchConfiguration>

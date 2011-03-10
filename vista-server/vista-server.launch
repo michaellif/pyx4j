@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/vista-portal-server/src/test/java/com/propertyvista/portal/server/VistaDBPreload.java"/>
+<listEntry value="/vista-server/src/test/java/com/propertyvista/portal/server/VistaPortalJettyLaunch.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
@@ -11,7 +11,7 @@
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.maven.ide.eclipse.launchconfig.classpathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.propertyvista.portal.server.VistaDBPreload"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="vista-portal-server"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.propertyvista.portal.server.VistaPortalJettyLaunch"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="vista-server"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.maven.ide.eclipse.launchconfig.sourcepathProvider"/>
 </launchConfiguration>
