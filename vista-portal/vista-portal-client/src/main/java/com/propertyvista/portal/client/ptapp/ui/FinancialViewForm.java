@@ -22,6 +22,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -191,6 +192,12 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
             @Override
             protected CEntityFolderItem<TenantAsset> createItem() {
                 return createAssetRowEditor(columns);
+            }
+
+            @Override
+            protected void createNewEntity(TenantAsset newEntity, AsyncCallback<TenantAsset> callback) {
+                newEntity.percent().setValue(100d);
+                super.createNewEntity(newEntity, callback);
             }
 
             private CEntityFolderItem<TenantAsset> createAssetRowEditor(final List<EntityFolderColumnDescriptor> columns) {
