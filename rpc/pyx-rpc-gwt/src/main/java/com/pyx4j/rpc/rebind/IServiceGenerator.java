@@ -20,17 +20,51 @@
  */
 package com.pyx4j.rpc.rebind;
 
+import java.io.PrintWriter;
+
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
+import com.google.gwt.core.ext.typeinfo.JClassType;
+import com.google.gwt.core.ext.typeinfo.NotFoundException;
+import com.google.gwt.core.ext.typeinfo.TypeOracle;
+import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
+import com.google.gwt.user.rebind.SourceWriter;
 
 public class IServiceGenerator extends Generator {
 
     @Override
-    public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
-        // TODO Auto-generated method stub
-        return null;
+    public String generate(TreeLogger logger, GeneratorContext genCtx, String typeName) throws UnableToCompleteException {
+        TypeOracle oracle = genCtx.getTypeOracle();
+        JClassType interfaceType;
+        try {
+            interfaceType = oracle.getType(typeName);
+        } catch (NotFoundException e) {
+            logger.log(TreeLogger.ERROR, "Unexpected error: " + e.getMessage(), e);
+            throw new UnableToCompleteException();
+        }
+
+        String implName = interfaceType.getName();
+        implName = implName.replace('.', '_') + "Impl";
+
+        String packageName = interfaceType.getPackage().getName();
+        PrintWriter printWriter = genCtx.tryCreate(logger, packageName, implName);
+
+        if (printWriter != null) {
+            ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, implName);
+            factory.addImplementedInterface(interfaceType.getQualifiedSourceName());
+            SourceWriter sourceWriter = factory.createSourceWriter(genCtx, printWriter);
+
+            IServiceImplCreator implCreator = new IServiceImplCreator(sourceWriter, interfaceType);
+            implCreator.emitClass(logger, null);
+
+            System.out.println(printWriter.toString());
+
+            genCtx.commit(logger, printWriter);
+        }
+
+        return packageName + "." + implName;
     }
 
 }
