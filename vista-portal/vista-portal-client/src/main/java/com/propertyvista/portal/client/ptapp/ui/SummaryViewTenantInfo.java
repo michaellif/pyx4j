@@ -241,15 +241,16 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         subviewPanel.getElement().getStyle().setMarginTop(0.3, Unit.EM);
         subviewPanel.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
 
-        subviewPanel.add(panel = bindEmergencyContact(proto().emergencyContact1(), dd2ColumnsTable));
-        subviewPanel.setCellWidth(panel, LEFT_COLUMN_WIDTH);
-
-        panel = new FlowPanel();
-        subviewPanel.add(panel);
-        subviewPanel.setCellWidth(panel, GAP_COLUMN_WIDTH);
-
-        subviewPanel.add(panel = bindEmergencyContact(proto().emergencyContact2(), dd2ColumnsTable));
-        subviewPanel.setCellWidth(panel, RIGHT_COLUMN_WIDTH);
+        //TODO VLADL will make it working
+        //        subviewPanel.add(panel = bindEmergencyContact(proto().emergencyContact(), dd2ColumnsTable));
+        //        subviewPanel.setCellWidth(panel, LEFT_COLUMN_WIDTH);
+        //
+        //        panel = new FlowPanel();
+        //        subviewPanel.add(panel);
+        //        subviewPanel.setCellWidth(panel, GAP_COLUMN_WIDTH);
+        //
+        //        subviewPanel.add(panel = bindEmergencyContact(proto().emergencyContact2(), dd2ColumnsTable));
+        //        subviewPanel.setCellWidth(panel, RIGHT_COLUMN_WIDTH);
 
         subviewPanel.add(new FlowPanel()); // add empty cell just for proper resizing of the previous two ;)
         subviewPanel.setWidth("100%");

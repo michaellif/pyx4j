@@ -259,11 +259,11 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
         EmergencyContact ec1 = createEmergencyContact();
         PersistenceServicesFactory.getPersistenceService().persist(ec1);
-        pti.emergencyContact1().set(ec1);
+        pti.emergencyContacts().add(ec1);
 
         EmergencyContact ec2 = createEmergencyContact();
         PersistenceServicesFactory.getPersistenceService().persist(ec2);
-        pti.emergencyContact2().set(ec2);
+        pti.emergencyContacts().add(ec2);
 
         PersistenceServicesFactory.getPersistenceService().persist(pti);
 

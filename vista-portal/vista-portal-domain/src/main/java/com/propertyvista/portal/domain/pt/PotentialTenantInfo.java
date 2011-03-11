@@ -56,9 +56,7 @@ public interface PotentialTenantInfo extends PotentialTenant {
     LegalQuestions legalQuestions();
 
     @Owned
-    EmergencyContact emergencyContact1();
-
-    @Owned
-    EmergencyContact emergencyContact2();
+    @Length(3)
+    IList<EmergencyContact> emergencyContacts();
 
 }

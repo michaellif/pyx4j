@@ -160,11 +160,8 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
         main.add(new HTML());
 
-        main.add(new ViewHeaderDecorator(h4(i18n.tr("Emergency Contact1"))));
-        main.add(inject(proto().emergencyContact1()));
-
-        main.add(new ViewHeaderDecorator(h4(i18n.tr("Emergency Contact2"))));
-        main.add(inject(proto().emergencyContact2()));
+        main.add(new ViewHeaderDecorator(h4(i18n.tr("Emergency Contacts"))));
+        main.add(inject(proto().emergencyContacts()));
 
         main.setWidth("700px");
 
