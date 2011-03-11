@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.rpc.pt.services;
 
-public interface SummaryServices {
+import com.propertyvista.portal.domain.pt.Summary;
+
+public interface SummaryServices extends AbstractWizardServices<Summary> {
 
 }

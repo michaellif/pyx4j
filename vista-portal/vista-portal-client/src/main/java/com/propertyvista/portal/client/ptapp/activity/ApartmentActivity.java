@@ -13,31 +13,34 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
+import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentView;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentViewPresenter;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
+import com.propertyvista.portal.rpc.pt.services.ApartmentServices;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.client.RPCManager;
 
 public class ApartmentActivity extends WizardStepActivity<UnitSelection, ApartmentViewPresenter> implements ApartmentViewPresenter {
 
+    static ApartmentServices srv = GWT.create(ApartmentServices.class);
+
     @Inject
     public ApartmentActivity(ApartmentView view) {
-        super(view, UnitSelection.class);
+        super(view, UnitSelection.class, srv);
     }
 
     @Override
     public void selectByDates(UnitSelectionCriteria entity) {
-        RPCManager.execute(PotentialTenantServices.RetrieveUnitSelection.class, entity, new DefaultAsyncCallback<UnitSelection>() {
+        srv.retrieveUnitSelection(entity, new DefaultAsyncCallback<UnitSelection>() {
 
             @Override
             public void onSuccess(UnitSelection result) {
                 getView().populate(result);
             }
+
         });
 
     }

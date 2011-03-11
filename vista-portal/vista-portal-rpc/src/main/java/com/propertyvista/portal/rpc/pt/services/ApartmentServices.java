@@ -13,6 +13,12 @@
  */
 package com.propertyvista.portal.rpc.pt.services;
 
-public interface ApartmentServices {
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
+
+public interface ApartmentServices extends AbstractWizardServices<UnitSelection> {
+
+    public void retrieveUnitSelection(UnitSelectionCriteria criteria, AsyncCallback<UnitSelection> callback);
 
 }

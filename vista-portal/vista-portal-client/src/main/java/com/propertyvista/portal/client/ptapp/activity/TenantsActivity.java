@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.TenantsView;
@@ -20,6 +21,7 @@ import com.propertyvista.portal.client.ptapp.ui.TenantsViewPresenter;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
+import com.propertyvista.portal.rpc.pt.services.TenantsServices;
 
 import com.pyx4j.security.client.ClientContext;
 
@@ -27,7 +29,7 @@ public class TenantsActivity extends WizardStepActivity<PotentialTenantList, Ten
 
     @Inject
     public TenantsActivity(TenantsView view) {
-        super(view, PotentialTenantList.class);
+        super(view, PotentialTenantList.class, (TenantsServices) GWT.create(TenantsServices.class));
     }
 
     @Override

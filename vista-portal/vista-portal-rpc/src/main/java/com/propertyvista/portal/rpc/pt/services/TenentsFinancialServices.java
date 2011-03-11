@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.rpc.pt.services;
 
-public interface TenentsFinancialServices {
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
+
+public interface TenentsFinancialServices extends AbstractWizardServices<PotentialTenantFinancial> {
 
 }

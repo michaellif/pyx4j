@@ -24,6 +24,7 @@ import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepPresenter;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepView;
 import com.propertyvista.portal.domain.pt.IBoundToApplication;
+import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 import com.propertyvista.portal.rpc.pt.services.AbstractWizardServices;
 
@@ -48,20 +49,16 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
     private final AbstractWizardServices<E> wizardServices;
 
     @SuppressWarnings("unchecked")
-    @Deprecated
-    public WizardStepActivity(WizardStepView<E, T> view, Class<E> clazz) {
-        this.view = view;
-        this.clazz = clazz;
-        view.setPresenter((T) this);
-        this.wizardServices = null;
-    }
-
-    @SuppressWarnings("unchecked")
     public WizardStepActivity(WizardStepView<E, T> view, Class<E> clazz, AbstractWizardServices<E> wizardServices) {
         this.view = view;
         this.clazz = clazz;
         view.setPresenter((T) this);
-        this.wizardServices = wizardServices;
+
+        if (clazz.equals(Pets.class)) {
+            this.wizardServices = wizardServices;
+        } else {
+            this.wizardServices = null;
+        }
     }
 
     public WizardStepActivity<E, T> withPlace(AppPlace place) {

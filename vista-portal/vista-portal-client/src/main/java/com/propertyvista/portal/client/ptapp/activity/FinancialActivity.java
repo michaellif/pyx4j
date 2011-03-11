@@ -13,15 +13,17 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
+import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.FinancialView;
 import com.propertyvista.portal.client.ptapp.ui.FinancialViewPresenter;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
+import com.propertyvista.portal.rpc.pt.services.TenentsFinancialServices;
 
 public class FinancialActivity extends WizardStepActivity<PotentialTenantFinancial, FinancialViewPresenter> implements FinancialViewPresenter {
 
     @Inject
     public FinancialActivity(FinancialView view) {
-        super(view, PotentialTenantFinancial.class);
+        super(view, PotentialTenantFinancial.class, (TenentsFinancialServices) GWT.create(TenentsFinancialServices.class));
     }
 }

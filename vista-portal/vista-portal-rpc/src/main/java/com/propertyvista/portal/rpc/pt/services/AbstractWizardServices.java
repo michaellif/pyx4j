@@ -19,8 +19,6 @@ import com.propertyvista.portal.domain.pt.IBoundToApplication;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 
-// SubItemCriteria  is marker to retrieve one of the items in list e.g. only details for one of the TenantsInfo 
-
 public interface AbstractWizardServices<EditableEntity extends IEntity & IBoundToApplication> extends IService {
 
     public void retrieve(Long tenantId, AsyncCallback<EditableEntity> callback);
