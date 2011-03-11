@@ -43,7 +43,6 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
     @Override
     public IsWidget createContent() {
         HorizontalPanel main = new HorizontalPanel();
-        main.setWidth("100%");
         for (EntityFolderColumnDescriptor column : columns) {
             CComponent<?> component = createCell(column);
             component.setWidth("100%");
