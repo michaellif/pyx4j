@@ -20,6 +20,10 @@
         <when-type-assignable class="com.pyx4j.rpc.client.ServiceNames"/>
     </generate-with>
     
+    <generate-with class="com.pyx4j.rpc.rebind.IServiceGenerator">
+        <when-type-assignable class="com.pyx4j.rpc.shared.IService"/>
+    </generate-with>
+    
     
     <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.rpc.client.*" />
 
