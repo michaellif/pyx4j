@@ -31,6 +31,7 @@ import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.log4gwt.rpc.LogServices;
+import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
@@ -41,6 +42,7 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
     public final static int CRUD = EntityPermission.CREATE | EntityPermission.READ | EntityPermission.UPDATE;
 
     public VistaAccessControlList() {
+        grant(new IServiceExecutePermission("*"));
         grant(new ServiceExecutePermission(LogServices.Log.class));
         grant(new ServiceExecutePermission(AuthenticationServices.class, "*"));
         grant(new ServiceExecutePermission(PotentialTenantServices.UnitExists.class));
