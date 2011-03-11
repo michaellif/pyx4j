@@ -906,10 +906,6 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("line-height", "2em");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitRowPanel, VistaStyles.ApartmentUnits.StyleDependent.hover));
-        style.addProperty("background-color", ThemeColor.SELECTION);
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitRowPanel));
         style.addProperty("background-color", "auto");
         style.addProperty("border", "none");
@@ -922,12 +918,16 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("cursor", "default");
         addStyle(style);
 
+        style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitRowPanel, VistaStyles.ApartmentUnits.StyleDependent.hover));
+        style.addProperty("background-color", ThemeColor.SELECTION);
+        addStyle(style);
+
         style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitDetailPanel));
-        //        style.addProperty("visibility", "hidden");
+//        style.addProperty("visibility", "hidden");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitDetailPanel, VistaStyles.ApartmentUnits.StyleDependent.selected));
-        //        style.addProperty("visibility", "visible");
+//        style.addProperty("visibility", "visible");
         addStyle(style);
     }
 

@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.themes.VistaStyles;
@@ -82,7 +83,6 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
     private HorizontalPanel floorplanRawPanel;
 
-    @SuppressWarnings("deprecation")
     public ApartmentUnitsTable(ValueChangeHandler<ApptUnit> selectedUnitChangeHandler, ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler) {
         super(ApptUnit.class);
         this.selectedUnitChangeHandler = selectedUnitChangeHandler;
@@ -119,8 +119,6 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
         tfd.getHeader().setStyleName(VistaStyles.ApartmentUnits.StylePrefix + VistaStyles.ApartmentUnits.StyleSuffix.UnitListHeader);
 
         floorplanRawPanel = new HorizontalPanel();
-        floorplanRawPanel.setWidth("100%");
-        floorplanRawPanel.getElement().getStyle().setDisplay(Style.Display.INLINE_BLOCK);
         tfd.insert(floorplanRawPanel, tfd.getWidgetIndex(tfd.getHeader()) + 1);
         tfd.insert(new ViewLineSeparator(700, Unit.PX, 0, Unit.EM, 0.5, Unit.EM), tfd.getWidgetCount() - 1);
         return tfd;
@@ -137,8 +135,9 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
     private void createFloorplanRaw(AvailableUnitsByFloorplan availableUnits) {
         floorplanRawPanel.clear();
+
         for (EntityFolderColumnDescriptor column : columns) {
-            HorizontalPanel cellPanel = new HorizontalPanel();
+            SimplePanel cellPanel = new SimplePanel();
             cellPanel.getElement().getStyle().setMarginLeft(3, Style.Unit.PX);
             cellPanel.getElement().getStyle().setMarginRight(3, Style.Unit.PX);
             cellPanel.setWidth(column.getWidth());
@@ -171,7 +170,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
                 }
             }
 
-            cellPanel.add(widgetToInsert != null ? widgetToInsert : new HTML(caption));
+            cellPanel.setWidget(widgetToInsert != null ? widgetToInsert : new HTML(caption));
             floorplanRawPanel.add(cellPanel);
             widgetToInsert = null;
         }
