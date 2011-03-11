@@ -1,0 +1,40 @@
+~~ @version $Revision$ ($Author$) $Date$
+~~ See this file format http://maven.apache.org/guides/mini/guide-apt-format.html
+
+                                    ------------------
+                                    Overview
+                                    ------------------
+
+
+Property Vista
+
+* Links
+
+    {{{http://www22.birchwoodsoftwaregroup.com/}www22}} Nightly build Application
+
+    {{{http://ve.kvrmmdsf.vesrv.com/}Admin site}}
+
+    {{{http://code.pyx4j.com/}Framework site}}
+
+* Project reports and statistics
+
+~~    {{{./changelog.html}Change Log}} - Generated change log report from SVN for Vista.
+
+    {{{http://code.pyx4j.com/changelog.html}Change Log}} - Generated change log report from SVN for Framework.
+
+~~ {{{./statscm/index.html}StatSCM}} -  Source Code Management Metrics and Statistic for Vista.
+
+    {{{http://code.pyx4j.com/statscm/index.html}StatSCM}} -  Source Code Management Metrics and Statistic for Framework.
+
+~~    {{{./mef-gwt-public-site/javancss.html}Code metric analysis(JavaNCSS) Report for Client site Module}}.
+
+~~    {{{./mef-server/javancss.html}Code metric analysis(JavaNCSS) Report for Server Module}}.
+
+
+* GWT Compile Reports
+
+~~   * {{{./mef-server/rpc/#version#}RPC files}} - Portal Client Site RPC policy files.
+
+    * {{{./vista-portal/vista-portal-client/soycReport/}GWT Compile Report 'vista-portal-client'}}
+
+    * {{{./vista-crm/vista-crm-client/soycReport/}GWT Compile Report 'CRM'}}

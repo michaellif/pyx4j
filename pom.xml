@@ -275,9 +275,9 @@
     <profiles>
 
         <profile>
-            <id>cruisecontrol-env</id>
+            <id>build-env</id>
             <properties>
-                <gwtCompileReport>false</gwtCompileReport>
+                <gwtCompileReport>true</gwtCompileReport>
             </properties>
         </profile>
 
