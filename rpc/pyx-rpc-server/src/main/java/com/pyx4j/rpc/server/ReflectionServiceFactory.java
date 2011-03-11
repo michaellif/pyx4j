@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.entity.server.RpcEntityServiceFilter;
+import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.Service;
 
 /**
@@ -46,9 +47,7 @@ public class ReflectionServiceFactory implements IServiceFactory {
         filters.add(new RpcEntityServiceFilter());
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public Class<? extends Service<?, ?>> getServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException {
+    protected String getImplClassName(String serviceInterfaceClassName) {
         String serviceImplClassName;
         if (serviceInterfaceClassName.contains(".shared.")) {
             serviceImplClassName = serviceInterfaceClassName.replace(".shared.", ".server.") + "Impl";
@@ -60,10 +59,30 @@ public class ReflectionServiceFactory implements IServiceFactory {
             serviceImplClassName = serviceInterfaceClassName + "Impl";
         }
         serviceImplClassName = serviceImplClassName.replace("$", "Impl$");
+        return serviceImplClassName;
+    }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Class<? extends Service<?, ?>> getServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException {
+        String serviceImplClassName = getImplClassName(serviceInterfaceClassName);
         Class<? extends Service<?, ?>> serviceClass = null;
         try {
             serviceClass = (Class<? extends Service<?, ?>>) Class.forName(serviceImplClassName);
+        } catch (Throwable e) {
+            log.error("RPC Service Class load error", e);
+            throw new ClassNotFoundException("RPC Service " + serviceImplClassName + " not avalable");
+        }
+        return serviceClass;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Class<? extends IService> getIServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException {
+        String serviceImplClassName = getImplClassName(serviceInterfaceClassName);
+        Class<? extends IService> serviceClass = null;
+        try {
+            serviceClass = (Class<? extends IService>) Class.forName(serviceImplClassName);
         } catch (Throwable e) {
             log.error("RPC Service Class load error", e);
             throw new ClassNotFoundException("RPC Service " + serviceImplClassName + " not avalable");

@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,23 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 29, 2009
+ * Created on 2011-03-11
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.config.server.rpc;
+package com.pyx4j.rpc.shared;
 
-import java.util.List;
+import com.pyx4j.security.shared.BasicPermission;
 
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.Service;
+public class IServiceExecutePermission extends BasicPermission {
 
-public interface IServiceFactory {
+    private static final long serialVersionUID = -2469354627746681497L;
 
-    public Class<? extends Service<?, ?>> getServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException;
+    public IServiceExecutePermission(String target) {
+        super(target);
+    }
 
-    public Class<? extends IService> getIServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException;
-
-    public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass);
+    public IServiceExecutePermission(Class<? extends IService> targetServiceInterface) {
+        super(targetServiceInterface.getName());
+    }
 
 }
