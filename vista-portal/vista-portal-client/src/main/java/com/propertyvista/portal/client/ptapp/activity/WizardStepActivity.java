@@ -23,7 +23,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepPresenter;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepView;
+import com.propertyvista.portal.domain.pt.IBoundToApplication;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
+import com.propertyvista.portal.rpc.pt.services.AbstractWizardServices;
 
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -32,7 +34,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.site.rpc.AppPlace;
 
-public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter<E>> extends AbstractActivity implements WizardStepPresenter<E> {
+public class WizardStepActivity<E extends IEntity & IBoundToApplication, T extends WizardStepPresenter<E>> extends AbstractActivity implements
+        WizardStepPresenter<E> {
 
     protected static final Logger log = LoggerFactory.getLogger(WizardStepActivity.class);
 
@@ -42,12 +45,23 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
 
     private final Class<E> clazz;
 
+    private final AbstractWizardServices<E> wizardServices;
+
     @SuppressWarnings("unchecked")
+    @Deprecated
     public WizardStepActivity(WizardStepView<E, T> view, Class<E> clazz) {
         this.view = view;
         this.clazz = clazz;
         view.setPresenter((T) this);
+        this.wizardServices = null;
+    }
 
+    @SuppressWarnings("unchecked")
+    public WizardStepActivity(WizardStepView<E, T> view, Class<E> clazz, AbstractWizardServices<E> wizardServices) {
+        this.view = view;
+        this.clazz = clazz;
+        view.setPresenter((T) this);
+        this.wizardServices = wizardServices;
     }
 
     public WizardStepActivity<E, T> withPlace(AppPlace place) {
@@ -57,7 +71,37 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        if (this.wizardServices == null) {
+            oldGet();
+        } else {
+            wizardServices.retrieve(null, new DefaultAsyncCallback<E>() {
+                @Override
+                public void onSuccess(E result) {
+                    if (result == null) {
+                        E newEntity = EntityFactory.create(clazz);
 
+                        createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
+
+                            @Override
+                            public void onSuccess(E result) {
+                                entity = result;
+                                log.info("CREATED {}", entity);
+                                view.populate(entity);
+                            }
+
+                        });
+                    } else {
+                        entity = result;
+                        log.info("LOADED {}", entity);
+                        view.populate(entity);
+                    }
+                }
+            });
+        }
+    }
+
+    @Deprecated
+    private void oldGet() {
         RPCManager.execute(PotentialTenantServices.RetrieveByPK.class, EntityCriteriaByPK.create(clazz, entity), new DefaultAsyncCallback<IEntity>() {
 
             @SuppressWarnings("unchecked")
@@ -92,6 +136,22 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
 
     @Override
     public void save(E entity) {
+        if (this.wizardServices != null) {
+            wizardServices.save(entity, new DefaultAsyncCallback<E>() {
+                @Override
+                public void onSuccess(E result) {
+                    log.info("SAVED {}", result);
+                    WizardStepActivity.this.entity = result;
+                    PtAppWizardManager.instance().nextStep();
+                }
+            });
+        } else {
+            oldSave(entity);
+        }
+    }
+
+    @Deprecated
+    private void oldSave(E entity) {
         RPCManager.execute(PotentialTenantServices.Save.class, entity, new DefaultAsyncCallback<IEntity>() {
 
             @SuppressWarnings("unchecked")

@@ -28,14 +28,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class PetsServicesImpl extends EntityServicesImpl implements PetsServices {
 
-    //======== New way  ===================
-
     @Override
-    public void retrieve(VoidSerializable nothing, AsyncCallback<Pets> callback) {
+    public void retrieve(Long tenantId, AsyncCallback<Pets> callback) {
         EntityQueryCriteria<Pets> criteria = EntityQueryCriteria.create(Pets.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
         Pets ret = secureRetrieve(criteria);
@@ -82,40 +79,6 @@ public class PetsServicesImpl extends EntityServicesImpl implements PetsServices
         pets.petChargeRule().set(petCharge);
         pets.petWeightMaximum().setValue(25);
         pets.petsMaximum().setValue(3);
-    }
-
-    //======== Old way  ===================
-
-    public static class RetrieveImpl implements PetsServices.Retrieve {
-
-        @Override
-        public Pets execute(VoidSerializable request) {
-            EntityQueryCriteria<Pets> criteria = EntityQueryCriteria.create(Pets.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
-            Pets ret = secureRetrieve(criteria);
-            if (ret == null) {
-                ret = EntityFactory.create(Pets.class);
-            }
-            loadTransientData(ret);
-            return ret;
-        }
-
-    }
-
-    public static class SaveImpl implements PetsServices.Save {
-
-        @Override
-        public Pets execute(Pets request) {
-
-            // TODO app specific security
-
-            secureSave(request);
-
-            loadTransientData(request);
-
-            return request;
-        }
-
     }
 
 }
