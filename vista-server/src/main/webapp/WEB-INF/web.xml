@@ -168,8 +168,7 @@
 
     <servlet>
         <servlet-name>RemoteServiceServlet</servlet-name>
-        <servlet-class>com.pyx4j.rpc.server.RemoteServiceServlet
-		</servlet-class>
+        <servlet-class>com.pyx4j.rpc.server.RemoteServiceServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -187,6 +186,11 @@
         <url-pattern>/admin/srv/*</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>RemoteServiceServlet</servlet-name>
+        <url-pattern>/crm/srv/*</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>RemoteJ2SEServiceServlet</servlet-name>
         <servlet-class>com.pyx4j.rpc.server.RemoteJ2SEServiceServlet</servlet-class>
