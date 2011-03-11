@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 public class PetsServicesImpl extends EntityServicesImpl implements PetsServices {
 
     @Override
-    public void retrieve(Long tenantId, AsyncCallback<Pets> callback) {
+    public void retrieve(AsyncCallback<Pets> callback, Long tenantId) {
         EntityQueryCriteria<Pets> criteria = EntityQueryCriteria.create(Pets.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
         Pets ret = secureRetrieve(criteria);
@@ -45,7 +45,7 @@ public class PetsServicesImpl extends EntityServicesImpl implements PetsServices
     }
 
     @Override
-    public void save(Pets editableEntity, AsyncCallback<Pets> callback) {
+    public void save(AsyncCallback<Pets> callback, Pets editableEntity) {
 
         // app specific security stuff
         final Application application = PtUserDataAccess.getCurrentUserApplication();

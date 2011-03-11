@@ -21,7 +21,7 @@ import com.pyx4j.rpc.shared.IService;
 
 public interface AbstractWizardServices<EditableEntity extends IEntity & IBoundToApplication> extends IService {
 
-    public void retrieve(Long tenantId, AsyncCallback<EditableEntity> callback);
+    public void retrieve(AsyncCallback<EditableEntity> callback, Long tenantId);
 
-    public void save(EditableEntity editableEntity, AsyncCallback<EditableEntity> callback);
+    public void save(AsyncCallback<EditableEntity> callback, EditableEntity editableEntity);
 }

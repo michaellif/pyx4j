@@ -71,7 +71,7 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
         if (this.wizardServices == null) {
             oldGet();
         } else {
-            wizardServices.retrieve(null, new DefaultAsyncCallback<E>() {
+            wizardServices.retrieve(new DefaultAsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
                     if (result == null) {
@@ -93,7 +93,7 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
                         view.populate(entity);
                     }
                 }
-            });
+            }, null);
         }
     }
 
@@ -134,14 +134,14 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
     @Override
     public void save(E entity) {
         if (this.wizardServices != null) {
-            wizardServices.save(entity, new DefaultAsyncCallback<E>() {
+            wizardServices.save(new DefaultAsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
                     log.info("SAVED {}", result);
                     WizardStepActivity.this.entity = result;
                     PtAppWizardManager.instance().nextStep();
                 }
-            });
+            }, entity);
         } else {
             oldSave(entity);
         }
