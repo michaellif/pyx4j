@@ -36,13 +36,7 @@ public class SecondNavigActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (ClientContext.isAuthenticated() && !(place instanceof SiteMap.Completion)) {
-            RootPanel.getBodyElement().setClassName("body-nonavig");
-            return secondNavigActivityProvider.get().withPlace(place);
-        } else {
-            RootPanel.getBodyElement().setClassName("body-navig");
-            return null;
-        }
+        return secondNavigActivityProvider.get().withPlace(place);
     }
 
 }
