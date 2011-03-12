@@ -62,9 +62,9 @@ public class IServiceGenerator extends Generator {
 
             IServiceImplCreator implCreator = new IServiceImplCreator(sourceWriter, interfaceType, oracle);
             implCreator.emitClass(logger, null);
-            sourceWriter.commit(logger);
 
-            genCtx.commit(logger, printWriter);
+            sourceWriter.commit(logger);
+            //genCtx.commit(logger, printWriter);
         }
 
         return packageName + "." + implName;
