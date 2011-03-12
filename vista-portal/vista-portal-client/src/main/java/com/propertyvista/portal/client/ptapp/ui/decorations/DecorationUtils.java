@@ -14,8 +14,13 @@
 package com.propertyvista.portal.client.ptapp.ui.decorations;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.domain.pt.IPerson;
+
+import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 
 public class DecorationUtils {
 
@@ -53,5 +58,17 @@ public class DecorationUtils {
             wg.setWidth(width);
         }
         return w;
+    }
+
+    // forms full person's name from our IPerson domain: 
+    public static FlowPanel formFullName(CEntityEditableComponent<?> entityComp, final IPerson person) {
+
+        FlowPanel fullname = new FlowPanel();
+        fullname.add(inline(entityComp.inject(person.firstName()), "auto"));
+        fullname.add(inline(new HTML("&nbsp;")));
+        fullname.add(inline(entityComp.inject(person.middleName()), "auto"));
+        fullname.add(inline(new HTML("&nbsp;")));
+        fullname.add(inline(entityComp.inject(person.lastName()), "auto"));
+        return fullname;
     }
 }

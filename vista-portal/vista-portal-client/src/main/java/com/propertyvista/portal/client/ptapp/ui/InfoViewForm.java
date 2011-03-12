@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import static com.pyx4j.commons.HtmlUtils.h4;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +42,8 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Vehicle;
 
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
@@ -160,8 +160,8 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
         main.add(new HTML());
 
-        main.add(new ViewHeaderDecorator(h4(i18n.tr("Emergency Contacts"))));
-//        main.add(inject(proto().emergencyContacts()));
+        main.add(new ViewHeaderDecorator(proto().emergencyContacts()));
+        main.add(inject(proto().emergencyContacts(), createIncomeFolderEditor()));
 
         main.setWidth("700px");
 
@@ -174,8 +174,6 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(Address.class)) {
             return createAddressEditor();
-        } else if (member.getValueClass().equals(EmergencyContact.class)) {
-            return createEmergencyContactEditor();
         } else {
             return super.create(member);
         }
@@ -252,34 +250,6 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
     }
 
-    private CEntityEditableComponent<EmergencyContact> createEmergencyContactEditor() {
-
-        return new CEntityEditableComponent<EmergencyContact>(EmergencyContact.class) {
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                main.add(inject(proto().firstName()), 12);
-                main.add(inject(proto().middleName()), 12);
-                main.add(inject(proto().lastName()), 20);
-                main.add(inject(proto().homePhone()), 15);
-                main.add(inject(proto().mobilePhone()), 15);
-                main.add(inject(proto().workPhone()), 15);
-                main.add(inject(proto().address().street1()), 20);
-                main.add(inject(proto().address().street2()), 20);
-                main.add(inject(proto().address().city()), 15);
-                main.add(inject(proto().address().province()), 17);
-                main.add(inject(proto().address().postalCode()), 7);
-                main.add(new HTML());
-                return main;
-            }
-
-            @Override
-            public void addValidations() {
-                get(proto().address().postalCode()).addValueValidator(new ZipCodeValueValidator());
-            }
-        };
-    }
-
     private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {
         return new CEntityFolder<Vehicle>(Vehicle.class) {
 
@@ -317,5 +287,51 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
         };
 
+    }
+
+    private CEntityFolder<EmergencyContact> createIncomeFolderEditor() {
+
+        return new CEntityFolder<EmergencyContact>(EmergencyContact.class) {
+
+            @Override
+            protected FolderDecorator<EmergencyContact> createFolderDecorator() {
+                return new BoxFolderDecorator<EmergencyContact>(SiteImages.INSTANCE.addRow(), i18n.tr("Add a contact"));
+            }
+
+            @Override
+            protected CEntityFolderItem<EmergencyContact> createItem() {
+                return createEmergencyContactItem();
+            }
+
+        };
+    }
+
+    private CEntityFolderItem<EmergencyContact> createEmergencyContactItem() {
+
+        return new CEntityFolderItem<EmergencyContact>(EmergencyContact.class) {
+            @Override
+            public IsWidget createContent() {
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+                main.add(inject(proto().firstName()), 12);
+                main.add(inject(proto().middleName()), 12);
+                main.add(inject(proto().lastName()), 20);
+                main.add(inject(proto().homePhone()), 15);
+                main.add(inject(proto().mobilePhone()), 15);
+                main.add(inject(proto().workPhone()), 15);
+                injectIAddress(main, proto().address(), this);
+                main.add(new HTML());
+                return main;
+            }
+
+            @Override
+            public void addValidations() {
+                get(proto().address().postalCode()).addValueValidator(new ZipCodeValueValidator());
+            }
+
+            @Override
+            public FolderItemDecorator createFolderItemDecorator() {
+                return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove contact"));
+            }
+        };
     }
 }

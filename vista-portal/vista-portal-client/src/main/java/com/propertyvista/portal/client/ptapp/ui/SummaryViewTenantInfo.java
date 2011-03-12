@@ -46,7 +46,6 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaReadOnlyDecorat
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
-import com.propertyvista.portal.domain.pt.IPerson;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Vehicle;
 
@@ -103,17 +102,6 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         return main;
     }
 
-    private FlowPanel formFullName(IPerson person) {
-
-        FlowPanel fullname = new FlowPanel();
-        fullname.add(DecorationUtils.inline(inject(person.firstName()), "auto"));
-        fullname.add(DecorationUtils.inline(new HTML("&nbsp;")));
-        fullname.add(DecorationUtils.inline(inject(person.middleName()), "auto"));
-        fullname.add(DecorationUtils.inline(new HTML("&nbsp;")));
-        fullname.add(DecorationUtils.inline(inject(person.lastName()), "auto"));
-        return fullname;
-    }
-
     public Widget bindCompactView() {
 
         HorizontalPanel panel = new HorizontalPanel();
@@ -122,7 +110,7 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         panel.add(sw = addViewSwitcher());
         panel.setCellVerticalAlignment(sw, HasVerticalAlignment.ALIGN_MIDDLE);
 
-        FlowPanel tenant = formFullName(proto());
+        FlowPanel tenant = DecorationUtils.formFullName(this, proto());
         tenant.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         tenant.getElement().getStyle().setFontSize(1.5, Unit.EM);
         tenant.getElement().getStyle().setPaddingTop(0.2, Unit.EM);
@@ -235,26 +223,10 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         // ----------------------------------------------------------------------
         // Emergency:
 
-        fullViewPanel.add(new HTML(h3(i18n.tr("Emergency Contacts"))));
+        fullViewPanel.add(new HTML(h3(proto().emergencyContacts().getMeta().getCaption())));
 
-        subviewPanel = new HorizontalPanel();
-        subviewPanel.getElement().getStyle().setMarginTop(0.3, Unit.EM);
-        subviewPanel.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-
-        //TODO VLADL will make it working
-        //        subviewPanel.add(panel = bindEmergencyContact(proto().emergencyContact(), dd2ColumnsTable));
-        //        subviewPanel.setCellWidth(panel, LEFT_COLUMN_WIDTH);
-        //
-        //        panel = new FlowPanel();
-        //        subviewPanel.add(panel);
-        //        subviewPanel.setCellWidth(panel, GAP_COLUMN_WIDTH);
-        //
-        //        subviewPanel.add(panel = bindEmergencyContact(proto().emergencyContact2(), dd2ColumnsTable));
-        //        subviewPanel.setCellWidth(panel, RIGHT_COLUMN_WIDTH);
-
-        subviewPanel.add(new FlowPanel()); // add empty cell just for proper resizing of the previous two ;)
-        subviewPanel.setWidth("100%");
-        fullViewPanel.add(subviewPanel);
+        bind(createIncomeFolderEditor(), proto().emergencyContacts());
+        fullViewPanel.add(get(proto().emergencyContacts()));
 
         fullViewPanel.setVisible(false);
         return fullViewPanel;
@@ -278,25 +250,6 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.managerName()), dd2ColumnsTable));
 
         return addressPanel;
-    }
-
-    private FlowPanel bindEmergencyContact(EmergencyContact emergencyContact, DecorationData dd2ColumnsTable) {
-        FlowPanel contactPanel = new FlowPanel();
-
-        FlowPanel person = formFullName(emergencyContact);
-        person.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        person.getElement().getStyle().setFontSize(1.1, Unit.EM);
-        contactPanel.add(person);
-        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.homePhone()), dd2ColumnsTable));
-        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.mobilePhone()), dd2ColumnsTable));
-        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.workPhone()), dd2ColumnsTable));
-        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.address().street1()), dd2ColumnsTable));
-        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.address().street2()), dd2ColumnsTable));
-        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.address().city()), dd2ColumnsTable));
-        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.address().province()), dd2ColumnsTable));
-        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.address().postalCode()), dd2ColumnsTable));
-
-        return contactPanel;
     }
 
     private Widget addViewSwitcher() {
@@ -357,5 +310,56 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
 
         };
 
+    }
+
+    private CEntityFolder<EmergencyContact> createIncomeFolderEditor() {
+
+        return new CEntityFolder<EmergencyContact>(EmergencyContact.class) {
+
+            @Override
+            protected FolderDecorator<EmergencyContact> createFolderDecorator() {
+                return new BoxReadOnlyFolderDecorator<EmergencyContact>();
+            }
+
+            @Override
+            protected CEntityFolderItem<EmergencyContact> createItem() {
+                return createEmergencyContactItem();
+            }
+
+            private CEntityFolderItem<EmergencyContact> createEmergencyContactItem() {
+
+                return new CEntityFolderItem<EmergencyContact>(EmergencyContact.class) {
+                    @Override
+                    public IsWidget createContent() {
+                        FlowPanel contactPanel = new FlowPanel();
+
+                        FlowPanel person = DecorationUtils.formFullName(this, proto());
+                        person.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+                        person.getElement().getStyle().setFontSize(1.1, Unit.EM);
+                        contactPanel.add(person);
+
+                        DecorationData dd = new DecorationData(40, Unit.PCT, HasHorizontalAlignment.ALIGN_LEFT, 60, Unit.PCT,
+                                HasHorizontalAlignment.ALIGN_RIGHT);
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().homePhone()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().mobilePhone()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().workPhone()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().street1()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().street2()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().city()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().province()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().country()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().postalCode()), dd));
+
+                        return contactPanel;
+                    }
+
+                    @Override
+                    public FolderItemDecorator createFolderItemDecorator() {
+                        return new BoxReadOnlyFolderItemDecorator(!isFirst());
+                    }
+                };
+            }
+
+        };
     }
 }
