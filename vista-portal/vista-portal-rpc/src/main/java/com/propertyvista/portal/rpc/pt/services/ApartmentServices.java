@@ -19,6 +19,6 @@ import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 
 public interface ApartmentServices extends AbstractWizardServices<UnitSelection> {
 
-    public void retrieveUnitSelection(UnitSelectionCriteria criteria, AsyncCallback<UnitSelection> callback);
+    public void retrieveUnitSelection(AsyncCallback<UnitSelection> callback, UnitSelectionCriteria criteria);
 
 }

@@ -34,14 +34,14 @@ public class ApartmentActivity extends WizardStepActivity<UnitSelection, Apartme
 
     @Override
     public void selectByDates(UnitSelectionCriteria entity) {
-        srv.retrieveUnitSelection(entity, new DefaultAsyncCallback<UnitSelection>() {
+        srv.retrieveUnitSelection(new DefaultAsyncCallback<UnitSelection>() {
 
             @Override
             public void onSuccess(UnitSelection result) {
                 getView().populate(result);
             }
 
-        });
+        }, entity);
 
     }
 }
