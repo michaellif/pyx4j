@@ -13,11 +13,14 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import java.util.Date;
+
 import com.propertyvista.portal.domain.ref.Province;
 
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
@@ -29,7 +32,9 @@ public interface Vehicle extends IEntity {
     @BusinessEqualValue
     IPrimitive<String> plateNumber();
 
-    IPrimitive<Integer> year();
+    @Format("yyyy")
+    @Editor(type = EditorType.yearpicker)
+    IPrimitive<Date> year();
 
     IPrimitive<String> make();
 

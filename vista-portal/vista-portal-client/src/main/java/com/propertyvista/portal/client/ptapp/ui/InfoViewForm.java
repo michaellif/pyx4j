@@ -161,7 +161,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         main.add(new HTML());
 
         main.add(new ViewHeaderDecorator(h4(i18n.tr("Emergency Contacts"))));
-        main.add(inject(proto().emergencyContacts()));
+//        main.add(inject(proto().emergencyContacts()));
 
         main.setWidth("700px");
 

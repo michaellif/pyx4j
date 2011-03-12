@@ -206,7 +206,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         Vehicle vehicle = EntityFactory.create(Vehicle.class);
 
         vehicle.plateNumber().setValue("ML" + RandomUtil.randomInt(9999) + "K");
-        vehicle.year().setValue(1990 + RandomUtil.randomInt(20));
+        vehicle.year().setValue(new Date());
         vehicle.make().setValue(RandomUtil.random(DemoData.CAR_MAKES));
         vehicle.model().setValue(RandomUtil.random(DemoData.CAR_MODELS));
         vehicle.province().set(retrieveByMemeber(Province.class, vehicle.province().code(), RandomUtil.random(DemoData.PROVINCES)));
