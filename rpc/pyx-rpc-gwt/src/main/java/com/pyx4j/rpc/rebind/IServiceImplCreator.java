@@ -24,19 +24,23 @@ import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
+import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.i18n.shared.GwtLocale;
 import com.google.gwt.user.rebind.AbstractGeneratorClassCreator;
 import com.google.gwt.user.rebind.SourceWriter;
 
 public class IServiceImplCreator extends AbstractGeneratorClassCreator {
 
-    public IServiceImplCreator(SourceWriter sourceWriter, JClassType interfaceType) {
+    private final TypeOracle oracle;
+
+    public IServiceImplCreator(SourceWriter sourceWriter, JClassType interfaceType, TypeOracle oracle) {
         super(sourceWriter, interfaceType);
+        this.oracle = oracle;
     }
 
     @Override
     protected void emitMethodBody(TreeLogger logger, JMethod method, GwtLocale locale) throws UnableToCompleteException {
-        IServiceImplMethodCreator methodCreator = new IServiceImplMethodCreator(this);
+        IServiceImplMethodCreator methodCreator = new IServiceImplMethodCreator(this, oracle);
         methodCreator.createMethodFor(logger, method, null, null, locale);
     }
 }

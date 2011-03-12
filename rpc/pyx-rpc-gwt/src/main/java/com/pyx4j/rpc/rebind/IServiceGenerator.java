@@ -21,6 +21,7 @@
 package com.pyx4j.rpc.rebind;
 
 import java.io.PrintWriter;
+import java.util.Map;
 
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
@@ -31,6 +32,8 @@ import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
+
+import com.pyx4j.rpc.client.IServiceBase;
 
 public class IServiceGenerator extends Generator {
 
@@ -53,13 +56,13 @@ public class IServiceGenerator extends Generator {
 
         if (printWriter != null) {
             ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, implName);
+            factory.addImport(IServiceBase.class.getName());
+            factory.setSuperclass(IServiceBase.class.getName());
             factory.addImplementedInterface(interfaceType.getQualifiedSourceName());
             SourceWriter sourceWriter = factory.createSourceWriter(genCtx, printWriter);
 
-            IServiceImplCreator implCreator = new IServiceImplCreator(sourceWriter, interfaceType);
+            IServiceImplCreator implCreator = new IServiceImplCreator(sourceWriter, interfaceType, oracle);
             implCreator.emitClass(logger, null);
-
-            System.out.println(printWriter.toString());
 
             genCtx.commit(logger, printWriter);
         }

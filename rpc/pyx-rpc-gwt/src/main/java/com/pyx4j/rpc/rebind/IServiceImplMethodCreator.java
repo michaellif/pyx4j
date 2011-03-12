@@ -22,23 +22,58 @@ package com.pyx4j.rpc.rebind;
 
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
+import com.google.gwt.core.ext.TreeLogger.Type;
+import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
+import com.google.gwt.core.ext.typeinfo.JParameter;
+import com.google.gwt.core.ext.typeinfo.NotFoundException;
+import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.i18n.rebind.AbstractResource.ResourceList;
 import com.google.gwt.i18n.shared.GwtLocale;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.rebind.AbstractGeneratorClassCreator;
 import com.google.gwt.user.rebind.AbstractMethodCreator;
 
 public class IServiceImplMethodCreator extends AbstractMethodCreator {
 
-    public IServiceImplMethodCreator(AbstractGeneratorClassCreator classCreator) {
+    private final TypeOracle oracle;
+
+    public IServiceImplMethodCreator(AbstractGeneratorClassCreator classCreator, TypeOracle oracle) {
         super(classCreator);
+        this.oracle = oracle;
     }
 
     @Override
     public void createMethodFor(TreeLogger logger, JMethod targetMethod, String key, ResourceList resourceList, GwtLocale locale)
             throws UnableToCompleteException {
-        // TODO Auto-generated method stub
+        indent();
+        print("execute(");
+        print("\"");
+        print(currentCreator.getTarget().getQualifiedSourceName());
+        print("\", \"");
+        print(targetMethod.getName());
+        print("\"");
+        if (targetMethod.getParameters().length == 0) {
+            logger.log(Type.ERROR, "Should have at least one argument");
+            throw new UnableToCompleteException();
+        }
 
+        try {
+            JClassType classType = targetMethod.getParameters()[0].getType().isInterface();
+            if (classType == null || !classType.isAssignableTo(oracle.getType(AsyncCallback.class.getName()))) {
+                logger.log(Type.ERROR, "First parameter should be AsyncCallback");
+                throw new UnableToCompleteException();
+            }
+        } catch (NotFoundException e) {
+            throw new UnableToCompleteException();
+        }
+
+        for (JParameter parameter : targetMethod.getParameters()) {
+            print(", ");
+            print(parameter.getName());
+        }
+        println(");");
+        outdent();
     }
 
 }
