@@ -27,6 +27,8 @@ import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.rpc.shared.IService;
@@ -86,9 +88,45 @@ public class IServiceImplImpl implements IServiceImpl {
         throw new UnRecoverableRuntimeException("Fatal system error");
     }
 
+    private static class ServerAsyncCallback implements AsyncCallback<Serializable> {
+
+        Throwable caught;
+
+        Serializable result;
+
+        boolean onSuccessCalled = false;
+
+        @Override
+        public void onFailure(Throwable caught) {
+            this.caught = caught;
+        }
+
+        @Override
+        public void onSuccess(Serializable result) {
+            this.result = result;
+            onSuccessCalled = true;
+        }
+
+    }
+
     private Serializable runMethod(IService serviceInstance, Method method, Serializable[] args) {
         try {
-            return (Serializable) method.invoke(serviceInstance, (Object[]) args);
+            ServerAsyncCallback callback = new ServerAsyncCallback();
+            Object[] methodArgs = new Object[args.length + 1];
+            methodArgs[0] = callback;
+            System.arraycopy(args, 0, methodArgs, 1, args.length);
+
+            method.invoke(serviceInstance, methodArgs);
+
+            if (callback.caught != null) {
+                log.error("Error", callback.caught);
+                throw new UnRecoverableRuntimeException("Fatal system error");
+            }
+            if (!callback.onSuccessCalled) {
+                log.error("Error forgot to call \"onSuccess\" from method {} in class {}", method.getName(), serviceInstance.getClass().getName());
+                throw new UnRecoverableRuntimeException("Fatal system error");
+            }
+            return callback.result;
         } catch (IllegalArgumentException e) {
             log.error("Error", e);
             throw new UnRecoverableRuntimeException("Fatal system error");
@@ -104,5 +142,4 @@ public class IServiceImplImpl implements IServiceImpl {
             }
         }
     }
-
 }
