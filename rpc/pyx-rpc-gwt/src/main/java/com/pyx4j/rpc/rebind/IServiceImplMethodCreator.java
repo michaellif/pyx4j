@@ -25,7 +25,6 @@ import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
-import com.google.gwt.core.ext.typeinfo.JParameter;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.i18n.rebind.AbstractResource.ResourceList;
@@ -67,10 +66,10 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
             throw new UnableToCompleteException();
         }
 
-        for (JParameter parameter : targetMethod.getParameters()) {
-            print(", ");
-            print(parameter.getName());
+        for (int i = 0; i < targetMethod.getParameters().length; i++) {
+            print(", arg" + i);
         }
+
         println(");");
     }
 
