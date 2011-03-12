@@ -100,11 +100,11 @@ public class AppSiteView extends FlowPanel {
         mainWrapper.add(caption2navigPanel);
 
         DisplayPanel messageDisplayPanel = new DisplayPanel();
-        secondNavigDisplayPanel.setStyleName(prefix + StyleSuffix.Message);
+        messageDisplayPanel.setStyleName(prefix + StyleSuffix.Message);
         mainWrapper.add(messageDisplayPanel);
 
         DisplayPanel contentDisplayPanel = new DisplayPanel();
-        secondNavigDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
+        contentDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
         mainWrapper.add(contentDisplayPanel);
 
         FlowPanel leftWrapper = new FlowPanel();
