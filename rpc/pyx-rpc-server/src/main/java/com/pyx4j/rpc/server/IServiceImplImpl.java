@@ -120,6 +120,9 @@ public class IServiceImplImpl implements IServiceImpl {
 
             if (callback.caught != null) {
                 log.error("Error", callback.caught);
+                if (callback.caught instanceof RuntimeException) {
+                    throw (RuntimeException) callback.caught;
+                }
                 throw new UnRecoverableRuntimeException("Fatal system error");
             }
             if (!callback.onSuccessCalled) {
@@ -137,7 +140,7 @@ public class IServiceImplImpl implements IServiceImpl {
             if (e.getCause() instanceof RuntimeException) {
                 throw (RuntimeException) e.getCause();
             } else {
-                log.error("Error", e);
+                log.error("Error", e.getCause());
                 throw new UnRecoverableRuntimeException("Fatal system error");
             }
         }
