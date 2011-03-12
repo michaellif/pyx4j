@@ -3,7 +3,6 @@ package com.pyx4j.site.client.ui;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -18,7 +17,7 @@ public class AppSiteView extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Header, MainNavig, Center, Main, Left, Right, Footer, Display
+        Header, MainNavig, Caption, SecondaryNavig, Message, Content, Center, Main, Left, Right, Footer, Display
     }
 
     public AppSiteView(ActivityMapper logoActivityMapper,
@@ -27,11 +26,13 @@ public class AppSiteView extends FlowPanel {
 
     ActivityMapper mainNavigActivityMapper,
 
-    ActivityMapper center1ActivityMapper,
+    ActivityMapper captionActivityMapper,
 
-    ActivityMapper center2ActivityMapper,
+    ActivityMapper secondNavigActivityMapper,
 
-    ActivityMapper center3ActivityMapper,
+    ActivityMapper messageActivityMapper,
+
+    ActivityMapper contentActivityMapper,
 
     ActivityMapper left1ActivityMapper,
 
@@ -86,14 +87,25 @@ public class AppSiteView extends FlowPanel {
         mainWrapper.setStyleName(prefix + StyleSuffix.Main);
         centerWrapper.add(mainWrapper);
 
-        DisplayPanel center1DisplayPanel = new DisplayPanel();
-        mainWrapper.add(center1DisplayPanel);
+        FlowPanel caption2navigPanel = new FlowPanel();
 
-        DisplayPanel center2DisplayPanel = new DisplayPanel();
-        mainWrapper.add(center2DisplayPanel);
+        DisplayPanel captionDisplayPanel = new DisplayPanel();
+        captionDisplayPanel.setStyleName(prefix + StyleSuffix.Caption);
+        caption2navigPanel.add(captionDisplayPanel);
 
-        DisplayPanel center3DisplayPanel = new DisplayPanel();
-        mainWrapper.add(center3DisplayPanel);
+        DisplayPanel secondNavigDisplayPanel = new DisplayPanel();
+        secondNavigDisplayPanel.setStyleName(prefix + StyleSuffix.SecondaryNavig);
+        caption2navigPanel.add(secondNavigDisplayPanel);
+
+        mainWrapper.add(caption2navigPanel);
+
+        DisplayPanel messageDisplayPanel = new DisplayPanel();
+        secondNavigDisplayPanel.setStyleName(prefix + StyleSuffix.Message);
+        mainWrapper.add(messageDisplayPanel);
+
+        DisplayPanel contentDisplayPanel = new DisplayPanel();
+        secondNavigDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
+        mainWrapper.add(contentDisplayPanel);
 
         FlowPanel leftWrapper = new FlowPanel();
         leftWrapper.setStyleName(prefix + StyleSuffix.Left);
@@ -126,10 +138,11 @@ public class AppSiteView extends FlowPanel {
         bind(logoActivityMapper, logoDisplayPanel, eventBus);
         bind(actionsActivityMapper, actionsDisplayPanel, eventBus);
         bind(mainNavigActivityMapper, mainNavigDisplayPanel, eventBus);
+        bind(secondNavigActivityMapper, secondNavigDisplayPanel, eventBus);
 
-        bind(center1ActivityMapper, center1DisplayPanel, eventBus);
-        bind(center2ActivityMapper, center2DisplayPanel, eventBus);
-        bind(center3ActivityMapper, center3DisplayPanel, eventBus);
+        bind(captionActivityMapper, captionDisplayPanel, eventBus);
+        bind(messageActivityMapper, messageDisplayPanel, eventBus);
+        bind(contentActivityMapper, contentDisplayPanel, eventBus);
 
         bind(left1ActivityMapper, left1DisplayPanel, eventBus);
         bind(left2ActivityMapper, left2DisplayPanel, eventBus);

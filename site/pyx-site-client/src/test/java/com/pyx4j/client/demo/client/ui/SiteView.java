@@ -13,9 +13,9 @@ import com.google.inject.Singleton;
 
 import com.pyx4j.client.demo.client.mvp.ActionsActivityMapper;
 import com.pyx4j.client.demo.client.mvp.BottomActivityMapper;
-import com.pyx4j.client.demo.client.mvp.Center1ActivityMapper;
-import com.pyx4j.client.demo.client.mvp.Center2ActivityMapper;
-import com.pyx4j.client.demo.client.mvp.Center3ActivityMapper;
+import com.pyx4j.client.demo.client.mvp.CaptionActivityMapper;
+import com.pyx4j.client.demo.client.mvp.MessageActivityMapper;
+import com.pyx4j.client.demo.client.mvp.ContentActivityMapper;
 import com.pyx4j.client.demo.client.mvp.Left1ActivityMapper;
 import com.pyx4j.client.demo.client.mvp.Left2ActivityMapper;
 import com.pyx4j.client.demo.client.mvp.LogoActivityMapper;
@@ -42,11 +42,11 @@ public class SiteView extends FlowPanel {
 
     MainNavigActivityMapper mainNavigActivityMapper,
 
-    Center1ActivityMapper center1ActivityMapper,
+    CaptionActivityMapper center1ActivityMapper,
 
-    Center2ActivityMapper center2ActivityMapper,
+    MessageActivityMapper center2ActivityMapper,
 
-    Center3ActivityMapper center3ActivityMapper,
+    ContentActivityMapper center3ActivityMapper,
 
     Left1ActivityMapper left1ActivityMapper,
 

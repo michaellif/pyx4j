@@ -20,27 +20,6 @@
  */
 package com.pyx4j.client.demo.client.mvp;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
-import com.pyx4j.client.demo.client.activity.MainContentActivity;
-
-public class Center1ActivityMapper implements ActivityMapper {
-
-    Provider<MainContentActivity> mainContentActivityProvider;
-
-    @Inject
-    public Center1ActivityMapper(final Provider<MainContentActivity> mainContentActivityProvider) {
-        super();
-        this.mainContentActivityProvider = mainContentActivityProvider;
-    }
-
-    @Override
-    public Activity getActivity(Place place) {
-        return mainContentActivityProvider.get().withPlace(place);
-    }
+public class ContentActivityMapper {
 
 }

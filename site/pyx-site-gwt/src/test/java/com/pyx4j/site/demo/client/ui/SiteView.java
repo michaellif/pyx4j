@@ -7,9 +7,9 @@ import com.google.inject.Singleton;
 import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.site.demo.client.mvp.ActionsActivityMapper;
 import com.pyx4j.site.demo.client.mvp.BottomActivityMapper;
-import com.pyx4j.site.demo.client.mvp.Center1ActivityMapper;
-import com.pyx4j.site.demo.client.mvp.Center2ActivityMapper;
-import com.pyx4j.site.demo.client.mvp.Center3ActivityMapper;
+import com.pyx4j.site.demo.client.mvp.CaptionActivityMapper;
+import com.pyx4j.site.demo.client.mvp.MessageActivityMapper;
+import com.pyx4j.site.demo.client.mvp.ContentActivityMapper;
 import com.pyx4j.site.demo.client.mvp.Left1ActivityMapper;
 import com.pyx4j.site.demo.client.mvp.Left2ActivityMapper;
 import com.pyx4j.site.demo.client.mvp.LogoActivityMapper;
@@ -28,11 +28,13 @@ public class SiteView extends AppSiteView {
 
     MainNavigActivityMapper mainNavigActivityMapper,
 
-    Center1ActivityMapper center1ActivityMapper,
+    CaptionActivityMapper captionActivityMapper,
 
-    Center2ActivityMapper center2ActivityMapper,
+    CaptionActivityMapper secondNavigActivityMapper,
 
-    Center3ActivityMapper center3ActivityMapper,
+    MessageActivityMapper messageActivityMapper,
+
+    ContentActivityMapper contentActivityMapper,
 
     Left1ActivityMapper left1ActivityMapper,
 
@@ -48,8 +50,9 @@ public class SiteView extends AppSiteView {
 
     Theme theme) {
 
-        super(logoActivityMapper, actionsActivityMapper, mainNavigActivityMapper, center1ActivityMapper, center2ActivityMapper, center3ActivityMapper,
-                left1ActivityMapper, left2ActivityMapper, right1ActivityMapper, right2ActivityMapper, bottomActivityMapper, eventBus, theme);
+        super(logoActivityMapper, actionsActivityMapper, mainNavigActivityMapper, captionActivityMapper, secondNavigActivityMapper, messageActivityMapper,
+                contentActivityMapper, left1ActivityMapper, left2ActivityMapper, right1ActivityMapper, right2ActivityMapper, bottomActivityMapper, eventBus,
+                theme);
 
     }
 

@@ -28,12 +28,12 @@ import com.google.inject.Provider;
 
 import com.pyx4j.site.demo.client.activity.MainContentActivity;
 
-public class Center1ActivityMapper implements ActivityMapper {
+public class CaptionActivityMapper implements ActivityMapper {
 
     Provider<MainContentActivity> mainContentActivityProvider;
 
     @Inject
-    public Center1ActivityMapper(final Provider<MainContentActivity> mainContentActivityProvider) {
+    public CaptionActivityMapper(final Provider<MainContentActivity> mainContentActivityProvider) {
         super();
         this.mainContentActivityProvider = mainContentActivityProvider;
     }

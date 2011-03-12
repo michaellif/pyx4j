@@ -18,18 +18,8 @@
  * @author Misha
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.pyx4j.site.demo.client.mvp;
+package com.pyx4j.client.demo.client.mvp;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
-
-public class Center2ActivityMapper implements ActivityMapper {
-
-    @Override
-    public Activity getActivity(Place place) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+public class MessageActivityMapper {
 
 }
