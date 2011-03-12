@@ -36,10 +36,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderIte
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaReadOnlyDecorator;
 import com.propertyvista.portal.client.ptapp.ui.validators.ValidationUtils;
-import com.propertyvista.portal.client.ptapp.ui.validators.ZipCodeValueValidator;
-import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantGuarantor;

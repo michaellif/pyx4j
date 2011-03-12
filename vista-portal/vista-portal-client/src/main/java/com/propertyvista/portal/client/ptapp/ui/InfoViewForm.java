@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
@@ -54,6 +55,7 @@ import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
@@ -247,6 +249,32 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         });
 
         get(proto().secureIdentifier()).addValueValidator(new CanadianSinValidator());
+
+        get(proto().vehicles()).addValueValidator(new EditableValueValidator<List<Map<String, Object>>>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
+                return !EntityGraph.hasBusinessDuplicates(getValue().vehicles());
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
+                return i18n.tr("Duplicate vehicles hspecified");
+            }
+        });
+
+        get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<Map<String, Object>>>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
+                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts());
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
+                return i18n.tr("Duplicate contacts specified");
+            }
+        });
     }
 
     private void enablePreviousAddress() {
@@ -316,6 +344,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 columns.add(new EntityFolderColumnDescriptor(proto().year(), "5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().make(), "5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().model(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().country(), "7em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().province(), "17em"));
             }
 
