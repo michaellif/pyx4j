@@ -210,6 +210,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         vehicle.make().setValue(RandomUtil.random(DemoData.CAR_MAKES));
         vehicle.model().setValue(RandomUtil.random(DemoData.CAR_MODELS));
         vehicle.province().set(retrieveByMemeber(Province.class, vehicle.province().code(), RandomUtil.random(DemoData.PROVINCES)));
+        vehicle.country().set(retrieveNamed(Country.class, "Canada"));
 
         return vehicle;
     }

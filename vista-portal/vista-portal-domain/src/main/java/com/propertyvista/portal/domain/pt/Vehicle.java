@@ -15,13 +15,17 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
+import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.portal.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.portal.domain.ref.Province;
 
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -43,4 +47,9 @@ public interface Vehicle extends IEntity {
     @Caption(name = "Province/State")
     @Editor(type = EditorType.combo)
     Province province();
+
+    @Editor(type = EditorType.suggest)
+    @NotNull
+    @Reference(adapter = CountryReferenceAdapter.class)
+    Country country();
 }
