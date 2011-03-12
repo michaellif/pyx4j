@@ -7,21 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-15
- * @author vlads
+ * Created on 2011-03-12
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.tester.ui;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public interface ApplicationProgress extends IEntity, IBoundToApplication {
+public interface SecondNavigView extends IsWidget {
 
-    @Owned
-    IList<ApplicationWizardStep> steps();
+    public void setPresenter(Presenter presenter);
 
-//    IList<long> tenants();
+    public interface Presenter {
+        public void navigTo(Place place);
+    }
 }

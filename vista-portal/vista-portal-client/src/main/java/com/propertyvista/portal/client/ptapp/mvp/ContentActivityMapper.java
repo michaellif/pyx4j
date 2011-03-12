@@ -38,7 +38,7 @@ import com.propertyvista.portal.rpc.pt.SiteMap;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-public class Center3ActivityMapper implements ActivityMapper {
+public class ContentActivityMapper implements ActivityMapper {
 
     Provider<CreateAccountActivity> createAccountActivityProvider;
 
@@ -73,7 +73,7 @@ public class Center3ActivityMapper implements ActivityMapper {
     Provider<GenericMessageActivity> genericMessageActivity;
 
     @Inject
-    public Center3ActivityMapper(final Provider<CreateAccountActivity> createAccountActivityProvider,
+    public ContentActivityMapper(final Provider<CreateAccountActivity> createAccountActivityProvider,
 
     final Provider<LoginActivity> loginActivityProvider,
 

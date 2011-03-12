@@ -7,21 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-15
- * @author vlads
+ * Created on 2011-03-12
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.client.ptapp.ui;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface ApplicationProgress extends IEntity, IBoundToApplication {
+public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView {
 
-    @Owned
-    IList<ApplicationWizardStep> steps();
+    private SecondNavigPresenter presenter;
 
-//    IList<long> tenants();
+    @Override
+    public void setPresenter(SecondNavigPresenter presenter) {
+        this.presenter = presenter;
+    }
+
 }

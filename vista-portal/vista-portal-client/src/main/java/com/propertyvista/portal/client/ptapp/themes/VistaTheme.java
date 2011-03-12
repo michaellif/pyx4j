@@ -837,6 +837,20 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("margin", "0 " + rightColumnWidth + "px 0 " + leftColumnWidth + "px");
         addStyle(style);
 
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Caption));
+        style.addProperty("width", "30%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.SecondaryNavig));
+        style.addProperty("width", "70%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Message));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Content));
+        addStyle(style);
+
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Left));
         style.addProperty("float", "left");
         style.addProperty("width", leftColumnWidth + "px");

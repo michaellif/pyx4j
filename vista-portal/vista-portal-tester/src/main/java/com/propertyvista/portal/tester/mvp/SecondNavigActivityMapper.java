@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on 2011-03-12
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.portal.tester.mvp;
@@ -18,23 +18,21 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.propertyvista.portal.tester.activity.EditDepartmenActivity;
+import com.propertyvista.portal.tester.activity.SecondNavigActivity;
 
-import com.pyx4j.site.rpc.AppPlace;
+public class SecondNavigActivityMapper implements ActivityMapper {
 
-public class Center3ActivityMapper implements ActivityMapper {
-
-    Provider<EditDepartmenActivity> editDepartmentActivityProvider;
+    Provider<SecondNavigActivity> secondNavigActivityProvider;
 
     @Inject
-    public Center3ActivityMapper(final Provider<EditDepartmenActivity> editDepartmentActivityProvider) {
+    public SecondNavigActivityMapper(final Provider<SecondNavigActivity> secondNavigActivityProvider) {
         super();
-        this.editDepartmentActivityProvider = editDepartmentActivityProvider;
+        this.secondNavigActivityProvider = secondNavigActivityProvider;
     }
 
     @Override
     public Activity getActivity(Place place) {
-
-        return editDepartmentActivityProvider.get().withPlace((AppPlace) place);
+        return secondNavigActivityProvider.get().withPlace(place);
     }
+
 }

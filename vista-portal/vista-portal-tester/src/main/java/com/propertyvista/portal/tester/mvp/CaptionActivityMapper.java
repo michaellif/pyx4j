@@ -28,7 +28,7 @@ import com.propertyvista.portal.tester.activity.TopRightActionsActivity;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-public class Center1ActivityMapper implements ActivityMapper {
+public class CaptionActivityMapper implements ActivityMapper {
 
     Provider<MainContentActivity> mainContentActivityProvider;
 
@@ -39,7 +39,7 @@ public class Center1ActivityMapper implements ActivityMapper {
     Provider<TopRightActionsActivity> topRightActionsActivityProvider;
 
     @Inject
-    public Center1ActivityMapper(final Provider<MainContentActivity> mainContentActivityProvider, final Provider<SignUpActivity> signUpActivityProvider,
+    public CaptionActivityMapper(final Provider<MainContentActivity> mainContentActivityProvider, final Provider<SignUpActivity> signUpActivityProvider,
             final Provider<SignUpResultActivity> signUpResultActivityProvider, final Provider<TopRightActionsActivity> topRightActionsActivityProvider) {
         super();
         this.mainContentActivityProvider = mainContentActivityProvider;

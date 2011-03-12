@@ -18,15 +18,16 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.mvp.ActionsActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.BottomActivityMapper;
-import com.propertyvista.portal.client.ptapp.mvp.Center1ActivityMapper;
-import com.propertyvista.portal.client.ptapp.mvp.Center2ActivityMapper;
-import com.propertyvista.portal.client.ptapp.mvp.Center3ActivityMapper;
+import com.propertyvista.portal.client.ptapp.mvp.CaptionActivityMapper;
+import com.propertyvista.portal.client.ptapp.mvp.MessageActivityMapper;
+import com.propertyvista.portal.client.ptapp.mvp.ContentActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.Left1ActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.Left2ActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.LogoActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.MainNavigActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.Right1ActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.Right2ActivityMapper;
+import com.propertyvista.portal.client.ptapp.mvp.SecondNavigActivityMapper;
 
 import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.widgets.client.style.Theme;
@@ -41,11 +42,13 @@ public class SiteView extends AppSiteView {
 
     MainNavigActivityMapper mainNavigActivityMapper,
 
-    Center1ActivityMapper center1ActivityMapper,
+    SecondNavigActivityMapper secondNavigActivityMapper,
 
-    Center2ActivityMapper center2ActivityMapper,
+    CaptionActivityMapper captionActivityMapper,
 
-    Center3ActivityMapper center3ActivityMapper,
+    MessageActivityMapper messageActivityMapper,
+
+    ContentActivityMapper contentActivityMapper,
 
     Left1ActivityMapper left1ActivityMapper,
 
@@ -61,8 +64,9 @@ public class SiteView extends AppSiteView {
 
     Theme theme) {
 
-        super(logoActivityMapper, actionsActivityMapper, mainNavigActivityMapper, center1ActivityMapper, center2ActivityMapper, center3ActivityMapper,
-                left1ActivityMapper, left2ActivityMapper, right1ActivityMapper, right2ActivityMapper, bottomActivityMapper, eventBus, theme);
+        super(logoActivityMapper, actionsActivityMapper, mainNavigActivityMapper, captionActivityMapper, secondNavigActivityMapper, messageActivityMapper,
+                contentActivityMapper, left1ActivityMapper, left2ActivityMapper, right1ActivityMapper, right2ActivityMapper, bottomActivityMapper, eventBus,
+                theme);
 
     }
 

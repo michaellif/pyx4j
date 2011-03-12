@@ -7,22 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on 2011-03-12
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.tester.mvp;
+package com.propertyvista.portal.tester.ui;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
-public class Center2ActivityMapper implements ActivityMapper {
+public class SecondNavigViewImpl extends HorizontalPanel implements SecondNavigView {
+
+    private Presenter presenter;
 
     @Override
-    public Activity getActivity(Place place) {
-        // TODO Auto-generated method stub
-        return null;
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
     }
-
 }

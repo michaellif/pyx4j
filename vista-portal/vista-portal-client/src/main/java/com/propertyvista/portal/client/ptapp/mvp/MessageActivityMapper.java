@@ -18,23 +18,24 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.propertyvista.portal.client.ptapp.activity.CaptionActivity;
+import com.propertyvista.portal.client.ptapp.activity.UserMessageActivity;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-public class Center1ActivityMapper implements ActivityMapper {
+public class MessageActivityMapper implements ActivityMapper {
 
-    Provider<CaptionActivity> captionActivityProvider;
+    Provider<UserMessageActivity> userMessageActivityProvider;
 
     @Inject
-    public Center1ActivityMapper(final Provider<CaptionActivity> captionActivityProvider) {
+    public MessageActivityMapper(final Provider<UserMessageActivity> userMessageActivityProvider) {
+
         super();
-        this.captionActivityProvider = captionActivityProvider;
+        this.userMessageActivityProvider = userMessageActivityProvider;
+
     }
 
     @Override
     public Activity getActivity(Place place) {
-        return captionActivityProvider.get().withPlace((AppPlace) place);
+        return userMessageActivityProvider.get().withPlace((AppPlace) place);
     }
-
 }
