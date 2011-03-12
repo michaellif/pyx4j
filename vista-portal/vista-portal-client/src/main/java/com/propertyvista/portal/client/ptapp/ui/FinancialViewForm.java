@@ -21,6 +21,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -32,8 +33,13 @@ import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaReadOnlyDecorator;
 import com.propertyvista.portal.client.ptapp.ui.validators.ValidationUtils;
+import com.propertyvista.portal.client.ptapp.ui.validators.ZipCodeValueValidator;
+import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantGuarantor;
@@ -41,6 +47,7 @@ import com.propertyvista.portal.domain.pt.TenantIncome;
 
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -166,9 +173,9 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
             private List<EntityFolderColumnDescriptor> columns;
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().assetType(), "180px"));
-                columns.add(new EntityFolderColumnDescriptor(proto().percent(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto().assetValue(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto().assetType(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().percent(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().assetValue(), "15em"));
             }
 
             @Override
@@ -235,17 +242,6 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
     private CEntityFolder<TenantGuarantor> createGuarantorFolderEditorColumns() {
         return new CEntityFolder<TenantGuarantor>(TenantGuarantor.class) {
 
-            private List<EntityFolderColumnDescriptor> columns;
-            {
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().firstName(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().middleName(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().lastName(), "12em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "7.2em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().email(), "10em"));
-            }
-
             @Override
             protected FolderDecorator<TenantGuarantor> createFolderDecorator() {
                 if (isReadOnlyMode()) {
@@ -257,24 +253,46 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         }
                     };
                 } else {
-                    return new TableFolderDecorator<TenantGuarantor>(columns, SiteImages.INSTANCE.addRow(), i18n.tr("Add guarantor"));
+                    return new BoxFolderDecorator<TenantGuarantor>(SiteImages.INSTANCE.addRow(), i18n.tr("Add guarantor"));
                 }
             }
 
             @Override
             protected CEntityFolderItem<TenantGuarantor> createItem() {
-                return createGuarantorRowEditor(columns);
+                return createGuarantorRowEditor();
             }
 
-            private CEntityFolderItem<TenantGuarantor> createGuarantorRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRow<TenantGuarantor>(TenantGuarantor.class, columns) {
+            private CEntityFolderItem<TenantGuarantor> createGuarantorRowEditor() {
+                return new CEntityFolderItem<TenantGuarantor>(TenantGuarantor.class) {
+
+                    @Override
+                    public IsWidget createContent() {
+                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
+                        if (isReadOnlyMode()) {
+                            FlowPanel person = DecorationUtils.formFullName(this, proto());
+                            person.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+                            person.getElement().getStyle().setFontSize(1.1, Unit.EM);
+                            main.add(person);
+                        } else {
+                            main.add(inject(proto().firstName()), 12);
+                            main.add(inject(proto().middleName()), 12);
+                            main.add(inject(proto().lastName()), 20);
+                        }
+                        main.add(inject(proto().homePhone()), 15);
+                        main.add(inject(proto().mobilePhone()), 15);
+                        main.add(inject(proto().workPhone()), 15);
+                        main.add(inject(proto().birthDate()), 8);
+                        main.add(inject(proto().email()), 15);
+                        main.add(new HTML());
+                        return main;
+                    }
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
                         if (isReadOnlyMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove guarantor"));
+                            return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove guarantor"));
                         }
                     }
 

@@ -32,11 +32,11 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
         this.readOnlyMode = readOnlyMode;
     }
 
-    public void add(final CComponent<?> component, int componentWidth) {
+    public void add(final CComponent<?> component, double componentWidth) {
         this.add(component, 10, componentWidth);
     }
 
-    public void add(final CComponent<?> component, int labelWidth, int componentWidth) {
+    public void add(final CComponent<?> component, double labelWidth, double componentWidth) {
         DecorationData decorData = new DecorationData();
         decorData = new DecorationData();
         decorData.componentWidth = componentWidth;
