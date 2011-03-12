@@ -55,6 +55,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 @Singleton
 public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
@@ -188,6 +189,60 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
             @Override
             public void onValueChange(ValueChangeEvent<Date> event) {
                 enablePreviousAddress();
+            }
+        });
+
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                return value.before(new Date());
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                return i18n.tr("The date can not be equal today or in the future.");
+            }
+        });
+
+        currentAddressForm.get(currentAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                return value.after(new Date());
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                return i18n.tr("The date can not be equal today or in the past.");
+            }
+        });
+
+        @SuppressWarnings("unchecked")
+        CEntityEditableComponent<Address> previousAddressForm = ((CEntityEditableComponent<Address>) getRaw(proto().previousAddress()));
+        previousAddressForm.get(currentAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                return value.before(new Date());
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                return i18n.tr("The date can not be equal today or in the future.");
+            }
+        });
+
+        previousAddressForm.get(currentAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                return value.before(new Date());
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                return i18n.tr("The date can not be equal today or in the future.");
             }
         });
 
