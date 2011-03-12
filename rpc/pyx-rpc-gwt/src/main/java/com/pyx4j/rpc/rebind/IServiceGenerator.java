@@ -21,7 +21,6 @@
 package com.pyx4j.rpc.rebind;
 
 import java.io.PrintWriter;
-import java.util.Map;
 
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
@@ -63,6 +62,7 @@ public class IServiceGenerator extends Generator {
 
             IServiceImplCreator implCreator = new IServiceImplCreator(sourceWriter, interfaceType, oracle);
             implCreator.emitClass(logger, null);
+            sourceWriter.commit(logger);
 
             genCtx.commit(logger, printWriter);
         }
