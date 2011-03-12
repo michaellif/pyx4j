@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.propertyvista.portal.domain.Money;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -63,5 +65,5 @@ public interface TenantAsset extends IEntity {
     IPrimitive<Double> percent();
 
     @Caption(name = "Current Value")
-    IPrimitive<Double> assetValue();
+    Money assetValue();
 }

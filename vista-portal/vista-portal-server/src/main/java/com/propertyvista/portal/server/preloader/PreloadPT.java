@@ -681,7 +681,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             income.incomeSource().setValue(IncomeSource.fulltime);
             income.employer().set(createEmployer());
-            //income.monthlyAmount().setValue(300d + RandomUtil.randomInt(4000));
+//            income. monthlyAmount().setValue(DomainUtil.createMoney(300d + RandomUtil.randomInt(4000)).getValue());
 
             //income.active().setValue(RandomUtil.randomBoolean());
 
@@ -692,7 +692,8 @@ public class PreloadPT extends BaseVistaDataPreloader {
             TenantAsset asset = EntityFactory.create(TenantAsset.class);
 
             asset.assetType().setValue(RandomUtil.random(AssetType.values()));
-            asset.assetValue().setValue(100d + RandomUtil.randomInt(10000));
+            asset.percent().setValue((double) RandomUtil.randomInt(100));
+            asset.assetValue().setValue(DomainUtil.createMoney(100d + RandomUtil.randomInt(10000)).getValue());
 
             persist(asset);
             ptf.assets().add(asset);
