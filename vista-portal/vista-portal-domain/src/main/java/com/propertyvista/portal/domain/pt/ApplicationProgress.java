@@ -23,5 +23,5 @@ public interface ApplicationProgress extends IEntity, IBoundToApplication {
     @Owned
     IList<ApplicationWizardStep> steps();
 
-//    IList<long> tenants();
+//    IList<Long> tenants();
 }
