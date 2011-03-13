@@ -42,7 +42,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
     public static void updateChargesFromApplication(Charges charges) {
         if (charges.application().isNull()) {
-            throw new Error("Data error");
+            throw new Error("Data error, charges are not associated with an application");
         }
         // find unit selection
         EntityQueryCriteria<UnitSelection> aptUnitCriteria = EntityQueryCriteria.create(UnitSelection.class);

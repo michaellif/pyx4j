@@ -24,8 +24,6 @@ import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepPresenter;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepView;
 import com.propertyvista.portal.domain.pt.IBoundToApplication;
-import com.propertyvista.portal.domain.pt.Pets;
-import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 import com.propertyvista.portal.rpc.pt.services.AbstractWizardServices;
 
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
@@ -54,11 +52,12 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
         this.clazz = clazz;
         view.setPresenter((T) this);
 
-        if (clazz.equals(Pets.class)) {
-            this.wizardServices = wizardServices;
-        } else {
-            this.wizardServices = null;
-        }
+        this.wizardServices = wizardServices;
+//        if (clazz.equals(Pets.class) || clazz.equals(Charges.class) || clazz.equals(UnitSelection.class)) {
+//            this.wizardServices = wizardServices;
+//        } else {
+//            this.wizardServices = null;
+//        }
     }
 
     public WizardStepActivity<E, T> withPlace(AppPlace place) {
@@ -69,7 +68,8 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         if (this.wizardServices == null) {
-            oldGet();
+            log.warn("Should not see this");
+//            oldGet();
         } else {
             wizardServices.retrieve(new DefaultAsyncCallback<E>() {
                 @Override
@@ -97,35 +97,35 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
         }
     }
 
-    @Deprecated
-    private void oldGet() {
-        RPCManager.execute(PotentialTenantServices.RetrieveByPK.class, EntityCriteriaByPK.create(clazz, entity), new DefaultAsyncCallback<IEntity>() {
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onSuccess(IEntity result) {
-                if (result == null) {
-                    E newEntity = EntityFactory.create(clazz);
-
-                    createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
-
-                        @Override
-                        public void onSuccess(E result) {
-                            entity = result;
-                            log.info("CREATED {}", entity);
-                            view.populate(entity);
-                        }
-
-                    });
-                } else {
-                    entity = (E) result;
-                    log.info("LOADED {}", entity);
-                    view.populate(entity);
-                }
-            }
-        });
-
-    }
+//    @Deprecated
+//    private void oldGet() {
+//        RPCManager.execute(PotentialTenantServices.RetrieveByPK.class, EntityCriteriaByPK.create(clazz, entity), new DefaultAsyncCallback<IEntity>() {
+//
+//            @SuppressWarnings("unchecked")
+//            @Override
+//            public void onSuccess(IEntity result) {
+//                if (result == null) {
+//                    E newEntity = EntityFactory.create(clazz);
+//
+//                    createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
+//
+//                        @Override
+//                        public void onSuccess(E result) {
+//                            entity = result;
+//                            log.info("CREATED {}", entity);
+//                            view.populate(entity);
+//                        }
+//
+//                    });
+//                } else {
+//                    entity = (E) result;
+//                    log.info("LOADED {}", entity);
+//                    view.populate(entity);
+//                }
+//            }
+//        });
+//
+//    }
 
     protected void createNewEntity(E newEntity, AsyncCallback<E> callback) {
         callback.onSuccess(newEntity);
@@ -143,23 +143,24 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
                 }
             }, entity);
         } else {
-            oldSave(entity);
+            log.warn("SHOULD NOT SEE THIS");
+//            oldSave(entity);
         }
     }
 
-    @Deprecated
-    private void oldSave(E entity) {
-        RPCManager.execute(PotentialTenantServices.Save.class, entity, new DefaultAsyncCallback<IEntity>() {
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onSuccess(IEntity result) {
-                log.info("SAVED {}", result);
-                WizardStepActivity.this.entity = (E) result;
-                PtAppWizardManager.instance().nextStep();
-            }
-        });
-    }
+//    @Deprecated
+//    private void oldSave(E entity) {
+//        RPCManager.execute(PotentialTenantServices.Save.class, entity, new DefaultAsyncCallback<IEntity>() {
+//
+//            @SuppressWarnings("unchecked")
+//            @Override
+//            public void onSuccess(IEntity result) {
+//                log.info("SAVED {}", result);
+//                WizardStepActivity.this.entity = (E) result;
+//                PtAppWizardManager.instance().nextStep();
+//            }
+//        });
+//    }
 
     protected WizardStepView<E, T> getView() {
         return view;

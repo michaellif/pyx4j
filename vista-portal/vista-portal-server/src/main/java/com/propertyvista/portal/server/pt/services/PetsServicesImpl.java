@@ -13,57 +13,47 @@
  */
 package com.propertyvista.portal.server.pt.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.ChargeType;
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.IBoundToApplication;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
 import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.rpc.pt.services.PetsServices;
 import com.propertyvista.portal.server.pt.PtUserDataAccess;
 
-import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityGraph;
 
-public class PetsServicesImpl extends EntityServicesImpl implements PetsServices {
+public class PetsServicesImpl extends ApplicationEntityServicesImpl implements PetsServices {
+    private final static Logger log = LoggerFactory.getLogger(PetsServicesImpl.class);
 
     @Override
     public void retrieve(AsyncCallback<Pets> callback, Long tenantId) {
+        log.info("Retrieving pets for tenant {}", tenantId);
         EntityQueryCriteria<Pets> criteria = EntityQueryCriteria.create(Pets.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
-        Pets ret = secureRetrieve(criteria);
-        if (ret == null) {
-            ret = EntityFactory.create(Pets.class);
+        Pets pets = secureRetrieve(criteria);
+        if (pets == null) {
+            pets = EntityFactory.create(Pets.class);
         }
-        loadTransientData(ret);
+        loadTransientData(pets);
 
-        callback.onSuccess(ret);
+        callback.onSuccess(pets);
     }
 
     @Override
-    public void save(AsyncCallback<Pets> callback, Pets editableEntity) {
+    public void save(AsyncCallback<Pets> callback, Pets pets) {
+        log.info("Saving pets {}", pets);
 
-        // app specific security stuff
-        final Application application = PtUserDataAccess.getCurrentUserApplication();
-        // update Owned Members  TODO move to super or to framework
-        EntityGraph.applyRecursively(editableEntity, new EntityGraph.ApplyMethod() {
-            @Override
-            public void apply(IEntity entity) {
-                if (entity instanceof IBoundToApplication) {
-                    ((IBoundToApplication) entity).application().set(application);
-                }
-            }
-        });
+        applyApplication(pets);
+        secureSave(pets);
 
-        secureSave(editableEntity);
+        loadTransientData(pets);
 
-        loadTransientData(editableEntity);
-
-        callback.onSuccess(editableEntity);
+        callback.onSuccess(pets);
     }
 
     /*

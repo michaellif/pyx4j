@@ -21,16 +21,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.portal.domain.AddOn;
-import com.propertyvista.portal.domain.Amenity;
 import com.propertyvista.portal.domain.ApptUnit;
-import com.propertyvista.portal.domain.Building;
-import com.propertyvista.portal.domain.Concession;
 import com.propertyvista.portal.domain.DemoData;
-import com.propertyvista.portal.domain.MarketRent;
-import com.propertyvista.portal.domain.UnitInfoItem;
 import com.propertyvista.portal.domain.User;
-import com.propertyvista.portal.domain.Utility;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.Application;
@@ -39,7 +32,6 @@ import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.ChargeLineList;
-import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.IAddress;
@@ -67,9 +59,12 @@ import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
 import com.propertyvista.portal.domain.util.DomainUtil;
+import com.propertyvista.portal.domain.util.PrintUtil;
 import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.services.ApartmentServices;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PotentialTenantServicesImpl;
+import com.propertyvista.portal.server.pt.services.ApartmentServicesImpl;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -89,7 +84,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
     private Pets pets;
 
-    private Building building;
+//    private Building building;
 
     private UnitSelection unitSelection;
 
@@ -496,14 +491,15 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
         unitSelection.selectionCriteria().set(criteria);
 
-        PotentialTenantServicesImpl.loadAvailableUnits(unitSelection);
+        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
+        apartmentServices.loadAvailableUnits(unitSelection);
 
         // now chose the first unit
         if (!unitSelection.availableUnits().units().isEmpty()) {
             ApptUnit selectedUnit = unitSelection.availableUnits().units().iterator().next();
             unitSelection.selectedUnit().set(selectedUnit);
             unitSelection.building().set(unitSelection.selectedUnit().building());
-            building = unitSelection.building();
+//            building = unitSelection.building();
             //            log.info("Created building {}", unitSelection.selectedUnit().building());
             unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
             unitSelection.rentStart().setValue(DateUtils.createDate(2011, 2, 17));
@@ -517,100 +513,12 @@ public class PreloadPT extends BaseVistaDataPreloader {
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
         UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
 
-        PotentialTenantServicesImpl.loadAvailableUnits(unitSelection);
+        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
+        apartmentServices.loadAvailableUnits(unitSelection);
 
-        sb.append("Criteria\n\t");
-        sb.append(unitSelection.selectionCriteria());
-        sb.append("\n\n");
+//        building = unitSelection.selectedUnit().building();
 
-        sb.append(unitSelection.availableUnits().units().size());
-        sb.append(" available units\n");
-        for (ApptUnit unit : unitSelection.availableUnits().units()) {
-            sb.append("\t");
-            sb.append(unit.suiteNumber().getStringView());
-            sb.append(" ");
-            sb.append(unit.bedrooms().getValue()).append(" beds, ");
-            sb.append(unit.bathrooms().getValue()).append(" baths,");
-            sb.append(" ");
-            sb.append(unit.area().getValue()).append(", sq ft");
-
-            sb.append(" available on ");
-            sb.append(unit.avalableForRent().getStringView());
-
-            log.info("Available {}", unit.building());
-
-            sb.append(", status: ").append(unit.status().getStringView());
-
-            sb.append("\n");
-
-            // show rent
-            for (MarketRent rent : unit.marketRent()) {
-                sb.append("\t\t");
-                sb.append(rent.leaseTerm().getValue()).append(" months $");
-                sb.append(rent.rent().amount().getValue()).append("");
-                sb.append("\n");
-            }
-
-            sb.append("\t\tDeposit: $").append(unit.requiredDeposit().getValue()).append("\n");
-        }
-
-        // selected unit
-        ApptUnit unit = unitSelection.selectedUnit();
-        sb.append("\n\n");
-        sb.append("Selected: ").append(unit.suiteNumber().getStringView());
-        sb.append("\n");
-
-        // building
-        log.info("Selected unit building {}", unit.building());
-        building = unit.building();
-        sb.append("Building: ").append(building).append("\n");
-        sb.append("Property: ").append(building.propertyProfile()).append("\n");
-
-        // amenities
-        sb.append("\tAmenities:\n");
-        for (Amenity amenity : unit.amenities()) {
-            sb.append("\t\t");
-            sb.append(amenity.name().getStringView());
-            sb.append("\n");
-        }
-
-        // utilities
-        sb.append("\tUtilities:\n");
-        for (Utility utility : unit.utilities()) {
-            sb.append("\t\t");
-            sb.append(utility.name().getStringView());
-            sb.append("\n");
-        }
-
-        // utilities
-        sb.append("\tUnitInfoItem:\n");
-        for (UnitInfoItem info : unit.infoDetails()) {
-            sb.append("\t\t");
-            sb.append(info.name().getStringView());
-            sb.append("\n");
-        }
-
-        // utilities
-        sb.append("\tConcessions:\n");
-        for (Concession concession : unit.concessions()) {
-            sb.append("\t\t");
-            sb.append(concession.name().getStringView());
-            sb.append("\n");
-        }
-
-        // utilities
-        sb.append("\tAdd-ons:\n");
-        for (AddOn addOn : unit.addOns()) {
-            sb.append("\t\t");
-            sb.append(addOn.name().getStringView());
-            sb.append(" $").append(addOn.monthlyCost().getValue());
-            sb.append("\n");
-        }
-
-        // rent
-        sb.append("\nStart rent:").append(unitSelection.rentStart().getStringView());
-        sb.append(", Lease: ").append(unitSelection.markerRent().leaseTerm().getValue()).append(" months, $");
-        sb.append(unitSelection.markerRent().rent().amount().getValue());
+        sb.append(PrintUtil.print(unitSelection));
     }
 
     private void loadTenants(StringBuilder sb) {
@@ -779,63 +687,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
         List<Charges> chargesList = PersistenceServicesFactory.getPersistenceService().query(criteria);
         for (Charges charges : chargesList) {
-
-            sb.append("Monthly\n");
-            for (ChargeLine line : charges.monthlyCharges().charges()) {
-                sb.append("\t$");
-                sb.append(line.charge().amount().getStringView());
-                sb.append(" \t");
-                sb.append(line.type().getStringView());
-                sb.append("\n");
-            }
-
-            sb.append("Upgrades\n");
-            for (ChargeLineSelectable line : charges.monthlyCharges().upgradeCharges()) {
-                sb.append("\t$");
-                sb.append(line.charge().amount().getStringView());
-                sb.append(" \t");
-                sb.append(line.type().getStringView());
-                if (line.selected().getValue()) {
-                    sb.append(" YES");
-                }
-                sb.append("\n");
-            }
-
-            sb.append("Monthly + Upgrades Total \n\t$");
-            sb.append(charges.monthlyCharges().total().amount().getStringView());
-            sb.append("\n");
-
-            sb.append("\nPro-Rated ").append(charges.proRatedCharges().total().amount().getStringView()).append("\n");
-            for (ChargeLine line : charges.proRatedCharges().charges()) {
-                sb.append("\t$");
-                sb.append(line.charge().amount().getStringView());
-                sb.append(" \t").append(line.label().getStringView());
-                sb.append("\n");
-            }
-
-            sb.append("\nApplication Charges ").append(charges.applicationCharges().total().amount().getStringView()).append("\n");
-            for (ChargeLine line : charges.applicationCharges().charges()) {
-                sb.append("\t$");
-                sb.append(line.charge().amount().getStringView());
-                sb.append(" \t");
-                sb.append(line.type().getStringView());
-                sb.append("\n");
-            }
-
-            sb.append("\nTenants Payment Split ").append(charges.paymentSplitCharges().total().amount().getStringView()).append("\n");
-            for (TenantCharge line : charges.paymentSplitCharges().charges()) {
-                sb.append("\t").append(line.tenant().relationship().getStringView());
-                sb.append(" ").append(line.tenant().firstName().getStringView()).append(" ").append(line.tenant().lastName().getStringView());
-                sb.append(" \t").append(line.percentage().getValue()).append("% $");
-                sb.append(line.charge().amount().getValue());
-                sb.append("\n");
-            }
-
-            //            sb.append("\t").append(charges.monthlyCharges()).append("\n");
-            //            sb.append("\t").append(charges.proRatedCharges()).append("\n");
-            //            sb.append("\t").append(charges.applicationCharges()).append("\n");
-            //            sb.append("\t").append(charges.paymentSplitCharges()).append("\n");
-            sb.append("\n");
+            sb.append(PrintUtil.print(charges));
         }
         sb.append("\n\n");
     }
