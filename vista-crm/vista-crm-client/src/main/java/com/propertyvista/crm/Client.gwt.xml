@@ -4,13 +4,11 @@
 <module rename-to='crm'>
 	
 	<inherits name='com.google.gwt.user.User'/>
-    <inherits name='com.pyx4j.essentials.Essentials' />
     
     <inherits name='com.propertyvista.crm.Rpc' />
     <inherits name='com.propertyvista.Domain' />
 
-    <inherits name='com.pyx4j.Commons' />
-	<inherits name='com.pyx4j.site.GwtSite' />
+	<inherits name='com.propertyvista.common.VistaCommon' />
 
     <source path="client"/>
 
