@@ -64,7 +64,8 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
             unitSelection = EntityFactory.create(UnitSelection.class);
         }
 
-//        log.info("Found unit selection\n{}", PrintUtil.print(unitSelection));
+        //        log.info("Found unit selection\n{}", PrintUtil.print(unitSelection));
+        loadTransientData(unitSelection);
 
         callback.onSuccess(unitSelection);
     }
@@ -76,7 +77,13 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
         applyApplication(unitSelection);
         secureSave(unitSelection);
 
+        loadTransientData(unitSelection);
+
         callback.onSuccess(unitSelection);
+    }
+
+    private void loadTransientData(UnitSelection unitSelection) {
+        loadAvailableUnits(unitSelection);
     }
 
     public List<ApptUnit> loadAvailableUnits(UnitSelectionCriteria selectionCriteria) {

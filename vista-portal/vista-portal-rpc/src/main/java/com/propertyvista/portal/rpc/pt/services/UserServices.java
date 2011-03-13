@@ -14,22 +14,16 @@
 package com.propertyvista.portal.rpc.pt.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.portal.domain.pt.ApplicationProgress;
-import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.CurrentApplication;
+import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 /**
- * This is secure services, user need to lodged in to use application.
+ * This is secure services, user need to be lodged in to do this actions.
  */
-public interface ApplicationServices extends IService {
+public interface UserServices extends IService {
 
-    /**
-     * Find of create Application object for current user. For now we have only one.
-     */
-    public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria request);
-
-    public void saveApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationProgress request);
+    public void passwordReset(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request);
 
 }

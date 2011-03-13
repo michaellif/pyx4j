@@ -22,24 +22,25 @@ import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
-import com.propertyvista.common.client.Message;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.VistaBehavior;
+import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
@@ -193,11 +194,11 @@ public class PtAppWizardManager {
     }
 
     private void saveApplicationProgress() {
-        RPCManager.execute(PotentialTenantServices.Save.class, currentApplication.progress, new DefaultAsyncCallback<IEntity>() {
+        ((ApplicationServices) GWT.create(ApplicationServices.class)).saveApplicationProgress(new DefaultAsyncCallback<ApplicationProgress>() {
             @Override
-            public void onSuccess(IEntity result) {
+            public void onSuccess(ApplicationProgress result) {
             }
-        });
+        }, currentApplication.progress);
     }
 
     private void initApplicationProcess(CurrentApplication result) {

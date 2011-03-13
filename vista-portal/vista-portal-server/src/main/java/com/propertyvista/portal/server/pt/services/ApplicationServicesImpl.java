@@ -11,25 +11,27 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.pt.services;
+package com.propertyvista.portal.server.pt.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
+import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
 
-import com.pyx4j.rpc.shared.IService;
+public class ApplicationServicesImpl extends ApplicationEntityServicesImpl implements ApplicationServices {
 
-/**
- * This is secure services, user need to lodged in to use application.
- */
-public interface ApplicationServices extends IService {
+    @Override
+    public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria request) {
+        // TODO Auto-generated method stub
 
-    /**
-     * Find of create Application object for current user. For now we have only one.
-     */
-    public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria request);
+    }
 
-    public void saveApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationProgress request);
+    @Override
+    public void saveApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationProgress request) {
+        applyApplication(request);
+        secureSave(request);
+        callback.onSuccess(request);
+    }
 
 }
