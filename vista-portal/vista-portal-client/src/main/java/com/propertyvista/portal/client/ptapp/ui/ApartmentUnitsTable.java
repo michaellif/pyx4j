@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.client.ptapp.themes.VistaStyles;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.domain.ApptUnit;
@@ -64,10 +63,22 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentUnitsTable.class);
+
+    public final static String DEFAULT_STYLE_PREFIX = "ApartmentViewForm";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        UnitListHeader, SelectedUnit, unitRowPanel, unitDetailPanel
+    }
+
+    public static enum StyleDependent implements IStyleDependent {
+        selected, disabled, hover
+    }
 
     private final List<EntityFolderColumnDescriptor> columns;
 
@@ -116,7 +127,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
     @Override
     protected FolderDecorator<ApptUnit> createFolderDecorator() {
         TableFolderDecorator<ApptUnit> tfd = new TableFolderDecorator<ApptUnit>(columns);
-        tfd.getHeader().setStyleName(VistaStyles.ApartmentUnits.StylePrefix + VistaStyles.ApartmentUnits.StyleSuffix.UnitListHeader);
+        tfd.getHeader().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.UnitListHeader);
 
         floorplanRawPanel = new HorizontalPanel();
         tfd.insert(floorplanRawPanel, tfd.getWidgetIndex(tfd.getHeader()) + 1);
@@ -221,7 +232,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
                         unitDetailsPanelShown.hide();
                     }
 
-                    getContent().addStyleDependentName(VistaStyles.ApartmentUnits.StyleDependent.selected.name());
+                    getContent().addStyleDependentName(StyleDependent.selected.name());
                     setSelected(getValue());
                     selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApptUnit>(getValue()) {
                     });
@@ -232,8 +243,8 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
                 @Override
                 public void onMouseOver(MouseOverEvent event) {
-                    if (!getContent().getStyleName().contains(VistaStyles.ApartmentUnits.StyleDependent.selected.name())) {
-                        getContent().addStyleDependentName(VistaStyles.ApartmentUnits.StyleDependent.hover.name());
+                    if (!getContent().getStyleName().contains(StyleDependent.selected.name())) {
+                        getContent().addStyleDependentName(StyleDependent.hover.name());
                     }
                 }
             }, MouseOverEvent.getType());
@@ -242,11 +253,11 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
                 @Override
                 public void onMouseOut(MouseOutEvent event) {
-                    getContent().removeStyleDependentName(VistaStyles.ApartmentUnits.StyleDependent.hover.name());
+                    getContent().removeStyleDependentName(StyleDependent.hover.name());
                 }
             }, MouseOutEvent.getType());
 
-            getContent().setStyleName(VistaStyles.ApartmentUnits.StylePrefix + VistaStyles.ApartmentUnits.StyleSuffix.unitRowPanel);
+            getContent().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitRowPanel);
             return decorator;
         }
 
@@ -286,13 +297,13 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
         // clear all selected style:
         for (ApptUnit au : getValue()) {
             UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(au);
-            unitTableRow.getContent().removeStyleDependentName(VistaStyles.ApartmentUnits.StyleDependent.selected.name());
+            unitTableRow.getContent().removeStyleDependentName(StyleDependent.selected.name());
         }
 
         UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(unit);
         if (unitTableRow != null) {
             unitTableRow.showDetails(unit);
-            unitTableRow.getContent().addStyleDependentName(VistaStyles.ApartmentUnits.StyleDependent.selected.name());
+            unitTableRow.getContent().addStyleDependentName(StyleDependent.selected.name());
         }
     }
 

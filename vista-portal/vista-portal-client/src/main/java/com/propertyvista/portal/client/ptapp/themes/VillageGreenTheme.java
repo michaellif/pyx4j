@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ptapp.themes;
 
+import com.propertyvista.portal.client.ptapp.ui.ApartmentUnitsTable;
+
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
@@ -53,9 +55,9 @@ public class VillageGreenTheme extends VistaTheme {
     protected void initVistaApartmentViewStyles() {
         super.initVistaApartmentViewStyles();
 
-        String prefix = VistaStyles.ApartmentUnits.StylePrefix;
+        String prefix = ApartmentUnitsTable.DEFAULT_STYLE_PREFIX;
 
-        Style style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.UnitListHeader));
+        Style style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitListHeader));
         style.addProperty("background-color", "#558E00");
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
         style.addProperty("font-weight", "bolder");
@@ -64,7 +66,7 @@ public class VillageGreenTheme extends VistaTheme {
         style.addProperty("margin-top", "-10px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitRowPanel, VistaStyles.ApartmentUnits.StyleDependent.selected));
+        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.unitRowPanel, ApartmentUnitsTable.StyleDependent.selected));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("border", "1px solid #bbb");
         style.addProperty("cursor", "default");
