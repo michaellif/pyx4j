@@ -4,9 +4,8 @@ rem helper to run maven2
 rem
 
 for /f "tokens=*" %%I in ('CD') do @set CurDir=%%~nI
-title *%CurDir% - mvn build
+title *%CurDir% - mvn with pyx
 call mvn install -P pyx %*
-if errorlevel 1 pause
 if errorlevel 1 (
     echo   
     pause
