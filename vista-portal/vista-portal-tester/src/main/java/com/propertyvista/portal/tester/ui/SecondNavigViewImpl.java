@@ -19,6 +19,9 @@ public class SecondNavigViewImpl extends HorizontalPanel implements SecondNavigV
 
     private Presenter presenter;
 
+    public SecondNavigViewImpl() {
+    }
+
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
