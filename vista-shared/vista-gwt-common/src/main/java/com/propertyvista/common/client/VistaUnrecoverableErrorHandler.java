@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.client.ptapp;
+package com.propertyvista.common.client;
 
 import java.util.Date;
 
@@ -21,8 +21,8 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ptapp.events.UserMessageEvent;
-import com.propertyvista.portal.client.ptapp.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;

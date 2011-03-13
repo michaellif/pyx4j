@@ -22,8 +22,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
-import com.propertyvista.portal.client.ptapp.events.UserMessageEvent;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;

@@ -18,6 +18,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.portal.client.ptapp.mvp.MvpModule;
 import com.propertyvista.portal.client.ptapp.ui.ViewModule;
 import com.propertyvista.portal.rpc.pt.SiteMap;

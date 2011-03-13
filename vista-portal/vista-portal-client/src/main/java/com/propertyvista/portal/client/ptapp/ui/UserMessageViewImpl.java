@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.inject.Singleton;
-import com.propertyvista.portal.client.ptapp.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 
 @Singleton

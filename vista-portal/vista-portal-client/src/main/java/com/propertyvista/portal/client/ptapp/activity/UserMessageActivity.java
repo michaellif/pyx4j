@@ -17,8 +17,8 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ptapp.events.UserMessageEvent;
-import com.propertyvista.portal.client.ptapp.events.UserMessageHandler;
+import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.common.client.events.UserMessageHandler;
 import com.propertyvista.portal.client.ptapp.ui.UserMessageView;
 
 import com.pyx4j.site.rpc.AppPlace;

@@ -11,7 +11,9 @@
 
     <inherits name='com.pyx4j.Commons' />
 	<inherits name='com.pyx4j.site.GwtSite' />
-
+	
+	<inherits name='com.propertyvista.common.VistaCommon' />
+	
     <source path="client"/>
 
     <entry-point class='com.propertyvista.portal.client.ptapp.VistaPtApplicationSite'/>
