@@ -13,16 +13,13 @@
  */
 package com.propertyvista.crm.client;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.GinModules;
 
 import com.pyx4j.site.client.AppSiteGinjector;
 
-@GinModules(SiteGinModule.class)
-public interface SiteGinjector extends AppSiteGinjector {
+@GinModules(CrmGinModule.class)
+public interface CrmGinjector extends AppSiteGinjector {
 
-    SiteView getSiteView();
-
-    EventBus getEventBus();
+    CrmView getSiteView();
 
 }

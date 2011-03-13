@@ -14,7 +14,7 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.client.ptapp.PtAppWizardManager.Message;
+import com.propertyvista.common.client.Message;
 
 public interface GenericMessageView extends IsWidget {
 

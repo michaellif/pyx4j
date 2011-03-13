@@ -21,10 +21,10 @@ import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.widgets.client.style.Theme;
 
 @Singleton
-public class SiteView extends AppSiteView {
+public class CrmView extends AppSiteView {
 
     @Inject
-    public SiteView(
+    public CrmView(
 
     //            LogoActivityMapper logoActivityMapper,
     //

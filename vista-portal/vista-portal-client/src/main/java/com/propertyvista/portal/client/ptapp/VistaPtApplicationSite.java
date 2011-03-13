@@ -14,35 +14,34 @@
 package com.propertyvista.portal.client.ptapp;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.propertyvista.common.client.resources.FormImageBundle;
+import com.propertyvista.common.client.Message;
+import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 
-import com.pyx4j.essentials.client.ApplicationCommon;
-import com.pyx4j.forms.client.ImageFactory;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.CaptchaComposite;
-import com.pyx4j.widgets.client.GlassPanel;
+public class VistaPtApplicationSite extends VistaSite {
 
-public class VistaPtApplicationSite extends AppSite {
+    private SiteGinjector ginjector;
 
     @Override
     public void onSiteLoad() {
+        super.onSiteLoad();
 
-        ImageFactory.setImageBundle((FormImageBundle) GWT.create(FormImageBundle.class));
-
-        ApplicationCommon.initRpcGlassPanel();
-
-        final SiteGinjector ginjector = GWT.create(SiteGinjector.class);
-
-        RootPanel.get().add(GlassPanel.instance());
+        ginjector = GWT.create(SiteGinjector.class);
 
         RootPanel.get().add(ginjector.getSiteView());
-
-        CaptchaComposite.setPublicKey("6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth");
 
         hideLoadingIndicator();
 
         PtAppWizardManager.initWizard(ginjector);
 
     }
+
+    @Override
+    public void showMessageDialog(String message, String title, String buttonText, Command command) {
+        setMessage(new Message(message, title, buttonText, command));
+        ginjector.getPlaceController().goTo(new SiteMap.GenericMessage());
+    }
+
 }

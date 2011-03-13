@@ -15,11 +15,11 @@ package com.propertyvista.portal.client.ptapp.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.propertyvista.common.client.Message;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
-import com.propertyvista.portal.client.ptapp.PtAppWizardManager.Message;
+import com.propertyvista.portal.client.ptapp.VistaPtApplicationSite;
 import com.propertyvista.portal.client.ptapp.ui.GenericMessageView;
 
 import com.pyx4j.site.rpc.AppPlace;
@@ -37,14 +37,11 @@ public class GenericMessageActivity extends AbstractActivity implements GenericM
 
     private final GenericMessageView view;
 
-    private final PlaceController placeController;
-
     private Message message;
 
     @Inject
-    public GenericMessageActivity(GenericMessageView view, PlaceController placeController) {
+    public GenericMessageActivity(GenericMessageView view) {
         this.view = view;
-        this.placeController = placeController;
         view.setPresenter(this);
     }
 
@@ -55,7 +52,7 @@ public class GenericMessageActivity extends AbstractActivity implements GenericM
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        message = PtAppWizardManager.getMessageDialog();
+        message = VistaPtApplicationSite.instance().getMessage();
         view.setMessage(message);
     }
 

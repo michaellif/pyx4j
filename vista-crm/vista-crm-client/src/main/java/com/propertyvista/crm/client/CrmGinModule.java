@@ -22,7 +22,7 @@ import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 
 import com.pyx4j.site.client.AppSiteGinModule;
 
-public class SiteGinModule extends AppSiteGinModule {
+public class CrmGinModule extends AppSiteGinModule {
 
     @Override
     protected void configure() {

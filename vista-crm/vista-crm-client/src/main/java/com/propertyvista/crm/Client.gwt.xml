@@ -14,7 +14,7 @@
 
     <source path="client"/>
 
-    <entry-point class='com.propertyvista.crm.client.VistaCrmSite'/>
+    <entry-point class='com.propertyvista.crm.client.CrmSite'/>
     
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.crm.client.*" />
     

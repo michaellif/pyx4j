@@ -28,6 +28,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
+import com.propertyvista.common.client.Message;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
@@ -61,8 +62,6 @@ public class PtAppWizardManager {
     private final SiteGinjector ginjector;
 
     private UnitSelectionCriteria unitSelectionCriteria;
-
-    private Message messageDialog;
 
     private PtAppWizardManager(SiteGinjector ginjector) {
         this.ginjector = ginjector;
@@ -140,12 +139,13 @@ public class PtAppWizardManager {
             public void onSuccess(Boolean result) {
                 ginjector.getPlaceHistoryHandler().handleCurrentHistory();
                 if (!result) {
-                    showMessageDialog(i18n.tr("We can't find that Building or avalable Units"), "Error", "Back", new Command() {
-                        @Override
-                        public void execute() {
-                            History.back();
-                        }
-                    });
+                    VistaPtApplicationSite.instance().showMessageDialog(i18n.tr("We can't find that Building or avalable Units"), "Error", "Back",
+                            new Command() {
+                                @Override
+                                public void execute() {
+                                    History.back();
+                                }
+                            });
                 }
             }
 
@@ -238,53 +238,6 @@ public class PtAppWizardManager {
 
     public static EventBus getEventBus() {
         return instance().ginjector.getEventBus();
-    }
-
-    // TODO M.L. --- remove all below to different place
-
-    public static Message getMessageDialog() {
-        return instance().messageDialog;
-    }
-
-    public static void showMessageDialog(String message, String title, String buttonText, Command command) {
-        instance().messageDialog = new Message(message, title, buttonText, command);
-        instance().ginjector.getPlaceController().goTo(new SiteMap.GenericMessage());
-    }
-
-    public static class Message {
-
-        private final String message;
-
-        private final String title;
-
-        private final String buttonText;
-
-        private final Command command;
-
-        public Message(String message, String title, String buttonText, Command command) {
-            super();
-            this.message = message;
-            this.title = title;
-            this.buttonText = buttonText;
-            this.command = command;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getButtonText() {
-            return buttonText;
-        }
-
-        public Command getCommand() {
-            return command;
-        }
-
     }
 
 }
