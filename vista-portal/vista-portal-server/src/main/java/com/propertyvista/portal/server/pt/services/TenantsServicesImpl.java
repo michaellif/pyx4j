@@ -49,6 +49,8 @@ public class TenantsServicesImpl extends ApplicationEntityServicesImpl implement
 
         applyApplication(tenants);
 
+        secureSave(tenants);
+
         // we need to load charges and re-calculate them
         log.info("Load charges and re-calculate them");
         EntityQueryCriteria<Charges> criteria = EntityQueryCriteria.create(Charges.class);
@@ -62,8 +64,6 @@ public class TenantsServicesImpl extends ApplicationEntityServicesImpl implement
         }
 
         CampaignManager.fireEvent(CampaignTriger.Registration, tenants);
-
-        secureSave(tenants);
 
         callback.onSuccess(tenants);
     }

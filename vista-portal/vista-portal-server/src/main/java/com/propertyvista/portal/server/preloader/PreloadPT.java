@@ -230,12 +230,13 @@ public class PreloadPT extends BaseVistaDataPreloader {
         pti.driversLicense().setValue(driversLicense);
         pti.driversLicenseState().set(retrieveByMemeber(Province.class, pti.driversLicenseState().code(), RandomUtil.random(DemoData.PROVINCES)));
 
-        String si = RandomUtil.randomInt(1000) + " " + RandomUtil.randomInt(1000) + " " + RandomUtil.randomInt(1000);
+        String si = (100 + RandomUtil.randomInt(899)) + " " + (100 + RandomUtil.randomInt(899)) + " " + (100 + RandomUtil.randomInt(899));
         pti.secureIdentifier().setValue(si);
 
         pti.canadianCitizen().setValue(RandomUtil.randomBoolean());
 
         Address currentAddress = createAddress();
+        currentAddress.moveOutDate().setValue(RandomUtil.randomDate(2012, 2013)); // this has to be in the future
         persist(currentAddress);
         pti.currentAddress().set(currentAddress);
 
@@ -267,9 +268,17 @@ public class PreloadPT extends BaseVistaDataPreloader {
     }
 
     private void populatePotentialTenant(PotentialTenant pt, Relationship relationship) {
-        pt.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
-        pt.middleName().setValue(RandomUtil.randomInt(100) % 4 == 0 ? "M" : "");
-        pt.lastName().setValue(RandomUtil.random(DemoData.LAST_NAMES));
+
+        if (relationship == Relationship.Applicant) {
+            pt.firstName().setValue("Jack");
+            pt.middleName().setValue("");
+            pt.lastName().setValue("London");
+        } else {
+            pt.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
+            pt.middleName().setValue(RandomUtil.randomInt(100) % 4 == 0 ? "M" : "");
+            pt.lastName().setValue(RandomUtil.random(DemoData.LAST_NAMES));
+        }
+
         pt.birthDate().setValue(RandomUtil.randomDate(1930, 1980));
         pt.homePhone().setValue(RandomUtil.randomPhone());
         pt.mobilePhone().setValue(RandomUtil.randomPhone());
@@ -423,11 +432,12 @@ public class PreloadPT extends BaseVistaDataPreloader {
             pet.color().setValue(RandomUtil.random(DemoData.PET_COLORS));
             pet.breed().setValue(RandomUtil.random(DemoData.PET_BREEDS));
 
-            pet.weight().setValue(20 + RandomUtil.randomInt(100));
             if (RandomUtil.randomBoolean()) {
                 pet.weightUnit().setValue(WeightUnit.kg);
+                pet.weight().setValue(4 + RandomUtil.randomInt(20));
             } else {
                 pet.weightUnit().setValue(WeightUnit.lb);
+                pet.weight().setValue(10 + RandomUtil.randomInt(30));
             }
 
             pet.birthDate().setValue(RandomUtil.randomDate(1985, 2010));
@@ -502,7 +512,8 @@ public class PreloadPT extends BaseVistaDataPreloader {
 //            building = unitSelection.building();
             //            log.info("Created building {}", unitSelection.selectedUnit().building());
             unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
-            unitSelection.rentStart().setValue(DateUtils.createDate(2011, 2, 17));
+
+            unitSelection.rentStart().setValue(selectedUnit.avalableForRent().getValue());
         }
 
         persist(unitSelection);

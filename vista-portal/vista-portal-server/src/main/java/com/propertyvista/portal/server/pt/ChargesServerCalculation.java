@@ -151,12 +151,16 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         }
 
         if (dirty) {
+            log.info("Tenants have changed, we need to reset payment split charges");
             resetPaymentSplitCharges(charges, tenantList);
+        } else {
+            log.info("Tenants are the same as before, no need to reset payment split charges");
         }
     }
 
     private static boolean examineTenantLists(List<PotentialTenantInfo> tenants1, List<PotentialTenantInfo> tenants2) {
 
+        log.info("Exam");
         for (PotentialTenantInfo tenant1 : tenants1) {
             // first, find the tenant (matching by first name and last name)
             PotentialTenantInfo tenant2 = null;
@@ -166,6 +170,8 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
                     continue;
                 }
             }
+
+            log.info("Comparing \n\t{} \nand \n\t{}", tenant1, tenant2);
 
             if (tenant2 == null) {
                 return false;
