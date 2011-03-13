@@ -13,20 +13,37 @@
  */
 package com.propertyvista.crm.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.propertyvista.common.client.resources.FormImageBundle;
 
+import com.pyx4j.essentials.client.ApplicationCommon;
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.widgets.client.CaptchaComposite;
+import com.pyx4j.widgets.client.GlassPanel;
 
 public class VistaCrmSite extends AppSite {
 
     @Override
     public void onSiteLoad() {
+        ImageFactory.setImageBundle((FormImageBundle) GWT.create(FormImageBundle.class));
+
+        ApplicationCommon.initRpcGlassPanel();
+
+        SiteGinjector ginjector = GWT.create(SiteGinjector.class);
+
+        RootPanel.get().add(GlassPanel.instance());
+
+        RootPanel.get().add(ginjector.getSiteView());
+
+        CaptchaComposite.setPublicKey("6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth");
+
         hideLoadingIndicator();
 
-        Frame f = new Frame("http://www.anekdot.ru/id/438661/");
-        f.setSize("100%", "200px");
-        RootPanel.get().add(f);
+        //PtAppWizardManager.initWizard(ginjector);
+
     }
 
 }

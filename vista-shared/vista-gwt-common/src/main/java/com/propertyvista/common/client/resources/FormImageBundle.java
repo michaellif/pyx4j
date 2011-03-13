@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.client.ptapp.resources;
+package com.propertyvista.common.client.resources;
 
 import com.google.gwt.resources.client.ImageResource;
 

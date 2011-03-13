@@ -31,8 +31,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-essentials-gwt</artifactId>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-gwt-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
 	</dependencies>

@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ptapp;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.propertyvista.portal.client.ptapp.resources.FormImageBundle;
+import com.propertyvista.common.client.resources.FormImageBundle;
 
 import com.pyx4j.essentials.client.ApplicationCommon;
 import com.pyx4j.forms.client.ImageFactory;
