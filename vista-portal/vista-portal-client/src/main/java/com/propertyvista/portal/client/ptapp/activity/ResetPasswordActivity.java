@@ -25,7 +25,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
-import com.propertyvista.portal.client.ptapp.VistaPtApplicationSite;
+import com.propertyvista.portal.client.ptapp.PtAppSite;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType;
 import com.propertyvista.portal.rpc.pt.ActivationServices;
@@ -65,7 +65,7 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         token = Window.Location.getParameter(ActivationServices.PASSWORD_TOKEN);
         if (CommonsStringUtils.isEmpty(token)) {
-            VistaPtApplicationSite.instance().showMessageDialog(i18n.tr("The URL you tried to use is either incorrect or no longer valid."), i18n.tr("Error"),
+            PtAppSite.instance().showMessageDialog(i18n.tr("The URL you tried to use is either incorrect or no longer valid."), i18n.tr("Error"),
                     i18n.tr("LogIn"), new Command() {
                         @Override
                         public void execute() {

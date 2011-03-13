@@ -19,6 +19,8 @@ import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
+import com.propertyvista.crm.client.mvp.MvpModule;
+import com.propertyvista.crm.client.ui.ViewModule;
 
 import com.pyx4j.site.client.AppSiteGinModule;
 
@@ -30,9 +32,9 @@ public class CrmGinModule extends AppSiteGinModule {
 
         bind(VistaUnrecoverableErrorHandler.class).asEagerSingleton();
 
-        //        install(new MvpModule());
-        //
-        //        install(new ViewModule());
+        install(new MvpModule());
+
+        install(new ViewModule());
     }
 
     @Override

@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.crm.client;
+package com.propertyvista.crm.client.ui;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.inject.Inject;

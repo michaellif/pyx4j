@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
-import com.propertyvista.portal.client.ptapp.VistaPtApplicationSite;
+import com.propertyvista.portal.client.ptapp.PtAppSite;
 import com.propertyvista.portal.client.ptapp.ui.GenericMessageView;
 
 import com.pyx4j.site.rpc.AppPlace;
@@ -52,7 +52,7 @@ public class GenericMessageActivity extends AbstractActivity implements GenericM
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        message = VistaPtApplicationSite.instance().getMessage();
+        message = PtAppSite.instance().getMessage();
         view.setMessage(message);
     }
 

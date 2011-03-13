@@ -20,7 +20,7 @@ import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 
-public class VistaPtApplicationSite extends VistaSite {
+public class PtAppSite extends VistaSite {
 
     private SiteGinjector ginjector;
 

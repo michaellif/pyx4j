@@ -139,7 +139,7 @@ public class PtAppWizardManager {
             public void onSuccess(Boolean result) {
                 ginjector.getPlaceHistoryHandler().handleCurrentHistory();
                 if (!result) {
-                    VistaPtApplicationSite.instance().showMessageDialog(i18n.tr("We can't find that Building or avalable Units"), "Error", "Back",
+                    PtAppSite.instance().showMessageDialog(i18n.tr("We can't find that Building or avalable Units"), "Error", "Back",
                             new Command() {
                                 @Override
                                 public void execute() {

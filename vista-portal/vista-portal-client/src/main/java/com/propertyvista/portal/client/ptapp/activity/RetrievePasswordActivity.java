@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
-import com.propertyvista.portal.client.ptapp.VistaPtApplicationSite;
+import com.propertyvista.portal.client.ptapp.PtAppSite;
 import com.propertyvista.portal.client.ptapp.ui.RetrievePasswordView;
 import com.propertyvista.portal.rpc.pt.ActivationServices;
 import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
@@ -57,7 +57,7 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
         AsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                VistaPtApplicationSite.instance().showMessageDialog("Please check your email", "", null, null);
+                PtAppSite.instance().showMessageDialog("Please check your email", "", null, null);
             }
         };
         RPCManager.execute(ActivationServices.PasswordReminder.class, request, callback);
