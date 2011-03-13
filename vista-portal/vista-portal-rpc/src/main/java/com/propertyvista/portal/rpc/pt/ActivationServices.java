@@ -17,8 +17,10 @@ import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
+@Deprecated
 public interface ActivationServices {
 
+    @Deprecated
     public interface CreateAccount extends Service<AccountCreationRequest, AuthenticationResponse> {
 
     };
@@ -26,6 +28,7 @@ public interface ActivationServices {
     /**
      * Request E-mail to be sent to customer with 'token' for PasswordReset.
      */
+    @Deprecated
     public interface PasswordReminder extends Service<PasswordRetrievalRequest, VoidSerializable> {
 
     };
@@ -35,10 +38,12 @@ public interface ActivationServices {
     /**
      * Reset password in the system base on token received in E-mail
      */
+    @Deprecated
     public interface PasswordReset extends Service<PasswordChangeRequest, AuthenticationResponse> {
 
     };
 
+    @Deprecated
     public interface PasswordChange extends Service<PasswordChangeRequest, VoidSerializable> {
 
     };

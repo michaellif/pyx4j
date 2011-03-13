@@ -19,24 +19,30 @@ import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.rpc.shared.Service;
 
+@Deprecated
 public interface PotentialTenantServices {
 
+    @Deprecated
     public interface UnitExists extends Service<UnitSelectionCriteria, Boolean> {
 
     }
 
+    @Deprecated
     public interface GetCurrentApplication extends Service<UnitSelectionCriteria, CurrentApplication> {
 
     }
 
+    @Deprecated
     public interface Save extends EntityServices.Save {
 
     };
 
+    @Deprecated
     public interface RetrieveByPK extends EntityServices.RetrieveByPK {
 
     };
 
+    @Deprecated
     public interface RetrieveUnitSelection extends Service<UnitSelectionCriteria, UnitSelection> {
 
     }
