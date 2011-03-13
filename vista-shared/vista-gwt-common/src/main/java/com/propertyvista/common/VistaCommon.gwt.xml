@@ -3,10 +3,14 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.google.gwt.user.User'/>
-        
+
+    <inherits name='com.pyx4j.essentials.Essentials' />      
     <inherits name='com.pyx4j.security.RPC' />
     <inherits name='com.pyx4j.entity.Entity'/>
     <inherits name='com.pyx4j.rpc.RPC' />
+    
+    <inherits name='com.pyx4j.Commons' />
+	<inherits name='com.pyx4j.site.GwtSite' />
     
     <source path="client"/>
     
