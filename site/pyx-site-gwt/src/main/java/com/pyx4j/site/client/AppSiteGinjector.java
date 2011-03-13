@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.client;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
@@ -29,5 +30,7 @@ public interface AppSiteGinjector extends Ginjector {
     PlaceHistoryHandler getPlaceHistoryHandler();
 
     PlaceController getPlaceController();
+
+    EventBus getEventBus();
 
 }
