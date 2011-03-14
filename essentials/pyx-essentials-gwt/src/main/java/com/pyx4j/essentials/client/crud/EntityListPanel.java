@@ -44,7 +44,7 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
     private DataTableModel<E> dataTableModel;
 
-    private final E metaEntity;
+    private final E entityPrototype;
 
     private Class<? extends NavigNode> editorPage;
 
@@ -57,7 +57,7 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
     public EntityListPanel(Class<E> clazz) {
         setWidth("100%");
 
-        metaEntity = EntityFactory.create(clazz);
+        entityPrototype = EntityFactory.create(clazz);
         dataTable = new DataTable<E>(false);
         dataTable.setWidth("100%");
 
@@ -71,7 +71,7 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
         setCellWidth(dataTable, "100%");
 
-        dataTableModel = new DataTableModel<E>(metaEntity.getEntityMeta(), getColumnDescriptors());
+        dataTableModel = new DataTableModel<E>(entityPrototype.getEntityMeta(), getColumnDescriptors());
 
         dataTable.setDataTableModel(dataTableModel);
         dataTable.addClickHandler(new ClickHandler() {
@@ -124,8 +124,16 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
         }
     }
 
+    public E proto() {
+        return entityPrototype;
+    }
+
+    /**
+     * @deprecated use proto()
+     */
+    @Deprecated
     public E getMetaEntity() {
-        return metaEntity;
+        return entityPrototype;
     }
 
     public int getPageSize() {
