@@ -3,6 +3,7 @@ package com.pyx4j.site.client.ui;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -91,10 +92,12 @@ public class AppSiteView extends FlowPanel {
 
         DisplayPanel captionDisplayPanel = new DisplayPanel();
         captionDisplayPanel.setStyleName(prefix + StyleSuffix.Caption);
+        captionDisplayPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         caption2navigPanel.add(captionDisplayPanel);
 
         DisplayPanel secondNavigDisplayPanel = new DisplayPanel();
         secondNavigDisplayPanel.setStyleName(prefix + StyleSuffix.SecondaryNavig);
+        secondNavigDisplayPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         caption2navigPanel.add(secondNavigDisplayPanel);
 
         mainWrapper.add(caption2navigPanel);
