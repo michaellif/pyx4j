@@ -51,12 +51,11 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
             HorizontalPanel main = new HorizontalPanel();
             main.setWidth("100%");
             for (EntityFolderColumnDescriptor column : columns) {
-                // Don't show dependent and takeOwnership 
-                if (column.getObject() == proto().status() || column.getObject() == proto().takeOwnership()) {
-                    continue;
-                }
                 CComponent<?> component = createCell(column);
-                if (column.getObject() == proto().email()) {
+                // Don't show relation and takeOwnership 
+                if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
+                    component.setVisible(false);
+                } else if (column.getObject() == proto().email()) {
                     ((CEditableComponent) component).setEditable(false);
                 }
                 main.add(createDecorator(component, column.getWidth()));
@@ -96,14 +95,10 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
                 @Override
                 public void onValueChange(ValueChangeEvent<Date> event) {
                     if (ValidationUtils.isOlderThen18(event.getValue())) {
-                        get(proto().takeOwnership()).setVisible(true);
-                        showCoApplicantStatus();
+                        enableStatusAndOwnership();
+                        get(proto().status()).setValue(null);
                     } else {
-                        get(proto().status()).setValue(Status.Dependant);
-
-                        get(proto().takeOwnership()).setValue(false);
-                        get(proto().takeOwnership()).setVisible(false);
-                        hideCoApplicantStatus();
+                        setMandatoryDependant();
                     }
                 }
             });
@@ -116,14 +111,9 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
 
         if (!isFirst()) {
             if (ValidationUtils.isOlderThen18(value.birthDate().getValue())) {
-                get(proto().takeOwnership()).setVisible(true);
-                showCoApplicantStatus();
+                enableStatusAndOwnership();
             } else {
-                get(proto().status()).setValue(Status.Dependant);
-
-                get(proto().takeOwnership()).setValue(false);
-                get(proto().takeOwnership()).setVisible(false);
-                hideCoApplicantStatus();
+                setMandatoryDependant();
             }
         }
     }
@@ -133,11 +123,7 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
         CComponent<?> comp = null;
 
-        if (isFirst() && proto().relationship() == column.getObject()) {
-            CTextField textComp = new CTextField();
-            textComp.setEditable(false);
-            comp = textComp;
-        } else if (isFirst() && proto().status() == column.getObject()) {
+        if (isFirst() && proto().status() == column.getObject()) {
             CTextField textComp = new CTextField();
             textComp.setEditable(false);
             textComp.setValue(Status.Applicant.name());
@@ -159,13 +145,16 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
         return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), TenantsViewForm.i18n.tr("Remove person"), !isFirst());
     }
 
-    @SuppressWarnings("unchecked")
-    private void hideCoApplicantStatus() {
-        ((CComboBox<Status>) get(proto().status())).removeOption(Status.CoApplicant);
+    private void setMandatoryDependant() {
+        get(proto().status()).setValue(Status.Dependant);
+        get(proto().status()).setEnabled(false);
+
+        get(proto().takeOwnership()).setValue(true);
+        get(proto().takeOwnership()).setEnabled(false);
     }
 
-    @SuppressWarnings("unchecked")
-    private void showCoApplicantStatus() {
-        ((CComboBox<Status>) get(proto().status())).updateOption(Status.CoApplicant);
+    private void enableStatusAndOwnership() {
+        get(proto().status()).setEnabled(true);
+        get(proto().takeOwnership()).setEnabled(true);
     }
 }

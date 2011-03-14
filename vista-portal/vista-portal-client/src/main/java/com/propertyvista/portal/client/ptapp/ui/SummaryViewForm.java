@@ -335,7 +335,11 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                             addCell(tableLayout, content, "Name", formFullName(proto()));
                             addCell(tableLayout, content, "Date of Birht", inject(proto().birthDate()).asWidget());
                             addCell(tableLayout, content, "Email", inject(proto().email()).asWidget());
-                            addCell(tableLayout, content, "Relationship", inject(proto().relationship()).asWidget());
+                            if (isFirst()) {
+                                addCell(tableLayout, content, "Relationship", new HTML("&nbsp;"));
+                            } else {
+                                addCell(tableLayout, content, "Relationship", inject(proto().relationship()).asWidget());
+                            }
                             addCell(tableLayout, content, "Status", inject(proto().status()).asWidget());
                             upperLevelElementElignment(content);
                             return content;
