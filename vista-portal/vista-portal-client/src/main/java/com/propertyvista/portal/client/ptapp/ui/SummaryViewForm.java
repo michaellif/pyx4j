@@ -207,7 +207,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             // fill header:
             for (Entry<String, String> e : tableLayout.entrySet()) {
-                HTML label = new HTML(e.getKey());
+                HTML label = new HTML(i18n.tr(e.getKey()));
                 label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                 label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
                 label.setWidth(e.getValue());
@@ -301,7 +301,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             // fill header:
             for (Entry<String, String> e : tableLayout.entrySet()) {
-                HTML label = new HTML(e.getKey());
+                HTML label = new HTML(i18n.tr(e.getKey()));
                 label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                 label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
                 label.setWidth(e.getValue());
