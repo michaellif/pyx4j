@@ -25,6 +25,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
@@ -185,7 +186,10 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
         infoStep.substeps().clear();
         financialStep.substeps().clear();
         for (PotentialTenantInfo tenant : tenantsNew.tenants()) {
-            // TODO if not 18y Old continue;
+            // if not 18y Old continue;
+            if (!ChargesSharedCalculation.isEligibleForPaymentSplit(tenant)) {
+                continue;
+            }
             infoStep.substeps().add(merge(tenant, findTenant(tenantsOrig, tenant), infoSubSteps));
             financialStep.substeps().add(merge(tenant, findTenant(tenantsOrig, tenant), financialSubSteps));
         }
