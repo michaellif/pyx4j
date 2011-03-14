@@ -20,22 +20,22 @@ public class MvpModule extends AbstractGinModule {
     @Override
     protected void configure() {
 
-        //        bind(LogoActivityMapper.class);
-        //        bind(ActionsActivityMapper.class);
-        //        bind(MainNavigActivityMapper.class);
-        //        bind(SecondNavigActivityMapper.class);
-        //
-        //        bind(CaptionActivityMapper.class);
-        //        bind(MessageActivityMapper.class);
-        //        bind(ContentActivityMapper.class);
-        //
-        //        bind(Left1ActivityMapper.class);
-        //        bind(Left2ActivityMapper.class);
-        //
-        //        bind(Right1ActivityMapper.class);
-        //        bind(Right2ActivityMapper.class);
-        //
-        //        bind(BottomActivityMapper.class);
+        bind(LogoActivityMapper.class);
+        bind(ActionsActivityMapper.class);
+        bind(MainNavigActivityMapper.class);
+        bind(SecondNavigActivityMapper.class);
+
+        bind(CaptionActivityMapper.class);
+        bind(MessageActivityMapper.class);
+        bind(ContentActivityMapper.class);
+
+        bind(Left1ActivityMapper.class);
+        bind(Left2ActivityMapper.class);
+
+        bind(Right1ActivityMapper.class);
+        bind(Right2ActivityMapper.class);
+
+        bind(BottomActivityMapper.class);
 
     }
 

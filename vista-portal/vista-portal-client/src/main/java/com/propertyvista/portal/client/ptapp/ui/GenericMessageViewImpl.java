@@ -28,7 +28,7 @@ import com.pyx4j.essentials.client.crud.CrudDebugId;
 
 public class GenericMessageViewImpl extends FlowPanel implements GenericMessageView {
 
-    private static I18n i18n = I18nFactory.getI18n(RetrievePasswordViewImpl.class);
+    private static I18n i18n = I18nFactory.getI18n(GenericMessageViewImpl.class);
 
     private Presenter presenter;
 

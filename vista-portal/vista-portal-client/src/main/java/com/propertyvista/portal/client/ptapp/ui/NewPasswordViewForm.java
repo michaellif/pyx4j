@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 
 import com.pyx4j.commons.HtmlUtils;

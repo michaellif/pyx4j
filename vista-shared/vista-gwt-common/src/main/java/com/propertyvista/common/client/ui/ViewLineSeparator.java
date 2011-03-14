@@ -11,7 +11,7 @@
  * @author VladLL
  * @version $Id$
  */
-package com.propertyvista.portal.client.ptapp.ui.decorations;
+package com.propertyvista.common.client.ui;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;

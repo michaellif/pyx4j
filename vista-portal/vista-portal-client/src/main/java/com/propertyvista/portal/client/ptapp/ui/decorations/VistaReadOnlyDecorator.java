@@ -17,7 +17,7 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;

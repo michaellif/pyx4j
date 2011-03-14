@@ -13,15 +13,15 @@
  */
 package com.propertyvista.portal.client.ptapp.themes;
 
+import com.propertyvista.common.client.ui.ViewLineSeparator;
+import com.propertyvista.common.client.ui.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentUnitsTable;
 import com.propertyvista.portal.client.ptapp.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 
 import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.widgets.client.ImageFactory;

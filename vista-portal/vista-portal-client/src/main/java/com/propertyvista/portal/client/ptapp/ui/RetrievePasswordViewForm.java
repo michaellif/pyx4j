@@ -20,7 +20,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
 
 import com.pyx4j.commons.HtmlUtils;

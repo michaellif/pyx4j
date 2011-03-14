@@ -16,7 +16,8 @@ package com.propertyvista.portal.client.ptapp.ui.decorations;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.common.client.ui.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 
 import com.pyx4j.forms.client.ui.CComponent;
 
