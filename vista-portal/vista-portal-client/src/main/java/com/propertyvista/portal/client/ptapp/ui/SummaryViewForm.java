@@ -44,7 +44,6 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderIte
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.domain.pt.Charges;
-import com.propertyvista.portal.domain.pt.IPerson;
 import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
@@ -332,7 +331,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                         @Override
                         public IsWidget createContent() {
                             FlowPanel content = new FlowPanel();
-                            addCell(tableLayout, content, "Name", formFullName(proto()));
+                            addCell(tableLayout, content, "Name", DecorationUtils.formFullName(this, proto()));
                             addCell(tableLayout, content, "Date of Birht", inject(proto().birthDate()).asWidget());
                             addCell(tableLayout, content, "Email", inject(proto().email()).asWidget());
                             if (isFirst()) {
@@ -348,16 +347,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                         @Override
                         public FolderItemDecorator createFolderItemDecorator() {
                             return new BoxReadOnlyFolderItemDecorator(false);
-                        }
-
-                        private FlowPanel formFullName(IPerson person) {
-                            FlowPanel fullname = new FlowPanel();
-                            fullname.add(DecorationUtils.inline(inject(person.firstName()), "auto"));
-                            fullname.add(DecorationUtils.inline(new HTML("&nbsp;")));
-                            fullname.add(DecorationUtils.inline(inject(person.middleName()), "auto"));
-                            fullname.add(DecorationUtils.inline(new HTML("&nbsp;")));
-                            fullname.add(DecorationUtils.inline(inject(person.lastName()), "auto"));
-                            return fullname;
                         }
                     };
                 }
