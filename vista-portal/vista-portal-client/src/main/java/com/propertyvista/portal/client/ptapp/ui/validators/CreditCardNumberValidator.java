@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-03-09
+ * Created on 2011-03-14
  * @author Vlad
  * @version $Id$
  */
@@ -19,22 +19,17 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18nFactory;
 
-public class CanadianSinValidator implements EditableValueValidator<String> {
+public class CreditCardNumberValidator implements EditableValueValidator<String> {
 
-    private static I18n i18n = I18nFactory.getI18n(CanadianSinValidator.class);
+    private static I18n i18n = I18nFactory.getI18n(CreditCardNumberValidator.class);
 
     @Override
     public boolean isValid(CEditableComponent<String, ?> component, String value) {
-        return value.trim().matches("^\\d{3}[ ]?\\d{3}[ ]?\\d{3}$") && ValidationUtils.isLuhnValid(value.trim().replaceAll(" ", ""));
+        return value.trim().matches("^\\d{4}[ ]?\\d{4}[ ]?\\d{4}[ ]?\\d{4}$") && ValidationUtils.isLuhnValid(value.trim().replaceAll(" ", ""));
     }
 
     @Override
     public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
-        return i18n.tr("Invalid SIN.");
+        return i18n.tr("Invalid credit card number.");
     }
-
-    /**
-     * here is one VALID SIN as example: 046 454 286
-     * (http://en.wikipedia.org/wiki/Social_Insurance_Number)
-     */
 }

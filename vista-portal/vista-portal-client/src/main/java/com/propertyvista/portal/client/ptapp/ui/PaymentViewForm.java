@@ -37,6 +37,7 @@ import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.portal.client.ptapp.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
 import com.propertyvista.portal.domain.payment.PaymentType;
@@ -67,17 +68,21 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
         main.add(new ViewHeaderDecorator(proto().applicationCharges()));
         main.add(inject(proto().applicationCharges().charges(), new ChargeLineFolder()));
 
-        main.add(new ViewLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM));
+        ViewLineSeparator sp = new ViewLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+        sp.getElement().getStyle().setMarginLeft(1, Unit.EM);
+        main.add(sp);
 
         FlowPanel applicationFeePanel = new FlowPanel();
         applicationFeePanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().label()), "300px", null));
+        applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().label()), "300px"));
         applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().charge()), "100px", "right"));
         main.add(applicationFeePanel);
 
         HorizontalPanel info = new HorizontalPanel();
+        info.getElement().getStyle().setMarginTop(1, Unit.EM);
         info.add(new Image(SiteImages.INSTANCE.userMessageInfo()));
         info.add(new HTML(SiteResources.INSTANCE.paymentApprovalNotes().getText()));
+        info.getElement().getStyle().setMarginBottom(1, Unit.EM);
         main.add(info);
 
         main.add(new ViewHeaderDecorator(proto().type()));
@@ -235,6 +240,12 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
                     });
                 }
                 return comp;
+            }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+                get(proto().cardNumber()).addValueValidator(new CreditCardNumberValidator());
             }
         };
     }
