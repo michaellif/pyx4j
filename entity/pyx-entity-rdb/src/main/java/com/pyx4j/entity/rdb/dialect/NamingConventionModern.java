@@ -24,6 +24,16 @@ import java.util.List;
 
 public class NamingConventionModern implements NamingConvention {
 
+    private final int identifierMaximumLength;
+
+    public NamingConventionModern() {
+        this.identifierMaximumLength = -1;
+    }
+
+    public NamingConventionModern(int identifierMaximumLength) {
+        this.identifierMaximumLength = identifierMaximumLength;
+    }
+
     @Override
     public String sqlTableName(String javaPersistenceName) {
         return javaPersistenceName;

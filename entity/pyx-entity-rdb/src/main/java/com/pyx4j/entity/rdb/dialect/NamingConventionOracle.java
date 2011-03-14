@@ -21,13 +21,39 @@
 package com.pyx4j.entity.rdb.dialect;
 
 import java.util.List;
-import java.util.Locale;
 
 public class NamingConventionOracle implements NamingConvention {
 
+    private final int identifierMaximumLength;
+
+    public NamingConventionOracle() {
+        this.identifierMaximumLength = -1;
+    }
+
+    public NamingConventionOracle(int identifierMaximumLength) {
+        this.identifierMaximumLength = identifierMaximumLength;
+    }
+
+    public static String splitCapitals(String word) {
+        StringBuilder b = new StringBuilder();
+        boolean inWord = false;
+        for (char c : word.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                if (inWord) {
+                    b.append('_');
+                }
+            } else {
+                c = Character.toUpperCase(c);
+                inWord = true;
+            }
+            b.append(c);
+        }
+        return b.toString();
+    }
+
     @Override
     public String sqlTableName(String javaPersistenceName) {
-        return javaPersistenceName.toUpperCase(Locale.ENGLISH);
+        return splitCapitals(javaPersistenceName);
     }
 
     @Override
@@ -37,29 +63,29 @@ public class NamingConventionOracle implements NamingConvention {
 
     @Override
     public String sqlFieldName(String javaPersistenceFieldName) {
-        return javaPersistenceFieldName.toUpperCase(Locale.ENGLISH).replace('-', '_');
+        return splitCapitals(javaPersistenceFieldName).replace('-', '_');
     }
 
     @Override
     public String sqlEmbededFieldName(List<String> path, String javaPersistenceFieldName) {
         StringBuilder sql = new StringBuilder();
         for (String pathPart : path) {
-            sql.append(pathPart.toUpperCase(Locale.ENGLISH));
+            sql.append(splitCapitals(pathPart));
             sql.append('_');
         }
-        sql.append(javaPersistenceFieldName.toUpperCase(Locale.ENGLISH));
+        sql.append(splitCapitals(javaPersistenceFieldName));
         return sql.toString();
     }
 
     @Override
     public String sqlEmbededTableName(String javaPersistenceTableName, List<String> path, String javaPersistenceFieldName) {
         StringBuilder sql = new StringBuilder();
-        sql.append(javaPersistenceTableName.toUpperCase(Locale.ENGLISH));
+        sql.append(splitCapitals(javaPersistenceTableName));
         for (String pathPart : path) {
-            sql.append(pathPart.toUpperCase(Locale.ENGLISH));
+            sql.append(splitCapitals(pathPart));
             sql.append('_');
         }
-        sql.append(javaPersistenceFieldName.toUpperCase(Locale.ENGLISH));
+        sql.append(splitCapitals(javaPersistenceFieldName));
         return sql.toString();
     }
 

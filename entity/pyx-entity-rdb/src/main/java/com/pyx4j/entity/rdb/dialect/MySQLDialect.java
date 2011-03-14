@@ -34,6 +34,11 @@ public class MySQLDialect extends Dialect {
     }
 
     @Override
+    public int identifierMaximumLength() {
+        return 64;
+    }
+
+    @Override
     public String getGeneratedIdColumnString() {
         return "NOT NULL AUTO_INCREMENT";
     }

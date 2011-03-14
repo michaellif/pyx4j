@@ -43,6 +43,8 @@ public abstract class Dialect {
         addTypeMeta(java.sql.Date.class, "date");
     }
 
+    public abstract int identifierMaximumLength();
+
     public NamingConvention getNamingConvention() {
         return namingConvention;
     }
