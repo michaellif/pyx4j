@@ -83,7 +83,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
     private Pets pets;
 
-//    private Building building;
+    //    private Building building;
 
     private UnitSelection unitSelection;
 
@@ -229,8 +229,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         pti.driversLicense().setValue(driversLicense);
         pti.driversLicenseState().set(retrieveByMemeber(Province.class, pti.driversLicenseState().code(), RandomUtil.random(DemoData.PROVINCES)));
 
-        String si = (100 + RandomUtil.randomInt(899)) + " " + (100 + RandomUtil.randomInt(899)) + " " + (100 + RandomUtil.randomInt(899));
-        pti.secureIdentifier().setValue(si);
+        pti.secureIdentifier().setValue("649 951 282");
 
         pti.canadianCitizen().setValue(RandomUtil.randomBoolean());
 
@@ -507,7 +506,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
             ApptUnit selectedUnit = unitSelection.availableUnits().units().iterator().next();
             unitSelection.selectedUnit().set(selectedUnit);
             unitSelection.building().set(unitSelection.selectedUnit().building());
-//            building = unitSelection.building();
+            //            building = unitSelection.building();
             //            log.info("Created building {}", unitSelection.selectedUnit().building());
             unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
 
@@ -525,7 +524,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
         apartmentServices.loadAvailableUnits(unitSelection);
 
-//        building = unitSelection.selectedUnit().building();
+        //        building = unitSelection.selectedUnit().building();
 
         sb.append(PrintUtil.print(unitSelection));
     }
@@ -599,7 +598,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             income.incomeSource().setValue(IncomeSource.fulltime);
             income.employer().set(createEmployer());
-//            income. monthlyAmount().setValue(DomainUtil.createMoney(300d + RandomUtil.randomInt(4000)).getValue());
+            //            income. monthlyAmount().setValue(DomainUtil.createMoney(300d + RandomUtil.randomInt(4000)).getValue());
 
             //income.active().setValue(RandomUtil.randomBoolean());
 
