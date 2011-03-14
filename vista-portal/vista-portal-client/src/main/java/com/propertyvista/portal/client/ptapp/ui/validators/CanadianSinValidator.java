@@ -33,10 +33,12 @@ public class CanadianSinValidator implements EditableValueValidator<String> {
         return i18n.tr("Invalid SIN.");
     }
 
-    /*
+    /**
      * Generic Luhn algorithm implementation (see
      * http://en.wikipedia.org/wiki/Luhn_algorithm for details) could be useful for other
      * ID verification like CreditCard #, etc.
+     * here is one VALID SIN as example: 046 454 286
+     * (http://en.wikipedia.org/wiki/Social_Insurance_Number)
      */
     public static boolean isValidCC(String num) {
 
