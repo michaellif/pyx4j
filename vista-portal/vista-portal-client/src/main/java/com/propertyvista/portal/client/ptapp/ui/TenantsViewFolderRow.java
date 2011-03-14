@@ -77,6 +77,7 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
                 Status status = getValue().status().getValue();
                 if ((status == Status.Applicant) || (status == Status.CoApplicant)) {
+                    // TODO I Believe that this is not correct, this logic has to be applied to Dependents as well, as per VISTA-273
                     return ValidationUtils.isOlderThen18(value);
                 } else {
                     return true;
