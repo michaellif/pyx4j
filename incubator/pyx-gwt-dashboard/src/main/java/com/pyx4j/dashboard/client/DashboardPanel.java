@@ -29,6 +29,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ComplexPanel;
@@ -110,20 +111,23 @@ public class DashboardPanel extends SimplePanel {
         }
 
         public Layout(int columns) throws IllegalArgumentException {
-            if (columns > 0)
+            if (columns > 0) {
                 this.columns = columns;
-            else
+            } else {
                 throw new IllegalArgumentException();
+            }
         }
 
         public Layout(int columns, double spacingH_PCT, int spacingV_PX) throws IllegalArgumentException {
-            if (columns > 0)
+            if (columns > 0) {
                 this.columns = columns;
-            else
+            } else {
                 throw new IllegalArgumentException();
+            }
 
-            if (!setHorizontalSpacing(spacingH_PCT))
+            if (!setHorizontalSpacing(spacingH_PCT)) {
                 throw new IllegalArgumentException();
+            }
 
             this.verticalSpacing = spacingV_PX;
         }
@@ -136,22 +140,25 @@ public class DashboardPanel extends SimplePanel {
             return horizontalSpacing;
         }
 
-        /*
+        /**
          * Horizontal spacing set by %, so their sum (doubled value multiplied by column
          * number) may not exceed 100%, at least (in reality we want to leave space for
          * the columns itself!). Then, the spacing is formed by means of column padding,
          * so its doubled value may not exceed the size of the smallest column also...
          */
         public boolean setHorizontalSpacing(double spacingH_PCT) {
-            if (getColumns() * spacingH_PCT * 2 >= 100.0)
+            if (getColumns() * spacingH_PCT * 2 >= 100.0) {
                 return false; // percentage looks strange!?.
+            }
 
             double pcMin = 100.0 / getColumns();
-            for (int i = 0; i < columnWidths.length; ++i)
+            for (int i = 0; i < columnWidths.length; ++i) {
                 pcMin = Math.min(pcMin, columnWidths[i]);
+            }
 
-            if (pcMin <= spacingH_PCT * 2)
+            if (pcMin <= spacingH_PCT * 2) {
                 return false; // ok, smallest column should be wider than spacing...
+            }
 
             horizontalSpacing = spacingH_PCT;
             return true;
@@ -161,7 +168,7 @@ public class DashboardPanel extends SimplePanel {
             return verticalSpacing;
         }
 
-        public void setverticalSpacing(int spacingV_PX) {
+        public void setVerticalSpacing(int spacingV_PX) {
             verticalSpacing = spacingV_PX;
         }
 
@@ -169,15 +176,16 @@ public class DashboardPanel extends SimplePanel {
             return (columnWidths.length != 0);
         }
 
-        /*
+        /**
          * The column widths set by %, so their sum shouldn't exceed 100%. But there is
          * horizontal spacing also, and spacing formed by column padding, so the smallest
          * column width should be greater that doubled spacing value...
          */
         public boolean setColumnWidths(byte[] columnWidths) throws IllegalArgumentException {
-            if (columnWidths.length > 0) { // note: zero lenth array is 'reset to default' case!..
-                if (columnWidths.length < getColumns())
+            if (columnWidths.length > 0) { // note: zero length array is 'reset to default' case!..
+                if (columnWidths.length < getColumns()) {
                     throw new IllegalArgumentException();
+                }
 
                 byte pcSum = 0;
                 double pcMin = 100.0 / getColumns();
@@ -186,11 +194,13 @@ public class DashboardPanel extends SimplePanel {
                     pcMin = Math.min(pcMin, columnWidths[i]);
                 }
 
-                if (pcSum > 100)
+                if (pcSum > 100) {
                     return false; // mmm, the widths percentage looks strange!?.
+                }
 
-                if (pcMin <= getHorizontalSpacing() * 2)
+                if (pcMin <= getHorizontalSpacing() * 2) {
                     return false; // ok, smallest column should be wider than spacing...
+                }
             }
 
             this.columnWidths = columnWidths;
@@ -206,8 +216,9 @@ public class DashboardPanel extends SimplePanel {
         }
 
         public void setColumnNames(String[] columnNames) throws IllegalArgumentException {
-            if (columnNames.length < getColumns())
+            if (columnNames.length < getColumns()) {
                 throw new IllegalArgumentException();
+            }
 
             this.columnNames = columnNames;
         }
@@ -237,9 +248,6 @@ public class DashboardPanel extends SimplePanel {
     // internal data:	
     protected Layout layout;
 
-    //    // VladLL : column drag-n-drop functionality is commented till now!..
-    //    protected PickupDragController columnDragController;
-
     protected PickupDragController widgetDragController;
 
     protected FlowPanel columnsContainerPanel; // holds columns (as vertical panels).
@@ -268,8 +276,9 @@ public class DashboardPanel extends SimplePanel {
     }
 
     public boolean refresh() {
-        if (!isRefreshAllowed)
+        if (!isRefreshAllowed) {
             return false;
+        }
 
         int gadgetsCount = 0;
         // hold the current widgets for a while:
@@ -285,14 +294,17 @@ public class DashboardPanel extends SimplePanel {
         // if new columns count the same as previous one - just move gadgets one to one:
         if (columnsContainerPanel.getWidgetCount() == columnWidgetsPanels.size()) {
             for (int i = 0; i < columnWidgetsPanels.size(); ++i) {
-                while (columnWidgetsPanels.get(i).getWidgetCount() > 0)
+                while (columnWidgetsPanels.get(i).getWidgetCount() > 0) {
                     getColumnWidgetsPanel(i).add(columnWidgetsPanels.get(i).getWidget(0));
+                }
             }
         } else { // 'equalize' gadgets per columns:
             Vector<Widget> allGadgets = new Vector<Widget>(gadgetsCount);
-            for (int i = 0; i < columnWidgetsPanels.size(); ++i)
-                for (int j = 0; j < columnWidgetsPanels.get(i).getWidgetCount(); ++j)
+            for (int i = 0; i < columnWidgetsPanels.size(); ++i) {
+                for (int j = 0; j < columnWidgetsPanels.get(i).getWidgetCount(); ++j) {
                     allGadgets.add(columnWidgetsPanels.get(i).getWidget(j));
+                }
+            }
 
             int gadgetsPerColumn = gadgetsCount / columnsContainerPanel.getWidgetCount();
             for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i) {
@@ -321,11 +333,12 @@ public class DashboardPanel extends SimplePanel {
             // create holder for supplied widget and insert it into specified column,row:
             GadgetHolder gh = new GadgetHolder(widget, this);
 
-            if (row > 0)
+            if (row > 0) {
                 getColumnWidgetsPanel(column).insert(gh, row);
-            else
+            } else {
                 // if row is negative - just add at the end:
                 getColumnWidgetsPanel(column).add(gh);
+            }
 
             return true;
         }
@@ -338,8 +351,9 @@ public class DashboardPanel extends SimplePanel {
     }
 
     public void removeAllGadgets() {
-        for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i)
+        for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i) {
             getColumnWidgetsPanel(i).clear();
+        }
     }
 
     // initializing:
@@ -355,15 +369,6 @@ public class DashboardPanel extends SimplePanel {
         // initialize horizontal panel to hold our columns:
         columnsContainerPanel = new FlowPanel();
         columnsContainerPanel.setWidth("100%");
-
-        //        // VladLL : column drag-n-drop functionality is commented till now!..
-        //        //initialize our column drag controller: 
-        //        columnDragController = new PickupDragController(boundaryPanel, false);
-        //        columnDragController.setBehaviorMultipleSelection(false);
-        //
-        //        // initialize our column drop controller:
-        //        CustomFlowPanelDropController columnDropController = new CustomFlowPanelDropController(columnsContainerPanel);
-        //        columnDragController.registerDropController(columnDropController);
 
         boundaryPanel.add(columnsContainerPanel);
 
@@ -383,7 +388,7 @@ public class DashboardPanel extends SimplePanel {
             FlowPanel columnCompositePanel = new FlowPanel();
             columnCompositePanel
                     .setWidth(((layout.isColumnWidths() ? layout.getCoumnWidth(col) : 100.0 / layout.getColumns()) - layout.getHorizontalSpacing() * 2) * 0.995
-                            + "%"); // note that nasty .99x multiplier - it seems that IE calculates % widths less precisely tham Mozilla, that leads to last  
+                            + "%"); // note that nasty .99x multiplier - it seems that IE calculates % widths less precisely than Mozilla, that leads to last  
                                     //  column is being dropped to the left-bottom corner of the panel, so we leave an additional space (make columns narrower)...
 
             // set specific formatting styles:
@@ -399,10 +404,6 @@ public class DashboardPanel extends SimplePanel {
                 heading.setWidth("100%");
 
                 columnCompositePanel.add(heading);
-
-                //                // VladLL : column drag-n-drop functionality is commented till now!..
-                //                // make the column draggable by its heading:
-                //                columnDragController.makeDraggable(columnCompositePanel, heading);
             }
 
             // inner vertical panel to hold individual widgets:
@@ -425,18 +426,21 @@ public class DashboardPanel extends SimplePanel {
     protected VerticalPanelWithSpacer getColumnWidgetsPanel(int column) {
         ComplexPanel columnCompositePanel = (ComplexPanel) columnsContainerPanel.getWidget(column);
         return (VerticalPanelWithSpacer) columnCompositePanel.getWidget(columnCompositePanel.getWidgetCount() - 1);
-        // note, that first element could be label with column name, so always get last one!..
+        // first element is label with column name, so always get last one!..
     }
 
     protected boolean checkIndexes(int column, int row, boolean insert) {
-        if (column >= columnsContainerPanel.getWidgetCount())
+        if (column >= columnsContainerPanel.getWidgetCount()) {
             return false;
+        }
 
         if (insert) {
-            if (row > getColumnWidgetsPanel(column).getWidgetCount())
+            if (row > getColumnWidgetsPanel(column).getWidgetCount()) {
                 return false;
-        } else if (row >= getColumnWidgetsPanel(column).getWidgetCount())
+            }
+        } else if (row >= getColumnWidgetsPanel(column).getWidgetCount()) {
             return false;
+        }
 
         return true;
     }
@@ -482,9 +486,19 @@ public class DashboardPanel extends SimplePanel {
             this.setWidget(frame);
             this.setWidth("100%");
 
-            // don't forget about vertical spacing:
-            this.getElement().getStyle().setMarginTop(layout.getVerticalSpacing(), Unit.PX);
-            this.getElement().getStyle().setMarginBottom(layout.getVerticalSpacing(), Unit.PX);
+            /**
+             * don't forget about vertical spacing:
+             * Note: dnd tricks with margin and uses DOM.getStyleAttribute(w,"margin")
+             * (com.allen_sauer.gwt.dnd.client.PickupDragController.
+             * saveSelectedWidgetsLocationAndStyle())
+             * to retrieve and save current widget margin, but... it doesn't reads
+             * attributes set by getStyle().setMarginTop/Bottom methods!!??
+             * Thus using instead such combination:
+             */
+            // this.getElement().getStyle().setProperty("margin", layout.getVerticalSpacing() + "px" + " 0px");
+            this.getElement().getStyle().setMargin(layout.getVerticalSpacing(), Unit.PX);
+            this.getElement().getStyle().setMarginLeft(0, Unit.PX);
+            this.getElement().getStyle().setMarginRight(0, Unit.PX);
 
             // make the widget place holder draggable by its title:
             widgetDragController.makeDraggable(this, title);
@@ -535,11 +549,13 @@ public class DashboardPanel extends SimplePanel {
                     MenuBar menu = new MenuBar(true);
                     menu.addStyleName(CSS_DASHBOARD_PANEL_GADGET_HOLDER_MENU);
 
-                    if (holdedGadget.isMinimizable())
+                    if (holdedGadget.isMinimizable()) {
                         menu.addItem((isMinimized() ? "Expand" : "Minimize"), cmdMinimize);
+                    }
 
-                    if (holdedGadget.isMaximizable())
+                    if (holdedGadget.isMaximizable()) {
                         menu.addItem((isMaximized() ? "Restore" : "Maximize"), cmdMaximize);
+                    }
 
                     menu.addItem("Delete", cmdDelete);
 

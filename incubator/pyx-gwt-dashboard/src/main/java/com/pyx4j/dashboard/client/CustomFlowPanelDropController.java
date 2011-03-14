@@ -24,6 +24,7 @@ import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.drop.FlowPanelDropController;
 import com.allen_sauer.gwt.dnd.client.util.DOMUtil;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -57,13 +58,6 @@ public class CustomFlowPanelDropController extends FlowPanelDropController {
     @Override
     protected LocationWidgetComparator getLocationWidgetComparator() {
         return LocationWidgetComparator.BOTTOM_HALF_COMPARATOR;
-        //        return new LocationWidgetComparator() {
-        //            @Override
-        //            public boolean locationIndicatesIndexFollowingWidget(Area widgetArea, Location location) {
-        //                //                return (location.getTop() > widgetArea.getBottom());// || location.getTop() < widgetArea.getBottom());
-        //                return widgetArea.intersects(location);
-        //            }
-        //        };
     }
 
     @Override
@@ -92,9 +86,10 @@ public class CustomFlowPanelDropController extends FlowPanelDropController {
         outer.setWidget(inner);
 
         // some must have styles:
-        outer.getElement().getStyle().setProperty("margin", verticalSpacing + "px" + " 0px");
         outer.getElement().getStyle().setProperty("zoom", "1"); /* IE gain hasLayout */
-        //        outer.getElement().getStyle().setProperty("z-index", "100"); // if set not from css - assert in dnd code!?!
+        outer.getElement().getStyle().setMarginTop(verticalSpacing, Unit.PX);
+        outer.getElement().getStyle().setMarginBottom(verticalSpacing, Unit.PX);
+        outer.getElement().getStyle().setZIndex(100);
         return outer;
     }
 }
