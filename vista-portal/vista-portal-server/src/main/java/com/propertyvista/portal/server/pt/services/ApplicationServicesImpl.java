@@ -20,6 +20,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
+import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
@@ -31,6 +34,8 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
@@ -126,25 +131,90 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
         callback.onSuccess(progress);
     }
 
-    public static ApplicationProgress createApplicationProgress() {
-        ApplicationProgress progress = EntityFactory.create(ApplicationProgress.class);
-        progress.steps().add(createWizardStep(new SiteMap.Apartment(), ApplicationWizardStep.Status.latest));
-        progress.steps().add(createWizardStep(new SiteMap.Tenants(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Info(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Financial(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Pets(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Charges(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Summary(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Payment(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Completion(), ApplicationWizardStep.Status.notVisited));
-        return progress;
-    }
-
-    private static ApplicationWizardStep createWizardStep(AppPlace place, ApplicationWizardStep.Status status) {
+    private static ApplicationWizardStep createWizardStep(Class<? extends AppPlace> place, ApplicationWizardStep.Status status) {
         ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
-        ws.placeToken().setValue(AppPlaceInfo.getPlaceId(place.getClass()));
+        ws.placeToken().setValue(AppPlaceInfo.getPlaceId(place));
         ws.status().setValue(status);
         return ws;
     }
 
+    public static ApplicationProgress createApplicationProgress() {
+        ApplicationProgress progress = EntityFactory.create(ApplicationProgress.class);
+        progress.steps().add(createWizardStep(SiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
+        progress.steps().add(createWizardStep(SiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(SiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(SiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(SiteMap.Pets.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(SiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(SiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(SiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(SiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
+        return progress;
+    }
+
+    private static ApplicationWizardStep findWizardStep(ApplicationProgress progress, Class<? extends AppPlace> place) {
+        for (ApplicationWizardStep step : progress.steps()) {
+            if (step.placeToken().getValue().equals(AppPlaceInfo.getPlaceId(place))) {
+                return step;
+            }
+        }
+        throw new Error("Step '" + place.getName() + "' not found");
+    }
+
+    //TODO move this to IList
+    private static PotentialTenantInfo findTenant(PotentialTenantList tenantsNew, PotentialTenantInfo tenantOrig) {
+        for (PotentialTenantInfo tenant : tenantsNew.tenants()) {
+            if (tenant.equals(tenantOrig)) {
+                return tenant;
+            }
+        }
+        return null;
+    }
+
+    public static void syncroizeApplicationProgress(PotentialTenantList tenantsOrig, PotentialTenantList tenantsNew) {
+        EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
+        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), tenantsNew.application()));
+        ApplicationProgress progress = secureRetrieve(applicationProgressCriteria);
+
+        ApplicationWizardStep infoStep = findWizardStep(progress, SiteMap.Info.class);
+        ApplicationWizardSubstep[] infoSubSteps = infoStep.substeps().toArray(new ApplicationWizardSubstep[infoStep.substeps().size()]);
+
+        ApplicationWizardStep financialStep = findWizardStep(progress, SiteMap.Financial.class);
+        ApplicationWizardSubstep[] financialSubSteps = financialStep.substeps().toArray(new ApplicationWizardSubstep[financialStep.substeps().size()]);
+
+        infoStep.substeps().clear();
+        financialStep.substeps().clear();
+        for (PotentialTenantInfo tenant : tenantsNew.tenants()) {
+            // TODO if not 18y Old continue;
+            infoStep.substeps().add(merge(tenant, findTenant(tenantsOrig, tenant), infoSubSteps));
+            financialStep.substeps().add(merge(tenant, findTenant(tenantsOrig, tenant), financialSubSteps));
+        }
+        PersistenceServicesFactory.getPersistenceService().merge(infoStep);
+        PersistenceServicesFactory.getPersistenceService().merge(financialStep);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static ApplicationWizardSubstep merge(PotentialTenantInfo tenantNew, PotentialTenantInfo tenantOrig, ApplicationWizardSubstep[] origSubSteps) {
+
+        ApplicationWizardSubstep step = EntityFactory.create(ApplicationWizardSubstep.class);
+        step.placeArgument().setValue(tenantNew.getPrimaryKey());
+        step.name().setValue(EntityFromatUtils.nvl_concat(" ", tenantNew.firstName(), tenantNew.middleName(), tenantNew.lastName()));
+        step.status().setValue(ApplicationWizardStep.Status.notVisited);
+
+        // find original
+        for (ApplicationWizardSubstep origStep : origSubSteps) {
+            if (origStep.placeArgument().getValue().equals(tenantNew.getPrimaryKey())) {
+                step.id().set(origStep.id());
+                step.status().set(origStep.status());
+
+                // see if something changed between tenantNew and tenantOrig
+                if ((tenantOrig != null) && (step.status().getValue() == ApplicationWizardStep.Status.complete)
+                        && !EntityGraph.memebersEquals(tenantNew, tenantOrig, tenantNew.firstName(), tenantNew.middleName(), tenantNew.lastName())) {
+                    step.status().setValue(ApplicationWizardStep.Status.invalid);
+                }
+            }
+        }
+
+        return step;
+    }
 }

@@ -49,7 +49,11 @@ public class TenantsServicesImpl extends ApplicationEntityServicesImpl implement
 
         applyApplication(tenants);
 
+        PotentialTenantList tenantsOrig = findApplicationEntity(PotentialTenantList.class);
+
         secureSave(tenants);
+
+        ApplicationServicesImpl.syncroizeApplicationProgress(tenantsOrig, tenants);
 
         // we need to load charges and re-calculate them
         log.info("Load charges and re-calculate them");
