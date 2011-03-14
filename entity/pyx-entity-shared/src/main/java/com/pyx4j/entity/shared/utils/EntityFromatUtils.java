@@ -25,7 +25,17 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public class EntityFromatUtils {
 
-    public static String nvl_concat(IPrimitive<String> value1, IPrimitive<String> value2, String sep) {
-        return CommonsStringUtils.nvl_concat(value1.getStringView(), value2.getStringView(), sep);
+    public static String nvl_concat(String sep, IPrimitive<String>... values) {
+        StringBuilder b = new StringBuilder();
+        for (IPrimitive<String> s : values) {
+            if (CommonsStringUtils.isEmpty(s.getValue())) {
+                continue;
+            }
+            if (b.length() > 0) {
+                b.append(sep);
+            }
+            b.append(s.getValue());
+        }
+        return b.toString();
     }
 }
