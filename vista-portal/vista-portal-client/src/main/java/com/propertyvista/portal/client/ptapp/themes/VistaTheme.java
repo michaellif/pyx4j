@@ -20,6 +20,7 @@ import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentUnitsTable;
 import com.propertyvista.portal.client.ptapp.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigViewImpl;
+import com.propertyvista.portal.client.ptapp.ui.SecondNavigViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 
@@ -72,7 +73,8 @@ public abstract class VistaTheme extends Theme {
         initSiteViewStyles();
         initVistaApartmentViewStyles();
         initVistaCaptionViewStyles();
-        initVistaNavigViewStyles();
+        initVistaMainNavigViewStyles();
+        initVistaSecondNavigViewStyles();
     }
 
     protected void initThemeColors() {
@@ -961,8 +963,102 @@ public abstract class VistaTheme extends Theme {
 
     }
 
-    private void initVistaNavigViewStyles() {
+    private void initVistaMainNavigViewStyles() {
         String prefix = MainNavigViewImpl.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("width", "100%");
+        style.addProperty("height", "57px");
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Holder));
+        style.addProperty("height", "57px");
+        style.addProperty("margin", "0");
+        style.addProperty("padding", "0");
+        style.addProperty("list-style", "none");
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.step().getURL() + "') no-repeat scroll 0 0 transparent");
+        style.addProperty("height", "57px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab, MainNavigViewImpl.StyleDependent.latest));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepLatest().getURL() + "') no-repeat scroll 0 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab, MainNavigViewImpl.StyleDependent.complete));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepValid().getURL() + "') no-repeat scroll 0 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab, MainNavigViewImpl.StyleDependent.invalid));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepInvalid().getURL() + "') no-repeat scroll 0 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepPointer().getURL() + "') no-repeat scroll 100% 0 transparent");
+        style.addProperty("margin-right", "-14px");
+        style.addProperty("position", "relative");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.latest));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepPointerLatest().getURL() + "') no-repeat scroll 100% 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.complete));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepPointerValid().getURL() + "') no-repeat scroll 100% 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.invalid));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepPointerInvalid().getURL() + "') no-repeat scroll 100% 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder));
+        style.addProperty("background", "transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.complete));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.check().getURL() + "') no-repeat scroll 50% 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.complete) + ":hover");
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.checkHover().getURL() + "') no-repeat scroll 50% 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.invalid));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.warning().getURL() + "') no-repeat scroll 50% 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.invalid) + ":hover");
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.warningHover().getURL() + "') no-repeat scroll 50% 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.pointer().getURL() + "') no-repeat scroll 50% 100% transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label));
+        style.addProperty("height", "57px");
+        style.addProperty("line-height", "74px");
+        style.addProperty("color", "#fff");
+        style.addProperty("font-size", "15px");
+        style.addProperty("font-style", "normal");
+        style.addProperty("text-shadow", "0 -1px 0 #333333");
+        style.addProperty("text-transform", "uppercase");
+        style.addProperty("padding-left", "29px");
+        style.addProperty("padding-right", "29px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
+        //style.addProperty("background", "#654");
+        addStyle(style);
+
+    }
+
+    private void initVistaSecondNavigViewStyles() {
+        String prefix = SecondNavigViewImpl.DEFAULT_STYLE_PREFIX;
 
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("width", "100%");

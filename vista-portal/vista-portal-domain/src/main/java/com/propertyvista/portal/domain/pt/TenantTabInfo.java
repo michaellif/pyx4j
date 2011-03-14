@@ -7,22 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-15
- * @author vlads
+ * Created on 2011-03-13
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.BusinessEqualValue;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ApplicationProgress extends IEntity, IBoundToApplication {
+public interface TenantTabInfo extends IEntity {
 
-    @Owned
-    IList<ApplicationWizardStep> steps();
-
-    @Transient
-    IList<TenantTabInfo> tenants();
+    @NotNull
+    @BusinessEqualValue
+    IPrimitive<String> fullName();
 }

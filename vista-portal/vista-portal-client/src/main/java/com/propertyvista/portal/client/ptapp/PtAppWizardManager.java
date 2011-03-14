@@ -70,7 +70,7 @@ public class PtAppWizardManager {
 
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
-                getCurrentApplication();
+                loadCurrentApplication();
             }
         });
         wizardSteps = new Vector<WizardStep>();
@@ -81,6 +81,10 @@ public class PtAppWizardManager {
 
     public List<WizardStep> getWizardSteps() {
         return wizardSteps;
+    }
+
+    public CurrentApplication getCurrentApplication() {
+        return currentApplication;
     }
 
     public static void initWizard(final SiteGinjector ginjector) {
@@ -140,13 +144,12 @@ public class PtAppWizardManager {
             public void onSuccess(Boolean result) {
                 ginjector.getPlaceHistoryHandler().handleCurrentHistory();
                 if (!result) {
-                    PtAppSite.instance().showMessageDialog(i18n.tr("We can't find that Building or avalable Units"), "Error", "Back",
-                            new Command() {
-                                @Override
-                                public void execute() {
-                                    History.back();
-                                }
-                            });
+                    PtAppSite.instance().showMessageDialog(i18n.tr("We can't find that Building or avalable Units"), "Error", "Back", new Command() {
+                        @Override
+                        public void execute() {
+                            History.back();
+                        }
+                    });
                 }
             }
 
@@ -220,7 +223,7 @@ public class PtAppWizardManager {
         nextStep();
     }
 
-    private void getCurrentApplication() {
+    private void loadCurrentApplication() {
         if (ClientSecurityController.checkBehavior(VistaBehavior.POTENCIAL_TENANT)) {
 
             RPCManager.execute(PotentialTenantServices.GetCurrentApplication.class, unitSelectionCriteria, new DefaultAsyncCallback<CurrentApplication>() {

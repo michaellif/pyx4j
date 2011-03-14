@@ -22,7 +22,7 @@ public interface ApplicationWizardStep extends IEntity {
 
     public enum Status implements Serializable {
 
-        notVisited, latest, complete, invalid
+        notVisited, latest, complete, invalid, getFromchldren
 
     }
 

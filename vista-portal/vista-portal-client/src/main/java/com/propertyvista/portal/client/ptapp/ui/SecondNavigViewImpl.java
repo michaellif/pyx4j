@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -32,7 +29,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.client.ptapp.WizardStep;
+import com.propertyvista.portal.domain.pt.TenantTabInfo;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -64,27 +62,23 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
     @Override
     public void setPresenter(SecondNavigPresenter presenter) {
         this.presenter = presenter;
+    }
 
+    @Override
+    public void show() {
         clear();
+
         tabsHolder = new NavigTabList();
-
-        List<NavigTab> tabs = new ArrayList<NavigTab>();
-
-        boolean visited = false;
-        for (int i = presenter.getWizardSteps().size() - 1; i >= 0; i--) {
-//            WizardStep step = presenter.getWizardSteps().get(i);
-//            if (ApplicationWizardStep.Status.latest.equals(step.getStatus())) {
-//                visited = true;
-//            }
-//            tabs.add(0, new NavigTab(step, visited));
-        }
-
-        for (NavigTab navigTab : tabs) {
-            tabsHolder.add(navigTab);
+        for (TenantTabInfo tti : presenter.getTenantTabsInfo()) {
+            tabsHolder.add(new NavigTab(tti));
         }
 
         setWidget(tabsHolder);
+    }
 
+    @Override
+    public void hide() {
+        clear();
     }
 
     class NavigTabList extends ComplexPanel {
@@ -113,7 +107,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             return place;
         }
 
-        NavigTab(final WizardStep step, boolean visited) {
+        NavigTab(final TenantTabInfo tti) {
             super();
             setElement(DOM.createElement("li"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
@@ -129,25 +123,26 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
-            this.place = step.getPlace();
-            label = new Label(presenter.getNavigLabel(place));
+            this.place = new SiteMap.Info();
+            label = new Label(tti.fullName().getValue());
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));
             statusHolder.add(label);
 
-            switch (step.getStatus()) {
-            case invalid:
-                addStyleDependentName(StyleDependent.invalid);
-                break;
-            case complete:
-                addStyleDependentName(StyleDependent.complete);
-                break;
-            case latest:
-                addStyleDependentName(StyleDependent.latest);
-                break;
-            default:
-                break;
-            }
+            // TODO: status logic here:
+//            switch (step.getStatus()) {
+//            case invalid:
+//                addStyleDependentName(StyleDependent.invalid);
+//                break;
+//            case complete:
+//                addStyleDependentName(StyleDependent.complete);
+//                break;
+//            case latest:
+//                addStyleDependentName(StyleDependent.latest);
+//                break;
+//            default:
+//                break;
+//            }
 
             if (place.equals(presenter.getWhere())) {
                 label.addStyleDependentName(StyleDependent.current.name());
@@ -157,6 +152,8 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
 
             getElement().getStyle().setCursor(Cursor.DEFAULT);
 
+            // TODO: visited if logic here (?):
+            boolean visited = true;
             if (visited) {
                 addDomHandler(new ClickHandler() {
                     @Override

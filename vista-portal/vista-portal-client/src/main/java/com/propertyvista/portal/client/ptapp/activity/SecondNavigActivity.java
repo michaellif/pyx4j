@@ -22,9 +22,12 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
-import com.propertyvista.portal.client.ptapp.WizardStep;
 import com.propertyvista.portal.client.ptapp.ui.SecondNavigView;
+import com.propertyvista.portal.domain.pt.ApplicationProgress;
+import com.propertyvista.portal.domain.pt.TenantTabInfo;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.place.AppPlaceListing;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -45,6 +48,28 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
     }
 
     public SecondNavigActivity withPlace(Place place) {
+
+        if (place.getClass() == SiteMap.Info.class || place.getClass() == SiteMap.Financial.class) {
+
+            // fill dumb tenants value:
+
+            ApplicationProgress ap = EntityFactory.create(ApplicationProgress.class);
+            TenantTabInfo tti = EntityFactory.create(TenantTabInfo.class);
+            tti.fullName().setValue("Vasia I. Pupkin");
+            ap.tenants().add(tti);
+            tti = EntityFactory.create(TenantTabInfo.class);
+            tti.fullName().setValue("Masha Pupkina");
+            ap.tenants().add(tti);
+            tti = EntityFactory.create(TenantTabInfo.class);
+            tti.fullName().setValue("Petya V. Pupkin");
+            ap.tenants().add(tti);
+
+            PtAppWizardManager.instance().getCurrentApplication().progress.tenants().setValue(ap.tenants().getValue());
+
+            view.show();
+        } else
+            view.hide();
+
         return this;
     }
 
@@ -64,8 +89,8 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
     }
 
     @Override
-    public List<WizardStep> getWizardSteps() {
-        return PtAppWizardManager.instance().getWizardSteps();
+    public List<TenantTabInfo> getTenantTabsInfo() {
+        return PtAppWizardManager.instance().getCurrentApplication().progress.tenants();
     }
 
     @Override
