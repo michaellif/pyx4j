@@ -19,6 +19,9 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
+
 public class CrmSite extends VistaSite {
 
     private CrmGinjector ginjector;
@@ -32,6 +35,7 @@ public class CrmSite extends VistaSite {
 
         hideLoadingIndicator();
 
+        obtainAuthenticationData();
     }
 
     @Override
@@ -41,4 +45,20 @@ public class CrmSite extends VistaSite {
         //ginjector.getPlaceController().goTo(new SiteMap.GenericMessage());
     }
 
+    private void obtainAuthenticationData() {
+        ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+            }
+
+            //TODO remove this when initial application message is implemented
+            @Override
+            public void onFailure(Throwable caught) {
+                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+                super.onFailure(caught);
+            }
+        });
+    }
 }

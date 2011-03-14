@@ -21,6 +21,7 @@ import com.google.inject.Singleton;
 import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.crm.client.mvp.MvpModule;
 import com.propertyvista.crm.client.ui.ViewModule;
+import com.propertyvista.crm.rpc.SiteMap;
 
 import com.pyx4j.site.client.AppSiteGinModule;
 
@@ -42,7 +43,7 @@ public class CrmGinModule extends AppSiteGinModule {
     @Singleton
     public PlaceHistoryHandler getHistoryHandler(PlaceController placeController, EventBus eventBus) {
         PlaceHistoryHandler historyHandler = super.getHistoryHandler(placeController, eventBus);
-        //historyHandler.register(placeController, eventBus, new SiteMap.CreateAccount());
+        historyHandler.register(placeController, eventBus, new SiteMap.CreateAccount());
         return historyHandler;
     }
 
