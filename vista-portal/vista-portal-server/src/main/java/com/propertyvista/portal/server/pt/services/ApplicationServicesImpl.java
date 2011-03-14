@@ -187,6 +187,7 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
         financialStep.substeps().clear();
         for (PotentialTenantInfo tenant : tenantsNew.tenants()) {
             // if not 18y Old continue;
+            // TODO vlads By the way, I do not think that this is correct, since this is moving domain-specific logic for tenants to such a generic method as this
             if (!ChargesSharedCalculation.isEligibleForPaymentSplit(tenant)) {
                 continue;
             }
