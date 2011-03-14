@@ -41,4 +41,8 @@ public class WizardStep {
     void setStatus(ApplicationWizardStep.Status status) {
         this.step.status().setValue(status);
     }
+
+    public ApplicationWizardStep getStep() {
+        return step;
+    }
 }

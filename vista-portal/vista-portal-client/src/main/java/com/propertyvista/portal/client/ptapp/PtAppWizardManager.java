@@ -83,6 +83,7 @@ public class PtAppWizardManager {
         return wizardSteps;
     }
 
+    @Deprecated
     public CurrentApplication getCurrentApplication() {
         return currentApplication;
     }
@@ -173,66 +174,53 @@ public class PtAppWizardManager {
     }
 
     public void nextStep() {
-        WizardStep currentStep = getStep(ginjector.getPlaceController().getWhere());
-        if (currentStep != null) {
-            //TODO hasAlert ?
-            currentStep.setStatus(ApplicationWizardStep.Status.complete);
+        WizardStep currentUIStep = getStep(ginjector.getPlaceController().getWhere());
+        ApplicationWizardStep currentStep = null;
+        if (currentUIStep != null) {
+            currentStep = currentUIStep.getStep();
         }
 
-        int idx = getWizardSteps().indexOf(currentStep);
-        if (idx == -1) {
-            idx = 0;
-        } else {
-            idx++;
-        }
-        WizardStep nextStep = getWizardSteps().get(idx);
-        if (nextStep.getStatus() == ApplicationWizardStep.Status.notVisited) {
-            nextStep.setStatus(ApplicationWizardStep.Status.latest);
-        }
-
-        ginjector.getPlaceController().goTo(nextStep.getPlace());
-
-        // save progress to DB
-        saveApplicationProgress();
-    }
-
-    private void saveApplicationProgress() {
-        ((ApplicationServices) GWT.create(ApplicationServices.class)).saveApplicationProgress(new DefaultAsyncCallback<ApplicationProgress>() {
+        ((ApplicationServices) GWT.create(ApplicationServices.class)).getApplicationProgress(new DefaultAsyncCallback<ApplicationProgress>() {
             @Override
             public void onSuccess(ApplicationProgress result) {
+                navigationByApplicationProgress(result);
             }
-        }, currentApplication.progress);
+        }, currentStep);
     }
 
-    private void initApplicationProcess(CurrentApplication result) {
-        currentApplication = result;
+    private void navigationByApplicationProgress(ApplicationProgress applicationProgress) {
         wizardSteps = new Vector<WizardStep>();
-
-        for (ApplicationWizardStep step : currentApplication.progress.steps()) {
+        for (ApplicationWizardStep step : applicationProgress.steps()) {
             wizardSteps.add(new WizardStep(step));
         }
-
-        log.info("start application {}", currentApplication.application);
-
         for (WizardStep step : wizardSteps) {
             if (step.getStatus() == ApplicationWizardStep.Status.latest) {
                 ginjector.getPlaceController().goTo(step.getPlace());
                 return;
             }
         }
-        nextStep();
+        // Should not happen
+        if (wizardSteps.size() > 0) {
+            ginjector.getPlaceController().goTo(wizardSteps.get(1).getPlace());
+        }
+    }
+
+    private void initApplicationProcess(CurrentApplication result) {
+        currentApplication = result;
+        log.info("start application {}", currentApplication.application);
+        navigationByApplicationProgress(currentApplication.progress);
     }
 
     private void loadCurrentApplication() {
         if (ClientSecurityController.checkBehavior(VistaBehavior.POTENCIAL_TENANT)) {
 
-            RPCManager.execute(PotentialTenantServices.GetCurrentApplication.class, unitSelectionCriteria, new DefaultAsyncCallback<CurrentApplication>() {
-
+            ((ApplicationServices) GWT.create(ApplicationServices.class)).getCurrentApplication(new DefaultAsyncCallback<CurrentApplication>() {
                 @Override
                 public void onSuccess(CurrentApplication result) {
                     initApplicationProcess(result);
                 }
-            });
+            }, unitSelectionCriteria);
+
         } else {
             currentApplication = null;
             wizardSteps = new Vector<WizardStep>();

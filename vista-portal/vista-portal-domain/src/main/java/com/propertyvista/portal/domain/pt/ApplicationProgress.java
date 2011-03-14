@@ -24,5 +24,6 @@ public interface ApplicationProgress extends IEntity, IBoundToApplication {
     IList<ApplicationWizardStep> steps();
 
     @Transient
+    @Deprecated
     IList<TenantTabInfo> tenants();
 }

@@ -13,25 +13,138 @@
  */
 package com.propertyvista.portal.server.pt.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
+import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
+import com.propertyvista.portal.server.pt.PtUserDataAccess;
+
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class ApplicationServicesImpl extends ApplicationEntityServicesImpl implements ApplicationServices {
 
+    private final static Logger log = LoggerFactory.getLogger(ApplicationServicesImpl.class);
+
     @Override
     public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria request) {
-        // TODO Auto-generated method stub
+        // find application by user
+        EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtUserDataAccess.getCurrentUser()));
+        Application application = secureRetrieve(criteria);
 
+        CurrentApplication currentApplication = new CurrentApplication();
+
+        if (application == null) {
+            UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
+            unitSelection.selectionCriteria().set(request);
+            new ApartmentServicesImpl().loadAvailableUnits(unitSelection);
+
+            if (unitSelection.building().isNull()) {
+                log.info("Could not find building with propertyCode {}", request.propertyCode());
+                throw new UserRuntimeException("Selected building not found");
+            }
+
+            application = EntityFactory.create(Application.class);
+            application.user().set(PtUserDataAccess.getCurrentUser());
+            secureSave(application);
+
+            ApplicationProgress progress = createApplicationProgress();
+            progress.application().set(application);
+            secureSave(progress);
+
+            currentApplication.progress = progress;
+
+            unitSelection.application().set(application);
+            secureSave(unitSelection);
+
+        } else {
+            //Verify if buildingName and floorplanName are the same
+            EntityQueryCriteria<UnitSelection> unitSelectionCriteria = EntityQueryCriteria.create(UnitSelection.class);
+            unitSelectionCriteria.add(PropertyCriterion.eq(unitSelectionCriteria.proto().application(), application));
+            UnitSelection unitSelection = secureRetrieve(unitSelectionCriteria);
+
+            if ((unitSelection != null) && (request != null)) {
+                if ((!unitSelection.selectionCriteria().propertyCode().equals(request.propertyCode()))
+                        || (!unitSelection.selectionCriteria().floorplanName().equals(request.floorplanName()))) {
+                    //TODO What if they are diferent ?  We need to discard some part of application flow.
+                }
+            }
+
+            EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
+            applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), application));
+            currentApplication.progress = secureRetrieve(applicationProgressCriteria);
+        }
+        PtUserDataAccess.setCurrentUserApplication(application);
+        currentApplication.application = application;
+        log.info("Start application {}", application);
+        log.info("  progress {}", currentApplication.progress);
+        callback.onSuccess(currentApplication);
     }
 
     @Override
-    public void saveApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationProgress request) {
-        applyApplication(request);
-        secureSave(request);
-        callback.onSuccess(request);
+    public void getApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationWizardStep currentStep) {
+        EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
+        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        ApplicationProgress progress = secureRetrieve(applicationProgressCriteria);
+
+        if (currentStep != null) {
+
+            int idx = progress.steps().indexOf(currentStep);
+            if (idx == -1) {
+                idx = 0;
+            } else {
+                currentStep = progress.steps().get(idx);
+                //TODO hasAlert ?
+                currentStep.status().setValue(ApplicationWizardStep.Status.complete);
+                PersistenceServicesFactory.getPersistenceService().persist(currentStep);
+                idx++;
+                if (idx < progress.steps().size()) {
+                    ApplicationWizardStep nextStep = progress.steps().get(idx);
+                    if (nextStep.status().getValue() == ApplicationWizardStep.Status.notVisited) {
+                        nextStep.status().setValue(ApplicationWizardStep.Status.latest);
+                        PersistenceServicesFactory.getPersistenceService().persist(nextStep);
+                    } else {
+                        //TODO navigate to next invalid step
+                    }
+                }
+            }
+        }
+        callback.onSuccess(progress);
+    }
+
+    public static ApplicationProgress createApplicationProgress() {
+        ApplicationProgress progress = EntityFactory.create(ApplicationProgress.class);
+        progress.steps().add(createWizardStep(new SiteMap.Apartment(), ApplicationWizardStep.Status.latest));
+        progress.steps().add(createWizardStep(new SiteMap.Tenants(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Info(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Financial(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Pets(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Charges(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Summary(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Payment(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Completion(), ApplicationWizardStep.Status.notVisited));
+        return progress;
+    }
+
+    private static ApplicationWizardStep createWizardStep(AppPlace place, ApplicationWizardStep.Status status) {
+        ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
+        ws.placeToken().setValue(AppPlaceInfo.getPlaceId(place.getClass()));
+        ws.status().setValue(status);
+        return ws;
     }
 
 }

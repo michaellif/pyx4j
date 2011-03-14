@@ -17,24 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.ApplicationProgress;
-import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
-import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.server.pt.services.ApartmentServicesImpl;
 
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18nFactory;
-import com.pyx4j.rpc.shared.UserRuntimeException;
-import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class PotentialTenantServicesImpl extends EntityServicesImpl implements PotentialTenantServices {
 
@@ -58,83 +48,6 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
     private static void loadAvailableUnits(UnitSelection unitSelection) {
         new ApartmentServicesImpl().loadAvailableUnits(unitSelection);
-    }
-
-    public static class GetCurrentApplicationImpl implements PotentialTenantServices.GetCurrentApplication {
-
-        @Override
-        public CurrentApplication execute(UnitSelectionCriteria request) {
-
-            // find application by user
-            EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtUserDataAccess.getCurrentUser()));
-            Application application = secureRetrieve(criteria);
-
-            CurrentApplication currentApplication = new CurrentApplication();
-
-            if (application == null) {
-                log.info("THIS SHOULD BE FIXED");
-                UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
-                unitSelection.selectionCriteria().set(request);
-                loadAvailableUnits(unitSelection);
-
-                if (unitSelection.building().isNull()) {
-                    log.info("Could not find building with propertyCode {}", request.propertyCode());
-                    throw new UserRuntimeException("Selected building not found");
-                }
-
-                application = EntityFactory.create(Application.class);
-                application.user().set(PtUserDataAccess.getCurrentUser());
-                secureSave(application);
-
-                ApplicationProgress progress = EntityFactory.create(ApplicationProgress.class);
-                progress.steps().add(createWizardStep(new SiteMap.Apartment(), ApplicationWizardStep.Status.notVisited));
-                progress.steps().add(createWizardStep(new SiteMap.Tenants(), ApplicationWizardStep.Status.notVisited));
-                progress.steps().add(createWizardStep(new SiteMap.Info(), ApplicationWizardStep.Status.notVisited));
-                progress.steps().add(createWizardStep(new SiteMap.Financial(), ApplicationWizardStep.Status.notVisited));
-                progress.steps().add(createWizardStep(new SiteMap.Pets(), ApplicationWizardStep.Status.notVisited));
-                progress.steps().add(createWizardStep(new SiteMap.Charges(), ApplicationWizardStep.Status.notVisited));
-                progress.steps().add(createWizardStep(new SiteMap.Summary(), ApplicationWizardStep.Status.notVisited));
-                progress.steps().add(createWizardStep(new SiteMap.Payment(), ApplicationWizardStep.Status.notVisited));
-                progress.steps().add(createWizardStep(new SiteMap.Completion(), ApplicationWizardStep.Status.notVisited));
-                progress.application().set(application);
-                secureSave(progress);
-
-                currentApplication.progress = progress;
-
-                unitSelection.application().set(application);
-                secureSave(unitSelection);
-
-            } else {
-                //Verify if buildingName and floorplanName are the same
-                EntityQueryCriteria<UnitSelection> unitSelectionCriteria = EntityQueryCriteria.create(UnitSelection.class);
-                unitSelectionCriteria.add(PropertyCriterion.eq(unitSelectionCriteria.proto().application(), application));
-                UnitSelection unitSelection = secureRetrieve(unitSelectionCriteria);
-
-                if ((unitSelection != null) && (request != null)) {
-                    if ((!unitSelection.selectionCriteria().propertyCode().equals(request.propertyCode()))
-                            || (!unitSelection.selectionCriteria().floorplanName().equals(request.floorplanName()))) {
-                        //TODO What if they are diferent ?  We need to discard some part of application flow.
-                    }
-                }
-
-                EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
-                applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), application));
-                currentApplication.progress = secureRetrieve(applicationProgressCriteria);
-            }
-            PtUserDataAccess.setCurrentUserApplication(application);
-            currentApplication.application = application;
-            log.info("Start application {}", application);
-            log.info("  progress {}", currentApplication.progress);
-            return currentApplication;
-        }
-
-        private ApplicationWizardStep createWizardStep(AppPlace place, ApplicationWizardStep.Status status) {
-            ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
-            ws.placeToken().setValue(AppPlaceInfo.getPlaceId(place.getClass()));
-            ws.status().setValue(status);
-            return ws;
-        }
     }
 
     //    public static class RetrieveByPKImpl extends EntityServicesImpl.RetrieveByPKImpl implements PotentialTenantServices.RetrieveByPK {

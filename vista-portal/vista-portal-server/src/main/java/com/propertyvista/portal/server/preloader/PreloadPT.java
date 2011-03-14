@@ -61,9 +61,9 @@ import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.util.PrintUtil;
-import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.services.ApartmentServicesImpl;
+import com.propertyvista.portal.server.pt.services.ApplicationServicesImpl;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -72,8 +72,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class PreloadPT extends BaseVistaDataPreloader {
 
@@ -365,24 +363,8 @@ public class PreloadPT extends BaseVistaDataPreloader {
         sb.append("User: ").append(loadedApplication.user()).append("\n");
     }
 
-    private ApplicationWizardStep createWizardStep(AppPlace place, ApplicationWizardStep.Status status) {
-        ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
-        ws.placeToken().setValue(AppPlaceInfo.getPlaceId(place.getClass()));
-        ws.status().setValue(status);
-        return ws;
-    }
-
     private void createApplicationProgress() {
-        ApplicationProgress progress = EntityFactory.create(ApplicationProgress.class);
-        progress.steps().add(createWizardStep(new SiteMap.Apartment(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Tenants(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Info(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Financial(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Pets(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Charges(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Summary(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Payment(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Completion(), ApplicationWizardStep.Status.notVisited));
+        ApplicationProgress progress = ApplicationServicesImpl.createApplicationProgress();
         progress.application().set(application);
         persist(progress);
     }
