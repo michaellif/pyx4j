@@ -22,6 +22,8 @@ package com.pyx4j.commons;
 
 import java.util.Date;
 
+// GWT requires Date
+@SuppressWarnings("deprecation")
 public class TimeUtils {
 
     public static int[] MONTH_DAYS = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -29,6 +31,16 @@ public class TimeUtils {
     public static int[] MONTH_DAYS_LEAP = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
     public static String[] MONTH_NAMES_SHORT = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
+    public static boolean isOlderThen(final Date bithday, int years) {
+        if (bithday == null) {
+            return false;
+        } else {
+            Date now = new Date();
+            Date y18 = TimeUtils.createDate(now.getYear() - years, now.getMonth(), now.getDay());
+            return bithday.before(y18);
+        }
+    }
 
     public static int maxMonthDays(Date date) {
         int year = date.getYear();
@@ -115,17 +127,14 @@ public class TimeUtils {
         return (System.currentTimeMillis() - start);
     }
 
-    @SuppressWarnings("deprecation")
     public static Date createDate(int year, int month, int day) {
         return new Date(year, month, day);
     }
 
-    @SuppressWarnings("deprecation")
     public static Date dayStart(Date d) {
         return new Date(d.getYear(), d.getMonth(), d.getDate());
     }
 
-    @SuppressWarnings("deprecation")
     public static Date dayEnd(Date d) {
         return new Date(d.getYear(), d.getMonth(), d.getDate(), 23, 59, 59);
     }
@@ -134,7 +143,6 @@ public class TimeUtils {
         return isSameDay(d, new Date());
     }
 
-    @SuppressWarnings("deprecation")
     public static boolean isSameDay(Date d1, Date d2) {
         if (d1 == null || d2 == null) {
             return false;
@@ -143,12 +151,10 @@ public class TimeUtils {
         }
     }
 
-    @SuppressWarnings("deprecation")
     public static String getTimeZoneInfo() {
         return "UTC" + String.valueOf(-(new Date()).getTimezoneOffset() / 60);
     }
 
-    @SuppressWarnings("deprecation")
     public static int getTimezoneOffset() {
         return (new Date()).getTimezoneOffset();
     }
@@ -157,10 +163,7 @@ public class TimeUtils {
         return !(testDate.before(startDate) || testDate.after(endDate));
     }
 
-    @SuppressWarnings("deprecation")
-    // GWT requires Date
     public static void addDays(Date date, int days) {
         date.setDate(date.getDate() + days);
     }
-
 }
