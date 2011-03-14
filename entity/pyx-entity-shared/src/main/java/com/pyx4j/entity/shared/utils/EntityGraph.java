@@ -28,7 +28,9 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
@@ -112,5 +114,22 @@ public class EntityGraph {
             }
         }
         return false;
+    }
+
+    public static boolean memebersEquals(IEntity ent1, IEntity ent2, IPrimitive<?>... protoValues) {
+        for (IPrimitive<?> member : protoValues) {
+            if (!ent1.getMember(member.getPath()).equals(ent2.getMember(member.getPath()))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void memebersCopy(IEntity src, IEntity dst, IPrimitive<?>... protoValues) {
+        for (IPrimitive<?> member : protoValues) {
+            Path memberPath = member.getPath();
+            Object v = src.getMember(memberPath).getValue();
+            dst.setValue(memberPath, v);
+        }
     }
 }
