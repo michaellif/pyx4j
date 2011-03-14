@@ -23,6 +23,8 @@ import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.TenantChargeList;
 import com.propertyvista.portal.domain.util.DomainUtil;
@@ -104,6 +106,24 @@ public class ChargesSharedCalculation {
         calculateTotal(charges.applicationCharges());
     }
 
+    public static boolean isEligibleForPaymentSplit(PotentialTenantInfo tenant) {
+        if (tenant.status().getValue() == Status.Applicant) {
+            return true;
+        }
+
+        // examine the age, if over 18 - is eligible
+        if (TimeUtils.isOlderThen(tenant.birthDate().getValue(), 18)) {
+            return true;
+        }
+//        Date date18back = new Date();
+//        date18back.setYear(date18back.getYear() - 18); // 
+//        if (date18back.before(tenant.birthDate().getValue())) {
+//            return false;
+//        }
+
+        return false;
+    }
+
     /**
      * As % for other applicants are entered, the % for the main applicant is
      * proportionately decreased. Note the total amount includes all monthly payments
@@ -115,16 +135,14 @@ public class ChargesSharedCalculation {
         TenantCharge applicantCharge = null;
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
 
-            switch (charge.tenant().status().getValue()) {
-            case Applicant:
+            if (charge.tenant().status().getValue() == Status.Applicant) {
                 applicantCharge = charge;
-                break;
-            case CoApplicant:
+            } else if (isEligibleForPaymentSplit(charge.tenant())) {
                 double v = DomainUtil.roundMoney(total * charge.percentage().getValue() / 100d);
                 charge.charge().amount().setValue(v);
                 totalSplit += v; // there may be multiple co-applicants
                 break;
-            default:
+            } else {
                 throw new Error("Can't split charges with non applicant");
             }
         }

@@ -132,8 +132,9 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         List<PotentialTenantInfo> chargedTenants = new ArrayList<PotentialTenantInfo>();
         for (TenantCharge tenantCharge : charges.paymentSplitCharges().charges()) {
 
-            // only applicant and co-applicant can be charged
-            if (tenantCharge.tenant().status().getValue() != Status.Applicant && tenantCharge.tenant().status().getValue() != Status.CoApplicant) {
+            PotentialTenantInfo tenant = tenantCharge.tenant();
+            log.info("Checking tenant {} of age {}", tenant.relationship().getValue(), tenant.birthDate().getValue());
+            if (isEligibleForPaymentSplit(tenant)) {
                 log.info("Charges contained tenant {} who should be removed", tenantCharge.tenant());
                 dirty = true;
                 break;
@@ -189,8 +190,10 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         charges.paymentSplitCharges().charges().clear();
         for (PotentialTenantInfo tenant : tenantList.tenants()) {
             Status status = tenant.status().getValue();
-            // only applicant or co-applicant can pay
-            if (status != Status.Applicant && status != Status.CoApplicant) {
+            log.info("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.birthDate().getValue());
+
+            if (!isEligibleForPaymentSplit(tenant)) { // make sure that it is eligible
+                log.info("This tenant was not eligible");
                 continue;
             }
 
