@@ -115,7 +115,7 @@ public class ChargesSharedCalculation {
         TenantCharge applicantCharge = null;
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
 
-            switch (charge.tenant().relationship().getValue()) {
+            switch (charge.tenant().status().getValue()) {
             case Applicant:
                 applicantCharge = charge;
                 break;

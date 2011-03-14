@@ -24,7 +24,7 @@ import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.Pets;
-import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.TenantCharge;
@@ -133,8 +133,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         for (TenantCharge tenantCharge : charges.paymentSplitCharges().charges()) {
 
             // only applicant and co-applicant can be charged
-            if (tenantCharge.tenant().relationship().getValue() != Relationship.Applicant
-                    && tenantCharge.tenant().relationship().getValue() != Relationship.CoApplicant) {
+            if (tenantCharge.tenant().status().getValue() != Status.Applicant && tenantCharge.tenant().status().getValue() != Status.CoApplicant) {
                 log.info("Charges contained tenant {} who should be removed", tenantCharge.tenant());
                 dirty = true;
                 break;
@@ -189,14 +188,14 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
     private static void resetPaymentSplitCharges(Charges charges, PotentialTenantList tenantList) {
         charges.paymentSplitCharges().charges().clear();
         for (PotentialTenantInfo tenant : tenantList.tenants()) {
-            Relationship relationship = tenant.relationship().getValue();
+            Status status = tenant.status().getValue();
             // only applicant or co-applicant can pay
-            if (relationship != Relationship.Applicant && relationship != Relationship.CoApplicant) {
+            if (status != Status.Applicant && status != Status.CoApplicant) {
                 continue;
             }
 
             int percentage = 0;
-            if (relationship == Relationship.Applicant) {
+            if (status == Status.Applicant) {
                 percentage = 100;
             }
             TenantCharge tenantCharge = DomainUtil.createTenantCharge(percentage, 0);

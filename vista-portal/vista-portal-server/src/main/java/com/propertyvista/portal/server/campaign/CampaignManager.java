@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.callfire.CallFire;
-import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
@@ -40,16 +40,16 @@ public class CampaignManager {
 
     public static void fireEvent(CampaignTriger trigger, PotentialTenantList tenants) {
         for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
-            Relationship relationship = tenantInfo.relationship().getValue();
+            Status status = tenantInfo.status().getValue();
 
             switch (trigger) {
             case ApplicationCompleated:
-                if (Relationship.Applicant.equals(relationship)) {
+                if (Status.Applicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }
                 break;
             default:
-                if (Relationship.Applicant.equals(relationship) || Relationship.CoApplicant.equals(relationship)) {
+                if (Status.Applicant.equals(status) || Status.CoApplicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }
             }

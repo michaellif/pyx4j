@@ -33,15 +33,23 @@ public interface PotentialTenant extends IEntity, IPerson, IBoundToApplication {
 
         //TODO i18n
 
-        Applicant,
-
-        CoApplicant("Co-applicant"),
-
         Spouse,
 
         Son,
 
         Daughter,
+
+        Mother,
+
+        Father,
+
+        GrandMother,
+
+        GrandFather,
+
+        Uncle,
+
+        Aunt,
 
         Other;
 
@@ -61,23 +69,47 @@ public interface PotentialTenant extends IEntity, IPerson, IBoundToApplication {
         }
     }
 
-    @ToString(index = 0)
-    @NotNull
-    IPrimitive<Relationship> relationship();
+    public enum Status implements Serializable {
+
+        //TODO i18n
+
+        Applicant,
+
+        CoApplicant("Co-applicant"),
+
+        Dependant;
+
+        private final String label;
+
+        Status() {
+            this.label = name();
+        }
+
+        Status(String label) {
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
+    }
 
     @Caption(name = "Birth Date")
     @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<Date> birthDate();
 
-    IPrimitive<Double> payment();
+    @ToString(index = 0)
+    @NotNull
+    IPrimitive<Relationship> relationship();
 
-    //TODO add appropriate description
-    @Caption(name = "Dependant", description = "A person who depends on another person, organization, etc., for support, aid, or sustenance, esp financial support")
-    IPrimitive<Boolean> dependant();
+    @ToString(index = 0)
+    IPrimitive<Status> status();
 
     //TODO add appropriate description
     @Caption(name = "Take Ownership", description = "Take Ownership of application filling means ...")
     IPrimitive<Boolean> takeOwnership();
 
+    IPrimitive<Double> payment();
 }

@@ -43,6 +43,7 @@ import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
 import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
@@ -61,9 +62,7 @@ import com.propertyvista.portal.domain.ref.Province;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.util.PrintUtil;
 import com.propertyvista.portal.rpc.pt.SiteMap;
-import com.propertyvista.portal.rpc.pt.services.ApartmentServices;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
-import com.propertyvista.portal.server.pt.PotentialTenantServicesImpl;
 import com.propertyvista.portal.server.pt.services.ApartmentServicesImpl;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -215,16 +214,16 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
         // first tenant must always be an applicant
         if (index == 0) {
-            pti.relationship().setValue(Relationship.Applicant);
+            pti.status().setValue(Status.Applicant);
         } else if (index == 1) {
-            pti.relationship().setValue(Relationship.CoApplicant);
+            pti.status().setValue(Status.CoApplicant);
         } else if (index == 2) {
-            pti.relationship().setValue(Relationship.CoApplicant);
-        } else {
-            pti.relationship().setValue(RandomUtil.random(DemoData.RELATIONSHIPS));
+            pti.status().setValue(Status.CoApplicant);
         }
 
-        populatePotentialTenant(pti, pti.relationship().getValue());
+        pti.relationship().setValue(RandomUtil.random(DemoData.RELATIONSHIPS));
+
+        populatePotentialTenant(pti, pti.relationship().getValue(), pti.status().getValue());
 
         String driversLicense = "JTVMX" + RandomUtil.randomInt(10) + "VMIEK";
         pti.driversLicense().setValue(driversLicense);
@@ -267,9 +266,9 @@ public class PreloadPT extends BaseVistaDataPreloader {
         return pti;
     }
 
-    private void populatePotentialTenant(PotentialTenant pt, Relationship relationship) {
+    private void populatePotentialTenant(PotentialTenant pt, Relationship relationship, Status status) {
 
-        if (relationship == Relationship.Applicant) {
+        if (status == Status.Applicant) {
             pt.firstName().setValue("Jack");
             pt.middleName().setValue("");
             pt.lastName().setValue("London");
@@ -290,9 +289,8 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
         pt.payment().setValue(1.0d + RandomUtil.randomInt(3000));
 
-        pt.dependant().setValue(false);
         if (relationship == Relationship.Daughter || relationship == Relationship.Son) {
-            pt.dependant().setValue(true);
+            pt.status().setValue(Status.Dependant);
         }
         pt.takeOwnership().setValue(RandomUtil.randomBoolean());
     }
@@ -543,7 +541,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         for (PotentialTenantInfo tenant : tenantList.tenants()) {
 
             sb.append("\n--- TENANT ---\n");
-            sb.append(tenant.relationship().getStringView());
+            sb.append(tenant.status().getStringView());
             sb.append(", ");
 
             sb.append(tenant.firstName().getStringView());
@@ -764,7 +762,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         //            sb.append(pt.email().getStringView());
         //
         //            sb.append("\t");
-        //            sb.append(pt.relationship().getStringView());
+        //            sb.append(pt.status().getStringView());
         //
         //            sb.append("\t$").append(pt.payment().getStringView());
         //

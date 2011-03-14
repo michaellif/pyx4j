@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.validators.BirthdayDateValidator;
 import com.propertyvista.portal.client.ptapp.ui.validators.ValidationUtils;
-import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -52,7 +52,7 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
             main.setWidth("100%");
             for (EntityFolderColumnDescriptor column : columns) {
                 // Don't show dependent and takeOwnership 
-                if (column.getObject() == proto().dependant() || column.getObject() == proto().takeOwnership()) {
+                if (column.getObject() == proto().status() || column.getObject() == proto().takeOwnership()) {
                     continue;
                 }
                 CComponent<?> component = createCell(column);
@@ -76,8 +76,8 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                Relationship relationship = getValue().relationship().getValue();
-                if ((relationship == Relationship.Applicant) || (relationship == Relationship.CoApplicant)) {
+                Status status = getValue().status().getValue();
+                if ((status == Status.Applicant) || (status == Status.CoApplicant)) {
                     return ValidationUtils.isOlderThen18(value);
                 } else {
                     return true;
@@ -97,38 +97,13 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
                 public void onValueChange(ValueChangeEvent<Date> event) {
                     if (ValidationUtils.isOlderThen18(event.getValue())) {
                         get(proto().takeOwnership()).setVisible(true);
-                        if (!get(proto().dependant()).getValue())
-                            showCoApplicantRelation();
+                        showCoApplicantStatus();
                     } else {
-                        get(proto().dependant()).setValue(true);
+                        get(proto().status()).setValue(Status.Dependant);
 
                         get(proto().takeOwnership()).setValue(false);
                         get(proto().takeOwnership()).setVisible(false);
-                        hideCoApplicantRelation();
-                    }
-                }
-            });
-
-            get(proto().relationship()).addValueChangeHandler(new ValueChangeHandler<Relationship>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Relationship> event) {
-                    if (event.getValue() == Relationship.CoApplicant) {
-                        get(proto().dependant()).setValue(false);
-                        get(proto().dependant()).setVisible(false);
-                    } else {
-                        get(proto().dependant()).setVisible(true);
-                    }
-                }
-            });
-
-            get(proto().dependant()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-
-                @Override
-                public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    if (event.getValue() == true) {
-                        hideCoApplicantRelation();
-                    } else {
-                        showCoApplicantRelation();
+                        hideCoApplicantStatus();
                     }
                 }
             });
@@ -142,15 +117,13 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
         if (!isFirst()) {
             if (ValidationUtils.isOlderThen18(value.birthDate().getValue())) {
                 get(proto().takeOwnership()).setVisible(true);
-                if (!value.dependant().getValue()) {
-                    showCoApplicantRelation();
-                }
+                showCoApplicantStatus();
             } else {
-                get(proto().dependant()).setValue(true);
+                get(proto().status()).setValue(Status.Dependant);
 
                 get(proto().takeOwnership()).setValue(false);
                 get(proto().takeOwnership()).setVisible(false);
-                hideCoApplicantRelation();
+                hideCoApplicantStatus();
             }
         }
     }
@@ -159,17 +132,23 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
     @Override
     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
         CComponent<?> comp = null;
+
         if (isFirst() && proto().relationship() == column.getObject()) {
             CTextField textComp = new CTextField();
             textComp.setEditable(false);
-            textComp.setValue(Relationship.Applicant.name());
+            comp = textComp;
+        } else if (isFirst() && proto().status() == column.getObject()) {
+            CTextField textComp = new CTextField();
+            textComp.setEditable(false);
+            textComp.setValue(Status.Applicant.name());
             comp = textComp;
         } else {
             comp = super.createCell(column);
-            if (proto().relationship() == column.getObject()) {
-                Collection<Relationship> relationships = EnumSet.allOf(Relationship.class);
-                relationships.remove(Relationship.Applicant);
-                ((CComboBox) comp).setOptions(relationships);
+
+            if (proto().status() == column.getObject()) {
+                Collection<Status> status = EnumSet.allOf(Status.class);
+                status.remove(Status.Applicant);
+                ((CComboBox) comp).setOptions(status);
             }
         }
         return comp;
@@ -181,16 +160,12 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
     }
 
     @SuppressWarnings("unchecked")
-    private void hideCoApplicantRelation() {
-        ((CComboBox<Relationship>) get(proto().relationship())).removeOption(Relationship.CoApplicant);
-        if (get(proto().relationship()).isValueEmpty()) {
-            //TODO this is wrong fix me!
-            get(proto().relationship()).setValue(Relationship.Other);
-        }
+    private void hideCoApplicantStatus() {
+        ((CComboBox<Status>) get(proto().status())).removeOption(Status.CoApplicant);
     }
 
     @SuppressWarnings("unchecked")
-    private void showCoApplicantRelation() {
-        ((CComboBox<Relationship>) get(proto().relationship())).updateOption(Relationship.CoApplicant);
+    private void showCoApplicantStatus() {
+        ((CComboBox<Status>) get(proto().status())).updateOption(Status.CoApplicant);
     }
 }

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancialList;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
@@ -73,7 +73,7 @@ public class TenantsFinancialServicesImpl extends ApplicationEntityServicesImpl 
         finList.tenantFinancials().add(financial);
 
         for (PotentialTenantInfo pti : tenantList.tenants()) {
-            if (pti.relationship().getValue().equals(Relationship.Applicant)) {
+            if (pti.status().getValue().equals(Status.Applicant)) {
                 financial.tenant().set(pti);
                 break;
             }

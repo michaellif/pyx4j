@@ -23,7 +23,7 @@ import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.PaymentInfo;
-import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
@@ -97,7 +97,7 @@ public class PaymentServicesImpl extends ApplicationEntityServicesImpl implement
         EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
         for (PotentialTenantInfo tenantInfo : secureRetrieve(criteria).tenants()) {
-            if (tenantInfo.relationship().getValue().equals(Relationship.Applicant)) {
+            if (tenantInfo.status().getValue().equals(Status.Applicant)) {
                 paymentInfo.currentAddress().set(tenantInfo.currentAddress());
                 paymentInfo.currentPhone().set(tenantInfo.homePhone());
                 break;

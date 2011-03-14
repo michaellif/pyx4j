@@ -46,7 +46,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.IPerson;
 import com.propertyvista.portal.domain.pt.Pets;
-import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
@@ -297,7 +297,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             tableLayout.put("Date of Birht", "20%");
             tableLayout.put("Email", "25%");
             tableLayout.put("Relationship", "15%");
-            tableLayout.put("Dependant", "10%");
+            tableLayout.put("Status", "10%");
 
             // fill header:
             for (Entry<String, String> e : tableLayout.entrySet()) {
@@ -336,7 +336,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                             addCell(tableLayout, content, "Date of Birht", inject(proto().birthDate()).asWidget());
                             addCell(tableLayout, content, "Email", inject(proto().email()).asWidget());
                             addCell(tableLayout, content, "Relationship", inject(proto().relationship()).asWidget());
-                            addCell(tableLayout, content, "Dependant", inject(proto().dependant()).asWidget());
+                            addCell(tableLayout, content, "Status", inject(proto().status()).asWidget());
                             upperLevelElementElignment(content);
                             return content;
                         }
@@ -477,7 +477,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             return false;
         }
         for (PotentialTenantInfo pti : getValue().tenants().tenants()) {
-            if (pti.relationship().getValue() == Relationship.Applicant) {
+            if (pti.status().getValue() == Status.Applicant) {
                 return isCombinationMatch(signature, pti.firstName(), pti.lastName(), pti.middleName());
             }
         }
