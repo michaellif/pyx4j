@@ -1076,12 +1076,13 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Tab));
-        style.addProperty("height", "47px");
+        style.addProperty("height", "46px");
         style.addProperty("margin", "0 2px");
         style.addProperty("background", "url('" + SiteImages.INSTANCE.step2().getURL() + "') no-repeat scroll 0 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Tab, SecondNavigViewImpl.StyleDependent.current));
+        style.addProperty("height", "47px");
         style.addProperty("background", "#F7F7F7"); // should be body colour!..
         addStyle(style);
 
