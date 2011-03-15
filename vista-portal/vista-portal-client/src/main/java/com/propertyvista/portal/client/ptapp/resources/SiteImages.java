@@ -93,6 +93,12 @@ public interface SiteImages extends ClientBundle {
     @Source("user_message_info.png")
     ImageResource userMessageInfo();
 
+    @Source("info.png")
+    ImageResource info();
+
+    @Source("info_orange.png")
+    ImageResource infoOrange();
+
     @Source("pointer_menu.png")
     ImageResource pointer();
 

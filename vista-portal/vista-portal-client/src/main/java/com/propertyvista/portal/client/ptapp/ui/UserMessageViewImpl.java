@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -37,7 +38,8 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
         holders = new HashMap<UserMessageType, Holder>();
 
         for (UserMessageType type : UserMessageType.values()) {
-            Holder holder = new Holder();
+
+            Holder holder = new Holder(type);
             holders.put(type, holder);
             add(holder);
         }
@@ -82,21 +84,50 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
 
         private final Image image;
 
-        Holder() {
+        private final String colour;
+
+        Holder(UserMessageType type) {
             setWidth("100%");
             getElement().getStyle().setMarginTop(15, Unit.PX);
             getElement().getStyle().setMarginBottom(15, Unit.PX);
 
-            image = new Image(SiteImages.INSTANCE.userMessageInfo());
+            switch (type) {
+            case INFO:
+                colour = "#BBB";
+                image = new Image(SiteImages.INSTANCE.info());
+                break;
+
+            case FAILURE:
+            case WARN:
+                colour = "#FF820D";
+                image = new Image(SiteImages.INSTANCE.infoOrange());
+                break;
+
+            case ERROR:
+                colour = "red";
+                image = new Image(SiteImages.INSTANCE.infoOrange());
+                break;
+
+            default:
+                colour = "inherit";
+                image = new Image(SiteImages.INSTANCE.userMessageInfo());
+            }
+
+            HTML colourSide = new HTML("&nbsp;&nbsp;&nbsp;");
+            colourSide.getElement().getStyle().setBackgroundColor(colour);
+            colourSide.getElement().getStyle().setHeight(100, Unit.PCT);
+            add(colourSide);
+            setCellHeight(colourSide, "100%");
+
+            add(new HTML("&nbsp;&nbsp;&nbsp;"));
             add(image);
-            setCellVerticalAlignment(image, HorizontalPanel.ALIGN_MIDDLE);
 
             html = new HTML();
+            html.getElement().getStyle().setColor(colour);
             html.getElement().getStyle().setPaddingLeft(15, Unit.PX);
             add(html);
             setCellVerticalAlignment(html, HorizontalPanel.ALIGN_MIDDLE);
             setCellWidth(html, "100%");
-
         }
 
         public void setHTML(String string) {
