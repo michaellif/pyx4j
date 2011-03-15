@@ -54,6 +54,7 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
+@Deprecated
 public class ActivationServicesImpl implements ActivationServices {
 
     private final static Logger log = LoggerFactory.getLogger(ActivationServicesImpl.class);
@@ -69,6 +70,7 @@ public class ActivationServicesImpl implements ActivationServices {
         }
     }
 
+    @Deprecated
     public static class CreateAccountImpl implements ActivationServices.CreateAccount {
 
         @Override
@@ -117,6 +119,7 @@ public class ActivationServicesImpl implements ActivationServices {
 
     }
 
+    @Deprecated
     public static class PasswordReminderImpl implements ActivationServices.PasswordReminder {
 
         @Override
@@ -160,6 +163,7 @@ public class ActivationServicesImpl implements ActivationServices {
         }
     }
 
+    @Deprecated
     public static class PasswordResetImpl implements ActivationServices.PasswordReset {
 
         @Override
