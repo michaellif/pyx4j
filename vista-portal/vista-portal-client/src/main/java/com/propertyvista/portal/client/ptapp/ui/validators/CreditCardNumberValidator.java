@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ptapp.ui.validators;
 
 import org.xnap.commons.i18n.I18n;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18nFactory;
@@ -25,7 +26,7 @@ public class CreditCardNumberValidator implements EditableValueValidator<String>
 
     @Override
     public boolean isValid(CEditableComponent<String, ?> component, String value) {
-        if (value != null) {
+        if (CommonsStringUtils.isStringSet(value)) {
             return value.trim().matches("^\\d{4}[ ]?\\d{4}[ ]?\\d{4}[ ]?\\d{4}$") && ValidationUtils.isLuhnValid(value.trim().replaceAll(" ", ""));
         } else {
             return true;
