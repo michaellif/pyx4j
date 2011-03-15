@@ -126,7 +126,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             this.place = new SiteMap.Info();
             label = new Label(tti.fullName().getValue());
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
-            label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));
+            label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.SecondNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));
             statusHolder.add(label);
 
             // TODO: status logic here:
@@ -144,12 +144,13 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
 //                break;
 //            }
 
-            if (place.equals(presenter.getWhere())) {
+            if (tti.fullName().getValue().contains("Vasia")) {
+//            if (place.equals(presenter.getWhere())) {
+                this.addStyleDependentName(StyleDependent.current.name());
                 label.addStyleDependentName(StyleDependent.current.name());
             }
 
             getElement().getStyle().setFontWeight(FontWeight.BOLD);
-
             getElement().getStyle().setCursor(Cursor.DEFAULT);
 
             // TODO: visited if logic here (?):

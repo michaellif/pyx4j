@@ -19,6 +19,8 @@ public enum VistaFormsDebugId implements IDebugId {
 
     MainNavigation_Prefix,
 
+    SecondNavigation_Prefix,
+
     Available_Units_Change,
 
     Available_Units_ViewPlan;

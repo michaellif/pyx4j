@@ -122,4 +122,8 @@ public interface SiteImages extends ClientBundle {
 
     @Source("home.png")
     ImageResource floorplan();
+
+    @Source("step2.png")
+    ImageResource step2();
+
 }
