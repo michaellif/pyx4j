@@ -17,6 +17,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -24,12 +25,11 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType;
-import com.propertyvista.portal.rpc.pt.ActivationServices;
 import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
+import com.propertyvista.portal.rpc.pt.services.ActivationServices;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.client.RPCManager;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class ChangePasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
@@ -65,15 +65,16 @@ public class ChangePasswordActivity extends AbstractActivity implements NewPassw
     @Override
     public void passwordReset(PasswordChangeRequest request) {
         request.token().setValue(token);
-        AsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
+        AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
+
             @Override
-            public void onSuccess(VoidSerializable result) {
-                //TODO
+            public void onSuccess(AuthenticationResponse result) {
+                // TODO Auto-generated method stub
+
             }
         };
 
-        RPCManager.execute(ActivationServices.PasswordChange.class, request, callback);
-
+        ((ActivationServices) GWT.create(ActivationServices.class)).passwordReset(callback, request);
     }
 
     @Override

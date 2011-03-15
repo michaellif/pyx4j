@@ -14,19 +14,18 @@
 package com.propertyvista.portal.client.ptapp.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.PtAppSite;
 import com.propertyvista.portal.client.ptapp.ui.RetrievePasswordView;
-import com.propertyvista.portal.rpc.pt.ActivationServices;
 import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
+import com.propertyvista.portal.rpc.pt.services.ActivationServices;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -60,6 +59,6 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
                 PtAppSite.instance().showMessageDialog("Please check your email", "", null, null);
             }
         };
-        RPCManager.execute(ActivationServices.PasswordReminder.class, request, callback);
+        ((ActivationServices) GWT.create(ActivationServices.class)).passwordReminder(callback, request);
     }
 }
