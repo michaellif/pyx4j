@@ -25,7 +25,11 @@ public class CreditCardNumberValidator implements EditableValueValidator<String>
 
     @Override
     public boolean isValid(CEditableComponent<String, ?> component, String value) {
-        return value.trim().matches("^\\d{4}[ ]?\\d{4}[ ]?\\d{4}[ ]?\\d{4}$") && ValidationUtils.isLuhnValid(value.trim().replaceAll(" ", ""));
+        if (value != null) {
+            return value.trim().matches("^\\d{4}[ ]?\\d{4}[ ]?\\d{4}[ ]?\\d{4}$") && ValidationUtils.isLuhnValid(value.trim().replaceAll(" ", ""));
+        } else {
+            return true;
+        }
     }
 
     @Override
