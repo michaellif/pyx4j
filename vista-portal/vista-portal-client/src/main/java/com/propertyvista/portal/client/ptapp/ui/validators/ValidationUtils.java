@@ -36,13 +36,5 @@ public class ValidationUtils {
 
     public static boolean isOlderThen18(final Date bithday) {
         return TimeUtils.isOlderThen(bithday, 18);
-//        if (bithday == null) {
-//            return false;
-//        } else {
-//            Date now = new Date();
-//            @SuppressWarnings("deprecation")
-//            Date y18 = TimeUtils.createDate(now.getYear() - 18, now.getMonth(), now.getDay());
-//            return bithday.before(y18);
-//        }
     }
 }
