@@ -414,7 +414,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
             @Override
             public FolderItemDecorator createFolderItemDecorator() {
-                return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove contact"), !isFirst());
+                return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove contact"), !isFirst());
             }
         };
     }
