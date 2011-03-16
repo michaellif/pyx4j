@@ -14,30 +14,27 @@
 package com.propertyvista.portal.client.ptapp.activity;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.SummaryView;
 import com.propertyvista.portal.client.ptapp.ui.SummaryViewPresenter;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.rpc.pt.services.SummaryServices;
 
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class SummaryActivity extends WizardStepActivity<Summary, SummaryViewPresenter> implements SummaryViewPresenter {
 
-    private final PlaceController placeController;
-
     @Inject
-    public SummaryActivity(SummaryView view, PlaceController placeController) {
+    public SummaryActivity(SummaryView view) {
         super(view, Summary.class, (SummaryServices) GWT.create(SummaryServices.class));
 
-        this.placeController = placeController;
         view.setPresenter(this);
     }
 
     @Override
     public void goToPlace(AppPlace place) {
-        placeController.goTo(place);
+        AppSite.instance().getPlaceController().goTo(place);
     }
 
 }

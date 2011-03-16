@@ -25,7 +25,7 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.client.ptapp.ui.StaticContentView;
 
-import com.pyx4j.site.client.place.AppPlaceListing;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
@@ -35,19 +35,16 @@ public class StaticContentActivity extends AbstractActivity implements StaticCon
 
     private final StaticContentView view;
 
-    private final AppPlaceListing appPlaceListing;
-
     private String content;
 
     @Inject
-    public StaticContentActivity(StaticContentView view, AppPlaceListing appPlaceListing) {
+    public StaticContentActivity(StaticContentView view) {
         this.view = view;
-        this.appPlaceListing = appPlaceListing;
         view.setPresenter(this);
     }
 
     public StaticContentActivity withPlace(AppPlace place) {
-        AppPlaceInfo info = appPlaceListing.getPlaceInfo(place);
+        AppPlaceInfo info = AppSite.instance().getHistoryMapper().getPlaceInfo(place);
         String resource = info.getResource();
         if (info.getResource() != null) {
             ResourcePrototype prototype = SiteResources.INSTANCE.getResource(resource);

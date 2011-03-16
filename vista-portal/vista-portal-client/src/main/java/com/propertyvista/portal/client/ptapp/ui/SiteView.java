@@ -13,18 +13,17 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.mvp.ActionsActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.BottomActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.CaptionActivityMapper;
-import com.propertyvista.portal.client.ptapp.mvp.MessageActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.ContentActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.Left1ActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.Left2ActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.LogoActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.MainNavigActivityMapper;
+import com.propertyvista.portal.client.ptapp.mvp.MessageActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.Right1ActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.Right2ActivityMapper;
 import com.propertyvista.portal.client.ptapp.mvp.SecondNavigActivityMapper;
@@ -60,13 +59,10 @@ public class SiteView extends AppSiteView {
 
     BottomActivityMapper bottomActivityMapper,
 
-    EventBus eventBus,
-
     Theme theme) {
 
         super(logoActivityMapper, actionsActivityMapper, mainNavigActivityMapper, captionActivityMapper, secondNavigActivityMapper, messageActivityMapper,
-                contentActivityMapper, left1ActivityMapper, left2ActivityMapper, right1ActivityMapper, right2ActivityMapper, bottomActivityMapper, eventBus,
-                theme);
+                contentActivityMapper, left1ActivityMapper, left2ActivityMapper, right1ActivityMapper, right2ActivityMapper, bottomActivityMapper, theme);
 
     }
 

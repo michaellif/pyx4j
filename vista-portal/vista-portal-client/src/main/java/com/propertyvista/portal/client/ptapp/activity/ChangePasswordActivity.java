@@ -38,17 +38,12 @@ public class ChangePasswordActivity extends AbstractActivity implements NewPassw
 
     private final NewPasswordView view;
 
-    private final PlaceController placeController;
-
-    private ConversationType conversationType;
-
     private String token;
 
     @Inject
-    public ChangePasswordActivity(NewPasswordView view, PlaceController placeController) {
+    public ChangePasswordActivity(NewPasswordView view) {
         this.view = view;
         view.setConversationType(ConversationType.CHANGE);
-        this.placeController = placeController;
         view.setPresenter(this);
     }
 
@@ -83,7 +78,6 @@ public class ChangePasswordActivity extends AbstractActivity implements NewPassw
     }
 
     public void setConversationType(ConversationType type) {
-        conversationType = type;
         view.setConversationType(type);
     }
 }

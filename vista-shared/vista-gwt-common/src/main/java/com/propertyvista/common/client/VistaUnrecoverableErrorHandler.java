@@ -29,17 +29,15 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {
 
     private static I18n i18n = I18nFactory.getI18n(VistaUnrecoverableErrorHandler.class);
 
-    private final EventBus eventBus;
-
     @Inject
-    public VistaUnrecoverableErrorHandler(EventBus eventBus) {
-        this.eventBus = eventBus;
+    public VistaUnrecoverableErrorHandler() {
         UncaughtHandler.setUnrecoverableErrorHandler(this);
     }
 
@@ -127,7 +125,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     }
 
     protected void showMessage(String userMessage, String debugMessage, UserMessageType messageType) {
-        eventBus.fireEvent(new UserMessageEvent(userMessage, debugMessage, messageType));
+        AppSite.instance().getEventBus().fireEvent(new UserMessageEvent(userMessage, debugMessage, messageType));
 
     }
 

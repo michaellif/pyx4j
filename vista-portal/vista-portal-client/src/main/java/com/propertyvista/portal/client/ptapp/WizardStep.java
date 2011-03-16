@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ptapp;
 
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 
-import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class WizardStep {
@@ -27,7 +27,7 @@ public class WizardStep {
     WizardStep(ApplicationWizardStep step) {
         super();
         this.step = step;
-        this.place = AppPlaceHistoryMapper.getPlaceImpl(step.placeToken().getValue());
+        this.place = AppSite.instance().getHistoryMapper().getPlace(step.placeToken().getValue());
     }
 
     public AppPlace getPlace() {

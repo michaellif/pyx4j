@@ -32,7 +32,7 @@ public class CrmSite extends VistaSite {
         super.onSiteLoad();
 
         ginjector = GWT.create(CrmGinjector.class);
-        getHistoryHandler().register(ginjector.getPlaceController(), ginjector.getEventBus(), new SiteMap.CreateAccount());
+        getHistoryHandler().register(getPlaceController(), getEventBus(), new SiteMap.CreateAccount());
 
         RootPanel.get().add(ginjector.getSiteView());
 

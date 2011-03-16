@@ -23,12 +23,12 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.propertyvista.common.client.events.UserMessageEvent;
-import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.site.client.AppSite;
 
 public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter<E>> extends FlowPanel implements WizardStepView<E, T> {
 
@@ -49,7 +49,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
             @Override
             public void onClick(ClickEvent event) {
-                PtAppWizardManager.getEventBus().fireEvent(new UserMessageEvent(null, null, null));
+                AppSite.instance().getEventBus().fireEvent(new UserMessageEvent(null, null, null));
                 form.setVisited(true);
                 if (!form.isValid()) {
                     scrollToTop();

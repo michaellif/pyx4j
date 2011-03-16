@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.CaptionView;
 
-import com.pyx4j.site.client.place.AppPlaceListing;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
@@ -27,16 +27,13 @@ public class CaptionActivity extends AbstractActivity {
 
     private final CaptionView view;
 
-    private final AppPlaceListing appPlaceListing;
-
     @Inject
-    public CaptionActivity(CaptionView view, AppPlaceListing appPlaceListing) {
+    public CaptionActivity(CaptionView view) {
         this.view = view;
-        this.appPlaceListing = appPlaceListing;
     }
 
     public CaptionActivity withPlace(AppPlace place) {
-        AppPlaceInfo info = appPlaceListing.getPlaceInfo(place);
+        AppPlaceInfo info = AppSite.instance().getHistoryMapper().getPlaceInfo(place);
         if (info != null) {
             view.setCaption(info.getCaption());
         }

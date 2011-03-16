@@ -16,7 +16,6 @@ package com.propertyvista.portal.client.ptapp.activity;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
@@ -33,12 +32,9 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
 
     private final RetrievePasswordView view;
 
-    private final PlaceController placeController;
-
     @Inject
-    public RetrievePasswordActivity(RetrievePasswordView view, PlaceController placeController) {
+    public RetrievePasswordActivity(RetrievePasswordView view) {
         this.view = view;
-        this.placeController = placeController;
         view.setPresenter(this);
     }
 

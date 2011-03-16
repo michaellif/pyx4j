@@ -32,20 +32,20 @@ public class PtAppSite extends VistaSite {
         super.onSiteLoad();
 
         ginjector = GWT.create(SiteGinjector.class);
-        getHistoryHandler().register(ginjector.getPlaceController(), ginjector.getEventBus(), new SiteMap.CreateAccount());
+        getHistoryHandler().register(getPlaceController(), getEventBus(), new SiteMap.CreateAccount());
 
         RootPanel.get().add(ginjector.getSiteView());
 
         hideLoadingIndicator();
 
-        PtAppWizardManager.initWizard(ginjector);
+        PtAppWizardManager.initWizard();
 
     }
 
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
         setMessage(new Message(message, title, buttonText, command));
-        ginjector.getPlaceController().goTo(new SiteMap.GenericMessage());
+        getPlaceController().goTo(new SiteMap.GenericMessage());
     }
 
 }

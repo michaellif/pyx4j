@@ -13,15 +13,9 @@
  */
 package com.propertyvista.crm.client;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
 import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.crm.client.mvp.MvpModule;
 import com.propertyvista.crm.client.ui.ViewModule;
-import com.propertyvista.crm.rpc.SiteMap;
 
 import com.pyx4j.site.client.AppSiteGinModule;
 

@@ -35,6 +35,7 @@ import com.propertyvista.crm.client.mvp.Right1ActivityMapper;
 import com.propertyvista.crm.client.mvp.Right2ActivityMapper;
 import com.propertyvista.crm.client.mvp.SecondNavigActivityMapper;
 
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.StyleManger;
@@ -74,9 +75,9 @@ public class CrmView extends FlowPanel {
 
     BottomActivityMapper bottomActivityMapper,
 
-    EventBus eventBus,
-
     Theme theme) {
+
+        EventBus eventBus = AppSite.instance().getEventBus();
 
         StyleManger.installTheme(theme);
 

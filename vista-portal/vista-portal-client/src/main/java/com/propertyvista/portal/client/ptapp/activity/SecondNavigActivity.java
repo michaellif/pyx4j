@@ -18,32 +18,23 @@ import java.util.List;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.SecondNavigView;
-import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.TenantTabInfo;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.place.AppPlaceListing;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class SecondNavigActivity extends AbstractActivity implements SecondNavigView.SecondNavigPresenter {
 
     private final SecondNavigView view;
 
-    private final PlaceController placeController;
-
-    private final AppPlaceListing appPlaceListing;
-
     @Inject
-    public SecondNavigActivity(SecondNavigView view, PlaceController placeController, AppPlaceListing appPlaceListing) {
+    public SecondNavigActivity(SecondNavigView view) {
         this.view = view;
-        this.placeController = placeController;
-        this.appPlaceListing = appPlaceListing;
         view.setPresenter(this);
     }
 
@@ -51,22 +42,22 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
 
         if (place.getClass() == SiteMap.Info.class || place.getClass() == SiteMap.Financial.class) {
 
-            // fill dumb tenants value:
+            //            // fill dumb tenants value:
+            //
+            //            ApplicationProgress ap = EntityFactory.create(ApplicationProgress.class);
+            //            TenantTabInfo tti = EntityFactory.create(TenantTabInfo.class);
+            //            tti.fullName().setValue("Vasia I. Pupkin");
+            //            ap.tenants().add(tti);
+            //            tti = EntityFactory.create(TenantTabInfo.class);
+            //            tti.fullName().setValue("Masha Pupkina");
+            //            ap.tenants().add(tti);
+            //            tti = EntityFactory.create(TenantTabInfo.class);
+            //            tti.fullName().setValue("Petya V. Pupkin");
+            //            ap.tenants().add(tti);
+            //
+            //            PtAppWizardManager.instance().getCurrentApplication().progress.tenants().setValue(ap.tenants().getValue());
 
-            ApplicationProgress ap = EntityFactory.create(ApplicationProgress.class);
-            TenantTabInfo tti = EntityFactory.create(TenantTabInfo.class);
-            tti.fullName().setValue("Vasia I. Pupkin");
-            ap.tenants().add(tti);
-            tti = EntityFactory.create(TenantTabInfo.class);
-            tti.fullName().setValue("Masha Pupkina");
-            ap.tenants().add(tti);
-            tti = EntityFactory.create(TenantTabInfo.class);
-            tti.fullName().setValue("Petya V. Pupkin");
-            ap.tenants().add(tti);
-
-            PtAppWizardManager.instance().getCurrentApplication().progress.tenants().setValue(ap.tenants().getValue());
-
-//            PtAppWizardManager.instance().get
+            //            PtAppWizardManager.instance().get
 
             view.show();
         } else
@@ -82,12 +73,12 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
 
     @Override
     public void navigTo(Place place) {
-        placeController.goTo(place);
+        AppSite.instance().getPlaceController().goTo(place);
     }
 
     @Override
     public String getNavigLabel(AppPlace place) {
-        return appPlaceListing.getPlaceInfo(place).getNavigLabel();
+        return AppSite.instance().getHistoryMapper().getPlaceInfo(place).getNavigLabel();
     }
 
     @Override
@@ -97,7 +88,7 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
 
     @Override
     public Place getWhere() {
-        return placeController.getWhere();
+        return AppSite.instance().getPlaceController().getWhere();
     }
 
 }

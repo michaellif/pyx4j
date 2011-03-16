@@ -18,29 +18,22 @@ import java.util.List;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.WizardStep;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigView;
 
-import com.pyx4j.site.client.place.AppPlaceListing;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
 
     private final MainNavigView view;
 
-    private final PlaceController placeController;
-
-    private final AppPlaceListing appPlaceListing;
-
     @Inject
-    public MainNavigActivity(MainNavigView view, PlaceController placeController, AppPlaceListing appPlaceListing) {
+    public MainNavigActivity(MainNavigView view) {
         this.view = view;
-        this.placeController = placeController;
-        this.appPlaceListing = appPlaceListing;
         view.setPresenter(this);
     }
 
@@ -55,12 +48,12 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
     @Override
     public void navigTo(Place place) {
-        placeController.goTo(place);
+        AppSite.instance().getPlaceController().goTo(place);
     }
 
     @Override
     public String getNavigLabel(AppPlace place) {
-        return appPlaceListing.getPlaceInfo(place).getNavigLabel();
+        return AppSite.instance().getHistoryMapper().getPlaceInfo(place).getNavigLabel();
     }
 
     @Override
@@ -70,7 +63,7 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
     @Override
     public Place getWhere() {
-        return placeController.getWhere();
+        return AppSite.instance().getPlaceController().getWhere();
     }
 
 }

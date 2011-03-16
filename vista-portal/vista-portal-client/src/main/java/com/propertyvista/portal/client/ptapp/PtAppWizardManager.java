@@ -47,6 +47,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.site.client.AppSite;
 
 public class PtAppWizardManager {
 
@@ -60,13 +61,10 @@ public class PtAppWizardManager {
 
     private List<WizardStep> wizardSteps;
 
-    private final SiteGinjector ginjector;
-
     private UnitSelectionCriteria unitSelectionCriteria;
 
-    private PtAppWizardManager(SiteGinjector ginjector) {
-        this.ginjector = ginjector;
-        ginjector.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+    private PtAppWizardManager() {
+        AppSite.instance().getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
 
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
@@ -88,9 +86,9 @@ public class PtAppWizardManager {
         return currentApplication;
     }
 
-    public static void initWizard(final SiteGinjector ginjector) {
+    public static void initWizard() {
         if (instance == null) {
-            instance = new PtAppWizardManager(ginjector);
+            instance = new PtAppWizardManager();
         } else {
             throw new RuntimeException("PtAppWizardManager is already initialized");
         }
@@ -174,7 +172,7 @@ public class PtAppWizardManager {
     }
 
     public void nextStep() {
-        WizardStep currentUIStep = getStep(ginjector.getPlaceController().getWhere());
+        WizardStep currentUIStep = getStep(AppSite.instance().getPlaceController().getWhere());
         ApplicationWizardStep currentStep = null;
         if (currentUIStep != null) {
             currentStep = currentUIStep.getStep();
@@ -195,13 +193,13 @@ public class PtAppWizardManager {
         }
         for (WizardStep step : wizardSteps) {
             if (step.getStatus() == ApplicationWizardStep.Status.latest) {
-                ginjector.getPlaceController().goTo(step.getPlace());
+                AppSite.instance().getPlaceController().goTo(step.getPlace());
                 return;
             }
         }
         // Should not happen
         if (wizardSteps.size() > 0) {
-            ginjector.getPlaceController().goTo(wizardSteps.get(1).getPlace());
+            AppSite.instance().getPlaceController().goTo(wizardSteps.get(1).getPlace());
         }
     }
 
@@ -224,12 +222,8 @@ public class PtAppWizardManager {
         } else {
             currentApplication = null;
             wizardSteps = new Vector<WizardStep>();
-            ginjector.getPlaceController().goTo(new SiteMap.CreateAccount());
+            AppSite.instance().getPlaceController().goTo(new SiteMap.CreateAccount());
         }
-    }
-
-    public static EventBus getEventBus() {
-        return instance().ginjector.getEventBus();
     }
 
 }

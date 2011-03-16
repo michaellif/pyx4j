@@ -15,7 +15,6 @@ package com.propertyvista.portal.client.ptapp.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
@@ -30,18 +29,16 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
 
     private final LoginView view;
 
-    private final PlaceController placeController;
-
     @Inject
-    public LoginActivity(LoginView view, PlaceController placeController) {
+    public LoginActivity(LoginView view) {
         this.view = view;
-        this.placeController = placeController;
         view.setPresenter(this);
     }
 
@@ -78,6 +75,6 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
 
     @Override
     public void gotoRetrievePassword() {
-        placeController.goTo(new SiteMap.RetrievePassword());
+        AppSite.instance().getPlaceController().goTo(new SiteMap.RetrievePassword());
     }
 }
