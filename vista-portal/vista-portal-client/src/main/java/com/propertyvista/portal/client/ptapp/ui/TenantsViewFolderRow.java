@@ -143,7 +143,8 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
 
     @Override
     public FolderItemDecorator createFolderItemDecorator() {
-        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), TenantsViewForm.i18n.tr("Remove person"), !isFirst());
+        return new TableFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), TenantsViewForm.i18n.tr("Remove person"),
+                !isFirst());
     }
 
     private void setMandatoryDependant() {

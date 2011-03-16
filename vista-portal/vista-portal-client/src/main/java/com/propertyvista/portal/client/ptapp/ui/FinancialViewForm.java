@@ -152,7 +152,8 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         }
                     };
                 } else {
-                    return new BoxFolderDecorator<TenantIncome>(SiteImages.INSTANCE.addRow(), i18n.tr("Add an income source"));
+                    return new BoxFolderDecorator<TenantIncome>(SiteImages.INSTANCE.addRow(), SiteImages.INSTANCE.addRowHover(),
+                            i18n.tr("Add an income source"));
                 }
             }
 
@@ -186,7 +187,8 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         }
                     };
                 } else {
-                    return new TableFolderDecorator<TenantAsset>(columns, SiteImages.INSTANCE.addRow(), i18n.tr("Add an asset"));
+                    return new TableFolderDecorator<TenantAsset>(columns, SiteImages.INSTANCE.addRow(), SiteImages.INSTANCE.addRowHover(),
+                            i18n.tr("Add an asset"));
                 }
             }
 
@@ -209,7 +211,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         if (isReadOnlyMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove asset"));
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), i18n.tr("Remove asset"));
                         }
                     }
 
@@ -250,7 +252,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         }
                     };
                 } else {
-                    return new BoxFolderDecorator<TenantGuarantor>(SiteImages.INSTANCE.addRow(), i18n.tr("Add guarantor"));
+                    return new BoxFolderDecorator<TenantGuarantor>(SiteImages.INSTANCE.addRow(), SiteImages.INSTANCE.addRowHover(), i18n.tr("Add guarantor"));
                 }
             }
 
@@ -289,7 +291,8 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         if (isReadOnlyMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove guarantor"));
+                            return new BoxFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(),
+                                    i18n.tr("Remove guarantor"));
                         }
                     }
 

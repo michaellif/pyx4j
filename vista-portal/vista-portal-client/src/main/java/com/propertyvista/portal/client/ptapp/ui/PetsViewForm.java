@@ -142,7 +142,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
                         }
                     };
                 } else {
-                    return new TableFolderDecorator<Pet>(columns, SiteImages.INSTANCE.addRow(), i18n.tr("Add a pet"));
+                    return new TableFolderDecorator<Pet>(columns, SiteImages.INSTANCE.addRow(), SiteImages.INSTANCE.addRowHover(), i18n.tr("Add a pet"));
                 }
 
             }
@@ -165,7 +165,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove pet"));
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), i18n.tr("Remove pet"));
                         }
                     }
 

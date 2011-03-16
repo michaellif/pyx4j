@@ -21,13 +21,19 @@ public interface SiteImages extends ClientBundle {
 
     SiteImages INSTANCE = GWT.create(SiteImages.class);
 
-    @Source("list_add.png")
+    @Source("add.png")
     ImageResource addRow();
 
-    @Source("list_remove.png")
-    ImageResource removeRow();
+    @Source("add_hover.png")
+    ImageResource addRowHover();
 
-    @Source("list_empty.png")
+    @Source("del.png")
+    ImageResource delRow();
+
+    @Source("del_hover.png")
+    ImageResource delRowHover();
+
+    @Source("empty.png")
     ImageResource hideRemoveRow();
 
     @Source("bg_body.gif")
@@ -110,6 +116,9 @@ public interface SiteImages extends ClientBundle {
 
     @Source("qv.png")
     ImageResource qv();
+
+    @Source("qv_hover.png")
+    ImageResource qvHover();
 
     @Source("payment-master.gif")
     ImageResource paymentMC();

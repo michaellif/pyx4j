@@ -104,7 +104,8 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
             @Override
             protected FolderDecorator<PotentialTenantInfo> createFolderDecorator() {
-                return new TableFolderDecorator<PotentialTenantInfo>(columns, SiteImages.INSTANCE.addRow(), i18n.tr("Add a person"));
+                return new TableFolderDecorator<PotentialTenantInfo>(columns, SiteImages.INSTANCE.addRow(), SiteImages.INSTANCE.addRowHover(),
+                        i18n.tr("Add a person"));
             }
 
             @Override

@@ -366,7 +366,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
             @Override
             protected FolderDecorator<Vehicle> createFolderDecorator() {
-                return new TableFolderDecorator<Vehicle>(columns, SiteImages.INSTANCE.addRow(), i18n.tr("Add a vehicle"));
+                return new TableFolderDecorator<Vehicle>(columns, SiteImages.INSTANCE.addRow(), SiteImages.INSTANCE.addRowHover(), i18n.tr("Add a vehicle"));
             }
 
             @Override
@@ -379,7 +379,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove vehicle"));
+                        return new TableFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), i18n.tr("Remove vehicle"));
                     }
 
                 };
@@ -395,7 +395,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
             @Override
             protected FolderDecorator<EmergencyContact> createFolderDecorator() {
-                return new BoxFolderDecorator<EmergencyContact>(SiteImages.INSTANCE.addRow(), i18n.tr("Add a contact"));
+                return new BoxFolderDecorator<EmergencyContact>(SiteImages.INSTANCE.addRow(), SiteImages.INSTANCE.addRowHover(), i18n.tr("Add a contact"));
             }
 
             @Override
@@ -430,7 +430,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
             @Override
             public FolderItemDecorator createFolderItemDecorator() {
-                return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove contact"), !isFirst());
+                return new BoxFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), i18n.tr("Remove contact"), !isFirst());
             }
         };
     }

@@ -81,7 +81,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         if (readOnlyMode) {
             return new BoxReadOnlyFolderItemDecorator(false);
         } else {
-            return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow());
+            return new BoxFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover());
         }
     }
 
