@@ -75,6 +75,6 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
 
     @Override
     public void gotoRetrievePassword() {
-        AppSite.instance().getPlaceController().goTo(new SiteMap.RetrievePassword());
+        AppSite.getPlaceController().goTo(new SiteMap.RetrievePassword());
     }
 }

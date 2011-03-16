@@ -26,7 +26,6 @@ import com.propertyvista.crm.client.resources.CrmResources;
 import com.propertyvista.crm.client.ui.StaticContentView;
 
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.place.AppPlaceListing;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
@@ -45,7 +44,7 @@ public class StaticContentActivity extends AbstractActivity implements StaticCon
     }
 
     public StaticContentActivity withPlace(AppPlace place) {
-        AppPlaceInfo info = AppSite.instance().getHistoryMapper().getPlaceInfo(place);
+        AppPlaceInfo info = AppSite.getHistoryMapper().getPlaceInfo(place);
         String resource = info.getResource();
         if (info.getResource() != null) {
             ResourcePrototype prototype = CrmResources.INSTANCE.getResource(resource);

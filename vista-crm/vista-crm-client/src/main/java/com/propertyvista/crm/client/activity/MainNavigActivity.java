@@ -47,17 +47,17 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
     @Override
     public void navigTo(Place place) {
-        AppSite.instance().getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(place);
     }
 
     @Override
     public String getNavigLabel(AppPlace place) {
-        return AppSite.instance().getHistoryMapper().getPlaceInfo(place).getNavigLabel();
+        return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
     }
 
     @Override
     public Place getWhere() {
-        return AppSite.instance().getPlaceController().getWhere();
+        return AppSite.getPlaceController().getWhere();
     }
 
     @Override

@@ -29,8 +29,6 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
     private static I18n i18n = I18nFactory.getI18n(RetrievePasswordViewImpl.class);
 
-    private Presenter presenter;
-
     private final HTML titleHtml;
 
     private final HTML messageHtml;

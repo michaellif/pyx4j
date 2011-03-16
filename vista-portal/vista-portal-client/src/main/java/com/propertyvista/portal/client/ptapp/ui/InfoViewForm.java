@@ -21,7 +21,6 @@ import java.util.Map;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -45,7 +44,6 @@ import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Vehicle;
-import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;

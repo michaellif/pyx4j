@@ -60,7 +60,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public PlaceController getPlaceController() {
-        return AppSite.instance().getPlaceController();
+        return AppSite.getPlaceController();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void login() {
-        AppSite.instance().getPlaceController().goTo(new SiteMap.Login());
+        AppSite.getPlaceController().goTo(new SiteMap.Login());
     }
 
     @Override

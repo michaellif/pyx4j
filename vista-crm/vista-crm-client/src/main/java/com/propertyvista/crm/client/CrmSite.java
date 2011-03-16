@@ -53,13 +53,13 @@ public class CrmSite extends VistaSite {
 
             @Override
             public void onSuccess(Boolean result) {
-                CrmSite.instance().getHistoryHandler().handleCurrentHistory();
+                CrmSite.getHistoryHandler().handleCurrentHistory();
             }
 
             //TODO remove this when initial application message is implemented
             @Override
             public void onFailure(Throwable caught) {
-                CrmSite.instance().getHistoryHandler().handleCurrentHistory();
+                CrmSite.getHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
             }
         });

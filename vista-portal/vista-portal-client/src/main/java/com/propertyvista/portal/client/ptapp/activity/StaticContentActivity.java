@@ -44,7 +44,7 @@ public class StaticContentActivity extends AbstractActivity implements StaticCon
     }
 
     public StaticContentActivity withPlace(AppPlace place) {
-        AppPlaceInfo info = AppSite.instance().getHistoryMapper().getPlaceInfo(place);
+        AppPlaceInfo info = AppSite.getHistoryMapper().getPlaceInfo(place);
         String resource = info.getResource();
         if (info.getResource() != null) {
             ResourcePrototype prototype = SiteResources.INSTANCE.getResource(resource);

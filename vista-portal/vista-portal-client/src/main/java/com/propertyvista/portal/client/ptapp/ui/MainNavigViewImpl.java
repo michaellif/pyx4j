@@ -130,7 +130,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
-            this.place = AppSite.instance().getHistoryMapper().getPlace(step.placeId().getValue());
+            this.place = AppSite.getHistoryMapper().getPlace(step.placeId().getValue());
             label = new Label(presenter.getNavigLabel(place));
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));
@@ -150,7 +150,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                 break;
             }
 
-            if (place.equals(presenter.getWhere())) {
+            if (AppSite.getPlaceId(place).equals(AppSite.getPlaceId(presenter.getWhere()))) {
                 label.addStyleDependentName(StyleDependent.current.name());
             }
 

@@ -56,7 +56,7 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
 
     @Override
     public void goToSignin() {
-        AppSite.instance().getPlaceController().goTo(new SiteMap.Login());
+        AppSite.getPlaceController().goTo(new SiteMap.Login());
     }
 
     @Override

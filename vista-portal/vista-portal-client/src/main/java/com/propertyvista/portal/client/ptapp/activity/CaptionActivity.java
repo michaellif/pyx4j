@@ -33,7 +33,7 @@ public class CaptionActivity extends AbstractActivity {
     }
 
     public CaptionActivity withPlace(AppPlace place) {
-        AppPlaceInfo info = AppSite.instance().getHistoryMapper().getPlaceInfo(place);
+        AppPlaceInfo info = AppSite.getHistoryMapper().getPlaceInfo(place);
         if (info != null) {
             view.setCaption(info.getCaption());
         }

@@ -21,8 +21,6 @@ public class StaticContentViewImpl extends HorizontalPanel implements StaticCont
 
     private final HTML contentHTML;
 
-    private Presenter presenter;
-
     public StaticContentViewImpl() {
 
         contentHTML = new HTML();
@@ -35,7 +33,6 @@ public class StaticContentViewImpl extends HorizontalPanel implements StaticCont
 
     @Override
     public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
     }
 
     @Override

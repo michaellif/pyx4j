@@ -77,7 +77,7 @@ public class CrmView extends FlowPanel {
 
     Theme theme) {
 
-        EventBus eventBus = AppSite.instance().getEventBus();
+        EventBus eventBus = AppSite.getEventBus();
 
         StyleManger.installTheme(theme);
 

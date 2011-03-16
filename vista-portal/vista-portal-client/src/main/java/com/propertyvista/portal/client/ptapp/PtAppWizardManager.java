@@ -64,7 +64,7 @@ public class PtAppWizardManager {
     private UnitSelectionCriteria unitSelectionCriteria;
 
     private PtAppWizardManager() {
-        AppSite.instance().getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+        AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
 
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
@@ -102,7 +102,7 @@ public class PtAppWizardManager {
             //TODO remove this when initial application message is implemented
             @Override
             public void onFailure(Throwable caught) {
-                PtAppSite.instance().getHistoryHandler().handleCurrentHistory();
+                PtAppSite.getHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
             }
         });
@@ -131,7 +131,7 @@ public class PtAppWizardManager {
 
             @Override
             public void onSuccess(Boolean result) {
-                PtAppSite.instance().getHistoryHandler().handleCurrentHistory();
+                PtAppSite.getHistoryHandler().handleCurrentHistory();
                 if (!result) {
                     PtAppSite.instance().showMessageDialog(i18n.tr("We can't find that Building or avalable Units"), "Error", "Back", new Command() {
                         @Override
@@ -145,7 +145,7 @@ public class PtAppWizardManager {
             //TODO remove this when initial application message is implemented
             @Override
             public void onFailure(Throwable caught) {
-                PtAppSite.instance().getHistoryHandler().handleCurrentHistory();
+                PtAppSite.getHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
             }
         });
@@ -157,7 +157,7 @@ public class PtAppWizardManager {
     }
 
     private ApplicationWizardStep getStep(Place current) {
-        String placeId = AppSite.instance().getHistoryMapper().getPlaceId(current);
+        String placeId = AppSite.getPlaceId(current);
         if (placeId == null) {
             return null;
         }
@@ -170,7 +170,7 @@ public class PtAppWizardManager {
     }
 
     public void nextStep() {
-        ApplicationWizardStep currentStep = getStep(AppSite.instance().getPlaceController().getWhere());
+        ApplicationWizardStep currentStep = getStep(AppSite.getPlaceController().getWhere());
         ((ApplicationServices) GWT.create(ApplicationServices.class)).getApplicationProgress(new DefaultAsyncCallback<ApplicationProgress>() {
             @Override
             public void onSuccess(ApplicationProgress result) {
@@ -183,7 +183,7 @@ public class PtAppWizardManager {
     private void navigationByApplicationProgress() {
         for (ApplicationWizardStep step : applicationProgress.steps()) {
             if (ApplicationWizardStep.Status.latest.equals(step.status().getValue())) {
-                AppPlace place = AppSite.instance().getHistoryMapper().getPlace(step.placeId().getValue());
+                AppPlace place = AppSite.getHistoryMapper().getPlace(step.placeId().getValue());
                 if (step.substeps().size() > 0) {
                     for (ApplicationWizardSubstep substep : step.substeps()) {
                         if (ApplicationWizardStep.Status.latest.equals(substep.status().getValue())) {
@@ -193,7 +193,7 @@ public class PtAppWizardManager {
                         }
                     }
                 }
-                AppSite.instance().getPlaceController().goTo(place);
+                AppSite.getPlaceController().goTo(place);
                 return;
             }
         }
@@ -218,7 +218,7 @@ public class PtAppWizardManager {
 
         } else {
             applicationProgress = null;
-            AppSite.instance().getPlaceController().goTo(new SiteMap.CreateAccount());
+            AppSite.getPlaceController().goTo(new SiteMap.CreateAccount());
         }
     }
 

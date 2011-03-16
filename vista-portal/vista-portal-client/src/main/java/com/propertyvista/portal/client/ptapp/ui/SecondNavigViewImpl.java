@@ -127,7 +127,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
-            this.place = AppSite.instance().getHistoryMapper().getPlace(token);
+            this.place = AppSite.getHistoryMapper().getPlace(token);
 
             HashMap<String, String> args = new HashMap<String, String>();
             args.put(SecondNavigActivity.STEP_ARG_NAME, substep.placeArgument().getStringView());

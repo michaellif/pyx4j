@@ -35,7 +35,6 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -79,7 +78,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
             descriptionLabel.setWidth("150px");
             descriptionLabel.getElement().getStyle().setPaddingRight(15, Unit.PX);
             description = new TextBox();
-//            description.setName(ServletParams.ORDER_IMAGE_DESCRIPTION);
+            //            description.setName(ServletParams.ORDER_IMAGE_DESCRIPTION);
             HorizontalPanel line = new HorizontalPanel();
             line.add(descriptionLabel);
             line.setCellHorizontalAlignment(descriptionLabel, HasHorizontalAlignment.ALIGN_RIGHT);
@@ -103,7 +102,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
 
         }
 
-//        this.add(new Hidden(ServletParams.ORDER_IMAGE_ORDER_ID, String.valueOf(order.getPrimaryKey())));
+        //        this.add(new Hidden(ServletParams.ORDER_IMAGE_ORDER_ID, String.valueOf(order.getPrimaryKey())));
 
         Label remarks = new Label(i18n.tr("Maximum upload size is 1 megabyte"), false);
         DOM.setStyleAttribute(remarks.getElement(), "fontStyle", "italic");
@@ -181,7 +180,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
         }
         int idx = 0;// = message.indexOf(ServletParams.UPLOAD_RESPONSE_PREFIX);
         if (idx >= 0) {
-//            message = message.substring(idx + ServletParams.UPLOAD_RESPONSE_PREFIX.length(), message.length());
+            //            message = message.substring(idx + ServletParams.UPLOAD_RESPONSE_PREFIX.length(), message.length());
             if (message.startsWith("OK")) {
                 onComplete();
                 dialog.hide();

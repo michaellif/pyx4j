@@ -49,7 +49,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
             @Override
             public void onClick(ClickEvent event) {
-                AppSite.instance().getEventBus().fireEvent(new UserMessageEvent(null, null, null));
+                AppSite.getEventBus().fireEvent(new UserMessageEvent(null, null, null));
                 form.setVisited(true);
                 if (!form.isValid()) {
                     scrollToTop();

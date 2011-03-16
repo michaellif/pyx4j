@@ -18,7 +18,6 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -66,7 +65,7 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
                     i18n.tr("LogIn"), new Command() {
                         @Override
                         public void execute() {
-                            AppSite.instance().getPlaceController().goTo(new SiteMap.Login());
+                            AppSite.getPlaceController().goTo(new SiteMap.Login());
                         }
                     });
         }

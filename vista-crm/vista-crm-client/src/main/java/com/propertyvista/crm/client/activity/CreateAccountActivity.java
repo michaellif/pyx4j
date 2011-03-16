@@ -39,8 +39,6 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
 
     private final CreateAccountView view;
 
-    private EventBus eventBus;
-
     @Inject
     public CreateAccountActivity(CreateAccountView view) {
         this.view = view;
@@ -53,13 +51,12 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        this.eventBus = eventBus;
         panel.setWidget(view);
     }
 
     @Override
     public void goToSignin() {
-        AppSite.instance().getPlaceController().goTo(new SiteMap.Login());
+        AppSite.getPlaceController().goTo(new SiteMap.Login());
     }
 
     @Override

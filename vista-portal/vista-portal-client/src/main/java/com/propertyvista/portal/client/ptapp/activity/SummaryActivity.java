@@ -34,7 +34,7 @@ public class SummaryActivity extends WizardStepActivity<Summary, SummaryViewPres
 
     @Override
     public void goToPlace(AppPlace place) {
-        AppSite.instance().getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(place);
     }
 
 }

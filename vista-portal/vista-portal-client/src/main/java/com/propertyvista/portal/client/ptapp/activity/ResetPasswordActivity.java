@@ -65,7 +65,7 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
                     i18n.tr("LogIn"), new Command() {
                         @Override
                         public void execute() {
-                            AppSite.instance().getPlaceController().goTo(new SiteMap.Login());
+                            AppSite.getPlaceController().goTo(new SiteMap.Login());
                         }
                     });
         }

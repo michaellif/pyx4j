@@ -30,8 +30,6 @@ import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 @Singleton
 public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
 
-    private Presenter presenter;
-
     private final Map<UserMessageType, Holder> holders;
 
     public UserMessageViewImpl() {
@@ -49,7 +47,6 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
 
     @Override
     public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
     }
 
     @Override

@@ -48,18 +48,18 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
 
     @Override
     public void navigTo(Place place) {
-        AppSite.instance().getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(place);
     }
 
     @Override
     public String getNavigLabel(AppPlace place) {
-        return AppSite.instance().getHistoryMapper().getPlaceInfo(place).getNavigLabel();
+        return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
     }
 
     @Override
     public ApplicationWizardStep getWizardStep() {
         ApplicationWizardStep wizardStep = null;
-        String placeId = AppSite.instance().getHistoryMapper().getPlaceId(getWhere());
+        String placeId = AppSite.getHistoryMapper().getPlaceId(getWhere());
         if (placeId != null) {
             for (ApplicationWizardStep step : PtAppWizardManager.instance().getApplicationProgress().steps()) {
                 if (placeId.equals(step.placeId().getValue())) {
@@ -73,7 +73,7 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
 
     @Override
     public AppPlace getWhere() {
-        return (AppPlace) AppSite.instance().getPlaceController().getWhere();
+        return (AppPlace) AppSite.getPlaceController().getWhere();
     }
 
 }
