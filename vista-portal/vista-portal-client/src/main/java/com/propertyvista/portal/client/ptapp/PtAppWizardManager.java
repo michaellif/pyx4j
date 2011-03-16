@@ -14,8 +14,6 @@
 package com.propertyvista.portal.client.ptapp;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +21,6 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
@@ -41,6 +38,7 @@ import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
@@ -57,9 +55,7 @@ public class PtAppWizardManager {
 
     private static PtAppWizardManager instance;
 
-    private CurrentApplication currentApplication;
-
-    private List<WizardStep> wizardSteps;
+    private ApplicationProgress applicationProgress;
 
     private UnitSelectionCriteria unitSelectionCriteria;
 
@@ -71,19 +67,9 @@ public class PtAppWizardManager {
                 loadCurrentApplication();
             }
         });
-        wizardSteps = new Vector<WizardStep>();
         //TODO implement initial application message
         //showMessageDialog(i18n.tr("Application is looking for building availability..."), i18n.tr("Loading..."), null, null);
         obtainAuthenticationData();
-    }
-
-    public List<WizardStep> getWizardSteps() {
-        return wizardSteps;
-    }
-
-    @Deprecated
-    public CurrentApplication getCurrentApplication() {
-        return currentApplication;
     }
 
     public static void initWizard() {
@@ -162,9 +148,17 @@ public class PtAppWizardManager {
 
     }
 
-    private WizardStep getStep(Place current) {
-        for (WizardStep step : getWizardSteps()) {
-            if (step.getPlace().equals(current)) {
+    public ApplicationProgress getApplicationProgress() {
+        return applicationProgress;
+    }
+
+    private ApplicationWizardStep getStep(Place current) {
+        String currentToken = AppSite.instance().getHistoryMapper().getToken(current);
+        if (currentToken == null) {
+            return null;
+        }
+        for (ApplicationWizardStep step : applicationProgress.steps()) {
+            if (currentToken.equals(step.placeToken().getValue())) {
                 return step;
             }
         }
@@ -172,41 +166,29 @@ public class PtAppWizardManager {
     }
 
     public void nextStep() {
-        WizardStep currentUIStep = getStep(AppSite.instance().getPlaceController().getWhere());
-        ApplicationWizardStep currentStep = null;
-        if (currentUIStep != null) {
-            currentStep = currentUIStep.getStep();
-        }
-
+        ApplicationWizardStep currentStep = getStep(AppSite.instance().getPlaceController().getWhere());
         ((ApplicationServices) GWT.create(ApplicationServices.class)).getApplicationProgress(new DefaultAsyncCallback<ApplicationProgress>() {
             @Override
             public void onSuccess(ApplicationProgress result) {
-                navigationByApplicationProgress(result);
+                applicationProgress = result;
+                navigationByApplicationProgress();
             }
         }, currentStep);
     }
 
-    private void navigationByApplicationProgress(ApplicationProgress applicationProgress) {
-        wizardSteps = new Vector<WizardStep>();
+    private void navigationByApplicationProgress() {
         for (ApplicationWizardStep step : applicationProgress.steps()) {
-            wizardSteps.add(new WizardStep(step));
-        }
-        for (WizardStep step : wizardSteps) {
-            if (step.getStatus() == ApplicationWizardStep.Status.latest) {
-                AppSite.instance().getPlaceController().goTo(step.getPlace());
+            if (ApplicationWizardStep.Status.latest.equals(step.status().getValue())) {
+                AppSite.instance().getPlaceController().goTo(AppSite.instance().getHistoryMapper().getPlace(step.placeToken().getValue()));
                 return;
             }
         }
-        // Should not happen
-        if (wizardSteps.size() > 0) {
-            AppSite.instance().getPlaceController().goTo(wizardSteps.get(1).getPlace());
-        }
+        throw new UnrecoverableClientError("Application Wizard doesn't have 'latest' step");
     }
 
-    private void initApplicationProcess(CurrentApplication result) {
-        currentApplication = result;
-        log.info("start application {}", currentApplication.application);
-        navigationByApplicationProgress(currentApplication.progress);
+    private void initApplicationProcess() {
+        log.info("start application");
+        navigationByApplicationProgress();
     }
 
     private void loadCurrentApplication() {
@@ -215,13 +197,13 @@ public class PtAppWizardManager {
             ((ApplicationServices) GWT.create(ApplicationServices.class)).getCurrentApplication(new DefaultAsyncCallback<CurrentApplication>() {
                 @Override
                 public void onSuccess(CurrentApplication result) {
-                    initApplicationProcess(result);
+                    applicationProgress = result.progress;
+                    initApplicationProcess();
                 }
             }, unitSelectionCriteria);
 
         } else {
-            currentApplication = null;
-            wizardSteps = new Vector<WizardStep>();
+            applicationProgress = null;
             AppSite.instance().getPlaceController().goTo(new SiteMap.CreateAccount());
         }
     }

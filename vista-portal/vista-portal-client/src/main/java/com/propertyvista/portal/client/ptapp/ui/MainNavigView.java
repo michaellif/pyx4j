@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.client.ptapp.WizardStep;
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -30,7 +30,7 @@ public interface MainNavigView extends IsWidget {
 
         public String getNavigLabel(AppPlace place);
 
-        public List<WizardStep> getWizardSteps();
+        public List<ApplicationWizardStep> getWizardSteps();
 
         public Place getWhere();
 

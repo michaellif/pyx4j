@@ -21,8 +21,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
-import com.propertyvista.portal.client.ptapp.WizardStep;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigView;
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -57,8 +57,8 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     }
 
     @Override
-    public List<WizardStep> getWizardSteps() {
-        return PtAppWizardManager.instance().getWizardSteps();
+    public List<ApplicationWizardStep> getWizardSteps() {
+        return PtAppWizardManager.instance().getApplicationProgress().steps();
     }
 
     @Override

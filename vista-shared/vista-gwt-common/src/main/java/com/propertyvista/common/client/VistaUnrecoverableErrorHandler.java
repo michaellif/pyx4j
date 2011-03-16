@@ -18,7 +18,6 @@ import java.util.Date;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.inject.Inject;
 import com.propertyvista.common.client.events.UserMessageEvent;

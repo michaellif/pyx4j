@@ -32,11 +32,11 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.client.ptapp.WizardStep;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.style.IStyleDependent;
@@ -73,8 +73,8 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         boolean visited = false;
         for (int i = presenter.getWizardSteps().size() - 1; i >= 0; i--) {
-            WizardStep step = presenter.getWizardSteps().get(i);
-            if (ApplicationWizardStep.Status.latest.equals(step.getStatus())) {
+            ApplicationWizardStep step = presenter.getWizardSteps().get(i);
+            if (ApplicationWizardStep.Status.latest.equals(step.status().getValue())) {
                 visited = true;
             }
             tabs.add(0, new NavigTab(step, visited));
@@ -114,7 +114,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             return place;
         }
 
-        NavigTab(final WizardStep step, boolean visited) {
+        NavigTab(final ApplicationWizardStep step, boolean visited) {
             super();
             setElement(DOM.createElement("li"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
@@ -130,13 +130,13 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
-            this.place = step.getPlace();
+            this.place = AppSite.instance().getHistoryMapper().getPlace(step.placeToken().getValue());
             label = new Label(presenter.getNavigLabel(place));
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));
             statusHolder.add(label);
 
-            switch (step.getStatus()) {
+            switch (step.status().getValue()) {
             case invalid:
                 addStyleDependentName(StyleDependent.invalid);
                 break;
