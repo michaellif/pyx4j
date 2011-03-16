@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import java.util.HashMap;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -29,11 +32,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.client.ptapp.activity.SecondNavigActivity;
 import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
-import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.style.IStyleDependent;
@@ -65,12 +69,17 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
 
         clear();
 
-        if (presenter.getWizardSubsteps() != null && presenter.getWizardSubsteps().size() > 0) {
-            tabsHolder = new NavigTabList();
-            for (ApplicationWizardSubstep substep : presenter.getWizardSubsteps()) {
-                tabsHolder.add(new NavigTab(substep));
+        if (presenter.getWizardStep() != null) {
+
+            List<ApplicationWizardSubstep> substeps = presenter.getWizardStep().substeps();
+
+            if (substeps.size() > 0) {
+                tabsHolder = new NavigTabList();
+                for (ApplicationWizardSubstep substep : substeps) {
+                    tabsHolder.add(new NavigTab(substep, presenter.getWizardStep().placeId().getValue()));
+                }
+                setWidget(tabsHolder);
             }
-            setWidget(tabsHolder);
         }
 
     }
@@ -101,7 +110,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             return place;
         }
 
-        NavigTab(final ApplicationWizardSubstep substep) {
+        NavigTab(final ApplicationWizardSubstep substep, String token) {
             super();
             setElement(DOM.createElement("li"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
@@ -117,7 +126,12 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
-            this.place = new SiteMap.Info();
+            this.place = AppSite.instance().getHistoryMapper().getPlace(token);
+
+            HashMap<String, String> args = new HashMap<String, String>();
+            args.put(SecondNavigActivity.STEP_ARG_NAME, substep.placeArgument().getStringView());
+            place.setArgs(args);
+
             label = new Label(substep.name().getValue());
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.SecondNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));
@@ -138,9 +152,9 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             //                break;
             //            }
 
-            if (substep.name().getValue().contains("Vasia")) {
-                //            if (place.equals(presenter.getWhere())) {
-                this.addStyleDependentName(StyleDependent.current.name());
+            if (substep.placeArgument().getValue() != null && presenter.getWhere().getArgs() != null
+                    && substep.placeArgument().getValue().toString().equals(presenter.getWhere().getArgs().get(SecondNavigActivity.STEP_ARG_NAME))) {
+                addStyleDependentName(StyleDependent.current.name());
                 label.addStyleDependentName(StyleDependent.current.name());
             }
 

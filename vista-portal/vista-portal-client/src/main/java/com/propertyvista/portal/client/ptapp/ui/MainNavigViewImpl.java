@@ -130,7 +130,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
-            this.place = AppSite.instance().getHistoryMapper().getPlace(step.placeToken().getValue());
+            this.place = AppSite.instance().getHistoryMapper().getPlace(step.placeId().getValue());
             label = new Label(presenter.getNavigLabel(place));
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));

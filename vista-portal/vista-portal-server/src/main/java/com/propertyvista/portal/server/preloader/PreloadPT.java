@@ -381,7 +381,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         sb.append(progress.steps().size()).append(" steps\n");
         for (ApplicationWizardStep step : progress.steps()) {
             sb.append("\t");
-            sb.append(step.placeToken().getStringView());
+            sb.append(step.placeId().getStringView());
             sb.append("\n");
         }
     }

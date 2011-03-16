@@ -28,7 +28,7 @@ public interface ApplicationWizardStep extends IEntity {
 
     }
 
-    IPrimitive<String> placeToken();
+    IPrimitive<String> placeId();
 
     IPrimitive<Status> status();
 

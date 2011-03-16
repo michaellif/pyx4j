@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
-import java.util.List;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -23,12 +21,13 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.SecondNavigView;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
-import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class SecondNavigActivity extends AbstractActivity implements SecondNavigView.SecondNavigPresenter {
+
+    public final static String STEP_ARG_NAME = "substep";
 
     private final SecondNavigView view;
 
@@ -58,22 +57,23 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
     }
 
     @Override
-    public List<ApplicationWizardSubstep> getWizardSubsteps() {
-        String token = AppSite.instance().getHistoryMapper().getToken(getWhere());
-        if (token == null) {
-            return null;
-        }
-        for (ApplicationWizardStep step : PtAppWizardManager.instance().getApplicationProgress().steps()) {
-            if (token.equals(step.placeToken().getValue())) {
-                return step.substeps();
+    public ApplicationWizardStep getWizardStep() {
+        ApplicationWizardStep wizardStep = null;
+        String placeId = AppSite.instance().getHistoryMapper().getPlaceId(getWhere());
+        if (placeId != null) {
+            for (ApplicationWizardStep step : PtAppWizardManager.instance().getApplicationProgress().steps()) {
+                if (placeId.equals(step.placeId().getValue())) {
+                    wizardStep = step;
+                    break;
+                }
             }
         }
-        return null;
+        return wizardStep;
     }
 
     @Override
-    public Place getWhere() {
-        return AppSite.instance().getPlaceController().getWhere();
+    public AppPlace getWhere() {
+        return (AppPlace) AppSite.instance().getPlaceController().getWhere();
     }
 
 }

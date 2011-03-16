@@ -134,7 +134,7 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
 
     private static ApplicationWizardStep createWizardStep(Class<? extends AppPlace> place, ApplicationWizardStep.Status status) {
         ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
-        ws.placeToken().setValue(AppPlaceInfo.getPlaceId(place));
+        ws.placeId().setValue(AppPlaceInfo.getPlaceId(place));
         ws.status().setValue(status);
         return ws;
     }
@@ -155,7 +155,7 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
 
     private static ApplicationWizardStep findWizardStep(ApplicationProgress progress, Class<? extends AppPlace> place) {
         for (ApplicationWizardStep step : progress.steps()) {
-            if (step.placeToken().getValue().equals(AppPlaceInfo.getPlaceId(place))) {
+            if (step.placeId().getValue().equals(AppPlaceInfo.getPlaceId(place))) {
                 return step;
             }
         }

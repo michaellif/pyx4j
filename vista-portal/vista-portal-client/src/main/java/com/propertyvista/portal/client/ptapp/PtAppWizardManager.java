@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ptapp;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +27,12 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
+import com.propertyvista.portal.client.ptapp.activity.SecondNavigActivity;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
+import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
@@ -46,6 +49,7 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class PtAppWizardManager {
 
@@ -153,12 +157,12 @@ public class PtAppWizardManager {
     }
 
     private ApplicationWizardStep getStep(Place current) {
-        String currentToken = AppSite.instance().getHistoryMapper().getToken(current);
-        if (currentToken == null) {
+        String placeId = AppSite.instance().getHistoryMapper().getPlaceId(current);
+        if (placeId == null) {
             return null;
         }
         for (ApplicationWizardStep step : applicationProgress.steps()) {
-            if (currentToken.equals(step.placeToken().getValue())) {
+            if (placeId.equals(step.placeId().getValue())) {
                 return step;
             }
         }
@@ -179,7 +183,17 @@ public class PtAppWizardManager {
     private void navigationByApplicationProgress() {
         for (ApplicationWizardStep step : applicationProgress.steps()) {
             if (ApplicationWizardStep.Status.latest.equals(step.status().getValue())) {
-                AppSite.instance().getPlaceController().goTo(AppSite.instance().getHistoryMapper().getPlace(step.placeToken().getValue()));
+                AppPlace place = AppSite.instance().getHistoryMapper().getPlace(step.placeId().getValue());
+                if (step.substeps().size() > 0) {
+                    for (ApplicationWizardSubstep substep : step.substeps()) {
+                        if (ApplicationWizardStep.Status.latest.equals(substep.status().getValue())) {
+                            HashMap<String, String> args = new HashMap<String, String>();
+                            args.put(SecondNavigActivity.STEP_ARG_NAME, substep.placeArgument().getStringView());
+                            place.setArgs(args);
+                        }
+                    }
+                }
+                AppSite.instance().getPlaceController().goTo(place);
                 return;
             }
         }

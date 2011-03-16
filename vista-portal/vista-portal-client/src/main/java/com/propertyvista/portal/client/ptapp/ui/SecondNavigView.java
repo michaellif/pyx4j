@@ -13,11 +13,9 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import java.util.List;
-
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -30,8 +28,8 @@ public interface SecondNavigView extends IsWidget {
 
         public String getNavigLabel(AppPlace place);
 
-        public List<ApplicationWizardSubstep> getWizardSubsteps();
+        public ApplicationWizardStep getWizardStep();
 
-        public Place getWhere();
+        public AppPlace getWhere();
     }
 }
