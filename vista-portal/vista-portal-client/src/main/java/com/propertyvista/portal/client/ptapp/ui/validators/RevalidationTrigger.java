@@ -28,7 +28,9 @@ public class RevalidationTrigger<E> implements ValueChangeHandler<E> {
 
     @Override
     public void onValueChange(ValueChangeEvent<E> event) {
-        targetComponent.onEditingStop();
+        if (targetComponent.isVisited() || (!targetComponent.isValueEmpty())) {
+            targetComponent.onEditingStop();
+        }
     }
 
 }
