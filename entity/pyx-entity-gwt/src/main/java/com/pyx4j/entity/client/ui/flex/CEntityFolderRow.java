@@ -47,12 +47,12 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
         for (EntityFolderColumnDescriptor column : columns) {
             CComponent<?> component = createCell(column);
             component.setWidth("100%");
-            main.add(createDecorator(component, column.getWidth()));
+            main.add(createDecorator(column, component, column.getWidth()));
         }
         return main;
     }
 
-    protected Widget createDecorator(CComponent<?> component, String width) {
+    protected Widget createDecorator(EntityFolderColumnDescriptor column, CComponent<?> component, String width) {
         SimplePanel wrapper = new SimplePanel();
         wrapper.getElement().getStyle().setPaddingLeft(3, Unit.PX);
         wrapper.getElement().getStyle().setPaddingRight(3, Unit.PX);
