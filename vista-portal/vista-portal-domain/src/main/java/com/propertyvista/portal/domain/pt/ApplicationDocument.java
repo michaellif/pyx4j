@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import java.io.Serializable;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -32,6 +33,9 @@ public interface ApplicationDocument extends IEntity, IBoundToApplication {
     // This is not shown in UI only defines where the document is attached.
     IPrimitive<DocumentType> type();
 
+    @Detached
+    PotentialTenantInfo tenant();
+
     /**
      * This is actual BLOB of the Image or PDF stored on server
      */
@@ -41,4 +45,5 @@ public interface ApplicationDocument extends IEntity, IBoundToApplication {
     IPrimitive<String> filename();
 
     IPrimitive<Long> fileSize();
+
 }
