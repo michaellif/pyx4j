@@ -16,8 +16,10 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -113,11 +115,18 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
                 image = new Image(SiteImages.INSTANCE.userMessageInfo());
             }
 
-            HTML colourSide = new HTML("&nbsp;&nbsp;&nbsp;");
-            colourSide.getElement().getStyle().setBackgroundColor(colour);
-            colourSide.getElement().getStyle().setHeight(100, Unit.PCT);
-            add(colourSide);
-            setCellHeight(colourSide, "100%");
+            HTML side = new HTML("&nbsp;&nbsp;&nbsp;");
+            side.getElement().getStyle().setBackgroundColor(colour);
+            side.getElement().getStyle().setHeight(8, Unit.EX);
+            add(side);
+
+//            getElement().getStyle().setOverflow(Overflow.HIDDEN);
+
+//            Element td = DOM.getParent(side.getElement());
+//            if (td != null) {
+//                td.setPropertyString("color", colour);
+//                td.setPropertyString("background-color", colour);
+//            }
 
             add(new HTML("&nbsp;&nbsp;&nbsp;"));
             add(image);
