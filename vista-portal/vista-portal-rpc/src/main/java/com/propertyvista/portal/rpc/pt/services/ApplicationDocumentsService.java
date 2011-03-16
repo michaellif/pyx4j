@@ -18,6 +18,7 @@ import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentsList;
 
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface ApplicationDocumentsService extends IService {
 
@@ -26,4 +27,6 @@ public interface ApplicationDocumentsService extends IService {
      * to EntityFolder for viewing in UI.
      */
     public void retrieveAttachments(AsyncCallback<ApplicationDocumentsList> callback, Long tenantId, ApplicationDocument.DocumentType documentType);
+
+    public void removeAttachment(AsyncCallback<VoidSerializable> callback, Long applicationDocumentId);
 }
