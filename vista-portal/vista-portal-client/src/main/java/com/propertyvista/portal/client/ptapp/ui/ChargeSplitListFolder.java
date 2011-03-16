@@ -23,16 +23,11 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData.ShowMandatory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 
@@ -47,6 +42,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
@@ -133,47 +129,35 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                     if (prc instanceof CNumberField) {
                         prc.addValueChangeHandler(valueChangeHandler);
                         ((CNumberField<Integer>) prc).setRange(0, 100);
+                        prc.addValueValidator(new EditableValueValidator<Integer>() {
+
+                            @Override
+                            public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
+                                int totalPrc = 0;
+                                boolean first = true;
+                                for (TenantCharge charge : ChargeSplitListFolder.this.getValue()) {
+                                    if (first) {
+                                        // Ignore fist one since it is calculated
+                                        first = false;
+                                        continue;
+                                    }
+                                    Integer p = charge.percentage().getValue();
+                                    if (p != null) {
+                                        totalPrc += p.intValue();
+                                    }
+                                }
+                                return totalPrc <= 100;
+                            }
+
+                            @Override
+                            public String getValidationMessage(CEditableComponent<Integer, ?> component, Integer value) {
+                                return i18n.tr("Sum of all percentages should not exceed 100%");
+                            }
+                        });
                     }
                 }
             }
         };
     }
 
-    protected CEntityFolderItem<TenantCharge> createItemOld() {
-
-        return new CEntityFolderItem<TenantCharge>(TenantCharge.class) {
-
-            @Override
-            public FolderItemDecorator createFolderItemDecorator() {
-                return new BoxReadOnlyFolderItemDecorator(!isFirst());
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public IsWidget createContent() {
-
-                FlowPanel main = new FlowPanel();
-                main.add(DecorationUtils.inline(inject(proto().tenant()), "285px", null));
-                main.add(DecorationUtils.inline(new HTML("%"), "10px", "right"));
-
-                DecorationData decorData = new DecorationData();
-                decorData.componentWidth = 4;
-                decorData.labelWidth = 0;
-                decorData.labelAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
-                decorData.readOnlyMode = (isFirst() || valueChangeHandler == null);
-                decorData.showMandatory = ShowMandatory.None;
-                main.add(DecorationUtils.inline(new VistaWidgetDecorator(inject(proto().percentage()), decorData), "25px", "right"));
-
-                main.add(DecorationUtils.inline(inject(proto().charge()), "80px", "right"));
-                if (valueChangeHandler != null) {
-                    get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
-                }
-                CEditableComponent<Integer, ?> prc = get(proto().percentage());
-                if (prc instanceof CNumberField) {
-                    ((CNumberField<Integer>) prc).setRange(0, 100);
-                }
-                return main;
-            }
-        };
-    }
 }
