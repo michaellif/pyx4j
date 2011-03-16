@@ -26,6 +26,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -66,7 +67,7 @@ public class FileUpload extends HorizontalPanel {
         fp.add(docList = new VerticalPanel());
         docList.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         docList.getElement().getStyle().setPaddingBottom(1, Unit.EM);
-        fp.add(new Button("Browse", new ClickHandler() {
+        fp.add(new Button(i18n.tr("Browse"), new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
@@ -103,7 +104,19 @@ public class FileUpload extends HorizontalPanel {
                             }
                         });
 
-                        docList.add(link);
+                        Button remove = new Button(i18n.tr("x"), new ClickHandler() {
+
+                            @Override
+                            public void onClick(ClickEvent event) {
+                                // TODO remove file here
+                            }
+                        });
+
+                        HorizontalPanel item = new HorizontalPanel();
+                        item.add(link);
+                        item.add(remove);
+
+                        docList.add(item);
                     }
                 }
 
