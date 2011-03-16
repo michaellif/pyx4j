@@ -57,6 +57,13 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
         return null;
     }
 
+    public String getPlaceId(Place place) {
+        if (place instanceof AppPlace) {
+            return AppPlaceInfo.getPlaceId(place.getClass());
+        }
+        return null;
+    }
+
     public AppPlaceInfo getPlaceInfo(AppPlace place) {
         return listing.getPlaceInfo(place);
     }
