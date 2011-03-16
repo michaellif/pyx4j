@@ -18,7 +18,6 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
@@ -38,17 +37,12 @@ public class ChangePasswordActivity extends AbstractActivity implements NewPassw
 
     private final NewPasswordView view;
 
-    private final PlaceController placeController;
-
-    private ConversationType conversationType;
-
     private String token;
 
     @Inject
-    public ChangePasswordActivity(NewPasswordView view, PlaceController placeController) {
+    public ChangePasswordActivity(NewPasswordView view) {
         this.view = view;
         view.setConversationType(ConversationType.CHANGE);
-        this.placeController = placeController;
         view.setPresenter(this);
     }
 
@@ -82,7 +76,6 @@ public class ChangePasswordActivity extends AbstractActivity implements NewPassw
     }
 
     public void setConversationType(ConversationType type) {
-        conversationType = type;
         view.setConversationType(type);
     }
 }

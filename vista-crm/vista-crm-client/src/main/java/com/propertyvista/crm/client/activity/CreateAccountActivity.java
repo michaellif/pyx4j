@@ -18,7 +18,6 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
@@ -31,6 +30,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class CreateAccountActivity extends AbstractActivity implements CreateAccountView.Presenter {
@@ -39,14 +39,11 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
 
     private final CreateAccountView view;
 
-    private final PlaceController placeController;
-
     private EventBus eventBus;
 
     @Inject
-    public CreateAccountActivity(CreateAccountView view, PlaceController placeController) {
+    public CreateAccountActivity(CreateAccountView view) {
         this.view = view;
-        this.placeController = placeController;
         view.setPresenter(this);
     }
 
@@ -62,7 +59,7 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
 
     @Override
     public void goToSignin() {
-        placeController.goTo(new SiteMap.Login());
+        AppSite.instance().getPlaceController().goTo(new SiteMap.Login());
     }
 
     @Override

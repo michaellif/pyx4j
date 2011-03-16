@@ -25,22 +25,16 @@ import com.propertyvista.crm.rpc.SiteMap;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
-import com.pyx4j.site.client.place.AppPlaceListing;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 
     private final TopRightActionsView view;
 
-    private final PlaceController placeController;
-
-    private final AppPlaceListing appPlaceListing;
-
     @Inject
-    public TopRightActionsActivity(TopRightActionsView view, PlaceController placeController, AppPlaceListing appPlaceListing) {
+    public TopRightActionsActivity(TopRightActionsView view) {
         this.view = view;
-        this.placeController = placeController;
-        this.appPlaceListing = appPlaceListing;
         view.setPresenter(this);
     }
 
@@ -66,12 +60,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public PlaceController getPlaceController() {
-        return placeController;
-    }
-
-    @Override
-    public AppPlaceListing getAppPlaceListing() {
-        return appPlaceListing;
+        return AppSite.instance().getPlaceController();
     }
 
     @Override
@@ -81,7 +70,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void login() {
-        placeController.goTo(new SiteMap.Login());
+        AppSite.instance().getPlaceController().goTo(new SiteMap.Login());
     }
 
     @Override

@@ -36,6 +36,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class ResetPasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
@@ -44,15 +45,12 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
 
     private final NewPasswordView view;
 
-    private final PlaceController placeController;
-
     private String token;
 
     @Inject
-    public ResetPasswordActivity(NewPasswordView view, PlaceController placeController) {
+    public ResetPasswordActivity(NewPasswordView view) {
         this.view = view;
         view.setConversationType(ConversationType.RESET);
-        this.placeController = placeController;
         view.setPresenter(this);
     }
 
@@ -68,7 +66,7 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
                     i18n.tr("LogIn"), new Command() {
                         @Override
                         public void execute() {
-                            placeController.goTo(new SiteMap.Login());
+                            AppSite.instance().getPlaceController().goTo(new SiteMap.Login());
                         }
                     });
         }
