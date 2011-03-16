@@ -17,7 +17,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentsList;
 
-public interface ApplicationDocumentsService {
+import com.pyx4j.rpc.shared.IService;
+
+public interface ApplicationDocumentsService extends IService {
 
     /**
      * Ideally we want to return List<ApplicationDocument> but we want to bind the results
