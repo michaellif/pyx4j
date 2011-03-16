@@ -21,19 +21,12 @@ import java.util.Map;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Element;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
@@ -41,18 +34,19 @@ import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.client.ptapp.ui.components.FileUploadDialog;
+import com.propertyvista.portal.client.ptapp.ui.components.FileUpload;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.validators.CanadianSinValidator;
 import com.propertyvista.portal.client.ptapp.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
+import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Vehicle;
+import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
 
-import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
@@ -78,6 +72,8 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
     private static Date needPreviousAddress;
 
     private Widget previousAddressHeader;
+
+    private FileUpload fileUpload;
 
     @SuppressWarnings("deprecation")
     public InfoViewForm() {
@@ -145,7 +141,12 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         main.add(new VistaWidgetDecorator(inject(proto().secureIdentifier()), decorData));
         decorData.componentWidth = 3;
         main.add(new VistaWidgetDecorator(inject(proto().notCanadianCitizen()), decorData));
-        main.add(new FileUpload());
+
+        fileUpload = new FileUpload();
+        fileUpload.getElement().getStyle().setMarginLeft(12.7, Unit.EM);
+        fileUpload.getElement().getStyle().setMarginTop(1, Unit.EM);
+        fileUpload.getElement().getStyle().setMarginBottom(1, Unit.EM);
+        main.add(fileUpload);
         main.add(new HTML());
 
         main.add(new ViewHeaderDecorator(proto().currentAddress()));
@@ -304,6 +305,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
     public void populate(PotentialTenantInfo value) {
         super.populate(value);
         enablePreviousAddress();
+        fileUpload.populate(value.id().getValue(), DocumentType.securityInfo);
     }
 
     private CEntityEditableComponent<Address> createAddressEditor() {
@@ -431,45 +433,5 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove contact"), !isFirst());
             }
         };
-    }
-
-    private class FileUpload extends HorizontalPanel {
-
-        public FileUpload() {
-            setWidth("50%");
-            getElement().getStyle().setMarginLeft(12.7, Unit.EM);
-            getElement().getStyle().setMarginTop(1, Unit.EM);
-            getElement().getStyle().setMarginBottom(1, Unit.EM);
-
-            HTML side = new HTML("&nbsp;&nbsp;&nbsp;");
-            add(side);
-
-            Element td = DOM.getParent(side.getElement());
-            if (td != null) {
-                td.getStyle().setBackgroundColor("#bbb");
-            }
-
-            add(new HTML("&nbsp;&nbsp;&nbsp;"));
-            add(new Image(SiteImages.INSTANCE.exclamation()));
-
-            final FlowPanel fp = new FlowPanel();
-            fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-            fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attach Files"))));
-            fp.add(new Button("Browse", new ClickHandler() {
-
-                @Override
-                public void onClick(ClickEvent event) {
-                    new FileUploadDialog(/* getEditorPanel().getEntity() */) {
-                        @Override
-                        public void onComplete() {
-                        }
-                    }.show();
-                }
-            }));
-
-            add(fp);
-            setCellVerticalAlignment(fp, HorizontalPanel.ALIGN_TOP);
-            setCellWidth(fp, "100%");
-        }
     }
 }
