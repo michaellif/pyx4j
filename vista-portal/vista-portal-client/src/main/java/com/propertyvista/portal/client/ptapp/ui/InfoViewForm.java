@@ -41,6 +41,7 @@ import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.components.FileUploadDialog;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.validators.CanadianSinValidator;
@@ -451,15 +452,18 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
             add(new HTML("&nbsp;&nbsp;&nbsp;"));
             add(new Image(SiteImages.INSTANCE.exclamation()));
 
-            FlowPanel fp = new FlowPanel();
+            final FlowPanel fp = new FlowPanel();
             fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attach Files"))));
             fp.add(new Button("Browse", new ClickHandler() {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    // TODO Auto-generated method stub
-
+                    new FileUploadDialog(/* getEditorPanel().getEntity() */) {
+                        @Override
+                        public void onComplete() {
+                        }
+                    }.show();
                 }
             }));
 
