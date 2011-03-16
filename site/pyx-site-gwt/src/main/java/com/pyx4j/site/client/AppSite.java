@@ -28,6 +28,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
@@ -35,6 +36,7 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.log4gwt.client.ClientLogger;
+import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 /**
@@ -48,16 +50,30 @@ public abstract class AppSite implements EntryPoint {
 
     private static AppSite instance;
 
+    private final AppPlaceHistoryMapper historyMapper;
+
+    private final PlaceHistoryHandler historyHandler;
+
     public AppSite() {
         instance = this;
 
         Element head = Document.get().getElementsByTagName("html").getItem(0);
         head.setPropertyString("xmlns:pyx", "");
 
+        historyMapper = new AppPlaceHistoryMapper();
+        historyHandler = new PlaceHistoryHandler(historyMapper);
     }
 
     public static AppSite instance() {
         return instance;
+    }
+
+    public AppPlaceHistoryMapper getHistoryMapper() {
+        return historyMapper;
+    }
+
+    public PlaceHistoryHandler getHistoryHandler() {
+        return historyHandler;
     }
 
     public abstract void onSiteLoad();

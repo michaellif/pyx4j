@@ -21,6 +21,7 @@
 package com.pyx4j.widgets.demo.client;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -51,6 +53,9 @@ import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 import com.pyx4j.widgets.client.combobox.ListBox;
+import com.pyx4j.widgets.client.datepicker.DatePickerExtended;
+import com.pyx4j.widgets.client.datepicker.DatePickerExtended.DateChosenEvent;
+import com.pyx4j.widgets.client.datepicker.DatePickerExtended.DateChosenEventHandler;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -100,6 +105,33 @@ public class WidgetsDemo implements EntryPoint {
         TextArea htmlViewer = new TextArea();
 
         sendButton.addClickHandler(new MyHandler(htmlViewer, pageEditor));
+
+        {
+            final TextBox textBox = new TextBox();
+            Date minDate = new Date(100, 1, 15);
+            Date maxDate = new Date(111, 3, 3);
+            Date starting = new Date(110, 2, 10);
+            ArrayList<Date> disabledDates = new ArrayList<Date>();
+            disabledDates.add(new Date(103, 1, 1));
+            disabledDates.add(new Date(103, 1, 2));
+            disabledDates.add(new Date(103, 1, 3));
+            disabledDates.add(new Date(103, 1, 4));
+            disabledDates.add(new Date(103, 1, 5));
+
+            DatePickerExtended datePicker = new DatePickerExtended(2, starting, minDate, maxDate, disabledDates);
+            datePicker.addDateChosenEventHandler(new DateChosenEventHandler() {
+
+                @Override
+                public void onDateChosen(DateChosenEvent event) {
+                    String date = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(event.getChosenDate());
+                    textBox.setText(date);
+                }
+
+            });
+            contentPanel.add(datePicker);
+            contentPanel.add(textBox);
+
+        }
 
         {
             ListBox<String> comboBox = new ListBox<String>(false, true);
