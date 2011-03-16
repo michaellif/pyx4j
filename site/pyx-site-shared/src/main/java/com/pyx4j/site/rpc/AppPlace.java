@@ -42,7 +42,9 @@ public class AppPlace extends Place {
     @Override
     public boolean equals(Object other) {
         if (getClass() == other.getClass()) {
-            if (args != null && args.equals(((AppPlace) other).getArgs())) {
+            if (args == null && ((AppPlace) other).getArgs() == null) {
+                return true;
+            } else if (args != null && args.equals(((AppPlace) other).getArgs())) {
                 return true;
             }
         }

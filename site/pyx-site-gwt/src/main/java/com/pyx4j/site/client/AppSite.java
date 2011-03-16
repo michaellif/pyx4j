@@ -28,6 +28,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.DOM;
@@ -75,20 +76,24 @@ public abstract class AppSite implements EntryPoint {
         return instance;
     }
 
-    public AppPlaceHistoryMapper getHistoryMapper() {
-        return historyMapper;
+    public static AppPlaceHistoryMapper getHistoryMapper() {
+        return instance().historyMapper;
     }
 
-    public PlaceHistoryHandler getHistoryHandler() {
-        return historyHandler;
+    public static PlaceHistoryHandler getHistoryHandler() {
+        return instance().historyHandler;
     }
 
-    public AppSiteEventBus getEventBus() {
-        return eventBus;
+    public static AppSiteEventBus getEventBus() {
+        return instance().eventBus;
     }
 
-    public PlaceController getPlaceController() {
-        return placeController;
+    public static PlaceController getPlaceController() {
+        return instance().placeController;
+    }
+
+    public static String getPlaceId(Place place) {
+        return instance().historyMapper.getPlaceId(place);
     }
 
     public abstract void onSiteLoad();
