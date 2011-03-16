@@ -24,11 +24,15 @@ public class PtAppSite extends VistaSite {
 
     private SiteGinjector ginjector;
 
+    public PtAppSite() {
+    }
+
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
 
         ginjector = GWT.create(SiteGinjector.class);
+        getHistoryHandler().register(ginjector.getPlaceController(), ginjector.getEventBus(), new SiteMap.CreateAccount());
 
         RootPanel.get().add(ginjector.getSiteView());
 

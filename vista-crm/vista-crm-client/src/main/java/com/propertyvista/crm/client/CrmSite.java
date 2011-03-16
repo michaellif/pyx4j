@@ -18,6 +18,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.crm.rpc.SiteMap;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -31,6 +32,8 @@ public class CrmSite extends VistaSite {
         super.onSiteLoad();
 
         ginjector = GWT.create(CrmGinjector.class);
+        getHistoryHandler().register(ginjector.getPlaceController(), ginjector.getEventBus(), new SiteMap.CreateAccount());
+
         RootPanel.get().add(ginjector.getSiteView());
 
         hideLoadingIndicator();
@@ -50,13 +53,13 @@ public class CrmSite extends VistaSite {
 
             @Override
             public void onSuccess(Boolean result) {
-                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+                CrmSite.instance().getHistoryHandler().handleCurrentHistory();
             }
 
             //TODO remove this when initial application message is implemented
             @Override
             public void onFailure(Throwable caught) {
-                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+                CrmSite.instance().getHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
             }
         });

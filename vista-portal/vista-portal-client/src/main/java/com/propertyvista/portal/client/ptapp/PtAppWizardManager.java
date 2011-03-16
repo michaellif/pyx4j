@@ -114,7 +114,7 @@ public class PtAppWizardManager {
             //TODO remove this when initial application message is implemented
             @Override
             public void onFailure(Throwable caught) {
-                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+                PtAppSite.instance().getHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
             }
         });
@@ -143,7 +143,7 @@ public class PtAppWizardManager {
 
             @Override
             public void onSuccess(Boolean result) {
-                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+                PtAppSite.instance().getHistoryHandler().handleCurrentHistory();
                 if (!result) {
                     PtAppSite.instance().showMessageDialog(i18n.tr("We can't find that Building or avalable Units"), "Error", "Back", new Command() {
                         @Override
@@ -157,7 +157,7 @@ public class PtAppWizardManager {
             //TODO remove this when initial application message is implemented
             @Override
             public void onFailure(Throwable caught) {
-                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+                PtAppSite.instance().getHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
             }
         });

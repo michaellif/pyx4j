@@ -38,13 +38,4 @@ public class CrmGinModule extends AppSiteGinModule {
         install(new ViewModule());
     }
 
-    @Override
-    @Provides
-    @Singleton
-    public PlaceHistoryHandler getHistoryHandler(PlaceController placeController, EventBus eventBus) {
-        PlaceHistoryHandler historyHandler = super.getHistoryHandler(placeController, eventBus);
-        historyHandler.register(placeController, eventBus, new SiteMap.CreateAccount());
-        return historyHandler;
-    }
-
 }
