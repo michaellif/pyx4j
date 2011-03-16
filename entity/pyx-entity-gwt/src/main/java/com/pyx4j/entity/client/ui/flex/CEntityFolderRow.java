@@ -26,6 +26,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -51,7 +52,7 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
         return main;
     }
 
-    protected SimplePanel createDecorator(CComponent<?> component, String width) {
+    protected Widget createDecorator(CComponent<?> component, String width) {
         SimplePanel wrapper = new SimplePanel();
         wrapper.getElement().getStyle().setPaddingLeft(3, Unit.PX);
         wrapper.getElement().getStyle().setPaddingRight(3, Unit.PX);
