@@ -16,6 +16,7 @@ package com.propertyvista.portal.domain.pt;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TenantIncome extends IEntity {
@@ -49,5 +50,7 @@ public interface TenantIncome extends IEntity {
     // incomeSource = student
     @Owned
     IncomeInfoStudentIncome studentIncome();
+
+    IList<ApplicationDocument> documents();
 
 }
