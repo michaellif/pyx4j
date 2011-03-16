@@ -41,7 +41,6 @@ import com.propertyvista.portal.domain.pt.LegalQuestions;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
 import com.propertyvista.portal.domain.pt.Pets;
-import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
@@ -263,7 +262,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         return pti;
     }
 
-    private void populatePotentialTenant(PotentialTenant pt, Relationship relationship, Status status) {
+    private void populatePotentialTenant(PotentialTenantInfo pt, Relationship relationship, Status status) {
 
         if (status == Status.Applicant) {
             pt.firstName().setValue("Jack");
@@ -307,9 +306,9 @@ public class PreloadPT extends BaseVistaDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(PotentialTenantList.class, PotentialTenant.class, PotentialTenantFinancial.class, PotentialTenantInfo.class, Charges.class,
-                    ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class, UnitSelection.class,
-                    ApplicationProgress.class, Pets.class, EmergencyContact.class, Summary.class, Address.class);
+            return deleteAll(PotentialTenantList.class, PotentialTenantFinancial.class, PotentialTenantInfo.class, Charges.class, ChargeLineList.class,
+                    ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class, UnitSelection.class, ApplicationProgress.class,
+                    Pets.class, EmergencyContact.class, Summary.class, Address.class);
         } else {
             return "This is production";
         }
