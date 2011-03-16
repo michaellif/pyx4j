@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, NativeTextBox<E>> {
 
-    private static I18n i18n = I18nFactory.getI18n(CNumberField.class);
+    protected static I18n i18n = I18nFactory.getI18n(CNumberField.class);
 
     private TextBoxParserValidator<E> validator;
 
@@ -67,6 +67,10 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
 
     }
 
+    protected String dataTypeName() {
+        return i18n.tr("numeric");
+    }
+
     class NumberFieldRangeValidator extends TextBoxParserValidator<E> {
 
         private final E from;
@@ -74,7 +78,7 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         private final E to;
 
         public NumberFieldRangeValidator(E from, E to) {
-            super(i18n.tr("Should be numeric in range from {0} to {1}", from, to));
+            super(i18n.tr("Should be {0} in range from {1} to {2}", dataTypeName(), from, to));
             this.from = from;
             this.to = to;
         }

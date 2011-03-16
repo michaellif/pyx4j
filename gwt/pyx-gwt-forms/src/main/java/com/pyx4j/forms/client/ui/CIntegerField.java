@@ -27,7 +27,12 @@ public class CIntegerField extends CNumberField<Integer> {
     }
 
     public CIntegerField(String title) {
-        super(title, "Should be numeric in range from " + Integer.MIN_VALUE + " to " + Integer.MAX_VALUE);
+        super(title, i18n.tr("Should be integer number"));
+    }
+
+    @Override
+    protected String dataTypeName() {
+        return i18n.tr("integer");
     }
 
     @Override
