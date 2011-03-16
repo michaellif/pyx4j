@@ -52,7 +52,9 @@ public class AppPlace extends Place {
     @Override
     public int hashCode() {
         int hash = getClass().hashCode();
-        hash = hash * 31 + args.hashCode();
+        if (args != null) {
+            hash = hash * 31 + args.hashCode();
+        }
         return hash;
     }
 }
