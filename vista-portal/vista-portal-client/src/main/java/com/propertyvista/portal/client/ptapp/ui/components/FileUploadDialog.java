@@ -25,6 +25,8 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.DOM;
@@ -47,6 +49,8 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
 public abstract class FileUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText, FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler {
+
+    private static I18n i18n = I18nFactory.getI18n(FileUploadDialog.class);
 
     private final static Logger log = LoggerFactory.getLogger(FileUploadDialog.class);
 
@@ -71,7 +75,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
         form.setWidget(this);
 
         {
-            Label descriptionLabel = new Label("Description:", false);
+            Label descriptionLabel = new Label(i18n.tr("Description:"), false);
             descriptionLabel.setWidth("150px");
             descriptionLabel.getElement().getStyle().setPaddingRight(15, Unit.PX);
             description = new TextBox();
@@ -85,11 +89,11 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
         }
 
         {
-            Label uploadLabel = new Label("File:", false);
+            Label uploadLabel = new Label(i18n.tr("File:"), false);
             uploadLabel.setWidth("150px");
             uploadLabel.getElement().getStyle().setPaddingRight(15, Unit.PX);
             upload = new FileUpload();
-            upload.setName("upload");
+            upload.setName(i18n.tr("upload"));
             HorizontalPanel line = new HorizontalPanel();
             line.add(uploadLabel);
             line.setCellHorizontalAlignment(uploadLabel, HasHorizontalAlignment.ALIGN_RIGHT);
@@ -101,7 +105,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
 
 //        this.add(new Hidden(ServletParams.ORDER_IMAGE_ORDER_ID, String.valueOf(order.getPrimaryKey())));
 
-        Label remarks = new Label("Maximum upload size is 1 megabyte", false);
+        Label remarks = new Label(i18n.tr("Maximum upload size is 1 megabyte"), false);
         DOM.setStyleAttribute(remarks.getElement(), "fontStyle", "italic");
         this.add(remarks);
 
@@ -114,8 +118,9 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
         supportedFormats.add("GIF");
         supportedFormats.add("TIFF");
         supportedFormats.add("BMP");
+        supportedFormats.add("PDF");
 
-        dialog = new Dialog("Upload file", this);
+        dialog = new Dialog(i18n.tr("Upload file"), this);
 
         form.setSize("400px", "100px");
 
@@ -131,7 +136,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
 
     @Override
     public String optionTextOk() {
-        return "Upload";
+        return i18n.tr("Upload");
     }
 
     @Override
@@ -149,7 +154,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
     public void onSubmit(SubmitEvent event) {
         String name = upload.getFilename();
         if (!CommonsStringUtils.isStringSet(name)) {
-            MessageDialog.error("Upload error", "The file name must not be empty");
+            MessageDialog.error(i18n.tr("Upload error"), i18n.tr("The file name must not be empty"));
             event.cancel();
             return;
         }
@@ -159,7 +164,8 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
             ext = name.substring(extIdx + 1).toUpperCase();
         }
         if (!supportedFormats.contains(ext)) {
-            MessageDialog.error("Upload error", "Only JPEG, PNG, GIF, BMP and TIFF image formats are supported\n<br/>[" + ext + "] not supported");
+            MessageDialog.error(i18n.tr("Upload error"), i18n.tr("Only JPEG, PNG, GIF, BMP, TIFF and PDF formats are supported") + "\n<br/>[" + ext + "]"
+                    + i18n.tr(" not supported"));
             event.cancel();
             return;
         }
@@ -180,12 +186,12 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
                 onComplete();
                 dialog.hide();
             } else {
-                log.error("Upload server message [{}]", message);
-                MessageDialog.error("Upload error", message);
+                log.error(i18n.tr("Upload server message") + " [{}]", message);
+                MessageDialog.error(i18n.tr("Upload error"), message);
             }
         } else {
             log.error("Upload server message [{}]", message);
-            MessageDialog.error("Upload error", "Error uploading image");
+            MessageDialog.error(i18n.tr("Upload error"), i18n.tr("Error uploading file"));
         }
 
     }

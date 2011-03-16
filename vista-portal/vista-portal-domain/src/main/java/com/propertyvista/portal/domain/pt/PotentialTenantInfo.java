@@ -35,7 +35,8 @@ public interface PotentialTenantInfo extends PotentialTenant {
     @Caption(name = "SIN")
     IPrimitive<String> secureIdentifier();
 
-    IPrimitive<Boolean> canadianCitizen();
+    @Caption(name = "I'm not resident of Canada")
+    IPrimitive<Boolean> notCanadianCitizen();
 
     /**
      * TODO I think that it is better to have a list here since some forms may ask for

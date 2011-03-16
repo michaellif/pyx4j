@@ -144,7 +144,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         decorData.componentWidth = 11;
         main.add(new VistaWidgetDecorator(inject(proto().secureIdentifier()), decorData));
         decorData.componentWidth = 3;
-        main.add(new VistaWidgetDecorator(inject(proto().canadianCitizen()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().notCanadianCitizen()), decorData));
         main.add(new FileUpload());
         main.add(new HTML());
 
