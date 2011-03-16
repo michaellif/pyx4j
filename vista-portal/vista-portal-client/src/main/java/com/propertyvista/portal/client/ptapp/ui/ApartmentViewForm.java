@@ -104,7 +104,7 @@ public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
                     getValue().selectedUnit().set(event.getValue());
                     getValue().markerRent().set(null);
                     CEditableComponent<Date, ?> rentStart = get(proto().rentStart());
-                    if (rentStart.getValue() == null) {
+                    if ((rentStart.getValue() == null) || (!rentStart.isVisited())) {
                         rentStart.setValue(getValue().selectedUnit().avalableForRent().getValue());
                     }
                 }
