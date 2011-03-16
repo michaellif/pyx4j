@@ -25,7 +25,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData.ShowMandatory;
@@ -60,7 +62,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
         super(TenantCharge.class);
         this.valueChangeHandler = valueChangeHandler;
         columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().tenant(), "285px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().tenant(), "270px"));
         columns.add(new EntityFolderColumnDescriptor(proto().percentage(), "25px"));
         columns.add(new EntityFolderColumnDescriptor(proto().charge(), "80px"));
     }
@@ -83,7 +85,13 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
             @Override
             public FolderItemDecorator createFolderItemDecorator() {
-                return new TableFolderItemDecorator(null);
+                TableFolderItemDecorator dec = new TableFolderItemDecorator(null);
+                if (!isFirst()) {
+                    Widget sp = new ViewLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+                    sp.getElement().getStyle().setPadding(0, Unit.EM);
+                    ((VerticalPanel) dec.getWidget()).insert(sp, 0);
+                }
+                return dec;
             }
 
             @Override
@@ -99,8 +107,34 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                 Widget w = super.createDecorator(column, component, width);
                 if (column.getObject() != proto().tenant()) {
                     w.getElement().getStyle().setProperty("textAlign", "right");
+                    component.asWidget().getElement().getStyle().setProperty("textAlign", "right");
+                }
+
+                if (column.getObject() == proto().percentage()) {
+                    FlowPanel wrap = new FlowPanel();
+                    wrap.add(DecorationUtils.inline(w, "25px"));
+                    // Add $ label before or after Input
+                    IsWidget lable = DecorationUtils.inline(new HTML("%"), "10px");
+                    if (valueChangeHandler != null) {
+                        wrap.insert(lable, 0);
+                    } else {
+                        wrap.add(lable);
+                    }
+                    return wrap;
                 }
                 return w;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void addValidations() {
+                if (valueChangeHandler != null) {
+                    CEditableComponent<Integer, ?> prc = get(proto().percentage());
+                    if (prc instanceof CNumberField) {
+                        prc.addValueChangeHandler(valueChangeHandler);
+                        ((CNumberField<Integer>) prc).setRange(0, 100);
+                    }
+                }
             }
         };
     }

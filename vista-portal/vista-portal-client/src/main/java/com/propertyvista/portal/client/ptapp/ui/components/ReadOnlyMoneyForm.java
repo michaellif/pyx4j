@@ -37,7 +37,7 @@ public class ReadOnlyMoneyForm extends CEntityEditableComponent<Money> {
 
     public static class MoneyFormat implements IFormat<Number> {
 
-        NumberFormat nf = NumberFormat.getFormat("#.00");
+        NumberFormat nf = NumberFormat.getFormat("#0.00");
 
         @Override
         public String format(Number value) {
