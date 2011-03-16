@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -99,13 +98,13 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
                 image = new Image(SiteImages.INSTANCE.info());
                 break;
 
-            case FAILURE:
             case WARN:
                 colour = "#FF820D";
                 image = new Image(SiteImages.INSTANCE.infoOrange());
                 break;
 
             case ERROR:
+            case FAILURE:
                 colour = "red";
                 image = new Image(SiteImages.INSTANCE.infoOrange());
                 break;
@@ -116,17 +115,13 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
             }
 
             HTML side = new HTML("&nbsp;&nbsp;&nbsp;");
-            side.getElement().getStyle().setBackgroundColor(colour);
-            side.getElement().getStyle().setHeight(8, Unit.EX);
             add(side);
 
-//            getElement().getStyle().setOverflow(Overflow.HIDDEN);
-
-//            Element td = DOM.getParent(side.getElement());
-//            if (td != null) {
-//                td.setPropertyString("color", colour);
-//                td.setPropertyString("background-color", colour);
-//            }
+            Element td = DOM.getParent(side.getElement());
+            if (td != null) {
+//                td.setPropertyString("background-color", "red");
+                td.setAttribute("bgcolor", colour); // just this works, BUT... bgcolor is DEPRECATED!?.
+            }
 
             add(new HTML("&nbsp;&nbsp;&nbsp;"));
             add(image);
