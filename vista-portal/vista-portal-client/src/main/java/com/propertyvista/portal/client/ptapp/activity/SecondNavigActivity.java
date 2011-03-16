@@ -51,20 +51,20 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
 
         if (place.getClass() == SiteMap.Info.class || place.getClass() == SiteMap.Financial.class) {
 
-//            // fill dumb tenants value:
-//
-//            ApplicationProgress ap = EntityFactory.create(ApplicationProgress.class);
-//            TenantTabInfo tti = EntityFactory.create(TenantTabInfo.class);
-//            tti.fullName().setValue("Vasia I. Pupkin");
-//            ap.tenants().add(tti);
-//            tti = EntityFactory.create(TenantTabInfo.class);
-//            tti.fullName().setValue("Masha Pupkina");
-//            ap.tenants().add(tti);
-//            tti = EntityFactory.create(TenantTabInfo.class);
-//            tti.fullName().setValue("Petya V. Pupkin");
-//            ap.tenants().add(tti);
-//
-//            PtAppWizardManager.instance().getCurrentApplication().progress.tenants().setValue(ap.tenants().getValue());
+            // fill dumb tenants value:
+
+            ApplicationProgress ap = EntityFactory.create(ApplicationProgress.class);
+            TenantTabInfo tti = EntityFactory.create(TenantTabInfo.class);
+            tti.fullName().setValue("Vasia I. Pupkin");
+            ap.tenants().add(tti);
+            tti = EntityFactory.create(TenantTabInfo.class);
+            tti.fullName().setValue("Masha Pupkina");
+            ap.tenants().add(tti);
+            tti = EntityFactory.create(TenantTabInfo.class);
+            tti.fullName().setValue("Petya V. Pupkin");
+            ap.tenants().add(tti);
+
+            PtAppWizardManager.instance().getCurrentApplication().progress.tenants().setValue(ap.tenants().getValue());
 
 //            PtAppWizardManager.instance().get
 
