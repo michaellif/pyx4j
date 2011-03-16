@@ -119,8 +119,7 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
 
             Element td = DOM.getParent(side.getElement());
             if (td != null) {
-//                td.setPropertyString("background-color", "red");
-                td.setAttribute("bgcolor", colour); // just this works, BUT... bgcolor is DEPRECATED!?.
+                td.getStyle().setBackgroundColor(colour);
             }
 
             add(new HTML("&nbsp;&nbsp;&nbsp;"));
