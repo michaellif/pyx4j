@@ -14,16 +14,11 @@
 package com.propertyvista.portal.client.ptapp.activity;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.TenantsView;
 import com.propertyvista.portal.client.ptapp.ui.TenantsViewPresenter;
-import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.rpc.pt.services.TenantsServices;
-
-import com.pyx4j.security.client.ClientContext;
 
 public class TenantsActivity extends WizardStepActivity<PotentialTenantList, TenantsViewPresenter> implements TenantsViewPresenter {
 
@@ -31,17 +26,5 @@ public class TenantsActivity extends WizardStepActivity<PotentialTenantList, Ten
     public TenantsActivity(TenantsView view) {
         super(view, PotentialTenantList.class, (TenantsServices) GWT.create(TenantsServices.class));
     }
-
-    @Override
-    protected void createNewEntity(PotentialTenantList newEntity, AsyncCallback<PotentialTenantList> callback) {
-        newEntity.tenants().clear();
-        PotentialTenantInfo first = newEntity.tenants().$();
-        first.email().setValue(ClientContext.getUserVisit().getEmail());
-        first.status().setValue(Status.Applicant);
-        newEntity.tenants().add(first);
-        callback.onSuccess(newEntity);
-    }
-
-    // TODO: Vlad - fill few tenenats in to ApplicationProgress!!!
 
 }

@@ -164,6 +164,9 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
 
     //TODO move this to IList
     private static PotentialTenantInfo findTenant(PotentialTenantList tenantsNew, PotentialTenantInfo tenantOrig) {
+        if (tenantsNew == null) {
+            return null;
+        }
         for (PotentialTenantInfo tenant : tenantsNew.tenants()) {
             if (tenant.equals(tenantOrig)) {
                 return tenant;

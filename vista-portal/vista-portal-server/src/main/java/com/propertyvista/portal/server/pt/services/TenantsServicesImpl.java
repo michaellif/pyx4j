@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.rpc.pt.services.TenantsServices;
 import com.propertyvista.portal.server.campaign.CampaignManager;
@@ -27,6 +29,7 @@ import com.propertyvista.server.domain.CampaignTriger;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.server.contexts.Context;
 
 public class TenantsServicesImpl extends ApplicationEntityServicesImpl implements TenantsServices {
     private final static Logger log = LoggerFactory.getLogger(TenantsServicesImpl.class);
@@ -39,6 +42,10 @@ public class TenantsServicesImpl extends ApplicationEntityServicesImpl implement
         if (tenants == null) {
             log.info("Creating new tenant list");
             tenants = EntityFactory.create(PotentialTenantList.class);
+            PotentialTenantInfo first = tenants.tenants().$();
+            first.email().setValue(Context.getVisit().getUserVisit().getEmail());
+            first.status().setValue(Status.Applicant);
+            tenants.tenants().add(first);
         }
 
         callback.onSuccess(tenants);
