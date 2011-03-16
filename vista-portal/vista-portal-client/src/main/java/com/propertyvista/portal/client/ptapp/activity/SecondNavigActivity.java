@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -21,9 +20,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.SecondNavigView;
-import com.propertyvista.portal.domain.pt.TenantTabInfo;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
+import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -39,30 +39,6 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
     }
 
     public SecondNavigActivity withPlace(Place place) {
-
-        if (place.getClass() == SiteMap.Info.class || place.getClass() == SiteMap.Financial.class) {
-
-            //            // fill dumb tenants value:
-            //
-            //            ApplicationProgress ap = EntityFactory.create(ApplicationProgress.class);
-            //            TenantTabInfo tti = EntityFactory.create(TenantTabInfo.class);
-            //            tti.fullName().setValue("Vasia I. Pupkin");
-            //            ap.tenants().add(tti);
-            //            tti = EntityFactory.create(TenantTabInfo.class);
-            //            tti.fullName().setValue("Masha Pupkina");
-            //            ap.tenants().add(tti);
-            //            tti = EntityFactory.create(TenantTabInfo.class);
-            //            tti.fullName().setValue("Petya V. Pupkin");
-            //            ap.tenants().add(tti);
-            //
-            //            PtAppWizardManager.instance().getCurrentApplication().progress.tenants().setValue(ap.tenants().getValue());
-
-            //            PtAppWizardManager.instance().get
-
-            view.show();
-        } else
-            view.hide();
-
         return this;
     }
 
@@ -82,8 +58,17 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
     }
 
     @Override
-    public List<TenantTabInfo> getTenantTabsInfo() {
-        return new ArrayList<TenantTabInfo>();
+    public List<ApplicationWizardSubstep> getWizardSubsteps() {
+        String token = AppSite.instance().getHistoryMapper().getToken(getWhere());
+        if (token == null) {
+            return null;
+        }
+        for (ApplicationWizardStep step : PtAppWizardManager.instance().getApplicationProgress().steps()) {
+            if (token.equals(step.placeToken().getValue())) {
+                return step.substeps();
+            }
+        }
+        return null;
     }
 
     @Override

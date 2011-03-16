@@ -14,7 +14,6 @@
 package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
@@ -23,7 +22,4 @@ public interface ApplicationProgress extends IEntity, IBoundToApplication {
     @Owned
     IList<ApplicationWizardStep> steps();
 
-    @Transient
-    @Deprecated
-    IList<TenantTabInfo> tenants();
 }

@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.domain.pt.TenantTabInfo;
+import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
@@ -62,23 +62,17 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
     @Override
     public void setPresenter(SecondNavigPresenter presenter) {
         this.presenter = presenter;
-    }
 
-    @Override
-    public void show() {
         clear();
 
-        tabsHolder = new NavigTabList();
-        for (TenantTabInfo tti : presenter.getTenantTabsInfo()) {
-            tabsHolder.add(new NavigTab(tti));
+        if (presenter.getWizardSubsteps() != null && presenter.getWizardSubsteps().size() > 0) {
+            tabsHolder = new NavigTabList();
+            for (ApplicationWizardSubstep substep : presenter.getWizardSubsteps()) {
+                tabsHolder.add(new NavigTab(substep));
+            }
+            setWidget(tabsHolder);
         }
 
-        setWidget(tabsHolder);
-    }
-
-    @Override
-    public void hide() {
-        clear();
     }
 
     class NavigTabList extends ComplexPanel {
@@ -107,7 +101,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             return place;
         }
 
-        NavigTab(final TenantTabInfo tti) {
+        NavigTab(final ApplicationWizardSubstep substep) {
             super();
             setElement(DOM.createElement("li"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
@@ -124,28 +118,28 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             labelHolder.add(statusHolder);
 
             this.place = new SiteMap.Info();
-            label = new Label(tti.fullName().getValue());
+            label = new Label(substep.name().getValue());
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.SecondNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));
             statusHolder.add(label);
 
             // TODO: status logic here:
-//            switch (step.getStatus()) {
-//            case invalid:
-//                addStyleDependentName(StyleDependent.invalid);
-//                break;
-//            case complete:
-//                addStyleDependentName(StyleDependent.complete);
-//                break;
-//            case latest:
-//                addStyleDependentName(StyleDependent.latest);
-//                break;
-//            default:
-//                break;
-//            }
+            //            switch (step.getStatus()) {
+            //            case invalid:
+            //                addStyleDependentName(StyleDependent.invalid);
+            //                break;
+            //            case complete:
+            //                addStyleDependentName(StyleDependent.complete);
+            //                break;
+            //            case latest:
+            //                addStyleDependentName(StyleDependent.latest);
+            //                break;
+            //            default:
+            //                break;
+            //            }
 
-            if (tti.fullName().getValue().contains("Vasia")) {
-//            if (place.equals(presenter.getWhere())) {
+            if (substep.name().getValue().contains("Vasia")) {
+                //            if (place.equals(presenter.getWhere())) {
                 this.addStyleDependentName(StyleDependent.current.name());
                 label.addStyleDependentName(StyleDependent.current.name());
             }

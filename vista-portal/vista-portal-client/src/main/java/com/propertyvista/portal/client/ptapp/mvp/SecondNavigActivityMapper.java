@@ -16,7 +16,6 @@ package com.propertyvista.portal.client.ptapp.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.propertyvista.portal.client.ptapp.activity.SecondNavigActivity;
@@ -36,7 +35,12 @@ public class SecondNavigActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return secondNavigActivityProvider.get().withPlace(place);
+        if (ClientContext.isAuthenticated() && !(place instanceof SiteMap.Completion)) {
+            return secondNavigActivityProvider.get().withPlace(place);
+        } else {
+            return null;
+        }
+
     }
 
 }

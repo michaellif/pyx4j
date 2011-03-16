@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.domain.pt.TenantTabInfo;
+import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -25,16 +25,12 @@ public interface SecondNavigView extends IsWidget {
 
     public void setPresenter(SecondNavigPresenter presenter);
 
-    public void show();
-
-    public void hide();
-
     public interface SecondNavigPresenter {
         public void navigTo(Place place);
 
         public String getNavigLabel(AppPlace place);
 
-        public List<TenantTabInfo> getTenantTabsInfo();
+        public List<ApplicationWizardSubstep> getWizardSubsteps();
 
         public Place getWhere();
     }
