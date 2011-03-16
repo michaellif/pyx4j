@@ -186,8 +186,8 @@ public class CrmView extends FlowPanel {
     }
 
     private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
-        ActivityManager logoActivityManager = new ActivityManager(mapper, eventBus);
-        logoActivityManager.setDisplay(widget);
+        ActivityManager activityManager = new ActivityManager(mapper, eventBus);
+        activityManager.setDisplay(widget);
 
     }
 
