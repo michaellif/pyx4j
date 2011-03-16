@@ -34,8 +34,28 @@ public class TableFolderItemDecorator extends BaseFolderItemDecorator {
 
     private final HTML validationMessageHolder;
 
+    public TableFolderItemDecorator(ImageResource removeButton) {
+        this(removeButton, (ImageResource) null);
+    }
+
+    public TableFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover) {
+        this(removeButton, removeButtonHover, null);
+    }
+
+    public TableFolderItemDecorator(ImageResource removeButton, String title) {
+        this(removeButton, (ImageResource) null, title);
+    }
+
+    public TableFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title) {
+        this(removeButton, removeButtonHover, title, true);
+    }
+
     public TableFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
-        super(removeButton, title, removable);
+        this(removeButton, null, title, removable);
+    }
+
+    public TableFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
+        super(removeButton, removeButtonHover, title, removable);
 
         VerticalPanel mainPanel = new VerticalPanel();
         setWidget(mainPanel);
@@ -46,14 +66,6 @@ public class TableFolderItemDecorator extends BaseFolderItemDecorator {
         validationMessageHolder.getElement().getStyle().setColor("red");
         mainPanel.add(validationMessageHolder);
 
-    }
-
-    public TableFolderItemDecorator(ImageResource removeButton, String title) {
-        this(removeButton, title, true);
-    }
-
-    public TableFolderItemDecorator(ImageResource removeButton) {
-        this(removeButton, null, true);
     }
 
     @Override

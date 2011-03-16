@@ -25,6 +25,10 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -40,7 +44,11 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     protected SimplePanel content;
 
-    protected Image addImage;
+    protected Image image;
+
+    protected final ImageResource imageResourceRegular;
+
+    protected final ImageResource imageResourceHover;
 
     protected FlowPanel imageHolder;
 
@@ -49,24 +57,46 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     protected boolean addable;
 
     public BaseFolderDecorator(ImageResource addButton, String title, boolean addable) {
+        this(addButton, null, title, addable);
+    }
+
+    public BaseFolderDecorator(ImageResource addButton, ImageResource addButtonHover, String title, boolean addable) {
         this.addable = addable && (addButton != null);
 
+        imageResourceRegular = addButton;
+        imageResourceHover = addButtonHover;
+
         if (addButton != null) {
-            addImage = new Image(addButton);
-            addImage.getElement().getStyle().setCursor(Cursor.POINTER);
-            addImage.getElement().getStyle().setFloat(Float.LEFT);
+            image = new Image(addButton);
+            image.getElement().getStyle().setCursor(Cursor.POINTER);
+            image.getElement().getStyle().setFloat(Float.LEFT);
+            image.addMouseOverHandler(new MouseOverHandler() {
+
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    setHoverImage();
+                }
+            });
+            image.addMouseOutHandler(new MouseOutHandler() {
+
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    setRegularImage();
+                }
+            });
 
             imageHolder = new FlowPanel();
             imageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            imageHolder.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
-            imageHolder.add(addImage);
+            imageHolder.getElement().getStyle().setPaddingLeft(image.getWidth(), Unit.PX);
+            imageHolder.add(image);
 
             addButtonLabel = new Label(title);
             addButtonLabel.getElement().getStyle().setPaddingLeft(3, Unit.PX);
             addButtonLabel.getElement().getStyle().setFloat(Float.LEFT);
             imageHolder.add(addButtonLabel);
+
         } else {
-            addImage = null;
+            image = null;
             addButtonLabel = null;
         }
 
@@ -81,7 +111,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
         }
 
         HandlerRegistrationGC h = new HandlerRegistrationGC();
-        h.add(addImage.addClickHandler(handler));
+        h.add(image.addClickHandler(handler));
         h.add(addButtonLabel.addClickHandler(handler));
         return h;
     }
@@ -97,8 +127,20 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
         //TODO use inheritance of objects
         //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
         if (addable) {
-            addImage.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString());
+            image.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString());
             addButtonLabel.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString() + "_label");
+        }
+    }
+
+    protected void setRegularImage() {
+        if (imageResourceRegular != null) {
+            image.setResource(imageResourceRegular);
+        }
+    }
+
+    protected void setHoverImage() {
+        if (imageResourceHover != null) {
+            image.setResource(imageResourceHover);
         }
     }
 }

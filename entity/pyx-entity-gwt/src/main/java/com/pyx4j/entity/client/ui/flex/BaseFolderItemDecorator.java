@@ -22,6 +22,10 @@ package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -34,6 +38,10 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
 
     protected Image image;
 
+    protected final ImageResource imageResourceRegular;
+
+    protected final ImageResource imageResourceHover;
+
     protected SimplePanel content;
 
     protected FlowPanel rowHolder;
@@ -43,7 +51,14 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
     protected ImageHolder imageHolder;
 
     public BaseFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
+        this(removeButton, null, title, removable);
+    }
+
+    public BaseFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
         this.removable = (removable && removeButton != null);
+
+        imageResourceRegular = removeButton;
+        imageResourceHover = removeButtonHover;
 
         rowHolder = new FlowPanel();
         rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -51,6 +66,20 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
         imageHolder = null;
         if (removeButton != null) {
             image = new Image(removeButton);
+            image.addMouseOverHandler(new MouseOverHandler() {
+
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    setHoverImage();
+                }
+            });
+            image.addMouseOutHandler(new MouseOutHandler() {
+
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    setRegularImage();
+                }
+            });
 
             imageHolder = new ImageHolder(image);
             imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
@@ -89,4 +118,15 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
         }
     }
 
+    protected void setRegularImage() {
+        if (imageResourceRegular != null) {
+            image.setResource(imageResourceRegular);
+        }
+    }
+
+    protected void setHoverImage() {
+        if (imageResourceHover != null) {
+            image.setResource(imageResourceHover);
+        }
+    }
 }

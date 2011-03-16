@@ -42,26 +42,39 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
     private final HorizontalPanel header;
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns) {
-        this(columns, null, null, false);
+        this(columns, null, null, null, false);
     }
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title) {
-        this(columns, addButton, title, true);
+        this(columns, addButton, (ImageResource) null, title);
+    }
+
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, ImageResource addButtonhover, String title) {
+        this(columns, addButton, addButtonhover, title, true);
     }
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton) {
-        this(columns, addButton, null, true);
+        this(columns, addButton, (ImageResource) null);
+    }
+
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, ImageResource addButtonhover) {
+        this(columns, addButton, addButtonhover, null, true);
     }
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title, boolean addable) {
-        super(addButton, title, addable);
+        this(columns, addButton, null, title, addable);
+    }
+
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, ImageResource addButtonhover, String title,
+            boolean addable) {
+        super(addButton, addButtonhover, title, addable);
 
         header = new HorizontalPanel();
         header.getElement().getStyle().setMarginBottom(3, Unit.PX);
         setHeaderVisible(false);
         header.setWidth("100%");
-        if (addImage != null) {
-            header.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
+        if (image != null) {
+            header.getElement().getStyle().setPaddingLeft(image.getWidth(), Unit.PX);
         }
 
         for (EntityFolderColumnDescriptor column : columns) {

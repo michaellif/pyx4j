@@ -29,15 +29,27 @@ import com.pyx4j.entity.shared.IList;
 public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {
 
     public BoxFolderDecorator(ImageResource addButton) {
-        this(addButton, null, false);
+        this(addButton, (ImageResource) null);
+    }
+
+    public BoxFolderDecorator(ImageResource addButton, ImageResource addButtonHover) {
+        this(addButton, addButtonHover, null, false);
     }
 
     public BoxFolderDecorator(ImageResource addButton, String title) {
-        this(addButton, title, true);
+        this(addButton, null, title);
+    }
+
+    public BoxFolderDecorator(ImageResource addButton, ImageResource addButtonHover, String title) {
+        this(addButton, addButtonHover, title, true);
     }
 
     public BoxFolderDecorator(ImageResource addButton, String title, boolean addable) {
-        super(addButton, title, addable);
+        this(addButton, null, title, addable);
+    }
+
+    public BoxFolderDecorator(ImageResource addButton, ImageResource addButtonHover, String title, boolean addable) {
+        super(addButton, addButtonHover, title, addable);
 
         add(content);
 
