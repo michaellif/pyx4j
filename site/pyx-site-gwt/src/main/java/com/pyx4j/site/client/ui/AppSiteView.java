@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
@@ -45,11 +46,11 @@ public class AppSiteView extends FlowPanel {
 
     ActivityMapper bottomActivityMapper,
 
-    EventBus eventBus,
-
     Theme theme) {
 
         StyleManger.installTheme(theme);
+
+        EventBus eventBus = AppSite.instance().getEventBus();
 
         String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
 

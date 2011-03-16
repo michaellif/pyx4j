@@ -29,10 +29,6 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
 
     @Override
     public AppPlace getPlace(String token) {
-        return getPlaceImpl(token);
-    }
-
-    public static AppPlace getPlaceImpl(String token) {
         int splitIndex = token.indexOf(ARGS_GROUP_SEPARATOR);
         String placeId = null;
         String queryString = null;
@@ -59,6 +55,10 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
             return AppPlaceInfo.getPlaceId(place.getClass()) + createQueryString(((AppPlace) place).getArgs());
         }
         return null;
+    }
+
+    public AppPlaceInfo getPlaceInfo(AppPlace place) {
+        return listing.getPlaceInfo(place);
     }
 
     protected static Map<String, String> parseQueryString(String queryString) {

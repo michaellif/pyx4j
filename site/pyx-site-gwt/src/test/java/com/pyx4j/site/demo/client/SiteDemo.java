@@ -20,9 +20,6 @@
  */
 package com.pyx4j.site.demo.client;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.RootPanel;
-
 import com.pyx4j.site.client.AppSite;
 
 /**
@@ -32,9 +29,6 @@ public class SiteDemo extends AppSite {
 
     @Override
     public void onSiteLoad() {
-        SiteGinjector ginjector = GWT.create(SiteGinjector.class);
-        RootPanel.get().add(ginjector.getSiteView());
-        ginjector.getPlaceHistoryHandler().handleCurrentHistory();
 
     }
 

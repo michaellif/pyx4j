@@ -20,29 +20,13 @@
  */
 package com.pyx4j.site.client;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.AbstractGinModule;
-import com.google.gwt.place.shared.PlaceController;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
 
 public class AppSiteGinModule extends AbstractGinModule {
 
     @Override
     protected void configure() {
 
-        bind(EventBus.class).to(AppSiteEventBus.class).in(Singleton.class);
-
-    }
-
-    @Provides
-    @Singleton
-    public PlaceController getPlaceController(EventBus eventBus) {
-        return new PlaceController(eventBus);
-    }
-
-    public EventBus getEventBus(EventBus eventBus) {
-        return eventBus;
     }
 
 }
