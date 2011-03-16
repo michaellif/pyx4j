@@ -229,7 +229,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
         pti.secureIdentifier().setValue("649 951 282");
 
-        pti.canadianCitizen().setValue(RandomUtil.randomBoolean());
+        pti.notCanadianCitizen().setValue(RandomUtil.randomBoolean());
 
         Address currentAddress = createAddress();
         currentAddress.moveOutDate().setValue(RandomUtil.randomDate(2012, 2013)); // this has to be in the future
