@@ -20,8 +20,6 @@ import com.propertyvista.portal.client.ptapp.ui.InfoViewPresenter;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.rpc.pt.services.TenantsInfoServices;
 
-import com.pyx4j.site.rpc.AppPlace;
-
 public class InfoActivity extends WizardStepWithSubstepsActivity<PotentialTenantInfo, InfoViewPresenter> implements InfoViewPresenter {
 
     @Inject
