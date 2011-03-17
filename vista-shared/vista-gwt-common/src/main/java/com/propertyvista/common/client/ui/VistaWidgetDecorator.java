@@ -93,10 +93,10 @@ public class VistaWidgetDecorator extends VerticalPanel {
             label.getElement().getStyle().setWidth(decorData.labelWidth, decorData.labelUnit);
         }
 
-        if (decorData.labelStyle == null) {
+        if (decorData.labelStyleName == null) {
             label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
         } else {
-            label.addStyleName(decorData.labelStyle);
+            label.addStyleName(decorData.labelStyleName);
         }
 
         Cursor.setDefault(label.getElement());
@@ -248,7 +248,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
         public Unit labelUnit = Unit.EM;
 
-        public String labelStyle;
+        public String labelStyleName;
 
         public HorizontalAlignmentConstant labelAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
 
@@ -294,28 +294,18 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
         // second one - with alignment:
         //
-        public DecorationData(HorizontalAlignmentConstant labelAlignment, HorizontalAlignmentConstant componentAlignment) {
-            this.labelAlignment = labelAlignment;
-            this.componentAlignment = componentAlignment;
-        }
-
-        public DecorationData(int labelWidth, HorizontalAlignmentConstant labelAlignment, int componentWidth, HorizontalAlignmentConstant componentAlignment) {
+        public DecorationData(int labelWidth, HorizontalAlignmentConstant labelAlignment, int componentWidth) {
             this.labelWidth = labelWidth;
             this.labelUnit = Unit.PX;
             this.labelAlignment = labelAlignment;
             this.componentWidth = componentWidth;
-            this.componentUnit = Unit.PX;
-            this.componentAlignment = componentAlignment;
         }
 
-        public DecorationData(double labelWidth, HorizontalAlignmentConstant labelAlignment, double componentWidth,
-                HorizontalAlignmentConstant componentAlignment) {
+        public DecorationData(double labelWidth, HorizontalAlignmentConstant labelAlignment, double componentWidth) {
             this.labelWidth = labelWidth;
             this.labelUnit = Unit.EM;
             this.labelAlignment = labelAlignment;
             this.componentWidth = componentWidth;
-            this.componentUnit = Unit.EM;
-            this.componentAlignment = componentAlignment;
         }
 
         public DecorationData(double labelWidth, Unit labelUnit, HorizontalAlignmentConstant labelAlignment, double componentWidth, Unit componentUnit,

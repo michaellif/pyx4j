@@ -447,10 +447,9 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             CTextField edit = new CTextField();
             bind(edit, proto().fullName());
 
-            DecorationData dd = new DecorationData(10d, 16);
-            dd.labelStyle = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureLabel.name();
+            DecorationData dd = new DecorationData(10d, HasHorizontalAlignment.ALIGN_LEFT, 16);
+            dd.labelStyleName = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureLabel.name();
 //            dd.componentStyle = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureEdit.name();
-            dd.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
             VistaWidgetDecorator signature = new VistaWidgetDecorator(edit, dd);
             signature.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignature.name());
             signature.getElement().getStyle().setMarginTop(1, Unit.EM);
