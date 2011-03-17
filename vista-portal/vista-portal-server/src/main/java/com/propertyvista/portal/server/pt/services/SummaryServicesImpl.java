@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.rpc.pt.services.SummaryServices;
 import com.propertyvista.portal.server.pt.PtUserDataAccess;
@@ -65,7 +66,12 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
 
         retrieveApplicationEntity(summary.tenants());
         summary.tenants2().set(summary.tenants());
+
         retrieveApplicationEntity(summary.financial());
+        EntityQueryCriteria<PotentialTenantFinancial> financialCriteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
+        financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        summary.tenantFinancials().addAll(PersistenceServicesFactory.getPersistenceService().query(financialCriteria));
+
         retrieveApplicationEntity(summary.pets());
         retrieveApplicationEntity(summary.charges());
 
