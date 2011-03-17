@@ -20,7 +20,7 @@ import com.propertyvista.portal.client.ptapp.ui.FinancialViewPresenter;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.rpc.pt.services.TenantsFinancialServices;
 
-public class FinancialActivity extends WizardStepActivity<PotentialTenantFinancial, FinancialViewPresenter> implements FinancialViewPresenter {
+public class FinancialActivity extends WizardStepWithSubstepsActivity<PotentialTenantFinancial, FinancialViewPresenter> implements FinancialViewPresenter {
 
     @Inject
     public FinancialActivity(FinancialView view) {

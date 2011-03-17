@@ -153,8 +153,8 @@ public class PtAppWizardManager {
         return applicationProgress;
     }
 
-    private ApplicationWizardStep getStep(Place current) {
-        String placeId = AppSite.getPlaceId(current);
+    private ApplicationWizardStep getStep(Place place) {
+        String placeId = AppSite.getPlaceId(place);
         if (placeId == null) {
             return null;
         }
@@ -166,26 +166,28 @@ public class PtAppWizardManager {
         return null;
     }
 
-    public void nextStep() {
-        Place current = AppSite.getPlaceController().getWhere();
-        ApplicationWizardStep currentStep = getStep(current);
-
-        ApplicationWizardSubstep substep = null;
-        AppPlace place = null;//  TODO where am I?
-        String stepArg = null;
-        if ((currentStep != null) && (place != null) && (place.getArgs() != null)) {
-            stepArg = place.getArgs().get(SecondNavigActivity.STEP_ARG_NAME);
-            // Find current substep
-            if (stepArg != null) {
-                for (ApplicationWizardSubstep sub : currentStep.substeps()) {
-                    if (stepArg.equals(sub.placeArgument().getStringView())) {
-                        substep = sub;
-                        break;
-                    }
-                }
-            }
+    private ApplicationWizardSubstep getSubStep(AppPlace place, ApplicationWizardStep currentStep) {
+        if ((place == null) || (currentStep == null)) {
+            return null;
+        }
+        String stepArg = place.getArgs().get(SecondNavigActivity.STEP_ARG_NAME);
+        // Find current Substep
+        if (stepArg == null) {
+            return null;
         }
 
+        for (ApplicationWizardSubstep substep : currentStep.substeps()) {
+            if (stepArg.equals(substep.placeArgument().getStringView())) {
+                return substep;
+            }
+        }
+        return null;
+    }
+
+    public void nextStep() {
+        AppPlace currentPlace = AppSite.getWhere();
+        ApplicationWizardStep currentStep = getStep(currentPlace);
+        ApplicationWizardSubstep substep = getSubStep(currentPlace, currentStep);
         ((ApplicationServices) GWT.create(ApplicationServices.class)).getApplicationProgress(new DefaultAsyncCallback<ApplicationProgress>() {
             @Override
             public void onSuccess(ApplicationProgress result) {

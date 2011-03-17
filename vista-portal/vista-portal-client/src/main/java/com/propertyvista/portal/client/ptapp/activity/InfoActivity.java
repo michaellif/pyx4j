@@ -20,7 +20,7 @@ import com.propertyvista.portal.client.ptapp.ui.InfoViewPresenter;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.rpc.pt.services.TenantsInfoServices;
 
-public class InfoActivity extends WizardStepActivity<PotentialTenantInfo, InfoViewPresenter> implements InfoViewPresenter {
+public class InfoActivity extends WizardStepWithSubstepsActivity<PotentialTenantInfo, InfoViewPresenter> implements InfoViewPresenter {
 
     @Inject
     public InfoActivity(InfoView view) {

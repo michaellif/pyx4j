@@ -33,8 +33,7 @@ public class TenantsInfoServicesImpl extends ApplicationEntityServicesImpl imple
         log.info("Retrieving summary for tenant {}", tenantId);
         EntityQueryCriteria<PotentialTenantInfo> criteria = EntityQueryCriteria.create(PotentialTenantInfo.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
-        // TODO - add query for particular tenantId
-        //        criteria.add(PropertyCriterion.eq(member, value))
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenantId));
         PotentialTenantInfo tenant = secureRetrieve(criteria);
         if (tenant == null) {
             log.info("Creating new tenant");

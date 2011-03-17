@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepPresenter;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepView;
-import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 import com.propertyvista.portal.domain.pt.IBoundToApplication;
 import com.propertyvista.portal.rpc.pt.services.AbstractWizardServices;
 
@@ -45,7 +44,7 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
 
     private final AbstractWizardServices<E> wizardServices;
 
-    private AppPlace currentPlace;
+    protected AppPlace currentPlace;
 
     @SuppressWarnings("unchecked")
     public WizardStepActivity(WizardStepView<E, T> view, Class<E> clazz, AbstractWizardServices<E> wizardServices) {
@@ -61,15 +60,13 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
         return this;
     }
 
+    protected Long getCurrentTenantId() {
+        return null;
+    }
+
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-
-        // get secondary step argument (should be tenant ID for Info and Financial views):
-        String stepArg = null;
-        if (currentPlace != null && currentPlace.getArgs() != null) {
-            stepArg = currentPlace.getArgs().get(SecondNavigActivity.STEP_ARG_NAME);
-        }
 
         wizardServices.retrieve(new DefaultAsyncCallback<E>() {
             @Override
@@ -93,7 +90,8 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
                     view.populate(entity);
                 }
             }
-        }, (stepArg != null ? Long.parseLong(stepArg) : null)); // retrieve data for specific tenant (if present) 
+        }, getCurrentTenantId());
+
     }
 
     protected void createNewEntity(E newEntity, AsyncCallback<E> callback) {
