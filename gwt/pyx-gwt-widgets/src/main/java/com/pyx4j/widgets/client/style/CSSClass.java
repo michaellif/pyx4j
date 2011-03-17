@@ -56,9 +56,6 @@ public enum CSSClass {
     //TextBox
     pyx4j_TextBox,
 
-    //ListBox
-    pyx4j_ListBox,
-
     //Hyperlink
     pyx4j_Hyperlink,
 

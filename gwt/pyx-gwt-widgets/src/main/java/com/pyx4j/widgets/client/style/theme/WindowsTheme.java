@@ -20,10 +20,8 @@
  */
 package com.pyx4j.widgets.client.style.theme;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
-
 import com.pyx4j.widgets.client.ImageFactory;
+import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
@@ -552,8 +550,10 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initListBoxStyle() {
-        Style style = new Style(CSSClass.pyx4j_ListBox);
+        Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX));
         style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
         addStyle(style);
     }
 

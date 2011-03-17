@@ -21,19 +21,25 @@
 package com.pyx4j.forms.client.ui;
 
 import java.util.List;
-import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 
+import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.Selector;
 
 /**
  *
  */
 public class NativeComboBox<E> extends ListBox implements INativeEditableComponent<E> {
+
+    public static enum StyleDependent implements IStyleDependent {
+        disabled, readOnly, invalid
+    }
 
     private final CComboBox<E> comboBox;
 
@@ -173,6 +179,13 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         super.setEnabled(enabled && this.isEditable());
+        String dependentSuffix = Selector.getDependentName(StyleDependent.disabled);
+        if (enabled) {
+            removeStyleDependentName(dependentSuffix);
+        } else {
+            addStyleDependentName(dependentSuffix);
+        }
+
     }
 
     @Override
@@ -184,6 +197,12 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
     public void setEditable(boolean editable) {
         this.editable = editable;
         super.setEnabled(editable && this.isEnabled());
+        String dependentSuffix = Selector.getDependentName(StyleDependent.readOnly);
+        if (editable) {
+            removeStyleDependentName(dependentSuffix);
+        } else {
+            addStyleDependentName(dependentSuffix);
+        }
     }
 
     @Override
@@ -244,5 +263,11 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
 
     @Override
     public void setValid(boolean valid) {
+        String dependentSuffix = Selector.getDependentName(StyleDependent.invalid);
+        if (valid) {
+            removeStyleDependentName(dependentSuffix);
+        } else {
+            addStyleDependentName(dependentSuffix);
+        }
     }
 }

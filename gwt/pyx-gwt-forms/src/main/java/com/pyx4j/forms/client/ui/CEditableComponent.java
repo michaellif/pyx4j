@@ -49,12 +49,10 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     private boolean mandatory = false;
 
-    private boolean editing = false;
-
     // Have been changed after population
     private boolean visited = false;
 
-    private final boolean valid = false;
+    private boolean editing = false;
 
     public CEditableComponent() {
         this(null);
@@ -66,7 +64,12 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     //TODO make it protected and add isValid that would return result
     public boolean isValid() {
-        return !isVisible() || !isEditable() || !isEnabled() || (isMandatoryConditionMet() && isValidationConditionMet());
+        return !isVisible() || !isEditable() || !isEnabled() || (!isMandatory() && isValueEmpty()) || (isMandatoryConditionMet() && isValidationConditionMet());
+    }
+
+    public void revalidate() {
+        asWidget().setValid(isValid());
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
     }
 
     public DATA_TYPE getValue() {
@@ -75,15 +78,14 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     void setValueByNativeComponent(DATA_TYPE value) {
         this.visited = true;
-        if (isValid()) {
-            asWidget().setValid(true);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
-        }
         if (isValuesEquals(getValue(), value)) {
             return;
         }
         this.value = value;
         setNativeComponentValue(value);
+
+        revalidate();
+
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
         ValueChangeEvent.fire(this, value);
 
@@ -277,8 +279,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     public void onEditingStop() {
         editing = false;
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
-        asWidget().setValid(isValid());
+        revalidate();
     }
 
     @Override
@@ -301,4 +302,5 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         });
         return widget;
     }
+
 }

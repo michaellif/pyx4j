@@ -20,19 +20,13 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
-
-import com.pyx4j.widgets.client.style.CSSClass;
-
 public class ListBox extends com.google.gwt.user.client.ui.ListBox {
+
+    public static String DEFAULT_STYLE_PREFIX = "pyx4j_ListBox";
 
     public ListBox() {
         super();
-        setStyleName(CSSClass.pyx4j_ListBox.name());
-        getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        getElement().getStyle().setBorderWidth(1, Unit.PX);
-
+        setStyleName(DEFAULT_STYLE_PREFIX);
     }
 
 }
