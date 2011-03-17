@@ -86,66 +86,43 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
         main.add(new ViewHeaderDecorator(i18n.tr("Contact Details")));
 
-        DecorationData decorData = new DecorationData();
+        DecorationData decorData = new DecorationData(10d, 12);
         decorData.editable = false;
-        decorData.componentWidth = 12;
         main.add(new VistaWidgetDecorator(inject(proto().firstName()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().middleName()), new DecorationData(10d, 12)));
 
-        main.add(new HTML());
-
-        decorData = new DecorationData();
-        decorData.componentWidth = 12;
-        main.add(new VistaWidgetDecorator(inject(proto().middleName()), decorData));
-        main.add(new HTML());
-
-        decorData = new DecorationData();
+        decorData = new DecorationData(10d, 20);
         decorData.editable = false;
-        decorData.componentWidth = 20;
         main.add(new VistaWidgetDecorator(inject(proto().lastName()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().homePhone()), new DecorationData(10d, 15)));
+        main.add(new VistaWidgetDecorator(inject(proto().mobilePhone()), new DecorationData(10d, 15)));
+        main.add(new VistaWidgetDecorator(inject(proto().workPhone()), new DecorationData(10d, 15)));
 
-        main.add(new HTML());
-
-        decorData = new DecorationData();
-        decorData.componentWidth = 15;
-        main.add(new VistaWidgetDecorator(inject(proto().homePhone()), decorData));
-        main.add(new HTML());
-
-        decorData = new DecorationData();
-        decorData.componentWidth = 15;
-        main.add(new VistaWidgetDecorator(inject(proto().mobilePhone()), decorData));
-        main.add(new HTML());
-
-        decorData = new DecorationData();
-        decorData.componentWidth = 15;
-        main.add(new VistaWidgetDecorator(inject(proto().workPhone()), decorData));
-        main.add(new HTML());
-
-        decorData = new DecorationData();
+        decorData = new DecorationData(10d, 25);
         decorData.editable = false;
-        decorData.componentWidth = 25;
         main.add(new VistaWidgetDecorator(inject(proto().email()), decorData));
 
         main.add(new ViewHeaderDecorator(i18n.tr("Secure Information")));
-        decorData = new DecorationData();
-        decorData.componentWidth = 20;
-        main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), decorData));
-        main.add(new HTML());
-        decorData = new DecorationData();
-        decorData.componentWidth = 17;
-        main.add(new VistaWidgetDecorator(inject(proto().driversLicenseState()), decorData));
-        main.add(new HTML());
-        decorData = new DecorationData();
-        decorData.componentWidth = 11;
-        main.add(new VistaWidgetDecorator(inject(proto().secureIdentifier()), decorData));
-        decorData.componentWidth = 3;
-        main.add(new VistaWidgetDecorator(inject(proto().notCanadianCitizen()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), new DecorationData(10d, 20)));
+        main.add(new VistaWidgetDecorator(inject(proto().driversLicenseState()), new DecorationData(10d, 17)));
+        main.add(new VistaWidgetDecorator(inject(proto().secureIdentifier()), new DecorationData(10d, 11)));
+
+        main.add(new VistaWidgetDecorator(inject(proto().notCanadianCitizen()), new DecorationData(10d, 3)));
 
         fileUpload = new FileUpload();
-        fileUpload.getElement().getStyle().setMarginLeft(12.7, Unit.EM);
+        fileUpload.getElement().getStyle().setMarginLeft(12.5, Unit.EM);
         fileUpload.getElement().getStyle().setMarginTop(1, Unit.EM);
         fileUpload.getElement().getStyle().setMarginBottom(1, Unit.EM);
+        fileUpload.setVisible(false); // show it in case on not a Canadian citizen!..
         main.add(fileUpload);
-        main.add(new HTML());
+
+        get(proto().notCanadianCitizen()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                fileUpload.setVisible(event.getValue());
+            }
+        });
 
         main.add(new ViewHeaderDecorator(proto().currentAddress()));
         main.add(inject(proto().currentAddress()));
@@ -158,23 +135,22 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
         main.add(new ViewHeaderDecorator(proto().legalQuestions()));
 
-        VistaWidgetDecorator.DecorationData decor = new VistaWidgetDecorator.DecorationData(450, 100);
+        VistaWidgetDecorator.DecorationData decor = new VistaWidgetDecorator.DecorationData(40d, 8);
         decor.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
 
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForRent()), decor));
-        main.add(new ViewLineSeparator());
+        main.add(new ViewLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForDamages()), decor));
-        main.add(new ViewLineSeparator());
+        main.add(new ViewLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().everEvicted()), decor));
-        main.add(new ViewLineSeparator());
+        main.add(new ViewLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().defaultedOnLease()), decor));
-        main.add(new ViewLineSeparator());
+        main.add(new ViewLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().convictedOfFelony()), decor));
-        main.add(new ViewLineSeparator());
+        main.add(new ViewLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().legalTroubles()), decor));
-        main.add(new ViewLineSeparator());
+        main.add(new ViewLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
-        main.add(new HTML());
 
         main.add(new ViewHeaderDecorator(proto().emergencyContacts()));
         main.add(inject(proto().emergencyContacts(), createIncomeFolderEditor()));
@@ -302,8 +278,11 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
     @Override
     public void populate(PotentialTenantInfo value) {
         super.populate(value);
+
         enablePreviousAddress();
+
         fileUpload.populate(value.id().getValue(), DocumentType.securityInfo);
+        fileUpload.setVisible(value.notCanadianCitizen().getValue());
     }
 
     private CEntityEditableComponent<Address> createAddressEditor() {

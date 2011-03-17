@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.themes;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.StyleSuffix;
@@ -22,6 +23,7 @@ import com.propertyvista.portal.client.ptapp.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.SecondNavigViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
+import com.propertyvista.portal.client.ptapp.ui.SummaryViewForm;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 
 import com.pyx4j.forms.client.ui.NativeTextBox;
@@ -72,6 +74,7 @@ public abstract class VistaTheme extends Theme {
         initBannerStyle();
         initSiteViewStyles();
         initVistaApartmentViewStyles();
+        initVistaSummaryViewStyles();
         initVistaCaptionViewStyles();
         initVistaMainNavigViewStyles();
         initVistaSecondNavigViewStyles();
@@ -877,7 +880,7 @@ public abstract class VistaTheme extends Theme {
         style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
         style.addProperty("margin", "0.4em 0 0.4em 0");
-        style.addProperty("width", "100%");
+        style.addProperty("width", "960px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX, ViewHeaderDecorator.StyleSuffix.Caption));
@@ -945,6 +948,25 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.unitDetailPanel, ApartmentUnitsTable.StyleDependent.selected));
         //        style.addProperty("visibility", "visible");
+        addStyle(style);
+    }
+
+    protected void initVistaSummaryViewStyles() {
+        String prefix = SummaryViewForm.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix, SummaryViewForm.StyleSuffix.DigitalSignature));
+        style.addProperty("background-color", "#50585F");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SummaryViewForm.StyleSuffix.DigitalSignatureLabel));
+        style.addProperty("color", "#fff");
+        style.addProperty("font-size", "1.4em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("text-align", "left");
+        style.addProperty("text-shadow", "0 -1px 0 #333333");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SummaryViewForm.StyleSuffix.DigitalSignatureEdit));
         addStyle(style);
     }
 

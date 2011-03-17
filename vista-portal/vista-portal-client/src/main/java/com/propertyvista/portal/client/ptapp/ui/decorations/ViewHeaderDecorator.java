@@ -28,24 +28,40 @@ public class ViewHeaderDecorator extends HorizontalPanel {
         Caption
     }
 
-    public ViewHeaderDecorator(String caption, Widget widget) {
+    public ViewHeaderDecorator(String caption, Widget widget, String width) {
         HTML captionHolder = new HTML(caption);
         setStyleName(DEFAULT_STYLE_PREFIX);
         captionHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Caption.name());
         add(captionHolder);
         setCellVerticalAlignment(captionHolder, HorizontalPanel.ALIGN_MIDDLE);
         setCellWidth(captionHolder, "200px");
+
         if (widget != null) {
             add(widget);
             setCellVerticalAlignment(widget, HorizontalPanel.ALIGN_MIDDLE);
         }
+
+        if (width != null)
+            setWidth(width);
+    }
+
+    public ViewHeaderDecorator(String caption, Widget widget) {
+        this(caption, widget, null);
+    }
+
+    public ViewHeaderDecorator(String caption, String width) {
+        this(caption, null, width);
     }
 
     public ViewHeaderDecorator(String caption) {
-        this(caption, null);
+        this(caption, (String) null);
+    }
+
+    public ViewHeaderDecorator(IObject<?> member, String width) {
+        this(member.getMeta().getCaption(), null, width);
     }
 
     public ViewHeaderDecorator(IObject<?> member) {
-        this(member.getMeta().getCaption(), null);
+        this(member, null);
     }
 }

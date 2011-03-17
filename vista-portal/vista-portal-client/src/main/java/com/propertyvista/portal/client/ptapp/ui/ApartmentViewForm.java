@@ -25,15 +25,12 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.components.BuildingPicture;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.MarketRent;
@@ -61,9 +58,7 @@ public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
 
     @Override
     public IsWidget createContent() {
-        HorizontalPanel content = new HorizontalPanel();
         FlowPanel main = new FlowPanel();
-        content.add(main);
 
         // Form first table header: 
         HorizontalPanel header = new HorizontalPanel();
@@ -92,8 +87,7 @@ public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
         });
         header.add(changeBtn);
 
-        Widget w = new ViewHeaderDecorator(i18n.tr("Available Units"), header);
-        main.add(w);
+        main.add(new ViewHeaderDecorator(i18n.tr("Available Units"), header, "100%"));
 
         // units table:
         main.add(inject(proto().availableUnits().units(), new ApartmentUnitsTable(new ValueChangeHandler<ApptUnit>() {
@@ -125,15 +119,11 @@ public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
         captionDecoration.labelStyle = ViewHeaderDecorator.DEFAULT_STYLE_PREFIX + ViewHeaderDecorator.StyleSuffix.Caption.name();
         main.add(new VistaWidgetDecorator(inject(proto().rentStart()), captionDecoration));
 
+        // last step - add building picture on the right:
+        HorizontalPanel content = new HorizontalPanel();
         main.setWidth("700px");
-
-        FlowPanel buildingView = new FlowPanel();
-        buildingView.add(new Image(SiteImages.INSTANCE.building()));
-        buildingView.add(new HTML("<b>ADDRESS: </b><br/>2060-2070 Prospect Street, Burlington"));
-        buildingView.getElement().getStyle().setMarginLeft(20, Unit.PX);
-
-        content.add(buildingView);
-
+        content.add(main);
+        content.add(new BuildingPicture());
         return content;
     }
 

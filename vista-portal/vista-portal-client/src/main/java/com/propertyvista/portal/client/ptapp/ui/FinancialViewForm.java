@@ -62,7 +62,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
     private static I18n i18n = I18nFactory.getI18n(FinancialViewForm.class);
 
-    private boolean readOnlyMode = false;
+    private boolean summaryViewMode = false;
 
     public FinancialViewForm() {
         super(PotentialTenantFinancial.class);
@@ -70,11 +70,11 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
     public FinancialViewForm(EditableComponentFactory factory) {
         super(PotentialTenantFinancial.class, factory);
-        readOnlyMode = true;
+        summaryViewMode = true;
     }
 
-    public boolean isReadOnlyMode() {
-        return readOnlyMode;
+    public boolean isSummaryViewMode() {
+        return summaryViewMode;
     }
 
     @Override
@@ -94,7 +94,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         main.add(new HTML());
 
         SimplePanel padder = new SimplePanel();
-        if (isReadOnlyMode()) {
+        if (isSummaryViewMode()) {
             padder.getElement().getStyle().setBackgroundColor("white");
             padder.getElement().getStyle().setBorderWidth(1, Unit.PX);
             padder.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
@@ -114,7 +114,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
     }
 
     private Widget createHeader(IObject<?> member) {
-        if (isReadOnlyMode()) {
+        if (isSummaryViewMode()) {
             return new HTML("<h4>" + member.getMeta().getCaption() + "</h4>");
         } else {
             return new ViewHeaderDecorator(member);
@@ -143,7 +143,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
             @Override
             protected FolderDecorator<TenantIncome> createFolderDecorator() {
-                if (isReadOnlyMode()) {
+                if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<TenantIncome>() {
                         @Override
                         public void setFolder(CEntityFolder<?> w) {
@@ -159,7 +159,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
             @Override
             protected CEntityFolderItem<TenantIncome> createItem() {
-                return new FinancialViewIncomeForm(readOnlyMode);
+                return new FinancialViewIncomeForm(summaryViewMode);
             }
 
         };
@@ -178,7 +178,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
             @Override
             protected FolderDecorator<TenantAsset> createFolderDecorator() {
-                if (isReadOnlyMode()) {
+                if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<TenantAsset>() {
                         @Override
                         public void setFolder(CEntityFolder<?> w) {
@@ -208,7 +208,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        if (isReadOnlyMode()) {
+                        if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
                             return new TableFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), i18n.tr("Remove asset"));
@@ -243,7 +243,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
             @Override
             protected FolderDecorator<TenantGuarantor> createFolderDecorator() {
-                if (isReadOnlyMode()) {
+                if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<TenantGuarantor>() {
                         @Override
                         public void setFolder(CEntityFolder<?> w) {
@@ -266,8 +266,8 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
                     @Override
                     public IsWidget createContent() {
-                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
-                        if (isReadOnlyMode()) {
+                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
+                        if (isSummaryViewMode()) {
                             FlowPanel person = DecorationUtils.formFullName(this, proto());
                             person.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
                             person.getElement().getStyle().setFontSize(1.1, Unit.EM);
@@ -288,7 +288,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        if (isReadOnlyMode()) {
+                        if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
                             return new BoxFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(),

@@ -18,10 +18,12 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
+import com.propertyvista.portal.client.ptapp.ui.components.BuildingPicture;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.domain.Money;
@@ -66,11 +68,15 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
         valueChangeHandler = null;
     }
 
+    public boolean isSummaryViewMode() {
+        return (valueChangeHandler == null);
+    }
+
     @Override
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        main.add(new ViewHeaderDecorator(proto().monthlyCharges()));
+        main.add(new ViewHeaderDecorator(proto().monthlyCharges(), "700px"));
         main.add(inject(proto().monthlyCharges().charges()));
         if (valueChangeHandler != null) {
             main.add(createHeader2(proto().monthlyCharges().upgradeCharges()));
@@ -79,23 +85,31 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
 
         main.add(createTotal(proto().monthlyCharges().total()));
 
-        main.add(new ViewHeaderDecorator(proto().proRatedCharges()));
+        main.add(new ViewHeaderDecorator(proto().proRatedCharges(), "700px"));
         main.add(inject(proto().proRatedCharges().charges()));
         main.add(createTotal(proto().proRatedCharges().total()));
 
-        main.add(new ViewHeaderDecorator(proto().applicationCharges()));
+        main.add(new ViewHeaderDecorator(proto().applicationCharges(), "700px"));
         main.add(inject(proto().applicationCharges().charges()));
         main.add(createTotal(proto().applicationCharges().total()));
 
         // could be hided from resulting form:
-        splitCharges.add(new ViewHeaderDecorator(proto().paymentSplitCharges()));
+        splitCharges.add(new ViewHeaderDecorator(proto().paymentSplitCharges(), "700px"));
         splitCharges.add(inject(proto().paymentSplitCharges().charges()));
         splitCharges.add(createTotal(proto().paymentSplitCharges().total()));
         main.add(splitCharges);
 
         main.setWidth("700px");
 
-        return main;
+        if (isSummaryViewMode()) {
+            return main;
+        } else {
+            // last step - add building picture on the right:
+            HorizontalPanel content = new HorizontalPanel();
+            content.add(main);
+            content.add(new BuildingPicture());
+            return content;
+        }
     }
 
     @Override

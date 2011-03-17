@@ -30,6 +30,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -38,6 +40,7 @@ import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
+import com.propertyvista.portal.client.ptapp.ui.components.BuildingPicture;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
@@ -64,11 +67,23 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 @Singleton
 public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     private static I18n i18n = I18nFactory.getI18n(SummaryViewForm.class);
+
+    public final static String DEFAULT_STYLE_PREFIX = "SummaryViewForm";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        DigitalSignature, DigitalSignatureLabel, DigitalSignatureEdit
+    }
+
+    public static enum StyleDependent implements IStyleDependent {
+        selected, disabled, hover
+    }
 
     private SummaryViewPresenter presenter;
 
@@ -90,41 +105,40 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        main.add(new ViewHeaderDecorator(i18n.tr("Apartment")));
+        main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Apartment"))));
 
         main.add(new ApartmentView());
 
-        main.add(new ViewHeaderDecorator(i18n.tr("Lease Term")));
+        main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Lease Term"))));
         main.add(new LeaseTermView());
 
-        main.add(createHeaderWithEditLink(i18n.tr("Tenants"), new SiteMap.Tenants()));
+        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Tenants"), new SiteMap.Tenants())));
         main.add(tenantsTable = new TenantsTable());
         main.add(inject(proto().tenants().tenants()));
 
-        main.add(createHeaderWithEditLink(i18n.tr("Info"), new SiteMap.Info()));
+        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Info"), new SiteMap.Info())));
         main.add(inject(proto().tenants2().tenants()));
 
-        main.add(createHeaderWithEditLink(i18n.tr("Financial"), new SiteMap.Financial()));
+        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new SiteMap.Financial())));
         main.add(inject(proto().financial()));
 
-        main.add(createHeaderWithEditLink(i18n.tr("Pets"), new SiteMap.Pets()));
+        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Pets"), new SiteMap.Pets())));
         main.add(inject(proto().pets()));
 
-        main.add(new ViewHeaderDecorator(i18n.tr("Lease Terms")));
+        main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Lease Terms"))));
         main.add(new LeaseTermsCheck());
 
         main.add(inject(proto().charges()));
 
-        // Another way of data binding:  
-        //bind(new ChargesViewForm(this), proto().charges());
-        //main.add(get(proto().charges()));
-
-        main.add(new ViewHeaderDecorator(i18n.tr("Digital Signature")));
+        main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Digital Signature"))));
         main.add(new SignatureView());
 
+        // last step - add building picture on the right:
+        HorizontalPanel content = new HorizontalPanel();
         main.setWidth("700px");
-
-        return main;
+        content.add(main);
+        content.add(new BuildingPicture());
+        return content;
     }
 
     @Override
@@ -167,20 +181,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         return new ViewHeaderDecorator(captionTxt, edit);
     }
 
-    /*
-     * Here is the workaround of the problem: our ViewHeaderDecorator has padding 1em on
-     * both ends in the CSS style, so in order to set all other internal widgets intended
-     * to be whole-width-wide by means of percentage width it's necessary to add those
-     * padding values!
-     */
-    private Widget upperLevelElementElignment(Widget e) {
-        //        e.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        //        e.getElement().getStyle().setPaddingRight(1, Unit.EM);
-        e.setWidth("700px");
-        return e;
-    }
-
-    private Widget innerLevelElementElignment(Widget e) {
+    private Widget alignWidth(Widget e) {
         e.setWidth("100%");
         return e;
     }
@@ -193,7 +194,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         public ApartmentView() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            upperLevelElementElignment(this);
+            alignWidth(this);
 
             Map<String, String> tableLayout = new LinkedHashMap<String, String>();
             tableLayout.put("Type", "25%");
@@ -219,7 +220,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             // add table content panel:
             FlowPanel content;
-            add(innerLevelElementElignment(content = new FlowPanel()));
+            add(alignWidth(content = new FlowPanel()));
 
             addCell(tableLayout, content, "Type", inject(proto().unitSelection().selectedUnit().floorplan().name()).asWidget());
             addCell(tableLayout, content, "Unit", inject(proto().unitSelection().selectedUnit().unitType()).asWidget());
@@ -246,7 +247,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         public LeaseTermView() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            upperLevelElementElignment(this);
+            alignWidth(this);
 
             // add lease term/price:
             FlowPanel content = new FlowPanel();
@@ -269,7 +270,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label));
 
-            add(innerLevelElementElignment(content));
+            add(alignWidth(content));
             content.setWidth("30%");
 
             // add static lease terms blah-blah:
@@ -290,13 +291,13 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         public TenantsTable() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            upperLevelElementElignment(this);
+            alignWidth(this);
 
             tableLayout.put("Name", "30%");
-            tableLayout.put("Date of Birht", "20%");
+            tableLayout.put("Date of Birht", "15%");
             tableLayout.put("Email", "25%");
             tableLayout.put("Relationship", "15%");
-            tableLayout.put("Status", "10%");
+            tableLayout.put("Status", "15%");
 
             // fill header:
             for (Entry<String, String> e : tableLayout.entrySet()) {
@@ -340,7 +341,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                                 addCell(tableLayout, content, "Relationship", inject(proto().relationship()).asWidget());
                             }
                             addCell(tableLayout, content, "Status", inject(proto().status()).asWidget());
-                            upperLevelElementElignment(content);
+                            alignWidth(content);
                             return content;
                         }
 
@@ -386,7 +387,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         public LeaseTermsCheck() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            upperLevelElementElignment(this);
+            alignWidth(this);
 
             // add terms content:
             CLabel leaseTermContent = new CLabel();
@@ -437,19 +438,28 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         public SignatureView() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            upperLevelElementElignment(this);
+            alignWidth(this);
 
             HTML signatureTerms = new HTML(SiteResources.INSTANCE.digitalSignature().getText());
             add(signatureTerms);
 
+            // signature composure:
             CTextField edit = new CTextField();
             bind(edit, proto().fullName());
-            VistaWidgetDecorator signature = new VistaWidgetDecorator(edit);
-            signature.getElement().getStyle().setBackgroundColor("darkGray");
-            signature.getElement().getStyle().setPaddingTop(1, Unit.EM);
-            signature.setHeight("3em");
-            add(signature);
 
+            DecorationData dd = new DecorationData(10d, 16);
+            dd.labelStyle = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureLabel.name();
+//            dd.componentStyle = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureEdit.name();
+            dd.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
+            VistaWidgetDecorator signature = new VistaWidgetDecorator(edit, dd);
+            signature.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignature.name());
+            signature.getElement().getStyle().setMarginTop(1, Unit.EM);
+            signature.getElement().getStyle().setPaddingTop(1, Unit.EM);
+            signature.getElement().getStyle().setPaddingLeft(1.5, Unit.EM);
+            signature.setHeight("3em");
+            add(alignWidth(signature));
+
+            // validation:
             edit.addValueValidator(new EditableValueValidator<String>() {
 
                 @Override

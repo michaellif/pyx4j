@@ -38,6 +38,7 @@ import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class FileUpload extends HorizontalPanel {
 
@@ -82,17 +83,17 @@ public class FileUpload extends HorizontalPanel {
 
     }
 
-    public void populate(Long tenantId, DocumentType documentType) {
+    public void populate(final Long tenantId, final DocumentType documentType) {
 
         docList.clear();
 
-        ApplicationDocumentsService ads = (ApplicationDocumentsService) GWT.create(ApplicationDocumentsService.class);
+        final ApplicationDocumentsService ads = (ApplicationDocumentsService) GWT.create(ApplicationDocumentsService.class);
         if (ads != null) {
             ads.retrieveAttachments(new AsyncCallback<ApplicationDocumentsList>() {
 
                 @Override
                 public void onSuccess(ApplicationDocumentsList result) {
-                    for (ApplicationDocument doc : result.documents()) {
+                    for (final ApplicationDocument doc : result.documents()) {
 
                         CHyperlink link = new CHyperlink(doc.getStringView(), new Command() {
                             @Override
@@ -101,13 +102,26 @@ public class FileUpload extends HorizontalPanel {
                             }
                         });
 
-                        Button remove = new Button(i18n.tr("x"), new ClickHandler() {
+                        Button remove = new Button("x", new ClickHandler() {
 
                             @Override
                             public void onClick(ClickEvent event) {
-                                // TODO remove file here
+                                ads.removeAttachment(new AsyncCallback<VoidSerializable>() {
+
+                                    @Override
+                                    public void onSuccess(VoidSerializable result) {
+                                        populate(tenantId, documentType);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Throwable caught) {
+                                        // TODO Auto-generated method stub
+                                    }
+                                }, doc.id().getValue());
                             }
                         });
+
+                        remove.setHeight("1em");
 
                         HorizontalPanel item = new HorizontalPanel();
                         item.add(link);

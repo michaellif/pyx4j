@@ -83,7 +83,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
             public FolderItemDecorator createFolderItemDecorator() {
                 TableFolderItemDecorator dec = new TableFolderItemDecorator(null);
                 if (!isFirst()) {
-                    Widget sp = new ViewLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+                    Widget sp = new ViewLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
                     sp.getElement().getStyle().setPadding(0, Unit.EM);
                     ((VerticalPanel) dec.getWidget()).insert(sp, 0);
                 }
