@@ -15,14 +15,12 @@ package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
+@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = PotentialTenantInfo.class)
 public interface PotentialTenantFinancial extends IEntity, IBoundToApplication {
-
-    //TODO @Detached
-    // TODO Back-end to retrieve only values for ToString
-    PotentialTenantInfo tenant();
 
     @Owned
     @Length(3)

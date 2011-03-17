@@ -126,20 +126,8 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
                 PersistenceServicesFactory.getPersistenceService().persist(currentSubstep);
                 // navigate to next invalid or notVisited step
                 idxSub++;
-                itrOverSubSteps: while (idxSub < currentStep.substeps().size()) {
-                    ApplicationWizardSubstep nextSubstep = currentStep.substeps().get(idxSub);
-                    switch (nextSubstep.status().getValue()) {
-                    case latest:
-                    case notVisited:
-                        nextSubstep.status().setValue(ApplicationWizardStep.Status.latest);
-                        PersistenceServicesFactory.getPersistenceService().persist(nextSubstep);
-                        currentStepCompleated = false;
-                        break itrOverSubSteps;
-                    case invalid:
-                        currentStepCompleated = false;
-                        break itrOverSubSteps;
-                    }
-                    idxSub++;
+                if (selectSubStep(currentStep, idxSub)) {
+                    currentStepCompleated = false;
                 }
             }
 
@@ -156,17 +144,39 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
                     case notVisited:
                         nextStep.status().setValue(ApplicationWizardStep.Status.latest);
                         PersistenceServicesFactory.getPersistenceService().persist(nextStep);
+                        currentStep = nextStep;
                         break iterOverSteps;
                     case invalid:
+                        currentStep = nextStep;
                         break iterOverSteps;
                     }
                     idx++;
                 }
-                //TODO Navigate to first subStep
+                // Navigate to first subStep
+                selectSubStep(currentStep, 0);
             }
 
         }
         callback.onSuccess(progress);
+    }
+
+    private boolean selectSubStep(ApplicationWizardStep currentStep, int startWithSubIndex) {
+        // navigate to next invalid or notVisited step
+        int idxSub = startWithSubIndex;
+        while (idxSub < currentStep.substeps().size()) {
+            ApplicationWizardSubstep nextSubstep = currentStep.substeps().get(idxSub);
+            switch (nextSubstep.status().getValue()) {
+            case latest:
+            case notVisited:
+                nextSubstep.status().setValue(ApplicationWizardStep.Status.latest);
+                PersistenceServicesFactory.getPersistenceService().persist(nextSubstep);
+                return true;
+            case invalid:
+                return true;
+            }
+            idxSub++;
+        }
+        return false;
     }
 
     private static ApplicationWizardStep createWizardStep(Class<? extends AppPlace> place, ApplicationWizardStep.Status status) {

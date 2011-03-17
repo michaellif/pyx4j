@@ -18,11 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancialList;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.rpc.pt.services.TenantsFinancialServices;
 import com.propertyvista.portal.server.pt.PtUserDataAccess;
 
@@ -38,11 +35,12 @@ public class TenantsFinancialServicesImpl extends ApplicationEntityServicesImpl 
     public void retrieve(AsyncCallback<PotentialTenantFinancial> callback, Long tenantId) {
         log.info("Retrieving summary for tenant {}", tenantId);
         EntityQueryCriteria<PotentialTenantFinancial> criteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenantId));
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
         PotentialTenantFinancial financial = secureRetrieve(criteria);
         if (financial == null) {
             log.info("Creating new tenant financial");
-            financial = createFinancial();
+            financial = createFinancial(tenantId);
         }
 
         callback.onSuccess(financial);
@@ -58,28 +56,22 @@ public class TenantsFinancialServicesImpl extends ApplicationEntityServicesImpl 
         callback.onSuccess(tenant);
     }
 
-    private PotentialTenantFinancial createFinancial() {
+    private PotentialTenantFinancial createFinancial(Long tenantId) {
         Application application = PtUserDataAccess.getCurrentUserApplication();
 
-        PotentialTenantFinancial financial = EntityFactory.create(PotentialTenantFinancial.class);
-        financial.application().set(application);
-
-        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+        EntityQueryCriteria<PotentialTenantInfo> criteria = EntityQueryCriteria.create(PotentialTenantInfo.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenantId));
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-        PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-
-        PotentialTenantFinancialList finList = EntityFactory.create(PotentialTenantFinancialList.class);
-        finList.application().set(application);
-        finList.tenantFinancials().add(financial);
-
-        for (PotentialTenantInfo pti : tenantList.tenants()) {
-            if (pti.status().getValue().equals(Status.Applicant)) {
-                financial.tenant().set(pti);
-                break;
-            }
+        PotentialTenantInfo tenant = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        if ((tenant == null) || (tenant.isEmpty())) {
+            throw new Error("Tenenat not found");
         }
 
-        PersistenceServicesFactory.getPersistenceService().persist(finList);
+        PotentialTenantFinancial financial = EntityFactory.create(PotentialTenantFinancial.class);
+        financial.id().setValue(tenantId);
+        financial.application().set(application);
+
+        PersistenceServicesFactory.getPersistenceService().persist(financial);
 
         return financial;
     }

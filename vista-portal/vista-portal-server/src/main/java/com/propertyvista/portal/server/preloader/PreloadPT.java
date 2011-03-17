@@ -572,7 +572,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         PotentialTenantFinancial ptf = EntityFactory.create(PotentialTenantFinancial.class);
 
         ptf.application().set(application);
-        ptf.tenant().set(tenant);
+        ptf.id().set(tenant.id());
 
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             TenantIncome income = EntityFactory.create(TenantIncome.class);
@@ -615,7 +615,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
     private void loadFinancialInfo(StringBuilder sb, PotentialTenantInfo tenant) {
         EntityQueryCriteria<PotentialTenantFinancial> criteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenant.id().getValue()));
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
         PotentialTenantFinancial financial = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
 

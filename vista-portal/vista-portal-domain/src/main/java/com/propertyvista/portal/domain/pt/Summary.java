@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Summary extends IEntity, IBoundToApplication {
@@ -34,7 +35,12 @@ public interface Summary extends IEntity, IBoundToApplication {
     // TODO this would be PotentialTenantFinancialList after tabs are created.
     @Transient
     @EmbeddedEntity
+    @Deprecated
     PotentialTenantFinancial financial();
+
+    @Transient
+    @EmbeddedEntity
+    IList<PotentialTenantFinancial> tenantFinancials();
 
     @Transient
     Pets pets();
