@@ -86,15 +86,6 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        if ((!readOnlyMode) && member.getValueClass().equals(Money.class)) {
-            return new MoneyEditorForm();
-        } else {
-            return super.create(member);
-        }
-    }
-
-    @Override
     public void populate(TenantIncome value) {
         super.populate(value);
         setVisibility(value.incomeSource().getValue());

@@ -43,7 +43,7 @@ import com.pyx4j.forms.client.ui.CRadioGroupInteger;
 
 public class ApartmentUnitDetailsPanel extends FlowPanel {
 
-    private static I18n i18n = I18nFactory.getI18n(ApartmentUnitsTable.class);
+    private static I18n i18n = I18nFactory.getI18n(ApartmentUnitDetailsPanel.class);
 
     public ApartmentUnitDetailsPanel() {
 
@@ -102,17 +102,19 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
         // lease term:
         unitDetailPanel.add(new HTML());
         unitDetailPanel.add(new HTML(h3(i18n.tr("Lease Terms"))));
+
         Map<Integer, String> options = new TreeMap<Integer, String>();
         for (final MarketRent mr : unit.marketRent()) {
-            options.put(mr.leaseTerm().getValue(), mr.leaseTerm().getStringView() + " month " + mr.rent().getStringView());
+            options.put(mr.leaseTerm().getValue(), mr.leaseTerm().getStringView() + i18n.tr(" month ") + mr.rent().getStringView());
         }
-        CRadioGroupInteger mr = new CRadioGroupInteger(CRadioGroup.Layout.VERTICAL, options);
-        mr.setDebugId(new CompositeDebugId(debugId, "leaseTerm"));
+
+        CRadioGroupInteger mrg = new CRadioGroupInteger(CRadioGroup.Layout.VERTICAL, options);
+        mrg.setDebugId(new CompositeDebugId(debugId, "leaseTerm"));
 
         if (unit.marketRent().contains(selectedmarketRent)) {
-            mr.populate(selectedmarketRent.leaseTerm().getValue());
+            mrg.populate(selectedmarketRent.leaseTerm().getValue());
         }
-        mr.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+        mrg.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 
             @Override
             public void onValueChange(ValueChangeEvent<Integer> event) {
@@ -126,8 +128,8 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
             }
         });
 
-        mr.asWidget().getElement().getStyle().setFloat(Float.LEFT);
-        unitDetailPanel.add(mr);
+        mrg.asWidget().getElement().getStyle().setFloat(Float.LEFT);
+        unitDetailPanel.add(mrg);
 
         HTML availabilityAndPricing = new HTML(SiteResources.INSTANCE.availabilityAndPricing().getText());
         availabilityAndPricing.getElement().getStyle().setFloat(Float.RIGHT);

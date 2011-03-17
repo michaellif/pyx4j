@@ -31,12 +31,14 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.components.MoneyEditorForm;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.validators.ValidationUtils;
+import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantGuarantor;
@@ -118,6 +120,15 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
             return new HTML("<h4>" + member.getMeta().getCaption() + "</h4>");
         } else {
             return new ViewHeaderDecorator(member);
+        }
+    }
+
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        if ((!isSummaryViewMode()) && member.getValueClass().equals(Money.class)) {
+            return new MoneyEditorForm();
+        } else {
+            return super.create(member);
         }
     }
 
@@ -291,8 +302,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new BoxFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(),
-                                    i18n.tr("Remove guarantor"));
+                            return new BoxFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), i18n.tr("Remove guarantor"));
                         }
                     }
 

@@ -299,7 +299,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
             UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(au);
             unitTableRow.getContent().removeStyleDependentName(StyleDependent.selected.name());
         }
-
+        // select desired one:
         UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(unit);
         if (unitTableRow != null) {
             unitTableRow.showDetails(unit);
