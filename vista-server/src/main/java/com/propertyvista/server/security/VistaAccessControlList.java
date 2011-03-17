@@ -19,7 +19,17 @@ import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
-import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
+import com.propertyvista.portal.rpc.pt.services.ActivationServices;
+import com.propertyvista.portal.rpc.pt.services.ApartmentServices;
+import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
+import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
+import com.propertyvista.portal.rpc.pt.services.ChargesServices;
+import com.propertyvista.portal.rpc.pt.services.PaymentServices;
+import com.propertyvista.portal.rpc.pt.services.PetsServices;
+import com.propertyvista.portal.rpc.pt.services.SummaryServices;
+import com.propertyvista.portal.rpc.pt.services.TenantsFinancialServices;
+import com.propertyvista.portal.rpc.pt.services.TenantsInfoServices;
+import com.propertyvista.portal.rpc.pt.services.TenantsServices;
 import com.propertyvista.portal.server.access.ApplicationEntityInstanceAccess;
 import com.propertyvista.server.domain.UserCredential;
 
@@ -42,13 +52,13 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
     public final static int CRUD = EntityPermission.CREATE | EntityPermission.READ | EntityPermission.UPDATE;
 
     public VistaAccessControlList() {
-        grant(new IServiceExecutePermission("*"));
         grant(new ServiceExecutePermission(LogServices.Log.class));
         grant(new ServiceExecutePermission(AuthenticationServices.class, "*"));
-        grant(new ServiceExecutePermission(PotentialTenantServices.UnitExists.class));
+        grant(new IServiceExecutePermission(ActivationServices.class));
 
         {
             // Debug
+            grant(new IServiceExecutePermission("*"));
             grant(new ServiceExecutePermission(EntityServices.class, "*"));
             grant(new ServiceExecutePermission("*"));
             grant(new EntityPermission("*", EntityPermission.ALL));
@@ -74,8 +84,16 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
     }
 
     private void potentialTenantGrants() {
-
-        grant(new ServiceExecutePermission(PotentialTenantServices.class, "*"));
+        grant(new IServiceExecutePermission(ApplicationServices.class));
+        grant(new IServiceExecutePermission(ApartmentServices.class));
+        grant(new IServiceExecutePermission(ApplicationDocumentsService.class));
+        grant(new IServiceExecutePermission(TenantsServices.class));
+        grant(new IServiceExecutePermission(TenantsInfoServices.class));
+        grant(new IServiceExecutePermission(TenantsFinancialServices.class));
+        grant(new IServiceExecutePermission(PetsServices.class));
+        grant(new IServiceExecutePermission(ChargesServices.class));
+        grant(new IServiceExecutePermission(SummaryServices.class));
+        grant(new IServiceExecutePermission(PaymentServices.class));
 
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
 

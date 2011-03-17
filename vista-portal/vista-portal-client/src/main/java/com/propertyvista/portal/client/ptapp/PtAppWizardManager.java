@@ -35,15 +35,14 @@ import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
-import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.services.ActivationServices;
 import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
@@ -126,9 +125,7 @@ public class PtAppWizardManager {
                 unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
             }
         }
-
-        RPCManager.execute(PotentialTenantServices.UnitExists.class, unitSelectionCriteria, new DefaultAsyncCallback<Boolean>() {
-
+        ((ActivationServices) GWT.create(ActivationServices.class)).unitExists(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 PtAppSite.getHistoryHandler().handleCurrentHistory();
@@ -148,7 +145,7 @@ public class PtAppWizardManager {
                 PtAppSite.getHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
             }
-        });
+        }, unitSelectionCriteria);
 
     }
 
