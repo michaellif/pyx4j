@@ -187,7 +187,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return value.before(new Date());
+                return (value != null) && value.before(new Date());
             }
 
             @Override
@@ -200,7 +200,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return value.after(new Date());
+                return (value != null) && value.after(new Date());
             }
 
             @Override
@@ -215,7 +215,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return value.before(new Date());
+                return (value != null) && value.before(new Date());
             }
 
             @Override
@@ -228,7 +228,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return value.before(new Date());
+                return (value != null) && value.before(new Date());
             }
 
             @Override
