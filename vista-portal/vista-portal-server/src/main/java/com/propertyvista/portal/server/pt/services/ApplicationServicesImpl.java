@@ -102,32 +102,68 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
     }
 
     @Override
-    public void getApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationWizardStep currentStep) {
+    public void getApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep currentSubstep) {
         EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
         applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
         ApplicationProgress progress = secureRetrieve(applicationProgressCriteria);
 
         if (currentStep != null) {
-
             int idx = progress.steps().indexOf(currentStep);
             if (idx == -1) {
-                idx = 0;
-            } else {
-                currentStep = progress.steps().get(idx);
-                //TODO hasAlert ?
+                throw new Error("Invalid Step recived");
+            }
+
+            currentStep = progress.steps().get(idx);
+            //TODO hasAlert ?
+            boolean currentStepCompleated = true;
+            if (currentSubstep != null) {
+                int idxSub = currentStep.substeps().indexOf(currentSubstep);
+                if (idxSub == -1) {
+                    throw new Error("Invalid Substep recived");
+                }
+                currentSubstep = currentStep.substeps().get(idxSub);
+                currentSubstep.status().setValue(ApplicationWizardStep.Status.complete);
+                PersistenceServicesFactory.getPersistenceService().persist(currentSubstep);
+                // navigate to next invalid or notVisited step
+                idxSub++;
+                itrOverSubSteps: while (idxSub < currentStep.substeps().size()) {
+                    ApplicationWizardSubstep nextSubstep = currentStep.substeps().get(idxSub);
+                    switch (nextSubstep.status().getValue()) {
+                    case latest:
+                    case notVisited:
+                        nextSubstep.status().setValue(ApplicationWizardStep.Status.latest);
+                        PersistenceServicesFactory.getPersistenceService().persist(nextSubstep);
+                        currentStepCompleated = false;
+                        break itrOverSubSteps;
+                    case invalid:
+                        currentStepCompleated = false;
+                        break itrOverSubSteps;
+                    }
+                    idxSub++;
+                }
+            }
+
+            if (currentStepCompleated) {
+                // Move to next regular step
                 currentStep.status().setValue(ApplicationWizardStep.Status.complete);
                 PersistenceServicesFactory.getPersistenceService().persist(currentStep);
                 idx++;
-                if (idx < progress.steps().size()) {
+                iterOverSteps: while (idx < progress.steps().size()) {
                     ApplicationWizardStep nextStep = progress.steps().get(idx);
-                    if (nextStep.status().getValue() == ApplicationWizardStep.Status.notVisited) {
+                    // navigate to next invalid step
+                    switch (nextStep.status().getValue()) {
+                    case latest:
+                    case notVisited:
                         nextStep.status().setValue(ApplicationWizardStep.Status.latest);
                         PersistenceServicesFactory.getPersistenceService().persist(nextStep);
-                    } else {
-                        //TODO navigate to next invalid step
+                        break iterOverSteps;
+                    case invalid:
+                        break iterOverSteps;
                     }
+                    idx++;
                 }
             }
+
         }
         callback.onSuccess(progress);
     }

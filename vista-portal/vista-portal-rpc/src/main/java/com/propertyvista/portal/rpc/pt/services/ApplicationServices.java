@@ -16,6 +16,7 @@ package com.propertyvista.portal.rpc.pt.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
+import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
 
@@ -31,6 +32,6 @@ public interface ApplicationServices extends IService {
      */
     public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria request);
 
-    public void getApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationWizardStep currentStep);
+    public void getApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep substep);
 
 }

@@ -167,14 +167,32 @@ public class PtAppWizardManager {
     }
 
     public void nextStep() {
-        ApplicationWizardStep currentStep = getStep(AppSite.getPlaceController().getWhere());
+        Place current = AppSite.getPlaceController().getWhere();
+        ApplicationWizardStep currentStep = getStep(current);
+
+        ApplicationWizardSubstep substep = null;
+        AppPlace place = null;//  TODO where am I?
+        String stepArg = null;
+        if ((currentStep != null) && (place != null) && (place.getArgs() != null)) {
+            stepArg = place.getArgs().get(SecondNavigActivity.STEP_ARG_NAME);
+            // Find current substep
+            if (stepArg != null) {
+                for (ApplicationWizardSubstep sub : currentStep.substeps()) {
+                    if (stepArg.equals(sub.placeArgument().getStringView())) {
+                        substep = sub;
+                        break;
+                    }
+                }
+            }
+        }
+
         ((ApplicationServices) GWT.create(ApplicationServices.class)).getApplicationProgress(new DefaultAsyncCallback<ApplicationProgress>() {
             @Override
             public void onSuccess(ApplicationProgress result) {
                 applicationProgress = result;
                 navigationByApplicationProgress();
             }
-        }, currentStep);
+        }, currentStep, substep);
     }
 
     private void navigationByApplicationProgress() {
