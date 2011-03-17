@@ -282,7 +282,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         enablePreviousAddress();
 
         fileUpload.populate(value.id().getValue(), DocumentType.securityInfo);
-        fileUpload.setVisible(value.notCanadianCitizen().getValue());
+        fileUpload.setVisible(value.notCanadianCitizen().isBooleanTrue());
     }
 
     private CEntityEditableComponent<Address> createAddressEditor() {
