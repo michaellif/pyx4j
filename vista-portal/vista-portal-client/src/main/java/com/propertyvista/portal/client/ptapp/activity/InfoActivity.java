@@ -20,6 +20,8 @@ import com.propertyvista.portal.client.ptapp.ui.InfoViewPresenter;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.rpc.pt.services.TenantsInfoServices;
 
+import com.pyx4j.site.rpc.AppPlace;
+
 public class InfoActivity extends WizardStepWithSubstepsActivity<PotentialTenantInfo, InfoViewPresenter> implements InfoViewPresenter {
 
     @Inject
@@ -27,4 +29,14 @@ public class InfoActivity extends WizardStepWithSubstepsActivity<PotentialTenant
         super(view, PotentialTenantInfo.class, (TenantsInfoServices) GWT.create(TenantsInfoServices.class));
     }
 
+    @Override
+    protected Long getCurrentTenantId() {
+        // get secondary step argument (should be tenant ID for Info and Financial views):
+        String stepArg = null;
+        if (currentPlace != null && currentPlace.getArgs() != null) {
+            stepArg = currentPlace.getArgs().get(SecondNavigActivity.STEP_ARG_NAME);
+        }
+
+        return (stepArg != null ? Long.parseLong(stepArg) : null); // retrieve data for particular tenant (if present) 
+    }
 }

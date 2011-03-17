@@ -26,4 +26,15 @@ public class FinancialActivity extends WizardStepWithSubstepsActivity<PotentialT
     public FinancialActivity(FinancialView view) {
         super(view, PotentialTenantFinancial.class, (TenantsFinancialServices) GWT.create(TenantsFinancialServices.class));
     }
+
+    @Override
+    protected Long getCurrentTenantId() {
+        // get secondary step argument (should be tenant ID for Info and Financial views):
+        String stepArg = null;
+        if (currentPlace != null && currentPlace.getArgs() != null) {
+            stepArg = currentPlace.getArgs().get(SecondNavigActivity.STEP_ARG_NAME);
+        }
+
+        return (stepArg != null ? Long.parseLong(stepArg) : null); // retrieve data for particular tenant (if present) 
+    }
 }
