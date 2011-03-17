@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.rpc;
 
+import java.util.Collections;
 import java.util.Map;
 
 import com.google.gwt.place.shared.Place;
@@ -29,10 +30,11 @@ public class AppPlace extends Place {
     private Map<String, String> args;
 
     public AppPlace() {
+        args = Collections.emptyMap();
     }
 
     public void setArgs(Map<String, String> args) {
-        this.args = args;
+        this.args = Collections.unmodifiableMap(args);
     }
 
     public Map<String, String> getArgs() {

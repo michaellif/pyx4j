@@ -39,6 +39,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 /**
@@ -82,6 +83,10 @@ public abstract class AppSite implements EntryPoint {
 
     public static PlaceHistoryHandler getHistoryHandler() {
         return instance().historyHandler;
+    }
+
+    public static AppPlace getWhere() {
+        return (AppPlace) getPlaceController().getWhere();
     }
 
     public static AppSiteEventBus getEventBus() {
