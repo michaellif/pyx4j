@@ -149,14 +149,14 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
 
     private void setMandatoryDependant() {
         get(proto().status()).setValue(Status.Dependant);
-        get(proto().status()).setEnabled(false);
+        get(proto().status()).setEditable(false);
 
         get(proto().takeOwnership()).setValue(true);
         get(proto().takeOwnership()).setEnabled(false);
     }
 
     private void enableStatusAndOwnership() {
-        get(proto().status()).setEnabled(true);
+        get(proto().status()).setEditable(true);
         get(proto().takeOwnership()).setEnabled(true);
     }
 }

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.themes;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.StyleSuffix;
@@ -26,8 +25,10 @@ import com.propertyvista.portal.client.ptapp.ui.SiteView;
 import com.propertyvista.portal.client.ptapp.ui.SummaryViewForm;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 
+import com.pyx4j.forms.client.ui.NativeComboBox;
 import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.widgets.client.ImageFactory;
+import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.ColorFactory;
@@ -596,9 +597,33 @@ public abstract class VistaTheme extends Theme {
     }
 
     protected void initListBoxStyle() {
-        Style style = new Style(CSSClass.pyx4j_ListBox);
+        Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX));
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
+
+        style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX), " option");
+        style.addProperty("background-color", "white");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX, null, NativeComboBox.StyleDependent.disabled));
+        style.addProperty("background-color", "lightGray");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX, null, NativeComboBox.StyleDependent.readOnly));
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "none");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX, null, NativeComboBox.StyleDependent.invalid));
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", "#f79494");
+        style.addProperty("background-color", "#f8d8d8");
+        addStyle(style);
+
     }
 
     protected void initDatePickerStyle() {
@@ -1118,8 +1143,8 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.LabelHolder));
-//        style.addProperty("margin-right", "-14px");
-//        style.addProperty("position", "relative");
+        //        style.addProperty("margin-right", "-14px");
+        //        style.addProperty("position", "relative");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.LabelHolder, SecondNavigViewImpl.StyleDependent.latest));
