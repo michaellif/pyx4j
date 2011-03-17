@@ -53,7 +53,7 @@ public class FileUpload extends HorizontalPanel {
 
         Element td = DOM.getParent(side.getElement());
         if (td != null) {
-            td.getStyle().setBackgroundColor("#bbb");
+            td.getStyle().setBackgroundColor("#50585F");
         }
 
         add(new HTML("&nbsp;&nbsp;&nbsp;"));
