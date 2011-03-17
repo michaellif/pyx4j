@@ -30,7 +30,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
@@ -118,7 +117,7 @@ public class EntityGraph {
 
     public static boolean memebersEquals(IEntity ent1, IEntity ent2, IPrimitive<?>... protoValues) {
         for (IPrimitive<?> member : protoValues) {
-            if (!ent1.getMember(member.getPath()).equals(ent2.getMember(member.getPath()))) {
+            if (!ent1.getMember(member.getFieldName()).equals(ent2.getMember(member.getFieldName()))) {
                 return false;
             }
         }
@@ -127,9 +126,9 @@ public class EntityGraph {
 
     public static void memebersCopy(IEntity src, IEntity dst, IPrimitive<?>... protoValues) {
         for (IPrimitive<?> member : protoValues) {
-            Path memberPath = member.getPath();
-            Object v = src.getMember(memberPath).getValue();
-            dst.setValue(memberPath, v);
+            String memberFieldName = member.getFieldName();
+            Object v = src.getMember(memberFieldName).getValue();
+            dst.setMemberValue(memberFieldName, v);
         }
     }
 }
