@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.rpc.pt.services.SummaryServices;
 import com.propertyvista.portal.server.pt.PtUserDataAccess;
@@ -28,6 +29,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
 public class SummaryServicesImpl extends ApplicationEntityServicesImpl implements SummaryServices {
     private final static Logger log = LoggerFactory.getLogger(SummaryServicesImpl.class);
@@ -60,6 +62,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         callback.onSuccess(summary);
     }
 
+    @SuppressWarnings("unchecked")
     private void retrieveSummary(Summary summary) {
         retrieveApplicationEntity(summary.unitSelection());
         PersistenceServicesFactory.getPersistenceService().retrieve(summary.unitSelection().selectedUnit().floorplan());
@@ -71,6 +74,16 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         EntityQueryCriteria<PotentialTenantFinancial> financialCriteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
         financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
         summary.tenantFinancials().addAll(PersistenceServicesFactory.getPersistenceService().query(financialCriteria));
+
+        // Update Transient values
+        for (PotentialTenantInfo tenant : summary.tenants().tenants()) {
+            fin: for (PotentialTenantFinancial fin : summary.tenantFinancials()) {
+                if (fin.id().equals(tenant.id())) {
+                    fin.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", tenant.firstName(), tenant.middleName(), tenant.lastName()));
+                    break fin;
+                }
+            }
+        }
 
         retrieveApplicationEntity(summary.pets());
         retrieveApplicationEntity(summary.charges());
