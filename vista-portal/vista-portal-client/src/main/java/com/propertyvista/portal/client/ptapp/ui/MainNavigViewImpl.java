@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -32,7 +33,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.client.ptapp.activity.SecondNavigActivity;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
+import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -131,6 +134,12 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             labelHolder.add(statusHolder);
 
             this.place = AppSite.getHistoryMapper().getPlace(step.placeId().getValue());
+            if (step.substeps().size() > 0) {
+                ApplicationWizardSubstep substep = step.substeps().get(0);
+                HashMap<String, String> args = new HashMap<String, String>();
+                args.put(SecondNavigActivity.STEP_ARG_NAME, substep.placeArgument().getStringView());
+                place.setArgs(args);
+            }
             label = new Label(presenter.getNavigLabel(place));
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));
