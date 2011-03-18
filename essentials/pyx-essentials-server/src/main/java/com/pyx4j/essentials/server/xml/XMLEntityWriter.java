@@ -90,35 +90,37 @@ public class XMLEntityWriter {
         processed.add(entity);
 
         Map<String, Object> entityValue = entity.getValue();
-        nextValue: for (Map.Entry<String, Object> me : entityValue.entrySet()) {
-            String propertyName = me.getKey();
-            if (propertyName.equals(IEntity.PRIMARY_KEY) || propertyName.equals(IEntity.CONCRETE_TYPE_DATA_ATTR)) {
-                continue nextValue;
-            }
-            Object value = me.getValue();
+        if (entityValue != null) {
+            nextValue: for (Map.Entry<String, Object> me : entityValue.entrySet()) {
+                String propertyName = me.getKey();
+                if (propertyName.equals(IEntity.PRIMARY_KEY) || propertyName.equals(IEntity.CONCRETE_TYPE_DATA_ATTR)) {
+                    continue nextValue;
+                }
+                Object value = me.getValue();
 
-            if (value instanceof Map<?, ?>) {
-                IEntity member = (IEntity) entity.getMember(propertyName);
-                if (!member.isObjectClassSameAsDef()) {
-                    member = member.cast();
-                }
-                write(member, propertyName, null, entity.getEntityMeta().getMemberMeta(propertyName).getObjectClass(), processed);
-            } else if (value instanceof Collection) {
-                xml.startIdented(propertyName);
-                IObject<?> member = entity.getMember(propertyName);
-                if (member instanceof ICollection<?, ?>) {
-                    for (Object item : (ICollection<?, ?>) member) {
-                        write((IEntity) item, entityName.getXMLName(((IEntity) item).getObjectClass()), null, entity.getEntityMeta()
-                                .getMemberMeta(propertyName).getObjectClass(), processed);
+                if (value instanceof Map<?, ?>) {
+                    IEntity member = (IEntity) entity.getMember(propertyName);
+                    if (!member.isObjectClassSameAsDef()) {
+                        member = member.cast();
                     }
+                    write(member, propertyName, null, entity.getEntityMeta().getMemberMeta(propertyName).getObjectClass(), processed);
+                } else if (value instanceof Collection) {
+                    xml.startIdented(propertyName);
+                    IObject<?> member = entity.getMember(propertyName);
+                    if (member instanceof ICollection<?, ?>) {
+                        for (Object item : (ICollection<?, ?>) member) {
+                            write((IEntity) item, entityName.getXMLName(((IEntity) item).getObjectClass()), null,
+                                    entity.getEntityMeta().getMemberMeta(propertyName).getObjectClass(), processed);
+                        }
+                    } else {
+                        for (Object item : (Collection<?>) value) {
+                            xml.write("item", getValueAsString(item));
+                        }
+                    }
+                    xml.endIdented(propertyName);
                 } else {
-                    for (Object item : (Collection<?>) value) {
-                        xml.write("item", getValueAsString(item));
-                    }
+                    xml.write(propertyName, getValueAsString(value));
                 }
-                xml.endIdented(propertyName);
-            } else {
-                xml.write(propertyName, getValueAsString(value));
             }
         }
 
