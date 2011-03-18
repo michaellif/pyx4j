@@ -37,6 +37,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
 import com.pyx4j.entity.adapters.ReferenceAdapter;
 import com.pyx4j.entity.annotations.Adapters;
@@ -74,6 +75,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private final ConnectionProvider connectionProvider;
 
     private final Mappings mappings;
+
+    private final boolean trace = false;
 
     public EntityPersistenceServiceRDB() {
         try {
@@ -676,12 +679,19 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     // cascadedeleteDataEntity is consistent with GAE implementation of delete(IEntity entity).
     private <T extends IEntity> void cascadeDelete(Connection connection, EntityMeta entityMeta, long primaryKey, IEntity cascadedeleteDataEntity) {
+        if (trace) {
+            log.info(Trace.enter() + "cascadeDelete {} id={}", entityMeta.getPersistenceName(), primaryKey);
+        }
+
         TableModel tm = tableModel(entityMeta);
 
         if (cascadedeleteDataEntity != null) {
             for (MemberOperationsMeta member : tm.operationsMeta().getCascadeDeleteMembers()) {
                 IEntity childEntity = (IEntity) member.getMember(cascadedeleteDataEntity);
                 if (childEntity.getPrimaryKey() != null) {
+                    if (trace) {
+                        log.info("cascadeDelete member {}", member.getMemberName());
+                    }
                     cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
                 }
             }
@@ -699,8 +709,15 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             CollectionsTableModel.delete(connection, primaryKey, member);
         }
 
+        if (entityMeta.getPersistenceName().equals("IncomeInfoOther")) {
+            log.info("remove data", new Throwable());
+        }
+
         if (!tm.delete(connection, primaryKey)) {
             throw new RuntimeException("Entity " + entityMeta.getCaption() + " " + primaryKey + " NotFound");
+        }
+        if (trace) {
+            log.info(Trace.returns() + "cascadeDelete {} id={}", entityMeta.getPersistenceName(), primaryKey);
         }
     }
 
@@ -724,12 +741,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     // TODO optimize
                     cascadeRetrieveMembers(connection, tm, entity);
                 }
+                if (trace) {
+                    log.info(Trace.enter() + "delete {} rows {}", tm.getTableName(), entities.size());
+                }
 
                 // remove data from join tables first, No cascade delete
                 for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                     //CollectionsTableModel.delete(connection, member, qb, tm.getTableName());
                     if (member.getMemberMeta().isOwnedRelationships() && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
-
+                        if (trace) {
+                            log.info(Trace.id() + "delete owned member [{}]", member.getMemberName());
+                        }
                         // TODO optimize
                         for (T entity : entities) {
                             for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(entity)) {
@@ -743,6 +765,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
                 count = tm.delete(connection, primaryKeys);
                 // TODO remove entities from Cache
+
+                if (trace) {
+                    log.info(Trace.returns() + "delete {}", tm.getTableName());
+                }
             }
             return count;
         } finally {

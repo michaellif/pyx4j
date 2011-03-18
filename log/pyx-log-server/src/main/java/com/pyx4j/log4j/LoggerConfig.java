@@ -45,6 +45,10 @@ public class LoggerConfig {
         nameVariables.put("contextName", name);
     }
 
+    public static String getContextName() {
+        return nameVariables.get("contextName");
+    }
+
     public static void setVariable(String name, String value) {
         nameVariables.put(name, value);
     }

@@ -24,7 +24,10 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.config.server.rpc.IServiceFilter;
+import com.pyx4j.config.shared.ApplicationBackend;
+import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
+import com.pyx4j.essentials.server.dev.RpcEntityDumpServiceFilter;
 import com.pyx4j.rpc.server.ReflectionServiceFactory;
 import com.pyx4j.rpc.shared.Service;
 
@@ -32,14 +35,18 @@ public class EssentialsRPCServiceFactory extends ReflectionServiceFactory {
 
     @Override
     public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass) {
+        //List<IServiceFilter> filters = super.getServiceFilterChain(serviceClass);
+        List<IServiceFilter> filters = new Vector<IServiceFilter>();
+        filters.addAll(super.getServiceFilterChain(serviceClass));
+
+        if (ApplicationBackend.getBackendType() == ApplicationBackendType.RDB) {
+            filters.add(new RpcEntityDumpServiceFilter());
+        }
+
         if ((NetworkSimulationServiceFilter.getNetworkSimulationConfig() != null)
                 && (NetworkSimulationServiceFilter.getNetworkSimulationConfig().enabled().isBooleanTrue())) {
-            List<IServiceFilter> filters = new Vector<IServiceFilter>();
-            filters.addAll(super.getServiceFilterChain(serviceClass));
             filters.add(new NetworkSimulationServiceFilter());
-            return filters;
-        } else {
-            return super.getServiceFilterChain(serviceClass);
         }
+        return filters;
     }
 }

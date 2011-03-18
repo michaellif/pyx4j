@@ -87,6 +87,12 @@
 		</dependency>
 
 		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <optional>true</optional>
+		</dependency>
+
+		<dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
         </dependency>

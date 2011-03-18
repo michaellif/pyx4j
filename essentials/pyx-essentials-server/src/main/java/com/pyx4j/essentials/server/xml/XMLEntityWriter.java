@@ -55,7 +55,7 @@ public class XMLEntityWriter {
     }
 
     public void writeRoot(IEntity entity, Map<String, String> attributes) {
-        write(entity, entityName.getXMLName(entity.getObjectClass()), attributes, null, new HashSet<Map<String, Object>>());
+        write(entity, entityName.getXMLName(entity.getObjectClass()), attributes, null, new HashSet<IEntity>());
     }
 
     public void write(IEntity entity) {
@@ -63,11 +63,11 @@ public class XMLEntityWriter {
     }
 
     public void write(IEntity entity, String name) {
-        write(entity, name, null, null, new HashSet<Map<String, Object>>());
+        write(entity, name, null, null, new HashSet<IEntity>());
     }
 
     private void write(IEntity entity, String name, Map<String, String> attributes, @SuppressWarnings("rawtypes") Class<? extends IObject> declaredObjectClass,
-            Set<Map<String, Object>> processed) {
+            Set<IEntity> processed) {
         Map<String, String> entityAttributes = new LinkedHashMap<String, String>();
         if (attributes != null) {
             entityAttributes.putAll(attributes);
@@ -83,14 +83,13 @@ public class XMLEntityWriter {
         }
         xml.startIdented(name, entityAttributes);
 
-        Map<String, Object> entityValue = entity.getValue();
-        if (processed.contains(entityValue)) {
+        if (processed.contains(entity)) {
             xml.endIdented(name);
             return;
         }
+        processed.add(entity);
 
-        processed.add(entityValue);
-
+        Map<String, Object> entityValue = entity.getValue();
         nextValue: for (Map.Entry<String, Object> me : entityValue.entrySet()) {
             String propertyName = me.getKey();
             if (propertyName.equals(IEntity.PRIMARY_KEY) || propertyName.equals(IEntity.CONCRETE_TYPE_DATA_ATTR)) {
