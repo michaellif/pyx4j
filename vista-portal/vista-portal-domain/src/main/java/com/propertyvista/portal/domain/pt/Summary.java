@@ -32,15 +32,9 @@ public interface Summary extends IEntity, IBoundToApplication {
     @Transient
     PotentialTenantList tenants2();
 
-    // TODO this would be PotentialTenantFinancialList after tabs are created.
     @Transient
     @EmbeddedEntity
-    @Deprecated
-    PotentialTenantFinancial financial();
-
-    @Transient
-    @EmbeddedEntity
-    IList<PotentialTenantFinancial> tenantFinancials();
+    IList<SummaryPotentialTenantFinancial> tenantFinancials();
 
     @Transient
     Pets pets();

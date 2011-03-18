@@ -18,28 +18,18 @@ import static com.pyx4j.commons.HtmlUtils.h3;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
@@ -56,9 +46,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 
-public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo> {
-
-    private final I18n i18n = I18nFactory.getI18n(SummaryViewTenantInfo.class);
+public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTenantInfo> {
 
     private final String LEFT_COLUMN_WIDTH = "40%";
 
@@ -66,63 +54,19 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
 
     private final String RIGHT_COLUMN_WIDTH = "40%";
 
-    private final FlowPanel fullViewPanel = new FlowPanel();
-
-    public SummaryViewTenantInfo(Class<PotentialTenantInfo> clazz) {
-        super(clazz);
+    public SummaryViewTenantInfo() {
+        super(PotentialTenantInfo.class);
     }
 
     @Override
-    public FolderItemDecorator createFolderItemDecorator() {
-        return new BoxReadOnlyFolderItemDecorator(false);
+    public IsWidget getTenantFullName() {
+        return DecorationUtils.formFullName(this, proto());
     }
 
     @Override
-    public IsWidget createContent() {
+    public IsWidget bindFullView() {
 
-        FlowPanel main = new FlowPanel();
-
-        main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        main.getElement().getStyle().setBackgroundColor("white");
-
-        main.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        main.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        main.getElement().getStyle().setBorderColor("#bbb");
-        main.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-
-        main.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
-        main.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
-        main.getElement().getStyle().setPaddingLeft(15, Unit.PX);
-        main.getElement().getStyle().setPaddingRight(15, Unit.PX);
-        main.setWidth("670px");
-
-        main.add(bindCompactView());
-        main.add(bindFullView());
-
-        return main;
-    }
-
-    public Widget bindCompactView() {
-
-        HorizontalPanel panel = new HorizontalPanel();
-
-        Widget sw;
-        panel.add(sw = addViewSwitcher());
-        panel.setCellVerticalAlignment(sw, HasVerticalAlignment.ALIGN_MIDDLE);
-
-        FlowPanel tenant = DecorationUtils.formFullName(this, proto());
-        tenant.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        tenant.getElement().getStyle().setFontSize(1.5, Unit.EM);
-        tenant.getElement().getStyle().setPaddingTop(0.2, Unit.EM);
-        tenant.getElement().getStyle().setPaddingBottom(0.3, Unit.EM);
-        tenant.getElement().getStyle().setMarginLeft(2, Unit.EM);
-        panel.add(tenant);
-        panel.setCellVerticalAlignment(tenant, HasVerticalAlignment.ALIGN_MIDDLE);
-
-        return panel;
-    }
-
-    public Widget bindFullView() {
+        FlowPanel fullViewPanel = new FlowPanel();
 
         DecorationData dd2ColumnsTable = new DecorationData(50, Unit.PCT, HasHorizontalAlignment.ALIGN_LEFT, 50, Unit.PCT, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -213,7 +157,7 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().convictedOfFelony()), ddQuestionay));
         panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().legalTroubles()), ddQuestionay));
         panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().filedBankruptcy()), ddQuestionay));
-        panel.setWidth("700px");
+        panel.setWidth("100%");
         fullViewPanel.add(panel);
 
         sp = new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
@@ -225,10 +169,8 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
 
         fullViewPanel.add(new HTML(h3(proto().emergencyContacts().getMeta().getCaption())));
 
-        bind(createIncomeFolderEditor(), proto().emergencyContacts());
+        bind(createEmergencyContactsFolder(), proto().emergencyContacts());
         fullViewPanel.add(get(proto().emergencyContacts()));
-
-        fullViewPanel.setVisible(false);
         return fullViewPanel;
     }
 
@@ -250,27 +192,6 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.managerName()), dd2ColumnsTable));
 
         return addressPanel;
-    }
-
-    private Widget addViewSwitcher() {
-
-        final Image switcher = new Image(SiteImages.INSTANCE.pointerCollapsed());
-        switcher.getElement().getStyle().setCursor(Cursor.POINTER);
-        switcher.addClickHandler(new ClickHandler() {
-
-            @Override
-            public void onClick(ClickEvent event) {
-                if (fullViewPanel.isVisible()) {
-                    fullViewPanel.setVisible(false);
-                    switcher.setResource(SiteImages.INSTANCE.pointerCollapsed());
-                } else {
-                    fullViewPanel.setVisible(true);
-                    switcher.setResource(SiteImages.INSTANCE.pointerExpanded());
-                }
-            }
-        });
-
-        return switcher;
     }
 
     private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {
@@ -312,7 +233,7 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
 
     }
 
-    private CEntityFolder<EmergencyContact> createIncomeFolderEditor() {
+    private CEntityFolder<EmergencyContact> createEmergencyContactsFolder() {
 
         return new CEntityFolder<EmergencyContact>(EmergencyContact.class) {
 

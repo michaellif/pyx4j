@@ -46,12 +46,10 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDec
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
-import com.propertyvista.portal.domain.pt.Charges;
-import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -59,7 +57,6 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -114,21 +111,21 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Tenants"), new SiteMap.Tenants())));
         main.add(tenantsTable = new TenantsTable());
-        main.add(inject(proto().tenants().tenants()));
+        main.add(inject(proto().tenants().tenants(), tenantsTable.createTenantTable()));
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Info"), new SiteMap.Info())));
-        main.add(inject(proto().tenants2().tenants()));
+        main.add(inject(proto().tenants2().tenants(), createTenantView()));
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new SiteMap.Financial())));
-        main.add(inject(proto().financial()));
+        main.add(inject(proto().tenantFinancials(), createFinancialView()));
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Pets"), new SiteMap.Pets())));
-        main.add(inject(proto().pets()));
+        main.add(inject(proto().pets(), new PetsViewForm(this)));
 
         main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Lease Terms"))));
         main.add(new LeaseTermsCheck());
 
-        main.add(inject(proto().charges()));
+        main.add(inject(proto().charges(), new ChargesViewForm(this)));
 
         main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Digital Signature"))));
         main.add(new SignatureView());
@@ -139,25 +136,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         content.add(main);
         content.add(new BuildingPicture());
         return content;
-    }
-
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-
-        if (member == proto().tenants().tenants()) {
-            return tenantsTable.createTenantTable();
-        } else if (member == proto().tenants2().tenants()) {
-            return createTenantView();
-        } else if (member.getValueClass().equals(PotentialTenantFinancial.class)) {
-            return new FinancialViewForm(this);
-        } else if (member.getValueClass().equals(Pets.class)) {
-            return new PetsViewForm(this);
-        } else if (member.getValueClass().equals(Charges.class)) {
-            return new ChargesViewForm(this);
-        } else {
-            return super.create(member);
-        }
-
     }
 
     @Override
@@ -369,12 +347,31 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             @Override
             protected CEntityFolderItem<PotentialTenantInfo> createItem() {
-                return new SummaryViewTenantInfo(PotentialTenantInfo.class);
+                return new SummaryViewTenantInfo();
             }
 
             @Override
             protected FolderDecorator<PotentialTenantInfo> createFolderDecorator() {
                 return new BoxReadOnlyFolderDecorator<PotentialTenantInfo>();
+            }
+        };
+    }
+
+    /*
+     * Financial detailed information view implementation
+     */
+    public CEntityFolder<SummaryPotentialTenantFinancial> createFinancialView() {
+
+        return new CEntityFolder<SummaryPotentialTenantFinancial>(SummaryPotentialTenantFinancial.class) {
+
+            @Override
+            protected CEntityFolderItem<SummaryPotentialTenantFinancial> createItem() {
+                return new SummaryViewTenantFinancial();
+            }
+
+            @Override
+            protected FolderDecorator<SummaryPotentialTenantFinancial> createFolderDecorator() {
+                return new BoxReadOnlyFolderDecorator<SummaryPotentialTenantFinancial>();
             }
         };
     }

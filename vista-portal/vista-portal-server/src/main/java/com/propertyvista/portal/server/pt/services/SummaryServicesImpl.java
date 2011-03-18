@@ -22,6 +22,7 @@ import com.propertyvista.portal.domain.pt.LeaseTerms;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.rpc.pt.services.SummaryServices;
 import com.propertyvista.portal.server.pt.PtUserDataAccess;
 
@@ -70,19 +71,21 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         retrieveApplicationEntity(summary.tenants());
         summary.tenants2().set(summary.tenants());
 
-        retrieveApplicationEntity(summary.financial());
         EntityQueryCriteria<PotentialTenantFinancial> financialCriteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
         financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
-        summary.tenantFinancials().addAll(PersistenceServicesFactory.getPersistenceService().query(financialCriteria));
+        for (PotentialTenantFinancial fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
+            SummaryPotentialTenantFinancial sf = summary.tenantFinancials().$();
 
-        // Update Transient values
-        for (PotentialTenantInfo tenant : summary.tenants().tenants()) {
-            fin: for (PotentialTenantFinancial fin : summary.tenantFinancials()) {
+            sf.tenantFinancial().set(fin);
+            // Update Transient values
+            fin: for (PotentialTenantInfo tenant : summary.tenants().tenants()) {
                 if (fin.id().equals(tenant.id())) {
-                    fin.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", tenant.firstName(), tenant.middleName(), tenant.lastName()));
+                    sf.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", tenant.firstName(), tenant.middleName(), tenant.lastName()));
                     break fin;
                 }
             }
+
+            summary.tenantFinancials().add(sf);
         }
 
         retrieveApplicationEntity(summary.pets());

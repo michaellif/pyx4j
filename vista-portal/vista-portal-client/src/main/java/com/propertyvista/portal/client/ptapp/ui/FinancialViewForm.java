@@ -20,14 +20,12 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
@@ -44,6 +42,7 @@ import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
@@ -95,29 +94,19 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         main.add(inject(proto().guarantors(), createGuarantorFolderEditorColumns()));
         main.add(new HTML());
 
-        SimplePanel padder = new SimplePanel();
         if (isSummaryViewMode()) {
-            padder.getElement().getStyle().setBackgroundColor("white");
-            padder.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            padder.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            padder.getElement().getStyle().setBorderColor("#bbb");
-            padder.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-
-            main.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
-            main.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
-            main.getElement().getStyle().setPaddingLeft(15, Unit.PX);
-            main.getElement().getStyle().setPaddingRight(15, Unit.PX);
-            main.setWidth("670");
+            main.setWidth("670px");
+        } else {
+            main.setWidth("700px");
         }
-
-        padder.setWidget(main);
-        padder.setWidth("700px");
-        return padder;
+        return main;
     }
 
     private Widget createHeader(IObject<?> member) {
         if (isSummaryViewMode()) {
-            return new HTML("<h4>" + member.getMeta().getCaption() + "</h4>");
+            HTML header = new HTML(HtmlUtils.h3(member.getMeta().getCaption()));
+            header.getElement().getStyle().setMarginTop(1, Unit.EM);
+            return header;
         } else {
             return new ViewHeaderDecorator(member);
         }

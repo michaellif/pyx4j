@@ -7,33 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 12, 2011
- * @author dmitry
+ * Created on 2011-03-17
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = PotentialTenantInfo.class)
-public interface PotentialTenantFinancial extends IEntity, IBoundToApplication {
+@Transient
+public interface SummaryPotentialTenantFinancial extends IEntity {
+
+    IPrimitive<String> tenantFullName();
 
     @Owned
-    @Length(3)
-    IList<TenantIncome> incomes();
-
-    @Owned
-    @Length(3)
-    IList<TenantAsset> assets();
-
-    @Owned
-    @Length(2)
-    IList<TenantGuarantor> guarantors();
-
+    PotentialTenantFinancial tenantFinancial();
 }

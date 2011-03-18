@@ -37,18 +37,18 @@ import com.pyx4j.forms.client.ui.CComboBox;
 
 public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
-    private final boolean readOnlyMode;
+    private final boolean summaryViewMode;
 
-    public FinancialViewIncomeForm(boolean readOnlyMode) {
+    public FinancialViewIncomeForm(boolean summaryViewMode) {
         super(TenantIncome.class);
-        this.readOnlyMode = readOnlyMode;
+        this.summaryViewMode = summaryViewMode;
     }
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
 
-        if (!readOnlyMode) {
+        if (!summaryViewMode) {
             @SuppressWarnings("unchecked")
             CComboBox<IncomeSource> incomeSource = (CComboBox<IncomeSource>) inject(proto().incomeSource());
             incomeSource.addValueChangeHandler(new ValueChangeHandler<IncomeSource>() {
@@ -74,8 +74,8 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
     @Override
     public FolderItemDecorator createFolderItemDecorator() {
-        if (readOnlyMode) {
-            return new BoxReadOnlyFolderItemDecorator(false);
+        if (summaryViewMode) {
+            return new BoxReadOnlyFolderItemDecorator(!isFirst());
         } else {
             return new BoxFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover());
         }
@@ -155,7 +155,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
             @Override
             public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10, 12);
                 main.add(inject(proto().employedForYears()), 10, 2);
                 BaseEntityForm.injectIAddress(main, proto(), this);
@@ -173,7 +173,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         return new CEntityEditableComponent<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
             @Override
             public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10, 10);
                 BaseEntityForm.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
@@ -189,7 +189,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         return new CEntityEditableComponent<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
             @Override
             public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10, 10);
                 BaseEntityForm.injectIAddress(main, proto(), this);
 
@@ -210,7 +210,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         return new CEntityEditableComponent<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
             @Override
             public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10, 10);
                 BaseEntityForm.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
@@ -229,7 +229,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         return new CEntityEditableComponent<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
             @Override
             public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10, 10);
                 BaseEntityForm.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
@@ -245,7 +245,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         return new CEntityEditableComponent<IncomeInfoOther>(IncomeInfoOther.class) {
             @Override
             public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10, 10);
                 main.add(inject(proto().monthlyAmount()), 10, 10);
                 main.add(inject(proto().ends()), 10, 10);
