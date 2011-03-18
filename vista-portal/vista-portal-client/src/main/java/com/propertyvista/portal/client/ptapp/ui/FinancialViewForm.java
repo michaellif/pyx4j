@@ -35,12 +35,12 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderIte
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.portal.client.ptapp.ui.validators.ValidationUtils;
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.TenantIncome;
+import com.propertyvista.portal.domain.util.ValidationUtils;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.EditableComponentFactory;

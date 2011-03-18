@@ -41,6 +41,8 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
     private final boolean summaryViewMode;
 
+    private FileUpload fileUpload;
+
     public FinancialViewIncomeForm(boolean summaryViewMode) {
         super(TenantIncome.class);
         this.summaryViewMode = summaryViewMode;
@@ -72,7 +74,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         main.add(inject(proto().otherIncomeInfo(), createOtherIncomeInfoEditor()));
 
         if (!summaryViewMode) {
-            FileUpload fileUpload = new FileUpload();
+            fileUpload = new FileUpload();
             fileUpload.getElement().getStyle().setMarginLeft(12.5, Unit.EM);
             fileUpload.getElement().getStyle().setMarginTop(1, Unit.EM);
             fileUpload.getElement().getStyle().setMarginBottom(1, Unit.EM);
@@ -105,24 +107,30 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         get(proto().studentIncome()).setVisible(false);
         get(proto().socialServices()).setVisible(false);
         get(proto().otherIncomeInfo()).setVisible(false);
+        fileUpload.setVisible(false);
 
         if (incomeSource != null) {
             switch (incomeSource) {
             case fulltime:
             case parttime:
                 get(proto().employer()).setVisible(true);
+                fileUpload.setVisible(true);
                 break;
             case selfemployed:
                 get(proto().selfEmployed()).setVisible(true);
+                fileUpload.setVisible(true);
                 break;
             case seasonallyEmployed:
                 get(proto().seasonallyEmployed()).setVisible(true);
+                fileUpload.setVisible(true);
                 break;
             case socialServices:
                 get(proto().socialServices()).setVisible(true);
+                fileUpload.setVisible(true);
                 break;
             case student:
                 get(proto().studentIncome()).setVisible(true);
+                fileUpload.setVisible(true);
                 break;
             default:
                 @SuppressWarnings("rawtypes")

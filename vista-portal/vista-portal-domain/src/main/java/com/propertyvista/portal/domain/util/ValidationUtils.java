@@ -11,11 +11,10 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ptapp.ui.validators;
+package com.propertyvista.portal.domain.util;
 
 import java.util.Date;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 
 public class ValidationUtils {
@@ -25,10 +24,6 @@ public class ValidationUtils {
      * ID verification like CreditCard #, etc.
      */
     public static boolean isLuhnValid(String num) {
-        if (CommonsStringUtils.isEmpty(num)) {
-            return false;
-        }
-
         final int[][] sumTable = { { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, { 0, 2, 4, 6, 8, 1, 3, 5, 7, 9 } };
         int sum = 0, flip = 0;
 
@@ -40,5 +35,14 @@ public class ValidationUtils {
 
     public static boolean isOlderThen18(final Date bithday) {
         return TimeUtils.isOlderThen(bithday, 18);
+    }
+
+    public static boolean isSinValid(String value) {
+        return value.trim().matches("^\\d{3}[\\s]*\\d{3}[\\s]*\\d{3}$") && isLuhnValid(value.trim().replaceAll(" ", ""));
+    }
+
+    public static boolean isCreditCardNumberValid(String num) {
+        num = num.trim().replaceAll(" ", "");
+        return num.matches("^\\d{13,16}$") && isLuhnValid(num);
     }
 }

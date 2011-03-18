@@ -24,9 +24,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.validators.BirthdayDateValidator;
-import com.propertyvista.portal.client.ptapp.ui.validators.ValidationUtils;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.util.ValidationUtils;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
