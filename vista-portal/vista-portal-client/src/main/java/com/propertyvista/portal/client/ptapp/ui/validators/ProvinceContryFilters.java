@@ -91,6 +91,7 @@ public class ProvinceContryFilters {
             public void onValueChange(ValueChangeEvent<Province> event) {
                 if ((!provinceCombo.isValueEmpty()) && (countrySuggest.isOptionsLoaded())) {
                     countrySuggest.setValueByString(provinceCombo.getValue().country().name().getValue());
+                    countrySuggest.revalidate();
                 }
             }
         });
