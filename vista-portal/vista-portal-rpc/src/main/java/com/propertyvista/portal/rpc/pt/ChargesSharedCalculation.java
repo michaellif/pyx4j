@@ -107,7 +107,12 @@ public class ChargesSharedCalculation {
     }
 
     public static boolean isEligibleForPaymentSplit(PotentialTenantInfo tenant) {
-        return (tenant.status().getValue() != Status.Dependant);
+        //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
+        if (tenant.status().getValue() == Status.Applicant) {
+            return true;
+        } else {
+            return TimeUtils.isOlderThen(tenant.birthDate().getValue(), 18);
+        }
     }
 
     /**

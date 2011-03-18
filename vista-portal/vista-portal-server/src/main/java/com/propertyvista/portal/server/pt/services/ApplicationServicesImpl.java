@@ -21,7 +21,7 @@ import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
-import com.propertyvista.portal.domain.pt.PotentialTenant;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.UnitSelection;
@@ -31,6 +31,7 @@ import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
 import com.propertyvista.portal.server.pt.PtUserDataAccess;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -222,6 +223,17 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
         return null;
     }
 
+    public static boolean shouldEnterInformation(PotentialTenantInfo tenant) {
+        //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
+        if (tenant.status().getValue() == Status.Applicant) {
+            return true;
+        }
+        if (!tenant.takeOwnership().isNull() && !tenant.takeOwnership().getValue()) {
+            return false;
+        }
+        return (TimeUtils.isOlderThen(tenant.birthDate().getValue(), 18));
+    }
+
     public static void syncroizeApplicationProgress(PotentialTenantList tenantsOrig, PotentialTenantList tenantsNew) {
         EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
         applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), tenantsNew.application()));
@@ -236,12 +248,10 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
         infoStep.substeps().clear();
         financialStep.substeps().clear();
         for (PotentialTenantInfo tenant : tenantsNew.tenants()) {
-            //TODO this logic should be documented
-            if ((!tenant.takeOwnership().isBooleanTrue()) || (tenant.status().getValue() == PotentialTenant.Status.Dependant)) {
-                continue;
+            if (shouldEnterInformation(tenant)) {
+                infoStep.substeps().add(merge(tenant, findTenant(tenantsOrig, tenant), infoSubSteps));
+                financialStep.substeps().add(merge(tenant, findTenant(tenantsOrig, tenant), financialSubSteps));
             }
-            infoStep.substeps().add(merge(tenant, findTenant(tenantsOrig, tenant), infoSubSteps));
-            financialStep.substeps().add(merge(tenant, findTenant(tenantsOrig, tenant), financialSubSteps));
         }
         PersistenceServicesFactory.getPersistenceService().merge(infoStep);
         PersistenceServicesFactory.getPersistenceService().merge(financialStep);
