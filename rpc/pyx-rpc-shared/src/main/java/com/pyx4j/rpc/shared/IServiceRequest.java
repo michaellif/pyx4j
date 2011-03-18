@@ -22,7 +22,9 @@ package com.pyx4j.rpc.shared;
 
 import java.io.Serializable;
 
-public class IServiceRequest implements Serializable {
+import com.pyx4j.commons.IHaveServiceCallMarker;
+
+public class IServiceRequest implements Serializable, IHaveServiceCallMarker {
 
     private static final long serialVersionUID = 6090572631432990996L;
 
@@ -53,5 +55,11 @@ public class IServiceRequest implements Serializable {
 
     public Serializable[] getArgs() {
         return args;
+    }
+
+    @Override
+    public String getServiceCallMarker() {
+        String className = getServiceClassId();
+        return className.substring(className.lastIndexOf(".") + 1) + "." + getServiceMethodId();
     }
 }
