@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Table.PrimaryKeyStrategy;
 import com.pyx4j.entity.rdb.ConnectionProvider;
+import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
@@ -302,6 +303,9 @@ public class TableModel {
                     SQLUtils.closeQuietly(keys);
                 }
             }
+            if (EntityPersistenceServiceRDB.trace) {
+                log.info("saved {} [{}] ", this.getTableName(), entity.getPrimaryKey());
+            }
         } catch (SQLException e) {
             log.error("{} SQL insert error", tableName, e);
             throw new RuntimeException(e);
@@ -316,12 +320,13 @@ public class TableModel {
             stmt = connection.prepareStatement(sqlUpdate());
             int parameterIndex = bindPersistParameters(dialect, stmt, entity);
             stmt.setLong(parameterIndex, entity.getPrimaryKey());
-            int rc = stmt.executeUpdate();
-
-            for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
-                CollectionsTableModel.update(connection, dialect, entity, member);
+            boolean updated = (stmt.executeUpdate() == 1);
+            if (updated) {
+                for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
+                    CollectionsTableModel.update(connection, dialect, entity, member);
+                }
             }
-            return (rc == 1);
+            return updated;
         } catch (SQLException e) {
             log.error("{} SQL update error", tableName, e);
             throw new RuntimeException(e);

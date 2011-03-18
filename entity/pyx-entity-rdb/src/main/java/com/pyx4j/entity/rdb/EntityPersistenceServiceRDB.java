@@ -76,7 +76,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private final Mappings mappings;
 
-    private final boolean trace = false;
+    public static final boolean trace = false;
 
     public EntityPersistenceServiceRDB() {
         try {
@@ -189,6 +189,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private void insert(Connection connection, TableModel tm, IEntity entity, Date now) {
+        if (trace) {
+            log.info(Trace.enter() + "insert {}", tm.getTableName());
+        }
         tm.insert(connection, entity);
         for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
             CollectionsTableModel.validate(entity, member);
@@ -206,9 +209,15 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
             CollectionsTableModel.insert(connection, connectionProvider.getDialect(), entity, member);
         }
+        if (trace) {
+            log.info(Trace.returns() + "insert {}", tm.getTableName());
+        }
     }
 
     private boolean update(Connection connection, TableModel tm, IEntity entity, Date now, boolean doMerge) {
+        if (trace) {
+            log.info(Trace.enter() + "update {} id={}", tm.getTableName(), entity.getPrimaryKey());
+        }
         for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
             CollectionsTableModel.validate(entity, member);
             if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
@@ -228,7 +237,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
             }
         }
-        return tm.update(connection, entity);
+        boolean updated = tm.update(connection, entity);
+        if (trace) {
+            log.info(Trace.returns() + "update {} id={}", tm.getTableName(), entity.getPrimaryKey());
+        }
+        return updated;
     }
 
     @Override

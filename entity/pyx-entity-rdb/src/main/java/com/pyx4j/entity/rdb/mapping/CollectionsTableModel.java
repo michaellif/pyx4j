@@ -34,6 +34,8 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.Trace;
+import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -118,6 +120,9 @@ public class CollectionsTableModel {
                     stmt.setObject(2, TableModel.encodeValue(valueClass, value), targetSqlType);
                     if (isList) {
                         stmt.setInt(3, seq);
+                    }
+                    if (EntityPersistenceServiceRDB.trace) {
+                        log.info(Trace.id() + "insert {} (" + primaryKey + ", " + value + ", " + +seq + ")", member.sqlName());
                     }
                     stmt.executeUpdate();
                 }
