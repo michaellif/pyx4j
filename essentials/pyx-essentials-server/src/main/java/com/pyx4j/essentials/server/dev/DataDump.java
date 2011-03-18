@@ -51,7 +51,7 @@ public class DataDump {
         NumberFormat nf = new DecimalFormat("0000");
         StringBuffer name = new StringBuffer(nf.format(id));
         name.append('-').append(type);
-        name.append('-').append(ent.getEntityMeta().getPersistenceName());
+        name.append('-').append(ent.getEntityMeta().getEntityClass().getSimpleName());
         name.append(".xml");
         File dir;
         if (LoggerConfig.getContextName() != null) {
