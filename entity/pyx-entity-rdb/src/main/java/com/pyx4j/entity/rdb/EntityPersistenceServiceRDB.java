@@ -722,10 +722,6 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             CollectionsTableModel.delete(connection, primaryKey, member);
         }
 
-        if (entityMeta.getPersistenceName().equals("IncomeInfoOther")) {
-            log.info("remove data", new Throwable());
-        }
-
         if (!tm.delete(connection, primaryKey)) {
             throw new RuntimeException("Entity " + entityMeta.getCaption() + " " + primaryKey + " NotFound");
         }
