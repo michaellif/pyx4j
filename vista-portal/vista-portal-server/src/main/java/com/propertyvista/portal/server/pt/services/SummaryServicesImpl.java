@@ -53,7 +53,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
 
     @Override
     public void save(AsyncCallback<Summary> callback, Summary summary) {
-//        log.info("Saving charges\n{}", PrintUtil.print(summary));
+        //        log.info("Saving charges\n{}", PrintUtil.print(summary));
 
         applyApplication(summary);
         secureSave(summary);
@@ -69,23 +69,29 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         PersistenceServicesFactory.getPersistenceService().retrieve(summary.unitSelection().selectedUnit().floorplan());
 
         retrieveApplicationEntity(summary.tenants());
-        summary.tenants2().set(summary.tenants());
+
+        // We do not remove the info from DB if Tenant status changes
+        for (PotentialTenantInfo tenant : summary.tenants().tenants()) {
+            if (ApplicationServicesImpl.shouldEnterInformation(tenant)) {
+                summary.tenantsWithInfo().tenants().add(tenant);
+            }
+        }
 
         EntityQueryCriteria<PotentialTenantFinancial> financialCriteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
         financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
         for (PotentialTenantFinancial fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
-            SummaryPotentialTenantFinancial sf = summary.tenantFinancials().$();
-
-            sf.tenantFinancial().set(fin);
-            // Update Transient values
-            fin: for (PotentialTenantInfo tenant : summary.tenants().tenants()) {
+            // Update Transient values and see if we need to show this Tenant
+            findTenenat: for (PotentialTenantInfo tenant : summary.tenants().tenants()) {
                 if (fin.id().equals(tenant.id())) {
-                    sf.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", tenant.firstName(), tenant.middleName(), tenant.lastName()));
-                    break fin;
+                    if (ApplicationServicesImpl.shouldEnterInformation(tenant)) {
+                        SummaryPotentialTenantFinancial sf = summary.tenantFinancials().$();
+                        sf.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", tenant.firstName(), tenant.middleName(), tenant.lastName()));
+                        sf.tenantFinancial().set(fin);
+                        summary.tenantFinancials().add(sf);
+                    }
+                    break findTenenat;
                 }
             }
-
-            summary.tenantFinancials().add(sf);
         }
 
         retrieveApplicationEntity(summary.pets());

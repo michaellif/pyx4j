@@ -30,7 +30,7 @@ public interface Summary extends IEntity, IBoundToApplication {
     PotentialTenantList tenants();
 
     @Transient
-    PotentialTenantList tenants2();
+    PotentialTenantList tenantsWithInfo();
 
     @Transient
     @EmbeddedEntity

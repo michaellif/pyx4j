@@ -114,7 +114,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(inject(proto().tenants().tenants(), tenantsTable.createTenantTable()));
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Info"), new SiteMap.Info())));
-        main.add(inject(proto().tenants2().tenants(), createTenantView()));
+        main.add(inject(proto().tenantsWithInfo().tenants(), createTenantView()));
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new SiteMap.Financial())));
         main.add(inject(proto().tenantFinancials(), createFinancialView()));
