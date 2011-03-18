@@ -49,6 +49,7 @@ public interface ApptUnit extends Property {
      * 
      * TODO Artur: Can we move this to floorplan?
      */
+    @Format("#0.#")
     @Caption(name = "Beds")
     IPrimitive<Double> bedrooms();
 
@@ -59,6 +60,7 @@ public interface ApptUnit extends Property {
      * 
      * TODO Are the units with the same number of b*rooms have the same plan.
      */
+    @Format("#0.#")
     @Caption(name = "Baths")
     IPrimitive<Double> bathrooms();
 

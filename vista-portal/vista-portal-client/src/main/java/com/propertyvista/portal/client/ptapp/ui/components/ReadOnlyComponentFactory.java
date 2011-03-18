@@ -42,7 +42,11 @@ public class ReadOnlyComponentFactory extends EntityFormComponentFactory {
             } else if (mm.getValueClass().isEnum()) {
                 return new CEnumLabel();
             } else if (mm.isNumberValueClass()) {
-                return new CNumberLabel();
+                CNumberLabel comp = new CNumberLabel();
+                if (mm.getFormat() != null) {
+                    (comp).setNumberFormat(mm.getFormat());
+                }
+                return comp;
             } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
                 CDateLabel comp = new CDateLabel();
                 if (mm.getFormat() != null) {
