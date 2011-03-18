@@ -71,11 +71,13 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         main.add(inject(proto().socialServices(), createSocialServicesEditor()));
         main.add(inject(proto().otherIncomeInfo(), createOtherIncomeInfoEditor()));
 
-        FileUpload fileUpload = new FileUpload();
-        fileUpload.getElement().getStyle().setMarginLeft(12.5, Unit.EM);
-        fileUpload.getElement().getStyle().setMarginTop(1, Unit.EM);
-        fileUpload.getElement().getStyle().setMarginBottom(1, Unit.EM);
-        main.add(fileUpload);
+        if (!summaryViewMode) {
+            FileUpload fileUpload = new FileUpload();
+            fileUpload.getElement().getStyle().setMarginLeft(12.5, Unit.EM);
+            fileUpload.getElement().getStyle().setMarginTop(1, Unit.EM);
+            fileUpload.getElement().getStyle().setMarginBottom(1, Unit.EM);
+            main.add(fileUpload);
+        }
 
         return main;
     }

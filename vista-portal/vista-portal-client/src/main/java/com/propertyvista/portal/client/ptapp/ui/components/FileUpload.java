@@ -57,7 +57,7 @@ public class FileUpload extends HorizontalPanel {
         }
 
         add(new HTML("&nbsp;&nbsp;&nbsp;"));
-        add(new Image(SiteImages.INSTANCE.exclamation()));
+        add(new Image(SiteImages.INSTANCE.clip()));
 
         final FlowPanel fp = new FlowPanel();
         fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);

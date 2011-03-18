@@ -69,6 +69,9 @@ public interface SiteImages extends ClientBundle {
     @Source("btn.gif")
     ImageResource buttonBackground();
 
+    @Source("clip.png")
+    ImageResource clip();
+
     @Source("bulet.gif")
     ImageResource bulet();
 
@@ -104,6 +107,9 @@ public interface SiteImages extends ClientBundle {
 
     @Source("info_orange.png")
     ImageResource infoOrange();
+
+    @Source("info_red.png")
+    ImageResource infoRed();
 
     @Source("pointer_menu.png")
     ImageResource pointer();

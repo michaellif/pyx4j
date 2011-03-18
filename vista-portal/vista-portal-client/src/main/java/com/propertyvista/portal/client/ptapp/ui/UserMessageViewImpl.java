@@ -103,7 +103,7 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
             case ERROR:
             case FAILURE:
                 colour = "red";
-                image = new Image(SiteImages.INSTANCE.infoOrange());
+                image = new Image(SiteImages.INSTANCE.infoRed());
                 break;
 
             default:
