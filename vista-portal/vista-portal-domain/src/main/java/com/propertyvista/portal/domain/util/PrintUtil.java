@@ -21,6 +21,7 @@ import com.propertyvista.portal.domain.Concession;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.UnitInfoItem;
 import com.propertyvista.portal.domain.Utility;
+import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
@@ -28,6 +29,22 @@ import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 
 public class PrintUtil {
+
+    public static String print(Address address) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        sb.append(address.street1().getValue());
+        sb.append(", ").append(address.city().getStringView());
+        sb.append(", ").append(address.province().getStringView());
+        sb.append(" ").append(address.postalCode().getStringView());
+
+        sb.append("\n");
+        sb.append(address.moveInDate().getStringView()).append(" - ");
+        sb.append(address.moveOutDate().getStringView());
+        sb.append(" $").append(address.payment().getValue());
+
+        return sb.toString();
+    }
 
     public static String print(UnitSelection unitSelection) {
         StringBuilder sb = new StringBuilder();

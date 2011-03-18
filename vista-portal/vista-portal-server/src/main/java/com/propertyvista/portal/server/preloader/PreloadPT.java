@@ -237,6 +237,16 @@ public class PreloadPT extends BaseVistaDataPreloader {
         pti.currentAddress().set(currentAddress);
 
         Address previousAddress = createAddress();
+        // moveOut date for previous address is the same as the moveIn date for current address
+        Date moveOut = currentAddress.moveInDate().getValue();
+        // moveIn date for previous address is a few days/years back
+        int years = RandomUtil.randomInt(10) + 1;
+        years *= -1;
+        Date moveIn = DateUtils.yearsAdd(moveOut, years);
+        log.info("Moving {} years back", years);
+        log.info("Moving from {} to {}", moveOut, moveIn);
+        previousAddress.moveOutDate().setValue(moveOut);
+        previousAddress.moveInDate().setValue(moveIn);
         persist(previousAddress);
         pti.previousAddress().set(previousAddress);
 
@@ -553,6 +563,11 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             sb.append("\t").append(tenant.secureIdentifier().getStringView());
 
+            sb.append("Current address");
+            sb.append(PrintUtil.print(tenant.currentAddress()));
+            sb.append("Previous address");
+            sb.append(PrintUtil.print(tenant.previousAddress()));
+
             sb.append("\nVehicles\n");
             // vehicles
             for (Vehicle vehicle : tenant.vehicles()) {
@@ -595,7 +610,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
             asset.percent().setValue((double) RandomUtil.randomInt(100));
             asset.assetValue().setValue(DomainUtil.createMoney(100d + RandomUtil.randomInt(10000)).getValue());
 
-            persist(asset);
+//            persist(asset);
             ptf.assets().add(asset);
         }
 
@@ -605,7 +620,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
                 guarantor.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
                 guarantor.lastName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
                 guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
-                persist(guarantor);
+//                persist(guarantor);
                 ptf.guarantors().add(guarantor);
             }
         }
