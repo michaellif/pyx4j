@@ -61,15 +61,18 @@ public class PaymentServicesImpl extends ApplicationEntityServicesImpl implement
 
     @Override
     public void save(AsyncCallback<PaymentInfo> callback, PaymentInfo payment) {
-//        log.info("Saving charges\n{}", PrintUtil.print(summary));
+        //        log.info("Saving charges\n{}", PrintUtil.print(summary));
 
         applyApplication(payment);
 
         secureSave(payment);
 
-        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
-        CampaignManager.fireEvent(CampaignTriger.ApplicationCompleated, secureRetrieve(criteria));
+        boolean callFireDemo = false;
+        if (callFireDemo) {
+            EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+            CampaignManager.fireEvent(CampaignTriger.ApplicationCompleated, secureRetrieve(criteria));
+        }
 
         if ((EnumSet.of(PaymentType.Amex, PaymentType.Visa, PaymentType.MasterCard, PaymentType.Discover).contains(payment.type().getValue()))
                 && ("2011".equals(payment.creditCard().cardNumber().getValue()))) {
