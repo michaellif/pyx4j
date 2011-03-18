@@ -446,7 +446,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             DecorationData dd = new DecorationData(10d, HasHorizontalAlignment.ALIGN_LEFT, 16);
             dd.labelStyleName = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureLabel.name();
-//            dd.componentStyle = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureEdit.name();
+            //            dd.componentStyle = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureEdit.name();
             VistaWidgetDecorator signature = new VistaWidgetDecorator(edit, dd);
             signature.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignature.name());
             signature.getElement().getStyle().setMarginTop(1, Unit.EM);
@@ -484,7 +484,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     }
 
     private boolean isCombinationMatch(String signature, IPrimitive<String> value1, IPrimitive<String> value2, IPrimitive<String> value3) {
-        signature = signature.trim().toLowerCase().replace("  ", " ");
+        signature = signature.trim().toLowerCase().replaceAll("\\s+", " ");
         String s1 = CommonsStringUtils.nvl(value1.getValue()).trim().toLowerCase();
         String s2 = CommonsStringUtils.nvl(value2.getValue()).trim().toLowerCase();
         String s3 = CommonsStringUtils.nvl(value3.getValue()).trim().toLowerCase();
