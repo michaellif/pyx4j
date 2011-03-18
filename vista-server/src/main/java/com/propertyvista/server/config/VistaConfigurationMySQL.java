@@ -18,6 +18,8 @@ import com.pyx4j.entity.rdb.dialect.NamingConventionModern;
 
 public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.ConfigurationMySQL {
 
+    private static final String LOG_CONFIG = "&logger=com.mysql.jdbc.log.Slf4JLogger";
+
     @Override
     public String dbHost() {
         return "localhost";
@@ -29,7 +31,7 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
 
     @Override
     public String connectionUrl() {
-        return super.connectionUrl() + "?autoReconnect=true" + (showSql() ? "&autoGenerateTestcaseScript=true" : "");
+        return super.connectionUrl() + "?autoReconnect=true" + LOG_CONFIG + (showSql() ? "&autoGenerateTestcaseScript=true" : "");
     }
 
     @Override

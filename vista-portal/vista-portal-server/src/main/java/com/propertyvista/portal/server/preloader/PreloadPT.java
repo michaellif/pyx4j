@@ -62,6 +62,7 @@ import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.util.PrintUtil;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.services.ApartmentServicesImpl;
+import com.propertyvista.portal.server.pt.services.ApplicationDebug;
 import com.propertyvista.portal.server.pt.services.ApplicationServicesImpl;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -360,6 +361,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         Application loadedApplication = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         sb.append("Application :").append(loadedApplication.rent().amount()).append("\n");
         sb.append("User: ").append(loadedApplication.user()).append("\n");
+        ApplicationDebug.dumpApplicationSummary(loadedApplication);
     }
 
     private void createApplicationProgress() {
