@@ -16,10 +16,8 @@ package com.propertyvista.portal.domain.pt;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = PotentialTenantInfo.class)
 public interface PotentialTenantFinancial extends IEntity, IBoundToApplication {
