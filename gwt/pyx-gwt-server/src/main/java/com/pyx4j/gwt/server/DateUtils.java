@@ -65,6 +65,14 @@ public class DateUtils extends TimeUtils {
         calendar.add(Calendar.SECOND, -1);
     }
 
+    public static Date yearsAdd(Date date, int years) {
+        Calendar c = new GregorianCalendar();
+        c.setTime(date);
+        c.add(Calendar.YEAR, years);
+
+        return c.getTime();
+    }
+
     public static boolean isSameDay(Calendar d1, Calendar d2) {
         if (d1 == null || d2 == null) {
             return false;
