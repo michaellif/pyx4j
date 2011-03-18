@@ -107,21 +107,7 @@ public class ChargesSharedCalculation {
     }
 
     public static boolean isEligibleForPaymentSplit(PotentialTenantInfo tenant) {
-        if (tenant.status().getValue() == Status.Applicant) {
-            return true;
-        }
-
-        // examine the age, if over 18 - is eligible
-        if (TimeUtils.isOlderThen(tenant.birthDate().getValue(), 18)) {
-            return true;
-        }
-//        Date date18back = new Date();
-//        date18back.setYear(date18back.getYear() - 18); // 
-//        if (date18back.before(tenant.birthDate().getValue())) {
-//            return false;
-//        }
-
-        return false;
+        return (tenant.status().getValue() != Status.Dependant);
     }
 
     /**

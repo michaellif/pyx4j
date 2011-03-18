@@ -21,11 +21,11 @@ import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
+import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
@@ -236,9 +236,8 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
         infoStep.substeps().clear();
         financialStep.substeps().clear();
         for (PotentialTenantInfo tenant : tenantsNew.tenants()) {
-            // if not 18y Old continue;
-            // TODO vlads By the way, I do not think that this is correct, since this is moving domain-specific logic for tenants to such a generic method as this
-            if (!ChargesSharedCalculation.isEligibleForPaymentSplit(tenant)) {
+            //TODO this logic should be documented
+            if ((!tenant.takeOwnership().isBooleanTrue()) || (tenant.status().getValue() == PotentialTenant.Status.Dependant)) {
                 continue;
             }
             infoStep.substeps().add(merge(tenant, findTenant(tenantsOrig, tenant), infoSubSteps));
