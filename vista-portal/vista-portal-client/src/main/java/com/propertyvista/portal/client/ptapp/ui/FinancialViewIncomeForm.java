@@ -13,10 +13,12 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.components.FileUpload;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.domain.pt.IEmploymentInfo;
@@ -68,6 +70,12 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         main.add(inject(proto().studentIncome(), createStudentIncomeEditor()));
         main.add(inject(proto().socialServices(), createSocialServicesEditor()));
         main.add(inject(proto().otherIncomeInfo(), createOtherIncomeInfoEditor()));
+
+        FileUpload fileUpload = new FileUpload();
+        fileUpload.getElement().getStyle().setMarginLeft(12.5, Unit.EM);
+        fileUpload.getElement().getStyle().setMarginTop(1, Unit.EM);
+        fileUpload.getElement().getStyle().setMarginBottom(1, Unit.EM);
+        main.add(fileUpload);
 
         return main;
     }
