@@ -240,21 +240,50 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
         ApplicationProgress progress = secureRetrieve(applicationProgressCriteria);
 
         ApplicationWizardStep infoStep = findWizardStep(progress, SiteMap.Info.class);
-        ApplicationWizardSubstep[] infoSubSteps = infoStep.substeps().toArray(new ApplicationWizardSubstep[infoStep.substeps().size()]);
-
         ApplicationWizardStep financialStep = findWizardStep(progress, SiteMap.Financial.class);
+        //Keep original values to be able to merge Steps
+        ApplicationWizardSubstep[] infoSubSteps = infoStep.substeps().toArray(new ApplicationWizardSubstep[infoStep.substeps().size()]);
         ApplicationWizardSubstep[] financialSubSteps = financialStep.substeps().toArray(new ApplicationWizardSubstep[financialStep.substeps().size()]);
 
         infoStep.substeps().clear();
         financialStep.substeps().clear();
         for (PotentialTenantInfo tenant : tenantsNew.tenants()) {
             if (shouldEnterInformation(tenant)) {
-                infoStep.substeps().add(merge(tenant, findTenant(tenantsOrig, tenant), infoSubSteps));
-                financialStep.substeps().add(merge(tenant, findTenant(tenantsOrig, tenant), financialSubSteps));
+                ApplicationWizardSubstep infoSubstep = merge(tenant, findTenant(tenantsOrig, tenant), infoSubSteps);
+                infoStep.substeps().add(infoSubstep);
+                updateParentStepStatus(infoStep, infoSubstep);
+
+                ApplicationWizardSubstep financialSubstep = merge(tenant, findTenant(tenantsOrig, tenant), financialSubSteps);
+                financialStep.substeps().add(financialSubstep);
+                updateParentStepStatus(financialStep, financialSubstep);
             }
         }
+        updateStepCompletion(infoStep);
+        updateStepCompletion(financialStep);
         PersistenceServicesFactory.getPersistenceService().merge(infoStep);
         PersistenceServicesFactory.getPersistenceService().merge(financialStep);
+    }
+
+    private static void updateParentStepStatus(ApplicationWizardStep step, ApplicationWizardSubstep substep) {
+        switch (substep.status().getValue()) {
+        case invalid:
+            step.status().setValue(ApplicationWizardStep.Status.invalid);
+            break;
+        case notVisited:
+            if (step.status().getValue() == ApplicationWizardStep.Status.complete) {
+                step.status().setValue(ApplicationWizardStep.Status.invalid);
+            }
+            break;
+        }
+    }
+
+    private static void updateStepCompletion(ApplicationWizardStep step) {
+        for (ApplicationWizardSubstep substep : step.substeps()) {
+            if (substep.status().getValue() != ApplicationWizardStep.Status.complete) {
+                return;
+            }
+        }
+        step.status().setValue(ApplicationWizardStep.Status.complete);
     }
 
     @SuppressWarnings("unchecked")

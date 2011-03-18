@@ -32,6 +32,7 @@ import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep.Status;
 import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
@@ -41,6 +42,7 @@ import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -197,13 +199,17 @@ public class PtAppWizardManager {
         }, currentStep, substep);
     }
 
+    private boolean shouldSelect(IPrimitive<Status> status) {
+        return (ApplicationWizardStep.Status.latest.equals(status.getValue()) || ApplicationWizardStep.Status.invalid.equals(status.getValue()));
+    }
+
     private void navigationByApplicationProgress() {
         for (ApplicationWizardStep step : applicationProgress.steps()) {
-            if (ApplicationWizardStep.Status.latest.equals(step.status().getValue())) {
+            if (shouldSelect(step.status())) {
                 AppPlace place = AppSite.getHistoryMapper().getPlace(step.placeId().getValue());
                 if (step.substeps().size() > 0) {
                     for (ApplicationWizardSubstep substep : step.substeps()) {
-                        if (ApplicationWizardStep.Status.latest.equals(substep.status().getValue())) {
+                        if (shouldSelect(substep.status())) {
                             HashMap<String, String> args = new HashMap<String, String>();
                             args.put(SecondNavigActivity.STEP_ARG_NAME, substep.placeArgument().getStringView());
                             place.setArgs(args);
