@@ -39,6 +39,7 @@ public class ChargesServicesImpl extends ApplicationEntityServicesImpl implement
         if (charges == null) {
             log.info("Creating new charges");
             charges = EntityFactory.create(Charges.class);
+            charges.application().set(PtUserDataAccess.getCurrentUserApplication());
         }
 
         ChargesServerCalculation.updateChargesFromApplication(charges);
