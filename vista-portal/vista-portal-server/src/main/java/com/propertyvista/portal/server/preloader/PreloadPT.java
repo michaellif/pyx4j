@@ -136,7 +136,6 @@ public class PreloadPT extends BaseVistaDataPreloader {
         contact.email().setValue(email);
 
         Address address = createAddress();
-        persist(address);
         contact.address().set(address);
 
         return contact;
@@ -233,7 +232,6 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
         Address currentAddress = createAddress();
         currentAddress.moveOutDate().setValue(RandomUtil.randomDate(2012, 2013)); // this has to be in the future
-        persist(currentAddress);
         pti.currentAddress().set(currentAddress);
 
         Address previousAddress = createAddress();
@@ -247,7 +245,6 @@ public class PreloadPT extends BaseVistaDataPreloader {
         log.info("Moving from {} to {}", moveOut, moveIn);
         previousAddress.moveOutDate().setValue(moveOut);
         previousAddress.moveInDate().setValue(moveIn);
-        persist(previousAddress);
         pti.previousAddress().set(previousAddress);
 
         for (int i = 0; i < RandomUtil.randomInt(3); i++) {
@@ -257,18 +254,13 @@ public class PreloadPT extends BaseVistaDataPreloader {
         }
 
         LegalQuestions legalQuestions = createLegalQuestions();
-        PersistenceServicesFactory.getPersistenceService().persist(legalQuestions);
         pti.legalQuestions().set(legalQuestions);
 
         EmergencyContact ec1 = createEmergencyContact();
-        PersistenceServicesFactory.getPersistenceService().persist(ec1);
         pti.emergencyContacts().add(ec1);
 
         EmergencyContact ec2 = createEmergencyContact();
-        PersistenceServicesFactory.getPersistenceService().persist(ec2);
         pti.emergencyContacts().add(ec2);
-
-        PersistenceServicesFactory.getPersistenceService().persist(pti);
 
         return pti;
     }
@@ -403,11 +395,12 @@ public class PreloadPT extends BaseVistaDataPreloader {
         for (int i = 0; i < DemoData.NUM_POTENTIAL_TENANTS; i++) {
             PotentialTenantInfo tenantInfo = createPotentialTenantInfo(i);
             tenantInfo.application().set(application);
-            createFinancialInfo(tenantInfo);
             tenants.tenants().add(tenantInfo);
         }
-
         persist(tenants);
+        for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
+            persist(createFinancialInfo(tenantInfo));
+        }
     }
 
     private void createPets() {
@@ -610,7 +603,6 @@ public class PreloadPT extends BaseVistaDataPreloader {
             asset.percent().setValue((double) RandomUtil.randomInt(100));
             asset.assetValue().setValue(DomainUtil.createMoney(100d + RandomUtil.randomInt(10000)).getValue());
 
-//            persist(asset);
             ptf.assets().add(asset);
         }
 
@@ -620,12 +612,9 @@ public class PreloadPT extends BaseVistaDataPreloader {
                 guarantor.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
                 guarantor.lastName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
                 guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
-//                persist(guarantor);
                 ptf.guarantors().add(guarantor);
             }
         }
-
-        persist(ptf);
 
         return ptf;
     }
