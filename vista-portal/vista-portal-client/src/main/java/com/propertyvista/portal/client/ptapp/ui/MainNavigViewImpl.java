@@ -13,8 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
@@ -32,7 +31,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.client.ptapp.activity.SecondNavigActivity;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
+import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -69,19 +70,8 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
         clear();
         tabsHolder = new NavigTabList();
 
-        List<NavigTab> tabs = new ArrayList<NavigTab>();
-
-        boolean visited = false; // iterate from the end to the beginning: 
-        for (int i = presenter.getWizardSteps().size() - 1; i >= 0; i--) {
-            ApplicationWizardStep step = presenter.getWizardSteps().get(i);
-            if (ApplicationWizardStep.Status.latest.equals(step.status().getValue())) {
-                visited = true; // from current to the beginning of the tablist... 
-            }
-            tabs.add(0, new NavigTab(step, visited));
-        }
-
-        for (NavigTab navigTab : tabs) {
-            tabsHolder.add(navigTab);
+        for (ApplicationWizardStep step : presenter.getWizardSteps()) {
+            tabsHolder.add(new NavigTab(step));
         }
 
         setWidget(tabsHolder);
@@ -114,7 +104,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             return place;
         }
 
-        NavigTab(final ApplicationWizardStep step, boolean visited) {
+        NavigTab(final ApplicationWizardStep step) {
             super();
 
             setElement(DOM.createElement("li"));
@@ -132,6 +122,12 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             labelHolder.add(statusHolder);
 
             this.place = AppSite.getHistoryMapper().getPlace(step.placeId().getValue());
+            if (step.substeps().size() > 0) {
+                ApplicationWizardSubstep substep = step.substeps().get(0);
+                HashMap<String, String> args = new HashMap<String, String>();
+                args.put(SecondNavigActivity.STEP_ARG_NAME, substep.placeArgument().getStringView());
+                place.setArgs(args);
+            }
             label = new Label(presenter.getNavigLabel(place));
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));
@@ -158,8 +154,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             getElement().getStyle().setFontWeight(FontWeight.BOLD);
             getElement().getStyle().setCursor(Cursor.DEFAULT);
 
-//            if (visited) {
-            if (true) {
+            if (step.status().getValue() != ApplicationWizardStep.Status.notVisited) {
                 addDomHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {

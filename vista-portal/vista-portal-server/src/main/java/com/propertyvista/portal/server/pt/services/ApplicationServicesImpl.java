@@ -116,7 +116,6 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
 
             currentStep = progress.steps().get(idx);
             //TODO hasAlert ?
-            boolean currentStepCompleated = true;
             if (currentSubstep != null) {
                 int idxSub = currentStep.substeps().indexOf(currentSubstep);
                 if (idxSub == -1) {
@@ -127,15 +126,15 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
                 PersistenceServicesFactory.getPersistenceService().persist(currentSubstep);
                 // navigate to next invalid or notVisited step
                 idxSub++;
-                if (selectSubStep(currentStep, idxSub)) {
-                    currentStepCompleated = false;
-                }
+                selectSubStep(currentStep, idxSub);
             }
+
+            currentStep.status().setValue(getStepAggeratedStatus(currentStep));
+            PersistenceServicesFactory.getPersistenceService().persist(currentStep);
+            boolean currentStepCompleated = (currentStep.status().getValue() == ApplicationWizardStep.Status.complete);
 
             if (currentStepCompleated) {
                 // Move to next regular step
-                currentStep.status().setValue(ApplicationWizardStep.Status.complete);
-                PersistenceServicesFactory.getPersistenceService().persist(currentStep);
                 idx++;
                 iterOverSteps: while (idx < progress.steps().size()) {
                     ApplicationWizardStep nextStep = progress.steps().get(idx);
@@ -275,6 +274,27 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
             }
             break;
         }
+    }
+
+    private static ApplicationWizardStep.Status getStepAggeratedStatus(ApplicationWizardStep step) {
+        ApplicationWizardStep.Status aggrStatus = ApplicationWizardStep.Status.complete;
+        for (ApplicationWizardSubstep substep : step.substeps()) {
+            switch (substep.status().getValue()) {
+            case complete:
+                break;
+            case invalid:
+                return ApplicationWizardStep.Status.invalid;
+            case latest:
+                aggrStatus = ApplicationWizardStep.Status.latest;
+                break;
+            case notVisited:
+                if (aggrStatus != ApplicationWizardStep.Status.latest) {
+                    aggrStatus = ApplicationWizardStep.Status.notVisited;
+                }
+                break;
+            }
+        }
+        return aggrStatus;
     }
 
     private static void updateStepCompletion(ApplicationWizardStep step) {

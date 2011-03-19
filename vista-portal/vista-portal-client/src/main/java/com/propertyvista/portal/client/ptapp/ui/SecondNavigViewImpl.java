@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -72,20 +71,8 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             if (substeps.size() > 0) {
 
                 tabsHolder = new NavigTabList();
-                List<NavigTab> tabs = new ArrayList<NavigTab>();
-
-                boolean visited = false; // iterate from the end to the beginning: 
-                for (int i = substeps.size() - 1; i >= 0; i--) {
-                    ApplicationWizardSubstep substep = substeps.get(i);
-                    if (ApplicationWizardStep.Status.latest.equals(substep.status().getValue())) {
-                        visited = true; // from current to the beginning of the tablist... 
-                    }
-
-                    tabs.add(0, new NavigTab(substep, presenter.getWizardStep().placeId().getValue(), visited));
-                }
-
-                for (NavigTab navigTab : tabs) {
-                    tabsHolder.add(navigTab);
+                for (ApplicationWizardSubstep substep : substeps) {
+                    tabsHolder.add(new NavigTab(substep, presenter.getWizardStep().placeId().getValue()));
                 }
 
                 setWidget(tabsHolder);
@@ -112,7 +99,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             return place;
         }
 
-        NavigTab(final ApplicationWizardSubstep substep, String token, boolean visited) {
+        NavigTab(final ApplicationWizardSubstep substep, String token) {
             super();
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
 
@@ -156,8 +143,8 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             getElement().getStyle().setFontWeight(FontWeight.BOLD);
             getElement().getStyle().setCursor(Cursor.DEFAULT);
 
-            // if visited - allow click:
-            if (visited) {
+            // Server decides to allow click or not
+            if (substep.status().getValue() != ApplicationWizardStep.Status.notVisited) {
                 addDomHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
