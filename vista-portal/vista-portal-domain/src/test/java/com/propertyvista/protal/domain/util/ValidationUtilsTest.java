@@ -1,9 +1,3 @@
-package com.propertyvista.protal.domain.util;
-
-import com.propertyvista.portal.domain.util.ValidationUtils;
-
-import junit.framework.TestCase;
-
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
@@ -17,6 +11,11 @@ import junit.framework.TestCase;
  * @author Vlad
  * @version $Id$
  */
+package com.propertyvista.protal.domain.util;
+
+import junit.framework.TestCase;
+
+import com.propertyvista.portal.domain.util.ValidationUtils;
 
 public class ValidationUtilsTest extends TestCase {
 
@@ -52,7 +51,7 @@ public class ValidationUtilsTest extends TestCase {
         assertTrue(ValidationUtils.isCreditCardNumberValid("6767 6222 2222 2222 222"));
         assertTrue(ValidationUtils.isCreditCardNumberValid("6767 6767 6767 6767 671"));
 
-//        assertTrue(ValidationUtils.isCreditCardNumberValid("76009244561")); // strange card - 11 digits???
+        //        assertTrue(ValidationUtils.isCreditCardNumberValid("76009244561")); // strange card - 11 digits???
         assertTrue(ValidationUtils.isCreditCardNumberValid("5019717010103742"));
         assertTrue(ValidationUtils.isCreditCardNumberValid("6331101999990016"));
 
