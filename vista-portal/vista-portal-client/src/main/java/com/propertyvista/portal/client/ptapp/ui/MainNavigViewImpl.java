@@ -74,13 +74,9 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         List<NavigTab> tabs = new ArrayList<NavigTab>();
 
-        boolean visited = false;
         for (int i = presenter.getWizardSteps().size() - 1; i >= 0; i--) {
             ApplicationWizardStep step = presenter.getWizardSteps().get(i);
-            if (ApplicationWizardStep.Status.latest.equals(step.status().getValue())) {
-                visited = true;
-            }
-            tabs.add(0, new NavigTab(step, visited));
+            tabs.add(0, new NavigTab(step));
         }
 
         for (NavigTab navigTab : tabs) {
@@ -117,7 +113,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             return place;
         }
 
-        NavigTab(final ApplicationWizardStep step, boolean visited) {
+        NavigTab(final ApplicationWizardStep step) {
             super();
             setElement(DOM.createElement("li"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
@@ -167,7 +163,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
             getElement().getStyle().setCursor(Cursor.DEFAULT);
 
-            if (visited) {
+            if (ApplicationWizardStep.Status.latest.equals(step.status().getValue())) {
                 addDomHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
@@ -197,7 +193,6 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                     }, ClickEvent.getType());
                 }
             }
-
         }
 
         public void addStyleDependentName(StyleDependent style) {

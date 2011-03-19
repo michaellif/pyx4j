@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.activity.SecondNavigActivity;
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
@@ -73,6 +74,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             List<ApplicationWizardSubstep> substeps = presenter.getWizardStep().substeps();
 
             if (substeps.size() > 0) {
+                boolean visited = false;
                 tabsHolder = new NavigTabList();
                 for (ApplicationWizardSubstep substep : substeps) {
                     tabsHolder.add(new NavigTab(substep, presenter.getWizardStep().placeId().getValue()));
@@ -149,9 +151,8 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             getElement().getStyle().setFontWeight(FontWeight.BOLD);
             getElement().getStyle().setCursor(Cursor.DEFAULT);
 
-            // TODO: visited if logic here (?):
-            boolean visited = true;
-            if (visited) {
+            // if visited - allow click:
+            if (ApplicationWizardStep.Status.latest.equals(substep.status().getValue())) {
                 addDomHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
@@ -159,7 +160,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
                     }
                 }, ClickEvent.getType());
                 getElement().getStyle().setCursor(Cursor.POINTER);
-            } else {
+            } else { // just in dev. mode
                 if (!GWT.isProdMode()) {
                     addDomHandler(new ClickHandler() {
                         @Override
