@@ -869,11 +869,11 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Caption));
-        style.addProperty("width", "25%");
+        style.addProperty("width", "30%");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.SecondaryNavig));
-        style.addProperty("width", "75%");
+        style.addProperty("width", "70%");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Message));
