@@ -39,7 +39,18 @@ public class ValidationUtilsTest extends TestCase {
 
         assertTrue(ValidationUtils.isCreditCardNumberValid("4111 1111 1111 1111"));
         assertTrue(ValidationUtils.isCreditCardNumberValid("4012 8888 8888 1881  "));
-        assertTrue(ValidationUtils.isCreditCardNumberValid("3852 0000 023   237"));
+        assertTrue(ValidationUtils.isCreditCardNumberValid("3852 0000  023  237"));
+
+        assertTrue(ValidationUtils.isCreditCardNumberValid("4007 0000 0002 7"));
+        assertTrue(ValidationUtils.isCreditCardNumberValid("4556 3818 1280 6"));
+        assertTrue(ValidationUtils.isCreditCardNumberValid("4012 8888 8888 1881"));
+        assertTrue(ValidationUtils.isCreditCardNumberValid("3056 9309 0259 04"));
+        assertTrue(ValidationUtils.isCreditCardNumberValid("3434 3434 3434 343"));
+
+        assertTrue(ValidationUtils.isCreditCardNumberValid("6304 9000 1774 0292 441"));
+        assertTrue(ValidationUtils.isCreditCardNumberValid("6333 3333 3333 3333 336"));
+        assertTrue(ValidationUtils.isCreditCardNumberValid("6767 6222 2222 2222 222"));
+        assertTrue(ValidationUtils.isCreditCardNumberValid("6767 6767 6767 6767 671"));
 
 //        assertTrue(ValidationUtils.isCreditCardNumberValid("76009244561")); // strange card - 11 digits???
         assertTrue(ValidationUtils.isCreditCardNumberValid("5019717010103742"));
@@ -50,5 +61,14 @@ public class ValidationUtilsTest extends TestCase {
         assertFalse(ValidationUtils.isCreditCardNumberValid("4012888898881881"));
         assertFalse(ValidationUtils.isCreditCardNumberValid("4012888808881881"));
         assertFalse(ValidationUtils.isCreditCardNumberValid("7012888888881881"));
+
+    }
+
+    public void testSIN() {
+        assertTrue(ValidationUtils.isSinValid("046 454 286"));
+        assertTrue(ValidationUtils.isSinValid("046454  286"));
+        assertTrue(ValidationUtils.isSinValid("046454286"));
+
+        assertFalse(ValidationUtils.isSinValid("123 456 789"));
     }
 }

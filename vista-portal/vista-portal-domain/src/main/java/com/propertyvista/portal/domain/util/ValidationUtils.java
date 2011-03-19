@@ -43,6 +43,6 @@ public class ValidationUtils {
 
     public static boolean isCreditCardNumberValid(String num) {
         num = num.trim().replaceAll(" ", "");
-        return num.matches("^\\d{13,16}$") && isLuhnValid(num);
+        return num.matches("^\\d{13,19}$") && isLuhnValid(num);
     }
 }
