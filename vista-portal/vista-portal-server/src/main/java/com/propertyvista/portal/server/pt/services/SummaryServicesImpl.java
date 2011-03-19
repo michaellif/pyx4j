@@ -23,6 +23,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
+import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.rpc.pt.services.SummaryServices;
 import com.propertyvista.portal.server.pt.PtUserDataAccess;
 
@@ -33,6 +34,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
 public class SummaryServicesImpl extends ApplicationEntityServicesImpl implements SummaryServices {
+
     private final static Logger log = LoggerFactory.getLogger(SummaryServicesImpl.class);
 
     @Override
@@ -104,6 +106,14 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
             }
         }
         summary.charges().monthlyCharges().upgradeCharges().clear();
+        loopOverTenantCharge: for (TenantCharge charge : summary.charges().paymentSplitCharges().charges()) {
+            for (PotentialTenantInfo tenant : summary.tenants().tenants()) {
+                if (tenant.equals(charge.tenant())) {
+                    charge.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", tenant.firstName(), tenant.middleName(), tenant.lastName()));
+                    continue loopOverTenantCharge;
+                }
+            }
+        }
 
         summary.leaseTerms().set(
                 PersistenceServicesFactory.getPersistenceService().retrieve(LeaseTerms.class,

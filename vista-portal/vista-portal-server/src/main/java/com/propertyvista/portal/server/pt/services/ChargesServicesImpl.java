@@ -66,6 +66,7 @@ public class ChargesServicesImpl extends ApplicationEntityServicesImpl implement
         callback.onSuccess(charges);
     }
 
+    // If adding new data here sync with @see SummaryServicesImpl#retrieveSummary 
     @SuppressWarnings("unchecked")
     private void loadTransientData(Charges charges) {
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
@@ -73,6 +74,5 @@ public class ChargesServicesImpl extends ApplicationEntityServicesImpl implement
                     .retrieve(PotentialTenantInfo.class, charge.tenant().getPrimaryKey());
             charge.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", tenant.firstName(), tenant.middleName(), tenant.lastName()));
         }
-
     }
 }
