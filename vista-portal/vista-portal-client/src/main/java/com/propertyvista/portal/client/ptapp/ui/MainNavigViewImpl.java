@@ -158,7 +158,8 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             getElement().getStyle().setFontWeight(FontWeight.BOLD);
             getElement().getStyle().setCursor(Cursor.DEFAULT);
 
-            if (visited) {
+//            if (visited) {
+            if (true) {
                 addDomHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
