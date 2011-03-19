@@ -106,6 +106,10 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
         RadioButton b = buttons.get(value);
         if (b != null) {
             b.setValue(Boolean.TRUE);
+        } else {
+            for (RadioButton button : buttons.values()) {
+                button.setValue(Boolean.FALSE);
+            }
         }
     }
 
