@@ -105,7 +105,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         main.add(new ViewHeaderDecorator(i18n.tr("Secure Information")));
         main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), new DecorationData(10d, 20)));
         main.add(new VistaWidgetDecorator(inject(proto().driversLicenseState()), new DecorationData(10d, 17)));
-        main.add(new VistaWidgetDecorator(inject(proto().secureIdentifier()), new DecorationData(10d, 11)));
+        main.add(new VistaWidgetDecorator(inject(proto().secureIdentifier()), new DecorationData(10d, 7)));
 
         main.add(new VistaWidgetDecorator(inject(proto().notCanadianCitizen()), new DecorationData(10d, 3)));
 
@@ -292,8 +292,8 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
                 injectIAddress(main, proto(), this);
-                main.add(inject(proto().moveInDate()), 10);
-                main.add(inject(proto().moveOutDate()), 10);
+                main.add(inject(proto().moveInDate()), 8.2);
+                main.add(inject(proto().moveOutDate()), 8.2);
                 main.add(inject(proto().phone()), 15);
 
                 CEditableComponent<?, ?> rentedComponent = inject(proto().rented());

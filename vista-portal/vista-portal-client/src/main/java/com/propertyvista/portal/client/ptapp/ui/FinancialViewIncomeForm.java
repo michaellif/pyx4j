@@ -191,8 +191,8 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 BaseEntityForm.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
 
-                main.add(inject(proto().starts()), 10, 10);
-                main.add(inject(proto().ends()), 10, 10);
+                main.add(inject(proto().starts()), 10, 8.2);
+                main.add(inject(proto().ends()), 10, 8.2);
                 return main;
             }
 
@@ -208,8 +208,8 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 BaseEntityForm.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
 
-                main.add(inject(proto().starts()), 10, 10);
-                main.add(inject(proto().ends()), 10, 10);
+                main.add(inject(proto().starts()), 10, 8.2);
+                main.add(inject(proto().ends()), 10, 8.2);
                 return main;
             }
         };
@@ -229,8 +229,8 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
                 main.add(inject(proto().monthlyAmount()), 10, 10);
 
-                main.add(inject(proto().starts()), 10, 10);
-                main.add(inject(proto().ends()), 10, 10);
+                main.add(inject(proto().starts()), 10, 8.2);
+                main.add(inject(proto().ends()), 10, 8.2);
                 return main;
             }
         };
@@ -248,8 +248,8 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 main.add(inject(proto().monthlyRevenue()), 10, 10);
                 main.add(inject(proto().numberOfEmployees()), 10, 4);
 
-                main.add(inject(proto().starts()), 10, 10);
-                main.add(inject(proto().ends()), 10, 10);
+                main.add(inject(proto().starts()), 10, 8.2);
+                main.add(inject(proto().ends()), 10, 8.2);
                 return main;
             }
         };
@@ -264,8 +264,8 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 BaseEntityForm.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
 
-                main.add(inject(proto().starts()), 10, 10);
-                main.add(inject(proto().ends()), 10, 10);
+                main.add(inject(proto().starts()), 10, 8.2);
+                main.add(inject(proto().ends()), 10, 8.2);
                 return main;
             }
         };
@@ -278,7 +278,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10, 10);
                 main.add(inject(proto().monthlyAmount()), 10, 10);
-                main.add(inject(proto().ends()), 10, 10);
+                main.add(inject(proto().ends()), 10, 8.2);
                 return main;
             }
         };

@@ -60,8 +60,8 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
         super(TenantCharge.class);
         this.valueChangeHandler = valueChangeHandler;
         columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().tenantFullName(), "270px"));
-        columns.add(new EntityFolderColumnDescriptor(proto().percentage(), "25px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().tenantFullName(), "260px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().percentage(), "35px"));
         columns.add(new EntityFolderColumnDescriptor(proto().charge(), "80px"));
     }
 
@@ -119,7 +119,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
                 if (column.getObject() == proto().percentage()) {
                     FlowPanel wrap = new FlowPanel();
-                    wrap.add(DecorationUtils.inline(w, "25px"));
+                    wrap.add(DecorationUtils.inline(w, "35px"));
                     // Add $ label before or after Input
                     IsWidget lable = DecorationUtils.inline(new HTML("%"), "10px");
                     if (valueChangeHandler != null) {

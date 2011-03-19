@@ -124,8 +124,8 @@ public class PetsViewForm extends CEntityForm<Pets> {
                 columns.add(new EntityFolderColumnDescriptor(proto().color(), "6em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().breed(), "13em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().weight(), "4em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().weightUnit(), "4em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "7.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().weightUnit(), "3.5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "8.2em"));
                 if (!isSummaryViewMode()) {
                     columns.add(new EntityFolderColumnDescriptor(proto().chargeLine(), "7em"));
                 }
