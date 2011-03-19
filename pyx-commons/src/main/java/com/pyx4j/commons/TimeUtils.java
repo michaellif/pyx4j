@@ -37,8 +37,10 @@ public class TimeUtils {
             return false;
         } else {
             Date now = new Date();
-            Date y18 = TimeUtils.createDate(now.getYear() - years, now.getMonth(), now.getDay());
-            return bithday.before(y18);
+            Date then = TimeUtils.createDate(now.getYear() - years, now.getMonth(), now.getDate());
+            // NOTE: Date.getDay() - return day of the WEEK!!?     
+            return !bithday.after(then);
+            // NOTE: we want today birthday user has been validated!  
         }
     }
 
