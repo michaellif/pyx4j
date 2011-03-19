@@ -23,10 +23,6 @@ package com.pyx4j.forms.client.ui;
 import java.util.List;
 import java.util.Vector;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -54,6 +50,8 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     private boolean editing = false;
 
+    private boolean valid = true;
+
     public CEditableComponent() {
         this(null);
     }
@@ -62,13 +60,23 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         super(title);
     }
 
-    //TODO make it protected and add isValid that would return result
     public boolean isValid() {
-        return !isVisible() || !isEditable() || !isEnabled() || (!isMandatory() && isValueEmpty()) || (isMandatoryConditionMet() && isValidationConditionMet());
+        return valid;
     }
 
     public void revalidate() {
-        asWidget().setValid(isValid());
+
+        valid = !isVisible() ||
+
+        !isEditable() ||
+
+        !isEnabled() ||
+
+        (!isMandatory() && isValueEmpty()) ||
+
+        ((!visited || isMandatoryConditionMet()) && isValidationConditionMet());
+
+        asWidget().setValid(valid);
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
     }
 
@@ -77,13 +85,11 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     }
 
     void setValueByNativeComponent(DATA_TYPE value) {
-        this.visited = true;
         if (isValuesEquals(getValue(), value)) {
             return;
         }
         this.value = value;
         setNativeComponentValue(value);
-
         revalidate();
 
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
@@ -97,10 +103,9 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         }
 
         this.value = value;
-        //If value was set programmatically it will be handled as not visited 
-        this.visited = false;
 
         setNativeComponentValue(value);
+
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
         ValueChangeEvent.fire(this, value);
     }
@@ -111,6 +116,9 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         this.visited = false;
 
         setNativeComponentValue(value);
+
+        revalidate();
+
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
     }
 
@@ -187,8 +195,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     public void setVisited(boolean visited) {
         this.visited = visited;
-        asWidget().setValid(isValid());
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
+        revalidate();
     }
 
     @Override
@@ -279,28 +286,8 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     public void onEditingStop() {
         editing = false;
+        visited = true;
         revalidate();
-    }
-
-    @Override
-    protected WIDGET_TYPE initWidget() {
-        WIDGET_TYPE widget = super.initWidget();
-        widget.addFocusHandler(new FocusHandler() {
-
-            @Override
-            public void onFocus(FocusEvent event) {
-                onEditingStart();
-            }
-        });
-
-        widget.addBlurHandler(new BlurHandler() {
-
-            @Override
-            public void onBlur(BlurEvent event) {
-                onEditingStop();
-            }
-        });
-        return widget;
     }
 
 }

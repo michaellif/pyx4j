@@ -20,6 +20,10 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -94,6 +98,27 @@ public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INa
                 return true;
             }
         }
+    }
+
+    @Override
+    protected WIDGET_TYPE initWidget() {
+        WIDGET_TYPE widget = super.initWidget();
+        widget.addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                onEditingStart();
+            }
+        });
+
+        widget.addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                onEditingStop();
+            }
+        });
+        return widget;
     }
 
 }
