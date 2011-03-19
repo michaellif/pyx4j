@@ -29,6 +29,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -85,23 +86,16 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
 
     }
 
-    class NavigTabList extends ComplexPanel {
+    class NavigTabList extends HorizontalPanel {
         public NavigTabList() {
-            setElement(DOM.createElement("ul"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Holder.name());
-        }
-
-        @Override
-        public void add(Widget w) {
-            super.add(w, getElement());
+            setSpacing(3);
         }
     }
 
-    class NavigTab extends ComplexPanel {
+    class NavigTab extends FlowPanel {
 
         private final AppPlace place;
-
-        private final FlowPanel labelHolder;
 
         private final SimplePanel statusHolder;
 
@@ -113,19 +107,13 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
 
         NavigTab(final ApplicationWizardSubstep substep, String token) {
             super();
-            setElement(DOM.createElement("li"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
 
-            getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
             sinkEvents(Event.ONCLICK);
-
-            labelHolder = new FlowPanel();
-            labelHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.LabelHolder.name());
-            add(labelHolder);
 
             statusHolder = new SimplePanel();
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
-            labelHolder.add(statusHolder);
+            add(statusHolder);
 
             this.place = AppSite.getHistoryMapper().getPlace(token);
 
@@ -138,20 +126,19 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.SecondNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));
             statusHolder.add(label);
 
-            // TODO: status logic here:
-            //            switch (step.getStatus()) {
-            //            case invalid:
-            //                addStyleDependentName(StyleDependent.invalid);
-            //                break;
-            //            case complete:
-            //                addStyleDependentName(StyleDependent.complete);
-            //                break;
-            //            case latest:
-            //                addStyleDependentName(StyleDependent.latest);
-            //                break;
-            //            default:
-            //                break;
-            //            }
+            switch (substep.status().getValue()) {
+            case invalid:
+                addStyleDependentName(StyleDependent.invalid);
+                break;
+            case complete:
+                addStyleDependentName(StyleDependent.complete);
+                break;
+            case latest:
+                addStyleDependentName(StyleDependent.latest);
+                break;
+            default:
+                break;
+            }
 
             if (substep.placeArgument().getValue() != null && presenter.getWhere().getArgs() != null
                     && substep.placeArgument().getValue().toString().equals(presenter.getWhere().getArgs().get(SecondNavigActivity.STEP_ARG_NAME))) {
@@ -171,18 +158,6 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
                         presenter.navigTo(place);
                     }
                 }, ClickEvent.getType());
-                addDomHandler(new MouseOverHandler() {
-                    @Override
-                    public void onMouseOver(MouseOverEvent event) {
-                        //label.getElement().getStyle().setProperty("color", "#555");
-                    }
-                }, MouseOverEvent.getType());
-                addDomHandler(new MouseOutHandler() {
-                    @Override
-                    public void onMouseOut(MouseOutEvent event) {
-                        //label.getElement().getStyle().setProperty("color", "#333");
-                    }
-                }, MouseOutEvent.getType());
                 getElement().getStyle().setCursor(Cursor.POINTER);
             } else {
                 if (!GWT.isProdMode()) {
@@ -199,7 +174,6 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
 
         public void addStyleDependentName(StyleDependent style) {
             super.addStyleDependentName(style.name());
-            labelHolder.addStyleDependentName(style.name());
             statusHolder.addStyleDependentName(style.name());
         }
 

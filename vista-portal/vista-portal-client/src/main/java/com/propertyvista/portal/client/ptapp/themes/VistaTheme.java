@@ -869,11 +869,11 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Caption));
-        style.addProperty("width", "30%");
+        style.addProperty("width", "25%");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.SecondaryNavig));
-        style.addProperty("width", "70%");
+        style.addProperty("width", "75%");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Message));
@@ -1109,27 +1109,21 @@ public abstract class VistaTheme extends Theme {
 
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("width", "100%");
-        style.addProperty("height", "47px");
-        style.addProperty("margin-top", "10px");
+        style.addProperty("height", "50px");
+        style.addProperty("margin-top", "7px");
         style.addProperty("overflow", "hidden");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Holder));
-        style.addProperty("height", "47px");
-        style.addProperty("margin", "0");
-        style.addProperty("padding", "0");
-        style.addProperty("list-style", "none");
-        style.addProperty("overflow", "hidden");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Tab));
         style.addProperty("height", "46px");
-        style.addProperty("margin", "0 2px");
         style.addProperty("background", "url('" + SiteImages.INSTANCE.step2().getURL() + "') no-repeat scroll 0 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Tab, SecondNavigViewImpl.StyleDependent.current));
-        style.addProperty("height", "47px");
+        style.addProperty("height", "50px");
         style.addProperty("background", "#F7F7F7"); // should be body colour!..
         addStyle(style);
 
@@ -1142,44 +1136,32 @@ public abstract class VistaTheme extends Theme {
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Tab, SecondNavigViewImpl.StyleDependent.invalid));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.LabelHolder));
-        //        style.addProperty("margin-right", "-14px");
-        //        style.addProperty("position", "relative");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.LabelHolder, SecondNavigViewImpl.StyleDependent.latest));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.LabelHolder, SecondNavigViewImpl.StyleDependent.complete));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.LabelHolder, SecondNavigViewImpl.StyleDependent.invalid));
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.StatusHolder));
         style.addProperty("background", "transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.StatusHolder, SecondNavigViewImpl.StyleDependent.complete));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.check().getURL() + "') no-repeat scroll 50% 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.StatusHolder, SecondNavigViewImpl.StyleDependent.complete) + ":hover");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.StatusHolder, SecondNavigViewImpl.StyleDependent.invalid));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.warning().getURL() + "') no-repeat scroll 50% 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.StatusHolder, SecondNavigViewImpl.StyleDependent.invalid) + ":hover");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Label));
-        style.addProperty("line-height", "57px");
         style.addProperty("color", "#fff");
-        style.addProperty("font-size", "15px");
+        style.addProperty("font-size", "1.1em");
         style.addProperty("font-style", "normal");
         style.addProperty("text-shadow", "0 -1px 0 #333333");
-        style.addProperty("padding-left", "29px");
-        style.addProperty("padding-right", "39px");
+        style.addProperty("padding-left", "1em");
+        style.addProperty("padding-right", "1em");
+        style.addProperty("padding-top", "23px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Label, SecondNavigViewImpl.StyleDependent.current));
