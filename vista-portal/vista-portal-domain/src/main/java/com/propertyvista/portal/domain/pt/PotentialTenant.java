@@ -105,6 +105,7 @@ public interface PotentialTenant extends IEntity, IPerson, IBoundToApplication {
     IPrimitive<Relationship> relationship();
 
     @ToString(index = 0)
+    @NotNull
     IPrimitive<Status> status();
 
     //TODO add appropriate description
