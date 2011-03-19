@@ -208,11 +208,12 @@ public class PtAppWizardManager {
             if (shouldSelect(step.status())) {
                 AppPlace place = AppSite.getHistoryMapper().getPlace(step.placeId().getValue());
                 if (step.substeps().size() > 0) {
-                    for (ApplicationWizardSubstep substep : step.substeps()) {
+                    loopOversubsteps: for (ApplicationWizardSubstep substep : step.substeps()) {
                         if (shouldSelect(substep.status())) {
                             HashMap<String, String> args = new HashMap<String, String>();
                             args.put(SecondNavigActivity.STEP_ARG_NAME, substep.placeArgument().getStringView());
                             place.setArgs(args);
+                            break loopOversubsteps;
                         }
                     }
                 }

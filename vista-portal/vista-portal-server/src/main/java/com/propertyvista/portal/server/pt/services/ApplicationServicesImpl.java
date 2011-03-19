@@ -298,12 +298,24 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
     }
 
     private static void updateStepCompletion(ApplicationWizardStep step) {
+        boolean hasNotComplete = false;
+        boolean hasInvalid = false;
         for (ApplicationWizardSubstep substep : step.substeps()) {
+            if ((hasInvalid) && (substep.status().getValue() == ApplicationWizardStep.Status.latest)) {
+                substep.status().setValue(ApplicationWizardStep.Status.notVisited);
+            }
+
+            if (substep.status().getValue() == ApplicationWizardStep.Status.invalid) {
+                hasInvalid = true;
+            }
             if (substep.status().getValue() != ApplicationWizardStep.Status.complete) {
-                return;
+                hasNotComplete = true;
             }
         }
-        step.status().setValue(ApplicationWizardStep.Status.complete);
+
+        if (!hasNotComplete) {
+            step.status().setValue(ApplicationWizardStep.Status.complete);
+        }
     }
 
     @SuppressWarnings("unchecked")
