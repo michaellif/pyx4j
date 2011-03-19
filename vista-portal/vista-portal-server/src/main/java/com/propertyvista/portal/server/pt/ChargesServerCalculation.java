@@ -31,6 +31,7 @@ import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
+import com.propertyvista.portal.server.pt.services.ApartmentServicesImpl;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -53,6 +54,8 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             log.warn("Could not find unit selection for charges {}", charges);
             return;
         }
+        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
+        apartmentServices.loadAvailableUnits(unitSelection);
         charges.rentStart().setValue(unitSelection.rentStart().getValue());
 
         // calculate things that we can

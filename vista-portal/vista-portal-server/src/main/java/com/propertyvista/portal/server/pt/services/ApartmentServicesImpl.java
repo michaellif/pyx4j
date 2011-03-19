@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.pt.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
@@ -24,11 +25,13 @@ import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.Picture;
+import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.util.PrintUtil;
 import com.propertyvista.portal.rpc.pt.services.ApartmentServices;
 import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.portal.server.pt.util.Converter;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -137,15 +140,22 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
         }
 
         ApptUnit firstUnit = units.get(0);
+        unitSelection.selectedUnit().set(Converter.convert(firstUnit));
+        unitSelection.selectedUnitId().set(firstUnit.id());
         Floorplan floorplan = firstUnit.floorplan();
 
         unitSelection.building().set(firstUnit.building());
-        unitSelection.availableUnits().floorplan().set(floorplan);
         for (Picture picture : floorplan.pictures()) {
             prepareImage(picture);
         }
+        unitSelection.availableUnits().floorplan().set(Converter.convert(floorplan));
 
-        unitSelection.availableUnits().units().addAll(units);
+        List<ApartmentUnit> convertedUnits = new ArrayList<ApartmentUnit>();
+        for (ApptUnit unit : units) {
+            convertedUnits.add(Converter.convert(unit));
+        }
+
+        unitSelection.availableUnits().units().addAll(convertedUnits);
     }
 
     //TODO If IE6 ?

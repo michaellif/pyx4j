@@ -13,23 +13,27 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.Currency;
-
-import com.pyx4j.commons.Pair;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-/*
- * This is cache of units for Rent
- */
-public interface AvailableUnitsByFloorplan extends IEntity {
+public interface ApartmentFloorplan extends IEntity {
 
-    ApartmentFloorplan floorplan();
+//    @Detached
+//    Building building();
+//
+    @Caption(name = "Plan")
+    IPrimitive<String> name();
 
-    IPrimitive<Pair<Double, Double>> rent();
-
-    Currency rentCurrency();
-
-    IList<ApartmentUnit> units();
+//
+//    /**
+//     * Contains the pictures of the floorplan / model unit
+//     */
+//    @Owned
+//    IList<Picture> pictures();
+//
+    /**
+     * Approximate value of square ft. size of unit
+     */
+    IPrimitive<Integer> area();
 }

@@ -15,7 +15,6 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.MarketRent;
 
@@ -39,7 +38,10 @@ public interface UnitSelection extends IEntity, IBoundToApplication {
 
     // user selected Unit from availableUnits..
     @NotNull
-    ApptUnit selectedUnit();
+    @Transient
+    ApartmentUnit selectedUnit();
+
+    IPrimitive<Long> selectedUnitId();
 
     // user selected leaseTerm (aka as MarkerRent in Unit)..
     @NotNull

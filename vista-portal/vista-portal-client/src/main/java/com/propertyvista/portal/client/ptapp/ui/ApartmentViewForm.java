@@ -32,8 +32,8 @@ import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.ui.components.BuildingPicture;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
-import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.MarketRent;
+import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
@@ -90,10 +90,10 @@ public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
         main.add(new ViewHeaderDecorator(i18n.tr("Available Units"), header, "100%"));
 
         // units table:
-        main.add(inject(proto().availableUnits().units(), new ApartmentUnitsTable(new ValueChangeHandler<ApptUnit>() {
+        main.add(inject(proto().availableUnits().units(), new ApartmentUnitsTable(new ValueChangeHandler<ApartmentUnit>() {
 
             @Override
-            public void onValueChange(ValueChangeEvent<ApptUnit> event) {
+            public void onValueChange(ValueChangeEvent<ApartmentUnit> event) {
                 if (!getValue().selectedUnit().equals(event.getValue())) {
                     getValue().selectedUnit().set(event.getValue());
                     getValue().markerRent().set(null);

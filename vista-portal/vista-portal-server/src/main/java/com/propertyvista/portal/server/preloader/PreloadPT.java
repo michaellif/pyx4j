@@ -21,11 +21,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
+import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
@@ -489,7 +489,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
         // now chose the first unit
         if (!unitSelection.availableUnits().units().isEmpty()) {
-            ApptUnit selectedUnit = unitSelection.availableUnits().units().iterator().next();
+            ApartmentUnit selectedUnit = unitSelection.availableUnits().units().iterator().next();
             unitSelection.selectedUnit().set(selectedUnit);
             unitSelection.building().set(unitSelection.selectedUnit().building());
             //            building = unitSelection.building();

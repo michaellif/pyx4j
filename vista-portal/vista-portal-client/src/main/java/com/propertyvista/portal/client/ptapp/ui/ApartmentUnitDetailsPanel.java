@@ -33,8 +33,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
-import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.MarketRent;
+import com.propertyvista.portal.domain.pt.ApartmentUnit;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -49,8 +49,8 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
 
     }
 
-    public void showUnitDetail(final ApptUnit unit, final MarketRent selectedmarketRent, final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler,
-            IDebugId debugId) {
+    public void showUnitDetail(final ApartmentUnit unit, final MarketRent selectedmarketRent,
+            final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler, IDebugId debugId) {
         this.clear();
 
         FlowPanel unitDetailPanel = new FlowPanel();

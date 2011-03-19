@@ -22,6 +22,7 @@ import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.UnitInfoItem;
 import com.propertyvista.portal.domain.Utility;
 import com.propertyvista.portal.domain.pt.Address;
+import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
@@ -54,10 +55,10 @@ public class PrintUtil {
 
         sb.append(unitSelection.availableUnits().units().size());
         sb.append(" available units\n");
-        for (ApptUnit unit : unitSelection.availableUnits().units()) {
+        for (ApartmentUnit unit : unitSelection.availableUnits().units()) {
             sb.append("\t");
-            sb.append(unit.suiteNumber().getStringView());
-            sb.append(" ");
+//            sb.append(unit.suiteNumber().getStringView());
+//            sb.append(" ");
             sb.append(unit.bedrooms().getValue()).append(" beds, ");
             sb.append(unit.bathrooms().getValue()).append(" baths,");
             sb.append(" ");
@@ -84,10 +85,10 @@ public class PrintUtil {
         }
 
         // selected unit
-        ApptUnit unit = unitSelection.selectedUnit();
+        ApartmentUnit unit = unitSelection.selectedUnit();
         sb.append("\n\n");
-        sb.append("Selected: ").append(unit.suiteNumber().getStringView());
-        sb.append("\n");
+//        sb.append("Selected: ").append(unit.suiteNumber().getStringView());
+//        sb.append("\n");
 
         // building
         Building building = unit.building();

@@ -41,8 +41,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
-import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.MarketRent;
+import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.util.DomainUtil;
@@ -66,7 +66,7 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
+public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentUnitsTable.class);
 
@@ -86,7 +86,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
     private ApartmentUnitDetailsPanel unitDetailsPanelShown = null;
 
-    private final ValueChangeHandler<ApptUnit> selectedUnitChangeHandler;
+    private final ValueChangeHandler<ApartmentUnit> selectedUnitChangeHandler;
 
     private final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler;
 
@@ -94,8 +94,8 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
     private HorizontalPanel floorplanRawPanel;
 
-    public ApartmentUnitsTable(ValueChangeHandler<ApptUnit> selectedUnitChangeHandler, ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler) {
-        super(ApptUnit.class);
+    public ApartmentUnitsTable(ValueChangeHandler<ApartmentUnit> selectedUnitChangeHandler, ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler) {
+        super(ApartmentUnit.class);
         this.selectedUnitChangeHandler = selectedUnitChangeHandler;
         this.selectedMarketRentChangeHandler = selectedMarketRentChangeHandler;
 
@@ -120,13 +120,13 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
     }
 
     @Override
-    protected CEntityFolderItem<ApptUnit> createItem() {
-        return new UnitTableRow(ApptUnit.class, columns);
+    protected CEntityFolderItem<ApartmentUnit> createItem() {
+        return new UnitTableRow(ApartmentUnit.class, columns);
     }
 
     @Override
-    protected FolderDecorator<ApptUnit> createFolderDecorator() {
-        TableFolderDecorator<ApptUnit> tfd = new TableFolderDecorator<ApptUnit>(columns);
+    protected FolderDecorator<ApartmentUnit> createFolderDecorator() {
+        TableFolderDecorator<ApartmentUnit> tfd = new TableFolderDecorator<ApartmentUnit>(columns);
         tfd.getHeader().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.UnitListHeader);
 
         floorplanRawPanel = new HorizontalPanel();
@@ -213,11 +213,11 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
     //
     // Unit representation:
     //
-    private class UnitTableRow extends CEntityFolderRow<ApptUnit> {
+    private class UnitTableRow extends CEntityFolderRow<ApartmentUnit> {
 
         private ApartmentUnitDetailsPanel unitDetailsPanel;
 
-        public UnitTableRow(Class<ApptUnit> clazz, List<EntityFolderColumnDescriptor> columns) {
+        public UnitTableRow(Class<ApartmentUnit> clazz, List<EntityFolderColumnDescriptor> columns) {
             super(clazz, columns);
         }
 
@@ -234,7 +234,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
                     getContent().addStyleDependentName(StyleDependent.selected.name());
                     setSelected(getValue());
-                    selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApptUnit>(getValue()) {
+                    selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApartmentUnit>(getValue()) {
                     });
                 }
             });
@@ -269,7 +269,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
             return content;
         }
 
-        private void showDetails(ApptUnit unit) {
+        private void showDetails(ApartmentUnit unit) {
             unitDetailsPanel.showUnitDetail(unit, selectedmarketRent, selectedMarketRentChangeHandler, this.getDebugId());
             unitDetailsPanelShown = unitDetailsPanel;
         }
@@ -293,9 +293,9 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
         setSelected(value.selectedUnit());
     }
 
-    private void setSelected(ApptUnit unit) {
+    private void setSelected(ApartmentUnit unit) {
         // clear all selected style:
-        for (ApptUnit au : getValue()) {
+        for (ApartmentUnit au : getValue()) {
             UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(au);
             unitTableRow.getContent().removeStyleDependentName(StyleDependent.selected.name());
         }
@@ -319,13 +319,13 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
         public Date minAvalableForRent;
 
-        public UnitsDataCalc(IList<ApptUnit> units) {
+        public UnitsDataCalc(IList<ApartmentUnit> units) {
             minRent = Double.MAX_VALUE;
             minDeposit = Double.MAX_VALUE;
             minBed = Double.MAX_VALUE;
             minBath = Double.MAX_VALUE;
 
-            for (com.propertyvista.portal.domain.ApptUnit u : units) {
+            for (ApartmentUnit u : units) {
                 for (MarketRent mr : u.marketRent()) {
                     minRent = Math.min(minRent, mr.rent().amount().getValue());
                 }
