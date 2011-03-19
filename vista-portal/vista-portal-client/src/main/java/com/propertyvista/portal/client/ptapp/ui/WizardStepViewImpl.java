@@ -52,10 +52,10 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
                 AppSite.getEventBus().fireEvent(new UserMessageEvent(null, null, null));
                 form.setVisited(true);
                 if (!form.isValid()) {
-                    scrollToTop();
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
                 presenter.save(getValue());
+                scrollToTop();
             }
 
         });
