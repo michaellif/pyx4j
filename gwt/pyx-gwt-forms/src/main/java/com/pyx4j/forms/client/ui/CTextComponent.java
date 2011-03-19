@@ -69,6 +69,7 @@ public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INa
         if (isWidgetCreated() && asWidget() instanceof WatermarkComponent) {
             ((WatermarkComponent) asWidget()).setWatermark(watermark);
         }
+
     }
 
     class TextComponentLengthValidator implements EditableValueValidator<DATA_TYPE> {
@@ -98,27 +99,6 @@ public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INa
                 return true;
             }
         }
-    }
-
-    @Override
-    protected WIDGET_TYPE initWidget() {
-        WIDGET_TYPE widget = super.initWidget();
-        widget.addFocusHandler(new FocusHandler() {
-
-            @Override
-            public void onFocus(FocusEvent event) {
-                onEditingStart();
-            }
-        });
-
-        widget.addBlurHandler(new BlurHandler() {
-
-            @Override
-            public void onBlur(BlurEvent event) {
-                onEditingStop();
-            }
-        });
-        return widget;
     }
 
 }

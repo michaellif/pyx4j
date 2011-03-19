@@ -22,7 +22,13 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Date;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.DeferredCommand;
 
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
@@ -117,6 +123,26 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
             }
         }
 
+    }
+
+    @Override
+    protected void addEditingStatusHandler() {
+        NativeDatePicker widget = super.asWidget();
+        widget.addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                onEditingStart();
+            }
+        });
+
+        widget.addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                onEditingStop();
+            }
+        });
     }
 
 }

@@ -37,7 +37,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.widgets.client.util.BrowserType;
@@ -48,7 +47,7 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
 
     private Composite composite;
 
-    private NativePushButton triggerButton;
+    private NativeTriggerButton triggerButton;
 
     private boolean enabled = true;
 
@@ -77,14 +76,9 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
             setCellWidth(composite, "100%");
         }
 
-        Image mImageButtonUp = new Image(ImageFactory.getImages().triggerBlueUp());
-        triggerButton = new NativePushButton(mImageButtonUp, new Image(ImageFactory.getImages().triggerBlueDown()));
+        triggerButton = new NativeTriggerButton(ImageFactory.getImages().triggerBlueUp(), ImageFactory.getImages().triggerBlueDown());
         triggerButton.setWidth("1%");
-        Cursor.setHand(mImageButtonUp);
-        triggerButton.getUpDisabledFace().setImage(new Image(ImageFactory.getImages().triggerBlueDisabled()));
-        Image mImageButtonOver = new Image(ImageFactory.getImages().triggerBlueOver());
-        triggerButton.getUpHoveringFace().setImage(mImageButtonOver);
-        Cursor.setHand(mImageButtonOver);
+        Cursor.setHand(triggerButton);
 
         add(triggerButton);
         setCellVerticalAlignment(triggerButton, ALIGN_TOP);
@@ -103,6 +97,7 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
 
         triggerButton.addClickHandler(new ClickHandler() {
 
+            @Override
             public void onClick(ClickEvent event) {
                 if (!isReadOnly() && isEnabled()) {
                     onTrigger(true);
@@ -112,6 +107,7 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
 
         triggerButton.addKeyDownHandler(new KeyDownHandler() {
 
+            @Override
             public void onKeyDown(KeyDownEvent event) {
                 switch (event.getNativeKeyCode()) {
                 case KeyCodes.KEY_TAB:
@@ -151,11 +147,13 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
         triggerButton.setVisible(trigger);
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         setTriggerButtonEnabled(!readOnly && enabled);
     }
 
+    @Override
     public boolean isEnabled() {
         return enabled;
     }
@@ -173,26 +171,32 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
         triggerButton.setEnabled(enabled);
     }
 
+    @Override
     public int getTabIndex() {
         return focusWidget.getTabIndex();
     }
 
+    @Override
     public void setTabIndex(int index) {
         focusWidget.setTabIndex(index);
     }
 
+    @Override
     public void setAccessKey(char key) {
         focusWidget.setAccessKey(key);
     }
 
+    @Override
     public void setFocus(boolean focused) {
         focusWidget.setFocus(focused);
     }
 
+    @Override
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
         return focusWidget.addFocusHandler(handler);
     }
 
+    @Override
     public HandlerRegistration addBlurHandler(BlurHandler handler) {
         return focusWidget.addBlurHandler(handler);
     }

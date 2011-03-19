@@ -23,6 +23,10 @@ package com.pyx4j.forms.client.ui;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -252,6 +256,26 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     protected void onWidgetCreated() {
         super.onWidgetCreated();
         setNativeComponentValue(getValue());
+        addEditingStatusHandler();
+    }
+
+    protected void addEditingStatusHandler() {
+        WIDGET_TYPE widget = super.asWidget();
+        widget.addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                onEditingStart();
+            }
+        });
+
+        widget.addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                onEditingStop();
+            }
+        });
     }
 
     protected void setNativeComponentValue(DATA_TYPE value) {

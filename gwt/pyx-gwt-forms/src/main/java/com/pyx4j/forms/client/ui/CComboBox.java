@@ -214,24 +214,4 @@ public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> imple
         }
     }
 
-    @Override
-    protected NativeComboBox<E> initWidget() {
-        NativeComboBox<E> widget = super.initWidget();
-        widget.addFocusHandler(new FocusHandler() {
-
-            @Override
-            public void onFocus(FocusEvent event) {
-                onEditingStart();
-            }
-        });
-
-        widget.addBlurHandler(new BlurHandler() {
-
-            @Override
-            public void onBlur(BlurEvent event) {
-                onEditingStop();
-            }
-        });
-        return widget;
-    }
 }
