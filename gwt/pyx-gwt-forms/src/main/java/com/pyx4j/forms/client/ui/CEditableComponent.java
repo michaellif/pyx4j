@@ -72,9 +72,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
         !isEnabled() ||
 
-        (!isMandatory() && isValueEmpty()) ||
-
-        ((!visited || isMandatoryConditionMet()) && isValidationConditionMet());
+        (isMandatoryConditionMet() && (isValueEmpty() || isValidationConditionMet()));
 
         asWidget().setValid(valid);
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
@@ -161,7 +159,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     }
 
     public boolean isMandatoryConditionMet() {
-        return !isEnabled() || !isEditable() || !isMandatory() || !isValueEmpty();
+        return !isEnabled() || !isEditable() || !isMandatory() || !isVisited() || !isValueEmpty();
     }
 
     public String getValidationMessage() {

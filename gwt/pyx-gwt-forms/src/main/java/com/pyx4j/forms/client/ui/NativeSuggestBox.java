@@ -27,10 +27,11 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.pyx4j.widgets.client.SuggestBox;
 
+import com.pyx4j.forms.client.ui.NativeTextBox.StyleDependent;
+import com.pyx4j.widgets.client.SuggestBox;
 import com.pyx4j.widgets.client.TextBox;
-import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.widgets.client.style.Selector;
 
 public class NativeSuggestBox<E> extends SuggestBox implements INativeTextComponent<E> {
 
@@ -39,7 +40,7 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     public NativeSuggestBox(CSuggestBox<E> cSuggestBox) {
         super(new MultiWordSuggestOracle(), new TextBox());
 
-        setStyleName(CSSClass.pyx4j_TextBox.name());
+        setStyleName(TextBox.DEFAULT_STYLE_PREFIX);
 
         delegate = new NativeTextBoxDelegate<E>(this, cSuggestBox);
 
@@ -49,6 +50,12 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     public void setEditable(boolean editable) {
         ((TextBox) getWidget()).setEnabled(editable);
         ((TextBox) getWidget()).setReadOnly(!editable);
+        String dependentSuffix = Selector.getDependentName(StyleDependent.readOnly);
+        if (editable) {
+            removeStyleDependentName(dependentSuffix);
+        } else {
+            addStyleDependentName(dependentSuffix);
+        }
     }
 
     @Override
@@ -59,6 +66,12 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     @Override
     public void setEnabled(boolean enabled) {
         ((TextBox) getWidget()).setEnabled(enabled);
+        String dependentSuffix = Selector.getDependentName(StyleDependent.disabled);
+        if (enabled) {
+            removeStyleDependentName(dependentSuffix);
+        } else {
+            addStyleDependentName(dependentSuffix);
+        }
     }
 
     @Override
@@ -117,5 +130,11 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
 
     @Override
     public void setValid(boolean valid) {
+        String dependentSuffix = Selector.getDependentName(StyleDependent.invalid);
+        if (valid) {
+            removeStyleDependentName(dependentSuffix);
+        } else {
+            addStyleDependentName(dependentSuffix);
+        }
     }
 }
