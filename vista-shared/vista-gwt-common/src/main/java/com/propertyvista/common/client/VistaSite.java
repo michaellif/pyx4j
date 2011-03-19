@@ -20,6 +20,9 @@ import com.propertyvista.common.client.resources.FormImageBundle;
 
 import com.pyx4j.essentials.client.ApplicationCommon;
 import com.pyx4j.forms.client.ImageFactory;
+import com.pyx4j.log4gwt.client.ClientLogger;
+import com.pyx4j.log4gwt.rpcappender.RPCAppender;
+import com.pyx4j.log4gwt.shared.Level;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.GlassPanel;
@@ -32,6 +35,7 @@ public abstract class VistaSite extends AppSite {
     public void onSiteLoad() {
         ImageFactory.setImageBundle((FormImageBundle) GWT.create(FormImageBundle.class));
         ApplicationCommon.initRpcGlassPanel();
+        ClientLogger.addAppender(new RPCAppender(Level.WARN));
         RootPanel.get().add(GlassPanel.instance());
         CaptchaComposite.setPublicKey("6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth");
 
