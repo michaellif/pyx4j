@@ -37,6 +37,7 @@ import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
 import com.pyx4j.widgets.client.style.ThemeColor;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public abstract class VistaTheme extends Theme {
 
@@ -567,6 +568,12 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.BORDER);
+        if (!BrowserType.isIE7()) {
+            style.addProperty("padding", "2px 5px");
+        }
+        style.addProperty("box-sizing", "border-box");
+        style.addProperty("-moz-box-sizing", "border-box");
+        style.addProperty("-webkit-box-sizing", "border-box");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_TextBox, " td");

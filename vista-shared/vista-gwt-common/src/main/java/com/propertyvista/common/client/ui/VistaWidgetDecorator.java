@@ -142,7 +142,6 @@ public class VistaWidgetDecorator extends VerticalPanel {
             ((NativeCheckBox) nativeComponent).setText(null);
             nativeComponent.getElement().getStyle().setMargin(0, Unit.PX);
         } else if (nativeComponent instanceof INativeTextComponent<?>) {
-            nativeComponent.getElement().getStyle().setProperty("padding", "2px 5px");
             mandatoryLabel.getElement().getStyle().setPaddingLeft(14, Unit.PX);
         }
 
