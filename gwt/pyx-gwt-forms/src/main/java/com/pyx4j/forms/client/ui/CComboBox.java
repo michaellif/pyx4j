@@ -24,6 +24,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
@@ -210,4 +214,24 @@ public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> imple
         }
     }
 
+    @Override
+    protected NativeComboBox<E> initWidget() {
+        NativeComboBox<E> widget = super.initWidget();
+        widget.addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                onEditingStart();
+            }
+        });
+
+        widget.addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                onEditingStop();
+            }
+        });
+        return widget;
+    }
 }
