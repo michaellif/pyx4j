@@ -18,16 +18,21 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.util.PrintUtil;
 import com.propertyvista.portal.rpc.pt.services.ChargesServices;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PtUserDataAccess;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
 public class ChargesServicesImpl extends ApplicationEntityServicesImpl implements ChargesServices {
+
     private final static Logger log = LoggerFactory.getLogger(ChargesServicesImpl.class);
 
     @Override
@@ -44,7 +49,7 @@ public class ChargesServicesImpl extends ApplicationEntityServicesImpl implement
 
         ChargesServerCalculation.updateChargesFromApplication(charges);
 
-        //        loadTransientData(ret);
+        loadTransientData(charges);
 
         callback.onSuccess(charges);
     }
@@ -56,8 +61,18 @@ public class ChargesServicesImpl extends ApplicationEntityServicesImpl implement
         applyApplication(charges);
         secureSave(charges);
 
-        //        loadTransientData(editableEntity);
+        loadTransientData(charges);
 
         callback.onSuccess(charges);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void loadTransientData(Charges charges) {
+        for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
+            PotentialTenantInfo tenant = PersistenceServicesFactory.getPersistenceService()
+                    .retrieve(PotentialTenantInfo.class, charge.tenant().getPrimaryKey());
+            charge.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", tenant.firstName(), tenant.middleName(), tenant.lastName()));
+        }
+
     }
 }

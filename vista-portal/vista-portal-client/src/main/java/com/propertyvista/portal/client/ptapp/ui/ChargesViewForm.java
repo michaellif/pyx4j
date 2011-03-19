@@ -28,9 +28,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.ChargeLine;
-import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
-import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
@@ -80,7 +78,7 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
         main.add(inject(proto().monthlyCharges().charges()));
         if (valueChangeHandler != null) {
             main.add(createHeader2(proto().monthlyCharges().upgradeCharges()));
-            main.add(inject(proto().monthlyCharges().upgradeCharges()));
+            main.add(inject(proto().monthlyCharges().upgradeCharges(), new ChargeLineSelectableFolder(valueChangeHandler)));
         }
 
         main.add(createTotal(proto().monthlyCharges().total()));
@@ -95,7 +93,7 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
 
         // could be hided from resulting form:
         splitCharges.add(new ViewHeaderDecorator(proto().paymentSplitCharges(), "700px"));
-        splitCharges.add(inject(proto().paymentSplitCharges().charges()));
+        splitCharges.add(inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(valueChangeHandler)));
         splitCharges.add(createTotal(proto().paymentSplitCharges().total()));
         main.add(splitCharges);
 
@@ -146,10 +144,6 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(ChargeLine.class)) {
             return new ChargeLineFolder();
-        } else if (member.getValueClass().equals(ChargeLineSelectable.class)) {
-            return new ChargeLineSelectableFolder(valueChangeHandler);
-        } else if (member.getValueClass().equals(TenantCharge.class)) {
-            return new ChargeSplitListFolder(valueChangeHandler);
         } else {
             return super.create(member);
         }

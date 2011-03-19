@@ -38,8 +38,10 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -58,9 +60,18 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
         super(TenantCharge.class);
         this.valueChangeHandler = valueChangeHandler;
         columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().tenant(), "270px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().tenantFullName(), "270px"));
         columns.add(new EntityFolderColumnDescriptor(proto().percentage(), "25px"));
         columns.add(new EntityFolderColumnDescriptor(proto().charge(), "80px"));
+    }
+
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        if (member == proto().tenantFullName()) {
+            return new CLabel();
+        } else {
+            return super.create(member);
+        }
     }
 
     @Override
@@ -101,7 +112,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
             @Override
             protected Widget createDecorator(EntityFolderColumnDescriptor column, CComponent<?> component, String width) {
                 Widget w = super.createDecorator(column, component, width);
-                if (column.getObject() != proto().tenant()) {
+                if (column.getObject() != proto().tenantFullName()) {
                     w.getElement().getStyle().setProperty("textAlign", "right");
                     component.asWidget().getElement().getStyle().setProperty("textAlign", "right");
                 }

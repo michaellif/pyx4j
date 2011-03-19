@@ -32,6 +32,7 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -117,6 +118,15 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
         // make sure to calculate charges
         calculateCharges(charges);
+    }
+
+    public static boolean isEligibleForPaymentSplit(PotentialTenantInfo tenant) {
+        //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
+        if (tenant.status().getValue() == Status.Applicant) {
+            return true;
+        } else {
+            return TimeUtils.isOlderThen(tenant.birthDate().getValue(), 18);
+        }
     }
 
     public static void updatePaymentSplitCharges(Charges charges, Application application) {

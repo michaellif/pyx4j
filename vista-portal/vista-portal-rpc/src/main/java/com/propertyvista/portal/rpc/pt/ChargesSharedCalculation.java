@@ -23,8 +23,6 @@ import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
-import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.TenantChargeList;
 import com.propertyvista.portal.domain.util.DomainUtil;
@@ -106,15 +104,6 @@ public class ChargesSharedCalculation {
         calculateTotal(charges.applicationCharges());
     }
 
-    public static boolean isEligibleForPaymentSplit(PotentialTenantInfo tenant) {
-        //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
-        if (tenant.status().getValue() == Status.Applicant) {
-            return true;
-        } else {
-            return TimeUtils.isOlderThen(tenant.birthDate().getValue(), 18);
-        }
-    }
-
     /**
      * As % for other applicants are entered, the % for the main applicant is
      * proportionately decreased. Note the total amount includes all monthly payments
@@ -125,27 +114,22 @@ public class ChargesSharedCalculation {
         double total = charges.monthlyCharges().total().amount().getValue();
         TenantCharge applicantCharge = null;
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
-
-            if (charge.tenant().status().getValue() == Status.Applicant) {
+            // !N.B. charge.tenant().status()  is not available here.  charge.tenant() never loaded to GWT!
+            // Consider the first is Applicant
+            if (applicantCharge == null) {
                 applicantCharge = charge;
-            } else if (isEligibleForPaymentSplit(charge.tenant())) {
+            } else {
                 double v = DomainUtil.roundMoney(total * charge.percentage().getValue() / 100d);
                 charge.charge().amount().setValue(v);
                 totalSplit += v; // there may be multiple co-applicants
-                break;
-            } else {
-                throw new Error("Can't split charges with non applicant");
             }
         }
-        if (applicantCharge == null) {
-            new Error("Applicant charges not found");
-        } else {
+        if (applicantCharge != null) {
             double v = total - totalSplit; // applicant's share of payment
             applicantCharge.charge().amount().setValue(v);
             int prc = (int) (100d * v / total);
             applicantCharge.percentage().setValue(prc);
         }
-
         calculateTotal(charges.paymentSplitCharges());
     }
 
