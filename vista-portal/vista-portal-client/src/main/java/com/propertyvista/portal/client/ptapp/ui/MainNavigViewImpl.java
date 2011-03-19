@@ -71,11 +71,11 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         List<NavigTab> tabs = new ArrayList<NavigTab>();
 
-        boolean visited = false;
+        boolean visited = false; // iterate from the end to the beginning: 
         for (int i = presenter.getWizardSteps().size() - 1; i >= 0; i--) {
             ApplicationWizardStep step = presenter.getWizardSteps().get(i);
             if (ApplicationWizardStep.Status.latest.equals(step.status().getValue())) {
-                visited = true;
+                visited = true; // from current to the beginning of the tablist... 
             }
             tabs.add(0, new NavigTab(step, visited));
         }
@@ -156,7 +156,6 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             }
 
             getElement().getStyle().setFontWeight(FontWeight.BOLD);
-
             getElement().getStyle().setCursor(Cursor.DEFAULT);
 
             if (visited) {

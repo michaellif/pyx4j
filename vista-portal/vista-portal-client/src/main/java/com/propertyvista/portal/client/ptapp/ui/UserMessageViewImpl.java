@@ -96,7 +96,7 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
                 break;
 
             case WARN:
-                colour = "#FF820D";
+                colour = "#F3931F";
                 image = new Image(SiteImages.INSTANCE.infoOrange());
                 break;
 

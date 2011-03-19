@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,27 +63,34 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
     @Override
     public void setPresenter(SecondNavigPresenter presenter) {
         this.presenter = presenter;
+        clear();
 
         if (presenter.getWizardStep() != null) {
 
             List<ApplicationWizardSubstep> substeps = presenter.getWizardStep().substeps();
 
             if (substeps.size() > 0) {
-                tabsHolder = new NavigTabList();
-                boolean visited = false;
-                for (ApplicationWizardSubstep substep : substeps) {
-                    if (ApplicationWizardStep.Status.latest.equals(substep.status().getValue())) {
-                        visited = true;
-                    }
-                    tabsHolder.add(new NavigTab(substep, presenter.getWizardStep().placeId().getValue(), visited));
-                }
-                setWidget(tabsHolder);
 
-            } else {
-                clear();
+                tabsHolder = new NavigTabList();
+                List<NavigTab> tabs = new ArrayList<NavigTab>();
+
+                boolean visited = false; // iterate from the end to the beginning: 
+                for (int i = substeps.size() - 1; i >= 0; i--) {
+                    ApplicationWizardSubstep substep = substeps.get(i);
+                    if (ApplicationWizardStep.Status.latest.equals(substep.status().getValue())) {
+                        visited = true; // from current to the beginning of the tablist... 
+                    }
+
+                    tabs.add(0, new NavigTab(substep, presenter.getWizardStep().placeId().getValue(), visited));
+                }
+
+                for (NavigTab navigTab : tabs) {
+                    tabsHolder.add(navigTab);
+                }
+
+                setWidget(tabsHolder);
             }
         }
-
     }
 
     class NavigTabList extends HorizontalPanel {
