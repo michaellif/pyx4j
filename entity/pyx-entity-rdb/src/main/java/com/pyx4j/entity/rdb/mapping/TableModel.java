@@ -33,6 +33,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Table.PrimaryKeyStrategy;
 import com.pyx4j.entity.rdb.ConnectionProvider;
@@ -307,7 +308,7 @@ public class TableModel {
                 }
             }
             if (EntityPersistenceServiceRDB.trace) {
-                log.info("saved {} [{}] ", this.getTableName(), entity.getPrimaryKey());
+                log.info(Trace.id() + "saved {} [{}] ", this.getTableName(), entity.getPrimaryKey());
             }
         } catch (SQLException e) {
             log.error("{} SQL insert error", tableName, e);

@@ -220,6 +220,21 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Owned value 0", task22, emp4.tasksSorted().get(0));
         Assert.assertEquals("Owned value 1", task3, emp4.tasksSorted().get(1));
 
+        //--- Sort Order Additions
+
+        Task task44 = emp4.tasksSorted().$();
+        String description44 = "Work2 " + uniqueString();
+        task44.description().setValue(description44);
+        emp4.tasksSorted().add(task44);
+
+        soSave(emp4, testCaseMethod);
+
+        Employee emp5 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertEquals("Retr. Set size", 3, emp5.tasksSorted().size());
+
+        Assert.assertEquals("Added as last", task44, emp5.tasksSorted().get(2));
+
+        // Just cleanup
         srv.delete(emp3);
     }
 

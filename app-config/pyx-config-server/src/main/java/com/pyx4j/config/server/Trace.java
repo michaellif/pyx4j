@@ -51,10 +51,9 @@ public class Trace {
 
     public static String returns() {
         TraceId tid = traceId.get();
-        String ret = tid.id;
         if (tid.id.length() > 0) {
             tid.id = tid.id.substring(0, tid.id.length() - 1);
         }
-        return ret + "}";
+        return tid.id + "}";
     }
 }

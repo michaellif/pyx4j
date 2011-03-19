@@ -24,6 +24,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -75,21 +76,23 @@ public class CollectionsTableModel {
      */
     @SuppressWarnings("rawtypes")
     private static List convertICollectionKeys(MemberOperationsMeta member, Collection<Object> dataSet, boolean insertNull) {
-        List<Long> idDataSet = new Vector<Long>();
+        List<Long> idDataSet = new ArrayList<Long>();
         for (Object value : dataSet) {
             @SuppressWarnings("unchecked")
             Map<String, Object> map = (Map<String, Object>) value;
             if (map == null) {
                 if (!insertNull) {
-                    continue;
+                    idDataSet.add(null);
+                } else {
+                    throw new Error("Saving null item from collection " + member.getMemberName());
                 }
-                throw new Error("Saving null item from collection " + member.getMemberName());
+            } else {
+                Long childKey = (Long) map.get(IEntity.PRIMARY_KEY);
+                if (childKey == null) {
+                    throw new Error("Saving non persisted item from collection " + member.getMemberName());
+                }
+                idDataSet.add(childKey);
             }
-            Long childKey = (Long) map.get(IEntity.PRIMARY_KEY);
-            if (childKey == null) {
-                throw new Error("Saving non persisted item from collection " + member.getMemberName());
-            }
-            idDataSet.add(childKey);
         }
         return idDataSet;
     }
@@ -122,7 +125,7 @@ public class CollectionsTableModel {
                         stmt.setInt(3, seq);
                     }
                     if (EntityPersistenceServiceRDB.trace) {
-                        log.info(Trace.id() + "insert {} (" + primaryKey + ", " + value + ", " + +seq + ")", member.sqlName());
+                        log.info(Trace.id() + "insert {} (" + primaryKey + ", " + value + ", " + seq + ")", member.sqlName());
                     }
                     stmt.executeUpdate();
                 }
@@ -152,7 +155,7 @@ public class CollectionsTableModel {
                 insertData.addAll(dataSet);
             } else {
                 insertData = convertICollectionKeys(member, dataSet, false);
-                collectionValues = new Vector<Object>();
+                collectionValues = new ArrayList<Object>();
                 collectionValues.addAll(dataSet);
             }
         }
@@ -173,6 +176,10 @@ public class CollectionsTableModel {
                     } else {
                         if (isList) {
                             if (valueIdx != rs.getInt("seq")) {
+                                if (EntityPersistenceServiceRDB.trace) {
+                                    log.info(Trace.id() + "update {} (" + entity.getPrimaryKey() + ", " + value + ", " + rs.getInt("seq") + "->" + valueIdx
+                                            + ")", member.sqlName());
+                                }
                                 rs.updateInt("seq", valueIdx);
                                 rs.updateRow();
                             }

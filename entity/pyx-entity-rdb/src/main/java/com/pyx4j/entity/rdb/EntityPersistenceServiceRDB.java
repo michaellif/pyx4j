@@ -192,25 +192,28 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (trace) {
             log.info(Trace.enter() + "insert {}", tm.getTableName());
         }
-        tm.insert(connection, entity);
-        for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-            CollectionsTableModel.validate(entity, member);
-            if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
-                MemberMeta memberMeta = member.getMemberMeta();
-                @SuppressWarnings("unchecked")
-                ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
-                for (IEntity childEntity : iCollectionMember) {
-                    if (memberMeta.isOwnedRelationships()) {
-                        persist(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
-                    } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
-                        mergeReference(connection, memberMeta, childEntity, now);
+        try {
+            tm.insert(connection, entity);
+            for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                CollectionsTableModel.validate(entity, member);
+                if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
+                    MemberMeta memberMeta = member.getMemberMeta();
+                    @SuppressWarnings("unchecked")
+                    ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+                    for (IEntity childEntity : iCollectionMember) {
+                        if (memberMeta.isOwnedRelationships()) {
+                            persist(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
+                        } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
+                            mergeReference(connection, memberMeta, childEntity, now);
+                        }
                     }
                 }
+                CollectionsTableModel.insert(connection, connectionProvider.getDialect(), entity, member);
             }
-            CollectionsTableModel.insert(connection, connectionProvider.getDialect(), entity, member);
-        }
-        if (trace) {
-            log.info(Trace.returns() + "insert {}", tm.getTableName());
+        } finally {
+            if (trace) {
+                log.info(Trace.returns() + "insert {}", tm.getTableName());
+            }
         }
     }
 
@@ -218,30 +221,32 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (trace) {
             log.info(Trace.enter() + "update {} id={}", tm.getTableName(), entity.getPrimaryKey());
         }
-        for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-            CollectionsTableModel.validate(entity, member);
-            if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
-                MemberMeta memberMeta = member.getMemberMeta();
-                @SuppressWarnings("unchecked")
-                ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
-                for (IEntity childEntity : iCollectionMember) {
-                    if (memberMeta.isOwnedRelationships()) {
-                        if (doMerge) {
-                            merge(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
-                        } else {
-                            persist(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
+        try {
+            for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                CollectionsTableModel.validate(entity, member);
+                if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
+                    MemberMeta memberMeta = member.getMemberMeta();
+                    @SuppressWarnings("unchecked")
+                    ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+                    for (IEntity childEntity : iCollectionMember) {
+                        if (memberMeta.isOwnedRelationships()) {
+                            if (doMerge) {
+                                merge(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
+                            } else {
+                                persist(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
+                            }
+                        } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
+                            mergeReference(connection, memberMeta, childEntity, now);
                         }
-                    } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
-                        mergeReference(connection, memberMeta, childEntity, now);
                     }
                 }
             }
+            return tm.update(connection, entity);
+        } finally {
+            if (trace) {
+                log.info(Trace.returns() + "update {} id={}", tm.getTableName(), entity.getPrimaryKey());
+            }
         }
-        boolean updated = tm.update(connection, entity);
-        if (trace) {
-            log.info(Trace.returns() + "update {} id={}", tm.getTableName(), entity.getPrimaryKey());
-        }
-        return updated;
     }
 
     @Override
@@ -695,38 +700,40 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (trace) {
             log.info(Trace.enter() + "cascadeDelete {} id={}", entityMeta.getPersistenceName(), primaryKey);
         }
+        try {
+            TableModel tm = tableModel(entityMeta);
 
-        TableModel tm = tableModel(entityMeta);
-
-        if (cascadedeleteDataEntity != null) {
-            for (MemberOperationsMeta member : tm.operationsMeta().getCascadeDeleteMembers()) {
-                IEntity childEntity = (IEntity) member.getMember(cascadedeleteDataEntity);
-                if (childEntity.getPrimaryKey() != null) {
-                    if (trace) {
-                        log.info("cascadeDelete member {}", member.getMemberName());
+            if (cascadedeleteDataEntity != null) {
+                for (MemberOperationsMeta member : tm.operationsMeta().getCascadeDeleteMembers()) {
+                    IEntity childEntity = (IEntity) member.getMember(cascadedeleteDataEntity);
+                    if (childEntity.getPrimaryKey() != null) {
+                        if (trace) {
+                            log.info(Trace.id() + "cascadeDelete member {}", member.getMemberName());
+                        }
+                        cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
                     }
-                    cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
-                }
-            }
-        }
-
-        for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-            if ((cascadedeleteDataEntity != null) && member.getMemberMeta().isOwnedRelationships()
-                    && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
-                for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(cascadedeleteDataEntity)) {
-                    cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
                 }
             }
 
-            // remove join table data
-            CollectionsTableModel.delete(connection, primaryKey, member);
-        }
+            for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                if ((cascadedeleteDataEntity != null) && member.getMemberMeta().isOwnedRelationships()
+                        && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
+                    for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(cascadedeleteDataEntity)) {
+                        cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
+                    }
+                }
 
-        if (!tm.delete(connection, primaryKey)) {
-            throw new RuntimeException("Entity " + entityMeta.getCaption() + " " + primaryKey + " NotFound");
-        }
-        if (trace) {
-            log.info(Trace.returns() + "cascadeDelete {} id={}", entityMeta.getPersistenceName(), primaryKey);
+                // remove join table data
+                CollectionsTableModel.delete(connection, primaryKey, member);
+            }
+
+            if (!tm.delete(connection, primaryKey)) {
+                throw new RuntimeException("Entity " + entityMeta.getCaption() + " " + primaryKey + " NotFound");
+            }
+        } finally {
+            if (trace) {
+                log.info(Trace.returns() + "cascadeDelete {} id={}", entityMeta.getPersistenceName(), primaryKey);
+            }
         }
     }
 
@@ -753,30 +760,32 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 if (trace) {
                     log.info(Trace.enter() + "delete {} rows {}", tm.getTableName(), entities.size());
                 }
-
-                // remove data from join tables first, No cascade delete
-                for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                    //CollectionsTableModel.delete(connection, member, qb, tm.getTableName());
-                    if (member.getMemberMeta().isOwnedRelationships() && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
-                        if (trace) {
-                            log.info(Trace.id() + "delete owned member [{}]", member.getMemberName());
-                        }
-                        // TODO optimize
-                        for (T entity : entities) {
-                            for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(entity)) {
-                                cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
+                try {
+                    // remove data from join tables first, No cascade delete
+                    for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                        //CollectionsTableModel.delete(connection, member, qb, tm.getTableName());
+                        if (member.getMemberMeta().isOwnedRelationships() && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
+                            if (trace) {
+                                log.info(Trace.id() + "delete owned member [{}]", member.getMemberName());
+                            }
+                            // TODO optimize
+                            for (T entity : entities) {
+                                for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(entity)) {
+                                    cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
+                                }
                             }
                         }
+
+                        CollectionsTableModel.delete(connection, primaryKeys, member);
                     }
 
-                    CollectionsTableModel.delete(connection, primaryKeys, member);
-                }
+                    count = tm.delete(connection, primaryKeys);
+                    // TODO remove entities from Cache
 
-                count = tm.delete(connection, primaryKeys);
-                // TODO remove entities from Cache
-
-                if (trace) {
-                    log.info(Trace.returns() + "delete {}", tm.getTableName());
+                } finally {
+                    if (trace) {
+                        log.info(Trace.returns() + "delete {}", tm.getTableName());
+                    }
                 }
             }
             return count;
