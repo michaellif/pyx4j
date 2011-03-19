@@ -21,13 +21,7 @@ import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -74,10 +68,13 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             List<ApplicationWizardSubstep> substeps = presenter.getWizardStep().substeps();
 
             if (substeps.size() > 0) {
-                boolean visited = false;
                 tabsHolder = new NavigTabList();
+                boolean visited = false;
                 for (ApplicationWizardSubstep substep : substeps) {
-                    tabsHolder.add(new NavigTab(substep, presenter.getWizardStep().placeId().getValue()));
+                    if (ApplicationWizardStep.Status.latest.equals(substep.status().getValue())) {
+                        visited = true;
+                    }
+                    tabsHolder.add(new NavigTab(substep, presenter.getWizardStep().placeId().getValue(), visited));
                 }
                 setWidget(tabsHolder);
 
@@ -107,7 +104,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             return place;
         }
 
-        NavigTab(final ApplicationWizardSubstep substep, String token) {
+        NavigTab(final ApplicationWizardSubstep substep, String token, boolean visited) {
             super();
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
 
@@ -152,7 +149,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             getElement().getStyle().setCursor(Cursor.DEFAULT);
 
             // if visited - allow click:
-            if (ApplicationWizardStep.Status.latest.equals(substep.status().getValue())) {
+            if (visited) {
                 addDomHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {

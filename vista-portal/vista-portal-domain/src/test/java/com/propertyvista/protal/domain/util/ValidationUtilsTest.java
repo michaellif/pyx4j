@@ -17,6 +17,8 @@ import junit.framework.TestCase;
 
 import com.propertyvista.portal.domain.util.ValidationUtils;
 
+import com.pyx4j.commons.TimeUtils;
+
 public class ValidationUtilsTest extends TestCase {
 
     public void testCC() {
@@ -69,5 +71,11 @@ public class ValidationUtilsTest extends TestCase {
         assertTrue(ValidationUtils.isSinValid("046454286"));
 
         assertFalse(ValidationUtils.isSinValid("123 456 789"));
+    }
+
+    public void testOlderThen18() {
+//        assertTrue(ValidationUtils.isOlderThen18(TimeUtils.createDate(1993, 3, 3)));
+
+        assertFalse(ValidationUtils.isOlderThen18(TimeUtils.createDate(2010, 5, 25)));
     }
 }
