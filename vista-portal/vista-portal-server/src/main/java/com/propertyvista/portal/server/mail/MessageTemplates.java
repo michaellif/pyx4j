@@ -19,8 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
-import com.propertyvista.portal.rpc.pt.ActivationServices;
 import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.services.ActivationServices;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.IOUtils;
