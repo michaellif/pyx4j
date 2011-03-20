@@ -35,6 +35,11 @@ public abstract class ConfigurationHSQL implements Configuration {
     }
 
     @Override
+    public String dbHost() {
+        return null;
+    }
+
+    @Override
     public String userName() {
         return "sa";
     }
