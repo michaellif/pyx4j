@@ -60,7 +60,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
         // calculate things that we can
         double rentAmount = unitSelection.markerRent().rent().amount().getValue();
-        double depositAmount = unitSelection.selectedUnit().requiredDeposit().amount().getValue();
+        double depositAmount = 666; //unitSelection.selectedUnit().requiredDeposit().amount().getValue();
 
         // monthly charges
         //TODO use update.
