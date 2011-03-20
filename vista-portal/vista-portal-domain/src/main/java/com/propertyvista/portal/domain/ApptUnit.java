@@ -98,13 +98,7 @@ public interface ApptUnit extends Property {
     // need a lease-terms object
     //IPrimitive<String> unitLeaseStatus();
 
-    //IPrimitive<String> unitOccpStatus();
-
-    public static enum Status {
-        available, reserved, leased, notice;
-    }
-
-    IPrimitive<Status> status();
+    IPrimitive<ApartmentUnitStatus> status();
 
     IList<Amenity> amenities();
 

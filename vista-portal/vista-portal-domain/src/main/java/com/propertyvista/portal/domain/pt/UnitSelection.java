@@ -15,7 +15,6 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.MarketRent;
 
 import com.pyx4j.entity.annotations.Caption;
@@ -30,7 +29,7 @@ public interface UnitSelection extends IEntity, IBoundToApplication {
     @EmbeddedEntity
     UnitSelectionCriteria selectionCriteria();
 
-    Building building();
+//    Building building();
 
     // Found by App server
     @Transient

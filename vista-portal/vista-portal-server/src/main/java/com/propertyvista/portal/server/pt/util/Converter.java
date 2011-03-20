@@ -34,17 +34,18 @@ public class Converter {
     public static ApartmentUnit convert(ApptUnit from) {
         ApartmentUnit to = EntityFactory.create(ApartmentUnit.class);
 
+        to.id().set(from.id());
+
         // iEntity
-        to.building().set(from.building());
         to.floorplan().set(convert(from.floorplan()));
         to.newLeaseTerms().set(from.newLeaseTerms());
         to.requiredDeposit().set(from.requiredDeposit());
-        to.infoDetails().set(from.infoDetails());
 
-        to.amenities().set(from.amenities());
-        to.concessions().set(from.concessions());
-        to.utilities().set(from.utilities());
-        to.addOns().set(from.addOns());
+        to.infoDetails().setValue(from.infoDetails().getStringView());
+        to.amenities().setValue(from.amenities().getStringView());
+        to.concessions().setValue(from.concessions().getStringView());
+        to.utilities().setValue(from.utilities().getStringView());
+        to.addOns().setValue(from.addOns().getStringView());
 
         to.status().set(from.status());
 

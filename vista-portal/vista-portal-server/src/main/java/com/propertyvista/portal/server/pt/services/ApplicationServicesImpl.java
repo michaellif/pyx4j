@@ -60,9 +60,9 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
             unitSelection.selectionCriteria().set(request);
             new ApartmentServicesImpl().loadAvailableUnits(unitSelection);
 
-            if (unitSelection.building().isNull()) {
+            if (unitSelection.selectedUnit().isNull()) {
                 log.info("Could not find building with propertyCode {}", request.propertyCode());
-                throw new UserRuntimeException("Selected building not found");
+                throw new UserRuntimeException("Selected unit not found");
             }
 
             application = EntityFactory.create(Application.class);

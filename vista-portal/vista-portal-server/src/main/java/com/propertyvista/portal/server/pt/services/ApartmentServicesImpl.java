@@ -144,7 +144,7 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
         unitSelection.selectedUnitId().set(firstUnit.id());
         Floorplan floorplan = firstUnit.floorplan();
 
-        unitSelection.building().set(firstUnit.building());
+//        unitSelection.building().set(firstUnit.building());
         for (Picture picture : floorplan.pictures()) {
             prepareImage(picture);
         }

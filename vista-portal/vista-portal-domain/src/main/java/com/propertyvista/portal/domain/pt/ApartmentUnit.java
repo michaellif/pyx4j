@@ -15,24 +15,21 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.AddOn;
-import com.propertyvista.portal.domain.Amenity;
-import com.propertyvista.portal.domain.ApptUnit.Status;
+import com.propertyvista.portal.domain.ApartmentUnitStatus;
 import com.propertyvista.portal.domain.Building;
-import com.propertyvista.portal.domain.Concession;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.Money;
-import com.propertyvista.portal.domain.UnitInfoItem;
-import com.propertyvista.portal.domain.Utility;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Transient
 public interface ApartmentUnit extends IEntity {
 
 //    IPrimitive<Integer> floor();
@@ -116,15 +113,17 @@ public interface ApartmentUnit extends IEntity {
 //        available, reserved, leased, notice;
 //    }
 
-    IPrimitive<Status> status();
+    IPrimitive<ApartmentUnitStatus> status();
 
-    IList<Amenity> amenities();
+    IPrimitive<String> amenities();
 
-    IList<Utility> utilities();
+//    IList<Amenity> amenities();
 
-    IList<UnitInfoItem> infoDetails();
+    IPrimitive<String> utilities();
 
-    IList<Concession> concessions();
+    IPrimitive<String> infoDetails();
 
-    IList<AddOn> addOns();
+    IPrimitive<String> concessions();
+
+    IPrimitive<String> addOns();
 }

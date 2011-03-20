@@ -13,14 +13,8 @@
  */
 package com.propertyvista.portal.domain.util;
 
-import com.propertyvista.portal.domain.AddOn;
-import com.propertyvista.portal.domain.Amenity;
-import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.Building;
-import com.propertyvista.portal.domain.Concession;
 import com.propertyvista.portal.domain.MarketRent;
-import com.propertyvista.portal.domain.UnitInfoItem;
-import com.propertyvista.portal.domain.Utility;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.ChargeLine;
@@ -96,45 +90,46 @@ public class PrintUtil {
         sb.append("Property: ").append(building.propertyProfile()).append("\n");
 
         // amenities
-        sb.append("\tAmenities:\n");
-        for (Amenity amenity : unit.amenities()) {
-            sb.append("\t\t");
-            sb.append(amenity.name().getStringView());
-            sb.append("\n");
-        }
+        sb.append("\tAmenities: ").append(unit.amenities()).append("\n");
+        sb.append("\tUtility: ").append(unit.utilities()).append("\n");
+        sb.append("\tUnitInfoItem: ").append(unit.infoDetails()).append("\n");
+        sb.append("\tConcessions: ").append(unit.concessions()).append("\n");
+        sb.append("\tAdd-ons: ").append(unit.addOns()).append("\n");
 
-        // utilities
-        sb.append("\tUtilities:\n");
-        for (Utility utility : unit.utilities()) {
-            sb.append("\t\t");
-            sb.append(utility.name().getStringView());
-            sb.append("\n");
-        }
-
-        // utilities
-        sb.append("\tUnitInfoItem:\n");
-        for (UnitInfoItem info : unit.infoDetails()) {
-            sb.append("\t\t");
-            sb.append(info.name().getStringView());
-            sb.append("\n");
-        }
-
-        // utilities
-        sb.append("\tConcessions:\n");
-        for (Concession concession : unit.concessions()) {
-            sb.append("\t\t");
-            sb.append(concession.name().getStringView());
-            sb.append("\n");
-        }
-
-        // utilities
-        sb.append("\tAdd-ons:\n");
-        for (AddOn addOn : unit.addOns()) {
-            sb.append("\t\t");
-            sb.append(addOn.name().getStringView());
-            sb.append(" $").append(addOn.monthlyCost().getValue());
-            sb.append("\n");
-        }
+//        for (Amenity amenity : unit.amenities()) {
+//            sb.append("\t\t");
+//            sb.append(amenity.name().getStringView());
+//            sb.append("\n");
+//        }
+//        // utilities
+//        sb.append("\tUtilities:\n");
+//        for (Utility utility : unit.utilities()) {
+//            sb.append("\t\t");
+//            sb.append(utility.name().getStringView());
+//            sb.append("\n");
+//        }
+//        // utilities
+//        sb.append("\tUnitInfoItem:\n");
+//        for (UnitInfoItem info : unit.infoDetails()) {
+//            sb.append("\t\t");
+//            sb.append(info.name().getStringView());
+//            sb.append("\n");
+//        }
+//        // utilities
+//        sb.append("\tConcessions:\n");
+//        for (Concession concession : unit.concessions()) {
+//            sb.append("\t\t");
+//            sb.append(concession.name().getStringView());
+//            sb.append("\n");
+//        }
+//        // utilities
+//        sb.append("\tAdd-ons:\n");
+//        for (AddOn addOn : unit.addOns()) {
+//            sb.append("\t\t");
+//            sb.append(addOn.name().getStringView());
+//            sb.append(" $").append(addOn.monthlyCost().getValue());
+//            sb.append("\n");
+//        }
 
         // rent
         sb.append("\nStart rent:").append(unitSelection.rentStart().getStringView());
