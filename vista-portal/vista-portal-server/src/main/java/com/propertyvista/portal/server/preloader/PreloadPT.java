@@ -216,6 +216,8 @@ public class PreloadPT extends BaseVistaDataPreloader {
             pti.status().setValue(Status.CoApplicant);
         } else if (index == 2) {
             pti.status().setValue(Status.CoApplicant);
+        } else {
+            pti.status().setValue(Status.Dependant);
         }
 
         pti.relationship().setValue(RandomUtil.random(DemoData.RELATIONSHIPS));
@@ -273,7 +275,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
             pt.lastName().setValue("London");
         } else {
             pt.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
-            pt.middleName().setValue(RandomUtil.randomInt(100) % 4 == 0 ? "M" : "");
+            pt.middleName().setValue(RandomUtil.randomInt(100) % 7 == 0 ? "M" : "");
             pt.lastName().setValue(RandomUtil.random(DemoData.LAST_NAMES));
         }
 

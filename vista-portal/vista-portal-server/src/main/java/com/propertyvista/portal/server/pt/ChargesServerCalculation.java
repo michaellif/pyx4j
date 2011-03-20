@@ -55,12 +55,12 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             return;
         }
         ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
-        apartmentServices.loadAvailableUnits(unitSelection);
+        apartmentServices.loadSelectedUnit(unitSelection);
         charges.rentStart().setValue(unitSelection.rentStart().getValue());
 
         // calculate things that we can
         double rentAmount = unitSelection.markerRent().rent().amount().getValue();
-        double depositAmount = 666; //unitSelection.selectedUnit().requiredDeposit().amount().getValue();
+        double depositAmount = unitSelection.selectedUnit().requiredDeposit().amount().getValue();
 
         // monthly charges
         //TODO use update.

@@ -66,8 +66,14 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
 
     @SuppressWarnings("unchecked")
     private void retrieveSummary(Summary summary) {
+
+        // this code starts to become very convoluted and all-over-the place
         retrieveApplicationEntity(summary.unitSelection());
-        PersistenceServicesFactory.getPersistenceService().retrieve(summary.unitSelection().selectedUnit().floorplan());
+        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
+        apartmentServices.loadTransientData(summary.unitSelection());
+
+        // I have no idea so far for why this line gets called
+//        PersistenceServicesFactory.getPersistenceService().retrieve(summary.unitSelection().selectedUnit().floorplan());
 
         retrieveApplicationEntity(summary.tenants());
 

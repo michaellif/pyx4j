@@ -82,9 +82,12 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
         callback.onSuccess(unitSelection);
     }
 
-    private void loadTransientData(UnitSelection unitSelection) {
+    public void loadTransientData(UnitSelection unitSelection) {
         loadAvailableUnits(unitSelection);
+        loadSelectedUnit(unitSelection);
+    }
 
+    public void loadSelectedUnit(UnitSelection unitSelection) {
         if (unitSelection.selectedUnitId() != null) {
             unitSelection.selectedUnit().set(
                     Converter.convert(PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitSelection.selectedUnitId().getValue())));
