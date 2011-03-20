@@ -57,6 +57,7 @@ import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -372,7 +373,8 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
             @Override
             protected FolderDecorator<EmergencyContact> createFolderDecorator() {
-                return new BoxFolderDecorator<EmergencyContact>(SiteImages.INSTANCE.addRow(), SiteImages.INSTANCE.addRowHover(), i18n.tr("Add a contact"));
+                return new BoxFolderDecorator<EmergencyContact>(SiteImages.INSTANCE.addRow(), SiteImages.INSTANCE.addRowHover(),
+                        i18n.tr("Add one more contact"));
             }
 
             @Override
@@ -380,6 +382,13 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 return createEmergencyContactItem();
             }
 
+            @Override
+            public void populate(IList<EmergencyContact> value) {
+                super.populate(value);
+                if (value.isEmpty()) {
+                    addItem(); // at least one Emergency Contact should be present!..
+                }
+            }
         };
     }
 
