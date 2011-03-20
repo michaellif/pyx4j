@@ -154,15 +154,21 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     public void type(String paramString, CharSequence... keysToSend) {
-        driver.findElement(elementLocator(paramString)).sendKeys(keysToSend);
+    	WebElement we  =  driver.findElement(elementLocator(paramString));
+    	we.clear();
+    	we.sendKeys(keysToSend);
     }
 
     public void type(IDebugId debugId, CharSequence... keysToSend) {
-        driver.findElement(by(debugId)).sendKeys(keysToSend);
+    	WebElement we  =  driver.findElement(by(debugId));
+    	we.clear();
+    	we.sendKeys(keysToSend);
     }
 
     public void type(IObject<?> member, CharSequence... keysToSend) {
-        driver.findElement(by(member)).sendKeys(keysToSend);
+    	WebElement we  =  driver.findElement(by(member));
+    	we.clear();
+    	we.sendKeys(keysToSend);
     }
 
     public String getText(String paramString) {
@@ -175,6 +181,13 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     public String getValue(String paramString) {
         return driver.findElement(elementLocator(paramString)).getValue();
+    }
+    public void select(String id) {
+        WebElement we = driver.findElement(By.id(id));
+        if ( !we.isSelected() && we.isEnabled())
+        {
+        	we.setSelected();
+        }        
     }
 
 }
