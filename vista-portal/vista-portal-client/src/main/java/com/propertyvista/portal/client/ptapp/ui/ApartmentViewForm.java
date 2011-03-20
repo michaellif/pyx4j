@@ -96,6 +96,7 @@ public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
             public void onValueChange(ValueChangeEvent<ApartmentUnit> event) {
                 if (!getValue().selectedUnit().equals(event.getValue())) {
                     getValue().selectedUnit().set(event.getValue());
+                    getValue().selectedUnitId().set(event.getValue().id());
                     getValue().markerRent().set(null);
                     CEditableComponent<Date, ?> rentStart = get(proto().rentStart());
                     if ((rentStart.getValue() == null) || (!rentStart.isVisited())) {
