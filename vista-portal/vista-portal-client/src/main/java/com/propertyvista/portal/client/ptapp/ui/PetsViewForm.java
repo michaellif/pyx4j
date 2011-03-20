@@ -170,12 +170,6 @@ public class PetsViewForm extends CEntityForm<Pets> {
                     }
 
                     @Override
-                    public IsWidget createContent() {
-                        IsWidget w = super.createContent();
-                        return w;
-                    }
-
-                    @Override
                     public void addValidations() {
                         EditableValueValidator<Integer> weightValidator = new EditableValueValidator<Integer>() {
 

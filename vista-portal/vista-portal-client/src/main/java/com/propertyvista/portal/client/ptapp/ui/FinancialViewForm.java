@@ -196,10 +196,6 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
             @Override
             protected CEntityFolderItem<TenantAsset> createItem() {
-                return createAssetRowEditor(columns);
-            }
-
-            private CEntityFolderItem<TenantAsset> createAssetRowEditor(final List<EntityFolderColumnDescriptor> columns) {
                 return new CEntityFolderRow<TenantAsset>(TenantAsset.class, columns) {
 
                     @Override
@@ -240,7 +236,6 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                     }
                 };
             }
-
         };
 
     }
