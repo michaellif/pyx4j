@@ -31,6 +31,12 @@
         </dependency>
         
         <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-rdb</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <scope>test</scope>
@@ -40,7 +46,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <scope>compile</scope>
             <optional>true</optional>
         </dependency>
 
