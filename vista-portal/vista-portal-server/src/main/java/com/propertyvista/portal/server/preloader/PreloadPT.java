@@ -487,17 +487,12 @@ public class PreloadPT extends BaseVistaDataPreloader {
         ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
         apartmentServices.loadAvailableUnits(unitSelection);
 
-        // now chose the first unit
-        if (!unitSelection.availableUnits().units().isEmpty()) {
-            ApartmentUnit selectedUnit = unitSelection.availableUnits().units().iterator().next();
-            unitSelection.selectedUnit().set(selectedUnit);
-//            unitSelection.building().set(unitSelection.selectedUnit().building());
-            //            building = unitSelection.building();
-            //            log.info("Created building {}", unitSelection.selectedUnit().building());
-            unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
-
-            unitSelection.rentStart().setValue(selectedUnit.avalableForRent().getValue());
-        }
+        // chose the first unit for demo
+        ApartmentUnit selectedUnit = unitSelection.availableUnits().units().iterator().next();
+        unitSelection.selectedUnit().set(selectedUnit);
+        unitSelection.selectedUnitId().set(selectedUnit.id());
+        unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
+        unitSelection.rentStart().setValue(selectedUnit.avalableForRent().getValue());
 
         persist(unitSelection);
     }
