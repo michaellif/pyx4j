@@ -475,10 +475,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private <T extends IEntity> T cascadeRetrieve(Connection connection, T entity) {
+        TableModel tm = tableModel(entity.getEntityMeta());
         if (entity.getPrimaryKey() == null) {
             return null;
         }
-        TableModel tm = tableModel(entity.getEntityMeta());
         if (tm.retrieve(connection, entity.getPrimaryKey(), entity)) {
             return cascadeRetrieveMembers(connection, tm, entity);
         } else {
