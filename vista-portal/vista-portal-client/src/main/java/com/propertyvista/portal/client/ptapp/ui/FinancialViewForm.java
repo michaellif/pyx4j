@@ -22,7 +22,8 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -38,6 +39,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowP
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantAsset;
+import com.propertyvista.portal.domain.pt.TenantAsset.AssetType;
 import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.util.ValidationUtils;
@@ -197,12 +199,6 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                 return createAssetRowEditor(columns);
             }
 
-            @Override
-            protected void createNewEntity(TenantAsset newEntity, AsyncCallback<TenantAsset> callback) {
-                newEntity.percent().setValue(100d);
-                super.createNewEntity(newEntity, callback);
-            }
-
             private CEntityFolderItem<TenantAsset> createAssetRowEditor(final List<EntityFolderColumnDescriptor> columns) {
                 return new CEntityFolderRow<TenantAsset>(TenantAsset.class, columns) {
 
@@ -229,6 +225,17 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                                 return i18n.tr("Value can not increase 100%");
                             }
 
+                        });
+
+                        get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<TenantAsset.AssetType>() {
+
+                            @Override
+                            public void onValueChange(ValueChangeEvent<AssetType> event) {
+                                if (get(proto().percent()).getValue() == null) {
+                                    get(proto().percent()).setValue(100d);
+                                }
+
+                            }
                         });
                     }
                 };
