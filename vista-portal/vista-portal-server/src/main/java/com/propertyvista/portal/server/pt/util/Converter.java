@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.server.pt.util;
 
-import com.propertyvista.portal.domain.ApptUnit;
+import com.propertyvista.portal.domain.AptUnit;
 import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.pt.ApartmentFloorplan;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
@@ -31,7 +31,7 @@ public class Converter {
         return to;
     }
 
-    public static ApartmentUnit convert(ApptUnit from) {
+    public static ApartmentUnit convert(AptUnit from) {
         ApartmentUnit to = EntityFactory.create(ApartmentUnit.class);
 
         to.id().set(from.id());

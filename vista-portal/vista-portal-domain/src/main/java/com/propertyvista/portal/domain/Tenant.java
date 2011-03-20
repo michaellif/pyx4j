@@ -20,7 +20,7 @@ public interface Tenant extends IEntity {
     // TODO make a RentingEntity (May be Company or Government)
     Person rentingEntity();
 
-    ApptUnit unit();
+    AptUnit unit();
 
     /**
      * Used for DB Denormalization

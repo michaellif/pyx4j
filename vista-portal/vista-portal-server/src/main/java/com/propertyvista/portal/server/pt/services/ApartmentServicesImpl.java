@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.portal.domain.ApptUnit;
+import com.propertyvista.portal.domain.AptUnit;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.Picture;
@@ -89,7 +89,7 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
         loadAvailableUnits(unitSelection);
     }
 
-    public List<ApptUnit> loadAvailableUnits(UnitSelectionCriteria selectionCriteria) {
+    public List<AptUnit> loadAvailableUnits(UnitSelectionCriteria selectionCriteria) {
         log.info("Looking for units {}", selectionCriteria);
 
         // find building first, don't use building from unit selection
@@ -114,7 +114,7 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
 
         // find units
         log.info("Found floorplan {}, now will look for building {}", floorplan, building);
-        EntityQueryCriteria<ApptUnit> criteria = EntityQueryCriteria.create(ApptUnit.class);
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
 
@@ -127,19 +127,19 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
                     .availableTo().getValue()));
         }
 
-        List<ApptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
+        List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
         log.info("Found {} units", units.size());
         return units;
     }
 
     public void loadAvailableUnits(UnitSelection unitSelection) {
 
-        List<ApptUnit> units = loadAvailableUnits(unitSelection.selectionCriteria());
+        List<AptUnit> units = loadAvailableUnits(unitSelection.selectionCriteria());
         if (units == null || units.isEmpty()) {
             log.info("Did not find any available units");
         }
 
-        ApptUnit firstUnit = units.get(0);
+        AptUnit firstUnit = units.get(0);
         unitSelection.selectedUnit().set(Converter.convert(firstUnit));
         unitSelection.selectedUnitId().set(firstUnit.id());
         Floorplan floorplan = firstUnit.floorplan();
@@ -151,7 +151,7 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
         unitSelection.availableUnits().floorplan().set(Converter.convert(floorplan));
 
         List<ApartmentUnit> convertedUnits = new ArrayList<ApartmentUnit>();
-        for (ApptUnit unit : units) {
+        for (AptUnit unit : units) {
             convertedUnits.add(Converter.convert(unit));
         }
 

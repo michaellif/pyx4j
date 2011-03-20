@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.portal.domain.ApptUnit;
+import com.propertyvista.portal.domain.AptUnit;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
@@ -68,7 +68,7 @@ public class ActivationServicesImpl extends ApplicationEntityServicesImpl implem
         log.info("Checking if unit exists {}", selectionCriteria);
 
         ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
-        List<ApptUnit> units = apartmentServices.loadAvailableUnits(selectionCriteria);
+        List<AptUnit> units = apartmentServices.loadAvailableUnits(selectionCriteria);
         boolean unitsExist = units != null && !units.isEmpty();
         callback.onSuccess(unitsExist);
     }
