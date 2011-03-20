@@ -20,6 +20,10 @@ import com.pyx4j.commons.TimeUtils;
 
 public class VistaDBPreloadTest extends VistaDBTestCase {
 
+    public void testNothing() {
+        //TODO remove when enabled below
+    }
+
     public void TODO_testDefaultPreload() {
         long start = System.currentTimeMillis();
         System.out.println(new VistaDataPreloaders().preloadAll());
