@@ -57,8 +57,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
     public void save(AsyncCallback<Summary> callback, Summary summary) {
         //        log.info("Saving charges\n{}", PrintUtil.print(summary));
 
-        applyApplication(summary);
-        secureSave(summary);
+        saveApplicationEntity(summary);
 
         //        loadTransientData(editableEntity);
 

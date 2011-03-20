@@ -48,8 +48,7 @@ public class PetsServicesImpl extends ApplicationEntityServicesImpl implements P
     public void save(AsyncCallback<Pets> callback, Pets pets) {
         log.info("Saving pets {}", pets);
 
-        applyApplication(pets);
-        secureSave(pets);
+        saveApplicationEntity(pets);
 
         loadTransientData(pets);
 

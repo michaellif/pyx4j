@@ -53,12 +53,9 @@ public class TenantsServicesImpl extends ApplicationEntityServicesImpl implement
 
     @Override
     public void save(AsyncCallback<PotentialTenantList> callback, PotentialTenantList tenants) {
-
-        applyApplication(tenants);
-
         PotentialTenantList tenantsOrig = findApplicationEntity(PotentialTenantList.class);
 
-        secureSave(tenants);
+        saveApplicationEntity(tenants);
 
         ApplicationServicesImpl.syncroizeApplicationProgress(tenantsOrig, tenants);
 

@@ -63,9 +63,7 @@ public class PaymentServicesImpl extends ApplicationEntityServicesImpl implement
     public void save(AsyncCallback<PaymentInfo> callback, PaymentInfo payment) {
         //        log.info("Saving charges\n{}", PrintUtil.print(summary));
 
-        applyApplication(payment);
-
-        secureSave(payment);
+        saveApplicationEntity(payment);
 
         boolean callFireDemo = false;
         if (callFireDemo) {

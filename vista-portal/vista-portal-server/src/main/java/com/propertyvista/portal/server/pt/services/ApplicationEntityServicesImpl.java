@@ -25,15 +25,18 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.security.shared.SecurityViolationException;
 
 public class ApplicationEntityServicesImpl extends EntityServicesImpl {
 
     protected static I18n i18n = I18nFactory.getI18n();
 
-    protected void applyApplication(IEntity entity) {
+    protected <E extends IEntity & IBoundToApplication> void saveApplicationEntity(E entity) {
         // app specific security stuff
-
         final Application application = PtUserDataAccess.getCurrentUserApplication();
+        if ((!entity.application().isNull()) && (!entity.application().equals(application))) {
+            throw new SecurityViolationException("Permission denied");
+        }
         EntityGraph.applyRecursively(entity, new EntityGraph.ApplyMethod() {
             @Override
             public void apply(IEntity entity) {
@@ -42,7 +45,7 @@ public class ApplicationEntityServicesImpl extends EntityServicesImpl {
                 }
             }
         });
-
+        secureSave(entity);
     }
 
     protected <T extends IBoundToApplication> T findApplicationEntity(Class<T> clazz) {

@@ -45,10 +45,9 @@ public class TenantsInfoServicesImpl extends ApplicationEntityServicesImpl imple
 
     @Override
     public void save(AsyncCallback<PotentialTenantInfo> callback, PotentialTenantInfo tenant) {
-//        log.info("Saving charges\n{}", PrintUtil.print(summary));
+        //        log.info("Saving charges\n{}", PrintUtil.print(summary));
 
-        applyApplication(tenant);
-        secureSave(tenant);
+        saveApplicationEntity(tenant);
 
         callback.onSuccess(tenant);
     }

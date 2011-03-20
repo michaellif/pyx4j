@@ -75,8 +75,7 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
     public void save(AsyncCallback<UnitSelection> callback, UnitSelection unitSelection) {
         log.info("Saving unit selection\n{}", PrintUtil.print(unitSelection));
 
-        applyApplication(unitSelection);
-        secureSave(unitSelection);
+        saveApplicationEntity(unitSelection);
 
         loadTransientData(unitSelection);
 

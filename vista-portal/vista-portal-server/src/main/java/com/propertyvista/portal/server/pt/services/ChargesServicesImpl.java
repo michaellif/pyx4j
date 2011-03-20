@@ -58,8 +58,7 @@ public class ChargesServicesImpl extends ApplicationEntityServicesImpl implement
     public void save(AsyncCallback<Charges> callback, Charges charges) {
         log.info("Saving charges\n{}", PrintUtil.print(charges));
 
-        applyApplication(charges);
-        secureSave(charges);
+        saveApplicationEntity(charges);
 
         loadTransientData(charges);
 

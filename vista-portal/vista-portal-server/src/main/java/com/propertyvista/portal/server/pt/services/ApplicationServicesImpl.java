@@ -67,18 +67,21 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
 
             application = EntityFactory.create(Application.class);
             application.user().set(PtUserDataAccess.getCurrentUser());
-            secureSave(application);
+            PersistenceServicesFactory.getPersistenceService().persist(application);
+            PtUserDataAccess.setCurrentUserApplication(application);
 
             ApplicationProgress progress = createApplicationProgress();
             progress.application().set(application);
-            secureSave(progress);
+            PersistenceServicesFactory.getPersistenceService().persist(progress);
 
             currentApplication.progress = progress;
 
             unitSelection.application().set(application);
-            secureSave(unitSelection);
+            PersistenceServicesFactory.getPersistenceService().persist(unitSelection);
 
         } else {
+            PtUserDataAccess.setCurrentUserApplication(application);
+
             //Verify if buildingName and floorplanName are the same
             EntityQueryCriteria<UnitSelection> unitSelectionCriteria = EntityQueryCriteria.create(UnitSelection.class);
             unitSelectionCriteria.add(PropertyCriterion.eq(unitSelectionCriteria.proto().application(), application));
@@ -95,7 +98,7 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
             applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), application));
             currentApplication.progress = secureRetrieve(applicationProgressCriteria);
         }
-        PtUserDataAccess.setCurrentUserApplication(application);
+
         currentApplication.application = application;
         log.info("Start application {}", application);
         log.info("  progress {}", currentApplication.progress);

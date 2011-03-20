@@ -17,8 +17,16 @@ import com.propertyvista.portal.admin.rpc.VistaAdminServices;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.ApplicationDocument;
+import com.propertyvista.portal.domain.pt.ApplicationProgress;
+import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.pt.PaymentInfo;
+import com.propertyvista.portal.domain.pt.Pets;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
+import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.rpc.pt.services.ActivationServices;
 import com.propertyvista.portal.rpc.pt.services.ApartmentServices;
 import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
@@ -42,6 +50,7 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.log4gwt.rpc.LogServices;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
+import com.pyx4j.rpc.shared.IServiceImpl;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
@@ -55,8 +64,10 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         grant(new ServiceExecutePermission(LogServices.Log.class));
         grant(new ServiceExecutePermission(AuthenticationServices.class, "*"));
         grant(new IServiceExecutePermission(ActivationServices.class));
+        grant(new ServiceExecutePermission(IServiceImpl.class));
 
-        {
+        boolean allowAllDuringDevelopment = true;
+        if (allowAllDuringDevelopment) {
             // Debug
             grant(new IServiceExecutePermission("*"));
             grant(new ServiceExecutePermission(EntityServices.class, "*"));
@@ -96,11 +107,18 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(PaymentServices.class));
 
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
-
         grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(Application.class, userEntityAccess, CRUD));
 
         InstanceAccess applicationEntityAccess = new ApplicationEntityInstanceAccess();
+        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(ApplicationProgress.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(UnitSelection.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(ApplicationDocument.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(PotentialTenantList.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(PotentialTenantInfo.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(Pets.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(PotentialTenantFinancial.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(Charges.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(Summary.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(PaymentInfo.class, applicationEntityAccess, CRUD));
     }
 }
