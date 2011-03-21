@@ -13,6 +13,9 @@
  */
 package com.propertyvista.server.tests;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
@@ -20,13 +23,11 @@ import com.pyx4j.commons.TimeUtils;
 
 public class VistaDBPreloadTest extends VistaDBTestCase {
 
-    public void testNothing() {
-        //TODO remove when enabled below
-    }
+    private final static Logger log = LoggerFactory.getLogger(VistaDBPreloadTest.class);
 
-    public void TODO_testDefaultPreload() {
+    public void testDefaultPreload() {
         long start = System.currentTimeMillis();
-        System.out.println(new VistaDataPreloaders().preloadAll());
-        System.out.println("Total time: " + TimeUtils.secSince(start));
+        new VistaDataPreloaders().preloadAll();
+        log.info("Preload time {}", TimeUtils.secSince(start));
     }
 }
