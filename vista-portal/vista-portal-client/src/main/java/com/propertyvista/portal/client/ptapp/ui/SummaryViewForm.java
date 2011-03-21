@@ -55,6 +55,7 @@ import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -68,7 +69,7 @@ import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 @Singleton
-public class SummaryViewForm extends BaseEntityForm<Summary> {
+public class SummaryViewForm extends CEntityForm<Summary> {
 
     private static I18n i18n = I18nFactory.getI18n(SummaryViewForm.class);
 

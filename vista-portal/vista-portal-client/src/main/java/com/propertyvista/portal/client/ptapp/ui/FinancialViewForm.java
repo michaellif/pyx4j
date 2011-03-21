@@ -51,6 +51,7 @@ import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
@@ -61,7 +62,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 @Singleton
-public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> {
+public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
 
     private static I18n i18n = I18nFactory.getI18n(FinancialViewForm.class);
 

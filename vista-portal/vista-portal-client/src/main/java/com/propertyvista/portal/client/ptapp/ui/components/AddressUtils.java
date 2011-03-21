@@ -11,9 +11,8 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.portal.client.ptapp.ui;
+package com.propertyvista.portal.client.ptapp.ui.components;
 
-import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.validators.ProvinceContryFilters;
 import com.propertyvista.portal.client.ptapp.ui.validators.RevalidationTrigger;
@@ -22,24 +21,14 @@ import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
 
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
-
-    public BaseEntityForm(Class<E> clazz) {
-        super(clazz, new VistaEditorsComponentFactory());
-    }
-
-    public BaseEntityForm(Class<E> rootClass, EditableComponentFactory factory) {
-        super(rootClass, factory);
-    }
+public class AddressUtils {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected static void injectIAddress(VistaDecoratorsFlowPanel main, IAddress proto, CEntityEditableComponent<?> parent) {
+    public static void injectIAddress(VistaDecoratorsFlowPanel main, IAddress proto, CEntityEditableComponent<?> parent) {
+
         main.add(parent.inject(proto.street1()), 20);
         main.add(parent.inject(proto.street2()), 20);
         main.add(parent.inject(proto.city()), 15);

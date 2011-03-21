@@ -32,11 +32,12 @@ import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
 @Singleton
-public class ChargesViewForm extends BaseEntityForm<Charges> {
+public class ChargesViewForm extends CEntityForm<Charges> {
 
     private final FlowPanel splitCharges = new FlowPanel();
 

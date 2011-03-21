@@ -34,6 +34,7 @@ import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
+import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
@@ -45,6 +46,7 @@ import com.propertyvista.portal.domain.pt.PaymentInfo;
 import com.propertyvista.portal.domain.ref.Province;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -53,7 +55,7 @@ import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
+public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
     private static I18n i18n = I18nFactory.getI18n(PaymentViewForm.class);
 
@@ -116,7 +118,7 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
             }
         });
 
-        injectIAddress(main, proto().billingAddress(), this);
+        AddressUtils.injectIAddress(main, proto().billingAddress(), this);
 
         main.add(inject(proto().billingAddress().phone()), 12);
 

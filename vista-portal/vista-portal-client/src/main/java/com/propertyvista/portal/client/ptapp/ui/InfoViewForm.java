@@ -33,6 +33,7 @@ import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
 import com.propertyvista.portal.client.ptapp.ui.components.FileUpload;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
@@ -52,6 +53,7 @@ import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
@@ -64,7 +66,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 @Singleton
-public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
+public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
     private static I18n i18n = I18nFactory.getI18n(SummaryViewForm.class);
 
@@ -292,7 +294,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                injectIAddress(main, proto(), this);
+                AddressUtils.injectIAddress(main, proto(), this);
                 main.add(inject(proto().moveInDate()), 8.2);
                 main.add(inject(proto().moveOutDate()), 8.2);
                 main.add(inject(proto().phone()), 15);
@@ -404,7 +406,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 main.add(inject(proto().homePhone()), 15);
                 main.add(inject(proto().mobilePhone()), 15);
                 main.add(inject(proto().workPhone()), 15);
-                injectIAddress(main, proto().address(), this);
+                AddressUtils.injectIAddress(main, proto().address(), this);
                 main.add(new HTML());
                 return main;
             }

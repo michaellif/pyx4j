@@ -18,6 +18,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
 import com.propertyvista.portal.client.ptapp.ui.components.FileUpload;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
@@ -188,7 +189,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10, 12);
                 main.add(inject(proto().employedForYears()), 10, 2);
-                BaseEntityForm.injectIAddress(main, proto(), this);
+                AddressUtils.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
 
                 main.add(inject(proto().starts()), 10, 8.2);
@@ -205,7 +206,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10, 10);
-                BaseEntityForm.injectIAddress(main, proto(), this);
+                AddressUtils.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
 
                 main.add(inject(proto().starts()), 10, 8.2);
@@ -221,7 +222,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10, 10);
-                BaseEntityForm.injectIAddress(main, proto(), this);
+                AddressUtils.injectIAddress(main, proto(), this);
 
                 main.add(inject(proto().program()), 10, 10);
                 main.add(inject(proto().fieldOfStudy()), 10, 10);
@@ -242,7 +243,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10, 10);
-                BaseEntityForm.injectIAddress(main, proto(), this);
+                AddressUtils.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
                 main.add(inject(proto().fullyOwned()), 10, 10);
                 main.add(inject(proto().monthlyRevenue()), 10, 10);
@@ -261,7 +262,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10, 10);
-                BaseEntityForm.injectIAddress(main, proto(), this);
+                AddressUtils.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
 
                 main.add(inject(proto().starts()), 10, 8.2);
