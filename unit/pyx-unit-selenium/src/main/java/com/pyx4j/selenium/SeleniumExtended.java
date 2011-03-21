@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import junit.framework.Assert;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebElement;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -39,9 +40,42 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     public static String GWT_DEBUG_ID_PREFIX = "gwt-debug-";
 
+    private RenderedWebElement glassPanel;
+
     public SeleniumExtended(ISeleniumTestConfiguration testConfig) {
         super(testConfig);
         driver.manage().timeouts().implicitlyWait(testConfig.implicitlyWaitSeconds(), TimeUnit.SECONDS);
+    }
+
+    public void setGlassPanelAware() {
+        glassPanel = (RenderedWebElement) driver.findElement(elementLocator("GlassPanel"));
+    }
+
+    public void waitWhileWorking() {
+        waitWhileWorking(testConfig.waitSeconds());
+    }
+
+    public void waitWhileWorking(int waitSeconds) {
+        if (glassPanel == null) {
+            return;
+        }
+        long start = System.currentTimeMillis();
+        for (int second = 0;; second++) {
+            if ((System.currentTimeMillis() - start) >= waitSeconds * Consts.SEC2MILLISECONDS) {
+                Assert.fail("Wait for GlassPanel; Timeout " + waitSeconds + " sec ...");
+            }
+            try {
+                if (!glassPanel.isDisplayed()) {
+                    return;
+                }
+            } catch (Throwable ok) {
+            }
+            try {
+                Thread.sleep(700);
+            } catch (InterruptedException e) {
+                throw new Error(e);
+            }
+        }
     }
 
     public static String gwtLocator(String baseID) {
@@ -100,22 +134,25 @@ public class SeleniumExtended extends WebDriverWrapper {
         waitFor(By.linkText(text));
     }
 
-    public void waitFor(String id) {
-        waitFor(By.id(gwtLocator(id)));
+    public WebElement waitFor(String id) {
+        return waitFor(By.id(gwtLocator(id)));
     }
 
-    public void waitFor(IDebugId debugId) {
-        waitFor(by(debugId));
+    public WebElement waitFor(IDebugId debugId) {
+        return waitFor(by(debugId));
     }
 
-    public void waitFor(IObject<?> member) {
-        waitFor(by(member));
+    public WebElement waitFor(IObject<?> member) {
+        return waitFor(by(member));
     }
 
-    public void waitFor(By paramBy) {
-        waitFor(paramBy, testConfig.waitSeconds());
+    public WebElement waitFor(By paramBy) {
+        return waitFor(paramBy, testConfig.waitSeconds());
     }
 
+    /**
+     * This method never returns null.
+     */
     public WebElement waitFor(By paramBy, int waitSeconds) {
         long start = System.currentTimeMillis();
         for (int second = 0;; second++) {
@@ -139,36 +176,40 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     public void click(String paramString) {
         driver.findElement(elementLocator(paramString)).click();
+        this.waitWhileWorking();
     }
 
     public void click(IDebugId debugId) {
         driver.findElement(by(debugId)).click();
+        this.waitWhileWorking();
     }
 
     public void click(IDebugId parent, IDebugId child) {
         driver.findElement(by(parent, child)).click();
+        this.waitWhileWorking();
     }
 
     public void click(IObject<?> member) {
         driver.findElement(by(member)).click();
+        this.waitWhileWorking();
     }
 
     public void type(String paramString, CharSequence... keysToSend) {
-    	WebElement we  =  driver.findElement(elementLocator(paramString));
-    	we.clear();
-    	we.sendKeys(keysToSend);
+        WebElement we = driver.findElement(elementLocator(paramString));
+        we.clear();
+        we.sendKeys(keysToSend);
     }
 
     public void type(IDebugId debugId, CharSequence... keysToSend) {
-    	WebElement we  =  driver.findElement(by(debugId));
-    	we.clear();
-    	we.sendKeys(keysToSend);
+        WebElement we = driver.findElement(by(debugId));
+        we.clear();
+        we.sendKeys(keysToSend);
     }
 
     public void type(IObject<?> member, CharSequence... keysToSend) {
-    	WebElement we  =  driver.findElement(by(member));
-    	we.clear();
-    	we.sendKeys(keysToSend);
+        WebElement we = driver.findElement(by(member));
+        we.clear();
+        we.sendKeys(keysToSend);
     }
 
     public String getText(String paramString) {
@@ -182,12 +223,12 @@ public class SeleniumExtended extends WebDriverWrapper {
     public String getValue(String paramString) {
         return driver.findElement(elementLocator(paramString)).getValue();
     }
+
     public void select(String id) {
         WebElement we = driver.findElement(By.id(id));
-        if ( !we.isSelected() && we.isEnabled())
-        {
-        	we.setSelected();
-        }        
+        if (!we.isSelected() && we.isEnabled()) {
+            we.setSelected();
+        }
     }
 
 }
