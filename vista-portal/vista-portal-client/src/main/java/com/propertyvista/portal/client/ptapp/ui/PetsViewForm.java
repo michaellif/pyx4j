@@ -37,7 +37,7 @@ import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -65,7 +65,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
         super(Pets.class);
     }
 
-    public PetsViewForm(EditableComponentFactory factory) {
+    public PetsViewForm(IEditableComponentFactory factory) {
         super(Pets.class, factory);
         summaryViewMode = true;
     }

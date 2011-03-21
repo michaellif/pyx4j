@@ -45,7 +45,7 @@ import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.util.ValidationUtils;
 
 import com.pyx4j.commons.HtmlUtils;
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -72,7 +72,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
         super(PotentialTenantFinancial.class);
     }
 
-    public FinancialViewForm(EditableComponentFactory factory) {
+    public FinancialViewForm(IEditableComponentFactory factory) {
         super(PotentialTenantFinancial.class, factory);
         summaryViewMode = true;
     }

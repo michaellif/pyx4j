@@ -31,7 +31,7 @@ import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -61,7 +61,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
     }
 
-    public ChargesViewForm(EditableComponentFactory factory) {
+    public ChargesViewForm(IEditableComponentFactory factory) {
         super(Charges.class, factory);
 
         valueChangeHandler = null;
