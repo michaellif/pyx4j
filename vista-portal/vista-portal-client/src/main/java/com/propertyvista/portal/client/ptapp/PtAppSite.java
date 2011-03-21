@@ -20,6 +20,8 @@ import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 
+import com.pyx4j.essentials.client.SessionInactiveDialog;
+
 public class PtAppSite extends VistaSite {
 
     private SiteGinjector ginjector;
@@ -35,8 +37,9 @@ public class PtAppSite extends VistaSite {
         getHistoryHandler().register(getPlaceController(), getEventBus(), new SiteMap.CreateAccount());
 
         RootPanel.get().add(ginjector.getSiteView());
-
         hideLoadingIndicator();
+
+        SessionInactiveDialog.register();
 
         PtAppWizardManager.initWizard();
 
