@@ -25,9 +25,12 @@ import java.util.concurrent.TimeUnit;
 import junit.framework.Assert;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.IDebugId;
@@ -130,6 +133,23 @@ public class SeleniumExtended extends WebDriverWrapper {
         return By.id(gwtLocator(member.getPath().getDebugIdString()));
     }
 
+    public boolean isElementPresent(String id) {
+        return isElementPresent(By.id(gwtLocator(id)));
+    }
+
+    public boolean isElementPresent(IDebugId debugId) {
+        return isElementPresent(by(debugId));
+    }
+
+    public boolean isElementPresent(By paramBy) {
+        try {
+            driver.findElement(paramBy);
+            return true;
+        } catch (NoSuchElementException notFound) {
+            return false;
+        }
+    }
+
     public void waitForLinkText(String text) {
         waitFor(By.linkText(text));
     }
@@ -163,6 +183,47 @@ public class SeleniumExtended extends WebDriverWrapper {
                 WebElement el = driver.findElement(paramBy);
                 if (el != null) {
                     return el;
+                }
+            } catch (Throwable ok) {
+            }
+            try {
+                Thread.sleep(700);
+            } catch (InterruptedException e) {
+                throw new Error(e);
+            }
+        }
+    }
+
+    public static boolean regExprEquals(String expected, String value) {
+        if (CommonsStringUtils.equals(expected, value)) {
+            return true;
+        } else if (expected.startsWith("@") && value != null) {
+            return value.matches(expected.substring(1));
+        } else {
+            return expected.equals(value);
+        }
+    }
+
+    public void waitForText(String id, String expected, int waitSeconds) {
+        waitForText(By.id(gwtLocator(id)), expected, waitSeconds);
+    }
+
+    public void waitForText(IDebugId debugId, String expected, int waitSeconds) {
+        waitForText(by(debugId), expected, waitSeconds);
+    }
+
+    public void waitForText(By paramBy, String expected, int waitSeconds) {
+        long start = System.currentTimeMillis();
+        for (int second = 0;; second++) {
+            if ((System.currentTimeMillis() - start) >= waitSeconds * Consts.SEC2MILLISECONDS) {
+                Assert.fail("Wait  " + paramBy + "; Timeout " + waitSeconds + " sec ...");
+            }
+            try {
+                WebElement el = driver.findElement(paramBy);
+                if (el != null) {
+                    if (regExprEquals(expected, el.getText())) {
+                        return;
+                    }
                 }
             } catch (Throwable ok) {
             }
@@ -228,6 +289,29 @@ public class SeleniumExtended extends WebDriverWrapper {
         WebElement we = driver.findElement(By.id(id));
         if (!we.isSelected() && we.isEnabled()) {
             we.setSelected();
+        }
+    }
+
+    public void fireEvent(String locator, String eventName) {
+        fireEvent(driver.findElement(elementLocator(locator)), eventName);
+    }
+
+    public void fireEvent(WebElement we, String eventName) {
+        new JavascriptLibrary().callEmbeddedSelenium(driver, "doFireEvent", we, eventName);
+    }
+
+    public void check(String locator, boolean check) {
+        WebElement we = driver.findElement(elementLocator(locator + "-input"));
+        if (we.isSelected()) {
+            if (!check) {
+                we.toggle();
+                fireEvent(we, "click");
+            }
+        } else {
+            if (check) {
+                we.toggle();
+                fireEvent(we, "click");
+            }
         }
     }
 
