@@ -28,6 +28,7 @@
     <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.rpc.client.*" />
 
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.core.client.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.canvas.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.http.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.safehtml.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.cellview.*" />
@@ -39,6 +40,7 @@
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.libideas.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.widgetideas.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.resources.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.xml.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.rpc.SerializableException" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.rpc.ServiceDefTarget.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.rpc.impl.*" />
