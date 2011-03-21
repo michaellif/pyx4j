@@ -13,9 +13,9 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-unit-shared</artifactId>
-    <name>pyx-unit-shared</name>
-    <description>pyx-unit-shared implementations</description>
+    <artifactId>pyx-unit-entity</artifactId>
+    <name>pyx-unit-entity</name>
+    <description>pyx-unit-entity entity tests helper</description>
 
 	<dependencies>
         <dependency>
