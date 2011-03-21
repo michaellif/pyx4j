@@ -50,6 +50,12 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-server</artifactId>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
