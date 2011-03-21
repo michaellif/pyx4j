@@ -20,11 +20,16 @@ public class VistaTestsServerSideConfiguration extends EssentialsServerSideConfi
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        boolean debugTests = false;
-        if (debugTests) {
-            return new VistaTestsDBConfigurationHSQLFile();
+        boolean testOnMySQL = false;
+        if (testOnMySQL) {
+            return new VistaTestsDBConfigurationMySQL();
         } else {
-            return new VistaTestsDBConfigurationHSQLMemory();
+            boolean hsqlFiles = false;
+            if (hsqlFiles) {
+                return new VistaTestsDBConfigurationHSQLFile();
+            } else {
+                return new VistaTestsDBConfigurationHSQLMemory();
+            }
         }
     }
 
