@@ -137,6 +137,18 @@
                 <version>${pyxVersion}</version>
             </dependency>
 
+             <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-unit-gwt</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-unit-selenium</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
        </dependencies>
     </dependencyManagement>
 
