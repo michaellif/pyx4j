@@ -41,7 +41,50 @@
             <artifactId>pyx-essentials-gwt</artifactId>
         </dependency>
 
-	</dependencies>
+        <dependency>
+            <groupId>com.googlecode.gwtupload</groupId>
+            <artifactId>gwtupload</artifactId>
+            <version>0.6.4-SNAPSHOT</version>
+        </dependency>
+        <!--dependency>
+            <groupId>com.googlecode.gwtupload</groupId>
+            <artifactId>gwtupload-gae</artifactId>
+            <version>0.6.3</version>
+        </dependency-->
+        <dependency>
+            <groupId>com.googlecode.gwtupload</groupId>
+            <artifactId>jsupload</artifactId>
+            <version>0.6.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>gwtchismes</groupId>
+            <artifactId>gwtchismes</artifactId>
+            <version>0.9.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-incubator</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.timepedia.exporter</groupId>
+            <artifactId>gwtexporter</artifactId>
+            <version>2.04</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
 
     <properties>
         <gwtModule>portal</gwtModule>
@@ -51,6 +94,29 @@
     <build>
 
         <plugins>
+
+            <!--plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>2.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <runTarget>index.html</runTarget>
+                    <hostedWebapp>${war}</hostedWebapp>
+                    <soyc>true</soyc>
+                    <style>PRETTY</style>
+                    <modules>
+                        <module>com.propertyvista.portal.Client</module>
+                    </modules>
+                </configuration>
+            </plugin-->
 
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>

@@ -47,6 +47,14 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
+import gwtupload.client.IFileInput.FileInputType;
+import gwtupload.client.IUploadStatus.Status;
+import gwtupload.client.IUploader;
+import gwtupload.client.PreloadedImage;
+import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
+import gwtupload.client.SingleUploader;
+import jsupload.client.IncubatorUploadProgress;
+
 public abstract class FileUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText, FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler {
 
     private static I18n i18n = I18nFactory.getI18n(FileUploadDialog.class);
@@ -57,13 +65,18 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
 
     private final FormPanel form;
 
-    private final FileUpload upload;
+    //private final FileUpload upload;
 
     private final Set<String> supportedFormats;
 
     private final TextBox description;
 
+    //private final FlowPanel panelImages = new FlowPanel();
+
+    private final HorizontalPanel uploadLine;
+
     public FileUploadDialog(/* Order order */) {
+        log.debug("new FileUploadDialog()");
         form = new FormPanel();
         form.setAction("uploadorderphoto");
         form.setEncoding(FormPanel.ENCODING_MULTIPART);
@@ -91,14 +104,23 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
             Label uploadLabel = new Label(i18n.tr("File:"), false);
             uploadLabel.setWidth("150px");
             uploadLabel.getElement().getStyle().setPaddingRight(15, Unit.PX);
-            upload = new FileUpload();
-            upload.setName(i18n.tr("upload"));
+            //upload = new FileUpload();
+            //upload.setName(i18n.tr("upload"));
+            SingleUploader singleUploader = new SingleUploader(FileInputType.BUTTON, new IncubatorUploadProgress());
+            singleUploader.setAutoSubmit(true);
+            singleUploader.setValidExtensions(new String[] { "jpg", "jpeg", "gif", "png", "tiff", "bmp", "pdf" });
+            singleUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
+            singleUploader.getFileInput().setText(i18n.tr("Upload File"));
+            singleUploader.getFileInput().getWidget().setStyleName("customButton");
+            singleUploader.getFileInput().getWidget().setSize("159px", "27px");
+            singleUploader.avoidRepeatFiles(true);
+
             HorizontalPanel line = new HorizontalPanel();
             line.add(uploadLabel);
             line.setCellHorizontalAlignment(uploadLabel, HasHorizontalAlignment.ALIGN_RIGHT);
-            line.add(upload);
+            line.add(singleUploader);
             line.getElement().getStyle().setPaddingTop(15, Unit.PX);
-            this.add(line);
+            this.add(uploadLine = line);
 
         }
 
@@ -122,10 +144,33 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
         dialog = new Dialog(i18n.tr("Upload file"), this);
 
         form.setSize("400px", "100px");
-
         dialog.setBody(form);
+
         dialog.setPixelSize(460, 150);
     }
+
+    private final IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
+
+        @Override
+        public void onFinish(IUploader uploader) {
+            log.debug("onFinishUploaderHandler.onFinish(): uploader=" + uploader);
+            if (uploader.getStatus() == Status.SUCCESS) {
+                log.debug("onFinishUploaderHandler.onFinish(): SUCCESS");
+                new PreloadedImage(uploader.fileUrl(), showImage);
+            }
+        }
+    };
+
+    OnLoadPreloadedImageHandler showImage = new OnLoadPreloadedImageHandler() {
+
+        @Override
+        public void onLoad(PreloadedImage img) {
+            log.debug("showImage.onLoad(): img=" + img);
+            img.setWidth("75px");
+            uploadLine.clear();
+            uploadLine.add(img);
+        }
+    };
 
     public void show() {
         dialog.show();
@@ -151,23 +196,29 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
 
     @Override
     public void onSubmit(SubmitEvent event) {
-        String name = upload.getFilename();
-        if (!CommonsStringUtils.isStringSet(name)) {
-            MessageDialog.error(i18n.tr("Upload error"), i18n.tr("The file name must not be empty"));
-            event.cancel();
-            return;
-        }
-        int extIdx = name.lastIndexOf('.');
-        String ext = "";
-        if ((extIdx > 0) && (extIdx < name.length() - 2)) {
-            ext = name.substring(extIdx + 1).toUpperCase();
-        }
-        if (!supportedFormats.contains(ext)) {
-            MessageDialog.error(i18n.tr("Upload error"), i18n.tr("Only JPEG, PNG, GIF, BMP, TIFF and PDF formats are supported") + "\n<br/>[" + ext + "]"
-                    + i18n.tr(" not supported"));
-            event.cancel();
-            return;
-        }
+        log.debug("FileUploadDialog.onSubmit(): event=" + event);
+        /*
+         * String name = upload.getFilename();
+         * if (!CommonsStringUtils.isStringSet(name)) {
+         * MessageDialog.error(i18n.tr("Upload error"),
+         * i18n.tr("The file name must not be empty"));
+         * event.cancel();
+         * return;
+         * }
+         * int extIdx = name.lastIndexOf('.');
+         * String ext = "";
+         * if ((extIdx > 0) && (extIdx < name.length() - 2)) {
+         * ext = name.substring(extIdx + 1).toUpperCase();
+         * }
+         * if (!supportedFormats.contains(ext)) {
+         * MessageDialog.error(i18n.tr("Upload error"),
+         * i18n.tr("Only JPEG, PNG, GIF, BMP, TIFF and PDF formats are supported") +
+         * "\n<br/>[" + ext + "]"
+         * + i18n.tr(" not supported"));
+         * event.cancel();
+         * return;
+         * }
+         */
         GlassPanel.show();
     }
 
