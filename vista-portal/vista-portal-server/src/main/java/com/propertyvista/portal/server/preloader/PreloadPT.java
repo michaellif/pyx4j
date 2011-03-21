@@ -27,6 +27,7 @@ import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ChargeLine;
@@ -72,6 +73,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
 
 public class PreloadPT extends BaseVistaDataPreloader {
 
@@ -86,6 +91,10 @@ public class PreloadPT extends BaseVistaDataPreloader {
     private UnitSelection unitSelection;
 
     private Application application;
+
+    private static String resourceFileName(String fileName) {
+        return PreloadPT.class.getPackage().getName().replace('.', '/') + "/" + fileName;
+    }
 
     private IncomeInfoEmployer createEmployer() {
         IncomeInfoEmployer employer = EntityFactory.create(IncomeInfoEmployer.class);
@@ -402,6 +411,24 @@ public class PreloadPT extends BaseVistaDataPreloader {
         persist(tenants);
         for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
             persist(createFinancialInfo(tenantInfo));
+
+            for (int i = 1; i <= 3; i++) {
+                String fileName = "apartment" + i + ".jpg";
+                ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
+                applicationDocument.application().set(application);
+                applicationDocument.tenant().set(tenantInfo);
+                applicationDocument.type().setValue(i == 1 ? ApplicationDocument.DocumentType.income : ApplicationDocument.DocumentType.securityInfo);
+                applicationDocument.filename().setValue(fileName);
+                try {
+                    InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(resourceFileName(fileName));
+                    byte[] data = IOUtils.toByteArray(in);
+                    applicationDocument.fileSize().setValue((long) data.length);
+                    applicationDocument.data().setValue(data);
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+                persist(applicationDocument);
+            }
         }
     }
 
