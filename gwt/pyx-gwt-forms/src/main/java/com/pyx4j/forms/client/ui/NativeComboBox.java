@@ -65,7 +65,7 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
             @Override
             public void onChange(ChangeEvent event) {
                 CComboBox<E> comboBox = NativeComboBox.this.comboBox;
-                comboBox.setValueByNativeComponent(getValueByNativeOptionIndex(getSelectedIndex()));
+                comboBox.update(getValueByNativeOptionIndex(getSelectedIndex()));
             }
         });
         setWidth(comboBox.getWidth());

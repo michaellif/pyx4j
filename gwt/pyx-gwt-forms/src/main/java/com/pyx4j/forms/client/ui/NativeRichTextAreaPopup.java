@@ -225,7 +225,7 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTex
                     }
                 });
             } else {
-                textArea.setValueByNativeComponent(NativeRichTextArea.trimHtml(richTextArea.getHTML()));
+                textArea.update(NativeRichTextArea.trimHtml(richTextArea.getHTML()));
             }
             richTextArea.removeFromParent();
             return true;

@@ -68,7 +68,7 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeEdi
         // Prevents setting the native value while propagating value from native component to CComponent
         nativeValueUpdate = true;
         try {
-            cComponent.setValueByNativeComponent(getDate());
+            cComponent.update(getDate());
         } finally {
             nativeValueUpdate = false;
         }

@@ -27,24 +27,12 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Timer;
 
 public class NativeTextBoxDelegate<E> {
 
     private final CTextFieldBase<E, ?> cTextBox;
 
     private final INativeTextComponent<E> nativeTextBox;
-
-    private boolean nativeValueUpdate = false;
-
-    private final Timer keyTimer = new Timer() {
-        @Override
-        public void run() {
-            nativeValueUpdate();
-        }
-    };
 
     public NativeTextBoxDelegate(final INativeTextComponent<E> nativeTextBox, final CTextFieldBase<E, ?> cTextField) {
         super();
@@ -66,17 +54,7 @@ public class NativeTextBoxDelegate<E> {
 
             @Override
             public void onChange(ChangeEvent event) {
-                keyTimer.cancel();
                 nativeValueUpdate();
-            }
-        });
-
-        nativeTextBox.addKeyUpHandler(new KeyUpHandler() {
-
-            @Override
-            public void onKeyUp(KeyUpEvent event) {
-                keyTimer.cancel();
-                keyTimer.schedule(CTextComponent.PARSINT_PERIOD);
             }
         });
 
@@ -95,29 +73,12 @@ public class NativeTextBoxDelegate<E> {
         setValue(cTextField.getValue());
     }
 
-    /**
-     * Prevents setting wrong value once the value has been Set Externally
-     */
-    void cancelScheduledUpdate() {
-        keyTimer.cancel();
-    }
-
     private void nativeValueUpdate() {
-        // Prevents setting the native value while propagating value from native component to CComponent
-        nativeValueUpdate = true;
-        try {
-            cTextBox.setValueByNativeComponent(cTextBox.getFormat().parse(nativeTextBox.getNativeText()));
-        } finally {
-            nativeValueUpdate = false;
-        }
+        cTextBox.update(cTextBox.getFormat().parse(nativeTextBox.getNativeText()));
     }
 
     public void setValue(E value) {
-        if (nativeValueUpdate) {
-            return;
-        }
         String newValue = value == null ? "" : cTextBox.getFormat().format(value);
-        cancelScheduledUpdate();
         if (!newValue.equals(nativeTextBox.getNativeText())) {
             nativeTextBox.setNativeText(newValue);
         }

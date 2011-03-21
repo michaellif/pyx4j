@@ -39,9 +39,6 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
 
     @Override
     public String getNativeText() {
-        if (delegate != null) {
-            delegate.cancelScheduledUpdate();
-        }
         return super.getText();
     }
 

@@ -41,7 +41,7 @@ public class NativeCaptcha extends CaptchaComposite implements INativeEditableCo
         addResponseValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
-                component.setValueByNativeComponent(getValue());
+                component.update(getValue());
             }
         });
     }

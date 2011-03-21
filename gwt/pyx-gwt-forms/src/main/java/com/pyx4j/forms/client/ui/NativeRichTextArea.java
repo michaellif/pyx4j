@@ -138,7 +138,7 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
         // Prevents setting the native value while propagating value from native component to CComponent
         nativeValueUpdate = true;
         try {
-            textArea.setValueByNativeComponent(trimHtml(richTextArea.getHTML()));
+            textArea.update(trimHtml(richTextArea.getHTML()));
         } finally {
             nativeValueUpdate = false;
         }

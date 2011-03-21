@@ -82,16 +82,11 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
     }
 
-    public DATA_TYPE getValue() {
-        return value;
-    }
-
-    void setValueByNativeComponent(DATA_TYPE value) {
+    void update(DATA_TYPE value) {
         if (isValuesEquals(getValue(), value)) {
             return;
         }
         this.value = value;
-        setNativeComponentValue(value);
         revalidate();
 
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
@@ -110,6 +105,10 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
         ValueChangeEvent.fire(this, value);
+    }
+
+    public DATA_TYPE getValue() {
+        return value;
     }
 
     public void populate(DATA_TYPE value) {

@@ -122,7 +122,7 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
         // Prevents setting the native value while propagating value from native component to CComponent
         nativeValueUpdate = true;
         try {
-            cComponent.setValueByNativeComponent(getText());
+            cComponent.update(getText());
         } finally {
             nativeValueUpdate = false;
         }
