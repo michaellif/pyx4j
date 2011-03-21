@@ -82,7 +82,7 @@ public class ClientSecurityController extends SecurityController implements HasV
     }
 
     public ClientSecurityController() {
-
+        SessionMonitor.initialize(this);
     }
 
     public static ClientSecurityController instance() {

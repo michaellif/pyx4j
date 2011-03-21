@@ -20,9 +20,6 @@
  */
 package com.pyx4j.essentials.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -37,13 +34,12 @@ import com.pyx4j.site.client.SitePanel;
 
 public abstract class BaseSiteDispatcher extends AbstractSiteDispatcher implements EntryPoint {
 
-    private static final Logger log = LoggerFactory.getLogger(BaseSiteDispatcher.class);
-
     @Override
     public void onSiteLoad() {
         ClientLogger.addAppender(new RPCAppender(Level.WARN));
         ClientEntityFactory.ensureIEntityImplementations();
         DefaultErrorHandlerDialog.register();
+        SessionInactiveDialog.register();
     }
 
     @Override

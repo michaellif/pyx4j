@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.client;
+package com.pyx4j.security.client;
 
 import java.util.Set;
 
@@ -35,8 +35,6 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent;
 import com.pyx4j.rpc.client.RPCStatusChangeHandler;
-import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.webstorage.client.HTML5Storage;
 import com.pyx4j.webstorage.client.StorageEvent;
@@ -47,6 +45,8 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
     private static final Logger log = LoggerFactory.getLogger(SessionMonitor.class);
 
     private static SessionMonitor instance;
+
+    private SessionInactiveHandler sessionInactiveHandler;
 
     private boolean monitoring = false;
 
@@ -70,14 +70,24 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
 
     public static void startMonitoring() {
         if (instance == null) {
-            instance = new SessionMonitor();
-            ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
-                    instance.onAuthenticationChange();
-                }
-            });
+            initialize(ClientSecurityController.instance());
         }
+    }
+
+    static void initialize(ClientSecurityController clientSecurityController) {
+        instance = new SessionMonitor();
+        clientSecurityController.addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
+                instance.onAuthenticationChange();
+            }
+        });
+    }
+
+    public static void setSessionInactiveHandler(SessionInactiveHandler sessionInactiveHandler) {
+        startMonitoring();
+        instance.sessionInactiveHandler = sessionInactiveHandler;
+
     }
 
     public static long getSessionStartTime() {
@@ -178,7 +188,9 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
     }
 
     protected void onSessionInactive(boolean timeout) {
-        SessionInactiveDialog.showSessionInactive(timeout);
+        if (sessionInactiveHandler != null) {
+            sessionInactiveHandler.onSessionInactive(timeout);
+        }
     }
 
     private void checkActivity() {

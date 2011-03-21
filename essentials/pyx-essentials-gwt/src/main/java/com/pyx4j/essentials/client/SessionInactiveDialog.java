@@ -28,15 +28,21 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.security.client.SessionInactiveHandler;
+import com.pyx4j.security.client.SessionMonitor;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
-public class SessionInactiveDialog {
+public class SessionInactiveDialog implements SessionInactiveHandler {
 
     private static I18n i18n = I18nFactory.getI18n(SessionInactiveDialog.class);
 
     private static boolean shown;
+
+    public static void register() {
+        SessionMonitor.setSessionInactiveHandler(new SessionInactiveDialog());
+    }
 
     private static class ShowOnceDialogOptions implements OkOption, CloseHandler<PopupPanel> {
 
@@ -52,7 +58,8 @@ public class SessionInactiveDialog {
 
     };
 
-    public static void showSessionInactive(final boolean timeout) {
+    @Override
+    public void onSessionInactive(final boolean timeout) {
         if (shown) {
             return;
         }
