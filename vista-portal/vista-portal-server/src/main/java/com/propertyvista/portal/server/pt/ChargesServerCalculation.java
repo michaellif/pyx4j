@@ -124,6 +124,11 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
     }
 
     public static boolean isEligibleForPaymentSplit(PotentialTenantInfo tenant) {
+        if (tenant.isNull()) {
+            log.info("Received a null tenant when checking for eligibility");
+            return false;
+        }
+
         //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
         if (tenant.status().getValue() == Status.Applicant) {
             return true;
@@ -144,23 +149,26 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         boolean dirty = charges.paymentSplitCharges().charges().isEmpty(); // if there a no charges let's create them
         List<PotentialTenantInfo> chargedTenants = new ArrayList<PotentialTenantInfo>();
         for (TenantCharge tenantCharge : charges.paymentSplitCharges().charges()) {
-
             PotentialTenantInfo tenant = tenantCharge.tenant();
-            log.info("Checking tenant {} of age {}", tenant.relationship().getValue(), tenant.birthDate().getValue());
-            if (isEligibleForPaymentSplit(tenant)) {
-                log.info("Charges contained tenant {} who should be removed", tenantCharge.tenant());
+            log.info("Tenant from charge: {}", tenant);
+            chargedTenants.add(tenant);
+        }
+
+        for (PotentialTenantInfo tenant : tenantList.tenants()) {
+            log.info("Tenant from master tenant list: {}", tenant);
+            if (!isEligibleForPaymentSplit(tenant)) {
+                log.info("Charges contained tenant {} who should be removed", tenant);
                 dirty = true;
                 break;
             }
-            chargedTenants.add(tenantCharge.tenant());
         }
 
         // go through both lists and make sure that they match
         if (!dirty) {
-            dirty = examineTenantLists(chargedTenants, tenantList.tenants());
+            dirty = !areTwoTenantListsTheSame(chargedTenants, tenantList.tenants());
         }
         if (!dirty) {
-            dirty = examineTenantLists(tenantList.tenants(), chargedTenants);
+            dirty = !areTwoTenantListsTheSame(tenantList.tenants(), chargedTenants);
         }
 
         if (dirty) {
@@ -171,29 +179,29 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         }
     }
 
-    private static boolean examineTenantLists(List<PotentialTenantInfo> tenants1, List<PotentialTenantInfo> tenants2) {
+    private static boolean areTwoTenantListsTheSame(List<PotentialTenantInfo> tenants1, List<PotentialTenantInfo> tenants2) {
 
         log.info("Exam");
         for (PotentialTenantInfo tenant1 : tenants1) {
             // first, find the tenant (matching by first name and last name)
             PotentialTenantInfo tenant2 = null;
             for (PotentialTenantInfo currTenant : tenants2) {
-                if (currTenant.firstName().equals(tenant1.firstName()) && currTenant.lastName().equals(tenant1.lastName())) {
+                if (currTenant.id().equals(tenant1.id())) {
                     tenant2 = currTenant;
                     continue;
                 }
             }
 
-            log.info("Comparing \n\t{} \nand \n\t{}", tenant1, tenant2);
+//            log.info("Comparing {} and {}", tenant1.id(), tenant2.id());
 
             if (tenant2 == null) {
-                return false;
+                return false; // this means that we have not found corresponding tenant in the other list by id
             }
 
-            // second, change their roles
-            if (!tenant1.relationship().getValue().equals(tenant2.relationship().getValue())) {
-                return false;
-            }
+//            // second, change their roles
+//            if (!tenant1.relationship().getValue().equals(tenant2.relationship().getValue())) {
+//                return false;
+//            }
         }
 
         return true;
