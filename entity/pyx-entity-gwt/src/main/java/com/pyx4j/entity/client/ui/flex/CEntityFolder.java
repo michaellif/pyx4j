@@ -202,6 +202,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
                 comp.setFirst(first);
             } else {
                 comp = createItem();
+                //Call setFirst before onBound()
                 comp.setFirst(first);
                 comp.onBound(this);
             }
