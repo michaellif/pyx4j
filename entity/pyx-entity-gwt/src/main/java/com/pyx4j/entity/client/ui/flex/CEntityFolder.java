@@ -192,6 +192,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         currentRowDebugId = 0;
 
         content.clear();
+        ValueChangeEvent.fire(this, getValue());
+
         for (E item : value) {
             CEntityFolderItem<E> comp = createItem();
             comp.setFirst(content.getWidgetCount() == 0);
