@@ -414,22 +414,28 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             for (int i = 1; i <= 3; i++) {
                 String fileName = "apartment" + i + ".jpg";
-                ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
-                applicationDocument.application().set(application);
-                applicationDocument.tenant().set(tenantInfo);
-                applicationDocument.type().setValue(i == 1 ? ApplicationDocument.DocumentType.income : ApplicationDocument.DocumentType.securityInfo);
-                applicationDocument.filename().setValue(fileName);
-                try {
-                    InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(resourceFileName(fileName));
-                    byte[] data = IOUtils.toByteArray(in);
-                    applicationDocument.fileSize().setValue((long) data.length);
-                    applicationDocument.data().setValue(data);
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                }
-                persist(applicationDocument);
+                ApplicationDocument.DocumentType documentType = i == 1 ? ApplicationDocument.DocumentType.income
+                        : ApplicationDocument.DocumentType.securityInfo;
+                createApplicationDocument(tenantInfo, fileName, documentType);
             }
         }
+    }
+
+    private void createApplicationDocument(PotentialTenantInfo tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) {
+        ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
+        applicationDocument.application().set(application);
+        applicationDocument.tenant().set(tenantInfo);
+        applicationDocument.type().setValue(documentType);
+        applicationDocument.filename().setValue(fileName);
+        try {
+            InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(resourceFileName(fileName));
+            byte[] data = IOUtils.toByteArray(in);
+            applicationDocument.fileSize().setValue((long) data.length);
+            applicationDocument.data().setValue(data);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        persist(applicationDocument);
     }
 
     private void createPets() {
