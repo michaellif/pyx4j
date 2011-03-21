@@ -148,7 +148,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                                 boolean first = true;
                                 for (TenantCharge charge : ChargeSplitListFolder.this.getValue()) {
                                     if (first) {
-                                        // Ignore fist one since it is calculated
+                                        // Ignore first one since it is calculated
                                         first = false;
                                         continue;
                                     }
