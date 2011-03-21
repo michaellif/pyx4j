@@ -81,6 +81,7 @@ public class GlassPanel extends AbsolutePanel implements ResizeHandler {
         getElement().getStyle().setDisplay(Display.NONE);
 
         glass = new SimplePanel();
+        glass.ensureDebugId("GlassPanel");
         glass.setSize("100%", "100%");
         add(glass, 0, 0);
 
@@ -165,6 +166,7 @@ public class GlassPanel extends AbsolutePanel implements ResizeHandler {
         setWidgetPosition(label, winWidth / 2, Document.get().getScrollTop());
     }
 
+    @Override
     public void onResize(ResizeEvent event) {
         setGlassPanelSize();
     }
