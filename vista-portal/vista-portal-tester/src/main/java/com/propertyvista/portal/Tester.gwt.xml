@@ -9,10 +9,13 @@
 	<inherits name="com.google.gwt.inject.Inject"/>
 	<inherits name='com.pyx4j.site.GwtSite' />
 
+	<inherits name='com.propertyvista.portal.test.DomainTests' />
+    <inherits name='com.propertyvista.portal.test.RpcTests' />
     
     <source path="tester"/>
 
-    <entry-point class='com.propertyvista.portal.tester.VistaTesterSite'/>
+    <!-- entry-point class='com.propertyvista.portal.tester.VistaTesterSite'/ -->
+    <entry-point class='com.propertyvista.portal.tester.TesterClientEntryPoint'/>
     
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.tester.*" />
     
