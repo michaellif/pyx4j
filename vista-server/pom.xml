@@ -110,11 +110,17 @@
             <scope>test</scope>
         </dependency>
         
-		<dependency>
+        <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.0.0-debug</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.gwtupload</groupId>
+            <artifactId>gwtupload</artifactId>
+            <version>0.6.4-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
