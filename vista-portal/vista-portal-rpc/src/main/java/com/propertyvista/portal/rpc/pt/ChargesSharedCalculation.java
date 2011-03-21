@@ -109,7 +109,7 @@ public class ChargesSharedCalculation {
      * proportionately decreased. Note the total amount includes all monthly payments
      * (rent and upgrades).
      */
-    public static void calculatePaymentcCharges(Charges charges) {
+    public static void calculatePaymentSplitCharges(Charges charges) {
         double totalSplit = 0d; // everything paid by co-applicants
         double total = charges.monthlyCharges().total().amount().getValue();
         int splitPrc = 0;
