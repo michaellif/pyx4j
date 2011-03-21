@@ -21,6 +21,7 @@
 package com.pyx4j.entity.client.ui.flex;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import org.slf4j.Logger;
@@ -186,20 +187,31 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     public void populate(IList<E> value) {
         super.populate(value);
 
-        //TODO reuse existing  CEntityEditableComponent.
-        //LinkedHashMap<E, CEntityFolderItem<E>> oldMap = new LinkedHashMap<E, CEntityFolderItem<E>>(itemsMap);
+        HashMap<E, CEntityFolderItem<E>> oldMap = new HashMap<E, CEntityFolderItem<E>>(itemsMap);
+
         itemsMap.clear();
         currentRowDebugId = 0;
 
-        content.clear();
         ValueChangeEvent.fire(this, getValue());
 
+        boolean first = true;
         for (E item : value) {
-            CEntityFolderItem<E> comp = createItem();
-            comp.setFirst(content.getWidgetCount() == 0);
-            comp.onBound(this);
+            CEntityFolderItem<E> comp = null;
+            if (oldMap.containsKey(item)) {
+                comp = oldMap.remove(item);
+                comp.setFirst(first);
+            } else {
+                comp = createItem();
+                comp.setFirst(first);
+                comp.onBound(this);
+            }
+            first = false;
             comp.populate(item);
             adoptFolderItem(comp);
+        }
+
+        for (CEntityFolderItem<E> item : oldMap.values()) {
+            content.remove(item);
         }
     }
 
@@ -215,7 +227,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
         component.setFolderItemDecorator(folderItemDecorator);
         component.addAccessAdapter(containerHelper);
-        content.add(component);
+        if (content.getWidgetIndex(component) == -1) {
+            content.add(component);
+        }
         itemsMap.put(component.getValue(), component);
 
         currentRowDebugId++;
