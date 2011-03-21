@@ -412,16 +412,15 @@ public class PreloadPT extends BaseVistaDataPreloader {
         for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
             persist(createFinancialInfo(tenantInfo));
 
-            for (int i = 1; i <= 3; i++) {
+            for (int i = 2; i <= 3; i++) {
                 String fileName = "apartment" + i + ".jpg";
-                ApplicationDocument.DocumentType documentType = i == 1 ? ApplicationDocument.DocumentType.income
-                        : ApplicationDocument.DocumentType.securityInfo;
+                ApplicationDocument.DocumentType documentType = ApplicationDocument.DocumentType.securityInfo;
                 createApplicationDocument(tenantInfo, fileName, documentType);
             }
         }
     }
 
-    private void createApplicationDocument(PotentialTenantInfo tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) {
+    private ApplicationDocument createApplicationDocument(PotentialTenantInfo tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) {
         ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
         applicationDocument.application().set(application);
         applicationDocument.tenant().set(tenantInfo);
@@ -436,6 +435,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
             log.error(e.getMessage(), e);
         }
         persist(applicationDocument);
+        return applicationDocument;
     }
 
     private void createPets() {
@@ -674,6 +674,11 @@ public class PreloadPT extends BaseVistaDataPreloader {
             //sb.append(" Active: ").append(income.active().getValue());
 
             sb.append("\n");
+
+            if (IncomeSource.fulltime.equals(income.incomeSource().getValue())) {
+                ApplicationDocument applicationDocument = createApplicationDocument(tenant, "apartment1.jpg", ApplicationDocument.DocumentType.income);
+                income.documents().add(applicationDocument);
+            }
         }
 
         sb.append("Assets\n");
