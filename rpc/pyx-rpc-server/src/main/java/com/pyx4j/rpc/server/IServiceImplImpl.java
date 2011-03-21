@@ -23,6 +23,7 @@ package com.pyx4j.rpc.server;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,12 +110,16 @@ public class IServiceImplImpl implements IServiceImpl {
 
     }
 
-    private Serializable runMethod(IService serviceInstance, Method method, Serializable[] args) {
+    private Serializable runMethod(IService serviceInstance, Method method, List<Serializable> args) {
         try {
             ServerAsyncCallback callback = new ServerAsyncCallback();
-            Object[] methodArgs = new Object[args.length + 1];
+            Object[] methodArgs = new Object[args.size() + 1];
             methodArgs[0] = callback;
-            System.arraycopy(args, 0, methodArgs, 1, args.length);
+            int i = 1;
+            for (Serializable a : args) {
+                methodArgs[i] = a;
+                i++;
+            }
 
             method.invoke(serviceInstance, methodArgs);
 

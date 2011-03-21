@@ -21,6 +21,9 @@
 package com.pyx4j.rpc.shared;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
 
 import com.pyx4j.commons.IHaveServiceCallMarker;
 
@@ -32,7 +35,7 @@ public class IServiceRequest implements Serializable, IHaveServiceCallMarker {
 
     private String serviceMethodId;
 
-    private Serializable[] args;
+    private Vector<Serializable> args;
 
     IServiceRequest() {
 
@@ -42,7 +45,8 @@ public class IServiceRequest implements Serializable, IHaveServiceCallMarker {
         super();
         this.serviceClassId = serviceClassId;
         this.serviceMethodId = serviceMethodId;
-        this.args = args;
+        this.args = new Vector<Serializable>();
+        this.args.addAll(Arrays.asList(args));
     }
 
     public String getServiceClassId() {
@@ -53,7 +57,7 @@ public class IServiceRequest implements Serializable, IHaveServiceCallMarker {
         return serviceMethodId;
     }
 
-    public Serializable[] getArgs() {
+    public List<Serializable> getArgs() {
         return args;
     }
 
