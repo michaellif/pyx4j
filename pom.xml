@@ -125,6 +125,7 @@
         <module>unit/pyx-unit-server</module>
         <module>unit/pyx-unit-runner</module>
         <module>unit/pyx-unit-selenium</module>
+        <module>unit/pyx-unit-entity</module>
 
         <module>site/pyx-site-shared</module>
         <module>site/pyx-site-client</module>
