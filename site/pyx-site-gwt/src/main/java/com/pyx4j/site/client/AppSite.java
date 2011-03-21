@@ -22,8 +22,6 @@ package com.pyx4j.site.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Document;
@@ -49,8 +47,6 @@ public abstract class AppSite implements EntryPoint {
 
     private static final Logger log = LoggerFactory.getLogger(AppSite.class);
 
-    private static I18n i18n = I18nFactory.getI18n(AppSite.class);
-
     private static AppSite instance;
 
     private final AppPlaceHistoryMapper historyMapper;
@@ -62,8 +58,8 @@ public abstract class AppSite implements EntryPoint {
     private final PlaceController placeController;
 
     public AppSite() {
+        ClientEntityFactory.ensureIEntityImplementations();
         instance = this;
-
         Element head = Document.get().getElementsByTagName("html").getItem(0);
         head.setPropertyString("xmlns:pyx", "");
 
@@ -108,7 +104,6 @@ public abstract class AppSite implements EntryPoint {
         if (ApplicationMode.isDevelopment()) {
             ClientLogger.setDebugOn(true);
         }
-        ClientEntityFactory.ensureIEntityImplementations();
         log.debug("{}", BrowserType.getCompiledType());
         onSiteLoad();
     }
