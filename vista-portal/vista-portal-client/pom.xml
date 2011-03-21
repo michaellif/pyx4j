@@ -97,6 +97,10 @@
             <url>http://svn.apache.org/repos/asf/james/hupa/lib</url>
             <layout>legacy</layout>
         </repository>
+        <repository>
+            <id>timepedia</id>
+            <url>http://timefire-repository.googlecode.com/svn/mavenrepo/</url>
+        </repository>
     </repositories>
 
     <properties>
