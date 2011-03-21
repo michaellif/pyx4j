@@ -5,8 +5,6 @@
 
     <inherits name='com.google.gwt.user.User'/>
     <inherits name='gwtupload.GWTUpload' />
-	<inherits name='jsupload.JsUploadLib' />
-	<stylesheet src='JsUpload.css' />
 	
     <inherits name='com.propertyvista.portal.Rpc' />
     <inherits name='com.propertyvista.portal.Domain' />

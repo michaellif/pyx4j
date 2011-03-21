@@ -20,6 +20,14 @@
  */
 package com.propertyvista.portal.client.ptapp.ui.components;
 
+import gwtupload.client.BaseUploadStatus;
+import gwtupload.client.IFileInput.FileInputType;
+import gwtupload.client.IUploadStatus.Status;
+import gwtupload.client.IUploader;
+import gwtupload.client.PreloadedImage;
+import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
+import gwtupload.client.SingleUploader;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +38,6 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
@@ -40,20 +47,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
-
-import gwtupload.client.IFileInput.FileInputType;
-import gwtupload.client.IUploadStatus.Status;
-import gwtupload.client.IUploader;
-import gwtupload.client.PreloadedImage;
-import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
-import gwtupload.client.SingleUploader;
-import jsupload.client.IncubatorUploadProgress;
 
 public abstract class FileUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText, FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler {
 
@@ -106,7 +104,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
             uploadLabel.getElement().getStyle().setPaddingRight(15, Unit.PX);
             //upload = new FileUpload();
             //upload.setName(i18n.tr("upload"));
-            SingleUploader singleUploader = new SingleUploader(FileInputType.BUTTON, new IncubatorUploadProgress());
+            SingleUploader singleUploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
             singleUploader.setAutoSubmit(true);
             singleUploader.setValidExtensions(new String[] { "jpg", "jpeg", "gif", "png", "tiff", "bmp", "pdf" });
             singleUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
@@ -190,7 +188,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
 
     @Override
     public boolean onClickOk() {
-        form.submit();
+        //form.submit();
         return false;
     }
 
@@ -198,26 +196,15 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
     public void onSubmit(SubmitEvent event) {
         log.debug("FileUploadDialog.onSubmit(): event=" + event);
         /*
-         * String name = upload.getFilename();
-         * if (!CommonsStringUtils.isStringSet(name)) {
-         * MessageDialog.error(i18n.tr("Upload error"),
-         * i18n.tr("The file name must not be empty"));
-         * event.cancel();
-         * return;
-         * }
-         * int extIdx = name.lastIndexOf('.');
-         * String ext = "";
-         * if ((extIdx > 0) && (extIdx < name.length() - 2)) {
-         * ext = name.substring(extIdx + 1).toUpperCase();
-         * }
-         * if (!supportedFormats.contains(ext)) {
+         * String name = upload.getFilename(); if (!CommonsStringUtils.isStringSet(name))
+         * { MessageDialog.error(i18n.tr("Upload error"),
+         * i18n.tr("The file name must not be empty")); event.cancel(); return; } int
+         * extIdx = name.lastIndexOf('.'); String ext = ""; if ((extIdx > 0) && (extIdx <
+         * name.length() - 2)) { ext = name.substring(extIdx + 1).toUpperCase(); } if
+         * (!supportedFormats.contains(ext)) {
          * MessageDialog.error(i18n.tr("Upload error"),
          * i18n.tr("Only JPEG, PNG, GIF, BMP, TIFF and PDF formats are supported") +
-         * "\n<br/>[" + ext + "]"
-         * + i18n.tr(" not supported"));
-         * event.cancel();
-         * return;
-         * }
+         * "\n<br/>[" + ext + "]" + i18n.tr(" not supported")); event.cancel(); return; }
          */
         GlassPanel.show();
     }
