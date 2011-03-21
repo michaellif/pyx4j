@@ -23,7 +23,11 @@ import com.thoughtworks.selenium.Selenium;
 
 public class ExampleTest extends TestCase {
 
-    public void testLogin() throws Exception {
+    public void testNoting() throws Exception {
+
+    }
+
+    public void OFF_testLogin() throws Exception {
         // The Firefox driver supports javascript
         WebDriver driver = new FirefoxDriver();
 
