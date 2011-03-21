@@ -37,7 +37,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.DomainManager;
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.client.ui.CEntityForm;
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.EntityFormFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFormBinder;
 import com.pyx4j.entity.rpc.EntityServices;
@@ -71,7 +71,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     private class DelegatingEntityFormFactory<T extends IEntity> extends EntityFormFactory<T> {
 
-        public DelegatingEntityFormFactory(Class<T> entityClass, EditableComponentFactory editableComponentFactory) {
+        public DelegatingEntityFormFactory(Class<T> entityClass, IEditableComponentFactory editableComponentFactory) {
             super(entityClass, editableComponentFactory);
         }
 
@@ -105,7 +105,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         this(entityClass, null);
     }
 
-    public AbstractEntityEditorPanel(Class<E> entityClass, EditableComponentFactory editableComponentFactory) {
+    public AbstractEntityEditorPanel(Class<E> entityClass, IEditableComponentFactory editableComponentFactory) {
         super();
         this.entityClass = entityClass;
         formFactory = new DelegatingEntityFormFactory<E>(entityClass, editableComponentFactory);

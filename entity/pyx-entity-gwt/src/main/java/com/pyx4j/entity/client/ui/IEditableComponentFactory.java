@@ -23,7 +23,7 @@ package com.pyx4j.entity.client.ui;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-public interface EditableComponentFactory {
+public interface IEditableComponentFactory {
 
     CEditableComponent<?, ?> create(IObject<?> member);
 

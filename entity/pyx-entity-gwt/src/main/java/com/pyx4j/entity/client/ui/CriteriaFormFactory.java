@@ -38,13 +38,13 @@ public abstract class CriteriaFormFactory<E extends IEntity> implements FormFact
 
     protected final E entityPrototype;
 
-    private final EditableComponentFactory editableComponentFactory;
+    private final IEditableComponentFactory editableComponentFactory;
 
     public CriteriaFormFactory(Class<E> entityClass) {
         this(entityClass, new BaseEditableComponentFactory());
     }
 
-    public CriteriaFormFactory(Class<E> entityClass, EditableComponentFactory editableComponentFactory) {
+    public CriteriaFormFactory(Class<E> entityClass, IEditableComponentFactory editableComponentFactory) {
         entityPrototype = EntityFactory.getEntityPrototype(entityClass);
         this.editableComponentFactory = editableComponentFactory;
     }

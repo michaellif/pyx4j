@@ -26,7 +26,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.EntityCSSClass;
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
@@ -34,7 +34,7 @@ public abstract class AbstractEntitySearchCriteriaPanel<E extends IEntity> exten
 
     protected final EntitySearchCriteriaFormModel<E> form;
 
-    public AbstractEntitySearchCriteriaPanel(Class<E> clazz, EditableComponentFactory editableComponentFactory) {
+    public AbstractEntitySearchCriteriaPanel(Class<E> clazz, IEditableComponentFactory editableComponentFactory) {
         super();
         form = new EntitySearchCriteriaFormModel<E>(clazz, editableComponentFactory);
         setStyleName(EntityCSSClass.pyx4j_Entity_EntitySearchCriteria.name());

@@ -25,7 +25,7 @@ import java.util.EnumSet;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -37,7 +37,7 @@ import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CTextField;
 
-public class CriteriaEditableComponentFactory implements EditableComponentFactory {
+public class CriteriaEditableComponentFactory implements IEditableComponentFactory {
 
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })

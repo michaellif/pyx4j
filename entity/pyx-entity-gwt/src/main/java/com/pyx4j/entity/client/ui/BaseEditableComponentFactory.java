@@ -54,7 +54,7 @@ import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CTimeField;
 
-public class BaseEditableComponentFactory implements EditableComponentFactory {
+public class BaseEditableComponentFactory implements IEditableComponentFactory {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override

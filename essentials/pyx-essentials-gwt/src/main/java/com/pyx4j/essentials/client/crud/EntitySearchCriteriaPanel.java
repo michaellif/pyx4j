@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.crud.AbstractEntitySearchCriteriaPanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -48,7 +48,7 @@ public abstract class EntitySearchCriteriaPanel<E extends IEntity> extends Abstr
         this(clazz, null);
     }
 
-    public EntitySearchCriteriaPanel(Class<E> clazz, EditableComponentFactory editableComponentFactory) {
+    public EntitySearchCriteriaPanel(Class<E> clazz, IEditableComponentFactory editableComponentFactory) {
         super(clazz, editableComponentFactory);
 
         VerticalPanel contentPanel = new VerticalPanel();

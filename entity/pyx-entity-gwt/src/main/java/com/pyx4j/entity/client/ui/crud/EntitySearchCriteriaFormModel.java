@@ -31,7 +31,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntitySuggestBox;
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -52,7 +52,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
 
     private final E entityPrototype;
 
-    private final EditableComponentFactory editableComponentFactory;
+    private final IEditableComponentFactory editableComponentFactory;
 
     private EntitySearchCriteria<E> editableCriteria;
 
@@ -95,7 +95,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
 
     }
 
-    public EntitySearchCriteriaFormModel(Class<E> clazz, EditableComponentFactory editableComponentFactory) {
+    public EntitySearchCriteriaFormModel(Class<E> clazz, IEditableComponentFactory editableComponentFactory) {
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
         valuePropagation = new ValuePropagationHandler();
         visibilityPropagation = new VisibilityPropagationHandler();
@@ -110,7 +110,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
         return entityPrototype;
     }
 
-    public static <T extends IEntity> EntitySearchCriteriaFormModel<T> create(Class<T> clazz, EditableComponentFactory editableComponentFactory) {
+    public static <T extends IEntity> EntitySearchCriteriaFormModel<T> create(Class<T> clazz, IEditableComponentFactory editableComponentFactory) {
         return new EntitySearchCriteriaFormModel<T>(clazz, editableComponentFactory);
     }
 

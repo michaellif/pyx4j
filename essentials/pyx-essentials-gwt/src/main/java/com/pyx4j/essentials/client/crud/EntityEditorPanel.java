@@ -29,7 +29,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.crud.AbstractEntityEditorPanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
@@ -48,7 +48,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
         this(entityClass, null);
     }
 
-    public EntityEditorPanel(Class<E> entityClass, EditableComponentFactory editableComponentFactory) {
+    public EntityEditorPanel(Class<E> entityClass, IEditableComponentFactory editableComponentFactory) {
         super(entityClass, editableComponentFactory);
 
         populateForm(null);

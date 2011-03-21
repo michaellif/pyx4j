@@ -22,9 +22,9 @@ package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 
-public interface IFlexContentComponent extends EditableComponentFactory {
+public interface IFlexContentComponent extends IEditableComponentFactory {
 
     IsWidget createContent();
 
