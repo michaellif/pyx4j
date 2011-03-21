@@ -26,12 +26,16 @@ public class NamingConventionModern implements NamingConvention {
 
     private final int identifierMaximumLength;
 
+    private final String childSeparator;
+
     public NamingConventionModern() {
         this.identifierMaximumLength = -1;
+        this.childSeparator = "$";
     }
 
-    public NamingConventionModern(int identifierMaximumLength) {
+    public NamingConventionModern(int identifierMaximumLength, String childSeparator) {
         this.identifierMaximumLength = identifierMaximumLength;
+        this.childSeparator = childSeparator;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class NamingConventionModern implements NamingConvention {
 
     @Override
     public String sqlChildTableName(String javaPersistenceTableName, String javaPersistenceChildTableName) {
-        return sqlTableName(javaPersistenceTableName) + "$" + sqlTableName(javaPersistenceChildTableName);
+        return sqlTableName(javaPersistenceTableName) + childSeparator + sqlTableName(javaPersistenceChildTableName);
     }
 
     @Override
