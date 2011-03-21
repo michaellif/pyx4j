@@ -31,6 +31,7 @@ import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.ui.components.BuildingPicture;
+import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
@@ -50,7 +51,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
     private ApartmentViewPresenter presenter;
 
     public ApartmentViewForm() {
-        super(UnitSelection.class);
+        super(UnitSelection.class, new VistaEditorsComponentFactory());
     }
 
     public void setPresenter(ApartmentViewPresenter presenter) {

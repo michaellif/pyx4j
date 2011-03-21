@@ -35,6 +35,7 @@ import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
+import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
@@ -60,7 +61,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
     private static I18n i18n = I18nFactory.getI18n(PaymentViewForm.class);
 
     public PaymentViewForm() {
-        super(PaymentInfo.class);
+        super(PaymentInfo.class, new VistaEditorsComponentFactory());
     }
 
     @Override

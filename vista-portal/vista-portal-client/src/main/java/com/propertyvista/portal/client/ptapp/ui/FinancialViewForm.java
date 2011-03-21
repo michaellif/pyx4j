@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.components.MoneyEditorForm;
+import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
@@ -69,7 +70,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
     private boolean summaryViewMode = false;
 
     public FinancialViewForm() {
-        super(PotentialTenantFinancial.class);
+        super(PotentialTenantFinancial.class, new VistaEditorsComponentFactory());
     }
 
     public FinancialViewForm(IEditableComponentFactory factory) {

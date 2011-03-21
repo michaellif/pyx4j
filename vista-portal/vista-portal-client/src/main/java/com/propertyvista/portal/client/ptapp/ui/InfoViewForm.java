@@ -35,6 +35,7 @@ import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
 import com.propertyvista.portal.client.ptapp.ui.components.FileUpload;
+import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.validators.CanadianSinValidator;
@@ -78,7 +79,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
     @SuppressWarnings("deprecation")
     public InfoViewForm() {
-        super(PotentialTenantInfo.class);
+        super(PotentialTenantInfo.class, new VistaEditorsComponentFactory());
         Date now = new Date();
         needPreviousAddress = TimeUtils.createDate(now.getYear() - 3, now.getMonth(), now.getDate());
     }

@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.components.BuildingPicture;
+import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.domain.Money;
@@ -46,7 +47,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
     @SuppressWarnings("rawtypes")
     public ChargesViewForm() {
-        super(Charges.class);
+        super(Charges.class, new VistaEditorsComponentFactory());
 
         valueChangeHandler = new ValueChangeHandler() {
 
