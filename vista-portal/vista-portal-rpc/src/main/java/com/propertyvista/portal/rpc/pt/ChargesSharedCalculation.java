@@ -109,9 +109,10 @@ public class ChargesSharedCalculation {
      * proportionately decreased. Note the total amount includes all monthly payments
      * (rent and upgrades).
      */
-    public static void calculatePaymentSplitCharges(Charges charges) {
+    public static void calculatePaymentcCharges(Charges charges) {
         double totalSplit = 0d; // everything paid by co-applicants
         double total = charges.monthlyCharges().total().amount().getValue();
+        int splitPrc = 0;
         TenantCharge applicantCharge = null;
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
             // !N.B. charge.tenant().status()  is not available here.  charge.tenant() never loaded to GWT!
@@ -119,6 +120,7 @@ public class ChargesSharedCalculation {
             if (applicantCharge == null) {
                 applicantCharge = charge;
             } else {
+                splitPrc += charge.percentage().getValue();
                 double v = DomainUtil.roundMoney(total * charge.percentage().getValue() / 100d);
                 charge.charge().amount().setValue(v);
                 totalSplit += v; // there may be multiple co-applicants
@@ -127,8 +129,7 @@ public class ChargesSharedCalculation {
         if (applicantCharge != null) {
             double v = total - totalSplit; // applicant's share of payment
             applicantCharge.charge().amount().setValue(v);
-            int prc = (int) (100d * v / total);
-            applicantCharge.percentage().setValue(prc);
+            applicantCharge.percentage().setValue(100 - splitPrc);
         }
         calculateTotal(charges.paymentSplitCharges());
     }
