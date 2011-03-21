@@ -149,6 +149,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     public void setEditable(boolean editable) {
         defaultAccessAdapter.setEditable(editable);
         applyEditabilityRules();
+        setTabIndex(editable ? 0 : -2); // enable/disable focus navigation 
     }
 
     public boolean isMandatory() {
@@ -310,6 +311,12 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         editing = false;
         visited = true;
         revalidate();
+    }
+
+    @Override
+    protected WIDGET_TYPE createWidget() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

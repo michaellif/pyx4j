@@ -51,4 +51,9 @@ public abstract class CFocusComponent<WIDGET_TYPE extends Widget & INativeFocusC
         }
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        setTabIndex(enabled ? 0 : -2); // enable/disable focus navigation 
+    }
 }
