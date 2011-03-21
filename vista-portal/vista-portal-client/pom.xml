@@ -84,6 +84,19 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
+        <repository>
+            <id>gwtupload</id>
+            <url>http://gwtupload.googlecode.com/svn/mavenrepo/</url>
+        </repository>
+        <repository>
+            <id>gwtchismes</id>
+            <url>http://gwtchismes.googlecode.com/svn/mavenrepo/</url>
+        </repository>
+        <repository>
+            <id>hupa-repo-incubator</id>
+            <url>http://svn.apache.org/repos/asf/james/hupa/lib</url>
+            <layout>legacy</layout>
+        </repository>
     </repositories>
 
     <properties>
