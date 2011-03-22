@@ -247,10 +247,10 @@
             </dependency>
 
             <dependency>
-			    <groupId>commons-httpclient</groupId>
-			    <artifactId>commons-httpclient</artifactId>
-			    <version>3.1</version>
-		    </dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>3.1</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
@@ -383,7 +383,7 @@
                                         </configuration>
                                         <reports>
                                             <report>index</report>
-                                            <report>dependencies</report>
+                                            <!--report>dependencies</report-->
                                             <report>modules</report>
                                             <report>license</report>
                                         </reports>

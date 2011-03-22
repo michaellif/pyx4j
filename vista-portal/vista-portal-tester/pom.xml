@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-         <groupId>com.propertyvista</groupId>
+        <groupId>com.propertyvista</groupId>
         <artifactId>vista-portal</artifactId>
         <version>1.0.0-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
@@ -16,13 +16,13 @@
     <artifactId>vista-portal-tester</artifactId>
     <name>vista-portal-tester</name>
 
-	<dependencies>
+    <dependencies>
 
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-			<scope>provided</scope>
-		</dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
@@ -34,7 +34,8 @@
             <artifactId>vista-portal-rpc</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
+<!-- mvn install site ; will faile on this!
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-portal-rpc</artifactId>
@@ -48,14 +49,13 @@
             <version>${project.version}</version>
             <classifier>tests</classifier>
         </dependency>
-
-
+-->
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-gwt</artifactId>
         </dependency>
 
-	</dependencies>
+    </dependencies>
 
     <properties>
         <gwtModule>tester</gwtModule>
@@ -85,7 +85,7 @@
             </plugin>
 
         </plugins>
-	</build>
+    </build>
 
     <profiles>
         <profile>
@@ -109,6 +109,7 @@
                             <sourceDirectories>
                                 <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
                             </sourceDirectories>
+                            <usePluginDependencies>com.propertyvista*</usePluginDependencies>
                             <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
@@ -122,10 +123,25 @@
                             <!-- disableCastChecking>true</disableCastChecking -->
                             <!-- disableClassMetadata>true</disableClassMetadata -->
                         </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.propertyvista</groupId>
+                                <artifactId>vista-portal-rpc</artifactId>
+                                <version>${project.version}</version>
+                                <classifier>tests</classifier>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.propertyvista</groupId>
+                                <artifactId>vista-portal-domain</artifactId>
+                                <version>${project.version}</version>
+                                <classifier>tests</classifier>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
         </profile>
+
     </profiles>
 
 </project>
