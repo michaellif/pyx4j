@@ -20,17 +20,21 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
@@ -49,9 +53,15 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
 
     private NativeTriggerButton triggerButton;
 
+    private HandlerManager focusHandlerManager;
+
     private boolean enabled = true;
 
     private boolean readOnly = false;
+
+    private boolean focusLost = true;
+
+    private boolean groupFocus = false;
 
     public NativeTriggerComponent() {
         super();
@@ -76,9 +86,45 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
             setCellWidth(composite, "100%");
         }
 
+        focusHandlerManager = new HandlerManager(this);
+
+        FocusHandler groupFocusHandler = new FocusHandler() {
+            @Override
+            public void onFocus(FocusEvent e) {
+                focusLost = false;
+                if (!groupFocus) {
+                    groupFocus = true;
+                    focusHandlerManager.fireEvent(e);
+                }
+            }
+        };
+
+        BlurHandler groupBlurHandler = new BlurHandler() {
+            @Override
+            public void onBlur(final BlurEvent e) {
+                focusLost = true;
+                Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+
+                    @Override
+                    public void execute() {
+                        if (groupFocus && focusLost) {
+                            groupFocus = false;
+                            focusHandlerManager.fireEvent(e);
+                        }
+                    }
+                });
+
+            }
+        };
+
+        focusWidget.addFocusHandler(groupFocusHandler);
+        focusWidget.addBlurHandler(groupBlurHandler);
+
         triggerButton = new NativeTriggerButton(ImageFactory.getImages().triggerBlueUp(), ImageFactory.getImages().triggerBlueDown());
         triggerButton.setWidth("1%");
         Cursor.setHand(triggerButton);
+        triggerButton.addFocusHandler(groupFocusHandler);
+        triggerButton.addBlurHandler(groupBlurHandler);
 
         add(triggerButton);
         setCellVerticalAlignment(triggerButton, ALIGN_TOP);
@@ -192,13 +238,13 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
     }
 
     @Override
-    public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return focusWidget.addFocusHandler(handler);
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        return focusHandlerManager.addHandler(FocusEvent.getType(), focusHandler);
     }
 
     @Override
-    public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return focusWidget.addBlurHandler(handler);
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        return focusHandlerManager.addHandler(BlurEvent.getType(), blurHandler);
     }
 
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
