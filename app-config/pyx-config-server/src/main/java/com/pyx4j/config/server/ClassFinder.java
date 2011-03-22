@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.gwt.server;
+package com.pyx4j.config.server;
 
 import java.io.File;
 import java.io.IOException;

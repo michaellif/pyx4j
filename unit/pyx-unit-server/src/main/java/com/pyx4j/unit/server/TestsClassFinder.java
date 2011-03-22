@@ -32,7 +32,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.gwt.server.ClassFinder;
+import com.pyx4j.config.server.ClassFinder;
 
 public class TestsClassFinder extends ClassFinder {
 
