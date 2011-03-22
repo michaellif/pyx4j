@@ -412,11 +412,10 @@ public class PreloadPT extends BaseVistaDataPreloader {
         for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
             persist(createFinancialInfo(tenantInfo));
 
-            for (int i = 2; i <= 3; i++) {
-                String fileName = "apartment" + i + ".jpg";
-                ApplicationDocument.DocumentType documentType = ApplicationDocument.DocumentType.securityInfo;
-                createApplicationDocument(tenantInfo, fileName, documentType);
-            }
+            //using apartment1.jpg as income doc, and apartment2.jpg and apartment3.jpg as securityInfo doc
+            ApplicationDocument.DocumentType documentType = ApplicationDocument.DocumentType.securityInfo;
+            createApplicationDocument(tenantInfo, "apartment2.jpg", documentType);
+            createApplicationDocument(tenantInfo, "apartment3.jpg", documentType);
         }
     }
 
@@ -623,6 +622,11 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             //income.active().setValue(RandomUtil.randomBoolean());
 
+            if (IncomeSource.fulltime.equals(income.incomeSource().getValue())) {
+                ApplicationDocument applicationDocument = createApplicationDocument(tenant, "apartment1.jpg", ApplicationDocument.DocumentType.income);
+                income.documents().add(applicationDocument);
+            }
+
             ptf.incomes().add(income);
         }
 
@@ -675,10 +679,6 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             sb.append("\n");
 
-            if (IncomeSource.fulltime.equals(income.incomeSource().getValue())) {
-                ApplicationDocument applicationDocument = createApplicationDocument(tenant, "apartment1.jpg", ApplicationDocument.DocumentType.income);
-                income.documents().add(applicationDocument);
-            }
         }
 
         sb.append("Assets\n");
