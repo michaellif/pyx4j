@@ -314,23 +314,28 @@ public class CollectionsTableModel {
     }
 
     private static Map<Long, Collection<Object>> retrieveData(Connection connection, List<Long> primaryKeys, MemberOperationsMeta member, ObjectClassType type) {
+        boolean isList = (type == ObjectClassType.EntityList);
+        StringBuilder queryStr = new StringBuilder();
+        queryStr.append("SELECT owner, value FROM ").append(member.sqlName()).append(" WHERE owner IN (");
+        int count = 0;
+        for (long primaryKey : primaryKeys) {
+            if (count != 0) {
+                queryStr.append(',');
+            }
+            queryStr.append(primaryKey);
+            count++;
+        }
+        queryStr.append(") ORDER BY owner ");
+        if (isList) {
+            queryStr.append(", seq");
+        }
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        boolean isList = (type == ObjectClassType.EntityList);
-        Map<Long, Collection<Object>> retMap = new HashMap<Long, Collection<Object>>();
-
         try {
-            String queryStr = "SELECT owner, value FROM " + member.sqlName() + " WHERE owner IN (";
-            int count = 0;
-            for (long primaryKey : primaryKeys) {
-                queryStr = queryStr + (count == 0 ? "" : ",") + primaryKey;
-                count++;
-            }
-            queryStr = queryStr + ") ORDER BY owner " + (isList ? ", seq" : "");
-            stmt = connection.prepareStatement(queryStr);
-
+            stmt = connection.prepareStatement(queryStr.toString());
             rs = stmt.executeQuery();
 
+            Map<Long, Collection<Object>> retMap = new HashMap<Long, Collection<Object>>();
             Collection<Object> dataSet = isList ? new Vector<Object>() : new HashSet<Object>();
             long currKey = -1, prevKey = -1;
             while (rs.next()) {
@@ -364,5 +369,4 @@ public class CollectionsTableModel {
             SQLUtils.closeQuietly(stmt);
         }
     }
-
 }

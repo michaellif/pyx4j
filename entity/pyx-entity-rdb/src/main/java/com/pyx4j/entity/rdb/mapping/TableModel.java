@@ -684,20 +684,22 @@ public class TableModel {
     }
 
     public <T extends IEntity> boolean retrieve(Connection connection, Map<Long, T> entities) {
-        PreparedStatement stmt = null;
-
-        java.util.Set<Long> keyset = entities.keySet();
-        String queryStr = "SELECT * FROM " + tableName + " WHERE id IN (";
+        StringBuilder queryStr = new StringBuilder();
+        queryStr.append("SELECT * FROM ").append(tableName).append(" WHERE id IN (");
         int count = 0;
-        for (Long primaryKey : keyset) {
-            queryStr = queryStr + (count == 0 ? "" : ",") + primaryKey;
+        for (Long primaryKey : entities.keySet()) {
+            if (count != 0) {
+                queryStr.append(',');
+            }
+            queryStr.append(primaryKey);
             count++;
         }
-        queryStr = queryStr + ")";
+        queryStr.append(')');
 
+        PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement(queryStr);
+            stmt = connection.prepareStatement(queryStr.toString());
 
             rs = stmt.executeQuery();
             for (int i = 0; i < count; i++) {
