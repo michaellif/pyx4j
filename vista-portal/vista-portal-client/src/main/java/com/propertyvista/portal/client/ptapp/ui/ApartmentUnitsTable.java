@@ -228,14 +228,15 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    if (unitDetailsPanelShown != null) {
-                        unitDetailsPanelShown.hide();
-                    }
+                    if (!getContent().getStyleName().contains(StyleDependent.selected.name())) {
+                        if (unitDetailsPanelShown != null) {
+                            unitDetailsPanelShown.hide();
+                        }
 
-                    getContent().addStyleDependentName(StyleDependent.selected.name());
-                    setSelected(getValue());
-                    selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApartmentUnit>(getValue()) {
-                    });
+                        setSelected(getValue());
+                        selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApartmentUnit>(getValue()) {
+                        });
+                    }
                 }
             });
 

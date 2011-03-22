@@ -81,6 +81,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
 
     public void showUnitDetail(final ApartmentUnit unit, final MarketRent selectedmarketRent,
             final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler, IDebugId debugId) {
+
         this.clear();
 
         FlowPanel unitDetailPanel = new FlowPanel();
@@ -170,7 +171,9 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
         unitDetailPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
         unitDetailPanel.getElement().getStyle().setBackgroundColor("white");
         this.add(unitDetailPanel);
-        new GrowAnimation(unitDetailPanel).run(1000);
+
+//        new GrowAnimation(unitDetailPanel).run(250);
+        new FadeInAnimation(unitDetailPanel).run(250);
     }
 
     public void hide() {
