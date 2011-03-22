@@ -149,13 +149,17 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        // TODO Auto-generated method stub
+        for (RadioButton b : buttons.values()) {
+            b.addFocusHandler(focusHandler);
+        }
         return null;
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        // TODO Auto-generated method stub
+        for (RadioButton b : buttons.values()) {
+            b.addBlurHandler(blurHandler);
+        }
         return null;
     }
 }
