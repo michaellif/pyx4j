@@ -34,6 +34,12 @@
             <scope>test</scope>
         </dependency>
 
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-j2se</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
     </dependencies>
 
     <properties>
