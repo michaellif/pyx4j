@@ -110,6 +110,7 @@
         <module>security/pyx-security-rpc</module>
         <module>entity/pyx-entity-rpc</module>
         <module>entity/pyx-entity-gwt</module>
+        <module>entity/pyx-entity-j2se</module>
         <module>entity/pyx-entity-server</module>
         <module>entity/pyx-entity-tests</module>
         <module>entity/pyx-entity-gae</module>

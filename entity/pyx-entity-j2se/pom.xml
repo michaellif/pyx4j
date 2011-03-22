@@ -13,33 +13,14 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-entity-server</artifactId>
-    <name>pyx-entity-server</name>
-    <description>pyx-entity Server Side Implementations</description>
+    <artifactId>pyx-entity-j2se</artifactId>
+    <name>pyx-entity-j2se</name>
+    <description>pyx-entity Java Standard edition Implementations</description>
 
     <dependencies>
-
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-entity-j2se</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-entity-rpc</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-commons</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-gwt-server</artifactId>
+            <artifactId>pyx-entity-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -58,11 +39,6 @@
 		<dependency>
         	<groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-		<dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
         </dependency>
 
 		<dependency>
