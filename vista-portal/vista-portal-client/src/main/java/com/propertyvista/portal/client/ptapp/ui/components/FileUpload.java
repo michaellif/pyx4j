@@ -26,15 +26,16 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -54,6 +55,10 @@ public class FileUpload extends HorizontalPanel {
 
     VerticalPanel docList;
 
+    Long tenantId;
+
+    DocumentType documentType;
+
     final ApplicationDocumentsService applicationDocumentsService = (ApplicationDocumentsService) GWT.create(ApplicationDocumentsService.class);
 
     public FileUpload() {
@@ -71,9 +76,10 @@ public class FileUpload extends HorizontalPanel {
 
         final FlowPanel fp = new FlowPanel();
         fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attach Files"))));
+        fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attached Files:"))));
         fp.add(docList = new VerticalPanel());
         docList.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        docList.getElement().getStyle().setPaddingTop(1, Unit.EM);
         docList.getElement().getStyle().setPaddingBottom(1, Unit.EM);
 
         SingleUploader singleUploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
@@ -102,7 +108,7 @@ public class FileUpload extends HorizontalPanel {
                     @Override
                     public void onLoad(PreloadedImage image) {
                         if (applicationDocumentsService != null) {
-//                            applicationDocumentsService.
+                            populate(tenantId, documentType);
                         }
 
                     }
@@ -113,6 +119,9 @@ public class FileUpload extends HorizontalPanel {
 
     public void populate(final Long tenantId, final DocumentType documentType) {
 
+        this.tenantId = tenantId;
+        this.documentType = documentType;
+
         docList.clear();
 
         if (applicationDocumentsService != null) {
@@ -122,14 +131,16 @@ public class FileUpload extends HorizontalPanel {
                 public void onSuccess(ApplicationDocumentsList result) {
                     for (final ApplicationDocument doc : result.documents()) {
 
-                        CHyperlink link = new CHyperlink(doc.getStringView(), new Command() {
+                        CHyperlink link = new CHyperlink(null, new Command() {
                             @Override
                             public void execute() {
                                 //TODO: show file here... 
                             }
                         });
 
-                        Button remove = new Button("x", new ClickHandler() {
+                        final Image remove = new Image(SiteImages.INSTANCE.delRow());
+                        remove.getElement().getStyle().setCursor(Cursor.POINTER);
+                        remove.addClickHandler(new ClickHandler() {
 
                             @Override
                             public void onClick(ClickEvent event) {
@@ -148,11 +159,14 @@ public class FileUpload extends HorizontalPanel {
                             }
                         });
 
-                        remove.setHeight("1em");
+                        link.setValue(doc.filename().getStringView());
 
                         HorizontalPanel item = new HorizontalPanel();
                         item.add(link);
+                        item.setCellWidth(link.asWidget(), "152px");
+
                         item.add(remove);
+                        item.setCellVerticalAlignment(remove, HasVerticalAlignment.ALIGN_MIDDLE);
 
                         docList.add(item);
                     }
@@ -161,7 +175,6 @@ public class FileUpload extends HorizontalPanel {
                 @Override
                 public void onFailure(Throwable caught) {
                     // TODO Auto-generated method stub
-
                 }
             }, tenantId, documentType);
         }

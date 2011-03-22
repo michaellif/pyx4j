@@ -109,7 +109,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         main.add(new ViewHeaderDecorator(i18n.tr("Secure Information")));
         main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), new DecorationData(10d, 20)));
         main.add(new VistaWidgetDecorator(inject(proto().driversLicenseState()), new DecorationData(10d, 17)));
-        main.add(new VistaWidgetDecorator(inject(proto().secureIdentifier()), new DecorationData(10d, 7)));
+        final CEditableComponent<?, ?> sin = inject(proto().secureIdentifier());
+        main.add(new VistaWidgetDecorator(sin, new DecorationData(10d, 7)));
 
         main.add(new VistaWidgetDecorator(inject(proto().notCanadianCitizen()), new DecorationData(10d, 3)));
 
@@ -124,6 +125,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
+                sin.asWidget().setEnabled(!event.getValue());
                 fileUpload.setVisible(event.getValue());
             }
         });
