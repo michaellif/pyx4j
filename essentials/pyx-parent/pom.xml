@@ -400,6 +400,36 @@
             </dependency>
 
             <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports</artifactId>
+                <!-- check poi version when updating -->
+                <version>4.0.1</version>
+                <exclusions>
+                    <exclusion><groupId>commons-collections</groupId><artifactId>commons-collections</artifactId></exclusion>
+                    <exclusion><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId></exclusion>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>jfree</groupId><artifactId>jfreechart</artifactId></exclusion>
+                    <exclusion><groupId>jfree</groupId><artifactId>jcommon</artifactId></exclusion>
+                    <!--exclusion><groupId>org.apache.poi</groupId><artifactId>poi</artifactId></exclusion-->
+                </exclusions>
+            </dependency>
+
+            <!-- latest version for jasperreports -->
+            <dependency>
+                <groupId>com.lowagie</groupId>
+                <artifactId>itext</artifactId>
+                <version>2.1.7</version>
+                <exclusions>
+                    <exclusion><groupId>bouncycastle</groupId><artifactId>bcmail-jdk14</artifactId></exclusion>
+                    <exclusion><groupId>bouncycastle</groupId><artifactId>bcprov-jdk14</artifactId></exclusion>
+                    <!-- Again magic, where it is comming from ?  -->
+                    <exclusion><groupId>org.bouncycastle</groupId><artifactId>bctsp-jdk14</artifactId></exclusion>
+                    <exclusion><groupId>org.bouncycastle</groupId><artifactId>bcmail-jdk14</artifactId></exclusion>
+                    <exclusion><groupId>org.bouncycastle</groupId><artifactId>bcprov-jdk14</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
                 <groupId>org.jasypt</groupId>
                 <artifactId>jasypt</artifactId>
                 <version>1.6</version>

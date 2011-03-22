@@ -13,9 +13,9 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-entity-server</artifactId>
-    <name>pyx-entity-server</name>
-    <description>pyx-entity Server Side Implementations</description>
+    <artifactId>pyx-entity-report</artifactId>
+    <name>pyx-entity-report</name>
+    <description>pyx-entity Reports Implementations</description>
 
     <dependencies>
 
@@ -63,6 +63,24 @@
 		<dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>test</scope>
+            <optional>true</optional>
         </dependency>
 
     </dependencies>

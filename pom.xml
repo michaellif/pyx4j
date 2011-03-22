@@ -119,6 +119,7 @@
 <!--
         <module>entity/entity-hibernate</module>
 -->
+        <module>entity/pyx-entity-report</module>
 
         <module>security/pyx-security-tests</module>
 
