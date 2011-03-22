@@ -23,10 +23,14 @@ package com.pyx4j.forms.client.ui;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
@@ -44,7 +48,13 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
 
     private boolean editable = true;
 
+    private boolean focusLost = true;
+
+    private boolean groupFocus = false;
+
     private final Map<E, RadioButton> buttons = new LinkedHashMap<E, RadioButton>();
+
+    private final HandlerManager focusHandlerManager;
 
     public NativeRadioGroup(CRadioGroup<E> cComponent) {
         this.cComponent = cComponent;
@@ -58,6 +68,37 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
 
         String groupName = "rb" + (uniqueGroupId++);
 
+        focusHandlerManager = new HandlerManager(this);
+
+        FocusHandler groupFocusHandler = new FocusHandler() {
+            @Override
+            public void onFocus(FocusEvent e) {
+                focusLost = false;
+                if (!groupFocus) {
+                    groupFocus = true;
+                    focusHandlerManager.fireEvent(e);
+                }
+            }
+        };
+
+        BlurHandler groupBlurHandler = new BlurHandler() {
+            @Override
+            public void onBlur(final BlurEvent e) {
+                focusLost = true;
+                Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+
+                    @Override
+                    public void execute() {
+                        if (groupFocus && focusLost) {
+                            groupFocus = false;
+                            focusHandlerManager.fireEvent(e);
+                        }
+                    }
+                });
+
+            }
+        };
+
         for (final E option : cComponent.getOptions()) {
             RadioButton b = new RadioButton(groupName, cComponent.getFormat().format(option));
             buttons.put(option, b);
@@ -69,8 +110,11 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
                     }
                 }
             });
+            b.addFocusHandler(groupFocusHandler);
+            b.addBlurHandler(groupBlurHandler);
             panel.add(b);
         }
+
     }
 
     @Override
@@ -149,17 +193,12 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        for (RadioButton b : buttons.values()) {
-            b.addFocusHandler(focusHandler);
-        }
-        return null;
+        return focusHandlerManager.addHandler(FocusEvent.getType(), focusHandler);
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        for (RadioButton b : buttons.values()) {
-            b.addBlurHandler(blurHandler);
-        }
-        return null;
+        return focusHandlerManager.addHandler(BlurEvent.getType(), blurHandler);
     }
+
 }
