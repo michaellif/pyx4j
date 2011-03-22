@@ -19,9 +19,10 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
-import com.propertyvista.portal.client.ptapp.ui.components.FileUpload;
+import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsUpload;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.domain.pt.IEmploymentInfo;
 import com.propertyvista.portal.domain.pt.IncomeInfoEmployer;
 import com.propertyvista.portal.domain.pt.IncomeInfoOther;
@@ -42,7 +43,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
     private final boolean summaryViewMode;
 
-    private FileUpload fileUpload;
+    private ApplicationDocumentsUpload fileUpload;
 
     public FinancialViewIncomeForm(boolean summaryViewMode) {
         super(TenantIncome.class);
@@ -75,7 +76,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         main.add(inject(proto().otherIncomeInfo(), createOtherIncomeInfoEditor()));
 
         if (!summaryViewMode) {
-            fileUpload = new FileUpload();
+            fileUpload = new ApplicationDocumentsUpload(DocumentType.income);
             fileUpload.getElement().getStyle().setMarginLeft(12.5, Unit.EM);
             fileUpload.getElement().getStyle().setMarginTop(1, Unit.EM);
             fileUpload.getElement().getStyle().setMarginBottom(1, Unit.EM);
@@ -97,6 +98,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     @Override
     public void populate(TenantIncome value) {
         super.populate(value);
+        fileUpload.updateFileList(value.id().getValue());
         setVisibility(value.incomeSource().getValue());
     }
 

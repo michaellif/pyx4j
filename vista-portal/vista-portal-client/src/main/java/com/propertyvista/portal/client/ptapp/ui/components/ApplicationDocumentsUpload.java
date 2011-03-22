@@ -17,8 +17,6 @@ import gwtupload.client.BaseUploadStatus;
 import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus.Status;
 import gwtupload.client.IUploader;
-import gwtupload.client.PreloadedImage;
-import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
 import gwtupload.client.SingleUploader;
 
 import org.xnap.commons.i18n.I18n;
@@ -49,9 +47,9 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public class FileUpload extends HorizontalPanel {
+public class ApplicationDocumentsUpload extends HorizontalPanel {
 
-    private static I18n i18n = I18nFactory.getI18n(FileUpload.class);
+    private static I18n i18n = I18nFactory.getI18n(ApplicationDocumentsUpload.class);
 
     VerticalPanel docList;
 
@@ -61,7 +59,8 @@ public class FileUpload extends HorizontalPanel {
 
     final ApplicationDocumentsService applicationDocumentsService = (ApplicationDocumentsService) GWT.create(ApplicationDocumentsService.class);
 
-    public FileUpload() {
+    public ApplicationDocumentsUpload(DocumentType documentType) {
+        this.documentType = documentType;
 
         HTML side = new HTML("&nbsp;&nbsp;&nbsp;");
         add(side);
@@ -82,15 +81,15 @@ public class FileUpload extends HorizontalPanel {
         docList.getElement().getStyle().setPaddingTop(1, Unit.EM);
         docList.getElement().getStyle().setPaddingBottom(1, Unit.EM);
 
-        SingleUploader singleUploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
-        singleUploader.setAutoSubmit(true);
-        singleUploader.avoidRepeatFiles(true);
-        singleUploader.setValidExtensions(new String[] { "jpg", "jpeg", "gif", "png", "tiff", "bmp", "pdf" });
-        singleUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
-        singleUploader.getFileInput().setText(i18n.tr("Browse for File"));
-        singleUploader.getFileInput().getWidget().setStyleName("customButton");
-        singleUploader.getFileInput().getWidget().setSize("152px", "27px");
-        fp.add(singleUploader);
+        SingleUploader uploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
+        uploader.setAutoSubmit(true);
+        uploader.avoidRepeatFiles(true);
+        uploader.setValidExtensions(new String[] { "jpg", "jpeg", "gif", "png", "tiff", "bmp", "pdf" });
+        uploader.addOnFinishUploadHandler(onFinishUploaderHandler);
+        uploader.getFileInput().setText(i18n.tr("Browse for File"));
+        uploader.getFileInput().getWidget().setStyleName("customButton");
+        uploader.getFileInput().getWidget().setSize("152px", "27px");
+        fp.add(uploader);
 
         add(fp);
         setCellVerticalAlignment(fp, HorizontalPanel.ALIGN_TOP);
@@ -103,24 +102,14 @@ public class FileUpload extends HorizontalPanel {
         @Override
         public void onFinish(IUploader uploader) {
             if (uploader.getStatus() == Status.SUCCESS) {
-                new PreloadedImage(uploader.fileUrl(), new OnLoadPreloadedImageHandler() {
-
-                    @Override
-                    public void onLoad(PreloadedImage image) {
-                        if (applicationDocumentsService != null) {
-                            populate(tenantId, documentType);
-                        }
-
-                    }
-                });
+                updateFileList(tenantId);
             }
         }
     };
 
-    public void populate(final Long tenantId, final DocumentType documentType) {
+    public void updateFileList(final Long tenantId) {
 
         this.tenantId = tenantId;
-        this.documentType = documentType;
 
         docList.clear();
 
@@ -148,7 +137,7 @@ public class FileUpload extends HorizontalPanel {
 
                                     @Override
                                     public void onSuccess(VoidSerializable result) {
-                                        populate(tenantId, documentType);
+                                        updateFileList(tenantId);
                                     }
 
                                     @Override

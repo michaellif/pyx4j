@@ -34,7 +34,7 @@ import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
-import com.propertyvista.portal.client.ptapp.ui.components.FileUpload;
+import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsUpload;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
@@ -75,7 +75,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
     private Widget previousAddressHeader;
 
-    private FileUpload fileUpload;
+    private ApplicationDocumentsUpload fileUpload;
 
     @SuppressWarnings("deprecation")
     public InfoViewForm() {
@@ -114,7 +114,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         main.add(new VistaWidgetDecorator(inject(proto().notCanadianCitizen()), new DecorationData(10d, 3)));
 
-        fileUpload = new FileUpload();
+        fileUpload = new ApplicationDocumentsUpload(DocumentType.securityInfo);
         fileUpload.getElement().getStyle().setMarginLeft(12.5, Unit.EM);
         fileUpload.getElement().getStyle().setMarginTop(1, Unit.EM);
         fileUpload.getElement().getStyle().setMarginBottom(1, Unit.EM);
@@ -287,7 +287,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         enablePreviousAddress();
 
-        fileUpload.populate(value.id().getValue(), DocumentType.securityInfo);
+        fileUpload.updateFileList(value.id().getValue());
         fileUpload.setVisible(value.notCanadianCitizen().isBooleanTrue());
     }
 
