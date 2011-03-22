@@ -21,6 +21,7 @@ import java.util.TreeMap;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.animation.client.Animation;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Overflow;
@@ -44,6 +45,35 @@ import com.pyx4j.forms.client.ui.CRadioGroupInteger;
 public class ApartmentUnitDetailsPanel extends FlowPanel {
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentUnitDetailsPanel.class);
+
+    public class FadeInAnimation extends Animation {
+        private final FlowPanel panel;
+
+        FadeInAnimation(final FlowPanel panel) {
+            this.panel = panel;
+        }
+
+        @Override
+        protected void onUpdate(final double progress) {
+            panel.getElement().getStyle().setOpacity(progress);
+        }
+    }
+
+    public class GrowAnimation extends Animation {
+        private final FlowPanel panel;
+
+        private final int height;
+
+        GrowAnimation(final FlowPanel panel) {
+            this.panel = panel;
+            this.height = panel.getOffsetHeight();
+        }
+
+        @Override
+        protected void onUpdate(final double progress) {
+            panel.setHeight(String.valueOf((int) (progress * this.height)) + "px");
+        }
+    }
 
     public ApartmentUnitDetailsPanel() {
 
@@ -140,6 +170,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
         unitDetailPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
         unitDetailPanel.getElement().getStyle().setBackgroundColor("white");
         this.add(unitDetailPanel);
+        new GrowAnimation(unitDetailPanel).run(1000);
     }
 
     public void hide() {
