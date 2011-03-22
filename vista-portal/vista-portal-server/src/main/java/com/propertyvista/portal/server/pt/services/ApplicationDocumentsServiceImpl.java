@@ -14,26 +14,46 @@
 package com.propertyvista.portal.server.pt.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentsList;
 import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
+import com.propertyvista.portal.server.pt.PtUserDataAccess;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import java.util.List;
 
-public class ApplicationDocumentsServiceImpl implements ApplicationDocumentsService {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class ApplicationDocumentsServiceImpl extends ApplicationEntityServicesImpl implements ApplicationDocumentsService {
+    private final static Logger log = LoggerFactory.getLogger(ApplicationDocumentsServiceImpl.class);
 
     @Override
     public void retrieveAttachments(AsyncCallback<ApplicationDocumentsList> callback, Long tenantId, DocumentType documentType) {
-        // TODO Auto-generated method stub
-        ApplicationDocumentsList listHolder = EntityFactory.create(ApplicationDocumentsList.class);
-        callback.onSuccess(listHolder);
+        log.info("Retrieving attachments for tenant {} and docType {}", tenantId, documentType);
+        EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenantId));
+        criteria.add(PropertyCriterion.eq(criteria.proto().type(), documentType));
+        List<ApplicationDocument> applicationDocuments = secureQuery(criteria);
+        ApplicationDocumentsList applicationDocumentsList = EntityFactory.create(ApplicationDocumentsList.class);
+        if (applicationDocuments != null) {
+            applicationDocumentsList.documents().addAll(applicationDocuments);
+        }
+        callback.onSuccess(applicationDocumentsList);
     }
 
     @Override
     public void removeAttachment(AsyncCallback<VoidSerializable> callback, Long applicationDocumentId) {
-        // TODO Auto-generated method stub
-        callback.onSuccess(null);
+        log.info("Remove attachments for applicationDoc {}", applicationDocumentId);
+        //    EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
+        //    criteria.add(PropertyCriterion.eq(criteria.proto().id(), applicationDocumentId));
+        //    callback.onSuccess(null);
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
