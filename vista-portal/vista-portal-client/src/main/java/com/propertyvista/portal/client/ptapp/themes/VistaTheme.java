@@ -1168,7 +1168,7 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("text-shadow", "0 -1px 0 #333333");
         style.addProperty("padding-left", "1em");
         style.addProperty("padding-right", "1em");
-        style.addProperty("padding-top", "23px");
+        style.addProperty("padding-top", "2em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Label, SecondNavigViewImpl.StyleDependent.current));
