@@ -150,6 +150,22 @@ public class SeleniumExtended extends WebDriverWrapper {
         }
     }
 
+    public boolean isVisible(String id) {
+        return isVisible(By.id(gwtLocator(id)));
+    }
+
+    public boolean isVisible(IDebugId debugId) {
+        return isElementPresent(by(debugId));
+    }
+
+    public boolean isVisible(By paramBy) {
+        try {
+            return ((RenderedWebElement) driver.findElement(paramBy)).isDisplayed();
+        } catch (NoSuchElementException notFound) {
+            return false;
+        }
+    }
+
     public void waitForLinkText(String text) {
         waitFor(By.linkText(text));
     }
@@ -315,4 +331,32 @@ public class SeleniumExtended extends WebDriverWrapper {
         }
     }
 
+    public boolean isEnabled(String locator) {
+        return driver.findElement(elementLocator(locator)).isEnabled();
+    }
+
+    public boolean isEnabled(IDebugId debugId) {
+        return driver.findElement(by(debugId)).isEnabled();
+    }
+
+    public static boolean isEditable(WebElement element) {
+        String tagName = element.getTagName().toLowerCase();
+        boolean acceptableTagName = "input".equals(tagName) || "select".equals(tagName);
+        String readonly = "";
+        if ("input".equals(tagName)) {
+            readonly = element.getAttribute("readonly");
+            if (readonly == null || "false".equals(readonly)) {
+                readonly = "";
+            }
+        }
+        return element.isEnabled() && acceptableTagName && "".equals(readonly);
+    }
+
+    public boolean isEditable(String locator) {
+        return isEditable(driver.findElement(elementLocator(locator)));
+    }
+
+    public boolean isEditable(IDebugId debugId) {
+        return isEditable(driver.findElement(by(debugId)));
+    }
 }

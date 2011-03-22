@@ -30,6 +30,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -168,5 +169,71 @@ public class BaseSeleniumTestCase extends TestCase {
         if (exception != null) {
             throw exception;
         }
+    }
+
+    // ====================== asserts  ===========================
+
+    public void assertEditable(String locator) {
+        assertTrue(locator + " should be editable", selenium.isEditable(locator));
+    }
+
+    public void assertNotEditable(String locator) {
+        assertFalse(locator + " should be Not editable", selenium.isEditable(locator));
+    }
+
+    public void assertEditable(IDebugId debugId) {
+        assertTrue(debugId + " should be editable", selenium.isEditable(debugId));
+    }
+
+    public void assertNotEditable(IDebugId debugId) {
+        assertFalse(debugId + " should be Not editable", selenium.isEditable(debugId));
+    }
+
+    public void assertEnabled(String locator) {
+        assertTrue(locator + " should be enabled", selenium.isEnabled(locator));
+    }
+
+    public void assertNotEnabled(String locator) {
+        assertFalse(locator + " should be Not enabled", selenium.isEnabled(locator));
+    }
+
+    public void assertEnabled(IDebugId debugId) {
+        assertTrue(debugId + " should be enabled", selenium.isEnabled(debugId));
+    }
+
+    public void assertNotEnabled(IDebugId debugId) {
+        assertFalse(debugId + " should be Not enabled", selenium.isEnabled(debugId));
+    }
+
+    public void assertPresent(String locator) {
+        assertTrue(locator + " should exists", selenium.isElementPresent(locator));
+    }
+
+    public void assertNotPresent(String locator) {
+        assertFalse(locator + " should be Not exists", selenium.isElementPresent(locator));
+    }
+
+    public void assertPresent(IDebugId debugId) {
+        assertTrue(debugId + " should exists", selenium.isElementPresent(debugId));
+    }
+
+    public void assertNotPresent(IDebugId debugId) {
+        assertFalse(debugId + " should be Not exists", selenium.isElementPresent(debugId));
+    }
+
+    public void assertVisible(String locator) {
+        assertTrue(locator + " should be visible", selenium.isVisible(locator));
+    }
+
+    public void assertNotVisible(String locator) {
+        assertFalse(locator + " should be Not be visible", selenium.isVisible(locator));
+    }
+
+    public void assertVisible(IDebugId debugId) {
+        assertTrue(debugId + " should be visible", selenium.isVisible(debugId));
+    }
+
+    public void assertNotVisible(IDebugId debugId) {
+        assertFalse(debugId + " should be Not be visible", selenium.isVisible(debugId));
     }
 }
