@@ -13,6 +13,14 @@
  */
 package com.propertyvista.portal.client.ptapp.ui.components;
 
+import gwtupload.client.BaseUploadStatus;
+import gwtupload.client.IFileInput.FileInputType;
+import gwtupload.client.IUploadStatus.Status;
+import gwtupload.client.IUploader;
+import gwtupload.client.PreloadedImage;
+import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
+import gwtupload.client.SingleUploader;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
@@ -46,6 +54,8 @@ public class FileUpload extends HorizontalPanel {
 
     VerticalPanel docList;
 
+    final ApplicationDocumentsService applicationDocumentsService = (ApplicationDocumentsService) GWT.create(ApplicationDocumentsService.class);
+
     public FileUpload() {
 
         HTML side = new HTML("&nbsp;&nbsp;&nbsp;");
@@ -65,17 +75,16 @@ public class FileUpload extends HorizontalPanel {
         fp.add(docList = new VerticalPanel());
         docList.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         docList.getElement().getStyle().setPaddingBottom(1, Unit.EM);
-        fp.add(new Button(i18n.tr("Browse"), new ClickHandler() {
 
-            @Override
-            public void onClick(ClickEvent event) {
-                new FileUploadDialog(/* getEditorPanel().getEntity() */) {
-                    @Override
-                    public void onComplete() {
-                    }
-                }.show();
-            }
-        }));
+        SingleUploader singleUploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
+        singleUploader.setAutoSubmit(true);
+        singleUploader.avoidRepeatFiles(true);
+        singleUploader.setValidExtensions(new String[] { "jpg", "jpeg", "gif", "png", "tiff", "bmp", "pdf" });
+        singleUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
+        singleUploader.getFileInput().setText(i18n.tr("Browse for File"));
+        singleUploader.getFileInput().getWidget().setStyleName("customButton");
+        singleUploader.getFileInput().getWidget().setSize("152px", "27px");
+        fp.add(singleUploader);
 
         add(fp);
         setCellVerticalAlignment(fp, HorizontalPanel.ALIGN_TOP);
@@ -83,13 +92,31 @@ public class FileUpload extends HorizontalPanel {
 
     }
 
+    private final IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
+
+        @Override
+        public void onFinish(IUploader uploader) {
+            if (uploader.getStatus() == Status.SUCCESS) {
+                new PreloadedImage(uploader.fileUrl(), new OnLoadPreloadedImageHandler() {
+
+                    @Override
+                    public void onLoad(PreloadedImage image) {
+                        if (applicationDocumentsService != null) {
+//                            applicationDocumentsService.
+                        }
+
+                    }
+                });
+            }
+        }
+    };
+
     public void populate(final Long tenantId, final DocumentType documentType) {
 
         docList.clear();
 
-        final ApplicationDocumentsService ads = (ApplicationDocumentsService) GWT.create(ApplicationDocumentsService.class);
-        if (ads != null) {
-            ads.retrieveAttachments(new AsyncCallback<ApplicationDocumentsList>() {
+        if (applicationDocumentsService != null) {
+            applicationDocumentsService.retrieveAttachments(new AsyncCallback<ApplicationDocumentsList>() {
 
                 @Override
                 public void onSuccess(ApplicationDocumentsList result) {
@@ -106,7 +133,7 @@ public class FileUpload extends HorizontalPanel {
 
                             @Override
                             public void onClick(ClickEvent event) {
-                                ads.removeAttachment(new AsyncCallback<VoidSerializable>() {
+                                applicationDocumentsService.removeAttachment(new AsyncCallback<VoidSerializable>() {
 
                                     @Override
                                     public void onSuccess(VoidSerializable result) {
