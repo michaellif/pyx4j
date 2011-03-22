@@ -236,6 +236,19 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
         return (TimeUtils.isOlderThen(tenant.birthDate().getValue(), 18));
     }
 
+    public static void invalidateChargesStep(Application application) {
+        EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
+        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), application));
+        ApplicationProgress progress = secureRetrieve(applicationProgressCriteria);
+        ApplicationWizardStep chargesStep = findWizardStep(progress, SiteMap.Charges.class);
+        switch (chargesStep.status().getValue()) {
+        case latest:
+        case complete:
+            chargesStep.status().setValue(ApplicationWizardStep.Status.invalid);
+            PersistenceServicesFactory.getPersistenceService().persist(chargesStep);
+        }
+    }
+
     public static void syncroizeApplicationProgress(PotentialTenantList tenantsOrig, PotentialTenantList tenantsNew) {
         EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
         applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), tenantsNew.application()));

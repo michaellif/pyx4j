@@ -18,9 +18,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.ChargeType;
+import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
 import com.propertyvista.portal.domain.pt.Pets;
+import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.pt.services.PetsServices;
+import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PtUserDataAccess;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -48,7 +51,17 @@ public class PetsServicesImpl extends ApplicationEntityServicesImpl implements P
     public void save(AsyncCallback<Pets> callback, Pets pets) {
         log.info("Saving pets {}", pets);
 
+        // Calculate charges on server to avoid Front End API Hackers.
+        PetChargeRule petCharge = loadPetChargeRule();
+        for (Pet pet : pets.pets()) {
+            ChargesSharedCalculation.calculatePetCharges(petCharge, pet);
+        }
+
         saveApplicationEntity(pets);
+
+        if (ChargesServerCalculation.updateChargesForPets(pets)) {
+            ApplicationServicesImpl.invalidateChargesStep(pets.application());
+        }
 
         loadTransientData(pets);
 
@@ -62,12 +75,17 @@ public class PetsServicesImpl extends ApplicationEntityServicesImpl implements P
      */
     private static void loadTransientData(Pets pets) {
         // TODO get it from building
-        PetChargeRule petCharge = EntityFactory.create(PetChargeRule.class);
-        petCharge.chargeType().setValue(ChargeType.monthly);
-        petCharge.value().setValue(20);
+        PetChargeRule petCharge = loadPetChargeRule();
         pets.petChargeRule().set(petCharge);
         pets.petWeightMaximum().setValue(25);
         pets.petsMaximum().setValue(3);
+    }
+
+    private static PetChargeRule loadPetChargeRule() {
+        PetChargeRule petChargeRule = EntityFactory.create(PetChargeRule.class);
+        petChargeRule.chargeType().setValue(ChargeType.monthly);
+        petChargeRule.value().setValue(20);
+        return petChargeRule;
     }
 
 }

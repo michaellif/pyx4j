@@ -123,6 +123,15 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         calculateCharges(charges);
     }
 
+    /**
+     * @param pets
+     * @return true if charges are changed
+     */
+    public static boolean updateChargesForPets(Pets pets) {
+        //TODO  See ChargeType.petCharge line will be changed and update it if required
+        return true;
+    }
+
     public static boolean isEligibleForPaymentSplit(PotentialTenantInfo tenant) {
         if (tenant.isNull()) {
             log.info("Received a null tenant when checking for eligibility");
