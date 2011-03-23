@@ -400,7 +400,7 @@ public class Dialog extends DialogPanelNew {
             setCellHeight(scrollPanel, "100%");
             setCellWidth(scrollPanel, "100%");
 
-            HTML htmlMessage = new HTML(message.replace("\n", "<br/>"));
+            HTML htmlMessage = new HTML((message == null) ? "" : message.replace("\n", "<br/>"));
 
             HorizontalPanel htmlHolder = new HorizontalPanel();
             htmlHolder.setSize("100%", "100%");
@@ -488,7 +488,7 @@ public class Dialog extends DialogPanelNew {
     }
 
     public final native Element getDocumentActiveElement() /*-{
-        return $doc.activeElement;
+		return $doc.activeElement;
     }-*/;
 
     public static void closeOpenDialogs() {
