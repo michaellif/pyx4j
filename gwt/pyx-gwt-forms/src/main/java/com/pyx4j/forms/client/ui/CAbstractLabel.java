@@ -42,10 +42,4 @@ public class CAbstractLabel<E> extends CReference<E, NativeLabel<E>> {
     protected NativeLabel<E> createNativeLabel() {
         return new NativeLabel<E>(this);
     }
-
-    @Override
-    public boolean isEditable() {
-        return false;
-    }
-
 }

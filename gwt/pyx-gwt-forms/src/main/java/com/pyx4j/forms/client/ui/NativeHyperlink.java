@@ -32,11 +32,11 @@ import com.pyx4j.widgets.client.style.CSSClass;
 
 public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
 
+    private boolean enabled;
+
     private Command comand;
 
     private final CAbstractHyperlink<E> cHyperlink;
-
-    private boolean enabled;
 
     private final NativeReferenceDelegate<E> delegate;
 
@@ -106,13 +106,13 @@ public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
     }
 
     @Override
-    public void setEditable(boolean editable) {
-        // do nothing - actually it's not editable...
+    public boolean isEditable() {
+        return false;
     }
 
     @Override
-    public boolean isEditable() {
-        return false;
+    public void setEditable(boolean editable) {
+        // do nothing - actually it's not editable...
     }
 
     @Override

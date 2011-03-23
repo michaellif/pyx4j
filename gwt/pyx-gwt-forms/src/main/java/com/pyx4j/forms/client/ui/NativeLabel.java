@@ -48,6 +48,7 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
 
     @Override
     public void setEnabled(boolean enabled) {
+        // do nothing - actually it's not enabled...
     }
 
     @Override
@@ -57,6 +58,7 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
 
     @Override
     public void setEditable(boolean editable) {
+        // do nothing - actually it's not editable...
     }
 
     @Override
@@ -65,6 +67,7 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
     }
 
     public void setReadOnly(boolean readOnly) {
+        // do nothing - actually it's always read-only ...
     }
 
     @Override
@@ -89,6 +92,7 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
 
     @Override
     public void setValid(boolean valid) {
+        // do nothing - actually it's valid always...
     }
 
     @Override

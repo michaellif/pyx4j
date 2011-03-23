@@ -60,4 +60,14 @@ public abstract class CReference<E, T extends Widget & INativeReference<E>> exte
     public void setAllowHtml(boolean allowHtml) {
         this.allowHtml = allowHtml;
     }
+
+    @Override
+    public boolean isEditable() {
+        return false;
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        // do nothing - not editable...
+    }
 }

@@ -24,8 +24,6 @@ import com.google.gwt.user.client.Command;
 
 public class CAbstractHyperlink<E> extends CReference<E, NativeHyperlink<E>> {
 
-    private boolean wordWrap = false;
-
     private final Command command;
 
     public CAbstractHyperlink(Command command) {
@@ -40,16 +38,5 @@ public class CAbstractHyperlink<E> extends CReference<E, NativeHyperlink<E>> {
     @Override
     protected NativeHyperlink<E> createWidget() {
         return new NativeHyperlink<E>(this, command);
-    }
-
-    public void setWordWrap(boolean wrap) {
-        if (isWidgetCreated()) {
-            asWidget().setWordWrap(wrap);
-        }
-        wordWrap = wrap;
-    }
-
-    public boolean isWordWrap() {
-        return wordWrap;
     }
 }
