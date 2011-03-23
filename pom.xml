@@ -91,16 +91,16 @@
         <developer>
             <name>Pinchuk Vadym</name>
             <id>vadymp</id>
-            <email>vadymp@gmail.com</email>
+            <email>vadymp@birchwoodsoftwaregroup.com</email>
             <roles>
                 <role>developer</role>
             </roles>
             <timezone>-5</timezone>
         </developer>
-                <developer>
+        <developer>
             <name>Vlad Loukiantchenko</name>
             <id>vladlouk</id>
-            <email>vladlouk@gmail.com</email>
+            <email>vladlouk@birchwoodsoftwaregroup.com</email>
             <roles>
                 <role>developer</role>
             </roles>
@@ -109,16 +109,61 @@
         <developer>
             <name>Dmitry Tumanov</name>
             <id>dmitryt</id>
-            <email>tumanov@gmail.com</email>
+            <email>dmitryt@birchwoodsoftwaregroup.com</email>
             <roles>
                 <role>developer</role>
             </roles>
             <timezone>-5</timezone>
         </developer>
         <developer>
-            <name>Anton Kraev</name>
-            <id>antonk</id>
-            <email>amkraev@gmail.com</email>
+            <name>Artur Roytburg</name>
+            <id>aroytbur</id>
+            <email>aroytbur@birchwoodsoftwaregroup.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Konstantin Lysenko</name>
+            <id>kostya</id>
+            <email>kostya@birchwoodsoftwaregroup.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Leon Tager</name>
+            <id>leont</id>
+            <email>leont@birchwoodsoftwaregroup.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Mark Levitin</name>
+            <id>markl</id>
+            <email>markl@birchwoodsoftwaregroup.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Sergei Goshko</name>
+            <id>sergeig</id>
+            <email>sergeig@birchwoodsoftwaregroup.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Vadim Spirkov</name>
+            <id>vadims</id>
+            <email>vadims@birchwoodsoftwaregroup.com</email>
             <roles>
                 <role>developer</role>
             </roles>
