@@ -56,13 +56,9 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
         CurrentApplication currentApplication = new CurrentApplication();
 
         if (application == null) {
-            UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
-            unitSelection.selectionCriteria().set(request);
-            new ApartmentServicesImpl().loadAvailableUnits(unitSelection);
-
-            if (unitSelection.selectedUnit().isNull()) {
+            if (!new ApartmentServicesImpl().areUnitsAvailable(request)) {
                 log.info("Could not find building with propertyCode {}", request.propertyCode());
-                throw new UserRuntimeException("Selected unit not found");
+                throw new UserRuntimeException("No units avalable");
             }
 
             application = EntityFactory.create(Application.class);
@@ -76,6 +72,8 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
 
             currentApplication.progress = progress;
 
+            UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
+            unitSelection.selectionCriteria().set(request);
             unitSelection.application().set(application);
             PersistenceServicesFactory.getPersistenceService().persist(unitSelection);
 

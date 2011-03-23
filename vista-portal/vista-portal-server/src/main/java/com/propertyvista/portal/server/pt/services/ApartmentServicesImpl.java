@@ -88,13 +88,13 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
     }
 
     public void loadSelectedUnit(UnitSelection unitSelection) {
-        if (unitSelection.selectedUnitId() != null) {
+        if (!unitSelection.selectedUnitId().isNull()) {
             unitSelection.selectedUnit().set(
                     Converter.convert(PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitSelection.selectedUnitId().getValue())));
         }
     }
 
-    public List<AptUnit> loadAvailableUnits(UnitSelectionCriteria selectionCriteria) {
+    public EntityQueryCriteria<AptUnit> createAptUnitCriteria(UnitSelectionCriteria selectionCriteria) {
         log.info("Looking for units {}", selectionCriteria);
 
         // find building first, don't use building from unit selection
@@ -118,7 +118,7 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
         }
 
         // find units
-        log.info("Found floorplan {}, now will look for building {}", floorplan, building);
+        log.info("Found floorplan {}, now can look for Units in building {}", floorplan, building);
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
@@ -131,7 +131,18 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
             criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.LESS_THAN_OR_EQUAL, selectionCriteria
                     .availableTo().getValue()));
         }
+        return criteria;
+    }
 
+    public boolean areUnitsAvailable(UnitSelectionCriteria selectionCriteria) {
+        EntityQueryCriteria<AptUnit> criteria = createAptUnitCriteria(selectionCriteria);
+        int count = PersistenceServicesFactory.getPersistenceService().count(criteria);
+        log.info("Found {} units", count);
+        return (count > 0);
+    }
+
+    public List<AptUnit> loadAvailableUnits(UnitSelectionCriteria selectionCriteria) {
+        EntityQueryCriteria<AptUnit> criteria = createAptUnitCriteria(selectionCriteria);
         List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
         log.info("Found {} units", units.size());
         return units;
