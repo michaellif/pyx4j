@@ -33,7 +33,9 @@ Property Vista
 
 * GWT Compile Reports
 
-~~   * {{{./mef-server/rpc/#version#}RPC files}} - Portal Client Site RPC policy files.
+    * {{{./vista-server/rpc/portal/#version#}RPC files}} - Portal Client Site RPC policy files.
+
+    * {{{http://cruisecontrol.birchwoodsoftwaregroup.com/reports/rpc/#version#}RPC files}} - Portal Client Site RPC policy files with history.
 
     * {{{./vista-portal/vista-portal-client/soycReport/}GWT Compile Report 'vista-portal-client'}}
 

@@ -201,6 +201,39 @@
                     </war>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+
+                    <execution>
+                        <id>site.rpc-version</id>
+                        <phase>site</phase>
+                        <goals>
+                          <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <path id="portal.rpc.path">
+                                    <first count="1"><fileset dir="${basedir}/src/main/webapp/portal" includes="*.rpc" /></first>
+                                </path>
+                                <property name="portal.rpc.full-path" refid="portal.rpc.path" />
+                                <pathconvert property="portal.rpc.name" pathsep=""><path refid="portal.rpc.path"/><flattenmapper/></pathconvert>
+                                <copy file="${portal.rpc.full-path}" tofile="${project.build.directory}/site/rpc/portal/${project.version}/${buildLabel}-${portal.rpc.name}"/>
+
+                                <path id="crm.rpc.path">
+                                    <first count="1"><fileset dir="${basedir}/src/main/webapp/crm" includes="*.rpc" /></first>
+                                </path>
+                                <property name="crm.rpc.full-path" refid="crm.rpc.path" />
+                                <pathconvert property="crm.rpc.name" pathsep=""><path refid="crm.rpc.path"/><flattenmapper/></pathconvert>
+                                <copy file="${crm.rpc.full-path}" tofile="${project.build.directory}/site/rpc/crm/${project.version}/${buildLabel}-${crm.rpc.name}"/>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
@@ -330,6 +363,47 @@
                                 <configuration>
                                     <target>
                                         <get src="${vista-app-ping-url}/o/db-reset" dest="${project.build.directory}/db-reset.txt"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>build-ci</id>
+            <properties>
+                <ciSiteDirectory>/data/apache/vista</ciSiteDirectory>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install.rpc-version</id>
+                                <phase>install</phase>
+                                <goals>
+                                  <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <path id="portal.rpc.path">
+                                            <first count="1"><fileset dir="${basedir}/src/main/webapp/portal" includes="*.rpc" /></first>
+                                        </path>
+                                        <property name="portal.rpc.full-path" refid="portal.rpc.path" />
+                                        <pathconvert property="portal.rpc.name" pathsep=""><path refid="portal.rpc.path"/><flattenmapper/></pathconvert>
+                                        <copy file="${portal.rpc.full-path}" tofile="${ciSiteDirectory}/reports/rpc/portal/${project.version}/${buildLabel}-${portal.rpc.name}"/>
+
+                                        <path id="crm.rpc.path">
+                                            <first count="1"><fileset dir="${basedir}/src/main/webapp/crm" includes="*.rpc" /></first>
+                                        </path>
+                                        <property name="crm.rpc.full-path" refid="crm.rpc.path" />
+                                        <pathconvert property="crm.rpc.name" pathsep=""><path refid="crm.rpc.path"/><flattenmapper/></pathconvert>
+                                        <copy file="${crm.rpc.full-path}" tofile="${ciSiteDirectory}/reports/rpc/crm/${project.version}/${buildLabel}-${crm.rpc.name}"/>
                                     </target>
                                 </configuration>
                             </execution>
