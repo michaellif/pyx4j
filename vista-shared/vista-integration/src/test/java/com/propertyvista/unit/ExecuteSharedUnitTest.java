@@ -18,7 +18,9 @@ import junit.framework.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.selenium.DefaultSeleniumTestConfiguration;
+import com.propertyvista.unit.config.ApplicationId;
+import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
+
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.selenium.UnitTestExecutionTestCase;
 
@@ -28,19 +30,7 @@ public class ExecuteSharedUnitTest extends UnitTestExecutionTestCase {
 
     @Override
     protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {
-        return new DefaultSeleniumTestConfiguration() {
-            @Override
-            public String getTestUrl() {
-                return "http://www22.birchwoodsoftwaregroup.com/tester/";
-                //return "http://localhost:8888/vista/tester/";
-            }
-
-            @Override
-            public boolean reuseBrowser() {
-                return false;
-            }
-
-        };
+        return new VistaSeleniumTestConfiguration(ApplicationId.tester);
     }
 
     public void testUnitTests() throws Exception {
