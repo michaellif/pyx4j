@@ -24,6 +24,7 @@ package com.pyx4j.entity.report.test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,17 +36,20 @@ import javax.xml.xpath.XPathFactory;
 
 import junit.framework.TestCase;
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 public abstract class ReportsTestBase extends TestCase {
+
+    private static final Logger log = LoggerFactory.getLogger(ReportsTestBase.class);
 
     private XPath xPath;
 
@@ -57,12 +61,16 @@ public abstract class ReportsTestBase extends TestCase {
         ByteArrayOutputStream bos = null;
         try {
 
+            log.debug("Creating report {}", getDesignFileName());
+
             JasperReport jasperReport = JasperCompileManager.compileReport(getDesignFileName());
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, getParameters(), getDataSource());
 
             bos = new ByteArrayOutputStream();
             JasperExportManager.exportReportToXmlStream(jasperPrint, bos);
             bos.flush();
+
+            log.debug(new String(bos.toByteArray()));
 
             document = parseXML(bos.toByteArray());
             XPathFactory xpathFactory = XPathFactory.newInstance();
