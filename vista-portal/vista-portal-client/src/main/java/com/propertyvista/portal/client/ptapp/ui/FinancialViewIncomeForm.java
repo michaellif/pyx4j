@@ -98,7 +98,10 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     @Override
     public void populate(TenantIncome value) {
         super.populate(value);
-        fileUpload.updateFileList(value.id().getValue());
+        if (fileUpload != null) {
+            fileUpload.updateFileList(value.id().getValue());
+        }
+
         setVisibility(value.incomeSource().getValue());
     }
 
