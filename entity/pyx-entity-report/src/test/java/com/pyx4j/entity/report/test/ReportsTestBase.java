@@ -24,7 +24,6 @@ package com.pyx4j.entity.report.test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -34,7 +33,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import junit.framework.TestCase;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -47,24 +45,22 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-public abstract class ReportsTestBase extends TestCase {
+public abstract class ReportsTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(ReportsTestBase.class);
 
-    private XPath xPath;
+    private static XPath xPath;
 
-    private Document document;
+    private static Document document;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    protected static void createReport(String designFileName, Map<String, String> parameters, JRDataSource dataSource) throws Exception {
         ByteArrayOutputStream bos = null;
         try {
 
-            log.debug("Creating report {}", getDesignFileName());
+            log.debug("Creating report {}", designFileName);
 
-            JasperReport jasperReport = JasperCompileManager.compileReport(getDesignFileName());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, getParameters(), getDataSource());
+            JasperReport jasperReport = JasperCompileManager.compileReport(designFileName);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
             bos = new ByteArrayOutputStream();
             JasperExportManager.exportReportToXmlStream(jasperPrint, bos);
@@ -81,14 +77,13 @@ public abstract class ReportsTestBase extends TestCase {
                 bos.close();
             }
         }
-
     }
 
     protected String evaluate(String expression) throws XPathExpressionException {
         return xPath.evaluate(expression, document);
     }
 
-    private Document parseXML(byte[] xml) throws SAXException, IOException, ParserConfigurationException {
+    private static Document parseXML(byte[] xml) throws SAXException, IOException, ParserConfigurationException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setValidating(false);
         dbf.setNamespaceAware(true);
@@ -99,16 +94,5 @@ public abstract class ReportsTestBase extends TestCase {
         DocumentBuilder db = dbf.newDocumentBuilder();
         return db.parse(new ByteArrayInputStream(xml));
     }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
-    protected abstract String getDesignFileName();
-
-    protected abstract Map<String, String> getParameters();
-
-    protected abstract JRDataSource getDataSource();
 
 }

@@ -24,29 +24,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.Assert;
-
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class StaticReportTest extends ReportsTestBase {
 
-    @Override
-    protected String getDesignFileName() {
-        return "target/test-classes/reports/Static.jrxml";
-    }
-
-    @Override
-    protected Map<String, String> getParameters() {
+    @BeforeClass
+    public static void init() throws Exception {
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("ReportTitle", "Static Report");
-        return parameters;
+
+        createReport("target/test-classes/reports/Static.jrxml", parameters, new JREmptyDataSource());
     }
 
-    @Override
-    protected JRDataSource getDataSource() {
-        return new JREmptyDataSource();
-    }
-
+    @Test
     public void testStaticText() throws Exception {
         Assert.assertEquals("'Static Text' not found, ", "Static text", evaluate("/jasperPrint/page/text/textContent"));
     }
