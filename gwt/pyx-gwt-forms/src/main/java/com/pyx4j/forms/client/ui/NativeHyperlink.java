@@ -101,11 +101,6 @@ public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
     }
 
     @Override
-    public void setWordWrap(boolean wrap) {
-        getElement().getStyle().setProperty("whiteSpace", wrap ? "normal" : "nowrap");
-    }
-
-    @Override
     public boolean isEditable() {
         return false;
     }

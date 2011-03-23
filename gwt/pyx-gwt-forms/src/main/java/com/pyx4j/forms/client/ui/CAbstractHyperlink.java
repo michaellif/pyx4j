@@ -37,6 +37,9 @@ public class CAbstractHyperlink<E> extends CReference<E, NativeHyperlink<E>> {
 
     @Override
     protected NativeHyperlink<E> createWidget() {
-        return new NativeHyperlink<E>(this, command);
+        NativeHyperlink<E> widget = new NativeHyperlink<E>(this, command);
+        widget.setWordWrap(this.isWordWrap());
+        widget.setWidth(this.getWidth());
+        return widget;
     }
 }

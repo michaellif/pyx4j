@@ -33,13 +33,9 @@ public class CAbstractLabel<E> extends CReference<E, NativeLabel<E>> {
 
     @Override
     protected NativeLabel<E> createWidget() {
-        NativeLabel<E> nativeLabel = createNativeLabel();
-        nativeLabel.setWordWrap(this.isWordWrap());
-        nativeLabel.setWidth(this.getWidth());
-        return nativeLabel;
-    }
-
-    protected NativeLabel<E> createNativeLabel() {
-        return new NativeLabel<E>(this);
+        NativeLabel<E> widget = new NativeLabel<E>(this);
+        widget.setWordWrap(this.isWordWrap());
+        widget.setWidth(this.getWidth());
+        return widget;
     }
 }
