@@ -19,39 +19,51 @@ import gwtupload.client.IUploadStatus.Status;
 import gwtupload.client.IUploader;
 import gwtupload.client.SingleUploader;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentsList;
 import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
 
 import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.entity.client.ui.flex.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.FolderDecorator;
+import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 
 public class ApplicationDocumentsUpload extends HorizontalPanel {
 
     private static I18n i18n = I18nFactory.getI18n(ApplicationDocumentsUpload.class);
 
     VerticalPanel docList;
+
+    ApplicationDocumentsListView appDocListView;
 
     Long tenantId;
 
@@ -76,10 +88,14 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
         final FlowPanel fp = new FlowPanel();
         fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attached Files:"))));
-        fp.add(docList = new VerticalPanel());
-        docList.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        docList.getElement().getStyle().setPaddingTop(1, Unit.EM);
-        docList.getElement().getStyle().setPaddingBottom(1, Unit.EM);
+
+//        fp.add(docList = new VerticalPanel());
+//        docList.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+//        docList.getElement().getStyle().setPaddingTop(1, Unit.EM);
+//        docList.getElement().getStyle().setPaddingBottom(1, Unit.EM);
+
+        fp.add(appDocListView = new ApplicationDocumentsListView());
+        appDocListView.initialize();
 
         SingleUploader uploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
         uploader.setAutoSubmit(true);
@@ -111,54 +127,56 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
 
         this.tenantId = tenantId;
 
-        docList.clear();
+//        docList.clear();
 
         if (applicationDocumentsService != null) {
             applicationDocumentsService.retrieveAttachments(new AsyncCallback<ApplicationDocumentsList>() {
 
                 @Override
                 public void onSuccess(ApplicationDocumentsList result) {
-                    for (final ApplicationDocument doc : result.documents()) {
+                    appDocListView.populate(result);
 
-                        CHyperlink link = new CHyperlink(null, new Command() {
-                            @Override
-                            public void execute() {
-                                //TODO: show file here... 
-                            }
-                        });
-
-                        final Image remove = new Image(SiteImages.INSTANCE.delRow());
-                        remove.getElement().getStyle().setCursor(Cursor.POINTER);
-                        remove.addClickHandler(new ClickHandler() {
-
-                            @Override
-                            public void onClick(ClickEvent event) {
-                                applicationDocumentsService.removeAttachment(new AsyncCallback<VoidSerializable>() {
-
-                                    @Override
-                                    public void onSuccess(VoidSerializable result) {
-                                        updateFileList(tenantId);
-                                    }
-
-                                    @Override
-                                    public void onFailure(Throwable caught) {
-                                        // TODO Auto-generated method stub
-                                    }
-                                }, doc.id().getValue());
-                            }
-                        });
-
-                        link.setValue(doc.filename().getStringView());
-
-                        HorizontalPanel item = new HorizontalPanel();
-                        item.add(link);
-                        item.setCellWidth(link.asWidget(), "152px");
-
-                        item.add(remove);
-                        item.setCellVerticalAlignment(remove, HasVerticalAlignment.ALIGN_MIDDLE);
-
-                        docList.add(item);
-                    }
+//                    for (final ApplicationDocument doc : result.documents()) {
+//
+//                        CHyperlink link = new CHyperlink(null, new Command() {
+//                            @Override
+//                            public void execute() {
+//                                //TODO: show file here... 
+//                            }
+//                        });
+//
+//                        final Image remove = new Image(SiteImages.INSTANCE.delRow());
+//                        remove.getElement().getStyle().setCursor(Cursor.POINTER);
+//                        remove.addClickHandler(new ClickHandler() {
+//
+//                            @Override
+//                            public void onClick(ClickEvent event) {
+//                                applicationDocumentsService.removeAttachment(new AsyncCallback<VoidSerializable>() {
+//
+//                                    @Override
+//                                    public void onSuccess(VoidSerializable result) {
+//                                        updateFileList(tenantId);
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(Throwable caught) {
+//                                        // TODO Auto-generated method stub
+//                                    }
+//                                }, doc.id().getValue());
+//                            }
+//                        });
+//
+//                        link.setValue(doc.filename().getStringView());
+//
+//                        HorizontalPanel item = new HorizontalPanel();
+//                        item.add(link);
+//                        item.setCellWidth(link.asWidget(), "152px");
+//
+//                        item.add(remove);
+//                        item.setCellVerticalAlignment(remove, HasVerticalAlignment.ALIGN_MIDDLE);
+//
+//                        docList.add(item);
+//                    }
                 }
 
                 @Override
@@ -168,5 +186,61 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
             }, tenantId, documentType);
         }
 
+    }
+
+    private class ApplicationDocumentsListView extends CEntityForm<ApplicationDocumentsList> {
+
+        public ApplicationDocumentsListView() {
+            super(ApplicationDocumentsList.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FlowPanel main = new FlowPanel();
+            main.add(inject(proto().documents(), new CEntityFolder<ApplicationDocument>(ApplicationDocument.class) {
+
+                private List<EntityFolderColumnDescriptor> columns;
+                {
+                    columns = new ArrayList<EntityFolderColumnDescriptor>();
+                    columns.add(new EntityFolderColumnDescriptor(proto().filename(), "15em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto().fileSize(), "5em"));
+                }
+
+                @Override
+                protected FolderDecorator<ApplicationDocument> createFolderDecorator() {
+                    return new BoxReadOnlyFolderDecorator<ApplicationDocument>();
+                }
+
+                @Override
+                protected CEntityFolderItem<ApplicationDocument> createItem() {
+                    return new CEntityFolderRow<ApplicationDocument>(ApplicationDocument.class, columns) {
+
+                        @Override
+                        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                            if (column.getObject() == proto().filename()) {
+                                CHyperlink link = new CHyperlink(new Command() {
+                                    @Override
+                                    public void execute() {
+                                        // TODO show the file here...
+                                    }
+                                });
+                                return inject(column.getObject(), link);
+                            } else if (column.getObject() == proto().fileSize()) {
+                                return inject(column.getObject(), new CNumberLabel());
+                            } else {
+                                return super.createCell(column);
+                            }
+                        }
+
+                        @Override
+                        public FolderItemDecorator createFolderItemDecorator() {
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), i18n.tr("Remove file"));
+                        }
+                    };
+                }
+            }));
+
+            return main;
+        }
     }
 }
