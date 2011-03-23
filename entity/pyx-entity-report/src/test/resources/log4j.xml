@@ -6,8 +6,8 @@
 	<appender name="ConsoleAppender-info" class="org.apache.log4j.ConsoleAppender">
 		<param name="Threshold" value="info" />
 		<layout class="org.apache.log4j.PatternLayout">
-			<!-- Line# clickable in eclipse -->
-			<param name="ConversionPattern" value="%-5p %m \t{ %c{1}.%M:%L}\n" />
+			<!-- The Line# should clickable in eclipse console. Do not change -->
+			<param name="ConversionPattern" value="%-5p %m \t{ %l}\n" />
 		</layout>
 	</appender>
 
