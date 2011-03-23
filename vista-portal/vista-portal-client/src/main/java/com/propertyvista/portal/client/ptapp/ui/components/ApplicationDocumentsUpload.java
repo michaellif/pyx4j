@@ -141,7 +141,8 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
 //                        CHyperlink link = new CHyperlink(null, new Command() {
 //                            @Override
 //                            public void execute() {
-//                                //TODO: show file here... 
+//                                //TODO: show file here...
+                                  //open this url: "ApplicationDocument?id="+doc.getId()
 //                            }
 //                        });
 //
