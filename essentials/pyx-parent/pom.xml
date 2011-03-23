@@ -405,7 +405,7 @@
                 <!-- check poi version when updating -->
                 <version>4.0.1</version>
                 <exclusions>
-                    <exclusion><groupId>commons-collections</groupId><artifactId>commons-collections</artifactId></exclusion>
+                    <!--exclusion><groupId>commons-collections</groupId><artifactId>commons-collections</artifactId></exclusion-->
                     <!--exclusion><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId></exclusion-->
                     <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
                     <exclusion><groupId>jfree</groupId><artifactId>jfreechart</artifactId></exclusion>
