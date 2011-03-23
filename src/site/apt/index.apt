@@ -64,3 +64,5 @@ We can create Entity implementation classes at build-time so bytecode manipulati
 ~~    * {{{./incubator/tester/tester-client/soycReport/}GWT Compile Report for 'tester'}}
 
     * {{{./examples/examples-site/soycReport/}GWT Compile Report for 'examples'}}
+
+    * {{{./examples/examples-gae-server/rpc/#version#}RPC files}} - 'examples' client Site RPC policy files with history.

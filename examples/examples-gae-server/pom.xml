@@ -127,6 +127,28 @@
                             </target>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>site.rpc-version</id>
+                        <phase>site</phase>
+                        <goals>
+                          <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <path id="site.rpc.path">
+                                    <first count="1"><fileset dir="${basedir}/war/g.site" includes="*.rpc" /></first>
+                                </path>
+                                <property name="site.rpc.full-path" refid="site.rpc.path" />
+                                <pathconvert property="site.rpc.name" pathsep=""><path refid="site.rpc.path"/><flattenmapper/></pathconvert>
+                                <echo message="site.rpc.name [${site.rpc.name}]"/>
+
+                                <copy file="${site.rpc.full-path}"
+                                    tofile="${project.build.directory}/site/rpc/${project.version}/${buildLabel}-${site.rpc.name}"/>
+                            </target>
+                        </configuration>
+                    </execution>
+
                 </executions>
             </plugin>
 
