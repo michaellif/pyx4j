@@ -27,6 +27,6 @@ public interface Entity extends IEntity {
 
     IPrimitive<String> field1();
 
-    Inner field2();
+    Inner inner();
 
 }

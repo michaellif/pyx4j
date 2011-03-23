@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="field1" class="java.lang.String"/>
-	<field name="field2/field3" class="java.lang.String"/>
+	<field name="inner/field3" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -35,7 +35,7 @@
 			<textField>
 				<reportElement x="0" y="20" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{field2/field3}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{inner/field3}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -45,12 +45,12 @@ public class EntityReportTest extends ReportsTestBase {
 
         Entity entity = EntityFactory.create(Entity.class);
         entity.field1().setValue("Field AA");
-        entity.field2().field3().setValue("Field AAAA");
+        entity.inner().field3().setValue("Field AAAA");
         entityCollection.add(entity);
 
         entity = EntityFactory.create(Entity.class);
         entity.field1().setValue("Field BB");
-        entity.field2().field3().setValue("Field BBBB");
+        entity.inner().field3().setValue("Field BBBB");
         entityCollection.add(entity);
 
         createReport("target/test-classes/reports/Entity.jrxml", parameters, new JRIEntityCollectionDataSource<Entity>(entityCollection));
