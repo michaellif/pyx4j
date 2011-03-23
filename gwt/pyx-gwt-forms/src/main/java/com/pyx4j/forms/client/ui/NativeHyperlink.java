@@ -30,16 +30,20 @@ import com.google.gwt.user.client.ui.Anchor;
 
 import com.pyx4j.widgets.client.style.CSSClass;
 
-public class NativeHyperlink extends Anchor implements INativeFocusComponent {
+public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
 
     private Command comand;
 
-    private final CHyperlink cHyperlink;
+    private final CAbstractHyperlink<E> cHyperlink;
 
     private boolean enabled;
 
-    public NativeHyperlink(CHyperlink hyperlink, Command comand) {
-        super(hyperlink.getValue());
+    private final NativeReferenceDelegate<E> delegate;
+
+    public NativeHyperlink(CAbstractHyperlink<E> hyperlink, Command comand) {
+        super(hyperlink.getValue() != null ? hyperlink.getValue().toString() : null);
+        delegate = new NativeReferenceDelegate<E>(this);
+
         this.cHyperlink = hyperlink;
         setStyleName(CSSClass.pyx4j_Hyperlink.name());
 
@@ -47,6 +51,7 @@ public class NativeHyperlink extends Anchor implements INativeFocusComponent {
         setCommand(comand);
 
         addClickHandler(new ClickHandler() {
+            @Override
             public void onClick(ClickEvent event) {
                 if (isEnabled() && NativeHyperlink.this.comand != null) {
                     NativeHyperlink.this.comand.execute();
@@ -56,6 +61,7 @@ public class NativeHyperlink extends Anchor implements INativeFocusComponent {
         });
 
         addKeyUpHandler(new KeyUpHandler() {
+            @Override
             public void onKeyUp(KeyUpEvent event) {
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER && isEnabled() && NativeHyperlink.this.comand != null) {
                     NativeHyperlink.this.comand.execute();
@@ -66,7 +72,8 @@ public class NativeHyperlink extends Anchor implements INativeFocusComponent {
         setEnabled(cHyperlink.isEnabled());
     }
 
-    public CComponent<?> getCComponent() {
+    @Override
+    public CAbstractHyperlink<E> getCComponent() {
         return cHyperlink;
     }
 
@@ -98,4 +105,23 @@ public class NativeHyperlink extends Anchor implements INativeFocusComponent {
         getElement().getStyle().setProperty("whiteSpace", wrap ? "normal" : "nowrap");
     }
 
+    @Override
+    public void setEditable(boolean editable) {
+        // do nothing - actually it's not editable...
+    }
+
+    @Override
+    public boolean isEditable() {
+        return false;
+    }
+
+    @Override
+    public void setNativeValue(E value) {
+        delegate.setNativeValue(value);
+    }
+
+    @Override
+    public void setValid(boolean valid) {
+        // do nothing - actually it's valid always...
+    }
 }

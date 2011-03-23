@@ -25,16 +25,19 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTML;
 
-public class NativeLabel<E> extends HTML implements INativeEditableComponent<E> {
+public class NativeLabel<E> extends HTML implements INativeReference<E> {
 
     private final CAbstractLabel<E> cComponent;
 
+    private final NativeReferenceDelegate<E> delegate;
+
     public NativeLabel(CAbstractLabel<E> cComponent) {
         this.cComponent = cComponent;
+        delegate = new NativeReferenceDelegate<E>(this);
     }
 
     @Override
-    public CComponent<?> getCComponent() {
+    public CAbstractLabel<E> getCComponent() {
         return cComponent;
     }
 
@@ -58,19 +61,7 @@ public class NativeLabel<E> extends HTML implements INativeEditableComponent<E> 
 
     @Override
     public void setNativeValue(E value) {
-        String text = "";
-        if (value != null) {
-            if (cComponent.getFormat() != null) {
-                text = cComponent.getFormat().format(value);
-            } else {
-                text = value.toString();
-            }
-        }
-        if (cComponent.isAllowHtml()) {
-            setHTML(text);
-        } else {
-            setText(text);
-        }
+        delegate.setNativeValue(value);
     }
 
     public void setReadOnly(boolean readOnly) {

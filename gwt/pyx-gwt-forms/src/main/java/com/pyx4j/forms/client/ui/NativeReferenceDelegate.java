@@ -20,16 +20,29 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.Command;
+public class NativeReferenceDelegate<E> {
 
-public class CHyperlink extends CAbstractHyperlink<String> {
+    private final INativeReference<E> parent;
 
-    public CHyperlink(Command command) {
-        super(command);
+    NativeReferenceDelegate(INativeReference<E> parent) {
+        this.parent = parent;
     }
 
-    public CHyperlink(String title, Command command) {
-        super(title, command);
+    @SuppressWarnings("unchecked")
+    public void setNativeValue(E value) {
+        String text = "";
+        CReference<E, ?> comp = (CReference<E, ?>) parent.getCComponent();
+        if (value != null) {
+            if (comp.getFormat() != null) {
+                text = comp.getFormat().format(value);
+            } else {
+                text = value.toString();
+            }
+        }
+        if (comp.isAllowHtml()) {
+            parent.setHTML(text);
+        } else {
+            parent.setText(text);
+        }
     }
-
 }

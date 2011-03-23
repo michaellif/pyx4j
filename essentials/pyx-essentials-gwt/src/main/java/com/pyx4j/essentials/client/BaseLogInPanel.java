@@ -125,7 +125,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
         add(forgotPassword.asWidget());
 
-        googleLogin = new CHyperlink(null, new Command() {
+        googleLogin = new CHyperlink(new Command() {
 
             @Override
             public void execute() {

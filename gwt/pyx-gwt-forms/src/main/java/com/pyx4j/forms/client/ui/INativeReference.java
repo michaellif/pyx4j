@@ -20,16 +20,12 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.Command;
+public interface INativeReference<E> extends INativeEditableComponent<E> {
 
-public class CHyperlink extends CAbstractHyperlink<String> {
+    void setWordWrap(boolean wrap);
 
-    public CHyperlink(Command command) {
-        super(command);
-    }
+    void setHTML(String text);
 
-    public CHyperlink(String title, Command command) {
-        super(title, command);
-    }
+    void setText(String text);
 
 }

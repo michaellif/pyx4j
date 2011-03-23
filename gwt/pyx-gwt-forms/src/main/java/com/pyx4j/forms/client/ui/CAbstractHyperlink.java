@@ -14,38 +14,42 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 12, 2010
- * @author vlads
+ * Created on Jan 11, 2010
+ * @author Michael
  * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 
-public class CAbstractLabel<E> extends CReference<E, NativeLabel<E>> {
+import com.google.gwt.user.client.Command;
 
-    public CAbstractLabel() {
-        this(null);
+public class CAbstractHyperlink<E> extends CReference<E, NativeHyperlink<E>> {
+
+    private boolean wordWrap = false;
+
+    private final Command command;
+
+    public CAbstractHyperlink(Command command) {
+        this(null, command);
     }
 
-    public CAbstractLabel(String title) {
+    public CAbstractHyperlink(String title, Command command) {
         super(title);
-        setWidth("100%");
+        this.command = command;
     }
 
     @Override
-    protected NativeLabel<E> createWidget() {
-        NativeLabel<E> nativeLabel = createNativeLabel();
-        nativeLabel.setWordWrap(this.isWordWrap());
-        nativeLabel.setWidth(this.getWidth());
-        return nativeLabel;
+    protected NativeHyperlink<E> createWidget() {
+        return new NativeHyperlink<E>(this, command);
     }
 
-    protected NativeLabel<E> createNativeLabel() {
-        return new NativeLabel<E>(this);
+    public void setWordWrap(boolean wrap) {
+        if (isWidgetCreated()) {
+            asWidget().setWordWrap(wrap);
+        }
+        wordWrap = wrap;
     }
 
-    @Override
-    public boolean isEditable() {
-        return false;
+    public boolean isWordWrap() {
+        return wordWrap;
     }
-
 }

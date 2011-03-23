@@ -230,7 +230,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
             try {
                 widget = initWidget();
             } catch (Throwable e) {
-                e.printStackTrace();
+                throw new Error("Widget could not be initialized", e);
             }
             if (getDebugId() != null) {
                 setDebugId(getDebugId());
