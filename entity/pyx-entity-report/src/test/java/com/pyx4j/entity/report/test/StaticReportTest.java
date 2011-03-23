@@ -23,6 +23,8 @@ package com.pyx4j.entity.report.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.Assert;
+
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 
@@ -45,8 +47,8 @@ public class StaticReportTest extends ReportsTestBase {
         return new JREmptyDataSource();
     }
 
-    public void testCreation() {
-
+    public void testStaticText() throws Exception {
+        Assert.assertEquals("'Static Text' not found, ", "Static text", evaluate("/jasperPrint/page/text/textContent"));
     }
 
 }

@@ -29,10 +29,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
@@ -46,74 +43,41 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 
 import org.w3c.dom.Document;
-import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
 public abstract class ReportsTestBase extends TestCase {
+
+    private XPath xPath;
+
+    private Document document;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        createReport();
-    }
-
-    private void createReport() {
+        ByteArrayOutputStream bos = null;
         try {
-            JasperReport jasperReport = JasperCompileManager.compileReport(getDesignFileName());
 
+            JasperReport jasperReport = JasperCompileManager.compileReport(getDesignFileName());
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, getParameters(), getDataSource());
 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bos = new ByteArrayOutputStream();
             JasperExportManager.exportReportToXmlStream(jasperPrint, bos);
             bos.flush();
-            System.out.println(new String(bos.toByteArray()));
-            bos.close();
 
-            //+++++++++++++++++++++++
-
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            factory.setValidating(false);
-
-            try {
-                factory.setFeature("http://xml.org/sax/features/validation", false);
-                factory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
-                factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-                factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-                factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-
-            SAXParser parser = factory.newSAXParser();
-
-            parser.parse(new ByteArrayInputStream(bos.toByteArray()), new DefaultHandler() {
-                @Override
-                public void startElement(String namespaceURI, String localName, String qName, Attributes atts) {
-                    System.out.println("++++++" + qName);
-                }
-            });
-
-            //+++++++++++++++++++++++
-
-            Document document = parseXML(bos.toByteArray());
+            document = parseXML(bos.toByteArray());
             XPathFactory xpathFactory = XPathFactory.newInstance();
-            XPath xPath = xpathFactory.newXPath();
-            XPathExpression xPathExpression = xPath.compile("/jasperPrint/page/text/textContent");
-            String result = xPathExpression.evaluate(document);
-            System.out.println(result);
+            xPath = xpathFactory.newXPath();
 
-        } catch (JRException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (XPathExpressionException e) {
-            e.printStackTrace();
+        } finally {
+            if (bos != null) {
+                bos.close();
+            }
         }
+
+    }
+
+    protected String evaluate(String expression) throws XPathExpressionException {
+        return xPath.evaluate(expression, document);
     }
 
     private Document parseXML(byte[] xml) throws SAXException, IOException, ParserConfigurationException {
