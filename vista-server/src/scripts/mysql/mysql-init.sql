@@ -17,3 +17,10 @@ GRANT ALL PRIVILEGES ON vista.* TO 'vista'@'%';
 DROP DATABASE vista;
 CREATE DATABASE vista;
 
+----- if you get error:
+----- ERROR 1396 (HY000) at line 3: Operation CREATE USER failed for 'vista'@'%'
+----- then run the following commands:
+-- DROP USER 'vista'@'localhost'
+-- delete from mysql.user where user='vista';
+-- delete from mysql.db where user='vista';
+-- FLUSH PRIVILEGES;
