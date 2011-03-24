@@ -24,11 +24,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+
+import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 public class WebDriverWrapper implements WebDriver {
 
@@ -43,7 +47,17 @@ public class WebDriverWrapper implements WebDriver {
             driver = new ChromeDriver();
             break;
         case Friefox:
-            driver = new FirefoxDriver();
+            FirefoxProfile profile = null;
+            ProxyConfig proxyConfig = testConfig.getProxyConfig();
+            if (proxyConfig != null) {
+                profile = new FirefoxProfile();
+                Proxy proxy = new Proxy();
+                proxy.setProxyType(Proxy.ProxyType.MANUAL);
+                proxy.setHttpProxy(proxyConfig.getHost() + ":" + proxyConfig.getPort());
+                proxy.setNoProxy("localhost");
+                profile.setProxyPreferences(proxy);
+            }
+            driver = new FirefoxDriver(profile);
             break;
         case IE:
             driver = new InternetExplorerDriver();

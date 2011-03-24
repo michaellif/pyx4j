@@ -21,6 +21,7 @@
 package com.pyx4j.selenium;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 public class DefaultSeleniumTestConfiguration implements ISeleniumTestConfiguration {
 
@@ -68,6 +69,11 @@ public class DefaultSeleniumTestConfiguration implements ISeleniumTestConfigurat
         } else {
             return Driver.Friefox;
         }
+    }
+
+    @Override
+    public ProxyConfig getProxyConfig() {
+        return null;
     }
 
     @Override

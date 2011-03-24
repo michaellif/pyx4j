@@ -20,6 +20,8 @@
  */
 package com.pyx4j.selenium;
 
+import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
+
 public interface ISeleniumTestConfiguration {
 
     public static enum Driver {
@@ -44,5 +46,7 @@ public interface ISeleniumTestConfiguration {
     public boolean keepBrowserOnError();
 
     public String screenshotDir();
+
+    public ProxyConfig getProxyConfig();
 
 }
