@@ -192,8 +192,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         itemsMap.clear();
         currentRowDebugId = 0;
 
-        ValueChangeEvent.fire(this, getValue());
-
         boolean first = true;
         for (E item : value) {
             CEntityFolderItem<E> comp = null;
@@ -214,6 +212,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         for (CEntityFolderItem<E> item : oldMap.values()) {
             content.remove(item);
         }
+
+        ValueChangeEvent.fire(this, getValue());
     }
 
     private void abandonFolderItem(final CEntityFolderItem<E> component) {
