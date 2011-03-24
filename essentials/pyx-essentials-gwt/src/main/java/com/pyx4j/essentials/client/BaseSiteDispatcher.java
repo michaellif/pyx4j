@@ -23,7 +23,6 @@ package com.pyx4j.essentials.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.essentials.client.console.ConsoleSiteFactory;
 import com.pyx4j.essentials.client.console.ConsoleSitePanel;
 import com.pyx4j.log4gwt.client.ClientLogger;
@@ -37,7 +36,6 @@ public abstract class BaseSiteDispatcher extends AbstractSiteDispatcher implemen
     @Override
     public void onSiteLoad() {
         ClientLogger.addAppender(new RPCAppender(Level.WARN));
-        ClientEntityFactory.ensureIEntityImplementations();
         DefaultErrorHandlerDialog.register();
         SessionInactiveDialog.register();
     }

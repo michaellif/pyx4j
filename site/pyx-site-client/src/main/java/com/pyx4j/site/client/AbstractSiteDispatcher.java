@@ -45,6 +45,7 @@ import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.security.client.ClientContext;
@@ -86,6 +87,7 @@ public abstract class AbstractSiteDispatcher {
 
     public AbstractSiteDispatcher() {
         instance = this;
+        ClientEntityFactory.ensureIEntityImplementations();
 
         Element head = Document.get().getElementsByTagName("html").getItem(0);
         head.setPropertyString("xmlns:pyx", "");
