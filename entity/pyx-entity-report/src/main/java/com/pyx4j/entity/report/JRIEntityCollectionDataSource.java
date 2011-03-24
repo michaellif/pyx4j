@@ -27,9 +27,9 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRRewindableDataSource;
 
-import org.apache.commons.beanutils.PropertyUtils;
-
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 
 public class JRIEntityCollectionDataSource<E extends IEntity> implements JRRewindableDataSource {
@@ -139,7 +139,12 @@ public class JRIEntityCollectionDataSource<E extends IEntity> implements JRRewin
 
         if (entity != null) {
 
-            value = entity.getValue(new Path(entity.getObjectClass().getSimpleName() + "/" + propertyName + "/"));
+            IObject<?> member = entity.getMember(new Path(entity.getObjectClass().getSimpleName() + "/" + propertyName + "/"));
+            if (member instanceof IPrimitive) {
+                value = member.getValue();
+            } else {
+                value = member;
+            }
 
         }
 

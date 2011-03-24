@@ -24,12 +24,14 @@ package com.pyx4j.entity.report.test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
@@ -43,6 +45,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public abstract class ReportsTestBase {
@@ -53,6 +56,8 @@ public abstract class ReportsTestBase {
 
     private static Document document;
 
+    private static ArrayList<String> textItems = new ArrayList<String>();
+
     protected static void createReport(String designFileName, Map<String, String> parameters, JRDataSource dataSource) throws Exception {
         ByteArrayOutputStream bos = null;
         try {
@@ -61,6 +66,7 @@ public abstract class ReportsTestBase {
 
             JasperReport jasperReport = JasperCompileManager.compileReport(designFileName);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+            JasperExportManager.exportReportToPdfFile(jasperPrint, designFileName + ".pdf");
 
             bos = new ByteArrayOutputStream();
             JasperExportManager.exportReportToXmlStream(jasperPrint, bos);
@@ -72,6 +78,11 @@ public abstract class ReportsTestBase {
             XPathFactory xpathFactory = XPathFactory.newInstance();
             xPath = xpathFactory.newXPath();
 
+            NodeList nodes = evaluate("/jasperPrint/page/text/textContent");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                textItems.add(nodes.item(i).getTextContent());
+            }
+
         } finally {
             if (bos != null) {
                 bos.close();
@@ -79,8 +90,12 @@ public abstract class ReportsTestBase {
         }
     }
 
-    protected String evaluate(String expression) throws XPathExpressionException {
-        return xPath.evaluate(expression, document);
+    protected static boolean containsText(String expression) {
+        return textItems.contains(expression);
+    }
+
+    protected static NodeList evaluate(String expression) throws XPathExpressionException {
+        return (NodeList) xPath.evaluate(expression, document, XPathConstants.NODESET);
     }
 
     private static Document parseXML(byte[] xml) throws SAXException, IOException, ParserConfigurationException {

@@ -3,19 +3,22 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="field1" class="java.lang.String"/>
-	<field name="inner/field3" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\My\\Projects\\PYX\\pyx4j\\entity\\pyx-entity-report\\src\\test\\resources\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="name" class="java.lang.String"/>
+	<field name="departments" class="com.pyx4j.entity.shared.ISet"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="79" splitType="Stretch">
 			<staticText>
-				<reportElement x="156" y="12" width="189" height="55"/>
+				<reportElement x="156" y="12" width="239" height="55"/>
 				<textElement textAlignment="Center">
 					<font size="24"/>
 				</textElement>
-				<text><![CDATA[Entity text]]></text>
+				<text><![CDATA[Organizations Report]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -30,13 +33,13 @@
 			<textField>
 				<reportElement x="0" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{field1}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="0" y="20" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{inner/field3}]]></textFieldExpression>
-			</textField>
+			<subreport>
+				<reportElement x="-22" y="44" width="597" height="76"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{departments})]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Departments.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 	<columnFooter>

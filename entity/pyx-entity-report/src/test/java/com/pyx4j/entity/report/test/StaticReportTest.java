@@ -41,7 +41,7 @@ public class StaticReportTest extends ReportsTestBase {
 
     @Test
     public void testStaticText() throws Exception {
-        Assert.assertEquals("'Static Text' not found, ", "Static text", evaluate("/jasperPrint/page/text/textContent"));
+        Assert.assertTrue("'Static Text' not found, ", containsText("Static text"));
     }
 
 }

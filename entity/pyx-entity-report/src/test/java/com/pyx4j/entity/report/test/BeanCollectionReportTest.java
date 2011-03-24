@@ -47,13 +47,13 @@ public class BeanCollectionReportTest extends ReportsTestBase {
 
     @Test
     public void testStaticText() throws Exception {
-        Assert.assertEquals("'Dynamic Text' not found, ", "Dynamic text", evaluate("/jasperPrint/page/text[1]/textContent"));
+        Assert.assertTrue("'Dynamic Text' not found, ", containsText("Dynamic text"));
     }
 
     @Test
     public void testDynamicText() throws Exception {
-        Assert.assertEquals("'Field A' not found, ", "Field A", evaluate("/jasperPrint/page/text[2]/textContent"));
-        Assert.assertEquals("'Field B' not found, ", "Field B", evaluate("/jasperPrint/page/text[3]/textContent"));
+        Assert.assertTrue("'Field A' not found, ", containsText("Field A"));
+        Assert.assertTrue("'Field B' not found, ", containsText("Field B"));
     }
 
     public static class Bean {
