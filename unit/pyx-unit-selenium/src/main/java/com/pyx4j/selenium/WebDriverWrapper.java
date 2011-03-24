@@ -31,10 +31,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 public class WebDriverWrapper implements WebDriver {
+
+    private static final Logger log = LoggerFactory.getLogger(WebDriverWrapper.class);
 
     protected ISeleniumTestConfiguration testConfig;
 
@@ -63,7 +67,10 @@ public class WebDriverWrapper implements WebDriver {
             driver = new InternetExplorerDriver();
             break;
         }
-        driver.get(this.testConfig.getTestUrl());
+        log.debug("WebDriver {} created", this.testConfig.getDriver());
+        String testUrl = this.testConfig.getTestUrl();
+        driver.get(testUrl);
+        log.debug("load {} is complete", testUrl);
     }
 
     @Override

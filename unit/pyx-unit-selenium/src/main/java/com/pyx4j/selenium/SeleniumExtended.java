@@ -29,6 +29,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.CompositeDebugId;
@@ -40,6 +42,8 @@ import com.pyx4j.entity.shared.IObject;
  * Compatibility layer with Selenium v1 i.e. with Selenium IDE generated scripts.
  */
 public class SeleniumExtended extends WebDriverWrapper {
+
+    private static final Logger log = LoggerFactory.getLogger(SeleniumExtended.class);
 
     public static String GWT_DEBUG_ID_PREFIX = "gwt-debug-";
 
@@ -191,6 +195,7 @@ public class SeleniumExtended extends WebDriverWrapper {
      */
     public WebElement waitFor(By paramBy, int waitSeconds) {
         long start = System.currentTimeMillis();
+        boolean logOnce = true;
         for (int second = 0;; second++) {
             if ((System.currentTimeMillis() - start) >= waitSeconds * Consts.SEC2MILLISECONDS) {
                 Assert.fail("Wait  " + paramBy + "; Timeout " + waitSeconds + " sec ...");
@@ -201,6 +206,10 @@ public class SeleniumExtended extends WebDriverWrapper {
                     return el;
                 }
             } catch (Throwable ok) {
+            }
+            if (logOnce) {
+                log.debug("waitFor {} ", paramBy);
+                logOnce = false;
             }
             try {
                 Thread.sleep(700);

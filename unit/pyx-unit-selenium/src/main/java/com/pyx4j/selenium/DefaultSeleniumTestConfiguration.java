@@ -93,7 +93,7 @@ public class DefaultSeleniumTestConfiguration implements ISeleniumTestConfigurat
 
     @Override
     public int implicitlyWaitSeconds() {
-        return getProperty("selenium.implicitlyWaitSeconds", 10);
+        return getProperty("selenium.implicitlyWaitSeconds", 2);
     }
 
     @Override
