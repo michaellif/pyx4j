@@ -109,29 +109,47 @@ public class ChargesSharedCalculation {
      * proportionately decreased. Note the total amount includes all monthly payments
      * (rent and upgrades).
      */
-    public static void calculatePaymentSplitCharges(Charges charges) {
-        double totalSplit = 0d; // everything paid by co-applicants
-        double total = charges.monthlyCharges().total().amount().getValue();
-        int splitPrc = 0;
-        TenantCharge applicantCharge = null;
+    public static boolean calculatePaymentSplitCharges(Charges charges) {
+
+        int totalSplitPrc = -1; // sum %, paid by co-applicants
+
+        // check % correctness: 
+        for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
+            if (totalSplitPrc == -1) { // first (main) applicant
+                totalSplitPrc = 0; // reset first (main) applicant flag
+            } else {
+                totalSplitPrc += charge.percentage().getValue();
+            }
+        }
+
+        if (totalSplitPrc > 100) {
+            return false; // something incorrect here!..
+        }
+
+        totalSplitPrc = 0; // perform actual calculation:
+        double totalSplitVal = 0d; // sum value, paid by co-applicants
+        TenantCharge mainApplicantCharge = null;
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
             // !N.B. charge.tenant().status()  is not available here.  charge.tenant() never loaded to GWT!
             // Consider the first is Applicant
-            if (applicantCharge == null) {
-                applicantCharge = charge;
+            if (mainApplicantCharge == null) {
+                mainApplicantCharge = charge;
             } else {
-                splitPrc += charge.percentage().getValue();
-                double v = DomainUtil.roundMoney(total * charge.percentage().getValue() / 100d);
-                charge.charge().amount().setValue(v);
-                totalSplit += v; // there may be multiple co-applicants
+                charge.charge().amount()
+                        .setValue(DomainUtil.roundMoney(charges.monthlyCharges().total().amount().getValue() * charge.percentage().getValue() / 100d));
+
+                totalSplitPrc += charge.percentage().getValue();
+                totalSplitVal += charge.charge().amount().getValue();
             }
         }
-        if (applicantCharge != null) {
-            double v = total - totalSplit; // applicant's share of payment
-            applicantCharge.charge().amount().setValue(v);
-            applicantCharge.percentage().setValue(100 - splitPrc);
+
+        if (mainApplicantCharge != null) {
+            mainApplicantCharge.charge().amount().setValue(charges.monthlyCharges().total().amount().getValue() - totalSplitVal);
+            mainApplicantCharge.percentage().setValue(100 - totalSplitPrc);
         }
+
         calculateTotal(charges.paymentSplitCharges());
+        return true;
     }
 
     public static double calculateSelectableTotal(IList<ChargeLineSelectable> charges) {
