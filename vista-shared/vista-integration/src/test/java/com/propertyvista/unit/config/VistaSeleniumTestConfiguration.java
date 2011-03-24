@@ -13,8 +13,10 @@
  */
 package com.propertyvista.unit.config;
 
+import com.propertyvista.config.SystemConfig;
 import com.propertyvista.config.VistaDeploymentId;
 
+import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 import com.pyx4j.selenium.DefaultSeleniumTestConfiguration;
 
 /**
@@ -34,9 +36,9 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
 
     public VistaSeleniumTestConfiguration(ApplicationId appID) {
         // Comment/uncomment lines here during development.  Never commit this file to SVN
-        this(appID, VistaDeploymentId.www22);
+        //this(appID, VistaDeploymentId.www22);
         //this(appID, VistaDeploymentId.www33);
-        //this(appID, VistaDeploymentId.local);
+        this(appID, VistaDeploymentId.local);
     }
 
     private VistaSeleniumTestConfiguration(ApplicationId appID, VistaDeploymentId deploymentId) {
@@ -81,6 +83,11 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
     @Override
     public boolean reuseBrowser() {
         return false;
+    }
+
+    @Override
+    public ProxyConfig getProxyConfig() {
+        return SystemConfig.instance().getProxyConfig();
     }
 
 }
