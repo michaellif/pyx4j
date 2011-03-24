@@ -33,10 +33,8 @@ import com.pyx4j.entity.shared.IList;
 
 public class ChargesSharedCalculation {
 
-    public static void calculateCharges(Charges charges) {
-        calculateMonthlyAndProrateCharges(charges);
-        calculateApplicationCharges(charges);
-        calculatePaymentSplitCharges(charges);
+    public static boolean calculateCharges(Charges charges) {
+        return (calculateMonthlyAndProrateCharges(charges) && calculateApplicationCharges(charges) && calculatePaymentSplitCharges(charges));
     }
 
     public static void calculatePetCharges(PetChargeRule petChargeRule, Pet pet) {
@@ -61,7 +59,7 @@ public class ChargesSharedCalculation {
     }
 
     @SuppressWarnings("deprecation")
-    public static void calculateMonthlyAndProrateCharges(Charges charges) {
+    public static boolean calculateMonthlyAndProrateCharges(Charges charges) {
 
         // take all monthly charges and get their total
         double rentTotal = calculateTotal(charges.monthlyCharges());
@@ -72,7 +70,7 @@ public class ChargesSharedCalculation {
         // take the rentStart date
         Date rentStart = charges.rentStart().getValue();
         if (rentStart == null) {
-            return;
+            return true;
         }
 
         // month end
@@ -98,10 +96,12 @@ public class ChargesSharedCalculation {
         charges.proRatedCharges().charges().clear();
         charges.proRatedCharges().charges().add(proratedCharge);
         charges.proRatedCharges().total().set(DomainUtil.createMoney(proratedTotal));
+        return true;
     }
 
-    public static void calculateApplicationCharges(Charges charges) {
+    public static boolean calculateApplicationCharges(Charges charges) {
         calculateTotal(charges.applicationCharges());
+        return true;
     }
 
     /**

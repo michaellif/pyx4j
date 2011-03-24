@@ -53,8 +53,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
             @Override
             public void onValueChange(ValueChangeEvent event) {
-                if (isValid()) {
-                    ChargesSharedCalculation.calculateCharges(getValue());
+                if (isValid() && ChargesSharedCalculation.calculateCharges(getValue())) {
                     setValue(getValue());
                 }
             }

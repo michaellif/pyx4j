@@ -58,7 +58,7 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
                 } else if (column.getObject() == proto().email()) {
                     ((CEditableComponent) component).setEditable(false);
                 }
-                main.add(createDecorator(column, component, column.getWidth()));
+                main.add(createCellDecorator(column, component, column.getWidth()));
             }
             return main;
         } else {

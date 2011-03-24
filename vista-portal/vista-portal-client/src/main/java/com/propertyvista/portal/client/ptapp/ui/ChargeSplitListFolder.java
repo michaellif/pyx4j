@@ -110,8 +110,8 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
             }
 
             @Override
-            protected Widget createDecorator(EntityFolderColumnDescriptor column, CComponent<?> component, String width) {
-                Widget w = super.createDecorator(column, component, width);
+            protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CComponent<?> component, String width) {
+                Widget w = super.createCellDecorator(column, component, width);
                 if (column.getObject() != proto().tenantFullName()) {
                     w.getElement().getStyle().setProperty("textAlign", "right");
                     component.asWidget().getElement().getStyle().setProperty("textAlign", "right");
