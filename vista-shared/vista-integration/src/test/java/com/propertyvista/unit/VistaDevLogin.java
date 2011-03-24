@@ -27,6 +27,7 @@ public class VistaDevLogin {
     public static void login(SeleniumExtended selenium) {
         if (!selenium.isElementPresent("id=googleSignIn")) {
             log.debug("login not required");
+            return;
         }
 
         Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials.properties");
@@ -40,5 +41,4 @@ public class VistaDevLogin {
         selenium.click("id=continue");
 
     }
-
 }
