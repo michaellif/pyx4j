@@ -24,10 +24,7 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Timer;
 
 import com.pyx4j.widgets.client.TextArea;
 
@@ -36,13 +33,6 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
     private final CTextArea cComponent;
 
     private boolean nativeValueUpdate = false;
-
-    private final Timer keyTimer = new Timer() {
-        @Override
-        public void run() {
-            nativeValueUpdate();
-        }
-    };
 
     public NativeTextArea(CTextArea textArea) {
         super();
@@ -54,25 +44,9 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
 
             @Override
             public void onChange(ChangeEvent event) {
-                keyTimer.cancel();
                 nativeValueUpdate();
             }
         });
-
-        addKeyUpHandler(new KeyUpHandler() {
-
-            @Override
-            public void onKeyUp(KeyUpEvent event) {
-                keyTimer.cancel();
-                keyTimer.schedule(CTextComponent.PARSINT_PERIOD);
-            }
-        });
-
-        //        addFocusHandler(new FocusHandler() {
-        //            public void onFocus(FocusEvent event) {
-        //                //textArea.onEditingStart();
-        //            }
-        //        });
 
         addBlurHandler(new BlurHandler() {
 
@@ -109,13 +83,6 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
         //Workaround for initiation of "scrollHeight" - keep next line!!!
         DOM.getElementPropertyInt(getElement(), "scrollHeight");
         DOM.setElementPropertyInt(getElement(), "scrollTop", Integer.MAX_VALUE);
-    }
-
-    /**
-     * Prevents setting wrong value once the value has been Set Externally
-     */
-    void cancelScheduledUpdate() {
-        keyTimer.cancel();
     }
 
     private void nativeValueUpdate() {

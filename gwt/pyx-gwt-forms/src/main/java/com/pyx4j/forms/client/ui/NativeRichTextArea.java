@@ -45,13 +45,6 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
 
     private final BasikRichTextToolbar toolbar;
 
-    private final Timer keyTimer = new Timer() {
-        @Override
-        public void run() {
-            nativeValueUpdate();
-        }
-    };
-
     public NativeRichTextArea(CRichTextArea textArea) {
         super();
         this.textArea = textArea;
@@ -71,15 +64,6 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
         setCellWidth(richTextArea, "100%");
 
         getElement().getStyle().setProperty("resize", "none");
-
-        richTextArea.addKeyUpHandler(new KeyUpHandler() {
-
-            @Override
-            public void onKeyUp(KeyUpEvent event) {
-                keyTimer.cancel();
-                keyTimer.schedule(CTextComponent.PARSINT_PERIOD);
-            }
-        });
 
         richTextArea.addBlurHandler(new BlurHandler() {
 
@@ -125,13 +109,6 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
         //Workaround for initiation of "scrollHeight" - keep next line!!!
         DOM.getElementPropertyInt(getElement(), "scrollHeight");
         DOM.setElementPropertyInt(getElement(), "scrollTop", Integer.MAX_VALUE);
-    }
-
-    /**
-     * Prevents setting wrong value once the value has been Set Externally
-     */
-    void cancelScheduledUpdate() {
-        keyTimer.cancel();
     }
 
     private void nativeValueUpdate() {
