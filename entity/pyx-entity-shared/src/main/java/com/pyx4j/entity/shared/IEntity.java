@@ -46,7 +46,7 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     public IPrimitive<Long> id();
 
     /**
-     * @return true if only PrimaryKey present and other properties are empty
+     * @return true if only PrimaryKey present and other properties are empty or null
      */
     public boolean isEmpty();
 

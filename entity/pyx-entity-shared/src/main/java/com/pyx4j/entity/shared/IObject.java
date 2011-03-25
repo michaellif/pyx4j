@@ -24,6 +24,9 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public interface IObject<VALUE_TYPE> {
 
+    /**
+     * @return true if Value object is Null
+     */
     public boolean isNull();
 
     public void setValue(VALUE_TYPE value) throws ClassCastException;
