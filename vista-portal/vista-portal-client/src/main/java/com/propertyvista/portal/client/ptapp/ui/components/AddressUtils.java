@@ -43,10 +43,9 @@ public class AddressUtils {
         CEditableComponent<String, ?> postalCode;
         main.add(postalCode = (CEditableComponent<String, ?>) parent.inject(proto.postalCode()), 7);
 
-        postalCode.addValueValidator(new ZipCodeValueValidator(country));
+        postalCode.addValueValidator(new ZipCodeValueValidator(parent, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger(postalCode));
 
         ProvinceContryFilters.attachFilters(province, country);
     }
-
 }

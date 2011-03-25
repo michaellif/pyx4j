@@ -18,6 +18,8 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.propertyvista.portal.domain.ref.Country;
 
+import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
@@ -25,48 +27,42 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
 
     private static I18n i18n = I18nFactory.getI18n(ZipCodeValueValidator.class);
 
-    private CEditableComponent<Country, ?> country;
+    private final CEntityEditableComponent<?> editor;
 
-    public ZipCodeValueValidator() {
+    private final Path countryPath;
 
+    public ZipCodeValueValidator(CEntityEditableComponent<?> editor, Country countryMemeberProto) {
+        this.editor = editor;
+        this.countryPath = countryMemeberProto.getPath();
     }
 
-    public ZipCodeValueValidator(CEditableComponent<Country, ?> country) {
-        this.country = country;
+    private String countryName() {
+        Country country = (Country) editor.getValue().getMember(countryPath);
+        return country.name().getValue();
     }
 
     @Override
     public boolean isValid(CEditableComponent<String, ?> component, String value) {
-        if (country != null) {
-            if ((!country.isValueEmpty()) && (value != null)) {
-                String c = country.getValue().name().getValue();
-                if ("Canada".equals(c)) {
-                    // see http://en.wikipedia.org/wiki/Postal_codes_in_Canada#Number_of_possible_postal_codes
-                    return canadianPostalCodeValidation(value);
-                } else if ("United States".equals(c)) {
-                    return usZipCodeValidation(value);
-                }
-            }
-            return true;
+        String c = countryName();
+        if ("Canada".equals(c)) {
+            // see http://en.wikipedia.org/wiki/Postal_codes_in_Canada#Number_of_possible_postal_codes
+            return canadianPostalCodeValidation(value);
+        } else if ("United States".equals(c)) {
+            return usZipCodeValidation(value);
         } else {
-            return canadianPostalCodeValidation(value) || usZipCodeValidation(value);
+            return true;
         }
     }
 
     @Override
     public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
-        if (country != null) {
-            if ((!country.isValueEmpty()) && (value != null)) {
-                String c = country.getValue().name().getValue();
-                if ("Canada".equals(c)) {
-                    return i18n.tr("Invalid Canadian Postal code.");
-                } else if ("United States".equals(c)) {
-                    return i18n.tr("Invalid US Zip code.");
-                }
-            }
-            return null;
+        String c = countryName();
+        if ("Canada".equals(c)) {
+            return i18n.tr("Invalid Canadian Postal code.");
+        } else if ("United States".equals(c)) {
+            return i18n.tr("Invalid US Zip code.");
         } else {
-            return i18n.tr("Invalid Postal/Zip code.");
+            return null;
         }
     }
 

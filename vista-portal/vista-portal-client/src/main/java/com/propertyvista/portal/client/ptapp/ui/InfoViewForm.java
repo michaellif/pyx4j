@@ -39,7 +39,6 @@ import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponent
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.validators.CanadianSinValidator;
-import com.propertyvista.portal.client.ptapp.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
@@ -414,11 +413,6 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
                 AddressUtils.injectIAddress(main, proto().address(), this);
                 main.add(new HTML());
                 return main;
-            }
-
-            @Override
-            public void addValidations() {
-                get(proto().address().postalCode()).addValueValidator(new ZipCodeValueValidator());
             }
 
             @Override
