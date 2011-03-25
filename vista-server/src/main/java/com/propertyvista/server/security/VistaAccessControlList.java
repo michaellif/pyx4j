@@ -107,18 +107,18 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(PaymentServices.class));
 
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
-        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(Application.class, userEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Application.class, userEntityAccess, CRUD));
 
         InstanceAccess applicationEntityAccess = new ApplicationEntityInstanceAccess();
-        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(ApplicationProgress.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(UnitSelection.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(ApplicationDocument.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(PotentialTenantList.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(PotentialTenantInfo.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(Pets.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(PotentialTenantFinancial.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(Charges.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(Summary.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(PaymentInfo.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(ApplicationProgress.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(UnitSelection.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(ApplicationDocument.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(PotentialTenantList.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(PotentialTenantInfo.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Pets.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(PotentialTenantFinancial.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Charges.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Summary.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(PaymentInfo.class, applicationEntityAccess, CRUD));
     }
 }

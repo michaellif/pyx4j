@@ -19,7 +19,7 @@ public enum VistaBehavior implements Behavior {
 
     // TODO 
 
-    POTENCIAL_TENANT,
+    POTENTIAL_TENANT,
 
     EMPLOYEE,
 

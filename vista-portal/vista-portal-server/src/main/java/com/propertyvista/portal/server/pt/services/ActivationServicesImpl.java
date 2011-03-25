@@ -108,7 +108,7 @@ public class ActivationServicesImpl extends ApplicationEntityServicesImpl implem
 
         credential.credential().setValue(PasswordEncryptor.encryptPassword(request.password().getValue()));
         credential.enabled().setValue(Boolean.TRUE);
-        credential.behavior().setValue(VistaBehavior.POTENCIAL_TENANT);
+        credential.behavior().setValue(VistaBehavior.POTENTIAL_TENANT);
 
         PersistenceServicesFactory.getPersistenceService().persist(user);
         credential.setPrimaryKey(user.getPrimaryKey());

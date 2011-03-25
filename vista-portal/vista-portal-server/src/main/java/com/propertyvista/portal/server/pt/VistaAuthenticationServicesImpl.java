@@ -106,7 +106,7 @@ public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl 
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.add(userCredential.behavior().getValue());
         UserVisit visit;
-        if (behaviors.contains(VistaBehavior.POTENCIAL_TENANT)) {
+        if (behaviors.contains(VistaBehavior.POTENTIAL_TENANT)) {
             visit = new PtUserVisit(user.getPrimaryKey(), user.name().getValue());
         } else {
             visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());

@@ -230,7 +230,7 @@ public class PtAppWizardManager {
     }
 
     private void loadCurrentApplication() {
-        if (ClientSecurityController.checkBehavior(VistaBehavior.POTENCIAL_TENANT)) {
+        if (ClientSecurityController.checkBehavior(VistaBehavior.POTENTIAL_TENANT)) {
 
             ((ApplicationServices) GWT.create(ApplicationServices.class)).getCurrentApplication(new DefaultAsyncCallback<CurrentApplication>() {
                 @Override
