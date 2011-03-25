@@ -25,18 +25,18 @@ import junit.framework.TestCase;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.unit.server.MockServiceFactory;
 import com.pyx4j.unit.test.rpc.FirstServices;
 
 public class FirstServiceTest extends TestCase {
 
-    public void testNothing() {
-
-    }
-
-    public void TODO_testMockServiceFactory() {
+    public void testMockServiceFactory() {
         FirstServices service = MockServiceFactory.create(FirstServices.class);
         Assert.assertNotNull("Service Not Created", service);
+        Assert.assertTrue("Service Class", service instanceof FirstServices);
+
         service.doNow(new AsyncCallback<Boolean>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -45,8 +45,76 @@ public class FirstServiceTest extends TestCase {
 
             @Override
             public void onSuccess(Boolean result) {
-                assertEquals("Service exeution results", Boolean.TRUE, result);
+                assertEquals("Service execution results", Boolean.TRUE, result);
             }
         }, "Hello");
+    }
+
+    public void testMockServiceEcho() {
+        FirstServices service = MockServiceFactory.create(FirstServices.class);
+
+        final String data = String.valueOf(System.currentTimeMillis());
+
+        service.doEcho(new AsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                fail(caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                assertEquals("Service execution results", data, result);
+            }
+        }, data);
+
+    }
+
+    public void testException() {
+        FirstServices service = MockServiceFactory.create(FirstServices.class);
+
+        // Verify if service works at all
+        service.doException(new AsyncCallback<Boolean>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                fail(caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                assertEquals("Error not expected", Boolean.FALSE, result);
+            }
+        }, Boolean.FALSE);
+
+        //Test regular serializable Exception
+        service.doException(new AsyncCallback<Boolean>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                assertEquals("Error message expected", FirstServices.EXCEPTION_MESSAGE, caught.getMessage());
+                Assert.assertTrue("Throwable Class", caught instanceof UserRuntimeException);
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                fail("Exception should be thrown");
+            }
+        }, Boolean.TRUE);
+
+        // Test non serializable wrapper
+        service.doException(new AsyncCallback<Boolean>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Assert.assertTrue("Throwable Class", !(caught instanceof NullPointerException));
+                Assert.assertTrue("Throwable Class serializable", caught instanceof UnRecoverableRuntimeException);
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                fail("Exception should be thrown");
+            }
+        }, null);
     }
 }

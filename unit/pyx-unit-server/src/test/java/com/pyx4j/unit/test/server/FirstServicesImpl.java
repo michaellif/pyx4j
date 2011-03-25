@@ -22,6 +22,7 @@ package com.pyx4j.unit.test.server;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.unit.test.rpc.FirstServices;
 
 public class FirstServicesImpl implements FirstServices {
@@ -33,8 +34,19 @@ public class FirstServicesImpl implements FirstServices {
     }
 
     @Override
-    public void doLater(AsyncCallback<Boolean> callback, String request) {
-        callback.onSuccess(Boolean.FALSE);
+    public void doEcho(AsyncCallback<String> callback, String request) {
+        callback.onSuccess(request);
+    }
+
+    @Override
+    public void doException(AsyncCallback<Boolean> callback, Boolean request) {
+        // Make NPE when request is null
+        if (request) {
+            throw new UserRuntimeException(EXCEPTION_MESSAGE);
+        } else {
+            callback.onSuccess(Boolean.FALSE);
+        }
+
     }
 
 }

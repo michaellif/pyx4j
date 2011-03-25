@@ -28,5 +28,9 @@ public interface FirstServices extends IService {
 
     public void doNow(AsyncCallback<Boolean> callback, String request);
 
-    public void doLater(AsyncCallback<Boolean> callback, String request);
+    public void doEcho(AsyncCallback<String> callback, String request);
+
+    public static final String EXCEPTION_MESSAGE = "TestMe";
+
+    public void doException(AsyncCallback<Boolean> callback, Boolean request);
 }

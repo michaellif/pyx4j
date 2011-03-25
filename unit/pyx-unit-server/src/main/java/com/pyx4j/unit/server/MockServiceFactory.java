@@ -20,12 +20,17 @@
  */
 package com.pyx4j.unit.server;
 
+import java.lang.reflect.Proxy;
+
 import com.pyx4j.rpc.shared.IService;
 
 public class MockServiceFactory {
 
     public static <T extends IService> T create(Class<T> classLiteral) {
-        return null;
+        Class<?>[] allInterfaces = new Class[classLiteral.getInterfaces().length + 1];
+        allInterfaces[0] = classLiteral;
+        System.arraycopy(classLiteral.getInterfaces(), 0, allInterfaces, 1, classLiteral.getInterfaces().length);
+        return classLiteral.cast(Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), allInterfaces, new IServiceMockProxy(classLiteral)));
     }
 
 }
