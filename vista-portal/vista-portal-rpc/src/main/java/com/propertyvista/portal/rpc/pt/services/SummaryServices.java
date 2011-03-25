@@ -13,8 +13,13 @@
  */
 package com.propertyvista.portal.rpc.pt.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.Summary;
 
+import com.pyx4j.rpc.shared.VoidSerializable;
+
 public interface SummaryServices extends AbstractWizardServices<Summary> {
+
+    public void downloadSummary(AsyncCallback<String> callback, VoidSerializable request);
 
 }

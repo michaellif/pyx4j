@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -27,6 +28,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -51,6 +53,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.services.SummaryServices;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -59,11 +62,13 @@ import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.essentials.client.DownloadFrame;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
@@ -103,6 +108,8 @@ public class SummaryViewForm extends CEntityForm<Summary> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
+        main.add(createDemoReport());
+
         main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Apartment"))));
 
         main.add(new ApartmentView());
@@ -137,6 +144,27 @@ public class SummaryViewForm extends CEntityForm<Summary> {
         content.add(main);
         content.add(new BuildingPicture());
         return content;
+    }
+
+    private Widget createDemoReport() {
+        Anchor l = new Anchor("Download Me");
+        l.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                SummaryServices srv = GWT.create(SummaryServices.class);
+                srv.downloadSummary(new DefaultAsyncCallback<String>() {
+
+                    @Override
+                    public void onSuccess(String result) {
+                        new DownloadFrame(result);
+                    }
+                }, null);
+
+            }
+        });
+
+        return l;
     }
 
     @Override

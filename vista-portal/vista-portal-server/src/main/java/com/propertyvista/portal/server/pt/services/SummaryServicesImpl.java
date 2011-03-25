@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.pt.services;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +34,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.server.contexts.Context;
 
 public class SummaryServicesImpl extends ApplicationEntityServicesImpl implements SummaryServices {
 
@@ -123,5 +130,22 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         summary.leaseTerms().set(
                 PersistenceServicesFactory.getPersistenceService().retrieve(LeaseTerms.class,
                         summary.unitSelection().selectedUnit().newLeaseTerms().getPrimaryKey()));
+    }
+
+    @Override
+    public void downloadSummary(AsyncCallback<String> callback, VoidSerializable request) {
+
+        try {
+            Downloadable d = new Downloadable(IOUtils.getResource("com/propertyvista/portal/server/preloader/apartment1.jpg"),
+                    Downloadable.getContentType(DownloadFormat.PDF));
+            d.save("da.jpg");
+
+            callback.onSuccess(Context.getRequest().getContextPath() + "/download/" + System.currentTimeMillis() + "/" + "da.jpg");
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            log.error("Error", e);
+        }
+
     }
 }
