@@ -83,7 +83,12 @@ public class DefaultSeleniumTestConfiguration implements ISeleniumTestConfigurat
 
     @Override
     public boolean keepBrowserOnError() {
-        return getProperty("selenium.keepBrowserOnError", false);
+        return getProperty("selenium.keepBrowserOnError", isStartedUnderEclipse());
+    }
+
+    public static boolean isStartedUnderEclipse() {
+        StackTraceElement[] ste = new Throwable().getStackTrace();
+        return (ste[ste.length - 1].getClassName().startsWith("org.eclipse.jdt"));
     }
 
     @Override

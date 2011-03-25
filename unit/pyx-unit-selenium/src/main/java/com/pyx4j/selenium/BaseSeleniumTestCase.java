@@ -182,11 +182,11 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public void assertEditable(IDebugId debugId) {
-        assertTrue(debugId + " should be editable", selenium.isEditable(debugId));
+        assertTrue(debugId.getDebugIdString() + " should be editable", selenium.isEditable(debugId));
     }
 
     public void assertNotEditable(IDebugId debugId) {
-        assertFalse(debugId + " should be Not editable", selenium.isEditable(debugId));
+        assertFalse(debugId.getDebugIdString() + " should be Not editable", selenium.isEditable(debugId));
     }
 
     public void assertEnabled(String locator) {
@@ -198,11 +198,11 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public void assertEnabled(IDebugId debugId) {
-        assertTrue(debugId + " should be enabled", selenium.isEnabled(debugId));
+        assertTrue(debugId.getDebugIdString() + " should be enabled", selenium.isEnabled(debugId));
     }
 
     public void assertNotEnabled(IDebugId debugId) {
-        assertFalse(debugId + " should be Not enabled", selenium.isEnabled(debugId));
+        assertFalse(debugId.getDebugIdString() + " should be Not enabled", selenium.isEnabled(debugId));
     }
 
     public void assertPresent(String locator) {
@@ -214,11 +214,11 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public void assertPresent(IDebugId debugId) {
-        assertTrue(debugId + " should exists", selenium.isElementPresent(debugId));
+        assertTrue(debugId.getDebugIdString() + " should exists", selenium.isElementPresent(debugId));
     }
 
     public void assertNotPresent(IDebugId debugId) {
-        assertFalse(debugId + " should be Not exists", selenium.isElementPresent(debugId));
+        assertFalse(debugId.getDebugIdString() + " should be Not exists", selenium.isElementPresent(debugId));
     }
 
     public void assertVisible(String locator) {
@@ -230,10 +230,10 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public void assertVisible(IDebugId debugId) {
-        assertTrue(debugId + " should be visible", selenium.isVisible(debugId));
+        assertTrue(debugId.getDebugIdString() + " should be visible", selenium.isVisible(debugId));
     }
 
     public void assertNotVisible(IDebugId debugId) {
-        assertFalse(debugId + " should be Not be visible", selenium.isVisible(debugId));
+        assertFalse(debugId.getDebugIdString() + " should be Not be visible", selenium.isVisible(debugId));
     }
 }

@@ -159,7 +159,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     public boolean isVisible(IDebugId debugId) {
-        return isElementPresent(by(debugId));
+        return isVisible(by(debugId));
     }
 
     public boolean isVisible(By paramBy) {
@@ -298,6 +298,22 @@ public class SeleniumExtended extends WebDriverWrapper {
         we.sendKeys(keysToSend);
     }
 
+    public void setValue(WebElement element, String textValue) {
+        InputHelper.setValue(element, textValue);
+    }
+
+    public void setValue(IDebugId debugId, String textValue) {
+        InputHelper.setValue(driver.findElement(by(debugId)), textValue);
+    }
+
+    public void setValue(String paramString, String textValue) {
+        InputHelper.setValue(driver.findElement(elementLocator(paramString)), textValue);
+    }
+
+    public void setValue(IObject<?> member, String textValue) {
+        InputHelper.setValue(driver.findElement(by(member)), textValue);
+    }
+
     public String getText(String paramString) {
         return driver.findElement(elementLocator(paramString)).getText();
     }
@@ -349,23 +365,14 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     public static boolean isEditable(WebElement element) {
-        String tagName = element.getTagName().toLowerCase();
-        boolean acceptableTagName = "input".equals(tagName) || "select".equals(tagName);
-        String readonly = "";
-        if ("input".equals(tagName)) {
-            readonly = element.getAttribute("readonly");
-            if (readonly == null || "false".equals(readonly)) {
-                readonly = "";
-            }
-        }
-        return element.isEnabled() && acceptableTagName && "".equals(readonly);
+        return InputHelper.isEditable(element);
     }
 
     public boolean isEditable(String locator) {
-        return isEditable(driver.findElement(elementLocator(locator)));
+        return InputHelper.isEditable(driver.findElement(elementLocator(locator)));
     }
 
     public boolean isEditable(IDebugId debugId) {
-        return isEditable(driver.findElement(by(debugId)));
+        return InputHelper.isEditable(driver.findElement(by(debugId)));
     }
 }
