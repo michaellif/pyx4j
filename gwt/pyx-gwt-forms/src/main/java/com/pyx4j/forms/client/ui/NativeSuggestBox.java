@@ -41,7 +41,7 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
 
     private final GroupFocusHandler focusHandlerManager;
 
-    public NativeSuggestBox(CSuggestBox<E> cSuggestBox) {
+    public NativeSuggestBox(final CSuggestBox<E> cSuggestBox) {
         super(new MultiWordSuggestOracle(), new TextBox());
 
         focusHandlerManager = new GroupFocusHandler(this);
@@ -55,6 +55,7 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
             @Override
             public void onSelection(SelectionEvent event) {
                 setFocus(true);
+                cSuggestBox.onEditingStop();
             }
         });
     }

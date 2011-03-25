@@ -121,7 +121,9 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
     }
 
     private E getValueByNativeOptionIndex(int index) {
-        if (index == 0) {
+        if (index == -1) {
+            return null;
+        } else if (index == 0) {
             if (firstNativeItemIsNoSelection) {
                 return null;
             } else if (notInOptionsValue != null) {
