@@ -29,8 +29,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
+import com.propertyvista.common.client.ui.CMoney;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.client.ptapp.ui.components.MoneyEditorForm;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
@@ -119,7 +119,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if ((!isSummaryViewMode()) && member.getValueClass().equals(Money.class)) {
-            return new MoneyEditorForm();
+            return new CMoney();
         } else {
             return super.create(member);
         }

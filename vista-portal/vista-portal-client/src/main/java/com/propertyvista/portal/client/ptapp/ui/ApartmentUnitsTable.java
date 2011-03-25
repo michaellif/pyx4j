@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
+import com.propertyvista.portal.client.ptapp.ui.components.VistaReadOnlyComponentFactory;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
@@ -82,7 +82,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
     private final List<EntityFolderColumnDescriptor> columns;
 
-    private final ReadOnlyComponentFactory factory = new ReadOnlyComponentFactory();
+    private final VistaReadOnlyComponentFactory factory = new VistaReadOnlyComponentFactory();
 
     private ApartmentUnitDetailsPanel unitDetailsPanelShown = null;
 

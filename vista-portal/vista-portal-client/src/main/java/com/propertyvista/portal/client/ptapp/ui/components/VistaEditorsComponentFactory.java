@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui.components;
 
+import com.propertyvista.common.client.ui.CMoneyLabel;
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.ref.Country;
 
@@ -28,7 +29,7 @@ public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(Money.class)) {
-            return new ReadOnlyMoneyForm();
+            return new CMoneyLabel();
         } else if (member.getValueClass().equals(Country.class)) {
             final CEntitySuggestBox<Country> c = new CEntitySuggestBox<Country>(Country.class);
             c.setFormat(new IFormat<Country>() {

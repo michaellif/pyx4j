@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ptapp.ui.components;
 
 import java.util.Date;
 
+import com.propertyvista.common.client.ui.CMoneyLabel;
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
@@ -31,7 +32,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 
-public class ReadOnlyComponentFactory extends EntityFormComponentFactory {
+public class VistaReadOnlyComponentFactory extends EntityFormComponentFactory {
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
@@ -61,7 +62,7 @@ public class ReadOnlyComponentFactory extends EntityFormComponentFactory {
         } else if ((member.getValueClass().equals(Province.class)) || (member.getValueClass().equals(Country.class))) {
             return new CEntityLabel();
         } else if (member.getValueClass().equals(Money.class)) {
-            return new ReadOnlyMoneyForm();
+            return new CMoneyLabel();
         } else {
             return super.create(member);
         }

@@ -43,6 +43,13 @@ public class DomainUtil {
         return money;
     }
 
+    public static Money createMoney(double value, String currency) {
+        Money money = EntityFactory.create(Money.class);
+        money.amount().setValue(value);
+        money.currency().name().setValue(currency);
+        return money;
+    }
+
     public static ChargeLine createChargeLine(ChargeType type, double money) {
         ChargeLine cl = EntityFactory.create(ChargeLine.class);
         cl.charge().set(createMoney(money));
