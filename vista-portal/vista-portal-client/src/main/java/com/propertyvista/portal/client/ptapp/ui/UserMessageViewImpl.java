@@ -26,6 +26,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.inject.Singleton;
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
+
+import com.pyx4j.commons.CompositeDebugId;
 
 @Singleton
 public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
@@ -39,6 +42,7 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
         for (UserMessageType type : UserMessageType.values()) {
 
             Holder holder = new Holder(type);
+            holder.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.UserMessage_Prefix, type));
             holders.put(type, holder);
             add(holder);
         }

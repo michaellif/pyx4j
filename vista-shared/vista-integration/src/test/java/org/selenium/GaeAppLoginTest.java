@@ -17,17 +17,24 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.openqa.selenium.By;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.unit.VistaDevLogin;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
+
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.selenium.BaseSeleniumTestCase;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class GaeAppLoginTest extends BaseSeleniumTestCase {
+
+    private static final Logger log = LoggerFactory.getLogger(GaeAppLoginTest.class);
 
     final public String blankpage = "about:blank";
 
@@ -95,6 +102,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
 
         selenium.type("UnitSelection$rentStart", strStartRent);
         selenium.click("UnitSelection$availableUnits$units_row-1_leaseTerm_12-input");
+        assertNoMessages();
         // we do not save, just a test in this case
 
         selenium.click("logout");
@@ -129,6 +137,8 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
 
         selenium.waitWhileWorking();
 
+        log.info("User {} created", ulogin);
+
         // APARTMENT PAGE
         selenium.click("UnitSelection$availableUnits$units_row-1_ApartmentUnit$unitType");
         String strAvailFrom = selenium.getText("UnitSelection$availableUnits$units_row-1_ApartmentUnit$avalableForRent");
@@ -157,9 +167,13 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         cal.add(Calendar.YEAR, 1); //get a 24 Years old co-tenant
         selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$birthDate", sdf2.format(cal.getTime()));
         selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$email", testUser + "sha" + strNow + emailAt);
-        selenium.select("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status-item0");
-        selenium.select("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$relationship-item0");
+        //selenium.select("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status-item0");
+        selenium.setValue("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status", "Co-applicant");
+        //selenium.select("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$relationship-item0");
+        selenium.setValue("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$relationship", "Spouse");
+
         selenium.click("Crud_Save");
+        assertNoMessages();
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class));
 
         selenium.click("logout");
@@ -191,9 +205,17 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
         selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$birthDate", sdf2.format(cal.getTime()));
         selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$email", testUser + "ovich" + strNow + emailAt);
-        selenium.select("gwt-debug-PotentialTenantList$tenants_row-3_PotentialTenantInfo$relationship-item1");
+        //selenium.select("gwt-debug-PotentialTenantList$tenants_row-3_PotentialTenantInfo$relationship-item1");
+        selenium.setValue("gwt-debug-PotentialTenantList$tenants_row-3_PotentialTenantInfo$relationship", "Son");
 
         selenium.click("Crud_Save");
+        assertNoMessages();
+    }
+
+    public void assertNoMessages() {
+        for (UserMessageType type : UserMessageType.values()) {
+            assertNotVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, type));
+        }
     }
 
     public void doTenantInfo() throws Exception {
@@ -255,6 +277,9 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         //INFO PAGE DOES NOT HAV PROPER DEBUF IDs ABOVE, so save does not work...
         //selenium.click("Crud_Save");
         selenium.click("MainNavigation_Prefix_apartment");
+
+        assertNoMessages();
+
         selenium.click("logout");
 
         ////sample from Slava

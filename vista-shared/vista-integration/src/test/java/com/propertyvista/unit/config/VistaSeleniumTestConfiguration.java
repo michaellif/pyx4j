@@ -43,7 +43,11 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
 
     private VistaSeleniumTestConfiguration(ApplicationId appID, VistaDeploymentId deploymentId) {
         this.appID = appID;
-        this.deploymentId = deploymentId;
+        if (System.getProperty("bamboo.buildNumber") == null) {
+            this.deploymentId = deploymentId;
+        } else {
+            this.deploymentId = VistaDeploymentId.www22;
+        }
     }
 
     @Override
