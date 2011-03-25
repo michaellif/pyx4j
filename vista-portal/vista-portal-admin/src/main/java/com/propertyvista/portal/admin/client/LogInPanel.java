@@ -122,8 +122,8 @@ public abstract class LogInPanel extends BaseLogInPanel {
             max = DemoData.MAX_ADMIN;
             break;
         case 'E':
-            devLoginUserPrefix = DemoData.CRM_EMPLOYEE_USER_PREFIX;
-            max = DemoData.MAX_EMPLOYEE;
+            devLoginUserPrefix = DemoData.CRM_PROPERTY_MANAGER_USER_PREFIX;
+            max = DemoData.MAX_PROPERTY_MANAGER;
             break;
         case 'O':
             devLoginUserPrefix = DemoData.CRM_CUSTOMER_USER_PREFIX;

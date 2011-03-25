@@ -23,7 +23,7 @@ import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.util.PrintUtil;
 import com.propertyvista.portal.rpc.pt.services.ChargesServices;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -39,12 +39,12 @@ public class ChargesServicesImpl extends ApplicationEntityServicesImpl implement
     public void retrieve(AsyncCallback<Charges> callback, Long tenantId) {
         log.info("Retrieving charges for tenant {}", tenantId);
         EntityQueryCriteria<Charges> criteria = EntityQueryCriteria.create(Charges.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         Charges charges = secureRetrieve(criteria);
         if (charges == null) {
             log.info("Creating new charges");
             charges = EntityFactory.create(Charges.class);
-            charges.application().set(PtUserDataAccess.getCurrentUserApplication());
+            charges.application().set(PtAppContext.getCurrentUserApplication());
         }
 
         ChargesServerCalculation.updateChargesFromApplication(charges);

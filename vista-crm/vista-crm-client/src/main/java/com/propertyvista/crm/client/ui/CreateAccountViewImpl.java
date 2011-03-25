@@ -192,7 +192,7 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
             devLoginUserPrefix = DemoData.CRM_ADMIN_USER_PREFIX;
             break;
         case 'Q':
-            devLoginUserPrefix = DemoData.CRM_CUSTOMER_USER_PREFIX;
+            devLoginUserPrefix = DemoData.CRM_PROPERTY_MANAGER_USER_PREFIX;
             break;
         }
         if (devLoginUserPrefix != null) {

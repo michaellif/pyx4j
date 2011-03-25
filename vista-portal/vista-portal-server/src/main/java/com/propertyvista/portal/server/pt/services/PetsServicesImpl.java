@@ -24,7 +24,7 @@ import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.pt.services.PetsServices;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -37,7 +37,7 @@ public class PetsServicesImpl extends ApplicationEntityServicesImpl implements P
     public void retrieve(AsyncCallback<Pets> callback, Long tenantId) {
         log.info("Retrieving pets for tenant {}", tenantId);
         EntityQueryCriteria<Pets> criteria = EntityQueryCriteria.create(Pets.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         Pets pets = secureRetrieve(criteria);
         if (pets == null) {
             pets = EntityFactory.create(Pets.class);

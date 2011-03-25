@@ -21,7 +21,7 @@ import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.rpc.pt.services.TenantsFinancialServices;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -36,7 +36,7 @@ public class TenantsFinancialServicesImpl extends ApplicationEntityServicesImpl 
         log.info("Retrieving summary for tenant {}", tenantId);
         EntityQueryCriteria<PotentialTenantFinancial> criteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenantId));
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         PotentialTenantFinancial financial = secureRetrieve(criteria);
         if (financial == null) {
             log.info("Creating new tenant financial");
@@ -55,7 +55,7 @@ public class TenantsFinancialServicesImpl extends ApplicationEntityServicesImpl 
     }
 
     private PotentialTenantFinancial createFinancial(Long tenantId) {
-        Application application = PtUserDataAccess.getCurrentUserApplication();
+        Application application = PtAppContext.getCurrentUserApplication();
 
         EntityQueryCriteria<PotentialTenantInfo> criteria = EntityQueryCriteria.create(PotentialTenantInfo.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenantId));

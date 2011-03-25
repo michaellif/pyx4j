@@ -31,6 +31,12 @@
             <version>${project.version}</version>
         </dependency>
 
+		<dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-crm-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-payment</artifactId>

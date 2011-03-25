@@ -25,7 +25,7 @@ import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.rpc.pt.services.SummaryServices;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -41,7 +41,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
     public void retrieve(AsyncCallback<Summary> callback, Long tenantId) {
         log.info("Retrieving summary for tenant {}", tenantId);
         EntityQueryCriteria<Summary> criteria = EntityQueryCriteria.create(Summary.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         Summary summary = secureRetrieve(criteria);
         if (summary == null) {
             log.info("Creating new Summary");
@@ -85,7 +85,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         }
 
         EntityQueryCriteria<PotentialTenantFinancial> financialCriteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
-        financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         for (PotentialTenantFinancial fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
             // Update Transient values and see if we need to show this Tenant
             findTenenat: for (PotentialTenantInfo tenant : summary.tenants().tenants()) {

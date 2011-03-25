@@ -29,7 +29,7 @@ import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -50,7 +50,7 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
     public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria request) {
         // find application by user
         EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtUserDataAccess.getCurrentUser()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtAppContext.getCurrentUser()));
         Application application = secureRetrieve(criteria);
 
         CurrentApplication currentApplication = new CurrentApplication();
@@ -62,9 +62,9 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
             }
 
             application = EntityFactory.create(Application.class);
-            application.user().set(PtUserDataAccess.getCurrentUser());
+            application.user().set(PtAppContext.getCurrentUser());
             PersistenceServicesFactory.getPersistenceService().persist(application);
-            PtUserDataAccess.setCurrentUserApplication(application);
+            PtAppContext.setCurrentUserApplication(application);
 
             ApplicationProgress progress = createApplicationProgress();
             progress.application().set(application);
@@ -78,7 +78,7 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
             PersistenceServicesFactory.getPersistenceService().persist(unitSelection);
 
         } else {
-            PtUserDataAccess.setCurrentUserApplication(application);
+            PtAppContext.setCurrentUserApplication(application);
 
             //Verify if buildingName and floorplanName are the same
             EntityQueryCriteria<UnitSelection> unitSelectionCriteria = EntityQueryCriteria.create(UnitSelection.class);
@@ -106,7 +106,7 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
     @Override
     public void getApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep currentSubstep) {
         EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
-        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         ApplicationProgress progress = secureRetrieve(applicationProgressCriteria);
 
         if (currentStep != null) {

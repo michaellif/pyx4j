@@ -29,7 +29,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.pt.services.PaymentServices;
 import com.propertyvista.portal.server.campaign.CampaignManager;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.server.domain.CampaignTriger;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -44,7 +44,7 @@ public class PaymentServicesImpl extends ApplicationEntityServicesImpl implement
     public void retrieve(AsyncCallback<PaymentInfo> callback, Long tenantId) {
         log.info("Retrieving summary for tenant {}", tenantId);
         EntityQueryCriteria<PaymentInfo> criteria = EntityQueryCriteria.create(PaymentInfo.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         PaymentInfo payment = secureRetrieve(criteria);
         if (payment == null) {
             log.info("Creating new payment");
@@ -68,7 +68,7 @@ public class PaymentServicesImpl extends ApplicationEntityServicesImpl implement
         boolean callFireDemo = false;
         if (callFireDemo) {
             EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
             CampaignManager.fireEvent(CampaignTriger.ApplicationCompleated, secureRetrieve(criteria));
         }
 
@@ -96,7 +96,7 @@ public class PaymentServicesImpl extends ApplicationEntityServicesImpl implement
         }
         // Get the currentAddress
         EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         for (PotentialTenantInfo tenantInfo : secureRetrieve(criteria).tenants()) {
             if (tenantInfo.status().getValue().equals(Status.Applicant)) {
                 paymentInfo.currentAddress().set(tenantInfo.currentAddress());

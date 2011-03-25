@@ -7,24 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 5, 2011
+ * Created on 2011-03-25
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain;
+package com.propertyvista.crm.server.security;
 
-import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.server.ServletContainerAclBuilder;
 
-public enum VistaBehavior implements Behavior {
+public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
-    // TODO 
+    public VistaCrmAccessControlList() {
 
-    POTENTIAL_TENANT,
-
-    PROPERTY_MANAGER,
-
-    PRODUCTION_SUPPORT,
-
-    ADMIN,
-
+    }
 }

@@ -11,10 +11,9 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.security;
+package com.propertyvista.server.common.security;
 
 import com.propertyvista.portal.domain.IUserEntity;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.security.InstanceAccess;
@@ -26,8 +25,7 @@ public class UserEntityInstanceAccess implements InstanceAccess {
 
     @Override
     public boolean allow(IEntity entity) {
-        return (entity instanceof IUserEntity)
-                && (EqualsHelper.equals(((IUserEntity) entity).user().getPrimaryKey(), PtUserDataAccess.getCurrentUserPrimaryKey()));
+        return (entity instanceof IUserEntity) && (EqualsHelper.equals(((IUserEntity) entity).user().getPrimaryKey(), VistaContext.getCurrentUserPrimaryKey()));
     }
 
 }

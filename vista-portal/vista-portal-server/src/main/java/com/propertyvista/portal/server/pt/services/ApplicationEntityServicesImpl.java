@@ -17,7 +17,7 @@ import org.xnap.commons.i18n.I18n;
 
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.IBoundToApplication;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.shared.IEntity;
@@ -33,7 +33,7 @@ public class ApplicationEntityServicesImpl extends EntityServicesImpl {
 
     protected <E extends IEntity & IBoundToApplication> void saveApplicationEntity(E entity) {
         // app specific security stuff
-        final Application application = PtUserDataAccess.getCurrentUserApplication();
+        final Application application = PtAppContext.getCurrentUserApplication();
         if ((!entity.application().isNull()) && (!entity.application().equals(application))) {
             throw new SecurityViolationException("Permission denied");
         }
@@ -50,14 +50,14 @@ public class ApplicationEntityServicesImpl extends EntityServicesImpl {
 
     protected <T extends IBoundToApplication> T findApplicationEntity(Class<T> clazz) {
         EntityQueryCriteria<T> criteria = EntityQueryCriteria.create(clazz);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         return secureRetrieve(criteria);
     }
 
     protected <T extends IBoundToApplication> void retrieveApplicationEntity(T entity) {
         @SuppressWarnings("unchecked")
         EntityQueryCriteria<T> criteria = (EntityQueryCriteria<T>) EntityQueryCriteria.create(entity.getValueClass());
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         entity.set(secureRetrieve(criteria));
     }
 }

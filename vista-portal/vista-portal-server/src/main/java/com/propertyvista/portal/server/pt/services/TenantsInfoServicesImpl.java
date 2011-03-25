@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.rpc.pt.services.TenantsInfoServices;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -32,7 +32,7 @@ public class TenantsInfoServicesImpl extends ApplicationEntityServicesImpl imple
     public void retrieve(AsyncCallback<PotentialTenantInfo> callback, Long tenantId) {
         log.info("Retrieving summary for tenant {}", tenantId);
         EntityQueryCriteria<PotentialTenantInfo> criteria = EntityQueryCriteria.create(PotentialTenantInfo.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenantId));
         PotentialTenantInfo tenant = secureRetrieve(criteria);
         if (tenant == null) {

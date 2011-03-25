@@ -17,9 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
-import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.rpc.pt.PtUserVisit;
+import com.propertyvista.server.common.security.VistaContext;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18nFactory;
@@ -28,33 +28,11 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
-public class PtUserDataAccess {
+public class PtAppContext extends VistaContext {
 
-    private final static Logger log = LoggerFactory.getLogger(PtUserDataAccess.class);
+    private final static Logger log = LoggerFactory.getLogger(PtAppContext.class);
 
     private static I18n i18n = I18nFactory.getI18n();
-
-    public static Long getCurrentUserPrimaryKey() {
-        Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
-            log.trace("no session");
-            throw new UnRecoverableRuntimeException(i18n.tr("no session"));
-        }
-        return v.getUserVisit().getPrincipalPrimaryKey();
-    }
-
-    public static User getCurrentUser() {
-        Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
-            log.trace("no session");
-            throw new UnRecoverableRuntimeException(i18n.tr("no session"));
-        }
-        User user = EntityFactory.create(User.class);
-        user.setPrimaryKey(v.getUserVisit().getPrincipalPrimaryKey());
-        user.name().setValue(v.getUserVisit().getName());
-        user.email().setValue(v.getUserVisit().getEmail());
-        return user;
-    }
 
     public static Long getCurrentUserApplicationPrimaryKey() {
         Visit v = Context.getVisit();

@@ -19,7 +19,7 @@ public class DemoData {
 
     public static int MAX_CUSTOMERS = 20;
 
-    public static int MAX_EMPLOYEE = 100;
+    public static int MAX_PROPERTY_MANAGER = 10;
 
     public static int MAX_ADMIN = 2;
 
@@ -27,7 +27,7 @@ public class DemoData {
 
     public static String CRM_CUSTOMER_USER_PREFIX = "cust";
 
-    public static String CRM_EMPLOYEE_USER_PREFIX = "emp";
+    public static String CRM_PROPERTY_MANAGER_USER_PREFIX = "pm";
 
     public static String USERS_DOMAIN = "@pyx4j.com";
 

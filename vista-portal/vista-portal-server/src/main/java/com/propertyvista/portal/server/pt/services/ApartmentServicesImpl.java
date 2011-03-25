@@ -28,7 +28,7 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.util.PrintUtil;
 import com.propertyvista.portal.rpc.pt.services.ApartmentServices;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.portal.server.pt.util.Converter;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -45,7 +45,7 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
         log.info("Asking to retrieve unit selection");
 
         EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         UnitSelection unitSelection = secureRetrieve(criteria);
         unitSelection.selectionCriteria().set(selectionCriteria);
 
@@ -58,7 +58,7 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
     public void retrieve(AsyncCallback<UnitSelection> callback, Long tenantId) {
         log.info("Retrieving unit selection for tenant {}", tenantId);
         EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         UnitSelection unitSelection = secureRetrieve(criteria);
         if (unitSelection == null) {
             log.info("Creating new unit selection");

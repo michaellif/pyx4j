@@ -34,10 +34,10 @@ import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
 import com.propertyvista.portal.rpc.pt.services.ActivationServices;
 import com.propertyvista.portal.server.mail.MessageTemplates;
-import com.propertyvista.portal.server.pt.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.AntiBot;
 import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;

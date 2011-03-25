@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.config;
 
-import com.propertyvista.portal.server.pt.VistaAuthenticationServicesImpl;
+import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 
 import com.pyx4j.essentials.server.EssentialsRPCServiceFactory;
 import com.pyx4j.rpc.shared.Service;

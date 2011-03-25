@@ -6,7 +6,7 @@
 package com.propertyvista.server.ci;
 
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.portal.server.pt.PtAppContext;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -35,7 +35,7 @@ public class ApplicationDocumentServlet extends HttpServlet {
         String id=request.getParameter("id");
         EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), new Integer(id)));
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication())); //for security use docs in current application context only
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication())); //for security use docs in current application context only
         ApplicationDocument adoc = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         if (adoc==null) {
             response.getWriter().println("Document not found");

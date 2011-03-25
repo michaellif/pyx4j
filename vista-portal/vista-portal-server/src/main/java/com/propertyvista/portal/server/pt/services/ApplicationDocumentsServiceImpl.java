@@ -18,7 +18,7 @@ import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentsList;
 import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -36,7 +36,7 @@ public class ApplicationDocumentsServiceImpl extends ApplicationEntityServicesIm
     public void retrieveAttachments(AsyncCallback<ApplicationDocumentsList> callback, Long tenantId, DocumentType documentType) {
         log.info("Retrieving attachments for tenant {} and docType {}", tenantId, documentType);
         EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenantId));
         criteria.add(PropertyCriterion.eq(criteria.proto().type(), documentType));
         List<ApplicationDocument> applicationDocuments = secureQuery(criteria);

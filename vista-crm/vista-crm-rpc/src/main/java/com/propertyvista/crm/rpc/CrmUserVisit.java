@@ -7,24 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 5, 2011
+ * Created on 2011-03-25
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain;
+package com.propertyvista.crm.rpc;
 
-import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.UserVisit;
 
-public enum VistaBehavior implements Behavior {
+public class CrmUserVisit extends UserVisit {
 
-    // TODO 
+    private static final long serialVersionUID = 6431065975467798513L;
 
-    POTENTIAL_TENANT,
+    protected CrmUserVisit() {
 
-    PROPERTY_MANAGER,
+    }
 
-    PRODUCTION_SUPPORT,
-
-    ADMIN,
+    public CrmUserVisit(Long principalPrimaryKey, String name) {
+        super(principalPrimaryKey, name);
+    }
 
 }
