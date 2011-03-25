@@ -88,6 +88,7 @@ public class ActivationServicesImpl extends ApplicationEntityServicesImpl implem
             throw new UnRecoverableRuntimeException(EntityServicesImpl.applicationReadOnlyMessage());
         }
         if (!validEmailAddress(request.email().getValue())) {
+            log.debug("Invalid Email [{}]", request.email().getValue());
             throw new UserRuntimeException(i18n.tr("Invalid Email"));
         }
         String email = request.email().getValue().toLowerCase();

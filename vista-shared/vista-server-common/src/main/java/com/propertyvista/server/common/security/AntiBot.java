@@ -50,15 +50,15 @@ public class AntiBot {
         if (challengeRresponse == null || CommonsStringUtils.isEmpty(challengeRresponse.getA()) || CommonsStringUtils.isEmpty(challengeRresponse.getB())) {
             throw new UserRuntimeException(i18n.tr("Captcha code is required"));
         }
+        if (ServerSideConfiguration.instance().isDevelopmentBehavior() && challengeRresponse.getB().equals("x")) {
+            log.warn("Development CAPTCHA Ok");
+            return;
+        }
 
         String privateKey = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPrivateKey();
         String publicKey = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey();
         ReCaptcha rc = ReCaptchaFactory.newReCaptcha(publicKey, privateKey, false);
 
-        if (ServerSideConfiguration.instance().isDevelopmentBehavior() && challengeRresponse.getB().equals("x")) {
-            log.warn("Development CAPTCHA Ok");
-            return;
-        }
         ReCaptchaResponse captchaResponse;
         try {
             captchaResponse = rc.checkAnswer(Context.getRequestRemoteAddr(), challengeRresponse.getA(), challengeRresponse.getB());

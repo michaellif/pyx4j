@@ -19,10 +19,15 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 
 public abstract class VistaDBTestCase extends TestCase {
 
+    private static boolean initOnce = true;
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration());
+        if (initOnce) {
+            ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration());
+            initOnce = false;
+        }
     }
 
 }
