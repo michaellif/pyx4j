@@ -20,62 +20,31 @@ import org.openqa.selenium.By;
 
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
-
-import com.pyx4j.essentials.j2se.J2SEServiceConnector;
-import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
+import com.propertyvista.unit.VistaDevLogin;
+import com.propertyvista.unit.config.ApplicationId;
+import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 import com.pyx4j.selenium.BaseSeleniumTestCase;
-import com.pyx4j.selenium.DefaultSeleniumTestConfiguration;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import org.openqa.selenium.WebDriver;
-
 public class GaeAppLoginTest extends BaseSeleniumTestCase {
-
-    final public String testsite = "http://www22.birchwoodsoftwaregroup.com/tester";
-
-    final public String mainsite = "http://www22.birchwoodsoftwaregroup.com/";
-
-    //final public String mainsite = "http://localhost:8888/vista/";
 
     final public String blankpage = "about:blank";
 
-    final public String testUser = "Jasper";
+    final public String testUser = "Bob";
 
     final public String emailAt = "@local.com";
 
-    private final String strNow = new SimpleDateFormat("yyyyMMdd-hhmmss").format( Calendar.getInstance().getTime()); //need to persist across test cases 
+    private final String strNow = new SimpleDateFormat("yyyyMMdd-hhmmss").format(Calendar.getInstance().getTime()); //need to persist across test cases 
 
     @Override
     protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {
-        return new DefaultSeleniumTestConfiguration() {
-            @Override
-            public String getTestUrl() {
-                return mainsite;
-            }
-
-            @Override
-            public boolean reuseBrowser() {
-                return false;
-            }
-        };
+        return new VistaSeleniumTestConfiguration(ApplicationId.portal);
     }
 
     public void loginToMainSite() throws Exception {
-        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials.properties");
 
-        /*** page 1 ***/
-        selenium.click("id=googleSignIn");
-
-        /*** page 2 ***/
-        selenium.type("id=Email", credentials.email);
-        selenium.type("id=Passwd", credentials.password);
-        selenium.click("id=signIn");
-
-        /*** page 3 ***/
-        selenium.click("id=continue");
-
-        /*** page 4 ***/
+        VistaDevLogin.login(selenium);
 
         //PLEASE ADD BREAKPOINT ON THE NEXT LINE//
         selenium.waitFor(By.id("gwt-debug-Login"), 10);
@@ -83,21 +52,17 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         selenium.setGlassPanelAware();
         // wait while site will initialize
         selenium.waitWhileWorking();
-    
+
     }
-    
+
     public void testLoginExistingUser() throws Exception {
-    	
-    	loginToMainSite();
+        loginToMainSite();
 
         selenium.click("id=gwt-debug-Login");
 
         /*** page 5 ***/
         selenium.type("id=gwt-debug-AuthenticationRequest$email", "cust001@pyx4j.com");
-        System.out.println("fedor@pyx4j.com");
         selenium.type("id=gwt-debug-AuthenticationRequest$password", "cust001@pyx4j.com");
-        System.out.println("fedor@pyx4j.com");
-
         //PLEASE ADD BREAKPOINT ON THE NEXT LINE//
         selenium.click("id=gwt-debug-Criteria_Submit");
 
@@ -116,7 +81,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         String strTo = sdf.format(fromDate.getTime());
 
         selenium.type("UnitSelection$selectionCriteria$availableFrom", strFrom);
-        //selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);    	
+        selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
 
         selenium.click("UnitSelection$availableUnits$units_row-1_ApartmentUnit$unitType");
@@ -130,104 +95,170 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
 
         selenium.type("UnitSelection$rentStart", strStartRent);
         selenium.click("UnitSelection$availableUnits$units_row-1_leaseTerm_12-input");
-        // do not save, just a test for now
-        //selenium.click("Crud_Save");
+        // we do not save, just a test in this case
 
+        selenium.click("logout");
+
+    }
+
+    public void testLoginNewTenant() throws Exception {
+        String theurl = selenium.getCurrentUrl();
+        if (!theurl.startsWith("http://localhost") && !theurl.startsWith("http://127.0.0.1")) {
+            loginToMainSite();
+        }
+
+        // Initialize access to GlassPanel
+        selenium.setGlassPanelAware();
+        // wait while site will initialize
+        selenium.waitWhileWorking();
+
+        doLoginNewTenant();
+        doReLoginTenant();
+        doTenantInfo();
+
+    }
+
+    public void doLoginNewTenant() throws Exception {
+
+        //starting from login screen:
+        String ulogin = testUser + strNow + emailAt;
+        selenium.type("AccountCreationRequest$email", ulogin);
+        selenium.type("AccountCreationRequest$password", ulogin);
+        selenium.type("id=recaptcha_response_field", "x");
+        selenium.click("id=gwt-debug-Criteria_Submit");
+
+        selenium.waitWhileWorking();
+
+        // APARTMENT PAGE
+        selenium.click("UnitSelection$availableUnits$units_row-1_ApartmentUnit$unitType");
+        String strAvailFrom = selenium.getText("UnitSelection$availableUnits$units_row-1_ApartmentUnit$avalableForRent");
+
+        selenium.type("UnitSelection$rentStart", strAvailFrom); //to make sure it's the same date
+        selenium.click("gwt-debug-UnitSelection$availableUnits$units_row-1_leaseTerm_6-input");
+        selenium.click("Crud_Save");
+
+        //current time in this format appended to the user name
+        //strNow =  new SimpleDateFormat("yyyyMMdd").format( Calendar.getInstance().getTime());
+
+        //  TENANTS PAGE
+        selenium.type("PotentialTenantList$tenants_row-1_PotentialTenantInfo$firstName", testUser + strNow);
+        selenium.type("PotentialTenantList$tenants_row-1_PotentialTenantInfo$lastName", testUser);
+        selenium.type("PotentialTenantList$tenants_row-1_PotentialTenantInfo$middleName", "M");
+        Calendar cal = Calendar.getInstance(); //current day-time
+        cal.add(Calendar.YEAR, -25); //get a 25 Years old tenant
+        SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
+        selenium.type("PotentialTenantList$tenants_row-1_PotentialTenantInfo$birthDate", sdf2.format(cal.getTime()));
+
+        // add a co-tenant
+        selenium.click("PotentialTenantList$tenants_fd__Form_Add");
+        selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$firstName", testUser + "sha");
+        selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$lastName", testUser);
+        selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$middleName", "D");
+        cal.add(Calendar.YEAR, 1); //get a 24 Years old co-tenant
+        selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$birthDate", sdf2.format(cal.getTime()));
+        selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$email", testUser + "sha" + strNow + emailAt);
+        selenium.select("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status-item0");
+        selenium.select("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$relationship-item0");
+        selenium.click("Crud_Save");
+        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class));
+
+        selenium.click("logout");
+
+    }
+
+    public void doReLoginTenant() throws Exception {
+
+        //starts with page with ID prompt
+        selenium.click("id=gwt-debug-Login");
+
+        Calendar cal = Calendar.getInstance(); //current day-time
+        selenium.type("AuthenticationRequest$email", testUser + strNow + emailAt);
+        selenium.type("AuthenticationRequest$password", testUser + strNow + emailAt);
+        selenium.click("Criteria_Submit");
+
+        //if dialog frame is present, click OK:
+        //if(selenium.findElement(By.id("gwt-debug-Dialog_Ok")) != null ){
+        //	selenium.click("Dialog_Ok"); 		
+        //}
+
+        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class));
+        // add a co-tenant - child
+        selenium.click("PotentialTenantList$tenants_fd__Form_Add");
+        selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$firstName", testUser + "ovich");
+        selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$middleName", "M");
+        selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$lastName", testUser);
+        cal.add(Calendar.YEAR, -3); //get a 24 Years old co-tenant
+        SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
+        selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$birthDate", sdf2.format(cal.getTime()));
+        selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$email", testUser + "ovich" + strNow + emailAt);
+        selenium.select("gwt-debug-PotentialTenantList$tenants_row-3_PotentialTenantInfo$relationship-item1");
+
+        selenium.click("Crud_Save");
+    }
+
+    public void doTenantInfo() throws Exception {
+
+        // Initialize access to GlassPanel
+        selenium.setGlassPanelAware();
+        // wait while site will initialize
+        selenium.waitWhileWorking();
+
+        selenium.type("PotentialTenantInfo$homePhone", "123-456-7890");
+        selenium.type("PotentialTenantInfo$mobilePhone", "123-456-7890");
+        selenium.type("PotentialTenantInfo$driversLicense", "1234567789");
+
+        selenium.type("PotentialTenantInfo$secureIdentifier", "123456789");
+        selenium.type("PotentialTenantInfo$secureIdentifier", "134567890");
+        selenium.click("PotentialTenantInfo$legalQuestions$suedForRent_N-input");
+        selenium.click("PotentialTenantInfo$legalQuestions$suedForDamages_N-input");
+        selenium.click("PotentialTenantInfo$legalQuestions$everEvicted_N-input");
+        selenium.click("PotentialTenantInfo$legalQuestions$defaultedOnLease_N-input");
+        selenium.click("PotentialTenantInfo$legalQuestions$convictedOfFelony_N-input");
+        selenium.click("PotentialTenantInfo$legalQuestions$legalTroubles_N-input");
+        selenium.click("PotentialTenantInfo$legalQuestions$filedBankruptcy_N-input");
+
+        // next part of page
+        selenium.type("PotentialTenantInfo$currentAddress_Address$street1", "123 dundas");
+        selenium.type("PotentialTenantInfo$currentAddress_Address$city", "Toronto");
+        selenium.type("PotentialTenantInfo$currentAddress_Address$postalCode", "h3b1g9");
+        selenium.type("PotentialTenantInfo$currentAddress_Address$country", "Canada");
+        selenium.click("PotentialTenantInfo$currentAddress_Address$rented_Rented-input");
+
+        selenium.type("PotentialTenantInfo$currentAddress_Address$phone", "098-765-4321");
+        selenium.click("PotentialTenantInfo$currentAddress_Address$rented_Rented-input");
+        //selenium.click("PotentialTenantInfo$emergencyContacts_fd__Form_Add");
+        selenium.type("PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$firstName", "contact1");
+        selenium.type("PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$lastName", "UFO");
+        selenium.type("PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$middleName", "NLO");
+        selenium.type("PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$address$city", "Andromeda");
+        selenium.type("PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$homePhone", "911-234-5678");
+        selenium.type("PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$address$street1", "Galaxy H3b4567");
+        selenium.type("PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$address$city", "");
+        selenium.type("PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$address$street2", "Andromeda");
+        selenium.type("PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$address$city", "NewNew York");
+        selenium.type("PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$address$postalCode", "12345");
+        selenium.type("PotentialTenantInfo$currentAddress_Address$street1", "123 dundas st., apt.12345");
+
+        selenium.click("PotentialTenantInfo$vehicles_fd__Form_Add");
+        selenium.type("PotentialTenantInfo$vehicles_row-1_Vehicle$plateNumber", "UFO1234");
+        selenium.type("PotentialTenantInfo$vehicles_row-1_Vehicle$make", "VAZ");
+        selenium.type("PotentialTenantInfo$vehicles_row-1_Vehicle$model", "LADA-01");
+        selenium.type("PotentialTenantInfo$vehicles_row-1_Vehicle$country", "Russia");
+
+        //INFO PAGE DOES NOT HAVE PROPER DEBUF IDs BELOW:
+        //selenium.select("PotentialTenantInfo$driversLicenseState-item1");
+        //selenium.select("PotentialTenantInfo$currentAddress_Address$province-item8");
+        //selenium.select("PotentialTenantInfo$vehicles_row-1_Vehicle$province-item0");
+        //selenium.select("PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$address$province-item0");
+        //selenium.select("PotentialTenantInfo$vehicles_row-1_Vehicle$year_yy-item5");
+
+        //INFO PAGE DOES NOT HAV PROPER DEBUF IDs ABOVE, so save does not work...
+        //selenium.click("Crud_Save");
+        selenium.click("MainNavigation_Prefix_apartment");
         selenium.click("logout");
 
         ////sample from Slava
         //selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
-
     }
 
-//==========================================================================================
-
-    public void testLoginNewTenant() throws Exception {
-    	loginToMainSite();
-
-        doLoginNewTenant();
-        doReLoginTenant();
-
-    }
-    
-    public void doLoginNewTenant() throws Exception {
-    	
-    	//starting from login screen:
-    	String ulogin = testUser + strNow + emailAt;
-    	selenium.type("AccountCreationRequest$email", ulogin);
-    	selenium.type("AccountCreationRequest$password", ulogin);
-    	selenium.type("id=recaptcha_response_field", "x");
-        selenium.click("id=gwt-debug-Criteria_Submit");
-        
-        //selenium.waitWhileWorking();
-    	
-        // APARTMENT PAGE
-    	selenium.click("UnitSelection$availableUnits$units_row-1_ApptUnit$unitType");
-    	String strAvailFrom = selenium.getText("UnitSelection$availableUnits$units_row-1_ApptUnit$avalableForRent");
-    	
-    	selenium.type("UnitSelection$rentStart", strAvailFrom); //to make sure it's the same date
-    	selenium.click("UnitSelection$availableUnits$units_row-1_leaseTerm_12-input");
-    	selenium.click("Crud_Save");
-    	
-        //current time in this format appended to the user name
-    	//strNow =  new SimpleDateFormat("yyyyMMdd").format( Calendar.getInstance().getTime());
-
-    	//  TENANTS PAGE
-    	selenium.type("PotentialTenantList$tenants_row-1_PotentialTenantInfo$firstName", testUser + strNow);
-    	selenium.type("PotentialTenantList$tenants_row-1_PotentialTenantInfo$lastName", testUser);
-    	selenium.type("PotentialTenantList$tenants_row-1_PotentialTenantInfo$middleName", "M");
-    	Calendar cal = Calendar.getInstance();  //current day-time
-    	cal.add(Calendar.YEAR, -25);  //get a 25 Years old tenant
-    	SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
-    	selenium.type("PotentialTenantList$tenants_row-1_PotentialTenantInfo$birthDate", sdf2.format(cal.getTime()));
-
-    	// add a co-tenant
-    	selenium.click("PotentialTenantList$tenants_fd__Form_Add");
-    	selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$firstName", testUser + "sha");
-    	selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$lastName", testUser);
-    	selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$middleName", "D");
-    	cal.add(Calendar.YEAR, 1);  //get a 24 Years old co-tenant
-    	selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$birthDate", sdf2.format(cal.getTime()));
-    	selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$email", testUser + "sha" + strNow + emailAt);
-    	selenium.select("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status-item0");
-    	selenium.select("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$relationship-item0");
-    	selenium.click("Crud_Save");
-    	selenium.click("logout");
-  	
-    }
-    
-    public void doReLoginTenant() throws Exception {
-
-    	//starts with page with ID prompt
-        selenium.click("id=gwt-debug-Login");
-        
-        //current time in this format appended to the user name
-        //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");  //"yyyyMMdd-HHmmss"
-    	Calendar cal = Calendar.getInstance();  //current day-time
-    	//strNow = sdf.format( cal.getTime());
-        //
-        selenium.type("AuthenticationRequest$email", testUser + strNow + emailAt);
-        selenium.type("AuthenticationRequest$password", testUser + strNow + emailAt);
-        selenium.click("Criteria_Submit");
-    	
-    	//if dialog frame is present, click OK:
-    	if(selenium.findElement(By.id("gwt-debug-Dialog_Ok")) != null ){
-    		selenium.click("Dialog_Ok"); 		
-    	}
-
-    	// add a co-tenant - child
-    	selenium.click("PotentialTenantList$tenants_fd__Form_Add");
-    	selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$firstName", testUser + "ovich");
-    	selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$middleName", "M");
-    	selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$lastName", testUser);
-    	cal.add(Calendar.YEAR, -3);  //get a 24 Years old co-tenant
-    	SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
-    	selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$birthDate", sdf2.format(cal.getTime()));
-    	selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$email", testUser + "ovich" + strNow + emailAt);
-    	selenium.click("PotentialTenantList$tenants_row-3_PotentialTenantInfo$relationship");
-    	selenium.click("PotentialTenantList$tenants_row-3_PotentialTenantInfo$relationship-item1");
-    	selenium.click("Crud_Save");
-    }
-    
-    
 }
