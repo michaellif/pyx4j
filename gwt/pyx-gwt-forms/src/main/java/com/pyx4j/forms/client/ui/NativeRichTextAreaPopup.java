@@ -51,8 +51,6 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTex
 
     private final CRichTextAreaPopup textArea;
 
-    private final boolean nativeValueUpdate = false;
-
     public NativeRichTextAreaPopup(CRichTextAreaPopup textArea) {
         super();
         this.textArea = textArea;
@@ -145,13 +143,15 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTex
 
     @Override
     public void setNativeValue(String value) {
-        if (nativeValueUpdate) {
-            return;
-        }
         String newValue = value == null ? "" : value;
         if (!newValue.equals(viewer.getHTML())) {
             viewer.setHTML(newValue);
         }
+    }
+
+    @Override
+    public String getNativeValue() {
+        return viewer.getHTML();
     }
 
     @Override
@@ -221,11 +221,13 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTex
 
                     @Override
                     public void onSuccess(String result) {
-                        textArea.setValue(result);
+                        setNativeValue(result);
+                        textArea.onEditingStop();
                     }
                 });
             } else {
-                textArea.update(NativeRichTextArea.trimHtml(richTextArea.getHTML()));
+                setNativeValue(NativeRichTextArea.trimHtml(richTextArea.getHTML()));
+                textArea.onEditingStop();
             }
             richTextArea.removeFromParent();
             return true;

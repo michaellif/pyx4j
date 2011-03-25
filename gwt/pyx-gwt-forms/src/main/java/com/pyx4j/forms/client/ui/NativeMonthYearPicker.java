@@ -38,9 +38,7 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeEdi
 
     private final CMonthYearPicker cComponent;
 
-    private boolean nativeValueUpdate = false;
-
-    public NativeMonthYearPicker(CMonthYearPicker cComponent) {
+    public NativeMonthYearPicker(final CMonthYearPicker cComponent) {
         super(cComponent.getYearRange(), cComponent.isYearOnly());
         this.cComponent = cComponent;
 
@@ -48,7 +46,7 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeEdi
 
             @Override
             public void onChange(ChangeEvent event) {
-                nativeValueUpdate();
+                cComponent.onEditingStop();
             }
         });
 
@@ -64,33 +62,18 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeEdi
         }
     }
 
-    private void nativeValueUpdate() {
-        // Prevents setting the native value while propagating value from native component to CComponent
-        nativeValueUpdate = true;
-        try {
-            cComponent.update(getDate());
-        } finally {
-            nativeValueUpdate = false;
-        }
-    }
-
-    @Override
-    public void setDate(Date date) {
-        if (nativeValueUpdate) {
-            return;
-        }
-        super.setDate(date);
-    }
-
     @Override
     public void setNativeValue(Date value) {
         setDate(value);
     }
 
     @Override
-    public void setTabIndex(int tabIndex) {
-        // TODO Auto-generated method stub
+    public Date getNativeValue() {
+        return getDate();
+    }
 
+    @Override
+    public void setTabIndex(int tabIndex) {
     }
 
     @Override
@@ -135,4 +118,5 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeEdi
         // TODO Auto-generated method stub
         return null;
     }
+
 }

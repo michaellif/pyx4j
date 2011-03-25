@@ -37,17 +37,16 @@ public class NativeCaptcha extends CaptchaComposite implements INativeEditableCo
         invalid
     }
 
+    private final CCaptcha component;
+
     public NativeCaptcha(final CCaptcha component) {
+        this.component = component;
         addResponseValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
-                component.update(getValue());
+                component.onEditingStop();
             }
         });
-    }
-
-    public Pair<String, String> getValue() {
-        return new Pair<String, String>(super.getValueChallenge(), super.getValueResponse());
     }
 
     @Override
@@ -67,12 +66,17 @@ public class NativeCaptcha extends CaptchaComposite implements INativeEditableCo
     }
 
     @Override
+    public Pair<String, String> getNativeValue() {
+        return new Pair<String, String>(super.getValueChallenge(), super.getValueResponse());
+    }
+
+    @Override
     public void setTabIndex(int tabIndex) {
     }
 
     @Override
-    public CComponent<?> getCComponent() {
-        return null;
+    public CCaptcha getCComponent() {
+        return component;
     }
 
     @Override
@@ -97,13 +101,12 @@ public class NativeCaptcha extends CaptchaComposite implements INativeEditableCo
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        // TODO Auto-generated method stub
         return null;
     }
+
 }

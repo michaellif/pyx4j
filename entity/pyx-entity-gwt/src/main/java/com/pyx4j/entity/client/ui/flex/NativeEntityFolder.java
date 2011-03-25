@@ -93,4 +93,10 @@ public class NativeEntityFolder<E> extends SimplePanel implements INativeEditabl
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public E getNativeValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

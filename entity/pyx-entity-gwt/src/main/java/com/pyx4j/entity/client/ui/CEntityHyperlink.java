@@ -167,4 +167,10 @@ class NativeEntityHyperlink extends Anchor implements INativeEditableComponent<I
     @Override
     public void setValid(boolean valid) {
     }
+
+    @Override
+    public IEntity getNativeValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

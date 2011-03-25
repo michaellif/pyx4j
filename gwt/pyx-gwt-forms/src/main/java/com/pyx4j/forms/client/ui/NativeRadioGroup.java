@@ -106,7 +106,7 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue()) {
-                        NativeRadioGroup.this.cComponent.update(option);
+                        NativeRadioGroup.this.cComponent.onEditingStop();
                     }
                 }
             });
@@ -155,6 +155,16 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
                 button.setValue(Boolean.FALSE);
             }
         }
+    }
+
+    @Override
+    public E getNativeValue() {
+        for (E value : buttons.keySet()) {
+            if (buttons.get(value).getValue()) {
+                return value;
+            }
+        }
+        return null;
     }
 
     @Override

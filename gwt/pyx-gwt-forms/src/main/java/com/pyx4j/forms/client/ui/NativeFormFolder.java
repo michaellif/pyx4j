@@ -166,6 +166,12 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
     }
 
     @Override
+    public List<E> getNativeValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public void setFocus(boolean focused) {
     }
 
@@ -204,4 +210,5 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
         // TODO Auto-generated method stub
         return null;
     }
+
 }

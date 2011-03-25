@@ -309,6 +309,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     public void onEditingStop() {
         editing = false;
         visited = true;
+        update(asWidget().getNativeValue());
         revalidate();
     }
 

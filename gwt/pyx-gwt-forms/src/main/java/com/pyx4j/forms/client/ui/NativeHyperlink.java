@@ -116,7 +116,13 @@ public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
     }
 
     @Override
+    public E getNativeValue() {
+        return null;
+    }
+
+    @Override
     public void setValid(boolean valid) {
         // do nothing - actually it's valid always...
     }
+
 }

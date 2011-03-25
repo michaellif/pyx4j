@@ -110,6 +110,12 @@ public class NativeFormGroup<E> extends DockPanel implements INativeEditableComp
     }
 
     @Override
+    public E getNativeValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public void setFocus(boolean focused) {
     }
 
@@ -146,4 +152,5 @@ public class NativeFormGroup<E> extends DockPanel implements INativeEditableComp
         // TODO Auto-generated method stub
         return null;
     }
+
 }

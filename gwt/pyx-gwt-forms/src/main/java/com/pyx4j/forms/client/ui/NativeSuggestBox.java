@@ -39,9 +39,7 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
 
     public NativeSuggestBox(CSuggestBox<E> cSuggestBox) {
         super(new MultiWordSuggestOracle(), new TextBox());
-
         setStyleName(TextBox.DEFAULT_STYLE_PREFIX);
-
         delegate = new NativeTextBoxDelegate<E>(this, cSuggestBox);
 
     }
@@ -98,6 +96,11 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     }
 
     @Override
+    public E getNativeValue() {
+        return delegate.getNativeValue();
+    }
+
+    @Override
     public String getNativeText() {
         return ((TextBox) getWidget()).getText();
     }
@@ -137,4 +140,5 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
             addStyleDependentName(dependentSuffix);
         }
     }
+
 }

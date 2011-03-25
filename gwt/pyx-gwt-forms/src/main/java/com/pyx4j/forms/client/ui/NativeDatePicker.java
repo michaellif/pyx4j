@@ -58,6 +58,11 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
     }
 
     @Override
+    public Date getNativeValue() {
+        return textBox.getNativeValue();
+    }
+
+    @Override
     public String getNativeText() {
         return textBox.getNativeText();
 
@@ -117,4 +122,5 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
             textBox.addStyleDependentName(dependentSuffix);
         }
     }
+
 }

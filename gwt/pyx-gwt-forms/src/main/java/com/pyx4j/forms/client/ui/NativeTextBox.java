@@ -53,6 +53,11 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     }
 
     @Override
+    public E getNativeValue() {
+        return delegate.getNativeValue();
+    }
+
+    @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         String dependentSuffix = Selector.getDependentName(StyleDependent.disabled);

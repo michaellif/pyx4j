@@ -30,8 +30,9 @@ public class CCaptcha extends CEditableComponent<Pair<String, String>, NativeCap
     }
 
     public void retrieveValue() {
+        //TODO validate if that code is needed
         if (isWidgetCreated() && isVisible()) {
-            setValue(asWidget().getValue());
+            setValue(asWidget().getNativeValue());
         }
     }
 

@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 
+//TODO doesn't follow convention on calling onEditStop+update
 public class NativeListBox<E> extends NativeTriggerComponent<List<E>> implements INativeListBox<E> {
 
     final private CListBox<E> cListBox;
@@ -152,6 +153,12 @@ public class NativeListBox<E> extends NativeTriggerComponent<List<E>> implements
                 nativeListBox.addItem(cListBox.getItemName(v));
             }
         }
+    }
+
+    @Override
+    public List<E> getNativeValue() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override

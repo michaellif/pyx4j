@@ -66,6 +66,12 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
         delegate.setNativeValue(value);
     }
 
+    @Override
+    public E getNativeValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     public void setReadOnly(boolean readOnly) {
         // do nothing - actually it's always read-only ...
     }
@@ -106,4 +112,5 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
         // TODO Auto-generated method stub
         return null;
     }
+
 }

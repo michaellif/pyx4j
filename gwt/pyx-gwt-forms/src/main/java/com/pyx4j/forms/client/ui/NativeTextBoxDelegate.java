@@ -20,10 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -45,24 +41,8 @@ public class NativeTextBoxDelegate<E> {
             @Override
             public void onKeyDown(KeyDownEvent event) {
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    nativeValueUpdate();
+                    cTextBox.onEditingStop();
                 }
-            }
-        });
-
-        nativeTextBox.addChangeHandler(new ChangeHandler() {
-
-            @Override
-            public void onChange(ChangeEvent event) {
-                nativeValueUpdate();
-            }
-        });
-
-        nativeTextBox.addBlurHandler(new BlurHandler() {
-
-            @Override
-            public void onBlur(BlurEvent event) {
-                nativeValueUpdate();
             }
         });
 
@@ -73,15 +53,15 @@ public class NativeTextBoxDelegate<E> {
         setNativeValue(cTextField.getValue());
     }
 
-    private void nativeValueUpdate() {
-        cTextBox.update(cTextBox.getFormat().parse(nativeTextBox.getNativeText()));
-    }
-
     public void setNativeValue(E value) {
         String newValue = value == null ? "" : cTextBox.getFormat().format(value);
         if (!newValue.equals(nativeTextBox.getNativeText())) {
             nativeTextBox.setNativeText(newValue);
         }
+    }
+
+    public E getNativeValue() {
+        return cTextBox.getFormat().parse(nativeTextBox.getNativeText());
     }
 
     public CTextFieldBase<E, ?> getCComponent() {

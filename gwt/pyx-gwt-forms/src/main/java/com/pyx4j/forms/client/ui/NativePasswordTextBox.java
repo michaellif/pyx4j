@@ -49,6 +49,11 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
     }
 
     @Override
+    public String getNativeValue() {
+        return delegate.getNativeValue();
+    }
+
+    @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
     }
@@ -77,4 +82,5 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
             addStyleDependentName(dependentSuffix);
         }
     }
+
 }

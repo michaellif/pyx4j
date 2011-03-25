@@ -60,8 +60,7 @@ public class DatePickerDropDownPanel extends DropDownPanel {
                     }
 
                     currenttextBox.setNativeValue(value);
-                    // TODO : getCComponent().update(value) could be called from onEditStop?!. 
-                    receiver.getCComponent().update(value);
+                    receiver.getCComponent().onEditingStop();
                     hide();
                     receiver.setFocus(true);
                 }

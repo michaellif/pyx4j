@@ -40,8 +40,7 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
 
             @Override
             public void onBlur(BlurEvent event) {
-                nativeValueUpdate();
-                //textArea.onEditingStop();
+                cComponent.onEditingStop();
             }
         });
 
@@ -73,16 +72,17 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
         DOM.setElementPropertyInt(getElement(), "scrollTop", Integer.MAX_VALUE);
     }
 
-    private void nativeValueUpdate() {
-        cComponent.update(getText());
-    }
-
     @Override
     public void setNativeValue(String value) {
         String newValue = value == null ? "" : value;
         if (!newValue.equals(getText())) {
             setText(newValue);
         }
+    }
+
+    @Override
+    public String getNativeValue() {
+        return getText();
     }
 
     @Override

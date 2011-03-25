@@ -40,7 +40,7 @@ public class NativeCheckBox extends CheckBox implements INativeEditableComponent
         this.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                checkBox.setValue(Boolean.valueOf(getValue()));
+                checkBox.onEditingStop();
             }
         });
         setTabIndex(checkBox.getTabIndex());
@@ -80,6 +80,11 @@ public class NativeCheckBox extends CheckBox implements INativeEditableComponent
     }
 
     @Override
+    public Boolean getNativeValue() {
+        return Boolean.valueOf(getValue());
+    }
+
+    @Override
     public CCheckBox getCComponent() {
         return checkBox;
     }
@@ -103,4 +108,5 @@ public class NativeCheckBox extends CheckBox implements INativeEditableComponent
     @Override
     public void setValid(boolean valid) {
     }
+
 }

@@ -94,4 +94,10 @@ public class NativeEntityEditor<E> extends SimplePanel implements INativeEditabl
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public E getNativeValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

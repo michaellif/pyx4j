@@ -41,8 +41,6 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
 
     private final CRichTextArea textArea;
 
-    private boolean nativeValueUpdate = false;
-
     private final BasikRichTextToolbar toolbar;
 
     public NativeRichTextArea(CRichTextArea textArea) {
@@ -64,14 +62,6 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
         setCellWidth(richTextArea, "100%");
 
         getElement().getStyle().setProperty("resize", "none");
-
-        richTextArea.addBlurHandler(new BlurHandler() {
-
-            @Override
-            public void onBlur(BlurEvent event) {
-                nativeValueUpdate();
-            }
-        });
 
         setTabIndex(textArea.getTabIndex());
 
@@ -111,16 +101,6 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
         DOM.setElementPropertyInt(getElement(), "scrollTop", Integer.MAX_VALUE);
     }
 
-    private void nativeValueUpdate() {
-        // Prevents setting the native value while propagating value from native component to CComponent
-        nativeValueUpdate = true;
-        try {
-            textArea.update(trimHtml(richTextArea.getHTML()));
-        } finally {
-            nativeValueUpdate = false;
-        }
-    }
-
     static String trimHtml(String html) {
         while (html.startsWith("<br>")) {
             html = html.substring(4).trim();
@@ -158,13 +138,15 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
 
     @Override
     public void setNativeValue(String value) {
-        if (nativeValueUpdate) {
-            return;
-        }
         String newValue = value == null ? "" : value;
         if (!newValue.equals(richTextArea.getHTML())) {
             richTextArea.setHTML(newValue);
         }
+    }
+
+    @Override
+    public String getNativeValue() {
+        return trimHtml(richTextArea.getHTML());
     }
 
     @Override
@@ -229,4 +211,5 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
         // TODO Auto-generated method stub
         return null;
     }
+
 }

@@ -28,6 +28,8 @@ public interface INativeEditableComponent<E> extends INativeFocusComponent {
 
     void setNativeValue(E value);
 
+    E getNativeValue();
+
     void setValid(boolean valid);
 
 }

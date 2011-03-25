@@ -65,7 +65,7 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
             @Override
             public void onChange(ChangeEvent event) {
                 CComboBox<E> comboBox = NativeComboBox.this.comboBox;
-                comboBox.update(getValueByNativeOptionIndex(getSelectedIndex()));
+                comboBox.onEditingStop();
             }
         });
         setWidth(comboBox.getWidth());
@@ -220,6 +220,11 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
         }
     }
 
+    @Override
+    public E getNativeValue() {
+        return getValueByNativeOptionIndex(getSelectedIndex());
+    }
+
     private void setSelectedValue(E value) {
         this.value = value;
         if (!deferredSetSelectedStarted) {
@@ -270,4 +275,5 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
             addStyleDependentName(dependentSuffix);
         }
     }
+
 }
