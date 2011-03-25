@@ -74,11 +74,14 @@ public class ProvinceContryFilters {
 
             @Override
             public void onValueChange(ValueChangeEvent<Country> event) {
-                if ((event.getValue() != null) && (provinceCombo.getValue() != null)
-                        && (!EqualsHelper.equals(event.getValue().name().getValue(), provinceCombo.getValue().country().name().getValue()))) {
-                    provinceCombo.setValue(null);
+                if (event.getValue() != null) {
+                    if ((provinceCombo.getValue() != null)
+                            && (!EqualsHelper.equals(event.getValue().name().getValue(), provinceCombo.getValue().country().name().getValue()))) {
+                        provinceCombo.setValue(null);
+                    }
                     if (provinceComboIsMandatoryInitialy) {
-                        provinceCombo.setMandatory(countryProvinceRequired.contains((event.getValue().name().getValue().toLowerCase())));
+                        provinceCombo.setEnabled(countryProvinceRequired.contains((event.getValue().name().getValue().toLowerCase())));
+                        provinceCombo.setVisited(true);
                     }
                 }
                 provinceCombo.resetOptions();
