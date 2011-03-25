@@ -102,7 +102,7 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
     @Override
     public void onEditingStop() {
         if (isParsedSuccesfully()) {
-            setNativeComponentValue(getValue());
+            setNativeValue(getValue());
         }
         super.onEditingStop();
     }

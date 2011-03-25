@@ -101,7 +101,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
         this.value = value;
 
-        setNativeComponentValue(value);
+        setNativeValue(value);
 
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
         ValueChangeEvent.fire(this, value);
@@ -116,7 +116,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         this.value = value;
         this.visited = false;
 
-        setNativeComponentValue(value);
+        setNativeValue(value);
 
         revalidate();
 
@@ -255,7 +255,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     @Override
     protected void onWidgetCreated() {
         super.onWidgetCreated();
-        setNativeComponentValue(getValue());
+        setNativeValue(getValue());
         addEditingStatusHandler();
     }
 
@@ -278,7 +278,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         });
     }
 
-    protected void setNativeComponentValue(DATA_TYPE value) {
+    protected void setNativeValue(DATA_TYPE value) {
         if (isWidgetCreated()) {
             asWidget().setNativeValue(value);
         }

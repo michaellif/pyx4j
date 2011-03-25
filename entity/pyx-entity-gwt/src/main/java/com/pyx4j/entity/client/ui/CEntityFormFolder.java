@@ -105,7 +105,7 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
         //        }
         getFormsMap().put(item, form);
 
-        setNativeComponentValue(getValue());
+        setNativeValue(getValue());
 
     }
 
@@ -116,7 +116,7 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
             if (cForm.equals(map.get(value))) {
                 getValue().remove(value);
                 getFormsMap().remove(value);
-                setNativeComponentValue(getValue());
+                setNativeValue(getValue());
                 return;
             }
         }
@@ -140,7 +140,7 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
                 for (E item : getValue()) {
                     getFormsMap().put(item, oldMap.get(item));
                 }
-                setNativeComponentValue(getValue());
+                setNativeValue(getValue());
                 return;
             }
         }

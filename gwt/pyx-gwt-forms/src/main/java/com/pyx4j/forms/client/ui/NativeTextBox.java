@@ -49,7 +49,7 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
 
     @Override
     public void setNativeValue(E value) {
-        delegate.setValue(value);
+        delegate.setNativeValue(value);
     }
 
     @Override

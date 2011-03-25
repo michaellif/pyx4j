@@ -45,7 +45,7 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
 
     @Override
     public void setNativeValue(String value) {
-        delegate.setValue(value);
+        delegate.setNativeValue(value);
     }
 
     @Override

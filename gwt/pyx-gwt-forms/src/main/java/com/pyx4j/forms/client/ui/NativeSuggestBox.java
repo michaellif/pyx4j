@@ -94,7 +94,7 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
 
     @Override
     public void setNativeValue(E value) {
-        delegate.setValue(value);
+        delegate.setNativeValue(value);
     }
 
     @Override

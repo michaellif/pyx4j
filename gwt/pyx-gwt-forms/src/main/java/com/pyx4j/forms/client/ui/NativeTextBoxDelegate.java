@@ -70,14 +70,14 @@ public class NativeTextBoxDelegate<E> {
 
         nativeTextBox.setWidth(cTextField.getWidth());
         nativeTextBox.setHeight(cTextField.getHeight());
-        setValue(cTextField.getValue());
+        setNativeValue(cTextField.getValue());
     }
 
     private void nativeValueUpdate() {
         cTextBox.update(cTextBox.getFormat().parse(nativeTextBox.getNativeText()));
     }
 
-    public void setValue(E value) {
+    public void setNativeValue(E value) {
         String newValue = value == null ? "" : cTextBox.getFormat().format(value);
         if (!newValue.equals(nativeTextBox.getNativeText())) {
             nativeTextBox.setNativeText(newValue);

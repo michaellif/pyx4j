@@ -22,8 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.DOM;
 
 import com.pyx4j.widgets.client.TextArea;
@@ -32,21 +30,11 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
 
     private final CTextArea cComponent;
 
-    private boolean nativeValueUpdate = false;
-
     public NativeTextArea(CTextArea textArea) {
         super();
         this.cComponent = textArea;
 
         getElement().getStyle().setProperty("resize", "none");
-
-        addChangeHandler(new ChangeHandler() {
-
-            @Override
-            public void onChange(ChangeEvent event) {
-                nativeValueUpdate();
-            }
-        });
 
         addBlurHandler(new BlurHandler() {
 
@@ -86,20 +74,11 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
     }
 
     private void nativeValueUpdate() {
-        // Prevents setting the native value while propagating value from native component to CComponent
-        nativeValueUpdate = true;
-        try {
-            cComponent.update(getText());
-        } finally {
-            nativeValueUpdate = false;
-        }
+        cComponent.update(getText());
     }
 
     @Override
     public void setNativeValue(String value) {
-        if (nativeValueUpdate) {
-            return;
-        }
         String newValue = value == null ? "" : value;
         if (!newValue.equals(getText())) {
             setText(newValue);
