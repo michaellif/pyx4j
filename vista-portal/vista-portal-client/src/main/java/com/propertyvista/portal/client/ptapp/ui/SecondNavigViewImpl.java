@@ -71,8 +71,10 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             if (substeps.size() > 0) {
 
                 tabsHolder = new NavigTabList();
+                int debugIdItemNo = 0;
                 for (ApplicationWizardSubstep substep : substeps) {
-                    tabsHolder.add(new NavigTab(substep, presenter.getWizardStep().placeId().getValue()));
+                    tabsHolder.add(new NavigTab(substep, presenter.getWizardStep().placeId().getValue(), debugIdItemNo));
+                    debugIdItemNo++;
                 }
 
                 setWidget(tabsHolder);
@@ -99,7 +101,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             return place;
         }
 
-        NavigTab(final ApplicationWizardSubstep substep, String token) {
+        NavigTab(final ApplicationWizardSubstep substep, String token, int debugIdItemNo) {
             super();
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
 
@@ -117,7 +119,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
 
             label = new Label(substep.name().getValue());
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
-            label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.SecondNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place)));
+            label.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.SecondNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(place), debugIdItemNo));
             statusHolder.add(label);
 
             switch (substep.status().getValue()) {
