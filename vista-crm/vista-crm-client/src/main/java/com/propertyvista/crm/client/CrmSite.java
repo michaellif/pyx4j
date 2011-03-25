@@ -20,6 +20,7 @@ import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.crm.rpc.SiteMap;
 
+import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 
@@ -38,14 +39,15 @@ public class CrmSite extends VistaSite {
 
         hideLoadingIndicator();
 
+        SessionInactiveDialog.register();
+
         obtainAuthenticationData();
     }
 
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
         setMessage(new Message(message, title, buttonText, command));
-        //TODO set place to show message
-        //ginjector.getPlaceController().goTo(new SiteMap.GenericMessage());
+        getPlaceController().goTo(new SiteMap.GenericMessage());
     }
 
     private void obtainAuthenticationData() {
