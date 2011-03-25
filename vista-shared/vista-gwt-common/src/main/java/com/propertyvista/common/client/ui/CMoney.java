@@ -37,9 +37,21 @@ public class CMoney extends CEditableComponent<Money, NativeMoney> {
         setDefaultValidation();
     }
 
+    public CMoney(boolean showCurrency) {
+        super();
+        setDefaultValidation();
+        setShowCurrency(showCurrency);
+    }
+
     public CMoney(String title) {
         super(title);
         setDefaultValidation();
+    }
+
+    public CMoney(String title, boolean showCurrency) {
+        super(title);
+        setDefaultValidation();
+        setShowCurrency(showCurrency);
     }
 
     public void setShowCurrency(boolean showCurrency) {

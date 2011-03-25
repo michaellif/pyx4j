@@ -39,9 +39,9 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
         disabled, readOnly, invalid
     }
 
-    private TextBox amount;
+    private final TextBox amount;
 
-    private Label currency;
+    private final Label currency;
 
     private final CMoney cComponent;
 
@@ -54,10 +54,15 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
         this.cComponent = cComponent;
 
         add(amount = new TextBox());
-        add(currency = new Label());
-        currency.getElement().getStyle().setMarginLeft(5, Unit.PX);
-        if (!cComponent.isShowCurrency()) {
-            remove(currency);
+        amount.setWidth("100%");
+
+        if (cComponent.isShowCurrency()) {
+            add(currency = new Label());
+            currency.setWidth("100%");
+            currency.getElement().getStyle().setMarginLeft(5, Unit.PX);
+        } else {
+            currency = null;
+            setCellWidth(amount, "100%");
         }
 
         setStyleName(DEFAULT_STYLE_PREFIX);
@@ -154,7 +159,7 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
     public void setNativeValue(Money value) {
         if (value != null && !value.amount().isNull()) {
             amount.setText(cComponent.getFormat().format(value));
-            if (!value.currency().isNull()) {
+            if (currency != null && !value.currency().isNull()) {
                 currency.setText(value.currency().getStringView());
             }
         }
@@ -163,7 +168,7 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
     @Override
     public Money getNativeValue() {
         Money value = cComponent.getFormat().parse(amount.getText());
-        if (value != null && !value.currency().isNull()) {
+        if (value != null && !value.currency().isNull() && currency != null) {
             value.currency().name().setValue(currency.getText());
         }
         return value;
