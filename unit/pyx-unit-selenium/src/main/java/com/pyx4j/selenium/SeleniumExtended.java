@@ -137,8 +137,8 @@ public class SeleniumExtended extends WebDriverWrapper {
         return By.id(gwtLocator(member.getPath().getDebugIdString()));
     }
 
-    public boolean isElementPresent(String id) {
-        return isElementPresent(By.id(gwtLocator(id)));
+    public boolean isElementPresent(String paramString) {
+        return isElementPresent(elementLocator(paramString));
     }
 
     public boolean isElementPresent(IDebugId debugId) {
@@ -154,8 +154,8 @@ public class SeleniumExtended extends WebDriverWrapper {
         }
     }
 
-    public boolean isVisible(String id) {
-        return isVisible(By.id(gwtLocator(id)));
+    public boolean isVisible(String paramString) {
+        return isVisible(elementLocator(paramString));
     }
 
     public boolean isVisible(IDebugId debugId) {
@@ -174,8 +174,8 @@ public class SeleniumExtended extends WebDriverWrapper {
         waitFor(By.linkText(text));
     }
 
-    public WebElement waitFor(String id) {
-        return waitFor(By.id(gwtLocator(id)));
+    public WebElement waitFor(String paramString) {
+        return waitFor(elementLocator(paramString));
     }
 
     public WebElement waitFor(IDebugId debugId) {
@@ -229,8 +229,8 @@ public class SeleniumExtended extends WebDriverWrapper {
         }
     }
 
-    public void waitForText(String id, String expected, int waitSeconds) {
-        waitForText(By.id(gwtLocator(id)), expected, waitSeconds);
+    public void waitForText(String paramString, String expected, int waitSeconds) {
+        waitForText(elementLocator(paramString), expected, waitSeconds);
     }
 
     public void waitForText(IDebugId debugId, String expected, int waitSeconds) {
