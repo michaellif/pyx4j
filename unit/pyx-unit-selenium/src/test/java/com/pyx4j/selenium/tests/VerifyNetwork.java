@@ -23,7 +23,7 @@ package com.pyx4j.selenium.tests;
 import java.net.InetAddress;
 import java.util.Enumeration;
 
-import org.openqa.selenium.networkutils.NetworkUtils;
+import org.openqa.selenium.net.NetworkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
