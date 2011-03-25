@@ -141,4 +141,12 @@ public class AclBuilder implements AclCreator {
     protected void revoke(Behavior behavior, Restriction restriction) {
         getGroup(behavior).restrictions.add(restriction);
     }
+
+    protected void merge(AclBuilder aclBuilder) {
+        aclBuilder.freeze();
+        global.add(aclBuilder.global);
+        for (Map.Entry<Behavior, PermissionsGroup> me : aclBuilder.groups.entrySet()) {
+            getGroup(me.getKey()).add(me.getValue());
+        }
+    }
 }
