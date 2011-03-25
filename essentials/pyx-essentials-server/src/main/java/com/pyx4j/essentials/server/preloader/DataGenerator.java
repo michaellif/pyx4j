@@ -98,6 +98,10 @@ public class DataGenerator {
         return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
     }
 
+    public static int randomInt(int n) {
+        return random.nextInt(n);
+    }
+
     public static <E extends Enum<E>> E randomEnum(Class<E> elementType) {
         EnumSet<E> all = EnumSet.allOf(elementType);
         int r = random.nextInt(all.size());

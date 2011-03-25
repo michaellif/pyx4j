@@ -60,7 +60,7 @@ class IServiceMockProxy implements java.lang.reflect.InvocationHandler {
             Serializable result = srv.execute(request);
             callback.onSuccess(result);
         } catch (Throwable e) {
-            log.debug("service {} call error", request.getServiceCallMarker(), e);
+            log.info("service {} call error", request.getServiceCallMarker(), e);
             if (e instanceof RuntimeExceptionSerializable) {
                 callback.onFailure(e);
             } else {
