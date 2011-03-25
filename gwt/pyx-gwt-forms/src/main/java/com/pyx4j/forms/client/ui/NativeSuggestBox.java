@@ -20,8 +20,10 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
@@ -37,11 +39,24 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
 
     private final NativeTextBoxDelegate<E> delegate;
 
+    private final GroupFocusHandler focusHandlerManager;
+
     public NativeSuggestBox(CSuggestBox<E> cSuggestBox) {
         super(new MultiWordSuggestOracle(), new TextBox());
+
+        focusHandlerManager = new GroupFocusHandler(this);
+
+        ((TextBox) getWidget()).addFocusHandler(focusHandlerManager);
+        ((TextBox) getWidget()).addBlurHandler(focusHandlerManager);
+
         setStyleName(TextBox.DEFAULT_STYLE_PREFIX);
         delegate = new NativeTextBoxDelegate<E>(this, cSuggestBox);
-
+        addSelectionHandler(new SelectionHandler() {
+            @Override
+            public void onSelection(SelectionEvent event) {
+                setFocus(true);
+            }
+        });
     }
 
     @Override
@@ -122,16 +137,6 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     }
 
     @Override
-    public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return ((TextBox) getWidget()).addFocusHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return ((TextBox) getWidget()).addBlurHandler(handler);
-    }
-
-    @Override
     public void setValid(boolean valid) {
         String dependentSuffix = Selector.getDependentName(StyleDependent.invalid);
         if (valid) {
@@ -139,6 +144,16 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
         } else {
             addStyleDependentName(dependentSuffix);
         }
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        return focusHandlerManager.addHandler(FocusEvent.getType(), focusHandler);
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        return focusHandlerManager.addHandler(BlurEvent.getType(), blurHandler);
     }
 
 }

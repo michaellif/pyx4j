@@ -24,10 +24,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
@@ -68,6 +64,10 @@ public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> imple
         } else {
             this.policy = policy;
         }
+    }
+
+    @Override
+    protected void addEditingStatusHandler() {
     }
 
     @Override

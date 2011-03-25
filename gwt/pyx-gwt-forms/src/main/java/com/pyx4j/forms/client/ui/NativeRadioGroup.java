@@ -48,13 +48,9 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
 
     private boolean editable = true;
 
-    private boolean focusLost = true;
-
-    private boolean groupFocus = false;
-
     private final Map<E, RadioButton> buttons = new LinkedHashMap<E, RadioButton>();
 
-    private final HandlerManager focusHandlerManager;
+    private final GroupFocusHandler focusHandlerManager;
 
     public NativeRadioGroup(CRadioGroup<E> cComponent) {
         this.cComponent = cComponent;
@@ -68,36 +64,7 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
 
         String groupName = "rb" + (uniqueGroupId++);
 
-        focusHandlerManager = new HandlerManager(this);
-
-        FocusHandler groupFocusHandler = new FocusHandler() {
-            @Override
-            public void onFocus(FocusEvent e) {
-                focusLost = false;
-                if (!groupFocus) {
-                    groupFocus = true;
-                    focusHandlerManager.fireEvent(e);
-                }
-            }
-        };
-
-        BlurHandler groupBlurHandler = new BlurHandler() {
-            @Override
-            public void onBlur(final BlurEvent e) {
-                focusLost = true;
-                Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-
-                    @Override
-                    public void execute() {
-                        if (groupFocus && focusLost) {
-                            groupFocus = false;
-                            focusHandlerManager.fireEvent(e);
-                        }
-                    }
-                });
-
-            }
-        };
+        focusHandlerManager = new GroupFocusHandler(this);
 
         for (final E option : cComponent.getOptions()) {
             RadioButton b = new RadioButton(groupName, cComponent.getFormat().format(option));
@@ -110,8 +77,8 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
                     }
                 }
             });
-            b.addFocusHandler(groupFocusHandler);
-            b.addBlurHandler(groupBlurHandler);
+            b.addFocusHandler(focusHandlerManager);
+            b.addBlurHandler(focusHandlerManager);
             panel.add(b);
         }
 

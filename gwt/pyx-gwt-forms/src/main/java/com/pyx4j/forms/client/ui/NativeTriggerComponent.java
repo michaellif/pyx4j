@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -34,7 +33,6 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
@@ -53,15 +51,11 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
 
     private NativeTriggerButton triggerButton;
 
-    private HandlerManager focusHandlerManager;
+    private GroupFocusHandler focusHandlerManager;
 
     private boolean enabled = true;
 
     private boolean readOnly = false;
-
-    private boolean focusLost = true;
-
-    private boolean groupFocus = false;
 
     public NativeTriggerComponent() {
         super();
@@ -86,45 +80,16 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
             setCellWidth(composite, "100%");
         }
 
-        focusHandlerManager = new HandlerManager(this);
+        focusHandlerManager = new GroupFocusHandler(this);
 
-        FocusHandler groupFocusHandler = new FocusHandler() {
-            @Override
-            public void onFocus(FocusEvent e) {
-                focusLost = false;
-                if (!groupFocus) {
-                    groupFocus = true;
-                    focusHandlerManager.fireEvent(e);
-                }
-            }
-        };
-
-        BlurHandler groupBlurHandler = new BlurHandler() {
-            @Override
-            public void onBlur(final BlurEvent e) {
-                focusLost = true;
-                Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-
-                    @Override
-                    public void execute() {
-                        if (groupFocus && focusLost) {
-                            groupFocus = false;
-                            focusHandlerManager.fireEvent(e);
-                        }
-                    }
-                });
-
-            }
-        };
-
-        focusWidget.addFocusHandler(groupFocusHandler);
-        focusWidget.addBlurHandler(groupBlurHandler);
+        focusWidget.addFocusHandler(focusHandlerManager);
+        focusWidget.addBlurHandler(focusHandlerManager);
 
         triggerButton = new NativeTriggerButton(ImageFactory.getImages().triggerBlueUp(), ImageFactory.getImages().triggerBlueDown());
         triggerButton.setWidth("1%");
         Cursor.setHand(triggerButton);
-        triggerButton.addFocusHandler(groupFocusHandler);
-        triggerButton.addBlurHandler(groupBlurHandler);
+        triggerButton.addFocusHandler(focusHandlerManager);
+        triggerButton.addBlurHandler(focusHandlerManager);
 
         add(triggerButton);
         setCellVerticalAlignment(triggerButton, ALIGN_TOP);
