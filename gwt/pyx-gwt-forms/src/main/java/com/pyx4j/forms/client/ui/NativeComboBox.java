@@ -224,7 +224,8 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
 
     @Override
     public E getNativeValue() {
-        return getValueByNativeOptionIndex(getSelectedIndex());
+        this.value = getValueByNativeOptionIndex(getSelectedIndex());
+        return this.value;
     }
 
     private void setSelectedValue(E value) {
