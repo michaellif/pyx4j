@@ -477,38 +477,6 @@ public class PreloadPT extends BaseVistaDataPreloader {
         }
     }
 
-    private void createUnitSelection() {
-        unitSelection = EntityFactory.create(UnitSelection.class);
-        unitSelection.application().set(application);
-
-        // unit selection criteria
-        UnitSelectionCriteria criteria = EntityFactory.create(UnitSelectionCriteria.class);
-        criteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
-        criteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
-
-        Calendar avalableTo = new GregorianCalendar();
-        avalableTo.setTime(new Date());
-        avalableTo.add(Calendar.MONTH, 1);
-        DateUtils.dayStart(avalableTo);
-
-        criteria.availableFrom().setValue(new Date());
-        criteria.availableTo().setValue(avalableTo.getTime());
-
-        unitSelection.selectionCriteria().set(criteria);
-
-        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
-        apartmentServices.loadAvailableUnits(unitSelection);
-
-        // chose the first unit for demo
-        ApartmentUnit selectedUnit = unitSelection.availableUnits().units().iterator().next();
-        unitSelection.selectedUnit().set(selectedUnit);
-        unitSelection.selectedUnitId().set(selectedUnit.id());
-        unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
-        unitSelection.rentStart().setValue(selectedUnit.avalableForRent().getValue());
-
-        persist(unitSelection);
-    }
-
     private void loadUnitSelection(StringBuilder sb) {
         EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
@@ -707,7 +675,9 @@ public class PreloadPT extends BaseVistaDataPreloader {
         application = VistaDataGenerator.createApplication(user);
         persist(application);
 
-        createUnitSelection();
+        UnitSelection unitSelection = VistaDataGenerator.createUnitSelection(application);
+        persist(unitSelection);
+
         createApplicationProgress();
         createPotentialTenantList();
         createPets();

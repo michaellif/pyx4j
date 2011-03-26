@@ -13,13 +13,23 @@
  */
 package com.propertyvista.portal.server.generator;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
+import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
+import com.propertyvista.portal.server.pt.services.ApartmentServicesImpl;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.server.DateUtils;
 
 public class VistaDataGenerator {
 
@@ -45,4 +55,35 @@ public class VistaDataGenerator {
         return application;
     }
 
+    public static UnitSelection createUnitSelection(Application application) {
+        UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
+        unitSelection.application().set(application);
+
+        // unit selection criteria
+        UnitSelectionCriteria criteria = EntityFactory.create(UnitSelectionCriteria.class);
+        criteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
+        criteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
+
+        Calendar avalableTo = new GregorianCalendar();
+        avalableTo.setTime(new Date());
+        avalableTo.add(Calendar.MONTH, 1);
+        DateUtils.dayStart(avalableTo);
+
+        criteria.availableFrom().setValue(new Date());
+        criteria.availableTo().setValue(avalableTo.getTime());
+
+        unitSelection.selectionCriteria().set(criteria);
+
+        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
+        apartmentServices.loadAvailableUnits(unitSelection);
+
+        // chose the first unit for demo
+        ApartmentUnit selectedUnit = unitSelection.availableUnits().units().iterator().next();
+        unitSelection.selectedUnit().set(selectedUnit);
+        unitSelection.selectedUnitId().set(selectedUnit.id());
+        unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
+        unitSelection.rentStart().setValue(selectedUnit.avalableForRent().getValue());
+
+        return unitSelection;
+    }
 }
