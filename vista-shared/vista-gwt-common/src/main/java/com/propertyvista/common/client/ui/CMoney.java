@@ -81,4 +81,10 @@ public class CMoney extends CEditableComponent<Money, NativeMoney> {
     public IFormat<Money> getFormat() {
         return format;
     }
+
+    @Override
+    public void onEditingStop() {
+        super.onEditingStop();
+        setNativeValue(getValue());
+    }
 }
