@@ -159,7 +159,7 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
     public void setNativeValue(Money value) {
         if (value != null && !value.amount().isNull()) {
             amount.setText(cComponent.getFormat().format(value));
-            if (currency != null && !value.currency().isNull()) {
+            if (currency != null) {
                 currency.setText(value.currency().getStringView());
             }
         }
@@ -168,7 +168,7 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
     @Override
     public Money getNativeValue() {
         Money value = cComponent.getFormat().parse(amount.getText());
-        if (value != null && !value.currency().isNull() && currency != null) {
+        if (value != null && currency != null) {
             value.currency().name().setValue(currency.getText());
         }
         return value;

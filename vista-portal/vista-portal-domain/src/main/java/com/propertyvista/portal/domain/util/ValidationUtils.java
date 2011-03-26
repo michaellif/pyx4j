@@ -38,11 +38,11 @@ public class ValidationUtils {
     }
 
     public static boolean isSinValid(String value) {
-        return value.trim().matches("^\\d{3}[\\s]*\\d{3}[\\s]*\\d{3}$") && isLuhnValid(value.trim().replaceAll(" ", ""));
+        return value.trim().matches("^\\d{3}[\\s]*\\d{3}[\\s]*\\d{3}$") && isLuhnValid(value.trim().replaceAll("\\s", ""));
     }
 
     public static boolean isCreditCardNumberValid(String num) {
-        num = num.trim().replaceAll(" ", "");
+        num = num.trim().replaceAll("\\s", "");
         return num.matches("^\\d{13,19}$") && isLuhnValid(num);
     }
 }
