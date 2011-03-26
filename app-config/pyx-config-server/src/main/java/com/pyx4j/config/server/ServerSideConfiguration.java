@@ -50,6 +50,8 @@ public class ServerSideConfiguration {
 
     private static ServerSideConfiguration instance;
 
+    private static Throwable instanceDefinedFrom;
+
     private EnvironmentType environmentType;
 
     public static enum EnvironmentType {
@@ -60,15 +62,17 @@ public class ServerSideConfiguration {
         // Fall back for Tests
         if (ServerSideConfiguration.instance == null) {
             instance = new ServerSideConfiguration();
+            instanceDefinedFrom = new Throwable("ServerSideConfiguration initialized from");
         }
         return instance;
     }
 
     public static final void setInstance(ServerSideConfiguration instance) {
         if (ServerSideConfiguration.instance != null) {
-            throw new Error("Can't redefine ServerSideConfiguration");
+            throw new Error("Can't redefine ServerSideConfiguration", instanceDefinedFrom);
         }
         ServerSideConfiguration.instance = instance;
+        instanceDefinedFrom = new Throwable("ServerSideConfiguration initialized from");
     }
 
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
