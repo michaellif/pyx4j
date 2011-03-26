@@ -12,7 +12,7 @@
  * @version $Id:
  */
 
-package com.propertyvista.server.ci;
+package com.propertyvista.portal.server.access;
 
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.server.pt.PtAppContext;

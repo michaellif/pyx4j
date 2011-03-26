@@ -12,7 +12,7 @@
  * @version $Id:
  */
 
-package com.propertyvista.server.ci;
+package com.propertyvista.portal.server.access;
 
 import gwtupload.server.UploadAction;
 import gwtupload.server.exceptions.UploadActionException;
