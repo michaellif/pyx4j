@@ -29,6 +29,12 @@
             <artifactId>pyx-essentials-gwt</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-portal-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
     </dependencies>
 
     <properties>
