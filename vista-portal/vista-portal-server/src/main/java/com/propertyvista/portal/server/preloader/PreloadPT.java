@@ -355,12 +355,6 @@ public class PreloadPT extends BaseVistaDataPreloader {
         ApplicationDebug.dumpApplicationSummary(loadedApplication);
     }
 
-    private void createApplicationProgress() {
-        ApplicationProgress progress = ApplicationServicesImpl.createApplicationProgress();
-        progress.application().set(application);
-        persist(progress);
-    }
-
     private void loadApplicationProgress(StringBuilder sb) {
         EntityQueryCriteria<ApplicationProgress> criteria = EntityQueryCriteria.create(ApplicationProgress.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
@@ -673,12 +667,15 @@ public class PreloadPT extends BaseVistaDataPreloader {
         user = loadUser(DemoData.PRELOADED_USERNAME);
 
         application = VistaDataGenerator.createApplication(user);
+        VistaDataGenerator generator = new VistaDataGenerator(application);
         persist(application);
 
-        UnitSelection unitSelection = VistaDataGenerator.createUnitSelection(application);
+        UnitSelection unitSelection = generator.createUnitSelection(application);
         persist(unitSelection);
 
-        createApplicationProgress();
+        ApplicationProgress progress = generator.createApplicationProgress();
+        persist(progress);
+
         createPotentialTenantList();
         createPets();
         createCharges();

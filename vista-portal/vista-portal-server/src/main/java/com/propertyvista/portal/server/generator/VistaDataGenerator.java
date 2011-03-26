@@ -22,9 +22,11 @@ import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.server.pt.services.ApartmentServicesImpl;
+import com.propertyvista.portal.server.pt.services.ApplicationServicesImpl;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.UserCredential;
 
@@ -32,6 +34,14 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
 public class VistaDataGenerator {
+
+//    private User user;
+
+    private final Application application;
+
+    public VistaDataGenerator(Application application) {
+        this.application = application;
+    }
 
     public static User createUser() {
         User user = EntityFactory.create(User.class);
@@ -55,7 +65,13 @@ public class VistaDataGenerator {
         return application;
     }
 
-    public static UnitSelection createUnitSelection(Application application) {
+    public ApplicationProgress createApplicationProgress() {
+        ApplicationProgress progress = ApplicationServicesImpl.createApplicationProgress();
+        progress.application().set(application);
+        return progress;
+    }
+
+    public UnitSelection createUnitSelection(Application application) {
         UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
         unitSelection.application().set(application);
 
