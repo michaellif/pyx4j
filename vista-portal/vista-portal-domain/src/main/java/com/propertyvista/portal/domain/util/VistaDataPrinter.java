@@ -18,19 +18,224 @@ import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
+import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.pt.Pet;
+import com.propertyvista.portal.domain.pt.Pets;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.pt.PotentialTenantList;
+import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
+import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantCharge;
+import com.propertyvista.portal.domain.pt.TenantGuarantor;
+import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.pt.Vehicle;
+
+import com.pyx4j.entity.shared.IList;
 
 public class VistaDataPrinter {
+
+    public static String print(Summary summary) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n\n---------------------------- APPLICATION -----------------------------\n");
+        sb.append(print(summary.application()));
+
+//        loadApplication(sb);
+//        loadApplicationProgress(sb);
+//
+        sb.append("\n\n---------------------------- UNIT SELECTION --------------------------\n");
+        sb.append(print(summary.unitSelection()));
+
+        sb.append("\n\n---------------------------- TENANTS ---------------------------------\n");
+        sb.append(print(summary.tenantList()));
+
+        sb.append("\n\n---------------------------- FINANCIALS ---------------------------------\n");
+        sb.append(print(summary.tenantFinancials()));
+
+        sb.append("\n\n---------------------------- PETS ------------------------------------\n");
+        sb.append(print(summary.pets()));
+
+        sb.append("\n\n---------------------------- CHARGES ---------------------------------\n");
+        sb.append(print(summary.charges()));
+
+        sb.append("\n\n\n");
+
+        return sb.toString();
+    }
+
+    public static String print(PotentialTenantList tenantList) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(tenantList.tenants().size()).append(" potential tenants");
+        sb.append("\n");
+
+        for (PotentialTenantInfo tenant : tenantList.tenants()) {
+
+            sb.append("\n--- tenant ---\n");
+            sb.append(print(tenant));
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    public static String print(PotentialTenantInfo tenant) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(tenant.status().getStringView());
+        sb.append(", ");
+
+        sb.append(tenant.firstName().getStringView());
+        sb.append(" ");
+        if (tenant.middleName().getStringView().length() > 0) {
+            sb.append(tenant.middleName().getStringView());
+            sb.append(" ");
+        }
+        sb.append(tenant.lastName().getStringView());
+
+        sb.append("\t\t Born on ");
+        sb.append(tenant.birthDate().getValue());
+
+        sb.append("\t");
+        sb.append(tenant.homePhone().getStringView()).append(" | ").append(tenant.mobilePhone().getStringView());
+
+        sb.append("\t");
+        sb.append(tenant.email().getStringView());
+
+        sb.append("\t");
+
+        sb.append("\t Payment $").append(tenant.payment().getStringView());
+
+        sb.append("\n\t");
+
+        sb.append(tenant.driversLicense().getStringView()).append(" ").append(tenant.driversLicenseState().getStringView());
+
+        sb.append("\t").append(tenant.secureIdentifier().getStringView());
+
+        sb.append("Current address");
+        sb.append(VistaDataPrinter.print(tenant.currentAddress()));
+        sb.append("Previous address");
+        sb.append(VistaDataPrinter.print(tenant.previousAddress()));
+
+        sb.append("\nVehicles\n");
+        // vehicles
+        for (Vehicle vehicle : tenant.vehicles()) {
+            sb.append("\n\t");
+            sb.append(vehicle.year().getStringView()).append(" ");
+            sb.append(vehicle.province().getStringView()).append(" ");
+            sb.append(vehicle.make().getStringView()).append(" ").append(vehicle.model().getStringView()).append(" ");
+            sb.append(vehicle.plateNumber().getStringView()).append(" ");
+        }
+
+        return sb.toString();
+    }
+
+    public static String print(IList<SummaryPotentialTenantFinancial> tenantFinancials) {
+        StringBuilder sb = new StringBuilder();
+
+        for (SummaryPotentialTenantFinancial summaryFinancial : tenantFinancials) {
+            sb.append(print(summaryFinancial.tenantFinancial()));
+        }
+
+        return sb.toString();
+    }
+
+    public static String print(PotentialTenantFinancial financial) {
+        StringBuilder sb = new StringBuilder();
+
+        if (financial == null) {
+            sb.append("No financial data\n");
+            return sb.toString();
+        }
+
+        sb.append("\nFinancial Info\n");
+
+        sb.append("Incomes\n");
+        for (TenantIncome income : financial.incomes()) {
+            sb.append("\t");
+            sb.append(income.incomeSource().getValue());
+            sb.append(" $");
+            // sb.append(income.monthlyAmount().getValue());
+
+//            loadEmployer(income.employer(), sb);
+
+            //sb.append(" Active: ").append(income.active().getValue());
+
+            sb.append("\n");
+
+        }
+
+        sb.append("Assets\n");
+        for (TenantAsset asset : financial.assets()) {
+            sb.append("\t");
+            sb.append(asset.assetType().getValue());
+            sb.append(" $");
+            sb.append(asset.assetValue().getValue());
+            sb.append("\n");
+        }
+
+        sb.append("Guarantor\n");
+        for (TenantGuarantor guarantor : financial.guarantors()) {
+            sb.append("\t");
+            sb.append(guarantor.relationship().getValue());
+            sb.append(", ");
+            sb.append(guarantor.firstName().getStringView());
+            sb.append(" ");
+            sb.append(guarantor.lastName().getStringView());
+            sb.append("\n");
+        }
+
+        sb.append("\n\n");
+
+        return sb.toString();
+    }
+
+    public static String print(Pets pets) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Pets\n");
+
+        for (Pet pet : pets.pets()) {
+            sb.append("\t");
+            sb.append(pet.type().getValue());
+
+            sb.append(" \t");
+            sb.append(pet.name().getStringView());
+
+            sb.append(" \t");
+            sb.append(pet.color().getStringView());
+
+            sb.append(" \t");
+            sb.append(pet.breed().getStringView());
+
+            sb.append(" \t");
+            sb.append(pet.weight().getValue()).append(" ").append(pet.weightUnit().getValue());
+
+            sb.append(" $");
+            sb.append(pet.chargeLine().charge().amount().getValue());
+
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 
     public static String print(User user) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(user);
 
+        return sb.toString();
+    }
+
+    public static String print(Application application) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Application :").append(application.rent().amount()).append("\n");
+        sb.append("User: ").append(application.user()).append("\n");
         return sb.toString();
     }
 

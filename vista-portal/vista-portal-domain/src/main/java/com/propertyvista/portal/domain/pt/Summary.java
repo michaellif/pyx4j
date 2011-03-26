@@ -27,7 +27,7 @@ public interface Summary extends IEntity, IBoundToApplication {
     UnitSelection unitSelection();
 
     @Transient
-    PotentialTenantList tenants();
+    PotentialTenantList tenantList();
 
     @Transient
     PotentialTenantList tenantsWithInfo();

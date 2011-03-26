@@ -18,6 +18,7 @@ import com.propertyvista.portal.domain.pt.IBoundToApplication;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
+import com.propertyvista.portal.domain.util.VistaDataPrinter;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -28,10 +29,20 @@ import com.pyx4j.essentials.server.dev.DataDump;
 public class ApplicationDebug {
 
     public static void dumpApplicationSummary(Application application) {
+        Summary summary = retrieveApplicationSummary(application);
+        DataDump.dump("app-summary", summary);
+    }
+
+    public static String printApplicationSummary(Application application) {
+        Summary summary = retrieveApplicationSummary(application);
+        return VistaDataPrinter.print(summary).toString();
+    }
+
+    public static Summary retrieveApplicationSummary(Application application) {
         Summary summary = EntityFactory.create(Summary.class);
         summary.application().set(application);
         retrieveApplicationEntity(summary.unitSelection(), application);
-        retrieveApplicationEntity(summary.tenants(), application);
+        retrieveApplicationEntity(summary.tenantList(), application);
         retrieveApplicationEntity(summary.pets(), application);
         retrieveApplicationEntity(summary.charges(), application);
 
@@ -42,10 +53,11 @@ public class ApplicationDebug {
             sf.tenantFinancial().set(fin);
             summary.tenantFinancials().add(sf);
         }
-        DataDump.dump("app-summary", summary);
+
+        return summary;
     }
 
-    private static <T extends IBoundToApplication> void retrieveApplicationEntity(T entity, Application application) {
+    public static <T extends IBoundToApplication> void retrieveApplicationEntity(T entity, Application application) {
         @SuppressWarnings("unchecked")
         EntityQueryCriteria<T> criteria = (EntityQueryCriteria<T>) EntityQueryCriteria.create(entity.getValueClass());
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));

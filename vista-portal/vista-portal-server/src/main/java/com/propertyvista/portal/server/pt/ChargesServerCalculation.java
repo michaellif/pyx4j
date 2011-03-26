@@ -56,20 +56,28 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         }
         ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
         apartmentServices.loadSelectedUnit(unitSelection);
-        charges.rentStart().setValue(unitSelection.rentStart().getValue());
-
-        // calculate things that we can
-        double rentAmount = unitSelection.markerRent().rent().amount().getValue();
-        double depositAmount = unitSelection.selectedUnit().requiredDeposit().amount().getValue();
-
-        // monthly charges
-        //TODO use update.
-        charges.monthlyCharges().charges().clear();
-        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.rent, rentAmount));
 
         EntityQueryCriteria<PotentialTenantList> tenantCriteria = EntityQueryCriteria.create(PotentialTenantList.class);
         tenantCriteria.add(PropertyCriterion.eq(tenantCriteria.proto().application(), charges.application()));
         PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(tenantCriteria);
+
+        // find appropriate pet charges
+        EntityQueryCriteria<Pets> petCriteria = EntityQueryCriteria.create(Pets.class);
+        petCriteria.add(PropertyCriterion.eq(aptUnitCriteria.proto().application(), charges.application()));
+        Pets pets = PersistenceServicesFactory.getPersistenceService().retrieve(petCriteria);
+
+        updateChargesFromObjects(charges, unitSelection, tenantList, pets);
+    }
+
+    public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, PotentialTenantList tenantList, Pets pets) {
+        double rentAmount = unitSelection.markerRent().rent().amount().getValue();
+        double depositAmount = unitSelection.selectedUnit().requiredDeposit().amount().getValue();
+
+        charges.rentStart().setValue(unitSelection.rentStart().getValue());
+        charges.monthlyCharges().charges().clear();
+        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.rent, rentAmount));
+        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 25)); // TODO make this dynamic
+
         int carsCount = 0;
         for (PotentialTenantInfo pti : tenantList.tenants()) {
             carsCount += pti.vehicles().size();
@@ -84,14 +92,6 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
                 charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(label, ChargeType.parking, parkingChargeAmount));
             }
         }
-
-        // TODO 
-        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 25));
-
-        // find appropriate pet charges
-        EntityQueryCriteria<Pets> petCriteria = EntityQueryCriteria.create(Pets.class);
-        petCriteria.add(PropertyCriterion.eq(aptUnitCriteria.proto().application(), charges.application()));
-        Pets pets = PersistenceServicesFactory.getPersistenceService().retrieve(petCriteria);
 
         double petChargeAmount = 0d;
         for (Pet pet : pets.pets()) {
@@ -117,7 +117,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.applicationFee, 29));
 
         // payment splits
-        updatePaymentSplitCharges(charges, charges.application());
+        updatePaymentSplitCharges(charges, tenantList);
 
         // make sure to calculate charges
         calculateCharges(charges);
@@ -146,13 +146,12 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         }
     }
 
-    public static void updatePaymentSplitCharges(Charges charges, Application application) {
-        // find all potential tenants 
-        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-        PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-
-        log.info("Found {} tenants", tenantList.tenants().size());
+    public static void updatePaymentSplitCharges(Charges charges, PotentialTenantList tenantList) {
+//        // find all potential tenants 
+//        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+//        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+//        PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+//        log.info("Found {} tenants", tenantList.tenants().size());
 
         // compare current tenant list with what we have on the form
         boolean dirty = charges.paymentSplitCharges().charges().isEmpty(); // if there a no charges let's create them
@@ -233,7 +232,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             }
             TenantCharge tenantCharge = DomainUtil.createTenantCharge(percentage, 0);
             tenantCharge.tenant().set(tenant);
-            PersistenceServicesFactory.getPersistenceService().persist(tenant);
+//            PersistenceServicesFactory.getPersistenceService().persist(tenant);
             charges.paymentSplitCharges().charges().add(tenantCharge);
         }
     }

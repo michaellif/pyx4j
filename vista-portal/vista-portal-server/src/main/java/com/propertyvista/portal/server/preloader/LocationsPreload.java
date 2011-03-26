@@ -13,45 +13,31 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
 import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
+import com.propertyvista.portal.server.generator.LocationsGenerator;
+import com.propertyvista.portal.server.generator.SharedData;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
 public class LocationsPreload extends AbstractDataPreloader {
-
-    private static String resourceFileName(String fileName) {
-        return LocationsPreload.class.getPackage().getName().replace('.', '/') + "/" + fileName;
-    }
 
     @Override
     public String create() {
         int countriesCount = 0;
         int provinceCount = 0;
 
-        List<Province> provinces = EntityCSVReciver.create(Province.class).loadFile(resourceFileName("Province.csv"));
+        List<Province> provinces = LocationsGenerator.loadProvincesFromFile();
+        List<Country> countries = LocationsGenerator.createCountries(provinces);
 
-        Map<String, Country> countries = new HashMap<String, Country>();
-        List<Country> toSaveCountry = new Vector<Country>();
-        for (Province provinceInfo : provinces) {
-            Country c = countries.get(provinceInfo.country().name().getValue());
-            if (c == null) {
-                c = provinceInfo.country();
-                countries.put(c.name().getValue(), c);
-                toSaveCountry.add(c);
-            } else {
-                provinceInfo.country().set(c);
-            }
-        }
-        PersistenceServicesFactory.getPersistenceService().persist(toSaveCountry);
-        countriesCount += toSaveCountry.size();
+        SharedData.registerProvinces(provinces);
+        SharedData.registerCountries(countries);
+
+        PersistenceServicesFactory.getPersistenceService().persist(countries);
+        countriesCount += countries.size();
         PersistenceServicesFactory.getPersistenceService().persist(provinces);
         provinceCount += provinces.size();
 

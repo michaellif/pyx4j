@@ -66,7 +66,7 @@ public class TenantsServicesImpl extends ApplicationEntityServicesImpl implement
         Charges charges = secureRetrieve(criteria);
 
         if (charges != null) {
-            ChargesServerCalculation.updatePaymentSplitCharges(charges, tenants.application());
+            ChargesServerCalculation.updatePaymentSplitCharges(charges, tenantsOrig);
             secureSave(charges);
             log.info("Re-calculated and saved charges");
         }

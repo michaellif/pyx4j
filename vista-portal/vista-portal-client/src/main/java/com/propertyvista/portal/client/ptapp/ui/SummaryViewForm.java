@@ -119,7 +119,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Tenants"), new SiteMap.Tenants())));
         main.add(tenantsTable = new TenantsTable());
-        main.add(inject(proto().tenants().tenants(), tenantsTable.createTenantTable()));
+        main.add(inject(proto().tenantList().tenants(), tenantsTable.createTenantTable()));
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Info"), new SiteMap.Info())));
         main.add(inject(proto().tenantsWithInfo().tenants(), createTenantView()));
@@ -504,7 +504,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
         if (CommonsStringUtils.isEmpty(signature)) {
             return false;
         }
-        for (PotentialTenantInfo pti : getValue().tenants().tenants()) {
+        for (PotentialTenantInfo pti : getValue().tenantList().tenants()) {
             if (pti.status().getValue() == Status.Applicant) {
                 return isCombinationMatch(signature, pti.firstName(), pti.lastName(), pti.middleName());
             }

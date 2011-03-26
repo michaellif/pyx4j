@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
@@ -47,6 +48,14 @@ public class RandomUtil extends DataGenerator {
         }
         int index = random.nextInt(array.length);
         return array[index];
+    }
+
+    public static <T> T random(List<T> list) {
+        if (list.size() == 0) {
+            return null;
+        }
+        int index = random.nextInt(list.size());
+        return list.get(index);
     }
 
     @SuppressWarnings("unchecked")

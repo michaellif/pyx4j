@@ -82,10 +82,10 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         // I have no idea so far for why this line gets called
 //        PersistenceServicesFactory.getPersistenceService().retrieve(summary.unitSelection().selectedUnit().floorplan());
 
-        retrieveApplicationEntity(summary.tenants());
+        retrieveApplicationEntity(summary.tenantList());
 
         // We do not remove the info from DB if Tenant status changes
-        for (PotentialTenantInfo tenant : summary.tenants().tenants()) {
+        for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
             if (ApplicationServicesImpl.shouldEnterInformation(tenant)) {
                 summary.tenantsWithInfo().tenants().add(tenant);
             }
@@ -95,7 +95,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         for (PotentialTenantFinancial fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
             // Update Transient values and see if we need to show this Tenant
-            findTenenat: for (PotentialTenantInfo tenant : summary.tenants().tenants()) {
+            findTenenat: for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
                 if (fin.id().equals(tenant.id())) {
                     if (ApplicationServicesImpl.shouldEnterInformation(tenant)) {
                         SummaryPotentialTenantFinancial sf = summary.tenantFinancials().$();
@@ -119,7 +119,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         }
         summary.charges().monthlyCharges().upgradeCharges().clear();
         loopOverTenantCharge: for (TenantCharge charge : summary.charges().paymentSplitCharges().charges()) {
-            for (PotentialTenantInfo tenant : summary.tenants().tenants()) {
+            for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
                 if (tenant.equals(charge.tenant())) {
                     charge.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", tenant.firstName(), tenant.middleName(), tenant.lastName()));
                     continue loopOverTenantCharge;
