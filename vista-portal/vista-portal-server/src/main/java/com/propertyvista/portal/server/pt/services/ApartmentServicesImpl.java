@@ -26,7 +26,7 @@ import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.Picture;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.domain.util.PrintUtil;
+import com.propertyvista.portal.domain.util.VistaDataPrinter;
 import com.propertyvista.portal.rpc.pt.services.ApartmentServices;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.portal.server.pt.util.Converter;
@@ -73,7 +73,7 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
 
     @Override
     public void save(AsyncCallback<UnitSelection> callback, UnitSelection unitSelection) {
-        log.info("Saving unit selection\n{}", PrintUtil.print(unitSelection));
+        log.info("Saving unit selection\n{}", VistaDataPrinter.print(unitSelection));
 
         saveApplicationEntity(unitSelection);
 

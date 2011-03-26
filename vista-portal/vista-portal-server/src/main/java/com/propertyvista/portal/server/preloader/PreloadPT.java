@@ -60,7 +60,8 @@ import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
 import com.propertyvista.portal.domain.util.DomainUtil;
-import com.propertyvista.portal.domain.util.PrintUtil;
+import com.propertyvista.portal.domain.util.VistaDataPrinter;
+import com.propertyvista.portal.server.generator.VistaDataGenerator;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.services.ApartmentServicesImpl;
 import com.propertyvista.portal.server.pt.services.ApplicationDebug;
@@ -328,26 +329,10 @@ public class PreloadPT extends BaseVistaDataPreloader {
         }
     }
 
-    private User createUser() {
+    private User loadUser(String name) {
         EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().name(), DemoData.PRELOADED_USERNAME));
+        criteria.add(PropertyCriterion.eq(criteria.proto().name(), name));
         user = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-
-        //        user = EntityFactory.create(User.class);
-        //        user.name().setValue("Gregory Holmes");
-        //        user.email().setValue("gregory@221b.com");
-        //
-        //        PersistenceServicesFactory.getPersistenceService().persist(user);
-        //
-        //        UserCredential credential = EntityFactory.create(UserCredential.class);
-        //        credential.setPrimaryKey(user.getPrimaryKey());
-        //
-        //        credential.user().set(user);
-        //        credential.credential().setValue(VistaAuthenticationServicesImpl.encryptPassword("london"));
-        //        credential.enabled().setValue(Boolean.TRUE);
-        //        credential.behavior().setValue(VistaBehavior.POTENCIAL_TENANT);
-        //
-        //        PersistenceServicesFactory.getPersistenceService().persist(credential);
         return user;
     }
 
@@ -357,13 +342,6 @@ public class PreloadPT extends BaseVistaDataPreloader {
         user = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
 
         sb.append("User: ").append(user).append("\n");
-    }
-
-    private Application createApplication() {
-        application = EntityFactory.create(Application.class);
-        application.user().set(user);
-        persist(application);
-        return application;
     }
 
     private void loadApplication(StringBuilder sb) {
@@ -541,7 +519,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
         //        building = unitSelection.selectedUnit().building();
 
-        sb.append(PrintUtil.print(unitSelection));
+        sb.append(VistaDataPrinter.print(unitSelection));
     }
 
     private void loadTenants(StringBuilder sb) {
@@ -586,9 +564,9 @@ public class PreloadPT extends BaseVistaDataPreloader {
             sb.append("\t").append(tenant.secureIdentifier().getStringView());
 
             sb.append("Current address");
-            sb.append(PrintUtil.print(tenant.currentAddress()));
+            sb.append(VistaDataPrinter.print(tenant.currentAddress()));
             sb.append("Previous address");
-            sb.append(PrintUtil.print(tenant.previousAddress()));
+            sb.append(VistaDataPrinter.print(tenant.previousAddress()));
 
             sb.append("\nVehicles\n");
             // vehicles
@@ -717,15 +695,18 @@ public class PreloadPT extends BaseVistaDataPreloader {
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
         List<Charges> chargesList = PersistenceServicesFactory.getPersistenceService().query(criteria);
         for (Charges charges : chargesList) {
-            sb.append(PrintUtil.print(charges));
+            sb.append(VistaDataPrinter.print(charges));
         }
         sb.append("\n\n");
     }
 
     @Override
     public String create() {
-        user = createUser();
-        createApplication();
+        user = loadUser(DemoData.PRELOADED_USERNAME);
+
+        application = VistaDataGenerator.createApplication(user);
+        persist(application);
+
         createUnitSelection();
         createApplicationProgress();
         createPotentialTenantList();
@@ -743,7 +724,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         StringBuilder sb = new StringBuilder();
 
         sb.append("\n\n---------------------------- USER -----------------------------------\n");
-        loadUser(sb);
+        sb.append(VistaDataPrinter.print(user));
 
         sb.append("\n\n---------------------------- APPLICATION -----------------------------\n");
         loadApplication(sb);

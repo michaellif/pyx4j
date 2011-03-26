@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.util;
 
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.MarketRent;
+import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.ChargeLine;
@@ -23,7 +24,15 @@ import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 
-public class PrintUtil {
+public class VistaDataPrinter {
+
+    public static String print(User user) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(user);
+
+        return sb.toString();
+    }
 
     public static String print(Address address) {
         StringBuilder sb = new StringBuilder();

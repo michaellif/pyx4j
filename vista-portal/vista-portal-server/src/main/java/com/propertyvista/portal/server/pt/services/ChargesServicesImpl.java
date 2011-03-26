@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.TenantCharge;
-import com.propertyvista.portal.domain.util.PrintUtil;
+import com.propertyvista.portal.domain.util.VistaDataPrinter;
 import com.propertyvista.portal.rpc.pt.services.ChargesServices;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PtAppContext;
@@ -56,7 +56,7 @@ public class ChargesServicesImpl extends ApplicationEntityServicesImpl implement
 
     @Override
     public void save(AsyncCallback<Charges> callback, Charges charges) {
-        log.info("Saving charges\n{}", PrintUtil.print(charges));
+        log.info("Saving charges\n{}", VistaDataPrinter.print(charges));
 
         saveApplicationEntity(charges);
 
