@@ -223,6 +223,51 @@
             </roles>
             <timezone>-5</timezone>
         </developer>
+         <developer>
+            <name>Konstantin Lysenko</name>
+            <id>kostya</id>
+            <email>kostya@birchwoodsoftwaregroup.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Leon Tager</name>
+            <id>leont</id>
+            <email>leontager@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Mark Levitin</name>
+            <id>markl</id>
+            <email>markl@birchwoodsoftwaregroup.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Sergei Goshko</name>
+            <id>sergeig</id>
+            <email>sergeig@birchwoodsoftwaregroup.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Vadim Spirkov</name>
+            <id>vadims</id>
+            <email>vadims@birchwoodsoftwaregroup.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
     </developers>
 
     <build>
