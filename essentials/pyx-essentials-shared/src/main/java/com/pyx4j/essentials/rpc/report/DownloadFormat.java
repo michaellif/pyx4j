@@ -40,6 +40,16 @@ public enum DownloadFormat {
 
     TXT("txt", "Text file"),
 
+    TIF("tif", "Image"),
+
+    GIF("gif", "Image"),
+
+    JPEG("jpg", "Image"),
+
+    PNG("png", "Image"),
+
+    BMP("bmp", "Image"),
+
     JAVA_SERIALIZED("ser", "Java Serialized Object");
 
     private String extension;

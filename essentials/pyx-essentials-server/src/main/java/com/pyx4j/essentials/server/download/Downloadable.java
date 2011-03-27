@@ -55,30 +55,7 @@ public class Downloadable implements Serializable {
     }
 
     public static String getContentType(DownloadFormat downloadFormat) {
-        switch (downloadFormat) {
-        case RTF:
-            return "application/rtf";
-        case DOCX:
-            return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        case XLS:
-            return "application/xls";
-        case ODT:
-            return "application/vnd.oasis.opendocument.text";
-        case PDF:
-            return "application/pdf";
-        case XML:
-            return "text/xml";
-        case HTML:
-            return "text/html";
-        case TXT:
-            return "text/plain";
-        case CSV:
-            return "text/csv";
-        case JAVA_SERIALIZED:
-            return "application/x-java-serialized-object";
-        default:
-            throw new RuntimeException("Unsupported report download format " + downloadFormat);
-        }
+        return MimeMap.getContentType(downloadFormat);
     }
 
     public boolean isOutDated() {
