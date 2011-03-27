@@ -153,7 +153,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
         public DemoReportButtons() {
             getElement().getStyle().setMargin(2, Unit.EM);
 
-            Button print = new Button("Print the Summary");
+            Button print = new Button(i18n.tr("Print the Summary"));
             print.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -164,7 +164,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             print.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
             add(alignWidth(print));
 
-            Button download = new Button("Download PDF");
+            Button download = new Button(i18n.tr("Download PDF"));
             download.addClickHandler(new ClickHandler() {
 
                 @Override
