@@ -21,7 +21,6 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -38,7 +37,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
