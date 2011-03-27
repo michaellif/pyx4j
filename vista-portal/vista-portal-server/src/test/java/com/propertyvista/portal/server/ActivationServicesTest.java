@@ -24,7 +24,7 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.unit.server.MockServiceFactory;
+import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 
 public class ActivationServicesTest extends VistaDBTestCase {
@@ -40,7 +40,7 @@ public class ActivationServicesTest extends VistaDBTestCase {
         request.password().setValue("1234");
         request.captcha().setValue(new Pair<String, String>("n/a", "x"));
 
-        ActivationServices service = MockServiceFactory.create(ActivationServices.class);
+        ActivationServices service = TestServiceFactory.create(ActivationServices.class);
         service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {

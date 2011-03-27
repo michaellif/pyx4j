@@ -76,6 +76,19 @@
         </dependency>
 
         <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-report</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-report</artifactId>
+            <version>${pyxVersion}</version>
+            <classifier>tests</classifier>
+        </dependency>
+        
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>
@@ -133,6 +146,11 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
         </dependency>
         
 		<dependency>

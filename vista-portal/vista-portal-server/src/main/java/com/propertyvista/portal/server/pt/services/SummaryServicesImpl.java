@@ -47,6 +47,17 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
     @Override
     public void retrieve(AsyncCallback<Summary> callback, Long tenantId) {
         log.info("Retrieving summary for tenant {}", tenantId);
+        callback.onSuccess(retrieveSummary());
+    }
+
+    @Override
+    public void save(AsyncCallback<Summary> callback, Summary summary) {
+        saveApplicationEntity(summary);
+        loadTransientData(summary);
+        callback.onSuccess(summary);
+    }
+
+    public Summary retrieveSummary() {
         EntityQueryCriteria<Summary> criteria = EntityQueryCriteria.create(Summary.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         Summary summary = secureRetrieve(criteria);
@@ -54,25 +65,12 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
             log.info("Creating new Summary");
             summary = EntityFactory.create(Summary.class);
         }
-
-        retrieveSummary(summary);
-
-        callback.onSuccess(summary);
-    }
-
-    @Override
-    public void save(AsyncCallback<Summary> callback, Summary summary) {
-        //        log.info("Saving charges\n{}", PrintUtil.print(summary));
-
-        saveApplicationEntity(summary);
-
-        //        loadTransientData(editableEntity);
-
-        callback.onSuccess(summary);
+        loadTransientData(summary);
+        return summary;
     }
 
     @SuppressWarnings("unchecked")
-    private void retrieveSummary(Summary summary) {
+    private void loadTransientData(Summary summary) {
 
         // this code starts to become very convoluted and all-over-the place
         retrieveApplicationEntity(summary.unitSelection());
@@ -80,7 +78,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         apartmentServices.loadTransientData(summary.unitSelection());
 
         // I have no idea so far for why this line gets called
-//        PersistenceServicesFactory.getPersistenceService().retrieve(summary.unitSelection().selectedUnit().floorplan());
+        //        PersistenceServicesFactory.getPersistenceService().retrieve(summary.unitSelection().selectedUnit().floorplan());
 
         retrieveApplicationEntity(summary.tenantList());
 
@@ -133,15 +131,15 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
     }
 
     @Override
-    public void downloadSummary(AsyncCallback<String> callback, VoidSerializable request) {
+    public void downloadSummary(AsyncCallback<String> callback, VoidSerializable none) {
+
+        Summary summary = retrieveSummary();
 
         try {
             Downloadable d = new Downloadable(IOUtils.getResource("com/propertyvista/portal/server/preloader/apartment1.jpg"),
                     Downloadable.getContentType(DownloadFormat.PDF));
             d.save("da.jpg");
-
             callback.onSuccess(Context.getRequest().getContextPath() + "/download/" + System.currentTimeMillis() + "/" + "da.jpg");
-
         } catch (IOException e) {
             // TODO Auto-generated catch block
             log.error("Error", e);

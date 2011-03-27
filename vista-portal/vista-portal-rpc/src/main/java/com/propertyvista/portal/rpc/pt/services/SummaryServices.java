@@ -20,6 +20,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface SummaryServices extends AbstractWizardServices<Summary> {
 
-    public void downloadSummary(AsyncCallback<String> callback, VoidSerializable request);
+    public void downloadSummary(AsyncCallback<String> callback, VoidSerializable none);
 
 }

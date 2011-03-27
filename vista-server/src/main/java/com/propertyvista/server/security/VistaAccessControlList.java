@@ -29,7 +29,7 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.log4gwt.rpc.LogServices;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
-import com.pyx4j.rpc.shared.IServiceImpl;
+import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
@@ -43,7 +43,7 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         grant(new ServiceExecutePermission(LogServices.Log.class));
         grant(new ServiceExecutePermission(AuthenticationServices.class, "*"));
         grant(new IServiceExecutePermission(ActivationServices.class));
-        grant(new ServiceExecutePermission(IServiceImpl.class));
+        grant(new ServiceExecutePermission(IServiceAdapter.class));
 
         boolean allowAllDuringDevelopment = true;
         if (allowAllDuringDevelopment) {
