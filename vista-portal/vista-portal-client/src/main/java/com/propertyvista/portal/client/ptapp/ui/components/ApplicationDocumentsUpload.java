@@ -33,6 +33,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -69,6 +70,8 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
 
     DocumentType documentType;
 
+    private final SingleUploader uploader;
+
     final ApplicationDocumentsService applicationDocumentsService = (ApplicationDocumentsService) GWT.create(ApplicationDocumentsService.class);
 
     public ApplicationDocumentsUpload(DocumentType documentType) {
@@ -97,9 +100,9 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
         fp.add(appDocListView = new ApplicationDocumentsListView());
         appDocListView.initialize();
 
-        SingleUploader uploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
+        uploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
         uploader.setAutoSubmit(true);
-        uploader.avoidRepeatFiles(true);
+        //uploader.avoidRepeatFiles(true);
         uploader.setValidExtensions(new String[] { "jpg", "jpeg", "gif", "png", "tiff", "bmp", "pdf" });
         uploader.addOnFinishUploadHandler(onFinishUploaderHandler);
         uploader.getFileInput().setText(i18n.tr("Browse for File"));
@@ -128,6 +131,7 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
         this.tenantId = tenantId;
 
 //        docList.clear();
+        uploader.add(new Hidden("tenantId", this.tenantId.toString()));
 
         if (applicationDocumentsService != null) {
             applicationDocumentsService.retrieveAttachments(new AsyncCallback<ApplicationDocumentsList>() {
@@ -142,7 +146,7 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
 //                            @Override
 //                            public void execute() {
 //                                //TODO: show file here...
-                                  //open this url: "ApplicationDocument?id="+doc.getId()
+                    //open this url: "ApplicationDocument?id="+doc.getId()
 //                            }
 //                        });
 //
@@ -223,6 +227,8 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
                                     @Override
                                     public void execute() {
                                         // TODO show the file here...
+                                        //open this url: "ApplicationDocument?id="+getValue().id()
+                                        String url="ApplicationDocument?id="+getValue().id().getValue();
                                     }
                                 });
                                 return inject(column.getObject(), link);
