@@ -30,7 +30,13 @@ public class DefaultMoneyValidator implements EditableValueValidator<Money> {
 
     @Override
     public boolean isValid(CEditableComponent<Money, ?> component, Money value) {
-        return (value != null);
+        if (value != null)
+            if (!value.amount().isNull())
+                if (value.amount().getValue().isNaN())
+                    return false; // just this case (note all nested if-s) we consider incorrect value (set by parser)!..
+
+        return true; // all others are ok...
+
     }
 
     @Override

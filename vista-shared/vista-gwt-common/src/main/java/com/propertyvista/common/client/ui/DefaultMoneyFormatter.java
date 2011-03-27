@@ -64,16 +64,15 @@ public class DefaultMoneyFormatter implements IFormat<Money> {
 
     @Override
     public Money parse(String string) {
+        if (string == null || string.trim().equals("")) {
+            return null; // empty value case
+        }
         try {
-            if (string == null) {
-                string = "0.0";
-            } else {
-                string = string.replaceAll("\\s", "");
-                string = string.replaceAll("\\D^.", "");
-            }
+            string = string.replaceAll("\\s", "");
+            string = string.replaceAll("\\D^.", "");
             return DomainUtil.createMoney(Double.valueOf(string));
         } catch (NumberFormatException e) {
-            return null;
+            return DomainUtil.createMoney(Double.NaN); // incorrect user entry case (checked by validator!)
         }
     }
 }

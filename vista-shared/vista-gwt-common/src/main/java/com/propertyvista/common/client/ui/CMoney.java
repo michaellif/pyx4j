@@ -85,6 +85,8 @@ public class CMoney extends CEditableComponent<Money, NativeMoney> {
     @Override
     public void onEditingStop() {
         super.onEditingStop();
-        setNativeValue(getValue());
+        if (isValid()) {
+            setNativeValue(getValue());
+        }
     }
 }
