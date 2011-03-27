@@ -48,13 +48,13 @@ public class DefaultMoneyFormatter implements IFormat<Money> {
 
     @Override
     public String format(Money value) {
-        String money = (value != null ? numberFormat.format(value.amount().getValue()) : "");
+        String money = (value != null && !value.amount().isNull() ? numberFormat.format(value.amount().getValue()) : "");
         switch (showCurrency) {
         case use$:
             money = "$" + money;
             break;
         case show:
-            money = money + " " + (value != null ? value.currency().getStringView() : "");
+            money = money + " " + (value != null && value.currency().isNull() ? value.currency().getStringView() : "");
             break;
         case hide:
             break;
