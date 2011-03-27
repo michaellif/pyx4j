@@ -28,6 +28,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
@@ -111,7 +112,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
         @Override
         public Date parse(String string) {
-            if (string == null || string.trim().equals("")) {
+            if (CommonsStringUtils.isEmpty(string)) {
                 return null;
             }
             try {

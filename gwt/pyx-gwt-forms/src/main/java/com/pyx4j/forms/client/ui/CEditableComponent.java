@@ -91,7 +91,6 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
         ValueChangeEvent.fire(this, value);
-
     }
 
     public void setValue(DATA_TYPE value) {
@@ -310,7 +309,6 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         editing = false;
         visited = true;
         update(asWidget().getNativeValue());
-        revalidate();
     }
 
     @Override
