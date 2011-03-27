@@ -10,9 +10,17 @@ Property Vista
 
 * Links
 
+    {{{http://cruisecontrol.birchwoodsoftwaregroup.com/}cruisecontrol.birchwoodsoftwaregroup.com}} Continuous integration Website (Under PYX LDAP)
+
     {{{http://www22.birchwoodsoftwaregroup.com/}www22}} Nightly build Application
 
-    {{{http://ve.kvrmmdsf.vesrv.com/}Admin site}}
+    {{{http://www33.birchwoodsoftwaregroup.com/}www33}} QA Test Application
+
+    {{{http://www44.birchwoodsoftwaregroup.com/}www44}} Customer Delivery Application (staging env)
+
+    {{{http://ve.kvrmmdsf.vesrv.com/managedb/}ve.kvrmmdsf.vesrv.com/managedb/}}  Testing Environment DB Browsing
+
+    {{{http://ve.kvrmmdsf.vesrv.com/}mediatemple.net Admin site}}
 
     {{{http://code.pyx4j.com/}Framework site}}
 
@@ -33,10 +41,14 @@ Property Vista
 
 * GWT Compile Reports
 
-    * {{{./vista-server/rpc/portal/#version#}RPC files}} - Portal Client Site RPC policy files.
-
-    * {{{http://cruisecontrol.birchwoodsoftwaregroup.com/reports/rpc/#version#}RPC files}} - Portal Client Site RPC policy files with history.
-
     * {{{./vista-portal/vista-portal-client/soycReport/}GWT Compile Report 'vista-portal-client'}}
 
+    * {{{./vista-server/rpc/portal/@version@}RPC files}} - Portal Client Site RPC policy files.
+
+    * {{{http://cruisecontrol.birchwoodsoftwaregroup.com/reports/rpc/portal/@version@}RPC files}} - Portal Client Site RPC policy files with history.
+
     * {{{./vista-crm/vista-crm-client/soycReport/}GWT Compile Report 'CRM'}}
+
+    * {{{./vista-server/rpc/crm/@version@}RPC files}} - CRM RPC policy files.
+
+    * {{{http://cruisecontrol.birchwoodsoftwaregroup.com/reports/rpc/crm/@version@}RPC files}} - CRM RPC policy files with history.

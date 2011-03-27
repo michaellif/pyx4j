@@ -344,6 +344,18 @@
             </properties>
         </profile>
 
+        <profile>
+            <id>hasCCBuildLabel</id>
+            <activation>
+                <property>
+                    <name>label</name>
+                </property>
+            </activation>
+            <properties>
+                <buildLabel>${project.version}-ci${label}</buildLabel>
+            </properties>
+        </profile>
+
         <!-- Used for speed up the GWT compiler for developers -->
         <profile>
             <id>draft</id>
