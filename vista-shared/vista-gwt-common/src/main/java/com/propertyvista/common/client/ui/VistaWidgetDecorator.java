@@ -243,7 +243,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
         public boolean readOnlyMode = false;
 
-        public double labelWidth = 10;
+        public double labelWidth = 12;
 
         public Unit labelUnit = Unit.EM;
 
