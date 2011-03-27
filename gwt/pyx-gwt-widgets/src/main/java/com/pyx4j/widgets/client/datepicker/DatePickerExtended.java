@@ -3,146 +3,67 @@ package com.pyx4j.widgets.client.datepicker;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.EventHandler;
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.GwtEvent.Type;
-import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.HasHandlers;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.datepicker.client.CalendarUtil;
-import com.google.gwt.user.datepicker.client.CalendarView;
+import com.google.gwt.user.datepicker.client.CalendarModel;
+import com.google.gwt.user.datepicker.client.DatePicker;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class DatePickerExtended extends Composite implements HasHandlers {
-
-    public static final Type<DateChosenEventHandler> TYPE = new Type<DateChosenEventHandler>();
-
-    public class DateChosenEvent extends GwtEvent<DateChosenEventHandler> {
-        private final Date date;
-
-        public DateChosenEvent(Date date) {
-            this.date = date;
-        }
-
-        public Date getChosenDate() {
-            return this.date;
-        }
-
-        @Override
-        public Type<DateChosenEventHandler> getAssociatedType() {
-            return TYPE;
-        }
-
-        @Override
-        protected void dispatch(DateChosenEventHandler handler) {
-            handler.onDateChosen(this);
-        }
+public abstract class DatePickerExtended extends DatePicker {
+	
+	public static String BASE_NAME = "datePicker";
+	
+    public static enum StyleSuffix implements IStyleSuffix {
+    	Grid, MonthSelector, GridDaysRow, Navigation, MonthLabel, YearLabel, YearNavigation
     }
 
-    public interface DateChosenEventHandler extends EventHandler {
-        void onDateChosen(DateChosenEvent event);
+    public static enum StyleDependent implements IStyleDependent {
+    	disabled, heighlighted, selected, right, multiple, first
     }
 
-    HandlerManager handlerManager;
+    protected MonthSelectorExtended monthSelector;
 
-    HorizontalPanel panel = new HorizontalPanel();
+    protected CalendarViewExtended calendarView;
 
-    ArrayList<DatePickerWithYearSelector> pickers = new ArrayList<DatePickerWithYearSelector>();
+    protected Date minDate;
 
-    ArrayList<Date> disabledDates;
+    protected Date maxDate;
 
-    Date minDate;
+    protected ArrayList<Date> disabledDates;
 
-    Date maxDate;
-
-    public Date selectedField;
-
-    public DatePickerExtended(int numberOfMonths, Date starting, Date minDate, Date maxDate, ArrayList<Date> disabledDates) {
-        DatePickerWithYearSelector picker;
-        Date tempMaxDate;
+    public DatePickerExtended(MonthSelectorExtended selector, ArrayList<Date> disabledDates) {
+        super(selector, new CalendarViewExtended(selector.getMinDate(), selector.getMaxDate(), disabledDates), new CalendarModel());
+        this.minDate = selector.getMinDate();
+        this.maxDate = selector.getMaxDate();
         this.disabledDates = disabledDates;
-        this.minDate = minDate;
-        this.maxDate = maxDate;
-        handlerManager = new HandlerManager(this);
-
-        for (int i = 0; i < numberOfMonths; i++) {
-            tempMaxDate = new Date(maxDate.getTime());
-            CalendarUtil.addMonthsToDate(tempMaxDate, -numberOfMonths + i + 1);
-            picker = new DatePickerWithYearSelector(starting, minDate, tempMaxDate, i);
-            pickers.add(picker);
-            picker.addValueChangeHandler(new ValueChangeHandler<Date>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Date> event) {
-                    setGridSelection(event);
-                }
-            });
-            picker.setParent(this);
-            disableDates(picker);
-            panel.add(picker);
-            CalendarUtil.addMonthsToDate(starting, 1);
-        }
-        initWidget(panel);
+        monthSelector = (MonthSelectorExtended) this.getMonthSelector();
+        monthSelector.setPicker(this);
+        monthSelector.setModel(this.getModel());
+        calendarView = (CalendarViewExtended) this.getView();
+        calendarView.setPicker(this);
     }
 
-    public void setGridSelection(ValueChangeEvent<Date> event) {
-        selectedField = event.getValue();
-        DateChosenEvent dateChosen = new DateChosenEvent(selectedField);
-        fireEvent(dateChosen);
+    public void refreshComponents() {
+        super.refreshAll();
     }
 
-    public void updateComponents() {
-        DatePickerWithYearSelector picker = pickers.get(0);
-        Date startingDate = picker.getMyModel().getCurrentMonth();
-        DatePickerWithYearSelector eachPicker;
-
-        Date tempStartingDate = new Date(startingDate.getTime());
-        for (int i = 0; i < pickers.size(); i++) {
-            eachPicker = pickers.get(i);
-            eachPicker.setCurrentMonth(tempStartingDate);
-            CalendarUtil.addMonthsToDate(tempStartingDate, 1);
-            disableDates(eachPicker);
-        }
+    public void setParent(DatePickerComposite parent) {
+        monthSelector.setCompositeParent(parent);
     }
 
-    private void disableDates(DatePickerWithYearSelector picker) {
-        Date first = picker.getFirstDate();
-        Date last = picker.getLastDate();
-        Date temp;
-        CalendarView view = picker.getMyView();
-
-        if (minDate.after(first) && minDate.before(last)) {
-            temp = new Date(first.getTime());
-            while (temp.before(minDate)) {
-                view.setEnabledOnDate(false, temp);
-                CalendarUtil.addDaysToDate(temp, 1);
-            }
-        }
-
-        if (maxDate.after(first) && maxDate.before(last)) {
-            temp = new Date(maxDate.getTime());
-            while (temp.before(last)) {
-                view.setEnabledOnDate(false, temp);
-                CalendarUtil.addDaysToDate(temp, 1);
-            }
-        }
-
-        for (Date disabledDate : this.disabledDates) {
-            if (disabledDate.after(first) && disabledDate.before(last)) {
-                view.setEnabledOnDate(false, disabledDate);
-            }
-        }
+    public CalendarViewExtended getMyView() {
+        return (CalendarViewExtended) this.getView();
     }
 
-    @Override
-    public void fireEvent(GwtEvent<?> event) {
-        handlerManager.fireEvent(event);
+    public CalendarModel getMyModel() {
+        return this.getModel();
     }
 
-    public HandlerRegistration addDateChosenEventHandler(DateChosenEventHandler handler) {
-        return handlerManager.addHandler(TYPE, handler);
+    public MonthSelectorExtended getMyMonthSelector() {
+        return (MonthSelectorExtended) this.getMonthSelector();
+    }
+
+    public void clearSelection() {
+        getMyView().clearSelection();
     }
 
 }

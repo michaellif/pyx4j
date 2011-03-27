@@ -1,0 +1,136 @@
+package com.pyx4j.widgets.client.datepicker;
+
+import java.util.Date;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+
+import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
+import com.pyx4j.widgets.client.style.Selector;
+
+@SuppressWarnings("deprecation")
+public class MonthSelectorSingle extends MonthSelectorExtended {
+
+    private Image backwards;
+
+    private Image forwards;
+
+    private Image backwardsYear;
+
+    private Image forwardsYear;
+
+    private Label lblYear;
+
+    private Label lblMonth;
+
+    private final int previousMonthColumn = 0;
+
+    private final int dateMonthColumn = 1;
+
+    private final int nextMonthColumn = 2;
+
+    private final int dateYearColumn = 3;
+
+    private final int yearNavigationColumn = 4;
+
+    private final int nextYearRow = 0;
+
+    private final int previousYearRow = 1;
+
+    private final String BASE_NAME = "monthSelector";
+    
+    public MonthSelectorSingle(Date minDate, Date maxDate) {
+        super(minDate, maxDate);
+    }
+
+    @Override
+    protected void refresh() {
+        if (this.model != null) {
+            Date current = this.model.getCurrentMonth();
+            if (current != null && lblMonth != null && lblYear != null) {
+                lblMonth.setText(monthName[current.getMonth()]);
+                lblYear.setText(String.valueOf(current.getYear() + 1900));
+            }
+        }
+    }
+
+    @Override
+    protected void setup() {
+        DatePickerImages resource = (DatePickerImages) GWT.create(DatePickerImages.class);
+        // Set up backwards.        
+        backwards = new Image(resource.MonthPrevious());
+        backwards.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                updateDate(-1);
+                getParent().updateComponents(picker);
+            }
+        });
+
+        forwards = new Image(resource.MonthNext());
+        forwards.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                updateDate(+1);
+                getParent().updateComponents(picker);
+            }
+        });
+        // Set up backwards year
+        backwardsYear = new Image(resource.YearPrevious());
+        backwardsYear.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                updateDate(-12);
+                getParent().updateComponents(picker);
+            }
+        });
+
+        forwardsYear = new Image(resource.YearNext());
+        forwardsYear.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                updateDate(+12);
+                getParent().updateComponents(picker);
+            }
+        });
+
+        lblMonth = new Label();
+        lblYear = new Label();
+        grid = new Grid(1, 5);
+        Grid yearGrid = new Grid(2, 1);
+
+        grid.setWidget(0, previousMonthColumn, backwards);
+        grid.setWidget(0, dateMonthColumn, lblMonth);
+        grid.setWidget(0, nextMonthColumn, forwards);
+        grid.setWidget(0, dateYearColumn, lblYear);
+
+        yearGrid.setWidget(nextYearRow, 0, forwardsYear);
+        yearGrid.setWidget(previousYearRow, 0, backwardsYear);
+
+        grid.setWidget(0, yearNavigationColumn, yearGrid);
+
+        grid.setStyleName(Selector.getStyleName(DatePickerExtended.BASE_NAME, DatePickerExtended.StyleSuffix.MonthSelector));
+//        grid.getCellFormatter().addStyleName(0, previousMonthColumn, "monthSelectorNavigation");
+//        grid.getCellFormatter().addStyleName(0, dateMonthColumn, "monthSelectorMonthLabel");
+//        grid.getCellFormatter().addStyleName(0, nextMonthColumn, "monthSelectorNavigation right");
+//        grid.getCellFormatter().addStyleName(0, dateYearColumn, "monthSelectorYearLabel");
+//        grid.getCellFormatter().addStyleName(0, yearNavigationColumn, "monthSelectorYearNavigation");
+        grid.getCellFormatter().addStyleName(0, previousMonthColumn, 
+        		Selector.getStyleName(BASE_NAME, DatePickerExtended.StyleSuffix.Navigation));
+        grid.getCellFormatter().addStyleName(0, dateMonthColumn, 
+        		Selector.getStyleName(BASE_NAME, DatePickerExtended.StyleSuffix.MonthLabel));
+        grid.getCellFormatter().addStyleName(0, nextMonthColumn, 
+        		Selector.getStyleName(BASE_NAME, DatePickerExtended.StyleSuffix.Navigation));
+        grid.getCellFormatter().addStyleName(0, nextMonthColumn, 
+        		Selector.getDependentName(DatePickerExtended.StyleDependent.right));
+        grid.getCellFormatter().addStyleName(0, dateYearColumn, 
+        		Selector.getStyleName(BASE_NAME, DatePickerExtended.StyleSuffix.YearLabel));
+        grid.getCellFormatter().addStyleName(0, yearNavigationColumn, 
+        		Selector.getStyleName(BASE_NAME, DatePickerExtended.StyleSuffix.YearNavigation));
+        initWidget(grid);
+    }
+}
