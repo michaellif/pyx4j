@@ -31,7 +31,12 @@ public class RandomUtil extends DataGenerator {
         calendar.set(Calendar.DAY_OF_YEAR, randomInt(365));
 
         // TODO have not done minutes/hours for now
-        return calendar.getTime();
+
+        // Note:  Calendar.getTime() return FULL date (with hours/minutes/seconds!) despite it set just year and day...
+        // our DatePicker control manipulates just rounded to days dates, so after just moving focus in/out in DatePicker 
+        // it seems that it was date change - and some of our checks mis-behave... So I've rounded this calendar date:  
+        Date d = calendar.getTime();
+        return new Date(d.getYear(), d.getMonth(), d.getDate());
     }
 
     public static boolean randomBoolean() {
