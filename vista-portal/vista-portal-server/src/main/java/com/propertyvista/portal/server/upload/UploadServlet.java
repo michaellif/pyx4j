@@ -12,7 +12,7 @@
  * @version $Id:
  */
 
-package com.propertyvista.portal.server.access;
+package com.propertyvista.portal.server.upload;
 
 import gwtupload.server.UploadAction;
 import gwtupload.server.exceptions.UploadActionException;
@@ -21,6 +21,7 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -35,6 +36,12 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.propertyvista.portal.domain.pt.ApplicationDocument;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.server.pt.PtAppContext;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 
 /**
  * 
@@ -89,6 +96,14 @@ public class UploadServlet extends UploadAction {
                     receivedContentTypes.put(item.getFieldName(), contentType);
                     log.debug("UploadServlet.executeAction(): receivedContentTypes=" + receivedContentTypes);
 
+                    //InputStream in = new FileInputStream(file);
+                    //try {
+                    byte[] data = item.get();//IOUtils.toByteArray(in);
+                    createApplicationDocument(null, item.getName(), data, ApplicationDocument.DocumentType.securityInfo);
+                    //} finally {
+                    //    in.close();
+                    //}
+
                     /// Compose a xml message with the full file information
                     response += "<file-" + cont + "-field>" + item.getFieldName() + "</file-" + cont + "-field>\n";
                     response += "<file-" + cont + "-name>" + item.getName() + "</file-" + cont + "-name>\n";
@@ -105,6 +120,22 @@ public class UploadServlet extends UploadAction {
 
         /// Send information of the received files to the client.
         return "<response>\n" + response + "</response>\n";
+    }
+
+    private ApplicationDocument createApplicationDocument(Long tenantId, String fileName, byte[] data, ApplicationDocument.DocumentType documentType) {
+        ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
+        applicationDocument.application().set(PtAppContext.getCurrentUserApplication());
+        applicationDocument.tenant().setPrimaryKey(tenantId);
+        applicationDocument.type().setValue(documentType);
+        applicationDocument.filename().setValue(fileName);
+        try {
+            applicationDocument.fileSize().setValue((long) data.length);
+            applicationDocument.data().setValue(data);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        PersistenceServicesFactory.getPersistenceService().persist(applicationDocument);
+        return applicationDocument;
     }
 
     /**
