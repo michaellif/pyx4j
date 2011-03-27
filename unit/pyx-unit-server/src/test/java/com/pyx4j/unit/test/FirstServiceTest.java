@@ -27,13 +27,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
-import com.pyx4j.unit.server.MockServiceFactory;
+import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.test.rpc.FirstServices;
 
 public class FirstServiceTest extends TestCase {
 
     public void testMockServiceFactory() {
-        FirstServices service = MockServiceFactory.create(FirstServices.class);
+        FirstServices service = TestServiceFactory.create(FirstServices.class);
         Assert.assertNotNull("Service Not Created", service);
         Assert.assertTrue("Service Class", service instanceof FirstServices);
 
@@ -51,7 +51,7 @@ public class FirstServiceTest extends TestCase {
     }
 
     public void testMockServiceEcho() {
-        FirstServices service = MockServiceFactory.create(FirstServices.class);
+        FirstServices service = TestServiceFactory.create(FirstServices.class);
 
         final String data = String.valueOf(System.currentTimeMillis());
 
@@ -71,7 +71,7 @@ public class FirstServiceTest extends TestCase {
     }
 
     public void testException() {
-        FirstServices service = MockServiceFactory.create(FirstServices.class);
+        FirstServices service = TestServiceFactory.create(FirstServices.class);
 
         // Verify if service works at all
         service.doException(new AsyncCallback<Boolean>() {

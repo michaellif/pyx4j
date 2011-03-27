@@ -25,7 +25,7 @@ import java.io.Serializable;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.IServiceImpl;
+import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.IServiceRequest;
 import com.pyx4j.rpc.shared.Service;
 
@@ -33,7 +33,7 @@ public abstract class IServiceBase implements IService {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected final void execute(String serviceClassId, String serviceMethodId, AsyncCallback<? extends Serializable> callback, Serializable... args) {
-        RPCManager.execute((Class<? extends Service<IServiceRequest, Serializable>>) IServiceImpl.class, new IServiceRequest(serviceClassId, serviceMethodId,
+        RPCManager.execute((Class<? extends Service<IServiceRequest, Serializable>>) IServiceAdapter.class, new IServiceRequest(serviceClassId, serviceMethodId,
                 args), (AsyncCallback) callback);
     }
 

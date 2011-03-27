@@ -24,7 +24,7 @@ import java.lang.reflect.Proxy;
 
 import com.pyx4j.rpc.shared.IService;
 
-public class MockServiceFactory {
+public class TestServiceFactory {
 
     public static <T extends IService> T create(Class<T> classLiteral) {
         Class<?>[] allInterfaces = new Class[classLiteral.getInterfaces().length + 1];

@@ -34,14 +34,14 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
-import com.pyx4j.rpc.shared.IServiceImpl;
+import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.IServiceRequest;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
 
-public class IServiceImplImpl implements IServiceImpl {
+public class IServiceAdapterImpl implements IServiceAdapter {
 
-    private static final Logger log = LoggerFactory.getLogger(IServiceImplImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(IServiceAdapterImpl.class);
 
     @Override
     public Serializable execute(IServiceRequest request) {

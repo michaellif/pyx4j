@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;
-import com.pyx4j.rpc.server.IServiceImplImpl;
+import com.pyx4j.rpc.server.IServiceAdapterImpl;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceRequest;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
@@ -54,7 +54,7 @@ class IServiceMockProxy implements java.lang.reflect.InvocationHandler {
         System.arraycopy(args, 1, serviceArgs, 0, args.length - 1);
         IServiceRequest request = new IServiceRequest(serviceInterfaceClass.getName(), method.getName(), serviceArgs);
 
-        IServiceImplImpl srv = new IServiceImplImpl();
+        IServiceAdapterImpl srv = new IServiceAdapterImpl();
 
         try {
             Serializable result = srv.execute(request);

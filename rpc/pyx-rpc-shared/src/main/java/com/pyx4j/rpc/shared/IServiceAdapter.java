@@ -22,6 +22,6 @@ package com.pyx4j.rpc.shared;
 
 import java.io.Serializable;
 
-public interface IServiceImpl extends Service<IServiceRequest, Serializable> {
+public interface IServiceAdapter extends Service<IServiceRequest, Serializable> {
 
 }
