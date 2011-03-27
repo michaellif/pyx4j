@@ -605,7 +605,6 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <testFailureIgnore>false</testFailureIgnore>
                     <excludes>
                         <exclude>**/*GWTTest.java</exclude>
                     </excludes>
