@@ -27,7 +27,6 @@ import com.propertyvista.portal.domain.pt.ChargeLineList;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.IAddress;
-import com.propertyvista.portal.domain.pt.IncomeInfoEmployer;
 import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
@@ -56,19 +55,19 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
 //    private Application application;
 
-    private void loadEmployer(IncomeInfoEmployer employer, StringBuilder sb) {
-        sb.append(" Employer: ").append(employer.name().getStringView());
-        sb.append(" \t").append(employer.starts().getStringView()).append(" - ").append(employer.ends().getStringView());
-
-        sb.append(" Supervisor: ").append(employer.supervisorName().getStringView());
-        sb.append(" at ").append(employer.supervisorPhone().getStringView());
-
-        sb.append(", Monthly salary ").append(employer.monthlyAmount().getValue());
-        sb.append(", Poisiton ").append(employer.position().getStringView());
-
-        sb.append(", \tAddress: ");
-        loadAddress(employer, sb);
-    }
+//    private void loadEmployer(IncomeInfoEmployer employer, StringBuilder sb) {
+//        sb.append(" Employer: ").append(employer.name().getStringView());
+//        sb.append(" \t").append(employer.starts().getStringView()).append(" - ").append(employer.ends().getStringView());
+//
+//        sb.append(" Supervisor: ").append(employer.supervisorName().getStringView());
+//        sb.append(" at ").append(employer.supervisorPhone().getStringView());
+//
+//        sb.append(", Monthly salary ").append(employer.monthlyAmount().getValue());
+//        sb.append(", Poisiton ").append(employer.position().getStringView());
+//
+//        sb.append(", \tAddress: ");
+//        loadAddress(employer, sb);
+//    }
 
     public static void loadAddress(IAddress address, StringBuilder sb) {
         sb.append(address.street1().getValue());
@@ -139,10 +138,10 @@ public class PreloadPT extends BaseVistaDataPreloader {
     public String create() {
         user = loadUser(DemoData.PRELOADED_USERNAME);
 
-        Application application = VistaDataGenerator.createApplication(user);
-        VistaDataGenerator generator = new VistaDataGenerator(application);
-        ApplicationProgress progress = generator.createApplicationProgress();
-        Summary summary = generator.createAll();
+        VistaDataGenerator generator = new VistaDataGenerator();
+        Application application = generator.createApplication(user);
+        ApplicationProgress progress = generator.createApplicationProgress(application);
+        Summary summary = generator.createAll(application);
         persistFullApplication(summary, progress, generator);
 
         load();

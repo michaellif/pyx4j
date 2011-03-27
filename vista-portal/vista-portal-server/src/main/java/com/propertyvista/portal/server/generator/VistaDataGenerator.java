@@ -73,29 +73,26 @@ public class VistaDataGenerator {
 
     private final static Logger log = LoggerFactory.getLogger(VistaDataGenerator.class);
 
-//    private User user;
-
-    private final Application application;
-
-    public VistaDataGenerator(Application application) {
-        this.application = application;
+    public VistaDataGenerator() {
     }
 
-    public Summary createAll() {
+    public Summary createAll(Application application) {
         Summary summary = EntityFactory.create(Summary.class);
         summary.application().set(application);
         summary.unitSelection().set(createUnitSelection(application));
-        summary.tenantList().set(createPotentialTenantList());
+        summary.tenantList().set(createPotentialTenantList(application));
         createTenantFinancials(summary.tenantFinancials(), summary.tenantList());
-        summary.pets().set(createPets());
+        summary.pets().set(createPets(application));
         summary.charges().set(createCharges(summary));
 
         return summary;
     }
 
     private Charges createCharges(Summary summary) {
+        assert (summary.application() != null);
+
         Charges charges = EntityFactory.create(Charges.class);
-        charges.application().set(application);
+        charges.application().set(summary.application());
         ChargesServerCalculation.updateChargesFromObjects(charges, summary.unitSelection(), summary.tenantList(), summary.pets());
         return charges;
     }
@@ -170,8 +167,10 @@ public class VistaDataGenerator {
     }
 
     public ApplicationDocument createApplicationDocument(PotentialTenantInfo tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) {
+        assert (tenantInfo.application() != null);
+
         ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
-        applicationDocument.application().set(application);
+        applicationDocument.application().set(tenantInfo.application());
         applicationDocument.tenant().set(tenantInfo);
         applicationDocument.type().setValue(documentType);
         applicationDocument.filename().setValue(fileName);
@@ -186,7 +185,7 @@ public class VistaDataGenerator {
         return applicationDocument;
     }
 
-    private Pets createPets() {
+    private Pets createPets(Application application) {
         Pets pets = EntityFactory.create(Pets.class);
         pets.application().set(application);
 
@@ -257,9 +256,10 @@ public class VistaDataGenerator {
     }
 
     private PotentialTenantFinancial createFinancialInfo(PotentialTenantInfo tenant) {
+        assert (tenant.application() != null);
         PotentialTenantFinancial ptf = EntityFactory.create(PotentialTenantFinancial.class);
 
-        ptf.application().set(application);
+        ptf.application().set(tenant.application());
         ptf.id().set(tenant.id());
 
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
@@ -302,12 +302,12 @@ public class VistaDataGenerator {
         return ptf;
     }
 
-    private PotentialTenantList createPotentialTenantList() {
+    private PotentialTenantList createPotentialTenantList(Application application) {
         PotentialTenantList tenants = EntityFactory.create(PotentialTenantList.class);
         tenants.application().set(application);
 
         for (int i = 0; i < DemoData.NUM_POTENTIAL_TENANTS; i++) {
-            PotentialTenantInfo tenantInfo = createPotentialTenantInfo(i);
+            PotentialTenantInfo tenantInfo = createPotentialTenantInfo(application, i);
             tenants.tenants().add(tenantInfo);
         }
         return tenants;
@@ -342,9 +342,8 @@ public class VistaDataGenerator {
         pt.takeOwnership().setValue(RandomUtil.randomBoolean());
     }
 
-    private PotentialTenantInfo createPotentialTenantInfo(int index) {
+    private PotentialTenantInfo createPotentialTenantInfo(Application application, int index) {
         PotentialTenantInfo pti = EntityFactory.create(PotentialTenantInfo.class);
-
         pti.application().set(application);
 
         // first tenant must always be an applicant
@@ -420,13 +419,13 @@ public class VistaDataGenerator {
         return user;
     }
 
-    public static Application createApplication(User user) {
+    public Application createApplication(User user) {
         Application application = EntityFactory.create(Application.class);
         application.user().set(user);
         return application;
     }
 
-    public ApplicationProgress createApplicationProgress() {
+    public ApplicationProgress createApplicationProgress(Application application) {
         ApplicationProgress progress = ApplicationServicesImpl.createApplicationProgress();
         progress.application().set(application);
         return progress;
