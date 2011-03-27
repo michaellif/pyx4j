@@ -70,17 +70,17 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
     }
 
     @SuppressWarnings("unchecked")
-    private void loadTransientData(Summary summary) {
+    public void loadTransientData(Summary summary) {
 
         // this code starts to become very convoluted and all-over-the place
-        retrieveApplicationEntity(summary.unitSelection());
+        retrieveApplicationEntity(summary.unitSelection(), summary.application());
         ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
         apartmentServices.loadTransientData(summary.unitSelection());
 
         // I have no idea so far for why this line gets called
         //        PersistenceServicesFactory.getPersistenceService().retrieve(summary.unitSelection().selectedUnit().floorplan());
 
-        retrieveApplicationEntity(summary.tenantList());
+        retrieveApplicationEntity(summary.tenantList(), summary.application());
 
         // We do not remove the info from DB if Tenant status changes
         for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
@@ -90,7 +90,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         }
 
         EntityQueryCriteria<PotentialTenantFinancial> financialCriteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
-        financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), PtAppContext.getCurrentUserApplication()));
+        financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), summary.application()));
         for (PotentialTenantFinancial fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
             // Update Transient values and see if we need to show this Tenant
             findTenenat: for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
@@ -106,8 +106,8 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
             }
         }
 
-        retrieveApplicationEntity(summary.pets());
-        retrieveApplicationEntity(summary.charges());
+        retrieveApplicationEntity(summary.pets(), summary.application());
+        retrieveApplicationEntity(summary.charges(), summary.application());
 
         // Move selected upgrades for presentation.
         for (ChargeLineSelectable charge : summary.charges().monthlyCharges().upgradeCharges()) {

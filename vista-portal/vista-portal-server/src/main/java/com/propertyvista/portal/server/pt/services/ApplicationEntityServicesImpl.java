@@ -55,9 +55,14 @@ public class ApplicationEntityServicesImpl extends EntityServicesImpl {
     }
 
     protected <T extends IBoundToApplication> void retrieveApplicationEntity(T entity) {
+        retrieveApplicationEntity(entity, PtAppContext.getCurrentUserApplication());
+    }
+
+    protected <T extends IBoundToApplication> void retrieveApplicationEntity(T entity, Application application) {
         @SuppressWarnings("unchecked")
         EntityQueryCriteria<T> criteria = (EntityQueryCriteria<T>) EntityQueryCriteria.create(entity.getValueClass());
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
         entity.set(secureRetrieve(criteria));
     }
+
 }

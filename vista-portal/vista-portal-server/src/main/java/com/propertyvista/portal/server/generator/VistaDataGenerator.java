@@ -76,7 +76,7 @@ public class VistaDataGenerator {
     public VistaDataGenerator() {
     }
 
-    public Summary createAll(Application application) {
+    public Summary createSummary(Application application) {
         Summary summary = EntityFactory.create(Summary.class);
         summary.application().set(application);
         summary.unitSelection().set(createUnitSelection(application));

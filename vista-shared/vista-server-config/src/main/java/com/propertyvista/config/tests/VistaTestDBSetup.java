@@ -7,20 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 20, 2011
- * @author vlads
+ * Created on Mar 27, 2011
+ * @author Misha
  * @version $Id$
  */
 package com.propertyvista.config.tests;
 
-import junit.framework.TestCase;
 
-public abstract class VistaDBTestCase extends TestCase {
+import com.pyx4j.config.server.ServerSideConfiguration;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        VistaTestDBSetup.init();
+public class VistaTestDBSetup {
+
+    private static boolean initOnce = true;
+
+    public static void init() {
+        if (initOnce) {
+            ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration());
+            initOnce = false;
+        }
+
     }
 
 }

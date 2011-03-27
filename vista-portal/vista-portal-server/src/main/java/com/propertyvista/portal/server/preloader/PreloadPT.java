@@ -141,7 +141,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         VistaDataGenerator generator = new VistaDataGenerator();
         Application application = generator.createApplication(user);
         ApplicationProgress progress = generator.createApplicationProgress(application);
-        Summary summary = generator.createAll(application);
+        Summary summary = generator.createSummary(application);
         persistFullApplication(summary, progress, generator);
 
         load();
