@@ -24,11 +24,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
@@ -108,8 +109,6 @@ public class SummaryViewForm extends CEntityForm<Summary> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        main.add(createDemoReport());
-
         main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Apartment"))));
 
         main.add(new ApartmentView());
@@ -142,29 +141,47 @@ public class SummaryViewForm extends CEntityForm<Summary> {
         HorizontalPanel content = new HorizontalPanel();
         main.setWidth("700px");
         content.add(main);
-        content.add(new BuildingPicture());
+        VerticalPanel rightSite = new VerticalPanel();
+        rightSite.add(new BuildingPicture());
+        rightSite.add(new DemoReportButtons());
+        content.add(rightSite);
         return content;
     }
 
-    private Widget createDemoReport() {
-        Anchor l = new Anchor("Download Me");
-        l.addClickHandler(new ClickHandler() {
+    public class DemoReportButtons extends FlowPanel {
 
-            @Override
-            public void onClick(ClickEvent event) {
-                SummaryServices srv = GWT.create(SummaryServices.class);
-                srv.downloadSummary(new DefaultAsyncCallback<String>() {
+        public DemoReportButtons() {
+            getElement().getStyle().setMargin(2, Unit.EM);
 
-                    @Override
-                    public void onSuccess(String result) {
-                        new DownloadFrame(result);
-                    }
-                }, null);
+            Button print = new Button("Print the Summary");
+            print.addClickHandler(new ClickHandler() {
 
-            }
-        });
+                @Override
+                public void onClick(ClickEvent event) {
+                }
+            });
 
-        return l;
+            print.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
+            add(alignWidth(print));
+
+            Button download = new Button("Download PDF");
+            download.addClickHandler(new ClickHandler() {
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    SummaryServices srv = GWT.create(SummaryServices.class);
+                    srv.downloadSummary(new DefaultAsyncCallback<String>() {
+
+                        @Override
+                        public void onSuccess(String result) {
+                            new DownloadFrame(result);
+                        }
+                    }, null);
+
+                }
+            });
+            add(alignWidth(download));
+        }
     }
 
     @Override
@@ -196,12 +213,17 @@ public class SummaryViewForm extends CEntityForm<Summary> {
     /*
      * Selected Apartment information view implementation
      */
-    private class ApartmentView extends FlowPanel {
+    private class ApartmentView extends HorizontalPanel {
 
         public ApartmentView() {
 
-            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             alignWidth(this);
+
+            FlowPanel main = new FlowPanel();
+            main.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+            main.getElement().getStyle().setPaddingRight(1, Unit.EM);
+            add(main);
+            setCellWidth(main, "100%");
 
             Map<String, String> tableLayout = new LinkedHashMap<String, String>();
             tableLayout.put("Type", "25%");
@@ -218,16 +240,19 @@ public class SummaryViewForm extends CEntityForm<Summary> {
                 label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                 label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
                 label.setWidth(e.getValue());
-                add(label);
+                main.add(label);
             }
 
             Widget sp = new ViewLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
-            add(sp);
+            sp.getElement().getStyle().setPaddingRight(2, Unit.EM);
+            sp.getElement().getStyle().setPosition(Position.RELATIVE);
+            sp.getElement().getStyle().setLeft(-1, Unit.EM);
+            main.add(sp);
 
             // add table content panel:
             FlowPanel content;
-            add(alignWidth(content = new FlowPanel()));
+            main.add(content = new FlowPanel());
 
             addCell(tableLayout, content, "Type", inject(proto().unitSelection().selectedUnit().floorplan().name()).asWidget());
             addCell(tableLayout, content, "Unit", inject(proto().unitSelection().selectedUnit().unitType()).asWidget());
@@ -249,17 +274,16 @@ public class SummaryViewForm extends CEntityForm<Summary> {
     /*
      * Selected Apartment information view implementation
      */
-    private class LeaseTermView extends FlowPanel {
+    private class LeaseTermView extends HorizontalPanel {
 
         public LeaseTermView() {
 
-            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             alignWidth(this);
 
             // add lease term/price:
             FlowPanel content = new FlowPanel();
-            content.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             content.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
 
             Widget label = inject(proto().unitSelection().markerRent().leaseTerm()).asWidget();
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
@@ -277,28 +301,33 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label));
 
-            add(alignWidth(content));
-            content.setWidth("30%");
+            add(content);
+            setCellWidth(content, "30%");
 
             // add static lease terms blah-blah:
             HTML availabilityAndPricing = new HTML(SiteResources.INSTANCE.availabilityAndPricing().getText());
-            availabilityAndPricing.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            availabilityAndPricing.setWidth("70%");
+            availabilityAndPricing.getElement().getStyle().setPaddingRight(1, Unit.EM);
             add(availabilityAndPricing);
+            setCellWidth(availabilityAndPricing, "70%");
         }
     }
 
     /*
      * Tenants information table implementation
      */
-    private class TenantsTable extends FlowPanel {
+    private class TenantsTable extends HorizontalPanel {
 
         private final Map<String, String> tableLayout = new LinkedHashMap<String, String>();
 
         public TenantsTable() {
 
-            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             alignWidth(this);
+
+            FlowPanel main = new FlowPanel();
+            main.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+            main.getElement().getStyle().setPaddingRight(1, Unit.EM);
+            add(main);
+            setCellWidth(main, "100%");
 
             tableLayout.put("Name", "30%");
             tableLayout.put("Date of Birht", "15%");
@@ -312,12 +341,15 @@ public class SummaryViewForm extends CEntityForm<Summary> {
                 label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                 label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
                 label.setWidth(e.getValue());
-                add(label);
+                main.add(label);
             }
 
             Widget sp = new ViewLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
-            add(sp);
+            sp.getElement().getStyle().setPaddingRight(2, Unit.EM);
+            sp.getElement().getStyle().setPosition(Position.RELATIVE);
+            sp.getElement().getStyle().setLeft(-1, Unit.EM);
+            main.add(sp);
         }
 
         private void addCell(Map<String, String> tableLayout, FlowPanel content, String cellName, Widget cellContent) {
@@ -339,6 +371,8 @@ public class SummaryViewForm extends CEntityForm<Summary> {
                         @Override
                         public IsWidget createContent() {
                             FlowPanel content = new FlowPanel();
+                            content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+                            content.getElement().getStyle().setPaddingRight(1, Unit.EM);
                             addCell(tableLayout, content, "Name", DecorationUtils.formFullName(this, proto()));
                             addCell(tableLayout, content, "Date of Birht", inject(proto().birthDate()).asWidget());
                             addCell(tableLayout, content, "Email", inject(proto().email()).asWidget());
@@ -348,7 +382,6 @@ public class SummaryViewForm extends CEntityForm<Summary> {
                                 addCell(tableLayout, content, "Relationship", inject(proto().relationship()).asWidget());
                             }
                             addCell(tableLayout, content, "Status", inject(proto().status()).asWidget());
-                            alignWidth(content);
                             return content;
                         }
 

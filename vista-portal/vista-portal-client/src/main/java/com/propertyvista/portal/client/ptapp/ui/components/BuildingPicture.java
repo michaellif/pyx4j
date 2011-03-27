@@ -24,6 +24,6 @@ public class BuildingPicture extends FlowPanel {
     public BuildingPicture() {
         add(new Image(SiteImages.INSTANCE.building()));
         add(new HTML("<b>ADDRESS: </b><br/>2060-2070 Prospect Street, Burlington"));
-        getElement().getStyle().setMarginLeft(20, Unit.PX);
+        getElement().getStyle().setMarginLeft(2, Unit.EM);
     }
 }
