@@ -136,6 +136,9 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
 
     public boolean areUnitsAvailable(UnitSelectionCriteria selectionCriteria) {
         EntityQueryCriteria<AptUnit> criteria = createAptUnitCriteria(selectionCriteria);
+        if (criteria == null) {
+            return false;
+        }
         int count = PersistenceServicesFactory.getPersistenceService().count(criteria);
         log.info("Found {} units", count);
         return (count > 0);
@@ -143,6 +146,9 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
 
     public List<AptUnit> loadAvailableUnits(UnitSelectionCriteria selectionCriteria) {
         EntityQueryCriteria<AptUnit> criteria = createAptUnitCriteria(selectionCriteria);
+        if (criteria == null) {
+            return null;
+        }
         List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
         log.info("Found {} units", units.size());
         return units;
@@ -153,19 +159,19 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
         List<AptUnit> units = loadAvailableUnits(unitSelection.selectionCriteria());
         if (units == null || units.isEmpty()) {
             log.info("Did not find any available units");
-        }
+        } else {
+            AptUnit firstUnit = units.get(0);
+            Floorplan floorplan = firstUnit.floorplan();
 
-        AptUnit firstUnit = units.get(0);
-        Floorplan floorplan = firstUnit.floorplan();
+            //        unitSelection.building().set(firstUnit.building());
+            for (Picture picture : floorplan.pictures()) {
+                prepareImage(picture);
+            }
+            unitSelection.availableUnits().floorplan().set(Converter.convert(floorplan));
 
-        //        unitSelection.building().set(firstUnit.building());
-        for (Picture picture : floorplan.pictures()) {
-            prepareImage(picture);
-        }
-        unitSelection.availableUnits().floorplan().set(Converter.convert(floorplan));
-
-        for (AptUnit unit : units) {
-            unitSelection.availableUnits().units().add(Converter.convert(unit));
+            for (AptUnit unit : units) {
+                unitSelection.availableUnits().units().add(Converter.convert(unit));
+            }
         }
     }
 

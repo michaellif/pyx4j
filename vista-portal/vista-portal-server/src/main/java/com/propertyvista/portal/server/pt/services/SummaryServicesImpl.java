@@ -125,9 +125,11 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
             }
         }
 
-        summary.leaseTerms().set(
-                PersistenceServicesFactory.getPersistenceService().retrieve(LeaseTerms.class,
-                        summary.unitSelection().selectedUnit().newLeaseTerms().getPrimaryKey()));
+        if (!summary.unitSelection().selectedUnit().newLeaseTerms().id().isNull()) {
+            summary.leaseTerms().set(
+                    PersistenceServicesFactory.getPersistenceService().retrieve(LeaseTerms.class,
+                            summary.unitSelection().selectedUnit().newLeaseTerms().getPrimaryKey()));
+        }
     }
 
     @Override
