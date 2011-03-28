@@ -77,12 +77,13 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
 
     public class ShrinkAnimation extends Animation {
         private final FlowPanel panel;
+
         private final FlowPanel parent;
 
         private final int height;
 
         ShrinkAnimation(final FlowPanel parent, final FlowPanel panel) {
-        	this.parent = parent;
+            this.parent = parent;
             this.panel = panel;
             this.height = panel.getOffsetHeight();
         }
@@ -91,12 +92,12 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
         protected void onUpdate(final double progress) {
             panel.setHeight(String.valueOf((int) ((1 - progress) * this.height)) + "px");
         }
-        
+
         @Override
-        protected void onComplete(){
-        	parent.clear();
+        protected void onComplete() {
+            parent.clear();
         }
-    }    
+    }
 
     public ApartmentUnitDetailsPanel() {
 
@@ -195,14 +196,14 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
         unitDetailPanel.getElement().getStyle().setBackgroundColor("white");
         this.add(unitDetailPanel);
 
-        new GrowAnimation(unitDetailPanel).run(500);
+        new GrowAnimation(unitDetailPanel).run(250);
         //new FadeInAnimation(unitDetailPanel).run(250);
     }
 
     public void hide() {
         //this.clear();
-    	FlowPanel panel = (FlowPanel) this.getWidget(0);
-    	new ShrinkAnimation(this, panel).run(1000);
+        FlowPanel panel = (FlowPanel) this.getWidget(0);
+        new ShrinkAnimation(this, panel).run(250);
     }
 
 }

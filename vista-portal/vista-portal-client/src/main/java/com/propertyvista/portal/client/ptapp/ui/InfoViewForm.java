@@ -89,29 +89,29 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         main.add(new ViewHeaderDecorator(i18n.tr("Contact Details")));
 
-        DecorationData decorData = new DecorationData(12d, 12);
+        DecorationData decorData = new DecorationData(14d, 12);
         decorData.editable = false;
         main.add(new VistaWidgetDecorator(inject(proto().firstName()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().middleName()), new DecorationData(12d, 12)));
+        main.add(new VistaWidgetDecorator(inject(proto().middleName()), new DecorationData(14d, 12)));
 
-        decorData = new DecorationData(12d, 20);
+        decorData = new DecorationData(14d, 20);
         decorData.editable = false;
         main.add(new VistaWidgetDecorator(inject(proto().lastName()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().homePhone()), new DecorationData(12d, 15)));
-        main.add(new VistaWidgetDecorator(inject(proto().mobilePhone()), new DecorationData(12d, 15)));
-        main.add(new VistaWidgetDecorator(inject(proto().workPhone()), new DecorationData(12d, 15)));
+        main.add(new VistaWidgetDecorator(inject(proto().homePhone()), new DecorationData(14d, 15)));
+        main.add(new VistaWidgetDecorator(inject(proto().mobilePhone()), new DecorationData(14d, 15)));
+        main.add(new VistaWidgetDecorator(inject(proto().workPhone()), new DecorationData(14d, 15)));
 
-        decorData = new DecorationData(12d, 25);
+        decorData = new DecorationData(14d, 25);
         decorData.editable = false;
         main.add(new VistaWidgetDecorator(inject(proto().email()), decorData));
 
         main.add(new ViewHeaderDecorator(i18n.tr("Secure Information")));
-        main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), new DecorationData(12d, 20)));
-        main.add(new VistaWidgetDecorator(inject(proto().driversLicenseState()), new DecorationData(12d, 17)));
+        main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), new DecorationData(14d, 20)));
+        main.add(new VistaWidgetDecorator(inject(proto().driversLicenseState()), new DecorationData(14d, 17)));
         final CEditableComponent<?, ?> sin = inject(proto().secureIdentifier());
-        main.add(new VistaWidgetDecorator(sin, new DecorationData(12d, 7)));
+        main.add(new VistaWidgetDecorator(sin, new DecorationData(14d, 7)));
 
-        main.add(new VistaWidgetDecorator(inject(proto().notCanadianCitizen()), new DecorationData(12d, 3)));
+        main.add(new VistaWidgetDecorator(inject(proto().notCanadianCitizen()), new DecorationData(14d, 3)));
 
         fileUpload = new ApplicationDocumentsUpload(DocumentType.securityInfo);
         fileUpload.getElement().getStyle().setMarginLeft(14.5, Unit.EM);

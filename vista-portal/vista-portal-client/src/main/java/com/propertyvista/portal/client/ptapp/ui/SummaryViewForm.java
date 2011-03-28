@@ -329,9 +329,9 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             add(main);
             setCellWidth(main, "100%");
 
-            tableLayout.put("Name", "30%");
+            tableLayout.put("Name", "29%");
             tableLayout.put("Date of Birht", "15%");
-            tableLayout.put("Email", "25%");
+            tableLayout.put("Email", "26%");
             tableLayout.put("Relationship", "15%");
             tableLayout.put("Status", "15%");
 

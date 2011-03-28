@@ -22,6 +22,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -86,12 +87,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
         this.decorData = decorData;
 
         label = new Label(CommonsStringUtils.nvl(component.getTitle()));
-        label.getElement().getStyle().setFloat(Float.LEFT);
-
         label.setHorizontalAlignment(decorData.labelAlignment);
-        if (decorData.labelWidth != 0) {
-            label.getElement().getStyle().setWidth(decorData.labelWidth, decorData.labelUnit);
-        }
 
         if (decorData.labelStyleName == null) {
             label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
@@ -105,10 +101,9 @@ public class VistaWidgetDecorator extends VerticalPanel {
             infoImageHolder = new SpaceHolder("1px");
 
         } else {
-            infoImageHolder = new SpaceHolder("18px");
+            infoImageHolder = new SpaceHolder("16px");
             infoImageHolder.getElement().getStyle().setPaddingRight(5, Unit.PX);
         }
-        infoImageHolder.getElement().getStyle().setFloat(Float.LEFT);
         infoImageHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
         infoImageHolder.getElement().getStyle().setPaddingLeft(5, Unit.PX);
 
@@ -155,7 +150,6 @@ public class VistaWidgetDecorator extends VerticalPanel {
         }
 
         SimplePanel nativeComponentHolder = new SimplePanel();
-
         nativeComponentHolder.getElement().getStyle().setFloat(Float.LEFT);
         nativeComponentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         if (decorData.componentWidth != 0)
@@ -166,9 +160,23 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
         // put it together:
 
+        HorizontalPanel leftSide = new HorizontalPanel();
+        leftSide.getElement().getStyle().setFloat(Float.LEFT);
+        if (decorData.labelWidth != 0) {
+            leftSide.getElement().getStyle().setWidth(decorData.labelWidth, decorData.labelUnit);
+        }
+
+        leftSide.add(label);
+        leftSide.add(infoImageHolder);
+
+        if (decorData.hideInfoHolder) {
+            leftSide.setCellWidth(infoImageHolder, "6px");
+        } else {
+            leftSide.setCellWidth(infoImageHolder, "26px");
+        }
+
         FlowPanel firstLine = new FlowPanel();
-        firstLine.add(label);
-        firstLine.add(infoImageHolder);
+        firstLine.add(leftSide);
         firstLine.add(nativeComponentHolder);
         firstLine.add(mandatoryLabel);
 
@@ -196,7 +204,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
                 }
             });
 
-            getElement().getStyle().setPadding(2, Unit.PX);
+            getElement().getStyle().setPaddingTop(2, Unit.PX);
             getElement().getStyle().setPaddingBottom(13, Unit.PX);
         }
 
