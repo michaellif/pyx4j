@@ -45,7 +45,7 @@ public class OrganizationsReportTest extends ReportsTestBase {
     @BeforeClass
     public static void init() throws Exception {
         Map<String, String> parameters = new HashMap<String, String>();
-        parameters.put("ReportTitle", "Organizations Report");
+        parameters.put("REPORT_TITLE", "Organizations Report");
         parameters.put("SUBREPORT_DIR", "target/test-classes/reports/");
 
         JasperCompileManager.compileReportToFile("target/test-classes/reports/Departments.jrxml", "target/test-classes/reports/Departments.jasper");
