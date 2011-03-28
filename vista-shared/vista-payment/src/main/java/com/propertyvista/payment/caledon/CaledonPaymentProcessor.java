@@ -16,6 +16,8 @@ package com.propertyvista.payment.caledon;
 import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.IPaymentProcessor;
 import com.propertyvista.payment.Merchant;
+import com.propertyvista.payment.PaymentInstrument;
+import com.propertyvista.payment.PaymentProcessingException;
 import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
 import com.propertyvista.payment.Token;
@@ -31,18 +33,29 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
     }
 
     @Override
-    public PaymentResponse realTimeSale(Merchant merchant, PaymentRequest request) {
-        CaledonRequest crequest = new CaledonRequest();
+    public PaymentResponse realTimeSale(Merchant merchant, PaymentRequest request) throws PaymentProcessingException {
+        CaledonRequest crequest = null;
+        PaymentInstrument pinstrument = request.paymentInstrument().getValue();
+        if (pinstrument.getClass().equals(CCInformation.class)) {
+            crequest = new CaledonRequest();
+            crequest.terminalID = merchant.terminalID().getValue();
+            crequest.transactionType = CaledonTransactionType.SALE.getValue();
+            crequest.referenceNumber = request.referenceNumber().getValue();
 
-        crequest.terminalID = merchant.terminalID().getValue();
-        crequest.transactionType = CaledonTransactionType.SALE.getValue();
-        crequest.referenceNumber = request.referenceNumber().getValue();
-
-        crequest.setAmount(request.amount().getValue());
-        crequest.creditCardNumber = ((CCInformation) (request.paymentInstrument().getValue())).creditCardNumber().getValue();
-        //crequest.creditCardNumber = request.creditCardNumber().getValue();
-        crequest.setExpiryDate(((CCInformation) (request.paymentInstrument().getValue())).creditCardExpiryDate().getValue());
-        //crequest.setExpiryDate(request.creditCardExpiryDate().getValue());
+            crequest.setAmount(request.amount().getValue());
+            crequest.creditCardNumber = ((CCInformation) pinstrument).creditCardNumber().getValue();
+            //crequest.creditCardNumber = request.creditCardNumber().getValue();
+            crequest.setExpiryDate(((CCInformation) (request.paymentInstrument().getValue())).creditCardExpiryDate().getValue());
+            //crequest.setExpiryDate(request.creditCardExpiryDate().getValue());
+        } else if (pinstrument.getClass().equals(Token.class)) {
+            crequest = new CaledonRequestToken();
+            crequest.terminalID = merchant.terminalID().getValue();
+            crequest.transactionType = CaledonTransactionType.SALE.getValue();
+            ((CaledonRequestToken) crequest).token = ((Token) pinstrument).code().getValue();
+            crequest.referenceNumber = request.referenceNumber().getValue();
+            crequest.setAmount(request.amount().getValue());
+        } else
+            throw new PaymentProcessingException("Unknown Payment Instrument.");
 
         CaledonResponse cresponse = client.transaction(crequest);
 
