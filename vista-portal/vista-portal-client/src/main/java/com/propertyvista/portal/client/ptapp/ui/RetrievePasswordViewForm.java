@@ -40,9 +40,9 @@ public class RetrievePasswordViewForm extends CEntityForm<PasswordRetrievalReque
         HTML header = new HTML(HtmlUtils.h2(i18n.tr("Retrieve Password")));
         header.getElement().getStyle().setMarginBottom(1, Unit.EM);
         main.add(header);
-        main.add(new VistaWidgetDecorator(inject(proto().email()), 62, 152));
+        main.add(new VistaWidgetDecorator(inject(proto().email()), 90, 160));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(inject(proto().captcha()), 62, 152));
+        main.add(new VistaWidgetDecorator(inject(proto().captcha()), 90, 160));
         return main;
     }
 }

@@ -22,9 +22,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
+import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePasswordView {
@@ -43,7 +43,7 @@ public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePassw
         add(form);
 
         Button retrievePasswordButton = new Button(i18n.tr("Retrieve Password"));
-        retrievePasswordButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        retrievePasswordButton.ensureDebugId(VistaFormsDebugId.Auth_RetrivePassword.toString());
         retrievePasswordButton.addClickHandler(new ClickHandler() {
 
             @Override
@@ -57,7 +57,7 @@ public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePassw
 
         });
 
-        retrievePasswordButton.getElement().getStyle().setMarginLeft(6.4, Unit.EM);
+        retrievePasswordButton.getElement().getStyle().setMarginLeft(90, Unit.PX);
         retrievePasswordButton.getElement().getStyle().setMarginRight(1, Unit.EM);
         retrievePasswordButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
         add(retrievePasswordButton);

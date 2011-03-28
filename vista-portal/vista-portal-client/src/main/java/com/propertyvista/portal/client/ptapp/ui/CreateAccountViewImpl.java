@@ -17,6 +17,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -29,18 +30,18 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
+import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
@@ -100,7 +101,7 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
         rightColumn.add(form);
 
         Button startButton = new Button(i18n.tr("Let's Start"));
-        startButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        startButton.ensureDebugId(VistaFormsDebugId.Auth_LetsStart.toString());
         startButton.addClickHandler(new ClickHandler() {
 
             @Override
@@ -109,12 +110,11 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
             }
 
         });
-        startButton.getElement().getStyle().setProperty("margin", "0.5em 0 0.5em 0");
+        startButton.getElement().getStyle().setMargin(0.5, Unit.EM);
+        startButton.getElement().getStyle().setMarginLeft(90, Unit.PX);
+        rightColumn.add(startButton);
 
         VerticalPanel startPanel = new VerticalPanel();
-        startPanel.add(startButton);
-        startPanel.setCellHorizontalAlignment(startButton, HasHorizontalAlignment.ALIGN_RIGHT);
-
         if (ApplicationMode.isDevelopment()) {
             startPanel.add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
             startPanel.add(new HTML("Press <i>Ctrl+Q</i> to create new user"));
@@ -123,18 +123,17 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
         startPanel.setWidth("100%");
         rightColumn.add(startPanel);
 
-        rightColumn.add(new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM));
+        rightColumn.add(new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
 
         FlowPanel signinPanel = new FlowPanel();
-        signinPanel.getElement().getStyle().setProperty("padding", "0.7em 0 0");
-
-        HTML header = new HTML("<h2>Already Registered?</h2");
-        header.getElement().getStyle().setFloat(Float.LEFT);
+        HTML header = new HTML(HtmlUtils.h2(i18n.tr("Already Registered?")));
+        header.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        header.getElement().getStyle().setMarginTop(0.4, Unit.EM);
         signinPanel.add(header);
 
         Button signinButton = new Button(i18n.tr("Login"));
+        signinButton.ensureDebugId(VistaFormsDebugId.Auth_Login.toString());
         signinButton.getElement().getStyle().setFloat(Float.RIGHT);
-        signinButton.ensureDebugId("Login");
         signinButton.addClickHandler(new ClickHandler() {
 
             @Override
@@ -143,8 +142,6 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
             }
 
         });
-        header.getElement().getStyle().setFloat(Float.LEFT);
-        signinButton.getElement().getStyle().setProperty("margin", "1px 0 0 1.25em");
         signinPanel.add(signinButton);
         rightColumn.add(signinPanel);
 

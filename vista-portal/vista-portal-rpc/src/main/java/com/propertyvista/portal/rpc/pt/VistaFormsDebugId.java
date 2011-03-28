@@ -17,6 +17,12 @@ import com.pyx4j.commons.IDebugId;
 
 public enum VistaFormsDebugId implements IDebugId {
 
+    Auth_Login,
+
+    Auth_LetsStart,
+
+    Auth_RetrivePassword,
+
     MainNavigation_Prefix,
 
     SecondNavigation_Prefix,
