@@ -47,7 +47,7 @@ class CaledonHttpClient {
         GetMethod httpMethod = new GetMethod(url);
         httpMethod.setFollowRedirects(false);
         httpMethod.setQueryString(caledoneQueryEncoding(buildRequestQuery(request)));
-        //System.out.println(httpMethod.getQueryString());
+        System.out.println(httpMethod.getQueryString());
 
         HttpClient httpClient = new HttpClient();
         ProxyConfig proxy = SystemConfig.instance().getCaledonProxy();
@@ -94,7 +94,7 @@ class CaledonHttpClient {
     private NameValuePair[] buildRequestQuery(CaledonRequest request) {
         List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 
-        for (Field field : request.getClass().getDeclaredFields()) {
+        for (Field field : request.getClass().getFields()) {
             HttpRequestField nameDeclared = field.getAnnotation(HttpRequestField.class);
             if (nameDeclared == null) {
                 continue;

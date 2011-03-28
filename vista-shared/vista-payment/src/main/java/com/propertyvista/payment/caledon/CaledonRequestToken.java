@@ -15,12 +15,12 @@ package com.propertyvista.payment.caledon;
 
 class CaledonRequestToken extends CaledonRequest {
     @HttpRequestField("TOKEN")
-    String token;
+    public String token;
 
     @HttpRequestField("TOKEN-ACTION")
-    String tokenAction;
+    public String tokenAction;
 
     @HttpRequestField("TOKEN-REF")
-    String tokenRef;
+    public String tokenRef;
 
 }

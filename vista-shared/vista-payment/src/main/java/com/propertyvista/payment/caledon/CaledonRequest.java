@@ -20,26 +20,26 @@ import java.util.Date;
 class CaledonRequest {
 
     @HttpRequestField("TERMID")
-    String terminalID;
+    public String terminalID;
 
     @HttpRequestField("CARD")
-    String creditCardNumber;
+    public String creditCardNumber;
 
     @HttpRequestField("EXP")
-    String expiryDate;
+    public String expiryDate;
 
     public void setExpiryDate(Date expiry) {
         this.expiryDate = new SimpleDateFormat("MMyy").format(expiry);
     }
 
     @HttpRequestField("DESC")
-    String merchantDescription;
+    public String merchantDescription;
 
     @HttpRequestField("REF")
-    String referenceNumber;
+    public String referenceNumber;
 
     @HttpRequestField("AMT")
-    String amount;
+    public String amount;
 
     public void setAmount(float amount) {
         NumberFormat nf = NumberFormat.getNumberInstance();
@@ -48,8 +48,8 @@ class CaledonRequest {
     }
 
     @HttpRequestField("TYPE")
-    String transactionType;
+    public String transactionType;
 
     @HttpRequestField("ECHO")
-    String echo;
+    public String echo;
 }
