@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Summary" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="46"/>
+	<property name="ireport.y" value="163"/>
 	<subDataset name="dataset1"/>
 	<subDataset name="dataset2"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -19,6 +19,7 @@
 	<field name="unitSelection/markerRent/rent/amount" class="java.lang.Double"/>
 	<field name="tenantList/tenants" class="com.pyx4j.entity.shared.IList"/>
 	<field name="tenantFinancials" class="com.pyx4j.entity.shared.IList"/>
+	<field name="pets/pets" class="com.pyx4j.entity.shared.IList"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -40,7 +41,7 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="385" splitType="Stretch">
+		<band height="129" splitType="Stretch">
 			<staticText>
 				<reportElement x="-1" y="20" width="77" height="19"/>
 				<textElement/>
@@ -149,13 +150,20 @@
 				<textElement/>
 				<text><![CDATA[* Pricing and availability... ]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="0" y="58" width="572" height="10"/>
+				<textElement/>
+				<text><![CDATA[Static text]]></text>
+			</staticText>
+		</band>
+		<band height="69">
 			<subreport>
-				<reportElement x="1" y="158" width="572" height="40"/>
+				<reportElement x="0" y="29" width="572" height="40"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{tenantList/tenants})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Info.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="0" y="138" width="572" height="20"/>
+				<reportElement x="0" y="9" width="572" height="20"/>
 				<box leftPadding="10"/>
 				<textElement>
 					<font size="12" isBold="true"/>
@@ -163,32 +171,69 @@
 				<text><![CDATA[Tenants]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="208" width="572" height="20"/>
+				<reportElement x="0" y="0" width="572" height="10"/>
+				<textElement/>
+				<text><![CDATA[Static text]]></text>
+			</staticText>
+		</band>
+		<band height="70">
+			<subreport>
+				<reportElement x="0" y="30" width="572" height="40"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{tenantFinancials})]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Financial.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="0" y="0" width="572" height="10"/>
+				<textElement/>
+				<text><![CDATA[Static text]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="10" width="572" height="20"/>
 				<box leftPadding="10"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Financial]]></text>
 			</staticText>
+		</band>
+		<band height="70">
 			<subreport>
-				<reportElement x="1" y="228" width="572" height="40"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{tenantFinancials})]]></dataSourceExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Financial.jasper"]]></subreportExpression>
+				<reportElement x="0" y="30" width="572" height="40"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{pets/pets})]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Pets.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="0" y="58" width="572" height="10"/>
+				<reportElement x="0" y="10" width="572" height="20"/>
+				<box leftPadding="10"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pets]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="572" height="10"/>
+				<textElement/>
+				<text><![CDATA[Static text]]></text>
+			</staticText>
+		</band>
+		<band height="166">
+			<staticText>
+				<reportElement x="1" y="0" width="572" height="10"/>
 				<textElement/>
 				<text><![CDATA[Static text]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="128" width="572" height="10"/>
-				<textElement/>
-				<text><![CDATA[Static text]]></text>
+				<reportElement x="1" y="10" width="572" height="20"/>
+				<box leftPadding="10"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lease Terms]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="198" width="572" height="10"/>
+				<reportElement x="0" y="30" width="572" height="135"/>
 				<textElement/>
-				<text><![CDATA[Static text]]></text>
+				<text><![CDATA[Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ]]></text>
 			</staticText>
 		</band>
 	</detail>

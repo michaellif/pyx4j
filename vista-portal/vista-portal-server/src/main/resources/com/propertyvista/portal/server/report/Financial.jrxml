@@ -8,7 +8,16 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="32" splitType="Stretch">
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="170" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="572" height="32"/>
 				<box leftPadding="0"/>
@@ -18,15 +27,6 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{tenantFullName}]]></textFieldExpression>
 			</textField>
 		</band>
-	</title>
-	<pageHeader>
-		<band splitType="Stretch"/>
-	</pageHeader>
-	<columnHeader>
-		<band splitType="Stretch"/>
-	</columnHeader>
-	<detail>
-		<band height="170" splitType="Stretch"/>
 	</detail>
 	<columnFooter>
 		<band splitType="Stretch"/>
