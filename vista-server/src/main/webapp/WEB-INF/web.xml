@@ -14,41 +14,6 @@
         <param-value>com.propertyvista.server.config.VistaServerSideConfiguration</param-value>
     </context-param>
 
-    <context-param>
-        <!-- max size of the upload request -->
-        <param-name>maxSize</param-name>
-        <param-value>2097152</param-value>
-    </context-param>
-
-    <context-param>
-        <!-- Useful in development mode to slow down the uploads in fast networks.
-         Put the number of milliseconds to sleep in each block received in the server.
-         false or 0, means don't use slow uploads
-         -->
-        <param-name>slowUploads</param-name>
-        <param-value>200</param-value>
-    </context-param>
-
-    <servlet>
-        <servlet-name>uploadServlet</servlet-name>
-        <!-- This is the default servlet, it puts files in session -->
-        <!--servlet-class>gwtupload.server.UploadServlet</servlet-class-->
-        <servlet-class>com.propertyvista.portal.server.upload.UploadServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>uploadServlet</servlet-name>
-        <url-pattern>*.gupld</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>ApplicationDocumentServlet</servlet-name>
-        <servlet-class>com.propertyvista.portal.server.upload.ApplicationDocumentServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ApplicationDocumentServlet</servlet-name>
-        <url-pattern>/portal/ApplicationDocument</url-pattern>
-    </servlet-mapping>
-
     <listener>
         <listener-class>com.pyx4j.entity.server.servlet.InitializationServletContextListener</listener-class>
     </listener>
@@ -244,6 +209,26 @@
     <servlet-mapping>
         <servlet-name>DownloadServlet</servlet-name>
         <url-pattern>/download/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>com.propertyvista.portal.server.upload.UploadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>*.gupld</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ApplicationDocumentServlet</servlet-name>
+        <servlet-class>com.propertyvista.portal.server.upload.ApplicationDocumentServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>ApplicationDocumentServlet</servlet-name>
+        <url-pattern>/ApplicationDocument</url-pattern>
     </servlet-mapping>
 
     <servlet>
