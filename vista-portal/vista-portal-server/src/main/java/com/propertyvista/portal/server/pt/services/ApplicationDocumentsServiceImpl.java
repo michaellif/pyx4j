@@ -16,9 +16,11 @@ package com.propertyvista.portal.server.pt.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
+import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentsList;
 import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
 import com.propertyvista.portal.server.pt.PtAppContext;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -50,10 +52,18 @@ public class ApplicationDocumentsServiceImpl extends ApplicationEntityServicesIm
     @Override
     public void removeAttachment(AsyncCallback<VoidSerializable> callback, Long applicationDocumentId) {
         log.info("Remove attachments for applicationDoc {}", applicationDocumentId);
-        //    EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
-        //    criteria.add(PropertyCriterion.eq(criteria.proto().id(), applicationDocumentId));
-        //    callback.onSuccess(null);
-        throw new UnsupportedOperationException("Not supported yet.");
+        //EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
+        //criteria.add(PropertyCriterion.eq(criteria.proto().id(), applicationDocumentId));
+        //EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
+        //criteria.add(PropertyCriterion.eq(criteria.proto().id(), applicationDocumentId));
+        ApplicationDocument applicationDocument = PersistenceServicesFactory.getPersistenceService().retrieve(ApplicationDocument.class, applicationDocumentId);
+        if (DocumentType.income.equals(applicationDocument.type().getValue())) {
+            TenantIncome income = PersistenceServicesFactory.getPersistenceService().retrieve(TenantIncome.class, applicationDocument.tenant().id().getValue());
+            income.documents().remove(applicationDocument);
+            PersistenceServicesFactory.getPersistenceService().merge(income);
+        }
+        PersistenceServicesFactory.getPersistenceService().delete(ApplicationDocument.class, applicationDocumentId);
+        callback.onSuccess(null);
     }
 
 }

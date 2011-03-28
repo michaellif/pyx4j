@@ -15,6 +15,7 @@
 package com.propertyvista.portal.server.upload;
 
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
+import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -54,12 +55,16 @@ public class UploadServlet extends UploadAction {
         //int cont = 0;
         FileItem fileItem = null;
         String tenantId = null;
+        String documentType = null;
 
         for (FileItem item : sessionFiles) {
             log.debug("UploadServlet.executeAction(): item=" + item);
             if (item.isFormField()) {
                 if ("tenantId".equalsIgnoreCase(item.getFieldName())) {
                     tenantId = item.getString();
+                    //log.debug("tenantId=" + tenantId);
+                } else if ("documentType".equalsIgnoreCase(item.getFieldName())) {
+                    documentType = item.getString();
                     //log.debug("tenantId=" + tenantId);
                 }
             } else {
@@ -104,17 +109,24 @@ public class UploadServlet extends UploadAction {
 
         log.debug("fileItem=" + fileItem);
         log.debug("tenantId=" + tenantId);
+        log.debug("documentType=" + documentType);
 
         if (fileItem != null && tenantId != null) {
             byte[] data = fileItem.get();//IOUtils.toByteArray(in);
-            createApplicationDocument(new Long(tenantId), fileItem.getName(), data, ApplicationDocument.DocumentType.securityInfo);
+            ApplicationDocument applicationDocument = createApplicationDocument(new Long(tenantId), fileItem.getName(), data,
+                    "securityInfo".equalsIgnoreCase(documentType) ? ApplicationDocument.DocumentType.securityInfo : ApplicationDocument.DocumentType.income);
+            if ("income".equalsIgnoreCase(documentType)) {
+                TenantIncome income = PersistenceServicesFactory.getPersistenceService().retrieve(TenantIncome.class, new Long(tenantId));
+                income.documents().add(applicationDocument);
+                PersistenceServicesFactory.getPersistenceService().merge(income);
+            }
             /// Compose a xml message with the full file information
             response.append("<file-field>").append(fileItem.getFieldName()).append("</file-field>\n");
             response.append("<file-name>").append(fileItem.getName()).append("</file-name>\n");
             response.append("<file-size>").append(fileItem.getSize()).append("</file-size>\n");
             response.append("<file-type>").append(fileItem.getContentType()).append("</file-type>\n");
         } else {
-            log.error("ERROR: fileItem or tenantId is missing: " + fileItem + ", tenantId=" + tenantId);
+            log.error("ERROR: fileItem, tenantId or documentType is missing: " + fileItem + ", tenantId=" + tenantId + ", documentType=" + documentType);
         }
 
         /// Remove files from session because we have a copy of them

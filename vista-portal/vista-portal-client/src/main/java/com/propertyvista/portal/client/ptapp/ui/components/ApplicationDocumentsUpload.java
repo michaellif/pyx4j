@@ -102,6 +102,7 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
         appDocListView.initialize();
 
         uploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
+        uploader.add(new Hidden("documentType", documentType.name()));
         uploader.setAutoSubmit(true);
         //uploader.avoidRepeatFiles(true);
         uploader.setValidExtensions(new String[] { "jpg", "jpeg", "gif", "png", "tiff", "bmp", "pdf" });
