@@ -57,6 +57,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class ApplicationDocumentsUpload extends HorizontalPanel {
 
@@ -130,7 +131,6 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
 
         this.tenantId = tenantId;
 
-//        docList.clear();
         uploader.add(new Hidden("tenantId", this.tenantId.toString()));
 
         if (applicationDocumentsService != null) {
@@ -139,49 +139,6 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
                 @Override
                 public void onSuccess(ApplicationDocumentsList result) {
                     appDocListView.populate(result);
-
-//                    for (final ApplicationDocument doc : result.documents()) {
-//
-//                        CHyperlink link = new CHyperlink(null, new Command() {
-//                            @Override
-//                            public void execute() {
-//                                //TODO: show file here...
-                    //open this url: "ApplicationDocument?id="+doc.getId()
-//                            }
-//                        });
-//
-//                        final Image remove = new Image(SiteImages.INSTANCE.delRow());
-//                        remove.getElement().getStyle().setCursor(Cursor.POINTER);
-//                        remove.addClickHandler(new ClickHandler() {
-//
-//                            @Override
-//                            public void onClick(ClickEvent event) {
-//                                applicationDocumentsService.removeAttachment(new AsyncCallback<VoidSerializable>() {
-//
-//                                    @Override
-//                                    public void onSuccess(VoidSerializable result) {
-//                                        updateFileList(tenantId);
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(Throwable caught) {
-//                                        // TODO Auto-generated method stub
-//                                    }
-//                                }, doc.id().getValue());
-//                            }
-//                        });
-//
-//                        link.setValue(doc.filename().getStringView());
-//
-//                        HorizontalPanel item = new HorizontalPanel();
-//                        item.add(link);
-//                        item.setCellWidth(link.asWidget(), "152px");
-//
-//                        item.add(remove);
-//                        item.setCellVerticalAlignment(remove, HasVerticalAlignment.ALIGN_MIDDLE);
-//
-//                        docList.add(item);
-//                    }
                 }
 
                 @Override
@@ -228,7 +185,7 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
                                     public void execute() {
                                         // TODO show the file here...
                                         //open this url: "ApplicationDocument?id="+getValue().id()
-                                        String url="ApplicationDocument?id="+getValue().id().getValue();
+                                        String url = "ApplicationDocument?id=" + getValue().id().getValue();
                                     }
                                 });
                                 return inject(column.getObject(), link);
@@ -244,6 +201,24 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
                             return new TableFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), i18n.tr("Remove file"));
                         }
                     };
+                }
+
+                @Override
+                protected void removeItem(CEntityFolderItem<ApplicationDocument> comp, FolderItemDecorator folderItemDecorator) {
+                    applicationDocumentsService.removeAttachment(new AsyncCallback<VoidSerializable>() {
+
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            updateFileList(tenantId);
+                        }
+
+                        @Override
+                        public void onSuccess(VoidSerializable result) {
+                            // TODO Auto-generated method stub
+                        }
+                    }, comp.getValue().id().getValue());
+
+                    super.removeItem(comp, folderItemDecorator);
                 }
             }));
 
