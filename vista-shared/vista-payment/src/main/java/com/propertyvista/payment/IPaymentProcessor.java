@@ -27,4 +27,6 @@ public interface IPaymentProcessor {
 
     PaymentResponse reactivateToken(Merchant merchant, Token token);
 
+    PaymentResponse tokenSale(Merchant merchant, PaymentRequest request);
+
 }

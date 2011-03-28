@@ -16,11 +16,10 @@ package com.propertyvista.payment;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Token  extends IEntity, PaymentInstrument {
+public interface Token extends IEntity, PaymentInstrument {
 
     IPrimitive<String> code();
-    
-    IPrimitive<String> description();
-    
-    
+
+    IPrimitive<String> description(); //TOKEN-REF
+
 }

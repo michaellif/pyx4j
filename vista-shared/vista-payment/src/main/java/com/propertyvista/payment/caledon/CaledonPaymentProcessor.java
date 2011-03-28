@@ -61,26 +61,106 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
     @Override
     public PaymentResponse createToken(Merchant merchant, CCInformation ccinfo, Token token) {
-        // TODO Auto-generated method stub
-        return null;
+        CaledonRequestToken crequest = new CaledonRequestToken();
+
+        crequest.terminalID = merchant.terminalID().getValue();
+        crequest.transactionType = CaledonTransactionType.TOKEN.getValue();
+        crequest.token = token.code().getValue();
+        crequest.tokenAction = CaledonTokenAction.ADD.getValue();
+        crequest.creditCardNumber = ccinfo.creditCardNumber().getValue();
+        crequest.setExpiryDate(ccinfo.creditCardExpiryDate().getValue());
+        crequest.tokenRef = token.description().getValue();
+        //crequest.creditCardNumber = request.creditCardNumber().getValue();
+        //crequest.setExpiryDate(request.creditCardExpiryDate().getValue());
+
+        CaledonResponse cresponse = client.transaction(crequest);
+
+        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
+        response.code().setValue(cresponse.code);
+        response.message().setValue(cresponse.text);
+        response.authorizationNumber().setValue(cresponse.authorizationNumber);
+
+        return response;
     }
 
     @Override
     public PaymentResponse updateToken(Merchant merchant, CCInformation ccinfo, Token token) {
-        // TODO Auto-generated method stub
-        return null;
+        CaledonRequestToken crequest = new CaledonRequestToken();
+
+        crequest.terminalID = merchant.terminalID().getValue();
+        crequest.transactionType = CaledonTransactionType.TOKEN.getValue();
+        crequest.token = token.code().getValue();
+        crequest.tokenAction = CaledonTokenAction.UPDATE.getValue();
+        crequest.creditCardNumber = ccinfo.creditCardNumber().getValue();
+        crequest.setExpiryDate(ccinfo.creditCardExpiryDate().getValue());
+        crequest.tokenRef = token.description().getValue();
+
+        CaledonResponse cresponse = client.transaction(crequest);
+
+        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
+        response.code().setValue(cresponse.code);
+        response.message().setValue(cresponse.text);
+        response.authorizationNumber().setValue(cresponse.authorizationNumber);
+
+        return response;
     }
 
     @Override
     public PaymentResponse deactivateToken(Merchant merchant, Token token) {
-        // TODO Auto-generated method stub
-        return null;
+        CaledonRequestToken crequest = new CaledonRequestToken();
+
+        crequest.terminalID = merchant.terminalID().getValue();
+        crequest.transactionType = CaledonTransactionType.TOKEN.getValue();
+        crequest.token = token.code().getValue();
+        crequest.tokenAction = CaledonTokenAction.DEACTIVATE.getValue();
+
+        CaledonResponse cresponse = client.transaction(crequest);
+
+        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
+        response.code().setValue(cresponse.code);
+        response.message().setValue(cresponse.text);
+        response.authorizationNumber().setValue(cresponse.authorizationNumber);
+
+        return response;
     }
 
     @Override
     public PaymentResponse reactivateToken(Merchant merchant, Token token) {
-        // TODO Auto-generated method stub
-        return null;
+        CaledonRequestToken crequest = new CaledonRequestToken();
+
+        crequest.terminalID = merchant.terminalID().getValue();
+        crequest.transactionType = CaledonTransactionType.TOKEN.getValue();
+        crequest.token = token.code().getValue();
+        crequest.tokenAction = CaledonTokenAction.REACTIVATE.getValue();
+
+        CaledonResponse cresponse = client.transaction(crequest);
+
+        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
+        response.code().setValue(cresponse.code);
+        response.message().setValue(cresponse.text);
+        response.authorizationNumber().setValue(cresponse.authorizationNumber);
+
+        return response;
+    }
+
+    @Override
+    public PaymentResponse tokenSale(Merchant merchant, PaymentRequest request) {
+        CaledonRequestToken crequest = new CaledonRequestToken();
+
+        crequest.terminalID = merchant.terminalID().getValue();
+        crequest.transactionType = CaledonTransactionType.SALE.getValue();
+        crequest.token = ((Token) (request.paymentInstrument().getValue())).code().getValue();
+        crequest.referenceNumber = request.referenceNumber().getValue();
+        crequest.setAmount(request.amount().getValue());
+
+        CaledonResponse cresponse = client.transaction(crequest);
+
+        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
+        response.code().setValue(cresponse.code);
+        response.message().setValue(cresponse.text);
+        response.authorizationNumber().setValue(cresponse.authorizationNumber);
+
+        return response;
     }
 
 }

@@ -47,7 +47,9 @@ enum CaledonTransactionType {
 
     CANADIAN_AVS("I", "Canadian Address Verification Service(AVS)"),
 
-    COMMERCIAL("K", "Commercial");
+    COMMERCIAL("K", "Commercial"),
+
+    TOKEN("G", "Token");
 
     private final String value;
 
