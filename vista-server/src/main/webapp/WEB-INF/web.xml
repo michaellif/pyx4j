@@ -46,7 +46,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ApplicationDocumentServlet</servlet-name>
-        <url-pattern>/ApplicationDocument</url-pattern>
+        <url-pattern>/portal/ApplicationDocument</url-pattern>
     </servlet-mapping>
 
     <listener>

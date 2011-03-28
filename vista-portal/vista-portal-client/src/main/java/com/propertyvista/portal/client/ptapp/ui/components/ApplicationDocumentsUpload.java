@@ -30,6 +30,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -57,6 +58,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class ApplicationDocumentsUpload extends HorizontalPanel {
@@ -186,7 +188,9 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
                                     public void execute() {
                                         // TODO show the file here...
                                         //open this url: "ApplicationDocument?id="+getValue().id()
-                                        String url = "ApplicationDocument?id=" + getValue().id().getValue();
+                                        // Consider  using GWT.getModuleBaseURL() in future
+                                        String url = GWT.getModuleBaseURL() + "ApplicationDocument?id=" + getValue().id().getValue();
+                                        Window.open(url, "_blank", null);
                                     }
                                 });
                                 return inject(column.getObject(), link);
@@ -204,23 +208,22 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
                     };
                 }
 
+                protected void callSuperRemoveItem(final CEntityFolderItem<ApplicationDocument> comp, final FolderItemDecorator folderItemDecorator) {
+                    super.removeItem(comp, folderItemDecorator);
+                }
+
                 @Override
-                protected void removeItem(CEntityFolderItem<ApplicationDocument> comp, FolderItemDecorator folderItemDecorator) {
-                    applicationDocumentsService.removeAttachment(new AsyncCallback<VoidSerializable>() {
+                protected void removeItem(final CEntityFolderItem<ApplicationDocument> comp, final FolderItemDecorator folderItemDecorator) {
+
+                    applicationDocumentsService.removeAttachment(new DefaultAsyncCallback<VoidSerializable>() {
 
                         @Override
                         public void onSuccess(VoidSerializable result) {
-                            // TODO Auto-generated method stub
-                        }
-
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            updateFileList(tenantId);
+                            callSuperRemoveItem(comp, folderItemDecorator);
                         }
 
                     }, comp.getValue().id().getValue());
 
-                    super.removeItem(comp, folderItemDecorator);
                 }
             }));
 
