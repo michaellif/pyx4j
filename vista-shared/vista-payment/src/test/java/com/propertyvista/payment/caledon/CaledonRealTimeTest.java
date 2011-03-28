@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 
 import junit.framework.TestCase;
 
+import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.IPaymentProcessor;
 import com.propertyvista.payment.Merchant;
 import com.propertyvista.payment.PaymentProcessingException;
@@ -36,13 +37,18 @@ public class CaledonRealTimeTest extends TestCase {
 
         request.referenceNumber().setValue("Test1");
         request.amount().setValue((float) amount);
-        request.creditCardNumber().setValue(creditCardNumber);
+        CCInformation ccInfo = EntityFactory.create(CCInformation.class);
+        ccInfo.creditCardNumber().setValue(creditCardNumber);
+
+        //request.creditCardNumber().setValue(creditCardNumber);
 
         try {
-            request.creditCardExpiryDate().setValue(new SimpleDateFormat("yyyy-MM").parse(exp));
+            //request.creditCardExpiryDate().setValue(new SimpleDateFormat("yyyy-MM").parse(exp));
+            ccInfo.creditCardExpiryDate().setValue(new SimpleDateFormat("yyyy-MM").parse(exp));
         } catch (Throwable e) {
             throw new Error("Invalid data");
         }
+        request.paymentInstrument().setValue(ccInfo);
 
         return request;
     }
@@ -61,6 +67,8 @@ public class CaledonRealTimeTest extends TestCase {
     }
 
     public void testSampleTransactions() {
+        PaymentRequest request = createRequest(TestData.CARD_MC1, "2015-01", 10.0);
+        System.out.print("CCNUMBER=" + ((CCInformation) (request.paymentInstrument().getValue())).creditCardNumber().getValue());
         assertRealTimeSale(testMerchant, createRequest(TestData.CARD_MC1, "2015-01", 10.0), "1285");
         assertRealTimeSale(testMerchant, createRequest(TestData.CARD_MC1, "2017-09", 10.0), "0000");
         assertRealTimeSale(testMerchantError, createRequest(TestData.CARD_MC1, "2017-09", 10.0), "1001");
