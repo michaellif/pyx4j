@@ -50,7 +50,6 @@ public class SummaryReportTest extends ReportsTestBase {
 
         createReport("target/classes/com/propertyvista/portal/server/report/Summary.jrxml", parameters,
                 new JRIEntityCollectionDataSource<Summary>(Arrays.asList(new Summary[] { retreiveSummary() })));
-
     }
 
     private static Summary retreiveSummary() {
