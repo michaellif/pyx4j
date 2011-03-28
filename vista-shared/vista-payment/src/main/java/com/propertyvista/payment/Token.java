@@ -7,31 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-13
- * @author vlads
+ * Created on Mar 27, 2011
+ * @author kostya
  * @version $Id$
  */
 package com.propertyvista.payment;
 
-import java.util.Date;
-
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Transient
-public interface PaymentRequest extends IEntity {
+public interface Token  extends IEntity, PaymentInstrument {
 
-    IPrimitive<PaymentInstrument> paymentInstrument();
-
-    @Deprecated
-    IPrimitive<String> creditCardNumber();
-
-    @Deprecated
-    IPrimitive<Date> creditCardExpiryDate();
-
-    IPrimitive<Float> amount();
-
-    IPrimitive<String> referenceNumber();
-
+    IPrimitive<String> code();
+    
+    IPrimitive<String> description();
+    
+    
 }

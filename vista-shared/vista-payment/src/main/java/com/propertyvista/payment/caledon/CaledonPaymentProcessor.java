@@ -13,10 +13,12 @@
  */
 package com.propertyvista.payment.caledon;
 
+import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.IPaymentProcessor;
 import com.propertyvista.payment.Merchant;
 import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
+import com.propertyvista.payment.Token;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -37,8 +39,10 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
         crequest.referenceNumber = request.referenceNumber().getValue();
 
         crequest.setAmount(request.amount().getValue());
-        crequest.creditCardNumber = request.creditCardNumber().getValue();
-        crequest.setExpiryDate(request.creditCardExpiryDate().getValue());
+        crequest.creditCardNumber = ((CCInformation) (request.paymentInstrument().getValue())).creditCardNumber().getValue();
+        //crequest.creditCardNumber = request.creditCardNumber().getValue();
+        crequest.setExpiryDate(((CCInformation) (request.paymentInstrument().getValue())).creditCardExpiryDate().getValue());
+        //crequest.setExpiryDate(request.creditCardExpiryDate().getValue());
 
         CaledonResponse cresponse = client.transaction(crequest);
 
@@ -52,6 +56,30 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
     @Override
     public PaymentResponse realTimeAuthorization(Merchant merchant, PaymentRequest request) {
+        return null;
+    }
+
+    @Override
+    public PaymentResponse createToken(Merchant merchant, CCInformation ccinfo, Token token) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public PaymentResponse updateToken(Merchant merchant, CCInformation ccinfo, Token token) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public PaymentResponse deactivateToken(Merchant merchant, Token token) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public PaymentResponse reactivateToken(Merchant merchant, Token token) {
+        // TODO Auto-generated method stub
         return null;
     }
 

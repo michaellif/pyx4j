@@ -19,4 +19,12 @@ public interface IPaymentProcessor {
 
     PaymentResponse realTimeAuthorization(Merchant merchant, PaymentRequest request);
 
+    PaymentResponse createToken(Merchant merchant, CCInformation ccinfo, Token token);
+
+    PaymentResponse updateToken(Merchant merchant, CCInformation ccinfo, Token token);
+
+    PaymentResponse deactivateToken(Merchant merchant, Token token);
+
+    PaymentResponse reactivateToken(Merchant merchant, Token token);
+
 }
