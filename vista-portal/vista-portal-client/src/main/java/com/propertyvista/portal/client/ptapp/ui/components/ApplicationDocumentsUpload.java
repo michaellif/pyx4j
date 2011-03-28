@@ -208,14 +208,15 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
                     applicationDocumentsService.removeAttachment(new AsyncCallback<VoidSerializable>() {
 
                         @Override
+                        public void onSuccess(VoidSerializable result) {
+                            // TODO Auto-generated method stub
+                        }
+
+                        @Override
                         public void onFailure(Throwable caught) {
                             updateFileList(tenantId);
                         }
 
-                        @Override
-                        public void onSuccess(VoidSerializable result) {
-                            // TODO Auto-generated method stub
-                        }
                     }, comp.getValue().id().getValue());
 
                     super.removeItem(comp, folderItemDecorator);
