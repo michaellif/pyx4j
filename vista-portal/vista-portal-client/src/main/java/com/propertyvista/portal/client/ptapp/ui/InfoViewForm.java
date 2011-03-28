@@ -140,9 +140,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         main.add(new ViewHeaderDecorator(proto().legalQuestions()));
 
-        VistaWidgetDecorator.DecorationData decor = new VistaWidgetDecorator.DecorationData(40d, 8);
-        decor.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
-
+        VistaWidgetDecorator.DecorationData decor = new VistaWidgetDecorator.DecorationData(43d, HasHorizontalAlignment.ALIGN_LEFT, 8);
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForRent()), decor));
         main.add(new ViewLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForDamages()), decor));
