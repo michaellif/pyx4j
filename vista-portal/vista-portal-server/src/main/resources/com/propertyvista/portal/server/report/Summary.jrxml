@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Static" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="1.6500000000000001"/>
+	<property name="ireport.x" value="30"/>
+	<property name="ireport.y" value="35"/>
 	<subDataset name="dataset1"/>
 	<subDataset name="dataset2"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -40,37 +40,37 @@
 	<detail>
 		<band height="800" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="23" width="45" height="19"/>
+				<reportElement x="4" y="20" width="77" height="19"/>
 				<textElement/>
 				<text><![CDATA[Type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="74" y="23" width="45" height="19"/>
+				<reportElement x="81" y="20" width="77" height="19"/>
 				<textElement/>
 				<text><![CDATA[Unit]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="148" y="23" width="47" height="19"/>
+				<reportElement x="158" y="20" width="77" height="19"/>
 				<textElement/>
 				<text><![CDATA[Deposit]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="224" y="23" width="45" height="19"/>
+				<reportElement x="235" y="20" width="77" height="19"/>
 				<textElement/>
 				<text><![CDATA[Beds]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="298" y="23" width="45" height="19"/>
+				<reportElement x="312" y="20" width="77" height="19"/>
 				<textElement/>
 				<text><![CDATA[Baths]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="372" y="23" width="45" height="19"/>
+				<reportElement x="389" y="20" width="77" height="19"/>
 				<textElement/>
 				<text><![CDATA[Sq F]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="446" y="23" width="99" height="19"/>
+				<reportElement x="466" y="20" width="77" height="19"/>
 				<textElement/>
 				<text><![CDATA[Available]]></text>
 			</staticText>
