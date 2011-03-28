@@ -16,6 +16,7 @@ package com.propertyvista.portal.domain.pt;
 import java.io.Serializable;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -40,6 +41,7 @@ public interface ApplicationDocument extends IEntity, IBoundToApplication {
      * This is actual BLOB of the Image or PDF stored on server
      */
     @RpcTransient
+    @Length(5 * 1024 * 1024)
     IPrimitive<byte[]> data();
 
     IPrimitive<String> filename();
