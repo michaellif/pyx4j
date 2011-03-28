@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.Assert;
+import net.sf.jasperreports.engine.JasperCompileManager;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -46,7 +47,13 @@ public class SummaryReportTest extends ReportsTestBase {
         new VistaDataPreloaders().preloadAll();
 
         Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("SUBREPORT_DIR", "target/classes/com/propertyvista/portal/server/report/");
         parameters.put("ReportTitle", title);
+
+        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Info.jrxml",
+                "target/classes/com/propertyvista/portal/server/report/Info.jasper");
+        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Financial.jrxml",
+                "target/classes/com/propertyvista/portal/server/report/Financial.jasper");
 
         createReport("target/classes/com/propertyvista/portal/server/report/Summary.jrxml", parameters,
                 new JRIEntityCollectionDataSource<Summary>(Arrays.asList(new Summary[] { retreiveSummary() })));
