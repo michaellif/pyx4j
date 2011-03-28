@@ -177,6 +177,11 @@ public class ServerSideConfiguration {
         return environmentType;
     }
 
+    public static boolean isStartedUnderEclipse() {
+        StackTraceElement[] ste = new Throwable().getStackTrace();
+        return (ste[ste.length - 1].getClassName().startsWith("org.eclipse.jdt"));
+    }
+
     public String getSessionCookieName() {
         switch (getEnvironmentType()) {
         default:
