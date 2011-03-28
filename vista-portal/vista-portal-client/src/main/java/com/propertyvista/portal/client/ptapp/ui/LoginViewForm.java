@@ -42,11 +42,11 @@ public class LoginViewForm extends CEntityForm<AuthenticationRequest> {
 
         FlowPanel main = new FlowPanel();
         main.add(header);
-        main.add(new VistaWidgetDecorator(inject(proto().email()), 60, 160));
+        main.add(new VistaWidgetDecorator(inject(proto().email()), 90, 160));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(inject(proto().password()), 60, 160));
+        main.add(new VistaWidgetDecorator(inject(proto().password()), 90, 160));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(inject(proto().captcha()), 60, 160));
+        main.add(new VistaWidgetDecorator(inject(proto().captcha()), 90, 160));
         return main;
     }
 }
