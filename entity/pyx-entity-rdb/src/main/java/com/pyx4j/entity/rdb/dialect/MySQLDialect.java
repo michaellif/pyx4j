@@ -29,7 +29,11 @@ public class MySQLDialect extends Dialect {
         addTypeMeta(Long.class, "bigint");
         addTypeMeta(Double.class, "double");
         addTypeMeta(Boolean.class, "bit");
-        addTypeMeta(byte[].class, "blob");
+
+        TypeMeta blobTypeMeta = new TypeMeta(byte[].class, "blob", 65535);
+        blobTypeMeta.addSqlType("mediumblob", 16777215);
+        typeNames.put(byte[].class, blobTypeMeta);
+
         addTypeMeta(java.util.Date.class, "datetime");
     }
 

@@ -20,30 +20,66 @@
  */
 package com.pyx4j.entity.rdb.dialect;
 
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+
 public class TypeMeta {
 
-    Class<?> javaClass;
+    final Class<?> javaClass;
 
-    String sqlType;
+    final String sqlType;
+
+    final int maxLength;
 
     String[] compatibleTypeNames;
+
+    private TreeMap<Integer, String> extendedTypes;
 
     public TypeMeta(Class<?> javaClass, String sqlType) {
         this.javaClass = javaClass;
         this.sqlType = sqlType;
+        this.maxLength = 0;
     }
 
     public TypeMeta(Class<?> javaClass, String sqlType, String... compatibleTypeNames) {
         this.javaClass = javaClass;
         this.sqlType = sqlType;
+        this.maxLength = 0;
         this.compatibleTypeNames = compatibleTypeNames;
+    }
+
+    public TypeMeta(Class<?> javaClass, String sqlType, int maxLength) {
+        this.javaClass = javaClass;
+        this.sqlType = sqlType;
+        this.maxLength = maxLength;
+    }
+
+    public void addSqlType(String sqlType, int maxLength) {
+        if (extendedTypes == null) {
+            extendedTypes = new TreeMap<Integer, String>();
+        }
+        extendedTypes.put(maxLength, sqlType);
+    }
+
+    public String getSqlType(int length) {
+        if ((length < maxLength) || (maxLength == 0)) {
+            return this.sqlType;
+        }
+        if (extendedTypes != null) {
+            for (Map.Entry<Integer, String> me : extendedTypes.entrySet()) {
+                if (me.getKey() > length) {
+                    return me.getValue();
+                }
+            }
+        }
+        throw new RuntimeException("Undefined SQL type for length " + length + " for class " + javaClass.getName());
     }
 
     public boolean isCompatibleType(String typeName) {
         if (sqlType.equalsIgnoreCase(typeName)) {
             return true;
         }
-
         if (compatibleTypeNames != null) {
             for (String name : compatibleTypeNames) {
                 if (name.equalsIgnoreCase(typeName)) {
@@ -51,7 +87,9 @@ public class TypeMeta {
                 }
             }
         }
-
+        if (extendedTypes != null) {
+            return extendedTypes.containsValue(typeName.toLowerCase(Locale.ENGLISH));
+        }
         return false;
     }
 }

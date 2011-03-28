@@ -131,6 +131,8 @@ public class MemberMetaImpl implements MemberMeta {
             } else {
                 length = 0;
             }
+        } else if ((lengthAnnotation != null) && (byte[].class.equals(valueClass))) {
+            length = lengthAnnotation.value();
         } else if (lengthAnnotation != null) {
             throw new RuntimeException("Unexpected @Length annotation in member " + fieldName);
         } else {

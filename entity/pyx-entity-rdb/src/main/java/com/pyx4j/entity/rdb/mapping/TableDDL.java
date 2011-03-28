@@ -87,7 +87,7 @@ class TableDDL {
                 sql.append(sqlType(dialect, memberMeta));
                 alterSqls.add(sql.toString());
             } else {
-                if (!dialect.isCompatibleType(memberMeta.getValueClass(), columnMeta.getTypeName())) {
+                if (!dialect.isCompatibleType(memberMeta.getValueClass(), memberMeta.getLength(), columnMeta.getTypeName())) {
                     throw new RuntimeException(tableModel.tableName + "." + member.sqlName() + " incompatible SQL type " + columnMeta.getTypeName() + " != "
                             + dialect.getSqlType(memberMeta.getValueClass()));
                 }
@@ -108,7 +108,7 @@ class TableDDL {
                 sql.append(indexSqlType(dialect, member));
                 alterSqls.add(sql.toString());
             } else {
-                if (!dialect.isCompatibleType(member.getIndexValueClass(), columnMeta.getTypeName())) {
+                if (!dialect.isCompatibleType(member.getIndexValueClass(), memberMeta.getLength(), columnMeta.getTypeName())) {
                     throw new RuntimeException(tableModel.tableName + "." + member.sqlName() + " incompatible SQL type " + columnMeta.getTypeName() + " != "
                             + dialect.getSqlType(member.getIndexValueClass()));
                 }
@@ -120,7 +120,7 @@ class TableDDL {
 
     private static String sqlType(Dialect dialect, MemberMeta memberMeta) {
         StringBuilder sql = new StringBuilder();
-        sql.append(dialect.getSqlType(memberMeta.getValueClass()));
+        sql.append(dialect.getSqlType(memberMeta.getValueClass(), memberMeta.getLength()));
         if (Enum.class.isAssignableFrom(memberMeta.getValueClass())) {
             sql.append("(" + TableModel.ENUM_STRING_LENGHT_MAX + ")");
         } else if (String.class == memberMeta.getValueClass()) {
@@ -135,8 +135,7 @@ class TableDDL {
         if (Enum.class.isAssignableFrom(member.getIndexValueClass())) {
             sql.append("(" + TableModel.ENUM_STRING_LENGHT_MAX + ")");
         } else if (String.class == member.getIndexValueClass()) {
-            sql.append('(')
-                    .append((member.getMemberMeta().getLength() == 0) ? TableModel.ORDINARY_STRING_LENGHT_MAX : member.getMemberMeta().getLength())
+            sql.append('(').append((member.getMemberMeta().getLength() == 0) ? TableModel.ORDINARY_STRING_LENGHT_MAX : member.getMemberMeta().getLength())
                     .append(')');
         }
         return sql.toString();

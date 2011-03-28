@@ -72,14 +72,18 @@ public abstract class Dialect {
     }
 
     public String getSqlType(Class<?> klass) {
+        return getSqlType(klass, 0);
+    }
+
+    public String getSqlType(Class<?> klass, int length) {
         TypeMeta typeMeta = typeNames.get(getType(klass));
         if (typeMeta == null) {
             throw new RuntimeException("Undefined SQL type for class " + getType(klass).getName());
         }
-        return typeMeta.sqlType;
+        return typeMeta.getSqlType(length);
     }
 
-    public boolean isCompatibleType(Class<?> klass, String typeName) {
+    public boolean isCompatibleType(Class<?> klass, int length, String typeName) {
         TypeMeta typeMeta = typeNames.get(getType(klass));
         if (typeMeta == null) {
             throw new RuntimeException("Undefined SQL type for class " + getType(klass).getName());
