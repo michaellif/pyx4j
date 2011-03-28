@@ -13,7 +13,6 @@
  */
 package com.propertyvista.config.tests;
 
-
 import com.pyx4j.config.server.ServerSideConfiguration;
 
 public class VistaTestDBSetup {
@@ -22,7 +21,7 @@ public class VistaTestDBSetup {
 
     public static void init() {
         if (initOnce) {
-            ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration());
+            ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(false));
             initOnce = false;
         }
 

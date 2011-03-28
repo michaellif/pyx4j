@@ -24,12 +24,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
+import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.portal.server.pt.services.SummaryServicesImpl;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.report.JRIEntityCollectionDataSource;
 import com.pyx4j.entity.report.test.ReportsTestBase;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -43,8 +45,14 @@ public class SummaryReportTest extends ReportsTestBase {
 
     @BeforeClass
     public static void init() throws Exception {
-        VistaTestDBSetup.init();
-        new VistaDataPreloaders().preloadAll();
+
+        boolean realTimeDevelopment = ServerSideConfiguration.isStartedUnderEclipse();
+        if (realTimeDevelopment) {
+            ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
+        } else {
+            VistaTestDBSetup.init();
+            new VistaDataPreloaders().preloadAll();
+        }
 
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("SUBREPORT_DIR", "target/classes/com/propertyvista/portal/server/report/");

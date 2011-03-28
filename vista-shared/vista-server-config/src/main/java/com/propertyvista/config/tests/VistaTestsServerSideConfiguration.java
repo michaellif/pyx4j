@@ -18,9 +18,14 @@ import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 
 public class VistaTestsServerSideConfiguration extends EssentialsServerSideConfiguration {
 
+    private final boolean testOnMySQL;
+
+    public VistaTestsServerSideConfiguration(boolean testOnMySQL) {
+        this.testOnMySQL = testOnMySQL;
+    }
+
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        boolean testOnMySQL = false;
         if (testOnMySQL) {
             return new VistaTestsDBConfigurationMySQL();
         } else {
