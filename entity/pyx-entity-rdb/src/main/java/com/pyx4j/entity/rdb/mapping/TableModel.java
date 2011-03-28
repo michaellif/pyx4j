@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -245,10 +246,23 @@ public class TableModel {
         return sqlUpdate;
     }
 
-    private void bindParameter(Dialect dialect, PreparedStatement stmt, int parameterIndex, Class<?> valueClass, Object value) throws SQLException {
+    private void bindParameter(Dialect dialect, PreparedStatement stmt, int parameterIndex, Class<?> valueClass, Object value, MemberMeta memberMeta)
+            throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, dialect.getTargetSqlType(valueClass));
         } else {
+            if ((memberMeta != null) && (memberMeta.getLength() > 0)) {
+                int size = 0;
+                if (value instanceof String) {
+                    size = ((String) value).length();
+                } else if (value.getClass().isArray()) {
+                    size = Array.getLength(value);
+                }
+                if (size > memberMeta.getLength()) {
+                    throw new RuntimeException("Member size vialoation member '" + memberMeta.getFieldName() + "' size " + size
+                            + " is greater than max allowed " + memberMeta.getLength());
+                }
+            }
             stmt.setObject(parameterIndex, encodeValue(valueClass, value), dialect.getTargetSqlType(valueClass));
         }
     }
@@ -271,12 +285,12 @@ public class TableModel {
                     stmt.setLong(parameterIndex, primaryKey);
                 }
             } else {
-                bindParameter(dialect, stmt, parameterIndex, memberMeta.getValueClass(), member.getMemberValue(entity));
+                bindParameter(dialect, stmt, parameterIndex, memberMeta.getValueClass(), member.getMemberValue(entity), memberMeta);
             }
             parameterIndex++;
         }
         for (MemberOperationsMeta member : entityOperationsMeta.getIndexMembers()) {
-            bindParameter(dialect, stmt, parameterIndex, member.getIndexValueClass(), member.getIndexedValue(entity));
+            bindParameter(dialect, stmt, parameterIndex, member.getIndexValueClass(), member.getIndexedValue(entity), null);
             parameterIndex++;
         }
         return parameterIndex;
