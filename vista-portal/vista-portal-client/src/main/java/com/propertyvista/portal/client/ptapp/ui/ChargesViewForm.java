@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
@@ -94,7 +95,14 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
         // could be hided from resulting form:
         splitCharges.add(new ViewHeaderDecorator(proto().paymentSplitCharges(), "700px"));
-        splitCharges.add(inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(valueChangeHandler)));
+
+        Label splitChargesValidationLabel = new Label();
+        //splitChargesValidationLabel.getElement().getStyle().setFloat(Style.Float.LEFT);
+        splitChargesValidationLabel.getElement().getStyle().setMarginLeft(30, Unit.PX);
+        splitChargesValidationLabel.getElement().getStyle().setColor("red");
+        splitCharges.add(splitChargesValidationLabel);
+
+        splitCharges.add(inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(valueChangeHandler, splitChargesValidationLabel)));
         splitCharges.add(createTotal(proto().paymentSplitCharges().total()));
         main.add(splitCharges);
 
