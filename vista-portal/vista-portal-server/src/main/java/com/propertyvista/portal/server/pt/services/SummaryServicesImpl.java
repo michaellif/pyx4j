@@ -62,8 +62,9 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         Summary summary = secureRetrieve(criteria);
         if (summary == null) {
-            log.info("Creating new Summary");
+            log.info("Creating new Summary for appl {}", PtAppContext.getCurrentUserApplicationPrimaryKey());
             summary = EntityFactory.create(Summary.class);
+            summary.application().set(PtAppContext.getCurrentUserApplication());
         }
         loadTransientData(summary);
         return summary;
@@ -75,7 +76,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         // this code starts to become very convoluted and all-over-the place
         retrieveApplicationEntity(summary.unitSelection(), summary.application());
         ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
-        apartmentServices.loadTransientData(summary.unitSelection());
+        apartmentServices.loadSelectedUnit(summary.unitSelection());
 
         // I have no idea so far for why this line gets called
         //        PersistenceServicesFactory.getPersistenceService().retrieve(summary.unitSelection().selectedUnit().floorplan());
