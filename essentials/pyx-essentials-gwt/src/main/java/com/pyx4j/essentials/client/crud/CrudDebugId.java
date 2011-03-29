@@ -32,6 +32,8 @@ public enum CrudDebugId implements IDebugId {
 
     Crud_New,
 
+    Crud_Delete,
+
     Crud_Download,
 
     Criteria_Clear,

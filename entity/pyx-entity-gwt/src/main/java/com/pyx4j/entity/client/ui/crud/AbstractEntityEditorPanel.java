@@ -37,8 +37,8 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.DomainManager;
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.client.ui.CEntityForm;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.EntityFormFactory;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFormBinder;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
@@ -51,6 +51,7 @@ import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
 import com.pyx4j.widgets.client.event.shared.PageLeavingHandler;
@@ -228,10 +229,17 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         return EntityServices.Save.class;
     }
 
+    protected Class<? extends EntityServices.Delete> getDeleteService() {
+        return null;
+    }
+
     protected void onBeforeSave() {
     }
 
     protected void onAfterSave() {
+    }
+
+    protected void onAfterDelete() {
     }
 
     protected void populateSaved(E entity) {
@@ -268,6 +276,28 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
         };
         RPCManager.execute(getSaveService(), entityForSave, handlingCallback);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void doDelete() {
+        final E entity = getEntity();
+        log.debug("removing {}", entity);
+        final AsyncCallback handlingCallback = new BlockingAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                onSaveFailure(caught);
+            }
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                DomainManager.entityDeleted(entity);
+                populateForm(null);
+                onAfterDelete();
+            }
+
+        };
+        RPCManager.execute(getDeleteService(), entity, handlingCallback);
     }
 
 }

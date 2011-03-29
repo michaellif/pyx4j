@@ -27,6 +27,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -44,6 +45,8 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
 
     protected final Button saveButton;
 
+    protected final Button deleteButton;
+
     public EntityEditorPanel(Class<E> entityClass) {
         this(entityClass, null);
     }
@@ -58,6 +61,8 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
         add(contentPanel);
 
         contentPanel.add(createFormWidget(LabelAlignment.LEFT));
+
+        HorizontalPanel buttonsPanel = new HorizontalPanel();
 
         if (getSaveService() != null) {
             saveButton = new Button(i18n.tr("Save"));
@@ -76,9 +81,30 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
             saveButton.getElement().getStyle().setMargin(20, Unit.PX);
             saveButton.ensureDebugId(CrudDebugId.Crud_Save.toString());
 
-            contentPanel.add(saveButton);
+            buttonsPanel.add(saveButton);
         } else {
             saveButton = null;
+        }
+
+        if (getDeleteService() != null) {
+            deleteButton = new Button(i18n.tr("Delete"));
+            deleteButton.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    parentWidget.setMessage(null);
+                    doDelete();
+                }
+            });
+            deleteButton.getElement().getStyle().setMargin(20, Unit.PX);
+            deleteButton.ensureDebugId(CrudDebugId.Crud_Delete.toString());
+
+            buttonsPanel.add(deleteButton);
+        } else {
+            deleteButton = null;
+        }
+
+        if (buttonsPanel.getWidgetCount() > 0) {
+            contentPanel.add(buttonsPanel);
         }
 
     }
@@ -89,6 +115,14 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
 
     public String toStringForPrint() {
         return getForm().asWidget().toStringForPrint();
+    }
+
+    @Override
+    public void populateForm(E entity) {
+        super.populateForm(entity);
+        if (deleteButton != null) {
+            deleteButton.setEnabled((entity != null) && !entity.id().isNull());
+        }
     }
 
     @Override
