@@ -60,6 +60,7 @@ public class SummaryReportTest extends ReportsTestBase {
         parameters.put("ReportTitle", title);
         parameters.put("LEASE_PRICE", "Pricing and Availability...");
         parameters.put("LEASE_TERMS", "Lease Terms text...");
+        parameters.put("DIGITAL_SIG", "Digital Signature...");
 
         JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Info.jrxml",
                 "target/classes/com/propertyvista/portal/server/report/Info.jasper");
@@ -75,6 +76,10 @@ public class SummaryReportTest extends ReportsTestBase {
                 "target/classes/com/propertyvista/portal/server/report/ApplicationCharges.jasper");
         JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/PaymentSplitCharges.jrxml",
                 "target/classes/com/propertyvista/portal/server/report/PaymentSplitCharges.jasper");
+        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Vehicles.jrxml",
+                "target/classes/com/propertyvista/portal/server/report/Vehicles.jasper");
+        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/EmergencyContacts.jrxml",
+                "target/classes/com/propertyvista/portal/server/report/EmergencyContacts.jasper");
 
         createReport("target/classes/com/propertyvista/portal/server/report/Summary.jrxml", parameters,
                 new JRIEntityCollectionDataSource<Summary>(Arrays.asList(new Summary[] { retreiveSummary() })));

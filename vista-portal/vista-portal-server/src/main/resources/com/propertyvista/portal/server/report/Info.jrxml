@@ -4,8 +4,9 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Java\\_DEV_\\PYX\\propertyvista\\vista-portal\\vista-portal-server\\src\\main\\resources\\com\\propertyvista\\portal\\server\\report\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
+	<parameter name="DIGITAL_SIG" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String"/>
 	<field name="middleName" class="java.lang.String"/>
 	<field name="lastName" class="java.lang.String"/>

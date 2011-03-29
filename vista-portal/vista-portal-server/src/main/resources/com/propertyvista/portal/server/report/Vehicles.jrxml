@@ -6,7 +6,7 @@
 	<field name="plateNumber" class="java.lang.String"/>
 	<field name="year" class="java.util.Date"/>
 	<field name="make" class="java.lang.String"/>
-	<field name="model" class="java.lang.Integer"/>
+	<field name="model" class="java.lang.String"/>
 	<field name="province/name" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -36,7 +36,7 @@
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{plateNumber}]]></textFieldExpression>
 			</textField>
-			<textField pattern="MM/dd/yyyy">
+			<textField pattern="yyyy">
 				<reportElement x="106" y="0" width="90" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{year}]]></textFieldExpression>
