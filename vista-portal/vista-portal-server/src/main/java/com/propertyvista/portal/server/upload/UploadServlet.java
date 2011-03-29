@@ -43,7 +43,7 @@ public class UploadServlet extends UploadAction {
         super.init(config);
 
         // set maxumum file size in bytes allowed for upload
-        maxSize = 5 * 1024 * 1024;
+        maxSize = EntityFactory.getEntityPrototype(ApplicationDocument.class).data().getMeta().getLength();
 
         // Useful in development mode to slow down the uploads in fast networks.
         // Put the number of milliseconds to sleep in each block received in the server.
@@ -133,12 +133,8 @@ public class UploadServlet extends UploadAction {
         applicationDocument.tenant().setPrimaryKey(tenantId);
         applicationDocument.type().setValue(documentType);
         applicationDocument.filename().setValue(fileName);
-        try {
-            applicationDocument.fileSize().setValue((long) data.length);
-            applicationDocument.data().setValue(data);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
+        applicationDocument.fileSize().setValue((long) data.length);
+        applicationDocument.data().setValue(data);
         PersistenceServicesFactory.getPersistenceService().persist(applicationDocument);
         return applicationDocument;
     }

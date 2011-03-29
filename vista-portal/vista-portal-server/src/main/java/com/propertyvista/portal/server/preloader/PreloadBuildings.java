@@ -116,7 +116,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         try {
             byte[] picture = IOUtils.getResource(filename);
             if (picture == null) {
-                log.info("Could not find picture [" + filename + "] in classpath");
+                log.warn("Could not find picture [{}] in classpath", filename);
             } else {
                 //            log.info("Picture size is: " + picture.length);
                 Picture blob = EntityFactory.create(Picture.class);
@@ -124,7 +124,8 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 floorplan.pictures().add(blob);
             }
         } catch (Exception e) {
-            log.error("Failed to read the file [" + filename + "]", e);
+            log.error("Failed to read the file [{}]", filename, e);
+            throw new Error("Failed to read the file [" + filename + "]");
         }
 
         return floorplan;
@@ -445,7 +446,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         load();
 
         StringBuilder b = new StringBuilder();
-        b.append("Created " + buildingCount + " buildings, " + unitCount + " units");
+        b.append("Created ").append(buildingCount).append(" buildings, ").append(unitCount).append(" units");
         return b.toString();
     }
 
@@ -468,7 +469,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         //        sb.append("Floorplan: ").append(floorplan);
 
         List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Building>(Building.class));
-        sb.append("\n\nLoaded " + buildings.size() + " buildings\n\n");
+        sb.append("\n\nLoaded ").append(buildings.size()).append(" buildings\n\n");
         for (Building building : buildings) {
             //            b.append(building.getStringView());
             sb.append(building.buildingType().getStringView());
@@ -504,7 +505,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
             criteria.add(new PropertyCriterion("building", Restriction.EQUAL, building.getPrimaryKey()));
             List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
-            sb.append("\tBuilding has " + units.size() + " units\n");
+            sb.append("\tBuilding has ").append(units.size()).append(" units\n");
 
             for (AptUnit unit : units) {
                 sb.append("\t");

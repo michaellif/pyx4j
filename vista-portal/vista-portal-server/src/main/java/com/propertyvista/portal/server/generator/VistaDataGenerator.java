@@ -19,7 +19,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +68,7 @@ import com.propertyvista.server.domain.UserCredential;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.gwt.server.IOUtils;
 
 public class VistaDataGenerator {
 
@@ -77,7 +77,7 @@ public class VistaDataGenerator {
     public VistaDataGenerator() {
     }
 
-    public Summary createSummary(Application application) throws IOException {
+    public Summary createSummary(Application application) {
         Summary summary = EntityFactory.create(Summary.class);
         summary.application().set(application);
         summary.unitSelection().set(createUnitSelection(application));
@@ -167,7 +167,7 @@ public class VistaDataGenerator {
         return employer;
     }
 
-    public ApplicationDocument createApplicationDocument(PotentialTenantInfo tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) throws IOException {
+    public ApplicationDocument createApplicationDocument(PotentialTenantInfo tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) {
         assert (tenantInfo.application() != null);
 
         ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
@@ -175,11 +175,23 @@ public class VistaDataGenerator {
         applicationDocument.tenant().set(tenantInfo);
         applicationDocument.type().setValue(documentType);
         applicationDocument.filename().setValue(fileName);
-        InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(PreloadUtil.resourceFileName(PreloadPT.class, fileName));
-        byte[] data = IOUtils.toByteArray(in);
-        applicationDocument.fileSize().setValue((long) data.length);
-        applicationDocument.data().setValue(data);
-        return applicationDocument;
+        //InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(PreloadUtil.resourceFileName(PreloadPT.class, fileName));
+        //byte[] data = IOUtils.toByteArray(in);
+        String filename = PreloadUtil.resourceFileName(PreloadPT.class, fileName);
+        try {
+            byte[] data = IOUtils.getResource(filename);
+            if (data == null) {
+                log.error("Could not find picture [{}] in classpath", filename);
+                throw new Error("Could not find picture [" + filename + "] in classpath");
+            } else {
+                applicationDocument.fileSize().setValue((long) data.length);
+                applicationDocument.data().setValue(data);
+                return applicationDocument;
+            }
+        } catch (Exception e) {
+            log.error("Failed to read the file [{}]", filename, e);
+            throw new Error("Failed to read the file [" + filename + "]");
+        }
     }
 
     private Pets createPets(Application application) {
@@ -244,7 +256,7 @@ public class VistaDataGenerator {
         return address;
     }
 
-    private void createTenantFinancials(IList<SummaryPotentialTenantFinancial> tenantFinancials, PotentialTenantList tenants) throws IOException {
+    private void createTenantFinancials(IList<SummaryPotentialTenantFinancial> tenantFinancials, PotentialTenantList tenants) {
         for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
             SummaryPotentialTenantFinancial summaryTenantFinancial = EntityFactory.create(SummaryPotentialTenantFinancial.class);
             summaryTenantFinancial.tenantFinancial().set(createFinancialInfo(tenantInfo));
@@ -252,7 +264,7 @@ public class VistaDataGenerator {
         }
     }
 
-    private PotentialTenantFinancial createFinancialInfo(PotentialTenantInfo tenant) throws IOException {
+    private PotentialTenantFinancial createFinancialInfo(PotentialTenantInfo tenant) {
         assert (tenant.application() != null);
         PotentialTenantFinancial ptf = EntityFactory.create(PotentialTenantFinancial.class);
 
