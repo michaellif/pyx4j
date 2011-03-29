@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 
@@ -47,7 +49,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
  * This component represents list of IEntities
  */
 public abstract class CEntityFolder<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> implements IComponentContainer,
-        IFlexContentComponent {
+        IFlexContentComponent, ValueChangeHandler<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
@@ -130,6 +132,10 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         if (this.getDebugId() != null) {
             folderDecorator.asWidget().ensureDebugId(this.getDebugId().getDebugIdString() + "_fd_");
         }
+    }
+
+    public FolderDecorator<E> getFolderDecorator() {
+        return folderDecorator;
     }
 
     @Override
@@ -238,6 +244,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         component.setDebugId(rowDebugId);
         folderItemDecorator.asWidget().ensureDebugId(rowDebugId.getDebugIdString());
 
+        //TODO remove on abandonFolderItem
+        HandlerRegistration handlerRegistration = component.addValueChangeHandler(this);
+
         ValueChangeEvent.fire(this, getValue());
 
         folderItemDecorator.addItemRemoveClickHandler(new ClickHandler() {
@@ -289,6 +298,12 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     public FlowPanel getContent() {
         return content;
+    }
+
+    @Override
+    public void onValueChange(ValueChangeEvent<E> event) {
+        ValueChangeEvent.fire(this, getValue());
+        System.out.println("++++++++++++++++onValueChange");
     }
 
 }
