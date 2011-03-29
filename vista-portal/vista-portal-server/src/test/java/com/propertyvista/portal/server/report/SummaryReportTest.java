@@ -80,6 +80,12 @@ public class SummaryReportTest extends ReportsTestBase {
                 "target/classes/com/propertyvista/portal/server/report/Vehicles.jasper");
         JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/EmergencyContacts.jrxml",
                 "target/classes/com/propertyvista/portal/server/report/EmergencyContacts.jasper");
+        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Incomes.jrxml",
+                "target/classes/com/propertyvista/portal/server/report/Incomes.jasper");
+        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Assets.jrxml",
+                "target/classes/com/propertyvista/portal/server/report/Assets.jasper");
+        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Guarantors.jrxml",
+                "target/classes/com/propertyvista/portal/server/report/Guarantors.jasper");
 
         createReport("target/classes/com/propertyvista/portal/server/report/Summary.jrxml", parameters,
                 new JRIEntityCollectionDataSource<Summary>(Arrays.asList(new Summary[] { retreiveSummary() })));
