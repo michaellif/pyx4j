@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.generator;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
@@ -76,7 +77,7 @@ public class VistaDataGenerator {
     public VistaDataGenerator() {
     }
 
-    public Summary createSummary(Application application) {
+    public Summary createSummary(Application application) throws IOException {
         Summary summary = EntityFactory.create(Summary.class);
         summary.application().set(application);
         summary.unitSelection().set(createUnitSelection(application));
@@ -166,7 +167,7 @@ public class VistaDataGenerator {
         return employer;
     }
 
-    public ApplicationDocument createApplicationDocument(PotentialTenantInfo tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) {
+    public ApplicationDocument createApplicationDocument(PotentialTenantInfo tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) throws IOException {
         assert (tenantInfo.application() != null);
 
         ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
@@ -174,14 +175,10 @@ public class VistaDataGenerator {
         applicationDocument.tenant().set(tenantInfo);
         applicationDocument.type().setValue(documentType);
         applicationDocument.filename().setValue(fileName);
-        try {
-            InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(PreloadUtil.resourceFileName(PreloadPT.class, fileName));
-            byte[] data = IOUtils.toByteArray(in);
-            applicationDocument.fileSize().setValue((long) data.length);
-            applicationDocument.data().setValue(data);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
+        InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(PreloadUtil.resourceFileName(PreloadPT.class, fileName));
+        byte[] data = IOUtils.toByteArray(in);
+        applicationDocument.fileSize().setValue((long) data.length);
+        applicationDocument.data().setValue(data);
         return applicationDocument;
     }
 
@@ -247,7 +244,7 @@ public class VistaDataGenerator {
         return address;
     }
 
-    private void createTenantFinancials(IList<SummaryPotentialTenantFinancial> tenantFinancials, PotentialTenantList tenants) {
+    private void createTenantFinancials(IList<SummaryPotentialTenantFinancial> tenantFinancials, PotentialTenantList tenants) throws IOException {
         for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
             SummaryPotentialTenantFinancial summaryTenantFinancial = EntityFactory.create(SummaryPotentialTenantFinancial.class);
             summaryTenantFinancial.tenantFinancial().set(createFinancialInfo(tenantInfo));
@@ -255,7 +252,7 @@ public class VistaDataGenerator {
         }
     }
 
-    private PotentialTenantFinancial createFinancialInfo(PotentialTenantInfo tenant) {
+    private PotentialTenantFinancial createFinancialInfo(PotentialTenantInfo tenant) throws IOException {
         assert (tenant.application() != null);
         PotentialTenantFinancial ptf = EntityFactory.create(PotentialTenantFinancial.class);
 

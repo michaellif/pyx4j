@@ -43,6 +43,7 @@ import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
+import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentsList;
 import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
 
@@ -104,7 +105,7 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
         appDocListView.initialize();
 
         uploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
-        uploader.add(new Hidden("documentType", documentType.name()));
+        uploader.add(new Hidden(ApplicationDocumentServletParameters.DOCUMENT_TYPE, documentType.name()));
         uploader.setAutoSubmit(true);
         //uploader.avoidRepeatFiles(true);
         uploader.setValidExtensions(new String[] { "jpg", "jpeg", "gif", "png", "tiff", "bmp", "pdf" });
@@ -134,7 +135,7 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
 
         this.tenantId = tenantId;
 
-        uploader.add(new Hidden("tenantId", this.tenantId.toString()));
+        uploader.add(new Hidden(ApplicationDocumentServletParameters.TENANT_ID, this.tenantId.toString()));
 
         if (applicationDocumentsService != null) {
             applicationDocumentsService.retrieveAttachments(new AsyncCallback<ApplicationDocumentsList>() {
@@ -189,7 +190,7 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
                                         // TODO show the file here...
                                         //open this url: "ApplicationDocument?id="+getValue().id()
                                         // Consider  using GWT.getModuleBaseURL() in future
-                                        String url = GWT.getModuleBaseURL() + "ApplicationDocument?id=" + getValue().id().getValue();
+                                        String url = GWT.getModuleBaseURL() + "ApplicationDocument?" + ApplicationDocumentServletParameters.DOCUMENT_ID + "=" + getValue().id().getValue();
                                         Window.open(url, "_blank", null);
                                     }
                                 });

@@ -9,12 +9,13 @@
  *
  * Created on Mar 20, 2011
  * @author sergei
- * @version $Id:
+ * @version $Id$
  */
 
 package com.propertyvista.portal.server.upload;
 
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
+import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -27,10 +28,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * 
- * @author sergei
- */
 public class ApplicationDocumentServlet extends HttpServlet {
 
     /**
@@ -51,9 +48,13 @@ public class ApplicationDocumentServlet extends HttpServlet {
      *             if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id = request.getParameter("id");
+        String id = request.getParameter(ApplicationDocumentServletParameters.DOCUMENT_ID);
+        if (id == null) {
+            response.getWriter().println("Document Id is missing");
+            return;
+        }
         EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), new Integer(id)));
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), new Long(id)));
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication())); //for security use docs in current application context only
         ApplicationDocument adoc = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         if (adoc == null) {
@@ -64,9 +65,12 @@ public class ApplicationDocumentServlet extends HttpServlet {
         int t = fname.lastIndexOf(".");
         if (t != -1) {
             String extension = fname.substring(t + 1).trim();
-            response.setContentType(MimeMap.getContentType(extension));
+            String contentType = MimeMap.getContentType(extension);
+            if (contentType == null)
+                throw new ServletException("Unknown file extension: " + fname);
+            response.setContentType(contentType);
         } else {
-            response.setContentType("image/jpg");
+            throw new ServletException("Uploaded file name does not have an extension");
         }
 
         response.getOutputStream().write(adoc.data().getValue());
@@ -88,33 +92,6 @@ public class ApplicationDocumentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     * 
-     * @param request
-     *            servlet request
-     * @param response
-     *            servlet response
-     * @throws ServletException
-     *             if a servlet-specific error occurs
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     * 
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }// </editor-fold>
 
 }

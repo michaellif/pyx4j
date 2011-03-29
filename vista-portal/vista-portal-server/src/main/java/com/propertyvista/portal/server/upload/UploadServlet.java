@@ -9,16 +9,19 @@
  *
  * Created on Mar 20, 2011
  * @author sergei
- * @version $Id:
+ * @version $Id$
  */
 
 package com.propertyvista.portal.server.upload;
 
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
+import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.domain.pt.TenantIncome;
+import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.download.MimeMap;
 import gwtupload.server.UploadAction;
 import gwtupload.server.exceptions.UploadActionException;
 import java.util.List;
@@ -29,10 +32,6 @@ import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * 
- * @author Sergei
- */
 public class UploadServlet extends UploadAction {
 
     private static final long serialVersionUID = 1L;
@@ -44,7 +43,7 @@ public class UploadServlet extends UploadAction {
         super.init(config);
 
         // set maxumum file size in bytes allowed for upload
-        maxSize=5*1024*1024;
+        maxSize = 5 * 1024 * 1024;
 
         // Useful in development mode to slow down the uploads in fast networks.
         // Put the number of milliseconds to sleep in each block received in the server.
@@ -68,10 +67,10 @@ public class UploadServlet extends UploadAction {
         for (FileItem item : sessionFiles) {
             log.debug("UploadServlet.executeAction(): item={}", item);
             if (item.isFormField()) {
-                if ("tenantId".equalsIgnoreCase(item.getFieldName())) {
+                if (ApplicationDocumentServletParameters.TENANT_ID.equalsIgnoreCase(item.getFieldName())) {
                     tenantId = item.getString();
                     //log.debug("tenantId=" + tenantId);
-                } else if ("documentType".equalsIgnoreCase(item.getFieldName())) {
+                } else if (ApplicationDocumentServletParameters.DOCUMENT_TYPE.equalsIgnoreCase(item.getFieldName())) {
                     documentType = item.getString();
                     //log.debug("tenantId=" + tenantId);
                 }
@@ -85,10 +84,24 @@ public class UploadServlet extends UploadAction {
         log.debug("documentType={}", documentType);
 
         if (fileItem != null && tenantId != null) {
+            String contentType = null;
+            if (fileItem.getName() != null) {
+                int t = fileItem.getName().lastIndexOf(".");
+                if (t != -1) {
+                    String extension = fileItem.getName().substring(t + 1).trim();
+                    contentType = MimeMap.getContentType(extension);
+                }
+            }
+            if (contentType == null)
+                throw new UploadActionException("Unknown file extension in file name:" + fileItem.getName());
+            if (fileItem.getContentType() != null && !fileItem.getContentType().trim().isEmpty() && !fileItem.getContentType().equalsIgnoreCase(contentType)) {
+                throw new UploadActionException("Content type resolved by file name extension (" + contentType
+                        + ") does not match to one passed with the upload request (" + fileItem.getContentType() + ")");
+            }
             byte[] data = fileItem.get();//IOUtils.toByteArray(in);
             ApplicationDocument applicationDocument = createApplicationDocument(new Long(tenantId), fileItem.getName(), data,
-                    "securityInfo".equalsIgnoreCase(documentType) ? ApplicationDocument.DocumentType.securityInfo : ApplicationDocument.DocumentType.income);
-            if ("income".equalsIgnoreCase(documentType)) {
+                    ApplicationDocument.DocumentType.valueOf(documentType));
+            if (DocumentType.income.equals(ApplicationDocument.DocumentType.valueOf(documentType))) {
                 TenantIncome income = PersistenceServicesFactory.getPersistenceService().retrieve(TenantIncome.class, new Long(tenantId));
                 income.documents().add(applicationDocument);
                 PersistenceServicesFactory.getPersistenceService().merge(income);
@@ -99,7 +112,8 @@ public class UploadServlet extends UploadAction {
             //response.append("<file-size>").append(fileItem.getSize()).append("</file-size>\n");
             //response.append("<file-type>").append(fileItem.getContentType()).append("</file-type>\n");
         } else {
-            throw new UploadActionException("ERROR: fileItem, tenantId or documentType is missing: " + fileItem + ", tenantId=" + tenantId + ", documentType=" + documentType);
+            throw new UploadActionException("ERROR: fileItem, tenantId or documentType is missing: " + fileItem + ", tenantId=" + tenantId + ", documentType="
+                    + documentType);
         }
 
         /// Remove files from session because we have a copy of them
