@@ -120,7 +120,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         // start date:
         main.add(new ViewLineSeparator(0, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
 
-        DecorationData captionDecoration = new DecorationData(150, 100);
+        DecorationData captionDecoration = new DecorationData(16d, 8.2);
         captionDecoration.labelStyleName = ViewHeaderDecorator.DEFAULT_STYLE_PREFIX + ViewHeaderDecorator.StyleSuffix.Caption.name();
         main.add(new VistaWidgetDecorator(inject(proto().rentStart()), captionDecoration));
 
