@@ -36,7 +36,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
     public PaymentResponse realTimeSale(Merchant merchant, PaymentRequest request) throws PaymentProcessingException {
         CaledonRequest crequest = null;
         PaymentInstrument pinstrument = request.paymentInstrument().getValue();
-        if (pinstrument.getClass().equals(CCInformation.class)) {
+        if (pinstrument instanceof CCInformation) {
             crequest = new CaledonRequest();
             crequest.terminalID = merchant.terminalID().getValue();
             crequest.transactionType = CaledonTransactionType.SALE.getValue();
@@ -47,7 +47,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
             //crequest.creditCardNumber = request.creditCardNumber().getValue();
             crequest.setExpiryDate(((CCInformation) (request.paymentInstrument().getValue())).creditCardExpiryDate().getValue());
             //crequest.setExpiryDate(request.creditCardExpiryDate().getValue());
-        } else if (pinstrument.getClass().equals(Token.class)) {
+        } else if (pinstrument instanceof Token) {
             crequest = new CaledonRequestToken();
             crequest.terminalID = merchant.terminalID().getValue();
             crequest.transactionType = CaledonTransactionType.SALE.getValue();
