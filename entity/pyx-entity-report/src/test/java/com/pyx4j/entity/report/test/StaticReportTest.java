@@ -24,19 +24,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.Assert;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.pyx4j.entity.report.JasperReportModel;
 
 public class StaticReportTest extends ReportsTestBase {
 
     @BeforeClass
     public static void init() throws Exception {
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("ReportTitle", "Static Report");
 
-        createReport("target/test-classes/reports/Static.jrxml", parameters, new JREmptyDataSource());
+        createReport(new JasperReportModel("reports.Static", null, parameters));
     }
 
     @Test

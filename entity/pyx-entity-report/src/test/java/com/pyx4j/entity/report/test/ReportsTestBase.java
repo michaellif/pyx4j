@@ -23,8 +23,12 @@ package com.pyx4j.entity.report.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -36,7 +40,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -48,6 +51,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.pyx4j.entity.report.JasperFileFormat;
+import com.pyx4j.entity.report.JasperReportFactory;
+import com.pyx4j.entity.report.JasperReportModel;
+import com.pyx4j.entity.report.JasperReportProcessor;
+import com.pyx4j.gwt.server.IOUtils;
+
 public abstract class ReportsTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(ReportsTestBase.class);
@@ -58,21 +67,36 @@ public abstract class ReportsTestBase {
 
     private static ArrayList<String> textItems = new ArrayList<String>();
 
-    protected static void createReport(String designFileName, Map<String, String> parameters, JRDataSource dataSource) throws Exception {
+    protected static String debugFileName(String designName, String ext) {
+        File dir = new File("target", "reports-dump");
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                throw new Error("Can't create directory " + dir.getAbsolutePath());
+            }
+        }
+        String uniqueId = new SimpleDateFormat("_MM-dd_HH-mm").format(new Date());
+        File file = new File(dir, designName + uniqueId + ext);
+        if (file.exists()) {
+            if (!file.delete()) {
+                throw new Error("Can't delete file " + file.getAbsolutePath());
+            }
+        }
+        return file.getAbsolutePath();
+    }
+
+    @Deprecated
+    protected static void createReport(String designName, Map<String, String> parameters, JRDataSource dataSource) throws Exception {
         ByteArrayOutputStream bos = null;
         try {
-
-            log.debug("Creating report {}", designFileName);
-
-            JasperReport jasperReport = JasperCompileManager.compileReport(designFileName);
+            JasperReport jasperReport = JasperReportFactory.create(designName);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-            JasperExportManager.exportReportToPdfFile(jasperPrint, designFileName + ".pdf");
+            JasperExportManager.exportReportToPdfFile(jasperPrint, debugFileName(designName, ".pdf"));
 
             bos = new ByteArrayOutputStream();
             JasperExportManager.exportReportToXmlStream(jasperPrint, bos);
             bos.flush();
 
-            log.debug(new String(bos.toByteArray()));
+            log.debug("xml {}", new String(bos.toByteArray()));
 
             document = parseXML(bos.toByteArray());
             XPathFactory xpathFactory = XPathFactory.newInstance();
@@ -87,6 +111,36 @@ public abstract class ReportsTestBase {
             if (bos != null) {
                 bos.close();
             }
+        }
+    }
+
+    protected static void createReport(JasperReportModel model) throws Exception {
+        ByteArrayOutputStream bos = null;
+        FileOutputStream pdf = null;
+        try {
+
+            pdf = new FileOutputStream(debugFileName(model.getDesignName(), ".pdf"));
+            JasperReportProcessor.createReport(model, JasperFileFormat.PDF, pdf);
+            pdf.flush();
+
+            bos = new ByteArrayOutputStream();
+            JasperReportProcessor.createReport(model, JasperFileFormat.XML, bos);
+            bos.flush();
+
+            log.debug("xml {}", new String(bos.toByteArray()));
+
+            document = parseXML(bos.toByteArray());
+            XPathFactory xpathFactory = XPathFactory.newInstance();
+            xPath = xpathFactory.newXPath();
+
+            NodeList nodes = evaluate("/jasperPrint/page/text/textContent");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                textItems.add(nodes.item(i).getTextContent());
+            }
+
+        } finally {
+            IOUtils.closeQuietly(bos);
+            IOUtils.closeQuietly(pdf);
         }
     }
 

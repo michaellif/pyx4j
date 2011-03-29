@@ -177,9 +177,13 @@ public class ServerSideConfiguration {
         return environmentType;
     }
 
+    /**
+     * @return true when running in Eclipse development env. (Not from maven)
+     */
     public static boolean isStartedUnderEclipse() {
         StackTraceElement[] ste = new Throwable().getStackTrace();
-        return (ste[ste.length - 1].getClassName().startsWith("org.eclipse.jdt"));
+        String firstRunnableClass = (ste[ste.length - 1]).getClassName();
+        return firstRunnableClass.startsWith("org.eclipse.jdt") || firstRunnableClass.startsWith("org.eclipse.jetty");
     }
 
     public String getSessionCookieName() {
