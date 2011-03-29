@@ -23,6 +23,7 @@ package com.pyx4j.entity.report.test;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import junit.framework.Assert;
@@ -30,7 +31,7 @@ import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.pyx4j.entity.report.JRIEntityCollectionDataSource;
+import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -43,10 +44,10 @@ public class DepartmentsReportTest extends ReportsTestBase {
 
     @BeforeClass
     public static void init() throws Exception {
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("ReportTitle", "Departments Report");
 
-        createReport("target/test-classes/reports/Departments.jrxml", parameters, new JRIEntityCollectionDataSource<Department>(createDepartments()));
+        createReport(new JasperReportModel("reports.Departments", createDepartments(), parameters));
     }
 
     private static Employee createEmploye() {
@@ -65,8 +66,8 @@ public class DepartmentsReportTest extends ReportsTestBase {
         Assert.assertTrue("'" + department2 + "' not found, ", containsText(department2));
     }
 
-    static Collection<Department> createDepartments() {
-        Collection<Department> departments = new ArrayList<Department>();
+    static List<Department> createDepartments() {
+        List<Department> departments = new ArrayList<Department>();
 
         {
             Department department = EntityFactory.create(Department.class);

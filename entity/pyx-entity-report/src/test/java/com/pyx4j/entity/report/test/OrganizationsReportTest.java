@@ -21,8 +21,8 @@
 package com.pyx4j.entity.report.test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import junit.framework.Assert;
@@ -31,7 +31,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.pyx4j.entity.report.JRIEntityCollectionDataSource;
+import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Organization;
@@ -44,13 +44,12 @@ public class OrganizationsReportTest extends ReportsTestBase {
 
     @BeforeClass
     public static void init() throws Exception {
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("REPORT_TITLE", "Organizations Report");
         parameters.put("SUBREPORT_DIR", "target/test-classes/reports/");
 
         JasperCompileManager.compileReportToFile("target/test-classes/reports/Departments.jrxml", "target/test-classes/reports/Departments.jasper");
-
-        createReport("target/test-classes/reports/Organizations.jrxml", parameters, new JRIEntityCollectionDataSource<Organization>(createOrganizations()));
+        createReport(new JasperReportModel("reports.Organizations", createOrganizations(), parameters));
 
     }
 
@@ -65,8 +64,8 @@ public class OrganizationsReportTest extends ReportsTestBase {
         Assert.assertTrue("'" + organization2 + "' not found, ", containsText(organization2));
     }
 
-    static Collection<Organization> createOrganizations() {
-        Collection<Organization> organizations = new ArrayList<Organization>();
+    static List<Organization> createOrganizations() {
+        List<Organization> organizations = new ArrayList<Organization>();
 
         {
             Organization organization = EntityFactory.create(Organization.class);

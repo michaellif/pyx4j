@@ -29,11 +29,11 @@ public class JasperReportModel {
 
     private final String designName;
 
-    private final List<IEntity> data;
+    private final List<? extends IEntity> data;
 
     private final Map<String, Object> parameters;
 
-    public JasperReportModel(String designName, List<IEntity> data, Map<String, Object> parameters) {
+    public JasperReportModel(String designName, List<? extends IEntity> data, Map<String, Object> parameters) {
         this.designName = designName;
         this.data = data;
         this.parameters = parameters;
@@ -43,7 +43,7 @@ public class JasperReportModel {
         return designName;
     }
 
-    public List<IEntity> getData() {
+    public List<? extends IEntity> getData() {
         return data;
     }
 
