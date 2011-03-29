@@ -38,7 +38,6 @@ import com.pyx4j.entity.report.test.ReportsTestBase;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 public class SummaryReportTest extends ReportsTestBase {
 
@@ -82,12 +81,14 @@ public class SummaryReportTest extends ReportsTestBase {
 
     private static Summary retreiveSummary() {
         EntityQueryCriteria<Summary> criteria = EntityQueryCriteria.create(Summary.class);
-        Application application = EntityFactory.create(Application.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+        //TODO
+        //Application application = EntityFactory.create(Application.class);
+        //application.setPrimaryKey(1L);
+        //criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
         Summary summary = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         if (summary == null) {
             summary = EntityFactory.create(Summary.class);
-            summary.application().set(application);
+            //summary.application().set(application);
         }
         new SummaryServicesImpl().loadTransientData(summary);
         return summary;
