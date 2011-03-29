@@ -52,8 +52,7 @@ public class NativeEntityEditor<E> extends SimplePanel implements INativeEditabl
 
     @Override
     public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
@@ -69,8 +68,7 @@ public class NativeEntityEditor<E> extends SimplePanel implements INativeEditabl
 
     @Override
     public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override

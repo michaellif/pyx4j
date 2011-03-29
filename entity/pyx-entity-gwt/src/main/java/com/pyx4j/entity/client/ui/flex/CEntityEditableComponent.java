@@ -22,6 +22,11 @@ package com.pyx4j.entity.client.ui.flex;
 
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IDebugId;
@@ -33,7 +38,9 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
 public abstract class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> implements IFlexContentComponent,
-        IComponentContainer, PropertyChangeHandler {
+        IComponentContainer {
+
+    private static final Logger log = LoggerFactory.getLogger(CEntityEditableComponent.class);
 
     private final EntityBinder<E> binder;
 
@@ -103,16 +110,28 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
         containerHelper.setVisited(visited);
     }
 
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        if (PropertyChangeEvent.PropertyName.VALIDITY.equals(event.getPropertyName())) {
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
-        }
-    }
-
-    public final void bind(CEditableComponent<?, ?> component, IObject<?> member) {
+    public final <T> void bind(CEditableComponent<T, ?> component, IObject<?> member) {
         binder.bind(component, member);
-        component.addPropertyChangeHandler(this);
+
+        component.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (PropertyChangeEvent.PropertyName.VALIDITY.equals(event.getPropertyName())) {
+                    PropertyChangeEvent.fire(CEntityEditableComponent.this, PropertyChangeEvent.PropertyName.VALIDITY);
+                    log.debug("CEntityEditableComponent.onPropertyChange fired from {}. Changed property is {}.", CEntityEditableComponent.this.getTitle(),
+                            event.getPropertyName());
+                }
+            }
+        });
+
+        component.addValueChangeHandler(new ValueChangeHandler<T>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<T> event) {
+                ValueChangeEvent.fire(CEntityEditableComponent.this, getValue());
+                log.debug("CEntityEditableComponent.onValueChange fired from {}. New value is {}.", CEntityEditableComponent.this.getTitle(), event.getValue());
+            }
+        });
+
         component.addAccessAdapter(containerHelper);
         if (component instanceof IFlexContentComponent) {
             ((IFlexContentComponent) component).onBound(this);

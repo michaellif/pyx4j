@@ -41,6 +41,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -49,7 +51,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
  * This component represents list of IEntities
  */
 public abstract class CEntityFolder<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> implements IComponentContainer,
-        IFlexContentComponent, ValueChangeHandler<E> {
+        IFlexContentComponent {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
@@ -166,6 +168,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
                 comp.onBound(CEntityFolder.this);
                 comp.populate(result);
                 adoptFolderItem(comp);
+                ValueChangeEvent.fire(CEntityFolder.this, getValue());
             }
 
         });
@@ -176,6 +179,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     protected void removeItem(CEntityFolderItem<E> comp, FolderItemDecorator folderItemDecorator) {
         getValue().remove(comp.getValue());
         abandonFolderItem(comp);
+        ValueChangeEvent.fire(CEntityFolder.this, getValue());
     }
 
     /**
@@ -218,8 +222,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         for (CEntityFolderItem<E> item : oldMap.values()) {
             content.remove(item);
         }
-
-        ValueChangeEvent.fire(this, getValue());
     }
 
     private void abandonFolderItem(final CEntityFolderItem<E> component) {
@@ -245,9 +247,22 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         folderItemDecorator.asWidget().ensureDebugId(rowDebugId.getDebugIdString());
 
         //TODO remove on abandonFolderItem
-        HandlerRegistration handlerRegistration = component.addValueChangeHandler(this);
+        HandlerRegistration ValueChangeHandlerRegistration = component.addValueChangeHandler(new ValueChangeHandler<E>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<E> event) {
+                ValueChangeEvent.fire(CEntityFolder.this, getValue());
+                log.debug("CEntityFolder.onValueChange fired from {}. New value is {}.", CEntityFolder.this.getTitle(), event.getValue());
+            }
+        });
 
-        ValueChangeEvent.fire(this, getValue());
+        HandlerRegistration PropertyChangeHandlerRegistration = component.addPropertyChangeHandler(new PropertyChangeHandler() {
+
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                ValueChangeEvent.fire(CEntityFolder.this, getValue());
+                log.debug("CEntityFolder.onPropertyChange fired from {}. Changed property is {}.", CEntityFolder.this.getTitle(), event.getPropertyName());
+            }
+        });
 
         folderItemDecorator.addItemRemoveClickHandler(new ClickHandler() {
 
@@ -298,12 +313,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     public FlowPanel getContent() {
         return content;
-    }
-
-    @Override
-    public void onValueChange(ValueChangeEvent<E> event) {
-        ValueChangeEvent.fire(this, getValue());
-        System.out.println("++++++++++++++++onValueChange");
     }
 
 }

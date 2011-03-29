@@ -70,40 +70,38 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     public void revalidate() {
 
-        valid = !isVisible() ||
+        boolean newValid = !isVisible() ||
 
         !isEditable() ||
 
         !isEnabled() ||
 
+        !isVisited() ||
+
         (isMandatoryConditionMet() && (isValueEmpty() || isValidationConditionMet()));
 
-        asWidget().setValid(valid);
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
+        if (!newValid || (newValid != valid)) {
+            valid = newValid;
+            asWidget().setValid(valid);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
+        }
+
     }
 
     void update(DATA_TYPE value) {
-        if (isValuesEquals(getValue(), value)) {
-            return;
+        if (!isValuesEquals(getValue(), value)) {
+            this.value = value;
+            revalidate();
+            ValueChangeEvent.fire(this, value);
         }
-        this.value = value;
-        revalidate();
-
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
-        ValueChangeEvent.fire(this, value);
     }
 
     public void setValue(DATA_TYPE value) {
-        if (isValuesEquals(getValue(), value)) {
-            return;
+        if (!isValuesEquals(getValue(), value)) {
+            this.value = value;
+            setNativeValue(value);
+            ValueChangeEvent.fire(this, value);
         }
-
-        this.value = value;
-
-        setNativeValue(value);
-
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
-        ValueChangeEvent.fire(this, value);
     }
 
     public DATA_TYPE getValue() {
@@ -119,7 +117,6 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
         revalidate();
 
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
     }
 
     @SuppressWarnings("unchecked")
@@ -307,7 +304,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     public void onEditingStop() {
         editing = false;
-        visited = true;
+        setVisited(true);
         update(asWidget().getNativeValue());
     }
 

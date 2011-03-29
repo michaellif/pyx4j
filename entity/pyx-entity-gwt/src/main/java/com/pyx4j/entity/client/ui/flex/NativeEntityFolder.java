@@ -32,19 +32,15 @@ public class NativeEntityFolder<E> extends SimplePanel implements INativeEditabl
 
     @Override
     public void setEnabled(boolean enabled) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public CComponent<?> getCComponent() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -62,20 +58,15 @@ public class NativeEntityFolder<E> extends SimplePanel implements INativeEditabl
 
     @Override
     public void setEditable(boolean editable) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public void setNativeValue(E value) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

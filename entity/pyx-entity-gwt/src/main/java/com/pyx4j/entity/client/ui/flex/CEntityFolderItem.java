@@ -26,8 +26,6 @@ import com.pyx4j.entity.shared.IEntity;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditableComponent<E> {
 
-    private FolderItemDecorator folderItemDecorator;
-
     private final SimplePanel content;
 
     private boolean first;
@@ -40,11 +38,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditab
     public abstract FolderItemDecorator createFolderItemDecorator();
 
     public void setFolderItemDecorator(FolderItemDecorator folderItemDecorator) {
-        this.folderItemDecorator = folderItemDecorator;
         folderItemDecorator.setFolderItem(this);
-
-        //TODO
-        //addValueChangeHandler(folderItemDecorator);
 
         asWidget().setWidget(folderItemDecorator);
 
