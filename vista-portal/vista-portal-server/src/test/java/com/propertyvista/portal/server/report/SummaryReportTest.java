@@ -57,6 +57,8 @@ public class SummaryReportTest extends ReportsTestBase {
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("SUBREPORT_DIR", "target/classes/com/propertyvista/portal/server/report/");
         parameters.put("ReportTitle", title);
+        parameters.put("LEASE_PRICE", "Pricing and Availability...");
+        parameters.put("LEASE_TERMS", "Lease Terms text...");
 
         JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Info.jrxml",
                 "target/classes/com/propertyvista/portal/server/report/Info.jasper");
@@ -64,6 +66,14 @@ public class SummaryReportTest extends ReportsTestBase {
                 "target/classes/com/propertyvista/portal/server/report/Financial.jasper");
         JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Pets.jrxml",
                 "target/classes/com/propertyvista/portal/server/report/Pets.jasper");
+        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/RentRelatedCharges.jrxml",
+                "target/classes/com/propertyvista/portal/server/report/RentRelatedCharges.jasper");
+        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/ProRatedCharges.jrxml",
+                "target/classes/com/propertyvista/portal/server/report/ProRatedCharges.jasper");
+        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/ApplicationCharges.jrxml",
+                "target/classes/com/propertyvista/portal/server/report/ApplicationCharges.jasper");
+        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/PaymentSplitCharges.jrxml",
+                "target/classes/com/propertyvista/portal/server/report/PaymentSplitCharges.jasper");
 
         createReport("target/classes/com/propertyvista/portal/server/report/Summary.jrxml", parameters,
                 new JRIEntityCollectionDataSource<Summary>(Arrays.asList(new Summary[] { retreiveSummary() })));

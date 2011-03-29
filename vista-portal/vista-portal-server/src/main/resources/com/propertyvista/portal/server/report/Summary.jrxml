@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Summary" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="46"/>
-	<property name="ireport.y" value="163"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<subDataset name="dataset1"/>
 	<subDataset name="dataset2"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\My\\Projects\\PYX\\pyx4j\\entity\\pyx-entity-report\\src\\test\\resources\\reports\\"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="LEASE_TERMS" class="java.lang.String"/>
+	<parameter name="LEASE_PRICE" class="java.lang.String"/>
 	<field name="unitSelection/selectedUnit/floorplan/name" class="java.lang.String"/>
 	<field name="unitSelection/selectedUnit/unitType" class="java.lang.String"/>
 	<field name="unitSelection/selectedUnit/requiredDeposit/amount" class="java.lang.Double"/>
@@ -20,6 +22,7 @@
 	<field name="tenantList/tenants" class="com.pyx4j.entity.shared.IList"/>
 	<field name="tenantFinancials" class="com.pyx4j.entity.shared.IList"/>
 	<field name="pets/pets" class="com.pyx4j.entity.shared.IList"/>
+	<field name="charges/monthlyCharges/upgradeCharges" class="com.pyx4j.entity.shared.IList"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -117,7 +120,7 @@
 			</textField>
 			<staticText>
 				<reportElement x="0" y="0" width="572" height="20"/>
-				<box topPadding="0" leftPadding="10"/>
+				<box topPadding="0" leftPadding="0"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -125,7 +128,7 @@
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="68" width="572" height="20"/>
-				<box topPadding="0" leftPadding="10"/>
+				<box topPadding="0" leftPadding="0"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -146,39 +149,31 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{unitSelection/markerRent/leaseTerm}+" month Rent"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="119" y="88" width="453" height="40"/>
-				<textElement/>
-				<text><![CDATA[* Pricing and availability... ]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="0" y="58" width="572" height="10"/>
 				<textElement/>
 				<text><![CDATA[Static text]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="143" y="88" width="430" height="40"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{LEASE_PRICE}]]></textFieldExpression>
+			</textField>
 		</band>
-		<band height="69">
+		<band height="50">
 			<subreport>
-				<reportElement x="0" y="29" width="572" height="40"/>
+				<reportElement x="1" y="10" width="572" height="40"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{tenantList/tenants})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Info.jasper"]]></subreportExpression>
 			</subreport>
-			<staticText>
-				<reportElement x="0" y="9" width="572" height="20"/>
-				<box leftPadding="10"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Tenants]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="572" height="10"/>
 				<textElement/>
 				<text><![CDATA[Static text]]></text>
 			</staticText>
 		</band>
-		<band height="70">
+		<band height="50">
 			<subreport>
-				<reportElement x="0" y="30" width="572" height="40"/>
+				<reportElement x="1" y="10" width="572" height="40"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{tenantFinancials})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Financial.jasper"]]></subreportExpression>
 			</subreport>
@@ -187,36 +182,20 @@
 				<textElement/>
 				<text><![CDATA[Static text]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="0" y="10" width="572" height="20"/>
-				<box leftPadding="10"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Financial]]></text>
-			</staticText>
 		</band>
-		<band height="70">
+		<band height="50">
 			<subreport>
-				<reportElement x="0" y="30" width="572" height="40"/>
+				<reportElement x="1" y="10" width="572" height="40"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{pets/pets})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Pets.jasper"]]></subreportExpression>
 			</subreport>
-			<staticText>
-				<reportElement x="0" y="10" width="572" height="20"/>
-				<box leftPadding="10"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Pets]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="572" height="10"/>
 				<textElement/>
 				<text><![CDATA[Static text]]></text>
 			</staticText>
 		</band>
-		<band height="166">
+		<band height="50">
 			<staticText>
 				<reportElement x="1" y="0" width="572" height="10"/>
 				<textElement/>
@@ -224,24 +203,67 @@
 			</staticText>
 			<staticText>
 				<reportElement x="1" y="10" width="572" height="20"/>
-				<box leftPadding="10"/>
+				<box leftPadding="0"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Lease Terms]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="0" y="30" width="572" height="135"/>
+			<textField>
+				<reportElement x="1" y="30" width="572" height="20"/>
 				<textElement/>
-				<text><![CDATA[Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ]]></text>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{LEASE_TERMS}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="50">
+			<subreport>
+				<reportElement x="1" y="10" width="572" height="40"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{charges/monthlyCharges/upgradeCharges})]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "RentRelatedCharges.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="1" y="0" width="572" height="10"/>
+				<textElement/>
+				<text><![CDATA[Static text]]></text>
 			</staticText>
 		</band>
+		<band height="50"/>
+		<band height="50"/>
+		<band height="50"/>
+		<band height="50"/>
 	</detail>
 	<columnFooter>
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band splitType="Stretch"/>
+		<band height="20" splitType="Stretch">
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-33" mode="Transparent" x="112" y="0" width="174" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-34" mode="Transparent" x="286" y="0" width="66" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
 	<summary>
 		<band splitType="Stretch"/>
