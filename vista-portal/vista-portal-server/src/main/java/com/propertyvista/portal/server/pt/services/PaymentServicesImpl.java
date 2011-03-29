@@ -42,7 +42,7 @@ public class PaymentServicesImpl extends ApplicationEntityServicesImpl implement
 
     @Override
     public void retrieve(AsyncCallback<PaymentInfo> callback, Long tenantId) {
-        log.info("Retrieving summary for tenant {}", tenantId);
+        log.info("Retrieving PaymentInfo for tenant {}", tenantId);
         EntityQueryCriteria<PaymentInfo> criteria = EntityQueryCriteria.create(PaymentInfo.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         PaymentInfo payment = secureRetrieve(criteria);
