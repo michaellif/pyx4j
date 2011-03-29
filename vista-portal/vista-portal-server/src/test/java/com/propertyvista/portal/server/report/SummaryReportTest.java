@@ -34,6 +34,7 @@ import com.propertyvista.portal.server.pt.services.SummaryServicesImpl;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.report.JRIEntityCollectionDataSource;
+import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.test.ReportsTestBase;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -56,7 +57,7 @@ public class SummaryReportTest extends ReportsTestBase {
             new VistaDataPreloaders().preloadAll();
         }
 
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("SUBREPORT_DIR", "target/classes/com/propertyvista/portal/server/report/");
         parameters.put("ReportTitle", title);
         parameters.put("LEASE_PRICE", "Pricing and Availability...");
@@ -88,8 +89,8 @@ public class SummaryReportTest extends ReportsTestBase {
         JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Guarantors.jrxml",
                 "target/classes/com/propertyvista/portal/server/report/Guarantors.jasper");
 
-        createReport("target/classes/com/propertyvista/portal/server/report/Summary.jrxml", parameters,
-                new JRIEntityCollectionDataSource<Summary>(Arrays.asList(new Summary[] { retreiveSummary() })));
+        createReport(new JasperReportModel("com.propertyvista.portal.server.report.Summary", Arrays.asList(new Summary[] { retreiveSummary() }), parameters));
+
     }
 
     private static Summary retreiveSummary() {
