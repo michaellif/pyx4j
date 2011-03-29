@@ -51,15 +51,18 @@ public class PetsServicesImpl extends ApplicationEntityServicesImpl implements P
     public void save(AsyncCallback<Pets> callback, Pets pets) {
         log.info("Saving pets {}", pets);
 
+        // This value will never be null, since we are always creating it at retrieve
+        Pets existingPets = findApplicationEntity(Pets.class);
+
         // Calculate charges on server to avoid Front End API Hackers.
-        PetChargeRule petCharge = loadPetChargeRule();
+        PetChargeRule petChargeRule = loadPetChargeRule();
         for (Pet pet : pets.pets()) {
-            ChargesSharedCalculation.calculatePetCharges(petCharge, pet);
+            ChargesSharedCalculation.calculatePetCharges(petChargeRule, pet);
         }
 
         saveApplicationEntity(pets);
 
-        if (ChargesServerCalculation.updateChargesForPets(pets)) {
+        if (ChargesServerCalculation.needToUpdateChargesForPets(pets, existingPets)) {
             ApplicationServicesImpl.invalidateChargesStep(pets.application());
         }
 

@@ -125,11 +125,26 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
     /**
      * @param pets
-     * @return true if charges are changed
+     * @return true if pets are changed
      */
-    public static boolean updateChargesForPets(Pets pets) {
+    public static boolean needToUpdateChargesForPets(Pets pets, Pets existingPets) {
+
+        if (pets.pets().size() != existingPets.pets().size()) {
+            log.info("Number of pets has changed from {} to {}", existingPets.pets().size(), pets.pets().size());
+            return true;
+        }
+
+        for (int i = 0; i < pets.pets().size(); i++) {
+            Pet pet = pets.pets().get(i);
+            Pet existingPet = existingPets.pets().get(i);
+            if (pet.chargeLine().charge().amount().getValue() != existingPet.chargeLine().charge().amount().getValue()) {
+                log.info("Pet's charge has changed from {} to {}", existingPet.chargeLine().charge(), pet.chargeLine().charge());
+                return true;
+            }
+        }
+
         //TODO  See ChargeType.petCharge line will be changed and update it if required
-        return true;
+        return false;
     }
 
     public static boolean isEligibleForPaymentSplit(PotentialTenantInfo tenant) {
@@ -147,11 +162,11 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
     }
 
     public static void updatePaymentSplitCharges(Charges charges, PotentialTenantList tenantList) {
-//        // find all potential tenants 
-//        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
-//        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-//        PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-//        log.info("Found {} tenants", tenantList.tenants().size());
+        //        // find all potential tenants 
+        //        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+        //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+        //        PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        //        log.info("Found {} tenants", tenantList.tenants().size());
 
         // compare current tenant list with what we have on the form
         boolean dirty = charges.paymentSplitCharges().charges().isEmpty(); // if there a no charges let's create them
@@ -200,16 +215,16 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
                 }
             }
 
-//            log.info("Comparing {} and {}", tenant1.id(), tenant2.id());
+            //            log.info("Comparing {} and {}", tenant1.id(), tenant2.id());
 
             if (tenant2 == null) {
                 return false; // this means that we have not found corresponding tenant in the other list by id
             }
 
-//            // second, change their roles
-//            if (!tenant1.relationship().getValue().equals(tenant2.relationship().getValue())) {
-//                return false;
-//            }
+            //            // second, change their roles
+            //            if (!tenant1.relationship().getValue().equals(tenant2.relationship().getValue())) {
+            //                return false;
+            //            }
         }
 
         return true;
@@ -232,7 +247,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             }
             TenantCharge tenantCharge = DomainUtil.createTenantCharge(percentage, 0);
             tenantCharge.tenant().set(tenant);
-//            PersistenceServicesFactory.getPersistenceService().persist(tenant);
+            //            PersistenceServicesFactory.getPersistenceService().persist(tenant);
             charges.paymentSplitCharges().charges().add(tenantCharge);
         }
     }
