@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.report.XMLStringWriter;
-import com.pyx4j.essentials.server.xml.XMLEntityConverter;
+import com.pyx4j.essentials.server.xml.XMLEntityWriter;
 import com.pyx4j.log4j.LoggerConfig;
 
 public class DataDump {
@@ -42,6 +42,23 @@ public class DataDump {
     private final static Logger log = LoggerFactory.getLogger(DataDump.class);
 
     private static long debugCount = 0;
+
+    private static class DumpXMLEntityWriter extends XMLEntityWriter {
+
+        public DumpXMLEntityWriter(XMLStringWriter xml) {
+            super(xml);
+        }
+
+        @Override
+        protected String getValueAsString(Object value) {
+            if (value instanceof byte[]) {
+                return "byte[" + ((byte[]) value).length + "] " + value.hashCode();
+            } else {
+                return super.getValueAsString(value);
+            }
+        }
+
+    }
 
     public static void dump(String type, IEntity ent) {
         if ((ent == null) || (!ServerSideConfiguration.instance().isDevelopmentBehavior())) {
@@ -74,7 +91,7 @@ public class DataDump {
         try {
             w = new FileWriter(f);
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-            XMLEntityConverter.write(xml, ent);
+            new DumpXMLEntityWriter(xml).write(ent);
             w.write(xml.toString());
             w.flush();
             log.debug("dumped value to file", f.getAbsolutePath());
