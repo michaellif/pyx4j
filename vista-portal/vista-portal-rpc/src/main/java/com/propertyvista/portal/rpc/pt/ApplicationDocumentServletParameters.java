@@ -9,7 +9,7 @@
  *
  * Created on Mar 28, 2011
  * @author sergei
- * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
+ * @version $Id$
  */
 package com.propertyvista.portal.rpc.pt;
 
