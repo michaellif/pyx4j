@@ -68,7 +68,7 @@
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-data</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-rdb</artifactId>
@@ -87,7 +87,7 @@
             <version>${pyxVersion}</version>
             <classifier>tests</classifier>
         </dependency>
-        
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -142,17 +142,17 @@
             <version>${pyxVersion}</version>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
         </dependency>
-        
+
 		<dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
@@ -160,5 +160,9 @@
         </dependency>
 
     </dependencies>
+
+    <properties>
+        <maven.test.failure.ignore>true</maven.test.failure.ignore>
+    </properties>
 
 </project>
