@@ -1,14 +1,20 @@
 @echo off
 rem @version $Revision$ ($Author$)  $Date$
-rem helper to run maven2
+rem helper to run maven3
 rem
 
 for /f "tokens=*" %%I in ('CD') do @set CurDir=%%~nI
 title *%CurDir% - mvn with pyx and svn update
-call mvn scm:update -P pyx
+
+call mvn --file ..\pyx4j\pom.xml scm:update
 @if errorlevel 1 goto errormark
-call mvn install -P pyx %*
+
+call mvn scm:update
 @if errorlevel 1 goto errormark
+
+call mvn -P pyx -DskipTests=true
+@if errorlevel 1 goto errormark
+
 title %CurDir%
 
 @goto endmark
