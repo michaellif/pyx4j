@@ -661,6 +661,7 @@
                                     <and>
                                         <equals arg1="${gwtCompileReport}" arg2="true" />
                                         <available file="${project.build.directory}/gwt-extra"/>
+                                        <available file="${project.build.directory}/${gwtModule}/soycReport/compile-report"/>
                                     </and>
                                     <then>
                                         <copy todir="${project.build.directory}/site/soycReport" preservelastmodified="true" overwrite="true" failonerror="false">
