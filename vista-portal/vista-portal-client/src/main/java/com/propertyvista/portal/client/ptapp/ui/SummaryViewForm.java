@@ -506,7 +506,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             CTextField edit = new CTextField();
             bind(edit, proto().fullName());
 
-            DecorationData dd = new DecorationData(10d, HasHorizontalAlignment.ALIGN_LEFT, 16);
+            DecorationData dd = new DecorationData(16d, HasHorizontalAlignment.ALIGN_LEFT, 16);
             dd.labelStyleName = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureLabel.name();
             //            dd.componentStyle = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureEdit.name();
             VistaWidgetDecorator signature = new VistaWidgetDecorator(edit, dd);
