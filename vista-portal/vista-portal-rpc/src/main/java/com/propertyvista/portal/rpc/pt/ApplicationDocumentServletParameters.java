@@ -25,7 +25,7 @@ public interface ApplicationDocumentServletParameters {
     /**
      * Document type parameter name passed along with binary document on upload form
      */
-    public static final String DOCUMENT_TYPE = DocumentType.class.getSimpleName();
+    public static final String DOCUMENT_TYPE = "DocumentType";
 
     /**
      * Document Id parameter name passed to download document servlet
