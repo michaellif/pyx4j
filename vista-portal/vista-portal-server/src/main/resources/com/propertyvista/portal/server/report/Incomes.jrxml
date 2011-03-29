@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Pets" pageWidth="612" pageHeight="792" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Incomes" pageWidth="612" pageHeight="792" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="firstName" class="java.lang.String"/>
-	<field name="middleName" class="java.lang.String"/>
-	<field name="lastName" class="java.lang.String"/>
-	<field name="homePhone" class="java.lang.String"/>
-	<field name="mobilePhone" class="java.lang.String"/>
-	<field name="workPhone" class="java.lang.String"/>
-	<field name="address/street1" class="java.lang.String"/>
-	<field name="address/street2" class="java.lang.String"/>
-	<field name="address/city" class="java.lang.String"/>
-	<field name="address/province/name" class="java.lang.String"/>
-	<field name="address/country/name" class="java.lang.String"/>
-	<field name="address/postalCode" class="java.lang.String"/>
+	<field name="incomeSource" class="com.propertyvista.portal.domain.pt.IncomeSource"/>
+	<field name="employer/name" class="java.lang.String"/>
+	<field name="employer/employedForYears" class="java.lang.Integer"/>
+	<field name="employer/country/name" class="java.lang.String"/>
+	<field name="employer/postalCode" class="java.lang.String"/>
+	<field name="employer/city" class="java.lang.String"/>
+	<field name="employer/province/name" class="java.lang.String"/>
+	<field name="employer/street1" class="java.lang.String"/>
+	<field name="employer/street2" class="java.lang.String"/>
+	<field name="employer/supervisorName" class="java.lang.String"/>
+	<field name="employer/supervisorPhone" class="java.lang.String"/>
+	<field name="employer/monthlyAmount/amount" class="java.lang.Double"/>
+	<field name="employer/position" class="java.lang.String"/>
+	<field name="employer/starts" class="java.util.Date"/>
+	<field name="employer/ends" class="java.util.Date"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -36,37 +39,157 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="201" splitType="Stretch">
+		<band height="312" splitType="Stretch">
 			<textField>
+				<reportElement x="288" y="18" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employer/name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="40" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Employed for (years)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="0" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Income Source]]></text>
+			</staticText>
+			<textField pattern="yy">
 				<reportElement x="288" y="38" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{mobilePhone}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="11" y="60" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[Work Phone]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="11" y="20" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[Home Phone]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="288" y="60" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{workPhone}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{employer/employedForYears}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="288" y="20" width="100" height="20"/>
+				<reportElement x="288" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{homePhone}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="40" width="100" height="20"/>
+				<reportElement x="11" y="20" width="165" height="20"/>
 				<textElement/>
-				<text><![CDATA[Mobile Phone]]></text>
+				<text><![CDATA[Employer Name]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="11" y="80" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Address 2]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="288" y="58" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employer/street1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="288" y="78" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employer/street2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="60" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Address 1]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="288" y="98" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employer/city}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="98" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[City]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="118" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Province/State]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="288" y="118" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employer/province/name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="288" y="158" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employer/postalCode}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="138" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Country]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="288" y="138" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employer/country/name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="158" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Postal Code]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="288" y="176" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employer/supervisorName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="178" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Supervisor/Manager Name]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="288" y="196" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employer/supervisorPhone}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="198" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Supervisor/Manager Phone]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="288" y="216" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{employer/monthlyAmount/amount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="218" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Monthly Salary]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="288" y="236" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employer/position}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="238" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Position]]></text>
+			</staticText>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement x="288" y="276" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{employer/ends}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="258" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Start on]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="278" width="165" height="20"/>
+				<textElement/>
+				<text><![CDATA[Stop on]]></text>
+			</staticText>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement x="288" y="256" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{employer/starts}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
