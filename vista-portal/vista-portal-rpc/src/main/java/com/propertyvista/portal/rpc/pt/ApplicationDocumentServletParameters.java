@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.rpc.pt;
 
-import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
-
 public interface ApplicationDocumentServletParameters {
 
     /**
