@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,20 +139,25 @@ public class PreloadPT extends BaseVistaDataPreloader {
     public String create() {
         user = loadUser(DemoData.PRELOADED_USERNAME);
 
-        VistaDataGenerator generator = new VistaDataGenerator();
-        Application application = generator.createApplication(user);
-        ApplicationProgress progress = generator.createApplicationProgress(application);
-        Summary summary = generator.createSummary(application);
-        persistFullApplication(summary, progress, generator);
+        try {
+            VistaDataGenerator generator = new VistaDataGenerator();
+            Application application = generator.createApplication(user);
+            ApplicationProgress progress = generator.createApplicationProgress(application);
+            Summary summary = generator.createSummary(application);
+            persistFullApplication(summary, progress, generator);
 
-        load();
+            load();
 
-        StringBuilder b = new StringBuilder();
-        b.append("Created potential tenant series of data");
-        return b.toString();
+            StringBuilder b = new StringBuilder();
+            b.append("Created potential tenant series of data");
+            return b.toString();
+        } catch(IOException e) {
+            log.error(e.getMessage(), e);
+            return "FAILED to create potential tenant series of data. ERROR: "+e.getClass().getName()+": "+e.getMessage();
+        }
     }
 
-    private void persistFullApplication(Summary summary, ApplicationProgress progress, VistaDataGenerator generator) {
+    private void persistFullApplication(Summary summary, ApplicationProgress progress, VistaDataGenerator generator) throws IOException {
         persist(summary.application());
         persist(progress);
         persist(summary.unitSelection());
