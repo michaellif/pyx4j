@@ -39,6 +39,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.dev.DataDump;
 
 public class SummaryReportTest extends ReportsTestBase {
 
@@ -102,6 +103,7 @@ public class SummaryReportTest extends ReportsTestBase {
             summary.application().set(application);
         }
         new SummaryServicesImpl().loadTransientData(summary);
+        DataDump.dump("test-summary", summary);
         return summary;
 
     }
