@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.report;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -94,7 +95,7 @@ public class SummaryReportTest extends ReportsTestBase {
 
     }
 
-    private static Summary retreiveSummaryTodo() {
+    private static Summary retreiveSummaryTodo() throws IOException {
         VistaDataGenerator generator = new VistaDataGenerator();
         Application application = generator.createApplication(VistaDataGenerator.createUser());
         generator.createSummary(application);
