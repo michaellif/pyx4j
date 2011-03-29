@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Summary" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<subDataset name="dataset1"/>
@@ -22,10 +22,14 @@
 	<field name="tenantList/tenants" class="com.pyx4j.entity.shared.IList"/>
 	<field name="tenantFinancials" class="com.pyx4j.entity.shared.IList"/>
 	<field name="pets/pets" class="com.pyx4j.entity.shared.IList"/>
-	<field name="charges/monthlyCharges/upgradeCharges" class="com.pyx4j.entity.shared.IList"/>
-	<field name="charges/monthlyCharges/proRatedCharges/charges" class="com.pyx4j.entity.shared.IList"/>
-	<field name="charges/monthlyCharges/applicationCharges/charges" class="com.pyx4j.entity.shared.IList"/>
-	<field name="charges/monthlyCharges/paymentSplitCharges/charges" class="com.pyx4j.entity.shared.IList"/>
+	<field name="charges/monthlyCharges/charges" class="com.pyx4j.entity.shared.IList"/>
+	<field name="charges/monthlyCharges/total/amount" class="java.lang.Double"/>
+	<field name="charges/proRatedCharges/charges" class="com.pyx4j.entity.shared.IList"/>
+	<field name="charges/proRatedCharges/total/amount" class="java.lang.Double"/>
+	<field name="charges/applicationCharges/charges" class="com.pyx4j.entity.shared.IList"/>
+	<field name="charges/applicationCharges/total/amount" class="java.lang.Double"/>
+	<field name="charges/paymentSplitCharges/charges" class="com.pyx4j.entity.shared.IList"/>
+	<field name="charges/paymentSplitCharges/total/amount" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -221,7 +225,7 @@
 		<band height="50">
 			<subreport>
 				<reportElement x="1" y="10" width="572" height="40"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{charges/monthlyCharges/upgradeCharges})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{charges/monthlyCharges/charges})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "RentRelatedCharges.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
@@ -230,10 +234,23 @@
 				<text><![CDATA[Static text]]></text>
 			</staticText>
 		</band>
+		<band height="20">
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="237" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{charges/monthlyCharges/total/amount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="0" width="236" height="20"/>
+				<box leftPadding="10"/>
+				<textElement/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
 		<band height="50">
 			<subreport>
 				<reportElement x="1" y="10" width="572" height="40"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{charges/monthlyCharges/proRatedCharges/charges})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{charges/proRatedCharges/charges})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "ProRatedCharges.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
@@ -242,10 +259,23 @@
 				<text><![CDATA[Static text]]></text>
 			</staticText>
 		</band>
+		<band height="20">
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="237" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{charges/proRatedCharges/total/amount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="0" width="236" height="20"/>
+				<box leftPadding="10"/>
+				<textElement/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
 		<band height="50">
 			<subreport>
 				<reportElement x="1" y="10" width="572" height="40"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{charges/monthlyCharges/applicationCharges/charges})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{charges/applicationCharges/charges})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "ApplicationCharges.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
@@ -254,16 +284,42 @@
 				<text><![CDATA[Static text]]></text>
 			</staticText>
 		</band>
+		<band height="20">
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="237" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{charges/applicationCharges/total/amount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="0" width="236" height="20"/>
+				<box leftPadding="10"/>
+				<textElement/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
 		<band height="50">
 			<subreport>
 				<reportElement x="1" y="10" width="572" height="40"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{charges/monthlyCharges/paymentSplitCharges/charges})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{charges/paymentSplitCharges/charges})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "PaymentSplitCharges.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
 				<reportElement x="1" y="0" width="572" height="10"/>
 				<textElement/>
 				<text><![CDATA[Static text]]></text>
+			</staticText>
+		</band>
+		<band height="20">
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="237" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{charges/paymentSplitCharges/total/amount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="0" width="236" height="20"/>
+				<box leftPadding="10"/>
+				<textElement/>
+				<text><![CDATA[Total]]></text>
 			</staticText>
 		</band>
 		<band height="50"/>
