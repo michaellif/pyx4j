@@ -83,7 +83,6 @@ public class SummaryReportTest extends ReportsTestBase {
     private static Summary retreiveSummary() {
         EntityQueryCriteria<Summary> criteria = EntityQueryCriteria.create(Summary.class);
         Application application = EntityFactory.create(Application.class);
-        application.setPrimaryKey(1L);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
         Summary summary = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         if (summary == null) {
