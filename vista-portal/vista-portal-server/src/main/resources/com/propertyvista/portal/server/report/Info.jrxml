@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Info" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Info" pageWidth="571" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="571" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="454"/>
+	<property name="ireport.y" value="408"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
@@ -54,9 +54,9 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="20" splitType="Stretch">
+		<band height="25" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="612" height="20"/>
+				<reportElement x="0" y="5" width="571" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -71,447 +71,444 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="365" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="612" height="20"/>
-				<box leftPadding="10"/>
-				<textElement verticalAlignment="Middle">
+		<band height="373" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="11" y="0" width="560" height="25"/>
+				<box topPadding="5" leftPadding="0"/>
+				<textElement verticalAlignment="Top">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{firstName}+" "+$F{middleName}+" "+$F{lastName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="20" width="100" height="20"/>
+				<reportElement x="11" y="25" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Home Phone]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="40" width="100" height="20"/>
+				<reportElement x="11" y="45" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Mobile Phone]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="60" width="100" height="20"/>
+				<reportElement x="11" y="65" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Work Phone]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="80" width="100" height="20"/>
+				<reportElement x="11" y="85" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Email Address]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="111" y="20" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="25" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{homePhone}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="111" y="40" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="45" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{mobilePhone}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="111" y="60" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="65" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{workPhone}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="111" y="80" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="85" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{email}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="288" y="20" width="100" height="20"/>
+				<reportElement x="288" y="25" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Drivers License]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="288" y="40" width="100" height="20"/>
+				<reportElement x="288" y="45" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Province/State]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="288" y="60" width="100" height="20"/>
+				<reportElement x="288" y="65" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[SIN]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="388" y="20" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="388" y="25" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{driversLicense}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="388" y="40" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="388" y="45" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{driversLicenseState/name}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="388" y="60" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="388" y="65" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{secureIdentifier}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement x="11" y="100" width="590" height="1" forecolor="#C0C0C0"/>
-				<graphicElement>
-					<pen lineStyle="Dotted"/>
-				</graphicElement>
-			</line>
 			<staticText>
-				<reportElement x="11" y="101" width="200" height="20"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font isBold="true"/>
+				<reportElement x="11" y="106" width="200" height="25"/>
+				<box topPadding="5"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Current Address]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="121" width="100" height="20"/>
+				<reportElement x="11" y="131" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Country]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="111" y="121" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="131" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{currentAddress/country/name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="141" width="100" height="20"/>
+				<reportElement x="11" y="151" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Postal Code]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="111" y="141" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="151" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{currentAddress/postalCode}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="161" width="100" height="20"/>
+				<reportElement x="11" y="171" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[City]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="111" y="161" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="171" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{currentAddress/city}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="181" width="100" height="20"/>
+				<reportElement x="11" y="191" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Province/State]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="111" y="181" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="191" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{currentAddress/province/name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="201" width="100" height="20"/>
+				<reportElement x="11" y="211" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Address 1]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="111" y="201" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="211" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{currentAddress/street1}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="221" width="100" height="20"/>
+				<reportElement x="11" y="231" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Address 2]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="111" y="221" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="231" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{currentAddress/street2}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="241" width="100" height="20"/>
+				<reportElement x="11" y="251" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Move In Date]]></text>
 			</staticText>
-			<textField pattern="MM/dd/yyyy">
-				<reportElement x="111" y="241" width="100" height="20"/>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement x="111" y="251" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{currentAddress/moveInDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="261" width="100" height="20"/>
+				<reportElement x="11" y="271" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Move Out Date]]></text>
 			</staticText>
-			<textField pattern="MM/dd/yyyy">
-				<reportElement x="111" y="261" width="100" height="20"/>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement x="111" y="271" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{currentAddress/moveOutDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="281" width="100" height="20"/>
+				<reportElement x="11" y="291" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Monthly Payment]]></text>
 			</staticText>
-			<textField pattern="¤ #,##0.00">
-				<reportElement x="111" y="281" width="100" height="20"/>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="111" y="291" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{currentAddress/payment}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="301" width="100" height="20"/>
+				<reportElement x="11" y="311" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Phone]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="111" y="301" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="311" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{currentAddress/phone}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="111" y="341" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="351" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{currentAddress/managerName}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="111" y="321" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="331" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{currentAddress/rented}.toString()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="321" width="100" height="20"/>
+				<reportElement x="11" y="331" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Owned/Rented]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="341" width="100" height="20"/>
+				<reportElement x="11" y="351" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Manager Name]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="388" y="300" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="388" y="311" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{previousAddress/phone}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="388" y="200" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="388" y="211" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{previousAddress/street1}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="388" y="180" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="388" y="191" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{previousAddress/province/name}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="388" y="160" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="388" y="171" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{previousAddress/city}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="388" y="220" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="388" y="231" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{previousAddress/street2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="MM/dd/yyyy">
-				<reportElement x="388" y="260" width="100" height="20"/>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement x="388" y="271" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{previousAddress/moveOutDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="288" y="240" width="100" height="20"/>
+				<reportElement x="288" y="251" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Move In Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="288" y="180" width="100" height="20"/>
+				<reportElement x="288" y="191" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Province/State]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="288" y="280" width="100" height="20"/>
+				<reportElement x="288" y="291" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Monthly Payment]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="288" y="120" width="100" height="20"/>
+				<reportElement x="288" y="131" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Country]]></text>
 			</staticText>
-			<textField pattern="MM/dd/yyyy">
-				<reportElement x="388" y="240" width="100" height="20"/>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement x="388" y="251" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{previousAddress/moveInDate}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="388" y="140" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="388" y="151" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{previousAddress/postalCode}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="288" y="100" width="200" height="20"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font isBold="true"/>
+				<reportElement x="288" y="106" width="200" height="25"/>
+				<box topPadding="5"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Previous Address]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="388" y="320" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="388" y="331" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{previousAddress/rented}.toString()]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
-				<reportElement x="388" y="280" width="100" height="20"/>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="388" y="291" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{previousAddress/payment}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="288" y="340" width="100" height="20"/>
+				<reportElement x="288" y="351" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Manager Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="288" y="260" width="100" height="20"/>
+				<reportElement x="288" y="271" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Move Out Date]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="388" y="340" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="388" y="351" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{previousAddress/managerName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="288" y="160" width="100" height="20"/>
+				<reportElement x="288" y="171" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[City]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="388" y="120" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="388" y="131" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{previousAddress/country/name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="288" y="320" width="100" height="20"/>
+				<reportElement x="288" y="331" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Owned/Rented]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="288" y="200" width="100" height="20"/>
+				<reportElement x="288" y="211" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Address 1]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="288" y="220" width="100" height="20"/>
+				<reportElement x="288" y="231" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Address 2]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="288" y="141" width="100" height="20"/>
+				<reportElement x="288" y="152" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Postal Code]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="288" y="300" width="100" height="20"/>
+				<reportElement x="288" y="311" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Phone]]></text>
 			</staticText>
 			<line>
-				<reportElement x="11" y="361" width="590" height="1" forecolor="#C0C0C0"/>
+				<reportElement x="0" y="106" width="571" height="1" forecolor="#C0C0C0"/>
 				<graphicElement>
-					<pen lineStyle="Dotted"/>
+					<pen lineStyle="Dashed"/>
 				</graphicElement>
 			</line>
 		</band>
 		<band height="40">
 			<subreport isUsingCache="true">
-				<reportElement x="11" y="0" width="590" height="40"/>
+				<reportElement x="0" y="0" width="571" height="40"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{vehicles})]]></dataSourceExpression>
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.Vehicles")]]></subreportExpression>
 			</subreport>
 		</band>
-		<band height="178">
+		<band height="185">
 			<staticText>
-				<reportElement x="11" y="0" width="200" height="20"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font isBold="true"/>
+				<reportElement x="11" y="5" width="560" height="25"/>
+				<box topPadding="5"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[General Questions]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="20" width="477" height="20"/>
+				<reportElement x="11" y="30" width="477" height="20"/>
 				<textElement/>
 				<text><![CDATA[Have you ever been sued for rent?]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="488" y="20" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="488" y="30" width="83" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Boolean"><![CDATA[$F{legalQuestions/suedForRent}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{legalQuestions/suedForRent} ? "Yes" : "No"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="40" width="477" height="20"/>
+				<reportElement x="11" y="50" width="477" height="20"/>
 				<textElement/>
 				<text><![CDATA[Have you ever been sued for damages?]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="488" y="40" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="488" y="50" width="83" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Boolean"><![CDATA[$F{legalQuestions/suedForRent}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{legalQuestions/suedForRent} ? "Yes" : "No"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="60" width="477" height="20"/>
+				<reportElement x="11" y="70" width="477" height="20"/>
 				<textElement/>
 				<text><![CDATA[Have you ever been evicted?]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="488" y="60" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="488" y="70" width="83" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Boolean"><![CDATA[$F{legalQuestions/suedForRent}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{legalQuestions/suedForRent} ? "Yes" : "No"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="80" width="477" height="20"/>
+				<reportElement x="11" y="90" width="477" height="20"/>
 				<textElement/>
 				<text><![CDATA[Have you ever defaulted on a lease?]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="488" y="80" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="488" y="90" width="83" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Boolean"><![CDATA[$F{legalQuestions/suedForRent}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{legalQuestions/suedForRent} ? "Yes" : "No"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="100" width="477" height="35"/>
+				<reportElement x="11" y="110" width="477" height="35"/>
 				<textElement/>
 				<text><![CDATA[Have you ever been convicted of a felony that involved an offence against property, persons, government officials, or that involved firearms, illegal drugs, or sex or sex crimes?]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="488" y="115" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="488" y="125" width="83" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Boolean"><![CDATA[$F{legalQuestions/suedForRent}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{legalQuestions/suedForRent} ? "Yes" : "No"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="135" width="477" height="20"/>
+				<reportElement x="11" y="145" width="477" height="20"/>
 				<textElement/>
 				<text><![CDATA[Have you ever had any public record suits, liens, judgements or reposessions?]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="488" y="135" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="488" y="145" width="83" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Boolean"><![CDATA[$F{legalQuestions/suedForRent}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{legalQuestions/suedForRent} ? "Yes" : "No"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="155" width="477" height="20"/>
+				<reportElement x="11" y="165" width="477" height="20"/>
 				<textElement/>
 				<text><![CDATA[Have you ever filed for bankruptcy protection?]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="488" y="155" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="488" y="165" width="83" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Boolean"><![CDATA[$F{legalQuestions/suedForRent}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{legalQuestions/suedForRent} ? "Yes" : "No"]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="11" y="175" width="590" height="1" forecolor="#C0C0C0"/>
+				<reportElement x="0" y="0" width="571" height="1" forecolor="#C0C0C0"/>
 				<graphicElement>
-					<pen lineStyle="Dotted"/>
+					<pen lineStyle="Dashed"/>
 				</graphicElement>
 			</line>
 		</band>
 		<band height="40">
 			<subreport isUsingCache="true">
-				<reportElement x="10" y="0" width="577" height="40"/>
+				<reportElement x="0" y="0" width="571" height="40"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{emergencyContacts})]]></dataSourceExpression>
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.EmergencyContacts")]]></subreportExpression>
 			</subreport>

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Summary" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="19"/>
+	<property name="ireport.y" value="0"/>
 	<subDataset name="dataset1"/>
 	<subDataset name="dataset2"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -143,14 +143,14 @@
 				</textElement>
 				<text><![CDATA[Lease Term]]></text>
 			</staticText>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="0" y="108" width="100" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["$"+$F{unitSelection/markerRent/rent/amount}+" / month"]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["$ "+$F{unitSelection/markerRent/rent/amount}+" / month"]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="88" width="100" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
@@ -162,7 +162,7 @@
 				<textElement/>
 				<text><![CDATA[Static text]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="143" y="88" width="430" height="40"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{LEASE_PRICE}]]></textFieldExpression>
@@ -218,7 +218,7 @@
 				</textElement>
 				<text><![CDATA[Lease Terms]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="1" y="30" width="572" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{LEASE_TERMS}]]></textFieldExpression>
@@ -323,27 +323,6 @@
 				<textElement/>
 				<text><![CDATA[Total]]></text>
 			</staticText>
-		</band>
-		<band height="60">
-			<textField>
-				<reportElement x="-1" y="0" width="573" height="40"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{DIGITAL_SIG}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="1" y="40" width="181" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Your Full Name :]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="186" y="40" width="166" height="20"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{fullName}]]></textFieldExpression>
-			</textField>
 		</band>
 	</detail>
 	<columnFooter>
