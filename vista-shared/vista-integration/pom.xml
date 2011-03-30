@@ -97,7 +97,7 @@
         <profile>
             <id>build-env</id>
             <properties>
-                <seleniumJvm>xvfb-run ${java.home}/bin/java</seleniumJvm>
+                <seleniumJvm>/mnt/bamboo-ebs/opt/xvfb-run ${java.home}/bin/java</seleniumJvm>
             </properties>
             <build>
                 <plugins>
