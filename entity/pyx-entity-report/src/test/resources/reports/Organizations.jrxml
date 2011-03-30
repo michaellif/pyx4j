@@ -34,10 +34,10 @@
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
-			<subreport>
+			<subreport isUsingCache="true">
 				<reportElement x="-22" y="44" width="597" height="62"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{departments})]]></dataSourceExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Departments.jasper"]]></subreportExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("reports.Departments")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="50"/>

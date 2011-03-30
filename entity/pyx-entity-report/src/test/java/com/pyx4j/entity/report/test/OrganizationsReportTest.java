@@ -46,11 +46,7 @@ public class OrganizationsReportTest extends ReportsTestBase {
     public static void init() throws Exception {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("REPORT_TITLE", "Organizations Report");
-        parameters.put("SUBREPORT_DIR", "target/test-classes/reports/");
-
-        JasperCompileManager.compileReportToFile("target/test-classes/reports/Departments.jrxml", "target/test-classes/reports/Departments.jasper");
         createReport(new JasperReportModel("reports.Organizations", createOrganizations(), parameters));
-
     }
 
     @Test
