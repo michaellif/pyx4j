@@ -54,7 +54,7 @@ public class EditableComponentsContainerHelper implements IAccessAdapter {
         return true;
     }
 
-    public ValidationResults getValidationResults() {
+    public ValidationResults getContainerValidationResults() {
         ValidationResults validationResults = new ValidationResults();
         String message = container.getValidationMessage();
         if (message != null) {
@@ -64,7 +64,11 @@ public class EditableComponentsContainerHelper implements IAccessAdapter {
                 validationResults.appendValidationError(message);
             }
         }
+        return validationResults;
+    }
 
+    public ValidationResults getAllValidationResults() {
+        ValidationResults validationResults = getContainerValidationResults();
         for (CEditableComponent<?, ?> component : ((IComponentContainer) container).getComponents()) {
             if (component.isValid()) {
                 continue;

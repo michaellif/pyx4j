@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -113,6 +114,55 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     protected abstract CEntityFolderItem<E> createItem();
 
+    private CEntityFolderItem<E> createItemPrivate() {
+
+        CEntityFolderItem<E> item = createItem();
+
+        item.addValueChangeHandler(new ValueChangeHandler<E>() {
+            boolean sheduled = false;
+
+            @Override
+            public void onValueChange(final ValueChangeEvent<E> event) {
+                if (!sheduled) {
+                    sheduled = true;
+                    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            log.debug("CEntityFolder.onValueChange fired from {}. New value is {}.", CEntityFolder.this.getTitle(), event.getValue());
+                            revalidate();
+                            ValueChangeEvent.fire(CEntityFolder.this, getValue());
+                            sheduled = false;
+                        }
+                    });
+                }
+
+            }
+        });
+
+        item.addPropertyChangeHandler(new PropertyChangeHandler() {
+            boolean sheduled = false;
+
+            @Override
+            public void onPropertyChange(final PropertyChangeEvent event) {
+                sheduled = true;
+                if (!sheduled) {
+                    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            log.debug("CEntityFolder.onPropertyChange fired from {}. Changed property is {}.", CEntityFolder.this.getTitle(),
+                                    event.getPropertyName());
+                            revalidate();
+                            ValueChangeEvent.fire(CEntityFolder.this, getValue());
+                            sheduled = false;
+                        }
+                    });
+                }
+            }
+        });
+
+        return item;
+    }
+
     protected abstract FolderDecorator<E> createFolderDecorator();
 
     public void setFolderDecorator(FolderDecorator<E> folderDecorator) {
@@ -154,7 +204,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
             return;
         }
 
-        final CEntityFolderItem<E> comp = createItem();
+        final CEntityFolderItem<E> comp = createItemPrivate();
 
         @SuppressWarnings("unchecked")
         E newEntity = (E) EntityFactory.create(comp.proto().getValueClass());
@@ -175,10 +225,10 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     }
 
-    //TODO add remove handlers
-    protected void removeItem(CEntityFolderItem<E> comp, FolderItemDecorator folderItemDecorator) {
-        getValue().remove(comp.getValue());
-        abandonFolderItem(comp);
+    protected void removeItem(CEntityFolderItem<E> item, FolderItemDecorator folderItemDecorator) {
+        getValue().remove(item.getValue());
+        abandonFolderItem(item);
+        item.removeAllHandlers();
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
     }
 
@@ -209,7 +259,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
                 comp = oldMap.remove(item);
                 comp.setFirst(first);
             } else {
-                comp = createItem();
+                comp = createItemPrivate();
                 //Call setFirst before onBound()
                 comp.setFirst(first);
                 comp.onBound(this);
@@ -245,24 +295,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         IDebugId rowDebugId = new CompositeDebugId(this.getDebugId(), "row", currentRowDebugId);
         component.setDebugId(rowDebugId);
         folderItemDecorator.asWidget().ensureDebugId(rowDebugId.getDebugIdString());
-
-        //TODO remove on abandonFolderItem
-        HandlerRegistration ValueChangeHandlerRegistration = component.addValueChangeHandler(new ValueChangeHandler<E>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<E> event) {
-                ValueChangeEvent.fire(CEntityFolder.this, getValue());
-                log.debug("CEntityFolder.onValueChange fired from {}. New value is {}.", CEntityFolder.this.getTitle(), event.getValue());
-            }
-        });
-
-        HandlerRegistration PropertyChangeHandlerRegistration = component.addPropertyChangeHandler(new PropertyChangeHandler() {
-
-            @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                ValueChangeEvent.fire(CEntityFolder.this, getValue());
-                log.debug("CEntityFolder.onPropertyChange fired from {}. Changed property is {}.", CEntityFolder.this.getTitle(), event.getPropertyName());
-            }
-        });
 
         folderItemDecorator.addItemRemoveClickHandler(new ClickHandler() {
 
@@ -302,7 +334,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     @Override
     public ValidationResults getValidationResults() {
-        return containerHelper.getValidationResults();
+        return containerHelper.getAllValidationResults();
+    }
+
+    public ValidationResults getContainerValidationResults() {
+        return containerHelper.getContainerValidationResults();
     }
 
     @Override

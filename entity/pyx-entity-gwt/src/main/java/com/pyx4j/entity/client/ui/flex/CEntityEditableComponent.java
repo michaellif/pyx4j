@@ -25,6 +25,7 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -101,7 +102,7 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
 
     @Override
     public ValidationResults getValidationResults() {
-        return containerHelper.getValidationResults();
+        return containerHelper.getAllValidationResults();
     }
 
     @Override
@@ -114,21 +115,48 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
         binder.bind(component, member);
 
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
+            boolean sheduled = false;
+
             @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                if (PropertyChangeEvent.PropertyName.VALIDITY.equals(event.getPropertyName())) {
-                    PropertyChangeEvent.fire(CEntityEditableComponent.this, PropertyChangeEvent.PropertyName.VALIDITY);
-                    log.debug("CEntityEditableComponent.onPropertyChange fired from {}. Changed property is {}.", CEntityEditableComponent.this.getTitle(),
-                            event.getPropertyName());
+            public void onPropertyChange(final PropertyChangeEvent event) {
+                if (!sheduled) {
+                    sheduled = true;
+                    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            if (PropertyChangeEvent.PropertyName.VALIDITY.equals(event.getPropertyName())) {
+                                log.debug("CEntityEditableComponent.onPropertyChange fired from {}. Changed property is {}.",
+                                        CEntityEditableComponent.this.getTitle(), event.getPropertyName());
+                                revalidate();
+                                PropertyChangeEvent.fire(CEntityEditableComponent.this, PropertyChangeEvent.PropertyName.VALIDITY);
+
+                            }
+                            sheduled = false;
+                        }
+                    });
                 }
             }
         });
 
         component.addValueChangeHandler(new ValueChangeHandler<T>() {
+            boolean sheduled = false;
+
             @Override
-            public void onValueChange(ValueChangeEvent<T> event) {
-                ValueChangeEvent.fire(CEntityEditableComponent.this, getValue());
-                log.debug("CEntityEditableComponent.onValueChange fired from {}. New value is {}.", CEntityEditableComponent.this.getTitle(), event.getValue());
+            public void onValueChange(final ValueChangeEvent<T> event) {
+                if (!sheduled) {
+                    sheduled = true;
+                    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            revalidate();
+                            log.debug("CEntityEditableComponent.onValueChange fired from {}. New value is {}.", CEntityEditableComponent.this.getTitle(),
+                                    event.getValue());
+                            ValueChangeEvent.fire(CEntityEditableComponent.this, getValue());
+                            sheduled = false;
+                        }
+                    });
+                }
+
             }
         });
 

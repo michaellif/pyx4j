@@ -20,9 +20,15 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditableComponent<E> {
 
@@ -30,9 +36,12 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditab
 
     private boolean first;
 
+    private final List<HandlerRegistration> handlerRegistrations;
+
     public CEntityFolderItem(Class<E> clazz) {
         super(clazz);
         content = new SimplePanel();
+        handlerRegistrations = new ArrayList<HandlerRegistration>();
     }
 
     public abstract FolderItemDecorator createFolderItemDecorator();
@@ -61,4 +70,25 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditab
     public void attachContent() {
         getContent().setWidget(createContent());
     }
+
+    @Override
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler) {
+        HandlerRegistration handlerRegistration = super.addValueChangeHandler(handler);
+        handlerRegistrations.add(handlerRegistration);
+        return handlerRegistration;
+    }
+
+    @Override
+    public HandlerRegistration addPropertyChangeHandler(PropertyChangeHandler handler) {
+        HandlerRegistration handlerRegistration = super.addPropertyChangeHandler(handler);
+        handlerRegistrations.add(handlerRegistration);
+        return handlerRegistration;
+    }
+
+    public void removeAllHandlers() {
+        for (HandlerRegistration handlerRegistration : handlerRegistrations) {
+            handlerRegistration.removeHandler();
+        }
+    }
+
 }
