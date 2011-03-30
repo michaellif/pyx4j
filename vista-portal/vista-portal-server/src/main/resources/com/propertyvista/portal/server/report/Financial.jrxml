@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Financial" pageWidth="612" pageHeight="792" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Financial" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -7,9 +7,9 @@
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
 	<field name="tenantFullName" class="java.lang.String"/>
-	<field name="incomes" class="com.pyx4j.entity.shared.IList"/>
-	<field name="assets" class="com.pyx4j.entity.shared.IList"/>
-	<field name="guarantors" class="com.pyx4j.entity.shared.IList"/>
+	<field name="tenantFinancial/incomes" class="com.pyx4j.entity.shared.IList"/>
+	<field name="tenantFinancial/assets" class="com.pyx4j.entity.shared.IList"/>
+	<field name="tenantFinancial/guarantors" class="com.pyx4j.entity.shared.IList"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -42,21 +42,30 @@
 			</textField>
 			<subreport>
 				<reportElement x="0" y="20" width="612" height="40"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{incomes})]]></dataSourceExpression>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{tenantFinancial/incomes})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Incomes.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="40">
 			<subreport>
 				<reportElement x="0" y="0" width="612" height="40"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{assets})]]></dataSourceExpression>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{tenantFinancial/assets})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Assets.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="40">
 			<subreport>
 				<reportElement x="0" y="0" width="612" height="40"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{guarantors})]]></dataSourceExpression>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{tenantFinancial/guarantors})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Guarantors.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
