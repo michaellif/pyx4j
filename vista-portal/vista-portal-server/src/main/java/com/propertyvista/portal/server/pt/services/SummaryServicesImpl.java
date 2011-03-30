@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.server.pt.services;
 
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,10 @@ import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.rpc.pt.services.SummaryServices;
 import com.propertyvista.portal.server.pt.PtAppContext;
+import com.propertyvista.portal.server.report.SummaryReport;
 
+import com.pyx4j.entity.report.JasperFileFormat;
+import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -137,15 +140,15 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
     public void downloadSummary(AsyncCallback<String> callback, VoidSerializable none) {
 
         Summary summary = retrieveSummary();
-
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
-            Downloadable d = new Downloadable(IOUtils.getResource("com/propertyvista/portal/server/preloader/apartment1.jpg"),
-                    Downloadable.getContentType(DownloadFormat.PDF));
-            d.save("da.jpg");
-            callback.onSuccess(Context.getRequest().getContextPath() + "/download/" + System.currentTimeMillis() + "/" + "da.jpg");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            log.error("Error", e);
+            JasperReportProcessor.createReport(SummaryReport.createModel(summary), JasperFileFormat.PDF, bos);
+            Downloadable d = new Downloadable(bos.toByteArray(), Downloadable.getContentType(DownloadFormat.PDF));
+            String fileName = "ApplicationSummary.pdf";
+            d.save(fileName);
+            callback.onSuccess(Context.getRequest().getContextPath() + "/download/" + System.currentTimeMillis() + "/" + fileName);
+        } finally {
+            IOUtils.closeQuietly(bos);
         }
 
     }

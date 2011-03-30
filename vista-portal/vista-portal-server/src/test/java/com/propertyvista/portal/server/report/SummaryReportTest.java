@@ -14,12 +14,8 @@
 package com.propertyvista.portal.server.report;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import junit.framework.Assert;
-import net.sf.jasperreports.engine.JasperCompileManager;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,7 +29,6 @@ import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.portal.server.pt.services.SummaryServicesImpl;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.test.ReportsTestBase;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -42,8 +37,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.dev.DataDump;
 
 public class SummaryReportTest extends ReportsTestBase {
-
-    private static final String title = "Summary Report";
 
     @BeforeClass
     public static void init() throws Exception {
@@ -56,12 +49,7 @@ public class SummaryReportTest extends ReportsTestBase {
             new VistaDataPreloaders().preloadAll();
         }
 
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("ReportTitle", title);
-        parameters.put("LEASE_PRICE", "Pricing and Availability...");
-        parameters.put("LEASE_TERMS", "Lease Terms text...");
-        parameters.put("DIGITAL_SIG", "Digital Signature...");
-        createReport(new JasperReportModel("com.propertyvista.portal.server.report.Summary", Arrays.asList(new Summary[] { retreiveSummary() }), parameters));
+        createReport(SummaryReport.createModel(retreiveSummary()));
 
     }
 
@@ -91,7 +79,7 @@ public class SummaryReportTest extends ReportsTestBase {
 
     @Test
     public void testStaticText() throws Exception {
-        Assert.assertTrue("'" + title + "' not found, ", containsText(title));
+        Assert.assertTrue("Report title '" + SummaryReport.title + "' not found, ", containsText(SummaryReport.title));
     }
 
 }
