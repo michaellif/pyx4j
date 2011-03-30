@@ -20,10 +20,6 @@ import com.pyx4j.site.rpc.annotations.PlaceProperties;
 public class SiteMap {
 
     @PlaceProperties(caption = "Application Form")
-    public static class CreateAccount extends AppPlace {
-    }
-
-    @PlaceProperties(caption = "Application Form")
     public static class Login extends AppPlace {
     }
 
@@ -39,9 +35,9 @@ public class SiteMap {
     public static class ChangePassword extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Apartment")
-    @PlaceProperties(caption = "Apartment Info")
-    public static class Apartment extends AppPlace {
+    @NavigationItem(navigLabel = "Dashboard")
+    @PlaceProperties(caption = "Dashboard")
+    public static class Dashboard extends AppPlace {
     }
 
     @NavigationItem(navigLabel = "Tenants")

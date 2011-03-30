@@ -35,7 +35,6 @@ public class ViewModule extends AbstractGinModule {
         bind(SecondNavigView.class).to(SecondNavigViewImpl.class).in(Singleton.class);
         bind(UserMessageView.class).to(UserMessageViewImpl.class).in(Singleton.class);
 
-        bind(CreateAccountView.class).to(CreateAccountViewImpl.class).in(Singleton.class);
         bind(LoginView.class).to(LoginViewImpl.class).in(Singleton.class);
         bind(RetrievePasswordView.class).to(RetrievePasswordViewImpl.class).in(Singleton.class);
         bind(NewPasswordView.class).to(NewPasswordViewImpl.class).in(Singleton.class);

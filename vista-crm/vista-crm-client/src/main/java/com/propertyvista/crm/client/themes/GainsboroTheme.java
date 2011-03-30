@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.themes;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
-public class GainsboroTheme extends VistaTheme {
+public class GainsboroTheme extends VistaCrmTheme {
 
     @Override
     protected void initThemeColors() {

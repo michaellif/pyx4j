@@ -29,9 +29,9 @@ import com.pyx4j.widgets.client.style.Theme;
 import com.pyx4j.widgets.client.style.ThemeColor;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
-public abstract class VistaTheme extends Theme {
+public abstract class VistaCrmTheme extends Theme {
 
-    public VistaTheme() {
+    public VistaCrmTheme() {
         initThemeColors();
         initStyles();
     }
@@ -89,7 +89,6 @@ public abstract class VistaTheme extends Theme {
 
     protected void initGeneralStyles() {
         Style style = new Style("html");
-        style.addProperty("overflow-y", "scroll");
         addStyle(style);
 
         style = new Style("td");
@@ -813,70 +812,96 @@ public abstract class VistaTheme extends Theme {
     protected void initSiteViewStyles() {
         String prefix = CrmView.DEFAULT_STYLE_PREFIX;
 
-        int minWidth = 960;
-        int maxWidth = 960;
-        int leftColumnWidth = 0;
-        int rightColumnWidth = 0;
-
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("width", "95%");
-        style.addProperty("min-width", minWidth + "px");
-        style.addProperty("max-width", maxWidth + "px");
-        style.addProperty("margin", "0 auto");
+        style.addProperty("min-width", "40em");
+        style.addProperty("min-height", "20em");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Header));
-        style.addProperty("height", "115px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.MainNavig));
-        style.addProperty("width", "100%");
-        style.addProperty("float", "left");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Center));
-        style.addProperty("width", "100%");
-        style.addProperty("float", "left");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Main));
-        style.addProperty("height", "100%");
-        style.addProperty("margin", "0 " + rightColumnWidth + "px 0 " + leftColumnWidth + "px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Caption));
-        style.addProperty("width", "30%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.SecondaryNavig));
-        style.addProperty("width", "70%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Message));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Content));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Left));
-        style.addProperty("float", "left");
-        style.addProperty("width", leftColumnWidth + "px");
-        style.addProperty("margin-left", "-100%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Right));
-        style.addProperty("float", "left");
-        style.addProperty("width", rightColumnWidth + "px");
-        style.addProperty("margin-left", "-" + rightColumnWidth + "px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Footer));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
-        style.addProperty("clear", "left");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Display));
-        addStyle(style);
+        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Header));
+        //        style.addProperty("height", "115px");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.MainNavig));
+        //        style.addProperty("width", "100%");
+        //        style.addProperty("float", "left");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Center));
+        //        style.addProperty("width", "100%");
+        //        style.addProperty("float", "left");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Main));
+        //        style.addProperty("height", "100%");
+        //        style.addProperty("margin", "0 " + rightColumnWidth + "px 0 " + leftColumnWidth + "px");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Caption));
+        //        style.addProperty("width", "30%");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.SecondaryNavig));
+        //        style.addProperty("width", "70%");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Message));
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Content));
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Left));
+        //        style.addProperty("float", "left");
+        //        style.addProperty("width", leftColumnWidth + "px");
+        //        style.addProperty("margin-left", "-100%");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Right));
+        //        style.addProperty("float", "left");
+        //        style.addProperty("width", rightColumnWidth + "px");
+        //        style.addProperty("margin-left", "-" + rightColumnWidth + "px");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Footer));
+        //        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        //        style.addProperty("clear", "left");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Display));
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX));
+        //        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        //        style.addProperty("margin", "0.4em 0 0.4em 0");
+        //        style.addProperty("width", "960px");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX, ViewHeaderDecorator.StyleSuffix.Caption));
+        //        style.addProperty("padding", "0.3em 1em 0.4em 1em");
+        //        style.addProperty("font-size", "1.3em");
+        //        style.addProperty("font-weight", "bold");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(ViewLineSeparator.DEFAULT_STYLE_PREFIX));
+        //        style.addProperty("border-top-width", "1px");
+        //        style.addProperty("border-top-style", "dotted");
+        //        style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);
+        //        style.addProperty("margin-bottom", "0.3em");
+        //        style.addProperty("width", "400px");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf(VistaWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));
+        //        style.addProperty("padding-top", "2px");
+        //        addStyle(style);
+        //
+        //        style = new Style(Selector.valueOf("logo"));
+        //        style.addProperty("font-size", "30px");
+        //        style.addProperty("line-height", "1.2em");
+        //        style.addProperty("text-align", "center");
+        //        style.addProperty("vertical-align", "middle");
+        //        style.addProperty("display", "block");
+        //        style.addProperty("color", ThemeColor.OBJECT_TONE5);
+        //        addStyle(style);
 
     }
 

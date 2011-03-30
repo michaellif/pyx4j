@@ -70,10 +70,10 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
         List<NavigTab> tabs = new ArrayList<NavigTab>();
 
         boolean visited = false;
-        for (int i = presenter.getMainNavigItems().size() - 1; i >= 0; i--) {
-            AppPlace place = presenter.getMainNavigItems().get(i);
-            tabs.add(0, new NavigTab(place, visited));
-        }
+        //        for (int i = presenter.getMainNavigItems().size() - 1; i >= 0; i--) {
+        //            AppPlace place = presenter.getMainNavigItems().get(i);
+        //            tabs.add(0, new NavigTab(place, visited));
+        //        }
 
         for (NavigTab navigTab : tabs) {
             tabsHolder.add(navigTab);

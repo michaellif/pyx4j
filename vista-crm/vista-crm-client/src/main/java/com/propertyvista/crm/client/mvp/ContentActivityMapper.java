@@ -19,7 +19,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.propertyvista.crm.client.activity.ChangePasswordActivity;
-import com.propertyvista.crm.client.activity.CreateAccountActivity;
 import com.propertyvista.crm.client.activity.GenericMessageActivity;
 import com.propertyvista.crm.client.activity.LoginActivity;
 import com.propertyvista.crm.client.activity.ResetPasswordActivity;
@@ -30,8 +29,6 @@ import com.propertyvista.crm.rpc.SiteMap;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class ContentActivityMapper implements ActivityMapper {
-
-    Provider<CreateAccountActivity> createAccountActivityProvider;
 
     Provider<LoginActivity> loginActivityProvider;
 
@@ -46,7 +43,7 @@ public class ContentActivityMapper implements ActivityMapper {
     Provider<GenericMessageActivity> genericMessageActivity;
 
     @Inject
-    public ContentActivityMapper(final Provider<CreateAccountActivity> createAccountActivityProvider,
+    public ContentActivityMapper(
 
     final Provider<LoginActivity> loginActivityProvider,
 
@@ -61,7 +58,6 @@ public class ContentActivityMapper implements ActivityMapper {
     final Provider<GenericMessageActivity> genericMessageActivity) {
 
         super();
-        this.createAccountActivityProvider = createAccountActivityProvider;
         this.loginActivityProvider = loginActivityProvider;
         this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
         this.resetPasswordActivityProvider = resetPasswordActivityProvider;
@@ -72,9 +68,7 @@ public class ContentActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (place instanceof SiteMap.CreateAccount) {
-            return createAccountActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.Login) {
+        if (place instanceof SiteMap.Login) {
             return loginActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.RetrievePassword) {
             return retrievePasswordActivityProvider.get().withPlace((AppPlace) place);

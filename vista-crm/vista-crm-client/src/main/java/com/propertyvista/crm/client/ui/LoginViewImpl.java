@@ -72,8 +72,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
         });
 
-        //                loginButton.getElement().getStyle().setProperty("margin", "0.7em 1m 1em 3em");
-        loginButton.getElement().getStyle().setMarginLeft(6.4, Unit.EM);
+        loginButton.getElement().getStyle().setMarginLeft(90, Unit.PX);
         loginButton.getElement().getStyle().setMarginRight(1, Unit.EM);
         loginButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
         add(loginButton);

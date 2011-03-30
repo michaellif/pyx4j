@@ -17,7 +17,7 @@ import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
-public class VillageGreenTheme extends VistaTheme {
+public class VillageGreenTheme extends VistaCrmTheme {
 
     @Override
     protected void initThemeColors() {

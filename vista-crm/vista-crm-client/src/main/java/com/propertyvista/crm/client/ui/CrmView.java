@@ -16,10 +16,14 @@ package com.propertyvista.crm.client.ui;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.propertyvista.crm.client.mvp.ActionsActivityMapper;
@@ -42,7 +46,7 @@ import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
 
 @Singleton
-public class CrmView extends FlowPanel {
+public class CrmView extends LayoutPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
@@ -85,103 +89,44 @@ public class CrmView extends FlowPanel {
 
         setStyleName(prefix);
 
-        //============ Top Panel ============
+        DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
+        add(contentPanel);
 
-        FlowPanel headerWrapper = new FlowPanel();
-        headerWrapper.setStyleName(prefix + StyleSuffix.Header);
-        add(headerWrapper);
+        //============ Header Panel ============
 
-        DisplayPanel logoDisplayPanel = new DisplayPanel();
+        FlowPanel headerPanel = new FlowPanel();
+        contentPanel.addNorth(headerPanel, 5);
+
+        DisplayPanel logoDisplayPanel = new DisplayPanel("Logo");
         logoDisplayPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
-        headerWrapper.add(logoDisplayPanel);
+        headerPanel.add(logoDisplayPanel);
 
-        DisplayPanel actionsDisplayPanel = new DisplayPanel();
+        DisplayPanel actionsDisplayPanel = new DisplayPanel("Actions");
+        actionsDisplayPanel.setWidth("20em");
         actionsDisplayPanel.getElement().getStyle().setFloat(Style.Float.RIGHT);
-        headerWrapper.add(actionsDisplayPanel);
+        headerPanel.add(actionsDisplayPanel);
 
-        //============ Main Navig ============
+        //============ Footer Panel ============
 
-        FlowPanel mainNavigWrapper = new FlowPanel();
-        mainNavigWrapper.setStyleName(prefix + StyleSuffix.MainNavig);
-        add(mainNavigWrapper);
+        DisplayPanel footerPanel = new DisplayPanel("Footer");
+        contentPanel.addSouth(footerPanel, 5);
 
-        DisplayPanel mainNavigDisplayPanel = new DisplayPanel();
-        mainNavigWrapper.add(mainNavigDisplayPanel);
+        //============ Left Panel ============
+
+        VerticalPanel leftPanel = new VerticalPanel();
+        contentPanel.addWest(leftPanel, 15);
+
+        DisplayPanel mainNavigDisplayPanel = new DisplayPanel("MainNavig");
+        leftPanel.add(mainNavigDisplayPanel);
+        leftPanel.setCellHeight(mainNavigDisplayPanel, "100%");
+
+        DisplayPanel communicationsDisplayPanel = new DisplayPanel("Communications");
+        leftPanel.add(communicationsDisplayPanel);
 
         //============ Main ============
 
-        SimplePanel centerWrapper = new SimplePanel();
-        centerWrapper.setStyleName(prefix + StyleSuffix.Center);
-        add(centerWrapper);
-
-        FlowPanel mainWrapper = new FlowPanel();
-        mainWrapper.setStyleName(prefix + StyleSuffix.Main);
-        centerWrapper.add(mainWrapper);
-
-        FlowPanel caption2navigPanel = new FlowPanel();
-
-        DisplayPanel captionDisplayPanel = new DisplayPanel();
-        captionDisplayPanel.setStyleName(prefix + StyleSuffix.Caption);
-        caption2navigPanel.add(captionDisplayPanel);
-
-        DisplayPanel secondNavigDisplayPanel = new DisplayPanel();
-        secondNavigDisplayPanel.setStyleName(prefix + StyleSuffix.SecondaryNavig);
-        caption2navigPanel.add(secondNavigDisplayPanel);
-
-        mainWrapper.add(caption2navigPanel);
-
-        DisplayPanel messageDisplayPanel = new DisplayPanel();
-        messageDisplayPanel.setStyleName(prefix + StyleSuffix.Message);
-        mainWrapper.add(messageDisplayPanel);
-
-        DisplayPanel contentDisplayPanel = new DisplayPanel();
-        contentDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
-        mainWrapper.add(contentDisplayPanel);
-
-        FlowPanel leftWrapper = new FlowPanel();
-        leftWrapper.setStyleName(prefix + StyleSuffix.Left);
-        add(leftWrapper);
-
-        DisplayPanel left1DisplayPanel = new DisplayPanel();
-        leftWrapper.add(left1DisplayPanel);
-        DisplayPanel left2DisplayPanel = new DisplayPanel();
-        leftWrapper.add(left2DisplayPanel);
-
-        FlowPanel rightWrapper = new FlowPanel();
-        rightWrapper.setStyleName(prefix + StyleSuffix.Right);
-        add(rightWrapper);
-
-        DisplayPanel right1DisplayPanel = new DisplayPanel();
-        rightWrapper.add(right1DisplayPanel);
-        DisplayPanel right2DisplayPanel = new DisplayPanel();
-        rightWrapper.add(right2DisplayPanel);
-
-        //============ Footer ============
-
-        FlowPanel footerWrapper = new FlowPanel();
-        footerWrapper.setStyleName(prefix + StyleSuffix.Footer);
-        footerWrapper.getElement().getStyle().setProperty("clear", "left");
-        add(footerWrapper);
-
-        DisplayPanel bottomDisplayPanel = new DisplayPanel();
-        footerWrapper.add(bottomDisplayPanel);
-
-        bind(logoActivityMapper, logoDisplayPanel, eventBus);
-        bind(actionsActivityMapper, actionsDisplayPanel, eventBus);
-        bind(mainNavigActivityMapper, mainNavigDisplayPanel, eventBus);
-        bind(secondNavigActivityMapper, secondNavigDisplayPanel, eventBus);
-
-        bind(captionActivityMapper, captionDisplayPanel, eventBus);
-        bind(messageActivityMapper, messageDisplayPanel, eventBus);
-        bind(contentActivityMapper, contentDisplayPanel, eventBus);
-
-        bind(left1ActivityMapper, left1DisplayPanel, eventBus);
-        bind(left2ActivityMapper, left2DisplayPanel, eventBus);
-
-        bind(right1ActivityMapper, right1DisplayPanel, eventBus);
-        bind(right2ActivityMapper, right2DisplayPanel, eventBus);
-
-        bind(bottomActivityMapper, bottomDisplayPanel, eventBus);
+        DisplayPanel mainPanel = new DisplayPanel("Main");
+        contentPanel.add(mainPanel);
 
     }
 
@@ -191,11 +136,13 @@ public class CrmView extends FlowPanel {
 
     }
 
-    class DisplayPanel extends SimplePanel {
-        DisplayPanel() {
+    class DisplayPanel extends HTML {
+        DisplayPanel(String html) {
+            setText(html);
             String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
 
-            setStyleName(prefix + StyleSuffix.Display);
+            getElement().getStyle().setColor("red");
+            //setStyleName(prefix + StyleSuffix.Display);
 
         }
     }
