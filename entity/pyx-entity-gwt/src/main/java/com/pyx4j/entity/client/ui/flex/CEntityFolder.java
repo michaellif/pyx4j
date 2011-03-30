@@ -315,4 +315,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         return content;
     }
 
+    @Override
+    public boolean isVisited() {
+        return true;
+    }
 }

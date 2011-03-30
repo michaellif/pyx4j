@@ -199,4 +199,8 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
         asWidget().setWidget(widget);
     }
 
+    @Override
+    public boolean isVisited() {
+        return true;
+    }
 }
