@@ -156,6 +156,8 @@
 
         <jettyVersion>7.2.2.v20101205</jettyVersion>
 
+        <jasperreportsVersion>4.0.1</jasperreportsVersion>
+
         <!-- Used for speed up the GWT compiler for developers -->
         <gwtDraftCompile>false</gwtDraftCompile>
         <!-- OBFUSCATED, PRETTY, or DETAILED -->
@@ -403,7 +405,7 @@
                 <groupId>net.sf.jasperreports</groupId>
                 <artifactId>jasperreports</artifactId>
                 <!-- check poi version when updating -->
-                <version>4.0.1</version>
+                <version>${jasperreportsVersion}</version>
                 <exclusions>
                     <!--exclusion><groupId>commons-collections</groupId><artifactId>commons-collections</artifactId></exclusion-->
                     <!--exclusion><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId></exclusion-->
