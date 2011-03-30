@@ -96,13 +96,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
         // could be hided from resulting form:
         splitCharges.add(new ViewHeaderDecorator(proto().paymentSplitCharges(), "700px"));
 
-        Label splitChargesValidationLabel = new Label();
-        //splitChargesValidationLabel.getElement().getStyle().setFloat(Style.Float.LEFT);
-        splitChargesValidationLabel.getElement().getStyle().setMarginLeft(30, Unit.PX);
-        splitChargesValidationLabel.getElement().getStyle().setColor("red");
-        splitCharges.add(splitChargesValidationLabel);
-
-        splitCharges.add(inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(valueChangeHandler, splitChargesValidationLabel)));
+        splitCharges.add(inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(valueChangeHandler)));
         splitCharges.add(createTotal(proto().paymentSplitCharges().total()));
         main.add(splitCharges);
 

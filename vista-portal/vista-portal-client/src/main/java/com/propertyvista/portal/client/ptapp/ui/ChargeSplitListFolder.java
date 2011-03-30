@@ -20,16 +20,16 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 
@@ -42,6 +42,8 @@ import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -56,35 +58,30 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
     @SuppressWarnings("rawtypes")
     private final ValueChangeHandler valueChangeHandler;
 
-    private final Label splitChargesValidationLabel;
-
     private EditableValueValidator<IList<TenantCharge>> prcValueValidator;
 
     private final List<EntityFolderColumnDescriptor> columns;
 
     @SuppressWarnings("rawtypes")
-    ChargeSplitListFolder(final ValueChangeHandler valueChangeHandler, final Label splitChargesValidationLabel) {
+    ChargeSplitListFolder(final ValueChangeHandler outerValueChangeHandler) {
         super(TenantCharge.class);
-        if (valueChangeHandler != null) {
+
+        if (outerValueChangeHandler != null) {
             this.valueChangeHandler = new ValueChangeHandler() {
                 @SuppressWarnings("unchecked")
                 @Override
                 public void onValueChange(ValueChangeEvent event) {
+                    revalidate();
                     if (!prcValueValidator.isValid(null, getValue())) {
-                        splitChargesValidationLabel.setText(prcValueValidator.getValidationMessage(null, getValue()));
-                        splitChargesValidationLabel.setVisible(true);
                     } else {
-                        splitChargesValidationLabel.setText(null);
-                        splitChargesValidationLabel.setVisible(false);
-                        valueChangeHandler.onValueChange(event);
+                        outerValueChangeHandler.onValueChange(event);
                     }
                 }
             };
         } else {
             this.valueChangeHandler = null;
         }
-        this.splitChargesValidationLabel = splitChargesValidationLabel;
-        this.splitChargesValidationLabel.setVisible(false);
+        // getFolderDecorator().hideValidationMessage();
         columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().tenantFullName(), "260px"));
         columns.add(new EntityFolderColumnDescriptor(proto().percentage(), "35px"));
@@ -130,21 +127,13 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
     }
 
     @Override
-    public void populate(IList<TenantCharge> value) {
-        super.populate(value);
-        this.splitChargesValidationLabel.setVisible(false);
+    public ChargeSplitListFolderDecorator getFolderDecorator() {
+        return (ChargeSplitListFolderDecorator) super.getFolderDecorator();
     }
 
     @Override
     protected FolderDecorator<TenantCharge> createFolderDecorator() {
-        return new BoxReadOnlyFolderDecorator<TenantCharge>() {
-
-            @Override
-            public void setFolder(CEntityFolder<?> w) {
-                super.setFolder(w);
-                this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-            }
-        };
+        return new ChargeSplitListFolderDecorator();
     }
 
     @Override
@@ -207,4 +196,41 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
         };
     }
 
+    public class ChargeSplitListFolderDecorator extends VerticalPanel implements FolderDecorator<TenantCharge> {
+
+        private final HTML validationMessageHolder;
+
+        ChargeSplitListFolderDecorator() {
+            validationMessageHolder = new HTML();
+            validationMessageHolder.getElement().getStyle().setColor("red");
+            add(validationMessageHolder);
+        }
+
+        @Override
+        public void onValueChange(ValueChangeEvent<IList<TenantCharge>> event) {
+        }
+
+        @Override
+        public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
+            return null;
+        }
+
+        @Override
+        public void setFolder(final CEntityFolder<?> folder) {
+            if (getWidgetCount() > 1) {
+                remove(1);
+            }
+            insert(folder.getContent(), 1);
+            folder.addPropertyChangeHandler(new PropertyChangeHandler() {
+                @Override
+                public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
+                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VALIDITY) {
+                        validationMessageHolder.setHTML(folder.getValidationResults().getMessagesText(true));
+                    }
+                }
+            });
+
+        }
+
+    }
 }
