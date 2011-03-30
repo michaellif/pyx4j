@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.crud.AbstractEntityEditorPanel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.client.ConfirmActionClickHandler;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -88,13 +89,16 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
 
         if (getDeleteService() != null) {
             deleteButton = new Button(i18n.tr("Delete"));
-            deleteButton.addClickHandler(new ClickHandler() {
+            deleteButton.addClickHandler(new ConfirmActionClickHandler(i18n.tr("Confirm Delete"), i18n.tr("Are you sure you want to delete {0}?", proto()
+                    .getEntityMeta().getCaption()), new Runnable() {
+
                 @Override
-                public void onClick(ClickEvent event) {
+                public void run() {
                     parentWidget.setMessage(null);
                     doDelete();
                 }
-            });
+
+            }));
             deleteButton.getElement().getStyle().setMargin(20, Unit.PX);
             deleteButton.ensureDebugId(CrudDebugId.Crud_Delete.toString());
 
