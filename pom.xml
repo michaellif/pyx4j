@@ -195,12 +195,7 @@
     </modules>
 
     <properties>
-        <!-- See profile deploy-prod -->
-        <appDeploymentId>dev</appDeploymentId>
         <appGWTModuleSufix></appGWTModuleSufix>
-        <appWebXmlTemplate>Open</appWebXmlTemplate>
-        <gaeDeployServerId>appengine.google.com-pyx</gaeDeployServerId>
-
         <scm.revision></scm.revision>
     </properties>
 
@@ -395,28 +390,7 @@
         <profile>
             <id>target-prod</id>
             <properties>
-                <appDeploymentId>prod</appDeploymentId>
                 <appGWTModuleSufix>Prod</appGWTModuleSufix>
-                <appWebXmlTemplate1>PRODUCTION</appWebXmlTemplate1>
-                <gaeDeployServerId>appengine.google.com-pyx-prod</gaeDeployServerId>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>target-www22</id>
-            <properties>
-                <appDeploymentId>www22</appDeploymentId>
-                <appWebXmlTemplate>Protected</appWebXmlTemplate>
-                <gaeDeployServerId>appengine.google.com-pyx</gaeDeployServerId>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>target-www33</id>
-            <properties>
-                <appDeploymentId>www33</appDeploymentId>
-                <appWebXmlTemplate>Protected</appWebXmlTemplate>
-                <gaeDeployServerId>appengine.google.com-pyx</gaeDeployServerId>
             </properties>
         </profile>
 
