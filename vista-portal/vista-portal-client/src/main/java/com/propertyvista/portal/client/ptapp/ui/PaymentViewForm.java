@@ -18,7 +18,9 @@ import java.util.Date;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -99,15 +101,24 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
             }
         });
         paymentType.asWidget().getElement().getStyle().setFloat(Float.LEFT);
-        main.add(paymentType);
 
         ComplexPanel instrumentsPanel = new FlowPanel();
         instrumentsPanel.asWidget().getElement().getStyle().setFloat(Float.RIGHT);
         instrumentsPanel.getElement().getStyle().setPaddingRight(50, Unit.PX);
+        instrumentsPanel.getElement().getStyle().setPaddingLeft(50, Unit.PX);
+        instrumentsPanel.getElement().getStyle().setPaddingTop(10, Unit.PX);
+        instrumentsPanel.getElement().getStyle().setPaddingBottom(10, Unit.PX);
         instrumentsPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
+        instrumentsPanel.getElement().getStyle().setBorderColor("black");
+        instrumentsPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+        instrumentsPanel.getElement().getStyle().setBackgroundColor("white");
+        instrumentsPanel.getElement().getStyle().setPosition(Position.RELATIVE);
+        instrumentsPanel.getElement().getStyle().setLeft(-20, Unit.PX);
+
         instrumentsPanel.add(inject(proto().echeck(), createEcheckInfoEditor()));
         instrumentsPanel.add(inject(proto().creditCard(), createCreditCardInfoEditor()));
         main.add(instrumentsPanel);
+        main.add(paymentType);
 
         main.add(new ViewHeaderDecorator(proto().billingAddress()));
         CCheckBox sameAsCurrent = (CCheckBox) inject(proto().sameAsCurrent());
