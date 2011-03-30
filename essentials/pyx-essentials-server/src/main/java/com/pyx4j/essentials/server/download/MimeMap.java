@@ -39,6 +39,7 @@ public class MimeMap {
         map.put("jpg", "image/jpeg");
         map.put("jpe", "image/jpeg");
         map.put("jpeg", "image/jpeg");
+        map.put("png", "image/png");
         map.put("java", "text/plain");
         map.put("zip", "application/zip");
         map.put("tar", "application/x-tar");
