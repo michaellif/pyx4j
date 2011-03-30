@@ -9,6 +9,8 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.widgets.client.datepicker.HoldableImage.HoldElapsedEvent;
+import com.pyx4j.widgets.client.datepicker.HoldableImage.HoldElapsedEventHandler;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 import com.pyx4j.widgets.client.style.Selector;
 
@@ -19,9 +21,9 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
 
     private Image forwards;
 
-    private Image backwardsYear;
+    private HoldableImage backwardsYear;
 
-    private Image forwardsYear;
+    private HoldableImage forwardsYear;
 
     private Label lblYear;
 
@@ -80,23 +82,25 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
             }
         });
         // Set up backwards year
-        backwardsYear = new Image(resource.YearPrevious());
-        backwardsYear.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                updateDate(-12);
+        backwardsYear = new HoldableImage(resource.YearPrevious(),300);
+        backwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
+			
+			@Override
+			public void onHoldElapsed(HoldElapsedEvent event) {
+                updateDate(-12*event.getChange());
                 getParent().updateComponents(picker);
-            }
-        });
+			}
+		});
 
-        forwardsYear = new Image(resource.YearNext());
-        forwardsYear.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                updateDate(+12);
+        forwardsYear = new HoldableImage(resource.YearNext(),300);
+        forwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
+			
+			@Override
+			public void onHoldElapsed(HoldElapsedEvent event) {
+                updateDate(+12*event.getChange());
                 getParent().updateComponents(picker);
-            }
-        });
+			}
+		});
 
         lblMonth = new Label();
         lblYear = new Label();
@@ -113,12 +117,8 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
 
         grid.setWidget(0, yearNavigationColumn, yearGrid);
 
-        grid.setStyleName(Selector.getStyleName(DatePickerExtended.BASE_NAME, DatePickerExtended.StyleSuffix.MonthSelector));
-//        grid.getCellFormatter().addStyleName(0, previousMonthColumn, "monthSelectorNavigation");
-//        grid.getCellFormatter().addStyleName(0, dateMonthColumn, "monthSelectorMonthLabel");
-//        grid.getCellFormatter().addStyleName(0, nextMonthColumn, "monthSelectorNavigation right");
-//        grid.getCellFormatter().addStyleName(0, dateYearColumn, "monthSelectorYearLabel");
-//        grid.getCellFormatter().addStyleName(0, yearNavigationColumn, "monthSelectorYearNavigation");
+        grid.setStyleName(Selector.getStyleName(DatePickerExtended.BASE_NAME, 
+        		DatePickerExtended.StyleSuffix.MonthSelector));
         grid.getCellFormatter().addStyleName(0, previousMonthColumn, 
         		Selector.getStyleName(BASE_NAME, DatePickerExtended.StyleSuffix.Navigation));
         grid.getCellFormatter().addStyleName(0, dateMonthColumn, 

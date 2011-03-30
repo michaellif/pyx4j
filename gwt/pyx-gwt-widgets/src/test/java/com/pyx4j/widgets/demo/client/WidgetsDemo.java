@@ -107,7 +107,7 @@ public class WidgetsDemo implements EntryPoint {
 
         {
             final TextBox textBox = new TextBox();
-            Date minDate = new Date(100, 1, 15);
+            Date minDate = new Date(0, 1, 15);
             Date maxDate = new Date(111, 3, 3);
             Date starting = new Date(110, 2, 10);
             ArrayList<Date> disabledDates = new ArrayList<Date>();
