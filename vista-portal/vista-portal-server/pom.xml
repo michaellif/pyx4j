@@ -161,8 +161,53 @@
 
     </dependencies>
 
-    <properties>
-        <maven.test.failure.ignore>true</maven.test.failure.ignore>
-    </properties>
+
+    <profiles>
+        <profile>
+            <id>full</id>
+            <activation>
+                <property>
+                    <name>bamboo.buildNumber</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>jasperreports-maven-plugin</artifactId>
+                        <version>1.0-beta-2</version>
+                        <configuration>
+                           <sourceDirectory>${basedir}/src/main/resources/com/propertyvista/portal/server/report</sourceDirectory>
+                           <outputDirectory>${project.build.directory}/classes/com/propertyvista/portal/server/report</outputDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>compile-reports</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>net.sf.jasperreports</groupId>
+                                <artifactId>jasperreports</artifactId>
+                                <version>${jasperreportsVersion}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>log4j</groupId>
+                                <artifactId>log4j</artifactId>
+                                <version>1.2.16</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+
+                </plugins>
+            </build>
+
+        </profile>
+    </profiles>
+
 
 </project>
