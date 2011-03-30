@@ -33,7 +33,6 @@ import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.portal.server.pt.services.SummaryServicesImpl;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.report.JRIEntityCollectionDataSource;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.test.ReportsTestBase;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -58,37 +57,10 @@ public class SummaryReportTest extends ReportsTestBase {
         }
 
         Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("SUBREPORT_DIR", "target/classes/com/propertyvista/portal/server/report/");
         parameters.put("ReportTitle", title);
         parameters.put("LEASE_PRICE", "Pricing and Availability...");
         parameters.put("LEASE_TERMS", "Lease Terms text...");
         parameters.put("DIGITAL_SIG", "Digital Signature...");
-
-        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Info.jrxml",
-                "target/classes/com/propertyvista/portal/server/report/Info.jasper");
-        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Financial.jrxml",
-                "target/classes/com/propertyvista/portal/server/report/Financial.jasper");
-        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Pets.jrxml",
-                "target/classes/com/propertyvista/portal/server/report/Pets.jasper");
-        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/RentRelatedCharges.jrxml",
-                "target/classes/com/propertyvista/portal/server/report/RentRelatedCharges.jasper");
-        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/ProRatedCharges.jrxml",
-                "target/classes/com/propertyvista/portal/server/report/ProRatedCharges.jasper");
-        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/ApplicationCharges.jrxml",
-                "target/classes/com/propertyvista/portal/server/report/ApplicationCharges.jasper");
-        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/PaymentSplitCharges.jrxml",
-                "target/classes/com/propertyvista/portal/server/report/PaymentSplitCharges.jasper");
-        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Vehicles.jrxml",
-                "target/classes/com/propertyvista/portal/server/report/Vehicles.jasper");
-        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/EmergencyContacts.jrxml",
-                "target/classes/com/propertyvista/portal/server/report/EmergencyContacts.jasper");
-        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Incomes.jrxml",
-                "target/classes/com/propertyvista/portal/server/report/Incomes.jasper");
-        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Assets.jrxml",
-                "target/classes/com/propertyvista/portal/server/report/Assets.jasper");
-        JasperCompileManager.compileReportToFile("target/classes/com/propertyvista/portal/server/report/Guarantors.jrxml",
-                "target/classes/com/propertyvista/portal/server/report/Guarantors.jasper");
-
         createReport(new JasperReportModel("com.propertyvista.portal.server.report.Summary", Arrays.asList(new Summary[] { retreiveSummary() }), parameters));
 
     }

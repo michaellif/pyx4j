@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Info" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="521"/>
+	<property name="ireport.y" value="454"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
@@ -418,10 +418,10 @@
 			</line>
 		</band>
 		<band height="40">
-			<subreport>
+			<subreport isUsingCache="true">
 				<reportElement x="11" y="0" width="590" height="40"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{vehicles})]]></dataSourceExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Vehicles.jasper"]]></subreportExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.Vehicles")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="178">
@@ -510,10 +510,10 @@
 			</line>
 		</band>
 		<band height="40">
-			<subreport>
+			<subreport isUsingCache="true">
 				<reportElement x="10" y="0" width="577" height="40"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{emergencyContacts})]]></dataSourceExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "EmergencyContacts.jasper"]]></subreportExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.EmergencyContacts")]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
