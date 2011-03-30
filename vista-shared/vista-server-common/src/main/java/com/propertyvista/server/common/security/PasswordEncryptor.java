@@ -13,17 +13,26 @@
  */
 package com.propertyvista.server.common.security;
 
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.jasypt.util.password.StrongPasswordEncryptor;
+
+import com.pyx4j.config.shared.ApplicationMode;
 
 public class PasswordEncryptor {
 
+    private static org.jasypt.util.password.PasswordEncryptor getPasswordEncryptor() {
+        if (ApplicationMode.isDevelopment()) {
+            return new BasicPasswordEncryptor();
+        } else {
+            return new StrongPasswordEncryptor();
+        }
+    }
+
     public static String encryptPassword(String userPassword) {
-        StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
-        return passwordEncryptor.encryptPassword(userPassword);
+        return getPasswordEncryptor().encryptPassword(userPassword);
     }
 
     public static boolean checkPassword(String inputPassword, String encryptedPassword) {
-        StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
-        return passwordEncryptor.checkPassword(inputPassword, encryptedPassword);
+        return getPasswordEncryptor().checkPassword(inputPassword, encryptedPassword);
     }
 }
