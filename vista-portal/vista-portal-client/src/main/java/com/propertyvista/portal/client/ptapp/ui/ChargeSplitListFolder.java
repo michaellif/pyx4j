@@ -22,7 +22,6 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -55,33 +54,13 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
     private static I18n i18n = I18nFactory.getI18n(ChargeSplitListFolder.class);
 
-    @SuppressWarnings("rawtypes")
-    private final ValueChangeHandler valueChangeHandler;
-
-    private EditableValueValidator<IList<TenantCharge>> prcValueValidator;
+    private final boolean summaryViewMode;
 
     private final List<EntityFolderColumnDescriptor> columns;
 
-    @SuppressWarnings("rawtypes")
-    ChargeSplitListFolder(final ValueChangeHandler outerValueChangeHandler) {
+    ChargeSplitListFolder(boolean summaryViewMode) {
         super(TenantCharge.class);
-
-        if (outerValueChangeHandler != null) {
-            this.valueChangeHandler = new ValueChangeHandler() {
-                @SuppressWarnings("unchecked")
-                @Override
-                public void onValueChange(ValueChangeEvent event) {
-                    revalidate();
-                    if (!prcValueValidator.isValid(null, getValue())) {
-                    } else {
-                        outerValueChangeHandler.onValueChange(event);
-                    }
-                }
-            };
-        } else {
-            this.valueChangeHandler = null;
-        }
-        // getFolderDecorator().hideValidationMessage();
+        this.summaryViewMode = summaryViewMode;
         columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().tenantFullName(), "260px"));
         columns.add(new EntityFolderColumnDescriptor(proto().percentage(), "35px"));
@@ -99,7 +78,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
     @Override
     public void addValidations() {
-        this.addValueValidator(prcValueValidator = new EditableValueValidator<IList<TenantCharge>>() {
+        this.addValueValidator(new EditableValueValidator<IList<TenantCharge>>() {
 
             @Override
             public boolean isValid(CEditableComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
@@ -172,7 +151,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                     wrap.add(DecorationUtils.inline(w, "35px"));
                     // Add $ label before or after Input
                     IsWidget lable = DecorationUtils.inline(new HTML("%"), "10px");
-                    if (valueChangeHandler != null) {
+                    if (!summaryViewMode) {
                         wrap.insert(lable, 0);
                     } else {
                         wrap.add(lable);
@@ -185,10 +164,9 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
             @SuppressWarnings("unchecked")
             @Override
             public void addValidations() {
-                if (valueChangeHandler != null) {
+                if (!summaryViewMode) {
                     CEditableComponent<Integer, ?> prc = get(proto().percentage());
                     if (prc instanceof CNumberField) {
-                        prc.addValueChangeHandler(valueChangeHandler);
                         ((CNumberField<Integer>) prc).setRange(0, 100);
                     }
                 }
@@ -225,7 +203,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                 @Override
                 public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
                     if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VALIDITY) {
-                        validationMessageHolder.setHTML(folder.getValidationResults().getMessagesText(true));
+                        validationMessageHolder.setHTML(folder.getContainerValidationResults().getMessagesText(true));
                     }
                 }
             });

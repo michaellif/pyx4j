@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
@@ -43,33 +42,31 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
     private final FlowPanel splitCharges = new FlowPanel();
 
-    @SuppressWarnings("rawtypes")
-    private final ValueChangeHandler valueChangeHandler;
+    private boolean summaryViewMode = false;
 
     @SuppressWarnings("rawtypes")
     public ChargesViewForm() {
         super(Charges.class, new VistaEditorsComponentFactory());
 
-        valueChangeHandler = new ValueChangeHandler() {
-
+        addValueChangeHandler(new ValueChangeHandler<Charges>() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
+                revalidate();
                 if (isValid() && ChargesSharedCalculation.calculateCharges(getValue())) {
                     setValue(getValue());
                 }
             }
-        };
+        });
 
+        summaryViewMode = false;
     }
 
     public ChargesViewForm(IEditableComponentFactory factory) {
         super(Charges.class, factory);
-
-        valueChangeHandler = null;
     }
 
     public boolean isSummaryViewMode() {
-        return (valueChangeHandler == null);
+        return summaryViewMode;
     }
 
     @Override
@@ -78,9 +75,9 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
         main.add(new ViewHeaderDecorator(proto().monthlyCharges(), "700px"));
         main.add(inject(proto().monthlyCharges().charges()));
-        if (valueChangeHandler != null) {
+        if (!summaryViewMode) {
             main.add(createHeader2(proto().monthlyCharges().upgradeCharges()));
-            main.add(inject(proto().monthlyCharges().upgradeCharges(), new ChargeLineSelectableFolder(valueChangeHandler)));
+            main.add(inject(proto().monthlyCharges().upgradeCharges(), new ChargeLineSelectableFolder(summaryViewMode)));
         }
 
         main.add(createTotal(proto().monthlyCharges().total()));
@@ -96,7 +93,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
         // could be hided from resulting form:
         splitCharges.add(new ViewHeaderDecorator(proto().paymentSplitCharges(), "700px"));
 
-        splitCharges.add(inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(valueChangeHandler)));
+        splitCharges.add(inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(summaryViewMode)));
         splitCharges.add(createTotal(proto().paymentSplitCharges().total()));
         main.add(splitCharges);
 

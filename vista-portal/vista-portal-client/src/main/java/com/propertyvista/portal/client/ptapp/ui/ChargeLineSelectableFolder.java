@@ -14,7 +14,6 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
@@ -31,12 +30,11 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectable> {
 
-    @SuppressWarnings("rawtypes")
-    final ValueChangeHandler valueChangeHandler;
+    private final boolean summaryViewMode;
 
-    ChargeLineSelectableFolder(@SuppressWarnings("rawtypes") ValueChangeHandler valueChangeHandler) {
+    ChargeLineSelectableFolder(boolean summaryViewMode) {
         super(ChargeLineSelectable.class);
-        this.valueChangeHandler = valueChangeHandler;
+        this.summaryViewMode = summaryViewMode;
     }
 
     @Override
@@ -68,12 +66,10 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
                 FlowPanel main = new FlowPanel();
 
                 String width = "300px";
-                if (valueChangeHandler != null) {
+                if (!summaryViewMode) {
                     main.add(DecorationUtils.inline(inject(proto().selected()), "25px"));
                     CEditableComponent<Boolean, ?> cb = get(proto().selected());
                     if (cb instanceof CCheckBox) {
-                        cb.addValueChangeHandler(valueChangeHandler);
-
                         //TODO this is hack for Misha to fix.
                         cb.asWidget().setStyleName(null);
                     }
