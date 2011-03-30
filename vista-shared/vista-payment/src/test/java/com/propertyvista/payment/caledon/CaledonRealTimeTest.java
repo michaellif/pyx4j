@@ -48,7 +48,7 @@ public class CaledonRealTimeTest extends CaledonTestCase {
         assertRealTimeSale(testMerchantError, createRequest(TestData.CARD_MC1, "2017-09", 10.0), "1001");
     }
 
-    public void OOO_testServerDropConnection() {
+    public void testServerDropConnection() {
         try {
             new CaledonPaymentProcessor().realTimeSale(testMerchant, createRequest(TestData.CARD_MC1, "2009-09", 10.0));
             fail("no return code expected");
