@@ -99,7 +99,7 @@
             <id>build-env</id>
             <properties>
                 <seleniumJvm>/mnt/bamboo-ebs/opt/xvfb-run</seleniumJvm>
-                <seleniumJvmArgLine>${java.home}/bin/java</seleniumJvmArgLine>
+                <seleniumJvmArgLine>--wait=10 --server-args="-screen 0 1024x768x24" ${java.home}/bin/java</seleniumJvmArgLine>
             </properties>
             <build>
                 <plugins>
