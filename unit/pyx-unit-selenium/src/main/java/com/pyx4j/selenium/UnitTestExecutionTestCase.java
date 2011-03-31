@@ -28,6 +28,7 @@ public abstract class UnitTestExecutionTestCase extends BaseSeleniumTestCase {
     protected void executeAllClientUnitTests(int waitSeconds) {
         selenium.waitFor("startClientTests");
         selenium.click("startClientTests");
+        selenium.waitFor("gUnitAll");
         selenium.check("gUnitAll", true);
         selenium.click(DialogDebugId.Dialog_Ok);
         selenium.waitForText("gUnitRunning", "Completed", waitSeconds);
