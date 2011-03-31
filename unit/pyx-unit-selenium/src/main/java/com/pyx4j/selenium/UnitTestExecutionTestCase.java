@@ -26,6 +26,7 @@ import com.pyx4j.widgets.client.dialog.DialogDebugId;
 public abstract class UnitTestExecutionTestCase extends BaseSeleniumTestCase {
 
     protected void executeAllClientUnitTests(int waitSeconds) {
+        selenium.waitFor("startClientTests");
         selenium.click("startClientTests");
         selenium.check("gUnitAll", true);
         selenium.click(DialogDebugId.Dialog_Ok);
