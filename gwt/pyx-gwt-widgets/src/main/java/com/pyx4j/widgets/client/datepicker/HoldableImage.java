@@ -10,6 +10,7 @@ import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Image;
 
@@ -18,7 +19,7 @@ public class HoldableImage extends Image {
     public static final Type<HoldElapsedEventHandler> TYPE = new Type<HoldElapsedEventHandler>();
 
     public class HoldElapsedEvent extends GwtEvent<HoldElapsedEventHandler> {
-        private int change;
+        private final int change;
 
         public HoldElapsedEvent(int change) {
             this.change = change;
@@ -48,18 +49,21 @@ public class HoldableImage extends Image {
     Timer timer;
 
     int change = 1;
-    
+
     int count = 0;
 
     public HoldableImage(ImageResource resource, final int schedule) {
-    	super(resource);
-        
+        super(resource);
+
         handlerManager = new HandlerManager(TYPE);
-        
+
         this.addMouseDownHandler(new MouseDownHandler() {
 
             @Override
             public void onMouseDown(MouseDownEvent event) {
+
+                DOM.setCapture(HoldableImage.this.getElement());
+
                 timer = new Timer() {
                     @Override
                     public void run() {
@@ -78,6 +82,7 @@ public class HoldableImage extends Image {
         this.addMouseUpHandler(new MouseUpHandler() {
             @Override
             public void onMouseUp(MouseUpEvent event) {
+                DOM.releaseCapture(HoldableImage.this.getElement());
                 timer.cancel();
                 change = 1;
                 count = 0;

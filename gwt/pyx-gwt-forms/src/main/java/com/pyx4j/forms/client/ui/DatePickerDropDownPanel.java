@@ -25,47 +25,21 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.datepicker.client.DatePicker;
-
 import com.pyx4j.widgets.client.DropDownPanel;
+import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 
 public class DatePickerDropDownPanel extends DropDownPanel {
 
     private static final Logger log = LoggerFactory.getLogger(DatePickerDropDownPanel.class);
 
-    private final DatePicker picker;
+    private DatePickerComposite picker;
 
     private static DatePickerDropDownPanel instance;
 
     private NativeDatePicker currenttextBox;
 
     private DatePickerDropDownPanel() {
-        picker = new DatePicker();
-        //TODO DOM.setStyleAttribute(picker.getElement(), "border", "1px solid " + popupBorderColor);
-        setWidget(picker);
         setAnimationEnabled(false);
-
-        picker.addValueChangeHandler(new ValueChangeHandler<Date>() {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<Date> event) {
-                NativeDatePicker receiver = currenttextBox;
-                if (receiver != null) {
-                    Date value = event.getValue();
-                    // Clone
-                    if (value != null) {
-                        value = new Date(value.getTime());
-                    }
-
-                    currenttextBox.setNativeValue(value);
-                    receiver.getCComponent().onEditingStop();
-                    hide();
-                    receiver.setFocus(true);
-                }
-            }
-        });
 
     }
 
@@ -98,8 +72,8 @@ public class DatePickerDropDownPanel extends DropDownPanel {
         if (selectedDate == null) {
             selectedDate = new Date();
         }
-        picker.setValue(selectedDate);
-        picker.setCurrentMonth(selectedDate);
+        createDatePicker();
+        picker.setDate(selectedDate);
         showRelativeTo(textBox);
         currenttextBox = textBox;
     }
@@ -112,6 +86,29 @@ public class DatePickerDropDownPanel extends DropDownPanel {
     public void hide(boolean autohide) {
         super.hide(autohide);
         currenttextBox = null;
+        picker = null;
+    }
+
+    private void createDatePicker() {
+        setWidget(picker = new DatePickerComposite());
+        picker.addDateChosenEventHandler(new DatePickerComposite.DateChosenEventHandler() {
+
+            @Override
+            public void onDateChosen(DatePickerComposite.DateChosenEvent event) {
+                NativeDatePicker receiver = currenttextBox;
+                if (receiver != null) {
+                    Date value = event.getChosenDate();
+                    if (value != null) { // Clone without time component!
+                        value = new Date(value.getYear(), value.getMonth(), value.getDate());
+                    }
+
+                    currenttextBox.setNativeValue(value);
+                    receiver.getCComponent().onEditingStop();
+                    hide();
+                    receiver.setFocus(true);
+                }
+            }
+        });
     }
 
 }

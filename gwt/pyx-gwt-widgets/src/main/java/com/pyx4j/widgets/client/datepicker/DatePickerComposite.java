@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.MonthSelector;
+
 import com.pyx4j.widgets.client.style.Selector;
 
 public class DatePickerComposite extends Composite implements HasHandlers {
@@ -60,6 +61,10 @@ public class DatePickerComposite extends Composite implements HasHandlers {
     Date maxDate;
 
     public Date selectedField;
+
+    public DatePickerComposite() {
+        this(1, new Date(), new Date(0, 1, 1), new Date(200, 1, 1), new ArrayList<Date>());
+    }
 
     public DatePickerComposite(int numberOfMonths, Date starting, Date minDate, Date maxDate, ArrayList<Date> disabledDates) {
         DatePickerExtended picker;
@@ -132,6 +137,16 @@ public class DatePickerComposite extends Composite implements HasHandlers {
 
     public HandlerRegistration addDateChosenEventHandler(DateChosenEventHandler handler) {
         return handlerManager.addHandler(TYPE, handler);
+    }
+
+    public void setDate(Date selectedDate) {
+        Date tempDate = new Date(selectedDate.getTime());
+        pickers.get(0).setSelectedDate(tempDate);
+        for (DatePickerExtended picker : pickers) {
+            tempDate = new Date(selectedDate.getTime());
+            picker.setCurrentMonth(tempDate);
+            CalendarUtil.addMonthsToDate(selectedDate, 1);
+        }
     }
 
 }

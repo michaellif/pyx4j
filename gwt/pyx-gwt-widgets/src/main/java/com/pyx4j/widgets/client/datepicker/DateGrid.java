@@ -1,5 +1,8 @@
 package com.pyx4j.widgets.client.datepicker;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -8,10 +11,8 @@ import com.google.gwt.user.client.impl.ElementMapperImpl;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
-import com.pyx4j.widgets.client.style.Selector;
 
-import java.util.ArrayList;
-import java.util.Date;
+import com.pyx4j.widgets.client.style.Selector;
 
 @SuppressWarnings(/* Date manipulation required */{ "deprecation" })
 public class DateGrid extends Grid {
@@ -37,7 +38,7 @@ public class DateGrid extends Grid {
         this.minDate = minDate;
         this.maxDate = maxDate;
         this.disabledDates = disabledDates;
-        setStyleName(Selector.getStyleName(DatePickerExtended.BASE_NAME,DatePickerExtended.StyleSuffix.Grid));
+        setStyleName(Selector.getStyleName(DatePickerExtended.BASE_NAME, DatePickerExtended.StyleSuffix.Grid));
         resize(CalendarModel.WEEKS_IN_MONTH + 1, CalendarModel.DAYS_IN_WEEK);
         drawCells();
     }
@@ -91,7 +92,7 @@ public class DateGrid extends Grid {
             DateCell cell = getCell(i);
             cell.setDate(lastDisplayed);
             cell.setEnabled(isEnabled(lastDisplayed, enableMonth));
-            if (selectedDate != null && lastDisplayed.getTime() == selectedDate.getTime()) {
+            if (selectedDate != null && CalendarUtil.isSameDate(lastDisplayed, selectedDate)) {
                 cell.setSelected(true);
                 selectedCell = cell;
             }
@@ -158,5 +159,9 @@ public class DateGrid extends Grid {
             selectedCell.setSelected(false);
         }
         selectedDate = null;
+    }
+
+    public void setSelectedDate(Date selectedDate) {
+        this.selectedDate = selectedDate;
     }
 }

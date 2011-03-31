@@ -9,6 +9,7 @@ import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.CalendarView;
 import com.google.gwt.user.datepicker.client.DatePicker;
+
 import com.pyx4j.widgets.client.style.Selector;
 
 public class CalendarViewExtended extends CalendarView {
@@ -84,7 +85,11 @@ public class CalendarViewExtended extends CalendarView {
             grid.setText(0, i, getModel().formatDayOfWeek(dayIdx));
         }
         //grid.getRowFormatter().setStyleName(0, "datePickerGridDaysRow");
-        grid.getRowFormatter().setStyleName(0, Selector.getStyleName(DatePickerExtended.BASE_NAME,DatePickerExtended.StyleSuffix.GridDaysRow));
+        grid.getRowFormatter().setStyleName(0, Selector.getStyleName(DatePickerExtended.BASE_NAME, DatePickerExtended.StyleSuffix.GridDaysRow));
         initWidget(grid);
+    }
+
+    public void setSelectedDate(Date selectedDate) {
+        this.grid.setSelectedDate(selectedDate);
     }
 }

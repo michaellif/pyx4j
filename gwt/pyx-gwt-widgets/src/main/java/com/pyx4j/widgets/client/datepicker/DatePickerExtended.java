@@ -5,19 +5,20 @@ import java.util.Date;
 
 import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.DatePicker;
+
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public abstract class DatePickerExtended extends DatePicker {
-	
-	public static String BASE_NAME = "datePicker";
-	
+
+    public static String BASE_NAME = "datePicker";
+
     public static enum StyleSuffix implements IStyleSuffix {
-    	Grid, MonthSelector, GridDaysRow, Navigation, MonthLabel, YearLabel, YearNavigation
+        Grid, MonthSelector, GridDaysRow, Navigation, MonthLabel, YearLabel, YearNavigation
     }
 
     public static enum StyleDependent implements IStyleDependent {
-    	disabled, heighlighted, selected, right, multiple, first
+        disabled, heighlighted, selected, right, multiple, first
     }
 
     protected MonthSelectorExtended monthSelector;
@@ -29,6 +30,11 @@ public abstract class DatePickerExtended extends DatePicker {
     protected Date maxDate;
 
     protected ArrayList<Date> disabledDates;
+
+    public DatePickerExtended() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
     public DatePickerExtended(MonthSelectorExtended selector, ArrayList<Date> disabledDates) {
         super(selector, new CalendarViewExtended(selector.getMinDate(), selector.getMaxDate(), disabledDates), new CalendarModel());
@@ -66,4 +72,7 @@ public abstract class DatePickerExtended extends DatePicker {
         getMyView().clearSelection();
     }
 
+    public void setSelectedDate(Date selectedDate) {
+        getMyView().setSelectedDate(selectedDate);
+    }
 }
