@@ -22,13 +22,13 @@ package com.pyx4j.entity.server;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.IdentitySet;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -45,13 +45,13 @@ public class RpcEntityServiceFilter implements IServiceFilter {
 
     @Override
     public Serializable filterIncomming(Class<? extends Service<?, ?>> serviceClass, Serializable request) {
-        filterRpcTransient(request, new HashSet<Serializable>());
+        filterRpcTransient(request, new IdentitySet<Serializable>());
         return request;
     }
 
     @Override
     public Serializable filterOutgoing(Class<? extends Service<?, ?>> serviceClass, Serializable response) {
-        filterRpcTransient(response, new HashSet<Serializable>());
+        filterRpcTransient(response, new IdentitySet<Serializable>());
         return response;
     }
 
