@@ -87,6 +87,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         retrieveApplicationEntity(summary.tenantList(), summary.application());
 
         // We do not remove the info from DB if Tenant status changes
+        summary.tenantsWithInfo().tenants().clear();
         for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
             if (ApplicationServicesImpl.shouldEnterInformation(tenant)) {
                 summary.tenantsWithInfo().tenants().add(tenant);
@@ -95,6 +96,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
 
         EntityQueryCriteria<PotentialTenantFinancial> financialCriteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
         financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), summary.application()));
+        summary.tenantFinancials().clear();
         for (PotentialTenantFinancial fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
             // Update Transient values and see if we need to show this Tenant
             findTenenat: for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
