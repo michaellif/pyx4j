@@ -94,9 +94,11 @@ public class HoldableImage extends Image {
     }
 
     private void stopHolding() {
-        timer.cancel();
-        change = 1;
-        count = 0;
+        if (timer != null) {
+            timer.cancel();
+            change = 1;
+            count = 0;
+        }
     }
 
     public HandlerRegistration addHoldElapsedHandler(HoldElapsedEventHandler handler) {
