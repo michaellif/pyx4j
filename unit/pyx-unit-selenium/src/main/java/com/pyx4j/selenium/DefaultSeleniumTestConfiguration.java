@@ -86,6 +86,11 @@ public class DefaultSeleniumTestConfiguration implements ISeleniumTestConfigurat
         return getProperty("selenium.keepBrowserOnError", isStartedUnderEclipse());
     }
 
+    @Override
+    public boolean windowMaximize() {
+        return getProperty("selenium.windowMaximize", !isStartedUnderEclipse());
+    }
+
     public static boolean isStartedUnderEclipse() {
         StackTraceElement[] ste = new Throwable().getStackTrace();
         return (ste[ste.length - 1].getClassName().startsWith("org.eclipse.jdt"));

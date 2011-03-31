@@ -49,4 +49,6 @@ public interface ISeleniumTestConfiguration {
 
     public ProxyConfig getProxyConfig();
 
+    public boolean windowMaximize();
+
 }

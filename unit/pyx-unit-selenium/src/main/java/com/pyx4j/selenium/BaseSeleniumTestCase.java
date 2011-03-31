@@ -27,6 +27,7 @@ import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,6 +81,11 @@ public class BaseSeleniumTestCase extends TestCase {
         }
     }
 
+    protected void windowMaximize() {
+        new JavascriptLibrary().executeScript(selenium.driver,
+                "if (window.screen) { window.moveTo(0, 0); window.resizeTo(window.screen.availWidth, window.screen.availHeight);};");
+    }
+
     @Override
     protected void setUp() throws Exception {
         log.info("====== Test " + this.getClass().getName() + "." + getName() + " ======");
@@ -98,6 +104,9 @@ public class BaseSeleniumTestCase extends TestCase {
             log.info("Reuse selenium");
         } else {
             selenium = new SeleniumExtended(testConfig);
+        }
+        if (this.testConfig.windowMaximize()) {
+            windowMaximize();
         }
         log.debug("start test execution {}", getName());
     }
