@@ -42,191 +42,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.dashboard.client.DashboardPanel.IGadget.ISetup;
+import com.pyx4j.dashboard.client.IGadget.ISetup;
 
 /**
  * Dashboard panel.
  */
 public class DashboardPanel extends SimplePanel {
-    /**
-     * Dashboard Gadget interface. User-defined dashboard gadgets should extend GWT Widget
-     * and implement this interface.
-     */
-    public interface IGadget {
-        // info:
-        Widget getWidget(); // should be implemented meaningful!
-
-        String getName();
-
-        // flags:	
-        boolean isMaximizable();
-
-        boolean isMinimizable();
-
-        boolean isSetupable();
-
-        /**
-         * Dashboard Gadget Setup interface. User-defined gadgets may implement this
-         * interface in order to get gadget setup functionality.
-         */
-        interface ISetup {
-            Widget getWidget(); // should be implemented meaningful!
-
-            // notifications:
-            boolean onOk();
-
-            void onCancel();
-        }
-
-        // setup:
-        ISetup getSetup(); // should be implemented meaningful if isSetupable!
-
-        // notifications:
-        void onMaximize(boolean maximized_restored); // true for max-ed, false - restored
-
-        void onMinimize(boolean minimized_restored); // true for min-ed, false - restored
-
-        void onDelete();
-    } // Interface IWidget
-
-    /**
-     * Dashboard layout data type. Represents desirable layout for dashboard
-     */
-    public static class Layout {
-        private int columns = 1; // at least one column exists by default...
-
-        // geometry:
-        private double horizontalSpacing = 0; // horizontal (%-values!) and
-
-        private int verticalSpacing = 0; // vertical (pixels) cell spacing value...
-
-        // column relative widths (in per-cents):
-        private byte[] columnWidths = new byte[0]; // could be filled with widths...
-
-        // decoration:
-        private String[] columnNames = new String[0]; // could be filled with names...
-
-        public Layout() {
-        }
-
-        public Layout(int columns) throws IllegalArgumentException {
-            if (columns > 0) {
-                this.columns = columns;
-            } else {
-                throw new IllegalArgumentException();
-            }
-        }
-
-        public Layout(int columns, double spacingH_PCT, int spacingV_PX) throws IllegalArgumentException {
-            if (columns > 0) {
-                this.columns = columns;
-            } else {
-                throw new IllegalArgumentException();
-            }
-
-            if (!setHorizontalSpacing(spacingH_PCT)) {
-                throw new IllegalArgumentException();
-            }
-
-            this.verticalSpacing = spacingV_PX;
-        }
-
-        public int getColumns() {
-            return columns;
-        }
-
-        public double getHorizontalSpacing() {
-            return horizontalSpacing;
-        }
-
-        /**
-         * Horizontal spacing set by %, so their sum (doubled value multiplied by column
-         * number) may not exceed 100%, at least (in reality we want to leave space for
-         * the columns itself!). Then, the spacing is formed by means of column padding,
-         * so its doubled value may not exceed the size of the smallest column also...
-         */
-        public boolean setHorizontalSpacing(double spacingH_PCT) {
-            if (getColumns() * spacingH_PCT * 2 >= 100.0) {
-                return false; // percentage looks strange!?.
-            }
-
-            double pcMin = 100.0 / getColumns();
-            for (int i = 0; i < columnWidths.length; ++i) {
-                pcMin = Math.min(pcMin, columnWidths[i]);
-            }
-
-            if (pcMin <= spacingH_PCT * 2) {
-                return false; // ok, smallest column should be wider than spacing...
-            }
-
-            horizontalSpacing = spacingH_PCT;
-            return true;
-        }
-
-        public int getVerticalSpacing() {
-            return verticalSpacing;
-        }
-
-        public void setVerticalSpacing(int spacingV_PX) {
-            verticalSpacing = spacingV_PX;
-        }
-
-        public boolean isColumnWidths() {
-            return (columnWidths.length != 0);
-        }
-
-        /**
-         * The column widths set by %, so their sum shouldn't exceed 100%. But there is
-         * horizontal spacing also, and spacing formed by column padding, so the smallest
-         * column width should be greater that doubled spacing value...
-         */
-        public boolean setColumnWidths(byte[] columnWidths) throws IllegalArgumentException {
-            if (columnWidths.length > 0) { // note: zero length array is 'reset to default' case!..
-                if (columnWidths.length < getColumns()) {
-                    throw new IllegalArgumentException();
-                }
-
-                byte pcSum = 0;
-                double pcMin = 100.0 / getColumns();
-                for (int i = 0; i < columnWidths.length; ++i) {
-                    pcSum += columnWidths[i];
-                    pcMin = Math.min(pcMin, columnWidths[i]);
-                }
-
-                if (pcSum > 100) {
-                    return false; // mmm, the widths percentage looks strange!?.
-                }
-
-                if (pcMin <= getHorizontalSpacing() * 2) {
-                    return false; // ok, smallest column should be wider than spacing...
-                }
-            }
-
-            this.columnWidths = columnWidths;
-            return true;
-        }
-
-        public float getCoumnWidth(int column) throws ArrayIndexOutOfBoundsException {
-            return columnWidths[column];
-        }
-
-        public boolean isColumnNames() {
-            return (columnNames.length != 0);
-        }
-
-        public void setColumnNames(String[] columnNames) throws IllegalArgumentException {
-            if (columnNames.length < getColumns()) {
-                throw new IllegalArgumentException();
-            }
-
-            this.columnNames = columnNames;
-        }
-
-        public String getCoumnName(int column) throws ArrayIndexOutOfBoundsException {
-            return columnNames[column];
-        }
-    } // class Layout
-
     // CSS style names used: 
     private static final String CSS_DASHBOARD_PANEL = "DashboardPanel";
 
@@ -483,21 +304,10 @@ public class DashboardPanel extends SimplePanel {
             frame.getElement().getStyle().setOverflow(Overflow.HIDDEN);
 
             this.setWidget(frame);
-            this.setWidth("100%");
+            this.setWidth("99.6%"); // note that dirty trick to count border width :( 
 
-            /**
-             * don't forget about vertical spacing:
-             * Note: dnd tricks with margin and uses DOM.getStyleAttribute(w,"margin")
-             * (com.allen_sauer.gwt.dnd.client.PickupDragController.
-             * saveSelectedWidgetsLocationAndStyle())
-             * to retrieve and save current widget margin, but... it doesn't reads
-             * attributes set by getStyle().setMarginTop/Bottom methods!!??
-             * Thus using instead such combination:
-             */
-            // this.getElement().getStyle().setProperty("margin", layout.getVerticalSpacing() + "px" + " 0px");
-            this.getElement().getStyle().setMargin(layout.getVerticalSpacing(), Unit.PX);
-            this.getElement().getStyle().setMarginLeft(0, Unit.PX);
-            this.getElement().getStyle().setMarginRight(0, Unit.PX);
+            // don't forget about vertical spacing:
+            setVerticalSpacing(layout.getVerticalSpacing());
 
             // make the widget place holder draggable by its title:
             widgetDragController.makeDraggable(this, title);
@@ -572,6 +382,21 @@ public class DashboardPanel extends SimplePanel {
             return btn;
         }
 
+        private void setVerticalSpacing(int spacing) {
+            /**
+             * Note: dnd tricks with margin and uses DOM.getStyleAttribute(w,"margin")
+             * (com.allen_sauer.gwt.dnd.client.PickupDragController.
+             * saveSelectedWidgetsLocationAndStyle())
+             * to retrieve and save current widget margin, but... it doesn't reads
+             * attributes set by getStyle().setMarginTop/Bottom methods!!??
+             * Thus using instead such combination:
+             */
+            // this.getElement().getStyle().setProperty("margin", layout.getVerticalSpacing() + "px" + " 0px");
+            this.getElement().getStyle().setMargin(spacing, Unit.PX);
+            this.getElement().getStyle().setMarginLeft(0, Unit.PX);
+            this.getElement().getStyle().setMarginRight(0, Unit.PX);
+        }
+
         // --------------------------------------------------------------
 
         private void minimize() {
@@ -628,9 +453,11 @@ public class DashboardPanel extends SimplePanel {
             public void saveWidgetPosition(GadgetHolder widget) {
                 columnPanel = (FlowPanel) getParent();
                 widgetIndex = maximizeData.columnPanel.getWidgetIndex(widget);
+                widget.setVerticalSpacing(0);
             }
 
             public void restoreWidgetPosition(GadgetHolder widget) {
+                widget.setVerticalSpacing(layout.getVerticalSpacing());
                 columnPanel.insert(widget, widgetIndex);
             }
 

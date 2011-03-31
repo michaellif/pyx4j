@@ -43,6 +43,8 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
+import com.pyx4j.dashboard.client.IGadget;
+import com.pyx4j.dashboard.client.Layout;
 
 /**
  * EntryPoint class for demonstrating and testing gwt-dnd.
@@ -104,7 +106,7 @@ public final class DashboardDemo implements EntryPoint {
         dashboardWrapper.setWidth("100%");
         mainPanel.add(dashboardWrapper);
 
-        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 1, 12);
+        Layout layout = new Layout(3, 1, 12);
 
         // uncomment for captioned columns:     
         byte colWidths[] = { 30, 50, 20 };
@@ -132,7 +134,7 @@ public final class DashboardDemo implements EntryPoint {
         dashboardWrapper.add(dashboardPanel);
 
         // define demo widget class: 
-        class MyHTML extends HTML implements DashboardPanel.IGadget {
+        class MyHTML extends HTML implements IGadget {
             MyHTML(String s) {
                 super(s);
             }
@@ -248,7 +250,7 @@ public final class DashboardDemo implements EntryPoint {
                     public void execute() {
                         pp.hide();
 
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(1, 4, 12);
+                        Layout layout = new Layout(1, 4, 12);
                         dashboardPanel.setLayout(layout);
                     }
                 };
@@ -258,7 +260,7 @@ public final class DashboardDemo implements EntryPoint {
                     public void execute() {
                         pp.hide();
 
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 2, 12);
+                        Layout layout = new Layout(2, 2, 12);
                         byte colWidths[] = { 33, 66 };
                         layout.setColumnWidths(colWidths);
                         dashboardPanel.setLayout(layout);
@@ -270,7 +272,7 @@ public final class DashboardDemo implements EntryPoint {
                     public void execute() {
                         pp.hide();
 
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 2, 12);
+                        Layout layout = new Layout(2, 2, 12);
                         byte colWidths[] = { 66, 33 };
                         layout.setColumnWidths(colWidths);
                         dashboardPanel.setLayout(layout);
@@ -282,7 +284,7 @@ public final class DashboardDemo implements EntryPoint {
                     public void execute() {
                         pp.hide();
 
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 2, 12);
+                        Layout layout = new Layout(2, 2, 12);
                         byte colWidths[] = { 50, 50 };
                         layout.setColumnWidths(colWidths);
                         dashboardPanel.setLayout(layout);
@@ -294,20 +296,20 @@ public final class DashboardDemo implements EntryPoint {
                     public void execute() {
                         pp.hide();
 
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 1, 12);
+                        Layout layout = new Layout(3, 1, 12);
                         dashboardPanel.setLayout(layout);
                     }
                 };
 
-                //                Command cmdLr = new Command() {
-                //                    @Override
-                //                    public void execute() {
-                //                        pp.hide();
-                //
-                //                        dashboardPanel.getLayout().setColumnWidths(new byte[0]);
-                //                        dashboardPanel.refresh();
-                //                    }
-                //                };
+//                Command cmdLr = new Command() {
+//                    @Override
+//                    public void execute() {
+//                        pp.hide();
+//
+//                        dashboardPanel.getLayout().setColumnWidths(null);
+//                        dashboardPanel.refresh();
+//                    }
+//                };
 
                 // create the menu:
                 MenuBar menu = new MenuBar(true);
@@ -316,8 +318,8 @@ public final class DashboardDemo implements EntryPoint {
                 menu.addItem("Two (66/33)", cmdL22);
                 menu.addItem("Two (50/50)", cmdL23);
                 menu.addItem("Three (33x3)", cmdL3);
-                //                menu.addSeparator();
-                //                menu.addItem("Reset widths", cmdLr);
+//                menu.addSeparator();
+//                menu.addItem("Reset widths", cmdLr);
 
                 menu.addStyleName(CSS_DASHBOARD_MENU);
 
