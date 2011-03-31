@@ -24,6 +24,7 @@ import java.io.Serializable;
 
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.rpc.shared.IServiceRequest;
 import com.pyx4j.rpc.shared.Service;
 
 public class RpcEntityDumpServiceFilter implements IServiceFilter {
@@ -32,6 +33,12 @@ public class RpcEntityDumpServiceFilter implements IServiceFilter {
     public Serializable filterIncomming(Class<? extends Service<?, ?>> serviceClass, Serializable request) {
         if (request instanceof IEntity) {
             DataDump.dump("got", (IEntity) request);
+        } else if (request instanceof IServiceRequest) {
+            for (Serializable arg : ((IServiceRequest) request).getArgs()) {
+                if (arg instanceof IEntity) {
+                    DataDump.dump("got", (IEntity) arg);
+                }
+            }
         }
         return request;
     }

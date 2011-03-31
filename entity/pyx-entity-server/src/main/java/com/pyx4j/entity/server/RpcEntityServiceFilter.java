@@ -26,6 +26,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -37,6 +40,8 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.rpc.shared.Service;
 
 public class RpcEntityServiceFilter implements IServiceFilter {
+
+    private static final Logger log = LoggerFactory.getLogger(RpcEntityServiceFilter.class);
 
     @Override
     public Serializable filterIncomming(Class<? extends Service<?, ?>> serviceClass, Serializable request) {
@@ -57,6 +62,8 @@ public class RpcEntityServiceFilter implements IServiceFilter {
             for (Object v : (Collection<?>) value) {
                 if (v instanceof Serializable) {
                     filterRpcTransient((Serializable) v, processed);
+                } else {
+                    log.warn("Sending non Serializable collection value [{}]", v);
                 }
             }
         }

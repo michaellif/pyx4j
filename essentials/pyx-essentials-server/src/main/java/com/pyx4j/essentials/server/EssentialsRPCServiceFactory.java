@@ -37,11 +37,12 @@ public class EssentialsRPCServiceFactory extends ReflectionServiceFactory {
     public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass) {
         //List<IServiceFilter> filters = super.getServiceFilterChain(serviceClass);
         List<IServiceFilter> filters = new Vector<IServiceFilter>();
-        filters.addAll(super.getServiceFilterChain(serviceClass));
 
         if (ApplicationBackend.getBackendType() == ApplicationBackendType.RDB) {
             filters.add(new RpcEntityDumpServiceFilter());
         }
+
+        filters.addAll(super.getServiceFilterChain(serviceClass));
 
         if ((NetworkSimulationServiceFilter.getNetworkSimulationConfig() != null)
                 && (NetworkSimulationServiceFilter.getNetworkSimulationConfig().enabled().isBooleanTrue())) {
