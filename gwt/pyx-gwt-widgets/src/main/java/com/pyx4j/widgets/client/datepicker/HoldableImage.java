@@ -2,6 +2,8 @@ package com.pyx4j.widgets.client.datepicker;
 
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.EventHandler;
@@ -10,7 +12,6 @@ import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Image;
 
@@ -61,9 +62,6 @@ public class HoldableImage extends Image {
 
             @Override
             public void onMouseDown(MouseDownEvent event) {
-
-                DOM.setCapture(HoldableImage.this.getElement());
-
                 timer = new Timer() {
                     @Override
                     public void run() {
@@ -79,15 +77,26 @@ public class HoldableImage extends Image {
             }
         });
 
+        this.addMouseOutHandler(new MouseOutHandler() {
+
+            @Override
+            public void onMouseOut(MouseOutEvent event) {
+                stopHolding();
+            }
+        });
+
         this.addMouseUpHandler(new MouseUpHandler() {
             @Override
             public void onMouseUp(MouseUpEvent event) {
-                DOM.releaseCapture(HoldableImage.this.getElement());
-                timer.cancel();
-                change = 1;
-                count = 0;
+                stopHolding();
             }
         });
+    }
+
+    private void stopHolding() {
+        timer.cancel();
+        change = 1;
+        count = 0;
     }
 
     public HandlerRegistration addHoldElapsedHandler(HoldElapsedEventHandler handler) {
