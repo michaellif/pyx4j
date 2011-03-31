@@ -54,7 +54,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         VistaDevLogin.login(selenium);
 
         //PLEASE ADD BREAKPOINT ON THE NEXT LINE//
-        selenium.waitFor(By.id("gwt-debug-Login"), 10);
+        selenium.waitFor(By.id("gwt-debug-Auth_Login"), 10);
         // Initialize access to GlassPanel
         selenium.setGlassPanelAware();
         // wait while site will initialize
@@ -65,7 +65,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
     public void testLoginExistingUser() throws Exception {
         loginToMainSite();
 
-        selenium.click("id=gwt-debug-Login");
+        selenium.click("Auth_Login");
 
         /*** page 5 ***/
         selenium.type("id=gwt-debug-AuthenticationRequest$email", "cust001@pyx4j.com");
