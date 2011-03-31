@@ -91,8 +91,8 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
 
-        selenium.click("UnitSelection$availableUnits$units_row-1_ApartmentUnit$unitType");
-        String strAvailFrom = selenium.getText("UnitSelection$availableUnits$units_row-1_ApartmentUnit$avalableForRent");
+        selenium.click("UnitSelection$availableUnits$units_row-2_ApartmentUnit$unitType");
+        String strAvailFrom = selenium.getText("UnitSelection$availableUnits$units_row-2_ApartmentUnit$avalableForRent");
 
         java.util.Date dateAvail = sdf.parse(strAvailFrom);
         Calendar cdl = Calendar.getInstance();
@@ -101,7 +101,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         String strStartRent = sdf.format(cdl.getTime());
 
         selenium.type("UnitSelection$rentStart", strStartRent);
-        selenium.click("UnitSelection$availableUnits$units_row-1_leaseTerm_12-input");
+        selenium.click("UnitSelection$availableUnits$units_row-2_leaseTerm_12-input");
         assertNoMessages();
         // we do not save, just a test in this case
 
@@ -133,18 +133,18 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         selenium.type("AccountCreationRequest$email", ulogin);
         selenium.type("AccountCreationRequest$password", ulogin);
         selenium.type("id=recaptcha_response_field", "x");
-        selenium.click("id=gwt-debug-Criteria_Submit");
+        selenium.click("id=gwt-debug-Auth_LetsStart");
 
         selenium.waitWhileWorking();
 
         log.info("User {} created", ulogin);
 
         // APARTMENT PAGE
-        selenium.click("UnitSelection$availableUnits$units_row-1_ApartmentUnit$unitType");
-        String strAvailFrom = selenium.getText("UnitSelection$availableUnits$units_row-1_ApartmentUnit$avalableForRent");
+        selenium.click("UnitSelection$availableUnits$units_row-2_ApartmentUnit$unitType");
+        String strAvailFrom = selenium.getText("UnitSelection$availableUnits$units_row-2_ApartmentUnit$avalableForRent");
 
         selenium.type("UnitSelection$rentStart", strAvailFrom); //to make sure it's the same date
-        selenium.click("gwt-debug-UnitSelection$availableUnits$units_row-1_leaseTerm_6-input");
+        selenium.click("gwt-debug-UnitSelection$availableUnits$units_row-2_leaseTerm_6-input");
         selenium.click("Crud_Save");
 
         //current time in this format appended to the user name
@@ -183,7 +183,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
     public void doReLoginTenant() throws Exception {
 
         //starts with page with ID prompt
-        selenium.click("id=gwt-debug-Login");
+        selenium.click("Auth_Login");
 
         Calendar cal = Calendar.getInstance(); //current day-time
         selenium.type("AuthenticationRequest$email", testUser + strNow + emailAt);
