@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.server.generator;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -67,6 +65,7 @@ import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
@@ -75,6 +74,10 @@ public class VistaDataGenerator {
     private final static Logger log = LoggerFactory.getLogger(VistaDataGenerator.class);
 
     public VistaDataGenerator() {
+    }
+
+    public VistaDataGenerator(long seed) {
+        DataGenerator.setRandomSeed(seed);
     }
 
     public Summary createSummary(Application application) {
