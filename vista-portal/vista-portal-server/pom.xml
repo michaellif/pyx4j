@@ -86,6 +86,8 @@
             <artifactId>pyx-entity-report</artifactId>
             <version>${pyxVersion}</version>
             <classifier>tests</classifier>
+            <scope>test</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
