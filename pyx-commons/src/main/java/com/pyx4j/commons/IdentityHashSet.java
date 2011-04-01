@@ -25,14 +25,14 @@ import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-public class IdentitySet<E> extends AbstractSet<E> implements Set<E> {
+public class IdentityHashSet<E> extends AbstractSet<E> implements Set<E> {
 
     private transient IdentityHashMap<E, Object> map;
 
     // Dummy value to associate with an Object in the backing Map
     private static final Object PRESENT = new Object();
 
-    public IdentitySet() {
+    public IdentityHashSet() {
         map = new IdentityHashMap<E, Object>();
     }
 

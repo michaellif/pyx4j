@@ -20,8 +20,11 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
+import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Country;
@@ -89,6 +92,14 @@ public class FactoryTest extends InitializerTestCase {
         employee2.firstName().setValue("Firstname2");
         employee2.setPrimaryKey(123L);
         assertEquals("same key", employee1, employee2);
+
+        Set<Employee> regularSet = new HashSet<Employee>();
+        regularSet.add(employee1);
+        assertTrue("contains by Id", regularSet.contains(employee2));
+
+        Set<Employee> identitySet = new IdentityHashSet<Employee>();
+        identitySet.add(employee1);
+        assertFalse("contains by Identity", identitySet.contains(employee2));
     }
 
     public void testSetManipulations() {

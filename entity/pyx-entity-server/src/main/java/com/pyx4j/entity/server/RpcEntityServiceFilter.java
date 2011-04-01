@@ -28,7 +28,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.IdentitySet;
+import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -45,13 +45,13 @@ public class RpcEntityServiceFilter implements IServiceFilter {
 
     @Override
     public Serializable filterIncomming(Class<? extends Service<?, ?>> serviceClass, Serializable request) {
-        filterRpcTransient(request, new IdentitySet<Serializable>());
+        filterRpcTransient(request, new IdentityHashSet<Serializable>());
         return request;
     }
 
     @Override
     public Serializable filterOutgoing(Class<? extends Service<?, ?>> serviceClass, Serializable response) {
-        filterRpcTransient(response, new IdentitySet<Serializable>());
+        filterRpcTransient(response, new IdentityHashSet<Serializable>());
         return response;
     }
 
@@ -70,7 +70,7 @@ public class RpcEntityServiceFilter implements IServiceFilter {
     }
 
     protected void filterMembers(IEntity entity, Set<Serializable> processed) {
-        if (entity.isNull() || processed.contains(entity)) {
+        if (entity.isNull() || processed.contains(entity) || processed.contains(entity.getValue())) {
             return;
         }
         EntityMeta em = entity.getEntityMeta();
@@ -78,6 +78,7 @@ public class RpcEntityServiceFilter implements IServiceFilter {
             throw new Error("Should not serialize " + entity.getObjectClass());
         }
         processed.add(entity);
+        processed.add((Serializable) entity.getValue());
         nextValue: for (Map.Entry<String, Object> me : entity.getValue().entrySet()) {
             String memberName = me.getKey();
             if (memberName.equals(IEntity.PRIMARY_KEY)) {

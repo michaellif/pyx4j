@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -42,11 +43,15 @@ public class EntityGraph {
     }
 
     public static void applyRecursively(IEntity entity, ApplyMethod method) {
-        applyRecursively(entity, method, new HashSet<IEntity>());
+        applyRecursively(entity, method, new HashSet<IEntity>(), new HashSet<Map<String, Object>>());
     }
 
-    public static void applyRecursively(IEntity entity, ApplyMethod method, Set<IEntity> processed) {
-        if (processed.contains(entity)) {
+    public static void applyRecursivelyAllObjects(IEntity entity, ApplyMethod method) {
+        applyRecursively(entity, method, new IdentityHashSet<IEntity>(), new IdentityHashSet<Map<String, Object>>());
+    }
+
+    private static void applyRecursively(IEntity entity, ApplyMethod method, Set<IEntity> processed, Set<Map<String, Object>> processedValues) {
+        if (processed.contains(entity) || processedValues.contains(entity.getValue())) {
             return;
         }
         method.apply(entity);
@@ -54,18 +59,20 @@ public class EntityGraph {
         if (entity.isNull()) {
             return;
         }
+        processedValues.add(entity.getValue());
+
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (memberMeta.isEntity()) {
-                applyRecursively((IEntity) entity.getMember(memberName), method, processed);
+                applyRecursively((IEntity) entity.getMember(memberName), method, processed, processedValues);
             } else if (ISet.class.equals(memberMeta.getObjectClass())) {
                 for (IEntity value : (ISet<?>) entity.getMember(memberName)) {
-                    applyRecursively(value, method, processed);
+                    applyRecursively(value, method, processed, processedValues);
                 }
             } else if (IList.class.equals(memberMeta.getObjectClass())) {
                 for (IEntity value : (IList<?>) entity.getMember(memberName)) {
-                    applyRecursively(value, method, processed);
+                    applyRecursively(value, method, processed, processedValues);
                 }
             }
         }
