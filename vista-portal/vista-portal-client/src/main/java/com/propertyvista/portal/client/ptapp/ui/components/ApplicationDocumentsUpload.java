@@ -96,10 +96,10 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
         fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attached Files:"))));
 
-//        fp.add(docList = new VerticalPanel());
-//        docList.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-//        docList.getElement().getStyle().setPaddingTop(1, Unit.EM);
-//        docList.getElement().getStyle().setPaddingBottom(1, Unit.EM);
+        //        fp.add(docList = new VerticalPanel());
+        //        docList.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        //        docList.getElement().getStyle().setPaddingTop(1, Unit.EM);
+        //        docList.getElement().getStyle().setPaddingBottom(1, Unit.EM);
 
         fp.add(appDocListView = new ApplicationDocumentsListView());
         appDocListView.initialize();
@@ -187,10 +187,8 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
                                 CHyperlink link = new CHyperlink(new Command() {
                                     @Override
                                     public void execute() {
-                                        // TODO show the file here...
-                                        //open this url: "ApplicationDocument?id="+getValue().id()
-                                        // Consider  using GWT.getModuleBaseURL() in future
-                                        String url = GWT.getModuleBaseURL() + "ApplicationDocument?" + ApplicationDocumentServletParameters.DOCUMENT_ID + "=" + getValue().id().getValue();
+                                        String url = GWT.getModuleBaseURL() + "ApplicationDocument?" + ApplicationDocumentServletParameters.DOCUMENT_ID + "="
+                                                + getValue().id().getValue();
                                         Window.open(url, "_blank", null);
                                     }
                                 });
