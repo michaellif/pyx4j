@@ -70,330 +70,285 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
-	private static I18n i18n = I18nFactory.getI18n(ApartmentUnitsTable.class);
+    private static I18n i18n = I18nFactory.getI18n(ApartmentUnitsTable.class);
 
-	public final static String DEFAULT_STYLE_PREFIX = "ApartmentViewForm";
+    public final static String DEFAULT_STYLE_PREFIX = "ApartmentViewForm";
 
-	public static enum StyleSuffix implements IStyleSuffix {
-		UnitListHeader, SelectedUnit, unitRowPanel, unitDetailPanel
-	}
+    public static enum StyleSuffix implements IStyleSuffix {
+        UnitListHeader, SelectedUnit, unitRowPanel, unitDetailPanel
+    }
 
-	public static enum StyleDependent implements IStyleDependent {
-		selected, disabled, hover
-	}
+    public static enum StyleDependent implements IStyleDependent {
+        selected, disabled, hover
+    }
 
-	private final List<EntityFolderColumnDescriptor> columns;
+    private final List<EntityFolderColumnDescriptor> columns;
 
-	private final VistaReadOnlyComponentFactory factory = new VistaReadOnlyComponentFactory();
+    private final VistaReadOnlyComponentFactory factory = new VistaReadOnlyComponentFactory();
 
-	private ApartmentUnitDetailsPanel unitDetailsPanelShown = null;
+    private ApartmentUnitDetailsPanel unitDetailsPanelShown = null;
 
-	private final ValueChangeHandler<ApartmentUnit> selectedUnitChangeHandler;
+    private final ValueChangeHandler<ApartmentUnit> selectedUnitChangeHandler;
 
-	private final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler;
+    private final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler;
 
-	private MarketRent selectedmarketRent;
+    private MarketRent selectedmarketRent;
 
-	private HorizontalPanel floorplanRawPanel;
-	
-	private ApartmentUnit currentApartmentUnit = null;
+    private HorizontalPanel floorplanRawPanel;
 
-	public ApartmentUnitsTable(
-			ValueChangeHandler<ApartmentUnit> selectedUnitChangeHandler,
-			ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler) {
-		super(ApartmentUnit.class);
-		this.selectedUnitChangeHandler = selectedUnitChangeHandler;
-		this.selectedMarketRentChangeHandler = selectedMarketRentChangeHandler;
+    private ApartmentUnit currentApartmentUnit = null;
 
-		columns = new ArrayList<EntityFolderColumnDescriptor>();
-		columns.add(new EntityFolderColumnDescriptor(
-				proto().floorplan().name(), "70px"));
-		columns.add(new EntityFolderColumnDescriptor(proto().unitType(),
-				"100px"));
-		columns.add(new EntityFolderColumnDescriptor(proto().marketRent(),
-				"70px"));
-		columns.add(new EntityFolderColumnDescriptor(proto().requiredDeposit(),
-				"70px"));
-		columns.add(new EntityFolderColumnDescriptor(proto().bedrooms(), "60px"));
-		columns.add(new EntityFolderColumnDescriptor(proto().bathrooms(),
-				"60px"));
-		columns.add(new EntityFolderColumnDescriptor(proto().area(), "60px"));
-		columns.add(new EntityFolderColumnDescriptor(proto().avalableForRent(),
-				"140px"));
-	}
+    public ApartmentUnitsTable(ValueChangeHandler<ApartmentUnit> selectedUnitChangeHandler, ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler) {
+        super(ApartmentUnit.class);
+        this.selectedUnitChangeHandler = selectedUnitChangeHandler;
+        this.selectedMarketRentChangeHandler = selectedMarketRentChangeHandler;
 
-	@Override
-	public CEditableComponent<?, ?> create(IObject<?> member) {
-		if (member.getValueClass() == MarketRent.class) {
-			return new MarketRentLabel();
-		} else {
-			return factory.create(member);
-		}
-	}
+        columns = new ArrayList<EntityFolderColumnDescriptor>();
+        columns.add(new EntityFolderColumnDescriptor(proto().floorplan().name(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().unitType(), "100px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().marketRent(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().requiredDeposit(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().bedrooms(), "60px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().bathrooms(), "60px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().area(), "60px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().avalableForRent(), "140px"));
+    }
 
-	@Override
-	protected CEntityFolderItem<ApartmentUnit> createItem() {
-		return new UnitTableRow(ApartmentUnit.class, columns);
-	}
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        if (member.getValueClass() == MarketRent.class) {
+            return new MarketRentLabel();
+        } else {
+            return factory.create(member);
+        }
+    }
 
-	@Override
-	protected FolderDecorator<ApartmentUnit> createFolderDecorator() {
-		TableFolderDecorator<ApartmentUnit> tfd = new TableFolderDecorator<ApartmentUnit>(
-				columns);
-		tfd.getHeader().setStyleName(
-				DEFAULT_STYLE_PREFIX + StyleSuffix.UnitListHeader);
+    @Override
+    protected CEntityFolderItem<ApartmentUnit> createItem() {
+        return new UnitTableRow(ApartmentUnit.class, columns);
+    }
 
-		floorplanRawPanel = new HorizontalPanel();
-		tfd.insert(floorplanRawPanel, tfd.getWidgetIndex(tfd.getHeader()) + 1);
-		tfd.insert(
-				new ViewLineSeparator(700, Unit.PX, 0, Unit.EM, 0.5, Unit.EM),
-				tfd.getWidgetCount() - 1);
-		return tfd;
+    @Override
+    protected FolderDecorator<ApartmentUnit> createFolderDecorator() {
+        TableFolderDecorator<ApartmentUnit> tfd = new TableFolderDecorator<ApartmentUnit>(columns);
+        tfd.getHeader().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.UnitListHeader);
 
-	}
+        floorplanRawPanel = new HorizontalPanel();
+        tfd.insert(floorplanRawPanel, tfd.getWidgetIndex(tfd.getHeader()) + 1);
+        tfd.insert(new ViewLineSeparator(700, Unit.PX, 0, Unit.EM, 0.5, Unit.EM), tfd.getWidgetCount() - 1);
+        return tfd;
 
-	private String formatDoubleAsInt(double value) {
-		if (Math.floor(value) == Math.ceil(value)) {
-			return String.valueOf((int) value);
-		} else {
-			return String.valueOf(value);
-		}
-	}
+    }
 
-	private void createFloorplanRaw(AvailableUnitsByFloorplan availableUnits) {
-		floorplanRawPanel.clear();
+    private String formatDoubleAsInt(double value) {
+        if (Math.floor(value) == Math.ceil(value)) {
+            return String.valueOf((int) value);
+        } else {
+            return String.valueOf(value);
+        }
+    }
 
-		for (EntityFolderColumnDescriptor column : columns) {
-			SimplePanel cellPanel = new SimplePanel();
-			cellPanel.getElement().getStyle().setMarginLeft(3, Style.Unit.PX);
-			cellPanel.getElement().getStyle().setMarginRight(3, Style.Unit.PX);
-			cellPanel.setWidth(column.getWidth());
+    private void createFloorplanRaw(AvailableUnitsByFloorplan availableUnits) {
+        floorplanRawPanel.clear();
 
-			String caption = "&nbsp";
-			Widget widgetToInsert = null;
+        for (EntityFolderColumnDescriptor column : columns) {
+            SimplePanel cellPanel = new SimplePanel();
+            cellPanel.getElement().getStyle().setMarginLeft(3, Style.Unit.PX);
+            cellPanel.getElement().getStyle().setMarginRight(3, Style.Unit.PX);
+            cellPanel.setWidth(column.getWidth());
 
-			if (proto().floorplan().name() == column.getObject()) {
-				widgetToInsert = new Image(SiteImages.INSTANCE.floorplan());
-				widgetToInsert
-						.ensureDebugId(VistaFormsDebugId.Available_Units_ViewPlan
-								.getDebugIdString());
-			} else if (proto().unitType() == column.getObject()) {
-				caption = availableUnits.floorplan().name().getStringView();
-			} else {
-				if (availableUnits.units().size() != 0) {
-					UnitsDataCalc calcs = new UnitsDataCalc(
-							availableUnits.units());
-					// fill the row:
-					if (proto().marketRent() == column.getObject()) {
-						caption = "From <br />"
-								+ DomainUtil.createMoney(calcs.minRent)
-										.getStringView();
-					} else if (proto().requiredDeposit() == column.getObject()) {
-						caption = "<br />"
-								+ DomainUtil.createMoney(calcs.minDeposit)
-										.getStringView();
-					} else if (proto().bedrooms() == column.getObject()) {
-						caption = "<br />" + formatDoubleAsInt(calcs.minBed);
-					} else if (proto().bathrooms() == column.getObject()) {
-						caption = "<br />" + formatDoubleAsInt(calcs.minBath);
-					} else if (proto().area() == column.getObject()) {
-						caption = "<br />"
-								+ availableUnits.floorplan().area()
-										.getStringView();
-					} else if (proto().avalableForRent() == column.getObject()) {
-						caption = "<br />"
-								+ DateTimeFormat.getFormat(
-										proto().avalableForRent().getMeta()
-												.getFormat()).format(
-										calcs.minAvalableForRent);
-					}
-				}
-			}
+            String caption = "&nbsp";
+            Widget widgetToInsert = null;
 
-			cellPanel.setWidget(widgetToInsert != null ? widgetToInsert
-					: new HTML(caption));
-			floorplanRawPanel.add(cellPanel);
-			widgetToInsert = null;
-		}
-	}
+            if (proto().floorplan().name() == column.getObject()) {
+                widgetToInsert = new Image(SiteImages.INSTANCE.floorplan());
+                widgetToInsert.ensureDebugId(VistaFormsDebugId.Available_Units_ViewPlan.getDebugIdString());
+            } else if (proto().unitType() == column.getObject()) {
+                caption = availableUnits.floorplan().name().getStringView();
+            } else {
+                if (availableUnits.units().size() != 0) {
+                    UnitsDataCalc calcs = new UnitsDataCalc(availableUnits.units());
+                    // fill the row:
+                    if (proto().marketRent() == column.getObject()) {
+                        caption = "From <br />" + DomainUtil.createMoney(calcs.minRent).getStringView();
+                    } else if (proto().requiredDeposit() == column.getObject()) {
+                        caption = "<br />" + DomainUtil.createMoney(calcs.minDeposit).getStringView();
+                    } else if (proto().bedrooms() == column.getObject()) {
+                        caption = "<br />" + formatDoubleAsInt(calcs.minBed);
+                    } else if (proto().bathrooms() == column.getObject()) {
+                        caption = "<br />" + formatDoubleAsInt(calcs.minBath);
+                    } else if (proto().area() == column.getObject()) {
+                        caption = "<br />" + availableUnits.floorplan().area().getStringView();
+                    } else if (proto().avalableForRent() == column.getObject()) {
+                        caption = "<br />" + DateTimeFormat.getFormat(proto().avalableForRent().getMeta().getFormat()).format(calcs.minAvalableForRent);
+                    }
+                }
+            }
 
-	static private class MarketRentLabel extends
-			CAbstractLabel<IList<MarketRent>> {
+            cellPanel.setWidget(widgetToInsert != null ? widgetToInsert : new HTML(caption));
+            floorplanRawPanel.add(cellPanel);
+            widgetToInsert = null;
+        }
+    }
 
-		public MarketRentLabel() {
-			super();
-			setFormat(new IFormat<IList<MarketRent>>() {
+    static private class MarketRentLabel extends CAbstractLabel<IList<MarketRent>> {
 
-				@Override
-				public IList<MarketRent> parse(String string) {
-					return null;
-				}
+        public MarketRentLabel() {
+            super();
+            setFormat(new IFormat<IList<MarketRent>>() {
 
-				@Override
-				public String format(IList<MarketRent> value) {
-					if (value.size() < 1) {
-						return null;
-					} else {
-						return value.get(value.size() - 1).rent()
-								.getStringView();
-					}
-				}
-			});
-		}
-	}
+                @Override
+                public IList<MarketRent> parse(String string) {
+                    return null;
+                }
 
-	//
-	// Unit representation:
-	//
-	private class UnitTableRow extends CEntityFolderRow<ApartmentUnit> {
+                @Override
+                public String format(IList<MarketRent> value) {
+                    if (value.size() < 1) {
+                        return null;
+                    } else {
+                        return value.get(value.size() - 1).rent().getStringView();
+                    }
+                }
+            });
+        }
+    }
 
-		private ApartmentUnitDetailsPanel unitDetailsPanel;
+    //
+    // Unit representation:
+    //
+    private class UnitTableRow extends CEntityFolderRow<ApartmentUnit> {
 
-		public UnitTableRow(Class<ApartmentUnit> clazz,
-				List<EntityFolderColumnDescriptor> columns) {
-			super(clazz, columns);
-		}
+        private ApartmentUnitDetailsPanel unitDetailsPanel;
 
-		@Override
-		public FolderItemDecorator createFolderItemDecorator() {
-			final TableFolderItemDecorator decorator = new TableFolderItemDecorator(
-					null, null, false);
-			decorator.addItemClickHandler(new ClickHandler() {
+        public UnitTableRow(Class<ApartmentUnit> clazz, List<EntityFolderColumnDescriptor> columns) {
+            super(clazz, columns);
+        }
 
-				@Override
-				public void onClick(ClickEvent event) {
-					if (!getContent().getStyleName().contains(
-							StyleDependent.selected.name())) {
-						if (unitDetailsPanelShown != null) {
-							unitDetailsPanelShown.hideUnitDetails();
-						}
-						currentApartmentUnit = getValue();
-					}
-				}
-			});
+        @Override
+        public FolderItemDecorator createFolderItemDecorator() {
+            final TableFolderItemDecorator decorator = new TableFolderItemDecorator(null, null, false);
+            decorator.addItemClickHandler(new ClickHandler() {
 
-			decorator.addDomHandler(new MouseOverHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    if (!getContent().getStyleName().contains(StyleDependent.selected.name())) {
+                        if (unitDetailsPanelShown != null) {
+                            unitDetailsPanelShown.hideUnitDetails();
+                        }
+                        currentApartmentUnit = getValue();
+                    }
+                }
+            });
 
-				@Override
-				public void onMouseOver(MouseOverEvent event) {
-					if (!getContent().getStyleName().contains(
-							StyleDependent.selected.name())) {
-						getContent().addStyleDependentName(
-								StyleDependent.hover.name());
-					}
-				}
-			}, MouseOverEvent.getType());
+            decorator.addDomHandler(new MouseOverHandler() {
 
-			decorator.addDomHandler(new MouseOutHandler() {
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    if (!getContent().getStyleName().contains(StyleDependent.selected.name())) {
+                        getContent().addStyleDependentName(StyleDependent.hover.name());
+                    }
+                }
+            }, MouseOverEvent.getType());
 
-				@Override
-				public void onMouseOut(MouseOutEvent event) {
-					getContent().removeStyleDependentName(
-							StyleDependent.hover.name());
-				}
-			}, MouseOutEvent.getType());
+            decorator.addDomHandler(new MouseOutHandler() {
 
-			getContent().setStyleName(
-					DEFAULT_STYLE_PREFIX + StyleSuffix.unitRowPanel);
-			return decorator;
-		}
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    getContent().removeStyleDependentName(StyleDependent.hover.name());
+                }
+            }, MouseOutEvent.getType());
 
-		@Override
-		public IsWidget createContent() {
-			FlowPanel content = new FlowPanel();
-			content.add(super.createContent());
-			unitDetailsPanel = new ApartmentUnitDetailsPanel();
-			unitDetailsPanel
-			.addAnimationCompleteEventHandler(new AnimationCompleteEventHandler() {
-				@Override
-				public void onAnimationComplete(
-						AnimationCompleteEvent event) {
-					setSelected(currentApartmentUnit);
-					selectedUnitChangeHandler
-							.onValueChange(new ValueChangeEvent<ApartmentUnit>(
-									currentApartmentUnit) {
-							});
-				}
-			});
-			content.add(unitDetailsPanel);
-			return content;
-		}
+            getContent().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitRowPanel);
+            return decorator;
+        }
 
-		private void showDetails(ApartmentUnit unit) {
-			unitDetailsPanel.showUnitDetails(unit, selectedmarketRent,
-					selectedMarketRentChangeHandler, this.getDebugId());
-			unitDetailsPanelShown = unitDetailsPanel;
-		}
+        @Override
+        public IsWidget createContent() {
+            FlowPanel content = new FlowPanel();
+            content.add(super.createContent());
+            unitDetailsPanel = new ApartmentUnitDetailsPanel();
+            unitDetailsPanel.addAnimationCompleteEventHandler(new AnimationCompleteEventHandler() {
+                @Override
+                public void onAnimationComplete(AnimationCompleteEvent event) {
+                    setSelected(currentApartmentUnit);
+                    selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApartmentUnit>(currentApartmentUnit) {
+                    });
+                }
+            });
+            content.add(unitDetailsPanel);
+            return content;
+        }
 
-		@Override
-		protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-			if (column.getObject() == proto().floorplan().name()) {
-				CLabel l = new CLabel();
-				l.setAllowHtml(true);
-				l.setValue("&nbsp");
-				return l;
-			} else {
-				return super.createCell(column);
-			}
-		}
-	}
+        private void showDetails(ApartmentUnit unit) {
+            unitDetailsPanel.showUnitDetails(unit, selectedmarketRent, selectedMarketRentChangeHandler, this.getDebugId());
+            unitDetailsPanelShown = unitDetailsPanel;
+        }
 
-	public void populate(UnitSelection value) {
-		selectedmarketRent = value.markerRent();
-		createFloorplanRaw(value.availableUnits());
-		setSelected(value.selectedUnit());
-	}
+        @Override
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+            if (column.getObject() == proto().floorplan().name()) {
+                CLabel l = new CLabel();
+                l.setAllowHtml(true);
+                l.setValue("&nbsp");
+                return l;
+            } else {
+                return super.createCell(column);
+            }
+        }
+    }
 
-	private void setSelected(ApartmentUnit unit) {
-		// clear all selected style:
-		for (ApartmentUnit au : getValue()) {
-			UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(au);
-			unitTableRow.getContent().removeStyleDependentName(
-					StyleDependent.selected.name());
-		}
-		// select desired one:
-		UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(unit);
-		if (unitTableRow != null) {
-			unitTableRow.showDetails(unit);
-			unitTableRow.getContent().addStyleDependentName(
-					StyleDependent.selected.name());
-		}
-	}
+    public void populate(UnitSelection value) {
+        selectedmarketRent = value.markerRent();
+        createFloorplanRaw(value.availableUnits());
+        setSelected(value.selectedUnit());
+    }
 
-	private static class UnitsDataCalc {
+    private void setSelected(ApartmentUnit unit) {
+        // clear all selected style:
+        for (ApartmentUnit au : getValue()) {
+            UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(au);
+            unitTableRow.getContent().removeStyleDependentName(StyleDependent.selected.name());
+        }
+        // select desired one:
+        UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(unit);
+        if (unitTableRow != null) {
+            unitTableRow.showDetails(unit);
+            unitTableRow.getContent().addStyleDependentName(StyleDependent.selected.name());
+        }
+    }
 
-		public double minRent;
+    private static class UnitsDataCalc {
 
-		public double minDeposit;
+        public double minRent;
 
-		public double minBed;
+        public double minDeposit;
 
-		public double minBath;
+        public double minBed;
 
-		public Date minAvalableForRent;
+        public double minBath;
 
-		public UnitsDataCalc(IList<ApartmentUnit> units) {
-			minRent = Double.MAX_VALUE;
-			minDeposit = Double.MAX_VALUE;
-			minBed = Double.MAX_VALUE;
-			minBath = Double.MAX_VALUE;
+        public Date minAvalableForRent;
 
-			for (ApartmentUnit u : units) {
-				for (MarketRent mr : u.marketRent()) {
-					minRent = Math.min(minRent, mr.rent().amount().getValue());
-				}
-				minBed = Math.min(minBed, u.bedrooms().getValue());
-				minBath = Math.min(minBath, u.bathrooms().getValue());
-				minDeposit = Math.min(minDeposit, u.requiredDeposit().amount()
-						.getValue());
+        public UnitsDataCalc(IList<ApartmentUnit> units) {
+            minRent = Double.MAX_VALUE;
+            minDeposit = Double.MAX_VALUE;
+            minBed = Double.MAX_VALUE;
+            minBath = Double.MAX_VALUE;
 
-				if ((minAvalableForRent == null)
-						|| (minAvalableForRent.after(u.avalableForRent()
-								.getValue()))) {
-					minAvalableForRent = u.avalableForRent().getValue();
-				}
-			}
-		}
+            for (ApartmentUnit u : units) {
+                for (MarketRent mr : u.marketRent()) {
+                    minRent = Math.min(minRent, mr.rent().amount().getValue());
+                }
+                minBed = Math.min(minBed, u.bedrooms().getValue());
+                minBath = Math.min(minBath, u.bathrooms().getValue());
+                minDeposit = Math.min(minDeposit, u.requiredDeposit().amount().getValue());
 
-	}
+                if ((minAvalableForRent == null) || (minAvalableForRent.after(u.avalableForRent().getValue()))) {
+                    minAvalableForRent = u.avalableForRent().getValue();
+                }
+            }
+        }
+
+    }
 }
