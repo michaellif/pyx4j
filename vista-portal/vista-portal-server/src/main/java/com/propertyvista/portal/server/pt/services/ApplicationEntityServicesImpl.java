@@ -37,7 +37,7 @@ public class ApplicationEntityServicesImpl extends EntityServicesImpl {
         if ((!entity.application().isNull()) && (!entity.application().equals(application))) {
             throw new SecurityViolationException("Permission denied");
         }
-        EntityGraph.applyRecursively(entity, new EntityGraph.ApplyMethod() {
+        EntityGraph.applyRecursivelyAllObjects(entity, new EntityGraph.ApplyMethod() {
             @Override
             public void apply(IEntity entity) {
                 if (entity instanceof IBoundToApplication) {
