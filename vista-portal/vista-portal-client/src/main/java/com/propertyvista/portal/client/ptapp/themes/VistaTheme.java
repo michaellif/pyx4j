@@ -982,6 +982,7 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.unitDetailPanel, ApartmentUnitsTable.StyleDependent.selected));
         //        style.addProperty("visibility", "visible");
+        style.addProperty("color", ThemeColor.TEXT);
         addStyle(style);
     }
 
