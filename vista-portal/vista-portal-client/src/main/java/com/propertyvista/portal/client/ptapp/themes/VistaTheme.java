@@ -973,6 +973,7 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.unitRowPanel, ApartmentUnitsTable.StyleDependent.hover));
         style.addProperty("background-color", ThemeColor.SELECTION);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.unitDetailPanel));
@@ -1218,6 +1219,7 @@ public abstract class VistaTheme extends Theme {
         style = new Style(".datePickerGrid .gwt-Label.heighlighted");
         style.addProperty("border", "1px solid #D0D0F0");
         style.addProperty("background-color", ThemeColor.SELECTION);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
         addStyle(style);
 
         style = new Style(".datePickerGrid .gwt-Label.selected");
