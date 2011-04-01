@@ -29,11 +29,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.EventHandler;
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -47,16 +43,18 @@ import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupInteger;
+import com.pyx4j.widgets.client.AnimationCallback;
 
 public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers {
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentUnitDetailsPanel.class);
 
-    public static final Type<AnimationCompleteEventHandler> TYPE = new Type<AnimationCompleteEventHandler>();
-
     private final HandlerManager handlerManager;
 
-    public ApartmentUnitDetailsPanel() {
+    private final Widget header;
+
+    public ApartmentUnitDetailsPanel(Widget header) {
+        this.header = header;
         handlerManager = new HandlerManager(this);
     }
 
@@ -80,7 +78,6 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
 
         GrowAnimation(final FlowPanel panel) {
             this.panel = panel;
-            ApartmentUnitDetailsPanel.this.add(panel);
             this.height = panel.getOffsetHeight();
         }
 
@@ -95,8 +92,11 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
 
         private final int height;
 
-        ShrinkAnimation(final FlowPanel panel) {
+        private final AnimationCallback callback;
+
+        ShrinkAnimation(final FlowPanel panel, AnimationCallback callback) {
             this.panel = panel;
+            this.callback = callback;
             this.height = panel.getOffsetHeight();
         }
 
@@ -108,32 +108,18 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         @Override
         protected void onComplete() {
             ApartmentUnitDetailsPanel.this.clear();
-            handlerManager.fireEvent(new AnimationCompleteEvent());
+            callback.onComplete();
         }
     }
 
-    public class AnimationCompleteEvent extends GwtEvent<AnimationCompleteEventHandler> {
-        @Override
-        public GwtEvent.Type<AnimationCompleteEventHandler> getAssociatedType() {
-            return TYPE;
-        }
-
-        @Override
-        protected void dispatch(AnimationCompleteEventHandler handler) {
-            handler.onAnimationComplete(this);
-        }
-    }
-
-    public interface AnimationCompleteEventHandler extends EventHandler {
-        void onAnimationComplete(AnimationCompleteEvent event);
-    }
-
-    public HandlerRegistration addAnimationCompleteEventHandler(AnimationCompleteEventHandler handler) {
-        return handlerManager.addHandler(TYPE, handler);
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        setWidth(header.getOffsetWidth() + "px");
     }
 
     public void showUnitDetails(final ApartmentUnit unit, final MarketRent selectedmarketRent,
-            final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler, IDebugId debugId) {
+            final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler, boolean animate, IDebugId debugId) {
 
         this.clear();
 
@@ -224,17 +210,21 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         unitDetailPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
         unitDetailPanel.getElement().getStyle().setBackgroundColor("white");
 
-        new GrowAnimation(unitDetailPanel).run(500);
-        // new FadeInAnimation(unitDetailPanel).run(250);
+        add(unitDetailPanel);
+        if (animate) {
+            new GrowAnimation(unitDetailPanel).run(500);
+        }
     }
 
-    public void hideUnitDetails() {
-        //this.clear();
+    public void hideUnitDetails(AnimationCallback callback, boolean animate) {
         if (this.getWidgetCount() > 0) {
             FlowPanel unitDetailPanel = (FlowPanel) this.getWidget(0);
-            new ShrinkAnimation(unitDetailPanel).run(500);
-        } else {
-            handlerManager.fireEvent(new AnimationCompleteEvent());
+            if (animate) {
+                new ShrinkAnimation(unitDetailPanel, callback).run(500);
+            } else {
+                callback.onComplete();
+                clear();
+            }
         }
     }
 

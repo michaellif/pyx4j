@@ -40,8 +40,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.client.ptapp.ui.ApartmentUnitDetailsPanel.AnimationCompleteEvent;
-import com.propertyvista.portal.client.ptapp.ui.ApartmentUnitDetailsPanel.AnimationCompleteEventHandler;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaReadOnlyComponentFactory;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
@@ -65,6 +63,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.widgets.client.AnimationCallback;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
@@ -75,7 +74,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
     public final static String DEFAULT_STYLE_PREFIX = "ApartmentViewForm";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        UnitListHeader, SelectedUnit, unitRowPanel, unitDetailPanel
+        UnitListHeader, UnitRowPanel, UnitDetailPanel
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -85,8 +84,6 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
     private final List<EntityFolderColumnDescriptor> columns;
 
     private final VistaReadOnlyComponentFactory factory = new VistaReadOnlyComponentFactory();
-
-    private ApartmentUnitDetailsPanel unitDetailsPanelShown = null;
 
     private final ValueChangeHandler<ApartmentUnit> selectedUnitChangeHandler;
 
@@ -121,6 +118,31 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
         } else {
             return factory.create(member);
         }
+    }
+
+    public void populate(UnitSelection value) {
+        selectedmarketRent = value.markerRent();
+        createFloorplanRaw(value.availableUnits());
+        setSelected(value.selectedUnit(), false);
+    }
+
+    private void setSelected(ApartmentUnit unit, boolean animate) {
+        // clear all selected style:
+        // select desired one:
+
+        if (currentApartmentUnit == unit) {
+            return;
+        }
+        currentApartmentUnit = unit;
+
+        UnitTableRow selectedRow = (UnitTableRow) getFolderRow(unit);
+
+        for (ApartmentUnit au : getValue()) {
+            UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(au);
+            unitTableRow.setSelected(selectedRow == unitTableRow, animate);
+        }
+        selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApartmentUnit>(currentApartmentUnit) {
+        });
     }
 
     @Override
@@ -214,12 +236,11 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
         }
     }
 
-    //
-    // Unit representation:
-    //
     private class UnitTableRow extends CEntityFolderRow<ApartmentUnit> {
 
         private ApartmentUnitDetailsPanel unitDetailsPanel;
+
+        private Widget header;
 
         public UnitTableRow(Class<ApartmentUnit> clazz, List<EntityFolderColumnDescriptor> columns) {
             super(clazz, columns);
@@ -232,12 +253,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    if (!getContent().getStyleName().contains(StyleDependent.selected.name())) {
-                        if (unitDetailsPanelShown != null) {
-                            unitDetailsPanelShown.hideUnitDetails();
-                        }
-                        currentApartmentUnit = getValue();
-                    }
+                    ApartmentUnitsTable.this.setSelected(getValue(), true);
                 }
             });
 
@@ -245,8 +261,8 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
                 @Override
                 public void onMouseOver(MouseOverEvent event) {
-                    if (!getContent().getStyleName().contains(StyleDependent.selected.name())) {
-                        getContent().addStyleDependentName(StyleDependent.hover.name());
+                    if (!header.getStyleName().contains(StyleDependent.selected.name())) {
+                        header.addStyleDependentName(StyleDependent.hover.name());
                     }
                 }
             }, MouseOverEvent.getType());
@@ -255,34 +271,40 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
                 @Override
                 public void onMouseOut(MouseOutEvent event) {
-                    getContent().removeStyleDependentName(StyleDependent.hover.name());
+                    header.removeStyleDependentName(StyleDependent.hover.name());
                 }
             }, MouseOutEvent.getType());
 
-            getContent().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitRowPanel);
             return decorator;
         }
 
         @Override
         public IsWidget createContent() {
             FlowPanel content = new FlowPanel();
-            content.add(super.createContent());
-            unitDetailsPanel = new ApartmentUnitDetailsPanel();
-            unitDetailsPanel.addAnimationCompleteEventHandler(new AnimationCompleteEventHandler() {
-                @Override
-                public void onAnimationComplete(AnimationCompleteEvent event) {
-                    setSelected(currentApartmentUnit);
-                    selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApartmentUnit>(currentApartmentUnit) {
-                    });
-                }
-            });
+
+            header = (Widget) super.createContent();
+            header.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.UnitRowPanel);
+
+            content.add(header);
+            unitDetailsPanel = new ApartmentUnitDetailsPanel(header);
+            unitDetailsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.UnitDetailPanel);
             content.add(unitDetailsPanel);
             return content;
         }
 
-        private void showDetails(ApartmentUnit unit) {
-            unitDetailsPanel.showUnitDetails(unit, selectedmarketRent, selectedMarketRentChangeHandler, this.getDebugId());
-            unitDetailsPanelShown = unitDetailsPanel;
+        private void setSelected(boolean selected, boolean animate) {
+            if (selected) {
+                unitDetailsPanel.showUnitDetails(getValue(), selectedmarketRent, selectedMarketRentChangeHandler, animate, this.getDebugId());
+                header.addStyleDependentName(StyleDependent.selected.name());
+                header.removeStyleDependentName(StyleDependent.hover.name());
+            } else {
+                unitDetailsPanel.hideUnitDetails(new AnimationCallback() {
+                    @Override
+                    public void onComplete() {
+                        header.removeStyleDependentName(StyleDependent.selected.name());
+                    }
+                }, animate);
+            }
         }
 
         @Override
@@ -296,26 +318,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
                 return super.createCell(column);
             }
         }
-    }
 
-    public void populate(UnitSelection value) {
-        selectedmarketRent = value.markerRent();
-        createFloorplanRaw(value.availableUnits());
-        setSelected(value.selectedUnit());
-    }
-
-    private void setSelected(ApartmentUnit unit) {
-        // clear all selected style:
-        for (ApartmentUnit au : getValue()) {
-            UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(au);
-            unitTableRow.getContent().removeStyleDependentName(StyleDependent.selected.name());
-        }
-        // select desired one:
-        UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(unit);
-        if (unitTableRow != null) {
-            unitTableRow.showDetails(unit);
-            unitTableRow.getContent().addStyleDependentName(StyleDependent.selected.name());
-        }
     }
 
     private static class UnitsDataCalc {

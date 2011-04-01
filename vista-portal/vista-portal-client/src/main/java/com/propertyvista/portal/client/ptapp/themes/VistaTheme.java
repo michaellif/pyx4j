@@ -959,31 +959,31 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("line-height", "2em");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.unitRowPanel));
+        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitRowPanel));
         style.addProperty("background-color", "auto");
         style.addProperty("border", "none");
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.unitRowPanel, ApartmentUnitsTable.StyleDependent.selected));
+        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitRowPanel, ApartmentUnitsTable.StyleDependent.selected));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
-        style.addProperty("border", "1px solid #bbb");
+        style.addProperty("border-top", "1px solid #bbb");
+        style.addProperty("border-left", "1px solid #bbb");
+        style.addProperty("border-right", "1px solid #bbb");
         style.addProperty("cursor", "default");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.unitRowPanel, ApartmentUnitsTable.StyleDependent.hover));
+        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitRowPanel, ApartmentUnitsTable.StyleDependent.hover));
         style.addProperty("background-color", ThemeColor.SELECTION);
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.unitDetailPanel));
-        //        style.addProperty("visibility", "hidden");
+        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitDetailPanel));
+        style.addProperty("border-bottom", "1px solid #bbb");
+        style.addProperty("border-left", "1px solid #bbb");
+        style.addProperty("border-right", "1px solid #bbb");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.unitDetailPanel, ApartmentUnitsTable.StyleDependent.selected));
-        //        style.addProperty("visibility", "visible");
-        style.addProperty("color", ThemeColor.TEXT);
-        addStyle(style);
     }
 
     protected void initVistaSummaryViewStyles() {

@@ -66,7 +66,7 @@ public class VillageGreenTheme extends VistaTheme {
         style.addProperty("margin-top", "-10px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.unitRowPanel, ApartmentUnitsTable.StyleDependent.selected));
+        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitRowPanel, ApartmentUnitsTable.StyleDependent.selected));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("border", "1px solid #bbb");
         style.addProperty("cursor", "default");
