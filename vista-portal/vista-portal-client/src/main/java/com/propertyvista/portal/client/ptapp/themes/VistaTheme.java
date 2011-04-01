@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.themes;
 
-import com.google.gwt.core.client.GWT;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.StyleSuffix;
@@ -31,7 +30,6 @@ import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TextBox;
-import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
@@ -1181,11 +1179,9 @@ public abstract class VistaTheme extends Theme {
     }
 
     private void initMultipleDatePicker() {
-        DatePickerImages resource = (DatePickerImages) GWT.create(DatePickerImages.class);
-
         Style style = new Style("table.datePickerMonthSelector");
-        style.addProperty("background-image", "url('" + resource.MonthSelectorBackground().getURL() + "')");
-        style.addProperty("background-repeat", "repeat-x");
+        style.addProperty("background-color", "#99A2A9");
+        style.addProperty("color", "#FFF");
         style.addProperty("line-height", "12px");
         style.addProperty("border-bottom", "1px solid #A8A8A8");
         addStyle(style);
@@ -1221,7 +1217,7 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(".datePickerGrid .gwt-Label.heighlighted");
         style.addProperty("border", "1px solid #D0D0F0");
-        style.addProperty("background-color", "#C8D8D8");
+        style.addProperty("background-color", ThemeColor.SELECTION);
         addStyle(style);
 
         style = new Style(".datePickerGrid .gwt-Label.selected");
@@ -1241,14 +1237,14 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(".datePickerMonthSelector");
-        style.addProperty("background-color", "#E4E4EC");
+        style.addProperty("background-color", "#F0F0F0");
         style.addProperty("margin", "0");
         style.addProperty("padding", "0");
         addStyle(style);
 
         style = new Style(".datePickerGrid");
         style.addProperty("width", "100%");
-        style.addProperty("background-color", "#E4E4EC");
+        style.addProperty("background-color", "#F0F0F0");
         style.addProperty("padding", "10px");
         addStyle(style);
 
