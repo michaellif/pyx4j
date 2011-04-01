@@ -1226,6 +1226,7 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(".datePickerMonthSelector .gwt-Label");
         style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "13px");
         addStyle(style);
 
         style = new Style("table.datePickerMonthSelector.multiple");
