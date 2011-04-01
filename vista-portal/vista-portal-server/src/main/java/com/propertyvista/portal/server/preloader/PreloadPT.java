@@ -53,21 +53,21 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
     private User user;
 
-//    private Application application;
+    //    private Application application;
 
-//    private void loadEmployer(IncomeInfoEmployer employer, StringBuilder sb) {
-//        sb.append(" Employer: ").append(employer.name().getStringView());
-//        sb.append(" \t").append(employer.starts().getStringView()).append(" - ").append(employer.ends().getStringView());
-//
-//        sb.append(" Supervisor: ").append(employer.supervisorName().getStringView());
-//        sb.append(" at ").append(employer.supervisorPhone().getStringView());
-//
-//        sb.append(", Monthly salary ").append(employer.monthlyAmount().getValue());
-//        sb.append(", Poisiton ").append(employer.position().getStringView());
-//
-//        sb.append(", \tAddress: ");
-//        loadAddress(employer, sb);
-//    }
+    //    private void loadEmployer(IncomeInfoEmployer employer, StringBuilder sb) {
+    //        sb.append(" Employer: ").append(employer.name().getStringView());
+    //        sb.append(" \t").append(employer.starts().getStringView()).append(" - ").append(employer.ends().getStringView());
+    //
+    //        sb.append(" Supervisor: ").append(employer.supervisorName().getStringView());
+    //        sb.append(" at ").append(employer.supervisorPhone().getStringView());
+    //
+    //        sb.append(", Monthly salary ").append(employer.monthlyAmount().getValue());
+    //        sb.append(", Poisiton ").append(employer.position().getStringView());
+    //
+    //        sb.append(", \tAddress: ");
+    //        loadAddress(employer, sb);
+    //    }
 
     public static void loadAddress(IAddress address, StringBuilder sb) {
         sb.append(address.street1().getValue());
@@ -104,35 +104,35 @@ public class PreloadPT extends BaseVistaDataPreloader {
         return application;
     }
 
-//    private void loadApplicationProgress(StringBuilder sb) {
-//        EntityQueryCriteria<ApplicationProgress> criteria = EntityQueryCriteria.create(ApplicationProgress.class);
-//        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-//
-//        ApplicationProgress progress = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-//        if (progress == null) {
-//            throw new IllegalStateException("Could not find progress for application");
-//        }
-//
-//        sb.append(progress.steps().size()).append(" steps\n");
-//        for (ApplicationWizardStep step : progress.steps()) {
-//            sb.append("\t");
-//            sb.append(step.placeId().getStringView());
-//            sb.append("\n");
-//        }
-//    }
+    //    private void loadApplicationProgress(StringBuilder sb) {
+    //        EntityQueryCriteria<ApplicationProgress> criteria = EntityQueryCriteria.create(ApplicationProgress.class);
+    //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+    //
+    //        ApplicationProgress progress = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+    //        if (progress == null) {
+    //            throw new IllegalStateException("Could not find progress for application");
+    //        }
+    //
+    //        sb.append(progress.steps().size()).append(" steps\n");
+    //        for (ApplicationWizardStep step : progress.steps()) {
+    //            sb.append("\t");
+    //            sb.append(step.placeId().getStringView());
+    //            sb.append("\n");
+    //        }
+    //    }
 
-//    private void loadUnitSelection(StringBuilder sb) {
-//        EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
-//        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-//        UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-//
-//        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
-//        apartmentServices.loadAvailableUnits(unitSelection);
-//
-//        //        building = unitSelection.selectedUnit().building();
-//
-//        sb.append(VistaDataPrinter.print(unitSelection));
-//    }
+    //    private void loadUnitSelection(StringBuilder sb) {
+    //        EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
+    //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+    //        UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+    //
+    //        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
+    //        apartmentServices.loadAvailableUnits(unitSelection);
+    //
+    //        //        building = unitSelection.selectedUnit().building();
+    //
+    //        sb.append(VistaDataPrinter.print(unitSelection));
+    //    }
 
     @Override
     public String create() {
@@ -175,10 +175,10 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             persist(financial.tenantFinancial());
 
-            //using apartment1.jpg as income doc, and apartment2.jpg and apartment3.jpg as securityInfo doc
-            ApplicationDocument.DocumentType documentType = ApplicationDocument.DocumentType.securityInfo;
-            persist(generator.createApplicationDocument(tenant, "apartment2.jpg", documentType));
-            persist(generator.createApplicationDocument(tenant, "apartment3.jpg", documentType));
+            if (tenant.notCanadianCitizen().isBooleanTrue()) {
+                ApplicationDocument.DocumentType documentType = ApplicationDocument.DocumentType.securityInfo;
+                persist(generator.createApplicationDocument(tenant, "doc-security" + RandomUtil.randomInt(3) + ".jpg", documentType));
+            }
         }
     }
 

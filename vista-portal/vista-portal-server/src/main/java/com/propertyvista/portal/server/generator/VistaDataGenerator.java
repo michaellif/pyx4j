@@ -110,8 +110,8 @@ public class VistaDataGenerator {
         vehicle.model().setValue(RandomUtil.random(DemoData.CAR_MODELS));
         vehicle.province().set(RandomUtil.random(SharedData.getProvinces()));
         vehicle.country().set(SharedData.findCountryCanada());
-//        vehicle.province().set(retrieveByMemeber(Province.class, vehicle.province().code(), RandomUtil.random(DemoData.PROVINCES)));
-//        vehicle.country().set(retrieveNamed(Country.class, "Canada"));
+        //        vehicle.province().set(retrieveByMemeber(Province.class, vehicle.province().code(), RandomUtil.random(DemoData.PROVINCES)));
+        //        vehicle.country().set(retrieveNamed(Country.class, "Canada"));
 
         return vehicle;
     }
@@ -237,7 +237,7 @@ public class VistaDataGenerator {
         address.street2().setValue("");
         address.city().setValue(RandomUtil.random(DemoData.CITIES));
         address.province().set(RandomUtil.random(SharedData.getProvinces()));
-//        address.province().set(retrieveByMemeber(Province.class, address.province().code(), RandomUtil.random(DemoData.PROVINCES)));
+        //        address.province().set(retrieveByMemeber(Province.class, address.province().code(), RandomUtil.random(DemoData.PROVINCES)));
         address.postalCode().setValue(zip);
         address.country().set(SharedData.findCountryCanada());
     }
@@ -284,7 +284,8 @@ public class VistaDataGenerator {
             //income.active().setValue(RandomUtil.randomBoolean());
 
             if (IncomeSource.fulltime.equals(income.incomeSource().getValue())) {
-                ApplicationDocument applicationDocument = createApplicationDocument(tenant, "apartment1.jpg", ApplicationDocument.DocumentType.income);
+                ApplicationDocument applicationDocument = createApplicationDocument(tenant, "doc-income" + RandomUtil.randomInt(3) + ".jpg",
+                        ApplicationDocument.DocumentType.income);
                 income.documents().add(applicationDocument);
             }
 
