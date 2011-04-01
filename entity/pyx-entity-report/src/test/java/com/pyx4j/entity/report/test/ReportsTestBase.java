@@ -1,5 +1,3 @@
-package com.pyx4j.entity.report.test;
-
 /*
  * Pyx4j framework
  * Copyright (C) 2008-2011 pyx4j.com.
@@ -20,6 +18,7 @@ package com.pyx4j.entity.report.test;
  * @author michaellif
  * @version $Id$
  */
+package com.pyx4j.entity.report.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

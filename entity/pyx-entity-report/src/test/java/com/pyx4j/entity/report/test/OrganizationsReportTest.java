@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import junit.framework.Assert;
-import net.sf.jasperreports.engine.JasperCompileManager;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
