@@ -45,6 +45,7 @@ import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentsList;
+import com.propertyvista.portal.rpc.pt.ServletMapping;
 import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
 
 import com.pyx4j.commons.HtmlUtils;
@@ -187,8 +188,8 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
                                 CHyperlink link = new CHyperlink(new Command() {
                                     @Override
                                     public void execute() {
-                                        String url = GWT.getModuleBaseURL() + "ApplicationDocument?" + ApplicationDocumentServletParameters.DOCUMENT_ID + "="
-                                                + getValue().id().getValue();
+                                        String url = GWT.getModuleBaseURL() + ServletMapping.APPLICATIONDOCUMENT + "?"
+                                                + ApplicationDocumentServletParameters.DOCUMENT_ID + "=" + getValue().id().getValue();
                                         Window.open(url, "_blank", null);
                                     }
                                 });

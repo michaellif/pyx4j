@@ -26,6 +26,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantCharge;
+import com.propertyvista.portal.rpc.pt.ServletMapping;
 import com.propertyvista.portal.rpc.pt.services.SummaryServices;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.portal.server.report.SummaryReport;
@@ -41,7 +42,6 @@ import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.server.contexts.Context;
 
 public class SummaryServicesImpl extends ApplicationEntityServicesImpl implements SummaryServices {
 
@@ -148,7 +148,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
             Downloadable d = new Downloadable(bos.toByteArray(), Downloadable.getContentType(DownloadFormat.PDF));
             String fileName = "ApplicationSummary.pdf";
             d.save(fileName);
-            callback.onSuccess(Context.getRequest().getContextPath() + "/download/" + System.currentTimeMillis() + "/" + fileName);
+            callback.onSuccess(ServletMapping.REPORTS_DOWNLOAD + "/" + System.currentTimeMillis() + "/" + fileName);
         } finally {
             IOUtils.closeQuietly(bos);
         }

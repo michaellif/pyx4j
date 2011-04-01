@@ -29,4 +29,5 @@ public interface ApplicationDocumentServletParameters {
      * Document Id parameter name passed to download document servlet
      */
     public static final String DOCUMENT_ID = "DocumentId";
+
 }

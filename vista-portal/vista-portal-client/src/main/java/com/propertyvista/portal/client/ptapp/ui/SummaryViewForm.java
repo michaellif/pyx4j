@@ -164,7 +164,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
                         @Override
                         public void onSuccess(String result) {
                             //TODO implement this in IE
-                            new DownloadFrame(result);
+                            new DownloadFrame(GWT.getModuleBaseURL() + result);
                         }
                     }, null);
 
