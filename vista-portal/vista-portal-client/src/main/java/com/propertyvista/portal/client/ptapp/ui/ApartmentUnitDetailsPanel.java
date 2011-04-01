@@ -29,7 +29,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -49,13 +48,10 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentUnitDetailsPanel.class);
 
-    private final HandlerManager handlerManager;
-
     private final Widget header;
 
     public ApartmentUnitDetailsPanel(Widget header) {
         this.header = header;
-        handlerManager = new HandlerManager(this);
     }
 
     public class FadeInAnimation extends Animation {
