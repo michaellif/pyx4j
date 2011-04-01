@@ -80,6 +80,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
 
         GrowAnimation(final FlowPanel panel) {
             this.panel = panel;
+            ApartmentUnitDetailsPanel.this.add(panel);
             this.height = panel.getOffsetHeight();
         }
 
@@ -92,12 +93,9 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
     public class ShrinkAnimation extends Animation {
         private final FlowPanel panel;
 
-        private final FlowPanel parent;
-
         private final int height;
 
-        ShrinkAnimation(final FlowPanel parent, final FlowPanel panel) {
-            this.parent = parent;
+        ShrinkAnimation(final FlowPanel panel) {
             this.panel = panel;
             this.height = panel.getOffsetHeight();
         }
@@ -109,7 +107,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
 
         @Override
         protected void onComplete() {
-            parent.clear();
+            ApartmentUnitDetailsPanel.this.clear();
             handlerManager.fireEvent(new AnimationCompleteEvent());
         }
     }
@@ -225,7 +223,6 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         unitDetailPanel.getElement().getStyle().setPadding(1, Unit.EM);
         unitDetailPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
         unitDetailPanel.getElement().getStyle().setBackgroundColor("white");
-        this.add(unitDetailPanel);
 
         new GrowAnimation(unitDetailPanel).run(500);
         // new FadeInAnimation(unitDetailPanel).run(250);
@@ -235,7 +232,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         //this.clear();
         if (this.getWidgetCount() > 0) {
             FlowPanel unitDetailPanel = (FlowPanel) this.getWidget(0);
-            new ShrinkAnimation(this, unitDetailPanel).run(500);
+            new ShrinkAnimation(unitDetailPanel).run(500);
         } else {
             handlerManager.fireEvent(new AnimationCompleteEvent());
         }
