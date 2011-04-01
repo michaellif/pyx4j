@@ -265,7 +265,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 					if (!getContent().getStyleName().contains(
 							StyleDependent.selected.name())) {
 						if (unitDetailsPanelShown != null) {
-							unitDetailsPanelShown.hide();
+							unitDetailsPanelShown.hideUnitDetails();
 						}
 						currentApartmentUnit = getValue();
 					}
@@ -320,7 +320,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 		}
 
 		private void showDetails(ApartmentUnit unit) {
-			unitDetailsPanel.showUnitDetail(unit, selectedmarketRent,
+			unitDetailsPanel.showUnitDetails(unit, selectedmarketRent,
 					selectedMarketRentChangeHandler, this.getDebugId());
 			unitDetailsPanelShown = unitDetailsPanel;
 		}
