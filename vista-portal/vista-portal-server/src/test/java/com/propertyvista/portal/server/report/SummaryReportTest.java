@@ -72,8 +72,7 @@ public class SummaryReportTest extends ReportsTestBase {
     private static Summary retreiveSummaryTodo() throws IOException {
         VistaDataGenerator generator = new VistaDataGenerator();
         Application application = generator.createApplication(VistaDataGenerator.createUser());
-        generator.createSummary(application);
-        Summary summary = generator.createSummary(application);
+        Summary summary = generator.createSummary(application, null);
         return summary;
     }
 

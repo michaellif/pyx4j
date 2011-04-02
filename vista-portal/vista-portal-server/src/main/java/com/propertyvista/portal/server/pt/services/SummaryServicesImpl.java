@@ -19,6 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.portal.domain.AptUnit;
+import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
@@ -29,6 +31,7 @@ import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.rpc.pt.ServletMapping;
 import com.propertyvista.portal.rpc.pt.services.SummaryServices;
 import com.propertyvista.portal.server.pt.PtAppContext;
+import com.propertyvista.portal.server.pt.util.Converter;
 import com.propertyvista.portal.server.report.SummaryReport;
 
 import com.pyx4j.entity.report.JasperFileFormat;
@@ -78,8 +81,17 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
 
         // this code starts to become very convoluted and all-over-the place
         retrieveApplicationEntity(summary.unitSelection(), summary.application());
-        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
-        apartmentServices.loadSelectedUnit(summary.unitSelection());
+        if (!summary.unitSelection().selectedUnitId().isNull()) {
+            summary.selectedUnit().set(
+                    Converter.convert(PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class,
+                            summary.unitSelection().selectedUnitId().getValue())));
+            for (MarketRent mr : summary.selectedUnit().marketRent()) {
+                if (mr.leaseTerm().equals(summary.unitSelection().selectedLeaseTerm())) {
+                    summary.selectedRent().set(mr.rent());
+                    break;
+                }
+            }
+        }
 
         // I have no idea so far for why this line gets called
         //        PersistenceServicesFactory.getPersistenceService().retrieve(summary.unitSelection().selectedUnit().floorplan());
@@ -131,10 +143,9 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
             }
         }
 
-        if (!summary.unitSelection().selectedUnit().newLeaseTerms().id().isNull()) {
+        if (!summary.selectedUnit().newLeaseTerms().id().isNull()) {
             summary.leaseTerms().set(
-                    PersistenceServicesFactory.getPersistenceService().retrieve(LeaseTerms.class,
-                            summary.unitSelection().selectedUnit().newLeaseTerms().getPrimaryKey()));
+                    PersistenceServicesFactory.getPersistenceService().retrieve(LeaseTerms.class, summary.selectedUnit().newLeaseTerms().getPrimaryKey()));
         }
     }
 

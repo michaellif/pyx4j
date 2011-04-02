@@ -244,13 +244,13 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             FlowPanel content;
             main.add(content = new FlowPanel());
 
-            addCell(tableLayout, content, "Type", inject(proto().unitSelection().selectedUnit().floorplan().name()).asWidget());
-            addCell(tableLayout, content, "Unit", inject(proto().unitSelection().selectedUnit().unitType()).asWidget());
-            addCell(tableLayout, content, "Deposit", inject(proto().unitSelection().selectedUnit().requiredDeposit()).asWidget());
-            addCell(tableLayout, content, "Beds", inject(proto().unitSelection().selectedUnit().bedrooms()).asWidget());
-            addCell(tableLayout, content, "Baths", inject(proto().unitSelection().selectedUnit().bathrooms()).asWidget());
-            addCell(tableLayout, content, "Sq F", inject(proto().unitSelection().selectedUnit().area()).asWidget());
-            addCell(tableLayout, content, "Available", inject(proto().unitSelection().selectedUnit().avalableForRent()).asWidget());
+            addCell(tableLayout, content, "Type", inject(proto().selectedUnit().floorplan().name()).asWidget());
+            addCell(tableLayout, content, "Unit", inject(proto().selectedUnit().unitType()).asWidget());
+            addCell(tableLayout, content, "Deposit", inject(proto().selectedUnit().requiredDeposit()).asWidget());
+            addCell(tableLayout, content, "Beds", inject(proto().selectedUnit().bedrooms()).asWidget());
+            addCell(tableLayout, content, "Baths", inject(proto().selectedUnit().bathrooms()).asWidget());
+            addCell(tableLayout, content, "Sq F", inject(proto().selectedUnit().area()).asWidget());
+            addCell(tableLayout, content, "Available", inject(proto().selectedUnit().avalableForRent()).asWidget());
         }
 
         private void addCell(Map<String, String> tableLayout, FlowPanel content, String cellName, Widget cellContent) {
@@ -275,7 +275,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             content.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
 
-            Widget label = inject(proto().unitSelection().markerRent().leaseTerm()).asWidget();
+            Widget label = inject(proto().unitSelection().selectedLeaseTerm()).asWidget();
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label, "auto"));
             label = new HTML("&nbsp;" + i18n.tr("month Rent"));
@@ -284,7 +284,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
 
             content.add(DecorationUtils.block(new HTML()));
 
-            label = inject(proto().unitSelection().markerRent().rent()).asWidget();
+            label = inject(proto().selectedRent()).asWidget();
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label, "auto"));
             label = new HTML("&nbsp;/ " + i18n.tr("month"));

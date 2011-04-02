@@ -20,12 +20,12 @@ import java.util.GregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertyvista.portal.domain.AptUnit;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
-import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
@@ -57,7 +57,6 @@ import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.server.preloader.PreloadPT;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
-import com.propertyvista.portal.server.pt.services.ApartmentServicesImpl;
 import com.propertyvista.portal.server.pt.services.ApplicationServicesImpl;
 import com.propertyvista.portal.server.pt.util.PreloadUtil;
 import com.propertyvista.server.common.security.PasswordEncryptor;
@@ -80,24 +79,24 @@ public class VistaDataGenerator {
         DataGenerator.setRandomSeed(seed);
     }
 
-    public Summary createSummary(Application application) {
+    public Summary createSummary(Application application, AptUnit selectedUnit) {
         Summary summary = EntityFactory.create(Summary.class);
         summary.application().set(application);
-        summary.unitSelection().set(createUnitSelection(application));
+        summary.unitSelection().set(createUnitSelection(application, selectedUnit));
         summary.tenantList().set(createPotentialTenantList(application));
         createTenantFinancials(summary.tenantFinancials(), summary.tenantList());
         summary.pets().set(createPets(application));
-        summary.charges().set(createCharges(summary));
+        summary.charges().set(createCharges(summary, selectedUnit));
 
         return summary;
     }
 
-    private Charges createCharges(Summary summary) {
+    private Charges createCharges(Summary summary, AptUnit selectedUnit) {
         assert (summary.application() != null);
 
         Charges charges = EntityFactory.create(Charges.class);
         charges.application().set(summary.application());
-        ChargesServerCalculation.updateChargesFromObjects(charges, summary.unitSelection(), summary.tenantList(), summary.pets());
+        ChargesServerCalculation.updateChargesFromObjects(charges, summary.unitSelection(), selectedUnit, summary.tenantList(), summary.pets());
         return charges;
     }
 
@@ -444,7 +443,7 @@ public class VistaDataGenerator {
         return progress;
     }
 
-    public UnitSelection createUnitSelection(Application application) {
+    public UnitSelection createUnitSelection(Application application, AptUnit selectedUnit) {
         UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
         unitSelection.application().set(application);
 
@@ -463,15 +462,10 @@ public class VistaDataGenerator {
 
         unitSelection.selectionCriteria().set(criteria);
 
-        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
-        apartmentServices.loadAvailableUnits(unitSelection);
-
-        // chose the first unit for demo
-        ApartmentUnit selectedUnit = unitSelection.availableUnits().units().iterator().next();
-        unitSelection.selectedUnit().set(selectedUnit);
-        unitSelection.selectedUnitId().set(selectedUnit.id());
-        unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
-        unitSelection.rentStart().setValue(selectedUnit.avalableForRent().getValue());
+        if (selectedUnit != null) {
+            unitSelection.selectedUnitId().setValue(selectedUnit.getPrimaryKey());
+            unitSelection.selectedLeaseTerm().set(RandomUtil.random(selectedUnit.marketRent()).leaseTerm());
+        }
 
         return unitSelection;
     }

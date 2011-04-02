@@ -44,7 +44,6 @@ import com.propertyvista.portal.client.ptapp.ui.components.VistaReadOnlyComponen
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
-import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
@@ -56,6 +55,7 @@ import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CAbstractLabel;
@@ -87,15 +87,15 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
     private final ValueChangeHandler<ApartmentUnit> selectedUnitChangeHandler;
 
-    private final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler;
-
-    private MarketRent selectedmarketRent;
+    private final ValueChangeHandler<Integer> selectedMarketRentChangeHandler;
 
     private HorizontalPanel floorplanRawPanel;
 
     private ApartmentUnit currentApartmentUnit = null;
 
-    public ApartmentUnitsTable(ValueChangeHandler<ApartmentUnit> selectedUnitChangeHandler, ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler) {
+    private Integer selectedLeaseTerm = null;
+
+    public ApartmentUnitsTable(ValueChangeHandler<ApartmentUnit> selectedUnitChangeHandler, ValueChangeHandler<Integer> selectedMarketRentChangeHandler) {
         super(ApartmentUnit.class);
         this.selectedUnitChangeHandler = selectedUnitChangeHandler;
         this.selectedMarketRentChangeHandler = selectedMarketRentChangeHandler;
@@ -120,29 +120,48 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
         }
     }
 
-    public void populate(UnitSelection value) {
-        selectedmarketRent = value.markerRent();
-        createFloorplanRaw(value.availableUnits());
-        setSelected(value.selectedUnit(), false);
+    public void populateFloorplan(AvailableUnitsByFloorplan availableUnits) {
+        createFloorplanRaw(availableUnits);
     }
 
-    private void setSelected(ApartmentUnit unit, boolean animate) {
-        // clear all selected style:
-        // select desired one:
+    ApartmentUnit setSelectedUnit(Long unitId, Integer selectedLeaseTerm) {
+        ApartmentUnit unitToSelect = null;
+        if (unitId != null) {
+            ApartmentUnit unit = EntityFactory.create(ApartmentUnit.class);
+            unit.setPrimaryKey(unitId);
+            int idx = getValue().indexOf(unit);
+            if (idx != -1) {
+                unitToSelect = getValue().get(idx);
+                this.selectedLeaseTerm = selectedLeaseTerm;
+            }
+        } else {
+            this.selectedLeaseTerm = null;
+        }
+        setSelectedUnit(unitToSelect, false);
+        return unitToSelect;
+    }
 
-        if (currentApartmentUnit == unit) {
+    private void setSelectedUnit(ApartmentUnit unit, boolean onClick) {
+        if ((currentApartmentUnit != null) && currentApartmentUnit.equals(unit)) {
             return;
         }
         currentApartmentUnit = unit;
 
-        UnitTableRow selectedRow = (UnitTableRow) getFolderRow(unit);
+        if (onClick) {
+            selectedLeaseTerm = null;
+        }
 
+        // clear all selected style:
+        // select desired one:
         for (ApartmentUnit au : getValue()) {
             UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(au);
-            unitTableRow.setSelected(selectedRow == unitTableRow, animate);
+            unitTableRow.setSelected(unitTableRow.getValue().equals(unit), onClick);
         }
-        selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApartmentUnit>(currentApartmentUnit) {
-        });
+
+        if (onClick) {
+            selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApartmentUnit>(unit) {
+            });
+        }
     }
 
     @Override
@@ -192,7 +211,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
                     UnitsDataCalc calcs = new UnitsDataCalc(availableUnits.units());
                     // fill the row:
                     if (proto().marketRent() == column.getObject()) {
-                        caption = "From <br />" + DomainUtil.createMoney(calcs.minRent).getStringView();
+                        caption = i18n.tr("From") + "<br />" + DomainUtil.createMoney(calcs.minRent).getStringView();
                     } else if (proto().requiredDeposit() == column.getObject()) {
                         caption = "<br />" + DomainUtil.createMoney(calcs.minDeposit).getStringView();
                     } else if (proto().bedrooms() == column.getObject()) {
@@ -253,7 +272,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    ApartmentUnitsTable.this.setSelected(getValue(), true);
+                    setSelectedUnit(getValue(), true);
                 }
             });
 
@@ -294,7 +313,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
         private void setSelected(boolean selected, boolean animate) {
             if (selected) {
-                unitDetailsPanel.showUnitDetails(getValue(), selectedmarketRent, selectedMarketRentChangeHandler, animate, this.getDebugId());
+                unitDetailsPanel.showUnitDetails(getValue(), selectedLeaseTerm, selectedMarketRentChangeHandler, animate, this.getDebugId());
                 header.addStyleDependentName(StyleDependent.selected.name());
                 header.removeStyleDependentName(StyleDependent.hover.name());
             } else {

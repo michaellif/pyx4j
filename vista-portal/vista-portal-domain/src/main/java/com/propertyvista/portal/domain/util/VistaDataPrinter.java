@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.domain.util;
 
-import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
@@ -292,23 +291,23 @@ public class VistaDataPrinter {
             sb.append("\t\tDeposit: $").append(unit.requiredDeposit().getValue()).append("\n");
         }
 
-        // selected unit
-        ApartmentUnit unit = unitSelection.selectedUnit();
-        sb.append("\n\n");
-//        sb.append("Selected: ").append(unit.suiteNumber().getStringView());
-//        sb.append("\n");
+//        // selected unit
+//        ApartmentUnit unit = unitSelection.selectedUnit();
+//        sb.append("\n\n");
+////        sb.append("Selected: ").append(unit.suiteNumber().getStringView());
+////        sb.append("\n");
 
-        // building
-        Building building = unit.building();
-        sb.append("Building: ").append(building).append("\n");
-        sb.append("Property: ").append(building.propertyProfile()).append("\n");
-
-        // amenities
-        sb.append("\tAmenities: ").append(unit.amenities()).append("\n");
-        sb.append("\tUtility: ").append(unit.utilities()).append("\n");
-        sb.append("\tUnitInfoItem: ").append(unit.infoDetails()).append("\n");
-        sb.append("\tConcessions: ").append(unit.concessions()).append("\n");
-        sb.append("\tAdd-ons: ").append(unit.addOns()).append("\n");
+//        // building
+//        Building building = unit.building();
+//        sb.append("Building: ").append(building).append("\n");
+//        sb.append("Property: ").append(building.propertyProfile()).append("\n");
+//
+//        // amenities
+//        sb.append("\tAmenities: ").append(unit.amenities()).append("\n");
+//        sb.append("\tUtility: ").append(unit.utilities()).append("\n");
+//        sb.append("\tUnitInfoItem: ").append(unit.infoDetails()).append("\n");
+//        sb.append("\tConcessions: ").append(unit.concessions()).append("\n");
+//        sb.append("\tAdd-ons: ").append(unit.addOns()).append("\n");
 
 //        for (Amenity amenity : unit.amenities()) {
 //            sb.append("\t\t");
@@ -346,9 +345,9 @@ public class VistaDataPrinter {
 //        }
 
         // rent
-        sb.append("\nStart rent:").append(unitSelection.rentStart().getStringView());
-        sb.append(", Lease: ").append(unitSelection.markerRent().leaseTerm().getValue()).append(" months, $");
-        sb.append(unitSelection.markerRent().rent().amount().getValue());
+//        sb.append("\nStart rent:").append(unitSelection.rentStart().getStringView());
+//        sb.append(", Lease: ").append(unitSelection.markerRent().leaseTerm().getValue()).append(" months, $");
+//        sb.append(unitSelection.markerRent().rent().amount().getValue());
 
         return sb.toString();
     }

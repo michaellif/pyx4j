@@ -15,8 +15,6 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.MarketRent;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
@@ -29,22 +27,13 @@ public interface UnitSelection extends IEntity, IBoundToApplication {
     @EmbeddedEntity
     UnitSelectionCriteria selectionCriteria();
 
-//    Building building();
-
     // Found by App server
     @Transient
     AvailableUnitsByFloorplan availableUnits();
 
-    // user selected Unit from availableUnits..
-    @NotNull
-    @Transient
-    ApartmentUnit selectedUnit();
-
     IPrimitive<Long> selectedUnitId();
 
-    // user selected leaseTerm (aka as MarkerRent in Unit)..
-    @NotNull
-    MarketRent markerRent();
+    IPrimitive<Integer> selectedLeaseTerm();
 
     @Caption(name = "Start Rent Date")
     @NotNull

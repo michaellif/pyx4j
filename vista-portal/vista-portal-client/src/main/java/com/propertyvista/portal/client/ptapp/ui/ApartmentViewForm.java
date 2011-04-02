@@ -33,14 +33,15 @@ import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.ui.components.BuildingPicture;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
-import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
+import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
@@ -49,6 +50,8 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
     private static I18n i18n = I18nFactory.getI18n(ApartmentViewForm.class);
 
     private ApartmentViewPresenter presenter;
+
+    private ApartmentUnit selectedUnit = EntityFactory.create(ApartmentUnit.class);
 
     public ApartmentViewForm() {
         super(UnitSelection.class, new VistaEditorsComponentFactory());
@@ -96,24 +99,21 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             @Override
             public void onValueChange(ValueChangeEvent<ApartmentUnit> event) {
-                if (!getValue().selectedUnit().equals(event.getValue())) {
-                    getValue().selectedUnit().set(event.getValue());
-                    getValue().selectedUnitId().set(event.getValue().id());
-                    getValue().markerRent().set(null);
-                    CEditableComponent<Date, ?> rentStart = get(proto().rentStart());
-                    if ((rentStart.getValue() == null) || (!rentStart.isVisited())) {
-                        rentStart.setValue(getValue().selectedUnit().avalableForRent().getValue());
-                    } else {
-                        rentStart.revalidate();
-                    }
+                selectedUnit = event.getValue();
+                getValue().selectedUnitId().set(selectedUnit.id());
+                getValue().selectedLeaseTerm().setValue(null);
+                CEditableComponent<Date, ?> rentStart = get(proto().rentStart());
+                if ((rentStart.getValue() == null) || (!rentStart.isVisited())) {
+                    rentStart.setValue(selectedUnit.avalableForRent().getValue());
+                } else {
+                    rentStart.revalidate();
                 }
-
             }
-        }, new ValueChangeHandler<MarketRent>() {
+        }, new ValueChangeHandler<Integer>() {
 
             @Override
-            public void onValueChange(ValueChangeEvent<MarketRent> event) {
-                getValue().markerRent().set(event.getValue());
+            public void onValueChange(ValueChangeEvent<Integer> event) {
+                getValue().selectedLeaseTerm().setValue(event.getValue());
             }
         })));
 
@@ -135,7 +135,19 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
     @Override
     public void populate(UnitSelection value) {
         super.populate(value);
-        ((ApartmentUnitsTable) getRaw(value.availableUnits().units())).populate(getValue());
+        ApartmentUnitsTable unitsTable = ((ApartmentUnitsTable) getRaw(proto().availableUnits().units()));
+        unitsTable.populateFloorplan(value.availableUnits());
+        selectedUnit.set(unitsTable.setSelectedUnit(getValue().selectedUnitId().getValue(), getValue().selectedLeaseTerm().getValue()));
+    }
+
+    void setAvailableUnits(AvailableUnitsByFloorplan availableUnits) {
+        ApartmentUnitsTable unitsTable = ((ApartmentUnitsTable) getRaw(proto().availableUnits().units()));
+        unitsTable.populateFloorplan(availableUnits);
+        unitsTable.populate(availableUnits.units());
+        selectedUnit.set(unitsTable.setSelectedUnit(getValue().selectedUnitId().getValue(), getValue().selectedLeaseTerm().getValue()));
+        if (selectedUnit.isNull()) {
+            getValue().selectedUnitId().setValue(null);
+        }
     }
 
     @Override
@@ -144,7 +156,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             @Override
             public boolean isValid(CEditableComponent<UnitSelection, ?> component, UnitSelection value) {
-                return !value.selectedUnit().isNull();
+                return !value.selectedUnitId().isNull();
             }
 
             @Override
@@ -157,7 +169,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             @Override
             public boolean isValid(CEditableComponent<UnitSelection, ?> component, UnitSelection value) {
-                return !value.markerRent().isNull();
+                return !value.selectedLeaseTerm().isNull();
             }
 
             @Override
@@ -170,7 +182,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                Date avalableForRent = getValue().selectedUnit().avalableForRent().getValue();
+                Date avalableForRent = selectedUnit.avalableForRent().getValue();
                 if ((avalableForRent == null) || (value == null)) {
                     return true;
                 } else {
@@ -180,7 +192,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("Start Rent Date for this unit can not be before {0,date,medium}", getValue().selectedUnit().avalableForRent().getValue());
+                return i18n.tr("Start Rent Date for this unit can not be before {0,date,medium}", selectedUnit.avalableForRent().getValue());
             }
         });
 
@@ -199,7 +211,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                Date avalableForRent = getValue().selectedUnit().avalableForRent().getValue();
+                Date avalableForRent = selectedUnit.avalableForRent().getValue();
                 if ((avalableForRent == null) || (value == null)) {
                     return true;
                 } else {
@@ -209,8 +221,8 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("Start Rent Date for this unit can not be later than {0,date,medium}", getLastAvailableDay(getValue().selectedUnit()
-                        .avalableForRent().getValue()));
+                return i18n.tr("Start Rent Date for this unit can not be later than {0,date,medium}", getLastAvailableDay(selectedUnit.avalableForRent()
+                        .getValue()));
             }
         });
     }

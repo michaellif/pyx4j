@@ -27,7 +27,6 @@ import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -114,8 +113,8 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         setWidth(header.getOffsetWidth() + "px");
     }
 
-    public void showUnitDetails(final ApartmentUnit unit, final MarketRent selectedmarketRent,
-            final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler, boolean animate, IDebugId debugId) {
+    public void showUnitDetails(final ApartmentUnit unit, final Integer selectedLeaseTerm, final ValueChangeHandler<Integer> selectedMarketRentChangeHandler,
+            boolean animate, IDebugId debugId) {
 
         this.clear();
 
@@ -177,22 +176,10 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         CRadioGroupInteger mrg = new CRadioGroupInteger(CRadioGroup.Layout.VERTICAL, options);
         mrg.setDebugId(new CompositeDebugId(debugId, "leaseTerm"));
 
-        if (unit.marketRent().contains(selectedmarketRent)) {
-            mrg.populate(selectedmarketRent.leaseTerm().getValue());
+        if (selectedLeaseTerm != null) {
+            mrg.populate(selectedLeaseTerm);
         }
-        mrg.addValueChangeHandler(new ValueChangeHandler<Integer>() {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<Integer> event) {
-                for (final MarketRent mr : unit.marketRent()) {
-                    if (event.getValue().equals(mr.leaseTerm().getValue())) {
-                        selectedMarketRentChangeHandler.onValueChange(new ValueChangeEvent<MarketRent>(mr) {
-                        });
-                        break;
-                    }
-                }
-            }
-        });
+        mrg.addValueChangeHandler(selectedMarketRentChangeHandler);
 
         mrg.asWidget().getElement().getStyle().setFloat(Float.LEFT);
         unitDetailPanel.add(mrg);

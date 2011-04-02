@@ -24,6 +24,7 @@ import com.propertyvista.portal.domain.AptUnit;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.Picture;
+import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
@@ -37,22 +38,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 public class ApartmentServicesImpl extends ApplicationEntityServicesImpl implements ApartmentServices {
+
     private final static Logger log = LoggerFactory.getLogger(ApartmentServicesImpl.class);
-
-    @Override
-    public void retrieveUnitSelection(AsyncCallback<UnitSelection> callback, UnitSelectionCriteria selectionCriteria) {
-
-        log.info("Asking to retrieve unit selection");
-
-        EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-        UnitSelection unitSelection = secureRetrieve(criteria);
-        unitSelection.selectionCriteria().set(selectionCriteria);
-
-        loadAvailableUnits(unitSelection);
-
-        callback.onSuccess(unitSelection);
-    }
 
     @Override
     public void retrieve(AsyncCallback<UnitSelection> callback, Long tenantId) {
@@ -82,16 +69,13 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
         callback.onSuccess(unitSelection);
     }
 
-    public void loadTransientData(UnitSelection unitSelection) {
-        loadAvailableUnits(unitSelection);
-        loadSelectedUnit(unitSelection);
+    @Override
+    public void retrieveUnitSelection(AsyncCallback<AvailableUnitsByFloorplan> callback, UnitSelectionCriteria selectionCriteria) {
+        callback.onSuccess(loadAvailableUnits(selectionCriteria));
     }
 
-    public void loadSelectedUnit(UnitSelection unitSelection) {
-        if (!unitSelection.selectedUnitId().isNull()) {
-            unitSelection.selectedUnit().set(
-                    Converter.convert(PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitSelection.selectedUnitId().getValue())));
-        }
+    public void loadTransientData(UnitSelection unitSelection) {
+        unitSelection.availableUnits().set(loadAvailableUnits(unitSelection.selectionCriteria()));
     }
 
     public EntityQueryCriteria<AptUnit> createAptUnitCriteria(UnitSelectionCriteria selectionCriteria) {
@@ -144,35 +128,28 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
         return (count > 0);
     }
 
-    public List<AptUnit> loadAvailableUnits(UnitSelectionCriteria selectionCriteria) {
+    public AvailableUnitsByFloorplan loadAvailableUnits(UnitSelectionCriteria selectionCriteria) {
+        AvailableUnitsByFloorplan availableUnits = EntityFactory.create(AvailableUnitsByFloorplan.class);
         EntityQueryCriteria<AptUnit> criteria = createAptUnitCriteria(selectionCriteria);
         if (criteria == null) {
-            return null;
+            return availableUnits;
         }
         List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
         log.info("Found {} units", units.size());
-        return units;
-    }
-
-    public void loadAvailableUnits(UnitSelection unitSelection) {
-
-        List<AptUnit> units = loadAvailableUnits(unitSelection.selectionCriteria());
-        if (units == null || units.isEmpty()) {
-            log.info("Did not find any available units");
-        } else {
+        if (!units.isEmpty()) {
             AptUnit firstUnit = units.get(0);
             Floorplan floorplan = firstUnit.floorplan();
 
-            //        unitSelection.building().set(firstUnit.building());
             for (Picture picture : floorplan.pictures()) {
                 prepareImage(picture);
             }
-            unitSelection.availableUnits().floorplan().set(Converter.convert(floorplan));
+            availableUnits.floorplan().set(Converter.convert(floorplan));
 
             for (AptUnit unit : units) {
-                unitSelection.availableUnits().units().add(Converter.convert(unit));
+                availableUnits.units().add(Converter.convert(unit));
             }
         }
+        return availableUnits;
     }
 
     //TODO If IE6 ?

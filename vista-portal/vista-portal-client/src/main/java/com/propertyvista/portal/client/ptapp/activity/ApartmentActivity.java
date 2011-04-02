@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentView;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentViewPresenter;
+import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.services.ApartmentServices;
@@ -34,11 +35,11 @@ public class ApartmentActivity extends WizardStepActivity<UnitSelection, Apartme
 
     @Override
     public void selectByDates(UnitSelectionCriteria entity) {
-        srv.retrieveUnitSelection(new DefaultAsyncCallback<UnitSelection>() {
+        srv.retrieveUnitSelection(new DefaultAsyncCallback<AvailableUnitsByFloorplan>() {
 
             @Override
-            public void onSuccess(UnitSelection result) {
-                getView().populate(result);
+            public void onSuccess(AvailableUnitsByFloorplan result) {
+                ((ApartmentView) getView()).setAvailableUnits(result);
             }
 
         }, entity);

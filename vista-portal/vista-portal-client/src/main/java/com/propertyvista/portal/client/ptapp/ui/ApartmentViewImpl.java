@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.inject.Singleton;
+import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 
 @Singleton
@@ -28,5 +29,10 @@ public class ApartmentViewImpl extends WizardStepViewImpl<UnitSelection, Apartme
     public void setPresenter(ApartmentViewPresenter presenter) {
         super.setPresenter(presenter);
         ((ApartmentViewForm) getForm()).setPresenter(getPresenter());
+    }
+
+    @Override
+    public void setAvailableUnits(AvailableUnitsByFloorplan availableUnits) {
+        ((ApartmentViewForm) getForm()).setAvailableUnits(availableUnits);
     }
 }

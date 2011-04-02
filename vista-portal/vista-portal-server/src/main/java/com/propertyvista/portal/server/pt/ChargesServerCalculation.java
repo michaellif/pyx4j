@@ -19,7 +19,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.AptUnit;
+import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.Pet;
@@ -31,7 +32,6 @@ import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
-import com.propertyvista.portal.server.pt.services.ApartmentServicesImpl;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -54,8 +54,10 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             log.warn("Could not find unit selection for charges {}", charges);
             return;
         }
-        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
-        apartmentServices.loadSelectedUnit(unitSelection);
+        AptUnit selectedUnit = null;
+        if (!unitSelection.selectedUnitId().isNull()) {
+            selectedUnit = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitSelection.selectedUnitId().getValue());
+        }
 
         EntityQueryCriteria<PotentialTenantList> tenantCriteria = EntityQueryCriteria.create(PotentialTenantList.class);
         tenantCriteria.add(PropertyCriterion.eq(tenantCriteria.proto().application(), charges.application()));
@@ -66,12 +68,21 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         petCriteria.add(PropertyCriterion.eq(aptUnitCriteria.proto().application(), charges.application()));
         Pets pets = PersistenceServicesFactory.getPersistenceService().retrieve(petCriteria);
 
-        updateChargesFromObjects(charges, unitSelection, tenantList, pets);
+        updateChargesFromObjects(charges, unitSelection, selectedUnit, tenantList, pets);
     }
 
-    public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, PotentialTenantList tenantList, Pets pets) {
-        double rentAmount = unitSelection.markerRent().rent().amount().getValue();
-        double depositAmount = unitSelection.selectedUnit().requiredDeposit().amount().getValue();
+    public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, AptUnit selectedUnit, PotentialTenantList tenantList, Pets pets) {
+        double rentAmount = 0;
+        double depositAmount = 0;
+        if (selectedUnit != null) {
+            for (MarketRent mr : selectedUnit.marketRent()) {
+                if (mr.leaseTerm().equals(unitSelection.selectedLeaseTerm())) {
+                    rentAmount = mr.rent().amount().getValue();
+                    break;
+                }
+            }
+            depositAmount = selectedUnit.requiredDeposit().amount().getValue();
+        }
 
         charges.rentStart().setValue(unitSelection.rentStart().getValue());
         charges.monthlyCharges().charges().clear();

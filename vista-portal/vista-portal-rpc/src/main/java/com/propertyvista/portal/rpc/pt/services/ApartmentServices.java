@@ -14,11 +14,12 @@
 package com.propertyvista.portal.rpc.pt.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 
 public interface ApartmentServices extends AbstractWizardServices<UnitSelection> {
 
-    public void retrieveUnitSelection(AsyncCallback<UnitSelection> callback, UnitSelectionCriteria criteria);
+    public void retrieveUnitSelection(AsyncCallback<AvailableUnitsByFloorplan> callback, UnitSelectionCriteria criteria);
 
 }
