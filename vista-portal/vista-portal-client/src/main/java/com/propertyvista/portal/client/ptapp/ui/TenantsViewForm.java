@@ -99,7 +99,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                 columns.add(new EntityFolderColumnDescriptor(proto().email(), "11em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().status(), "8.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "5em"));
             }
 
             @Override

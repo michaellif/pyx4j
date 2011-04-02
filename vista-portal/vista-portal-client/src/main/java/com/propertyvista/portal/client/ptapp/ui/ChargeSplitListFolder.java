@@ -195,6 +195,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
         @Override
         public void setFolder(final CEntityFolder<?> folder) {
+            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             if (getWidgetCount() > 1) {
                 remove(1);
             }
@@ -209,6 +210,5 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
             });
 
         }
-
     }
 }

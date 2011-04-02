@@ -47,6 +47,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
     @SuppressWarnings("rawtypes")
     public ChargesViewForm() {
         super(Charges.class, new VistaEditorsComponentFactory());
+        summaryViewMode = false;
 
         addValueChangeHandler(new ValueChangeHandler<Charges>() {
             @Override
@@ -57,12 +58,11 @@ public class ChargesViewForm extends CEntityForm<Charges> {
                 }
             }
         });
-
-        summaryViewMode = false;
     }
 
     public ChargesViewForm(IEditableComponentFactory factory) {
         super(Charges.class, factory);
+        summaryViewMode = true;
     }
 
     public boolean isSummaryViewMode() {
