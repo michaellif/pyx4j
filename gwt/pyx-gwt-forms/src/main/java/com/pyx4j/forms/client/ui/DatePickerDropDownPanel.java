@@ -39,8 +39,8 @@ public class DatePickerDropDownPanel extends DropDownPanel {
     private NativeDatePicker currenttextBox;
 
     private DatePickerDropDownPanel() {
+        createDatePicker();
         setAnimationEnabled(false);
-
     }
 
     public static DatePickerDropDownPanel instance() {
@@ -72,7 +72,6 @@ public class DatePickerDropDownPanel extends DropDownPanel {
         if (selectedDate == null) {
             selectedDate = new Date();
         }
-        createDatePicker();
         picker.setDate(selectedDate);
         showRelativeTo(textBox);
         currenttextBox = textBox;
@@ -86,7 +85,7 @@ public class DatePickerDropDownPanel extends DropDownPanel {
     public void hide(boolean autohide) {
         super.hide(autohide);
         currenttextBox = null;
-        picker = null;
+//        picker = null;
     }
 
     private void createDatePicker() {
