@@ -20,6 +20,8 @@
  */
 package com.pyx4j.essentials.rpc.report;
 
+import java.util.Arrays;
+
 public enum DownloadFormat {
 
     CSV("csv", "Comma-separated values (CSV)"),
@@ -40,11 +42,11 @@ public enum DownloadFormat {
 
     TXT("txt", "Text file"),
 
-    TIF("tif", "Image"),
+    TIF(new String[] { "tif", "tiff" }, "Image"),
 
     GIF("gif", "Image"),
 
-    JPEG("jpg", "Image"),
+    JPEG(new String[] { "jpg", "jpeg" }, "Image"),
 
     PNG("png", "Image"),
 
@@ -52,21 +54,58 @@ public enum DownloadFormat {
 
     JAVA_SERIALIZED("ser", "Java Serialized Object");
 
-    private String extension;
+    private String[] extensions;
 
     private String name;
 
     DownloadFormat(String extension, String name) {
-        this.extension = extension;
+        this.extensions = new String[] { extension };
         this.name = name;
     }
 
+    DownloadFormat(String[] extensions, String name) {
+        this.extensions = extensions;
+        this.name = name;
+    }
+
+    /**
+     * get name
+     * 
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * get default extension
+     * 
+     * @return default extension
+     */
     public String getExtension() {
-        return extension;
+        return extensions[0];
+    }
+
+    /**
+     * get all extensions
+     * 
+     * @return array of all extensions
+     */
+    public String[] getExtensions() {
+        return extensions;
     }
 
     @Override
     public String toString() {
-        return name;
+        return getName();
+    }
+
+    public static DownloadFormat valueByExtension(String ext) {
+        ext = ext.toLowerCase();
+        for (DownloadFormat df : DownloadFormat.values()) {
+            if (Arrays.asList(df.getExtensions()).contains(ext))
+                return df;
+        }
+        throw new IllegalArgumentException();
     }
 }

@@ -20,14 +20,13 @@
  */
 package com.pyx4j.essentials.server.download;
 
-import java.util.Hashtable;
-import java.util.Map;
-
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MimeMap {
 
-    private static Map<String, String> map = new Hashtable<String, String>();
+    private static final Map<String, String> map = new HashMap<String, String>();
 
     static {
         map.put("txt", "text/plain");
