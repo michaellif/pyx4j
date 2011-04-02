@@ -32,7 +32,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 
@@ -271,6 +270,10 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
         for (CEntityFolderItem<E> item : oldMap.values()) {
             content.remove(item);
+        }
+
+        if (folderDecorator instanceof TableFolderDecorator) {
+            ((TableFolderDecorator<E>) folderDecorator).setHeaderVisible(content.getWidgetCount() > 0);
         }
     }
 

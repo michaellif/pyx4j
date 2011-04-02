@@ -125,7 +125,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         setHeaderVisible(!event.getValue().isNull() && event.getValue().size() > 0);
     }
 
-    private void setHeaderVisible(boolean visible) {
+    void setHeaderVisible(boolean visible) {
         if (visible) {
             header.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         } else {
