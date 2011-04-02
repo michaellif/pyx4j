@@ -975,6 +975,10 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitRowPanel, ApartmentUnitsTable.StyleDependent.hover));
         style.addProperty("background-color", ThemeColor.SELECTION);
+        style.addProperty("border-left", "1px solid");
+        style.addProperty("border-right", "1px solid");
+        style.addProperty("border-left-color", ThemeColor.SELECTION);
+        style.addProperty("border-right-color", ThemeColor.SELECTION);
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
         addStyle(style);
 
