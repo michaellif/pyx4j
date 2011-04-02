@@ -78,6 +78,7 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
     DocumentType documentType;
 
     private final SingleUploader uploader;
+
     private Hidden tenantIdParam;
 
     final ApplicationDocumentsService applicationDocumentsService = (ApplicationDocumentsService) GWT.create(ApplicationDocumentsService.class);
@@ -112,8 +113,8 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
         uploader.add(new Hidden(ApplicationDocumentServletParameters.DOCUMENT_TYPE, documentType.name()));
         uploader.setAutoSubmit(true);
         //uploader.avoidRepeatFiles(true);
-        List<String> validExtensions=new ArrayList<String>();
-        for(DownloadFormat f:ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS)
+        List<String> validExtensions = new ArrayList<String>();
+        for (DownloadFormat f : ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS)
             validExtensions.addAll(Arrays.asList(f.getExtensions()));
         uploader.setValidExtensions(validExtensions.toArray(new String[validExtensions.size()]));
         uploader.addOnFinishUploadHandler(onFinishUploaderHandler);
@@ -142,8 +143,9 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
 
         this.tenantId = tenantId;
 
-        if (tenantIdParam!=null) uploader.remove(tenantIdParam);
-        uploader.add(tenantIdParam=new Hidden(ApplicationDocumentServletParameters.TENANT_ID, this.tenantId.toString()));
+        if (tenantIdParam != null)
+            tenantIdParam.removeFromParent();
+        uploader.add(tenantIdParam = new Hidden(ApplicationDocumentServletParameters.TENANT_ID, this.tenantId.toString()));
 
         if (applicationDocumentsService != null) {
             applicationDocumentsService.retrieveAttachments(new AsyncCallback<ApplicationDocumentsList>() {
