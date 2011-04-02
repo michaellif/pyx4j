@@ -28,9 +28,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.unit.server.TestServiceFactory;
+import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.pyx4j.unit.test.rpc.FirstServices;
 
 public class FirstServiceTest extends TestCase {
+
+    @Override
+    protected void tearDown() throws Exception {
+        TestLifecycle.tearDown();
+    }
 
     public void testMockServiceFactory() {
         FirstServices service = TestServiceFactory.create(FirstServices.class);

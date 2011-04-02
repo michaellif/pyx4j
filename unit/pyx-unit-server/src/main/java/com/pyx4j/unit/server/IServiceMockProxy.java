@@ -33,6 +33,7 @@ import com.pyx4j.rpc.server.IServiceAdapterImpl;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceRequest;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+import com.pyx4j.unit.server.mock.TestLifecycle;
 
 class IServiceMockProxy implements java.lang.reflect.InvocationHandler {
 
@@ -54,10 +55,19 @@ class IServiceMockProxy implements java.lang.reflect.InvocationHandler {
         System.arraycopy(args, 1, serviceArgs, 0, args.length - 1);
         IServiceRequest request = new IServiceRequest(serviceInterfaceClass.getName(), method.getName(), serviceArgs);
 
+        TestLifecycle.beginRequest();
+
         IServiceAdapterImpl srv = new IServiceAdapterImpl();
 
         try {
-            Serializable result = srv.execute(request);
+
+            Serializable result;
+            try {
+                result = srv.execute(request);
+            } finally {
+                TestLifecycle.endRequest();
+            }
+
             callback.onSuccess(result);
         } catch (Throwable e) {
             log.info("service {} call error", request.getServiceCallMarker(), e);

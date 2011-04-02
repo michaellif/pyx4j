@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
 
@@ -36,327 +37,289 @@ import javax.servlet.http.HttpSession;
 
 public class MockHttpServletRequest implements HttpServletRequest {
 
-    @Override
-    public Object getAttribute(String name) {
-        // TODO Auto-generated method stub
-        return null;
+    protected Hashtable<String, Object> attributes = new Hashtable<String, Object>();
+
+    public MockHttpServletRequest() {
+
     }
 
     @Override
+    public Object getAttribute(String name) {
+        return attributes.get(name);
+    }
+
+    @Override
+    public void setAttribute(String name, Object o) {
+        attributes.put(name, o);
+    }
+
+    @Override
+    public void removeAttribute(String name) {
+        attributes.remove(name);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
     public Enumeration getAttributeNames() {
-        // TODO Auto-generated method stub
-        return null;
+        return attributes.keys();
     }
 
     @Override
     public String getCharacterEncoding() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setCharacterEncoding(String env) throws UnsupportedEncodingException {
-        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException();
 
     }
 
     @Override
     public int getContentLength() {
-        // TODO Auto-generated method stub
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getContentType() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ServletInputStream getInputStream() throws IOException {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getParameter(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public Enumeration getParameterNames() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String[] getParameterValues(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public Map getParameterMap() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getProtocol() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getScheme() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getServerName() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public int getServerPort() {
-        // TODO Auto-generated method stub
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public BufferedReader getReader() throws IOException {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getRemoteAddr() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getRemoteHost() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setAttribute(String name, Object o) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void removeAttribute(String name) {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Locale getLocale() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public Enumeration getLocales() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean isSecure() {
-        // TODO Auto-generated method stub
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public RequestDispatcher getRequestDispatcher(String path) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getRealPath(String path) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public int getRemotePort() {
-        // TODO Auto-generated method stub
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getLocalName() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getLocalAddr() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public int getLocalPort() {
-        // TODO Auto-generated method stub
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getAuthType() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Cookie[] getCookies() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public long getDateHeader(String name) {
-        // TODO Auto-generated method stub
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getHeader(String name) {
-        // TODO Auto-generated method stub
         return null;
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public Enumeration getHeaders(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public Enumeration getHeaderNames() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public int getIntHeader(String name) {
-        // TODO Auto-generated method stub
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getMethod() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getPathInfo() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getPathTranslated() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getContextPath() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getQueryString() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getRemoteUser() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean isUserInRole(String role) {
-        // TODO Auto-generated method stub
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Principal getUserPrincipal() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getRequestedSessionId() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getRequestURI() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public StringBuffer getRequestURL() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getServletPath() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public HttpSession getSession(boolean create) {
-        // TODO Auto-generated method stub
-        return null;
+        if (create && TestLifecycle.threadLocalContext.get().session == null) {
+            TestLifecycle.threadLocalContext.get().session = new MockHttpSession();
+        }
+        return TestLifecycle.threadLocalContext.get().session;
     }
 
     @Override
     public HttpSession getSession() {
-        // TODO Auto-generated method stub
-        return null;
+        return TestLifecycle.threadLocalContext.get().session;
     }
 
     @Override
     public boolean isRequestedSessionIdValid() {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public boolean isRequestedSessionIdFromCookie() {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public boolean isRequestedSessionIdFromURL() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean isRequestedSessionIdFromUrl() {
-        // TODO Auto-generated method stub
         return false;
     }
 

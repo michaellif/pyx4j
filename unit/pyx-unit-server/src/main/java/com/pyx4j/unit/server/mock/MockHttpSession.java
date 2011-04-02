@@ -21,23 +21,32 @@
 package com.pyx4j.unit.server.mock;
 
 import java.util.Enumeration;
+import java.util.Hashtable;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionContext;
 
 public class MockHttpSession implements HttpSession {
 
+    private final long creationTime = System.currentTimeMillis();
+
+    private static int count = 0;
+
+    private final int id = (count++);
+
+    protected Hashtable<String, Object> attributes = new Hashtable<String, Object>();
+
+    public MockHttpSession() {
+    }
+
     @Override
     public long getCreationTime() {
-        // TODO Auto-generated method stub
-        return 0;
+        return creationTime;
     }
 
     @Override
     public String getId() {
-        // TODO Auto-generated method stub
-        return null;
+        return "test-" + id;
     }
 
     @Override
@@ -48,8 +57,7 @@ public class MockHttpSession implements HttpSession {
 
     @Override
     public ServletContext getServletContext() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -64,64 +72,60 @@ public class MockHttpSession implements HttpSession {
         return 0;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public HttpSessionContext getSessionContext() {
-        // TODO Auto-generated method stub
-        return null;
+    public javax.servlet.http.HttpSessionContext getSessionContext() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Object getAttribute(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        return attributes.get(name);
     }
 
     @Override
     public Object getValue(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public Enumeration getAttributeNames() {
-        // TODO Auto-generated method stub
-        return null;
+        return attributes.keys();
     }
 
     @Override
     public String[] getValueNames() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setAttribute(String name, Object value) {
-        // TODO Auto-generated method stub
-
+        attributes.put(name, value);
     }
 
     @Override
     public void putValue(String name, Object value) {
-        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException();
 
     }
 
     @Override
     public void removeAttribute(String name) {
-        // TODO Auto-generated method stub
-
+        attributes.remove(name);
     }
 
     @Override
     public void removeValue(String name) {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void invalidate() {
-        // TODO Auto-generated method stub
-
+        attributes.clear();
+        if (TestLifecycle.threadLocalContext.get().session == this) {
+            TestLifecycle.threadLocalContext.get().session = null;
+        }
     }
 
     @Override
