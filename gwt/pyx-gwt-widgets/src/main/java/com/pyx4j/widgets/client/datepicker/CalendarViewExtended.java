@@ -19,6 +19,7 @@ import java.util.Date;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.CalendarView;
@@ -35,6 +36,8 @@ public class CalendarViewExtended extends CalendarView {
     private final DateGrid grid;
 
     private DatePicker picker;
+    
+    private String[] daysOfWeek = new String[7];
 
     public CalendarViewExtended(Date minDate, Date maxDate, ArrayList<Date> disabledDates) {
         grid = new DateGrid(minDate, maxDate, disabledDates);
@@ -90,13 +93,23 @@ public class CalendarViewExtended extends CalendarView {
         firstDisplayed = getModel().getCurrentFirstDayOfFirstWeek();
         grid.redraw(firstDisplayed);
     }
+    
+    private void setDaysOfWeek(){
+        Date date = new Date();
+        for (int i = 1; i <= 7; i++) {
+          date.setDate(i);
+          int dayOfWeek = date.getDay();
+          daysOfWeek[dayOfWeek] = DateTimeFormat.getFormat("E").format(date).substring(0,2);
+        }
+    }
 
     @Override
     protected void setup() {
+    	setDaysOfWeek();
         for (int i = 0; i < CalendarModel.DAYS_IN_WEEK; i++) {
             int shift = CalendarUtil.getStartingDayOfWeek();
             int dayIdx = i + shift < CalendarModel.DAYS_IN_WEEK ? i + shift : i + shift - CalendarModel.DAYS_IN_WEEK;
-            grid.setText(0, i, getModel().formatDayOfWeek(dayIdx));
+            grid.setText(0, i, daysOfWeek[dayIdx]);
         }
         //grid.getRowFormatter().setStyleName(0, "datePickerGridDaysRow");
         grid.getRowFormatter().setStyleName(0, Selector.getStyleName(DatePickerExtended.BASE_NAME, DatePickerExtended.StyleSuffix.GridDaysRow));

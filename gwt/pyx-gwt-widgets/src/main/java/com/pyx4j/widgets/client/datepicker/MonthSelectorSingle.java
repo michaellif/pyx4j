@@ -97,6 +97,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
         });
         // Set up backwards year
         backwardsYear = new HoldableImage(resource.YearPrevious(),300);
+        backwardsYear.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.bottom));
         backwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
 			
 			@Override
@@ -107,6 +108,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
 		});
 
         forwardsYear = new HoldableImage(resource.YearNext(),300);
+        forwardsYear.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.top));
         forwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
 			
 			@Override

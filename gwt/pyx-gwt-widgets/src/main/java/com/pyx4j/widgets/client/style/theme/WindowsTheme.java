@@ -827,8 +827,17 @@ public class WindowsTheme extends Theme {
 
         style = new Style(".datePickerMonthSelector img");
         style.addProperty("width", "10px");
+        style.addProperty("position", "relative");
         addStyle(style);
 
+        style = new Style(".datePickerMonthSelector img.top");
+        style.addProperty("top", "3px");
+        addStyle(style);
+
+        style = new Style(".datePickerMonthSelector img.bottom");
+        style.addProperty("top", "-3px");
+        addStyle(style);        
+        
         style = new Style(".datePickerMonthSelector");
         style.addProperty("background-color", "#E4E4EC");
         style.addProperty("margin", "0");

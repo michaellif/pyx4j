@@ -95,6 +95,7 @@ public class DateCell extends Label {
 		this.setStyleName(Selector
 				.getDependentName(DatePickerExtended.StyleDependent.selected),
 				selected);
+		heighlight(false);
 	}
 
 	private void heighlight(boolean isheighlighted) {
