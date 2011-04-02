@@ -21,6 +21,7 @@ import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
 import gwtupload.server.UploadAction;
 import gwtupload.server.exceptions.UploadActionException;
@@ -89,7 +90,17 @@ public class UploadServlet extends UploadAction {
                 int t = fileItem.getName().lastIndexOf(".");
                 if (t != -1) {
                     String extension = fileItem.getName().substring(t + 1).trim();
+                    try {
+                        if (!ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS.contains(DownloadFormat.valueByExtension(extension))) {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        throw new UploadActionException("Unsupported file extension in file name:" + fileItem.getName() + ". List of supported extensions: "
+                                + ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS);
+                    }
                     contentType = MimeMap.getContentType(extension);
+                } else {
+                    throw new UploadActionException("There's no extension in file name:" + fileItem.getName());
                 }
             }
             if (contentType == null)

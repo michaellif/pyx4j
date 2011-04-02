@@ -13,10 +13,14 @@
  */
 package com.propertyvista.portal.rpc.pt;
 
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import java.util.Arrays;
+import java.util.EnumSet;
+
 public interface ApplicationDocumentServletParameters {
 
     /**
-     * Tenent Id parameter name passed along with binary document on upload form
+     * Tenant Id parameter name passed along with binary document on upload form
      */
     public static final String TENANT_ID = "TenantId";
 
@@ -29,5 +33,11 @@ public interface ApplicationDocumentServletParameters {
      * Document Id parameter name passed to download document servlet
      */
     public static final String DOCUMENT_ID = "DocumentId";
+
+    /**
+     * array of file extensions allowed to upload as application document
+     */
+    public static final EnumSet<DownloadFormat> SUPPORTED_FILE_EXTENSIONS = EnumSet.copyOf(Arrays.asList(new DownloadFormat[] {
+            DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG, DownloadFormat.TIF, DownloadFormat.BMP, DownloadFormat.PDF }));
 
 }

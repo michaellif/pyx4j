@@ -20,6 +20,7 @@ import gwtupload.client.IUploader;
 import gwtupload.client.SingleUploader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.xnap.commons.i18n.I18n;
@@ -57,6 +58,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CNumberLabel;
@@ -109,7 +111,10 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
         uploader.add(new Hidden(ApplicationDocumentServletParameters.DOCUMENT_TYPE, documentType.name()));
         uploader.setAutoSubmit(true);
         //uploader.avoidRepeatFiles(true);
-        uploader.setValidExtensions(new String[] { "jpg", "jpeg", "gif", "png", "tiff", "bmp", "pdf" });
+        List<String> validExtensions=new ArrayList<String>();
+        for(DownloadFormat f:ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS)
+            validExtensions.addAll(Arrays.asList(f.getExtensions()));
+        uploader.setValidExtensions(validExtensions.toArray(new String[validExtensions.size()]));
         uploader.addOnFinishUploadHandler(onFinishUploaderHandler);
         uploader.getFileInput().setText(i18n.tr("Browse for File"));
         uploader.getFileInput().getWidget().setStyleName("customButton");
