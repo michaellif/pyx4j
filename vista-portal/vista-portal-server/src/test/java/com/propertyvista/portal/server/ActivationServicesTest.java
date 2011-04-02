@@ -26,16 +26,20 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
+import com.pyx4j.unit.server.mock.TestLifecycle;
 
 public class ActivationServicesTest extends VistaDBTestCase {
 
-    public void testNoting() throws Exception {
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        TestLifecycle.tearDown();
     }
 
-    public void TODO_testAccountCreation() {
+    public void testAccountCreation() {
         AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
 
-        final String email = DataGenerator.randomLastName() + DataGenerator.randomInt(Integer.MAX_VALUE) + DemoData.USERS_DOMAIN;
+        final String email = DataGenerator.randomLastName().toLowerCase() + DataGenerator.randomInt(Integer.MAX_VALUE) + DemoData.USERS_DOMAIN;
         request.email().setValue(email);
         request.password().setValue("1234");
         request.captcha().setValue(new Pair<String, String>("n/a", "x"));
