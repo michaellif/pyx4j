@@ -34,6 +34,8 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
 
     private final NativeTextBox<Date> textBox;
 
+    private DatePickerDropDownPanel datePickerDropDown;
+
     public NativeDatePicker(final CDatePicker datePicker) {
         super();
         textBox = new NativeTextBox<Date>(datePicker);
@@ -44,7 +46,9 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
         textBox.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                DatePickerDropDownPanel.hideDatePicker();
+                if (datePickerDropDown != null) {
+                    datePickerDropDown.hideDatePicker();
+                }
             }
         });
         setWidth(datePicker.getWidth());
@@ -81,9 +85,12 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
     @Override
     protected void onTrigger(boolean show) {
         if (show) {
-            DatePickerDropDownPanel.showDatePicker(this);
+            if (datePickerDropDown == null) {
+                datePickerDropDown = new DatePickerDropDownPanel();
+            }
+            datePickerDropDown.showDatePicker(this);
         } else {
-            DatePickerDropDownPanel.hideDatePicker();
+            datePickerDropDown.hideDatePicker();
         }
     }
 

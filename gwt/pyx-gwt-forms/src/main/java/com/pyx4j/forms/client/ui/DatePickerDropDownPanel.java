@@ -34,24 +34,15 @@ public class DatePickerDropDownPanel extends DropDownPanel {
 
     private DatePickerComposite picker;
 
-    private static DatePickerDropDownPanel instance;
-
     private NativeDatePicker currenttextBox;
 
-    private DatePickerDropDownPanel() {
+    public DatePickerDropDownPanel() {
         createDatePicker();
         setAnimationEnabled(false);
     }
 
-    public static DatePickerDropDownPanel instance() {
-        if (instance == null) {
-            instance = new DatePickerDropDownPanel();
-        }
-        return instance;
-    }
-
-    public static void showDatePicker(NativeDatePicker textBox) {
-        instance().attachAndShow(textBox);
+    public void showDatePicker(NativeDatePicker textBox) {
+        attachAndShow(textBox);
     }
 
     private void attachAndShow(NativeDatePicker textBox) {
@@ -77,8 +68,8 @@ public class DatePickerDropDownPanel extends DropDownPanel {
         currenttextBox = textBox;
     }
 
-    public static void hideDatePicker() {
-        instance().hide();
+    public void hideDatePicker() {
+        hide();
     }
 
     @Override
