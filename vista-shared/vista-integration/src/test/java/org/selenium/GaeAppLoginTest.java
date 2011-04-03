@@ -167,15 +167,18 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         cal.add(Calendar.YEAR, 1); //get a 24 Years old co-tenant
         selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$birthDate", sdf2.format(cal.getTime()));
         selenium.type("PotentialTenantList$tenants_row-2_PotentialTenantInfo$email", testUser + "sha" + strNow + emailAt);
-        //selenium.select("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status-item0");
-        selenium.setValue("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status", "Co-applicant");
-        //selenium.select("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$relationship-item0");
-        selenium.setValue("gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$relationship", "Spouse");
+        selenium.setValue("id=gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$relationship", "Spouse");
+        assertEnabled("id=gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status");  // status must be enabled for spouse
+        selenium.setValue("id=gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status", "Co-applicant");
 
         selenium.click("Crud_Save");
         assertNoMessages();
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class));
 
+        assertEnabled("id=gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status");  // status must be enabled for spouse
+        assertEquals(selenium.getValue("id=gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status"), "Co-applicant");
+        
+        
         selenium.click("logout");
 
     }
@@ -205,8 +208,8 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
         selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$birthDate", sdf2.format(cal.getTime()));
         selenium.type("PotentialTenantList$tenants_row-3_PotentialTenantInfo$email", testUser + "ovich" + strNow + emailAt);
-        //selenium.select("gwt-debug-PotentialTenantList$tenants_row-3_PotentialTenantInfo$relationship-item1");
-        selenium.setValue("gwt-debug-PotentialTenantList$tenants_row-3_PotentialTenantInfo$relationship", "Son");
+        selenium.setValue("id=gwt-debug-PotentialTenantList$tenants_row-3_PotentialTenantInfo$relationship", "Son");
+        assertNotEnabled("id=gwt-debug-PotentialTenantList$tenants_row-3_PotentialTenantInfo$status");  // status must be enabled for spouse
 
         selenium.click("Crud_Save");
         assertNoMessages();
@@ -268,22 +271,19 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         selenium.type("PotentialTenantInfo$vehicles_row-1_Vehicle$country", "Russia");
 
         //INFO PAGE DOES NOT HAVE PROPER DEBUF IDs BELOW:
-        //selenium.select("PotentialTenantInfo$driversLicenseState-item1");
-        //selenium.select("PotentialTenantInfo$currentAddress_Address$province-item8");
-        //selenium.select("PotentialTenantInfo$vehicles_row-1_Vehicle$province-item0");
-        //selenium.select("PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$address$province-item0");
-        //selenium.select("PotentialTenantInfo$vehicles_row-1_Vehicle$year_yy-item5");
+        selenium.setValue("id=gwt-debug-PotentialTenantInfo$driversLicenseState", "Ontario");
+        selenium.setValue("id=gwt-debug-PotentialTenantInfo$currentAddress_Address$province", "Ontario");
+        selenium.setValue("id=gwt-debug-PotentialTenantInfo$vehicles_row-1_Vehicle$province", "Ontario");
+        selenium.setValue("id=gwt-debug-PotentialTenantInfo$emergencyContacts_row-1_EmergencyContact$address$province", "Ontario");
+        selenium.setValue("id=gwt-debug-PotentialTenantInfo$vehicles_row-1_Vehicle$year_yy", "2001");
 
         //INFO PAGE DOES NOT HAV PROPER DEBUF IDs ABOVE, so save does not work...
-        //selenium.click("Crud_Save");
+        selenium.click("Crud_Save");
         selenium.click("MainNavigation_Prefix_apartment");
-
         assertNoMessages();
 
         selenium.click("logout");
 
-        ////sample from Slava
-        //selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
     }
 
 }
