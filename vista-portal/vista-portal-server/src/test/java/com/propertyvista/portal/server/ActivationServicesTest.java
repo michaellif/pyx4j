@@ -29,6 +29,7 @@ import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 public class ActivationServicesTest extends VistaDBTestCase {
+    @SuppressWarnings("unused")
     private final static Logger log = LoggerFactory.getLogger(ActivationServicesTest.class);
 
     @Override
@@ -41,31 +42,30 @@ public class ActivationServicesTest extends VistaDBTestCase {
         return TestServiceFactory.create(ActivationServices.class);
     }
 
-//    /**
-//     * Test invalid email address
-//     */
-//    public void testInvalidEmail() {
-//        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
-//
-//        final String email = "abc";
-//        request.email().setValue(email);
-//        request.password().setValue("1234");
-//        request.captcha().setValue(TestUtil.createCaptcha());
-//
-//        ActivationServices service = createService();
-//        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
-//            @Override
-//            public void onSuccess(AuthenticationResponse result) {
-//                Assert.assertNotNull("Got the visit", result.getUserVisit());
-//                Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//                System.out.print("Failure!");
-//            }
-//        }, request);
-//    }
+    /**
+     * Test invalid email address
+     */
+    public void testInvalidEmail() {
+        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
+
+        final String email = "abc";
+        request.email().setValue(email);
+        request.password().setValue("1234");
+        request.captcha().setValue(TestUtil.createCaptcha());
+
+        ActivationServices service = createService();
+        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                Assert.fail("Should never come here");
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                Assert.assertNotNull("Received failure", throwable);
+            }
+        }, request);
+    }
 
     /**
      * Submit a simple account creation request
@@ -88,7 +88,7 @@ public class ActivationServicesTest extends VistaDBTestCase {
 
             @Override
             public void onFailure(Throwable throwable) {
-                Assert.assertTrue("Should never come here", false);
+                Assert.fail("Should never come here");
             }
         }, request);
     }
