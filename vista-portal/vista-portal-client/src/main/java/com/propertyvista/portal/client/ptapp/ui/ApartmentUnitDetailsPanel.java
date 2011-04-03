@@ -194,6 +194,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         unitDetailPanel.getElement().getStyle().setBackgroundColor("white");
 
         add(unitDetailPanel);
+
         if (animate) {
             new GrowAnimation(unitDetailPanel).run(500);
         }

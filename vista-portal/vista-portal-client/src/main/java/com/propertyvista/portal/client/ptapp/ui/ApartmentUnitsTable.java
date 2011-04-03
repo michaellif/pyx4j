@@ -102,7 +102,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
         columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().floorplan().name(), "70px"));
-        columns.add(new EntityFolderColumnDescriptor(proto().unitType(), "100px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().unitType(), "122px"));
         columns.add(new EntityFolderColumnDescriptor(proto().marketRent(), "70px"));
         columns.add(new EntityFolderColumnDescriptor(proto().requiredDeposit(), "70px"));
         columns.add(new EntityFolderColumnDescriptor(proto().bedrooms(), "60px"));
