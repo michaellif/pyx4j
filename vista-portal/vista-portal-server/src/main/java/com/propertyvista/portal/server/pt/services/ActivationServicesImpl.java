@@ -17,6 +17,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -68,9 +70,22 @@ public class ActivationServicesImpl extends ApplicationEntityServicesImpl implem
         callback.onSuccess(new ApartmentServicesImpl().areUnitsAvailable(selectionCriteria));
     }
 
-    public static boolean validEmailAddress(String address) {
+    public static boolean validEmailAddress(String email) {
+
+        // check email using regular expressions
+        Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
+
+        // Match the given string with the pattern
+        Matcher m = p.matcher(email);
+
+        // check whether match is found 
+        boolean matchFound = m.matches();
+        if (!matchFound) {
+            return false;
+        }
+
         try {
-            new InternetAddress(address);
+            new InternetAddress(email);
             return true;
         } catch (AddressException e) {
             return false;
@@ -82,11 +97,12 @@ public class ActivationServicesImpl extends ApplicationEntityServicesImpl implem
         if (ServerSideConfiguration.instance().datastoreReadOnly()) {
             throw new UnRecoverableRuntimeException(EntityServicesImpl.applicationReadOnlyMessage());
         }
-        if (!validEmailAddress(request.email().getValue())) {
-            log.debug("Invalid Email [{}]", request.email().getValue());
-            throw new UserRuntimeException(i18n.tr("Invalid Email"));
+        String email = request.email().getValue().toLowerCase(); // intentionally convert this to lowercase before validation
+        log.info("Creating account for email={}", email);
+        if (!validEmailAddress(email)) {
+            log.info("Invalid Email [{}]", email);
+            throw new UserRuntimeException(i18n.tr("Invalid Email " + email));
         }
-        String email = request.email().getValue().toLowerCase();
         AntiBot.assertCaptcha(request.captcha().getValue());
 
         EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);

@@ -14,21 +14,22 @@
 package com.propertyvista.portal.server;
 
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.propertyvista.config.tests.VistaDBTestCase;
-import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.services.ActivationServices;
+import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 
-import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 public class ActivationServicesTest extends VistaDBTestCase {
+    private final static Logger log = LoggerFactory.getLogger(ActivationServicesTest.class);
 
     @Override
     protected void tearDown() throws Exception {
@@ -36,21 +37,58 @@ public class ActivationServicesTest extends VistaDBTestCase {
         TestLifecycle.tearDown();
     }
 
+    private ActivationServices createService() {
+        return TestServiceFactory.create(ActivationServices.class);
+    }
+
+//    /**
+//     * Test invalid email address
+//     */
+//    public void testInvalidEmail() {
+//        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
+//
+//        final String email = "abc";
+//        request.email().setValue(email);
+//        request.password().setValue("1234");
+//        request.captcha().setValue(TestUtil.createCaptcha());
+//
+//        ActivationServices service = createService();
+//        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+//            @Override
+//            public void onSuccess(AuthenticationResponse result) {
+//                Assert.assertNotNull("Got the visit", result.getUserVisit());
+//                Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                System.out.print("Failure!");
+//            }
+//        }, request);
+//    }
+
+    /**
+     * Submit a simple account creation request
+     */
     public void testAccountCreation() {
         AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
 
-        final String email = DataGenerator.randomLastName().toLowerCase() + DataGenerator.randomInt(Integer.MAX_VALUE) + DemoData.USERS_DOMAIN;
+        final String email = BusinessDataGenerator.createEmail();
         request.email().setValue(email);
         request.password().setValue("1234");
-        request.captcha().setValue(new Pair<String, String>("n/a", "x"));
+        request.captcha().setValue(TestUtil.createCaptcha());
 
-        ActivationServices service = TestServiceFactory.create(ActivationServices.class);
+        ActivationServices service = createService();
         service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
-                Assert.assertNotNull("Git the visit", result.getUserVisit());
-                Assert.assertEquals("email", email, result.getUserVisit().getEmail());
+                Assert.assertNotNull("Got the visit", result.getUserVisit());
+                Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
+            }
 
+            @Override
+            public void onFailure(Throwable throwable) {
+                Assert.assertTrue("Should never come here", false);
             }
         }, request);
     }
