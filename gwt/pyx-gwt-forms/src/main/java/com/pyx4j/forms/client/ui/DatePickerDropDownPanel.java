@@ -25,37 +25,60 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Focusable;
+
 import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 
-public class DatePickerDropDownPanel extends DropDownPanel {
+public class DatePickerDropDownPanel extends DropDownPanel implements Focusable {
 
     private static final Logger log = LoggerFactory.getLogger(DatePickerDropDownPanel.class);
 
-    private DatePickerComposite picker;
+    private final DatePickerComposite picker;
 
-    private NativeDatePicker currenttextBox;
+    private final FocusPanel focusPanel;
 
-    public DatePickerDropDownPanel() {
-        createDatePicker();
+    private final NativeDatePicker nativeDatePicker;
+
+    public DatePickerDropDownPanel(final NativeDatePicker nativeDatePicker) {
+        this.nativeDatePicker = nativeDatePicker;
+
+        focusPanel = new FocusPanel();
+
+        picker = new DatePickerComposite();
+
+        focusPanel.setWidget(picker);
+        setWidget(focusPanel);
+        picker.addDateChosenEventHandler(new DatePickerComposite.DateChosenEventHandler() {
+
+            @Override
+            public void onDateChosen(DatePickerComposite.DateChosenEvent event) {
+                Date value = event.getChosenDate();
+                if (value != null) { // Clone without time component!
+                    value = new Date(value.getYear(), value.getMonth(), value.getDate());
+                }
+
+                nativeDatePicker.setNativeValue(value);
+                nativeDatePicker.getCComponent().onEditingStop();
+                hide();
+                nativeDatePicker.setFocus(true);
+            }
+        });
+
         setAnimationEnabled(false);
+
     }
 
-    public void showDatePicker(NativeDatePicker textBox) {
-        attachAndShow(textBox);
-    }
-
-    private void attachAndShow(NativeDatePicker textBox) {
-        if (currenttextBox == textBox) {
-            hideDatePicker();
-            return;
-        }
-        currenttextBox = null;
+    public void showDatePicker() {
         Date selectedDate = null;
-        String value = textBox.getNativeText().trim();
+        String value = nativeDatePicker.getNativeText().trim();
         if (!value.equals("")) {
             try {
-                selectedDate = textBox.getCComponent().getValue();
+                selectedDate = nativeDatePicker.getCComponent().getValue();
             } catch (IllegalArgumentException e) {
                 log.info("Cannot parse as date: " + value);
             }
@@ -64,8 +87,7 @@ public class DatePickerDropDownPanel extends DropDownPanel {
             selectedDate = new Date();
         }
         picker.setDate(selectedDate);
-        showRelativeTo(textBox);
-        currenttextBox = textBox;
+        showRelativeTo(nativeDatePicker);
     }
 
     public void hideDatePicker() {
@@ -73,32 +95,31 @@ public class DatePickerDropDownPanel extends DropDownPanel {
     }
 
     @Override
-    public void hide(boolean autohide) {
-        super.hide(autohide);
-        currenttextBox = null;
-//        picker = null;
+    public int getTabIndex() {
+        return focusPanel.getTabIndex();
     }
 
-    private void createDatePicker() {
-        setWidget(picker = new DatePickerComposite());
-        picker.addDateChosenEventHandler(new DatePickerComposite.DateChosenEventHandler() {
+    @Override
+    public void setAccessKey(char key) {
+        focusPanel.setAccessKey(key);
+    }
 
-            @Override
-            public void onDateChosen(DatePickerComposite.DateChosenEvent event) {
-                NativeDatePicker receiver = currenttextBox;
-                if (receiver != null) {
-                    Date value = event.getChosenDate();
-                    if (value != null) { // Clone without time component!
-                        value = new Date(value.getYear(), value.getMonth(), value.getDate());
-                    }
+    @Override
+    public void setFocus(boolean focused) {
+        focusPanel.setFocus(focused);
+    }
 
-                    currenttextBox.setNativeValue(value);
-                    receiver.getCComponent().onEditingStop();
-                    hide();
-                    receiver.setFocus(true);
-                }
-            }
-        });
+    @Override
+    public void setTabIndex(int index) {
+        focusPanel.setTabIndex(index);
+    }
+
+    public HandlerRegistration addBlurHandler(BlurHandler handler) {
+        return focusPanel.addBlurHandler(handler);
+    }
+
+    public HandlerRegistration addFocusHandler(FocusHandler handler) {
+        return focusPanel.addFocusHandler(handler);
     }
 
 }

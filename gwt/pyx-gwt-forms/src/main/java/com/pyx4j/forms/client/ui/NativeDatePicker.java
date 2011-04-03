@@ -86,11 +86,15 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
     protected void onTrigger(boolean show) {
         if (show) {
             if (datePickerDropDown == null) {
-                datePickerDropDown = new DatePickerDropDownPanel();
+                datePickerDropDown = new DatePickerDropDownPanel(this);
+                datePickerDropDown.addFocusHandler(getGroupFocusHandler());
+                datePickerDropDown.addBlurHandler(getGroupFocusHandler());
             }
-            datePickerDropDown.showDatePicker(this);
+            datePickerDropDown.showDatePicker();
         } else {
-            datePickerDropDown.hideDatePicker();
+            if (datePickerDropDown != null) {
+                datePickerDropDown.hideDatePicker();
+            }
         }
     }
 

@@ -36,6 +36,7 @@ public class DropDownPanel extends PopupPanel {
 
     private static ResizeHandler resizeHandler = new ResizeHandler() {
 
+        @Override
         public void onResize(ResizeEvent event) {
             if (openPanels != null) {
                 ArrayList<DropDownPanel> old = openPanels;

@@ -212,6 +212,10 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
         return focusHandlerManager.addHandler(BlurEvent.getType(), blurHandler);
     }
 
+    protected GroupFocusHandler getGroupFocusHandler() {
+        return focusHandlerManager;
+    }
+
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
         return focusWidget.addKeyUpHandler(handler);
     }
