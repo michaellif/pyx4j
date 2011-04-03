@@ -109,7 +109,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         instrumentsPanel.getElement().getStyle().setPaddingTop(10, Unit.PX);
         instrumentsPanel.getElement().getStyle().setPaddingBottom(10, Unit.PX);
         instrumentsPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        instrumentsPanel.getElement().getStyle().setBorderColor("black");
+        instrumentsPanel.getElement().getStyle().setBorderColor("#bbb");
         instrumentsPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
         instrumentsPanel.getElement().getStyle().setBackgroundColor("white");
         instrumentsPanel.getElement().getStyle().setPosition(Position.RELATIVE);

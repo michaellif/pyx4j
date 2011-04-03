@@ -314,6 +314,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
         private void setSelected(boolean selected, boolean animate) {
             if (selected) {
                 unitDetailsPanel.showUnitDetails(getValue(), selectedLeaseTerm, selectedMarketRentChangeHandler, animate, this.getDebugId());
+                unitDetailsPanel.addStyleDependentName(StyleDependent.selected.name());
                 header.addStyleDependentName(StyleDependent.selected.name());
                 header.removeStyleDependentName(StyleDependent.hover.name());
             } else {
@@ -321,6 +322,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
                     @Override
                     public void onComplete() {
                         header.removeStyleDependentName(StyleDependent.selected.name());
+                        unitDetailsPanel.removeStyleDependentName(StyleDependent.selected.name());
                     }
                 }, animate);
             }

@@ -983,6 +983,10 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitDetailPanel));
+        style.addProperty("border", "none");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitDetailPanel, ApartmentUnitsTable.StyleDependent.selected));
         style.addProperty("border-bottom", "1px solid #bbb");
         style.addProperty("border-left", "1px solid #bbb");
         style.addProperty("border-right", "1px solid #bbb");
