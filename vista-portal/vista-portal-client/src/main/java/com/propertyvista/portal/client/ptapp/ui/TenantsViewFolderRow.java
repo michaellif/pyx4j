@@ -95,7 +95,7 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
 
                 @Override
                 public void onValueChange(ValueChangeEvent<Date> event) {
-                    if (!event.getValue().equals(get(proto().birthDate()).getValue())) {
+                    if (event.getValue() != null && !event.getValue().equals(get(proto().birthDate()).getValue())) {
                         if (ValidationUtils.isOlderThen18(event.getValue())) {
                             enableStatusAndOwnership();
                             get(proto().status()).setValue(null);
