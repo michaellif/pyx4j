@@ -18,15 +18,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.rpc.pt.services.TenantsInfoServices;
+import com.propertyvista.portal.rpc.pt.services.TenantInfoService;
 import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-public class TenantsInfoServicesImpl extends ApplicationEntityServicesImpl implements TenantsInfoServices {
-    private final static Logger log = LoggerFactory.getLogger(TenantsInfoServicesImpl.class);
+public class TenantInfoServiceImpl extends ApplicationEntityServiceImpl implements TenantInfoService {
+    private final static Logger log = LoggerFactory.getLogger(TenantInfoServiceImpl.class);
 
     @Override
     public void retrieve(AsyncCallback<PotentialTenantInfo> callback, Long tenantId) {

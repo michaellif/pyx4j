@@ -28,7 +28,7 @@ import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
-import com.propertyvista.portal.rpc.pt.services.ApartmentServices;
+import com.propertyvista.portal.rpc.pt.services.ApartmentService;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.portal.server.pt.util.Converter;
 
@@ -37,9 +37,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-public class ApartmentServicesImpl extends ApplicationEntityServicesImpl implements ApartmentServices {
+public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implements ApartmentService {
 
-    private final static Logger log = LoggerFactory.getLogger(ApartmentServicesImpl.class);
+    private final static Logger log = LoggerFactory.getLogger(ApartmentServiceImpl.class);
 
     @Override
     public void retrieve(AsyncCallback<UnitSelection> callback, Long tenantId) {

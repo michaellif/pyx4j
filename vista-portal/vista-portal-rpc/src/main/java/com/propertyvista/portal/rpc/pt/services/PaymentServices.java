@@ -15,6 +15,6 @@ package com.propertyvista.portal.rpc.pt.services;
 
 import com.propertyvista.portal.domain.pt.PaymentInfo;
 
-public interface PaymentServices extends AbstractWizardServices<PaymentInfo> {
+public interface PaymentServices extends AbstractWizardService<PaymentInfo> {
 
 }

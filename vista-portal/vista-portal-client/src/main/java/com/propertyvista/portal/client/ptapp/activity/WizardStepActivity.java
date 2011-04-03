@@ -24,7 +24,7 @@ import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepPresenter;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepView;
 import com.propertyvista.portal.domain.pt.IBoundToApplication;
-import com.propertyvista.portal.rpc.pt.services.AbstractWizardServices;
+import com.propertyvista.portal.rpc.pt.services.AbstractWizardService;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -42,12 +42,12 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
 
     private final Class<E> clazz;
 
-    private final AbstractWizardServices<E> wizardServices;
+    private final AbstractWizardService<E> wizardServices;
 
     protected AppPlace currentPlace;
 
     @SuppressWarnings("unchecked")
-    public WizardStepActivity(WizardStepView<E, T> view, Class<E> clazz, AbstractWizardServices<E> wizardServices) {
+    public WizardStepActivity(WizardStepView<E, T> view, Class<E> clazz, AbstractWizardService<E> wizardServices) {
         this.view = view;
         this.clazz = clazz;
         view.setPresenter((T) this);

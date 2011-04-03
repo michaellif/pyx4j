@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.rpc.pt.services;
 
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
+import com.propertyvista.portal.domain.pt.Pets;
 
-public interface TenantsFinancialServices extends AbstractWizardServices<PotentialTenantFinancial> {
+public interface PetService extends AbstractWizardService<Pets> {
 
 }

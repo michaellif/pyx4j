@@ -25,7 +25,7 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType;
 import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
-import com.propertyvista.portal.rpc.pt.services.ActivationServices;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -68,7 +68,7 @@ public class ChangePasswordActivity extends AbstractActivity implements NewPassw
             }
         };
 
-        ((ActivationServices) GWT.create(ActivationServices.class)).passwordReset(callback, request);
+        ((ActivationService) GWT.create(ActivationService.class)).passwordReset(callback, request);
     }
 
     @Override

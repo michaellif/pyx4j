@@ -26,7 +26,7 @@ import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
-import com.propertyvista.portal.server.pt.services.SummaryServicesImpl;
+import com.propertyvista.portal.server.pt.services.SummaryServiceImpl;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.report.test.ReportsTestBase;
@@ -63,7 +63,7 @@ public class SummaryReportTest extends ReportsTestBase {
             summary = EntityFactory.create(Summary.class);
             summary.application().set(application);
         }
-        new SummaryServicesImpl().loadTransientData(summary);
+        new SummaryServiceImpl().loadTransientData(summary);
         DataDump.dump("test-summary", summary);
         return summary;
 

@@ -18,12 +18,12 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.ChargesView;
 import com.propertyvista.portal.client.ptapp.ui.ChargesViewPresenter;
 import com.propertyvista.portal.domain.pt.Charges;
-import com.propertyvista.portal.rpc.pt.services.ChargesServices;
+import com.propertyvista.portal.rpc.pt.services.ChargesService;
 
 public class ChargesActivity extends WizardStepActivity<Charges, ChargesViewPresenter> implements ChargesViewPresenter {
 
     @Inject
     public ChargesActivity(ChargesView view) {
-        super(view, Charges.class, (ChargesServices) GWT.create(ChargesServices.class));
+        super(view, Charges.class, (ChargesService) GWT.create(ChargesService.class));
     }
 }

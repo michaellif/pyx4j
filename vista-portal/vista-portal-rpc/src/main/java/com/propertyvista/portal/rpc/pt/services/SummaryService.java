@@ -13,8 +13,13 @@
  */
 package com.propertyvista.portal.rpc.pt.services;
 
-import com.propertyvista.portal.domain.pt.Pets;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.portal.domain.pt.Summary;
 
-public interface PetsServices extends AbstractWizardServices<Pets> {
+import com.pyx4j.rpc.shared.VoidSerializable;
+
+public interface SummaryService extends AbstractWizardService<Summary> {
+
+    public void downloadSummary(AsyncCallback<String> callback, VoidSerializable none);
 
 }

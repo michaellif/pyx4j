@@ -18,12 +18,12 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.PetsView;
 import com.propertyvista.portal.client.ptapp.ui.PetsViewPresenter;
 import com.propertyvista.portal.domain.pt.Pets;
-import com.propertyvista.portal.rpc.pt.services.PetsServices;
+import com.propertyvista.portal.rpc.pt.services.PetService;
 
 public class PetsActivity extends WizardStepActivity<Pets, PetsViewPresenter> implements PetsViewPresenter {
 
     @Inject
     public PetsActivity(PetsView view) {
-        super(view, Pets.class, (PetsServices) GWT.create(PetsServices.class));
+        super(view, Pets.class, (PetService) GWT.create(PetService.class));
     }
 }

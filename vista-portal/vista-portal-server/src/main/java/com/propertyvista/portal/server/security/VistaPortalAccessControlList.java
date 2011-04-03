@@ -25,16 +25,16 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.rpc.pt.services.ApartmentServices;
+import com.propertyvista.portal.rpc.pt.services.ApartmentService;
 import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
-import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
-import com.propertyvista.portal.rpc.pt.services.ChargesServices;
+import com.propertyvista.portal.rpc.pt.services.ApplicationService;
+import com.propertyvista.portal.rpc.pt.services.ChargesService;
 import com.propertyvista.portal.rpc.pt.services.PaymentServices;
-import com.propertyvista.portal.rpc.pt.services.PetsServices;
-import com.propertyvista.portal.rpc.pt.services.SummaryServices;
-import com.propertyvista.portal.rpc.pt.services.TenantsFinancialServices;
-import com.propertyvista.portal.rpc.pt.services.TenantsInfoServices;
-import com.propertyvista.portal.rpc.pt.services.TenantsServices;
+import com.propertyvista.portal.rpc.pt.services.PetService;
+import com.propertyvista.portal.rpc.pt.services.SummaryService;
+import com.propertyvista.portal.rpc.pt.services.TenantFinancialService;
+import com.propertyvista.portal.rpc.pt.services.TenantInfoService;
+import com.propertyvista.portal.rpc.pt.services.TenantService;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 
 import com.pyx4j.entity.security.EntityPermission;
@@ -47,15 +47,15 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
     private final static int CRUD = EntityPermission.CREATE | EntityPermission.READ | EntityPermission.UPDATE;
 
     public VistaPortalAccessControlList() {
-        grant(new IServiceExecutePermission(ApplicationServices.class));
-        grant(new IServiceExecutePermission(ApartmentServices.class));
+        grant(new IServiceExecutePermission(ApplicationService.class));
+        grant(new IServiceExecutePermission(ApartmentService.class));
         grant(new IServiceExecutePermission(ApplicationDocumentsService.class));
-        grant(new IServiceExecutePermission(TenantsServices.class));
-        grant(new IServiceExecutePermission(TenantsInfoServices.class));
-        grant(new IServiceExecutePermission(TenantsFinancialServices.class));
-        grant(new IServiceExecutePermission(PetsServices.class));
-        grant(new IServiceExecutePermission(ChargesServices.class));
-        grant(new IServiceExecutePermission(SummaryServices.class));
+        grant(new IServiceExecutePermission(TenantService.class));
+        grant(new IServiceExecutePermission(TenantInfoService.class));
+        grant(new IServiceExecutePermission(TenantFinancialService.class));
+        grant(new IServiceExecutePermission(PetService.class));
+        grant(new IServiceExecutePermission(ChargesService.class));
+        grant(new IServiceExecutePermission(SummaryService.class));
         grant(new IServiceExecutePermission(PaymentServices.class));
 
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();

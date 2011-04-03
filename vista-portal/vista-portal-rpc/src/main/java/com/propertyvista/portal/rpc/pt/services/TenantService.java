@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.rpc.pt.services;
 
-import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.pt.PotentialTenantList;
 
-public interface ChargesServices extends AbstractWizardServices<Charges> {
+public interface TenantService extends AbstractWizardService<PotentialTenantList> {
 
 }

@@ -7,14 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 10, 2011
+ * Created on 2011-03-11
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.pt.services;
 
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 
-public interface TenantsServices extends AbstractWizardServices<PotentialTenantList> {
+public interface TenantInfoService extends AbstractWizardService<PotentialTenantInfo> {
 
 }

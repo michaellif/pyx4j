@@ -37,8 +37,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-public class PaymentServicesImpl extends ApplicationEntityServicesImpl implements PaymentServices {
-    private final static Logger log = LoggerFactory.getLogger(PaymentServicesImpl.class);
+public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements PaymentServices {
+    private final static Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
     @Override
     public void retrieve(AsyncCallback<PaymentInfo> callback, Long tenantId) {

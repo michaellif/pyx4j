@@ -22,7 +22,7 @@ import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
 import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
-import com.propertyvista.portal.rpc.pt.services.PetsServices;
+import com.propertyvista.portal.rpc.pt.services.PetService;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PtAppContext;
 
@@ -30,8 +30,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-public class PetsServicesImpl extends ApplicationEntityServicesImpl implements PetsServices {
-    private final static Logger log = LoggerFactory.getLogger(PetsServicesImpl.class);
+public class PetServiceImpl extends ApplicationEntityServiceImpl implements PetService {
+    private final static Logger log = LoggerFactory.getLogger(PetServiceImpl.class);
 
     @Override
     public void retrieve(AsyncCallback<Pets> callback, Long tenantId) {
@@ -63,7 +63,7 @@ public class PetsServicesImpl extends ApplicationEntityServicesImpl implements P
         saveApplicationEntity(pets);
 
         if (ChargesServerCalculation.needToUpdateChargesForPets(pets, existingPets)) {
-            ApplicationServicesImpl.invalidateChargesStep(pets.application());
+            ApplicationServiceImpl.invalidateChargesStep(pets.application());
         }
 
         loadTransientData(pets);

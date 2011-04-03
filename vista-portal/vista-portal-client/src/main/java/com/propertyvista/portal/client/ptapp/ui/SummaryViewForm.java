@@ -54,7 +54,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.rpc.pt.SiteMap;
-import com.propertyvista.portal.rpc.pt.services.SummaryServices;
+import com.propertyvista.portal.rpc.pt.services.SummaryService;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -158,7 +158,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    SummaryServices srv = GWT.create(SummaryServices.class);
+                    SummaryService srv = GWT.create(SummaryService.class);
                     srv.downloadSummary(new DefaultAsyncCallback<String>() {
 
                         @Override

@@ -25,7 +25,7 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.CreateAccountView;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.SiteMap;
-import com.propertyvista.portal.rpc.pt.services.ActivationServices;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -69,6 +69,6 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
             }
 
         };
-        ((ActivationServices) GWT.create(ActivationServices.class)).createAccount(callback, request);
+        ((ActivationService) GWT.create(ActivationService.class)).createAccount(callback, request);
     }
 }

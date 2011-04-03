@@ -22,7 +22,7 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppSite;
 import com.propertyvista.portal.client.ptapp.ui.RetrievePasswordView;
 import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
-import com.propertyvista.portal.rpc.pt.services.ActivationServices;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -55,6 +55,6 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
                 PtAppSite.instance().showMessageDialog("Please check your email", "", null, null);
             }
         };
-        ((ActivationServices) GWT.create(ActivationServices.class)).passwordReminder(callback, request);
+        ((ActivationService) GWT.create(ActivationService.class)).passwordReminder(callback, request);
     }
 }

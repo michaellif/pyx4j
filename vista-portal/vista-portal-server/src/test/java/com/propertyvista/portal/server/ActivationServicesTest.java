@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
-import com.propertyvista.portal.rpc.pt.services.ActivationServices;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -39,8 +39,8 @@ public class ActivationServicesTest extends VistaDBTestCase {
         TestLifecycle.tearDown();
     }
 
-    private ActivationServices createService() {
-        return TestServiceFactory.create(ActivationServices.class);
+    private ActivationService createService() {
+        return TestServiceFactory.create(ActivationService.class);
     }
 
     /**
@@ -54,7 +54,7 @@ public class ActivationServicesTest extends VistaDBTestCase {
         request.password().setValue("1234");
         request.captcha().setValue(TestUtil.createCaptcha());
 
-        ActivationServices service = createService();
+        ActivationService service = createService();
         service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
@@ -80,7 +80,7 @@ public class ActivationServicesTest extends VistaDBTestCase {
         request.password().setValue("1234");
         request.captcha().setValue(TestUtil.createCaptcha());
 
-        ActivationServices service = createService();
+        ActivationService service = createService();
         service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {

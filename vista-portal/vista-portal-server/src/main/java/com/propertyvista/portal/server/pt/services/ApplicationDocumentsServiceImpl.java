@@ -31,7 +31,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ApplicationDocumentsServiceImpl extends ApplicationEntityServicesImpl implements ApplicationDocumentsService {
+public class ApplicationDocumentsServiceImpl extends ApplicationEntityServiceImpl implements ApplicationDocumentsService {
     private final static Logger log = LoggerFactory.getLogger(ApplicationDocumentsServiceImpl.class);
 
     @Override

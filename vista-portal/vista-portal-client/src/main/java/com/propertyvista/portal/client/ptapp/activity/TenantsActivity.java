@@ -18,13 +18,13 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.TenantsView;
 import com.propertyvista.portal.client.ptapp.ui.TenantsViewPresenter;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
-import com.propertyvista.portal.rpc.pt.services.TenantsServices;
+import com.propertyvista.portal.rpc.pt.services.TenantService;
 
 public class TenantsActivity extends WizardStepActivity<PotentialTenantList, TenantsViewPresenter> implements TenantsViewPresenter {
 
     @Inject
     public TenantsActivity(TenantsView view) {
-        super(view, PotentialTenantList.class, (TenantsServices) GWT.create(TenantsServices.class));
+        super(view, PotentialTenantList.class, (TenantService) GWT.create(TenantService.class));
     }
 
 }

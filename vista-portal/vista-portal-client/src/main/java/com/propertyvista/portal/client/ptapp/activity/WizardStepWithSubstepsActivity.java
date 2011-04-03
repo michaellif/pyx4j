@@ -16,13 +16,13 @@ package com.propertyvista.portal.client.ptapp.activity;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepPresenter;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepView;
 import com.propertyvista.portal.domain.pt.IBoundToApplication;
-import com.propertyvista.portal.rpc.pt.services.AbstractWizardServices;
+import com.propertyvista.portal.rpc.pt.services.AbstractWizardService;
 
 import com.pyx4j.entity.shared.IEntity;
 
 abstract class WizardStepWithSubstepsActivity<E extends IEntity & IBoundToApplication, T extends WizardStepPresenter<E>> extends WizardStepActivity<E, T> {
 
-    public WizardStepWithSubstepsActivity(WizardStepView<E, T> view, Class<E> clazz, AbstractWizardServices<E> wizardServices) {
+    public WizardStepWithSubstepsActivity(WizardStepView<E, T> view, Class<E> clazz, AbstractWizardService<E> wizardServices) {
         super(view, clazz, wizardServices);
     }
 

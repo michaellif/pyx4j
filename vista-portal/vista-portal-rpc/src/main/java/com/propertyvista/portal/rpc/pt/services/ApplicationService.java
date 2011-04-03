@@ -25,7 +25,7 @@ import com.pyx4j.rpc.shared.IService;
 /**
  * This is secure services, user need to lodged in to use application.
  */
-public interface ApplicationServices extends IService {
+public interface ApplicationService extends IService {
 
     /**
      * Find of create Application object for current user. For now we have only one.

@@ -23,7 +23,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
-public interface ActivationServices extends IService {
+public interface ActivationService extends IService {
 
     /**
      * Verify that Unit exists before we allow to start Application process, e.g.

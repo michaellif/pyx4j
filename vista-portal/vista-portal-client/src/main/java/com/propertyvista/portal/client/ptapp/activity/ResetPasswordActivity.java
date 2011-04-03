@@ -29,7 +29,7 @@ import com.propertyvista.portal.client.ptapp.ui.NewPasswordView;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType;
 import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 import com.propertyvista.portal.rpc.pt.SiteMap;
-import com.propertyvista.portal.rpc.pt.services.ActivationServices;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -59,7 +59,7 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        token = Window.Location.getParameter(ActivationServices.PASSWORD_TOKEN);
+        token = Window.Location.getParameter(ActivationService.PASSWORD_TOKEN);
         if (CommonsStringUtils.isEmpty(token)) {
             PtAppSite.instance().showMessageDialog(i18n.tr("The URL you tried to use is either incorrect or no longer valid."), i18n.tr("Error"),
                     i18n.tr("LogIn"), new Command() {
@@ -83,7 +83,7 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
             }
         };
 
-        ((ActivationServices) GWT.create(ActivationServices.class)).passwordReset(callback, request);
+        ((ActivationService) GWT.create(ActivationService.class)).passwordReset(callback, request);
     }
 
     @Override

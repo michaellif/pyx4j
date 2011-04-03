@@ -20,13 +20,13 @@ import com.propertyvista.portal.client.ptapp.ui.ApartmentViewPresenter;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.services.ApartmentServices;
+import com.propertyvista.portal.rpc.pt.services.ApartmentService;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 public class ApartmentActivity extends WizardStepActivity<UnitSelection, ApartmentViewPresenter> implements ApartmentViewPresenter {
 
-    static ApartmentServices srv = GWT.create(ApartmentServices.class);
+    static ApartmentService srv = GWT.create(ApartmentService.class);
 
     @Inject
     public ApartmentActivity(ApartmentView view) {

@@ -7,14 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-03-11
+ * Created on Mar 10, 2011
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.pt.services;
 
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
+import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 
-public interface TenantsInfoServices extends AbstractWizardServices<PotentialTenantInfo> {
+public interface ApartmentService extends AbstractWizardService<UnitSelection> {
+
+    public void retrieveUnitSelection(AsyncCallback<AvailableUnitsByFloorplan> callback, UnitSelectionCriteria criteria);
 
 }

@@ -18,12 +18,12 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.InfoView;
 import com.propertyvista.portal.client.ptapp.ui.InfoViewPresenter;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.rpc.pt.services.TenantsInfoServices;
+import com.propertyvista.portal.rpc.pt.services.TenantInfoService;
 
 public class InfoActivity extends WizardStepWithSubstepsActivity<PotentialTenantInfo, InfoViewPresenter> implements InfoViewPresenter {
 
     @Inject
     public InfoActivity(InfoView view) {
-        super(view, PotentialTenantInfo.class, (TenantsInfoServices) GWT.create(TenantsInfoServices.class));
+        super(view, PotentialTenantInfo.class, (TenantInfoService) GWT.create(TenantInfoService.class));
     }
 }

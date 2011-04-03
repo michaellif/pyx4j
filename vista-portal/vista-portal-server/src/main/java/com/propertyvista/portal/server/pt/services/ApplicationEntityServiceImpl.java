@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.security.shared.SecurityViolationException;
 
-public class ApplicationEntityServicesImpl extends EntityServicesImpl {
+public class ApplicationEntityServiceImpl extends EntityServicesImpl {
 
     protected static I18n i18n = I18nFactory.getI18n();
 

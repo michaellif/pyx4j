@@ -17,7 +17,7 @@ import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
 import com.propertyvista.portal.admin.rpc.VistaAdminServices;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
-import com.propertyvista.portal.rpc.pt.services.ActivationServices;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
 import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
 import com.propertyvista.server.domain.UserCredential;
 
@@ -42,7 +42,7 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
     public VistaAccessControlList() {
         grant(new ServiceExecutePermission(LogServices.Log.class));
         grant(new ServiceExecutePermission(AuthenticationServices.class, "*"));
-        grant(new IServiceExecutePermission(ActivationServices.class));
+        grant(new IServiceExecutePermission(ActivationService.class));
         grant(new ServiceExecutePermission(IServiceAdapter.class));
 
         boolean allowAllDuringDevelopment = true;

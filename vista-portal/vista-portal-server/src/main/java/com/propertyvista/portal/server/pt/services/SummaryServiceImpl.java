@@ -29,7 +29,7 @@ import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.rpc.pt.ServletMapping;
-import com.propertyvista.portal.rpc.pt.services.SummaryServices;
+import com.propertyvista.portal.rpc.pt.services.SummaryService;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.portal.server.pt.util.Converter;
 import com.propertyvista.portal.server.report.SummaryReport;
@@ -46,9 +46,9 @@ import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public class SummaryServicesImpl extends ApplicationEntityServicesImpl implements SummaryServices {
+public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements SummaryService {
 
-    private final static Logger log = LoggerFactory.getLogger(SummaryServicesImpl.class);
+    private final static Logger log = LoggerFactory.getLogger(SummaryServiceImpl.class);
 
     @Override
     public void retrieve(AsyncCallback<Summary> callback, Long tenantId) {
@@ -101,7 +101,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
         // We do not remove the info from DB if Tenant status changes
         summary.tenantsWithInfo().tenants().clear();
         for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
-            if (ApplicationServicesImpl.shouldEnterInformation(tenant)) {
+            if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
                 summary.tenantsWithInfo().tenants().add(tenant);
             }
         }
@@ -113,7 +113,7 @@ public class SummaryServicesImpl extends ApplicationEntityServicesImpl implement
             // Update Transient values and see if we need to show this Tenant
             findTenenat: for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
                 if (fin.id().equals(tenant.id())) {
-                    if (ApplicationServicesImpl.shouldEnterInformation(tenant)) {
+                    if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
                         SummaryPotentialTenantFinancial sf = summary.tenantFinancials().$();
                         sf.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", tenant.firstName(), tenant.middleName(), tenant.lastName()));
                         sf.tenantFinancial().set(fin);

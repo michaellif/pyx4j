@@ -57,7 +57,7 @@ import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.server.preloader.PreloadPT;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
-import com.propertyvista.portal.server.pt.services.ApplicationServicesImpl;
+import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
 import com.propertyvista.portal.server.pt.util.PreloadUtil;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.UserCredential;
@@ -438,7 +438,7 @@ public class VistaDataGenerator {
     }
 
     public ApplicationProgress createApplicationProgress(Application application) {
-        ApplicationProgress progress = ApplicationServicesImpl.createApplicationProgress();
+        ApplicationProgress progress = ApplicationServiceImpl.createApplicationProgress();
         progress.application().set(application);
         return progress;
     }

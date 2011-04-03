@@ -22,7 +22,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 /**
  * This is secure services, user need to be lodged in to do this actions.
  */
-public interface UserServices extends IService {
+public interface UserService extends IService {
 
     public void passwordReset(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request);
 

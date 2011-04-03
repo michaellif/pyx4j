@@ -37,8 +37,8 @@ import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.SiteMap;
-import com.propertyvista.portal.rpc.pt.services.ActivationServices;
-import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
+import com.propertyvista.portal.rpc.pt.services.ApplicationService;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -127,7 +127,7 @@ public class PtAppWizardManager {
                 unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
             }
         }
-        ((ActivationServices) GWT.create(ActivationServices.class)).unitExists(new DefaultAsyncCallback<Boolean>() {
+        ((ActivationService) GWT.create(ActivationService.class)).unitExists(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 PtAppSite.getHistoryHandler().handleCurrentHistory();
@@ -190,7 +190,7 @@ public class PtAppWizardManager {
         AppPlace currentPlace = AppSite.getWhere();
         ApplicationWizardStep currentStep = getStep(currentPlace);
         ApplicationWizardSubstep substep = getSubStep(currentPlace, currentStep);
-        ((ApplicationServices) GWT.create(ApplicationServices.class)).getApplicationProgress(new DefaultAsyncCallback<ApplicationProgress>() {
+        ((ApplicationService) GWT.create(ApplicationService.class)).getApplicationProgress(new DefaultAsyncCallback<ApplicationProgress>() {
             @Override
             public void onSuccess(ApplicationProgress result) {
                 applicationProgress = result;
@@ -232,7 +232,7 @@ public class PtAppWizardManager {
     private void loadCurrentApplication() {
         if (ClientSecurityController.checkBehavior(VistaBehavior.POTENTIAL_TENANT)) {
 
-            ((ApplicationServices) GWT.create(ApplicationServices.class)).getCurrentApplication(new DefaultAsyncCallback<CurrentApplication>() {
+            ((ApplicationService) GWT.create(ApplicationService.class)).getCurrentApplication(new DefaultAsyncCallback<CurrentApplication>() {
                 @Override
                 public void onSuccess(CurrentApplication result) {
                     applicationProgress = result.progress;

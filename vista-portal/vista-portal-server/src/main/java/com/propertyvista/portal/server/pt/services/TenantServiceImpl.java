@@ -21,7 +21,7 @@ import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
-import com.propertyvista.portal.rpc.pt.services.TenantsServices;
+import com.propertyvista.portal.rpc.pt.services.TenantService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.server.domain.CampaignTriger;
@@ -31,8 +31,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
 
-public class TenantsServicesImpl extends ApplicationEntityServicesImpl implements TenantsServices {
-    private final static Logger log = LoggerFactory.getLogger(TenantsServicesImpl.class);
+public class TenantServiceImpl extends ApplicationEntityServiceImpl implements TenantService {
+    private final static Logger log = LoggerFactory.getLogger(TenantServiceImpl.class);
 
     @Override
     public void retrieve(AsyncCallback<PotentialTenantList> callback, Long tenantId) {
@@ -57,7 +57,7 @@ public class TenantsServicesImpl extends ApplicationEntityServicesImpl implement
 
         saveApplicationEntity(tenants);
 
-        ApplicationServicesImpl.syncroizeApplicationProgress(tenantsOrig, tenants);
+        ApplicationServiceImpl.syncroizeApplicationProgress(tenantsOrig, tenants);
 
         // we need to load charges and re-calculate them
         log.info("Load charges and re-calculate them");

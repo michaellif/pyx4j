@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.rpc.pt.services.TenantsFinancialServices;
+import com.propertyvista.portal.rpc.pt.services.TenantFinancialService;
 import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -28,8 +28,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-public class TenantsFinancialServicesImpl extends ApplicationEntityServicesImpl implements TenantsFinancialServices {
-    private final static Logger log = LoggerFactory.getLogger(TenantsFinancialServicesImpl.class);
+public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl implements TenantFinancialService {
+    private final static Logger log = LoggerFactory.getLogger(TenantFinancialServiceImpl.class);
 
     @Override
     public void retrieve(AsyncCallback<PotentialTenantFinancial> callback, Long tenantId) {

@@ -29,7 +29,7 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.SiteMap;
-import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
+import com.propertyvista.portal.rpc.pt.services.ApplicationService;
 import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.commons.TimeUtils;
@@ -43,9 +43,9 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-public class ApplicationServicesImpl extends ApplicationEntityServicesImpl implements ApplicationServices {
+public class ApplicationServiceImpl extends ApplicationEntityServiceImpl implements ApplicationService {
 
-    private final static Logger log = LoggerFactory.getLogger(ApplicationServicesImpl.class);
+    private final static Logger log = LoggerFactory.getLogger(ApplicationServiceImpl.class);
 
     /**
      * Find existing application for user.
@@ -66,7 +66,7 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
         CurrentApplication currentApplication = new CurrentApplication();
 
         if (application == null) {
-            if (!new ApartmentServicesImpl().areUnitsAvailable(request)) {
+            if (!new ApartmentServiceImpl().areUnitsAvailable(request)) {
                 log.info("Could not find building with propertyCode {}", request.propertyCode());
                 throw new UserRuntimeException("No units avalable");
             }

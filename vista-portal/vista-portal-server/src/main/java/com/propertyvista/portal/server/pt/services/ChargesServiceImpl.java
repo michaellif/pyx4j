@@ -21,7 +21,7 @@ import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
-import com.propertyvista.portal.rpc.pt.services.ChargesServices;
+import com.propertyvista.portal.rpc.pt.services.ChargesService;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PtAppContext;
 
@@ -31,9 +31,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
-public class ChargesServicesImpl extends ApplicationEntityServicesImpl implements ChargesServices {
+public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements ChargesService {
 
-    private final static Logger log = LoggerFactory.getLogger(ChargesServicesImpl.class);
+    private final static Logger log = LoggerFactory.getLogger(ChargesServiceImpl.class);
 
     @Override
     public void retrieve(AsyncCallback<Charges> callback, Long tenantId) {

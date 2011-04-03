@@ -33,7 +33,7 @@ import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
-import com.propertyvista.portal.rpc.pt.services.ActivationServices;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
 import com.propertyvista.portal.server.mail.MessageTemplates;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.AntiBot;
@@ -57,8 +57,8 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
-public class ActivationServicesImpl extends ApplicationEntityServicesImpl implements ActivationServices {
-    private final static Logger log = LoggerFactory.getLogger(ActivationServicesImpl.class);
+public class ActivationServiceImpl extends ApplicationEntityServiceImpl implements ActivationService {
+    private final static Logger log = LoggerFactory.getLogger(ActivationServiceImpl.class);
 
     /**
      * Verify that Unit exists before we allow to start Application process, e.g.
@@ -67,7 +67,7 @@ public class ActivationServicesImpl extends ApplicationEntityServicesImpl implem
     @Override
     public void unitExists(AsyncCallback<Boolean> callback, UnitSelectionCriteria selectionCriteria) {
         log.info("Checking if unit exists {}", selectionCriteria);
-        callback.onSuccess(new ApartmentServicesImpl().areUnitsAvailable(selectionCriteria));
+        callback.onSuccess(new ApartmentServiceImpl().areUnitsAvailable(selectionCriteria));
     }
 
     public static boolean validEmailAddress(String email) {

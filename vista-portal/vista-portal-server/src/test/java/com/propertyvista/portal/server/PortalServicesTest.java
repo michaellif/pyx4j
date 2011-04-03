@@ -23,8 +23,8 @@ import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
-import com.propertyvista.portal.rpc.pt.services.ActivationServices;
-import com.propertyvista.portal.rpc.pt.services.ApplicationServices;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
+import com.propertyvista.portal.rpc.pt.services.ApplicationService;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
@@ -63,7 +63,7 @@ public class PortalServicesTest extends VistaDBTestCase {
         request.password().setValue("1234");
         request.captcha().setValue(TestUtil.createCaptcha());
 
-        ActivationServices activationService = TestServiceFactory.create(ActivationServices.class);
+        ActivationService activationService = TestServiceFactory.create(ActivationService.class);
         activationService.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
@@ -77,7 +77,7 @@ public class PortalServicesTest extends VistaDBTestCase {
         unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
         unitSelectionCriteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
 
-        ApplicationServices applicationService = TestServiceFactory.create(ApplicationServices.class);
+        ApplicationService applicationService = TestServiceFactory.create(ApplicationService.class);
         applicationService.getCurrentApplication(new UnitTestsAsyncCallback<CurrentApplication>() {
             @Override
             public void onSuccess(CurrentApplication result) {
