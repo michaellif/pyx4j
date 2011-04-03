@@ -32,7 +32,7 @@ public abstract class DatePickerExtended extends DatePicker {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        disabled, heighlighted, selected, right, multiple, first, top, bottom
+        disabled, heighlighted, selected, right, multiple, first, top, bottom, middle
     }
 
     protected MonthSelectorExtended monthSelector;
