@@ -1194,6 +1194,11 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("color", "#FFF");
         style.addProperty("line-height", "12px");
         style.addProperty("border-bottom", "1px solid #A8A8A8");
+        style.addProperty("border-collapse", "collapse");
+        addStyle(style);
+
+        style = new Style("table.datePickerMonthSelector table");
+        style.addProperty("border-collapse", "collapse");
         addStyle(style);
 
         style = new Style("table.gwt-DatePicker");
@@ -1218,7 +1223,7 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(".datePickerGrid .gwt-Label");
-        style.addProperty("border", "1px solid #E4E4EC");
+        style.addProperty("border", "1px solid #F0F0F0");
         addStyle(style);
 
         style = new Style(".datePickerGrid .gwt-Label.disabled");
@@ -1246,6 +1251,21 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(".datePickerMonthSelector img");
         style.addProperty("width", "10px");
+        addStyle(style);
+
+        style = new Style(".datePickerMonthSelector img.top");
+        style.addProperty("position", "relative");
+        style.addProperty("top", "4px");
+        addStyle(style);
+
+        style = new Style(".datePickerMonthSelector img.middle");
+        style.addProperty("position", "relative");
+        style.addProperty("top", "2px");
+        addStyle(style);
+
+        style = new Style(".datePickerMonthSelector img.bottom");
+        style.addProperty("position", "relative");
+        style.addProperty("top", "-2px");
         addStyle(style);
 
         style = new Style(".datePickerMonthSelector");
