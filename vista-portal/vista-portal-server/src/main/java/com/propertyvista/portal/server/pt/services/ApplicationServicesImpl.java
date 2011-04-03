@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
@@ -46,11 +47,20 @@ public class ApplicationServicesImpl extends ApplicationEntityServicesImpl imple
 
     private final static Logger log = LoggerFactory.getLogger(ApplicationServicesImpl.class);
 
+    /**
+     * Find existing application for user.
+     * If application does not exist, will create new application progress. It will also
+     * create a default unit selection
+     */
     @Override
     public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria request) {
+
+        User currentUser = PtAppContext.getCurrentUser();
+        log.debug("Asking for current application for current user {}", currentUser);
+
         // find application by user
         EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtAppContext.getCurrentUser()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
         Application application = secureRetrieve(criteria);
 
         CurrentApplication currentApplication = new CurrentApplication();

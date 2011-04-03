@@ -121,6 +121,7 @@ public class ApartmentServicesImpl extends ApplicationEntityServicesImpl impleme
     public boolean areUnitsAvailable(UnitSelectionCriteria selectionCriteria) {
         EntityQueryCriteria<AptUnit> criteria = createAptUnitCriteria(selectionCriteria);
         if (criteria == null) {
+            log.info("Could not construct a valid criteria based on selection criteria");
             return false;
         }
         int count = PersistenceServicesFactory.getPersistenceService().count(criteria);

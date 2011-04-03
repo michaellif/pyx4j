@@ -23,6 +23,7 @@ import com.propertyvista.portal.rpc.pt.services.ActivationServices;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
@@ -63,6 +64,7 @@ public class ActivationServicesTest extends VistaDBTestCase {
             @Override
             public void onFailure(Throwable throwable) {
                 Assert.assertNotNull("Received failure", throwable);
+                Assert.assertEquals(throwable.getClass(), UserRuntimeException.class);
             }
         }, request);
     }
@@ -84,11 +86,6 @@ public class ActivationServicesTest extends VistaDBTestCase {
             public void onSuccess(AuthenticationResponse result) {
                 Assert.assertNotNull("Got the visit", result.getUserVisit());
                 Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                Assert.fail("Should never come here");
             }
         }, request);
     }
