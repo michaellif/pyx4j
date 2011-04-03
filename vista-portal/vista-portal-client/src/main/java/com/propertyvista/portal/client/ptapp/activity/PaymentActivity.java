@@ -18,13 +18,13 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.PaymentView;
 import com.propertyvista.portal.client.ptapp.ui.PaymentView.PaymentPresenter;
 import com.propertyvista.portal.domain.pt.PaymentInfo;
-import com.propertyvista.portal.rpc.pt.services.PaymentServices;
+import com.propertyvista.portal.rpc.pt.services.PaymentService;
 
 public class PaymentActivity extends WizardStepActivity<PaymentInfo, PaymentPresenter> implements PaymentPresenter {
 
     @Inject
     public PaymentActivity(PaymentView view) {
-        super(view, PaymentInfo.class, (PaymentServices) GWT.create(PaymentServices.class));
+        super(view, PaymentInfo.class, (PaymentService) GWT.create(PaymentService.class));
     }
 
 }

@@ -27,7 +27,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
-import com.propertyvista.portal.rpc.pt.services.PaymentServices;
+import com.propertyvista.portal.rpc.pt.services.PaymentService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.server.domain.CampaignTriger;
@@ -37,7 +37,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements PaymentServices {
+public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements PaymentService {
     private final static Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
     @Override

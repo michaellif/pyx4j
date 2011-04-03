@@ -29,7 +29,7 @@ import com.propertyvista.portal.rpc.pt.services.ApartmentService;
 import com.propertyvista.portal.rpc.pt.services.ApplicationDocumentsService;
 import com.propertyvista.portal.rpc.pt.services.ApplicationService;
 import com.propertyvista.portal.rpc.pt.services.ChargesService;
-import com.propertyvista.portal.rpc.pt.services.PaymentServices;
+import com.propertyvista.portal.rpc.pt.services.PaymentService;
 import com.propertyvista.portal.rpc.pt.services.PetService;
 import com.propertyvista.portal.rpc.pt.services.SummaryService;
 import com.propertyvista.portal.rpc.pt.services.TenantFinancialService;
@@ -56,7 +56,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(PetService.class));
         grant(new IServiceExecutePermission(ChargesService.class));
         grant(new IServiceExecutePermission(SummaryService.class));
-        grant(new IServiceExecutePermission(PaymentServices.class));
+        grant(new IServiceExecutePermission(PaymentService.class));
 
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Application.class, userEntityAccess, CRUD));
