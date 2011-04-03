@@ -284,10 +284,9 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         enablePreviousAddress();
 
+        get(proto().secureIdentifier()).setEnabled(!value.notCanadianCitizen().isBooleanTrue());
         fileUpload.setVisible(value.notCanadianCitizen().isBooleanTrue());
-        if (value.notCanadianCitizen().isBooleanTrue()) {
-            fileUpload.updateFileList(value.id().getValue());
-        }
+        fileUpload.updateFileList(value.id().getValue());
     }
 
     private CEntityEditableComponent<Address> createAddressEditor() {

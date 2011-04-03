@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
@@ -69,19 +68,17 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
 
     private static I18n i18n = I18nFactory.getI18n(ApplicationDocumentsUpload.class);
 
-    VerticalPanel docList;
-
-    ApplicationDocumentsListView appDocListView;
-
-    Long tenantId;
-
-    DocumentType documentType;
+    private final DocumentType documentType;
 
     private final SingleUploader uploader;
 
+    private Long tenantId;
+
     private Hidden tenantIdParam;
 
-    final ApplicationDocumentsService applicationDocumentsService = (ApplicationDocumentsService) GWT.create(ApplicationDocumentsService.class);
+    private ApplicationDocumentsListView appDocListView;
+
+    private final ApplicationDocumentsService applicationDocumentsService = (ApplicationDocumentsService) GWT.create(ApplicationDocumentsService.class);
 
     public ApplicationDocumentsUpload(DocumentType documentType) {
         this.documentType = documentType;
@@ -100,12 +97,6 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
         final FlowPanel fp = new FlowPanel();
         fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attached Files:"))));
-
-        //        fp.add(docList = new VerticalPanel());
-        //        docList.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        //        docList.getElement().getStyle().setPaddingTop(1, Unit.EM);
-        //        docList.getElement().getStyle().setPaddingBottom(1, Unit.EM);
-
         fp.add(appDocListView = new ApplicationDocumentsListView());
         appDocListView.initialize();
 
@@ -113,9 +104,12 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
         uploader.add(new Hidden(ApplicationDocumentServletParameters.DOCUMENT_TYPE, documentType.name()));
         uploader.setAutoSubmit(true);
         //uploader.avoidRepeatFiles(true);
+
         List<String> validExtensions = new ArrayList<String>();
-        for (DownloadFormat f : ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS)
+        for (DownloadFormat f : ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS) {
             validExtensions.addAll(Arrays.asList(f.getExtensions()));
+        }
+
         uploader.setValidExtensions(validExtensions.toArray(new String[validExtensions.size()]));
         uploader.addOnFinishUploadHandler(onFinishUploaderHandler);
         uploader.getFileInput().setText(i18n.tr("Browse for File"));
@@ -143,9 +137,13 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
 
         this.tenantId = tenantId;
 
-        if (tenantIdParam != null)
+        if (tenantIdParam != null) {
             tenantIdParam.removeFromParent();
-        uploader.add(tenantIdParam = new Hidden(ApplicationDocumentServletParameters.TENANT_ID, this.tenantId.toString()));
+        }
+
+        if (tenantId != null) {
+            uploader.add(tenantIdParam = new Hidden(ApplicationDocumentServletParameters.TENANT_ID, this.tenantId.toString()));
+        }
 
         if (applicationDocumentsService != null) {
             applicationDocumentsService.retrieveAttachments(new AsyncCallback<ApplicationDocumentsList>() {
