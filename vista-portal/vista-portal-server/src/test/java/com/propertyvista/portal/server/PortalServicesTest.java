@@ -35,6 +35,9 @@ import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
@@ -140,9 +143,14 @@ public class PortalServicesTest extends VistaDBTestCase {
             @Override
             public void onSuccess(PotentialTenantList result) {
                 Assert.assertNotNull("Result", result);
-                Assert.assertEquals("Tenant lists", tenantList, result);
-                log.info("1 {}", tenantList);
-                log.info("2 {}", result);
+                Path changePath = EntityGraph.getChangedDataPath(tenantList, result);
+                if (changePath != null) {
+                    DataDump.dump("tenantList-save", tenantList);
+                    DataDump.dump("tenantList-saved", result);
+                    log.debug("1 {}", tenantList);
+                    log.debug("2 {}", result);
+                    Assert.fail("Tenant lists changed:" + changePath);
+                }
             }
         }, tenantList);
     }
