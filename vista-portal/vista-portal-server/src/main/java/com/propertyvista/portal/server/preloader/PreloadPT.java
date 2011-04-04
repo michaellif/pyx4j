@@ -171,7 +171,6 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             financial.tenantFinancial().id().set(tenant.id());
 
-            //TODO remove. documents() are now @Owned
             for (TenantIncome income : financial.tenantFinancial().incomes()) {
                 for (ApplicationDocument applicationDocument : income.documents()) {
                     persist(applicationDocument);
@@ -181,12 +180,11 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             persist(financial.tenantFinancial());
 
-            //TODO remove. this is moved to PotentialTenantInfo documents
             if (tenant.notCanadianCitizen().isBooleanTrue()) {
-                ApplicationDocument.DocumentType documentType = ApplicationDocument.DocumentType.securityInfo;
-                ApplicationDocument applicationDocument = generator.createApplicationDocument(tenant, "doc-security" + RandomUtil.randomInt(3) + ".jpg", documentType);
-                persist(applicationDocument);
-                persist(generator.createApplicationDocumentData(applicationDocument.filename().getValue(), applicationDocument.id().getValue()));
+                for (ApplicationDocument applicationDocument : tenant.documents()) {
+                    persist(applicationDocument);
+                    persist(generator.createApplicationDocumentData(applicationDocument.filename().getValue(), applicationDocument.id().getValue()));
+                }
             }
         }
     }
