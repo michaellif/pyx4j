@@ -113,7 +113,7 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
     public void populate(PotentialTenantInfo value) {
         super.populate(value);
 
-        if (!isFirst()) {
+        if (!isFirst() && !value.birthDate().isNull()) {
             if (ValidationUtils.isOlderThen18(value.birthDate().getValue())) {
                 enableStatusAndOwnership();
             } else {
