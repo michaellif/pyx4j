@@ -53,7 +53,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
      * create a default unit selection
      */
     @Override
-    public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria request) {
+    public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria usCriteria) {
 
         User currentUser = PtAppContext.getCurrentUser();
         log.debug("Asking for current application for current user {}", currentUser);
@@ -65,51 +65,57 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 
         CurrentApplication currentApplication = new CurrentApplication();
 
-        if (application == null) {
-            if (!new ApartmentServiceImpl().areUnitsAvailable(request)) {
-                log.info("Could not find building with propertyCode {}", request.propertyCode());
+        if (application == null) { // create default application
+            if (!new ApartmentServiceImpl().areUnitsAvailable(usCriteria)) {
+                log.info("Could not find building with propertyCode {}", usCriteria.propertyCode());
                 throw new UserRuntimeException("No units avalable");
             }
 
+            // create and save application
             application = EntityFactory.create(Application.class);
             application.user().set(PtAppContext.getCurrentUser());
             PersistenceServicesFactory.getPersistenceService().persist(application);
             PtAppContext.setCurrentUserApplication(application);
 
+            // create and save progress
             ApplicationProgress progress = createApplicationProgress();
             progress.application().set(application);
             PersistenceServicesFactory.getPersistenceService().persist(progress);
 
             currentApplication.progress = progress;
 
+            // create unit selection with provided criteria
             UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
-            unitSelection.selectionCriteria().set(request);
+            unitSelection.selectionCriteria().set(usCriteria);
             unitSelection.application().set(application);
             PersistenceServicesFactory.getPersistenceService().persist(unitSelection);
 
-        } else {
+        } else { // load application
             PtAppContext.setCurrentUserApplication(application);
 
-            //Verify if buildingName and floorplanName are the same
+            // verify if buildingName and floorplanName are the same
             EntityQueryCriteria<UnitSelection> unitSelectionCriteria = EntityQueryCriteria.create(UnitSelection.class);
             unitSelectionCriteria.add(PropertyCriterion.eq(unitSelectionCriteria.proto().application(), application));
             UnitSelection unitSelection = secureRetrieve(unitSelectionCriteria);
 
-            if ((unitSelection != null) && (request != null)) {
-                if ((!unitSelection.selectionCriteria().propertyCode().equals(request.propertyCode()))
-                        || (!unitSelection.selectionCriteria().floorplanName().equals(request.floorplanName()))) {
-                    //TODO What if they are diferent ?  We need to discard some part of application flow.
+            // check if unit selection on file is different from what has been provided
+            if (unitSelection != null && usCriteria != null) {
+                if ((!unitSelection.selectionCriteria().propertyCode().equals(usCriteria.propertyCode()))
+                        || (!unitSelection.selectionCriteria().floorplanName().equals(usCriteria.floorplanName()))) {
+                    //TODO What if they are diferent? We need to discard some part of application flow.
+                    log.warn("This is a special case that needs to be taken care of");
                 }
             }
 
+            // load application progress
             EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
             applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), application));
             currentApplication.progress = secureRetrieve(applicationProgressCriteria);
         }
 
         currentApplication.application = application;
-        log.info("Start application {}", application);
-        log.info("  progress {}", currentApplication.progress);
+        log.info("Current application {}", application);
+        log.info("Progress {}", currentApplication.progress);
         callback.onSuccess(currentApplication);
     }
 
