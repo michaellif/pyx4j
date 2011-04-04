@@ -21,7 +21,7 @@ import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
+import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
@@ -29,11 +29,12 @@ import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.services.ActivationService;
 import com.propertyvista.portal.rpc.pt.services.ApartmentService;
 import com.propertyvista.portal.rpc.pt.services.ApplicationService;
+import com.propertyvista.portal.rpc.pt.services.TenantService;
+import com.propertyvista.portal.server.generator.VistaDataGenerator;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
@@ -56,13 +57,15 @@ public class PortalServicesTest extends VistaDBTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         DemoData.MAX_CUSTOMERS = 5;
-        new VistaDataPreloaders().preloadAll();
+        new VistaDataPreloaders().preloadAll(false);
     }
 
     /**
      * Test invalid email address
      */
     public void testFullLifecycle() {
+        VistaDataGenerator generator = new VistaDataGenerator(500l);
+
         // first, create the user
         AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
         final String email = BusinessDataGenerator.createEmail();
@@ -129,5 +132,18 @@ public class PortalServicesTest extends VistaDBTestCase {
 
         Assert.assertFalse("Selected unit", unitSelection.selectedUnitId().isNull());
         log.info("Successfully loaded unit {}", unitSelection.selectedUnitId());
+
+        // go through tenants
+        final PotentialTenantList tenantList = generator.createPotentialTenantList(application);
+        TenantService tenantService = TestServiceFactory.create(TenantService.class);
+        tenantService.save(new UnitTestsAsyncCallback<PotentialTenantList>() {
+            @Override
+            public void onSuccess(PotentialTenantList result) {
+                Assert.assertNotNull("Result", result);
+                Assert.assertEquals("Tenant lists", tenantList, result);
+                log.info("1 {}", tenantList);
+                log.info("2 {}", result);
+            }
+        }, tenantList);
     }
 }

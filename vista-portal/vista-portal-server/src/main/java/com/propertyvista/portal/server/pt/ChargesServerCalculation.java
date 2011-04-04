@@ -189,7 +189,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         }
 
         for (PotentialTenantInfo tenant : tenantList.tenants()) {
-            log.info("Tenant from master tenant list: {}", tenant);
+            log.debug("Tenant from master tenant list: {}", tenant);
             if (!isEligibleForPaymentSplit(tenant)) {
                 log.info("Charges contained tenant {} who should be removed", tenant);
                 dirty = true;
@@ -245,7 +245,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         charges.paymentSplitCharges().charges().clear();
         for (PotentialTenantInfo tenant : tenantList.tenants()) {
             Status status = tenant.status().getValue();
-            log.info("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.birthDate().getValue());
+            log.debug("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.birthDate().getValue());
 
             if (!isEligibleForPaymentSplit(tenant)) { // make sure that it is eligible
                 log.info("This tenant was not eligible");

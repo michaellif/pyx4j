@@ -148,8 +148,6 @@ public class PreloadPT extends BaseVistaDataPreloader {
         //for(ApplicationDocument adoc : adocs) {
         //    persist(generator.createApplicationDocumentData(adoc.filename().getValue(), adoc.id().getValue()));
         //}
-        load();
-
         StringBuilder b = new StringBuilder();
         b.append("Created potential tenant series of data");
         return b.toString();
@@ -162,7 +160,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         persist(summary.tenantList());
         persist(summary.pets());
 
-        log.info("Charges: " + VistaDataPrinter.print(summary.charges()));
+        log.debug("Charges: " + VistaDataPrinter.print(summary.charges()));
         persist(summary.charges());
 
         for (int i = 0; i < summary.tenantFinancials().size(); i++) {
@@ -189,7 +187,8 @@ public class PreloadPT extends BaseVistaDataPreloader {
         }
     }
 
-    public void load() {
+    @Override
+    public String print() {
         StringBuilder sb = new StringBuilder();
 
         Application application = loadApplication();
@@ -200,7 +199,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
         sb.append(ApplicationDebug.printApplicationSummary(application));
 
-        log.info(sb.toString());
+        return sb.toString();
     }
 
     private static void persist(IEntity entity) {

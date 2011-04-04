@@ -333,7 +333,7 @@ public class VistaDataGenerator {
         return ptf;
     }
 
-    private PotentialTenantList createPotentialTenantList(Application application) {
+    public PotentialTenantList createPotentialTenantList(Application application) {
         PotentialTenantList tenants = EntityFactory.create(PotentialTenantList.class);
         tenants.application().set(application);
 
@@ -416,8 +416,8 @@ public class VistaDataGenerator {
         int years = RandomUtil.randomInt(10) + 1;
         years *= -1;
         Date moveIn = DateUtils.yearsAdd(moveOut, years);
-        log.info("Moving {} years back", years);
-        log.info("Moving from {} to {}", moveOut, moveIn);
+        log.debug("Moving {} years back", years);
+        log.debug("Moving from {} to {}", moveOut, moveIn);
         previousAddress.moveOutDate().setValue(moveOut);
         previousAddress.moveInDate().setValue(moveIn);
         pti.previousAddress().set(previousAddress);

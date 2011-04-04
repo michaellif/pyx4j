@@ -442,15 +442,13 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             }
         }
 
-        // for now load the units from here, this can be later be part of the preloader
-        load();
-
         StringBuilder b = new StringBuilder();
         b.append("Created ").append(buildingCount).append(" buildings, ").append(unitCount).append(" units");
         return b.toString();
     }
 
-    public void load() {
+    @Override
+    public String print() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n\n");
 
@@ -527,7 +525,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             }
         }
         sb.append("\n");
-        log.info(sb.toString());
+        return sb.toString();
     }
 
     private static void persist(IEntity entity) {
