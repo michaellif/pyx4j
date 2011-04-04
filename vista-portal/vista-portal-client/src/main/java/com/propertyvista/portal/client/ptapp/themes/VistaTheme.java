@@ -26,6 +26,7 @@ import com.propertyvista.portal.client.ptapp.ui.SummaryViewForm;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 
 import com.pyx4j.forms.client.ui.NativeComboBox;
+import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ListBox;
@@ -81,6 +82,7 @@ public abstract class VistaTheme extends Theme {
         initVistaMainNavigViewStyles();
         initVistaSecondNavigViewStyles();
         initMultipleDatePicker();
+        initPaymentRadioButtonGroupStyles();
     }
 
     protected void initThemeColors() {
@@ -1313,4 +1315,32 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("width", "10%");
         addStyle(style);
     }
+
+    private void initPaymentRadioButtonGroupStyles() {
+
+        String prefix = "PaymentRadioButtonGroup";
+
+        Style style = new Style(prefix);
+        style.addProperty("background-color", "red");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item));
+        style.addProperty("width", "100%");
+        style.addProperty("height", "30px");
+        style.addProperty("border-top", "1px solid #F7F7F7");
+        style.addProperty("border-bottom", "1px solid #F7F7F7");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item) + " input");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item) + " label");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item, NativeRadioGroup.StyleDependent.selected));
+        style.addProperty("border-top", "1px solid #bbb");
+        style.addProperty("border-bottom", "1px solid #bbb");
+        addStyle(style);
+    }
+
 }

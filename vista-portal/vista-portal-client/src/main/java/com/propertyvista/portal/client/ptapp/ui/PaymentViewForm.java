@@ -91,9 +91,10 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         main.add(info);
 
         main.add(new ViewHeaderDecorator(proto().type()));
+        CRadioGroupEnum<PaymentType> radioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, CRadioGroup.Layout.VERTICAL);
+        radioGroup.setStylePrefix("PaymentRadioButtonGroup");
         @SuppressWarnings("unchecked")
-        CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class,
-                CRadioGroup.Layout.VERTICAL));
+        CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) inject(proto().type(), radioGroup);
         paymentType.addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {

@@ -173,4 +173,10 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
         }
         return value;
     }
+
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }
