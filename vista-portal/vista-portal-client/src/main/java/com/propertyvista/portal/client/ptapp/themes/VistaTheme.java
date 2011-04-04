@@ -20,6 +20,7 @@ import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentUnitsTable;
 import com.propertyvista.portal.client.ptapp.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigViewImpl;
+import com.propertyvista.portal.client.ptapp.ui.PaymentViewForm;
 import com.propertyvista.portal.client.ptapp.ui.SecondNavigViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
 import com.propertyvista.portal.client.ptapp.ui.SummaryViewForm;
@@ -1318,7 +1319,7 @@ public abstract class VistaTheme extends Theme {
 
     private void initPaymentRadioButtonGroupStyles() {
 
-        String prefix = "PaymentRadioButtonGroup";
+        String prefix = PaymentViewForm.PAYMENT_BUTTONS_STYLE_PREFIX;
 
         Style style = new Style(prefix);
         style.addProperty("background-color", "red");

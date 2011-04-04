@@ -62,6 +62,8 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
     private static I18n i18n = I18nFactory.getI18n(PaymentViewForm.class);
 
+    public static String PAYMENT_BUTTONS_STYLE_PREFIX = "PaymentRadioButtonGroup";
+
     public PaymentViewForm() {
         super(PaymentInfo.class, new VistaEditorsComponentFactory());
     }
@@ -92,7 +94,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
         main.add(new ViewHeaderDecorator(proto().type()));
         CRadioGroupEnum<PaymentType> radioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, CRadioGroup.Layout.VERTICAL);
-        radioGroup.setStylePrefix("PaymentRadioButtonGroup");
+        radioGroup.setStylePrefix(PAYMENT_BUTTONS_STYLE_PREFIX);
         @SuppressWarnings("unchecked")
         CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) inject(proto().type(), radioGroup);
         paymentType.addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
