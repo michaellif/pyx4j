@@ -188,6 +188,7 @@ public class VistaDataGenerator {
                 throw new Error("Could not find picture [" + filename + "] in classpath");
             } else {
                 applicationDocument.fileSize().setValue((long) data.length);
+                //applicationDocument.dataId().set(createApplicationDocumentData(filename).id());
                 return applicationDocument;
             }
         } catch (Exception e) {
@@ -196,7 +197,7 @@ public class VistaDataGenerator {
         }
     }
 
-    public ApplicationDocumentData createApplicationDocumentData(String fileName, Long documentId) {
+    public ApplicationDocumentData createApplicationDocumentData(String fileName) {
         String filename = PreloadUtil.resourceFileName(PreloadPT.class, fileName);
         try {
             byte[] data = IOUtils.getResource(filename);
@@ -205,7 +206,7 @@ public class VistaDataGenerator {
                 throw new Error("Could not find picture [" + filename + "] in classpath");
             } else {
                 ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
-                applicationDocumentData.id().setValue(documentId);
+                //applicationDocumentData.id().setValue(documentId);
                 applicationDocumentData.data().setValue(data);
                 return applicationDocumentData;
             }

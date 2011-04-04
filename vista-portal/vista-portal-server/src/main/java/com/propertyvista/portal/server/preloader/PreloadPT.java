@@ -21,6 +21,7 @@ import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
+import com.propertyvista.portal.domain.pt.ApplicationDocumentData;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineList;
@@ -171,8 +172,10 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             for (TenantIncome income : financial.tenantFinancial().incomes()) {
                 for (ApplicationDocument applicationDocument : income.documents()) {
+                    ApplicationDocumentData applicationDocumentData = generator.createApplicationDocumentData(applicationDocument.filename().getValue());
+                    persist(applicationDocumentData);
+                    applicationDocument.dataId().set(applicationDocumentData.id());
                     persist(applicationDocument);
-                    persist(generator.createApplicationDocumentData(applicationDocument.filename().getValue(), applicationDocument.id().getValue()));
                 }
             }
 
@@ -180,8 +183,10 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             if (tenant.notCanadianCitizen().isBooleanTrue()) {
                 for (ApplicationDocument applicationDocument : tenant.documents()) {
+                    ApplicationDocumentData applicationDocumentData = generator.createApplicationDocumentData(applicationDocument.filename().getValue());
+                    persist(applicationDocumentData);
+                    applicationDocument.dataId().set(applicationDocumentData.id());
                     persist(applicationDocument);
-                    persist(generator.createApplicationDocumentData(applicationDocument.filename().getValue(), applicationDocument.id().getValue()));
                 }
             }
         }
