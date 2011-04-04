@@ -105,6 +105,11 @@ public class EntityEqualsTest extends InitializerTestCase {
 
         assertTrue("Not Same data\n" + t1.toString() + "\n!=\n" + t2.toString(), EntityGraph.fullyEqual(t1, t2));
 
+        t2.status().setValue(Status.ACTIVE);
+        assertFalse("Same data\n" + t1.toString() + "\n!=\n" + t2.toString(), EntityGraph.fullyEqual(t1, t2));
+
+        t1.status().setValue(Status.ACTIVE);
+
         t2.notes().clear();
         t2.notes().add("Note 2");
         t2.notes().add("Note 1");

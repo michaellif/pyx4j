@@ -20,6 +20,11 @@
  */
 package com.pyx4j.unit.server;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
@@ -29,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.server.IServiceAdapterImpl;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceRequest;
@@ -52,7 +58,13 @@ class IServiceMockProxy implements java.lang.reflect.InvocationHandler {
         AsyncCallback<Serializable> callback = (AsyncCallback<Serializable>) args[0];
 
         Serializable[] serviceArgs = new Serializable[args.length - 1];
-        System.arraycopy(args, 1, serviceArgs, 0, args.length - 1);
+        try {
+            for (int i = 1; i < args.length; i++) {
+                serviceArgs[i - 1] = serializationClone((Serializable) args[i]);
+            }
+        } catch (Throwable e) {
+            callback.onFailure(new UnRecoverableRuntimeException(e.getMessage()));
+        }
         IServiceRequest request = new IServiceRequest(serviceInterfaceClass.getName(), method.getName(), serviceArgs);
 
         TestLifecycle.beginRequest();
@@ -68,16 +80,53 @@ class IServiceMockProxy implements java.lang.reflect.InvocationHandler {
                 TestLifecycle.endRequest();
             }
 
-            callback.onSuccess(result);
+            callback.onSuccess(serializationClone(result));
         } catch (Throwable e) {
             log.info("service {} call error", request.getServiceCallMarker(), e);
             if (e instanceof RuntimeExceptionSerializable) {
-                callback.onFailure(e);
+                callback.onFailure((Throwable) serializationClone(e));
             } else {
                 callback.onFailure(new UnRecoverableRuntimeException(e.getMessage()));
             }
         }
 
         return null;
+    }
+
+    private static Serializable serializationClone(Serializable o) {
+        try {
+            return (Serializable) unzip(zip(o));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            log.error("Error", e);
+            throw new UnRecoverableRuntimeException("Serialization error");
+        }
+    }
+
+    private static byte[] zip(Serializable o) throws IOException {
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream(buf);
+            out.writeObject(o);
+        } finally {
+            IOUtils.closeQuietly(out);
+            IOUtils.closeQuietly(buf);
+        }
+        return buf.toByteArray();
+    }
+
+    private static Object unzip(byte[] buf) throws IOException {
+        ByteArrayInputStream b = new ByteArrayInputStream(buf);
+        ObjectInputStream in = null;
+        try {
+            in = new ObjectInputStream(b);
+            return in.readObject();
+        } catch (ClassNotFoundException e) {
+            throw new IOException(e.getMessage());
+        } finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(b);
+        }
     }
 }

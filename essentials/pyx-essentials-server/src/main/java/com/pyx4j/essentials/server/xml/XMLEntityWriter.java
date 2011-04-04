@@ -35,6 +35,8 @@ import org.apache.commons.codec.binary.Base64;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.server.report.XMLStringWriter;
 
 public class XMLEntityWriter {
@@ -89,41 +91,46 @@ public class XMLEntityWriter {
         }
         processed.add(entity);
 
-        Map<String, Object> entityValue = entity.getValue();
-        if (entityValue != null) {
-            nextValue: for (Map.Entry<String, Object> me : entityValue.entrySet()) {
-                String propertyName = me.getKey();
-                if (propertyName.equals(IEntity.PRIMARY_KEY) || propertyName.equals(IEntity.CONCRETE_TYPE_DATA_ATTR)) {
-                    continue nextValue;
+        EntityMeta em = entity.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            if (entity.getMember(memberName).isNull()) {
+                continue;
+            }
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            switch (memberMeta.getObjectClassType()) {
+            case Entity:
+                IEntity member = (IEntity) entity.getMember(memberName);
+                if (!member.isObjectClassSameAsDef()) {
+                    member = member.cast();
                 }
-                Object value = me.getValue();
-
-                if (value instanceof Map<?, ?>) {
-                    IEntity member = (IEntity) entity.getMember(propertyName);
-                    if (!member.isObjectClassSameAsDef()) {
-                        member = member.cast();
+                write(member, memberName, null, memberMeta.getObjectClass(), processed);
+                break;
+            case EntitySet:
+            case EntityList:
+                if (!((ICollection<?, ?>) entity.getMember(memberName)).isEmpty()) {
+                    xml.startIdented(memberName);
+                    for (Object item : (ICollection<?, ?>) entity.getMember(memberName)) {
+                        write((IEntity) item, entityName.getXMLName(((IEntity) item).getObjectClass()), null, memberMeta.getObjectClass(), processed);
                     }
-                    write(member, propertyName, null, entity.getEntityMeta().getMemberMeta(propertyName).getObjectClass(), processed);
-                } else if (value instanceof Collection) {
-                    xml.startIdented(propertyName);
-                    IObject<?> member = entity.getMember(propertyName);
-                    if (member instanceof ICollection<?, ?>) {
-                        for (Object item : (ICollection<?, ?>) member) {
-                            write((IEntity) item, entityName.getXMLName(((IEntity) item).getObjectClass()), null,
-                                    entity.getEntityMeta().getMemberMeta(propertyName).getObjectClass(), processed);
-                        }
-                    } else {
-                        for (Object item : (Collection<?>) value) {
-                            xml.write("item", getValueAsString(item));
-                        }
-                    }
-                    xml.endIdented(propertyName);
-                } else {
-                    xml.write(propertyName, getValueAsString(value));
+                    xml.endIdented(memberName);
                 }
+                break;
+            case PrimitiveSet:
+                if (!((Collection<?>) entity.getMemberValue(memberName)).isEmpty()) {
+                    xml.startIdented(memberName);
+                    for (Object item : (Collection<?>) entity.getMemberValue(memberName)) {
+                        xml.write("item", getValueAsString(item));
+                    }
+                    xml.endIdented(memberName);
+                }
+                break;
+            case Primitive:
+                if (!memberName.equals(IEntity.PRIMARY_KEY)) {
+                    xml.write(memberName, getValueAsString(entity.getMemberValue(memberName)));
+                }
+                break;
             }
         }
-
         xml.endIdented(name);
     }
 

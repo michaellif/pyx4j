@@ -21,6 +21,7 @@
 package com.pyx4j.entity.shared.utils;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,6 +32,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
@@ -87,28 +89,121 @@ public class EntityGraph {
     }
 
     public static boolean fullyEqualValues(IEntity ent1, IEntity ent2) {
-        Map<String, Object> otherValue = ent2.getValue();
-        for (Map.Entry<String, Object> me : ent1.getValue().entrySet()) {
-            if (me.getValue() instanceof Map) {
-                IEntity ent1Member = (IEntity) ent1.getMember(me.getKey());
-                if (ent1Member.getMeta().isEmbedded()) {
-                    if (!fullyEqualValues(ent1Member, (IEntity) ent2.getMember(me.getKey()))) {
+        EntityMeta em = ent1.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (memberMeta.isEntity()) {
+                IEntity ent1Member = (IEntity) ent1.getMember(memberName);
+                IEntity ent2Member = (IEntity) ent2.getMember(memberName);
+                if (ent2Member.isNull() && ent2Member.isNull()) {
+                    continue;
+                } else if (ent1Member.getMeta().isEmbedded()) {
+                    if (!fullyEqualValues(ent1Member, ent2Member)) {
                         return false;
                     }
-                } else if (!fullyEqual(ent1Member, (IEntity) ent2.getMember(me.getKey()))) {
+                } else if (!fullyEqual(ent1Member, ent2Member)) {
                     return false;
                 }
-            } else if (me.getKey().equals(IEntity.CONCRETE_TYPE_DATA_ATTR)) {
-                if (!EqualsHelper.classEquals(me.getValue(), otherValue.get(me.getKey()))) {
-                    return false;
-                }
-            } else if (!EqualsHelper.equals(me.getValue(), otherValue.get(me.getKey()))) {
-                //                System.out.println("--changes " + ent1.getEntityMeta().getCaption() + "." + me.getKey() + " " + me.getValue() + "!="
-                //                        + otherValue.get(me.getKey()));
+            } else if (!EqualsHelper.equals(ent1.getMember(memberName), ent2.getMember(memberName))) {
                 return false;
             }
         }
         return true;
+    }
+
+    /**
+     * Compare ignoring addition of ID's in Entity ent2
+     * 
+     * @param ent1
+     * @param ent2
+     *            the entity after save in DB. new Pk may be assigned to values.
+     * @return
+     */
+    public static Path getChangedDataPath(IEntity ent1, IEntity ent2) {
+        return getChangedDataPath(ent1, ent2, new HashSet<IEntity>());
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Path getChangedDataPath(IEntity ent1, IEntity ent2, Set<IEntity> processed) {
+        if ((ent1 == ent2) || (processed.contains(ent1))) {
+            return null;
+        } else if ((!ent1.getInstanceValueClass().equals(ent2.getInstanceValueClass()))) {
+            return ent1.getPath();
+        }
+        processed.add(ent1);
+        EntityMeta em = ent1.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            Path p;
+            switch (memberMeta.getObjectClassType()) {
+            case Entity:
+                IEntity ent1Member = (IEntity) ent1.getMember(memberName);
+                IEntity ent2Member = (IEntity) ent2.getMember(memberName);
+                if (ent2Member.isNull() && ent2Member.isNull()) {
+                    continue;
+                } else if (ent1Member.getMeta().isEmbedded()) {
+                    if ((p = getChangedDataPath(ent1Member, ent2Member, processed)) != null) {
+                        return p;
+                    }
+                } else if (!memberMeta.isOwnedRelationships()) {
+                    if (!(processed.contains(ent1)) && (!ent1Member.equals(ent2Member))) {
+                        return ent1.getMember(memberName).getPath();
+                    }
+                } else if ((p = getChangedDataPath(ent1Member, ent2Member, processed)) != null) {
+                    return p;
+                }
+                break;
+            case EntitySet:
+                if ((p = getChangedDataPath((ISet<IEntity>) ent1.getMember(memberName), (ISet<IEntity>) ent2.getMember(memberName), processed)) != null) {
+                    return p;
+                }
+                break;
+            case EntityList:
+                if ((p = getChangedDataPath((IList<IEntity>) ent1.getMember(memberName), (IList<IEntity>) ent2.getMember(memberName), processed)) != null) {
+                    return p;
+                }
+                break;
+            default:
+                if (memberName.equals(IEntity.PRIMARY_KEY)) {
+                    if ((ent1.getPrimaryKey() != null) && !EqualsHelper.classEquals(ent1.getPrimaryKey(), ent2.getPrimaryKey())) {
+                        return ent1.getMember(memberName).getPath();
+                    }
+                } else if (!EqualsHelper.equals(ent1.getMember(memberName), ent2.getMember(memberName))) {
+                    return ent1.getMember(memberName).getPath();
+                }
+            }
+        }
+        return null;
+    }
+
+    //TODO, this is not proper implementation in regards to ID
+    private static Path getChangedDataPath(ISet<IEntity> set1, ISet<IEntity> set2, Set<IEntity> processed) {
+        if (set1.size() != set2.size()) {
+            return set1.getPath();
+        }
+        Iterator<IEntity> iter1 = set1.iterator();
+        while (iter1.hasNext()) {
+            IEntity ent1 = iter1.next();
+            if (!set2.contains(ent1)) {
+                return ent1.getPath();
+            }
+        }
+        return null;
+    }
+
+    private static Path getChangedDataPath(IList<IEntity> value1, IList<IEntity> value2, Set<IEntity> processed) {
+        if (value1.size() != value2.size()) {
+            return value1.getPath();
+        }
+        Iterator<?> iter1 = value1.iterator();
+        Iterator<?> iter2 = value2.iterator();
+        for (; iter1.hasNext() && iter2.hasNext();) {
+            Path p;
+            if ((p = getChangedDataPath((IEntity) iter1.next(), (IEntity) iter2.next(), processed)) != null) {
+                return p;
+            }
+        }
+        return null;
     }
 
     public static <E extends IEntity> boolean hasBusinessDuplicates(ICollection<E, ?> entityList) {
