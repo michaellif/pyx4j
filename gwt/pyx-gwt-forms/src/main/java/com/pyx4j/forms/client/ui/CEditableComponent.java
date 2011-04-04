@@ -100,6 +100,8 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         if (!isValuesEquals(getValue(), value)) {
             this.value = value;
             setNativeValue(value);
+            //TODO Evaluate if revalidate is needed here
+            //revalidate();
             ValueChangeEvent.fire(this, value);
         }
     }
@@ -108,6 +110,9 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         return value;
     }
 
+    /*
+     * Call populate on init of component
+     */
     public void populate(DATA_TYPE value) {
 
         this.value = value;

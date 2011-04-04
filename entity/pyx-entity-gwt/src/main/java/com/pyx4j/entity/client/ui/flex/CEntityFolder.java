@@ -243,9 +243,18 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     }
 
     @Override
+    public void setValue(IList<E> value) {
+        super.setValue(value);
+        repopulate(value);
+    }
+
+    @Override
     public void populate(IList<E> value) {
         super.populate(value);
+        repopulate(value);
+    }
 
+    protected void repopulate(IList<E> value) {
         HashMap<E, CEntityFolderItem<E>> oldMap = new HashMap<E, CEntityFolderItem<E>>(itemsMap);
 
         itemsMap.clear();
@@ -275,6 +284,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         if (folderDecorator instanceof TableFolderDecorator) {
             ((TableFolderDecorator<E>) folderDecorator).setHeaderVisible(content.getWidgetCount() > 0);
         }
+
     }
 
     private void abandonFolderItem(final CEntityFolderItem<E> component) {
