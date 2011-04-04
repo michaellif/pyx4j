@@ -35,6 +35,7 @@ public interface ApplicationDocument extends IEntity, IBoundToApplication {
     IPrimitive<DocumentType> type();
 
     @Detached
+    @Deprecated
     PotentialTenantInfo tenant();
 
     /**
@@ -46,6 +47,8 @@ public interface ApplicationDocument extends IEntity, IBoundToApplication {
     @Length(5 * 1024 * 1024)
     @Deprecated
     IPrimitive<byte[]> data();
+
+    IPrimitive<Long> dataId();
 
     IPrimitive<String> filename();
 

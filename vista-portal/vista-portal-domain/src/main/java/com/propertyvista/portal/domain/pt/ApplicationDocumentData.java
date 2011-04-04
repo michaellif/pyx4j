@@ -13,15 +13,17 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @RpcTransient
-@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = ApplicationDocument.class)
-public interface ApplicationDocumentData extends IEntity {
+public interface ApplicationDocumentData extends IEntity, IBoundToApplication {
+
+    @Detached
+    PotentialTenantInfo tenant();
 
     /**
      * This is actual BLOB of the Image or PDF stored on server
