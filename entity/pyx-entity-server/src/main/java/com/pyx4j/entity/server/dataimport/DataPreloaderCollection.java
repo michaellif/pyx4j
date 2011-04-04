@@ -118,9 +118,16 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
     }
 
     public String preloadAll() {
+        return preloadAll(true);
+    }
+
+    public String preloadAll(boolean print) {
         StringBuilder b = new StringBuilder();
         b.append(delete()).append('\n');
         b.append(create());
+        if (print) {
+            b.append(print());
+        }
         return b.toString();
     }
 
@@ -147,6 +154,20 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             preloader.setParametersValues(parameters);
             log.debug("delete preloader {}", preloader.getClass());
             String txt = preloader.delete();
+            if (txt != null) {
+                b.append(txt).append('\n');
+            }
+        }
+        return b.toString();
+    }
+
+    @Override
+    public String print() {
+        StringBuilder b = new StringBuilder();
+        for (DataPreloader preloader : childPreloaders) {
+            preloader.setParametersValues(parameters);
+            log.debug("print preloader {}", preloader.getClass());
+            String txt = preloader.print();
             if (txt != null) {
                 b.append(txt).append('\n');
             }

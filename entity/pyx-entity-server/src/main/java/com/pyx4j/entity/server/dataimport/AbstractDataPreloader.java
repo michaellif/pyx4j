@@ -54,6 +54,11 @@ public abstract class AbstractDataPreloader implements DataPreloader {
     public void prepare() {
     }
 
+    @Override
+    public String print() {
+        return "";
+    }
+
     public static boolean isGAEDevelopment() {
         return (ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment);
     }
