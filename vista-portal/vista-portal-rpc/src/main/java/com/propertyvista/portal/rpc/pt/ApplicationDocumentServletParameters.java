@@ -25,6 +25,11 @@ public interface ApplicationDocumentServletParameters {
     public static final String TENANT_ID = "TenantId";
 
     /**
+     * Income Id parameter name passed along with binary document on income documents upload form
+     */
+    public static final String INCOME_ID = "IncomeId";
+
+    /**
      * Document type parameter name passed along with binary document on upload form
      */
     public static final String DOCUMENT_TYPE = "DocumentType";

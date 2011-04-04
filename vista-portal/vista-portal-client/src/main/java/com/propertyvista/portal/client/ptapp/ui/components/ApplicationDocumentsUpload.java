@@ -76,6 +76,10 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
 
     private Hidden tenantIdParam;
 
+    private Long incomeId;
+
+    private Hidden incomeIdParam;
+
     private ApplicationDocumentsListView appDocListView;
 
     private final ApplicationDocumentsService applicationDocumentsService = (ApplicationDocumentsService) GWT.create(ApplicationDocumentsService.class);
@@ -143,6 +147,14 @@ public class ApplicationDocumentsUpload extends HorizontalPanel {
 
         if (tenantId != null) {
             uploader.add(tenantIdParam = new Hidden(ApplicationDocumentServletParameters.TENANT_ID, this.tenantId.toString()));
+        }
+
+        if (incomeIdParam != null) {
+            incomeIdParam.removeFromParent();
+        }
+        
+        if (incomeId!=null) {
+            uploader.add(incomeIdParam = new Hidden(ApplicationDocumentServletParameters.INCOME_ID, this.incomeId.toString()));
         }
 
         if (applicationDocumentsService != null) {

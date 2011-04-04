@@ -63,6 +63,7 @@ public class UploadServlet extends UploadAction {
         //int cont = 0;
         FileItem fileItem = null;
         String tenantId = null;
+        String incomeId = null;
         String documentType = null;
 
         for (FileItem item : sessionFiles) {
@@ -70,6 +71,9 @@ public class UploadServlet extends UploadAction {
             if (item.isFormField()) {
                 if (ApplicationDocumentServletParameters.TENANT_ID.equalsIgnoreCase(item.getFieldName())) {
                     tenantId = item.getString();
+                    //log.debug("tenantId=" + tenantId);
+                } else if (ApplicationDocumentServletParameters.INCOME_ID.equalsIgnoreCase(item.getFieldName())) {
+                    incomeId = item.getString();
                     //log.debug("tenantId=" + tenantId);
                 } else if (ApplicationDocumentServletParameters.DOCUMENT_TYPE.equalsIgnoreCase(item.getFieldName())) {
                     documentType = item.getString();
@@ -82,6 +86,7 @@ public class UploadServlet extends UploadAction {
 
         log.debug("fileItem={}", fileItem);
         log.debug("tenantId={}", tenantId);
+        log.debug("incomeId={}", incomeId);
         log.debug("documentType={}", documentType);
 
         if (fileItem != null && tenantId != null) {
@@ -110,12 +115,19 @@ public class UploadServlet extends UploadAction {
                         + ") does not match to one passed with the upload request (" + fileItem.getContentType() + ")");
             }
             byte[] data = fileItem.get();//IOUtils.toByteArray(in);
-            ApplicationDocument applicationDocument = createApplicationDocument(new Long(tenantId), fileItem.getName(), data,
-                    ApplicationDocument.DocumentType.valueOf(documentType));
             if (DocumentType.income.equals(ApplicationDocument.DocumentType.valueOf(documentType))) {
-                TenantIncome income = PersistenceServicesFactory.getPersistenceService().retrieve(TenantIncome.class, new Long(tenantId));
-                income.documents().add(applicationDocument);
-                PersistenceServicesFactory.getPersistenceService().merge(income);
+                if (incomeId==null) {
+                    throw new UploadActionException("ERROR: incomeId is missing");
+                } else {
+                    ApplicationDocument applicationDocument = createApplicationDocument(new Long(tenantId), fileItem.getName(), data,
+                            ApplicationDocument.DocumentType.valueOf(documentType));
+                    TenantIncome income = PersistenceServicesFactory.getPersistenceService().retrieve(TenantIncome.class, new Long(incomeId));
+                    income.documents().add(applicationDocument);
+                    PersistenceServicesFactory.getPersistenceService().merge(income);
+                }
+            } else {
+                createApplicationDocument(new Long(tenantId), fileItem.getName(), data,
+                        ApplicationDocument.DocumentType.valueOf(documentType));
             }
             /// Compose a xml message with the full file information
             //response.append("<file-field>").append(fileItem.getFieldName()).append("</file-field>\n");
