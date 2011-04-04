@@ -16,6 +16,8 @@ package com.propertyvista.portal.server.upload;
 
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
+import com.propertyvista.portal.domain.pt.ApplicationDocumentData;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.pt.PtAppContext;
@@ -126,8 +128,11 @@ public class UploadServlet extends UploadAction {
                     PersistenceServicesFactory.getPersistenceService().merge(income);
                 }
             } else {
-                createApplicationDocument(new Long(tenantId), fileItem.getName(), data,
+                ApplicationDocument applicationDocument = createApplicationDocument(new Long(tenantId), fileItem.getName(), data,
                         ApplicationDocument.DocumentType.valueOf(documentType));
+                PotentialTenantInfo ptInfo = PersistenceServicesFactory.getPersistenceService().retrieve(PotentialTenantInfo.class, new Long(tenantId));
+                ptInfo.documents().add(applicationDocument);
+                PersistenceServicesFactory.getPersistenceService().merge(ptInfo);
             }
             /// Compose a xml message with the full file information
             //response.append("<file-field>").append(fileItem.getFieldName()).append("</file-field>\n");
@@ -157,8 +162,14 @@ public class UploadServlet extends UploadAction {
         applicationDocument.type().setValue(documentType);
         applicationDocument.filename().setValue(fileName);
         applicationDocument.fileSize().setValue((long) data.length);
-        applicationDocument.data().setValue(data);
+        //applicationDocument.data().setValue(data);
         PersistenceServicesFactory.getPersistenceService().persist(applicationDocument);
+
+        ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
+        applicationDocumentData.id().setValue(applicationDocument.id().getValue());
+        applicationDocumentData.data().setValue(data);
+        PersistenceServicesFactory.getPersistenceService().persist(applicationDocumentData);
+
         return applicationDocument;
     }
 }

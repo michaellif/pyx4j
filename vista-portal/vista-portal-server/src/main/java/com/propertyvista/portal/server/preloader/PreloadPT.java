@@ -144,7 +144,10 @@ public class PreloadPT extends BaseVistaDataPreloader {
         // TODO retive some unit
         Summary summary = generator.createSummary(application, null);
         persistFullApplication(summary, progress, generator);
-
+        //List<ApplicationDocument> adocs = PersistenceServicesFactory.getPersistenceService().query(EntityQueryCriteria.create(ApplicationDocument.class));
+        //for(ApplicationDocument adoc : adocs) {
+        //    persist(generator.createApplicationDocumentData(adoc.filename().getValue(), adoc.id().getValue()));
+        //}
         load();
 
         StringBuilder b = new StringBuilder();
@@ -170,8 +173,9 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             //TODO remove. documents() are now @Owned
             for (TenantIncome income : financial.tenantFinancial().incomes()) {
-                for (ApplicationDocument document : income.documents()) {
-                    persist(document);
+                for (ApplicationDocument applicationDocument : income.documents()) {
+                    persist(applicationDocument);
+                    persist(generator.createApplicationDocumentData(applicationDocument.filename().getValue(), applicationDocument.id().getValue()));
                 }
             }
 
@@ -180,7 +184,9 @@ public class PreloadPT extends BaseVistaDataPreloader {
             //TODO remove. this is moved to PotentialTenantInfo documents
             if (tenant.notCanadianCitizen().isBooleanTrue()) {
                 ApplicationDocument.DocumentType documentType = ApplicationDocument.DocumentType.securityInfo;
-                persist(generator.createApplicationDocument(tenant, "doc-security" + RandomUtil.randomInt(3) + ".jpg", documentType));
+                ApplicationDocument applicationDocument = generator.createApplicationDocument(tenant, "doc-security" + RandomUtil.randomInt(3) + ".jpg", documentType);
+                persist(applicationDocument);
+                persist(generator.createApplicationDocumentData(applicationDocument.filename().getValue(), applicationDocument.id().getValue()));
             }
         }
     }

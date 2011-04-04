@@ -28,6 +28,7 @@ import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
+import com.propertyvista.portal.domain.pt.ApplicationDocumentData;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.Charges;
@@ -187,8 +188,26 @@ public class VistaDataGenerator {
                 throw new Error("Could not find picture [" + filename + "] in classpath");
             } else {
                 applicationDocument.fileSize().setValue((long) data.length);
-                applicationDocument.data().setValue(data);
                 return applicationDocument;
+            }
+        } catch (Exception e) {
+            log.error("Failed to read the file [{}]", filename, e);
+            throw new Error("Failed to read the file [" + filename + "]");
+        }
+    }
+
+    public ApplicationDocumentData createApplicationDocumentData(String fileName, Long documentId) {
+        String filename = PreloadUtil.resourceFileName(PreloadPT.class, fileName);
+        try {
+            byte[] data = IOUtils.getResource(filename);
+            if (data == null) {
+                log.error("Could not find picture [{}] in classpath", filename);
+                throw new Error("Could not find picture [" + filename + "] in classpath");
+            } else {
+                ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
+                applicationDocumentData.id().setValue(documentId);
+                applicationDocumentData.data().setValue(data);
+                return applicationDocumentData;
             }
         } catch (Exception e) {
             log.error("Failed to read the file [{}]", filename, e);

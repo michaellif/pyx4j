@@ -15,6 +15,7 @@
 package com.propertyvista.portal.server.upload;
 
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
+import com.propertyvista.portal.domain.pt.ApplicationDocumentData;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -48,13 +49,13 @@ public class ApplicationDocumentServlet extends HttpServlet {
      *             if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id = request.getParameter(ApplicationDocumentServletParameters.DOCUMENT_ID);
-        if (id == null) {
+        String documentId = request.getParameter(ApplicationDocumentServletParameters.DOCUMENT_ID);
+        if (documentId == null) {
             response.getWriter().println("Document Id is missing");
             return;
         }
         EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), new Long(id)));
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), new Long(documentId)));
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication())); //for security use docs in current application context only
         ApplicationDocument adoc = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         if (adoc == null) {
@@ -73,7 +74,17 @@ public class ApplicationDocumentServlet extends HttpServlet {
             throw new ServletException("Uploaded file name does not have an extension");
         }
 
-        response.getOutputStream().write(adoc.data().getValue());
+        //EntityQueryCriteria<ApplicationDocumentData> criteriaData = EntityQueryCriteria.create(ApplicationDocumentData.class);
+        //criteriaData.add(PropertyCriterion.eq(criteriaData.proto().id(), new Long(documentId)));
+        ApplicationDocumentData adata = PersistenceServicesFactory.getPersistenceService().retrieve(ApplicationDocumentData.class, new Long(documentId));
+        if (adata == null) {
+            throw new ServletException("Cannot retrieve binary data: adata is null");
+        }
+        if (adata.data() == null) {
+            throw new ServletException("Cannot retrieve binary data: adata.data() is null");
+        }
+
+        response.getOutputStream().write(adata.data().getValue());
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
