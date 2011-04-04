@@ -23,7 +23,6 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-
 public class NativeHorizontalPanel extends HorizontalPanel implements INativeSimplePanel {
 
     private final CPanelBase panel;
@@ -35,20 +34,29 @@ public class NativeHorizontalPanel extends HorizontalPanel implements INativeSim
         setHeight(panel.getHeight());
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
     }
 
+    @Override
     public void add(INativeComponent nativeWidget, CLayoutConstraints layoutConstraints) {
         super.add((Widget) nativeWidget);
         GWTStyleAdapter.setLayoutConstraints((Widget) nativeWidget, layoutConstraints);
     }
 
+    @Override
     public CPanelBase getCComponent() {
         return panel;
     }
 
+    @Override
     public boolean isEnabled() {
         return true;
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

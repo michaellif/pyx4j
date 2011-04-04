@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.ui.HTML;
 
-
 public class NativeCaption extends HTML implements INativeComponent {
 
     private final CCaption cComponent;
@@ -45,4 +44,9 @@ public class NativeCaption extends HTML implements INativeComponent {
     public void setEnabled(boolean enabled) {
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

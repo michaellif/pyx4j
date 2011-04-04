@@ -23,7 +23,6 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-
 /**
  *
  */
@@ -34,14 +33,17 @@ public class NativeWidgetHolder extends SimplePanel implements INativeWidgetHold
         this.add((Widget) widget);
     }
 
+    @Override
     public CComponent<?> getCComponent() {
         return null;
     }
 
+    @Override
     public boolean isEnabled() {
         return false;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
     }
 
@@ -55,5 +57,11 @@ public class NativeWidgetHolder extends SimplePanel implements INativeWidgetHold
     protected void onUnload() {
         super.onUnload();
         DomDebug.detachWidget();
+    }
+
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
     }
 }

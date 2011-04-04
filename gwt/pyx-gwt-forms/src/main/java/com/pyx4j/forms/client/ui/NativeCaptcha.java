@@ -109,4 +109,9 @@ public class NativeCaptcha extends CaptchaComposite implements INativeEditableCo
         return null;
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

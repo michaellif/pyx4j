@@ -61,4 +61,10 @@ public class NativeInLineListBox<E> extends NativeListSelectionComposite<E> {
     @Override
     public void setValid(boolean valid) {
     }
+
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

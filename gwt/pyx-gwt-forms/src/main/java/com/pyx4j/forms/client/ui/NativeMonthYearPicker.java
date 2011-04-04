@@ -119,4 +119,9 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeEdi
         return null;
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

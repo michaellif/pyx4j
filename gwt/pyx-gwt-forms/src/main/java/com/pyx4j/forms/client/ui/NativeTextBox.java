@@ -112,4 +112,9 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
         }
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

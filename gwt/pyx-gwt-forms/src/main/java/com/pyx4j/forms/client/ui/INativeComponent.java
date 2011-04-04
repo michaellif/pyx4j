@@ -38,4 +38,6 @@ public interface INativeComponent extends IsWidget {
 
     public void setHeight(String height);
 
+    public void installStyles(String stylePrefix);
+
 }

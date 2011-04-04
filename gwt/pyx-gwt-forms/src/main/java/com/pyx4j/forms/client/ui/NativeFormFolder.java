@@ -211,4 +211,9 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
         return null;
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

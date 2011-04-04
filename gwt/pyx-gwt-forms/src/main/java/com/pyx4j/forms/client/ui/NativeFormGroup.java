@@ -153,4 +153,9 @@ public class NativeFormGroup<E> extends DockPanel implements INativeEditableComp
         return null;
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

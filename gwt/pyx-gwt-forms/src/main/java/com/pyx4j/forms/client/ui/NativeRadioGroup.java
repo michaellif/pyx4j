@@ -23,14 +23,13 @@ package com.pyx4j.forms.client.ui;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
@@ -38,7 +37,21 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.Selector;
+
 public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableComponent<E> {
+
+    public static String DEFAULT_STYLE_PREFIX = "pyx4j_RadioGroup";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        Item
+    }
+
+    public static enum StyleDependent implements IStyleDependent {
+        selected, disabled, hover
+    }
 
     private static int uniqueGroupId = 0;
 
@@ -67,21 +80,27 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
         focusHandlerManager = new GroupFocusHandler(this);
 
         for (final E option : cComponent.getOptions()) {
-            RadioButton b = new RadioButton(groupName, cComponent.getFormat().format(option));
-            buttons.put(option, b);
-            b.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            RadioButton button = new RadioButton(groupName, cComponent.getFormat().format(option));
+            buttons.put(option, button);
+            button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue()) {
+                        applyDependentStyles();
                         NativeRadioGroup.this.cComponent.onEditingStop();
                     }
                 }
             });
-            b.addFocusHandler(focusHandlerManager);
-            b.addBlurHandler(focusHandlerManager);
-            panel.add(b);
+            button.addFocusHandler(focusHandlerManager);
+            button.addBlurHandler(focusHandlerManager);
+            panel.add(button);
+            if (panel instanceof VerticalPanel) {
+                button.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                ((VerticalPanel) panel).setCellHeight(button, "100%");
+                ((VerticalPanel) panel).setCellWidth(button, "100%");
+            }
         }
-
+        installStyles(cComponent.getStylePrefix());
     }
 
     @Override
@@ -114,12 +133,24 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
 
     @Override
     public void setNativeValue(E value) {
-        RadioButton b = buttons.get(value);
-        if (b != null) {
-            b.setValue(Boolean.TRUE);
+        RadioButton selectedButton = buttons.get(value);
+        if (selectedButton != null) {
+            selectedButton.setValue(Boolean.TRUE);
         } else {
             for (RadioButton button : buttons.values()) {
                 button.setValue(Boolean.FALSE);
+            }
+        }
+        applyDependentStyles();
+    }
+
+    private void applyDependentStyles() {
+        String selectedSuffix = Selector.getDependentName(StyleDependent.selected);
+        for (RadioButton button : buttons.values()) {
+            if (button.getValue()) {
+                button.addStyleDependentName(selectedSuffix);
+            } else {
+                button.removeStyleDependentName(selectedSuffix);
             }
         }
     }
@@ -178,4 +209,14 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
         return focusHandlerManager.addHandler(BlurEvent.getType(), blurHandler);
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        if (stylePrefix == null) {
+            stylePrefix = DEFAULT_STYLE_PREFIX;
+        }
+        setStyleName(stylePrefix);
+        for (RadioButton button : buttons.values()) {
+            button.setStyleName(stylePrefix + StyleSuffix.Item);
+        }
+    }
 }

@@ -173,4 +173,10 @@ class NativeEntityHyperlink extends Anchor implements INativeEditableComponent<I
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

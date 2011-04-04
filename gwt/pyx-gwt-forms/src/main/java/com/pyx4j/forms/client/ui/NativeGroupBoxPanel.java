@@ -230,4 +230,9 @@ public class NativeGroupBoxPanel extends FieldSetPanel implements INativeSimpleP
         collapseButtonTooltip.setTooltipText(tooltipText());
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

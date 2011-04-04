@@ -90,4 +90,10 @@ public class NativeEntityFolder<E> extends SimplePanel implements INativeEditabl
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

@@ -23,7 +23,6 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-
 public class NativeVerticalPanel extends VerticalPanel implements INativeSimplePanel {
 
     private final CPanelBase panel;
@@ -35,9 +34,11 @@ public class NativeVerticalPanel extends VerticalPanel implements INativeSimpleP
         setHeight(panel.getHeight());
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
     }
 
+    @Override
     public void add(INativeComponent nativeWidget, CLayoutConstraints layoutConstraints) {
         super.add((Widget) nativeWidget);
         setCellWidth((Widget) nativeWidget, "100%");
@@ -55,12 +56,19 @@ public class NativeVerticalPanel extends VerticalPanel implements INativeSimpleP
         //        }
     }
 
+    @Override
     public CPanelBase getCComponent() {
         return panel;
     }
 
+    @Override
     public boolean isEnabled() {
         return true;
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

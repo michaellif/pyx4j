@@ -157,4 +157,9 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
         return focusHandlerManager.addHandler(BlurEvent.getType(), blurHandler);
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

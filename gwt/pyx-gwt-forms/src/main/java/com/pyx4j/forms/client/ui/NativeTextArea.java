@@ -106,4 +106,9 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
     public void setValid(boolean valid) {
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

@@ -279,4 +279,9 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
         }
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

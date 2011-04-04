@@ -62,7 +62,19 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     private String height = "";
 
+    private String stylePrefix = null;
+
     private IDebugId debugId;
+
+    public CComponent() {
+        this(null);
+    }
+
+    public CComponent(String title) {
+        this.title = title;
+        defaultAccessAdapter = new ComponentAccessAdapter();
+        addAccessAdapter(defaultAccessAdapter);
+    }
 
     /**
      * Basic information would be available in server log
@@ -74,14 +86,15 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
         return component.getClass() + " " + component.getTitle();
     }
 
-    public CComponent() {
-        this(null);
+    public void setStylePrefix(String stylePrefix) {
+        this.stylePrefix = stylePrefix;
+        if (isWidgetCreated()) {
+            ((INativeComponent) asWidget()).installStyles(stylePrefix);
+        }
     }
 
-    public CComponent(String title) {
-        this.title = title;
-        defaultAccessAdapter = new ComponentAccessAdapter();
-        addAccessAdapter(defaultAccessAdapter);
+    public String getStylePrefix() {
+        return stylePrefix;
     }
 
     public String getTitle() {

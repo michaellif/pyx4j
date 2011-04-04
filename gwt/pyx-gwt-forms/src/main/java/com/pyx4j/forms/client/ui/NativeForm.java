@@ -749,4 +749,9 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

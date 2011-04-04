@@ -270,4 +270,9 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTex
     public void setValid(boolean valid) {
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

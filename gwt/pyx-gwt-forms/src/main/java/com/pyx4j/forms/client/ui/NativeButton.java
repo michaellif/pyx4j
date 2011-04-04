@@ -24,7 +24,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 
-
 public class NativeButton extends com.google.gwt.user.client.ui.Button implements INativeFocusComponent {
 
     private Command comand;
@@ -37,6 +36,7 @@ public class NativeButton extends com.google.gwt.user.client.ui.Button implement
         this.button = button;
         this.addClickHandler(new ClickHandler() {
 
+            @Override
             public void onClick(ClickEvent event) {
                 if (NativeButton.this.comand != null) {
                     NativeButton.this.comand.execute();
@@ -57,6 +57,7 @@ public class NativeButton extends com.google.gwt.user.client.ui.Button implement
         return comand;
     }
 
+    @Override
     public CButton getCComponent() {
         return button;
     }
@@ -66,4 +67,9 @@ public class NativeButton extends com.google.gwt.user.client.ui.Button implement
         super.setEnabled(enabled);
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }

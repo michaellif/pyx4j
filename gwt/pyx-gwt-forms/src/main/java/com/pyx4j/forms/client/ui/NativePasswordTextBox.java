@@ -83,4 +83,9 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
         }
     }
 
+    @Override
+    public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
 }
