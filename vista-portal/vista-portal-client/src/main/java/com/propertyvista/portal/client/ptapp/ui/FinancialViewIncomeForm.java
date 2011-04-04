@@ -19,7 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
-import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsUpload;
+import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
@@ -43,7 +43,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
     private final boolean summaryViewMode;
 
-    private ApplicationDocumentsUpload fileUpload;
+    private ApplicationDocumentsFolderUploader fileUpload;
 
     public FinancialViewIncomeForm(boolean summaryViewMode) {
         super(TenantIncome.class);
@@ -76,11 +76,10 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         main.add(inject(proto().otherIncomeInfo(), createOtherIncomeInfoEditor()));
 
         if (!summaryViewMode) {
-            fileUpload = new ApplicationDocumentsUpload(DocumentType.income);
-            fileUpload.getElement().getStyle().setMarginLeft(14, Unit.EM);
-            fileUpload.getElement().getStyle().setMarginTop(1, Unit.EM);
-            fileUpload.getElement().getStyle().setMarginBottom(1, Unit.EM);
-            main.add(fileUpload);
+            main.add(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.income)));
+            fileUpload.asWidget().getElement().getStyle().setMarginLeft(14, Unit.EM);
+            fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
+            fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
         }
 
         return main;
@@ -98,9 +97,6 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     @Override
     public void populate(TenantIncome value) {
         super.populate(value);
-        if (fileUpload != null) {
-            fileUpload.updateFileList(value.id().getValue());
-        }
 
         setVisibility(value.incomeSource().getValue());
     }

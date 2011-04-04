@@ -34,7 +34,7 @@ import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
-import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsUpload;
+import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
@@ -74,7 +74,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
     private Widget previousAddressHeader;
 
-    private ApplicationDocumentsUpload fileUpload;
+    private ApplicationDocumentsFolderUploader fileUpload;
 
     @SuppressWarnings("deprecation")
     public InfoViewForm() {
@@ -113,12 +113,11 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         main.add(new VistaWidgetDecorator(inject(proto().notCanadianCitizen()), new DecorationData(14d, 3)));
 
-        fileUpload = new ApplicationDocumentsUpload(DocumentType.securityInfo);
-        fileUpload.getElement().getStyle().setMarginLeft(14.5, Unit.EM);
-        fileUpload.getElement().getStyle().setMarginTop(1, Unit.EM);
-        fileUpload.getElement().getStyle().setMarginBottom(1, Unit.EM);
+        main.add(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo)));
+        fileUpload.asWidget().getElement().getStyle().setMarginLeft(14, Unit.EM);
+        fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
+        fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
         fileUpload.setVisible(false); // show it in case on not a Canadian citizen!..
-        main.add(fileUpload);
 
         get(proto().notCanadianCitizen()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -286,7 +285,6 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         get(proto().secureIdentifier()).setEnabled(!value.notCanadianCitizen().isBooleanTrue());
         fileUpload.setVisible(value.notCanadianCitizen().isBooleanTrue());
-        fileUpload.updateFileList(value.id().getValue());
     }
 
     private CEntityEditableComponent<Address> createAddressEditor() {
