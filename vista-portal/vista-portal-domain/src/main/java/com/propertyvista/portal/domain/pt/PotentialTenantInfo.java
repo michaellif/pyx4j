@@ -60,4 +60,7 @@ public interface PotentialTenantInfo extends PotentialTenant {
     @Length(3)
     IList<EmergencyContact> emergencyContacts();
 
+    @Owned
+    IList<ApplicationDocument> documents();
+
 }

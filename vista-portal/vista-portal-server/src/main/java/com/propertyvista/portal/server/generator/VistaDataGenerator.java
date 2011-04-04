@@ -381,6 +381,11 @@ public class VistaDataGenerator {
 
         pti.notCanadianCitizen().setValue(RandomUtil.randomBoolean());
 
+        if (pti.notCanadianCitizen().isBooleanTrue()) {
+            ApplicationDocument.DocumentType documentType = ApplicationDocument.DocumentType.securityInfo;
+            pti.documents().add(createApplicationDocument(pti, "doc-security" + RandomUtil.randomInt(3) + ".jpg", documentType));
+        }
+
         Address currentAddress = createAddress();
         currentAddress.moveOutDate().setValue(RandomUtil.randomDate(2012, 2013)); // this has to be in the future
         pti.currentAddress().set(currentAddress);

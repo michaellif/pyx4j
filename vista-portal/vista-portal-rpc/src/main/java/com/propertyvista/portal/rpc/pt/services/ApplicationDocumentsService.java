@@ -20,13 +20,16 @@ import com.propertyvista.portal.rpc.pt.ApplicationDocumentsList;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+@Deprecated
 public interface ApplicationDocumentsService extends IService {
 
     /**
      * Ideally we want to return List<ApplicationDocument> but we want to bind the results
      * to EntityFolder for viewing in UI.
      */
+    @Deprecated
     public void retrieveAttachments(AsyncCallback<ApplicationDocumentsList> callback, Long tenantId, ApplicationDocument.DocumentType documentType);
 
+    @Deprecated
     public void removeAttachment(AsyncCallback<VoidSerializable> callback, Long applicationDocumentId);
 }

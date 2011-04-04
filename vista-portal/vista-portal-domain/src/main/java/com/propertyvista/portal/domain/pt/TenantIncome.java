@@ -51,6 +51,7 @@ public interface TenantIncome extends IEntity {
     @Owned
     IncomeInfoStudentIncome studentIncome();
 
+    @Owned
     IList<ApplicationDocument> documents();
 
 }
