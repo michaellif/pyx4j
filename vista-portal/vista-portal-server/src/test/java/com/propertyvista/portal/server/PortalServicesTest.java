@@ -21,6 +21,7 @@ import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
@@ -29,15 +30,13 @@ import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.services.ActivationService;
 import com.propertyvista.portal.rpc.pt.services.ApartmentService;
 import com.propertyvista.portal.rpc.pt.services.ApplicationService;
+import com.propertyvista.portal.rpc.pt.services.TenantInfoService;
 import com.propertyvista.portal.rpc.pt.services.TenantService;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
@@ -49,6 +48,8 @@ public class PortalServicesTest extends VistaDBTestCase {
     private Application application;
 
     private UnitSelection unitSelection;
+
+    private PotentialTenantList tenantList;
 
     @Override
     protected void tearDown() throws Exception {
@@ -64,7 +65,7 @@ public class PortalServicesTest extends VistaDBTestCase {
     }
 
     /**
-     * Test invalid email address
+     * Create application. Do full life cycle test from the beginning.
      */
     public void testFullLifecycle() {
         VistaDataGenerator generator = new VistaDataGenerator(500l);
@@ -129,6 +130,7 @@ public class PortalServicesTest extends VistaDBTestCase {
             @Override
             public void onSuccess(UnitSelection result) {
                 Assert.assertFalse("Selected unit", result.selectedUnitId().isNull());
+                TestUtil.assertEqual("UnitSelection", unitSelection, result);
                 unitSelection = result; // update local unit
             }
         }, unitSelection);
@@ -137,21 +139,40 @@ public class PortalServicesTest extends VistaDBTestCase {
         log.info("Successfully loaded unit {}", unitSelection.selectedUnitId());
 
         // go through tenants
-        final PotentialTenantList tenantList = generator.createPotentialTenantList(application);
+        tenantList = generator.createPotentialTenantList(application);
         TenantService tenantService = TestServiceFactory.create(TenantService.class);
         tenantService.save(new UnitTestsAsyncCallback<PotentialTenantList>() {
             @Override
             public void onSuccess(PotentialTenantList result) {
                 Assert.assertNotNull("Result", result);
-                Path changePath = EntityGraph.getChangedDataPath(tenantList, result);
-                if (changePath != null) {
-                    DataDump.dump("tenantList-save", tenantList);
-                    DataDump.dump("tenantList-saved", result);
-                    log.debug("1 {}", tenantList);
-                    log.debug("2 {}", result);
-                    Assert.fail("Tenant lists changed:" + changePath);
-                }
+                TestUtil.assertEqual("TenantList", tenantList, result);
+                tenantList = result;
             }
         }, tenantList);
+
+        // let's load the tenants to make sure that things are fine there
+        // TODO this code throws exceptions for now
+        //        tenantService.retrieve(new UnitTestsAsyncCallback<PotentialTenantList>() {
+        //            @Override
+        //            public void onSuccess(PotentialTenantList result) {
+        //                Assert.assertNotNull("Result", result);
+        //                TestUtil.assertEqual("TenantList", tenantList, result);
+        //                tenantList = result;
+        //            }
+        //        }, null);
+
+        TenantInfoService tenantInfoService = TestServiceFactory.create(TenantInfoService.class);
+        for (PotentialTenantInfo tenant : tenantList.tenants()) {
+            log.info("Tenant {}", tenant);
+            tenantInfoService.retrieve(new UnitTestsAsyncCallback<PotentialTenantInfo>() {
+                @Override
+                public void onSuccess(PotentialTenantInfo result) {
+                    Assert.assertFalse("Result", result.isNull());
+                    log.info("Retrieved {}", result);
+                    //                    TestUtil.assertEqual("TenantList", tenantList, result);
+                    //                    tenantList = result;
+                }
+            }, tenant.id().getValue());
+        }
     }
 }
