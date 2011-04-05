@@ -76,7 +76,7 @@ public class ApplicationDocumentServlet extends HttpServlet {
 
         //EntityQueryCriteria<ApplicationDocumentData> criteriaData = EntityQueryCriteria.create(ApplicationDocumentData.class);
         //criteriaData.add(PropertyCriterion.eq(criteriaData.proto().id(), new Long(documentId)));
-        ApplicationDocumentData adata = PersistenceServicesFactory.getPersistenceService().retrieve(ApplicationDocumentData.class, new Long(documentId));
+        ApplicationDocumentData adata = PersistenceServicesFactory.getPersistenceService().retrieve(ApplicationDocumentData.class, adoc.dataId().getValue());
         if (adata == null) {
             throw new ServletException("Cannot retrieve binary data: adata is null");
         }
