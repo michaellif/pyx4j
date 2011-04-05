@@ -35,6 +35,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
@@ -595,9 +596,13 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                         setVisible(component.isVisible());
                     } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TITLE_PROPERTY) {
                         label.setText(component.getTitle() + ":");
+                    } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.MANDATORY_PROPERTY) {
+                        renderMandatoryStar();
+                    } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY
+                            || propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VALIDITY) {
+                        renderToolTip();
                     }
-                    renderToolTip();
-                    renderMandatoryStar();
+
                 }
             });
 
@@ -635,29 +640,43 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
         private void renderToolTip() {
             if (!InfoImageAlignment.HIDDEN.equals(infoImageAlignment)) {
-                if (component.getToolTip() == null || component.getToolTip().trim().length() == 0) {
+                String message = null;
+                ImageResource imageResource = null;
+                String tooltipText = component.getToolTip();
+                if (tooltipText == null) {
+                    tooltipText = "";
+                } else {
+                    tooltipText = tooltipText.trim();
+                }
+                if (component instanceof CEditableComponent<?, ?> && ((CEditableComponent<?, ?>) component).isMandatoryConditionMet()
+                        && !((CEditableComponent<?, ?>) component).isValid()) {
+                    message = "<div style='color:red'>" + ((CEditableComponent<?, ?>) component).getValidationMessage() + "</div>"
+                            + (tooltipText.equals("") ? "" : ("<br/><div>" + component.getToolTip() + "</div>"));
+                    imageResource = ImageFactory.getImages().formTooltipWarn();
+                } else if (!tooltipText.trim().equals("")) {
+                    message = component.getToolTip();
+                    imageResource = ImageFactory.getImages().formTooltipInfo();
+                }
+
+                if (imageResource == null) {
                     imageInfoWarnHolder.clear();
                 } else {
                     if (imageInfoWarn == null) {
                         imageInfoWarn = new Image();
                         tooltip = Tooltip.tooltip(imageInfoWarn, "");
                     }
-                    if (component instanceof CEditableComponent<?, ?> && ((CEditableComponent<?, ?>) component).isMandatoryConditionMet()
-                            && !((CEditableComponent<?, ?>) component).isValid()) {
-                        imageInfoWarn.setResource(ImageFactory.getImages().formTooltipWarn());
-                    } else {
-                        imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());
-                    }
-                    imageInfoWarnHolder.setWidget(imageInfoWarn);
-                    tooltip.setTooltipText(component.getToolTip());
+                    imageInfoWarn.setResource(imageResource);
 
+                    imageInfoWarnHolder.setWidget(imageInfoWarn);
+                    tooltip.setTooltipText(message);
                 }
+
             }
         }
 
         private void renderMandatoryStar() {
             if (component instanceof CEditableComponent<?, ?>) {
-                if (!((CEditableComponent<?, ?>) component).isMandatoryConditionMet()) {
+                if (((CEditableComponent<?, ?>) component).isMandatory()) {
                     if (imageMandatory == null) {
                         imageMandatory = new Image();
                         imageMandatory.setResource(ImageFactory.getImages().mandatory());
