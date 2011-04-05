@@ -31,7 +31,7 @@ public class ApplicationEntityServiceImpl extends EntityServicesImpl {
 
     protected static I18n i18n = I18nFactory.getI18n();
 
-    protected <E extends IEntity & IBoundToApplication> void saveApplicationEntity(E entity) {
+    public static <E extends IEntity & IBoundToApplication> void saveApplicationEntity(E entity) {
         // app specific security stuff
         final Application application = PtAppContext.getCurrentUserApplication();
         if ((!entity.application().isNull()) && (!entity.application().equals(application))) {

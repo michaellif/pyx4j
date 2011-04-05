@@ -14,21 +14,26 @@
 
 package com.propertyvista.portal.server.upload;
 
-import com.propertyvista.portal.domain.pt.ApplicationDocumentData;
-import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.server.download.MimeMap;
 import gwtupload.server.UploadAction;
 import gwtupload.server.exceptions.UploadActionException;
+
 import java.util.List;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.propertyvista.portal.domain.pt.ApplicationDocumentData;
+import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
+import com.propertyvista.portal.server.pt.services.ApplicationEntityServiceImpl;
+
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.server.download.MimeMap;
 
 public class UploadServlet extends UploadAction {
 
@@ -50,8 +55,8 @@ public class UploadServlet extends UploadAction {
     }
 
     /**
-     * Override executeAction to save the received files in a custom place
-     * and delete this items from session.
+     * Override executeAction to save the received files in a custom place and delete this
+     * items from session.
      */
     @Override
     public String executeAction(HttpServletRequest request, List<FileItem> sessionFiles) throws UploadActionException {
@@ -107,7 +112,7 @@ public class UploadServlet extends UploadAction {
                         + ") does not match to one passed with the upload request (" + fileItem.getContentType() + ")");
             }
             byte[] data = fileItem.get();//IOUtils.toByteArray(in);
-            ApplicationDocumentData applicationDocumentData = createApplicationDocumentData(data);
+            ApplicationDocumentData applicationDocumentData = createApplicationDocumentData(data, null);
 
             //StringBuilder response = new StringBuilder();
             //response.append("<fileField>").append(fileItem.getFieldName()).append("</fileField>\n");
@@ -132,10 +137,11 @@ public class UploadServlet extends UploadAction {
         //return null;
     }
 
-    private ApplicationDocumentData createApplicationDocumentData(byte[] data) {
+    private ApplicationDocumentData createApplicationDocumentData(byte[] data, Long tenant) {
         ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
         applicationDocumentData.data().setValue(data);
-        PersistenceServicesFactory.getPersistenceService().persist(applicationDocumentData);
+        applicationDocumentData.tenant().setPrimaryKey(tenant);
+        ApplicationEntityServiceImpl.saveApplicationEntity(applicationDocumentData);
         return applicationDocumentData;
     }
 }
