@@ -28,7 +28,6 @@ import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
-import com.propertyvista.portal.domain.pt.ApplicationDocumentData;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.Charges;
@@ -61,6 +60,7 @@ import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
 import com.propertyvista.portal.server.pt.util.PreloadUtil;
 import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -175,7 +175,6 @@ public class VistaDataGenerator {
 
         ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
         applicationDocument.application().set(tenantInfo.application());
-        applicationDocument.tenant().set(tenantInfo);
         applicationDocument.type().setValue(documentType);
         applicationDocument.filename().setValue(fileName);
         //InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(PreloadUtil.resourceFileName(PreloadPT.class, fileName));
@@ -197,7 +196,7 @@ public class VistaDataGenerator {
         }
     }
 
-    public ApplicationDocumentData createApplicationDocumentData(String fileName) {
+    public ApplicationDocumentData createApplicationDocumentData(PotentialTenantInfo tenantInfo, String fileName) {
         String filename = PreloadUtil.resourceFileName(PreloadPT.class, fileName);
         try {
             byte[] data = IOUtils.getResource(filename);
@@ -207,6 +206,8 @@ public class VistaDataGenerator {
             } else {
                 ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
                 //applicationDocumentData.id().setValue(documentId);
+                applicationDocumentData.tenant().set(tenantInfo);
+                applicationDocumentData.application().set(tenantInfo.application());
                 applicationDocumentData.data().setValue(data);
                 return applicationDocumentData;
             }

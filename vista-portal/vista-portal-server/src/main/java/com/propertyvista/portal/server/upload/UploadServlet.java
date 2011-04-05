@@ -27,10 +27,13 @@ import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.portal.domain.pt.ApplicationDocumentData;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
+import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.portal.server.pt.services.ApplicationEntityServiceImpl;
+import com.propertyvista.server.domain.ApplicationDocumentData;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -62,7 +65,7 @@ public class UploadServlet extends UploadAction {
     public String executeAction(HttpServletRequest request, List<FileItem> sessionFiles) throws UploadActionException {
         log.debug("UploadServlet.executeAction(): request={}, sessionFiles={}", request, sessionFiles);
         FileItem fileItem = null;
-        //String tenantId = null;
+        String tenantId = null;
         //String incomeId = null;
         //String documentType = null;
 
@@ -70,7 +73,7 @@ public class UploadServlet extends UploadAction {
             log.debug("UploadServlet.executeAction(): item={}", item);
             if (item.isFormField()) {
                 if (ApplicationDocumentServletParameters.TENANT_ID.equalsIgnoreCase(item.getFieldName())) {
-                    //tenantId = item.getString();
+                    tenantId = item.getString();
                     //log.debug("tenantId=" + tenantId);
                 } else if (ApplicationDocumentServletParameters.INCOME_ID.equalsIgnoreCase(item.getFieldName())) {
                     //incomeId = item.getString();
@@ -85,8 +88,9 @@ public class UploadServlet extends UploadAction {
         }
 
         log.debug("fileItem={}", fileItem);
+        log.debug("tenantId={}", tenantId);
 
-        if (fileItem != null) {
+        if (fileItem != null && tenantId != null) {
             String contentType = null;
             if (fileItem.getName() != null) {
                 int t = fileItem.getName().lastIndexOf(".");
@@ -111,8 +115,16 @@ public class UploadServlet extends UploadAction {
                 throw new UploadActionException("Content type resolved by file name extension (" + contentType
                         + ") does not match to one passed with the upload request (" + fileItem.getContentType() + ")");
             }
+            PotentialTenantInfo tenant = PersistenceServicesFactory.getPersistenceService().retrieve(PotentialTenantInfo.class, new Long(tenantId));
+            if (tenant == null) {
+                throw new UploadActionException("Unknown tenantId: " + tenantId);
+            }
+            if (!tenant.application().id().getValue().equals(PtAppContext.getCurrentUserApplication().id().getValue())) {
+                throw new UploadActionException("Wrong TenantId: " + tenantId);
+            }
+
             byte[] data = fileItem.get();//IOUtils.toByteArray(in);
-            ApplicationDocumentData applicationDocumentData = createApplicationDocumentData(data, null);
+            ApplicationDocumentData applicationDocumentData = createApplicationDocumentData(data, tenant);
 
             //StringBuilder response = new StringBuilder();
             //response.append("<fileField>").append(fileItem.getFieldName()).append("</fileField>\n");
@@ -123,7 +135,7 @@ public class UploadServlet extends UploadAction {
             //return response.toString();
             return applicationDocumentData.id().getValue().toString();
         } else {
-            throw new UploadActionException("ERROR: fileItem is missing");
+            throw new UploadActionException("ERROR: fileItem or tenantId is missing");
         }
 
         /// Remove files from session because we have a copy of them
@@ -137,10 +149,11 @@ public class UploadServlet extends UploadAction {
         //return null;
     }
 
-    private ApplicationDocumentData createApplicationDocumentData(byte[] data, Long tenant) {
+    private ApplicationDocumentData createApplicationDocumentData(byte[] data, PotentialTenantInfo tenant) {
         ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
         applicationDocumentData.data().setValue(data);
-        applicationDocumentData.tenant().setPrimaryKey(tenant);
+        applicationDocumentData.tenant().set(tenant);
+        applicationDocumentData.application().set(tenant.application());
         ApplicationEntityServiceImpl.saveApplicationEntity(applicationDocumentData);
         return applicationDocumentData;
     }

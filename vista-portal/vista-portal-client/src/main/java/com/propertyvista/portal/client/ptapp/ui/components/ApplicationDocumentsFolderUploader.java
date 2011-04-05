@@ -129,10 +129,6 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
         private SimplePanel appDocsListHolder;
 
-        private Hidden tenantIdParam;
-
-        private final SingleUploader uploader;
-
         public UploaderFolderDecorator() {
             super();
 
@@ -152,7 +148,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attached Files:"))));
             fp.add(appDocsListHolder = new SimplePanel());
 
-            uploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
+            SingleUploader uploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
             uploader.add(new Hidden(ApplicationDocumentServletParameters.DOCUMENT_TYPE, documentType.name()));
             uploader.setAutoSubmit(true);
             //uploader.avoidRepeatFiles(true);
@@ -190,6 +186,8 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
         }
 
         private final IUploader.OnStartUploaderHandler onStartUploaderHandler = new IUploader.OnStartUploaderHandler() {
+
+            private Hidden tenantIdParam;
 
             @Override
             public void onStart(IUploader uploader) {

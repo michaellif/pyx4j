@@ -11,8 +11,10 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.server.domain;
 
+import com.propertyvista.portal.domain.pt.IBoundToApplication;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;

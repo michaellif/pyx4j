@@ -21,7 +21,6 @@ import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
-import com.propertyvista.portal.domain.pt.ApplicationDocumentData;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineList;
@@ -41,6 +40,7 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
 import com.propertyvista.portal.server.pt.services.ApplicationDebug;
+import com.propertyvista.server.domain.ApplicationDocumentData;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -172,7 +172,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             for (TenantIncome income : financial.tenantFinancial().incomes()) {
                 for (ApplicationDocument applicationDocument : income.documents()) {
-                    ApplicationDocumentData applicationDocumentData = generator.createApplicationDocumentData(applicationDocument.filename().getValue());
+                    ApplicationDocumentData applicationDocumentData = generator.createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
                     persist(applicationDocumentData);
                     applicationDocument.dataId().set(applicationDocumentData.id());
                     persist(applicationDocument);
@@ -183,7 +183,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             if (tenant.notCanadianCitizen().isBooleanTrue()) {
                 for (ApplicationDocument applicationDocument : tenant.documents()) {
-                    ApplicationDocumentData applicationDocumentData = generator.createApplicationDocumentData(applicationDocument.filename().getValue());
+                    ApplicationDocumentData applicationDocumentData = generator.createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
                     persist(applicationDocumentData);
                     applicationDocument.dataId().set(applicationDocumentData.id());
                     persist(applicationDocument);
