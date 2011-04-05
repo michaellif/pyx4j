@@ -287,7 +287,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         }
     }
 
-    protected void applyEditabilityRules() {
+    public void applyEditabilityRules() {
         boolean editable = isEditable();
         if (isWidgetCreated() && asWidget().isEditable() != editable) {
             asWidget().setEditable(editable);
@@ -296,7 +296,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     }
 
     @Override
-    protected void applyAccessibilityRules() {
+    public void applyAccessibilityRules() {
         super.applyAccessibilityRules();
         applyEditabilityRules();
     }

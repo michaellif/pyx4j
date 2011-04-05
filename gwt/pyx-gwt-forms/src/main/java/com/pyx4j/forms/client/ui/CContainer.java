@@ -89,7 +89,7 @@ public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> 
     }
 
     @Override
-    protected void applyVisibilityRules() {
+    public void applyVisibilityRules() {
         super.applyVisibilityRules();
         if (getComponents() != null) {
             for (CComponent<?> component : getComponents()) {
@@ -99,7 +99,7 @@ public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> 
     }
 
     @Override
-    protected void applyEnablingRules() {
+    public void applyEnablingRules() {
         super.applyEnablingRules();
         if (getComponents() != null) {
             for (CComponent<?> component : getComponents()) {
@@ -108,7 +108,7 @@ public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> 
         }
     }
 
-    protected void applyEditabilityRules() {
+    public void applyEditabilityRules() {
         if (getComponents() != null) {
             for (CComponent<?> component : getComponents()) {
                 if (component instanceof CEditableComponent<?, ?>) {
@@ -121,7 +121,7 @@ public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> 
     }
 
     @Override
-    protected void applyAccessibilityRules() {
+    public void applyAccessibilityRules() {
         super.applyAccessibilityRules();
         applyEditabilityRules();
     }

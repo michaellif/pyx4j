@@ -268,7 +268,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
         }
     }
 
-    protected void applyVisibilityRules() {
+    public void applyVisibilityRules() {
         boolean visible = isVisible();
         if (isWidgetCreated() && asWidget().isVisible() != visible) {
             asWidget().setVisible(visible);
@@ -276,7 +276,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
         }
     }
 
-    protected void applyEnablingRules() {
+    public void applyEnablingRules() {
         boolean enabled = isEnabled();
         if (isWidgetCreated() && asWidget().isEnabled() != enabled) {
             asWidget().setEnabled(enabled);
@@ -284,7 +284,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
         }
     }
 
-    protected void applyAccessibilityRules() {
+    public void applyAccessibilityRules() {
         applyVisibilityRules();
         applyEnablingRules();
     }
