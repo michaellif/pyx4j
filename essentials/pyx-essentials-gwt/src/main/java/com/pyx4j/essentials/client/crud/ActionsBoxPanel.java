@@ -69,7 +69,7 @@ public class ActionsBoxPanel extends ActionsPanel {
         return addItem(name, null, handler);
     }
 
-    public Anchor addItem(String name, IDebugId debugId, ClickHandler handler) {
+    public Anchor createItem(String name, IDebugId debugId, ClickHandler handler) {
         Anchor anchor = new Anchor(name);
         anchor.getElement().getStyle().setColor("#0066CC");
         anchor.getElement().getStyle().setFontWeight(FontWeight.BOLD);
@@ -85,10 +85,19 @@ public class ActionsBoxPanel extends ActionsPanel {
         } else {
             anchor.ensureDebugId(name);
         }
+        return anchor;
+    }
 
+    public Anchor addItem(String name, IDebugId debugId, ClickHandler handler) {
+        Anchor anchor = createItem(name, debugId, handler);
         contentPanel.add(anchor);
         return anchor;
+    }
 
+    public Anchor insertItem(int beforeIndex, String name, IDebugId debugId, ClickHandler handler) {
+        Anchor anchor = createItem(name, debugId, handler);
+        contentPanel.insert(anchor, beforeIndex);
+        return anchor;
     }
 
     class LegendPanel extends ComplexPanel {
