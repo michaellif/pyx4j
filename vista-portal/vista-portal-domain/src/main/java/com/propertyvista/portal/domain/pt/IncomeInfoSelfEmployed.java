@@ -28,7 +28,7 @@ public interface IncomeInfoSelfEmployed extends IEntity, IEmploymentInfo {
 
     @Override
     @Caption(name = "Years in business")
-    IPrimitive<Integer> employedForYears();
+    IPrimitive<Double> employedForYears();
 
     @Caption(name = "Is fully owned")
     IPrimitive<Boolean> fullyOwned();

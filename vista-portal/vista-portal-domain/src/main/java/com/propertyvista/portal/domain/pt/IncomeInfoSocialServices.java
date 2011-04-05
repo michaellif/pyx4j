@@ -27,7 +27,7 @@ public interface IncomeInfoSocialServices extends IEntity, IEmploymentInfo {
 
     @Override
     @Caption(name = "Years receiving")
-    IPrimitive<Integer> employedForYears();
+    IPrimitive<Double> employedForYears();
 
     @Override
     @Caption(name = "Social Service Agent or Case Worker")

@@ -30,7 +30,7 @@ public interface IEmploymentInfo extends IAddress, IIncomeInfo {
 
     //TODO: either one of starts/ends,  may be optional/hidden ?
     @Caption(name = "Employed for (years)")
-    IPrimitive<Integer> employedForYears();
+    IPrimitive<Double> employedForYears();
 
     @Caption(name = "Supervisor/Manager Name")
     IPrimitive<String> supervisorName();

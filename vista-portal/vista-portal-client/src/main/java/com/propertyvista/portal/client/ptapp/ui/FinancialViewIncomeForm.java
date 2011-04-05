@@ -192,7 +192,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 14, 12);
-                main.add(inject(proto().employedForYears()), 14, 2);
+                main.add(inject(proto().employedForYears()), 14, 4);
                 AddressUtils.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
 
