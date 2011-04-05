@@ -17,7 +17,7 @@ import gwtupload.client.BaseUploadStatus;
 import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus.Status;
 import gwtupload.client.IUploader;
-import gwtupload.client.SingleUploader;
+import gwtupload.client.Uploader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -125,10 +125,6 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
         private SimplePanel appDocsListHolder;
 
-        private class AppDocUploader extends SingleUploader {
-
-        }
-
         public UploaderFolderDecorator() {
             super();
 
@@ -143,26 +139,25 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             add(new HTML("&nbsp;&nbsp;&nbsp;"));
             add(new Image(SiteImages.INSTANCE.clip()));
 
-            final FlowPanel fp = new FlowPanel();
+            FlowPanel fp = new FlowPanel();
             fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attached Files:"))));
             fp.add(appDocsListHolder = new SimplePanel());
-
-            SingleUploader uploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
-            uploader.setAutoSubmit(true);
-            //uploader.avoidRepeatFiles(true);
 
             List<String> validExtensions = new ArrayList<String>();
             for (DownloadFormat f : ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS) {
                 validExtensions.addAll(Arrays.asList(f.getExtensions()));
             }
 
+            DocumentsUploader uploader = new DocumentsUploader();
             uploader.setValidExtensions(validExtensions.toArray(new String[validExtensions.size()]));
             uploader.addOnStartUploadHandler(onStartUploaderHandler);
             uploader.addOnFinishUploadHandler(onFinishUploaderHandler);
+
             uploader.getFileInput().setText(i18n.tr("Browse for File"));
             uploader.getFileInput().getWidget().setStyleName("customButton");
             uploader.getFileInput().getWidget().setSize("152px", "27px");
+            uploader.getStatusWidget().getWidget().getElement().getStyle().setMarginLeft(1, Unit.EM);
             fp.add(uploader);
 
             add(fp);
@@ -211,12 +206,33 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
                     newDocument.dataId().setValue(Long.parseLong(uploader.getServerInfo().message));
                     newDocument.filename().setValue(uploader.getServerInfo().name);
                     newDocument.fileSize().setValue((long) uploader.getServerInfo().size);
-
+                    // add new document to the folder-list:
                     IList<ApplicationDocument> docList = getValue();
                     docList.add(newDocument);
                     setValue(docList);
                 }
             }
         };
-    };
+
+        // overridden gwtupload.client.Uploader:
+        protected class DocumentsUploader extends Uploader {
+
+            public DocumentsUploader() {
+                super(FileInputType.BUTTON, true);
+                super.avoidRepeatFiles(true);
+                super.setStatusWidget(new BaseUploadStatus());
+            }
+
+            @Override
+            protected void onFinishUpload() {
+                super.onFinishUpload();
+                if (getStatus() == Status.REPEATED) {
+                    getStatusWidget().setError(getI18NConstants().uploaderAlreadyDone());
+                }
+                getStatusWidget().setStatus(Status.UNINITIALIZED);
+                reuse();
+                assignNewNameToFileInput();
+            }
+        }
+    }
 }
