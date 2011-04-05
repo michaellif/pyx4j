@@ -219,7 +219,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
             public DocumentsUploader() {
                 super(FileInputType.BUTTON, true);
-                super.avoidRepeatFiles(true);
+//                super.avoidRepeatFiles(true);
                 super.setStatusWidget(new BaseUploadStatus());
             }
 
