@@ -14,13 +14,8 @@
 
 package com.propertyvista.portal.server.upload;
 
-import com.propertyvista.portal.domain.pt.ApplicationDocument;
-import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.domain.pt.ApplicationDocumentData;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
-import com.propertyvista.portal.server.pt.PtAppContext;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -45,8 +40,8 @@ public class UploadServlet extends UploadAction {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        // set maxumum file size in bytes allowed for upload
-        maxSize = EntityFactory.getEntityPrototype(ApplicationDocument.class).data().getMeta().getLength();
+        // set maximum file size in bytes allowed for upload
+        maxSize = EntityFactory.getEntityPrototype(ApplicationDocumentData.class).data().getMeta().getLength();
 
         // Useful in development mode to slow down the uploads in fast networks.
         // Put the number of milliseconds to sleep in each block received in the server.
@@ -61,24 +56,22 @@ public class UploadServlet extends UploadAction {
     @Override
     public String executeAction(HttpServletRequest request, List<FileItem> sessionFiles) throws UploadActionException {
         log.debug("UploadServlet.executeAction(): request={}, sessionFiles={}", request, sessionFiles);
-        //StringBuilder response = new StringBuilder();
-        //int cont = 0;
         FileItem fileItem = null;
-        String tenantId = null;
-        String incomeId = null;
-        String documentType = null;
+        //String tenantId = null;
+        //String incomeId = null;
+        //String documentType = null;
 
         for (FileItem item : sessionFiles) {
             log.debug("UploadServlet.executeAction(): item={}", item);
             if (item.isFormField()) {
                 if (ApplicationDocumentServletParameters.TENANT_ID.equalsIgnoreCase(item.getFieldName())) {
-                    tenantId = item.getString();
+                    //tenantId = item.getString();
                     //log.debug("tenantId=" + tenantId);
                 } else if (ApplicationDocumentServletParameters.INCOME_ID.equalsIgnoreCase(item.getFieldName())) {
-                    incomeId = item.getString();
+                    //incomeId = item.getString();
                     //log.debug("tenantId=" + tenantId);
                 } else if (ApplicationDocumentServletParameters.DOCUMENT_TYPE.equalsIgnoreCase(item.getFieldName())) {
-                    documentType = item.getString();
+                    //documentType = item.getString();
                     //log.debug("tenantId=" + tenantId);
                 }
             } else {
@@ -87,11 +80,8 @@ public class UploadServlet extends UploadAction {
         }
 
         log.debug("fileItem={}", fileItem);
-        log.debug("tenantId={}", tenantId);
-        log.debug("incomeId={}", incomeId);
-        log.debug("documentType={}", documentType);
 
-        if (fileItem != null && tenantId != null) {
+        if (fileItem != null) {
             String contentType = null;
             if (fileItem.getName() != null) {
                 int t = fileItem.getName().lastIndexOf(".");
@@ -117,59 +107,35 @@ public class UploadServlet extends UploadAction {
                         + ") does not match to one passed with the upload request (" + fileItem.getContentType() + ")");
             }
             byte[] data = fileItem.get();//IOUtils.toByteArray(in);
-            if (DocumentType.income.equals(ApplicationDocument.DocumentType.valueOf(documentType))) {
-                if (incomeId==null) {
-                    throw new UploadActionException("ERROR: incomeId is missing");
-                } else {
-                    ApplicationDocument applicationDocument = createApplicationDocument(new Long(tenantId), fileItem.getName(), data,
-                            ApplicationDocument.DocumentType.valueOf(documentType));
-                    TenantIncome income = PersistenceServicesFactory.getPersistenceService().retrieve(TenantIncome.class, new Long(incomeId));
-                    income.documents().add(applicationDocument);
-                    PersistenceServicesFactory.getPersistenceService().merge(income);
-                }
-            } else {
-                ApplicationDocument applicationDocument = createApplicationDocument(new Long(tenantId), fileItem.getName(), data,
-                        ApplicationDocument.DocumentType.valueOf(documentType));
-                PotentialTenantInfo ptInfo = PersistenceServicesFactory.getPersistenceService().retrieve(PotentialTenantInfo.class, new Long(tenantId));
-                ptInfo.documents().add(applicationDocument);
-                PersistenceServicesFactory.getPersistenceService().merge(ptInfo);
-            }
-            /// Compose a xml message with the full file information
-            //response.append("<file-field>").append(fileItem.getFieldName()).append("</file-field>\n");
-            //response.append("<file-name>").append(fileItem.getName()).append("</file-name>\n");
-            //response.append("<file-size>").append(fileItem.getSize()).append("</file-size>\n");
-            //response.append("<file-type>").append(fileItem.getContentType()).append("</file-type>\n");
+            ApplicationDocumentData applicationDocumentData = createApplicationDocumentData(data);
+
+            //StringBuilder response = new StringBuilder();
+            //response.append("<fileField>").append(fileItem.getFieldName()).append("</fileField>\n");
+            //response.append("<fileName>").append(fileItem.getName()).append("</fileName>");
+            //response.append("<fileSize>").append(fileItem.getSize()).append("</fileSize>");
+            //response.append("<fileType>").append(contentType).append("</fileType>");
+            //response.append("<dataId>").append(applicationDocumentData.id().getValue()).append("</dataId>");
+            //return response.toString();
+            return applicationDocumentData.id().getValue().toString();
         } else {
-            throw new UploadActionException("ERROR: fileItem, tenantId or documentType is missing: " + fileItem + ", tenantId=" + tenantId + ", documentType="
-                    + documentType);
+            throw new UploadActionException("ERROR: fileItem is missing");
         }
 
         /// Remove files from session because we have a copy of them
-        removeSessionFileItems(request);
+        //removeSessionFileItems(request);
 
         //response.insert(0, "<response>\n");
         //response.append("</response>\n");
 
         /// Send information of the received files to the client.
         //return response.toString();
-        return null;
+        //return null;
     }
 
-    private ApplicationDocument createApplicationDocument(Long tenantId, String fileName, byte[] data, ApplicationDocument.DocumentType documentType) {
-        ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
-        applicationDocument.application().set(PtAppContext.getCurrentUserApplication());
-        applicationDocument.tenant().setPrimaryKey(tenantId);
-        applicationDocument.type().setValue(documentType);
-        applicationDocument.filename().setValue(fileName);
-        applicationDocument.fileSize().setValue((long) data.length);
-        //applicationDocument.data().setValue(data);
-        PersistenceServicesFactory.getPersistenceService().persist(applicationDocument);
-
+    private ApplicationDocumentData createApplicationDocumentData(byte[] data) {
         ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
-        applicationDocumentData.id().setValue(applicationDocument.id().getValue());
         applicationDocumentData.data().setValue(data);
         PersistenceServicesFactory.getPersistenceService().persist(applicationDocumentData);
-
-        return applicationDocument;
+        return applicationDocumentData;
     }
 }
