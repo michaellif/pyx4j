@@ -177,12 +177,15 @@
         <repository>
             <id>pyx4j-snapshot</id>
             <url>http://repository.pyx4j.com/maven2-snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
+            <snapshots><enabled>true</enabled></snapshots>
+            <releases><enabled>false</enabled></releases>
+        </repository>
+
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots><enabled>true</enabled></snapshots>
+            <releases><enabled>false</enabled></releases>
         </repository>
 
     </repositories>
@@ -283,7 +286,7 @@
             <dependency>
                 <groupId>com.googlecode.gwtupload</groupId>
                 <artifactId>gwtupload</artifactId>
-                <version>0.6.3</version>
+                <version>0.6.4-SNAPSHOT</version>
             </dependency>
 
             <dependency>
