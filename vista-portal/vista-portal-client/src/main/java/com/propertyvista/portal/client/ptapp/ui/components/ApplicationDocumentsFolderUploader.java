@@ -55,6 +55,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -66,6 +67,8 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
     private static I18n i18n = I18nFactory.getI18n(ApplicationDocumentsFolderUploader.class);
 
     private final DocumentType documentType;
+
+    private Long tenantId;
 
     public ApplicationDocumentsFolderUploader(DocumentType documentType) {
         super(ApplicationDocument.class);
@@ -118,9 +121,15 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
         super.removeItem(comp, folderItemDecorator);
     }
 
+    public void setTenantID(Long id) {
+        tenantId = id;
+    }
+
     private class UploaderFolderDecorator extends HorizontalPanel implements FolderDecorator<ApplicationDocument> {
 
         private SimplePanel appDocsListHolder;
+
+        private Hidden tenantIdParam;
 
         private final SingleUploader uploader;
 
@@ -154,6 +163,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             }
 
             uploader.setValidExtensions(validExtensions.toArray(new String[validExtensions.size()]));
+            uploader.addOnStartUploadHandler(onStartUploaderHandler);
             uploader.addOnFinishUploadHandler(onFinishUploaderHandler);
             uploader.getFileInput().setText(i18n.tr("Browse for File"));
             uploader.getFileInput().getWidget().setStyleName("customButton");
@@ -179,12 +189,36 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             appDocsListHolder.setWidget(w.getContent());
         }
 
+        private final IUploader.OnStartUploaderHandler onStartUploaderHandler = new IUploader.OnStartUploaderHandler() {
+
+            @Override
+            public void onStart(IUploader uploader) {
+
+                if (tenantIdParam != null) {
+                    tenantIdParam.removeFromParent();
+                }
+
+                if (tenantId != null) {
+                    uploader.add(tenantIdParam = new Hidden(ApplicationDocumentServletParameters.TENANT_ID, tenantId.toString()));
+                }
+            }
+        };
+
         private final IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
 
             @Override
             public void onFinish(IUploader uploader) {
                 if (uploader.getStatus() == Status.SUCCESS) {
-//                    addItem();
+                    ApplicationDocument newDocument = EntityFactory.create(ApplicationDocument.class);
+//                    newDocument.tenant().set(tenantInfo);
+                    newDocument.type().setValue(documentType);
+                    newDocument.filename().setValue(uploader.getFileName());
+//                    newDocument.fileSize().setValue(uploader.get);
+
+                    IList<ApplicationDocument> docList = getValue();
+                    docList.add(newDocument);
+                    setValue(docList);
+
                     // TODO we need something here?..
                 }
             }

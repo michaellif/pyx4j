@@ -37,6 +37,7 @@ import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComboBox;
 
 public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
@@ -97,8 +98,10 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     @Override
     public void populate(TenantIncome value) {
         super.populate(value);
-
         setVisibility(value.incomeSource().getValue());
+        if (value != null && fileUpload != null) {
+            fileUpload.setTenantID(((IEntity) (value.getParent().getParent())).getPrimaryKey());
+        }
     }
 
     @SuppressWarnings("unchecked")

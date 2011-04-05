@@ -59,6 +59,7 @@ import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -285,6 +286,10 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         get(proto().secureIdentifier()).setEnabled(!value.notCanadianCitizen().isBooleanTrue());
         fileUpload.setVisible(value.notCanadianCitizen().isBooleanTrue());
+
+        if (value != null) {
+            fileUpload.setTenantID(((IEntity) value).getPrimaryKey());
+        }
     }
 
     private CEntityEditableComponent<Address> createAddressEditor() {
