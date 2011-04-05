@@ -211,15 +211,13 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
                 if (uploader.getStatus() == Status.SUCCESS) {
                     ApplicationDocument newDocument = EntityFactory.create(ApplicationDocument.class);
                     newDocument.type().setValue(documentType);
-                    newDocument.dataId().setValue(Long.getLong(uploader.getServerInfo().message));
-                    newDocument.filename().setValue(uploader.getFileName());
-//                    newDocument.fileSize().setValue(uploader.get);
+                    newDocument.dataId().setValue(Long.parseLong(uploader.getServerInfo().message));
+                    newDocument.filename().setValue(uploader.getServerInfo().name);
+                    newDocument.fileSize().setValue((long) uploader.getServerInfo().size);
 
                     IList<ApplicationDocument> docList = getValue();
                     docList.add(newDocument);
                     setValue(docList);
-
-                    // TODO we need something here?..
                 }
             }
         };
