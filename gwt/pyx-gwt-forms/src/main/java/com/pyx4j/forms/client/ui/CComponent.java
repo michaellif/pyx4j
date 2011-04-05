@@ -225,10 +225,6 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     protected abstract WIDGET_TYPE createWidget();
 
-    protected WIDGET_TYPE initWidget() {
-        return createWidget();
-    }
-
     protected void onWidgetCreated() {
         applyAccessibilityRules();
     }
@@ -241,7 +237,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
     public WIDGET_TYPE asWidget() {
         if (widget == null) {
             try {
-                widget = initWidget();
+                widget = createWidget();
             } catch (Throwable e) {
                 throw new Error("Widget could not be initialized", e);
             }
