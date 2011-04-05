@@ -60,7 +60,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.forms.client.ui.CNumberLabel;
 
 public class ApplicationDocumentsFolderUploader extends CEntityFolder<ApplicationDocument> {
 
@@ -79,7 +78,6 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
     {
         columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().filename(), "15em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().fileSize(), "5em"));
     }
 
     @Override
@@ -98,13 +96,11 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
                         @Override
                         public void execute() {
                             String url = GWT.getModuleBaseURL() + ServletMapping.APPLICATIONDOCUMENT + "?" + ApplicationDocumentServletParameters.DOCUMENT_ID
-                                    + "=" + getValue().id().getValue();
+                                    + "=" + getValue().dataId().getValue();
                             Window.open(url, "_blank", null);
                         }
                     });
                     return inject(column.getObject(), link);
-                } else if (column.getObject() == proto().fileSize()) {
-                    return inject(column.getObject(), new CNumberLabel());
                 } else {
                     return super.createCell(column);
                 }
@@ -129,6 +125,10 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
         private SimplePanel appDocsListHolder;
 
+        private class AppDocUploader extends SingleUploader {
+
+        }
+
         public UploaderFolderDecorator() {
             super();
 
@@ -149,7 +149,6 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             fp.add(appDocsListHolder = new SimplePanel());
 
             SingleUploader uploader = new SingleUploader(FileInputType.BUTTON, new BaseUploadStatus());
-            uploader.add(new Hidden(ApplicationDocumentServletParameters.DOCUMENT_TYPE, documentType.name()));
             uploader.setAutoSubmit(true);
             //uploader.avoidRepeatFiles(true);
 
