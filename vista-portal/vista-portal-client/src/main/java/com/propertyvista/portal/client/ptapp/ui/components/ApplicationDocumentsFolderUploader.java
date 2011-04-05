@@ -210,8 +210,8 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             public void onFinish(IUploader uploader) {
                 if (uploader.getStatus() == Status.SUCCESS) {
                     ApplicationDocument newDocument = EntityFactory.create(ApplicationDocument.class);
-//                    newDocument.tenant().set(tenantInfo);
                     newDocument.type().setValue(documentType);
+                    newDocument.dataId().setValue(Long.getLong(uploader.getServerInfo().message));
                     newDocument.filename().setValue(uploader.getFileName());
 //                    newDocument.fileSize().setValue(uploader.get);
 
