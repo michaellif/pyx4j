@@ -396,7 +396,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private boolean retrieveAndApplyModifications(Connection connection, TableModel tm, IEntity baseEntity, IEntity entity) {
         if (!tm.retrieve(connection, entity.getPrimaryKey(), baseEntity)) {
-            throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
+            if (tm.getPrimaryKeyStrategy() != Table.PrimaryKeyStrategy.ASSIGNED) {
+                throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
+            }
         }
         String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
         if (!EqualsHelper.equals(entity.getMemberValue(updatedTs), baseEntity.getMemberValue(updatedTs))) {
