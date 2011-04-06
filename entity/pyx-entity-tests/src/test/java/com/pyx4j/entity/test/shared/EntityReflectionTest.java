@@ -136,4 +136,32 @@ public class EntityReflectionTest extends InitializerTestCase {
         assertTrue("same id shown", text.contains("description=Do"));
 
     }
+
+    public void testICollectionToString() {
+        Employee emp = EntityFactory.create(Employee.class);
+
+        {
+            Task task = EntityFactory.create(Task.class);
+            task.setPrimaryKey(1L);
+            task.description().setValue("Do");
+            emp.tasksSorted().add(task);
+        }
+        {
+            Task task = EntityFactory.create(Task.class);
+            task.setPrimaryKey(2L);
+            task.description().setValue("Go");
+            emp.tasksSorted().add(task);
+        }
+        {
+            Task task = EntityFactory.create(Task.class);
+            task.setPrimaryKey(1L);
+            task.description().setValue("Try");
+            emp.tasksSorted().add(task);
+        }
+        String text = emp.tasksSorted().toString();
+        //System.out.println(text);
+        assertTrue("same id shown", text.contains("description=Do"));
+        assertTrue("same id shown", text.contains("description=Try"));
+
+    }
 }

@@ -22,12 +22,12 @@ package com.pyx4j.entity.shared.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
+import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -144,8 +144,8 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         b.append(getObjectClass().getName()).append(" ");
         VALUE_TYPE value = getValue();
         if (value != null) {
-            Set<Map<String, Object>> processed = new HashSet<Map<String, Object>>();
-            b.append('[');
+            Set<Map<String, Object>> processed = new IdentityHashSet<Map<String, Object>>();
+            b.append("[ size=");
             b.append(((Collection<?>) value).size());
             b.append(' ');
             boolean first = true;
@@ -156,7 +156,15 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
                     b.append(", ");
                 }
                 if (o instanceof Map<?, ?>) {
-                    EntityValueMap.dumpMap(b, (Map<String, Object>) o, processed, "");
+                    b.append('{');
+                    if (ToStringStyle.fieldMultiLine) {
+                        b.append('\n');
+                    }
+                    EntityValueMap.dumpMap(b, (Map<String, Object>) o, processed, ToStringStyle.PADDING + ToStringStyle.PADDING);
+                    if (ToStringStyle.fieldMultiLine) {
+                        b.append(ToStringStyle.PADDING);
+                    }
+                    b.append('}');
                 } else {
                     b.append(o);
                 }
