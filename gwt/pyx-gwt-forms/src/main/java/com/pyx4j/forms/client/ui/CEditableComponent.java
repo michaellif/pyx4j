@@ -302,13 +302,17 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     }
 
     public void onEditingStart() {
-        editing = true;
+        if (isEnabled() && isVisible() && isEditable()) {
+            editing = true;
+        }
     }
 
     public void onEditingStop() {
-        editing = false;
-        setVisited(true);
-        update(asWidget().getNativeValue());
+        if (isEnabled() && isVisible() && isEditable()) {
+            setVisited(true);
+            editing = false;
+            update(asWidget().getNativeValue());
+        }
     }
 
     @Override
