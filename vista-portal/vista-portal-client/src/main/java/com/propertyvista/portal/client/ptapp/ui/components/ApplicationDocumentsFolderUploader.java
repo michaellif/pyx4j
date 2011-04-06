@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ptapp.ui.components;
 
 import gwtupload.client.BaseUploadStatus;
 import gwtupload.client.IFileInput.FileInputType;
+import gwtupload.client.IUploadStatus;
 import gwtupload.client.IUploadStatus.Status;
 import gwtupload.client.IUploader;
 import gwtupload.client.Uploader;
@@ -28,6 +29,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -77,7 +79,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
     private List<EntityFolderColumnDescriptor> columns;
     {
         columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().filename(), "15em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().filename(), "25em"));
     }
 
     @Override
@@ -143,6 +145,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attached Files:"))));
             fp.add(appDocsListHolder = new SimplePanel());
+            appDocsListHolder.getElement().getStyle().setMarginTop(0.5, Unit.EM);
 
             List<String> validExtensions = new ArrayList<String>();
             for (DownloadFormat f : ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS) {
@@ -154,9 +157,9 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             uploader.addOnStartUploadHandler(onStartUploaderHandler);
             uploader.addOnFinishUploadHandler(onFinishUploaderHandler);
 
-            uploader.getFileInput().setText(i18n.tr("Browse for File"));
+            uploader.getFileInput().setText(i18n.tr("Browse..."));
             uploader.getFileInput().getWidget().setStyleName("customButton");
-            uploader.getFileInput().getWidget().setSize("152px", "27px");
+            uploader.getFileInput().getWidget().setSize("120px", "27px");
             uploader.getStatusWidget().getWidget().getElement().getStyle().setMarginLeft(1, Unit.EM);
             fp.add(uploader);
 
@@ -218,8 +221,14 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
             public DocumentsUploader() {
                 super(FileInputType.BUTTON, true);
-                //                super.avoidRepeatFiles(true);
                 super.setStatusWidget(new BaseUploadStatus());
+                getStatusWidget().setCancelConfiguration(IUploadStatus.GMAIL_CANCEL_CFG);
+                getStatusWidget().getWidget().getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
+                getStatusWidget().getWidget().getElement().getStyle().setBorderWidth(1, Unit.PX);
+                getStatusWidget().getWidget().getElement().getStyle().setBorderColor("#bbb");
+                if (getStatusWidget().getWidget().getClass().equals(HorizontalPanel.class)) {
+                    ((HorizontalPanel) getStatusWidget().getWidget()).setSpacing(10);
+                }
             }
 
             @Override
