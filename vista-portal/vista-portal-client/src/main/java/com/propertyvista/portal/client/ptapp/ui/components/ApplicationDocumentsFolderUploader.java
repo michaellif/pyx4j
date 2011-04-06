@@ -207,9 +207,8 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
                     newDocument.filename().setValue(uploader.getServerInfo().name);
                     newDocument.fileSize().setValue((long) uploader.getServerInfo().size);
                     // add new document to the folder-list:
-                    IList<ApplicationDocument> docList = getValue();
-                    docList.add(newDocument);
-                    setValue(docList);
+                    getValue().add(newDocument);
+                    repopulate(getValue());
                 }
             }
         };
