@@ -25,7 +25,8 @@ public interface ApplicationDocumentServletParameters {
     public static final String TENANT_ID = "TenantId";
 
     /**
-     * Income Id parameter name passed along with binary document on income documents upload form
+     * Income Id parameter name passed along with binary document on income documents
+     * upload form
      */
     public static final String INCOME_ID = "IncomeId";
 
@@ -37,12 +38,12 @@ public interface ApplicationDocumentServletParameters {
     /**
      * Document Id parameter name passed to download document servlet
      */
-    public static final String DOCUMENT_ID = "DocumentId";
+    public static final String DATA_ID = "dataId";
 
     /**
      * array of file extensions allowed to upload as application document
      */
-    public static final EnumSet<DownloadFormat> SUPPORTED_FILE_EXTENSIONS = EnumSet.copyOf(Arrays.asList(new DownloadFormat[] {
-            DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG, DownloadFormat.TIF, DownloadFormat.BMP, DownloadFormat.PDF }));
+    public static final EnumSet<DownloadFormat> SUPPORTED_FILE_EXTENSIONS = EnumSet.copyOf(Arrays.asList(new DownloadFormat[] { DownloadFormat.JPEG,
+            DownloadFormat.GIF, DownloadFormat.PNG, DownloadFormat.TIF, DownloadFormat.BMP, DownloadFormat.PDF }));
 
 }

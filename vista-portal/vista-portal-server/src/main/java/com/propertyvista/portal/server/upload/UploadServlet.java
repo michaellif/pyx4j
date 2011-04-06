@@ -124,7 +124,7 @@ public class UploadServlet extends UploadAction {
             }
 
             byte[] data = fileItem.get();//IOUtils.toByteArray(in);
-            ApplicationDocumentData applicationDocumentData = createApplicationDocumentData(data, tenant);
+            ApplicationDocumentData applicationDocumentData = createApplicationDocumentData(data, contentType, tenant);
 
             //StringBuilder response = new StringBuilder();
             //response.append("<fileField>").append(fileItem.getFieldName()).append("</fileField>\n");
@@ -149,10 +149,11 @@ public class UploadServlet extends UploadAction {
         //return null;
     }
 
-    private ApplicationDocumentData createApplicationDocumentData(byte[] data, PotentialTenantInfo tenant) {
+    private ApplicationDocumentData createApplicationDocumentData(byte[] data, String contentType, PotentialTenantInfo tenant) {
         ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
         applicationDocumentData.data().setValue(data);
         applicationDocumentData.tenant().set(tenant);
+        applicationDocumentData.contentType().setValue(contentType);
         applicationDocumentData.application().set(tenant.application());
         ApplicationEntityServiceImpl.saveApplicationEntity(applicationDocumentData);
         return applicationDocumentData;

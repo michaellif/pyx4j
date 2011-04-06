@@ -14,14 +14,10 @@
 
 package com.propertyvista.portal.server.upload;
 
-import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.essentials.server.download.MimeMap;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -31,9 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ApplicationDocumentServlet extends HttpServlet {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -49,41 +42,51 @@ public class ApplicationDocumentServlet extends HttpServlet {
      *             if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String documentId = request.getParameter(ApplicationDocumentServletParameters.DOCUMENT_ID);
-        if (documentId == null) {
-            response.getWriter().println("Document Id is missing");
+        String dataId = request.getParameter(ApplicationDocumentServletParameters.DATA_ID);
+        if (dataId == null) {
+            response.getWriter().println("dataId parameter is missing");
             return;
         }
-        EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), new Long(documentId)));
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication())); //for security use docs in current application context only
-        ApplicationDocument adoc = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        if (adoc == null) {
-            response.getWriter().println("Document not found");
-            return;
-        }
-        String fname = adoc.filename().getValue();
-        int t = fname.lastIndexOf(".");
-        if (t != -1) {
-            String extension = fname.substring(t + 1).trim();
-            String contentType = MimeMap.getContentType(extension);
-            if (contentType == null)
-                throw new ServletException("Unknown file extension: " + fname);
-            response.setContentType(contentType);
-        } else {
-            throw new ServletException("Uploaded file name does not have an extension");
-        }
-
+        /*
+         * EntityQueryCriteria<ApplicationDocument> criteria =
+         * EntityQueryCriteria.create(ApplicationDocument.class);
+         * criteria.add(PropertyCriterion.eq(criteria.proto().id(), new
+         * Long(documentId)));
+         * criteria.add(PropertyCriterion.eq(criteria.proto().application(),
+         * PtAppContext.getCurrentUserApplication())); //for security use docs in current
+         * application context only
+         * ApplicationDocument adoc =
+         * PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+         * if (adoc == null) {
+         * response.getWriter().println("Document not found");
+         * return;
+         * }
+         * String fname = adoc.filename().getValue();
+         * int t = fname.lastIndexOf(".");
+         * if (t != -1) {
+         * String extension = fname.substring(t + 1).trim();
+         * String contentType = MimeMap.getContentType(extension);
+         * if (contentType == null)
+         * throw new ServletException("Unknown file extension: " + fname);
+         * response.setContentType(contentType);
+         * } else {
+         * throw new ServletException("Uploaded file name does not have an extension");
+         * }
+         */
         //EntityQueryCriteria<ApplicationDocumentData> criteriaData = EntityQueryCriteria.create(ApplicationDocumentData.class);
         //criteriaData.add(PropertyCriterion.eq(criteriaData.proto().id(), new Long(documentId)));
-        ApplicationDocumentData adata = PersistenceServicesFactory.getPersistenceService().retrieve(ApplicationDocumentData.class, adoc.dataId().getValue());
+        ApplicationDocumentData adata = PersistenceServicesFactory.getPersistenceService().retrieve(ApplicationDocumentData.class, new Long(dataId));
         if (adata == null) {
             throw new ServletException("Cannot retrieve binary data: adata is null");
+        }
+        if (!adata.application().id().getValue().equals(PtAppContext.getCurrentUserApplication().id().getValue())) {
+            throw new ServletException("Cannot retrieve data: wrong application Id: " + adata.application().id().getValue() + " != "
+                    + PtAppContext.getCurrentUserApplication().id().getValue());
         }
         if (adata.data() == null) {
             throw new ServletException("Cannot retrieve binary data: adata.data() is null");
         }
-
+        response.setContentType(adata.contentType().getValue());
         response.getOutputStream().write(adata.data().getValue());
     }
 

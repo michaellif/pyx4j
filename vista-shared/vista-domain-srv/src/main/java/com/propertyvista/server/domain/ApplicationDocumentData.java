@@ -27,6 +27,8 @@ public interface ApplicationDocumentData extends IEntity, IBoundToApplication {
     @Detached
     PotentialTenantInfo tenant();
 
+    IPrimitive<String> contentType();
+
     /**
      * This is actual BLOB of the Image or PDF stored on server
      */

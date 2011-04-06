@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.generator;
 
+import gwtupload.server.exceptions.UploadActionException;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -54,6 +56,7 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.domain.util.DomainUtil;
+import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.preloader.PreloadPT;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
@@ -65,6 +68,8 @@ import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
@@ -203,14 +208,31 @@ public class VistaDataGenerator {
             if (data == null) {
                 log.error("Could not find picture [{}] in classpath", filename);
                 throw new Error("Could not find picture [" + filename + "] in classpath");
-            } else {
-                ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
-                //applicationDocumentData.id().setValue(documentId);
-                applicationDocumentData.tenant().set(tenantInfo);
-                applicationDocumentData.application().set(tenantInfo.application());
-                applicationDocumentData.data().setValue(data);
-                return applicationDocumentData;
             }
+
+            int t = fileName.lastIndexOf(".");
+            if (t == -1)
+                throw new IllegalArgumentException("There's no extension in file name:" + fileName);
+            String extension = fileName.substring(t + 1).trim();
+            try {
+                if (!ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS.contains(DownloadFormat.valueByExtension(extension))) {
+                    throw new Exception();
+                }
+            } catch (Exception e) {
+                throw new UploadActionException("Unsupported file extension in file name:" + fileName + ". List of supported extensions: "
+                        + ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS);
+            }
+            String contentType = MimeMap.getContentType(extension);
+            if (contentType == null)
+                throw new UploadActionException("Unknown file extension in file name:" + fileName);
+
+            ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
+            //applicationDocumentData.id().setValue(documentId);
+            applicationDocumentData.tenant().set(tenantInfo);
+            applicationDocumentData.application().set(tenantInfo.application());
+            applicationDocumentData.data().setValue(data);
+            applicationDocumentData.contentType().setValue(contentType);
+            return applicationDocumentData;
         } catch (Exception e) {
             log.error("Failed to read the file [{}]", filename, e);
             throw new Error("Failed to read the file [" + filename + "]");

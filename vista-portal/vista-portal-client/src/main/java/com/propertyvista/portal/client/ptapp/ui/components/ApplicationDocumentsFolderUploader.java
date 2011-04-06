@@ -95,8 +95,8 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
                     CHyperlink link = new CHyperlink(new Command() {
                         @Override
                         public void execute() {
-                            String url = GWT.getModuleBaseURL() + ServletMapping.APPLICATIONDOCUMENT + "?" + ApplicationDocumentServletParameters.DOCUMENT_ID
-                                    + "=" + getValue().dataId().getValue();
+                            String url = GWT.getModuleBaseURL() + ServletMapping.APPLICATIONDOCUMENT + "?" + ApplicationDocumentServletParameters.DATA_ID + "="
+                                    + getValue().dataId().getValue();
                             Window.open(url, "_blank", null);
                         }
                     });
