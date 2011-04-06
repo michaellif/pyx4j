@@ -28,15 +28,15 @@ public interface ApplicationDocumentServletParameters {
      * Income Id parameter name passed along with binary document on income documents
      * upload form
      */
-    public static final String INCOME_ID = "IncomeId";
+    //public static final String INCOME_ID = "IncomeId";
 
     /**
      * Document type parameter name passed along with binary document on upload form
      */
-    public static final String DOCUMENT_TYPE = "DocumentType";
+    //public static final String DOCUMENT_TYPE = "DocumentType";
 
     /**
-     * Document Id parameter name passed to download document servlet
+     * Application Document Data Id parameter name passed to download document servlet
      */
     public static final String DATA_ID = "dataId";
 

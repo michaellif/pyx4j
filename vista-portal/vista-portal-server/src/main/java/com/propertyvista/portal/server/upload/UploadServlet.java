@@ -66,21 +66,12 @@ public class UploadServlet extends UploadAction {
         log.debug("UploadServlet.executeAction(): request={}, sessionFiles={}", request, sessionFiles);
         FileItem fileItem = null;
         String tenantId = null;
-        //String incomeId = null;
-        //String documentType = null;
 
         for (FileItem item : sessionFiles) {
             log.debug("UploadServlet.executeAction(): item={}", item);
             if (item.isFormField()) {
                 if (ApplicationDocumentServletParameters.TENANT_ID.equalsIgnoreCase(item.getFieldName())) {
                     tenantId = item.getString();
-                    //log.debug("tenantId=" + tenantId);
-                } else if (ApplicationDocumentServletParameters.INCOME_ID.equalsIgnoreCase(item.getFieldName())) {
-                    //incomeId = item.getString();
-                    //log.debug("tenantId=" + tenantId);
-                } else if (ApplicationDocumentServletParameters.DOCUMENT_TYPE.equalsIgnoreCase(item.getFieldName())) {
-                    //documentType = item.getString();
-                    //log.debug("tenantId=" + tenantId);
                 }
             } else {
                 fileItem = item;
@@ -123,30 +114,16 @@ public class UploadServlet extends UploadAction {
                 throw new UploadActionException("Wrong TenantId: " + tenantId);
             }
 
-            byte[] data = fileItem.get();//IOUtils.toByteArray(in);
+            byte[] data = fileItem.get();
             ApplicationDocumentData applicationDocumentData = createApplicationDocumentData(data, contentType, tenant);
 
-            //StringBuilder response = new StringBuilder();
-            //response.append("<fileField>").append(fileItem.getFieldName()).append("</fileField>\n");
-            //response.append("<fileName>").append(fileItem.getName()).append("</fileName>");
-            //response.append("<fileSize>").append(fileItem.getSize()).append("</fileSize>");
-            //response.append("<fileType>").append(contentType).append("</fileType>");
-            //response.append("<dataId>").append(applicationDocumentData.id().getValue()).append("</dataId>");
-            //return response.toString();
+            // Remove files from session because we have a copy of them
+            //removeSessionFileItems(request);
+
             return applicationDocumentData.id().getValue().toString();
         } else {
             throw new UploadActionException("ERROR: fileItem or tenantId is missing");
         }
-
-        /// Remove files from session because we have a copy of them
-        //removeSessionFileItems(request);
-
-        //response.insert(0, "<response>\n");
-        //response.append("</response>\n");
-
-        /// Send information of the received files to the client.
-        //return response.toString();
-        //return null;
     }
 
     private ApplicationDocumentData createApplicationDocumentData(byte[] data, String contentType, PotentialTenantInfo tenant) {

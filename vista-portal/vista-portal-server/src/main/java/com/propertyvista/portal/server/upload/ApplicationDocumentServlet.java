@@ -47,34 +47,7 @@ public class ApplicationDocumentServlet extends HttpServlet {
             response.getWriter().println("dataId parameter is missing");
             return;
         }
-        /*
-         * EntityQueryCriteria<ApplicationDocument> criteria =
-         * EntityQueryCriteria.create(ApplicationDocument.class);
-         * criteria.add(PropertyCriterion.eq(criteria.proto().id(), new
-         * Long(documentId)));
-         * criteria.add(PropertyCriterion.eq(criteria.proto().application(),
-         * PtAppContext.getCurrentUserApplication())); //for security use docs in current
-         * application context only
-         * ApplicationDocument adoc =
-         * PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-         * if (adoc == null) {
-         * response.getWriter().println("Document not found");
-         * return;
-         * }
-         * String fname = adoc.filename().getValue();
-         * int t = fname.lastIndexOf(".");
-         * if (t != -1) {
-         * String extension = fname.substring(t + 1).trim();
-         * String contentType = MimeMap.getContentType(extension);
-         * if (contentType == null)
-         * throw new ServletException("Unknown file extension: " + fname);
-         * response.setContentType(contentType);
-         * } else {
-         * throw new ServletException("Uploaded file name does not have an extension");
-         * }
-         */
-        //EntityQueryCriteria<ApplicationDocumentData> criteriaData = EntityQueryCriteria.create(ApplicationDocumentData.class);
-        //criteriaData.add(PropertyCriterion.eq(criteriaData.proto().id(), new Long(documentId)));
+
         ApplicationDocumentData adata = PersistenceServicesFactory.getPersistenceService().retrieve(ApplicationDocumentData.class, new Long(dataId));
         if (adata == null) {
             throw new ServletException("Cannot retrieve binary data: adata is null");
