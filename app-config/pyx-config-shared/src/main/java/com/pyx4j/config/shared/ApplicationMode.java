@@ -26,6 +26,11 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 public class ApplicationMode {
 
+    /**
+     * Marker for error messages that are available only in development mode.
+     */
+    public static final String DEV = "(DEV:)";
+
     private final static Mode impl;
 
     static {
