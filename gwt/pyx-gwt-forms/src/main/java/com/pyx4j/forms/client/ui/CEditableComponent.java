@@ -259,10 +259,6 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     protected void onWidgetCreated() {
         super.onWidgetCreated();
         setNativeValue(getValue());
-        addEditingStatusHandler();
-    }
-
-    protected void addEditingStatusHandler() {
         WIDGET_TYPE widget = super.asWidget();
         widget.addFocusHandler(new FocusHandler() {
 

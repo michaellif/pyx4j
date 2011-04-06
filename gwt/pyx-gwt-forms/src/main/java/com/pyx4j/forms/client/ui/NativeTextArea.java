@@ -20,8 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.user.client.DOM;
 
 import com.pyx4j.widgets.client.TextArea;
@@ -35,14 +33,6 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
         this.cComponent = textArea;
 
         getElement().getStyle().setProperty("resize", "none");
-
-        addBlurHandler(new BlurHandler() {
-
-            @Override
-            public void onBlur(BlurEvent event) {
-                cComponent.onEditingStop();
-            }
-        });
 
         setTabIndex(textArea.getTabIndex());
 
