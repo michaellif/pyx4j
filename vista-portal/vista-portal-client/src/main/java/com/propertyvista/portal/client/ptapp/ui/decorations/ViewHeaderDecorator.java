@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui.decorations;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -38,7 +39,9 @@ public class ViewHeaderDecorator extends HorizontalPanel {
 
         if (widget != null) {
             add(widget);
+            widget.getElement().getStyle().setMarginRight(1, Unit.EM);
             setCellVerticalAlignment(widget, HorizontalPanel.ALIGN_MIDDLE);
+            setCellHorizontalAlignment(widget, ALIGN_RIGHT);
         }
 
         if (width != null)

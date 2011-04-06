@@ -80,8 +80,8 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
         Button changeBtn = new Button(i18n.tr("Change"));
         changeBtn.ensureDebugId(VistaFormsDebugId.Available_Units_Change.getDebugIdString());
-        changeBtn.getElement().getStyle().setMargin(5, Unit.PX);
-        changeBtn.getElement().getStyle().setMarginTop(2, Unit.PX);
+        changeBtn.getElement().getStyle().setMarginTop(0, Unit.PX);
+        changeBtn.getElement().getStyle().setMarginLeft(1, Unit.EM);
         changeBtn.addClickHandler(new ClickHandler() {
 
             @Override
@@ -92,6 +92,9 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             }
         });
         header.add(changeBtn);
+
+        header.getElement().getStyle().setMarginTop(7, Unit.PX);
+        header.getElement().getStyle().setMarginLeft(130, Unit.PX);
 
         main.add(new ViewHeaderDecorator(i18n.tr("Available Units"), header, "100%"));
 
