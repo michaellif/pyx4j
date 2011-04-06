@@ -31,6 +31,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 
+import com.pyx4j.forms.client.ui.CDatePicker.DateFormat;
 import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 
@@ -44,6 +45,8 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
 
     private final NativeDatePicker nativeDatePicker;
 
+    private final DateFormat dateFormat;
+
     public DatePickerDropDownPanel(final NativeDatePicker nativeDatePicker) {
         this.nativeDatePicker = nativeDatePicker;
 
@@ -51,6 +54,8 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
         focusPanel.getElement().getStyle().setProperty("outline", "0");
 
         picker = new DatePickerComposite();
+
+        dateFormat = new DateFormat();
 
         focusPanel.setWidget(picker);
         setWidget(focusPanel);
@@ -79,7 +84,7 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
         String value = nativeDatePicker.getNativeText().trim();
         if (!value.equals("")) {
             try {
-                selectedDate = nativeDatePicker.getCComponent().getValue();
+                selectedDate = dateFormat.parse(value);
             } catch (IllegalArgumentException e) {
                 log.info("Cannot parse as date: " + value);
             }
