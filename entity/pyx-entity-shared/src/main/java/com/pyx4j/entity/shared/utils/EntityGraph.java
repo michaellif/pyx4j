@@ -114,20 +114,20 @@ public class EntityGraph {
     /**
      * Compare ignoring addition of ID's in Entity ent2
      * 
-     * @param ent1
-     * @param ent2
+     * @param cleintSide
+     * @param received
      *            the entity after save in DB. new Pk may be assigned to values.
      * @return
      */
-    public static Path getChangedDataPath(IEntity ent1, IEntity ent2) {
-        return getChangedDataPath(ent1, ent2, new HashSet<IEntity>());
+    public static Path getChangedDataPath(IEntity cleintSide, IEntity received) {
+        return getChangedDataPath(cleintSide, received, new HashSet<IEntity>());
     }
 
     @SuppressWarnings("unchecked")
-    private static Path getChangedDataPath(IEntity ent1, IEntity ent2, Set<IEntity> processed) {
-        if ((ent1 == ent2) || (processed.contains(ent1))) {
+    private static Path getChangedDataPath(IEntity ent1, IEntity received, Set<IEntity> processed) {
+        if ((ent1 == received) || (processed.contains(ent1))) {
             return null;
-        } else if ((!ent1.getInstanceValueClass().equals(ent2.getInstanceValueClass()))) {
+        } else if ((!ent1.getInstanceValueClass().equals(received.getInstanceValueClass()))) {
             return ent1.getPath();
         }
         processed.add(ent1);
@@ -138,7 +138,7 @@ public class EntityGraph {
             switch (memberMeta.getObjectClassType()) {
             case Entity:
                 IEntity ent1Member = (IEntity) ent1.getMember(memberName);
-                IEntity ent2Member = (IEntity) ent2.getMember(memberName);
+                IEntity ent2Member = (IEntity) received.getMember(memberName);
                 if (ent2Member.isNull() && ent2Member.isNull()) {
                     continue;
                 } else if (ent1Member.getMeta().isEmbedded()) {
@@ -154,21 +154,21 @@ public class EntityGraph {
                 }
                 break;
             case EntitySet:
-                if ((p = getChangedDataPath((ISet<IEntity>) ent1.getMember(memberName), (ISet<IEntity>) ent2.getMember(memberName), processed)) != null) {
+                if ((p = getChangedDataPath((ISet<IEntity>) ent1.getMember(memberName), (ISet<IEntity>) received.getMember(memberName), processed)) != null) {
                     return p;
                 }
                 break;
             case EntityList:
-                if ((p = getChangedDataPath((IList<IEntity>) ent1.getMember(memberName), (IList<IEntity>) ent2.getMember(memberName), processed)) != null) {
+                if ((p = getChangedDataPath((IList<IEntity>) ent1.getMember(memberName), (IList<IEntity>) received.getMember(memberName), processed)) != null) {
                     return p;
                 }
                 break;
             default:
                 if (memberName.equals(IEntity.PRIMARY_KEY)) {
-                    if ((ent1.getPrimaryKey() != null) && !EqualsHelper.classEquals(ent1.getPrimaryKey(), ent2.getPrimaryKey())) {
+                    if ((ent1.getPrimaryKey() != null) && !EqualsHelper.classEquals(ent1.getPrimaryKey(), received.getPrimaryKey())) {
                         return ent1.getMember(memberName).getPath();
                     }
-                } else if (!EqualsHelper.equals(ent1.getMember(memberName), ent2.getMember(memberName))) {
+                } else if (!EqualsHelper.equals(ent1.getMember(memberName), received.getMember(memberName))) {
                     return ent1.getMember(memberName).getPath();
                 }
             }
