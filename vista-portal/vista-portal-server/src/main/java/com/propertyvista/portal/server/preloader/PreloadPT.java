@@ -83,7 +83,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(PotentialTenantList.class, PotentialTenantFinancial.class, PotentialTenantInfo.class, Charges.class, ChargeLineList.class,
                     ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class, UnitSelection.class, ApplicationProgress.class,
-                    Pets.class, EmergencyContact.class, Summary.class, Address.class);
+                    Pets.class, EmergencyContact.class, Summary.class, Address.class, ApplicationDocumentData.class);
         } else {
             return "This is production";
         }
@@ -172,7 +172,8 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             for (TenantIncome income : financial.tenantFinancial().incomes()) {
                 for (ApplicationDocument applicationDocument : income.documents()) {
-                    ApplicationDocumentData applicationDocumentData = generator.createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
+                    ApplicationDocumentData applicationDocumentData = generator
+                            .createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
                     persist(applicationDocumentData);
                     applicationDocument.dataId().set(applicationDocumentData.id());
                     persist(applicationDocument);
@@ -183,7 +184,8 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
             if (tenant.notCanadianCitizen().isBooleanTrue()) {
                 for (ApplicationDocument applicationDocument : tenant.documents()) {
-                    ApplicationDocumentData applicationDocumentData = generator.createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
+                    ApplicationDocumentData applicationDocumentData = generator
+                            .createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
                     persist(applicationDocumentData);
                     applicationDocument.dataId().set(applicationDocumentData.id());
                     persist(applicationDocument);
