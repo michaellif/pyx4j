@@ -208,7 +208,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
                     newDocument.fileSize().setValue((long) uploader.getServerInfo().size);
                     // add new document to the folder-list:
                     getValue().add(newDocument);
-                    repopulate(getValue());
+                    setValue(getValue());
                 }
             }
         };
@@ -218,7 +218,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
             public DocumentsUploader() {
                 super(FileInputType.BUTTON, true);
-//                super.avoidRepeatFiles(true);
+                //                super.avoidRepeatFiles(true);
                 super.setStatusWidget(new BaseUploadStatus());
             }
 
