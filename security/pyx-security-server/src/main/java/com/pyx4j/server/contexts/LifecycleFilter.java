@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.RequestDebug;
 import com.pyx4j.security.server.ThrottleConfig;
 
@@ -129,7 +130,7 @@ public class LifecycleFilter implements Filter {
                     log.error("return http error {}", t);
                     if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                         RequestDebug.debug(request);
-                        httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, t.getMessage());
+                        httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ApplicationMode.DEV + t.getMessage());
                     } else {
                         httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     }
