@@ -45,7 +45,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     private DATA_TYPE value = null;
 
-    private List<EditableValueValidator<DATA_TYPE>> validators;
+    private List<EditableValueValidator<? super DATA_TYPE>> validators;
 
     private boolean mandatory = false;
 
@@ -169,15 +169,16 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         return !isEnabled() || !isEditable() || !isMandatory() || !isVisited() || !isValueEmpty();
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public String getValidationMessage() {
         if (!isValid()) {
             if (!isMandatoryConditionMet()) {
                 return getMandatoryValidationMessage();
             } else {
                 if (validators != null) {
-                    for (EditableValueValidator<DATA_TYPE> validator : validators) {
-                        if (!validator.isValid(this, getValue())) {
-                            return validator.getValidationMessage(this, getValue());
+                    for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
+                        if (!validator.isValid((CEditableComponent) this, getValue())) {
+                            return validator.getValidationMessage((CEditableComponent) this, getValue());
                         }
                     }
                 }
@@ -208,14 +209,14 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         return addHandler(handler, ValueChangeEvent.getType());
     }
 
-    public void addValueValidator(EditableValueValidator<DATA_TYPE> validator) {
+    public void addValueValidator(EditableValueValidator<? super DATA_TYPE> validator) {
         if (validators == null) {
-            validators = new Vector<EditableValueValidator<DATA_TYPE>>();
+            validators = new Vector<EditableValueValidator<? super DATA_TYPE>>();
         }
         validators.add(validator);
     }
 
-    public boolean removeValueValidator(EditableValueValidator<DATA_TYPE> validator) {
+    public boolean removeValueValidator(EditableValueValidator<? super DATA_TYPE> validator) {
         if (validators != null) {
             return validators.remove(validator);
         } else {
@@ -229,12 +230,13 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         }
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected boolean isValidationConditionMet() {
         if (validators == null) {
             return true;
         }
-        for (EditableValueValidator<DATA_TYPE> validator : validators) {
-            if (!validator.isValid(this, getValue())) {
+        for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
+            if (!validator.isValid((CEditableComponent) this, getValue())) {
                 return false;
             }
         }
