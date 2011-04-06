@@ -37,6 +37,7 @@ import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
@@ -140,6 +141,7 @@ public class PortalServicesTest extends VistaDBTestCase {
 
         // go through tenants
         tenantList = generator.createPotentialTenantList(application);
+        DataDump.dump("generated", tenantList);
         TenantService tenantService = TestServiceFactory.create(TenantService.class);
         tenantService.save(new UnitTestsAsyncCallback<PotentialTenantList>() {
             @Override
@@ -151,26 +153,24 @@ public class PortalServicesTest extends VistaDBTestCase {
         }, tenantList);
 
         // let's load the tenants to make sure that things are fine there
-        // TODO this code throws exceptions for now
-        //        tenantService.retrieve(new UnitTestsAsyncCallback<PotentialTenantList>() {
-        //            @Override
-        //            public void onSuccess(PotentialTenantList result) {
-        //                Assert.assertNotNull("Result", result);
-        //                TestUtil.assertEqual("TenantList", tenantList, result);
-        //                tenantList = result;
-        //            }
-        //        }, null);
+        tenantService.retrieve(new UnitTestsAsyncCallback<PotentialTenantList>() {
+            @Override
+            public void onSuccess(PotentialTenantList result) {
+                Assert.assertNotNull("Result", result);
+                TestUtil.assertEqual("TenantList", tenantList, result);
+                tenantList = result;
+            }
+        }, null);
 
         TenantInfoService tenantInfoService = TestServiceFactory.create(TenantInfoService.class);
-        for (PotentialTenantInfo tenant : tenantList.tenants()) {
+        for (final PotentialTenantInfo tenant : tenantList.tenants()) {
             log.info("Tenant {}", tenant);
             tenantInfoService.retrieve(new UnitTestsAsyncCallback<PotentialTenantInfo>() {
                 @Override
                 public void onSuccess(PotentialTenantInfo result) {
                     Assert.assertFalse("Result", result.isNull());
                     log.info("Retrieved {}", result);
-                    //                    TestUtil.assertEqual("TenantList", tenantList, result);
-                    //                    tenantList = result;
+                    TestUtil.assertEqual("TenantList", tenant, result);
                 }
             }, tenant.id().getValue());
         }

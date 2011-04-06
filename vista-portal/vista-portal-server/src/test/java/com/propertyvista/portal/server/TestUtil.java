@@ -30,13 +30,13 @@ public class TestUtil {
         return new Pair<String, String>("n/a", "x");
     }
 
-    public static void assertEqual(String name, IEntity ent1, IEntity ent2) {
-        Path changePath = EntityGraph.getChangedDataPath(ent1, ent2);
+    public static void assertEqual(String name, IEntity clientSide, IEntity received) {
+        Path changePath = EntityGraph.getChangedDataPath(clientSide, received);
         if (changePath != null) {
-            DataDump.dump("ent1-", ent1);
-            DataDump.dump("ent2-", ent2);
-            log.debug("ent1 {}", ent1);
-            log.debug("ent2 {}", ent2);
+            DataDump.dump("client", clientSide);
+            DataDump.dump("server", received);
+            log.debug("cleintSide {}", clientSide);
+            log.debug("received {}", received);
             Assert.fail(name + " are not the same: " + changePath);
         }
     }
