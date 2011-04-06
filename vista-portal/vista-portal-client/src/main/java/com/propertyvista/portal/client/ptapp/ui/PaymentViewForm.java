@@ -31,6 +31,9 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
@@ -56,13 +59,29 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.Selector;
 
 public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
     private static I18n i18n = I18nFactory.getI18n(PaymentViewForm.class);
 
+    private FlowPanel paymentTypeImagesPanel;
+
+    private FlowPanel paymentFeesPanel;
+
     public static String PAYMENT_BUTTONS_STYLE_PREFIX = "PaymentRadioButtonGroup";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        PaymentImages, PaymentFee, PaymentForm
+    }
+
+    public static enum StyleDependent implements IStyleDependent {
+        item, selected
+    }
 
     public PaymentViewForm() {
         super(PaymentInfo.class, new VistaEditorsComponentFactory());
@@ -95,18 +114,47 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         main.add(new ViewHeaderDecorator(proto().type()));
         CRadioGroupEnum<PaymentType> radioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, CRadioGroup.Layout.VERTICAL);
         radioGroup.setStylePrefix(PAYMENT_BUTTONS_STYLE_PREFIX);
-        @SuppressWarnings("unchecked")
+
+        paymentTypeImagesPanel = new FlowPanel();
+        paymentTypeImagesPanel.setStyleName(Selector.getStyleName(PAYMENT_BUTTONS_STYLE_PREFIX, PaymentViewForm.StyleSuffix.PaymentImages));
+        Image paymentTypeImage;
+        FlowPanel holder;
+        for (PaymentType type : PaymentType.values()) {
+            paymentTypeImage = new Image(SiteImages.INSTANCE.userMessageInfo());
+            paymentTypeImage.setHeight("20px");
+            paymentTypeImage.setWidth("20px");
+            holder = new FlowPanel();
+            holder.add(paymentTypeImage);
+            paymentTypeImagesPanel.add(holder);
+        }
+        paymentTypeImagesPanel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
+        main.add(paymentTypeImagesPanel);
+
         CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) inject(proto().type(), radioGroup);
         paymentType.addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
+                int index = event.getValue().ordinal();
+                setPaymentTableVisibility(index);
                 setInstrumentsVisibility(event.getValue());
             }
         });
         paymentType.asWidget().getElement().getStyle().setFloat(Float.LEFT);
 
+        paymentFeesPanel = new FlowPanel();
+        paymentFeesPanel.setStyleName(Selector.getStyleName(PAYMENT_BUTTONS_STYLE_PREFIX, PaymentViewForm.StyleSuffix.PaymentFee));
+        Label paymentFeesLabel;
+        for (PaymentType type : PaymentType.values()) {
+            paymentFeesLabel = new Label("Convenience fee: $1.99");
+            paymentFeesPanel.add(paymentFeesLabel);
+        }
+        paymentFeesPanel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
+
         ComplexPanel instrumentsPanel = new FlowPanel();
-        instrumentsPanel.asWidget().getElement().getStyle().setFloat(Float.RIGHT);
+        instrumentsPanel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
+        instrumentsPanel.asWidget().getElement().addClassName(Selector.getStyleName(PAYMENT_BUTTONS_STYLE_PREFIX, StyleSuffix.PaymentForm));
+        instrumentsPanel.getElement().getStyle().setHeight(184, Unit.PX);
+        instrumentsPanel.getElement().getStyle().setWidth(363, Unit.PX);
         instrumentsPanel.getElement().getStyle().setPaddingRight(50, Unit.PX);
         instrumentsPanel.getElement().getStyle().setPaddingLeft(50, Unit.PX);
         instrumentsPanel.getElement().getStyle().setPaddingTop(10, Unit.PX);
@@ -116,12 +164,16 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         instrumentsPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
         instrumentsPanel.getElement().getStyle().setBackgroundColor("white");
         instrumentsPanel.getElement().getStyle().setPosition(Position.RELATIVE);
-        instrumentsPanel.getElement().getStyle().setLeft(-20, Unit.PX);
+        instrumentsPanel.getElement().getStyle().setLeft(-1, Unit.PX);
 
         instrumentsPanel.add(inject(proto().echeck(), createEcheckInfoEditor()));
         instrumentsPanel.add(inject(proto().creditCard(), createCreditCardInfoEditor()));
-        main.add(instrumentsPanel);
+
         main.add(paymentType);
+        main.add(paymentFeesPanel);
+        main.add(instrumentsPanel);
+
+        setPaymentTableVisibility(0);
 
         main.add(new ViewHeaderDecorator(proto().billingAddress()));
         CCheckBox sameAsCurrent = (CCheckBox) inject(proto().sameAsCurrent());
@@ -146,7 +198,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
         main.add(new HTML(SiteResources.INSTANCE.paymentTermsNotes().getText()));
 
-        main.setWidth("700px");
+        main.setWidth("900px");
 
         return main;
     }
@@ -156,6 +208,16 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
         get(proto().echeck()).setVisible(!card);
         get(proto().creditCard()).setVisible(card);
+    }
+
+    private void setPaymentTableVisibility(int index) {
+        int count = paymentFeesPanel.getWidgetCount();
+        for (int i = 0; i < count; i++) {
+            paymentTypeImagesPanel.getWidget(i).removeStyleName(Selector.getDependentName(StyleDependent.selected));
+            paymentFeesPanel.getWidget(i).removeStyleName(Selector.getDependentName(StyleDependent.selected));
+        }
+        paymentTypeImagesPanel.getWidget(index).addStyleName(Selector.getDependentName(StyleDependent.selected));
+        paymentFeesPanel.getWidget(index).addStyleName(Selector.getDependentName(StyleDependent.selected));
     }
 
     private void setAsCurrentAddress(Boolean value) {

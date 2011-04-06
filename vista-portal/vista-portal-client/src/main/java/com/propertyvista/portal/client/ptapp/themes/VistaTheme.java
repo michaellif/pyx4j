@@ -1321,12 +1321,14 @@ public abstract class VistaTheme extends Theme {
 
         String prefix = PaymentViewForm.PAYMENT_BUTTONS_STYLE_PREFIX;
 
-        Style style = new Style(prefix);
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("margin-top", "10px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item));
         style.addProperty("width", "100%");
-        style.addProperty("height", "30px");
+        style.addProperty("padding-top", "3px");
+        style.addProperty("height", "27px");
         style.addProperty("border-top", "1px solid #F7F7F7");
         style.addProperty("border-bottom", "1px solid #F7F7F7");
         addStyle(style);
@@ -1340,6 +1342,59 @@ public abstract class VistaTheme extends Theme {
         style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item, NativeRadioGroup.StyleDependent.selected));
         style.addProperty("border-top", "1px solid #bbb");
         style.addProperty("border-bottom", "1px solid #bbb");
+        style.addProperty("background-color", "white");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentViewForm.StyleSuffix.PaymentForm));
+        style.addProperty("border-radius", "5px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentViewForm.StyleSuffix.PaymentImages));
+        style.addProperty("margin-top", "10px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentViewForm.StyleSuffix.PaymentImages) + " div");
+        style.addProperty("padding-top", "8px");
+        style.addProperty("height", "24px");
+        style.addProperty("padding-right", "10px");
+        style.addProperty("border-top-left-radius", "3px");
+        style.addProperty("border-bottom-left-radius", "3px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentViewForm.StyleSuffix.PaymentImages) + " div.selected");
+        style.addProperty("padding-top", "7px");
+        style.addProperty("height", "23px");
+        style.addProperty("border-top", "1px solid #bbb");
+        style.addProperty("border-bottom", "1px solid #bbb");
+        style.addProperty("border-left", "1px solid #bbb");
+        style.addProperty("background-color", "white");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentViewForm.StyleSuffix.PaymentImages) + " div img");
+        style.addProperty("padding-left", "10px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentViewForm.StyleSuffix.PaymentFee));
+        style.addProperty("margin-top", "10px");
+        style.addProperty("position", "relative");
+        style.addProperty("z-index", "2");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentViewForm.StyleSuffix.PaymentFee) + " div");
+        style.addProperty("padding-right", "50px");
+        style.addProperty("padding-top", "8px");
+        style.addProperty("height", "24px");
+        style.addProperty("padding-left", "50px");
+        style.addProperty("padding-right", "20px");
+        style.addProperty("z-index", "2");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentViewForm.StyleSuffix.PaymentFee) + " div.selected");
+        style.addProperty("padding-top", "7px");
+        style.addProperty("height", "23px");
+        style.addProperty("border-top", "1px solid #bbb");
+        style.addProperty("border-bottom", "1px solid #bbb");
+        style.addProperty("background-color", "white");
         addStyle(style);
     }
 
