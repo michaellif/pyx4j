@@ -27,6 +27,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
@@ -100,6 +101,39 @@ public class EntityReflectionTest extends InitializerTestCase {
         address.streetName().setValue("Any");
         assertFalse("isNull()", address.isNull());
         assertFalse("isEmpty()", address.isEmpty());
+
+    }
+
+    public void testEntityToString() {
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.setPrimaryKey(0L);
+        emp.firstName().setValue("Bob");
+        emp.reliable().setValue(Boolean.TRUE);
+        emp.holidays().setValue(7L);
+        emp.manager().setPrimaryKey(1L);
+        emp.manager().firstName().setValue("Manager");
+
+        {
+            Task task = EntityFactory.create(Task.class);
+            task.setPrimaryKey(emp.manager().getPrimaryKey());
+            task.description().setValue("Do");
+            emp.tasks().add(task);
+        }
+        {
+            Task task = EntityFactory.create(Task.class);
+            task.setPrimaryKey(2L);
+            task.description().setValue("Go");
+            emp.tasks().add(task);
+        }
+        {
+            Task task = EntityFactory.create(Task.class);
+            task.setPrimaryKey(3L);
+            task.description().setValue("Try");
+            emp.tasks().add(task);
+        }
+        String text = emp.toString();
+        //System.out.println(text);
+        assertTrue("same id shown", text.contains("description=Do"));
 
     }
 }

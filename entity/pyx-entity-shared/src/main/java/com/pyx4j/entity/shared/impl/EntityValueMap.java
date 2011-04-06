@@ -105,7 +105,7 @@ public class EntityValueMap extends HashMap<String, Object> {
     }
 
     @SuppressWarnings("unchecked")
-    public static void dumpMap(StringBuilder b, Map<String, Object> map, Set<Map<String, Object>> processed) {
+    public static void dumpMap(StringBuilder b, Map<String, Object> map, Set<Map<String, Object>> processed, String ident) {
         if (processed.contains(map)) {
             b.append("...");
             return;
@@ -113,15 +113,25 @@ public class EntityValueMap extends HashMap<String, Object> {
         boolean first = true;
         processed.add(map);
         for (Map.Entry<String, Object> me : map.entrySet()) {
-            if (!first) {
-                b.append(' ');
+            if (ToStringStyle.fieldMultiLine) {
+                b.append(ident);
             } else {
-                first = false;
+                if (!first) {
+                    b.append(' ');
+                } else {
+                    first = false;
+                }
             }
             b.append(me.getKey()).append("=");
             if (me.getValue() instanceof Map<?, ?>) {
                 b.append('{');
-                dumpMap(b, (Map<String, Object>) me.getValue(), processed);
+                if (ToStringStyle.fieldMultiLine) {
+                    b.append('\n');
+                }
+                dumpMap(b, (Map<String, Object>) me.getValue(), processed, ident + ToStringStyle.PADDING);
+                if (ToStringStyle.fieldMultiLine) {
+                    b.append(ident);
+                }
                 b.append('}');
             } else if (me.getValue() instanceof Collection<?>) {
                 b.append('[');
@@ -133,7 +143,15 @@ public class EntityValueMap extends HashMap<String, Object> {
                         b.append(", ");
                     }
                     if (o instanceof Map<?, ?>) {
-                        dumpMap(b, (Map<String, Object>) o, processed);
+                        b.append('{');
+                        if (ToStringStyle.fieldMultiLine) {
+                            b.append('\n');
+                        }
+                        dumpMap(b, (Map<String, Object>) o, processed, ident + ToStringStyle.PADDING + ToStringStyle.PADDING);
+                        if (ToStringStyle.fieldMultiLine) {
+                            b.append(ident + ToStringStyle.PADDING);
+                        }
+                        b.append('}');
                     } else {
                         b.append(o);
                     }
@@ -142,13 +160,16 @@ public class EntityValueMap extends HashMap<String, Object> {
             } else {
                 b.append(me.getValue());
             }
+            if (ToStringStyle.fieldMultiLine) {
+                b.append('\n');
+            }
         }
     }
 
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
-        EntityValueMap.dumpMap(b, this, new HashSet<Map<String, Object>>());
+        EntityValueMap.dumpMap(b, this, new HashSet<Map<String, Object>>(), "");
         return b.toString();
     }
 

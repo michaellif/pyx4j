@@ -33,6 +33,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.commons.IHaveServiceCallMarker;
+import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.commons.LoopCounter;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -586,9 +587,16 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             b.append("{meta}");
             return b.toString();
         } else {
+            b.append('@').append(Integer.toHexString(this.hashCode()));
+            b.append('(').append(Integer.toHexString(System.identityHashCode(this))).append(')');
             Map<String, Object> v = getValue();
             if ((v != null) && (v.size() != 0)) {
-                EntityValueMap.dumpMap(b, v, new HashSet<Map<String, Object>>());
+                b.append('{');
+                if (ToStringStyle.fieldMultiLine) {
+                    b.append('\n');
+                }
+                EntityValueMap.dumpMap(b, v, new IdentityHashSet<Map<String, Object>>(), ToStringStyle.PADDING);
+                b.append("}");
             } else {
                 b.append("{null}");
             }

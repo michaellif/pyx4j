@@ -156,7 +156,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
                     b.append(", ");
                 }
                 if (o instanceof Map<?, ?>) {
-                    EntityValueMap.dumpMap(b, (Map<String, Object>) o, processed);
+                    EntityValueMap.dumpMap(b, (Map<String, Object>) o, processed, "");
                 } else {
                     b.append(o);
                 }
