@@ -1322,7 +1322,6 @@ public abstract class VistaTheme extends Theme {
         String prefix = PaymentViewForm.PAYMENT_BUTTONS_STYLE_PREFIX;
 
         Style style = new Style(prefix);
-        style.addProperty("background-color", "red");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item));
