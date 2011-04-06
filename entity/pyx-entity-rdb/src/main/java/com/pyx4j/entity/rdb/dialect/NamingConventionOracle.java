@@ -41,6 +41,7 @@ public class NamingConventionOracle implements NamingConvention {
             if (Character.isUpperCase(c)) {
                 if (inWord) {
                     b.append('_');
+                    inWord = false;
                 }
             } else {
                 c = Character.toUpperCase(c);
