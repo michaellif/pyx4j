@@ -41,6 +41,7 @@ public abstract class Dialect {
         addTypeMeta(Double.class, "double");
 
         addTypeMeta(java.sql.Date.class, "date");
+        addTypeMeta(java.sql.Time.class, "time");
     }
 
     public abstract int identifierMaximumLength();
@@ -106,8 +107,11 @@ public abstract class Dialect {
             return Types.DATE;
         } else if (valueClass.equals(java.util.Date.class)) {
             return Types.TIMESTAMP;
+        } else if (valueClass.equals(java.sql.Time.class)) {
+            return Types.TIME;
         } else if (valueClass.isEnum()) {
             return Types.VARCHAR;
+
         } else if (valueClass.equals(Boolean.class)) {
             return Types.BOOLEAN;
         } else if (valueClass.equals(Short.class)) {

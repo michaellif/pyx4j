@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.ui;
 
+import java.sql.Time;
 import java.util.Date;
 import java.util.EnumSet;
 
@@ -97,8 +98,13 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
                 return new CMonthYearPicker(false);
             case yearpicker:
                 return new CMonthYearPicker(true);
-            case timepicker:
-                return new CTimeField();
+            case timepicker: {
+                CTimeField comp = new CTimeField();
+                if (mm.getFormat() != null) {
+                    comp.setTimeFormat(mm.getFormat());
+                }
+                return comp;
+            }
             case email:
                 return new CEmailField();
             case phone:
@@ -150,6 +156,12 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
             return comp;
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
             return new CDatePicker();
+        } else if (mm.getValueClass().equals(Time.class)) {
+            CTimeField comp = new CTimeField();
+            if (mm.getFormat() != null) {
+                (comp).setTimeFormat(mm.getFormat());
+            }
+            return comp;
         } else if (mm.getValueClass().equals(Boolean.class)) {
             return new CCheckBox();
         } else if (mm.getValueClass().equals(Integer.class)) {

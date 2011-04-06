@@ -20,15 +20,20 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.Date;
+import java.sql.Time;
+
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.TimeZone;
 
-import com.pyx4j.commons.Consts;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
-public class CTimeField extends CTextFieldBase<Integer, NativeTextBox<Integer>> {
+public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
+
+    protected static I18n i18n = I18nFactory.getI18n(CTimeField.class);
+
+    private static final String defaultTimeFormat = i18n.tr("h:mm a");
 
     public CTimeField() {
         this(null);
@@ -36,40 +41,43 @@ public class CTimeField extends CTextFieldBase<Integer, NativeTextBox<Integer>> 
 
     public CTimeField(String title) {
         super(title);
-        setFormat(new TimeFormat());
-        addValueValidator(new TextBoxParserValidator<Integer>("Not a valid time. Must be in the format 12:00 AM"));
+        setFormat(new TimeFormat(defaultTimeFormat));
+        addValueValidator(new TextBoxParserValidator<Time>(i18n.tr("Not a valid time. Must be in the format 12:00 AM")));
     }
 
     @Override
-    protected NativeTextBox<Integer> createWidget() {
-        return new NativeTextBox<Integer>(this);
+    protected NativeTextBox<Time> createWidget() {
+        return new NativeTextBox<Time>(this);
     }
 
-    public static class TimeFormat implements IFormat<Integer> {
+    public void setTimeFormat(final String format) {
+        setFormat(new TimeFormat(format));
+    }
 
-        private final static DateTimeFormat formatter = DateTimeFormat.getFormat("h:mm a");
+    public static class TimeFormat implements IFormat<Time> {
 
-        private final static DateTimeFormat parser = DateTimeFormat.getFormat("yyyy.MM.dd Z h:mm a");
+        private final DateTimeFormat parser;
 
-        public TimeFormat() {
+        public TimeFormat(final String format) {
 
+            parser = DateTimeFormat.getFormat(format);
         }
 
         @Override
-        public String format(Integer value) {
+        public String format(Time value) {
             if (value == null) {
                 return null;
             }
-            return formatter.format(new Date(value * Consts.MIN2MSEC), TimeZone.createTimeZone(0));
+            return parser.format(value);
         }
 
         @Override
-        public Integer parse(String string) {
+        public Time parse(String string) {
             if (string == null) {
                 return null;
             } else {
                 try {
-                    return Math.round(parser.parseStrict("1970.01.01 GMT " + string).getTime() * 1f / Consts.MIN2MSEC);
+                    return new Time(parser.parseStrict(string).getTime());
                 } catch (IllegalArgumentException e) {
                     return null;
                 }

@@ -367,6 +367,10 @@ public class TableModel {
             return null;
         } else if (memberMeta.getValueClass().isEnum()) {
             return Enum.valueOf((Class<Enum>) memberMeta.getValueClass(), (String) value);
+        } else if (java.sql.Date.class.isAssignableFrom(memberMeta.getValueClass())) {
+            return value;
+        } else if (java.sql.Time.class.isAssignableFrom(memberMeta.getValueClass())) {
+            return value;
         } else if (java.util.Date.class.isAssignableFrom(memberMeta.getValueClass())) {
             return new java.util.Date(((java.sql.Timestamp) value).getTime());
         } else {
