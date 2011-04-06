@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -49,5 +50,8 @@ public class VistaDBReset {
                 srv.dropTable(meta.getEntityClass());
             }
         }
+        long start = System.currentTimeMillis();
+        System.out.println(conf.getDataPreloaders().preloadAll());
+        System.out.println("Preload time: " + TimeUtils.secSince(start));
     }
 }

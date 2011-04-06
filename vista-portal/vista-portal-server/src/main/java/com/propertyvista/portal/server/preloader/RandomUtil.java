@@ -39,6 +39,10 @@ public class RandomUtil extends DataGenerator {
         return new Date(d.getYear(), d.getMonth(), d.getDate());
     }
 
+    public static java.sql.Date randomSqlDate(int yearFrom, int yearTo) {
+        return new java.sql.Date(randomDate(yearFrom, yearTo).getTime());
+    }
+
     public static boolean randomBoolean() {
         return random.nextBoolean();
     }

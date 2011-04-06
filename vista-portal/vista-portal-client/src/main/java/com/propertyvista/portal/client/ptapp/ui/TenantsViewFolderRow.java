@@ -91,10 +91,10 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
         });
 
         if (!isFirst()) { // all this stuff isn't for primary applicant:  
-            get(proto().birthDate()).addValueChangeHandler(new ValueChangeHandler<Date>() {
+            get(proto().birthDate()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
 
                 @Override
-                public void onValueChange(ValueChangeEvent<Date> event) {
+                public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
                     if (getValue().status().getValue() == null) {
                         if (ValidationUtils.isOlderThen18(event.getValue())) {
                             boolean currentEditableState = get(proto().status()).isEditable();

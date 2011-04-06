@@ -110,7 +110,7 @@ public class VistaDataGenerator {
         Vehicle vehicle = EntityFactory.create(Vehicle.class);
 
         vehicle.plateNumber().setValue("ML" + RandomUtil.randomInt(9999) + "K");
-        vehicle.year().setValue(RandomUtil.randomDate(1992, 2012));
+        vehicle.year().setValue(RandomUtil.randomSqlDate(1992, 2012));
         vehicle.make().setValue(RandomUtil.random(DemoData.CAR_MAKES));
         vehicle.model().setValue(RandomUtil.random(DemoData.CAR_MODELS));
         vehicle.province().set(RandomUtil.random(SharedData.getProvinces()));
@@ -259,7 +259,7 @@ public class VistaDataGenerator {
                 pet.weight().setValue(10 + RandomUtil.randomInt(30));
             }
 
-            pet.birthDate().setValue(RandomUtil.randomDate(1985, 2010));
+            pet.birthDate().setValue(RandomUtil.randomSqlDate(1985, 2010));
 
             // charge line
             pet.chargeLine().set(DomainUtil.createChargeLine(ChargeType.petCharge, 20d + RandomUtil.randomInt(100)));
@@ -380,7 +380,7 @@ public class VistaDataGenerator {
             pt.lastName().setValue(RandomUtil.random(DemoData.LAST_NAMES));
         }
 
-        pt.birthDate().setValue(RandomUtil.randomDate(1930, 1980));
+        pt.birthDate().setValue(RandomUtil.randomSqlDate(1930, 1980));
         pt.homePhone().setValue(RandomUtil.randomPhone());
         pt.mobilePhone().setValue(RandomUtil.randomPhone());
         pt.workPhone().setValue(RandomUtil.randomPhone());
