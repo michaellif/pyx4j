@@ -151,8 +151,6 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
             selectedLeaseTerm = null;
         }
 
-        // clear all selected style:
-        // select desired one:
         for (ApartmentUnit au : getValue()) {
             UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(au);
             unitTableRow.setSelected(unitTableRow.getValue().equals(unit), onClick);
