@@ -28,7 +28,11 @@ public abstract class UnitTestsAsyncCallback<E> implements AsyncCallback<E> {
 
     @Override
     public void onFailure(Throwable caught) {
-        Assert.fail(caught.getClass().getName() + " " + caught.getMessage());
+        if (caught instanceof AssertionError) {
+            throw (AssertionError) caught;
+        } else {
+            Assert.fail(caught.getClass().getName() + " " + caught.getMessage());
+        }
     }
 
 }
