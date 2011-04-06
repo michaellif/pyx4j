@@ -32,8 +32,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
@@ -59,7 +57,6 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
-import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
@@ -120,7 +117,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         Image paymentTypeImage;
         FlowPanel holder;
         for (PaymentType type : PaymentType.values()) {
-            paymentTypeImage = new Image(SiteImages.INSTANCE.userMessageInfo());
+            paymentTypeImage = new Image(SiteImages.INSTANCE.paymentACH());
             paymentTypeImage.setHeight("20px");
             paymentTypeImage.setWidth("20px");
             holder = new FlowPanel();
