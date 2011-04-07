@@ -27,9 +27,13 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 import com.pyx4j.forms.client.ui.CDatePicker.DateFormat;
 import com.pyx4j.widgets.client.DropDownPanel;
@@ -76,7 +80,7 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
         });
 
         setAnimationEnabled(false);
-
+        initializeKeyListener();
     }
 
     public void showDatePicker() {
@@ -94,6 +98,7 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
         }
         picker.setDate(selectedDate);
         showRelativeTo(nativeDatePicker);
+        focusPanel.setFocus(true);
     }
 
     public void hideDatePicker() {
@@ -126,6 +131,39 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
 
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
         return focusPanel.addFocusHandler(handler);
+    }
+
+    private void initializeKeyListener() {
+        focusPanel.addKeyDownHandler(new KeyDownHandler() {
+
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
+                if (event.getNativeKeyCode() == KeyCodes.KEY_UP) {
+                    Date current = getCurrent();
+                    CalendarUtil.addMonthsToDate(current, 12);
+                    picker.setDate(current);
+                } else if (event.getNativeKeyCode() == KeyCodes.KEY_DOWN) {
+                    Date current = getCurrent();
+                    CalendarUtil.addMonthsToDate(current, -12);
+                    picker.setDate(current);
+                } else if (event.getNativeKeyCode() == KeyCodes.KEY_LEFT) {
+                    Date current = getCurrent();
+                    CalendarUtil.addMonthsToDate(current, -1);
+                    picker.setDate(current);
+                } else if (event.getNativeKeyCode() == KeyCodes.KEY_RIGHT) {
+                    Date current = getCurrent();
+                    CalendarUtil.addMonthsToDate(current, 1);
+                    picker.setDate(current);
+                }
+                event.preventDefault();
+            }
+
+            private Date getCurrent() {
+                Date newDate = new Date(picker.getDate().getTime());
+                return newDate;
+            }
+
+        });
     }
 
 }

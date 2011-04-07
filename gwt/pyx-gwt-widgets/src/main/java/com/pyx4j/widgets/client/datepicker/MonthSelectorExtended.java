@@ -97,7 +97,7 @@ public abstract class MonthSelectorExtended extends MonthSelector {
         picker.refreshComponents();
     }
 
-    protected void updateDate(int months) {
+    public void updateDate(int months) {
         setValidDateWithShift(months);
         getParent().updateComponents(picker);
     }

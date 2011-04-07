@@ -163,4 +163,8 @@ public class DatePickerComposite extends Composite implements HasHandlers {
         }
     }
 
+    public Date getDate() {
+        return pickers.get(0).getCurrentMonth();
+    }
+
 }
