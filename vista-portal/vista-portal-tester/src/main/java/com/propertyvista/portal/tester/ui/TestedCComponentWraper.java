@@ -365,9 +365,9 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
                 public void onBlur(BlurEvent event) {
                     IntegerBox tb = (IntegerBox) event.getSource();
                     Integer i = tb.getValue();
-                    if (i == null)
-                        i = 0;
-                    ctxt.setMaxLength(i);
+
+                    if (i != null)
+                        ctxt.setMaxLength(i);
                     ctxt.revalidate();
                 }
             });
