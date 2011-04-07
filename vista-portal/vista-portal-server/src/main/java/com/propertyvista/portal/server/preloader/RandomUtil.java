@@ -72,14 +72,14 @@ public class RandomUtil extends DataGenerator {
         return (T) random(en.getEnumConstants());
     }
 
-    public static String randomPhone() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("(416) ");
-        sb.append(randomInt(10) * 100 + randomInt(10) * 10 + randomInt(10));
-        sb.append("-");
-        sb.append(randomInt(10) * 1000 + randomInt(10) * 100 + randomInt(10) * 10 + randomInt(10));
-
-        return sb.toString();
-    }
+    //    public static String randomPhone() {
+    //        StringBuilder sb = new StringBuilder();
+    //
+    //        sb.append("(416) ");
+    //        sb.append(randomInt(10) * 100 + randomInt(10) * 10 + randomInt(10));
+    //        sb.append("-");
+    //        sb.append(randomInt(10) * 1000 + randomInt(10) * 100 + randomInt(10) * 10 + randomInt(10));
+    //
+    //        return sb.toString();
+    //    }
 }

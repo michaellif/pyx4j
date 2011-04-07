@@ -21,6 +21,7 @@ import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.UnitSelection;
@@ -30,6 +31,7 @@ import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.services.ActivationService;
 import com.propertyvista.portal.rpc.pt.services.ApartmentService;
 import com.propertyvista.portal.rpc.pt.services.ApplicationService;
+import com.propertyvista.portal.rpc.pt.services.TenantFinancialService;
 import com.propertyvista.portal.rpc.pt.services.TenantInfoService;
 import com.propertyvista.portal.rpc.pt.services.TenantService;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
@@ -139,6 +141,10 @@ public class PortalServicesTest extends VistaDBTestCase {
         Assert.assertFalse("Selected unit", unitSelection.selectedUnitId().isNull());
         log.info("Successfully loaded unit {}", unitSelection.selectedUnitId());
 
+        subTestTenants(generator);
+    }
+
+    public void subTestTenants(VistaDataGenerator generator) {
         // go through tenants
         tenantList = generator.createPotentialTenantList(application);
         DataDump.dump("generated", tenantList);
@@ -162,6 +168,11 @@ public class PortalServicesTest extends VistaDBTestCase {
             }
         }, null);
 
+        subTestTenantInfo();
+        subTestTenantFinancial(generator);
+    }
+
+    public void subTestTenantInfo() {
         TenantInfoService tenantInfoService = TestServiceFactory.create(TenantInfoService.class);
         for (final PotentialTenantInfo tenant : tenantList.tenants()) {
             log.info("Tenant {}", tenant);
@@ -171,6 +182,22 @@ public class PortalServicesTest extends VistaDBTestCase {
                     Assert.assertFalse("Result", result.isNull());
                     log.info("Retrieved {}", result);
                     TestUtil.assertEqual("TenantList", tenant, result);
+                }
+            }, tenant.id().getValue());
+        }
+    }
+
+    public void subTestTenantFinancial(VistaDataGenerator generator) {
+        //        generator.createTenantFinancials(tenantFinancials, tenants)
+
+        // financials
+        TenantFinancialService tenantFinancialService = TestServiceFactory.create(TenantFinancialService.class);
+        for (final PotentialTenantInfo tenant : tenantList.tenants()) {
+            tenantFinancialService.retrieve(new UnitTestsAsyncCallback<PotentialTenantFinancial>() {
+                @Override
+                public void onSuccess(PotentialTenantFinancial result) {
+                    Assert.assertFalse("Result", result.isNull());
+                    log.info("Retrieved {}", result);
                 }
             }, tenant.id().getValue());
         }
