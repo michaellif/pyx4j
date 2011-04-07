@@ -19,11 +19,11 @@
 
     <dependencies>
 
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-			<scope>provided</scope>
-		</dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
@@ -37,23 +37,23 @@
             <version>${project.version}</version>
         </dependency>
 
-		<dependency>
-			<groupId>com.pyx4j</groupId>
-			<artifactId>pyx-security-gwt</artifactId>
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-security-gwt</artifactId>
             <version>${project.version}</version>
-		</dependency>
+        </dependency>
 
-		<dependency>
-			<groupId>com.pyx4j</groupId>
-			<artifactId>pyx-site-shared</artifactId>
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-site-shared</artifactId>
             <version>${project.version}</version>
-		</dependency>
+        </dependency>
 
-		<dependency>
-			<groupId>com.pyx4j</groupId>
-			<artifactId>pyx-entity-gwt</artifactId>
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-gwt</artifactId>
             <version>${project.version}</version>
-		</dependency>
+        </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
@@ -76,12 +76,11 @@
             <scope>test</scope>
         </dependency>
 
-	
-		<dependency>
-			<groupId>com.googlecode.gwt-dnd</groupId>
-			<artifactId>gwt-dnd</artifactId>
-		</dependency>
-  
+        <dependency>
+            <groupId>com.google.code.gwt-dnd</groupId>
+            <artifactId>gwt-dnd</artifactId>
+        </dependency>
+
     </dependencies>
 
     <properties>
