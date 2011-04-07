@@ -135,6 +135,12 @@ public interface SiteImages extends ClientBundle {
     @Source("payment-amex.gif")
     ImageResource paymentAMEX();
 
+    @Source("payment-discover.gif")
+    ImageResource paymentDiscover();
+
+    @Source("payment-interact.gif")
+    ImageResource paymentInterac();
+
     @Source("payment-ach.gif")
     ImageResource paymentACH();
 

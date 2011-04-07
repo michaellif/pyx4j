@@ -1354,16 +1354,18 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PaymentViewForm.StyleSuffix.PaymentImages) + " div");
-        style.addProperty("padding-top", "8px");
-        style.addProperty("height", "24px");
+        style.addProperty("height", "27px");
+        style.addProperty("padding-top", "5px");
         style.addProperty("padding-right", "10px");
+        style.addProperty("padding-left", "10px");
         style.addProperty("border-top-left-radius", "3px");
         style.addProperty("border-bottom-left-radius", "3px");
+        style.addProperty("border-left", "1px solid #F7F7F7");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PaymentViewForm.StyleSuffix.PaymentImages) + " div.selected");
-        style.addProperty("padding-top", "7px");
-        style.addProperty("height", "23px");
+        style.addProperty("padding-top", "4px");
+        style.addProperty("height", "26px");
         style.addProperty("border-top", "1px solid #bbb");
         style.addProperty("border-bottom", "1px solid #bbb");
         style.addProperty("border-left", "1px solid #bbb");

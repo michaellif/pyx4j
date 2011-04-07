@@ -116,10 +116,28 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         paymentTypeImagesPanel.setStyleName(Selector.getStyleName(PAYMENT_BUTTONS_STYLE_PREFIX, PaymentViewForm.StyleSuffix.PaymentImages));
         Image paymentTypeImage;
         FlowPanel holder;
-        for (PaymentType type : PaymentType.values()) {
-            paymentTypeImage = new Image(SiteImages.INSTANCE.paymentACH());
+        for (int i = 0; i < PaymentType.values().length; i++) {
+            switch (i) {
+            case 0:
+                paymentTypeImage = new Image(SiteImages.INSTANCE.paymentACH().getURL());
+                break;
+            case 1:
+                paymentTypeImage = new Image(SiteImages.INSTANCE.paymentVISA().getURL());
+                break;
+            case 2:
+                paymentTypeImage = new Image(SiteImages.INSTANCE.paymentAMEX().getURL());
+                break;
+            case 3:
+                paymentTypeImage = new Image(SiteImages.INSTANCE.paymentMC().getURL());
+                break;
+            case 4:
+                paymentTypeImage = new Image(SiteImages.INSTANCE.paymentDiscover().getURL());
+                break;
+            default:
+                paymentTypeImage = new Image(SiteImages.INSTANCE.paymentInterac().getURL());
+                break;
+            }
             paymentTypeImage.setHeight("20px");
-            paymentTypeImage.setWidth("20px");
             holder = new FlowPanel();
             holder.add(paymentTypeImage);
             paymentTypeImagesPanel.add(holder);
