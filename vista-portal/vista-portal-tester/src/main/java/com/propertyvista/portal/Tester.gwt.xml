@@ -11,11 +11,23 @@
 
 	<inherits name='com.propertyvista.portal.test.DomainTests' />
     <inherits name='com.propertyvista.portal.test.RpcTests' />
+    <inherits name='com.google.gwt.user.theme.standard.Standard'/>
+    
+    <inherits name='com.propertyvista.common.VistaCommon' />
+    
+    <stylesheet src="vista-tester.css" />
+    
+<!--     <inherits name="com.google.gwt.libideas.ImmutableResources" />
+	<inherits name="com.google.gwt.libideas.StyleInjector" /> -->
     
     <source path="tester"/>
+    <source path="public"/>
 
     <!-- entry-point class='com.propertyvista.portal.tester.VistaTesterSite'/ -->
-    <entry-point class='com.propertyvista.portal.tester.TesterClientEntryPoint'/>
+  <!--   <entry-point class='com.propertyvista.portal.tester.TesterClientEntryPoint'/>
+   -->  
+   <entry-point class='com.propertyvista.portal.tester.ComponentTester'/>
+    
     
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.tester.*" />
     

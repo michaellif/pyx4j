@@ -7,19 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author vlads
+ * Created on Apr 4, 2011
+ * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.tester;
+package com.propertyvista.portal.tester.util;
 
-import com.pyx4j.site.client.AppSite;
-
-public class VistaTesterSite extends AppSite {
-
-    @Override
-    public void onSiteLoad() {
-
-    }
+public class Constants {
+    public final static String DEBUG_ID_PRFX = "pyx-";
 
 }
