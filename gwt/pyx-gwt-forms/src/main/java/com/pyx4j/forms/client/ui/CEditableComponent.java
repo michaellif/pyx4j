@@ -56,6 +56,8 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     private boolean valid = true;
 
+    private String validationMessage;
+
     public CEditableComponent() {
         this(null);
     }
@@ -165,26 +167,8 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         }
     }
 
-    public boolean isMandatoryConditionMet() {
-        return !isEnabled() || !isEditable() || !isMandatory() || !isVisited() || !isValueEmpty();
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     public String getValidationMessage() {
-        if (!isValid()) {
-            if (!isMandatoryConditionMet()) {
-                return getMandatoryValidationMessage();
-            } else {
-                if (validators != null) {
-                    for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
-                        if (!validator.isValid((CEditableComponent) this, getValue())) {
-                            return validator.getValidationMessage((CEditableComponent) this, getValue());
-                        }
-                    }
-                }
-            }
-        }
-        return null;
+        return validationMessage;
     }
 
     public String getMandatoryValidationMessage() {
@@ -201,7 +185,9 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     public void setVisited(boolean visited) {
         this.visited = visited;
-        revalidate();
+        if (this.visited) {
+            revalidate();
+        }
     }
 
     @Override
@@ -235,12 +221,19 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         if (validators == null) {
             return true;
         }
+
+        validationMessage = null;
         for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
             if (!validator.isValid((CEditableComponent) this, getValue())) {
+                validationMessage = validator.getValidationMessage((CEditableComponent) this, getValue());
                 return false;
             }
         }
         return true;
+    }
+
+    public boolean isMandatoryConditionMet() {
+        return !isEnabled() || !isEditable() || !isMandatory() || !isVisited() || !isValueEmpty();
     }
 
     @Override
@@ -311,7 +304,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     public void onEditingStop() {
         if (isEnabled() && isVisible() && isEditable()) {
-            setVisited(true);
+            visited = true;
             editing = false;
             update(asWidget().getNativeValue());
         }
