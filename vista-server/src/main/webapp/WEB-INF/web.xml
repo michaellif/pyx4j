@@ -234,6 +234,12 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>JobScheduler</servlet-name>
+        <servlet-class>com.propertyvista.portal.server.scheduler.JobScheduler</servlet-class>
+        <load-on-startup/>
+    </servlet>
+    
+    <servlet>
         <servlet-name>ServletContainerLoginServlet</servlet-name>
         <servlet-class>com.pyx4j.security.server.ServletContainerLoginServlet</servlet-class>
     </servlet>
