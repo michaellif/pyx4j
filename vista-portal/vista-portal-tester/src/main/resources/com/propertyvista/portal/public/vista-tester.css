@@ -1,48 +1,55 @@
-.pyx-chrome-tiny-border{
- 	border-style: solid;
-	border-width:1px;
-	border-color:#D0E4F6;
- }
-
-.pyx-chrome-border, .pyx-header{
- 	border-style: solid;
-	border-width:6px;
-	border-color:#D0E4F6;
- }
- 
- .pyx-header {
- 	background-color:#D0E4F6;
- 	color:black;
- 	text-align:center;
- 	font-weight:bold;
- 	font-size:1.3em !important;
- }
-
- .pyx-diplay-not{
-	display:none;
- }
- 
- .pyx-footer{
-   	background-color:#D0E4F6;
- 	color:black;
-  
- }
- 
- .pyx-value, .pyx-footer{
- 	font-weight:bold;
- 	font-size:1.2em !important;	
-  } 
-  
- a.pyx-navigator:link, a.pyx-navigator:visited, a.pyx-navigator:active{
-	text-decoration:none;
-	color:#6694E3;
-	margin-left:5px;
-	font-size: 1.1em;
-	font-weight:bold;
+.pyx-chrome-tiny-border {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #D0E4F6;
 }
 
-a.pyx-navigator:hover {text-decoration:underline;}   /* mouse over link */
+.pyx-chrome-border{
+	border-style: solid;
+	border-width: 6px;
+	border-color: #D0E4F6;
+	background-color:white;
+}
 
-  
+.pyx-header {
+	background-color: #D0E4F6;
+	color: black;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.3em !important;
+}
 
- 
+.pyx-diplay-not {
+	display: none;
+}
+
+.pyx-footer {
+	background-color: #D0E4F6;
+	color: black;
+}
+
+.pyx-value,.pyx-footer,.pyx-note {
+	font-weight: bold;
+	font-size: 1.2em !important;
+}
+
+.pyx-note {
+	margin: 5px;
+}
+
+.pyx-btn{
+	background-color: #6694E3;
+	color:white;
+}	
+
+a.pyx-navigator:link,a.pyx-navigator:visited,a.pyx-navigator:active {
+	text-decoration: none;
+	color: #6694E3;
+	margin-left: 5px;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+a.pyx-navigator:hover {
+	text-decoration: underline;
+} /* mouse over link */

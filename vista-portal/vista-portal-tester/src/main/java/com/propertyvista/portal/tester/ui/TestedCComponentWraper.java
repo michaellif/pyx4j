@@ -8,7 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Apr 4, 2011
- * @author Dad
+ * @author vadims
  * @version $Id$
  */
 package com.propertyvista.portal.tester.ui;
@@ -16,6 +16,7 @@ package com.propertyvista.portal.tester.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -40,7 +41,7 @@ import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.tester.util.Constants;
 
-import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
@@ -58,6 +59,10 @@ import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.CTextField;
 
+/**
+ * 
+ * @author vadims
+ */
 public class TestedCComponentWraper extends LayoutPanel implements Comparable<TestedCComponentWraper> {
 
     private final VerticalPanel testedfeatures;
@@ -72,13 +77,23 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
 
     private final Label rawvalue;
 
+    private final boolean uniqueID;
+
     public TestedCComponentWraper(CFocusComponent<?> component) {
+        this(component, false);
+    }
+
+    public TestedCComponentWraper(CFocusComponent<?> component, boolean genuniqueids) {
         super();
+
+        uniqueID = genuniqueids;
         testedfeatures = new VerticalPanel();
         testedcomponent = new LayoutPanel();
         rawvalue = new Label("");
         rawvalue.setStyleName("pyx-footer");
-        rawvalue.ensureDebugId(Constants.DEBUG_ID_PRFX + "rawvalue");
+
+        if (component == null)
+            return;
 
         /**
          * Draw the Tested Features widget
@@ -106,6 +121,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         this.setWidgetTopBottom(testedcomponent, 5, Unit.PCT, 5, Unit.PCT);
         processTestedComponent(component);
         this.ensureDebugId(Constants.DEBUG_ID_PRFX + fullname);
+        rawvalue.ensureDebugId(composeDebugId("rawvalue"));
 
     }
 
@@ -126,17 +142,10 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         fullname = this.component.getClass().getName();
         String[] s = fullname.split("\\.");
         shortname = s[s.length - 1];
+        if (shortname == null)
+            shortname = "";
         this.component.setTitle("Tested Value:");
-        this.component.setDebugId(
-
-        new IDebugId() {
-            @Override
-            public String getDebugIdString() {
-                return (Constants.DEBUG_ID_PRFX + shortname);
-            }
-        }
-
-        );
+        this.component.setDebugId(new StringDebugId(composeDebugId("testedcomponent")));
 
         /**
          * Format testing area
@@ -168,7 +177,8 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         testedrow.setCellWidth(decoratedcomp, "470px");
 
         Button b = new Button("Print Component Raw Data");
-        b.ensureDebugId(Constants.DEBUG_ID_PRFX + shortname + "-focus-btn");
+        b.ensureDebugId(composeDebugId("focus-btn"));
+        b.setStyleName("pyx-btn");
         b.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -193,7 +203,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         CheckBox chk = null;
         if (!(this.component instanceof CLabel /* || this.component instanceof CHyperlink */)) {
             chk = new CheckBox("Disabled");
-            chk.ensureDebugId(Constants.DEBUG_ID_PRFX + shortname + "-disabled-chk");
+            chk.ensureDebugId(composeDebugId("disabled-chk"));
             chk.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -208,7 +218,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
             //Mandatory optional
             final CEditableComponent<?, ?> ec = (CEditableComponent<?, ?>) this.component;
             chk = new CheckBox("Mandatory");
-            chk.ensureDebugId(Constants.DEBUG_ID_PRFX + shortname + "-mandatory-chk");
+            chk.ensureDebugId(composeDebugId("mandatory-chk"));
 
             chk.addClickHandler(new ClickHandler() {
 
@@ -222,7 +232,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
             testedfeatures.add(chk);
 
             chk = new CheckBox("Read Only");
-            chk.ensureDebugId(Constants.DEBUG_ID_PRFX + shortname + "-read-only-chk");
+            chk.ensureDebugId(composeDebugId("read-only-chk"));
             chk.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -235,7 +245,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
             testedfeatures.add(chk);
 
             chk = new CheckBox("Visited");
-            chk.ensureDebugId(Constants.DEBUG_ID_PRFX + shortname + "-visited-chk");
+            chk.ensureDebugId(composeDebugId("visited-chk"));
             chk.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -253,7 +263,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
             final CTextComponent<?, ?> ctxt = (CTextComponent<?, ?>) this.component;
             TextBox wmfield = new TextBox();
             wmfield.setTitle("Watermark");
-            wmfield.ensureDebugId(Constants.DEBUG_ID_PRFX + shortname + "-watermark-txt");
+            wmfield.ensureDebugId(composeDebugId("watermark-txt"));
             wmfield.addBlurHandler(new BlurHandler() {
                 @Override
                 public void onBlur(BlurEvent event) {
@@ -287,10 +297,10 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
                 tofield = new DoubleBox();
             }
 
-            fromfield.ensureDebugId(Constants.DEBUG_ID_PRFX + shortname + "-fromnum-txt");
+            fromfield.ensureDebugId(composeDebugId("fromnum-txt"));
             fromfield.setTitle("From Number");
             fromfield.setWidth("85%");
-            tofield.ensureDebugId(Constants.DEBUG_ID_PRFX + shortname + "-tonum-txt");
+            tofield.ensureDebugId(composeDebugId("tonum-txt"));
             tofield.setTitle("To Number");
             tofield.setWidth("85%");
 
@@ -300,10 +310,8 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
                     Number f = ((ValueBox<Number>) fromfield).getValue();
                     Number t = ((ValueBox<Number>) tofield).getValue();
 
-                    if (f.doubleValue() > 0 && t.doubleValue() > 0)
+                    if (f != null && f.doubleValue() > 0 && t != null && t.doubleValue() > 0)
                         cnum.setRange(f, t);
-                    else
-                        cnum.setRange(null, null);
                     cnum.revalidate();
                 }
             });
@@ -314,10 +322,8 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
                     Number f = ((ValueBox<Number>) fromfield).getValue();
                     Number t = ((ValueBox<Number>) tofield).getValue();
 
-                    if (f.doubleValue() > 0 && t.doubleValue() > 0)
+                    if (f != null && f.doubleValue() > 0 && t != null && t.doubleValue() > 0)
                         cnum.setRange(f, t);
-                    else
-                        cnum.setRange(null, null);
                     cnum.revalidate();
 
                 }
@@ -344,7 +350,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         } else if (this.component instanceof CDatePicker) {
             final CDatePicker dtpk = (CDatePicker) this.component;
             chk = new CheckBox("No Past Date Selection");
-            chk.ensureDebugId(Constants.DEBUG_ID_PRFX + shortname + "-no-pastdate-selection-chk");
+            chk.ensureDebugId(composeDebugId("no-pastdate-selection-chk"));
             chk.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -358,7 +364,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         } else if (this.component instanceof CEmailField || this.component instanceof CTextField || this.component instanceof CTextArea) {
             final CTextComponent<?, ?> ctxt = (CTextComponent<?, ?>) this.component;
             IntegerBox maxfield = new IntegerBox();
-            maxfield.ensureDebugId(Constants.DEBUG_ID_PRFX + shortname + "-maxlength-txt");
+            maxfield.ensureDebugId(composeDebugId("-maxlength-txt"));
             maxfield.setTitle("Max Length");
             maxfield.addBlurHandler(new BlurHandler() {
                 @Override
@@ -379,6 +385,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
             hp.setWidth("100%");
             hp.setSpacing(2);
             testedfeatures.add(hp);
+
         } else if (this.component instanceof CSuggestBox<?>) {
             /**
              * Note! If this component gets instantiated and configured in calling object
@@ -409,11 +416,44 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         component.setEnabled(!chk.getValue());
     }
 
+    private String composeDebugId(String postfix) {
+        String pfx = (postfix == null) ? "" : postfix;
+        return Constants.DEBUG_ID_PRFX + (uniqueID ? shortname + "-" : "") + pfx;
+    }
+
     @Override
     public int compareTo(TestedCComponentWraper o) {
         if (o == null)
             return 1;
         return shortname.compareTo(o.getShortname());
+    }
+
+    /**
+     * @deprecated
+     * @param activate
+     */
+    @Deprecated
+    public void setActive(boolean activate) {
+        this.setVisible(activate);
+        Element parent = this.getElement().getParentElement();
+        if (activate) {
+            if (parent != null)
+                parent.removeClassName("pyx-diplay-not");
+
+        } else {
+            if (parent != null)
+                parent.addClassName("pyx-diplay-not");
+        }
+
+    }
+
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
+    public boolean isActive() {
+        return this.isVisible();
     }
 
 }

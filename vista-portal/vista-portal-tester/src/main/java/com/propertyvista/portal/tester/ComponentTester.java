@@ -8,7 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Mar 31, 2011
- * @author Dad
+ * @author vadims
  * @version $Id$
  */
 package com.propertyvista.portal.tester;
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -35,6 +36,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.portal.tester.ui.TestedCComponentWraper;
 import com.propertyvista.portal.tester.util.Constants;
 
+import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
@@ -54,7 +56,16 @@ import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CTimeField;
+import com.pyx4j.log4gwt.client.ClientLogger;
+import com.pyx4j.log4gwt.rpcappender.RPCAppender;
+import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.unit.client.ui.TestRunnerDialog;
+import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
+import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.style.Theme;
+import com.pyx4j.widgets.client.style.ThemeColor;
+import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 public class ComponentTester extends AppSite {
     private DecoratedStackPanel mainmenu;
@@ -67,9 +78,25 @@ public class ComponentTester extends AppSite {
      */
     private List<TestedCComponentWraper> testedComponents;
 
+    private TestedCComponentWraper beingtested;
+
+    private LayoutPanel testcontainer;
+
     @Override
     public void onModuleLoad() {
+        ClientEntityFactory.ensureIEntityImplementations();
+        UnrecoverableErrorHandlerDialog.register();
+
+        Theme theme = new WindowsTheme();
+        theme.putThemeColor(ThemeColor.OBJECT_TONE1, 0xFFFFFF);
+        StyleManger.installTheme(theme);
+
+        ClientLogger.addAppender(new RPCAppender());
+        ClientLogger.setDebugOn(true);
+        RPCManager.enableAppEngineUsageStats();
+
         hideLoadingIndicator();
+        beingtested = null;
 
         /**
          * Populate array of the tested components
@@ -135,25 +162,42 @@ public class ComponentTester extends AppSite {
          * 
          */
         VerticalPanel widgetpanel = createWidgetListPanel(testedComponents);
+        testcontainer = new LayoutPanel();
+        HTML version = new HTML("GWT version used: " + GWT.getVersion());
+        version.setStyleName("pyx-note", true);
+        testcontainer.add(version);
 
-        LayoutPanel p = new LayoutPanel();
-        for (TestedCComponentWraper tc : testedComponents) {
-            p.add(tc);
-            p.setWidgetLeftRight(tc, 3, Unit.PCT, 3, Unit.PCT);
-            p.setWidgetTopBottom(tc, 3, Unit.PCT, 3, Unit.PCT);
-            tc.getElement().getParentElement().addClassName("pyx-diplay-not");
+/*
+ * for (TestedCComponentWraper tc : testedComponents) {
+ * testingcontainer.add(tc);
+ * testingcontainer.setWidgetLeftRight(tc, 3, Unit.PCT, 3, Unit.PCT);
+ * testingcontainer.setWidgetTopBottom(tc, 3, Unit.PCT, 3, Unit.PCT);
+ * tc.getElement().getParentElement().addClassName("pyx-diplay-not");
+ * 
+ * }
+ */
+        mainmenu.add(widgetpanel, "Tested C Components");
+        final Anchor junitlink = new Anchor("Start Tests");
+        junitlink.setTarget("_self");
+        junitlink.setStyleName("pyx-navigator");
+        junitlink.ensureDebugId(Constants.DEBUG_ID_PRFX + "-junit-href");
+        junitlink.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                TestRunnerDialog.createAsync();
+            }
+        });
+        mainmenu.add(junitlink, "Client Side Tests");
 
-        }
-
-        mainmenu.add(widgetpanel, "Tested Components");
-        mainmenu.add(new HTML("Future Test Groups"), "Other");
+        HTML other_stack = new HTML("Future Test Groups");
+        other_stack.ensureDebugId(Constants.DEBUG_ID_PRFX + "other-stack");
+        mainmenu.add(other_stack, "Other");
 
         /**
          * Main UI container
          */
-
         maincontainer.addWest(mainmenu, 200);
-        maincontainer.add(p);
+        maincontainer.add(testcontainer);
         maincontainer.setSize("100%", "100%");
         RootLayoutPanel.get().add(maincontainer);
 
@@ -168,7 +212,7 @@ public class ComponentTester extends AppSite {
      */
     private VerticalPanel createWidgetListPanel(List<TestedCComponentWraper> testedCWidgets) {
         VerticalPanel widgetpanel = new VerticalPanel();
-        widgetpanel.ensureDebugId(Constants.DEBUG_ID_PRFX + "widgetpanel");
+        widgetpanel.ensureDebugId(Constants.DEBUG_ID_PRFX + "ccomponent-stack");
         widgetpanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
         widgetpanel.setSpacing(4);
 
@@ -183,7 +227,16 @@ public class ComponentTester extends AppSite {
             widlink.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    depictTestedComponent(event);
+                    //Remove current tested component if any
+                    if (beingtested != null)
+                        ComponentTester.this.testcontainer.remove(beingtested);
+                    beingtested = getTestedComponentById(((Anchor) event.getSource()).getName());
+                    if (beingtested != null) {
+                        ComponentTester.this.testcontainer.add(beingtested);
+                        ComponentTester.this.testcontainer.setWidgetLeftRight(beingtested, 3, Unit.PCT, 3, Unit.PCT);
+                        ComponentTester.this.testcontainer.setWidgetTopBottom(beingtested, 3, Unit.PCT, 3, Unit.PCT);
+                    }
+
                 }
             });
         }
@@ -191,17 +244,30 @@ public class ComponentTester extends AppSite {
         return widgetpanel;
     }
 
-    private void depictTestedComponent(ClickEvent event) {
-        String name = ((Anchor) event.getSource()).getName();
-        TestedCComponentWraper found = null;
-        for (TestedCComponentWraper c : testedComponents) {
-            c.getElement().getParentElement().addClassName("pyx-diplay-not");
-            if (name.equals(c.getElement().getId()))
-                found = c;
+    private TestedCComponentWraper getTestedComponentById(String compId) {
+        if (compId == null)
+            return null;
+        for (TestedCComponentWraper tc : testedComponents) {
+            if (tc.getElement().getId().equals(compId))
+                return tc;
 
         }
-        found.setVisible(true);
-        found.getElement().getParentElement().removeClassName("pyx-diplay-not");
-
+        return null;
     }
+
+/*
+ * private void depictTestedComponent(ClickEvent event) {
+ * String name = ((Anchor) event.getSource()).getName();
+ * TestedCComponentWraper found = null;
+ * for (TestedCComponentWraper c : testedComponents) {
+ * if (c.isActive())
+ * c.setActive(false);
+ * if (name.equals(c.getElement().getId()))
+ * found = c;
+ * 
+ * }
+ * if (found != null)
+ * found.setActive(true);
+ * }
+ */
 }
