@@ -162,8 +162,9 @@ public class DataTableModel<E extends IEntity> {
     }
 
     public void clearData() {
-        data.clear();
+        this.data.clear();
         this.pageNumber = 0;
+        this.hasMoreData = false;
         fireTableChanged(new DataTableModelEvent());
     }
 

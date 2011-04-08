@@ -138,14 +138,6 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
         return entityPrototype;
     }
 
-    /**
-     * @deprecated use proto()
-     */
-    @Deprecated
-    public E getMetaEntity() {
-        return entityPrototype;
-    }
-
     public int getPageSize() {
         if (dataTableModel != null) {
             return dataTableModel.getPageSize();
@@ -164,7 +156,7 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
     public void setEditorPageType(Class<? extends NavigNode> editorPage) {
         this.editorPage = editorPage;
-        // change Cursor style to arrow
+        //TODO change Cursor style to arrow
         dataTable.setHasDetailsNavigation(this.editorPage != null);
     }
 
