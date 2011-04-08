@@ -43,27 +43,24 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.dashboard.client.IGadget.ISetup;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 /**
  * Dashboard panel.
  */
 public class DashboardPanel extends SimplePanel {
-    // CSS style names used: 
-    private static final String CSS_DASHBOARD_PANEL = "DashboardPanel";
 
-    private static final String CSS_DASHBOARD_PANEL_COLUMN = "DashboardPanel-column";
+    // CSS style names: 
+    public static String BASE_NAME = "pyx4j_DashboardPanel";
 
-    private static final String CSS_DASHBOARD_PANEL_COLUMN_HEADING = "DashboardPanel-column-heading";
+    public static enum StyleSuffix implements IStyleSuffix {
+        Column, ColumnHeading, ColumnSpacer, Holder, HolderSetup, HolderCaption, HolderMenu, HolderMenuButton, DndPositioner
+    }
 
-    private static final String CSS_DASHBOARD_PANEL_GADGET_HOLDER = "DashboardPanel-holder";
-
-    private static final String CSS_DASHBOARD_PANEL_GADGET_HOLDER_SETUP = "DashboardPanel-holder-setup";
-
-    private static final String CSS_DASHBOARD_PANEL_GADGET_HOLDER_CAPTION = "DashboardPanel-holder-caption";
-
-    private static final String CSS_DASHBOARD_PANEL_GADGET_HOLDER_MENU = "DashboardPanel-holder-menu";
-
-    private static final String CSS_DASHBOARD_PANEL_GADGET_HOLDER_MENU_BUTTON = "DashboardPanel-holder-menu-button";
+    public static enum StyleDependent implements IStyleDependent {
+        disabled, selected, hover
+    }
 
     // internal data:	
     protected Layout layout;
@@ -178,7 +175,7 @@ public class DashboardPanel extends SimplePanel {
 
     // initializing:
     protected boolean init() {
-        addStyleName(CSS_DASHBOARD_PANEL);
+        addStyleName(BASE_NAME);
         isRefreshAllowed = true;
 
         // use the boundary panel as this composite's widget:
@@ -219,7 +216,7 @@ public class DashboardPanel extends SimplePanel {
             // put column name if necessary:
             if (layout.isColumnNames()) {
                 Label heading = new Label(layout.getCoumnName(col));
-                heading.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_HEADING);
+                heading.addStyleName(BASE_NAME + StyleSuffix.ColumnHeading);
                 heading.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 heading.setWidth("100%");
 
@@ -228,7 +225,7 @@ public class DashboardPanel extends SimplePanel {
 
             // inner vertical panel to hold individual widgets:
             VerticalPanelWithSpacer columnPanel = new VerticalPanelWithSpacer();
-            columnPanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN);
+            columnPanel.addStyleName(BASE_NAME + StyleSuffix.Column);
             columnPanel.setWidth("100%");
 
             // widget drop controller for the current column:
@@ -283,13 +280,13 @@ public class DashboardPanel extends SimplePanel {
         public GadgetHolder(IGadget widget, DashboardPanel mainPanel) {
             this.holdedGadget = widget;
             this.dashboardPanel = mainPanel;
-            this.addStyleName(CSS_DASHBOARD_PANEL_GADGET_HOLDER);
+            this.addStyleName(BASE_NAME + StyleSuffix.Holder);
 
             // create caption with title and menu:
             title.setText(holdedGadget.getName());
             title.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-            HorizontalPanel caption = new HorizontalPanel();
-            caption.addStyleName(CSS_DASHBOARD_PANEL_GADGET_HOLDER_CAPTION);
+            final HorizontalPanel caption = new HorizontalPanel();
+            caption.addStyleName(BASE_NAME + StyleSuffix.HolderCaption);
             caption.add(title);
             caption.setCellWidth(caption.getWidget(caption.getWidgetCount() - 1), "90%");
             caption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
@@ -315,7 +312,7 @@ public class DashboardPanel extends SimplePanel {
 
         private Widget createWidgetMenu() {
             final Button btn = new Button("^");
-            btn.addStyleName(CSS_DASHBOARD_PANEL_GADGET_HOLDER_MENU_BUTTON);
+            btn.addStyleName(BASE_NAME + StyleSuffix.HolderMenuButton);
             btn.addClickHandler(new ClickHandler() {
                 private final PopupPanel pp = new PopupPanel(true);
 
@@ -356,7 +353,7 @@ public class DashboardPanel extends SimplePanel {
 
                     // create the menu:
                     MenuBar menu = new MenuBar(true);
-                    menu.addStyleName(CSS_DASHBOARD_PANEL_GADGET_HOLDER_MENU);
+                    menu.addStyleName(BASE_NAME + StyleSuffix.HolderMenu);
 
                     if (holdedGadget.isMinimizable()) {
                         menu.addItem((isMinimized() ? "Expand" : "Minimize"), cmdMinimize);
@@ -483,7 +480,7 @@ public class DashboardPanel extends SimplePanel {
 
             // create main gadget setup panel: 
             final FlowPanel setup = new FlowPanel();
-            setup.addStyleName(CSS_DASHBOARD_PANEL_GADGET_HOLDER_SETUP);
+            setup.addStyleName(BASE_NAME + StyleSuffix.HolderSetup);
             setup.add(setupGadget.getWidget());
 
             // create panel with Ok/Cancel buttons:

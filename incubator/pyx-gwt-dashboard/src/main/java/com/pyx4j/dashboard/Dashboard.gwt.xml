@@ -4,6 +4,7 @@
 <module>
     <inherits name='com.google.gwt.user.User'/>
     <inherits name='com.pyx4j.Commons'/>
+    <inherits name='com.pyx4j.Widgets.Widgets'/>
     <inherits name='com.pyx4j.log4gwt.Log4gwt'/>
     <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
      
