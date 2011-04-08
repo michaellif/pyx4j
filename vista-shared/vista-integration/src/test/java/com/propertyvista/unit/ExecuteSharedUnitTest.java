@@ -18,6 +18,7 @@ import junit.framework.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertyvista.portal.tester.TesterDebugId;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
@@ -35,6 +36,7 @@ public class ExecuteSharedUnitTest extends UnitTestExecutionTestCase {
 
     public void testUnitTests() throws Exception {
         VistaDevLogin.login(selenium);
+        selenium.waitFor(TesterDebugId.TesterMainMenu.name() + "-text1").click();
         executeAllClientUnitTests(180);
         ExecutionStatus status = getExecutionStatus();
 

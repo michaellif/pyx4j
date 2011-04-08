@@ -46,7 +46,7 @@ public class VistaDBReset {
                 continue;
             }
             if (srv.isTableExists(meta.getEntityClass())) {
-                log.info("drop table {}", meta.getEntityClass());
+                log.info("drop table {}", meta.getEntityClass().getName());
                 srv.dropTable(meta.getEntityClass());
             }
         }

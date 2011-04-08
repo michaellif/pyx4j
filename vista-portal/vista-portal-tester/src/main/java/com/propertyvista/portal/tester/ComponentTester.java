@@ -61,6 +61,7 @@ import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
+import com.pyx4j.unit.shared.UnitDebugId;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
@@ -167,32 +168,34 @@ public class ComponentTester extends AppSite {
         version.setStyleName("pyx-note", true);
         testcontainer.add(version);
 
-/*
- * for (TestedCComponentWraper tc : testedComponents) {
- * testingcontainer.add(tc);
- * testingcontainer.setWidgetLeftRight(tc, 3, Unit.PCT, 3, Unit.PCT);
- * testingcontainer.setWidgetTopBottom(tc, 3, Unit.PCT, 3, Unit.PCT);
- * tc.getElement().getParentElement().addClassName("pyx-diplay-not");
- * 
- * }
- */
+        /*
+         * for (TestedCComponentWraper tc : testedComponents) {
+         * testingcontainer.add(tc);
+         * testingcontainer.setWidgetLeftRight(tc, 3, Unit.PCT, 3, Unit.PCT);
+         * testingcontainer.setWidgetTopBottom(tc, 3, Unit.PCT, 3, Unit.PCT);
+         * tc.getElement().getParentElement().addClassName("pyx-diplay-not");
+         * 
+         * }
+         */
+
         mainmenu.add(widgetpanel, "Tested C Components");
         final Anchor junitlink = new Anchor("Start Tests");
         junitlink.setTarget("_self");
         junitlink.setStyleName("pyx-navigator");
-        junitlink.ensureDebugId(Constants.DEBUG_ID_PRFX + "-junit-href");
+        junitlink.ensureDebugId(UnitDebugId.JUnit_StartClientTests.name());
         junitlink.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 TestRunnerDialog.createAsync();
             }
         });
-        mainmenu.add(junitlink, "Client Side Tests");
+        mainmenu.add(junitlink, "Client Side JUnit");
 
         HTML other_stack = new HTML("Future Test Groups");
         other_stack.ensureDebugId(Constants.DEBUG_ID_PRFX + "other-stack");
         mainmenu.add(other_stack, "Other");
 
+        mainmenu.ensureDebugId(TesterDebugId.TesterMainMenu.name());
         /**
          * Main UI container
          */
@@ -255,19 +258,19 @@ public class ComponentTester extends AppSite {
         return null;
     }
 
-/*
- * private void depictTestedComponent(ClickEvent event) {
- * String name = ((Anchor) event.getSource()).getName();
- * TestedCComponentWraper found = null;
- * for (TestedCComponentWraper c : testedComponents) {
- * if (c.isActive())
- * c.setActive(false);
- * if (name.equals(c.getElement().getId()))
- * found = c;
- * 
- * }
- * if (found != null)
- * found.setActive(true);
- * }
- */
+    /*
+     * private void depictTestedComponent(ClickEvent event) {
+     * String name = ((Anchor) event.getSource()).getName();
+     * TestedCComponentWraper found = null;
+     * for (TestedCComponentWraper c : testedComponents) {
+     * if (c.isActive())
+     * c.setActive(false);
+     * if (name.equals(c.getElement().getId()))
+     * found = c;
+     * 
+     * }
+     * if (found != null)
+     * found.setActive(true);
+     * }
+     */
 }
