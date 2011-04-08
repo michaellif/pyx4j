@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.server.domain.ApplicationDocumentData;
+
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -33,7 +34,7 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        logger.info("CleanOrphanApplicationDocumentDataRecordsJob: STARTED");
+        logger.trace("CleanOrphanApplicationDocumentDataRecordsJob: STARTED");
         //TODO do not delete recently created data records, since customer might be in a process of filling the application
         List<Long> dataKeys = PersistenceServicesFactory.getPersistenceService().queryKeys(EntityQueryCriteria.create(ApplicationDocumentData.class));
         logger.trace("dataKeys={}", dataKeys);
@@ -48,6 +49,6 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
                 deleted++;
             }
         }
-        logger.info("CleanOrphanApplicationDocumentDataRecordsJob: {} ApplicationDocumentData record(s) deleted", deleted);
+        logger.trace("CleanOrphanApplicationDocumentDataRecordsJob: {} ApplicationDocumentData record(s) deleted", deleted);
     }
 }
