@@ -25,9 +25,11 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataItem;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
@@ -104,6 +106,14 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
     public void setNextActionHandler(ClickHandler nextActionHandler) {
         upperActionsBar.setNextActionHandler(nextActionHandler);
         lowerActionsBar.setNextActionHandler(nextActionHandler);
+    }
+
+    public Anchor insertUpperActionItem(String name, IDebugId debugId, ClickHandler handler) {
+        return upperActionsBar.insertActionItem(name, debugId, handler);
+    }
+
+    public Anchor insertLowerActionItem(String name, IDebugId debugId, ClickHandler handler) {
+        return lowerActionsBar.insertActionItem(name, debugId, handler);
     }
 
     public DataTable<E> getDataTable() {

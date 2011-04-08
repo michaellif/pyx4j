@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.EntityCSSClass;
 
 public class DataTableActionsBar extends HorizontalPanel implements DataTableModelListener {
@@ -94,6 +95,19 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         }
     }
 
+    public Anchor insertActionItem(String name, IDebugId debugId, ClickHandler handler) {
+        Anchor anchor = new Anchor(name, false);
+        anchor.getElement().getStyle().setMarginRight(10, Unit.PX);
+        anchor.addClickHandler(handler);
+        if (debugId != null) {
+            anchor.ensureDebugId(debugId.getDebugIdString());
+        } else {
+            anchor.ensureDebugId(name);
+        }
+        this.insert(anchor, 0);
+        return anchor;
+    }
+
     public void setDataTableModel(DataTableModel<?> model) {
         if (this.model != null) {
             this.model.removeDataTableModelListener(this);
@@ -116,7 +130,6 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         }
 
         nextAnchor.setVisible(nextActionHandlerRegistration != null && model.hasMoreData());
-
     }
 
 }
