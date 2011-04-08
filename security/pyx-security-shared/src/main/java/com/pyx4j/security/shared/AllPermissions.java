@@ -24,6 +24,9 @@ public class AllPermissions implements Permission {
 
     private static final long serialVersionUID = 5817981037125026218L;
 
+    public AllPermissions() {
+    }
+
     @Override
     public boolean implies(Permission p) {
         return true;
