@@ -15,6 +15,7 @@ package com.propertyvista.config.tests;
 
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
+import com.pyx4j.security.shared.AclCreator;
 
 public class VistaTestsServerSideConfiguration extends EssentialsServerSideConfiguration {
 
@@ -43,4 +44,15 @@ public class VistaTestsServerSideConfiguration extends EssentialsServerSideConfi
         return true;
     }
 
+    @Override
+    public AclCreator getAclCreator() {
+        final String SERVER_SIDE_TESTS_ACL_CREATOR = this.getClass().getPackage().getName() + ".VistaTestModuleAclCreator";
+        try {
+            @SuppressWarnings("unchecked")
+            Class<TestAclCreator> klass = (Class<TestAclCreator>) Class.forName(SERVER_SIDE_TESTS_ACL_CREATOR);
+            return klass.newInstance();
+        } catch (Throwable e) {
+            throw new RuntimeException("Can't create " + SERVER_SIDE_TESTS_ACL_CREATOR, e);
+        }
+    }
 }

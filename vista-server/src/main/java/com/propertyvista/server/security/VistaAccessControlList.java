@@ -17,7 +17,6 @@ import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
 import com.propertyvista.portal.admin.rpc.VistaAdminServices;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
-import com.propertyvista.portal.rpc.pt.services.ActivationService;
 import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
 import com.propertyvista.server.domain.UserCredential;
 
@@ -39,12 +38,12 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
 
     public final static int CRUD = EntityPermission.CREATE | EntityPermission.READ | EntityPermission.UPDATE;
 
-    public static final boolean allowAllDuringDevelopment = true;
+    // Change this if you want to make it work temporary. Build will fail!
+    private static final boolean allowAllDuringDevelopment = false;
 
     public VistaAccessControlList() {
         grant(new ServiceExecutePermission(LogServices.Log.class));
         grant(new ServiceExecutePermission(AuthenticationServices.class, "*"));
-        grant(new IServiceExecutePermission(ActivationService.class));
         grant(new ServiceExecutePermission(IServiceAdapter.class));
 
         if (allowAllDuringDevelopment) {

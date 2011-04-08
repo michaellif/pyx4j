@@ -19,11 +19,11 @@
 
     <dependencies>
 
-		<!-- ensure proper version, NOT from gwt-dev.jar -->
-		<dependency>
-		    <groupId>commons-codec</groupId>
-		    <artifactId>commons-codec</artifactId>
-		</dependency>
+        <!-- ensure proper version, NOT from gwt-dev.jar -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
@@ -31,7 +31,7 @@
             <version>${project.version}</version>
         </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-crm-server</artifactId>
             <version>${project.version}</version>
@@ -67,8 +67,8 @@
 
         <dependency>
             <groupId>net.tanesha.recaptcha4j</groupId>
-	        <artifactId>recaptcha4j</artifactId>
-	    </dependency>
+            <artifactId>recaptcha4j</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>commons-fileupload</groupId>
@@ -92,6 +92,11 @@
         </dependency>
 
         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
@@ -104,9 +109,12 @@
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-unit-server</artifactId>
+            <version>${pyxVersion}</version>
+            <scope>test</scope>
         </dependency>
+
 
         <dependency>
             <groupId>com.pyx4j</groupId>

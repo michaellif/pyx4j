@@ -64,7 +64,7 @@ public class ActivationServicesTest extends VistaDBTestCase {
             @Override
             public void onFailure(Throwable throwable) {
                 Assert.assertNotNull("Received failure", throwable);
-                Assert.assertEquals(throwable.getClass(), UserRuntimeException.class);
+                Assert.assertEquals(UserRuntimeException.class, throwable.getClass());
             }
         }, request);
     }

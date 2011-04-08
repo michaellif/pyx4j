@@ -17,6 +17,7 @@ import java.io.IOException;
 
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -35,6 +36,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.dev.DataDump;
+import com.pyx4j.security.shared.CoreBehavior;
+import com.pyx4j.unit.server.mock.TestLifecycle;
 
 public class SummaryReportTest extends ReportsTestBase {
 
@@ -48,9 +51,17 @@ public class SummaryReportTest extends ReportsTestBase {
             VistaTestDBSetup.init();
             new VistaDataPreloaders().preloadAll();
         }
+        // Ignore all security constrains
+        TestLifecycle.testSession(null, CoreBehavior.DEVELOPER);
+        TestLifecycle.beginRequest();
 
         createReport(SummaryReport.createModel(retreiveSummary()));
 
+    }
+
+    @After
+    public void tearDown() {
+        TestLifecycle.tearDown();
     }
 
     private static Summary retreiveSummary() {

@@ -25,6 +25,9 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.portal.domain.ref.Province;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
 import com.propertyvista.portal.rpc.pt.services.ApartmentService;
 import com.propertyvista.portal.rpc.pt.services.ApplicationService;
 import com.propertyvista.portal.rpc.pt.services.ChargesService;
@@ -36,25 +39,37 @@ import com.propertyvista.portal.rpc.pt.services.TenantInfoService;
 import com.propertyvista.portal.rpc.pt.services.TenantService;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 
+import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
+import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
+import com.pyx4j.security.shared.AllPermissions;
+import com.pyx4j.security.shared.CoreBehavior;
 
 public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
     private final static int CRUD = EntityPermission.CREATE | EntityPermission.READ | EntityPermission.UPDATE;
 
     public VistaPortalAccessControlList() {
-        grant(new IServiceExecutePermission(ApplicationService.class));
-        grant(new IServiceExecutePermission(ApartmentService.class));
-        grant(new IServiceExecutePermission(TenantService.class));
-        grant(new IServiceExecutePermission(TenantInfoService.class));
-        grant(new IServiceExecutePermission(TenantFinancialService.class));
-        grant(new IServiceExecutePermission(PetService.class));
-        grant(new IServiceExecutePermission(ChargesService.class));
-        grant(new IServiceExecutePermission(SummaryService.class));
-        grant(new IServiceExecutePermission(PaymentService.class));
+        grant(new IServiceExecutePermission(ActivationService.class));
+
+        grant(VistaBehavior.POTENTIAL_TENANT, new IServiceExecutePermission(ApplicationService.class));
+        grant(VistaBehavior.POTENTIAL_TENANT, new IServiceExecutePermission(ApartmentService.class));
+        grant(VistaBehavior.POTENTIAL_TENANT, new IServiceExecutePermission(TenantService.class));
+        grant(VistaBehavior.POTENTIAL_TENANT, new IServiceExecutePermission(TenantInfoService.class));
+        grant(VistaBehavior.POTENTIAL_TENANT, new IServiceExecutePermission(TenantFinancialService.class));
+        grant(VistaBehavior.POTENTIAL_TENANT, new IServiceExecutePermission(PetService.class));
+        grant(VistaBehavior.POTENTIAL_TENANT, new IServiceExecutePermission(ChargesService.class));
+        grant(VistaBehavior.POTENTIAL_TENANT, new IServiceExecutePermission(SummaryService.class));
+        grant(VistaBehavior.POTENTIAL_TENANT, new IServiceExecutePermission(PaymentService.class));
+
+        // Old TODO remove
+        grant(VistaBehavior.POTENTIAL_TENANT, new ServiceExecutePermission(EntityServices.Query.class));
+
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Country.class, EntityPermission.READ));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Province.class, EntityPermission.READ));
 
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Application.class, userEntityAccess, CRUD));
@@ -70,5 +85,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Charges.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Summary.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(PaymentInfo.class, applicationEntityAccess, CRUD));
+
+        grant(CoreBehavior.DEVELOPER, new AllPermissions());
+
+        freeze();
     }
 }

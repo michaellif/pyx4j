@@ -27,7 +27,7 @@ public class ApplicationEntityInstanceAccess implements InstanceAccess {
     @Override
     public boolean allow(IEntity entity) {
         return (entity instanceof IBoundToApplication)
-                && (EqualsHelper.equals(((IBoundToApplication) entity).application().getPrimaryKey(), PtAppContext.getCurrentUserApplication()));
+                && (EqualsHelper.equals(((IBoundToApplication) entity).application(), PtAppContext.getCurrentUserApplication()));
     }
 
 }
