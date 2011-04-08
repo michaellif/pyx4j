@@ -242,6 +242,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
             get(proto().billingAddress().street1()).setValue(getValue().currentAddress().street1().getValue());
             get(proto().billingAddress().street2()).setValue(getValue().currentAddress().street2().getValue());
             get(proto().billingAddress().city()).setValue(getValue().currentAddress().city().getValue());
+            get(proto().billingAddress().country()).setValue(getValue().currentAddress().country().getValue());
             get(proto().billingAddress().postalCode()).setValue(getValue().currentAddress().postalCode().getValue());
             get(proto().billingAddress().phone()).setValue(getValue().currentPhone().getValue());
 
@@ -254,8 +255,9 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         get(proto().billingAddress().street1()).setEditable(editable);
         get(proto().billingAddress().street2()).setEditable(editable);
         get(proto().billingAddress().city()).setEditable(editable);
-        get(proto().billingAddress().postalCode()).setEditable(editable);
         get(proto().billingAddress().province()).setEditable(editable);
+        get(proto().billingAddress().country()).setEditable(editable);
+        get(proto().billingAddress().postalCode()).setEditable(editable);
         get(proto().billingAddress().phone()).setEditable(editable);
     }
 
