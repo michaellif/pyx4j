@@ -23,6 +23,8 @@ package com.pyx4j.dashboard.client;
 import java.util.Vector;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
@@ -35,7 +37,9 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -44,6 +48,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.dashboard.client.IGadget.ISetup;
+import com.pyx4j.dashboard.client.images.DashboardImages;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
@@ -56,12 +61,15 @@ public class DashboardPanel extends SimplePanel {
     public static String BASE_NAME = "pyx4j_DashboardPanel";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Column, ColumnHeading, ColumnSpacer, Holder, HolderSetup, HolderCaption, HolderHeading, HolderMenu, HolderMenuButton, DndPositioner
+        Column, ColumnHeading, ColumnSpacer, Holder, HolderSetup, HolderCaption, HolderHeading, HolderMenu, DndPositioner
     }
 
     public static enum StyleDependent implements IStyleDependent {
         disabled, selected, hover
     }
+
+    // resources:
+    protected DashboardImages images = (DashboardImages) GWT.create(DashboardImages.class);
 
     // internal data:	
     protected Layout layout;
@@ -273,6 +281,8 @@ public class DashboardPanel extends SimplePanel {
 
         private final Label title = new Label();
 
+        private final Image maximizer;
+
         // public interface:
         public IGadget getIWidget() {
             return holdedGadget;
@@ -285,15 +295,34 @@ public class DashboardPanel extends SimplePanel {
             this.addStyleName(BASE_NAME + StyleSuffix.Holder);
 
             // create caption with title and menu:
+            final HorizontalPanel caption = new HorizontalPanel();
+
             title.setText(holdedGadget.getName());
             title.addStyleName(BASE_NAME + StyleSuffix.HolderHeading);
-            final HorizontalPanel caption = new HorizontalPanel();
             caption.addStyleName(BASE_NAME + StyleSuffix.HolderCaption);
             caption.add(title);
-            caption.setCellWidth(caption.getWidget(caption.getWidgetCount() - 1), "90%");
+            caption.setCellWidth(caption.getWidget(caption.getWidgetCount() - 1), "98%");
+
             caption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+
+            maximizer = new Image(images.WindowMaximize());
+            maximizer.setTitle("Maximize");
+            maximizer.getElement().getStyle().setCursor(Cursor.POINTER);
+            maximizer.addClickHandler(new ClickHandler() {
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    maximize();
+                }
+            });
+            caption.add(maximizer);
+            caption.setCellWidth(caption.getWidget(caption.getWidgetCount() - 1), "1%");
+            caption.setCellVerticalAlignment(caption.getWidget(caption.getWidgetCount() - 1), HasVerticalAlignment.ALIGN_MIDDLE);
+
             caption.add(createWidgetMenu());
-            caption.setCellWidth(caption.getWidget(caption.getWidgetCount() - 1), "10%");
+            caption.setCellWidth(caption.getWidget(caption.getWidgetCount() - 1), "1%");
+            caption.setCellVerticalAlignment(caption.getWidget(caption.getWidgetCount() - 1), HasVerticalAlignment.ALIGN_MIDDLE);
+
             caption.setWidth("100%");
 
             // put it together:
@@ -313,8 +342,8 @@ public class DashboardPanel extends SimplePanel {
         }
 
         private Widget createWidgetMenu() {
-            final Button btn = new Button("^");
-            btn.addStyleName(BASE_NAME + StyleSuffix.HolderMenuButton);
+            final Image btn = new Image(images.WindowMenu());
+            btn.getElement().getStyle().setCursor(Cursor.POINTER);
             btn.addClickHandler(new ClickHandler() {
                 private final PopupPanel pp = new PopupPanel(true);
 
@@ -326,14 +355,6 @@ public class DashboardPanel extends SimplePanel {
                         public void execute() {
                             pp.hide();
                             minimize();
-                        }
-                    };
-
-                    Command cmdMaximize = new Command() {
-                        @Override
-                        public void execute() {
-                            pp.hide();
-                            maximize();
                         }
                     };
 
@@ -361,10 +382,6 @@ public class DashboardPanel extends SimplePanel {
                         menu.addItem((isMinimized() ? "Expand" : "Minimize"), cmdMinimize);
                     }
 
-                    if (holdedGadget.isMaximizable()) {
-                        menu.addItem((isMaximized() ? "Restore" : "Maximize"), cmdMaximize);
-                    }
-
                     menu.addItem("Delete", cmdDelete);
 
                     if (holdedGadget.isSetupable()) {
@@ -378,6 +395,7 @@ public class DashboardPanel extends SimplePanel {
                 } // onClick button event handler...
             }); // ClickHandler class...
 
+            btn.setTitle("Options");
             return btn;
         }
 
@@ -420,6 +438,9 @@ public class DashboardPanel extends SimplePanel {
 
         private void maximize() {
             if (isMaximized()) {
+                maximizer.setResource(images.WindowMaximize());
+                maximizer.setTitle("Maximize");
+
                 maximizeData.restoreWidgetPosition(this);
                 dashboardPanel.setWidget(maximizeData.boundaryPanel);
                 maximizeData.clear();
@@ -428,6 +449,9 @@ public class DashboardPanel extends SimplePanel {
                 holdedGadget.onMaximize(false);
                 isRefreshAllowed = true;
             } else { // maximize:
+                maximizer.setResource(images.WindowRestore());
+                maximizer.setTitle("Restore");
+
                 maximizeData.saveWidgetPosition(this);
                 maximizeData.boundaryPanel = dashboardPanel.getWidget();
                 dashboardPanel.setWidget(this);

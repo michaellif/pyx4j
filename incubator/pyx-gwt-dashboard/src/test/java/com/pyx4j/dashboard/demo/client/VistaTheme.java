@@ -183,11 +183,9 @@ public class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderCaption));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("border-bottom", "1px solid #aaa");
         style.addProperty("font", "caption");
         style.addProperty("font-weight", "bold");
         style.addProperty("color", "#444");
-        style.addProperty("padding-top", "1px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderCaption) + ":hover");
@@ -196,6 +194,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderHeading));
+        style.addProperty("padding-top", "2px");
         style.addProperty("text-align", "center");
         addStyle(style);
 
@@ -203,11 +202,6 @@ public class VistaTheme extends Theme {
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("border", "1px solid #aaa");
         style.addProperty("font", "menu");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderMenuButton));
-        style.addProperty("font", "small-caption");
-        style.addProperty("height", "1.4em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.DndPositioner));
