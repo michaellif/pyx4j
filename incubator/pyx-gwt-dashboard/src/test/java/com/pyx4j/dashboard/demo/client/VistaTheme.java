@@ -54,7 +54,7 @@ public class VistaTheme extends Theme {
         putThemeColor(ThemeColor.TEXT, 0x000000);
         putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
         putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
+        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfafafa);
         putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
         putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
     }
