@@ -44,7 +44,7 @@ import com.pyx4j.site.shared.meta.NavigUtils;
 
 public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
-    private DataTableModel<E> dataTableModel;
+    protected final DataTableModel<E> dataTableModel;
 
     private final E entityPrototype;
 
