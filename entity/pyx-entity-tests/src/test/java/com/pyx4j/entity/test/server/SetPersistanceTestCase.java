@@ -53,7 +53,7 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
             // OK
         }
         if (saved) {
-            fail("Should not save UnownedSetMemebr");
+            fail("Should not save UnownedSetMember");
         }
 
         // See if it is not updated with cascade

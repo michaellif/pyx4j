@@ -65,6 +65,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.security.shared.SecurityViolationException;
 
 public class EntityPersistenceServiceRDB implements IEntityPersistenceService, IEntityPersistenceServiceExt {
 
@@ -423,7 +424,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             IEntity baseChildEntity = (IEntity) member.getMember(baseEntity);
             if (memberMeta.isOwnedRelationships()) {
                 if (!EqualsHelper.equals(childEntity.getPrimaryKey(), baseChildEntity.getPrimaryKey())) {
-                    if (baseChildEntity.getPrimaryKey() != null) {
+                    if (childEntity.getPrimaryKey() != null) {
+                        // attempt to attach to different entity graphs
+                        throw new SecurityViolationException("Permission denied");
+                    } else if (baseChildEntity.getPrimaryKey() != null) {
                         // Cascade delete
                         delete(baseChildEntity);
                     }

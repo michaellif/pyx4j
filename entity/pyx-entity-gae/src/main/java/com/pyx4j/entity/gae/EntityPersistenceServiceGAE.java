@@ -89,6 +89,7 @@ import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+import com.pyx4j.security.shared.SecurityViolationException;
 
 /**
  * 
@@ -406,13 +407,21 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         embedEntityProperties(entity, me.getKey(), "", childIEntity, meta.isIndexed());
                         continue nextValue;
                     } else {
+                        Key origKeyValue = (Key) entity.getProperty(propertyName);
+                        Long origPk = null;
+                        if (origKeyValue != null) {
+                            origPk = Long.valueOf(origKeyValue.getId());
+                        }
+                        if ((childIEntity.getPrimaryKey() != null) && (!EqualsHelper.equals(childIEntity.getPrimaryKey(), origPk))) {
+                            // attempt to attach to different entity graphs
+                            throw new SecurityViolationException("Permission denied");
+                        }
                         value = persistImpl(childIEntity, merge);
                         // Cascade delete
                         if (isUpdate && merge) {
-                            Object origValue = entity.getProperty(propertyName);
-                            if ((origValue != null) && (origValue.equals(value))) {
+                            if ((origKeyValue != null) && (origKeyValue.equals(value))) {
                                 datastoreCallStats.get().writeCount++;
-                                datastore.delete((Key) origValue);
+                                datastore.delete(origKeyValue);
                             }
                         }
                     }
