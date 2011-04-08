@@ -23,9 +23,10 @@ package com.pyx4j.dashboard.client;
 import java.util.Vector;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
-import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -211,7 +212,8 @@ public class DashboardPanel extends SimplePanel {
             // set specific formatting styles:
             columnCompositePanel.getElement().getStyle().setMarginLeft(layout.getHorizontalSpacing(), Unit.PCT);
             columnCompositePanel.getElement().getStyle().setMarginRight(layout.getHorizontalSpacing(), Unit.PCT);
-            columnCompositePanel.getElement().getStyle().setFloat(Float.LEFT);
+            columnCompositePanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            columnCompositePanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
 
             // put column name if necessary:
             if (layout.isColumnNames()) {
