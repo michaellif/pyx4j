@@ -47,6 +47,7 @@ import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
 import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.pt.PaymentInfo;
+import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
@@ -242,13 +243,17 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
             get(proto().billingAddress().street1()).setValue(getValue().currentAddress().street1().getValue());
             get(proto().billingAddress().street2()).setValue(getValue().currentAddress().street2().getValue());
             get(proto().billingAddress().city()).setValue(getValue().currentAddress().city().getValue());
-            get(proto().billingAddress().country()).setValue(getValue().currentAddress().country().getValue());
             get(proto().billingAddress().postalCode()).setValue(getValue().currentAddress().postalCode().getValue());
             get(proto().billingAddress().phone()).setValue(getValue().currentPhone().getValue());
 
             @SuppressWarnings("unchecked")
+            CEditableComponent<Country, ?> country = (CEditableComponent<Country, ?>) getRaw(proto().billingAddress().country());
+            country.setValue(getValue().currentAddress().country());
+
+            @SuppressWarnings("unchecked")
             CEditableComponent<Province, ?> prov = (CEditableComponent<Province, ?>) getRaw(proto().billingAddress().province());
             prov.setValue(getValue().currentAddress().province());
+
             editable = false;
         }
 
