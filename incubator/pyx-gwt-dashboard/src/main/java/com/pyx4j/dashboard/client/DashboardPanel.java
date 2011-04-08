@@ -55,7 +55,7 @@ public class DashboardPanel extends SimplePanel {
     public static String BASE_NAME = "pyx4j_DashboardPanel";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Column, ColumnHeading, ColumnSpacer, Holder, HolderSetup, HolderCaption, HolderMenu, HolderMenuButton, DndPositioner
+        Column, ColumnHeading, ColumnSpacer, Holder, HolderSetup, HolderCaption, HolderHeading, HolderMenu, HolderMenuButton, DndPositioner
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -284,7 +284,7 @@ public class DashboardPanel extends SimplePanel {
 
             // create caption with title and menu:
             title.setText(holdedGadget.getName());
-            title.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+            title.addStyleName(BASE_NAME + StyleSuffix.HolderHeading);
             final HorizontalPanel caption = new HorizontalPanel();
             caption.addStyleName(BASE_NAME + StyleSuffix.HolderCaption);
             caption.add(title);

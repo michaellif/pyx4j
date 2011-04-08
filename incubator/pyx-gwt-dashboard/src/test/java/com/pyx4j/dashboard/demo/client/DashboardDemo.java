@@ -122,9 +122,7 @@ public final class DashboardDemo implements EntryPoint {
         DashboardPanel dashboardPanel = new DashboardPanel(layout);
 
         HorizontalPanel dashboardCaption = new HorizontalPanel();
-        Label title = new Label("Demo Dashboard");
-        title.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER); // ?!? - works just this way and doesn't work from css!..
-        dashboardCaption.add(title);
+        dashboardCaption.add(new Label());
         dashboardCaption.setCellWidth(dashboardCaption.getWidget(dashboardCaption.getWidgetCount() - 1), "90%");
         dashboardCaption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         dashboardCaption.add(createDashboardMenu(dashboardPanel));
