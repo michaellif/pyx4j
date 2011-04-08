@@ -116,7 +116,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     public void populate(DATA_TYPE value) {
 
         this.value = value;
-        this.visited = false;
+        this.visited = !isValueEmpty();
 
         setNativeValue(value);
 
