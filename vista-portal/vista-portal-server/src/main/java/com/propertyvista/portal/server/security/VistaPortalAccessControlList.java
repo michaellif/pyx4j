@@ -38,6 +38,7 @@ import com.propertyvista.portal.rpc.pt.services.TenantFinancialService;
 import com.propertyvista.portal.rpc.pt.services.TenantInfoService;
 import com.propertyvista.portal.rpc.pt.services.TenantService;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
+import com.propertyvista.server.domain.ApplicationDocumentData;
 
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
@@ -78,6 +79,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(ApplicationProgress.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(UnitSelection.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(ApplicationDocument.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(ApplicationDocumentData.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(PotentialTenantList.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(PotentialTenantInfo.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Pets.class, applicationEntityAccess, CRUD));

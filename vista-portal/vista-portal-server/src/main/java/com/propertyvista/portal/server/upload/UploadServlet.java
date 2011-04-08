@@ -100,8 +100,9 @@ public class UploadServlet extends UploadAction {
                     throw new UploadActionException("There's no extension in file name:" + fileItem.getName());
                 }
             }
-            if (contentType == null)
+            if (contentType == null) {
                 throw new UploadActionException("Unknown file extension in file name:" + fileItem.getName());
+            }
             if (fileItem.getContentType() != null && !fileItem.getContentType().trim().isEmpty() && !fileItem.getContentType().equalsIgnoreCase(contentType)) {
                 throw new UploadActionException("Content type resolved by file name extension (" + contentType
                         + ") does not match to one passed with the upload request (" + fileItem.getContentType() + ")");
