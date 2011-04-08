@@ -175,7 +175,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
                             @Override
                             public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
-                                return DomainUtil.getWeightKg(getValue().weight(), getValue().weightUnit()) <= PetsViewForm.this.getValue().petWeightMaximum()
+                                return DomainUtil.getWeightKg(value, getValue().weightUnit().getValue()) <= PetsViewForm.this.getValue().petWeightMaximum()
                                         .getValue();
                             }
 
