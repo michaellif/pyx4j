@@ -61,6 +61,11 @@ public class Context {
         return requestLocal.get().abstractVisit;
     }
 
+    public static boolean isUserLoggedIn() {
+        Visit v = Context.getVisit();
+        return (v != null) && (v.isUserLoggedIn());
+    }
+
     static void setVisit(Visit v) {
         requestLocal.get().abstractVisit = v;
     }
