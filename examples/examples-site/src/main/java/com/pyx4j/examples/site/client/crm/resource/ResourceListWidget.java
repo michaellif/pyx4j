@@ -64,14 +64,14 @@ public class ResourceListWidget extends EntityListWithCriteriaWidget<Resource> {
             @Override
             public List<ColumnDescriptor<Resource>> getColumnDescriptors() {
                 List<ColumnDescriptor<Resource>> columnDescriptors = new ArrayList<ColumnDescriptor<Resource>>();
-                ColumnDescriptor<Resource> name = ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().name());
+                ColumnDescriptor<Resource> name = ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name());
                 name.setWidth("200px");
                 name.setWordWrap(false);
                 columnDescriptors.add(name);
 
-                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().phone(), "80px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().phone(), "80px"));
 
-                ColumnDescriptor<Resource> status = ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().status());
+                ColumnDescriptor<Resource> status = ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status());
                 status.setWidth("200px");
                 status.setWordWrap(false);
                 columnDescriptors.add(status);

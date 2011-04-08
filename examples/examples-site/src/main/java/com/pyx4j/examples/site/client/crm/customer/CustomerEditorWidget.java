@@ -108,8 +108,8 @@ public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
             @Override
             public List<ColumnDescriptor<Order>> getColumnDescriptors() {
                 List<ColumnDescriptor<Order>> columnDescriptors = new ArrayList<ColumnDescriptor<Order>>();
-                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().description(), "140px"));
-                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().status(), "80px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().description(), "140px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), "80px"));
                 return columnDescriptors;
             }
         };
@@ -178,11 +178,13 @@ public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
     void populateOrderList(Customer customer, final int pageNumber) {
         AsyncCallback<EntitySearchResult<?>> callback = new RecoverableAsyncCallback<EntitySearchResult<?>>() {
 
+            @Override
             @SuppressWarnings("unchecked")
             public void onSuccess(EntitySearchResult<?> result) {
                 ordersPanel.populateData((List<Order>) result.getData(), pageNumber, result.hasMoreData());
             }
 
+            @Override
             public void onFailure(Throwable caught) {
                 throw new UnrecoverableClientError(caught);
             }

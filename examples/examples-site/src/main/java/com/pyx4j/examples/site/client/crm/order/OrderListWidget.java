@@ -78,11 +78,11 @@ public class OrderListWidget extends EntityListWithCriteriaWidget<Order> {
             @Override
             public List<ColumnDescriptor<Order>> getColumnDescriptors() {
                 List<ColumnDescriptor<Order>> columnDescriptors = new ArrayList<ColumnDescriptor<Order>>();
-                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().customerName(), "100px"));
-                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().orderNumber(), "50px"));
-                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().resource(), "90px"));
-                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().description(), "110px"));
-                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().status(), "80px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().customerName(), "100px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().orderNumber(), "50px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().resource(), "90px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().description(), "110px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), "80px"));
                 return columnDescriptors;
             }
         });

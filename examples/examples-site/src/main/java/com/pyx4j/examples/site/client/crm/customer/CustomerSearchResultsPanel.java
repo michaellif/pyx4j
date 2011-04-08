@@ -65,9 +65,9 @@ public class CustomerSearchResultsPanel extends EntityListPanel<Customer> {
     @Override
     public List<ColumnDescriptor<Customer>> getColumnDescriptors() {
         List<ColumnDescriptor<Customer>> columnDescriptors = new ArrayList<ColumnDescriptor<Customer>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().name(), "120px"));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().phone(), "90px"));
-        ColumnDescriptor<Customer> addrCol = ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().address(), "180px");
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), "120px"));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().phone(), "90px"));
+        ColumnDescriptor<Customer> addrCol = ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().address(), "180px");
         addrCol.setWordWrap(true);
         columnDescriptors.add(addrCol);
         return columnDescriptors;
