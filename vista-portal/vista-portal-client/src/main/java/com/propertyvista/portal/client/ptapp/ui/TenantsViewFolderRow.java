@@ -95,7 +95,8 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
 
                 @Override
                 public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
-                    if (getValue().status().getValue() == null) {
+                    Status status = getValue().status().getValue();
+                    if ((status == null) || (status == Status.Dependant)) {
                         if (ValidationUtils.isOlderThen18(event.getValue())) {
                             boolean currentEditableState = get(proto().status()).isEditable();
                             enableStatusAndOwnership();
