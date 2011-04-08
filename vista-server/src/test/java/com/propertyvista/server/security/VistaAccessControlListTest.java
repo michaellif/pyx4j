@@ -56,7 +56,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.Context;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 public class VistaAccessControlListTest {
@@ -125,11 +124,11 @@ public class VistaAccessControlListTest {
         TestLifecycle.endRequest();
     }
 
-    void assertEntityPermission(boolean expected, Class<? extends IEntity> entityClass) {
+    void assertEntityPermission(boolean expected, Class<? extends IEntity> entityClass, Application application) {
         try {
             IEntity ent = EntityFactory.create(entityClass);
-            if ((ent instanceof IBoundToApplication) && Context.isUserLoggedIn()) {
-                ((IBoundToApplication) ent).application().set(PtAppContext.getCurrentUserApplication());
+            if ((application != null) && (ent instanceof IBoundToApplication)) {
+                ((IBoundToApplication) ent).application().set(application);
             }
             Assert.assertEquals("Allow Read " + entityClass.getSimpleName(), expected, SecurityController.checkPermission(EntityPermission.permissionRead(ent)));
             Assert.assertEquals("Allow Update " + entityClass.getSimpleName(), expected,
@@ -145,16 +144,16 @@ public class VistaAccessControlListTest {
     public void publicApplicationEntityInstanceAccess() {
         TestLifecycle.beginRequest();
 
-        assertEntityPermission(false, ApplicationProgress.class);
-        assertEntityPermission(false, UnitSelection.class);
-        assertEntityPermission(false, ApplicationDocument.class);
-        assertEntityPermission(false, PotentialTenantList.class);
-        assertEntityPermission(false, PotentialTenantInfo.class);
-        assertEntityPermission(false, Pets.class);
-        assertEntityPermission(false, PotentialTenantFinancial.class);
-        assertEntityPermission(false, Charges.class);
-        assertEntityPermission(false, Summary.class);
-        assertEntityPermission(false, PaymentInfo.class);
+        assertEntityPermission(false, ApplicationProgress.class, null);
+        assertEntityPermission(false, UnitSelection.class, null);
+        assertEntityPermission(false, ApplicationDocument.class, null);
+        assertEntityPermission(false, PotentialTenantList.class, null);
+        assertEntityPermission(false, PotentialTenantInfo.class, null);
+        assertEntityPermission(false, Pets.class, null);
+        assertEntityPermission(false, PotentialTenantFinancial.class, null);
+        assertEntityPermission(false, Charges.class, null);
+        assertEntityPermission(false, Summary.class, null);
+        assertEntityPermission(false, PaymentInfo.class, null);
     }
 
     @Test
@@ -166,16 +165,29 @@ public class VistaAccessControlListTest {
         application.setPrimaryKey(-251L);
         PtAppContext.setCurrentUserApplication(application);
 
-        assertEntityPermission(true, ApplicationProgress.class);
-        assertEntityPermission(true, UnitSelection.class);
-        assertEntityPermission(true, ApplicationDocument.class);
-        assertEntityPermission(true, PotentialTenantList.class);
-        assertEntityPermission(true, PotentialTenantInfo.class);
-        assertEntityPermission(true, Pets.class);
-        assertEntityPermission(true, PotentialTenantFinancial.class);
-        assertEntityPermission(true, Charges.class);
-        assertEntityPermission(true, Summary.class);
-        assertEntityPermission(true, PaymentInfo.class);
+        assertEntityPermission(true, ApplicationProgress.class, application);
+        assertEntityPermission(true, UnitSelection.class, application);
+        assertEntityPermission(true, ApplicationDocument.class, application);
+        assertEntityPermission(true, PotentialTenantList.class, application);
+        assertEntityPermission(true, PotentialTenantInfo.class, application);
+        assertEntityPermission(true, Pets.class, application);
+        assertEntityPermission(true, PotentialTenantFinancial.class, application);
+        assertEntityPermission(true, Charges.class, application);
+        assertEntityPermission(true, Summary.class, application);
+        assertEntityPermission(true, PaymentInfo.class, application);
+
+        Application application2 = EntityFactory.create(Application.class);
+        application2.setPrimaryKey(-252L);
+        assertEntityPermission(false, ApplicationProgress.class, application2);
+        assertEntityPermission(false, UnitSelection.class, application2);
+        assertEntityPermission(false, ApplicationDocument.class, application2);
+        assertEntityPermission(false, PotentialTenantList.class, application2);
+        assertEntityPermission(false, PotentialTenantInfo.class, application2);
+        assertEntityPermission(false, Pets.class, application2);
+        assertEntityPermission(false, PotentialTenantFinancial.class, application2);
+        assertEntityPermission(false, Charges.class, application2);
+        assertEntityPermission(false, Summary.class, application2);
+        assertEntityPermission(false, PaymentInfo.class, application2);
     }
 
 }
