@@ -48,8 +48,8 @@ public class UserListWidget extends EntityListWithCriteriaWidget<User> {
             @Override
             public List<ColumnDescriptor<User>> getColumnDescriptors() {
                 List<ColumnDescriptor<User>> columnDescriptors = new ArrayList<ColumnDescriptor<User>>();
-                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().name(), "200px"));
-                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().email(), "300px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), "200px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().email(), "300px"));
                 return columnDescriptors;
             }
         });
