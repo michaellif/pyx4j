@@ -22,7 +22,11 @@ package com.pyx4j.dashboard.client;
 
 import java.util.Vector;
 
+import com.allen_sauer.gwt.dnd.client.DragEndEvent;
+import com.allen_sauer.gwt.dnd.client.DragHandler;
+import com.allen_sauer.gwt.dnd.client.DragStartEvent;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
@@ -213,11 +217,7 @@ public class DashboardPanel extends SimplePanel {
             // vertical panel to hold the heading and a second vertical panel for widgets:
             FlowPanel columnCompositePanel = new FlowPanel();
             columnCompositePanel
-                    .setWidth(((layout.isColumnWidths() ? layout.getCoumnWidth(col) : 100.0 / layout.getColumns()) - layout.getHorizontalSpacing() * 2) * 0.995
-                            + "%"); // note that nasty .99x multiplier - it seems that IE calculates % widths less precisely than Mozilla, that leads to last  
-                                    //  column is being dropped to the left-bottom corner of the panel, so we leave an additional space (make columns narrower)...
-
-            // set specific formatting styles:
+                    .setWidth(((layout.isColumnWidths() ? layout.getCoumnWidth(col) : 100.0 / layout.getColumns()) - layout.getHorizontalSpacing() * 2) + "%");
             columnCompositePanel.getElement().getStyle().setMarginLeft(layout.getHorizontalSpacing(), Unit.PCT);
             columnCompositePanel.getElement().getStyle().setMarginRight(layout.getHorizontalSpacing(), Unit.PCT);
             columnCompositePanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -332,13 +332,37 @@ public class DashboardPanel extends SimplePanel {
             frame.getElement().getStyle().setOverflow(Overflow.HIDDEN);
 
             this.setWidget(frame);
-            this.setWidth("99.6%"); // note that dirty trick to count border width :( 
+            this.setWidth("auto");
 
             // don't forget about vertical spacing:
             setVerticalSpacing(layout.getVerticalSpacing());
 
             // make the widget place holder draggable by its title:
             widgetDragController.makeDraggable(this, title);
+            widgetDragController.addDragHandler(new DragHandler() {
+
+                @Override
+                public void onPreviewDragStart(DragStartEvent event) throws VetoDragException {
+                }
+
+                @Override
+                public void onPreviewDragEnd(DragEndEvent event) throws VetoDragException {
+                }
+
+                @Override
+                public void onDragStart(DragStartEvent event) {
+                    if (event.getContext().draggable.equals(GadgetHolder.this)) {
+                        GadgetHolder.this.setWidth("100%"); // prevent draggable gadget from collapsing!.. 
+                    }
+                }
+
+                @Override
+                public void onDragEnd(DragEndEvent event) {
+                    if (event.getContext().draggable.equals(GadgetHolder.this)) {
+                        GadgetHolder.this.setWidth("auto"); // restore automatic width calculation...
+                    }
+                }
+            });
         }
 
         private Widget createWidgetMenu() {
@@ -477,9 +501,11 @@ public class DashboardPanel extends SimplePanel {
                 columnPanel = (FlowPanel) getParent();
                 widgetIndex = maximizeData.columnPanel.getWidgetIndex(widget);
                 widget.setVerticalSpacing(0);
+                widget.setWidth("auto");
             }
 
             public void restoreWidgetPosition(GadgetHolder widget) {
+                widget.setWidth("100%");
                 widget.setVerticalSpacing(layout.getVerticalSpacing());
                 columnPanel.insert(widget, widgetIndex);
             }
