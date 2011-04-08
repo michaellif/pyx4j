@@ -26,9 +26,9 @@ import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.unit.client.GCaseMeta;
 import com.pyx4j.unit.client.GCaseResultAsyncCallback;
 import com.pyx4j.unit.client.GResult;
-import com.pyx4j.unit.shared.UnitTestExecuteRequest;
-import com.pyx4j.unit.shared.UnitTestResult;
-import com.pyx4j.unit.shared.UnitTestsServices;
+import com.pyx4j.unit.serverside.rpc.UnitTestExecuteRequest;
+import com.pyx4j.unit.serverside.rpc.UnitTestResult;
+import com.pyx4j.unit.serverside.rpc.UnitTestsServices;
 
 public class ServerSideGCaseMeta implements GCaseMeta {
 

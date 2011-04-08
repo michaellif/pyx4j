@@ -24,9 +24,15 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
 
 class InputHelper {
+
+    static void fireEvent(WebDriver driver, WebElement we, String eventName) {
+        new JavascriptLibrary().callEmbeddedSelenium(driver, "doFireEvent", we, eventName);
+    }
 
     static boolean isEditable(WebElement element) {
         String tagName = element.getTagName().toLowerCase();
@@ -75,6 +81,20 @@ class InputHelper {
         if ((textValue != null) && (!optionFound)) {
             throw new NoSuchElementException(textValue + " in " + element.getAttribute("id"));
         }
-
     }
+
+    static void setValue(WebDriver driver, WebElement element, boolean selectionValue) {
+        if (element.isSelected()) {
+            if (!selectionValue) {
+                element.toggle();
+                fireEvent(driver, element, "click");
+            }
+        } else {
+            if (selectionValue) {
+                element.toggle();
+                fireEvent(driver, element, "click");
+            }
+        }
+    }
+
 }

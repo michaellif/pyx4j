@@ -33,11 +33,11 @@ import junit.framework.TestSuite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.unit.shared.UnitTestExecuteRequest;
-import com.pyx4j.unit.shared.UnitTestInfo;
-import com.pyx4j.unit.shared.UnitTestResult;
-import com.pyx4j.unit.shared.UnitTestsServices.ExectuteTest;
-import com.pyx4j.unit.shared.UnitTestsServices.GetTestsList;
+import com.pyx4j.unit.serverside.rpc.UnitTestExecuteRequest;
+import com.pyx4j.unit.serverside.rpc.UnitTestInfo;
+import com.pyx4j.unit.serverside.rpc.UnitTestResult;
+import com.pyx4j.unit.serverside.rpc.UnitTestsServices.ExectuteTest;
+import com.pyx4j.unit.serverside.rpc.UnitTestsServices.GetTestsList;
 
 public abstract class UnitTestsServicesImpl {
 

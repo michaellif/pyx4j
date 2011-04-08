@@ -14,23 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 4, 2010
+ * Created on Apr 8, 2011
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.unit.shared;
 
-import java.util.Vector;
+import com.pyx4j.commons.IDebugId;
 
-import com.pyx4j.rpc.shared.Service;
+public enum UnitDebugId implements IDebugId {
 
-public interface UnitTestsServices {
+    JUnit_StartClientTests,
 
-    public interface GetTestsList extends Service<String, Vector<UnitTestInfo>> {
+    JUnit_StartServerTests,
 
-    };
+    JUnit_SelectAll,
 
-    public interface ExectuteTest extends Service<UnitTestExecuteRequest, UnitTestResult> {
+    JUnit_StatusRunning,
 
-    };
+    JUnit_ResultsDuration,
+
+    JUnit_ResultsSuccess,
+
+    JUnit_ResultsFailed;
+
+    @Override
+    public String getDebugIdString() {
+        return this.name();
+    }
+
 }

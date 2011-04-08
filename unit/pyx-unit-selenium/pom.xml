@@ -21,6 +21,12 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-unit-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-server</artifactId>
             <version>${project.version}</version>
         </dependency>

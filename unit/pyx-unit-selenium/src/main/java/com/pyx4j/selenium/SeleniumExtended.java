@@ -318,6 +318,10 @@ public class SeleniumExtended extends WebDriverWrapper {
         return driver.findElement(elementLocator(paramString)).getText();
     }
 
+    public String getText(IDebugId debugId) {
+        return driver.findElement(by(debugId)).getText();
+    }
+
     public String getText(IObject<?> member) {
         return driver.findElement(by(member)).getText();
     }
@@ -341,19 +345,32 @@ public class SeleniumExtended extends WebDriverWrapper {
         new JavascriptLibrary().callEmbeddedSelenium(driver, "doFireEvent", we, eventName);
     }
 
+    /**
+     * @deprecated Use setValue(, boolean)
+     */
+    @Deprecated
     public void check(String locator, boolean check) {
-        WebElement we = driver.findElement(elementLocator(locator + "-input"));
-        if (we.isSelected()) {
-            if (!check) {
-                we.toggle();
-                fireEvent(we, "click");
-            }
-        } else {
-            if (check) {
-                we.toggle();
-                fireEvent(we, "click");
-            }
-        }
+        setValue(locator, check);
+    }
+
+    //CheckBox special case
+    public void setValue(WebElement element, boolean selectionValue) {
+        InputHelper.setValue(driver, element, selectionValue);
+    }
+
+    //CheckBox special case
+    public void setValue(IDebugId debugId, boolean selectionValue) {
+        InputHelper.setValue(driver, driver.findElement(By.id(gwtLocator(debugId.getDebugIdString() + "-input"))), selectionValue);
+    }
+
+    //CheckBox special case
+    public void setValue(String paramString, boolean selectionValue) {
+        InputHelper.setValue(driver, driver.findElement(elementLocator(paramString + "-input")), selectionValue);
+    }
+
+    //CheckBox special case
+    public void setValue(IObject<?> member, boolean selectionValue) {
+        InputHelper.setValue(driver, driver.findElement(By.id(gwtLocator(member.getPath().getDebugIdString() + "-input"))), selectionValue);
     }
 
     public boolean isEnabled(String locator) {

@@ -34,8 +34,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.unit.client.GCaseMeta;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
-import com.pyx4j.unit.shared.UnitTestInfo;
-import com.pyx4j.unit.shared.UnitTestsServices;
+import com.pyx4j.unit.serverside.rpc.UnitTestInfo;
+import com.pyx4j.unit.serverside.rpc.UnitTestsServices;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class ServerTestRunner {

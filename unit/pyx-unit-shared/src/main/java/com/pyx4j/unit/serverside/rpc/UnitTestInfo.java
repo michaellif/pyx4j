@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.unit.shared;
+package com.pyx4j.unit.serverside.rpc;
 
 import java.io.Serializable;
 import java.util.List;

@@ -49,6 +49,7 @@ import com.pyx4j.unit.client.GCaseResultAsyncCallback;
 import com.pyx4j.unit.client.GResult;
 import com.pyx4j.unit.client.GUnitTester;
 import com.pyx4j.unit.client.TestAwareExceptionHandler;
+import com.pyx4j.unit.shared.UnitDebugId;
 import com.pyx4j.widgets.client.dialog.CloseOption;
 import com.pyx4j.widgets.client.dialog.OkOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
@@ -107,22 +108,22 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
         DOM.setStyleAttribute(statusPanel.getElement(), "paddingRight", "40px");
 
         statusRun = new Label();
-        statusRun.ensureDebugId("gUnitRunning");
+        statusRun.ensureDebugId(UnitDebugId.JUnit_StatusRunning.name());
         statusPanel.add(statusRun);
 
         statusDuration = new Label();
         statusPanel.add(new Label("Duration:"));
-        statusDuration.ensureDebugId("gUnitDuration");
+        statusDuration.ensureDebugId(UnitDebugId.JUnit_ResultsDuration.name());
         statusPanel.add(statusDuration);
 
         statusSuccess = new Label();
-        statusSuccess.ensureDebugId("gUnitSuccess");
+        statusSuccess.ensureDebugId(UnitDebugId.JUnit_ResultsSuccess.name());
         setColor(statusSuccess, colorOk);
         statusPanel.add(new Label("Success:"));
         statusPanel.add(statusSuccess);
 
         statusFailed = new Label();
-        statusFailed.ensureDebugId("gUnitFailed");
+        statusFailed.ensureDebugId(UnitDebugId.JUnit_ResultsFailed.name());
         setColor(statusFailed, colorError);
         statusPanel.add(new Label("Failed:"));
         statusPanel.add(statusFailed);
@@ -130,7 +131,7 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
         buttonsPanel.add(statusPanel);
 
         checkAll = new CheckBox("All");
-        checkAll.ensureDebugId("gUnitAll");
+        checkAll.ensureDebugId(UnitDebugId.JUnit_SelectAll.name());
         checkAll.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

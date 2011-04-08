@@ -21,17 +21,18 @@
 package com.pyx4j.selenium;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.unit.shared.UnitDebugId;
 import com.pyx4j.widgets.client.dialog.DialogDebugId;
 
 public abstract class UnitTestExecutionTestCase extends BaseSeleniumTestCase {
 
     protected void executeAllClientUnitTests(int waitSeconds) {
-        selenium.waitFor("startClientTests");
-        selenium.click("startClientTests");
-        selenium.waitFor("gUnitAll");
-        selenium.check("gUnitAll", true);
+        selenium.waitFor(UnitDebugId.JUnit_StartClientTests);
+        selenium.click(UnitDebugId.JUnit_StartClientTests);
+        selenium.waitFor(UnitDebugId.JUnit_SelectAll);
+        selenium.setValue(UnitDebugId.JUnit_SelectAll, true);
         selenium.click(DialogDebugId.Dialog_Ok);
-        selenium.waitForText("gUnitRunning", "Completed", waitSeconds);
+        selenium.waitForText(UnitDebugId.JUnit_StatusRunning, "Completed", waitSeconds);
     }
 
     protected static class ExecutionStatus {
@@ -56,9 +57,9 @@ public abstract class UnitTestExecutionTestCase extends BaseSeleniumTestCase {
 
         ExecutionStatus s = new ExecutionStatus();
 
-        s.success = parsString(selenium.getText("gUnitSuccess"));
-        s.failed = parsString(selenium.getText("gUnitFailed"));
-        s.duration = selenium.getText("gUnitDuration");
+        s.success = parsString(selenium.getText(UnitDebugId.JUnit_ResultsSuccess));
+        s.failed = parsString(selenium.getText(UnitDebugId.JUnit_ResultsFailed));
+        s.duration = selenium.getText(UnitDebugId.JUnit_ResultsDuration);
 
         return s;
     }

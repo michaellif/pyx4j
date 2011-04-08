@@ -39,6 +39,7 @@ import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 import com.pyx4j.unit.runner.ServerTestRunner;
+import com.pyx4j.unit.shared.UnitDebugId;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
@@ -67,7 +68,7 @@ public class TesterClientEntryPoint implements EntryPoint {
         menu.add(new HTML("This version compiled with GWT <b>" + GWT.getVersion() + "</b>"));
 
         final Button startButton = new Button("Start Client Side (GWT) Tests");
-        startButton.ensureDebugId("startClientTests");
+        startButton.ensureDebugId(UnitDebugId.JUnit_StartClientTests.name());
         menu.add(startButton);
         startButton.addClickHandler(new ClickHandler() {
             @Override
@@ -77,7 +78,7 @@ public class TesterClientEntryPoint implements EntryPoint {
         });
 
         final Button serverStartButton = new Button("Start Server Side Tests");
-        serverStartButton.ensureDebugId("startServerTests");
+        serverStartButton.ensureDebugId(UnitDebugId.JUnit_StartServerTests.name());
         menu.add(serverStartButton);
         serverStartButton.addClickHandler(new ClickHandler() {
             @Override

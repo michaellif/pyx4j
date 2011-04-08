@@ -7,6 +7,8 @@
 
 	<inherits name='com.pyx4j.widgets.Widgets'/>
 
+	<inherits name='com.pyx4j.unit.UnitShared'/>
+
     <generate-with class="com.pyx4j.unit.rebind.GUnitMetaDataGenerator">
         <when-type-assignable class="com.pyx4j.unit.client.impl.TestSuiteMetaData"/>
     </generate-with>
