@@ -21,6 +21,7 @@
 package com.pyx4j.entity.test.shared.domain;
 
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -30,6 +31,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface EmployeeData extends IEntity {
 
     IPrimitive<String> comment();
+
+    @ReadOnly
+    IPrimitive<String> token();
 
     @Owned
     IList<Task> tasksArchive();

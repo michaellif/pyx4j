@@ -88,4 +88,23 @@ public abstract class AssignedPrimaryKeyTestCase extends DatastoreTestBase {
         Assert.assertEquals("Retr. Set size", 2, empData1.tasksArchive().size());
 
     }
+
+    public void testPKAssigmentMerge() {
+        Employee emp = EntityFactory.create(Employee.class);
+        srv.persist(emp);
+
+        EmployeeData empData = EntityFactory.create(EmployeeData.class);
+        empData.setPrimaryKey(emp.getPrimaryKey());
+        String comment = "aComment " + uniqueString();
+        empData.comment().setValue(comment);
+        String token = "aToken " + uniqueString();
+        empData.token().setValue(token);
+        srv.merge(empData);
+        Assert.assertEquals("Assigned PrimaryKey", emp.getPrimaryKey(), empData.getPrimaryKey());
+
+        EmployeeData empData1 = srv.retrieve(EmployeeData.class, emp.getPrimaryKey());
+        Assert.assertEquals("dataValue", comment, empData1.comment().getValue());
+        Assert.assertEquals("readOnly dataValue", token, empData1.token().getValue());
+        Assert.assertEquals("Assigned PrimaryKey", emp.getPrimaryKey(), empData1.getPrimaryKey());
+    }
 }
