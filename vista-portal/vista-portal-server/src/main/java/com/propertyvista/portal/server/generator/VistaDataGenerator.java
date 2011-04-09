@@ -318,10 +318,11 @@ public class VistaDataGenerator {
 
     public PotentialTenantFinancial createFinancialInfo(PotentialTenantInfo tenant) {
         assert (tenant.application() != null);
-        PotentialTenantFinancial ptf = EntityFactory.create(PotentialTenantFinancial.class);
+        PotentialTenantFinancial tenantFinancial = EntityFactory.create(PotentialTenantFinancial.class);
 
-        ptf.application().set(tenant.application());
-        ptf.id().set(tenant.id());
+        tenantFinancial.application().set(tenant.application());
+        tenantFinancial.id().set(tenant.id());
+        tenantFinancial.setPrimaryKey(tenant.getPrimaryKey());
 
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             TenantIncome income = EntityFactory.create(TenantIncome.class);
@@ -338,7 +339,7 @@ public class VistaDataGenerator {
                 income.documents().add(applicationDocument);
             }
 
-            ptf.incomes().add(income);
+            tenantFinancial.incomes().add(income);
         }
 
         for (int i = 0; i < RandomUtil.randomInt(3); i++) {
@@ -348,7 +349,7 @@ public class VistaDataGenerator {
             asset.percent().setValue((double) RandomUtil.randomInt(100));
             asset.assetValue().setValue(DomainUtil.createMoney(100d + RandomUtil.randomInt(10000)).getValue());
 
-            ptf.assets().add(asset);
+            tenantFinancial.assets().add(asset);
         }
 
         if (tenant.relationship().getValue() == Relationship.Son || tenant.relationship().getValue() == Relationship.Daughter) {
@@ -357,11 +358,11 @@ public class VistaDataGenerator {
                 guarantor.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
                 guarantor.lastName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
                 guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
-                ptf.guarantors().add(guarantor);
+                tenantFinancial.guarantors().add(guarantor);
             }
         }
 
-        return ptf;
+        return tenantFinancial;
     }
 
     public PotentialTenantList createPotentialTenantList(Application application) {

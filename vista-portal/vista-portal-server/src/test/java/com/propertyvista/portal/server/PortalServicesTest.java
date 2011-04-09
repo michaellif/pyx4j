@@ -74,37 +74,9 @@ public class PortalServicesTest extends VistaDBTestCase {
     public void testFullLifecycle() {
         VistaDataGenerator generator = new VistaDataGenerator(500l);
 
-        // first, create the user
-        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
         final String email = BusinessDataGenerator.createEmail();
-        request.email().setValue(email);
-        request.password().setValue("1234");
-        request.captcha().setValue(TestUtil.createCaptcha());
-
-        ActivationService activationService = TestServiceFactory.create(ActivationService.class);
-        activationService.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                Assert.assertNotNull("Got the visit", result.getUserVisit());
-                Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
-            }
-        }, request);
-
-        // start application process
-        UnitSelectionCriteria unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
-        unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
-        unitSelectionCriteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
-
-        ApplicationService applicationService = TestServiceFactory.create(ApplicationService.class);
-        applicationService.getCurrentApplication(new UnitTestsAsyncCallback<CurrentApplication>() {
-            @Override
-            public void onSuccess(CurrentApplication result) {
-                Assert.assertNotNull("Application", result.application);
-                application = result.application;
-            }
-        }, unitSelectionCriteria);
-
-        Assert.assertNotNull(application);
+        subTestActivation(email);
+        subTestApplication();
 
         // now let's load unit selection
         ApartmentService apartmentService = TestServiceFactory.create(ApartmentService.class);
@@ -143,6 +115,41 @@ public class PortalServicesTest extends VistaDBTestCase {
         log.info("Successfully loaded unit {}", unitSelection.selectedUnitId());
 
         subTestTenants(generator, email);
+    }
+
+    public void subTestActivation(final String email) {
+        // first, create the user
+        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
+        request.email().setValue(email);
+        request.password().setValue("1234");
+        request.captcha().setValue(TestUtil.createCaptcha());
+
+        ActivationService activationService = TestServiceFactory.create(ActivationService.class);
+        activationService.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                Assert.assertNotNull("Got the visit", result.getUserVisit());
+                Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
+            }
+        }, request);
+    }
+
+    public void subTestApplication() {
+        // start application process
+        UnitSelectionCriteria unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
+        unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
+        unitSelectionCriteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
+
+        ApplicationService applicationService = TestServiceFactory.create(ApplicationService.class);
+        applicationService.getCurrentApplication(new UnitTestsAsyncCallback<CurrentApplication>() {
+            @Override
+            public void onSuccess(CurrentApplication result) {
+                Assert.assertNotNull("Application", result.application);
+                application = result.application;
+            }
+        }, unitSelectionCriteria);
+
+        Assert.assertNotNull(application);
     }
 
     public void subTestTenants(VistaDataGenerator generator, String email) {
@@ -205,18 +212,15 @@ public class PortalServicesTest extends VistaDBTestCase {
         TenantFinancialService tenantFinancialService = TestServiceFactory.create(TenantFinancialService.class);
         for (final PotentialTenantInfo tenant : tenantList.tenants()) {
 
-            final PotentialTenantFinancial tenantFinancial = generator.createFinancialInfo(tenant);
-
             tenantFinancialService.retrieve(new UnitTestsAsyncCallback<PotentialTenantFinancial>() {
-
                 @Override
                 public void onSuccess(PotentialTenantFinancial result) {
                     Assert.assertEquals("prepopulated email", tenant.getPrimaryKey(), result.getPrimaryKey());
-                    // ignore create tenant since it is the same as we expect
+                    // ignore created tenant since it is the same as we expect
                 }
             }, tenant.getPrimaryKey());
 
-            tenantFinancial.setPrimaryKey(tenant.getPrimaryKey());
+            final PotentialTenantFinancial tenantFinancial = generator.createFinancialInfo(tenant);
             tenantFinancialService.save(new UnitTestsAsyncCallback<PotentialTenantFinancial>() {
                 @Override
                 public void onSuccess(PotentialTenantFinancial result) {
@@ -225,13 +229,13 @@ public class PortalServicesTest extends VistaDBTestCase {
                 }
             }, tenantFinancial);
 
-//            tenantFinancialService.retrieve(new UnitTestsAsyncCallback<PotentialTenantFinancial>() {
-//                @Override
-//                public void onSuccess(PotentialTenantFinancial result) {
-//                    Assert.assertFalse("Result", result.isNull());
-//                    log.info("Retrieved {}", result);
-//                }
-//            }, tenant.id().getValue());
+            //            tenantFinancialService.retrieve(new UnitTestsAsyncCallback<PotentialTenantFinancial>() {
+            //                @Override
+            //                public void onSuccess(PotentialTenantFinancial result) {
+            //                    Assert.assertFalse("Result", result.isNull());
+            //                    log.info("Retrieved {}", result);
+            //                }
+            //            }, tenant.id().getValue());
         }
     }
 }

@@ -97,14 +97,19 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         if (ServerSideConfiguration.instance().datastoreReadOnly()) {
             throw new UnRecoverableRuntimeException(EntityServicesImpl.applicationReadOnlyMessage());
         }
+
+        // validate email
         String email = request.email().getValue().toLowerCase(); // intentionally convert this to lowercase before validation
         log.info("Creating account for email={}", email);
         if (!validEmailAddress(email)) {
             log.info("Invalid Email [{}]", email);
             throw new UserRuntimeException(i18n.tr("Invalid Email " + email));
         }
+
+        // captcha (TODO this should probably go even before we validate email)
         AntiBot.assertCaptcha(request.captcha().getValue());
 
+        // check if user is already registered
         EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
         List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
@@ -112,19 +117,26 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
             throw new UserRuntimeException(i18n.tr("Email already registered"));
         }
 
+        // validate password
+        String password = request.password().getValue();
+        if (password == null || password.length() == 0) {
+            throw new UserRuntimeException(i18n.tr("Password can not be empty"));
+        }
+
+        // create account (user + credential)
         UserCredential credential = EntityFactory.create(UserCredential.class);
 
         User user = EntityFactory.create(User.class);
         user.email().setValue(email);
         user.name().setValue(request.email().getValue());
 
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(request.password().getValue()));
+        credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
         credential.enabled().setValue(Boolean.TRUE);
         credential.behavior().setValue(VistaBehavior.POTENTIAL_TENANT);
 
+        // save to db
         PersistenceServicesFactory.getPersistenceService().persist(user);
         credential.setPrimaryKey(user.getPrimaryKey());
-
         PersistenceServicesFactory.getPersistenceService().persist(credential);
 
         //            Audit audit = EntityFactory.create(Audit.class);

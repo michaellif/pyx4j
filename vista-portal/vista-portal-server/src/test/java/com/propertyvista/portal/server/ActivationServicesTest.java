@@ -99,12 +99,33 @@ public class ActivationServicesTest extends VistaDBTestCase {
     }
 
     /**
-     * Test invalid email address
+     * Submit a simple account creation request
      */
-    public void testInvalidEmail() {
+    public void testCreateAccount() {
         AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
 
-        final String email = "abc";
+        final String email = BusinessDataGenerator.createEmail();
+        request.email().setValue(email);
+        request.password().setValue("1234");
+        request.captcha().setValue(TestUtil.createCaptcha());
+
+        ActivationService service = createService();
+        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                Assert.assertNotNull("Got the visit", result.getUserVisit());
+                Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
+            }
+        }, request);
+    }
+
+    /**
+     * Test invalid email address
+     */
+    public void testCreateAccountInvalidEmail() {
+        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
+
+        final String email = "abc"; // this is invalid email
         request.email().setValue(email);
         request.password().setValue("1234");
         request.captcha().setValue(TestUtil.createCaptcha());
@@ -124,10 +145,51 @@ public class ActivationServicesTest extends VistaDBTestCase {
         }, request);
     }
 
-    /**
-     * Submit a simple account creation request
-     */
-    public void testAccountCreation() {
+    public void testCreateAccountNoPassword() {
+        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
+
+        final String email = BusinessDataGenerator.createEmail();
+        request.email().setValue(email);
+        request.captcha().setValue(TestUtil.createCaptcha());
+
+        ActivationService service = createService();
+        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                Assert.fail("Should never come here");
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                Assert.assertNotNull("Received failure", throwable);
+                Assert.assertEquals(UserRuntimeException.class, throwable.getClass());
+            }
+        }, request);
+    }
+
+    public void testCreateAccountNoCaptcha() {
+        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
+
+        final String email = BusinessDataGenerator.createEmail();
+        request.email().setValue(email);
+        request.password().setValue("abc-password");
+
+        ActivationService service = createService();
+        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                Assert.fail("Should never come here");
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                Assert.assertNotNull("Received failure", throwable);
+                Assert.assertEquals(UserRuntimeException.class, throwable.getClass());
+            }
+        }, request);
+    }
+
+    public void testCreateAccountAlreadyExists() {
         AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
 
         final String email = BusinessDataGenerator.createEmail();
@@ -141,6 +203,20 @@ public class ActivationServicesTest extends VistaDBTestCase {
             public void onSuccess(AuthenticationResponse result) {
                 Assert.assertNotNull("Got the visit", result.getUserVisit());
                 Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
+            }
+        }, request);
+
+        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                Assert.fail("Should not see success");
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                // this means that there was a problem creating the same account
+                Assert.assertNotNull("Received failure", throwable);
+                Assert.assertEquals(UserRuntimeException.class, throwable.getClass());
             }
         }, request);
     }

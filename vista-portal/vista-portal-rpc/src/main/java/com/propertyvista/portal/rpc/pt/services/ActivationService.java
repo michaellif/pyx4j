@@ -31,6 +31,14 @@ public interface ActivationService extends IService {
      */
     public void unitExists(AsyncCallback<Boolean> callback, UnitSelectionCriteria request);
 
+    /**
+     * Create account (user and credentials) and start session
+     * 
+     * @throws UserRuntimeException
+     *             if email is invalid
+     * @throws UserRuntimeException
+     *             if email is already registered by an existing user
+     */
     public void createAccount(AsyncCallback<AuthenticationResponse> callback, AccountCreationRequest request);
 
     /**
