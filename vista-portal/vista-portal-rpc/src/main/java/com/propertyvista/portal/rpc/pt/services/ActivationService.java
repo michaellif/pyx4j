@@ -43,7 +43,7 @@ public interface ActivationService extends IService {
     public static final String PASSWORD_TOKEN = "token";
 
     /**
-     * Reset password in the system base on token received in E-mail
+     * Reset password in the system based on token received in E-mail
      */
     public void passwordReset(AsyncCallback<AuthenticationResponse> callback, PasswordChangeRequest request);
 

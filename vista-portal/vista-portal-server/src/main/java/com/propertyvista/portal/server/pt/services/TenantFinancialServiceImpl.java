@@ -47,11 +47,11 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     }
 
     @Override
-    public void save(AsyncCallback<PotentialTenantFinancial> callback, PotentialTenantFinancial tenant) {
-        //        log.info("Saving charges\n{}", PrintUtil.print(summary));
+    public void save(AsyncCallback<PotentialTenantFinancial> callback, PotentialTenantFinancial tenantFinancial) {
+        log.info("Saving tenantFinancial {}", tenantFinancial);
 
-        saveApplicationEntity(tenant);
-        callback.onSuccess(tenant);
+        saveApplicationEntity(tenantFinancial);
+        callback.onSuccess(tenantFinancial);
     }
 
     private PotentialTenantFinancial createFinancial(Long tenantId) {

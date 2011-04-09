@@ -308,7 +308,7 @@ public class VistaDataGenerator {
         return address;
     }
 
-    public void createTenantFinancials(IList<SummaryPotentialTenantFinancial> tenantFinancials, PotentialTenantList tenants) {
+    private void createTenantFinancials(IList<SummaryPotentialTenantFinancial> tenantFinancials, PotentialTenantList tenants) {
         for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
             SummaryPotentialTenantFinancial summaryTenantFinancial = EntityFactory.create(SummaryPotentialTenantFinancial.class);
             summaryTenantFinancial.tenantFinancial().set(createFinancialInfo(tenantInfo));
@@ -316,7 +316,7 @@ public class VistaDataGenerator {
         }
     }
 
-    private PotentialTenantFinancial createFinancialInfo(PotentialTenantInfo tenant) {
+    public PotentialTenantFinancial createFinancialInfo(PotentialTenantInfo tenant) {
         assert (tenant.application() != null);
         PotentialTenantFinancial ptf = EntityFactory.create(PotentialTenantFinancial.class);
 

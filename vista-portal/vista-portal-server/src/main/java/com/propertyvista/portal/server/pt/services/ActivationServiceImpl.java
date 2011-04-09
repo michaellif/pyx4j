@@ -146,11 +146,13 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
      */
     @Override
     public void passwordReminder(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
+        // validate email
         if (!validEmailAddress(request.email().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Email"));
         }
         AntiBot.assertCaptcha(request.captcha().getValue());
 
+        // find user(s) with the same email
         EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), request.email().getValue().toLowerCase()));
         List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
@@ -161,7 +163,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
 
         UserCredential credential = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
         if (credential == null) {
-            throw new UserRuntimeException(i18n.tr("Invalid login/password"));
+            throw new UserRuntimeException(i18n.tr("Invalid login/password")); // TODO is this a correct message?
         }
         credential.accessKey().setValue(AccessKey.createAccessKey());
         Calendar expire = new GregorianCalendar();
