@@ -738,8 +738,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         Entity entity;
         boolean isUpdate = true;
+        Table tableAnnotation = entityMeta.getEntityClass().getAnnotation(Table.class);
         if (iEntity.getPrimaryKey() == null) {
-            Table tableAnnotation = entityMeta.getEntityClass().getAnnotation(Table.class);
             if ((tableAnnotation != null) && (tableAnnotation.primaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED)) {
                 throw new Error("Can't persist Entity without assigned PK");
             }
@@ -762,7 +762,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     datastoreCallStats.get().readCount++;
                     entity = datastore.get(key);
                 } catch (EntityNotFoundException e) {
-                    throw new RuntimeException("Entity " + key.getKind() + " " + key.getId() + " NotFound");
+                    if ((tableAnnotation != null) && (tableAnnotation.primaryKeyStrategy() != Table.PrimaryKeyStrategy.ASSIGNED)) {
+                        throw new RuntimeException("Entity " + key.getKind() + " " + key.getId() + " NotFound");
+                    } else {
+                        entity = new Entity(key);
+                        isUpdate = false;
+                    }
                 }
             } else {
                 entity = new Entity(key);
