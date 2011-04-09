@@ -149,7 +149,7 @@ public final class DashboardDemo implements EntryPoint {
 
             @Override
             public String getName() {
-                return "Gadget Title";
+                return (getText() + " Title");
             }
 
             // flags:
@@ -262,7 +262,7 @@ public final class DashboardDemo implements EntryPoint {
                         pp.hide();
 
                         Layout layout = new Layout(2, 1, 12);
-                        byte colWidths[] = { 33, 66 };
+                        byte colWidths[] = { 33, 67 };
                         layout.setColumnWidths(colWidths);
                         dashboardPanel.setLayout(layout);
                     }
@@ -274,7 +274,7 @@ public final class DashboardDemo implements EntryPoint {
                         pp.hide();
 
                         Layout layout = new Layout(2, 1, 12);
-                        byte colWidths[] = { 66, 33 };
+                        byte colWidths[] = { 67, 33 };
                         layout.setColumnWidths(colWidths);
                         dashboardPanel.setLayout(layout);
                     }
@@ -314,19 +314,18 @@ public final class DashboardDemo implements EntryPoint {
 
                 // create the menu:
                 MenuBar menu = new MenuBar(true);
-                menu.addItem("One", cmdL1);
-                menu.addItem("Two (33/66)", cmdL21);
-                menu.addItem("Two (66/33)", cmdL22);
-                menu.addItem("Two (50/50)", cmdL23);
-                menu.addItem("Three (33x3)", cmdL3);
+                menu.addItem("One row", cmdL1);
+                menu.addItem("Two rows (1/3)", cmdL21);
+                menu.addItem("Two rows (3/1)", cmdL22);
+                menu.addItem("Two equal rows", cmdL23);
+                menu.addItem("Three equal rows", cmdL3);
 //                menu.addSeparator();
 //                menu.addItem("Reset widths", cmdLr);
 
                 menu.addStyleName(CSS_DASHBOARD_MENU);
 
                 pp.setWidget(menu);
-                //                pp.addStyleName(CSS_DASHBOARD_MENU);
-                pp.setPopupPosition(btn.getAbsoluteLeft(), btn.getAbsoluteTop() + btn.getOffsetHeight());
+                pp.setPopupPosition(btn.getAbsoluteLeft() - 20, btn.getAbsoluteTop() + btn.getOffsetHeight());
                 pp.show();
             } // onClick button event handler...
         }); // ClickHandler class...

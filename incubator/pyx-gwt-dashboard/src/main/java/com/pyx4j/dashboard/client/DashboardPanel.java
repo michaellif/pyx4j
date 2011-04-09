@@ -187,7 +187,7 @@ public class DashboardPanel extends SimplePanel {
     }
 
     // initializing:
-    protected boolean init() {
+    protected void init() {
         addStyleName(BASE_NAME);
         isRefreshAllowed = true;
 
@@ -206,22 +206,23 @@ public class DashboardPanel extends SimplePanel {
         widgetDragController = new PickupDragController(boundaryPanel, false);
         widgetDragController.setBehaviorMultipleSelection(false);
 
-        return initColumns();
+        initColumns();
     }
 
-    protected boolean initColumns() {
+    protected void initColumns() {
         columnsContainerPanel.clear();
         widgetDragController.unregisterDropControllers();
 
         for (int col = 0; col < layout.getColumns(); ++col) {
             // vertical panel to hold the heading and a second vertical panel for widgets:
             FlowPanel columnCompositePanel = new FlowPanel();
-            columnCompositePanel
-                    .setWidth(((layout.isColumnWidths() ? layout.getCoumnWidth(col) : 100.0 / layout.getColumns()) - layout.getHorizontalSpacing() * 2) + "%");
-            columnCompositePanel.getElement().getStyle().setMarginLeft(layout.getHorizontalSpacing(), Unit.PCT);
-            columnCompositePanel.getElement().getStyle().setMarginRight(layout.getHorizontalSpacing(), Unit.PCT);
             columnCompositePanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             columnCompositePanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            columnCompositePanel.getElement().getStyle().setMarginLeft(layout.getHorizontalSpacing(), Unit.PCT);
+            columnCompositePanel
+                    .setWidth(((layout.isColumnWidths() ? layout.getCoumnWidth(col) : 100.0 / layout.getColumns()) - layout.getHorizontalSpacing() - layout
+                            .getHorizontalSpacing() / layout.getColumns())
+                            + "%");
 
             // put column name if necessary:
             if (layout.isColumnNames()) {
@@ -245,8 +246,6 @@ public class DashboardPanel extends SimplePanel {
             columnCompositePanel.add(columnPanel);
             columnsContainerPanel.add(columnCompositePanel);
         }
-
-        return true;
     }
 
     // internals:	
@@ -428,7 +427,7 @@ public class DashboardPanel extends SimplePanel {
              * Note: dnd tricks with margin and uses DOM.getStyleAttribute(w,"margin")
              * (com.allen_sauer.gwt.dnd.client.PickupDragController.
              * saveSelectedWidgetsLocationAndStyle())
-             * to retrieve and save current widget margin, but... it doesn't reads
+             * to retrieve and save current widget margin, but... it doesn't read
              * attributes set by getStyle().setMarginTop/Bottom methods!!??
              * Thus using instead such combination:
              */
@@ -501,11 +500,9 @@ public class DashboardPanel extends SimplePanel {
                 columnPanel = (FlowPanel) getParent();
                 widgetIndex = maximizeData.columnPanel.getWidgetIndex(widget);
                 widget.setVerticalSpacing(0);
-                widget.setWidth("auto");
             }
 
             public void restoreWidgetPosition(GadgetHolder widget) {
-                widget.setWidth("100%");
                 widget.setVerticalSpacing(layout.getVerticalSpacing());
                 columnPanel.insert(widget, widgetIndex);
             }
