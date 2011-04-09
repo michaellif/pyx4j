@@ -34,8 +34,8 @@ import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-public class ActivationServicesTest extends VistaDBTestCase {
-    private final static Logger log = LoggerFactory.getLogger(ActivationServicesTest.class);
+public class ActivationServiceTest extends VistaDBTestCase {
+    private final static Logger log = LoggerFactory.getLogger(ActivationServiceTest.class);
 
     @Override
     protected void setUp() throws Exception {
