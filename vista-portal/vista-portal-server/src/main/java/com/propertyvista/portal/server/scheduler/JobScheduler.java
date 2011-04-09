@@ -48,11 +48,12 @@ public class JobScheduler extends HttpServlet {
             schedulerFactory = new StdSchedulerFactory();
             scheduler = schedulerFactory.getScheduler();
             scheduler.start();
-            JobDetail job = JobBuilder.newJob(CleanOrphanApplicationDocumentDataRecordsJob.class).withIdentity("job1", "group1").build();
+            JobDetail job = JobBuilder.newJob(CleanOrphanApplicationDocumentDataRecordsJob.class)
+                    .withIdentity("CleanOrphanApplicationDocumentDataRecordsJob", "Maintenance").build();
 
-            SimpleTrigger simpleTrigger = TriggerBuilder.newTrigger().withIdentity("trigger1", "group1")
-                    .startAt(DateBuilder.futureDate(30, IntervalUnit.SECOND))
-                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().repeatForever().withIntervalInSeconds(30)).build();
+            SimpleTrigger simpleTrigger = TriggerBuilder.newTrigger().withIdentity("dailyRun", "Maintenance")
+                    .startAt(DateBuilder.futureDate(30, IntervalUnit.MINUTE))
+                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().repeatForever().withIntervalInHours(24)).build();
             scheduler.scheduleJob(job, simpleTrigger);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
