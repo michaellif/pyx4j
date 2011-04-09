@@ -55,6 +55,7 @@ import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.pt.Vehicle;
+import com.propertyvista.portal.domain.ref.Province;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.preloader.PreloadPT;
@@ -273,15 +274,21 @@ public class VistaDataGenerator {
 
         String line1 = 100 + RandomUtil.randomInt(10000) + " " + RandomUtil.random(DemoData.STREETS);
 
-        String zip = "M2J 9V1";
-
         address.street1().setValue(line1);
         address.street2().setValue("");
+
+        Province province = RandomUtil.random(SharedData.getProvinces());
+        address.province().set(province);
+        address.country().set(province.country());
+
         address.city().setValue(RandomUtil.random(DemoData.CITIES));
-        address.province().set(RandomUtil.random(SharedData.getProvinces()));
-        //        address.province().set(retrieveByMemeber(Province.class, address.province().code(), RandomUtil.random(DemoData.PROVINCES)));
-        address.postalCode().setValue(zip);
-        address.country().set(SharedData.findCountryCanada());
+
+        // for now we support only two countries
+        if (address.country().name().getValue().toLowerCase().startsWith("c")) {
+            address.postalCode().setValue(RandomUtil.randomPostalCode());
+        } else {
+            address.postalCode().setValue(RandomUtil.randomZipCode());
+        }
     }
 
     public Address createAddress() {
