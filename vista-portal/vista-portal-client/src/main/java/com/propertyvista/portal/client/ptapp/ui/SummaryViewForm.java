@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -42,6 +43,7 @@ import com.google.inject.Singleton;
 import com.propertyvista.common.client.ui.ViewLineSeparator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.portal.client.ptapp.activity.SecondNavigActivity;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.client.ptapp.ui.components.BuildingPicture;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaReadOnlyComponentFactory;
@@ -188,6 +190,14 @@ public class SummaryViewForm extends CEntityForm<Summary> {
 
             @Override
             public void onClick(ClickEvent event) {
+                if (link.getClass().equals(SiteMap.Info.class) || link.getClass().equals(SiteMap.Financial.class)) {
+                    if (!getValue().tenantList().tenants().isEmpty()) {
+                        HashMap<String, String> args = new HashMap<String, String>();
+                        args.put(SecondNavigActivity.STEP_ARG_NAME, getValue().tenantList().tenants().get(0).getPrimaryKey().toString());
+                        link.setArgs(args);
+                    }
+                }
+
                 getPresenter().goToPlace(link);
             }
         });
