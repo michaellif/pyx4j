@@ -24,6 +24,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -185,6 +186,8 @@ public final class DashboardDemo implements EntryPoint {
                         content.setWidth("100%");
                         setupPanel.add(content);
 
+                        setupPanel.getElement().getStyle().setPadding(10, Unit.PX);
+                        setupPanel.getElement().getStyle().setPaddingBottom(0, Unit.PX);
                         return setupPanel;
                     }
 

@@ -534,7 +534,6 @@ public class DashboardPanel extends SimplePanel {
 
             // create panel with Ok/Cancel buttons:
             HorizontalPanel buttons = new HorizontalPanel();
-
             buttons.add(new Button("OK", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -542,7 +541,6 @@ public class DashboardPanel extends SimplePanel {
                     switchViewToNormal();
                 }
             }));
-
             buttons.add(new Button("Cancel", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -550,7 +548,6 @@ public class DashboardPanel extends SimplePanel {
                     switchViewToNormal();
                 }
             }));
-
             buttons.setSpacing(10);
             setup.add(buttons);
 
