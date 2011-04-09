@@ -377,14 +377,12 @@ public class VistaDataGenerator {
 
     private void populatePotentialTenant(PotentialTenantInfo pt, Relationship relationship, Status status) {
 
+        pt.firstName().setValue(DataGenerator.randomFirstName());
+        pt.lastName().setValue(DataGenerator.randomLastName());
         if (status == Status.Applicant) {
-            pt.firstName().setValue("Jack");
             pt.middleName().setValue("");
-            pt.lastName().setValue("London");
         } else {
-            pt.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
             pt.middleName().setValue(RandomUtil.randomInt(100) % 7 == 0 ? "M" : "");
-            pt.lastName().setValue(RandomUtil.random(DemoData.LAST_NAMES));
         }
 
         pt.birthDate().setValue(RandomUtil.randomSqlDate(1930, 1980));

@@ -46,6 +46,7 @@ import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 public class PortalServicesTest extends VistaDBTestCase {
+
     private final static Logger log = LoggerFactory.getLogger(PortalServicesTest.class);
 
     private Application application;
@@ -141,14 +142,26 @@ public class PortalServicesTest extends VistaDBTestCase {
         Assert.assertFalse("Selected unit", unitSelection.selectedUnitId().isNull());
         log.info("Successfully loaded unit {}", unitSelection.selectedUnitId());
 
-        subTestTenants(generator);
+        subTestTenants(generator, email);
     }
 
-    public void subTestTenants(VistaDataGenerator generator) {
-        // go through tenants
+    public void subTestTenants(VistaDataGenerator generator, String email) {
         tenantList = generator.createPotentialTenantList(application);
+        tenantList.tenants().get(0).email().setValue(email);
+
+        // go through tenants
         DataDump.dump("generated", tenantList);
         TenantService tenantService = TestServiceFactory.create(TenantService.class);
+
+        //We the same as UI does, Allow for server to make its creation actions
+        tenantService.retrieve(new UnitTestsAsyncCallback<PotentialTenantList>() {
+            @Override
+            public void onSuccess(PotentialTenantList result) {
+                Assert.assertEquals("We expect first Tenant prepopulated", 1, result.tenants().size());
+                Assert.assertEquals("prepopulated email", tenantList.tenants().get(0).email(), result.tenants().get(0).email());
+            }
+        }, null);
+
         tenantService.save(new UnitTestsAsyncCallback<PotentialTenantList>() {
             @Override
             public void onSuccess(PotentialTenantList result) {
@@ -170,8 +183,7 @@ public class PortalServicesTest extends VistaDBTestCase {
 
         subTestTenantInfo();
 
-        // TODO this does not work for now, need to talk to Vlad S
-//        subTestTenantFinancial(generator);
+        subTestTenantFinancial(generator);
     }
 
     public void subTestTenantInfo() {
@@ -195,6 +207,16 @@ public class PortalServicesTest extends VistaDBTestCase {
 
             final PotentialTenantFinancial tenantFinancial = generator.createFinancialInfo(tenant);
 
+            tenantFinancialService.retrieve(new UnitTestsAsyncCallback<PotentialTenantFinancial>() {
+
+                @Override
+                public void onSuccess(PotentialTenantFinancial result) {
+                    Assert.assertEquals("prepopulated email", tenant.getPrimaryKey(), result.getPrimaryKey());
+                    // ignore create tenant since it is the same as we expect
+                }
+            }, tenant.getPrimaryKey());
+
+            tenantFinancial.setPrimaryKey(tenant.getPrimaryKey());
             tenantFinancialService.save(new UnitTestsAsyncCallback<PotentialTenantFinancial>() {
                 @Override
                 public void onSuccess(PotentialTenantFinancial result) {
