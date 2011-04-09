@@ -88,6 +88,30 @@ public class DataGenerator {
         return adresses.get(random.nextInt(adresses.size()));
     }
 
+    /**
+     * Five random numbers
+     */
+    public static String randomZipCode() {
+        return "" + random.nextInt(10) + random.nextInt(10) + random.nextInt(10) + random.nextInt(10) + random.nextInt(10);
+    }
+
+    /**
+     * X0X 0X0 format
+     */
+    public static String randomPostalCode() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(randomLetter());
+        sb.append(random.nextInt(10));
+        sb.append(randomLetter());
+        sb.append(" ");
+        sb.append(random.nextInt(10));
+        sb.append(randomLetter());
+        sb.append(random.nextInt(10));
+
+        return sb.toString();
+    }
+
     public static String randomPhone() {
         return randomPhone(String.valueOf(areCodes[random.nextInt(areCodes.length)]));
     }
