@@ -35,6 +35,7 @@ public abstract class EntityGraphsSecurityTestCase extends DatastoreTestBase {
 
         srv.merge(employee0);
 
+        //Test insert
         {
             Employee employee2 = EntityFactory.create(Employee.class);
             employee2.firstName().setValue("Firstname B. " + uniqueString());
@@ -53,12 +54,34 @@ public abstract class EntityGraphsSecurityTestCase extends DatastoreTestBase {
             }
         }
 
+        // Test update
         {
             Employee employee3 = EntityFactory.create(Employee.class);
             employee3.firstName().setValue("Firstname C. " + uniqueString());
             srv.merge(employee3);
 
             employee3.homeAddress().streetName().setValue("Home Street 300 " + uniqueString());
+            employee3.homeAddress().setPrimaryKey(employee0.homeAddress().getPrimaryKey());
+            boolean saved = false;
+            try {
+                srv.merge(employee3);
+                saved = true;
+            } catch (SecurityViolationException e) {
+                // OK
+            }
+            if (saved) {
+                fail("Should not save OwnedMember with Id");
+            }
+        }
+
+        // Test change
+        {
+            Employee employee3 = EntityFactory.create(Employee.class);
+            employee3.firstName().setValue("Firstname C. " + uniqueString());
+            employee3.homeAddress().streetName().setValue("Home Street 400 " + uniqueString());
+            srv.merge(employee3);
+
+            employee3.homeAddress().streetName().setValue("Home Street 500 " + uniqueString());
             employee3.homeAddress().setPrimaryKey(employee0.homeAddress().getPrimaryKey());
             boolean saved = false;
             try {
