@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.unit.server;
+package com.pyx4j.unit.serverside.server;
 
 import java.util.Enumeration;
 import java.util.List;
@@ -33,6 +33,7 @@ import junit.framework.TestSuite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.unit.server.TestsClassFinder;
 import com.pyx4j.unit.serverside.rpc.UnitTestExecuteRequest;
 import com.pyx4j.unit.serverside.rpc.UnitTestInfo;
 import com.pyx4j.unit.serverside.rpc.UnitTestResult;
