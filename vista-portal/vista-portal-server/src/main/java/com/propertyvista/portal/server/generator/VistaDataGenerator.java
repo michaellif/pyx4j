@@ -354,9 +354,11 @@ public class VistaDataGenerator {
         if (tenant.relationship().getValue() == Relationship.Son || tenant.relationship().getValue() == Relationship.Daughter) {
             for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
                 TenantGuarantor guarantor = EntityFactory.create(TenantGuarantor.class);
-                guarantor.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
-                guarantor.lastName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
+                guarantor.firstName().setValue(DataGenerator.randomFirstName());
+                guarantor.lastName().setValue(DataGenerator.randomLastName());
                 guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
+                guarantor.birthDate().setValue(RandomUtil.randomSqlDate(1960, 2011 - 18));
+                guarantor.email().setValue(RandomUtil.randomPersonEmail(guarantor));
                 tenantFinancial.guarantors().add(guarantor);
             }
         }
@@ -390,9 +392,7 @@ public class VistaDataGenerator {
         pt.mobilePhone().setValue(RandomUtil.randomPhone());
         pt.workPhone().setValue(RandomUtil.randomPhone());
 
-        String email = pt.firstName().getStringView().toLowerCase() + "." + pt.lastName().getStringView().toLowerCase() + "@"
-                + RandomUtil.random(DemoData.EMAIL_DOMAINS);
-        pt.email().setValue(email);
+        pt.email().setValue(RandomUtil.randomPersonEmail(pt));
 
         pt.payment().setValue(1.0d + RandomUtil.randomInt(3000));
 

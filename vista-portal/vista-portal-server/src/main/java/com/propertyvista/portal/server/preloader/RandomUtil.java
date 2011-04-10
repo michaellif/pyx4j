@@ -16,6 +16,9 @@ package com.propertyvista.portal.server.preloader;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.propertyvista.portal.domain.DemoData;
+import com.propertyvista.portal.domain.pt.IPerson;
+
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 public class RandomUtil extends DataGenerator {
@@ -42,4 +45,8 @@ public class RandomUtil extends DataGenerator {
         return new java.sql.Date(randomDate(yearFrom, yearTo).getTime());
     }
 
+    public static String randomPersonEmail(IPerson person) {
+        return person.firstName().getStringView().toLowerCase() + "." + person.lastName().getStringView().toLowerCase() + "@"
+                + RandomUtil.random(DemoData.EMAIL_DOMAINS);
+    }
 }
