@@ -30,6 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.server.maintenance.CleanOrphanApplicationDocumentDataRecordsJob;
+import com.propertyvista.server.common.security.DevelopmentSecurity;
+import com.pyx4j.config.shared.ApplicationMode;
 
 public class JobScheduler extends HttpServlet {
 
@@ -51,9 +53,18 @@ public class JobScheduler extends HttpServlet {
             JobDetail job = JobBuilder.newJob(CleanOrphanApplicationDocumentDataRecordsJob.class)
                     .withIdentity("CleanOrphanApplicationDocumentDataRecordsJob", "Maintenance").build();
 
-            SimpleTrigger simpleTrigger = TriggerBuilder.newTrigger().withIdentity("dailyRun", "Maintenance")
-                    .startAt(DateBuilder.futureDate(30, IntervalUnit.MINUTE))
-                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().repeatForever().withIntervalInHours(24)).build();
+            //TODO do proper schedule setup
+            boolean isTesting = false;
+            SimpleTrigger simpleTrigger;
+            if (isTesting) {
+                // testing schedule
+                simpleTrigger = TriggerBuilder.newTrigger().withIdentity("testing", "Maintenance").startAt(DateBuilder.futureDate(15, IntervalUnit.SECOND))
+                        .withSchedule(SimpleScheduleBuilder.simpleSchedule().repeatForever().withIntervalInSeconds(30)).build();
+            } else {
+                // production schedule
+                simpleTrigger = TriggerBuilder.newTrigger().withIdentity("dailyRun", "Maintenance").startAt(DateBuilder.tomorrowAt(4, 0, 0)) //start at 4am
+                        .withSchedule(SimpleScheduleBuilder.simpleSchedule().repeatForever().withIntervalInHours(24)).build();
+            }
             scheduler.scheduleJob(job, simpleTrigger);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

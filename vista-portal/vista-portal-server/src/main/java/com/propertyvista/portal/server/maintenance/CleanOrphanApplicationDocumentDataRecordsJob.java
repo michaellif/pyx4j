@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.maintenance;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.quartz.Job;
@@ -27,6 +29,7 @@ import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
 
@@ -34,9 +37,15 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        logger.trace("CleanOrphanApplicationDocumentDataRecordsJob: STARTED");
-        //TODO do not delete recently created data records, since customer might be in a process of filling the application
-        List<Long> dataKeys = PersistenceServicesFactory.getPersistenceService().queryKeys(EntityQueryCriteria.create(ApplicationDocumentData.class));
+        logger.info("CleanOrphanApplicationDocumentDataRecordsJob: STARTED");
+        EntityQueryCriteria<ApplicationDocumentData> allDataCriteria = EntityQueryCriteria.create(ApplicationDocumentData.class);
+        Calendar minDate = new GregorianCalendar();
+        minDate.add(Calendar.DATE, -7);
+        allDataCriteria.add(new PropertyCriterion(allDataCriteria.proto().created(), Restriction.GREATER_THAN, minDate.getTime()));
+        Calendar maxDate = new GregorianCalendar();
+        maxDate.add(Calendar.HOUR, -24);
+        allDataCriteria.add(new PropertyCriterion(allDataCriteria.proto().created(), Restriction.LESS_THAN, maxDate.getTime()));
+        List<Long> dataKeys = PersistenceServicesFactory.getPersistenceService().queryKeys(allDataCriteria);
         logger.trace("dataKeys={}", dataKeys);
         int deleted = 0;
         for (Long dataKey : dataKeys) {
@@ -49,6 +58,6 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
                 deleted++;
             }
         }
-        logger.trace("CleanOrphanApplicationDocumentDataRecordsJob: {} ApplicationDocumentData record(s) deleted", deleted);
+        logger.info("CleanOrphanApplicationDocumentDataRecordsJob: {} ApplicationDocumentData record(s) deleted", deleted);
     }
 }

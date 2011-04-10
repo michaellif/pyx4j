@@ -18,8 +18,10 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import java.util.Date;
 
 @RpcTransient
 public interface ApplicationDocumentData extends IEntity, IBoundToApplication {
@@ -35,5 +37,8 @@ public interface ApplicationDocumentData extends IEntity, IBoundToApplication {
     @RpcTransient
     @Length(5 * 1024 * 1024)
     IPrimitive<byte[]> data();
+
+    @Timestamp(Timestamp.Update.Created)
+    IPrimitive<Date> created();
 
 }
