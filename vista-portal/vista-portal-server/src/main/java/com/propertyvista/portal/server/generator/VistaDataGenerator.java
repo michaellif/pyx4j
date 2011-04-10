@@ -27,7 +27,6 @@ import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Address;
-import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
@@ -302,7 +301,7 @@ public class VistaDataGenerator {
         address.payment().setValue(1000d + RandomUtil.randomInt(1000));
 
         address.phone().setValue(RandomUtil.randomPhone());
-        address.rented().setValue((OwnedRented) RandomUtil.random(Address.OwnedRented.class));
+        address.rented().setValue(RandomUtil.randomEnum(Address.OwnedRented.class));
         address.managerName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
 
         return address;

@@ -17,6 +17,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.portal.domain.util.ValidationUtils;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.shared.Path;
@@ -45,10 +46,9 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
     public boolean isValid(CEditableComponent<String, ?> component, String value) {
         String c = countryName();
         if ("Canada".equals(c)) {
-            // see http://en.wikipedia.org/wiki/Postal_codes_in_Canada#Number_of_possible_postal_codes
-            return canadianPostalCodeValidation(value);
+            return ValidationUtils.isCanadianPostalCodeValid(value);
         } else if ("United States".equals(c)) {
-            return usZipCodeValidation(value);
+            return ValidationUtils.isUSZipCodeValid(value);
         } else {
             return true;
         }
@@ -66,11 +66,4 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
         }
     }
 
-    private boolean canadianPostalCodeValidation(String value) {
-        return value.toUpperCase().matches("^[ABCEGHJKLMNPRSTVXY]{1}\\d{1}[A-Z]{1} *\\d{1}[A-Z]{1}\\d{1}$") && !value.toUpperCase().matches(".*[DFIOQU].*");
-    }
-
-    private boolean usZipCodeValidation(String value) {
-        return value.matches("^\\d{5}(-\\d{4})?$");
-    }
 }

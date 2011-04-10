@@ -17,7 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.commons.TimeUtils;
 
-public class ValidationUtils {
+public class ValidationUtils extends com.pyx4j.commons.ValidationUtils {
     /**
      * Generic Luhn algorithm implementation (see
      * http://en.wikipedia.org/wiki/Luhn_algorithm for details) could be useful for other
@@ -45,4 +45,5 @@ public class ValidationUtils {
         num = num.trim().replaceAll("\\s", "");
         return num.matches("^\\d{13,19}$") && isLuhnValid(num);
     }
+
 }

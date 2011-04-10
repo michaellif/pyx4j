@@ -15,7 +15,6 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
@@ -43,43 +42,4 @@ public class RandomUtil extends DataGenerator {
         return new java.sql.Date(randomDate(yearFrom, yearTo).getTime());
     }
 
-    public static boolean randomBoolean() {
-        return random.nextBoolean();
-    }
-
-    public static int randomInt(int max) {
-        return random.nextInt(max);
-    }
-
-    public static <T> T random(T[] array) {
-        if (array.length == 0) {
-            return null;
-        }
-        int index = random.nextInt(array.length);
-        return array[index];
-    }
-
-    public static <T> T random(List<T> list) {
-        if (list.size() == 0) {
-            return null;
-        }
-        int index = random.nextInt(list.size());
-        return list.get(index);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T random(Class<?> en) {
-        return (T) random(en.getEnumConstants());
-    }
-
-    //    public static String randomPhone() {
-    //        StringBuilder sb = new StringBuilder();
-    //
-    //        sb.append("(416) ");
-    //        sb.append(randomInt(10) * 100 + randomInt(10) * 10 + randomInt(10));
-    //        sb.append("-");
-    //        sb.append(randomInt(10) * 1000 + randomInt(10) * 100 + randomInt(10) * 10 + randomInt(10));
-    //
-    //        return sb.toString();
-    //    }
 }
