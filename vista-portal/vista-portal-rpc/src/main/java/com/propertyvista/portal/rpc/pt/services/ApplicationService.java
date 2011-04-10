@@ -21,6 +21,7 @@ import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
 
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 /**
  * This is secure services, user need to lodged in to use application.
@@ -28,7 +29,15 @@ import com.pyx4j.rpc.shared.IService;
 public interface ApplicationService extends IService {
 
     /**
-     * Find of create Application object for current user. For now we have only one.
+     * Find existing application for user.
+     * 
+     * If no application exists, new one will be created, together with the progress and
+     * unit selection
+     * For new applications:
+     * search criteria must be provided
+     * 
+     * @throws UserRuntimeException
+     *             if search criteria did not yield any results
      */
     public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria request);
 

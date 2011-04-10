@@ -47,11 +47,6 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 
     private final static Logger log = LoggerFactory.getLogger(ApplicationServiceImpl.class);
 
-    /**
-     * Find existing application for user.
-     * If application does not exist, will create new application progress. It will also
-     * create a default unit selection
-     */
     @Override
     public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria usCriteria) {
 
@@ -65,7 +60,9 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 
         CurrentApplication currentApplication = new CurrentApplication();
 
-        if (application == null) { // create default application
+        if (application == null) { // non exists, create default application
+
+            // TODO this message seems to be wrong, instead we should say that no units were found
             if (!new ApartmentServiceImpl().areUnitsAvailable(usCriteria)) {
                 log.info("Could not find building with propertyCode {}", usCriteria.propertyCode());
                 throw new UserRuntimeException("No units avalable");

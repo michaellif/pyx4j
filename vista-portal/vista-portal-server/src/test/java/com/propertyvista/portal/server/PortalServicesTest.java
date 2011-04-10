@@ -77,43 +77,7 @@ public class PortalServicesTest extends VistaDBTestCase {
         final String email = BusinessDataGenerator.createEmail();
         subTestActivation(email);
         subTestApplication();
-
-        // now let's load unit selection
-        ApartmentService apartmentService = TestServiceFactory.create(ApartmentService.class);
-        apartmentService.retrieve(new UnitTestsAsyncCallback<UnitSelection>() {
-            @Override
-            public void onSuccess(UnitSelection result) {
-                Assert.assertNotNull("Unit selection", result);
-                unitSelection = result;
-            }
-        }, null);
-
-        Assert.assertNotNull("Unit selection", unitSelection);
-        Assert.assertNotNull("Retrieved units", unitSelection.availableUnits().units());
-        Assert.assertFalse("Found units", unitSelection.availableUnits().units().isEmpty());
-        log.info("Working with unit selection {}", unitSelection);
-
-        for (ApartmentUnit unit : unitSelection.availableUnits().units()) {
-            log.info("Found unit {}", unit);
-        }
-
-        // select the first unit
-        Assert.assertTrue("No unit selected at this point", unitSelection.selectedUnitId().isNull());
-        unitSelection.selectedUnitId().setValue(unitSelection.availableUnits().units().get(0).id().getValue());
-
-        // save unit selection
-        apartmentService.save(new UnitTestsAsyncCallback<UnitSelection>() {
-            @Override
-            public void onSuccess(UnitSelection result) {
-                Assert.assertFalse("Selected unit", result.selectedUnitId().isNull());
-                TestUtil.assertEqual("UnitSelection", unitSelection, result);
-                unitSelection = result; // update local unit
-            }
-        }, unitSelection);
-
-        Assert.assertFalse("Selected unit", unitSelection.selectedUnitId().isNull());
-        log.info("Successfully loaded unit {}", unitSelection.selectedUnitId());
-
+        subTestApartment();
         subTestTenants(generator, email);
     }
 
@@ -150,6 +114,44 @@ public class PortalServicesTest extends VistaDBTestCase {
         }, unitSelectionCriteria);
 
         Assert.assertNotNull(application);
+    }
+
+    public void subTestApartment() {
+        // now let's load unit selection
+        ApartmentService apartmentService = TestServiceFactory.create(ApartmentService.class);
+        apartmentService.retrieve(new UnitTestsAsyncCallback<UnitSelection>() {
+            @Override
+            public void onSuccess(UnitSelection result) {
+                Assert.assertNotNull("Unit selection", result);
+                unitSelection = result;
+            }
+        }, null);
+
+        Assert.assertNotNull("Unit selection", unitSelection);
+        Assert.assertNotNull("Retrieved units", unitSelection.availableUnits().units());
+        Assert.assertFalse("Found units", unitSelection.availableUnits().units().isEmpty());
+        log.info("Working with unit selection {}", unitSelection);
+
+        for (ApartmentUnit unit : unitSelection.availableUnits().units()) {
+            log.info("Found unit {}", unit);
+        }
+
+        // select the first unit
+        Assert.assertTrue("No unit selected at this point", unitSelection.selectedUnitId().isNull());
+        unitSelection.selectedUnitId().setValue(unitSelection.availableUnits().units().get(0).id().getValue());
+
+        // save unit selection
+        apartmentService.save(new UnitTestsAsyncCallback<UnitSelection>() {
+            @Override
+            public void onSuccess(UnitSelection result) {
+                Assert.assertFalse("Selected unit", result.selectedUnitId().isNull());
+                TestUtil.assertEqual("UnitSelection", unitSelection, result);
+                unitSelection = result; // update local unit
+            }
+        }, unitSelection);
+
+        Assert.assertFalse("Selected unit", unitSelection.selectedUnitId().isNull());
+        log.info("Successfully loaded unit {}", unitSelection.selectedUnitId());
     }
 
     public void subTestTenants(VistaDataGenerator generator, String email) {

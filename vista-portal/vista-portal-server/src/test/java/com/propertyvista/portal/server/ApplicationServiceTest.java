@@ -20,11 +20,16 @@ import org.slf4j.LoggerFactory;
 import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
 import com.propertyvista.portal.rpc.pt.services.ApplicationService;
+import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
@@ -49,20 +54,60 @@ public class ApplicationServiceTest extends VistaDBTestCase {
         return TestServiceFactory.create(ApplicationService.class);
     }
 
-    public void testGetCurrentApplication() {
-        //        // start application process
-        //        UnitSelectionCriteria unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
-        //        unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
-        //        unitSelectionCriteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
-        //
-        //        ApplicationService applicationService = createService();
-        //        applicationService.getCurrentApplication(new UnitTestsAsyncCallback<CurrentApplication>() {
-        //            @Override
-        //            public void onSuccess(CurrentApplication result) {
-        //                Assert.assertNotNull("Application", result.application);
-        //                Assert.assertFalse("Application", result.application.isNull());
-        //                log.info("Received {}", result);
-        //            }
-        //        }, unitSelectionCriteria);
+    private void createAccount() {
+        final String email = BusinessDataGenerator.createEmail();
+
+        // first, create the user
+        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
+        request.email().setValue(email);
+        request.password().setValue("1234");
+        request.captcha().setValue(TestUtil.createCaptcha());
+
+        ActivationService activationService = TestServiceFactory.create(ActivationService.class);
+        activationService.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                Assert.assertNotNull("Got the visit", result.getUserVisit());
+                Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
+            }
+        }, request);
+    }
+
+    public void testGetCurrentApplicationNew() {
+        createAccount();
+
+        UnitSelectionCriteria unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
+        unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
+        unitSelectionCriteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
+
+        ApplicationService applicationService = createService();
+        applicationService.getCurrentApplication(new UnitTestsAsyncCallback<CurrentApplication>() {
+            @Override
+            public void onSuccess(CurrentApplication result) {
+                Assert.assertNotNull("Application", result.application);
+                Assert.assertFalse("Application", result.application.isNull());
+                log.info("Received {}", result);
+            }
+        }, unitSelectionCriteria);
+    }
+
+    public void testGetCurrentApplicationNewBadCriteria() {
+        createAccount();
+
+        UnitSelectionCriteria unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
+
+        ApplicationService applicationService = createService();
+        applicationService.getCurrentApplication(new UnitTestsAsyncCallback<CurrentApplication>() {
+            @Override
+            public void onSuccess(CurrentApplication result) {
+                Assert.fail("Expect exception");
+            }
+
+            @Override
+            public void onFailure(Throwable error) {
+                Assert.assertNotNull("Error", error);
+                Assert.assertEquals(UserRuntimeException.class, error.getClass());
+            }
+        }, unitSelectionCriteria);
     }
 }
