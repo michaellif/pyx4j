@@ -25,6 +25,10 @@ import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
 public interface Configuration extends IPersistenceConfiguration {
 
+    public enum ConnectionPoolProvider {
+        dbcp, c3p0
+    };
+
     public String driverClass();
 
     public String dbHost();
@@ -41,7 +45,7 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public boolean readOnly();
 
-    public String connectionPool();
+    public ConnectionPoolProvider connectionPool();
 
     public int minPoolSize();
 

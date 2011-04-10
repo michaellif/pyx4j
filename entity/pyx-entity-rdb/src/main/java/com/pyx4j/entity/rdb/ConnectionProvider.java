@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolProvider;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.HSQLDialect;
 import com.pyx4j.entity.rdb.dialect.MySQLDialect;
@@ -63,9 +64,9 @@ public class ConnectionProvider {
 
         // connection pool
         try {
-            if (cfg.connectionPool().contains("dbcp")) {
+            if (cfg.connectionPool() == ConnectionPoolProvider.dbcp) {
                 connectionPool = new ConnectionPoolDBCP(cfg);
-            } else if (cfg.connectionPool().contains("c3p0")) {
+            } else if (cfg.connectionPool() == ConnectionPoolProvider.c3p0) {
                 connectionPool = new ConnectionPoolC3P0(cfg);
             } else {
                 throw new SQLException("Configuration does not specify proper connection pool " + cfg.connectionPool());

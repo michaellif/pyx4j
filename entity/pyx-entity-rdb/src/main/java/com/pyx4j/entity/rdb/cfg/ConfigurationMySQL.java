@@ -49,8 +49,8 @@ public abstract class ConfigurationMySQL implements Configuration {
     }
 
     @Override
-    public String connectionPool() {
-        return "c3p0";
+    public ConnectionPoolProvider connectionPool() {
+        return ConnectionPoolProvider.c3p0;
     }
 
     @Override
