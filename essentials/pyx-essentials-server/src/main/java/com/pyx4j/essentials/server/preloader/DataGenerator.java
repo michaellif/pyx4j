@@ -95,18 +95,22 @@ public class DataGenerator {
         return "" + random.nextInt(10) + random.nextInt(10) + random.nextInt(10) + random.nextInt(10) + random.nextInt(10);
     }
 
+    private static final char[] canadianPostalFirtLetters = "ABCEGHJKLMNPRSTVXY".toCharArray();
+
+    private static final char[] canadianPostalLetters = "ABCEGHJKLMNPRSTVWXYZ".toCharArray();
+
     /**
      * X0X 0X0 format
      */
     public static String randomPostalCode() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(randomLetter());
+        sb.append(random(canadianPostalFirtLetters));
         sb.append(random.nextInt(10));
-        sb.append(randomLetter());
+        sb.append(random(canadianPostalLetters));
         sb.append(" ");
         sb.append(random.nextInt(10));
-        sb.append(randomLetter());
+        sb.append(random(canadianPostalLetters));
         sb.append(random.nextInt(10));
 
         return sb.toString();
@@ -126,6 +130,10 @@ public class DataGenerator {
         return random.nextInt(n);
     }
 
+    public static boolean randomBoolean() {
+        return random.nextBoolean();
+    }
+
     public static <E extends Enum<E>> E randomEnum(Class<E> elementType) {
         EnumSet<E> all = EnumSet.allOf(elementType);
         int r = random.nextInt(all.size());
@@ -137,6 +145,30 @@ public class DataGenerator {
             n++;
         }
         return null;
+    }
+
+    public static <T> T random(List<T> list) {
+        if (list.size() == 0) {
+            return null;
+        }
+        int index = random.nextInt(list.size());
+        return list.get(index);
+    }
+
+    public static <T> T random(T[] array) {
+        if (array.length == 0) {
+            return null;
+        }
+        int index = random.nextInt(array.length);
+        return array[index];
+    }
+
+    private static char random(char[] array) {
+        if (array.length == 0) {
+            return '?';
+        }
+        int index = random.nextInt(array.length);
+        return array[index];
     }
 
     public static Date randomDate(int month) {
