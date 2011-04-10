@@ -50,6 +50,16 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
     }
 
     @Override
+    public int minPoolSize() {
+        return 3;
+    }
+
+    @Override
+    public int maxPoolSize() {
+        return 25;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return new NamingConventionModern();
     }
