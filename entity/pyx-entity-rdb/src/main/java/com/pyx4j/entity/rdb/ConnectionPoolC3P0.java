@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 
 public class ConnectionPoolC3P0 implements ConnectionPool {
@@ -44,8 +45,13 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
         // the settings below are optional -- c3p0 can work with defaults
         dataSource.setMinPoolSize(cfg.minPoolSize()); // default is 3
-        dataSource.setAcquireIncrement(1); // how many new connections it will try to acquire if pool is exhausted
         dataSource.setMaxPoolSize(cfg.maxPoolSize()); // default is 15, we may need more for the server
+        dataSource.setAcquireIncrement(1); // how many new connections it will try to acquire if pool is exhausted
+        dataSource.setAcquireRetryAttempts(3); // Defines how many times c3p0 will try to acquire a new Connection from the database before giving up
+        dataSource.setMaxIdleTime(20 * Consts.MIN2SEC); // Seconds a Connection can remain pooled but unused before being discarded.
+
+        dataSource.setAutomaticTestTable("_c3p0_connection_test"); // If provided, c3p0 will create an empty table of the specified name, and use queries against that table to test the Connection
+        dataSource.setIdleConnectionTestPeriod(5 * Consts.MIN2SEC); //If this is a number greater than 0, c3p0 will test all idle, pooled but unchecked-out connections, every this number of seconds.
 
         log.debug("Pool size is {} min and {} max", dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
     }
