@@ -43,4 +43,8 @@ public class ApartmentServiceTest extends VistaDBTestCase {
     private ApartmentService createService() {
         return TestServiceFactory.create(ApartmentService.class);
     }
+
+    public void testDummy() {
+        log.info("Now what would we test");
+    }
 }
