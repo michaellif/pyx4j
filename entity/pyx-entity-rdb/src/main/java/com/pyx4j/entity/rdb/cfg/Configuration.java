@@ -41,6 +41,12 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public boolean readOnly();
 
+    public String connectionPool();
+
+    public int minPoolSize();
+
+    public int maxPoolSize();
+
     /**
      * 
      * @return return null to use framework default

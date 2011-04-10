@@ -49,6 +49,21 @@ public abstract class ConfigurationMySQL implements Configuration {
     }
 
     @Override
+    public String connectionPool() {
+        return "c3p0";
+    }
+
+    @Override
+    public int minPoolSize() {
+        return 3;
+    }
+
+    @Override
+    public int maxPoolSize() {
+        return 15;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return null;
     }

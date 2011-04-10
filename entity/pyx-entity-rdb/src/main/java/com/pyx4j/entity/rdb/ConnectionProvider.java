@@ -30,11 +30,6 @@ import java.util.Vector;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.ConnectionFactory;
-import org.apache.commons.dbcp.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp.PoolableConnectionFactory;
-import org.apache.commons.dbcp.PoolingDataSource;
-import org.apache.commons.pool.impl.GenericObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,9 +44,9 @@ public class ConnectionProvider {
 
     private static final Logger log = LoggerFactory.getLogger(ConnectionProvider.class);
 
-    private DataSource dataSource;
+    private ConnectionPool connectionPool;
 
-    private GenericObjectPool connectionPool;
+    private DataSource dataSource;
 
     private Dialect dialect;
 
@@ -66,16 +61,22 @@ public class ConnectionProvider {
             throw new SQLException("JDBC driver " + cfg.driverClass() + " not found");
         }
 
-        connectionPool = new GenericObjectPool(null);
-        connectionPool.setTestWhileIdle(true);
+        // connection pool
+        try {
+            if (cfg.connectionPool().contains("dbcp")) {
+                connectionPool = new ConnectionPoolDBCP(cfg);
+            } else if (cfg.connectionPool().contains("c3p0")) {
+                connectionPool = new ConnectionPoolC3P0(cfg);
+            } else {
+                throw new SQLException("Configuration does not specify proper connection pool " + cfg.connectionPool());
+            }
 
-        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(cfg.connectionUrl(), cfg.userName(), cfg.password());
+            log.info("Using connection pool {}", connectionPool);
 
-        PoolableConnectionFactory poolable = new PoolableConnectionFactory(connectionFactory, connectionPool, null, cfg.connectionValidationQuery(),
-                cfg.readOnly(), true);
-        poolable.setValidationQueryTimeout(1);
-
-        dataSource = new PoolingDataSource(connectionPool);
+            dataSource = connectionPool.getDataSource();
+        } catch (Exception e) {
+            throw new SQLException("Failed to initialize connection pool: " + e.getMessage());
+        }
 
         NamingConvention namingConvention = cfg.namingConvention();
         if (namingConvention == null) {
