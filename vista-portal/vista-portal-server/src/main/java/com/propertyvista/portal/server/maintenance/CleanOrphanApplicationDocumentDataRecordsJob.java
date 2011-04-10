@@ -38,15 +38,23 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         logger.info("CleanOrphanApplicationDocumentDataRecordsJob: STARTED");
+
+        // select list of keys from addlicationDocumentData for records created within last 7 days,
+        // but not later then last 24 hours (to avoid purging data that was recently created
         EntityQueryCriteria<ApplicationDocumentData> allDataCriteria = EntityQueryCriteria.create(ApplicationDocumentData.class);
         Calendar minDate = new GregorianCalendar();
         minDate.add(Calendar.DATE, -7);
+        logger.debug("minDate={}", minDate);
         allDataCriteria.add(new PropertyCriterion(allDataCriteria.proto().created(), Restriction.GREATER_THAN, minDate.getTime()));
         Calendar maxDate = new GregorianCalendar();
         maxDate.add(Calendar.HOUR, -24);
+        logger.debug("maxDate={}", maxDate);
         allDataCriteria.add(new PropertyCriterion(allDataCriteria.proto().created(), Restriction.LESS_THAN, maxDate.getTime()));
+
         List<Long> dataKeys = PersistenceServicesFactory.getPersistenceService().queryKeys(allDataCriteria);
+        logger.debug("Number of data records found within the timeframe: {}", dataKeys.size());
         logger.trace("dataKeys={}", dataKeys);
+
         int deleted = 0;
         for (Long dataKey : dataKeys) {
             EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
@@ -58,6 +66,6 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
                 deleted++;
             }
         }
-        logger.info("CleanOrphanApplicationDocumentDataRecordsJob: {} ApplicationDocumentData record(s) deleted", deleted);
+        logger.info("CleanOrphanApplicationDocumentDataRecordsJob: FINISHED. {} applicationDocumentData record(s) deleted", deleted);
     }
 }
