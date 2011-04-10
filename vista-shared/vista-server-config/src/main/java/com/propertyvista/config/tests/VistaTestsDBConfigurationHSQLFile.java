@@ -27,4 +27,14 @@ public class VistaTestsDBConfigurationHSQLFile extends ConfigurationHSQL {
         return "jdbc:hsqldb:file:./target/hsqldb/" + dbName();
     }
 
+    @Override
+    public int minPoolSize() {
+        return 1;
+    }
+
+    @Override
+    public int maxPoolSize() {
+        return 1;
+    }
+
 }

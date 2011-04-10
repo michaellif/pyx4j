@@ -15,6 +15,7 @@ package com.propertyvista.server.config;
 
 import javax.servlet.ServletContext;
 
+import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
 public class VistaServerSideConfigurationDev extends VistaServerSideConfiguration {
@@ -23,6 +24,21 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         // Disable environment selection.
         return this;
+    }
+
+    @Override
+    public IPersistenceConfiguration getPersistenceConfiguration() {
+        return new VistaConfigurationMySQL() {
+            @Override
+            public int minPoolSize() {
+                return 1;
+            }
+
+            @Override
+            public int maxPoolSize() {
+                return 2;
+            }
+        };
     }
 
     @Override

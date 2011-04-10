@@ -22,4 +22,13 @@ public class VistaTestsDBConfigurationHSQLMemory extends ConfigurationHSQL {
         return "vista_tst";
     }
 
+    @Override
+    public int minPoolSize() {
+        return 1;
+    }
+
+    @Override
+    public int maxPoolSize() {
+        return 1;
+    }
 }

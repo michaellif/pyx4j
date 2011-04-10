@@ -56,7 +56,7 @@ public class VistaTestsDBConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Con
 
     @Override
     public int maxPoolSize() {
-        return 10;
+        return 1;
     }
 
     @Override
