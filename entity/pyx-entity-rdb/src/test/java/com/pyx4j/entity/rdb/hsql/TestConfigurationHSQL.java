@@ -32,4 +32,14 @@ public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.Configuratio
         return null;
     }
 
+    @Override
+    public int minPoolSize() {
+        return 1;
+    }
+
+    @Override
+    public int maxPoolSize() {
+        return 1;
+    }
+
 }

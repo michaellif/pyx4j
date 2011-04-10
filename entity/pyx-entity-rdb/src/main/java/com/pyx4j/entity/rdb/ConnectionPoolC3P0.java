@@ -44,10 +44,10 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
         // the settings below are optional -- c3p0 can work with defaults
         dataSource.setMinPoolSize(cfg.minPoolSize()); // default is 3
-        dataSource.setAcquireIncrement(3); // how many new connections it will try to acquire if pool is exhausted
+        dataSource.setAcquireIncrement(1); // how many new connections it will try to acquire if pool is exhausted
         dataSource.setMaxPoolSize(cfg.maxPoolSize()); // default is 15, we may need more for the server
 
-        log.info("Pool size is {} min and {} max", dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
+        log.debug("Pool size is {} min and {} max", dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
     }
 
     @Override

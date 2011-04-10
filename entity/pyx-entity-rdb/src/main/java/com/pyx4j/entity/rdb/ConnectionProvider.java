@@ -71,7 +71,7 @@ public class ConnectionProvider {
                 throw new SQLException("Configuration does not specify proper connection pool " + cfg.connectionPool());
             }
 
-            log.info("Using connection pool {}", connectionPool);
+            log.debug("Using connection pool {}", connectionPool);
 
             dataSource = connectionPool.getDataSource();
         } catch (Exception e) {
