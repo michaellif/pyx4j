@@ -45,6 +45,8 @@ public class ButtonTest extends BaseSeleniumTestCase {
         selenium.click("pyx-testedcomponent");
         assertEquals("Button press again event Result", "CButton clicked", selenium.getText(TesterDebugId.TestMessage));
 
+        selenium.click(TesterDebugId.TestMessageClear);
+        assertEquals("Clear message", "", selenium.getText(TesterDebugId.TestMessage));
     }
 
 }
