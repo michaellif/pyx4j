@@ -28,7 +28,7 @@ public class ButtonTest extends BaseSeleniumTestCase {
         return new VistaSeleniumTestConfiguration(ApplicationId.tester);
     }
 
-    public void testUnitTests() throws Exception {
+    public void testButtonClickTwice() throws Exception {
         VistaDevLogin.login(selenium);
         selenium.waitFor(TesterDebugId.TesterMainMenu.name() + "-text0").click();
 
