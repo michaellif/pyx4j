@@ -66,11 +66,8 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         loginToMainSite();
 
         selenium.click("Auth_Login");
-
-        /*** page 5 ***/
         selenium.type("id=gwt-debug-AuthenticationRequest$email", "cust001@pyx4j.com");
         selenium.type("id=gwt-debug-AuthenticationRequest$password", "cust001@pyx4j.com");
-        //PLEASE ADD BREAKPOINT ON THE NEXT LINE//
         selenium.click("id=gwt-debug-Criteria_Submit");
 
         doTestAppartment1();
@@ -177,7 +174,6 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
 
         assertEnabled("id=gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status");  // status must be enabled for spouse
         assertEquals(selenium.getValue("id=gwt-debug-PotentialTenantList$tenants_row-2_PotentialTenantInfo$status"), "Co-applicant");
-        
         
         selenium.click("logout");
 
