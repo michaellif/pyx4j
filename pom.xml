@@ -101,6 +101,7 @@
         <module>gwt/pyx-gwt-widgets</module>
         <module>gwt/pyx-gwt-forms</module>
         <module>gwt/pyx-gwt-ria</module>
+        <module>gwt/pyx-gwt-dashboard</module>
 
         <module>gwt/pyx-gwt-dnd</module>
 
