@@ -30,6 +30,8 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
 
     protected final VistaDeploymentId deploymentId;
 
+    protected final boolean gwtServerTrace;
+
     public VistaSeleniumTestConfiguration() {
         this(ApplicationId.portal);
     }
@@ -48,6 +50,7 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
         } else {
             this.deploymentId = VistaDeploymentId.www22;
         }
+        gwtServerTrace = (deploymentId == VistaDeploymentId.local);
     }
 
     @Override
@@ -79,6 +82,10 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
         case crm:
             url.append("crm/");
             break;
+        }
+
+        if (gwtServerTrace) {
+            url.append("?trace=true");
         }
 
         return url.toString();

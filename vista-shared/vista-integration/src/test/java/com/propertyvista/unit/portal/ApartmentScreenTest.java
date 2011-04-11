@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
+import com.propertyvista.unit.TestUtils;
 import com.propertyvista.unit.VistaDevLogin;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
@@ -44,14 +45,20 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
     final public String testUser = "Bob";
 
     final static public String emailAt = "@local.com";
-    
-    final static public String warnTerm  = "Please select the Lease Terms";
-    final static public String warnFromFmt  = "Field 'From' is not valid";
-    final static public String warnToFmt  = "Field 'To' is not valid";
-    final static public String warnRentDateFmt  = "Field 'Start Rent Date' is not valid";
-    final static public String warnNoUnit  = "Please select the Unit";
-    final static public String warnRentDateBefore  = "Field 'Start Rent Date' is not valid. Start Rent Date for this unit can not be before";
-    final static public String warnRentDateAfter  = "Field 'Start Rent Date' is not valid. Start Rent Date for this unit can not be later than";
+
+    final static public String warnTerm = "Please select the Lease Terms";
+
+    final static public String warnFromFmt = "Field 'From' is not valid";
+
+    final static public String warnToFmt = "Field 'To' is not valid";
+
+    final static public String warnRentDateFmt = "Field 'Start Rent Date' is not valid";
+
+    final static public String warnNoUnit = "Please select the Unit";
+
+    final static public String warnRentDateBefore = "Field 'Start Rent Date' is not valid. Start Rent Date for this unit can not be before";
+
+    final static public String warnRentDateAfter = "Field 'Start Rent Date' is not valid. Start Rent Date for this unit can not be later than";
 
     @Override
     protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {
@@ -65,8 +72,7 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
     }
 
     public void testDateTimePickers() throws Exception {
-        String strNow = new SimpleDateFormat("yyyyMMdd-hhmmss").format(Calendar.getInstance().getTime());  
-
+        String strNow = new SimpleDateFormat("yyyyMMdd-hhmmss").format(Calendar.getInstance().getTime());
 
         VistaDevLogin.login(selenium);
         selenium.waitFor(By.id("gwt-debug-Auth_Login"), 10);
@@ -113,22 +119,19 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
         selenium.type("UnitSelection$selectionCriteria$availableTo", "13/32/20011");
         selenium.click(VistaFormsDebugId.Available_Units_Change);
         selenium.type("UnitSelection$rentStart", "32/32/32");
-        
+
         selenium.click("Crud_Save");
         assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN));
         String warns = selenium.getText("id=gwt-debug-UserMessage_Prefix_WARN-3");
-        assertTrue( warns.indexOf(warnFromFmt) >= 0 &&
-                warns.indexOf(warnToFmt) >= 0 &&
-                warns.indexOf(warnNoUnit) >= 0 &&  //this is in the error list too, but it's not the purpose of this test
-                warns.indexOf(warnRentDateFmt) >= 0 
-               );
+        assertTrue(warns.indexOf(warnFromFmt) >= 0 && warns.indexOf(warnToFmt) >= 0 && warns.indexOf(warnNoUnit) >= 0 && //this is in the error list too, but it's not the purpose of this test
+                warns.indexOf(warnRentDateFmt) >= 0);
 
         selenium.click("logout");
     }
 
     public void testDateTimePast() throws Exception {
-        String strNow = new SimpleDateFormat("yyyyMMdd-hhmmss").format(Calendar.getInstance().getTime());  
-        
+        String strNow = new SimpleDateFormat("yyyyMMdd-hhmmss").format(Calendar.getInstance().getTime());
+
         VistaDevLogin.login(selenium);
         selenium.waitFor(By.id("gwt-debug-Auth_Login"), 10);
         selenium.setGlassPanelAware();
@@ -139,7 +142,7 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
         selenium.type("AccountCreationRequest$password", ulogin);
         selenium.type("id=recaptcha_response_field", "x");
         selenium.click("id=gwt-debug-Auth_LetsStart");
-        
+
         log.info("User {} logged in", ulogin);
         //if we go on some other screen, return back to APARTMENT screen
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
@@ -148,7 +151,7 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
         doTestStartRent10DaysAfter();
         doTestStartRent10DaysBefore();
     }
-    
+
     protected void doTestDateTimePast() throws Exception {
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -161,13 +164,13 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
         selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
         //ERROR HERE 
         selenium.click(VistaFormsDebugId.Available_Units_Change);
-        
+
         selenium.click("Crud_Save");
-        
+
         assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN));
         String warns = selenium.getText("id=gwt-debug-UserMessage_Prefix_WARN-3");
-        assertTrue( warns.indexOf(warnRentDateFmt) >= 0 );
-        assertTrue( warns.indexOf(warnNoUnit) >= 0);
+        assertTrue(warns.indexOf(warnRentDateFmt) >= 0);
+        assertTrue(warns.indexOf(warnNoUnit) >= 0);
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
     }
 
@@ -182,6 +185,7 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
         selenium.type("UnitSelection$selectionCriteria$availableFrom", strFrom);
         selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
         //ERROR HERE 
+        TestUtils.sleep(2000);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
 
         selenium.click("UnitSelection$availableUnits$units_row-2_ApartmentUnit$unitType");
@@ -197,9 +201,9 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
         selenium.click("Crud_Save");
         assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN));
         String warns = selenium.getText("id=gwt-debug-UserMessage_Prefix_WARN-3");
-        assertTrue( warns.indexOf(warnRentDateAfter) >= 0);
+        assertTrue(warns.indexOf(warnRentDateAfter) >= 0);
 
-    }    
+    }
 
     protected void doTestStartRent10DaysBefore() throws Exception {
 
@@ -226,11 +230,10 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
         selenium.click("Crud_Save");
         assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN));
         String warns = selenium.getText("id=gwt-debug-UserMessage_Prefix_WARN-3");
-        assertTrue( warns.indexOf(warnRentDateBefore) >= 0);
+        assertTrue(warns.indexOf(warnRentDateBefore) >= 0);
 
         //selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
         selenium.click("logout");
-    }    
-
+    }
 
 }

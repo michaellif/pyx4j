@@ -48,7 +48,7 @@
 	</appender>
 
 	<appender name="FileAppender.client" class="com.pyx4j.log4j.RollingFileAppender">
-		<param name="Threshold" value="debug" />
+		<param name="Threshold" value="trace" />
 
 		<param name="File" value="%{container.home}/logs/%{contextName}/vista-client.log" />
 		<param name="Append" value="false" />
@@ -86,7 +86,7 @@
     </logger>
     
 	<logger name="client">
-        <level value="debug" />
+        <level value="trace" />
         <appender-ref ref="FileAppender.client" />
     </logger>
     
