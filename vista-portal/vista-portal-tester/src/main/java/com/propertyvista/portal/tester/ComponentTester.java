@@ -24,11 +24,13 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratedStackPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
@@ -37,6 +39,7 @@ import com.propertyvista.portal.tester.ui.TestedCComponentWraper;
 import com.propertyvista.portal.tester.util.Constants;
 
 import com.pyx4j.entity.client.ClientEntityFactory;
+import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
@@ -99,6 +102,8 @@ public class ComponentTester extends AppSite {
         hideLoadingIndicator();
         beingtested = null;
 
+        final Label testMessage = new Label();
+        testMessage.ensureDebugId(TesterDebugId.TestMessage.name());
         /**
          * Populate array of the tested components
          */
@@ -117,11 +122,18 @@ public class ComponentTester extends AppSite {
         CHyperlink hl = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
-                Window.alert("Tested");
+                testMessage.setText("CHyperlink clicked");
             }
         });
         hl.setValue("Test Hyperlink");
         testedComponents.add(new TestedCComponentWraper(hl));
+        CButton b = new CButton("Test CButton", new Command() {
+            @Override
+            public void execute() {
+                testMessage.setText("CButton clicked");
+            }
+        });
+        testedComponents.add(new TestedCComponentWraper(b));
         testedComponents.add(new TestedCComponentWraper(new CIntegerField()));
         CLabel clbl = new CLabel();
         clbl.setValue("Test Label");
@@ -164,9 +176,25 @@ public class ComponentTester extends AppSite {
          */
         VerticalPanel widgetpanel = createWidgetListPanel(testedComponents);
         testcontainer = new LayoutPanel();
+
+        HorizontalPanel messagePanel = new HorizontalPanel();
+        testcontainer.add(messagePanel);
+
         HTML version = new HTML("GWT version used: " + GWT.getVersion());
         version.setStyleName("pyx-note", true);
-        testcontainer.add(version);
+        messagePanel.add(version);
+
+        messagePanel.add(testMessage);
+        Button testMessageClear = new Button("Clear Message");
+        testMessageClear.ensureDebugId(TesterDebugId.TestMessageClear.name());
+        messagePanel.add(testMessageClear);
+        testMessageClear.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                testMessage.setText("");
+            }
+        });
 
         /*
          * for (TestedCComponentWraper tc : testedComponents) {

@@ -17,7 +17,11 @@ import com.pyx4j.commons.IDebugId;
 
 public enum TesterDebugId implements IDebugId {
 
-    TesterMainMenu;
+    TesterMainMenu,
+
+    TestMessage,
+
+    TestMessageClear;
 
     @Override
     public String getDebugIdString() {
