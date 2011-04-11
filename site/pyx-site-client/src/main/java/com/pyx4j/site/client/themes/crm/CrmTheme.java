@@ -48,6 +48,19 @@ public class CrmTheme extends SiteTheme {
     }
 
     @Override
+    protected void initGeneralStyles() {
+        super.initGeneralStyles();
+        Style style = new Style("textarea");
+        style.addProperty("font-family", "'Lucida Grande', 'Segoe UI', 'Bitstream Vera Sans', Tahoma, Verdana, Arial, sans-serif");
+        style.addProperty("font-size", "1em");
+        addStyle(style);
+        style = new Style("input");
+        style.addProperty("font-family", "'Lucida Grande', 'Segoe UI', 'Bitstream Vera Sans', Tahoma, Verdana, Arial, sans-serif");
+        style.addProperty("font-size", "1em");
+        addStyle(style);
+    }
+
+    @Override
     protected void initBodyStyles() {
         Style style = new Style("body");
         style.addProperty("font-family", "'Lucida Grande', 'Segoe UI', 'Bitstream Vera Sans', Tahoma, Verdana, Arial, sans-serif");
