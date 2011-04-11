@@ -3,5 +3,10 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module rename-to="crm">
     <inherits name='com.propertyvista.crm.Client'/>
+    
+    <extend-property name="locale" values="en_US"/>
+	<set-property name="locale" value="en_US"/>
+	<set-configuration-property name="pyx.locale.default" value="en_US"/>
+	
     <inherits name='com.google.gwt.user.Debug'/>
 </module>
