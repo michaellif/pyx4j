@@ -111,8 +111,8 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         }
 
         currentApplication.application = application;
-        log.info("Current application {}", application);
-        log.info("Progress {}", currentApplication.progress);
+        log.debug("Current application {}", application);
+        log.debug("Progress {}", currentApplication.progress);
         callback.onSuccess(currentApplication);
     }
 

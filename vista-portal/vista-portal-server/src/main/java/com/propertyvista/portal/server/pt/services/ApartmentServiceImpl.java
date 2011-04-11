@@ -43,16 +43,19 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
 
     @Override
     public void retrieve(AsyncCallback<UnitSelection> callback, Long tenantId) {
-        log.info("Retrieving unit selection for tenant {}", tenantId);
         EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         UnitSelection unitSelection = secureRetrieve(criteria);
         if (unitSelection == null) {
             log.info("Creating new unit selection");
             unitSelection = EntityFactory.create(UnitSelection.class);
+        } else {
+            //            log.info("Loaded existing unit selection {}", unitSelection);
         }
 
         //        log.info("Found unit selection\n{}", PrintUtil.print(unitSelection));
+        log.info("Loading unit selection with criteria {}", unitSelection.selectionCriteria());
+
         loadTransientData(unitSelection);
 
         callback.onSuccess(unitSelection);
@@ -60,7 +63,9 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
 
     @Override
     public void save(AsyncCallback<UnitSelection> callback, UnitSelection unitSelection) {
-        log.info("Saving unit selection\n{}", VistaDataPrinter.print(unitSelection));
+        log.debug("Saving unit selection\n{}", VistaDataPrinter.print(unitSelection));
+
+        log.info("Saving unit selection with criteria {}", unitSelection.selectionCriteria());
 
         saveApplicationEntity(unitSelection);
 
@@ -79,7 +84,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
     }
 
     public EntityQueryCriteria<AptUnit> createAptUnitCriteria(UnitSelectionCriteria selectionCriteria) {
-        log.info("Looking for units {}", selectionCriteria);
+        log.info("Looking for units from {} to {}", selectionCriteria.availableFrom().getStringView(), selectionCriteria.availableTo().getStringView());
 
         // find building first, don't use building from unit selection
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
@@ -102,7 +107,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
         }
 
         // find units
-        log.info("Found floorplan {}, now can look for Units in building {}", floorplan, building);
+        log.debug("Found floorplan {}, now can look for Units in building {}", floorplan, building);
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
@@ -130,6 +135,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
     }
 
     public AvailableUnitsByFloorplan loadAvailableUnits(UnitSelectionCriteria selectionCriteria) {
+        log.info("Loading available units {}", selectionCriteria);
         AvailableUnitsByFloorplan availableUnits = EntityFactory.create(AvailableUnitsByFloorplan.class);
         EntityQueryCriteria<AptUnit> criteria = createAptUnitCriteria(selectionCriteria);
         if (criteria == null) {

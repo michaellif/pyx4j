@@ -35,8 +35,8 @@ public class TestUtil {
         if (changePath != null) {
             DataDump.dump("client", clientSide);
             DataDump.dump("server", received);
-            log.debug("cleintSide {}", clientSide);
-            log.debug("received {}", received);
+            log.debug("client {}", clientSide);
+            log.debug("server {}", received);
             Assert.fail(name + " are not the same: " + changePath);
         }
     }

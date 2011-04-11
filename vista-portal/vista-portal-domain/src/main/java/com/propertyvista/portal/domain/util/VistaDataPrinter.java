@@ -45,9 +45,9 @@ public class VistaDataPrinter {
         sb.append("\n\n---------------------------- APPLICATION -----------------------------\n");
         sb.append(print(summary.application()));
 
-//        loadApplication(sb);
-//        loadApplicationProgress(sb);
-//
+        //        loadApplication(sb);
+        //        loadApplicationProgress(sb);
+        //
         sb.append("\n\n---------------------------- UNIT SELECTION --------------------------\n");
         sb.append(print(summary.unitSelection()));
 
@@ -162,7 +162,7 @@ public class VistaDataPrinter {
             sb.append(" $");
             // sb.append(income.monthlyAmount().getValue());
 
-//            loadEmployer(income.employer(), sb);
+            //            loadEmployer(income.employer(), sb);
 
             //sb.append(" Active: ").append(income.active().getValue());
 
@@ -264,8 +264,8 @@ public class VistaDataPrinter {
         sb.append(" available units\n");
         for (ApartmentUnit unit : unitSelection.availableUnits().units()) {
             sb.append("\t");
-//            sb.append(unit.suiteNumber().getStringView());
-//            sb.append(" ");
+            //            sb.append(unit.suiteNumber().getStringView());
+            //            sb.append(" ");
             sb.append(unit.bedrooms().getValue()).append(" beds, ");
             sb.append(unit.bathrooms().getValue()).append(" baths,");
             sb.append(" ");
@@ -274,7 +274,7 @@ public class VistaDataPrinter {
             sb.append(" available on ");
             sb.append(unit.avalableForRent().getStringView());
 
-//            log.info("Available {}", unit.building());
+            //            log.info("Available {}", unit.building());
 
             sb.append(", status: ").append(unit.status().getStringView());
 
@@ -290,64 +290,6 @@ public class VistaDataPrinter {
 
             sb.append("\t\tDeposit: $").append(unit.requiredDeposit().getValue()).append("\n");
         }
-
-//        // selected unit
-//        ApartmentUnit unit = unitSelection.selectedUnit();
-//        sb.append("\n\n");
-////        sb.append("Selected: ").append(unit.suiteNumber().getStringView());
-////        sb.append("\n");
-
-//        // building
-//        Building building = unit.building();
-//        sb.append("Building: ").append(building).append("\n");
-//        sb.append("Property: ").append(building.propertyProfile()).append("\n");
-//
-//        // amenities
-//        sb.append("\tAmenities: ").append(unit.amenities()).append("\n");
-//        sb.append("\tUtility: ").append(unit.utilities()).append("\n");
-//        sb.append("\tUnitInfoItem: ").append(unit.infoDetails()).append("\n");
-//        sb.append("\tConcessions: ").append(unit.concessions()).append("\n");
-//        sb.append("\tAdd-ons: ").append(unit.addOns()).append("\n");
-
-//        for (Amenity amenity : unit.amenities()) {
-//            sb.append("\t\t");
-//            sb.append(amenity.name().getStringView());
-//            sb.append("\n");
-//        }
-//        // utilities
-//        sb.append("\tUtilities:\n");
-//        for (Utility utility : unit.utilities()) {
-//            sb.append("\t\t");
-//            sb.append(utility.name().getStringView());
-//            sb.append("\n");
-//        }
-//        // utilities
-//        sb.append("\tUnitInfoItem:\n");
-//        for (UnitInfoItem info : unit.infoDetails()) {
-//            sb.append("\t\t");
-//            sb.append(info.name().getStringView());
-//            sb.append("\n");
-//        }
-//        // utilities
-//        sb.append("\tConcessions:\n");
-//        for (Concession concession : unit.concessions()) {
-//            sb.append("\t\t");
-//            sb.append(concession.name().getStringView());
-//            sb.append("\n");
-//        }
-//        // utilities
-//        sb.append("\tAdd-ons:\n");
-//        for (AddOn addOn : unit.addOns()) {
-//            sb.append("\t\t");
-//            sb.append(addOn.name().getStringView());
-//            sb.append(" $").append(addOn.monthlyCost().getValue());
-//            sb.append("\n");
-//        }
-
-        // rent
-//        sb.append("\nStart rent:").append(unitSelection.rentStart().getStringView());
-//        sb.append(", Lease: ").append(unitSelection.markerRent().leaseTerm().getValue()).append(" months, $");
-//        sb.append(unitSelection.markerRent().rent().amount().getValue());
 
         return sb.toString();
     }
