@@ -27,6 +27,8 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -36,6 +38,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.style.CSSClass;
 
@@ -84,6 +87,18 @@ public class GlassPanel extends AbsolutePanel implements ResizeHandler {
         glass.ensureDebugId("GlassPanel");
         glass.setSize("100%", "100%");
         add(glass, 0, 0);
+
+        if (ApplicationMode.isDevelopment()) {
+            // Used for debug  of Selenium tests
+            glass.addDomHandler(new ClickHandler() {
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    log.trace("GlassPanel.onClick {},{}", event.getClientX(), event.getClientY());
+
+                }
+            }, ClickEvent.getType());
+        }
 
         label = new HTML();
         add(label, 0, 0);
