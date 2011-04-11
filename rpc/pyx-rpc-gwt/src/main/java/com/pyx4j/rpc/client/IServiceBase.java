@@ -22,6 +22,9 @@ package com.pyx4j.rpc.client;
 
 import java.io.Serializable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
@@ -31,10 +34,13 @@ import com.pyx4j.rpc.shared.Service;
 
 public abstract class IServiceBase implements IService {
 
+    protected static final Logger log = LoggerFactory.getLogger(IServiceBase.class);
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected final void execute(String serviceClassId, String serviceMethodId, AsyncCallback<? extends Serializable> callback, Serializable... args) {
-        RPCManager.execute((Class<? extends Service<IServiceRequest, Serializable>>) IServiceAdapter.class, new IServiceRequest(serviceClassId, serviceMethodId,
-                args), (AsyncCallback) callback);
+        log.trace("RPC CALL {} {}", serviceClassId, serviceMethodId);
+        RPCManager.execute((Class<? extends Service<IServiceRequest, Serializable>>) IServiceAdapter.class, new IServiceRequest(serviceClassId,
+                serviceMethodId, args), (AsyncCallback) callback);
     }
 
 }
