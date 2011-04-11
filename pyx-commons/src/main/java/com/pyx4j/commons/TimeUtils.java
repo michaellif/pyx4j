@@ -67,7 +67,10 @@ public class TimeUtils {
         if (start == 0) {
             return "n/a";
         }
-        long msec = since(start);
+        return durationFormat(since(start));
+    }
+
+    public static String durationFormat(long msec) {
         long sec = msec / 1000;
         long min = sec / 60;
         sec -= min * 60;
