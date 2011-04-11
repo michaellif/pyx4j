@@ -42,12 +42,6 @@ public class DataGenerator {
 
     static List<AddressInfo> adresses;
 
-    /**
-     * @deprecated Use ThreadLocal function random()
-     */
-    @Deprecated
-    protected static Random random = new Random();
-
     private static int areCodes[] = { 416, 905, 647 };
 
     private static class GeneratorContext {
@@ -171,12 +165,12 @@ public class DataGenerator {
     }
 
     public static String randomPhone() {
-        return randomPhone(String.valueOf(areCodes[random.nextInt(areCodes.length)]));
+        return randomPhone(String.valueOf(areCodes[random().nextInt(areCodes.length)]));
     }
 
     public static String randomPhone(String areaCode) {
         DecimalFormat nf = new DecimalFormat("0000000");
-        String unformatedPhone = areaCode + nf.format((random.nextInt(10000000)));
+        String unformatedPhone = areaCode + nf.format((random().nextInt(10000000)));
         return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
     }
 
@@ -235,7 +229,7 @@ public class DataGenerator {
 
     public static Date randomDate(int month) {
         Calendar c = new GregorianCalendar();
-        c.add(Calendar.MONTH, (month > 0) ? random.nextInt(month) : -random.nextInt(-month));
+        c.add(Calendar.MONTH, (month > 0) ? random().nextInt(month) : -random().nextInt(-month));
         return c.getTime();
     }
 }
