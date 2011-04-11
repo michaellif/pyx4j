@@ -25,9 +25,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
+import com.pyx4j.commons.FIFO;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
@@ -39,12 +42,63 @@ public class DataGenerator {
 
     static List<AddressInfo> adresses;
 
+    /**
+     * @deprecated Use ThreadLocal function random()
+     */
+    @Deprecated
     protected static Random random = new Random();
 
     private static int areCodes[] = { 416, 905, 647 };
 
+    private static class GeneratorContext {
+
+        Random random = new Random();
+
+        private Map<String, FIFO<Integer>> duplicates;
+
+        /**
+         * Avoid creation of same values during data generation
+         */
+        int nextInt(int n, String duplicatesId, int resultsToRemeber) {
+            if (duplicates == null) {
+                duplicates = new HashMap<String, FIFO<Integer>>();
+            }
+            FIFO<Integer> fifo = duplicates.get(duplicatesId);
+            if (fifo == null) {
+                fifo = new FIFO<Integer>(resultsToRemeber);
+                duplicates.put(duplicatesId, fifo);
+            }
+
+            // Avoid infinite loop
+            for (int i = 0; i <= 10; i++) {
+                int val = random.nextInt(n);
+                if (!fifo.contains(val)) {
+                    fifo.push(val);
+                    return val;
+                }
+            }
+            throw new Error("Can't generate unique value for Ids:" + duplicatesId);
+        }
+
+    }
+
+    private static final ThreadLocal<GeneratorContext> generatorLocal = new ThreadLocal<GeneratorContext>() {
+        @Override
+        protected GeneratorContext initialValue() {
+            return new GeneratorContext();
+        }
+    };
+
     public static void setRandomSeed(long seed) {
-        random.setSeed(seed);
+        random().setSeed(seed);
+    }
+
+    protected static Random random() {
+        return generatorLocal.get().random;
+    }
+
+    public static int nextInt(int n, String duplicatesId, int resultsToRemeber) {
+        return generatorLocal.get().nextInt(n, duplicatesId, resultsToRemeber);
     }
 
     public static String randomLetters(int count) {
@@ -56,7 +110,7 @@ public class DataGenerator {
     }
 
     public static char randomLetter() {
-        return (char) (('A') + random.nextInt('Z' - 'A'));
+        return (char) (('A') + random().nextInt('Z' - 'A'));
     }
 
     private static String resourceFileName(String fileName) {
@@ -67,14 +121,14 @@ public class DataGenerator {
         if (firstNames == null) {
             firstNames = CSVLoad.loadFile(resourceFileName("first-names.csv"), "Name");
         }
-        return firstNames[random.nextInt(firstNames.length)];
+        return firstNames[nextInt(firstNames.length, "firstName", 20)];
     }
 
     public static String randomLastName() {
         if (lastNames == null) {
             lastNames = CSVLoad.loadFile(resourceFileName("last-names.csv"), "Name");
         }
-        return lastNames[random.nextInt(lastNames.length)];
+        return lastNames[nextInt(lastNames.length, "lastName", 5)];
     }
 
     public static String randomName() {
@@ -85,14 +139,14 @@ public class DataGenerator {
         if (adresses == null) {
             adresses = EntityCSVReciver.create(AddressInfo.class).loadFile(resourceFileName("postal_codes.csv"));
         }
-        return adresses.get(random.nextInt(adresses.size()));
+        return adresses.get(nextInt(adresses.size(), "address", 10));
     }
 
     /**
      * Five random numbers
      */
     public static String randomZipCode() {
-        return "" + random.nextInt(10) + random.nextInt(10) + random.nextInt(10) + random.nextInt(10) + random.nextInt(10);
+        return "" + random().nextInt(10) + random().nextInt(10) + random().nextInt(10) + random().nextInt(10) + random().nextInt(10);
     }
 
     private static final char[] canadianPostalFirtLetters = "ABCEGHJKLMNPRSTVXY".toCharArray();
@@ -106,12 +160,12 @@ public class DataGenerator {
         StringBuilder sb = new StringBuilder();
 
         sb.append(random(canadianPostalFirtLetters));
-        sb.append(random.nextInt(10));
+        sb.append(random().nextInt(10));
         sb.append(random(canadianPostalLetters));
         sb.append(" ");
-        sb.append(random.nextInt(10));
+        sb.append(random().nextInt(10));
         sb.append(random(canadianPostalLetters));
-        sb.append(random.nextInt(10));
+        sb.append(random().nextInt(10));
 
         return sb.toString();
     }
@@ -127,16 +181,16 @@ public class DataGenerator {
     }
 
     public static int randomInt(int n) {
-        return random.nextInt(n);
+        return random().nextInt(n);
     }
 
     public static boolean randomBoolean() {
-        return random.nextBoolean();
+        return random().nextBoolean();
     }
 
     public static <E extends Enum<E>> E randomEnum(Class<E> elementType) {
         EnumSet<E> all = EnumSet.allOf(elementType);
-        int r = random.nextInt(all.size());
+        int r = random().nextInt(all.size());
         int n = 0;
         for (E en : all) {
             if (n == r) {
@@ -151,7 +205,7 @@ public class DataGenerator {
         if (list.size() == 0) {
             return null;
         }
-        int index = random.nextInt(list.size());
+        int index = random().nextInt(list.size());
         return list.get(index);
     }
 
@@ -159,7 +213,15 @@ public class DataGenerator {
         if (array.length == 0) {
             return null;
         }
-        int index = random.nextInt(array.length);
+        int index = random().nextInt(array.length);
+        return array[index];
+    }
+
+    public static <T> T random(T[] array, String duplicatesId, int resultsToRemeber) {
+        if (array.length == 0) {
+            return null;
+        }
+        int index = nextInt(array.length, duplicatesId, resultsToRemeber);
         return array[index];
     }
 
@@ -167,7 +229,7 @@ public class DataGenerator {
         if (array.length == 0) {
             return '?';
         }
-        int index = random.nextInt(array.length);
+        int index = random().nextInt(array.length);
         return array[index];
     }
 
