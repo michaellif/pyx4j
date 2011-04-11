@@ -38,6 +38,7 @@ import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.i18n.client.I18nResourceBundleImpl;
 
 public class I18nResourceBundleGenerator extends Generator {
@@ -47,18 +48,28 @@ public class I18nResourceBundleGenerator extends Generator {
      */
     private static final String PROP_LOCALE = "locale";
 
+    /**
+     * Configuration property.
+     */
+    public static final String CONFIG_LOCALE_DEFAULT = "pyx.locale.default";
+
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
         String locale;
+        String localeDefault;
         try {
             SelectionProperty localeProp = context.getPropertyOracle().getSelectionProperty(logger, PROP_LOCALE);
             locale = localeProp.getCurrentValue();
+            localeDefault = context.getPropertyOracle().getConfigurationProperty(CONFIG_LOCALE_DEFAULT).getValues().get(0);
+            if (CommonsStringUtils.isEmpty(localeDefault)) {
+
+            }
         } catch (BadPropertyValueException e) {
             logger.log(TreeLogger.ERROR, "Could not parse specified locale", e);
             throw new UnableToCompleteException();
         }
 
-        if ((locale.equals("en")) || (locale.equals("default"))) {
+        if (locale.equals(localeDefault)) {
             return null;
         }
 
