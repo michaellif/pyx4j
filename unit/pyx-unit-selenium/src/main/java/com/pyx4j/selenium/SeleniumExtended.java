@@ -260,24 +260,26 @@ public class SeleniumExtended extends WebDriverWrapper {
         }
     }
 
-    public void click(String paramString) {
-        driver.findElement(elementLocator(paramString)).click();
+    public void click(By by) {
+        WebElement element = driver.findElement(by);
+        element.click();
         this.waitWhileWorking();
+    }
+
+    public void click(String paramString) {
+        click(elementLocator(paramString));
     }
 
     public void click(IDebugId debugId) {
-        driver.findElement(by(debugId)).click();
-        this.waitWhileWorking();
+        click(by(debugId));
     }
 
     public void click(IDebugId parent, IDebugId child) {
-        driver.findElement(by(parent, child)).click();
-        this.waitWhileWorking();
+        click(by(parent, child));
     }
 
     public void click(IObject<?> member) {
-        driver.findElement(by(member)).click();
-        this.waitWhileWorking();
+        click(by(member));
     }
 
     public void type(String paramString, CharSequence... keysToSend) {

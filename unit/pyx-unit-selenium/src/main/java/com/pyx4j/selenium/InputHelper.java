@@ -30,8 +30,8 @@ import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
 
 class InputHelper {
 
-    static void fireEvent(WebDriver driver, WebElement we, String eventName) {
-        new JavascriptLibrary().callEmbeddedSelenium(driver, "doFireEvent", we, eventName);
+    static void fireEvent(WebDriver driver, WebElement element, String eventName) {
+        new JavascriptLibrary().callEmbeddedSelenium(driver, "doFireEvent", element, eventName);
     }
 
     static boolean isEditable(WebElement element) {
