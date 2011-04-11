@@ -27,6 +27,7 @@ public class RandomUtil extends DataGenerator {
         return randomDate(1930, 2020);
     }
 
+    @SuppressWarnings("deprecation")
     public static Date randomDate(int yearFrom, int yearTo) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, yearFrom + randomInt(yearTo - yearFrom));
