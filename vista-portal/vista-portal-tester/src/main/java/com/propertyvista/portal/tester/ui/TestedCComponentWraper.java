@@ -23,7 +23,6 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -42,7 +41,6 @@ import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.tester.TesterDebugId;
 import com.propertyvista.portal.tester.util.Constants;
 
-import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
@@ -59,6 +57,7 @@ import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.widgets.client.CheckBox;
 
 /**
  * 
@@ -122,7 +121,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         this.setWidgetTopBottom(testedcomponent, 5, Unit.PCT, 5, Unit.PCT);
         processTestedComponent(component);
         this.ensureDebugId(Constants.DEBUG_ID_PRFX + fullname);
-        rawvalue.ensureDebugId(composeDebugId(TesterDebugId.RAWVALUE.getDebugIdString()));
+        rawvalue.ensureDebugId(composeDebugId(TesterDebugId.RAWVALUE.debugId()));
 
     }
 
@@ -140,13 +139,14 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         /**
          * right-hand panel formatting
          */
+        //TODO remove the Class names manipulations from GWT: This would not work when we compile in production mode!
         fullname = this.component.getClass().getName();
         String[] s = fullname.split("\\.");
         shortname = s[s.length - 1];
         if (shortname == null)
             shortname = "";
         this.component.setTitle("Tested Value:");
-        this.component.setDebugId(new StringDebugId(composeDebugId(TesterDebugId.TESTEDCOMP.getDebugIdString())));
+        this.component.setDebugId(TesterDebugId.ComponentUnderTest);
 
         /**
          * Format testing area
@@ -178,7 +178,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         testedrow.setCellWidth(decoratedcomp, "470px");
 
         Button b = new Button("Print Component Raw Data");
-        b.ensureDebugId(composeDebugId(TesterDebugId.PRINTREPORT_BTN.getDebugIdString()));
+        b.ensureDebugId(composeDebugId(TesterDebugId.PRINTREPORT_BTN.debugId()));
         b.setStyleName("pyx-btn");
         b.addClickHandler(new ClickHandler() {
             @Override
@@ -205,7 +205,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         CheckBox chk = null;
         if (!(this.component instanceof CLabel)) {
             chk = new CheckBox("Disabled");
-            chk.ensureDebugId(composeDebugId(TesterDebugId.DISABLED_CHK.getDebugIdString()));
+            chk.ensureDebugId(TesterDebugId.DISABLED_CHK.debugId());
             chk.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -220,7 +220,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
             //Mandatory optional
             final CEditableComponent<?, ?> ec = (CEditableComponent<?, ?>) this.component;
             chk = new CheckBox("Mandatory");
-            chk.ensureDebugId(composeDebugId(TesterDebugId.MANDATORY_CHK.getDebugIdString()));
+            chk.ensureDebugId(TesterDebugId.MANDATORY_CHK.debugId());
 
             chk.addClickHandler(new ClickHandler() {
 
@@ -234,7 +234,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
             testedfeatures.add(chk);
 
             chk = new CheckBox("Read Only");
-            chk.ensureDebugId(composeDebugId(TesterDebugId.READONLY_CHK.getDebugIdString()));
+            chk.ensureDebugId(composeDebugId(TesterDebugId.READONLY_CHK.debugId()));
             chk.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -247,7 +247,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
             testedfeatures.add(chk);
 
             chk = new CheckBox("Visited");
-            chk.ensureDebugId(composeDebugId(TesterDebugId.VISITED_CHK.getDebugIdString()));
+            chk.ensureDebugId(composeDebugId(TesterDebugId.VISITED_CHK.debugId()));
             chk.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -273,7 +273,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
             final CTextComponent<?, ?> ctxt = (CTextComponent<?, ?>) this.component;
             TextBox wmfield = new TextBox();
             wmfield.setTitle("Watermark");
-            wmfield.ensureDebugId(composeDebugId(TesterDebugId.WATERMARK_TXT.getDebugIdString()));
+            wmfield.ensureDebugId(composeDebugId(TesterDebugId.WATERMARK_TXT.debugId()));
             wmfield.addBlurHandler(new BlurHandler() {
                 @Override
                 public void onBlur(BlurEvent event) {
@@ -308,10 +308,10 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
                 tofield = new DoubleBox();
             }
 
-            fromfield.ensureDebugId(composeDebugId(TesterDebugId.FROMNUM_TXT.getDebugIdString()));
+            fromfield.ensureDebugId(composeDebugId(TesterDebugId.FROMNUM_TXT.debugId()));
             fromfield.setTitle("From Number");
             fromfield.setWidth("85%");
-            tofield.ensureDebugId(composeDebugId(TesterDebugId.TONUM_TXT.getDebugIdString()));
+            tofield.ensureDebugId(composeDebugId(TesterDebugId.TONUM_TXT.debugId()));
             tofield.setTitle("To Number");
             tofield.setWidth("85%");
 
@@ -361,7 +361,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         } else if (this.component instanceof CDatePicker) {
             final CDatePicker dtpk = (CDatePicker) this.component;
             chk = new CheckBox("No Past Date Selection");
-            chk.ensureDebugId(composeDebugId(TesterDebugId.NOPOSTDATE_TXT.getDebugIdString()));
+            chk.ensureDebugId(composeDebugId(TesterDebugId.NOPOSTDATE_TXT.debugId()));
             chk.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -375,7 +375,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         } else if (this.component instanceof CEmailField || this.component instanceof CTextField || this.component instanceof CTextArea) {
             final CTextComponent<?, ?> ctxt = (CTextComponent<?, ?>) this.component;
             IntegerBox maxfield = new IntegerBox();
-            maxfield.ensureDebugId(composeDebugId(TesterDebugId.MAXLENGTH_TXT.getDebugIdString()));
+            maxfield.ensureDebugId(composeDebugId(TesterDebugId.MAXLENGTH_TXT.debugId()));
             maxfield.setTitle("Max Length");
             maxfield.addBlurHandler(new BlurHandler() {
                 @Override
@@ -427,6 +427,10 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         component.setEnabled(!chk.getValue());
     }
 
+    /**
+     * TODO vadims: Remove the Constants.DEBUG_ID_PRFX
+     */
+    @Deprecated
     private String composeDebugId(String postfix) {
         String pfx = (postfix == null) ? "" : postfix;
         return Constants.DEBUG_ID_PRFX + (uniqueID ? shortname + "-" : "") + pfx;

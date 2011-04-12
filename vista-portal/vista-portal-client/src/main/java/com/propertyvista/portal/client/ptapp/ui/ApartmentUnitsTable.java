@@ -201,7 +201,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
             if (proto().floorplan().name() == column.getObject()) {
                 widgetToInsert = new Image(SiteImages.INSTANCE.floorplan());
-                widgetToInsert.ensureDebugId(VistaFormsDebugId.Available_Units_ViewPlan.getDebugIdString());
+                widgetToInsert.ensureDebugId(VistaFormsDebugId.Available_Units_ViewPlan.debugId());
             } else if (proto().unitType() == column.getObject()) {
                 caption = availableUnits.floorplan().name().getStringView();
             } else {

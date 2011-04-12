@@ -24,7 +24,7 @@ public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
         INFO, WARN, ERROR, FAILURE;
 
         @Override
-        public String getDebugIdString() {
+        public String debugId() {
             return this.name();
         }
     }

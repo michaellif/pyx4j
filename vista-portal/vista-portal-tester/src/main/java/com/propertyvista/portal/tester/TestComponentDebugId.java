@@ -8,24 +8,22 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Apr 11, 2011
- * @author Dad
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.tester.unit;
+package com.propertyvista.portal.tester;
 
-import com.pyx4j.selenium.DefaultSeleniumTestConfiguration;
+import com.pyx4j.commons.IDebugId;
 
-public class TestConfigurator extends DefaultSeleniumTestConfiguration {
+public enum TestComponentDebugId implements IDebugId {
 
-    @Override
-    public String getTestUrl() {
-        return getProperty("selenium.url", "http://localhost:8888/vista/tester/");
+    CButton,
 
-    }
+    CCheckBox;
 
     @Override
-    public boolean reuseBrowser() {
-        return getProperty("selenium.reuseBrowser", true);
+    public String debugId() {
+        return this.name();
     }
 
 }

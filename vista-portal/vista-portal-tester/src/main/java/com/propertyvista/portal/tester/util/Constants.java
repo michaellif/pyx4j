@@ -13,7 +13,12 @@
  */
 package com.propertyvista.portal.tester.util;
 
+//TODO vadims: Remove
+@Deprecated
 public class Constants {
-    public final static String DEBUG_ID_PRFX = "pyx-";
+
+    //TODO vadims: Remove the Constants.DEBUG_ID_PRFX
+    @Deprecated
+    public final static String DEBUG_ID_PRFX = "";
 
 }

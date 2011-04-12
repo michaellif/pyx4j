@@ -79,7 +79,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         header.add(new VistaWidgetDecorator(inject(proto().selectionCriteria().availableTo()), decorData));
 
         Button changeBtn = new Button(i18n.tr("Change"));
-        changeBtn.ensureDebugId(VistaFormsDebugId.Available_Units_Change.getDebugIdString());
+        changeBtn.ensureDebugId(VistaFormsDebugId.Available_Units_Change.debugId());
         changeBtn.getElement().getStyle().setMarginTop(0, Unit.PX);
         changeBtn.getElement().getStyle().setMarginLeft(1, Unit.EM);
         changeBtn.addClickHandler(new ClickHandler() {

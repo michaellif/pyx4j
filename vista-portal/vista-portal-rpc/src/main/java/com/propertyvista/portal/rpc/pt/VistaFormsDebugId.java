@@ -34,7 +34,7 @@ public enum VistaFormsDebugId implements IDebugId {
     Available_Units_ViewPlan;
 
     @Override
-    public String getDebugIdString() {
+    public String debugId() {
         return this.name();
     }
 

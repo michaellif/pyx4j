@@ -17,11 +17,22 @@ import com.pyx4j.commons.IDebugId;
 
 public enum TesterDebugId implements IDebugId {
 
-    HREF, BTN, TXTBOX, CHK, LBL, DTBOX, MANDATORY_CHK, VISITED_CHK, READONLY_CHK, EDITABLE_CHK, PANEL, MENU, VALUE, RAWVALUE, PRINTREPORT_BTN, DISABLED_CHK, WATERMARK_TXT, TONUM_TXT, FROMNUM_TXT, NOPOSTDATE_TXT, MAXLENGTH_TXT, CCOMP_STACK, FORM_STACK, F1_HREF, TESTEDCOMP, TesterMainMenu, TestMessage, TestMessageClear;
+    TesterMainMenu,
+
+    StartTestSufix,
+
+    ComponentUnderTest,
+
+    //TODO vadims: format and rename to Humanly readable names. NO need to flow  All Capitals rules
+    BTN, TXTBOX, CHK, LBL, DTBOX, MANDATORY_CHK, VISITED_CHK, READONLY_CHK, EDITABLE_CHK, PANEL, MENU, VALUE, RAWVALUE, PRINTREPORT_BTN, DISABLED_CHK, WATERMARK_TXT, TONUM_TXT, FROMNUM_TXT, NOPOSTDATE_TXT, MAXLENGTH_TXT, CCOMP_STACK, FORM_STACK, F1_HREF,
+
+    TestMessage,
+
+    TestMessageClear;
 
     @Override
-    public String getDebugIdString() {
-        return this.name().toLowerCase();
+    public String debugId() {
+        return this.name();
     }
 
 }

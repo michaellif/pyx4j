@@ -40,6 +40,7 @@ import com.propertyvista.portal.tester.ui.EditDepartmentViewImpl;
 import com.propertyvista.portal.tester.ui.TestedCComponentWraper;
 import com.propertyvista.portal.tester.util.Constants;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -227,7 +228,7 @@ public class ComponentTester extends AppSite {
         final Anchor dformlink = new Anchor("Departments");
         dformlink.setTarget("_self");
         dformlink.setStyleName("pyx-navigator");
-        dformlink.ensureDebugId(Constants.DEBUG_ID_PRFX + TesterDebugId.F1_HREF.getDebugIdString());
+        dformlink.ensureDebugId(Constants.DEBUG_ID_PRFX + TesterDebugId.F1_HREF.debugId());
         dformlink.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -266,7 +267,7 @@ public class ComponentTester extends AppSite {
      */
     private VerticalPanel createWidgetListPanel(List<TestedCComponentWraper> testedCWidgets) {
         VerticalPanel widgetpanel = new VerticalPanel();
-        widgetpanel.ensureDebugId(Constants.DEBUG_ID_PRFX + TesterDebugId.CCOMP_STACK.getDebugIdString());
+        widgetpanel.ensureDebugId(Constants.DEBUG_ID_PRFX + TesterDebugId.CCOMP_STACK.debugId());
         widgetpanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
         widgetpanel.setSpacing(4);
 
@@ -275,7 +276,7 @@ public class ComponentTester extends AppSite {
             widlink.setTarget("_self");
             widlink.setStyleName("pyx-navigator");
             widlink.setName(w.getElement().getId());
-            widlink.ensureDebugId(Constants.DEBUG_ID_PRFX + w.getShortname() + "-" + TesterDebugId.HREF.getDebugIdString());
+            widlink.ensureDebugId(CompositeDebugId.debugId(w.getShortname(), TesterDebugId.StartTestSufix));
             widgetpanel.add(widlink);
             // Show test panel for selected widget
             widlink.addClickHandler(new ClickHandler() {

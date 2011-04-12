@@ -20,7 +20,7 @@ public enum VistaFormsDebugId implements IDebugId {
     MainNavigation_Prefix;
 
     @Override
-    public String getDebugIdString() {
+    public String debugId() {
         return this.name();
     }
 

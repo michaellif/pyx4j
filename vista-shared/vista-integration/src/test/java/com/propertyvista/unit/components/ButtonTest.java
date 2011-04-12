@@ -13,11 +13,13 @@
  */
 package com.propertyvista.unit.components;
 
+import com.propertyvista.portal.tester.TestComponentDebugId;
 import com.propertyvista.portal.tester.TesterDebugId;
 import com.propertyvista.unit.VistaDevLogin;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.selenium.BaseSeleniumTestCase;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 
@@ -30,11 +32,12 @@ public class ButtonTest extends BaseSeleniumTestCase {
 
     public void testButtonClickTwice() throws Exception {
         VistaDevLogin.login(selenium);
-        selenium.waitFor(TesterDebugId.TesterMainMenu.name() + "-text0").click();
+        selenium.waitFor(new CompositeDebugId(TesterDebugId.TesterMainMenu, "text0"));
+        selenium.click(new CompositeDebugId(TesterDebugId.TesterMainMenu, "text0"));
 
-        selenium.click("pyx-CButton-href");
+        selenium.click(TestComponentDebugId.CButton, TesterDebugId.StartTestSufix);
 
-        selenium.click("pyx-testedcomponent");
+        selenium.click(TesterDebugId.ComponentUnderTest);
 
         assertEquals("Button event Result", "CButton clicked", selenium.getText(TesterDebugId.TestMessage));
         selenium.click(TesterDebugId.TestMessageClear);
@@ -42,7 +45,14 @@ public class ButtonTest extends BaseSeleniumTestCase {
         assertEquals("Clear message", "", selenium.getText(TesterDebugId.TestMessage));
 
         // Test if we can press second time
-        selenium.click("pyx-testedcomponent");
+        selenium.click(TesterDebugId.ComponentUnderTest);
+        assertEquals("Button press again event Result", "CButton clicked", selenium.getText(TesterDebugId.TestMessage));
+
+        selenium.click(TesterDebugId.TestMessageClear);
+        assertEquals("Clear message", "", selenium.getText(TesterDebugId.TestMessage));
+
+        // Test if we can press third time
+        selenium.click(TesterDebugId.ComponentUnderTest);
         assertEquals("Button press again event Result", "CButton clicked", selenium.getText(TesterDebugId.TestMessage));
 
         selenium.click(TesterDebugId.TestMessageClear);

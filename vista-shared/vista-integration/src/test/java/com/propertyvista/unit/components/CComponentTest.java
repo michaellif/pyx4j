@@ -11,144 +11,160 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.tester.unit;
+package com.propertyvista.unit.components;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import com.google.gwt.user.client.ui.UIObject;
+import com.propertyvista.portal.tester.TestComponentDebugId;
 import com.propertyvista.portal.tester.TesterDebugId;
 import com.propertyvista.portal.tester.util.Constants;
+import com.propertyvista.unit.VistaDevLogin;
+import com.propertyvista.unit.config.ApplicationId;
+import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.selenium.BaseSeleniumTestCase;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 
 public class CComponentTest extends BaseSeleniumTestCase {
 
-    private final String MAIN_MENU_PRFX = UIObject.DEBUG_ID_PREFIX + TesterDebugId.TesterMainMenu.name();
-
+    //TODO vadims: Remove this 
     private final String PYX_DEBUG_PRFX = UIObject.DEBUG_ID_PREFIX + Constants.DEBUG_ID_PRFX;
 
-    private final String TESTED_COMPONENT = PYX_DEBUG_PRFX + TesterDebugId.TESTEDCOMP.getDebugIdString();
+    //TODO vadims: Remove this, See all oveloaded methods we have in class SeleniumExtended
+    private final String TESTED_COMPONENT = TesterDebugId.ComponentUnderTest.debugId();
 
     @Override
     protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {
-        return new TestConfigurator();
+        return new VistaSeleniumTestConfiguration(ApplicationId.tester);
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        selenium.waitFor(By.id(MAIN_MENU_PRFX + "-text0"), 50);
-        selenium.click(By.id(MAIN_MENU_PRFX + "-text0"));
+        VistaDevLogin.login(selenium);
+        selenium.waitFor(new CompositeDebugId(TesterDebugId.TesterMainMenu, "text0"));
+        selenium.click(new CompositeDebugId(TesterDebugId.TesterMainMenu, "text0"));
 
     }
 
     public void testCButton() throws Exception {
         //TODO finish it up
-        final String el = "CButton-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        //final String el = "CButton-";
+        //selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+        selenium.click(TestComponentDebugId.CButton, TesterDebugId.StartTestSufix);
     }
 
     public void testCCheckBox() throws Exception {
         final String el = "CCheckBox-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        //WAS: selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+        //I think this is better, because more consistend with all other use of debugIds.
+        selenium.click(TestComponentDebugId.CCheckBox, TesterDebugId.StartTestSufix);
+
         //Enable/Disable
-        tstEnableDisable(TESTED_COMPONENT + "-input", PYX_DEBUG_PRFX + TesterDebugId.DISABLED_CHK.getDebugIdString() + "-input");
+        //tstEnableDisable(TESTED_COMPONENT + "-input", PYX_DEBUG_PRFX + TesterDebugId.DISABLED_CHK.debugId() + "-input");
+        //NOW: How I(VladS) see the same function
+        assertEnabled(TesterDebugId.ComponentUnderTest);
+        selenium.click(TesterDebugId.DISABLED_CHK);
+        assertNotEnabled(TesterDebugId.ComponentUnderTest);
+        selenium.click(TesterDebugId.DISABLED_CHK);
+
         //Read-only
-        tstReadOnly(TESTED_COMPONENT + "-input", PYX_DEBUG_PRFX + TesterDebugId.READONLY_CHK.getDebugIdString() + "-input");
+        //tstReadOnly(TESTED_COMPONENT + "-input", PYX_DEBUG_PRFX + TesterDebugId.READONLY_CHK.debugId() + "-input");
 
     }
 
     public void testCComboBox() throws Exception {
         final String el = "CComboBox-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
         //Enable/Disable
-        tstEnableDisable(TESTED_COMPONENT, PYX_DEBUG_PRFX + TesterDebugId.DISABLED_CHK.getDebugIdString() + "-input");
+        tstEnableDisable(TESTED_COMPONENT, PYX_DEBUG_PRFX + TesterDebugId.DISABLED_CHK.debugId() + "-input");
         //TODO mandatory
         //Read-only
-        tstReadOnly(TESTED_COMPONENT, PYX_DEBUG_PRFX + TesterDebugId.READONLY_CHK.getDebugIdString() + "-input");
+        tstReadOnly(TESTED_COMPONENT, PYX_DEBUG_PRFX + TesterDebugId.READONLY_CHK.debugId() + "-input");
 
     }
 
     public void testCDatePicker() throws Exception {
         final String el = "CDatePicker-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCDoubleField() throws Exception {
         final String el = "CDoubleField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCEmailField() throws Exception {
         final String el = "CEmailField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCHyperlink() throws Exception {
         final String el = "CHyperlink-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCIntegerField() throws Exception {
         final String el = "CIntegerField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCLabel() throws Exception {
         final String el = "CLabel-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCListBox() throws Exception {
         final String el = "CListBox-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCLongField() throws Exception {
         final String el = "CLongField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCMonthYearPicker() throws Exception {
         final String el = "CMonthYearPicker-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCPasswordTextField() throws Exception {
         final String el = "CPasswordTextField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCRadioGroupInteger() throws Exception {
         final String el = "CRadioGroupInteger-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCRichTextArea() throws Exception {
         final String el = "CRichTextArea-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void ttestCSuggestBox() throws Exception {
         final String el = "CSuggestBox-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCTextArea() throws Exception {
         final String el = "CTextArea-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void ttestCTextField() throws Exception {
         final String el = "CTextField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     public void testCTimeField() throws Exception {
         final String el = "CTimeField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.HREF.getDebugIdString()));
+        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
     }
 
     private void tstEnableDisable(String testedcId, String testedfId) {
