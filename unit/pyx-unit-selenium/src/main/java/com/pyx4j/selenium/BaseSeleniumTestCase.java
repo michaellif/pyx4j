@@ -187,7 +187,7 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public void assertNotEditable(String locator) {
-        assertFalse(locator + " should be Not editable", selenium.isEditable(locator));
+        assertFalse(locator + " should not be editable", selenium.isEditable(locator));
     }
 
     public void assertEditable(IDebugId debugId) {
@@ -195,7 +195,7 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public void assertNotEditable(IDebugId debugId) {
-        assertFalse(debugId.debugId() + " should be Not editable", selenium.isEditable(debugId));
+        assertFalse(debugId.debugId() + " should not be editable", selenium.isEditable(debugId));
     }
 
     public void assertEnabled(String locator) {
@@ -203,7 +203,7 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public void assertNotEnabled(String locator) {
-        assertFalse(locator + " should be Not enabled", selenium.isEnabled(locator));
+        assertFalse(locator + " should not be enabled", selenium.isEnabled(locator));
     }
 
     public void assertEnabled(IDebugId debugId) {
@@ -211,7 +211,7 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public void assertNotEnabled(IDebugId debugId) {
-        assertFalse(debugId.debugId() + " should be Not enabled", selenium.isEnabled(debugId));
+        assertFalse(debugId.debugId() + " should not be enabled", selenium.isEnabled(debugId));
     }
 
     public void assertPresent(String locator) {
@@ -219,7 +219,7 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public void assertNotPresent(String locator) {
-        assertFalse(locator + " should be Not exists", selenium.isElementPresent(locator));
+        assertFalse(locator + " should not be present", selenium.isElementPresent(locator));
     }
 
     public void assertPresent(IDebugId debugId) {
@@ -227,7 +227,7 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public void assertNotPresent(IDebugId debugId) {
-        assertFalse(debugId.debugId() + " should be Not exists", selenium.isElementPresent(debugId));
+        assertFalse(debugId.debugId() + " should not be present", selenium.isElementPresent(debugId));
     }
 
     public void assertVisible(String locator) {
@@ -235,7 +235,7 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public void assertNotVisible(String locator) {
-        assertFalse(locator + " should be Not be visible", selenium.isVisible(locator));
+        assertFalse(locator + " should not be visible", selenium.isVisible(locator));
     }
 
     public void assertVisible(IDebugId debugId) {
@@ -243,6 +243,6 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public void assertNotVisible(IDebugId debugId) {
-        assertFalse(debugId.debugId() + " should be Not be visible", selenium.isVisible(debugId));
+        assertFalse(debugId.debugId() + " should not be visible", selenium.isVisible(debugId));
     }
 }
