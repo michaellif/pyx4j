@@ -17,14 +17,11 @@ import com.pyx4j.commons.IDebugId;
 
 public enum TesterDebugId implements IDebugId {
 
-    TesterMainMenu,
-
-    TestMessage,
-
-    TestMessageClear;
+    HREF, BTN, TXTBOX, CHK, LBL, DTBOX, MANDATORY_CHK, VISITED_CHK, READONLY_CHK, EDITABLE_CHK, PANEL, MENU, VALUE, RAWVALUE, PRINTREPORT_BTN, DISABLED_CHK, WATERMARK_TXT, TONUM_TXT, FROMNUM_TXT, NOPOSTDATE_TXT, MAXLENGTH_TXT, CCOMP_STACK, FORM_STACK, F1_HREF, TESTEDCOMP, TesterMainMenu, TestMessage, TestMessageClear;
 
     @Override
     public String getDebugIdString() {
-        return this.name();
+        return this.name().toLowerCase();
     }
+
 }

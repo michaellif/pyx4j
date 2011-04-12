@@ -65,9 +65,9 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         public CEditableComponent<?, ?> create(IObject<?> member) {
             if (member.getValueClass().equals(Employee.class)) {
                 return createEmployeeEditor();
-            } else if (member.equals(proto().employees())) {
+            } else if (member == proto().employees()) {
                 return createEmployeeFolderEditorColumns();
-            } else if (member.equals(proto().contractors())) {
+            } else if (member == proto().contractors()) {
                 return createEmployeeFolderEditorForms();
             } else {
                 return super.create(member);
@@ -177,7 +177,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.save(form.getValue());
+                // presenter.save(form.getValue());
             }
 
         });

@@ -35,6 +35,8 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.tester.ui.EditDepartmentViewImpl;
 import com.propertyvista.portal.tester.ui.TestedCComponentWraper;
 import com.propertyvista.portal.tester.util.Constants;
 
@@ -82,7 +84,7 @@ public class ComponentTester extends AppSite {
      */
     private List<TestedCComponentWraper> testedComponents;
 
-    private TestedCComponentWraper beingtested;
+    private Widget beingtested;
 
     private LayoutPanel testcontainer;
 
@@ -177,6 +179,8 @@ public class ComponentTester extends AppSite {
         VerticalPanel widgetpanel = createWidgetListPanel(testedComponents);
         testcontainer = new LayoutPanel();
 
+        testcontainer.setStyleName("pyx-generic-background");
+
         HorizontalPanel messagePanel = new HorizontalPanel();
         testcontainer.add(messagePanel);
 
@@ -207,6 +211,7 @@ public class ComponentTester extends AppSite {
          */
 
         mainmenu.add(widgetpanel, "Tested C Components");
+
         final Anchor junitlink = new Anchor("Start Tests");
         junitlink.setTarget("_self");
         junitlink.setStyleName("pyx-navigator");
@@ -219,9 +224,27 @@ public class ComponentTester extends AppSite {
         });
         mainmenu.add(junitlink, "Client Side JUnit");
 
-        HTML other_stack = new HTML("Future Test Groups");
-        other_stack.ensureDebugId(Constants.DEBUG_ID_PRFX + "other-stack");
-        mainmenu.add(other_stack, "Other");
+        final Anchor dformlink = new Anchor("Departments");
+        dformlink.setTarget("_self");
+        dformlink.setStyleName("pyx-navigator");
+        dformlink.ensureDebugId(Constants.DEBUG_ID_PRFX + TesterDebugId.F1_HREF.getDebugIdString());
+        dformlink.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (beingtested != null)
+                    ComponentTester.this.testcontainer.remove(beingtested);
+                beingtested = new EditDepartmentViewImpl();
+                //new TestDeptImpl();
+                //EditDepartmentViewImpl();
+                if (beingtested != null) {
+                    ComponentTester.this.testcontainer.add(beingtested);
+                    ComponentTester.this.testcontainer.setWidgetLeftRight(beingtested, 3, Unit.PCT, 3, Unit.PCT);
+                    ComponentTester.this.testcontainer.setWidgetTopBottom(beingtested, 3, Unit.PCT, 3, Unit.PCT);
+                }
+            }
+        });
+
+        mainmenu.add(dformlink, "Form Tests");
 
         mainmenu.ensureDebugId(TesterDebugId.TesterMainMenu.name());
         /**
@@ -243,7 +266,7 @@ public class ComponentTester extends AppSite {
      */
     private VerticalPanel createWidgetListPanel(List<TestedCComponentWraper> testedCWidgets) {
         VerticalPanel widgetpanel = new VerticalPanel();
-        widgetpanel.ensureDebugId(Constants.DEBUG_ID_PRFX + "ccomponent-stack");
+        widgetpanel.ensureDebugId(Constants.DEBUG_ID_PRFX + TesterDebugId.CCOMP_STACK.getDebugIdString());
         widgetpanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
         widgetpanel.setSpacing(4);
 
@@ -252,7 +275,7 @@ public class ComponentTester extends AppSite {
             widlink.setTarget("_self");
             widlink.setStyleName("pyx-navigator");
             widlink.setName(w.getElement().getId());
-            widlink.ensureDebugId(Constants.DEBUG_ID_PRFX + w.getShortname() + "-href");
+            widlink.ensureDebugId(Constants.DEBUG_ID_PRFX + w.getShortname() + "-" + TesterDebugId.HREF.getDebugIdString());
             widgetpanel.add(widlink);
             // Show test panel for selected widget
             widlink.addClickHandler(new ClickHandler() {

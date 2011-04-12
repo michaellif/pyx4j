@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.ValueBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.portal.tester.TesterDebugId;
 import com.propertyvista.portal.tester.util.Constants;
 
 import com.pyx4j.commons.StringDebugId;
@@ -121,7 +122,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         this.setWidgetTopBottom(testedcomponent, 5, Unit.PCT, 5, Unit.PCT);
         processTestedComponent(component);
         this.ensureDebugId(Constants.DEBUG_ID_PRFX + fullname);
-        rawvalue.ensureDebugId(composeDebugId("rawvalue"));
+        rawvalue.ensureDebugId(composeDebugId(TesterDebugId.RAWVALUE.getDebugIdString()));
 
     }
 
@@ -145,7 +146,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         if (shortname == null)
             shortname = "";
         this.component.setTitle("Tested Value:");
-        this.component.setDebugId(new StringDebugId(composeDebugId("testedcomponent")));
+        this.component.setDebugId(new StringDebugId(composeDebugId(TesterDebugId.TESTEDCOMP.getDebugIdString())));
 
         /**
          * Format testing area
@@ -177,7 +178,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         testedrow.setCellWidth(decoratedcomp, "470px");
 
         Button b = new Button("Print Component Raw Data");
-        b.ensureDebugId(composeDebugId("focus-btn"));
+        b.ensureDebugId(composeDebugId(TesterDebugId.PRINTREPORT_BTN.getDebugIdString()));
         b.setStyleName("pyx-btn");
         b.addClickHandler(new ClickHandler() {
             @Override
@@ -199,11 +200,12 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         //TODO Toolotip does not work
         this.component.setTitle("This is " + shortname);
         this.component.setToolTip("Tooltip for " + shortname);
+
         //Enable disable
         CheckBox chk = null;
-        if (!(this.component instanceof CLabel /* || this.component instanceof CHyperlink */)) {
+        if (!(this.component instanceof CLabel)) {
             chk = new CheckBox("Disabled");
-            chk.ensureDebugId(composeDebugId("disabled-chk"));
+            chk.ensureDebugId(composeDebugId(TesterDebugId.DISABLED_CHK.getDebugIdString()));
             chk.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -218,7 +220,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
             //Mandatory optional
             final CEditableComponent<?, ?> ec = (CEditableComponent<?, ?>) this.component;
             chk = new CheckBox("Mandatory");
-            chk.ensureDebugId(composeDebugId("mandatory-chk"));
+            chk.ensureDebugId(composeDebugId(TesterDebugId.MANDATORY_CHK.getDebugIdString()));
 
             chk.addClickHandler(new ClickHandler() {
 
@@ -232,7 +234,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
             testedfeatures.add(chk);
 
             chk = new CheckBox("Read Only");
-            chk.ensureDebugId(composeDebugId("read-only-chk"));
+            chk.ensureDebugId(composeDebugId(TesterDebugId.READONLY_CHK.getDebugIdString()));
             chk.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -245,7 +247,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
             testedfeatures.add(chk);
 
             chk = new CheckBox("Visited");
-            chk.ensureDebugId(composeDebugId("visited-chk"));
+            chk.ensureDebugId(composeDebugId(TesterDebugId.VISITED_CHK.getDebugIdString()));
             chk.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -258,17 +260,26 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
 
             testedfeatures.add(chk);
 
+            ec.asWidget().addBlurHandler(new BlurHandler() {
+
+                @Override
+                public void onBlur(BlurEvent event) {
+                    ec.revalidate();
+
+                }
+            });
         }
         if (this.component instanceof CTextComponent<?, ?> && !(this.component instanceof CDatePicker || this.component instanceof CPasswordTextField)) {
             final CTextComponent<?, ?> ctxt = (CTextComponent<?, ?>) this.component;
             TextBox wmfield = new TextBox();
             wmfield.setTitle("Watermark");
-            wmfield.ensureDebugId(composeDebugId("watermark-txt"));
+            wmfield.ensureDebugId(composeDebugId(TesterDebugId.WATERMARK_TXT.getDebugIdString()));
             wmfield.addBlurHandler(new BlurHandler() {
                 @Override
                 public void onBlur(BlurEvent event) {
                     TextBox tb = (TextBox) event.getSource();
-                    ctxt.setWatermark(tb.getValue());
+                    String v = tb.getValue();
+                    ctxt.setWatermark(v);
                     ctxt.revalidate();
                 }
             });
@@ -297,10 +308,10 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
                 tofield = new DoubleBox();
             }
 
-            fromfield.ensureDebugId(composeDebugId("fromnum-txt"));
+            fromfield.ensureDebugId(composeDebugId(TesterDebugId.FROMNUM_TXT.getDebugIdString()));
             fromfield.setTitle("From Number");
             fromfield.setWidth("85%");
-            tofield.ensureDebugId(composeDebugId("tonum-txt"));
+            tofield.ensureDebugId(composeDebugId(TesterDebugId.TONUM_TXT.getDebugIdString()));
             tofield.setTitle("To Number");
             tofield.setWidth("85%");
 
@@ -350,7 +361,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         } else if (this.component instanceof CDatePicker) {
             final CDatePicker dtpk = (CDatePicker) this.component;
             chk = new CheckBox("No Past Date Selection");
-            chk.ensureDebugId(composeDebugId("no-pastdate-selection-chk"));
+            chk.ensureDebugId(composeDebugId(TesterDebugId.NOPOSTDATE_TXT.getDebugIdString()));
             chk.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -364,7 +375,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         } else if (this.component instanceof CEmailField || this.component instanceof CTextField || this.component instanceof CTextArea) {
             final CTextComponent<?, ?> ctxt = (CTextComponent<?, ?>) this.component;
             IntegerBox maxfield = new IntegerBox();
-            maxfield.ensureDebugId(composeDebugId("-maxlength-txt"));
+            maxfield.ensureDebugId(composeDebugId(TesterDebugId.MAXLENGTH_TXT.getDebugIdString()));
             maxfield.setTitle("Max Length");
             maxfield.addBlurHandler(new BlurHandler() {
                 @Override

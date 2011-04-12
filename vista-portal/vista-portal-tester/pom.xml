@@ -1,160 +1,159 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://maven.apache.org/POM/4.0.0">
-    <!-- @version $Revision$ ($Author$) $Date$ -->
-    <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+	<!-- @version $Revision$ ($Author$) $Date: 2011-04-06 21:49:04 
+		-0400 (Wed, 06 Apr 2011) $ -->
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.propertyvista</groupId>
-        <artifactId>vista-portal</artifactId>
-        <version>1.0.0-SNAPSHOT</version><!--vista-version-->
-        <relativePath>../pom.xml</relativePath>
-    </parent>
+	<parent>
+		<groupId>com.propertyvista</groupId>
+		<artifactId>vista-portal</artifactId>
+		<version>1.0.0-SNAPSHOT</version><!--vista-version -->
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 
-    <artifactId>vista-portal-tester</artifactId>
-    <name>vista-portal-tester</name>
+	<artifactId>vista-portal-tester</artifactId>
+	<name>vista-portal-tester</name>
 
-    <dependencies>
+	<dependencies>
 
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-unit-gwt</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-unit-gwt</artifactId>
+		</dependency>
 
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-portal-rpc</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-gwt-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>com.propertyvista</groupId>
+			<artifactId>vista-portal-rpc</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
-<!-- mvn install site ; will faile on this!
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-portal-rpc</artifactId>
-            <version>${project.version}</version>
-            <classifier>tests</classifier>
-        </dependency>
+		<dependency>
+			<groupId>com.propertyvista</groupId>
+			<artifactId>vista-gwt-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-portal-domain</artifactId>
-            <version>${project.version}</version>
-            <classifier>tests</classifier>
-        </dependency>
--->
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-essentials-gwt</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-unit-selenium</artifactId>
+			<version>${pyxVersion}</version>
+		</dependency>
 
-        <dependency>
-        	<groupId>com.google.gwt</groupId>
-        	<artifactId>gwt-incubator</artifactId>
-        	<version>2.0.1</version>
-        	<type>jar</type>
-        	<scope>provided</scope>
-        </dependency>
-    </dependencies>
+		<!-- mvn install site ; will faile on this! <dependency> <groupId>com.propertyvista</groupId> 
+			<artifactId>vista-portal-rpc</artifactId> <version>${project.version}</version> 
+			<classifier>tests</classifier> </dependency> <dependency> <groupId>com.propertyvista</groupId> 
+			<artifactId>vista-portal-domain</artifactId> <version>${project.version}</version> 
+			<classifier>tests</classifier> </dependency> -->
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-essentials-gwt</artifactId>
+		</dependency>
 
-    <properties>
-        <gwtModule>tester</gwtModule>
-        <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
-    </properties>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-incubator</artifactId>
+			<version>2.0.1</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 
-    <build>
+	<properties>
+		<gwtModule>tester</gwtModule>
+		<gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
+	</properties>
 
-        <plugins>
+	<build>
 
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>clean.app-gwt-generated</id>
-                        <phase>clean</phase>
-                        <goals><goal>run</goal></goals>
-                        <configuration>
-                            <target>
-                                <delete quiet="true" includeemptydirs="true">
-                                    <fileset dir="${basedir}/../../vista-server/src/main/webapp/${gwtModule}"/>
-                                </delete>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+		<plugins>
 
-        </plugins>
-    </build>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>clean.app-gwt-generated</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<delete quiet="true" includeemptydirs="true">
+									<fileset
+										dir="${basedir}/../../vista-server/src/main/webapp/${gwtModule}" />
+								</delete>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
-    <profiles>
-        <profile>
-            <id>gwtc</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.pyx4j</groupId>
-                        <artifactId>maven-gwt-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>compile-java2script</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>compile</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <module>${gwtModuleCompile}</module>
-                            <sourceDirectories>
-                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                            </sourceDirectories>
-                            <usePluginDependencies>com.propertyvista*</usePluginDependencies>
-                            <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
-                            <logLevel>INFO</logLevel>
-                            <style>${gwtCompilerOutputStyle}</style>
-                            <target>${basedir}/../../vista-server/src/main/webapp</target>
-                            <generated>${project.build.directory}/gwt-generated</generated>
-                            <compilerClass>com.google.gwt.dev.Compiler</compilerClass>
-                            <localWorkers>${gwtLocalWorkers}</localWorkers>
-                            <draftCompile>${gwtDraftCompile}</draftCompile>
-                            <!--compileReport>${gwtCompileReport}</compileReport-->
-                            <compileReport>false</compileReport>
-                            <!-- disableCastChecking>true</disableCastChecking -->
-                            <!-- disableClassMetadata>true</disableClassMetadata -->
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>com.propertyvista</groupId>
-                                <artifactId>vista-portal-rpc</artifactId>
-                                <version>${project.version}</version>
-                                <classifier>tests</classifier>
-                            </dependency>
-                            <dependency>
-                                <groupId>com.propertyvista</groupId>
-                                <artifactId>vista-portal-domain</artifactId>
-                                <version>${project.version}</version>
-                                <classifier>tests</classifier>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+		</plugins>
+	</build>
 
-    </profiles>
+	<profiles>
+		<profile>
+			<id>gwtc</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.pyx4j</groupId>
+						<artifactId>maven-gwt-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>compile-java2script</id>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>compile</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<module>${gwtModuleCompile}</module>
+							<sourceDirectories>
+								<sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+							</sourceDirectories>
+							<usePluginDependencies>com.propertyvista*</usePluginDependencies>
+							<!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
+							<logLevel>INFO</logLevel>
+							<style>${gwtCompilerOutputStyle}</style>
+							<target>${basedir}/../../vista-server/src/main/webapp</target>
+							<generated>${project.build.directory}/gwt-generated</generated>
+							<compilerClass>com.google.gwt.dev.Compiler</compilerClass>
+							<localWorkers>${gwtLocalWorkers}</localWorkers>
+							<draftCompile>${gwtDraftCompile}</draftCompile>
+							<!--compileReport>${gwtCompileReport}</compileReport -->
+							<compileReport>false</compileReport>
+							<!-- disableCastChecking>true</disableCastChecking -->
+							<!-- disableClassMetadata>true</disableClassMetadata -->
+						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>com.propertyvista</groupId>
+								<artifactId>vista-portal-rpc</artifactId>
+								<version>${project.version}</version>
+								<classifier>tests</classifier>
+							</dependency>
+							<dependency>
+								<groupId>com.propertyvista</groupId>
+								<artifactId>vista-portal-domain</artifactId>
+								<version>${project.version}</version>
+								<classifier>tests</classifier>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
 
 </project>
