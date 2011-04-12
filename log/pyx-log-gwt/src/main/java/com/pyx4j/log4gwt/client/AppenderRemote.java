@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,22 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 24, 2010
+ * Created on 2011-04-12
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.shared;
+package com.pyx4j.log4gwt.client;
 
-import java.util.List;
-import java.util.Map;
-
-public interface IList<TYPE extends IEntity> extends ICollection<TYPE, List<Map<String, Object>>>, List<TYPE> {
-
-    public void set(IList<TYPE> typedList);
+public interface AppenderRemote extends Appender {
 
     /**
-     * Create new instance Prototype of the Value object with special handling for item
-     * position in a list.
+     * Send the buffer to storage or remote computer.
      */
-    //public TYPE $(int idx);
+    public void flush();
+
 }

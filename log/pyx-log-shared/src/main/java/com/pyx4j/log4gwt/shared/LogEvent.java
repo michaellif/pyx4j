@@ -46,6 +46,8 @@ public class LogEvent implements Serializable {
 
     private String throwableMessage;
 
+    private boolean rollOverFlag;
+
     public LogEvent() {
     }
 
@@ -72,6 +74,12 @@ public class LogEvent implements Serializable {
         this.message = message;
         this.dataArray = data;
         this.throwable = throwable;
+    }
+
+    public static LogEvent RollOverLogEvent(String message) {
+        LogEvent e = new LogEvent(Level.INFO, message, null, (Object) null);
+        e.rollOverFlag = true;
+        return e;
     }
 
     public Level getLevel() {
@@ -137,5 +145,9 @@ public class LogEvent implements Serializable {
         } else {
             return getFormatedMessage() + " " + getThrowableMessage();
         }
+    }
+
+    public boolean isRollOverFlag() {
+        return rollOverFlag;
     }
 }

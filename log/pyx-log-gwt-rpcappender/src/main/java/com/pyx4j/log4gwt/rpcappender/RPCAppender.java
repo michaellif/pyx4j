@@ -30,7 +30,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Consts;
-import com.pyx4j.log4gwt.client.Appender;
+import com.pyx4j.log4gwt.client.AppenderRemote;
 import com.pyx4j.log4gwt.client.LogFormatter;
 import com.pyx4j.log4gwt.rpc.LogServices;
 import com.pyx4j.log4gwt.shared.Level;
@@ -38,7 +38,7 @@ import com.pyx4j.log4gwt.shared.LogEvent;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public class RPCAppender implements Appender {
+public class RPCAppender implements AppenderRemote {
 
     private static final Logger log = LoggerFactory.getLogger(RPCAppender.class);
 
@@ -108,7 +108,8 @@ public class RPCAppender implements Appender {
         }
     }
 
-    private void flush() {
+    @Override
+    public void flush() {
         try {
             // Do not change timer rate, simply wait more when errors are happening  
             if ((deliveryErrorCount > 3) && ((lastDeliveryAttemptTime + deliveryErrorDelayMillis) > System.currentTimeMillis())) {

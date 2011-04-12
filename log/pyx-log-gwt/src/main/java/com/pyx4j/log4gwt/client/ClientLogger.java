@@ -40,6 +40,7 @@ public class ClientLogger extends MarkerIgnoringBase {
 
     protected ClientLogger() {
         appenderCollection = new AppenderCollection();
+        registerAPI();
     }
 
     public static ClientLogger instance() {
@@ -125,6 +126,41 @@ public class ClientLogger extends MarkerIgnoringBase {
 
     public static boolean isDebugOn() {
         return debugOn;
+    }
+
+    /**
+     * Send the buffer to storage or remote computer.
+     */
+    public static void flush() {
+        instance().appenderCollection.flush();
+    }
+
+    /**
+     * Send the buffer to storage or remote computer and RollOver the log file.
+     */
+    public static void rollOver(String message) {
+        instance().appenderCollection.callAppenders(LogEvent.RollOverLogEvent(message));
+        flush();
+    }
+
+    private static native void registerAPI() /*-{
+
+		$wnd.pyxClientLog = function(message) {
+			@com.pyx4j.log4gwt.client.ClientLogger::apiClientLog(Ljava/lang/String;)(message);
+		}
+
+		$wnd.pyxClientLogFlush = function() {
+			@com.pyx4j.log4gwt.client.ClientLogger::flush()();
+		}
+
+		$wnd.pyxClientLogRollOver = function(message) {
+			@com.pyx4j.log4gwt.client.ClientLogger::rollOver(Ljava/lang/String;)(message);
+		}
+
+    }-*/;
+
+    private static void apiClientLog(String message) {
+        instance().info(message);
     }
 
     @Override

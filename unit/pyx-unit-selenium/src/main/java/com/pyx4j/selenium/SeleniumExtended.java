@@ -25,12 +25,17 @@ import java.util.concurrent.TimeUnit;
 import junit.framework.Assert;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.FormattingTuple;
+import org.slf4j.helpers.MessageFormatter;
+import org.slf4j.impl.Log4jLoggerAdapter;
+import org.slf4j.spi.LocationAwareLogger;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.CompositeDebugId;
@@ -45,13 +50,48 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     private static final Logger log = LoggerFactory.getLogger(SeleniumExtended.class);
 
+    final static String FQCN = SeleniumExtended.class.getName();
+
     public static String GWT_DEBUG_ID_PREFIX = "gwt-debug-";
 
+    public static String GWT_LOG_PREFIX = "Selenium: ";
+
     private RenderedWebElement glassPanel;
+
+    private boolean propagateLogToClient;
 
     public SeleniumExtended(ISeleniumTestConfiguration testConfig) {
         super(testConfig);
         driver.manage().timeouts().implicitlyWait(testConfig.implicitlyWaitSeconds(), TimeUnit.SECONDS);
+    }
+
+    public void setPropagateLogToClient(boolean enable) {
+        propagateLogToClient = enable;
+    }
+
+    private void log(String format, Object... args) {
+        if (propagateLogToClient) {
+            clientLog(GWT_LOG_PREFIX + format, args);
+        }
+        FormattingTuple ft = MessageFormatter.arrayFormat(format, args);
+        ((Log4jLoggerAdapter) log).log(null, FQCN, LocationAwareLogger.DEBUG_INT, ft.getMessage(), null, null);
+    }
+
+    private static String escapeJS(String message) {
+        return message.replace("\"", "\\\"");
+    }
+
+    public void clientLog(String format, Object... args) {
+        FormattingTuple ft = MessageFormatter.arrayFormat(format, args);
+        ((JavascriptExecutor) driver).executeScript("window.pyxClientLog(\"" + escapeJS(ft.getMessage()) + "\")");
+    }
+
+    public void clientLogFlush() {
+        ((JavascriptExecutor) driver).executeScript("window.pyxClientLogFlush()");
+    }
+
+    public void clientLogRollOver(String message) {
+        ((JavascriptExecutor) driver).executeScript("window.pyxClientLogRollOver(\"" + escapeJS(message) + "\")");
     }
 
     public void setGlassPanelAware() {
@@ -274,6 +314,7 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     public void click(By by) {
         WebElement element = driver.findElement(by);
+        log("click on element <{}> id={} ", element.getTagName(), element.getAttribute("id"));
         element.click();
         this.waitWhileWorking();
     }
@@ -294,38 +335,40 @@ public class SeleniumExtended extends WebDriverWrapper {
         click(by(member));
     }
 
+    public void type(By by, CharSequence... keysToSend) {
+        WebElement element = driver.findElement(by);
+        log("type in element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), keysToSend);
+        element.clear();
+        element.sendKeys(keysToSend);
+    }
+
     public void type(String paramString, CharSequence... keysToSend) {
-        WebElement we = driver.findElement(elementLocator(paramString));
-        we.clear();
-        we.sendKeys(keysToSend);
+        type(elementLocator(paramString), keysToSend);
     }
 
     public void type(IDebugId debugId, CharSequence... keysToSend) {
-        WebElement we = driver.findElement(by(debugId));
-        we.clear();
-        we.sendKeys(keysToSend);
+        type(by(debugId), keysToSend);
     }
 
     public void type(IObject<?> member, CharSequence... keysToSend) {
-        WebElement we = driver.findElement(by(member));
-        we.clear();
-        we.sendKeys(keysToSend);
+        type(by(member), keysToSend);
     }
 
     public void setValue(WebElement element, String textValue) {
+        log("setValue of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), textValue);
         InputHelper.setValue(element, textValue);
     }
 
     public void setValue(IDebugId debugId, String textValue) {
-        InputHelper.setValue(driver.findElement(by(debugId)), textValue);
+        setValue(driver.findElement(by(debugId)), textValue);
     }
 
     public void setValue(String paramString, String textValue) {
-        InputHelper.setValue(driver.findElement(elementLocator(paramString)), textValue);
+        setValue(driver.findElement(elementLocator(paramString)), textValue);
     }
 
     public void setValue(IObject<?> member, String textValue) {
-        InputHelper.setValue(driver.findElement(by(member)), textValue);
+        setValue(driver.findElement(by(member)), textValue);
     }
 
     public String getText(String paramString) {
@@ -373,22 +416,23 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     //CheckBox special case
     public void setValue(WebElement element, boolean selectionValue) {
+        log("setValue of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), selectionValue);
         InputHelper.setValue(driver, element, selectionValue);
     }
 
     //CheckBox special case
     public void setValue(IDebugId debugId, boolean selectionValue) {
-        InputHelper.setValue(driver, driver.findElement(by(debugId)), selectionValue);
+        setValue(driver.findElement(by(debugId)), selectionValue);
     }
 
     //CheckBox special case
     public void setValue(String paramString, boolean selectionValue) {
-        InputHelper.setValue(driver, driver.findElement(elementLocator(paramString)), selectionValue);
+        setValue(driver.findElement(elementLocator(paramString)), selectionValue);
     }
 
     //CheckBox special case
     public void setValue(IObject<?> member, boolean selectionValue) {
-        InputHelper.setValue(driver, driver.findElement(by(member)), selectionValue);
+        setValue(driver.findElement(by(member)), selectionValue);
     }
 
     public boolean isEnabled(String locator) {

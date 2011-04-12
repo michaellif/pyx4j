@@ -63,6 +63,21 @@ public class AppenderCollection {
     }
 
     /**
+     * Send the buffer to storage or remote computer.
+     */
+    public void flush() {
+        if (appenderList != null) {
+            int size = appenderList.size();
+            for (int i = 0; i < size; i++) {
+                Appender appender = appenderList.get(i);
+                if (appender instanceof AppenderRemote) {
+                    ((AppenderRemote) appender).flush();
+                }
+            }
+        }
+    }
+
+    /**
      * Get all attached appenders as an Enumeration. If there are no attached appenders
      * <code>null</code> is returned.
      * 

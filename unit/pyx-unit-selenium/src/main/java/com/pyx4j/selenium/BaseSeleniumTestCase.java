@@ -161,6 +161,10 @@ public class BaseSeleniumTestCase extends TestCase {
             keepBrowser = true;
         }
 
+        if (selenium != null) {
+            selenium.clientLogRollOver(SeleniumExtended.GWT_LOG_PREFIX + "test-end " + this.getClass().getName() + "." + getName());
+        }
+
         if ((selenium != null) && (!keepBrowser)) {
             selenium.driver.quit();
         } else {
