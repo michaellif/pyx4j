@@ -188,7 +188,7 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
         //ERROR HERE 
         selenium.click(VistaFormsDebugId.Available_Units_Change);
         //TODO tmp Hack #1
-        selenium.click(VistaFormsDebugId.Available_Units_Change);
+        //selenium.click(VistaFormsDebugId.Available_Units_Change);
 
         //selenium.click(meta(UnitSelection.class).availableUnits().units().$(2).unitType());
         selenium.click("UnitSelection$availableUnits$units-row-2-ApartmentUnit$unitType");

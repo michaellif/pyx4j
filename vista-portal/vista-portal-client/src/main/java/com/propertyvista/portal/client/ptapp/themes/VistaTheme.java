@@ -60,7 +60,7 @@ public abstract class VistaTheme extends Theme {
         initTabPanelStyles();
         initDialogBoxStyles();
         initDialogPanelStyles();
-        initGwtButtonStyles();
+        // initGwtButtonStyles();
         initComboBoxStyles();
         initButtonStyles();
         initTooltipStyle();
