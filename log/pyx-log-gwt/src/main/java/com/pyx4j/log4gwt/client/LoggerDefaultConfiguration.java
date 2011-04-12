@@ -62,6 +62,8 @@ class LoggerDefaultConfiguration {
         public void setUp() {
             if (AppenderFirebug.isSupported()) {
                 ClientLogger.addAppender(new AppenderFirebug());
+            } else if (AppenderConsoleMozilla.isSupported()) {
+                ClientLogger.addAppender(new AppenderConsoleMozilla());
             }
         }
 
