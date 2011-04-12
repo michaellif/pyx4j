@@ -132,7 +132,7 @@ public class Path implements Serializable, IDebugId {
     }
 
     @Override
-    public String getDebugIdString() {
+    public String debugId() {
         return path.substring(0, path.length() - 1).replace(PATH_SEPARATOR, '$');
     }
 

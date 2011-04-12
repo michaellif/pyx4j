@@ -419,7 +419,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             } else {
                 parentDebugId = getCComponent().getParentContainer().getDebugId();
             }
-            collapseImage.ensureDebugId(new CompositeDebugId(parentDebugId, FormNavigationDebugId.Form_Collapse).getDebugIdString());
+            collapseImage.ensureDebugId(new CompositeDebugId(parentDebugId, FormNavigationDebugId.Form_Collapse).debugId());
             collapseImageHolder.setWidget(collapseImage);
 
             add(collapseImageHolder);
@@ -482,7 +482,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 upCommand.setResource(ImageFactory.getImages().moveUp());
                 upCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
                 upCommand.getElement().getStyle().setMargin(2, Unit.PX);
-                upCommand.ensureDebugId(new CompositeDebugId(rowDebugId, FormNavigationDebugId.Form_MoveUp).getDebugIdString());
+                upCommand.ensureDebugId(new CompositeDebugId(rowDebugId, FormNavigationDebugId.Form_MoveUp).debugId());
                 upCommand.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
@@ -498,7 +498,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 downCommand.setResource(ImageFactory.getImages().moveDown());
                 downCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
                 downCommand.getElement().getStyle().setMargin(2, Unit.PX);
-                downCommand.ensureDebugId(new CompositeDebugId(rowDebugId, FormNavigationDebugId.Form_MoveDown).getDebugIdString());
+                downCommand.ensureDebugId(new CompositeDebugId(rowDebugId, FormNavigationDebugId.Form_MoveDown).debugId());
                 downCommand.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
@@ -514,7 +514,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 removeCommand.setResource(ImageFactory.getImages().deleteItem());
                 removeCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
                 removeCommand.getElement().getStyle().setMargin(2, Unit.PX);
-                removeCommand.ensureDebugId(new CompositeDebugId(rowDebugId, FormNavigationDebugId.Form_Remove).getDebugIdString());
+                removeCommand.ensureDebugId(new CompositeDebugId(rowDebugId, FormNavigationDebugId.Form_Remove).debugId());
                 removeCommand.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {

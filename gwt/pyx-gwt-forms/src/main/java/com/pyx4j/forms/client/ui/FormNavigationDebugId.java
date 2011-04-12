@@ -35,7 +35,7 @@ public enum FormNavigationDebugId implements IDebugId {
     Form_Collapse;
 
     @Override
-    public String getDebugIdString() {
+    public String debugId() {
         return this.name();
     }
 

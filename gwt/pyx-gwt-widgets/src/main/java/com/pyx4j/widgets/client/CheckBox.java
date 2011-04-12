@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.google.gwt.dom.client.InputElement;
+import com.google.gwt.dom.client.LabelElement;
+
 import com.pyx4j.widgets.client.style.CSSClass;
 
 public class CheckBox extends com.google.gwt.user.client.ui.CheckBox {
@@ -27,5 +30,22 @@ public class CheckBox extends com.google.gwt.user.client.ui.CheckBox {
     public CheckBox() {
         super();
         setStyleName(CSSClass.pyx4j_CheckBox.name());
+    }
+
+    public CheckBox(String label) {
+        this();
+        this.setText(label);
+    }
+
+    /**
+     * Change the Debug Id to avoid a special cases for CheckBox in selenium.
+     */
+    @Override
+    protected void onEnsureDebugId(String baseID) {
+        InputElement inputElem = getElement().getChild(0).cast();
+        LabelElement labelElem = getElement().getChild(1).cast();
+        ensureDebugId(labelElem, baseID, "label");
+        ensureDebugId(inputElem, baseID);
+        labelElem.setHtmlFor(inputElem.getId());
     }
 }

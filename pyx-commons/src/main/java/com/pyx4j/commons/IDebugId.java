@@ -22,6 +22,6 @@ package com.pyx4j.commons;
 
 public interface IDebugId {
 
-    public String getDebugIdString();
+    public String debugId();
 
 }

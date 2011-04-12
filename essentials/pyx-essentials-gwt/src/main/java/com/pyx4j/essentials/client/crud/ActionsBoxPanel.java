@@ -81,7 +81,7 @@ public class ActionsBoxPanel extends ActionsPanel {
             anchor.addClickHandler(handler);
         }
         if (debugId != null) {
-            anchor.ensureDebugId(debugId.getDebugIdString());
+            anchor.ensureDebugId(debugId.debugId());
         } else {
             anchor.ensureDebugId(name);
         }

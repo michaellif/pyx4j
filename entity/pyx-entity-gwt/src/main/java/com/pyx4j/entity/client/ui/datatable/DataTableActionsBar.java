@@ -100,7 +100,7 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         anchor.getElement().getStyle().setMarginRight(10, Unit.PX);
         anchor.addClickHandler(handler);
         if (debugId != null) {
-            anchor.ensureDebugId(debugId.getDebugIdString());
+            anchor.ensureDebugId(debugId.debugId());
         } else {
             anchor.ensureDebugId(name);
         }

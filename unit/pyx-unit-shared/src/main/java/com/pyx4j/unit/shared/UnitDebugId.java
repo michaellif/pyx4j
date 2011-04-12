@@ -39,7 +39,7 @@ public enum UnitDebugId implements IDebugId {
     JUnit_ResultsFailed;
 
     @Override
-    public String getDebugIdString() {
+    public String debugId() {
         return this.name();
     }
 

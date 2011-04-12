@@ -41,7 +41,7 @@ public enum CrudDebugId implements IDebugId {
     Criteria_Submit;
 
     @Override
-    public String getDebugIdString() {
+    public String debugId() {
         return this.name();
     }
 }

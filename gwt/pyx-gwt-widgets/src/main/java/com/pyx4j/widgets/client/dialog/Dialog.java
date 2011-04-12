@@ -310,7 +310,7 @@ public class Dialog extends DialogPanelNew {
         if (debugID == null) {
             button.ensureDebugId("Dialog." + text);
         } else {
-            button.ensureDebugId(debugID.getDebugIdString());
+            button.ensureDebugId(debugID.debugId());
         }
         button.addClickHandler(buttonListener);
         DOM.setStyleAttribute(button.getElement(), "margin", "3px");

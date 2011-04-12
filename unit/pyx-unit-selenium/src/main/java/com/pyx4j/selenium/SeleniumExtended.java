@@ -126,15 +126,23 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     public By by(IDebugId debugId) {
-        return By.id(gwtLocator(debugId.getDebugIdString()));
+        return By.id(gwtLocator(debugId.debugId()));
     }
 
     public By by(IDebugId parent, IDebugId child) {
         return By.id(gwtLocator(CompositeDebugId.debugId(parent, child)));
     }
 
+    public By by(String parent, IDebugId child) {
+        return By.id(gwtLocator(CompositeDebugId.debugId(parent, child)));
+    }
+
+    public By by(IDebugId parent, String child) {
+        return By.id(gwtLocator(CompositeDebugId.debugId(parent, child)));
+    }
+
     public By by(IObject<?> member) {
-        return By.id(gwtLocator(member.getPath().getDebugIdString()));
+        return By.id(gwtLocator(member.getPath().debugId()));
     }
 
     public boolean isElementPresent(String paramString) {
@@ -362,17 +370,17 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     //CheckBox special case
     public void setValue(IDebugId debugId, boolean selectionValue) {
-        InputHelper.setValue(driver, driver.findElement(By.id(gwtLocator(debugId.getDebugIdString() + "-input"))), selectionValue);
+        InputHelper.setValue(driver, driver.findElement(by(debugId)), selectionValue);
     }
 
     //CheckBox special case
     public void setValue(String paramString, boolean selectionValue) {
-        InputHelper.setValue(driver, driver.findElement(elementLocator(paramString + "-input")), selectionValue);
+        InputHelper.setValue(driver, driver.findElement(elementLocator(paramString)), selectionValue);
     }
 
     //CheckBox special case
     public void setValue(IObject<?> member, boolean selectionValue) {
-        InputHelper.setValue(driver, driver.findElement(By.id(gwtLocator(member.getPath().getDebugIdString() + "-input"))), selectionValue);
+        InputHelper.setValue(driver, driver.findElement(by(member)), selectionValue);
     }
 
     public boolean isEnabled(String locator) {

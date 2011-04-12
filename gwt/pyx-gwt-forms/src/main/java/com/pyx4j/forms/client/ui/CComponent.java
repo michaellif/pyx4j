@@ -260,7 +260,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
     public void setDebugId(IDebugId debugId) {
         this.debugId = debugId;
         if ((widget != null) && (debugId != null)) {
-            widget.ensureDebugId(getDebugId().getDebugIdString());
+            widget.ensureDebugId(getDebugId().debugId());
         }
     }
 

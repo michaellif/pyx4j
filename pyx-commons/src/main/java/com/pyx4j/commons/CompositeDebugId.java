@@ -39,16 +39,28 @@ public class CompositeDebugId implements IDebugId {
         this(parent, new StringDebugId(child + "-" + itemNumber));
     }
 
+    public CompositeDebugId(String parent, IDebugId child) {
+        this(new StringDebugId(parent), child);
+    }
+
     @Override
-    public String getDebugIdString() {
-        return (parent != null ? parent.getDebugIdString() + "_" : "") + (child != null ? child.getDebugIdString() : "unknown");
+    public String debugId() {
+        return (parent != null ? parent.debugId() + "-" : "") + (child != null ? child.debugId() : "unknown");
     }
 
     public static String debugId(IDebugId parent, IDebugId child) {
-        return new CompositeDebugId(parent, child).getDebugIdString();
+        return new CompositeDebugId(parent, child).debugId();
+    }
+
+    public static String debugId(IDebugId parent, String child) {
+        return new CompositeDebugId(parent, child).debugId();
+    }
+
+    public static String debugId(String parent, IDebugId child) {
+        return new CompositeDebugId(parent, child).debugId();
     }
 
     public static String debugId(IDebugId parent, IDebugId child, int itemNumber) {
-        return new CompositeDebugId(parent, child).getDebugIdString() + "-" + itemNumber;
+        return new CompositeDebugId(parent, child).debugId() + "-" + itemNumber;
     }
 }

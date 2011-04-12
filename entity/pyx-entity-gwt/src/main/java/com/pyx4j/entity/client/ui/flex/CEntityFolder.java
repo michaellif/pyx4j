@@ -182,7 +182,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         });
         //TODO use components inheritance
         if (this.getDebugId() != null) {
-            folderDecorator.asWidget().ensureDebugId(this.getDebugId().getDebugIdString() + "_fd_");
+            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + "_fd_");
         }
     }
 
@@ -194,7 +194,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     public void setDebugId(IDebugId debugId) {
         super.setDebugId(debugId);
         if ((debugId != null) && (folderDecorator != null)) {
-            folderDecorator.asWidget().ensureDebugId(this.getDebugId().getDebugIdString() + "_fd_");
+            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + "_fd_");
         }
     }
 
@@ -308,7 +308,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         currentRowDebugId++;
         IDebugId rowDebugId = new CompositeDebugId(this.getDebugId(), "row", currentRowDebugId);
         component.setDebugId(rowDebugId);
-        folderItemDecorator.asWidget().ensureDebugId(rowDebugId.getDebugIdString());
+        folderItemDecorator.asWidget().ensureDebugId(rowDebugId.debugId());
 
         folderItemDecorator.addItemRemoveClickHandler(new ClickHandler() {
 

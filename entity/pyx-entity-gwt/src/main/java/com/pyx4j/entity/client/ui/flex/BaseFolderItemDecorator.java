@@ -114,7 +114,7 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
         if (image != null) {
-            image.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Remove.getDebugIdString());
+            image.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Remove.debugId());
         }
     }
 
