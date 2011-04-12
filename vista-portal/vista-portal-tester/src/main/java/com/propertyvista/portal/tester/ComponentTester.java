@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.tester.ui.EditDepartmentViewImpl;
 import com.propertyvista.portal.tester.ui.TestedCComponentWraper;
+import com.propertyvista.portal.tester.unit.TestDeferredCommands;
 import com.propertyvista.portal.tester.util.Constants;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -246,6 +247,8 @@ public class ComponentTester extends AppSite {
         });
 
         mainmenu.add(dformlink, "Form Tests");
+
+        mainmenu.add(new TestDeferredCommands(), "Deferred Commands");
 
         mainmenu.ensureDebugId(TesterDebugId.TesterMainMenu.name());
         /**

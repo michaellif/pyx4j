@@ -16,7 +16,6 @@ package com.propertyvista.unit.portal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.openqa.selenium.By;
 import org.selenium.GaeAppLoginTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +25,11 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
-import com.propertyvista.unit.VistaDevLogin;
+import com.propertyvista.unit.VistaBaseSeleniumTestCase;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.selenium.BaseSeleniumTestCase;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
@@ -39,7 +37,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
  * @author vadym
  * 
  */
-public class ApartmentScreenTest extends BaseSeleniumTestCase {
+public class ApartmentScreenTest extends VistaBaseSeleniumTestCase {
 
     private static final Logger log = LoggerFactory.getLogger(GaeAppLoginTest.class);
 
@@ -74,10 +72,6 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
 
     public void testDateTimePickers() throws Exception {
         String strNow = new SimpleDateFormat("yyyyMMdd-hhmmss").format(Calendar.getInstance().getTime());
-        VistaDevLogin.login(selenium);
-        selenium.waitFor(VistaFormsDebugId.Auth_Login, 10);
-        selenium.setGlassPanelAware();
-        selenium.waitWhileWorking();
 
         String ulogin = testUser + strNow + emailAt;
         selenium.type(meta(AccountCreationRequest.class).email(), ulogin);
@@ -133,11 +127,6 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
     public void testDateTimePast() throws Exception {
         String strNow = new SimpleDateFormat("yyyyMMdd-hhmmss").format(Calendar.getInstance().getTime());
 
-        VistaDevLogin.login(selenium);
-        selenium.waitFor(By.id("gwt-debug-Auth_Login"), 10);
-        selenium.setGlassPanelAware();
-        selenium.waitWhileWorking();
-
         String ulogin = testUser + strNow + emailAt;
         selenium.type(meta(AccountCreationRequest.class).email(), ulogin);
         selenium.type(meta(AccountCreationRequest.class).password(), ulogin);
@@ -164,15 +153,17 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
         selenium.type(meta(UnitSelection.class).selectionCriteria().availableFrom(), strFrom);
         selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
         //ERROR HERE 
+        //TestUtils.sleep(3000);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
+        assertNotPresent("UnitSelection$availableUnits$units-row-1-ApartmentUnit$unitType");
 
-//        selenium.click("Crud_Save");
+        selenium.click("Crud_Save");
 
-//        assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN));
-//        String warns = selenium.getText("id=gwt-debug-UserMessage_Prefix_WARN-3");
-//        assertTrue(warns.indexOf(warnRentDateFmt) >= 0);
-//        assertTrue(warns.indexOf(warnNoUnit) >= 0);
-//        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
+        assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN));
+        String warns = selenium.getText(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN);
+        assertTrue(warns.indexOf(warnRentDateFmt) >= 0);
+        assertTrue(warns.indexOf(warnNoUnit) >= 0);
+        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
     }
 
     protected void doTestStartRent10DaysAfter() throws Exception {
@@ -186,11 +177,13 @@ public class ApartmentScreenTest extends BaseSeleniumTestCase {
         selenium.type("UnitSelection$selectionCriteria$availableFrom", strFrom);
         selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
         //ERROR HERE 
+        //TestUtils.sleep(3000);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
         //TODO tmp Hack #1
         //selenium.click(VistaFormsDebugId.Available_Units_Change);
 
         //selenium.click(meta(UnitSelection.class).availableUnits().units().$(2).unitType());
+        // UnitSelection/availableUnits/units/[2]/ApartmentUnit/unitType
         selenium.click("UnitSelection$availableUnits$units-row-2-ApartmentUnit$unitType");
         String strAvailFrom = selenium.getText("UnitSelection$availableUnits$units-row-2-ApartmentUnit$avalableForRent");
         java.util.Date dateAvail = sdf.parse(strAvailFrom);

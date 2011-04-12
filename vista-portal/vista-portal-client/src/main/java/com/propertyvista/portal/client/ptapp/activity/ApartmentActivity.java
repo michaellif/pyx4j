@@ -39,6 +39,7 @@ public class ApartmentActivity extends WizardStepActivity<UnitSelection, Apartme
 
             @Override
             public void onSuccess(AvailableUnitsByFloorplan result) {
+                log.debug("received AvailableUnits {}", result.units().size());
                 ((ApartmentView) getView()).setAvailableUnits(result);
             }
 

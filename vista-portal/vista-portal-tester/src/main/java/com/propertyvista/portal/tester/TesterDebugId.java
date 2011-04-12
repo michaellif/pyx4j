@@ -28,7 +28,15 @@ public enum TesterDebugId implements IDebugId {
 
     TestMessage,
 
-    TestMessageClear;
+    TestMessageClear,
+
+    DeferredStartProcess,
+
+    DeferredMessageCheck,
+
+    DeferredMessageStatus,
+
+    DeferredCheckStatus;
 
     @Override
     public String debugId() {
