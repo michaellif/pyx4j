@@ -190,6 +190,10 @@ public class SeleniumExtended extends WebDriverWrapper {
         return waitFor(by(debugId));
     }
 
+    public WebElement waitFor(IDebugId debugId, int waitSeconds) {
+        return waitFor(by(debugId), waitSeconds);
+    }
+
     public WebElement waitFor(IObject<?> member) {
         return waitFor(by(member));
     }
@@ -330,6 +334,10 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     public String getText(IDebugId debugId) {
         return driver.findElement(by(debugId)).getText();
+    }
+
+    public String getText(IDebugId parent, IDebugId child) {
+        return driver.findElement(by(parent, child)).getText();
     }
 
     public String getText(IObject<?> member) {
