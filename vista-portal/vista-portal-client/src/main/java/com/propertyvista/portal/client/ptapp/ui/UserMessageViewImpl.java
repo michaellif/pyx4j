@@ -42,7 +42,6 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
         for (UserMessageType type : UserMessageType.values()) {
 
             Holder holder = new Holder(type);
-            holder.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.UserMessage_Prefix, type));
             holders.put(type, holder);
             add(holder);
         }
@@ -129,6 +128,8 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
             html = new HTML();
             html.getElement().getStyle().setColor(colour);
             html.getElement().getStyle().setPaddingLeft(15, Unit.PX);
+            html.ensureDebugId(CompositeDebugId.debugId(VistaFormsDebugId.UserMessage_Prefix, type));
+
             add(html);
             setCellVerticalAlignment(html, HorizontalPanel.ALIGN_MIDDLE);
             setCellWidth(html, "100%");
