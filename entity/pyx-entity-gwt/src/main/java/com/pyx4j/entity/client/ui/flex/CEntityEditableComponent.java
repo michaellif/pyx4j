@@ -149,7 +149,7 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
                         @Override
                         public void execute() {
                             revalidate();
-                            log.debug("CEntityEditableComponent.onValueChange fired from {}. New value is {}.!", CEntityEditableComponent.this.getTitle(),
+                            log.debug("CEntityEditableComponent.onValueChange fired from {}. New value is {}.", CEntityEditableComponent.this.getTitle(),
                                     event.getValue());
                             ValueChangeEvent.fire(CEntityEditableComponent.this, getValue());
                             sheduled = false;
