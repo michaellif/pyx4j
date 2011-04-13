@@ -33,7 +33,7 @@ public class CComponentTest extends BaseSeleniumTestCase {
         return new VistaSeleniumTestConfiguration(ApplicationId.tester) {
             @Override
             public boolean reuseBrowser() {
-                return true;
+                return isStartedUnderEclipse();
             }
         };
     }
