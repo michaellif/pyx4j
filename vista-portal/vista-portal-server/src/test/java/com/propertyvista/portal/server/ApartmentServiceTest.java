@@ -151,20 +151,20 @@ public class ApartmentServiceTest extends VistaDBTestCase {
             }
         }, unitSelection);
 
-        // TODO For now this part fails, something to do with AvailableFrom and To being null
-        //        // now let's load unit selection
-        //        apartmentService.retrieve(new UnitTestsAsyncCallback<UnitSelection>() {
-        //            @Override
-        //            public void onSuccess(UnitSelection result) {
-        //                Assert.assertFalse("Result", result.isNull());
-        //                Assert.assertTrue("Selected unit", result.selectedUnitId().isNull());
-        //                TestUtil.assertEqual("UnitSelection", unitSelection, result);
-        //                unitSelection = result; // update local unit
-        //            }
-        //        }, null);
-        //
-        //        Assert.assertNotNull("Unit selection", unitSelection);
-        //        Assert.assertNotNull("Retrieved units", unitSelection.availableUnits().units());
-        //        Assert.assertFalse("Found units", unitSelection.availableUnits().units().isEmpty());
+        // now let's load unit selection
+        // TODO Vlads, this one fails
+        apartmentService.retrieve(new UnitTestsAsyncCallback<UnitSelection>() {
+            @Override
+            public void onSuccess(UnitSelection result) {
+                Assert.assertFalse("Result", result.isNull());
+                Assert.assertTrue("Selected unit", result.selectedUnitId().isNull());
+                TestUtil.assertEqual("UnitSelection", unitSelection, result);
+                unitSelection = result; // update local unit
+            }
+        }, null);
+
+        Assert.assertNotNull("Unit selection", unitSelection);
+        Assert.assertNotNull("Retrieved units", unitSelection.availableUnits().units());
+        Assert.assertFalse("Found units", unitSelection.availableUnits().units().isEmpty());
     }
 }
