@@ -76,96 +76,96 @@ public class CComponentTest extends BaseSeleniumTestCase {
 
     }
 
-    public void testCComboBox() throws Exception {
-        final String el = "CComboBox-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-        //Enable/Disable
-        tstEnableDisable(TESTED_COMPONENT, PYX_DEBUG_PRFX + TesterDebugId.DISABLED_CHK.debugId() + "-input");
-        //TODO mandatory
-        //Read-only
-        tstReadOnly(TESTED_COMPONENT, PYX_DEBUG_PRFX + TesterDebugId.READONLY_CHK.debugId() + "-input");
-
-    }
-
-    public void testCDatePicker() throws Exception {
-        final String el = "CDatePicker-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCDoubleField() throws Exception {
-        final String el = "CDoubleField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCEmailField() throws Exception {
-        final String el = "CEmailField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCHyperlink() throws Exception {
-        final String el = "CHyperlink-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCIntegerField() throws Exception {
-        final String el = "CIntegerField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCLabel() throws Exception {
-        final String el = "CLabel-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCListBox() throws Exception {
-        final String el = "CListBox-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCLongField() throws Exception {
-        final String el = "CLongField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCMonthYearPicker() throws Exception {
-        final String el = "CMonthYearPicker-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCPasswordTextField() throws Exception {
-        final String el = "CPasswordTextField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCRadioGroupInteger() throws Exception {
-        final String el = "CRadioGroupInteger-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCRichTextArea() throws Exception {
-        final String el = "CRichTextArea-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void ttestCSuggestBox() throws Exception {
-        final String el = "CSuggestBox-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCTextArea() throws Exception {
-        final String el = "CTextArea-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void ttestCTextField() throws Exception {
-        final String el = "CTextField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
-
-    public void testCTimeField() throws Exception {
-        final String el = "CTimeField-";
-        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-    }
+//    public void testCComboBox() throws Exception {
+//        final String el = "CComboBox-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//        //Enable/Disable
+//        tstEnableDisable(TESTED_COMPONENT, PYX_DEBUG_PRFX + TesterDebugId.DISABLED_CHK.debugId() + "-input");
+//        //TODO mandatory
+//        //Read-only
+//        tstReadOnly(TESTED_COMPONENT, PYX_DEBUG_PRFX + TesterDebugId.READONLY_CHK.debugId() + "-input");
+//
+//    }
+//
+//    public void testCDatePicker() throws Exception {
+//        final String el = "CDatePicker-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCDoubleField() throws Exception {
+//        final String el = "CDoubleField-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCEmailField() throws Exception {
+//        final String el = "CEmailField-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCHyperlink() throws Exception {
+//        final String el = "CHyperlink-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCIntegerField() throws Exception {
+//        final String el = "CIntegerField-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCLabel() throws Exception {
+//        final String el = "CLabel-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCListBox() throws Exception {
+//        final String el = "CListBox-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCLongField() throws Exception {
+//        final String el = "CLongField-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCMonthYearPicker() throws Exception {
+//        final String el = "CMonthYearPicker-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCPasswordTextField() throws Exception {
+//        final String el = "CPasswordTextField-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCRadioGroupInteger() throws Exception {
+//        final String el = "CRadioGroupInteger-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCRichTextArea() throws Exception {
+//        final String el = "CRichTextArea-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void ttestCSuggestBox() throws Exception {
+//        final String el = "CSuggestBox-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCTextArea() throws Exception {
+//        final String el = "CTextArea-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void ttestCTextField() throws Exception {
+//        final String el = "CTextField-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
+//
+//    public void testCTimeField() throws Exception {
+//        final String el = "CTimeField-";
+//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
+//    }
 
     private void tstEnableDisable(String testedcId, String testedfId) {
         assertEnabled(testedcId);
