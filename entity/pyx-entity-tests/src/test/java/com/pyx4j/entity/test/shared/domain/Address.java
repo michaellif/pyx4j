@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.test.shared.domain;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
@@ -30,7 +32,7 @@ import com.pyx4j.entity.test.shared.adapters.ProvinceReferenceAdapter;
 @Table(prefix = "test")
 public interface Address extends IEntity {
 
-    public static int TEST_DECLARED_MEMBERS = 4;
+    public static int TEST_DECLARED_MEMBERS = 6;
 
     @ToString(index = 3)
     Country country();
@@ -43,6 +45,10 @@ public interface Address extends IEntity {
 
     @ToString(index = 1)
     IPrimitive<String> streetName();
+
+    IPrimitive<java.sql.Date> effectiveFrom();
+
+    IPrimitive<Date> effectiveTo();
 
     //TODO
     //IPrimitive<GeoPoint> location();

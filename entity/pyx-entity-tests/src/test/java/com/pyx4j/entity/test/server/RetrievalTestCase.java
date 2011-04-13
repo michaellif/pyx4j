@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
 import com.pyx4j.entity.test.shared.domain.Country;
@@ -214,6 +215,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         runtestOwnedListQuery(true, true);
     }
 
+    //TODO
     public void TODOtestEmbeddedEntity() {
 
         Address address = EntityFactory.create(Address.class);
@@ -241,6 +243,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         Assert.assertNull("null is saved", address3.city().name().getValue());
     }
 
+    //TODO
     public void TODOtestEmbeddedEntityRemoval() {
 
         Address address = EntityFactory.create(Address.class);
@@ -341,6 +344,12 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         Assert.assertEquals("address.country Value", countryName, emp2.workAddress().country().name().getValue());
         Assert.assertEquals("address.city Value", cityName, emp2.workAddress().city().name().getValue());
+
+        // Test retrieve with criteria
+        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().firstName(), emp.firstName().getValue()));
+        Employee emp2q = srv.retrieve(criteria);
+        assertTrue("Retr by criteria\n" + emp2.toString() + "\n!=\n" + emp2q.toString(), EntityGraph.fullyEqual(emp2, emp2q));
 
         // Test value removal
 

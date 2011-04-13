@@ -20,12 +20,18 @@
  */
 package com.pyx4j.entity.test.server;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Random;
 
 import junit.framework.TestCase;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.env.ConfigureTestsEnv;
 
 /**
@@ -41,6 +47,8 @@ public abstract class DatastoreTestBase extends TestCase {
     protected abstract PersistenceEnvironment getPersistenceEnvironment();
 
     private PersistenceEnvironment persistenceEnvironment;
+
+    protected Random random = new Random(256);
 
     @Override
     protected void setUp() throws Exception {
@@ -61,11 +69,25 @@ public abstract class DatastoreTestBase extends TestCase {
         }
     }
 
+    protected void assertFullyEqual(String message, IEntity ent1, IEntity ent2) {
+        assertTrue(message + "\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
+    }
+
     public synchronized String uniqueString() {
         return Integer.toHexString(++uniqueCount) + "_" + Long.toHexString(System.currentTimeMillis()) + " " + this.getName();
     }
 
     public static Date getRoundedNow() {
         return new Date(1000 * (new Date().getTime() / 1000));
+    }
+
+    protected Date randomDate() {
+        Calendar c = new GregorianCalendar();
+        c.add(Calendar.MONTH, -random.nextInt(1024));
+        return new Date(1000 * (c.getTime().getTime() / 1000));
+    }
+
+    protected java.sql.Date randomSqlDate() {
+        return new java.sql.Date(TimeUtils.dayStart(randomDate()).getTime());
     }
 }

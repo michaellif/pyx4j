@@ -31,7 +31,7 @@ import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Task;
 
-public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase {
+public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
 
     public void testPersist() {
         Assert.assertNotNull("getPersistenceService", srv);
@@ -128,6 +128,55 @@ public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase
         Assert.assertNotNull("retrieve owned member", employee2.homeAddress().streetName());
 
         Assert.assertEquals("streetName is wrong", addressStreet, employee2.homeAddress().streetName().getValue());
+    }
+
+    public void testEmbeddedPersist() {
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue(uniqueString());
+        emp.workAddress().streetName().setValue(uniqueString());
+        emp.workAddress().city().name().setValue(uniqueString());
+        emp.workAddress().effectiveFrom().setValue(randomSqlDate());
+        emp.workAddress().effectiveTo().setValue(randomDate());
+        srv.persist(emp);
+
+        Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertNotNull("retrieve", emp2);
+        Assert.assertEquals("address.streetName Value", emp.workAddress().streetName().getValue(), emp2.workAddress().streetName().getValue());
+        Assert.assertEquals("address.city Value", emp.workAddress().city().name().getValue(), emp2.workAddress().city().name().getValue());
+        Assert.assertEquals("address.effectiveFrom Value", emp.workAddress().effectiveFrom().getValue(), emp2.workAddress().effectiveFrom().getValue());
+        Assert.assertEquals("address.effectiveTo Value", emp.workAddress().effectiveTo().getValue(), emp2.workAddress().effectiveTo().getValue());
+        assertFullyEqual("After persist", emp, emp2);
+
+        srv.merge(srv.retrieve(Employee.class, emp.getPrimaryKey()));
+
+        Employee emp3 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertNotNull("retrieve", emp3);
+        Assert.assertEquals("address.streetName Value", emp.workAddress().streetName().getValue(), emp3.workAddress().streetName().getValue());
+        Assert.assertEquals("address.city Value", emp.workAddress().city().name().getValue(), emp3.workAddress().city().name().getValue());
+        Assert.assertEquals("address.effectiveFrom Value", emp.workAddress().effectiveFrom().getValue(), emp3.workAddress().effectiveFrom().getValue());
+        Assert.assertEquals("address.effectiveTo Value", emp.workAddress().effectiveTo().getValue(), emp3.workAddress().effectiveTo().getValue());
+        assertFullyEqual("After merge", emp2, emp3);
+    }
+
+    public void testEmbeddedMerge() {
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue(uniqueString());
+        srv.persist(emp);
+
+        emp.workAddress().streetName().setValue(uniqueString());
+        emp.workAddress().city().name().setValue(uniqueString());
+        emp.workAddress().effectiveFrom().setValue(randomSqlDate());
+        emp.workAddress().effectiveTo().setValue(randomDate());
+        srv.merge(emp);
+
+        Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertNotNull("retrieve", emp2);
+        Assert.assertEquals("address.streetName Value", emp.workAddress().streetName().getValue(), emp2.workAddress().streetName().getValue());
+        Assert.assertEquals("address.city Value", emp.workAddress().city().name().getValue(), emp2.workAddress().city().name().getValue());
+        Assert.assertEquals("address.effectiveFrom Value", emp.workAddress().effectiveFrom().getValue(), emp2.workAddress().effectiveFrom().getValue());
+        Assert.assertEquals("address.effectiveTo Value", emp.workAddress().effectiveTo().getValue(), emp2.workAddress().effectiveTo().getValue());
+        assertFullyEqual("After merge", emp, emp2);
+
     }
 
     public void testUnownedSetPersist() {

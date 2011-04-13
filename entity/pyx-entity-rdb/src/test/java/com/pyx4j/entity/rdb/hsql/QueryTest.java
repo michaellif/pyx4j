@@ -22,9 +22,9 @@ package com.pyx4j.entity.rdb.hsql;
 
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
-import com.pyx4j.entity.test.server.QueryTestBase;
+import com.pyx4j.entity.test.server.QueryTestCase;
 
-public class QueryTest extends QueryTestBase {
+public class QueryTest extends QueryTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {

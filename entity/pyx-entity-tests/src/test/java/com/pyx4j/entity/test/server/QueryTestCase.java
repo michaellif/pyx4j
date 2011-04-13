@@ -34,7 +34,7 @@ import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 
-public abstract class QueryTestBase extends DatastoreTestBase {
+public abstract class QueryTestCase extends DatastoreTestBase {
 
     protected Employee metaEmp;
 
