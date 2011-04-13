@@ -24,7 +24,7 @@
             <artifactId>pyx-unit-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-server</artifactId>
@@ -56,8 +56,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <scope>test</scope>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
