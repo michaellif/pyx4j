@@ -24,6 +24,7 @@ import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 public abstract class EntityGraphsSecurityTestCase extends DatastoreTestBase {
@@ -97,5 +98,38 @@ public abstract class EntityGraphsSecurityTestCase extends DatastoreTestBase {
 
         Employee employee1mod = srv.retrieve(Employee.class, employee0.getPrimaryKey());
         Assert.assertEquals("streetName is changed", employee0.homeAddress().streetName().getValue(), employee1mod.homeAddress().streetName().getValue());
+    }
+
+    //TODO
+    public void TODO_testOwnedOneToManyMerge() {
+        Employee employee0 = EntityFactory.create(Employee.class);
+        employee0.firstName().setValue("A. " + uniqueString());
+        Task task0 = EntityFactory.create(Task.class);
+        task0.description().setValue("A. " + uniqueString());
+        employee0.tasks().add(task0);
+        srv.merge(employee0);
+
+        //Test insert
+        {
+            Employee employee2 = EntityFactory.create(Employee.class);
+            employee2.firstName().setValue("B. " + uniqueString());
+
+            Task task2 = EntityFactory.create(Task.class);
+            task2.description().setValue("B. " + uniqueString());
+            task2.setPrimaryKey(task0.getPrimaryKey());
+            employee2.tasks().add(task2);
+
+            boolean saved = false;
+            try {
+                srv.merge(employee2);
+                saved = true;
+            } catch (SecurityViolationException e) {
+                // OK
+            }
+            if (saved) {
+                fail("Should not save OwnedMember with Id");
+            }
+        }
+
     }
 }
