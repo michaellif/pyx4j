@@ -152,8 +152,6 @@ public class ApartmentScreenTest extends VistaBaseSeleniumTestCase {
         String strTo = sdf.format(fromDate.getTime());
         selenium.type(meta(UnitSelection.class).selectionCriteria().availableFrom(), strFrom);
         selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
-        //ERROR HERE 
-        //TestUtils.sleep(3000);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
         assertNotPresent("UnitSelection$availableUnits$units-row-1-ApartmentUnit$unitType");
 
@@ -176,8 +174,6 @@ public class ApartmentScreenTest extends VistaBaseSeleniumTestCase {
         String strTo = sdf.format(fromDate.getTime());
         selenium.type("UnitSelection$selectionCriteria$availableFrom", strFrom);
         selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
-        //ERROR HERE 
-        //TestUtils.sleep(3000);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
         //TODO tmp Hack #1
         //selenium.click(VistaFormsDebugId.Available_Units_Change);
