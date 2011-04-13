@@ -47,6 +47,8 @@ class IServiceMockProxy implements java.lang.reflect.InvocationHandler {
 
     private final Class<? extends IService> serviceInterfaceClass;
 
+    private static int rpcCallCount = 0;
+
     IServiceMockProxy(Class<? extends IService> serviceInterfaceClass) {
         this.serviceInterfaceClass = serviceInterfaceClass;
     }
@@ -65,7 +67,7 @@ class IServiceMockProxy implements java.lang.reflect.InvocationHandler {
         } catch (Throwable e) {
             callback.onFailure(new UnRecoverableRuntimeException(e.getMessage()));
         }
-        IServiceRequest request = new IServiceRequest(serviceInterfaceClass.getName(), method.getName(), serviceArgs);
+        IServiceRequest request = new IServiceRequest(serviceInterfaceClass.getName(), method.getName(), serviceArgs, ++rpcCallCount);
 
         TestLifecycle.beginRequest();
 
