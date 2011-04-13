@@ -121,7 +121,7 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
             public void onPropertyChange(final PropertyChangeEvent event) {
                 if (!sheduled) {
                     sheduled = true;
-                    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
                             if (PropertyChangeEvent.PropertyName.VALIDITY.equals(event.getPropertyName())) {
@@ -145,11 +145,11 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
             public void onValueChange(final ValueChangeEvent<T> event) {
                 if (!sheduled) {
                     sheduled = true;
-                    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
                             revalidate();
-                            log.debug("CEntityEditableComponent.onValueChange fired from {}. New value is {}.", CEntityEditableComponent.this.getTitle(),
+                            log.debug("CEntityEditableComponent.onValueChange fired from {}. New value is {}.!", CEntityEditableComponent.this.getTitle(),
                                     event.getValue());
                             ValueChangeEvent.fire(CEntityEditableComponent.this, getValue());
                             sheduled = false;

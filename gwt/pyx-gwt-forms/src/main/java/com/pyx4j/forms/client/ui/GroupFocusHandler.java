@@ -50,7 +50,7 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
     @Override
     public void onBlur(final BlurEvent e) {
         focusLost = true;
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+        Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
 
             @Override
             public void execute() {

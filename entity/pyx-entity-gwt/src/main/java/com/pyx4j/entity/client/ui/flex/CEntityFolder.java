@@ -125,7 +125,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
             public void onValueChange(final ValueChangeEvent<E> event) {
                 if (!sheduled) {
                     sheduled = true;
-                    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
                             log.debug("CEntityFolder.onValueChange fired from {}. New value is {}.", CEntityFolder.this.getTitle(), event.getValue());
@@ -146,7 +146,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
             public void onPropertyChange(final PropertyChangeEvent event) {
                 sheduled = true;
                 if (!sheduled) {
-                    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
                             log.debug("CEntityFolder.onPropertyChange fired from {}. Changed property is {}.", CEntityFolder.this.getTitle(),
