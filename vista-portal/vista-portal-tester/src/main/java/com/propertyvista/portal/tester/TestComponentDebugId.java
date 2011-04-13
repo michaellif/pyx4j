@@ -19,7 +19,41 @@ public enum TestComponentDebugId implements IDebugId {
 
     CButton,
 
-    CCheckBox;
+    CCheckBox,
+
+    CComboBox,
+
+    CDataPicker,
+
+    CDoubleField,
+
+    CEmailField,
+
+    CHyperLink,
+
+    CIntegerField,
+
+    CLabel,
+
+    CListBox,
+
+    CLongField,
+
+    CMonthYearPicker,
+
+    CPasswordTextField,
+
+    CRadioGroupInteger,
+
+    CRichTextArea,
+
+    CSuggestBox,
+
+    CTextArea,
+
+    CTextField,
+
+    CTimeField;
 
     @Override
     public String debugId() {

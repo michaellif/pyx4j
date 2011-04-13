@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.tester.ui.EditDepartmentViewImpl;
 import com.propertyvista.portal.tester.ui.TestedCComponentWraper;
 import com.propertyvista.portal.tester.unit.TestDeferredCommands;
-import com.propertyvista.portal.tester.util.Constants;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.entity.client.ClientEntityFactory;
@@ -109,20 +108,20 @@ public class ComponentTester extends AppSite {
         final Label testMessage = new Label();
         testMessage.ensureDebugId(TesterDebugId.TestMessage.name());
         /**
-         * Populate array of the tested components
+         * Populate list of the tested components
          */
         testedComponents = new ArrayList<TestedCComponentWraper>(20);
-        testedComponents.add(new TestedCComponentWraper(new CCheckBox()));
+        testedComponents.add(new TestedCComponentWraper(new CCheckBox(), TestComponentDebugId.CCheckBox));
         CComboBox<String> cbx = new CComboBox<String>();
         List<String> options = new ArrayList<String>(3);
         options.add("Option 1");
         options.add("Option 2");
         options.add("Option 3");
         cbx.setOptions(options);
-        testedComponents.add(new TestedCComponentWraper(cbx));
-        testedComponents.add(new TestedCComponentWraper(new CDatePicker()));
-        testedComponents.add(new TestedCComponentWraper(new CDoubleField()));
-        testedComponents.add(new TestedCComponentWraper(new CEmailField()));
+        testedComponents.add(new TestedCComponentWraper(cbx, TestComponentDebugId.CComboBox));
+        testedComponents.add(new TestedCComponentWraper(new CDatePicker(), TestComponentDebugId.CDataPicker));
+        testedComponents.add(new TestedCComponentWraper(new CDoubleField(), TestComponentDebugId.CDoubleField));
+        testedComponents.add(new TestedCComponentWraper(new CEmailField(), TestComponentDebugId.CEmailField));
         CHyperlink hl = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
@@ -130,18 +129,18 @@ public class ComponentTester extends AppSite {
             }
         });
         hl.setValue("Test Hyperlink");
-        testedComponents.add(new TestedCComponentWraper(hl));
+        testedComponents.add(new TestedCComponentWraper(hl, TestComponentDebugId.CHyperLink));
         CButton b = new CButton("Test CButton", new Command() {
             @Override
             public void execute() {
                 testMessage.setText("CButton clicked");
             }
         });
-        testedComponents.add(new TestedCComponentWraper(b));
-        testedComponents.add(new TestedCComponentWraper(new CIntegerField()));
+        testedComponents.add(new TestedCComponentWraper(b, TestComponentDebugId.CButton));
+        testedComponents.add(new TestedCComponentWraper(new CIntegerField(), TestComponentDebugId.CIntegerField));
         CLabel clbl = new CLabel();
         clbl.setValue("Test Label");
-        testedComponents.add(new TestedCComponentWraper(clbl));
+        testedComponents.add(new TestedCComponentWraper(clbl, TestComponentDebugId.CLabel));
         CListBox<String> lbx = new CListBox<String>();
         List<String> loptions = new ArrayList<String>(3);
         lbx.populate(loptions);
@@ -150,20 +149,21 @@ public class ComponentTester extends AppSite {
         loptions.add("List Option 3");
         lbx.setOptions(loptions);
 
-        testedComponents.add(new TestedCComponentWraper(lbx));
-        testedComponents.add(new TestedCComponentWraper(new CLongField()));
-        testedComponents.add(new TestedCComponentWraper(new CSuggestBox<String>()));
-        testedComponents.add(new TestedCComponentWraper(new CTextArea()));
-        testedComponents.add(new TestedCComponentWraper(new CTextField()));
-        testedComponents.add(new TestedCComponentWraper(new CTimeField()));
-        testedComponents.add(new TestedCComponentWraper(new CMonthYearPicker(false)));
+        testedComponents.add(new TestedCComponentWraper(lbx, TestComponentDebugId.CListBox));
+        testedComponents.add(new TestedCComponentWraper(new CLongField(), TestComponentDebugId.CLongField));
+        testedComponents.add(new TestedCComponentWraper(new CSuggestBox<String>(), TestComponentDebugId.CSuggestBox));
+        testedComponents.add(new TestedCComponentWraper(new CTextArea(), TestComponentDebugId.CTextArea));
+        testedComponents.add(new TestedCComponentWraper(new CTextField(), TestComponentDebugId.CTextField));
+        testedComponents.add(new TestedCComponentWraper(new CTimeField(), TestComponentDebugId.CTimeField));
+        testedComponents.add(new TestedCComponentWraper(new CMonthYearPicker(false), TestComponentDebugId.CMonthYearPicker));
         Map<Integer, String> rbuttons = new TreeMap<Integer, String>();
         rbuttons.put(1, "One");
         rbuttons.put(2, "Two");
         rbuttons.put(3, "Tree");
-        testedComponents.add(new TestedCComponentWraper(new CRadioGroupInteger(CRadioGroup.Layout.VERTICAL, rbuttons)));
-        testedComponents.add(new TestedCComponentWraper(new CRichTextArea()));
-        testedComponents.add(new TestedCComponentWraper(new CPasswordTextField()));
+        testedComponents
+                .add(new TestedCComponentWraper(new CRadioGroupInteger(CRadioGroup.Layout.VERTICAL, rbuttons), TestComponentDebugId.CRadioGroupInteger));
+        testedComponents.add(new TestedCComponentWraper(new CRichTextArea(), TestComponentDebugId.CRichTextArea));
+        testedComponents.add(new TestedCComponentWraper(new CPasswordTextField(), TestComponentDebugId.CPasswordTextField));
 
         Collections.sort(testedComponents);
 
@@ -202,16 +202,6 @@ public class ComponentTester extends AppSite {
             }
         });
 
-        /*
-         * for (TestedCComponentWraper tc : testedComponents) {
-         * testingcontainer.add(tc);
-         * testingcontainer.setWidgetLeftRight(tc, 3, Unit.PCT, 3, Unit.PCT);
-         * testingcontainer.setWidgetTopBottom(tc, 3, Unit.PCT, 3, Unit.PCT);
-         * tc.getElement().getParentElement().addClassName("pyx-diplay-not");
-         * 
-         * }
-         */
-
         mainmenu.add(widgetpanel, "Tested C Components");
 
         final Anchor junitlink = new Anchor("Start Tests");
@@ -229,7 +219,7 @@ public class ComponentTester extends AppSite {
         final Anchor dformlink = new Anchor("Departments");
         dformlink.setTarget("_self");
         dformlink.setStyleName("pyx-navigator");
-        dformlink.ensureDebugId(Constants.DEBUG_ID_PRFX + TesterDebugId.F1_HREF.debugId());
+        dformlink.ensureDebugId(TesterDebugId.FormOneLnk.debugId());
         dformlink.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -270,16 +260,16 @@ public class ComponentTester extends AppSite {
      */
     private VerticalPanel createWidgetListPanel(List<TestedCComponentWraper> testedCWidgets) {
         VerticalPanel widgetpanel = new VerticalPanel();
-        widgetpanel.ensureDebugId(Constants.DEBUG_ID_PRFX + TesterDebugId.CCOMP_STACK.debugId());
+        widgetpanel.ensureDebugId(TesterDebugId.CComponentStack.debugId());
         widgetpanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
         widgetpanel.setSpacing(4);
 
         for (TestedCComponentWraper w : testedCWidgets) {
-            final Anchor widlink = new Anchor(w.getShortname());
+            final Anchor widlink = new Anchor(w.getComponentid());
             widlink.setTarget("_self");
             widlink.setStyleName("pyx-navigator");
             widlink.setName(w.getElement().getId());
-            widlink.ensureDebugId(CompositeDebugId.debugId(w.getShortname(), TesterDebugId.StartTestSufix));
+            widlink.ensureDebugId(CompositeDebugId.debugId(w.getComponentid(), TesterDebugId.StartTestSufix));
             widgetpanel.add(widlink);
             // Show test panel for selected widget
             widlink.addClickHandler(new ClickHandler() {
@@ -312,20 +302,4 @@ public class ComponentTester extends AppSite {
         }
         return null;
     }
-
-    /*
-     * private void depictTestedComponent(ClickEvent event) {
-     * String name = ((Anchor) event.getSource()).getName();
-     * TestedCComponentWraper found = null;
-     * for (TestedCComponentWraper c : testedComponents) {
-     * if (c.isActive())
-     * c.setActive(false);
-     * if (name.equals(c.getElement().getId()))
-     * found = c;
-     * 
-     * }
-     * if (found != null)
-     * found.setActive(true);
-     * }
-     */
 }

@@ -23,8 +23,7 @@ public enum TesterDebugId implements IDebugId {
 
     ComponentUnderTest,
 
-    //TODO vadims: format and rename to Humanly readable names. NO need to flow  All Capitals rules
-    BTN, TXTBOX, CHK, LBL, DTBOX, MANDATORY_CHK, VISITED_CHK, READONLY_CHK, EDITABLE_CHK, PANEL, MENU, VALUE, RAWVALUE, PRINTREPORT_BTN, DISABLED_CHK, WATERMARK_TXT, TONUM_TXT, FROMNUM_TXT, NOPOSTDATE_TXT, MAXLENGTH_TXT, CCOMP_STACK, FORM_STACK, F1_HREF,
+    MandatoryChk, VisitedChk, ReadOnlyChk, EditableChk, RawValue, PrintReportBtn, DisabledChk, WaterMarkTxt, ToNumTxt, FromNumTxt, NoPostDateTxt, MaxLengthTxt, CComponentStack, TestedFormStack, FormOneLnk,
 
     TestMessage,
 
