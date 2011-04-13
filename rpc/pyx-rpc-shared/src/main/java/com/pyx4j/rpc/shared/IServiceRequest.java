@@ -37,16 +37,19 @@ public class IServiceRequest implements Serializable, IHaveServiceCallMarker {
 
     private Vector<Serializable> args;
 
+    private int rpcCallNumber;
+
     IServiceRequest() {
 
     }
 
-    public IServiceRequest(String serviceClassId, String serviceMethodId, Serializable[] args) {
+    public IServiceRequest(String serviceClassId, String serviceMethodId, Serializable[] args, int rpcCallNumber) {
         super();
         this.serviceClassId = serviceClassId;
         this.serviceMethodId = serviceMethodId;
         this.args = new Vector<Serializable>();
         this.args.addAll(Arrays.asList(args));
+        this.rpcCallNumber = rpcCallNumber;
     }
 
     public String getServiceClassId() {
@@ -59,6 +62,10 @@ public class IServiceRequest implements Serializable, IHaveServiceCallMarker {
 
     public List<Serializable> getArgs() {
         return args;
+    }
+
+    public int getRpcCallNumber() {
+        return rpcCallNumber;
     }
 
     @Override

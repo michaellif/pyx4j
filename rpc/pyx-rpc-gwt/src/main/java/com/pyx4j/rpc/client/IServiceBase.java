@@ -36,11 +36,13 @@ public abstract class IServiceBase implements IService {
 
     protected static final Logger log = LoggerFactory.getLogger(IServiceBase.class);
 
+    private static int rpcCallCount = 0;
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected final void execute(String serviceClassId, String serviceMethodId, AsyncCallback<? extends Serializable> callback, Serializable... args) {
-        log.trace("RPC CALL {}.{}", serviceClassId, serviceMethodId);
+        log.trace("RPC CALL {} #{}", serviceClassId + "." + serviceMethodId, ++rpcCallCount);
         RPCManager.execute((Class<? extends Service<IServiceRequest, Serializable>>) IServiceAdapter.class, new IServiceRequest(serviceClassId,
-                serviceMethodId, args), (AsyncCallback) callback);
+                serviceMethodId, args, rpcCallCount), (AsyncCallback) callback);
     }
 
 }

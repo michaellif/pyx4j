@@ -36,7 +36,7 @@ public class RpcEntityDumpServiceFilter implements IServiceFilter {
         } else if (request instanceof IServiceRequest) {
             for (Serializable arg : ((IServiceRequest) request).getArgs()) {
                 if (arg instanceof IEntity) {
-                    DataDump.dump("got", (IEntity) arg);
+                    DataDump.dump("got-" + ((IServiceRequest) request).getRpcCallNumber(), (IEntity) arg);
                 }
             }
         }
