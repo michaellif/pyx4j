@@ -16,10 +16,8 @@ package com.propertyvista.unit.components;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import com.google.gwt.user.client.ui.UIObject;
 import com.propertyvista.portal.tester.TestComponentDebugId;
 import com.propertyvista.portal.tester.TesterDebugId;
-import com.propertyvista.portal.tester.util.Constants;
 import com.propertyvista.unit.VistaDevLogin;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
@@ -30,15 +28,14 @@ import com.pyx4j.selenium.ISeleniumTestConfiguration;
 
 public class CComponentTest extends BaseSeleniumTestCase {
 
-    //TODO vadims: Remove this 
-    private final String PYX_DEBUG_PRFX = UIObject.DEBUG_ID_PREFIX + Constants.DEBUG_ID_PRFX;
-
-    //TODO vadims: Remove this, See all oveloaded methods we have in class SeleniumExtended
-    private final String TESTED_COMPONENT = TesterDebugId.ComponentUnderTest.debugId();
-
     @Override
     protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {
-        return new VistaSeleniumTestConfiguration(ApplicationId.tester);
+        return new VistaSeleniumTestConfiguration(ApplicationId.tester) {
+            @Override
+            public boolean reuseBrowser() {
+                return true;
+            }
+        };
     }
 
     @Override
@@ -47,45 +44,30 @@ public class CComponentTest extends BaseSeleniumTestCase {
         VistaDevLogin.login(selenium);
         selenium.waitFor(new CompositeDebugId(TesterDebugId.TesterMainMenu, "text0"));
         selenium.click(new CompositeDebugId(TesterDebugId.TesterMainMenu, "text0"));
-
     }
 
     public void testCButton() throws Exception {
         //TODO finish it up
-        //final String el = "CButton-";
-        //selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
         selenium.click(TestComponentDebugId.CButton, TesterDebugId.StartTestSufix);
     }
 
     public void testCCheckBox() throws Exception {
-        final String el = "CCheckBox-";
-        //WAS: selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-        //I think this is better, because more consistend with all other use of debugIds.
         selenium.click(TestComponentDebugId.CCheckBox, TesterDebugId.StartTestSufix);
-
         //Enable/Disable
-        //tstEnableDisable(TESTED_COMPONENT + "-input", PYX_DEBUG_PRFX + TesterDebugId.DISABLED_CHK.debugId() + "-input");
-        //NOW: How I(VladS) see the same function
-        assertEnabled(TesterDebugId.ComponentUnderTest);
-        selenium.click(TesterDebugId.DISABLED_CHK);
-        assertNotEnabled(TesterDebugId.ComponentUnderTest);
-        selenium.click(TesterDebugId.DISABLED_CHK);
-
+        tstEnableDisable();
         //Read-only
-        //tstReadOnly(TESTED_COMPONENT + "-input", PYX_DEBUG_PRFX + TesterDebugId.READONLY_CHK.debugId() + "-input");
+        tstReadOnly();
 
     }
 
-//    public void testCComboBox() throws Exception {
-//        final String el = "CComboBox-";
-//        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
-//        //Enable/Disable
-//        tstEnableDisable(TESTED_COMPONENT, PYX_DEBUG_PRFX + TesterDebugId.DISABLED_CHK.debugId() + "-input");
-//        //TODO mandatory
-//        //Read-only
-//        tstReadOnly(TESTED_COMPONENT, PYX_DEBUG_PRFX + TesterDebugId.READONLY_CHK.debugId() + "-input");
-//
-//    }
+    public void testCComboBox() throws Exception {
+        selenium.click(TestComponentDebugId.CComboBox, TesterDebugId.StartTestSufix);
+        //Enable/Disable
+        tstEnableDisable();
+        //Read-only
+        tstReadOnly();
+    }
+
 //
 //    public void testCDatePicker() throws Exception {
 //        final String el = "CDatePicker-";
@@ -167,43 +149,33 @@ public class CComponentTest extends BaseSeleniumTestCase {
 //        selenium.click(By.id(PYX_DEBUG_PRFX + el + TesterDebugId.StartTestSufix.debugId()));
 //    }
 
-    private void tstEnableDisable(String testedcId, String testedfId) {
-        assertEnabled(testedcId);
-        selenium.click(By.id(testedfId));
-        assertFalse(selenium.isEnabled(testedcId));
-        selenium.click(By.id(testedfId));
+    private void tstEnableDisable() {
+
+        assertEnabled(TesterDebugId.ComponentUnderTest);
+        selenium.click(TesterDebugId.DisabledChk);
+        assertNotEnabled(TesterDebugId.ComponentUnderTest);
+        selenium.click(TesterDebugId.DisabledChk);
+
     }
 
     /**
-     * TODO finish
+     * TODO finish it up
      * 
      * @param testedcId
      * @param testedfId
      */
-    private void tstMandatory(String testedcId, String testedfId) {
-        selenium.click(By.id(testedfId));
-        WebElement wel = selenium.findElement(By.id(testedcId));
+    private void tstMandatory() {
+        selenium.click(TesterDebugId.MandatoryChk);
+        WebElement wel = selenium.findElement(By.id(TesterDebugId.MandatoryChk.debugId()));
         // selenium.get(paramString)
         // assertFalse(selenium.isEnabled(testedcId));
-        selenium.click(By.id(testedfId));
     }
 
-    private void tstReadOnly(String testedcId, String testedfId) {
-        assertEditable(testedcId);
-        selenium.click(By.id(testedfId));
-        assertFalse(selenium.isEditable(testedcId));
-        selenium.click(By.id(testedfId));
-    }
-
-    private void ttstReadOnly(String testedcId, String testedfId, String value) {
-        String tstvalue = String.valueOf(Math.random());
-        assertEditable(testedcId);
-        selenium.setValue(testedcId, value);
-        selenium.click(By.id(testedfId));
-        selenium.setValue(testedcId, tstvalue);
-        WebElement wel = selenium.findElement(By.id(testedcId));
-        assertTrue(wel.getValue().equals(value));
-        selenium.click(By.id(testedfId));
+    private void tstReadOnly() {
+        assertEditable(TesterDebugId.ComponentUnderTest);
+        selenium.click(TesterDebugId.ReadOnlyChk);
+        assertNotEditable(TesterDebugId.ComponentUnderTest);
+        selenium.click(TesterDebugId.ReadOnlyChk);
     }
 
 }
