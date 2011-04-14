@@ -14,7 +14,7 @@
 	<appender name="FileAppender" class="com.pyx4j.log4j.RollingFileAppender">
 		<param name="Threshold" value="debug" />
 
-		<param name="File" value="%{container.home}/logs/%{contextName}/vista-server.log" />
+		<param name="File" value="%{container.home}/logs/%{contextName}/vista-tester.log" />
 		<param name="Append" value="false" />
 		<!-- start new file on every restart -->
 		<param name="MaxFileSize" value="3000KB" />
@@ -34,7 +34,7 @@
 	</appender>
 
 	<appender name="FileAppender.warn" class="com.pyx4j.log4j.RollingFileAppender">
-		<param name="File" value="%{container.home}/logs/%{contextName}/vista-server-warn.log" />
+		<param name="File" value="%{container.home}/logs/%{contextName}/vista-tester-warn.log" />
 		<param name="Threshold" value="warn" />
 		<param name="Append" value="false" />
 		<!-- start new file on every restart -->
@@ -50,7 +50,7 @@
 	<appender name="FileAppender.client" class="com.pyx4j.log4j.RollingFileAppender">
 		<param name="Threshold" value="trace" />
 
-		<param name="File" value="%{container.home}/logs/%{contextName}/vista-client.log" />
+		<param name="File" value="%{container.home}/logs/%{contextName}/vista-tester-client.log" />
 		<param name="Append" value="false" />
 		<!-- start new file on every restart -->
 		<param name="MaxFileSize" value="3000KB" />

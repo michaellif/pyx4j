@@ -11,7 +11,7 @@
 
     <context-param>
         <param-name>com.pyx4j.config.server.ServerSideConfiguration</param-name>
-        <param-value>com.propertyvista.tester.server.config.VistaServerSideConfiguration</param-value>
+        <param-value>com.propertyvista.tester.server.config.VistaTesterServerSideConfiguration</param-value>
     </context-param>
 
     <listener>
@@ -44,7 +44,7 @@
 
     <servlet>
         <servlet-name>StatusServlet</servlet-name>
-        <servlet-class>com.propertyvista.server.ci.VistaStatusServlet</servlet-class>
+        <servlet-class>com.propertyvista.tester.server.ci.StatusServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

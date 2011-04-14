@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<module rename-to="tester">
+    <inherits name='com.propertyvista.tester.Tester'/>
+    
+    <extend-property name="locale" values="en_US"/>
+	<set-property name="locale" value="en_US"/>
+	<set-configuration-property name="pyx.locale.default" value="en_US"/>
+	
+    <inherits name='com.google.gwt.user.Debug'/>
+</module>
