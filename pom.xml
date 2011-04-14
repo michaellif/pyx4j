@@ -195,6 +195,7 @@
         <module>vista-shared</module>
         <module>vista-crm</module>
         <module>vista-server</module>
+        <module>vista-tester</module>
     </modules>
 
     <properties>

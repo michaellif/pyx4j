@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+         <groupId>com.propertyvista</groupId>
+        <artifactId>vista-shared</artifactId>
+        <version>1.0.0-SNAPSHOT</version><!--vista-version-->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>vista-tester-selenium</artifactId>
+    <name>vista-tester-selenium</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-tester-cleint</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-unit-selenium</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-j2se</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <properties>
+        <seleniumJvm>${java.home}/bin/java</seleniumJvm>
+        <seleniumJvmArgLine></seleniumJvmArgLine>
+    </properties>
+
+    <profiles>
+
+        <profile>
+            <id>build-env</id>
+            <properties>
+                <seleniumJvm>/mnt/bamboo-ebs/opt/xvfb-run</seleniumJvm>
+                <seleniumJvmArgLine>--wait=10 --server-args="-screen 0 1050x1680x24" ${java.home}/bin/java</seleniumJvmArgLine>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.pyx4j</groupId>
+                        <artifactId>maven-password-plugin</artifactId>
+                        <version>${pyxVersion}</version>
+                        <configuration>
+                            <serverId>google-app.birchwoodsoftwaregroup.com</serverId>
+                            <locationDir>${basedir}</locationDir>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>create-pwd</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>write</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>remove-pwd</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                     </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
+        <profile>
+            <id>selenium</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>surefire-it</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>false</skip>
+                                    <jvm>${seleniumJvm}</jvm>
+                                    <argLine>${seleniumJvmArgLine}</argLine>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+</project>
