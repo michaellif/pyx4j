@@ -23,6 +23,8 @@ import org.junit.Test;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
+import com.propertyvista.portal.domain.DemoData;
+import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
@@ -65,8 +67,16 @@ public class SummaryReportTest extends ReportsTestBase {
     }
 
     private static Summary retreiveSummary() {
+        EntityQueryCriteria<User> userCriteria = EntityQueryCriteria.create(User.class);
+        userCriteria.add(PropertyCriterion.eq(userCriteria.proto().name(), DemoData.PRELOADED_USERNAME));
+        User devUser = PersistenceServicesFactory.getPersistenceService().retrieve(userCriteria);
+        Assert.assertNotNull("devUser " + DemoData.PRELOADED_USERNAME, devUser);
+
         EntityQueryCriteria<Application> applicationCriteria = EntityQueryCriteria.create(Application.class);
+        applicationCriteria.add(PropertyCriterion.eq(applicationCriteria.proto().user(), devUser));
         Application application = PersistenceServicesFactory.getPersistenceService().retrieve(applicationCriteria);
+        Assert.assertNotNull("devUser application", application);
+
         EntityQueryCriteria<Summary> criteria = EntityQueryCriteria.create(Summary.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
         Summary summary = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
