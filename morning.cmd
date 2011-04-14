@@ -12,13 +12,16 @@ call mvn --file ..\pyx4j\pom.xml clean --fail-never
 call mvn --file ..\pyx4j\pom.xml scm:update
 @if errorlevel 1 goto errormark
 
+call mvn --file ..\pyx4j\pom.xml -DskipTests=true
+@if errorlevel 1 goto errormark
+
 call mvn clean --fail-never
 @if errorlevel 1 goto errormark
 
 call mvn scm:update
 @if errorlevel 1 goto errormark
 
-call mvn -P pyx -DskipTests=true
+call mvn -DskipTests=true
 @if errorlevel 1 goto errormark
 
 title %CurDir%

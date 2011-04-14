@@ -22,6 +22,13 @@ if [[ ! "$?" = "0" ]]; then
     exit 1
 fi
 
+mvn --file ../pyx4j/pom.xml -DskipTests=true
+if [[ ! "$?" = "0" ]]; then
+    echo   
+    echo Error in PYX build
+    exit 1
+fi
+
 mvn clean --fail-never
 if [[ ! "$?" = "0" ]]; then
     echo   
@@ -36,7 +43,7 @@ if [[ ! "$?" = "0" ]]; then
     exit 1
 fi
 
-mvn -P pyx -DskipTests=true
+mvn -DskipTests=true
 if [[ ! "$?" = "0" ]]; then
     echo   
     echo Error in build
