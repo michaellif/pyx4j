@@ -18,7 +18,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-tester-cleint</module>
+        <module>vista-tester-client</module>
         <module>vista-tester-server</module>
         <module>vista-tester-selenium</module>
     </modules>
