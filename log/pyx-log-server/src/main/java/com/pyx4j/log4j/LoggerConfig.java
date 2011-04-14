@@ -31,7 +31,9 @@ public class LoggerConfig {
 
     static {
         String containerHome = ".";
-        if (CommonsStringUtils.isStringSet(System.getProperty("catalina.home"))) {
+        if (CommonsStringUtils.isStringSet(System.getProperty("catalina.base"))) {
+            containerHome = System.getProperty("catalina.base");
+        } else if (CommonsStringUtils.isStringSet(System.getProperty("catalina.home"))) {
             containerHome = System.getProperty("catalina.home");
         } else if (CommonsStringUtils.isStringSet(System.getProperty("jetty.home"))) {
             containerHome = System.getProperty("jetty.home");
