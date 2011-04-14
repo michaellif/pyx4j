@@ -20,7 +20,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-tester-cleint</artifactId>
+            <artifactId>vista-tester-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 
