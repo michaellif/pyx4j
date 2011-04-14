@@ -129,9 +129,38 @@
             <id>gwtct</id>
             <build>
                 <plugins>
+                    <!-- pyx4j plugin is not used -->
                     <plugin>
                         <groupId>com.pyx4j</groupId>
                         <artifactId>maven-gwt-plugin</artifactId>
+                        <executions>
+                            <!--execution>
+                                <id>compile-java2script</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution-->
+                        </executions>
+                        <configuration>
+                            <module>${gwtModuleCompile}</module>
+                            <sourceDirectories>
+                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                            </sourceDirectories>
+                            <logLevel>INFO</logLevel>
+                            <style>${gwtCompilerOutputStyle}</style>
+                            <target>${basedir}/war</target>
+                            <generated>${project.build.directory}/gwt-generated</generated>
+                            <localWorkers>${gwtLocalWorkers}</localWorkers>
+                            <draftCompile>${gwtDraftCompile}</draftCompile>
+                            <compileReport>false</compileReport>
+                            <!--compileReport>${gwtCompileReport}</compileReport-->
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>gwt-maven-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>compile-java2script</id>
@@ -143,21 +172,18 @@
                         </executions>
                         <configuration>
                             <module>${gwtModuleCompile}</module>
-                            <sourceDirectories>
-                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                            </sourceDirectories>
-                            <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <target>${basedir}/war</target>
+                            <inplace>true</inplace>
+                            <warSourceDirectory>${basedir}/war</warSourceDirectory>
                             <generated>${project.build.directory}/gwt-generated</generated>
-                            <compilerClass>com.google.gwt.dev.Compiler</compilerClass>
+                            <extra>${project.build.directory}/gwt-extra</extra>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
                             <compileReport>false</compileReport>
-                            <!--compileReport>${gwtCompileReport}</compileReport-->
                         </configuration>
                     </plugin>
+
                 </plugins>
             </build>
         </profile>

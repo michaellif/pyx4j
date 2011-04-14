@@ -113,17 +113,19 @@
             <id>gwtce</id>
             <build>
                 <plugins>
+
+                    <!-- pyx4j plugin is not used -->
                     <plugin>
                         <groupId>com.pyx4j</groupId>
                         <artifactId>maven-gwt-plugin</artifactId>
                         <executions>
-                            <execution>
+                            <!--execution>
                                 <id>compile-java2script</id>
                                 <phase>prepare-package</phase>
                                 <goals>
                                     <goal>compile</goal>
                                 </goals>
-                            </execution>
+                            </execution-->
                         </executions>
                         <configuration>
                             <module>${gwtModuleCompile}</module>
@@ -135,13 +137,40 @@
                             <style>${gwtCompilerOutputStyle}</style>
                             <target>${basedir}/../examples-gae-server/war</target>
                             <generated>${project.build.directory}/gwt-generated</generated>
-                            <compilerClass>com.google.gwt.dev.Compiler</compilerClass>
-                            <!--compilerClass>com.google.gwt.dev.GWTCompiler</compilerClass-->
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
                             <compileReport>${gwtCompileReport}</compileReport>
                         </configuration>
                     </plugin>
+
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>gwt-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>compile-java2script</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <module>${gwtModuleCompile}</module>
+                            <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
+                            <logLevel>INFO</logLevel>
+                            <style>${gwtCompilerOutputStyle}</style>
+                            <inplace>true</inplace>
+                            <warSourceDirectory>${basedir}/../examples-gae-server/war</warSourceDirectory>
+                            <generated>${project.build.directory}/gwt-generated</generated>
+                            <extra>${project.build.directory}/gwt-extra</extra>
+                            <localWorkers>${gwtLocalWorkers}</localWorkers>
+                            <draftCompile>${gwtDraftCompile}</draftCompile>
+                            <compileReport>${gwtCompileReport}</compileReport>
+                        </configuration>
+                    </plugin>
+
                 </plugins>
             </build>
         </profile>
