@@ -87,6 +87,9 @@
                                 <delete quiet="true" includeemptydirs="true">
                                     <fileset dir="${basedir}/../vista-tester-server/src/main/webapp/${gwtModule}" />
                                 </delete>
+                                <delete quiet="true" includeemptydirs="true">
+                                    <fileset dir="${basedir}/../vista-tester-server/src/main/webapp/WEB-INF/deploy/${gwtModule}" />
+                                </delete>
                             </target>
                         </configuration>
                     </execution>
