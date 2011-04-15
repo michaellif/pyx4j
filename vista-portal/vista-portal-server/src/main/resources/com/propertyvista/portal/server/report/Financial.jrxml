@@ -43,7 +43,7 @@
 			<subreport isUsingCache="true">
 				<reportElement x="0" y="30" width="572" height="40"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{tenantFinancial/incomes})]]></dataSourceExpression>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.Incomes")]]></subreportExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.IncomesDecision")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="40">

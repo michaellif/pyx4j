@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Incomes" pageWidth="572" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="incomeSource" class="com.propertyvista.portal.domain.pt.IncomeSource"/>
+	<field name="employer" class="com.propertyvista.portal.domain.pt.IncomeInfoEmployer"/>
+	<field name="selfEmployed" class="com.propertyvista.portal.domain.pt.IncomeInfoSelfEmployed">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="seasonallyEmployed" class="com.propertyvista.portal.domain.pt.IncomeInfoSeasonallyEmployed"/>
+	<field name="socialServices" class="com.propertyvista.portal.domain.pt.IncomeInfoSocialServices"/>
+	<field name="studentIncome" class="com.propertyvista.portal.domain.pt.IncomeInfoStudentIncome"/>
+	<field name="otherIncomeInfo" class="com.propertyvista.portal.domain.pt.IncomeInfoOther"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="11" y="5" width="561" height="20"/>
+				<textElement>
+					<font size="11" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Incomes]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="105" splitType="Stretch">
+			<subreport isUsingCache="true">
+				<reportElement x="0" y="44" width="572" height="61"/>
+				<dataSourceExpression><![CDATA[( $F{incomeSource}.toString().equals("Full time") ?
+    new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.pt.IEmploymentInfo[]{$F{employer}})) :
+    ( $F{incomeSource}.toString().equals("Self employed") ?
+		new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.pt.IEmploymentInfo[]{$F{selfEmployed}})) :
+		( $F{incomeSource}.toString().equals("Seasonally Employed") ?
+			new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.pt.IEmploymentInfo[]{$F{seasonallyEmployed}})) :
+			( $F{incomeSource}.toString().equals("Social Services") ?
+				new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.pt.IEmploymentInfo[]{$F{socialServices}})) :
+				( $F{incomeSource}.toString().equals("Student") ?
+					new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.pt.IIncomeInfo[]{$F{studentIncome}})) :
+					new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.pt.IIncomeInfo[]{$F{otherIncomeInfo}})))))))]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[( $F{incomeSource}.toString().equals("Full time") ?
+    com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.IncomesEmployed") :
+    ( $F{incomeSource}.toString().equals("Self employed") ?
+		com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.IncomesSelfEmployed") :
+		( $F{incomeSource}.toString().equals("Seasonally Employed") ?
+			com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.IncomesEmployed") :
+			( $F{incomeSource}.toString().equals("Social Services") ?
+				com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.IncomesEmployed") :
+				( $F{incomeSource}.toString().equals("Student") ?
+					com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.IncomesStudent") :
+					com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.IncomesOther"))))))]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="11" y="12" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
