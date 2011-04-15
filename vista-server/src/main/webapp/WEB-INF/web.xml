@@ -236,7 +236,7 @@
     <servlet>
         <servlet-name>JobScheduler</servlet-name>
         <servlet-class>com.propertyvista.portal.server.scheduler.JobScheduler</servlet-class>
-        <load-on-startup/>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     
     <servlet>
