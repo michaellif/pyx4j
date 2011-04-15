@@ -1405,7 +1405,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
             @Override
             public String encodedCursorReference() {
-                return iterator.getCursor().toWebSafeString();
+                Cursor cursor = iterator.getCursor();
+                if (cursor != null) {
+                    return cursor.toWebSafeString();
+                } else {
+                    return null;
+                }
             }
         };
     }
@@ -1490,7 +1495,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
             @Override
             public String encodedCursorReference() {
-                return iterator.getCursor().toWebSafeString();
+                Cursor cursor = iterator.getCursor();
+                if (cursor != null) {
+                    return cursor.toWebSafeString();
+                } else {
+                    return null;
+                }
             }
         };
     }
@@ -1507,7 +1517,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         query.setKeysOnly();
         datastoreCallStats.get().readCount++;
         PreparedQuery pq = datastore.prepare(query);
-        int rc = pq.countEntities();
+        int rc = pq.countEntities(FetchOptions.Builder.withDefaults());
         long duration = System.nanoTime() - start;
         if (duration > Consts.SEC2NANO) {
             log.warn("Long running countQuery {} took {}ms", criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
