@@ -14,8 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-02-14
- * @author VladLL
+ * Created on 2011-04-11
+ * @author Vlad
  * @version $Id$
  */
 package com.pyx4j.dashboard.client;
@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.InsertPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -56,13 +57,10 @@ import com.pyx4j.dashboard.client.images.DashboardImages;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-/**
- * Dashboard panel.
- */
-public class DashboardPanel extends SimplePanel {
+public class DashboardPanel2 extends SimplePanel {
 
     // CSS style names: 
-    public static String BASE_NAME = "pyx4j_DashboardPanel";
+    public static String BASE_NAME = "pyx4j_DashboardPanel2";
 
     public static enum StyleSuffix implements IStyleSuffix {
         Column, ColumnHeading, ColumnSpacer, Holder, HolderSetup, HolderCaption, HolderHeading, HolderMenu, DndPositioner
@@ -75,7 +73,7 @@ public class DashboardPanel extends SimplePanel {
     // resources:
     protected DashboardImages images = (DashboardImages) GWT.create(DashboardImages.class);
 
-    // internal data:	
+    // internal data:   
     protected Layout layout;
 
     protected PickupDragController widgetDragController;
@@ -85,12 +83,12 @@ public class DashboardPanel extends SimplePanel {
     private boolean isRefreshAllowed;
 
     // construction:
-    public DashboardPanel() {
+    public DashboardPanel2() {
         this.layout = new Layout();
         init();
     }
 
-    public DashboardPanel(Layout layout) {
+    public DashboardPanel2(Layout layout) {
         this.layout = layout;
         init();
     }
@@ -149,7 +147,7 @@ public class DashboardPanel extends SimplePanel {
         return true;
     }
 
-    // Widget manipulation:	
+    // Widget manipulation: 
     public boolean addGadget(IGadget widget) {
         return insertGadget(widget, 0, 0);
     }
@@ -213,41 +211,27 @@ public class DashboardPanel extends SimplePanel {
         columnsContainerPanel.clear();
         widgetDragController.unregisterDropControllers();
 
-        for (int col = 0; col < layout.getColumns(); ++col) {
-            // vertical panel to hold the heading and a second vertical panel for widgets:
-            FlowPanel columnCompositePanel = new FlowPanel();
-            columnCompositePanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            columnCompositePanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            columnCompositePanel.getElement().getStyle().setMarginLeft(layout.getHorizontalSpacing(), Unit.PCT);
-            columnCompositePanel
-                    .setWidth(((layout.isColumnWidths() ? layout.getCoumnWidth(col) : 100.0 / layout.getColumns()) - layout.getHorizontalSpacing() - layout
-                            .getHorizontalSpacing() / layout.getColumns())
-                            + "%");
+        // vertical panel to hold the heading and a second vertical panel for widgets:
+        FlowPanel columnCompositePanel = new FlowPanel();
+        columnCompositePanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        columnCompositePanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+        columnCompositePanel.getElement().getStyle().setMarginLeft(layout.getHorizontalSpacing(), Unit.PCT);
+        columnCompositePanel.getElement().getStyle().setMarginRight(layout.getHorizontalSpacing(), Unit.PCT);
+        columnCompositePanel.setWidth((100.0 - layout.getHorizontalSpacing() * 2) + "%");
 
-            // put column name if necessary:
-            if (layout.isColumnNames()) {
-                Label heading = new Label(layout.getCoumnName(col));
-                heading.addStyleName(BASE_NAME + StyleSuffix.ColumnHeading);
-                heading.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-                heading.setWidth("100%");
+        // inner vertical panel to hold individual widgets:
+        ColumnFlowPanel columnPanel = new ColumnFlowPanel(widgetDragController, layout);
+        columnPanel.addStyleName(BASE_NAME + StyleSuffix.Column);
+        columnPanel.setWidth("100%");
 
-                columnCompositePanel.add(heading);
-            }
+        // widget drop controller for the current column:
+        widgetDragController.registerDropController(new CustomFlowPanelDropController(columnPanel, layout));
 
-            // inner vertical panel to hold individual widgets:
-            ColumnFlowPanel columnPanel = new ColumnFlowPanel();
-            columnPanel.addStyleName(BASE_NAME + StyleSuffix.Column);
-            columnPanel.setWidth("100%");
-
-            // widget drop controller for the current column:
-            widgetDragController.registerDropController(new CustomFlowPanelDropController(columnPanel, layout));
-
-            columnCompositePanel.add(columnPanel);
-            columnsContainerPanel.add(columnCompositePanel);
-        }
+        columnCompositePanel.add(columnPanel);
+        columnsContainerPanel.add(columnCompositePanel);
     }
 
-    // internals:	
+    // internals:   
     protected ColumnFlowPanel getColumnWidgetsPanel(int column) {
         ComplexPanel columnCompositePanel = (ComplexPanel) columnsContainerPanel.getWidget(column);
         return (ColumnFlowPanel) columnCompositePanel.getWidget(columnCompositePanel.getWidgetCount() - 1);
@@ -273,7 +257,7 @@ public class DashboardPanel extends SimplePanel {
     protected final class GadgetHolder extends SimplePanel {
         private final IGadget holdedGadget;
 
-        private final DashboardPanel dashboardPanel;
+        private final DashboardPanel2 dashboardPanel;
 
         private final VerticalPanel frame = new VerticalPanel();
 
@@ -283,13 +267,14 @@ public class DashboardPanel extends SimplePanel {
 
         // public interface:
         public IGadget getIWidget() {
+
             return holdedGadget;
         }
 
         // internals:
-        public GadgetHolder(IGadget widget, DashboardPanel mainPanel) {
+        public GadgetHolder(IGadget widget, DashboardPanel2 dashboardPanelHorizontal) {
             this.holdedGadget = widget;
-            this.dashboardPanel = mainPanel;
+            this.dashboardPanel = dashboardPanelHorizontal;
             this.addStyleName(BASE_NAME + StyleSuffix.Holder);
 
             // create caption with title and menu:
@@ -328,9 +313,13 @@ public class DashboardPanel extends SimplePanel {
             frame.add(holdedGadget.getWidget());
             frame.setWidth("100%");
             frame.getElement().getStyle().setOverflow(Overflow.HIDDEN);
-
             this.setWidget(frame);
-            this.setWidth("auto");
+
+            if (holdedGadget.isFullWidth()) {
+                this.setWidth("auto");
+            } else {
+                this.setWidth("100%");
+            }
 
             // don't forget about vertical spacing:
             setVerticalSpacing(layout.getVerticalSpacing());
@@ -349,18 +338,22 @@ public class DashboardPanel extends SimplePanel {
 
                 @Override
                 public void onDragStart(DragStartEvent event) {
-                    if (event.getContext().draggable.equals(GadgetHolder.this)) {
+                    if (event.getContext().draggable.equals(GadgetHolder.this) && holdedGadget.isFullWidth()) {
                         GadgetHolder.this.setWidth("100%"); // prevent draggable gadget from collapsing!.. 
                     }
                 }
 
                 @Override
                 public void onDragEnd(DragEndEvent event) {
-                    if (event.getContext().draggable.equals(GadgetHolder.this)) {
+                    if (event.getContext().draggable.equals(GadgetHolder.this) && holdedGadget.isFullWidth()) {
                         GadgetHolder.this.setWidth("auto"); // restore automatic width calculation...
                     }
                 }
             });
+        }
+
+        public boolean isFullWidth() {
+            return holdedGadget.isFullWidth();
         }
 
         private Widget createWidgetMenu() {
@@ -431,9 +424,11 @@ public class DashboardPanel extends SimplePanel {
              * Thus using instead such combination:
              */
             // this.getElement().getStyle().setProperty("margin", layout.getVerticalSpacing() + "px" + " 0px");
-            this.getElement().getStyle().setMargin(spacing, Unit.PX);
-            this.getElement().getStyle().setMarginLeft(0, Unit.PX);
-            this.getElement().getStyle().setMarginRight(0, Unit.PX);
+            if (holdedGadget.isFullWidth()) {
+                this.getElement().getStyle().setMargin(spacing, Unit.PX);
+                this.getElement().getStyle().setMarginLeft(0, Unit.PX);
+                this.getElement().getStyle().setMarginRight(0, Unit.PX);
+            }
         }
 
         // --------------------------------------------------------------
@@ -489,26 +484,31 @@ public class DashboardPanel extends SimplePanel {
         }
 
         private class MaximizeData {
-            private FlowPanel columnPanel;
+            private InsertPanel hostPanel;
 
             private int widgetIndex;
 
             public Widget boundaryPanel;
 
             public void saveWidgetPosition(GadgetHolder widget) {
-                columnPanel = (FlowPanel) getParent();
-                widgetIndex = maximizeData.columnPanel.getWidgetIndex(widget);
+                Widget parent = getParent();
+                while (!(parent instanceof InsertPanel)) {
+                    parent = parent.getParent();
+                }
+
+                hostPanel = (InsertPanel) parent;
+                widgetIndex = hostPanel.getWidgetIndex(widget);
                 widget.setVerticalSpacing(0);
             }
 
             public void restoreWidgetPosition(GadgetHolder widget) {
                 widget.setVerticalSpacing(layout.getVerticalSpacing());
-                columnPanel.insert(widget, widgetIndex);
+                hostPanel.insert(widget, widgetIndex);
             }
 
             public void clear() {
                 boundaryPanel = null;
-                columnPanel = null;
+                hostPanel = null;
             }
         }
 
@@ -518,7 +518,7 @@ public class DashboardPanel extends SimplePanel {
 
         private void delete() {
             holdedGadget.onDelete();
-            ((FlowPanel) getParent()).remove(this);
+            this.removeFromParent();
         }
 
         // --------------------------------------------------------------

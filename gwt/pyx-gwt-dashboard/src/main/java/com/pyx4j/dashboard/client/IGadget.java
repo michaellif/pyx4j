@@ -19,6 +19,8 @@ public interface IGadget {
 
     boolean isSetupable();
 
+    boolean isFullWidth();
+
     /**
      * Dashboard Gadget Setup interface. User-defined gadgets may implement this
      * interface in order to get gadget setup functionality.

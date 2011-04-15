@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
  * Modification of Allen Sauer's FlowPanelDropController: I replaced
  * FlowPanelDropController::newPositioner (which was pretty basic (?!)) with the
  * functionality of his VerticalPanelDropController::newPositioner...
+ * getLocationWidgetComparator has been changed also...
  */
 public class CustomFlowPanelDropController extends FlowPanelDropController {
 
@@ -43,14 +44,14 @@ public class CustomFlowPanelDropController extends FlowPanelDropController {
      */
     private static final Label DUMMY_LABEL_IE_QUIRKS_MODE_OFFSET_HEIGHT = new Label("x");
 
-    private final int verticalSpacing;
+    protected Layout layout;
 
     /**
      * @param dropTarget
      */
-    public CustomFlowPanelDropController(FlowPanel dropTarget, int verticalSpacing) {
+    public CustomFlowPanelDropController(FlowPanel dropTarget, Layout layout) {
         super(dropTarget);
-        this.verticalSpacing = verticalSpacing;
+        this.layout = layout;
     }
 
     @Override
@@ -85,9 +86,10 @@ public class CustomFlowPanelDropController extends FlowPanelDropController {
 
         // some must have styles:
         outer.getElement().getStyle().setProperty("zoom", "1"); /* IE gain hasLayout */
-        outer.getElement().getStyle().setMarginTop(verticalSpacing, Unit.PX);
-        outer.getElement().getStyle().setMarginBottom(verticalSpacing, Unit.PX);
+        outer.getElement().getStyle().setMarginTop(layout.getVerticalSpacing(), Unit.PX);
+        outer.getElement().getStyle().setMarginBottom(layout.getVerticalSpacing(), Unit.PX);
         outer.getElement().getStyle().setZIndex(100);
+        System.out.println("> new Vertical Positioner created!");
         return outer;
     }
 }

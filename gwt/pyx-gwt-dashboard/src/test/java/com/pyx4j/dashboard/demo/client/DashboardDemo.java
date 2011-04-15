@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
+import com.pyx4j.dashboard.client.DashboardPanel2;
 import com.pyx4j.dashboard.client.IGadget;
 import com.pyx4j.dashboard.client.Layout;
 import com.pyx4j.widgets.client.style.StyleManger;
@@ -110,23 +111,24 @@ public final class DashboardDemo implements EntryPoint {
         dashboardWrapper.setWidth("100%");
         mainPanel.add(dashboardWrapper);
 
-        Layout layout = new Layout(3, 1, 12);
+        Layout layout = new Layout(1, 1, 12);
 
         // uncomment for captioned columns:     
-        byte colWidths[] = { 30, 50, 20 };
-        layout.setColumnWidths(colWidths);
+//        byte colWidths[] = { 30, 50, 20 };
+//        layout.setColumnWidths(colWidths);
 
-        //        // uncomment for captioned columns: layout.useColumnNames = true; String
-        //        String colNames[] = { "one", "two", "three" };
-        //        layout.setColumnNames(colNames);
+//        // uncomment for captioned columns: layout.useColumnNames = true; String
+//        String colNames[] = { "one", "two", "three" };
+//        layout.setColumnNames(colNames);
 
-        DashboardPanel dashboardPanel = new DashboardPanel(layout);
+//        DashboardPanel dashboardPanel = new DashboardPanel(layout);
+        DashboardPanel2 dashboardPanel = new DashboardPanel2(layout);
 
         HorizontalPanel dashboardCaption = new HorizontalPanel();
         dashboardCaption.add(new Label());
         dashboardCaption.setCellWidth(dashboardCaption.getWidget(dashboardCaption.getWidgetCount() - 1), "90%");
         dashboardCaption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        dashboardCaption.add(createDashboardMenu(dashboardPanel));
+//        dashboardCaption.add(createDashboardMenu(dashboardPanel));
         dashboardCaption.setCellWidth(dashboardCaption.getWidget(dashboardCaption.getWidgetCount() - 1), "10%");
         dashboardCaption.addStyleName(CSS_DASHBOARD_CAPTION);
         dashboardCaption.setWidth("100%");
@@ -137,6 +139,9 @@ public final class DashboardDemo implements EntryPoint {
 
         // define demo widget class: 
         class MyHTML extends HTML implements IGadget {
+
+            boolean fullWidth = true;
+
             MyHTML(String s) {
                 super(s);
             }
@@ -170,7 +175,16 @@ public final class DashboardDemo implements EntryPoint {
                 return true;
             }
 
+            @Override
+            public boolean isFullWidth() {
+                return fullWidth;
+            }
+
             // setup:
+
+            public void setFullWidth(boolean fullWidth) {
+                this.fullWidth = fullWidth;
+            }
 
             @Override
             public ISetup getSetup() {
@@ -232,10 +246,11 @@ public final class DashboardDemo implements EntryPoint {
 
         int count = 0;
         for (int col = 0; col < dashboardPanel.getLayout().getColumns(); ++col)
-            for (int row = 0; row < 3; ++row) {
+            for (int row = 0; row < 4; ++row) {
                 // initialize a widget
                 MyHTML widget = new MyHTML("&nbsp;Gadget&nbsp;#" + ++count);
                 widget.setHeight(Random.nextInt(8) + 2 + "em");
+                widget.setFullWidth(row % 2 > 0);
                 //			dashboardPanel.insertWidget(widget, col, row);
                 dashboardPanel.addGadget(widget, col);
             }
