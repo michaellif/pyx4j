@@ -69,15 +69,6 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
 
         saveApplicationEntity(unitSelection);
 
-        // --- REMOVE ---
-        // TODO Vlad, please look into this
-        log.info("After we've saved, let's load it again");
-        EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-        unitSelection = secureRetrieve(criteria);
-        log.info("Test loading unit selection with criteria {}", unitSelection.selectionCriteria());
-        // --- REMOVE ---
-
         loadTransientData(unitSelection);
 
         callback.onSuccess(unitSelection);
