@@ -60,7 +60,7 @@ public class SiteFactory {
     }
 
     protected String footerCopyright() {
-        return "&copy; 2008-2010 pyx4j.com All rights reserved.";
+        return "&copy; 2008-2011 pyx4j.com All rights reserved.";
     }
 
     protected static String pageBodyUnderConstruction(String caption) {
