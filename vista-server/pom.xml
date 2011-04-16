@@ -255,11 +255,6 @@
 
         <profile>
             <id>full</id>
-            <activation>
-                <property>
-                    <name>bamboo.buildNumber</name>
-                </property>
-            </activation>
             <build>
                 <plugins>
 

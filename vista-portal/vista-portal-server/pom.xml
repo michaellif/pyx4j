@@ -154,7 +154,7 @@
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
@@ -173,11 +173,6 @@
 
         <profile>
             <id>full</id>
-            <activation>
-                <property>
-                    <name>bamboo.buildNumber</name>
-                </property>
-            </activation>
             <build>
                 <plugins>
 
