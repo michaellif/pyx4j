@@ -18,24 +18,21 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.propertyvista.crm.client.activity.UserMessageActivity;
+import com.propertyvista.crm.client.activity.FooterActivity;
 
-import com.pyx4j.site.rpc.AppPlace;
+public class FooterActivityMapper implements ActivityMapper {
 
-public class MessageActivityMapper implements ActivityMapper {
-
-    Provider<UserMessageActivity> userMessageActivityProvider;
+    Provider<FooterActivity> activityProvider;
 
     @Inject
-    public MessageActivityMapper(final Provider<UserMessageActivity> userMessageActivityProvider) {
-
+    public FooterActivityMapper(Provider<FooterActivity> activityProvider) {
         super();
-        this.userMessageActivityProvider = userMessageActivityProvider;
-
+        this.activityProvider = activityProvider;
     }
 
     @Override
     public Activity getActivity(Place place) {
-        return userMessageActivityProvider.get().withPlace((AppPlace) place);
+        return activityProvider.get();
     }
+
 }

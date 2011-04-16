@@ -18,17 +18,14 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.propertyvista.crm.client.activity.ChangePasswordActivity;
-import com.propertyvista.crm.client.activity.GenericMessageActivity;
 import com.propertyvista.crm.client.activity.LoginActivity;
 import com.propertyvista.crm.client.activity.ResetPasswordActivity;
 import com.propertyvista.crm.client.activity.RetrievePasswordActivity;
-import com.propertyvista.crm.client.activity.StaticContentActivity;
-import com.propertyvista.crm.rpc.SiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-public class ContentActivityMapper implements ActivityMapper {
+public class MainActivityMapper implements ActivityMapper {
 
     Provider<LoginActivity> loginActivityProvider;
 
@@ -36,48 +33,29 @@ public class ContentActivityMapper implements ActivityMapper {
 
     Provider<ResetPasswordActivity> resetPasswordActivityProvider;
 
-    Provider<ChangePasswordActivity> changePasswordActivityProvider;
-
-    Provider<StaticContentActivity> staticContentActivity;
-
-    Provider<GenericMessageActivity> genericMessageActivity;
-
     @Inject
-    public ContentActivityMapper(
+    public MainActivityMapper(
 
     final Provider<LoginActivity> loginActivityProvider,
 
     final Provider<RetrievePasswordActivity> retrievePasswordActivityProvider,
 
-    final Provider<ResetPasswordActivity> resetPasswordActivityProvider,
-
-    final Provider<ChangePasswordActivity> changePasswordActivityProvider,
-
-    final Provider<StaticContentActivity> staticContentActivity,
-
-    final Provider<GenericMessageActivity> genericMessageActivity) {
+    final Provider<ResetPasswordActivity> resetPasswordActivityProvider) {
 
         super();
         this.loginActivityProvider = loginActivityProvider;
         this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
         this.resetPasswordActivityProvider = resetPasswordActivityProvider;
-        this.changePasswordActivityProvider = changePasswordActivityProvider;
-        this.staticContentActivity = staticContentActivity;
-        this.genericMessageActivity = genericMessageActivity;
     }
 
     @Override
     public Activity getActivity(Place place) {
-        if (place instanceof SiteMap.Login) {
+        if (place instanceof CrmSiteMap.Login) {
             return loginActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.RetrievePassword) {
+        } else if (place instanceof CrmSiteMap.RetrievePassword) {
             return retrievePasswordActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.ChangePassword) {
-            return changePasswordActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.ResetPassword) {
+        } else if (place instanceof CrmSiteMap.ResetPassword) {
             return resetPasswordActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.GenericMessage) {
-            return genericMessageActivity.get().withPlace((AppPlace) place);
         }
         //TODO what to do on other place
         return null;

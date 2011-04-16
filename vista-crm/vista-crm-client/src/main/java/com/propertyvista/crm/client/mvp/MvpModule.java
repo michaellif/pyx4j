@@ -22,20 +22,14 @@ public class MvpModule extends AbstractGinModule {
 
         bind(LogoActivityMapper.class);
         bind(ActionsActivityMapper.class);
-        bind(MainNavigActivityMapper.class);
-        bind(SecondNavigActivityMapper.class);
+        bind(NavigActivityMapper.class);
 
-        bind(CaptionActivityMapper.class);
-        bind(MessageActivityMapper.class);
-        bind(ContentActivityMapper.class);
+        bind(MainActivityMapper.class);
 
         bind(Left1ActivityMapper.class);
         bind(Left2ActivityMapper.class);
 
-        bind(Right1ActivityMapper.class);
-        bind(Right2ActivityMapper.class);
-
-        bind(BottomActivityMapper.class);
+        bind(FooterActivityMapper.class);
 
     }
 

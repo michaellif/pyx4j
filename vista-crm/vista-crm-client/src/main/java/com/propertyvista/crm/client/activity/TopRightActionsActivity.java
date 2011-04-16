@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;
-import com.propertyvista.crm.rpc.SiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
@@ -70,7 +70,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void login() {
-        AppSite.getPlaceController().goTo(new SiteMap.Login());
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
     }
 
     @Override

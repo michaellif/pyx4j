@@ -143,6 +143,18 @@ public abstract class VistaCrmTheme extends Theme {
         style.addProperty("margin-left", "40px");
         style.addProperty("margin-right", "40px");
         addStyle(style);
+
+        style = new Style(".gwt-SplitLayoutPanel");
+        addStyle(style);
+
+        style = new Style(".gwt-SplitLayoutPanel-HDragger");
+        style.addProperty("cursor", "col-resize");
+        addStyle(style);
+
+        style = new Style(".gwt-SplitLayoutPanel-VDragger");
+        style.addProperty("cursor", "row-resize");
+        addStyle(style);
+
     }
 
     protected void initBodyStyles() {

@@ -18,23 +18,27 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.propertyvista.crm.client.activity.CaptionActivity;
+import com.propertyvista.crm.client.activity.NavigActivity;
 
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.security.client.ClientContext;
 
-public class CaptionActivityMapper implements ActivityMapper {
+public class NavigActivityMapper implements ActivityMapper {
 
-    Provider<CaptionActivity> captionActivityProvider;
+    Provider<NavigActivity> navigActivityProvider;
 
     @Inject
-    public CaptionActivityMapper(final Provider<CaptionActivity> captionActivityProvider) {
+    public NavigActivityMapper(final Provider<NavigActivity> navigActivityProvider) {
         super();
-        this.captionActivityProvider = captionActivityProvider;
+        this.navigActivityProvider = navigActivityProvider;
     }
 
     @Override
     public Activity getActivity(Place place) {
-        return captionActivityProvider.get().withPlace((AppPlace) place);
+        if (ClientContext.isAuthenticated()) {
+            return navigActivityProvider.get().withPlace(place);
+        } else {
+            return null;
+        }
     }
 
 }

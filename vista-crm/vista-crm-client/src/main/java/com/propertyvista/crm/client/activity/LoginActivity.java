@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.LoginView;
-import com.propertyvista.crm.rpc.SiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -75,6 +75,6 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
 
     @Override
     public void gotoRetrievePassword() {
-        AppSite.getPlaceController().goTo(new SiteMap.RetrievePassword());
+        AppSite.getPlaceController().goTo(new CrmSiteMap.RetrievePassword());
     }
 }

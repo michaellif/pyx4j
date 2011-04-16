@@ -11,28 +11,31 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.crm.client.mvp;
+package com.propertyvista.crm.client.activity;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.propertyvista.crm.client.activity.FooterActivity;
+import com.propertyvista.crm.client.ui.DashboardView;
 
-public class BottomActivityMapper implements ActivityMapper {
+public class DashboardActivity extends AbstractActivity {
 
-    Provider<FooterActivity> activityProvider;
+    private final DashboardView view;
 
     @Inject
-    public BottomActivityMapper(Provider<FooterActivity> activityProvider) {
-        super();
-        this.activityProvider = activityProvider;
+    public DashboardActivity(DashboardView view) {
+        this.view = view;
+    }
+
+    public DashboardActivity withPlace(Place place) {
+        return this;
     }
 
     @Override
-    public Activity getActivity(Place place) {
-        return activityProvider.get();
+    public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
+        containerWidget.setWidget(view);
     }
 
 }

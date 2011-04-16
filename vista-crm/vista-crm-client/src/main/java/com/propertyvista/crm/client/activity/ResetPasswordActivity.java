@@ -28,7 +28,7 @@ import com.propertyvista.crm.client.ui.NewPasswordView;
 import com.propertyvista.crm.client.ui.NewPasswordView.ConversationType;
 import com.propertyvista.crm.rpc.ActivationServices;
 import com.propertyvista.crm.rpc.PasswordChangeRequest;
-import com.propertyvista.crm.rpc.SiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -65,7 +65,7 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
                     i18n.tr("LogIn"), new Command() {
                         @Override
                         public void execute() {
-                            AppSite.getPlaceController().goTo(new SiteMap.Login());
+                            AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
                         }
                     });
         }

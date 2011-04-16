@@ -21,23 +21,19 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.propertyvista.crm.client.mvp.ActionsActivityMapper;
-import com.propertyvista.crm.client.mvp.BottomActivityMapper;
-import com.propertyvista.crm.client.mvp.CaptionActivityMapper;
-import com.propertyvista.crm.client.mvp.ContentActivityMapper;
+import com.propertyvista.crm.client.mvp.FooterActivityMapper;
 import com.propertyvista.crm.client.mvp.Left1ActivityMapper;
 import com.propertyvista.crm.client.mvp.Left2ActivityMapper;
 import com.propertyvista.crm.client.mvp.LogoActivityMapper;
-import com.propertyvista.crm.client.mvp.MainNavigActivityMapper;
-import com.propertyvista.crm.client.mvp.MessageActivityMapper;
-import com.propertyvista.crm.client.mvp.Right1ActivityMapper;
-import com.propertyvista.crm.client.mvp.Right2ActivityMapper;
-import com.propertyvista.crm.client.mvp.SecondNavigActivityMapper;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
+import com.propertyvista.crm.client.mvp.NavigActivityMapper;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AppSiteView;
@@ -59,25 +55,15 @@ public class CrmView extends LayoutPanel {
 
     ActionsActivityMapper actionsActivityMapper,
 
-    MainNavigActivityMapper mainNavigActivityMapper,
+    NavigActivityMapper navigActivityMapper,
 
-    SecondNavigActivityMapper secondNavigActivityMapper,
-
-    CaptionActivityMapper captionActivityMapper,
-
-    MessageActivityMapper messageActivityMapper,
-
-    ContentActivityMapper contentActivityMapper,
+    MainActivityMapper mainActivityMapper,
 
     Left1ActivityMapper left1ActivityMapper,
 
     Left2ActivityMapper left2ActivityMapper,
 
-    Right1ActivityMapper right1ActivityMapper,
-
-    Right2ActivityMapper right2ActivityMapper,
-
-    BottomActivityMapper bottomActivityMapper,
+    FooterActivityMapper footerActivityMapper,
 
     Theme theme) {
 
@@ -97,36 +83,54 @@ public class CrmView extends LayoutPanel {
         FlowPanel headerPanel = new FlowPanel();
         contentPanel.addNorth(headerPanel, 5);
 
-        DisplayPanel logoDisplayPanel = new DisplayPanel("Logo");
-        logoDisplayPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
-        headerPanel.add(logoDisplayPanel);
+        DisplayPanel logoDisplay = new DisplayPanel();
+        logoDisplay.getElement().getStyle().setFloat(Style.Float.LEFT);
+        headerPanel.add(logoDisplay);
 
-        DisplayPanel actionsDisplayPanel = new DisplayPanel("Actions");
-        actionsDisplayPanel.setWidth("20em");
-        actionsDisplayPanel.getElement().getStyle().setFloat(Style.Float.RIGHT);
-        headerPanel.add(actionsDisplayPanel);
+        DisplayPanel actionsDisplay = new DisplayPanel();
+        actionsDisplay.setWidth("20em");
+        actionsDisplay.getElement().getStyle().setFloat(Style.Float.RIGHT);
+        headerPanel.add(actionsDisplay);
 
         //============ Footer Panel ============
 
-        DisplayPanel footerPanel = new DisplayPanel("Footer");
-        contentPanel.addSouth(footerPanel, 5);
+        DisplayPanel footerDisplay = new DisplayPanel();
+        contentPanel.addSouth(footerDisplay, 5);
+
+        SplitLayoutPanel splitPanel = new SplitLayoutPanel();
+
+        contentPanel.add(splitPanel);
 
         //============ Left Panel ============
 
         VerticalPanel leftPanel = new VerticalPanel();
-        contentPanel.addWest(leftPanel, 15);
+        leftPanel.setSize("100%", "100%");
+        splitPanel.addWest(leftPanel, 250);
 
-        DisplayPanel mainNavigDisplayPanel = new DisplayPanel("MainNavig");
-        leftPanel.add(mainNavigDisplayPanel);
-        leftPanel.setCellHeight(mainNavigDisplayPanel, "100%");
+        DisplayPanel navigDisplay = new DisplayPanel();
+        leftPanel.add(navigDisplay);
+        navigDisplay.setSize("100%", "100%");
+        leftPanel.setCellWidth(navigDisplay, "100%");
+        leftPanel.setCellHeight(navigDisplay, "100%");
 
-        DisplayPanel communicationsDisplayPanel = new DisplayPanel("Communications");
-        leftPanel.add(communicationsDisplayPanel);
+        DisplayPanel left1Display = new DisplayPanel();
+        leftPanel.add(left1Display);
+
+        DisplayPanel left2Display = new DisplayPanel();
+        leftPanel.add(left2Display);
 
         //============ Main ============
 
-        DisplayPanel mainPanel = new DisplayPanel("Main");
-        contentPanel.add(mainPanel);
+        DisplayPanel mainDisplay = new DisplayPanel();
+        splitPanel.add(mainDisplay);
+
+        bind(logoActivityMapper, logoDisplay, eventBus);
+        bind(actionsActivityMapper, actionsDisplay, eventBus);
+        bind(footerActivityMapper, footerDisplay, eventBus);
+        bind(navigActivityMapper, navigDisplay, eventBus);
+        bind(left1ActivityMapper, left1Display, eventBus);
+        bind(left2ActivityMapper, left2Display, eventBus);
+        bind(mainActivityMapper, mainDisplay, eventBus);
 
     }
 
@@ -136,14 +140,10 @@ public class CrmView extends LayoutPanel {
 
     }
 
-    class DisplayPanel extends HTML {
-        DisplayPanel(String html) {
-            setText(html);
+    class DisplayPanel extends SimplePanel {
+        DisplayPanel() {
             String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
-
-            getElement().getStyle().setColor("red");
-            //setStyleName(prefix + StyleSuffix.Display);
-
+            setStyleName(prefix + StyleSuffix.Display);
         }
     }
 

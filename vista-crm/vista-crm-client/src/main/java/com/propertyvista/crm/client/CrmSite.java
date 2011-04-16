@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.crm.rpc.SiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.portal.domain.VistaBehavior;
 
 import com.pyx4j.essentials.client.SessionInactiveDialog;
@@ -39,7 +39,7 @@ public class CrmSite extends VistaSite {
         super.onSiteLoad();
 
         ginjector = GWT.create(CrmGinjector.class);
-        getHistoryHandler().register(getPlaceController(), getEventBus(), new SiteMap.Login());
+        getHistoryHandler().register(getPlaceController(), getEventBus(), new CrmSiteMap.Login());
 
         RootPanel.get().add(RootLayoutPanel.get());
 
@@ -63,16 +63,16 @@ public class CrmSite extends VistaSite {
 
     private void loadCrm() {
         if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
-            AppSite.getPlaceController().goTo(new SiteMap.Dashboard());
+            AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard());
         } else {
-            AppSite.getPlaceController().goTo(new SiteMap.Login());
+            AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
         }
     }
 
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
         setMessage(new Message(message, title, buttonText, command));
-        getPlaceController().goTo(new SiteMap.GenericMessage());
+        //TODO getPlaceController().goTo(new CrmSiteMap.GenericMessage());
     }
 
     private void obtainAuthenticationData() {

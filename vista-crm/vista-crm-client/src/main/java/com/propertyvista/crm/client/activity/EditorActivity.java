@@ -7,27 +7,12 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
+ * Created on Apr 16, 2011
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.crm.client.mvp;
+package com.propertyvista.crm.client.activity;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-
-public class Right1ActivityMapper implements ActivityMapper {
-
-    @Inject
-    public Right1ActivityMapper() {
-        super();
-    }
-
-    @Override
-    public Activity getActivity(Place place) {
-        return null;
-    }
+public class EditorActivity {
 
 }
