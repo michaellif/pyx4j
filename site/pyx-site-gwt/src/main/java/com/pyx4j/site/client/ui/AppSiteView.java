@@ -5,7 +5,6 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -158,7 +157,7 @@ public class AppSiteView extends FlowPanel {
 
     }
 
-    private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
+    private static void bind(ActivityMapper mapper, DisplayPanel widget, EventBus eventBus) {
         ActivityManager activityManager = new ActivityManager(mapper, eventBus);
         activityManager.setDisplay(widget);
 
