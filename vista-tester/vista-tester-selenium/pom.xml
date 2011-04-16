@@ -7,8 +7,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-         <groupId>com.propertyvista</groupId>
-        <artifactId>vista-shared</artifactId>
+        <groupId>com.propertyvista</groupId>
+        <artifactId>vista-tester</artifactId>
         <version>1.0.0-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>

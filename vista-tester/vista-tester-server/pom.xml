@@ -7,8 +7,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-         <groupId>com.propertyvista</groupId>
-        <artifactId>vista</artifactId>
+        <groupId>com.propertyvista</groupId>
+        <artifactId>vista-tester</artifactId>
         <version>1.0.0-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -206,6 +206,7 @@
                         </configuration>
                     </plugin>
 
+                    <!--
                     <plugin>
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
@@ -221,6 +222,7 @@
                             </execution>
                         </executions>
                     </plugin>
+                    -->
 
                 </plugins>
             </build>
