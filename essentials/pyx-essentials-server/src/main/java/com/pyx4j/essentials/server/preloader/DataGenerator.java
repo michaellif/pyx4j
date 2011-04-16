@@ -230,6 +230,8 @@ public class DataGenerator {
     public static Date randomDate(int month) {
         Calendar c = new GregorianCalendar();
         c.add(Calendar.MONTH, (month > 0) ? random().nextInt(month) : -random().nextInt(-month));
+        // DB does not store Milliseconds
+        c.set(Calendar.MILLISECOND, 0);
         return c.getTime();
     }
 }
