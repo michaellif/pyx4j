@@ -78,13 +78,18 @@ public abstract class DatastoreTestBase extends TestCase {
     }
 
     public static Date getRoundedNow() {
-        return new Date(1000 * (new Date().getTime() / 1000));
+        Calendar c = new GregorianCalendar();
+        // DB does not store Milliseconds
+        c.set(Calendar.MILLISECOND, 0);
+        return c.getTime();
     }
 
     protected Date randomDate() {
         Calendar c = new GregorianCalendar();
         c.add(Calendar.MONTH, -random.nextInt(1024));
-        return new Date(1000 * (c.getTime().getTime() / 1000));
+        // DB does not store Milliseconds
+        c.set(Calendar.MILLISECOND, 0);
+        return c.getTime();
     }
 
     protected java.sql.Date randomSqlDate() {
