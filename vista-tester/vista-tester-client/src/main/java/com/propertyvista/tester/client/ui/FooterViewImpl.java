@@ -11,20 +11,21 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.tester.client.mvp;
+package com.propertyvista.tester.client.ui;
 
-import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.inject.Singleton;
 
-public class TesterMvpModule extends AbstractGinModule {
+@Singleton
+public class FooterViewImpl extends SimplePanel implements FooterView {
 
-    @Override
-    protected void configure() {
+    public FooterViewImpl() {
+        HTML labael = new HTML("========Status=========");
+        setWidget(labael);
+        getElement().getStyle().setPaddingTop(10, Unit.PX);
 
-        bind(FooterActivityMapper.class);
-        bind(HeaderActionActivityMapper.class);
-        bind(NavigationActivityMapper.class);
-        bind(LogActivityMapper.class);
-        bind(TestAreaActivityMapper.class);
     }
 
 }

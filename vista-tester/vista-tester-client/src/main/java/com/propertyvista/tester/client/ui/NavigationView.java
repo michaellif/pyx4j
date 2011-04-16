@@ -7,24 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Apr 16, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.tester.client.mvp;
+package com.propertyvista.tester.client.ui;
 
-import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class TesterMvpModule extends AbstractGinModule {
-
-    @Override
-    protected void configure() {
-
-        bind(FooterActivityMapper.class);
-        bind(HeaderActionActivityMapper.class);
-        bind(NavigationActivityMapper.class);
-        bind(LogActivityMapper.class);
-        bind(TestAreaActivityMapper.class);
-    }
+public interface NavigationView extends IsWidget {
 
 }

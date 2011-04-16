@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Apr 16, 2011
+ * @author vadims
  * @version $Id$
  */
 package com.propertyvista.tester.client.activity;
@@ -18,24 +18,24 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.tester.client.ui.StatusView;
+import com.propertyvista.tester.client.ui.LogView;
 
-public class StatusActivity extends AbstractActivity {
+public class LogActivity extends AbstractActivity {
 
-    private final StatusView view;
+    private final LogView view;
 
     @Inject
-    public StatusActivity(StatusView view) {
+    public LogActivity(LogView view) {
         this.view = view;
     }
 
-    public StatusActivity withPlace(Place place) {
+    public LogActivity withPlace(Place place) {
         return this;
     }
 
     @Override
-    public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
-        containerWidget.setWidget(view);
+    public void start(AcceptsOneWidget container, EventBus eventBus) {
+        container.setWidget(view);
     }
 
 }

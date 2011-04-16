@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Apr 16, 2011
+ * @author vadims
  * @version $Id$
  */
 package com.propertyvista.tester.client.mvp;
@@ -18,14 +18,14 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.propertyvista.tester.client.activity.StatusActivity;
+import com.propertyvista.tester.client.activity.LogActivity;
 
-public class StatusActivityMapper implements ActivityMapper {
+public class LogActivityMapper implements ActivityMapper {
 
-    Provider<StatusActivity> activityProvider;
+    private final Provider<LogActivity> activityProvider;
 
     @Inject
-    public StatusActivityMapper(Provider<StatusActivity> activityProvider) {
+    public LogActivityMapper(Provider<LogActivity> activityProvider) {
         super();
         this.activityProvider = activityProvider;
     }

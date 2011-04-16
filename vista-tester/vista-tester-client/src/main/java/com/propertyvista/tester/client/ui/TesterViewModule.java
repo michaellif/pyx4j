@@ -24,9 +24,11 @@ public class TesterViewModule extends AbstractGinModule {
     @Override
     protected void configure() {
         bind(TesterView.class);
-
-        bind(StatusView.class).to(StatusViewImpl.class).in(Singleton.class);
-
+        bind(FooterView.class).to(FooterViewImpl.class).in(Singleton.class);
+        bind(HeaderActionView.class).to(HeaderActionViewImpl.class).in(Singleton.class);
+        bind(NavigationView.class).to(NavigationViewImpl.class).in(Singleton.class);
+        bind(LogView.class).to(LogViewImpl.class).in(Singleton.class);
+        bind(TestAreaView.class).to(TestAreaViewImpl.class).in(Singleton.class);
         bind(Theme.class).to(VistaTheme.class).in(Singleton.class);
     }
 }

@@ -7,24 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Apr 16, 2011
+ * @author Dad
  * @version $Id$
  */
-package com.propertyvista.tester.client.mvp;
+package com.propertyvista.tester.client.ui;
 
-import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
-public class TesterMvpModule extends AbstractGinModule {
-
-    @Override
-    protected void configure() {
-
-        bind(FooterActivityMapper.class);
-        bind(HeaderActionActivityMapper.class);
-        bind(NavigationActivityMapper.class);
-        bind(LogActivityMapper.class);
-        bind(TestAreaActivityMapper.class);
+public class LogViewImpl extends ScrollPanel implements LogView {
+    public LogViewImpl() {
+        /**
+         * TODO complete implementation
+         */
+        setWidget(new HTML("Log"));
     }
 
 }

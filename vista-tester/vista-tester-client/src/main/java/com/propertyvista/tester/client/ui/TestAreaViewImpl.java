@@ -7,24 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Apr 16, 2011
+ * @author Dad
  * @version $Id$
  */
-package com.propertyvista.tester.client.mvp;
+package com.propertyvista.tester.client.ui;
 
-import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
-public class TesterMvpModule extends AbstractGinModule {
+public class TestAreaViewImpl extends ScrollPanel implements TestAreaView {
 
-    @Override
-    protected void configure() {
+    public TestAreaViewImpl() {
+        /**
+         * TODO complete implementation
+         */
+        setWidget(new HTML("Test Area"));
 
-        bind(FooterActivityMapper.class);
-        bind(HeaderActionActivityMapper.class);
-        bind(NavigationActivityMapper.class);
-        bind(LogActivityMapper.class);
-        bind(TestAreaActivityMapper.class);
     }
 
 }
