@@ -64,7 +64,10 @@ public class AppPlaceInfo {
             if (i == 0) {
                 builder.append(Character.toLowerCase(charArray[i]));
             } else if (Character.isUpperCase(charArray[i])) {
-                builder.append('_').append(Character.toLowerCase(charArray[i]));
+                if (charArray[i - 1] != '/') {
+                    builder.append('_');
+                }
+                builder.append(Character.toLowerCase(charArray[i]));
             } else {
                 builder.append(charArray[i]);
             }
