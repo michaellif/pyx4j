@@ -35,6 +35,5 @@ maven profiles for build server
     * build-env
     * build-ci (for cruisecontrol)
     * deploy (deploy to tomcat)
-    * target-www22
-    * target-www33
-    * target-www44
+    * deploy-target-www33
+    * deploy-target-www44
