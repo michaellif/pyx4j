@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.activity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.pyx4j.site.rpc.AppPlace;
@@ -30,8 +29,8 @@ public class NavigFolder {
         navigItems = new ArrayList<AppPlace>();
     }
 
-    public Iterator<AppPlace> getNavigItemsIterator() {
-        return navigItems.iterator();
+    public List<AppPlace> getNavigItems() {
+        return navigItems;
     }
 
     public void addNavigItem(AppPlace item) {

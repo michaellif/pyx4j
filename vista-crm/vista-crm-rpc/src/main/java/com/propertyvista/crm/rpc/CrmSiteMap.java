@@ -38,22 +38,27 @@ public class CrmSiteMap {
     public static class Properties extends AppPlace {
 
         @PlaceProperties(caption = "Buildings")
+        @NavigationItem(navigLabel = "Buildings")
         public static class Buildings extends AppPlace {
         }
 
         @PlaceProperties(caption = "Arrears")
+        @NavigationItem(navigLabel = "Arrears")
         public static class Arrears extends AppPlace {
         }
 
         @PlaceProperties(caption = "Budgets")
+        @NavigationItem(navigLabel = "Budgets")
         public static class Budgets extends AppPlace {
         }
 
         @PlaceProperties(caption = "Purchase Orders")
+        @NavigationItem(navigLabel = "Purchase Orders")
         public static class PurchaseOrders extends AppPlace {
         }
 
         @PlaceProperties(caption = "City Orders")
+        @NavigationItem(navigLabel = "City Orders")
         public static class CityOrders extends AppPlace {
         }
     }
@@ -83,7 +88,6 @@ public class CrmSiteMap {
     public static class Dashboard extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Editor")
     @PlaceProperties(caption = "Editor")
     public static class Editor extends AppPlace {
     }

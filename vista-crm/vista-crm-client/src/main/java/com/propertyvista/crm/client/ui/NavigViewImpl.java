@@ -15,11 +15,17 @@ package com.propertyvista.crm.client.ui;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.DecoratedStackPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.propertyvista.crm.client.activity.NavigFolder;
 
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
@@ -43,15 +49,33 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
     }
 
     @Override
-    public void setPresenter(MainNavigPresenter presenter) {
+    public void setPresenter(final MainNavigPresenter presenter) {
         this.presenter = presenter;
 
-        DecoratedStackPanel stackPanel = new DecoratedStackPanel();
+        StackLayoutPanel stackPanel = new StackLayoutPanel(Unit.EM);
         stackPanel.setSize("100%", "100%");
 
         List<NavigFolder> folders = presenter.getNavigFolders();
         for (NavigFolder navigFolder : folders) {
-            stackPanel.add(new HTML(navigFolder.getTitle()), navigFolder.getTitle());
+            ScrollPanel scroll = new ScrollPanel();
+
+            FlowPanel list = new FlowPanel();
+
+            for (final AppPlace place : navigFolder.getNavigItems()) {
+                SimplePanel line = new SimplePanel();
+                Anchor anchor = new Anchor(presenter.getNavigLabel(place));
+                anchor.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        presenter.navigTo(place);
+                    }
+                });
+                line.setWidget(anchor);
+                list.add(line);
+            }
+
+            scroll.setWidget(list);
+            stackPanel.add(scroll, navigFolder.getTitle(), 2);
         }
 
         setWidget(stackPanel);
