@@ -30,23 +30,17 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-
 /**
  * {@link VerticalPanel} which has a permanent spacer at the end to prevent CSS collapse
  * of the panel and its parent.
  */
-public class ColumnFlowPanel extends FlowPanel /* VerticalPanel */{
+class ColumnFlowPanel extends FlowPanel /* VerticalPanel */{
 
     final PickupDragController dragController;
 
     private boolean rowGadgetIsDragging = false;
 
     protected Layout layout;
-
-//    public ColumnFlowPanel() {
-//        this.dragController = null;
-//        clear();
-//    }
 
     public ColumnFlowPanel(PickupDragController dragCtrl, Layout layout) {
         this.dragController = dragCtrl;

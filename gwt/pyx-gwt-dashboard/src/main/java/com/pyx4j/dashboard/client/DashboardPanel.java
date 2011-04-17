@@ -127,8 +127,8 @@ public class DashboardPanel extends SimplePanel {
 
     @Override
     public void clear() {
-        columnsContainerPanel.clear();
         widgetDragController.unregisterDropControllers();
+        columnsContainerPanel.clear();
     }
 
     public boolean refresh() {
@@ -231,7 +231,6 @@ public class DashboardPanel extends SimplePanel {
             }
 
             // inner vertical panel to hold individual widgets:
-//            ColumnFlowPanel columnPanel = new ColumnFlowPanel();
             ColumnFlowPanel columnPanel = new ColumnFlowPanel(widgetDragController, layout);
             columnPanel.addStyleName(BASE_NAME + StyleSuffix.Column);
             columnPanel.setWidth("100%");

@@ -25,12 +25,11 @@ import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.allen_sauer.gwt.dnd.client.drop.SimpleDropController;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-
 /**
  * DropController which allows a widget to be dropped on a SimplePanel drop target when
  * the drop target does not yet have a child widget.
  */
-public class TwoGadgetsRowDropController extends SimpleDropController {
+class TwoGadgetsRowDropController extends SimpleDropController {
 
     private final SimplePanel dropTarget;
 

@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.Widget;
  * functionality of his VerticalPanelDropController::newPositioner...
  * getLocationWidgetComparator has been changed also...
  */
-public class CustomFlowPanelDropController extends FlowPanelDropController {
+class CustomFlowPanelDropController extends FlowPanelDropController {
 
     /**
      * Label for IE quirks mode workaround.
