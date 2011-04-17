@@ -23,11 +23,10 @@ package com.pyx4j.entity.client.impl;
 import java.util.Date;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.impl.PrimitiveHandler;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 
 public abstract class EntityImplNativeHelper {
-
-    public static final Class<?> BYTE_ARRAY_CLASS = byte[].class;
 
     public static IObject<?> createMemberIPrimitive_java_lang_String(SharedEntityHandler handler, String memberName) {
         return handler.lazyCreateMemberIPrimitive(memberName, String.class);
@@ -74,6 +73,6 @@ public abstract class EntityImplNativeHelper {
     }
 
     public static IObject<?> createMemberIPrimitive_byteArray(SharedEntityHandler handler, String memberName) {
-        return handler.lazyCreateMemberIPrimitive(memberName, byte[].class);
+        return handler.lazyCreateMemberIPrimitive(memberName, PrimitiveHandler.BYTE_ARRAY_CLASS);
     }
 }

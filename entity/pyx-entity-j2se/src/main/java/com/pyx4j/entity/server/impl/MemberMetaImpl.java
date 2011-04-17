@@ -47,6 +47,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.ObjectClassType;
+import com.pyx4j.entity.shared.impl.PrimitiveHandler;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
@@ -131,7 +132,7 @@ public class MemberMetaImpl implements MemberMeta {
             } else {
                 length = 0;
             }
-        } else if ((lengthAnnotation != null) && (byte[].class.equals(valueClass))) {
+        } else if ((lengthAnnotation != null) && (PrimitiveHandler.BYTE_ARRAY_CLASS.equals(valueClass))) {
             length = lengthAnnotation.value();
         } else if (lengthAnnotation != null) {
             throw new RuntimeException("Unexpected @Length annotation in member " + fieldName);

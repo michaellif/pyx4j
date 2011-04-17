@@ -33,6 +33,9 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
 
     private static final long serialVersionUID = 5565143015625424503L;
 
+    //Avoid problems in some java code parsing implementations.
+    public static final Class<?> BYTE_ARRAY_CLASS = byte[].class;
+
     private final Class<TYPE> valueClass;
 
     public PrimitiveHandler(IEntity parent, String fieldName, Class<TYPE> valueClass) {
