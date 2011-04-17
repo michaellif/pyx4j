@@ -73,8 +73,8 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.pyx4j</groupId>
-                        <artifactId>maven-gwt-plugin</artifactId>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>gwt-maven-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>compile-java2script</id>
@@ -86,18 +86,13 @@
                         </executions>
                         <configuration>
                             <module>${gwtModuleCompile}</module>
-                            <sourceDirectories>
-                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                            </sourceDirectories>
-                            <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <target>${basedir}/../../vista-server/src/main/webapp</target>
+                            <warSourceDirectory>${basedir}/../../vista-server/src/main/webapp</warSourceDirectory>
                             <generated>${project.build.directory}/gwt-generated</generated>
-                            <compilerClass>com.google.gwt.dev.Compiler</compilerClass>
+                            <extra>${project.build.directory}/gwt-extra</extra>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
-                            <!--compileReport>${gwtCompileReport}</compileReport-->
                             <compileReport>false</compileReport>
                             <!-- disableCastChecking>true</disableCastChecking -->
                             <!-- disableClassMetadata>true</disableClassMetadata -->
