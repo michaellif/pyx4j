@@ -56,7 +56,7 @@ public class CComponentTest extends BaseSeleniumTestCase {
         //Enable/Disable
         tstEnableDisable();
         //Read-only
-        tstReadOnly();
+        //  tstReadOnly();
 
     }
 
@@ -65,7 +65,7 @@ public class CComponentTest extends BaseSeleniumTestCase {
         //Enable/Disable
         tstEnableDisable();
         //Read-only
-        tstReadOnly();
+        //   tstReadOnly();
     }
 
 //
