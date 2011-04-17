@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.dashboard.client.DashboardPanel2.GadgetHolder;
 
 /**
  * {@link VerticalPanel} which has a permanent spacer at the end to prevent CSS collapse
@@ -44,10 +43,10 @@ public class ColumnFlowPanel extends FlowPanel /* VerticalPanel */{
 
     protected Layout layout;
 
-    public ColumnFlowPanel() {
-        this.dragController = null;
-        clear();
-    }
+//    public ColumnFlowPanel() {
+//        this.dragController = null;
+//        clear();
+//    }
 
     public ColumnFlowPanel(PickupDragController dragCtrl, Layout layout) {
         this.dragController = dragCtrl;
@@ -106,7 +105,7 @@ public class ColumnFlowPanel extends FlowPanel /* VerticalPanel */{
         } else if (isRowGadgetIsDragging()) {
             needNewRow = (w.getStyleName().equals(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.DndPositioner));
 //        } else {
-//            needRow = (w.getStyleName().equals(DashboardPanelHorizontal.BASE_NAME + DashboardPanelHorizontal.StyleSuffix.DndPositioner));
+//            needRow = (w.getStyleName().equals(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.DndRowPositioner));
         }
 
         if (needNewRow) {

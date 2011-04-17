@@ -160,14 +160,14 @@ class TwoGadgetsRowFlowPanel extends FlowPanel {
 
     public boolean isLeft() {
         return (leftPlace.getWidget() != null);
-//          return (placeLeft.getWidget() != null && !(placeLeft.getWidget().getStyleName().equals(DashboardPanelHorizontal.BASE_NAME
-//          + DashboardPanelHorizontal.StyleSuffix.DndPositioner)));
+//          return (placeLeft.getWidget() != null && !(placeLeft.getWidget().getStyleName().equals(DashboardPanel.BASE_NAME
+//          + DashboardPanel.StyleSuffix.DndRowPositioner)));
     }
 
     public boolean isRight() {
         return (rightPlace.getWidget() != null);
-//          return (placeRight.getWidget() != null && !(placeRight.getWidget().getStyleName().equals(DashboardPanelHorizontal.BASE_NAME
-//          + DashboardPanelHorizontal.StyleSuffix.DndPositioner)));
+//          return (placeRight.getWidget() != null && !(placeRight.getWidget().getStyleName().equals(DashboardPanel.BASE_NAME
+//          + DashboardPanel.StyleSuffix.DndRowPositioner)));
     }
 
     public boolean isFull() {

@@ -19,7 +19,7 @@ public interface IGadget {
 
     boolean isSetupable();
 
-    boolean isFullWidth();
+    boolean isFullWidth(); // should be 'true' for regular gadgets/layouts...
 
     /**
      * Dashboard Gadget Setup interface. User-defined gadgets may implement this

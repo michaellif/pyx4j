@@ -21,7 +21,6 @@
 package com.pyx4j.dashboard.demo.client;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
-import com.pyx4j.dashboard.client.DashboardPanel2;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
@@ -38,7 +37,6 @@ public class VistaTheme extends Theme {
 
         initDashboardDemo();
         initDashboard();
-        initDashboardHorizontal();
     }
 
     protected void initThemeColors() {
@@ -210,64 +208,7 @@ public class VistaTheme extends Theme {
         style.addProperty("border", "1px dashed #aaa");
         addStyle(style);
 
-        // overriding gwt-dnd styles:
-        style = new Style(".dragdrop-handle");
-        style.addProperty("cursor", "default");
-        addStyle(style);
-    }
-
-    protected void initDashboardHorizontal() {
-        String prefix = DashboardPanel2.BASE_NAME;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DashboardPanel2.StyleSuffix.Column));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DashboardPanel2.StyleSuffix.ColumnHeading));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("font-weight", "bold");
-        style.addProperty("text-align", "center");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DashboardPanel2.StyleSuffix.ColumnSpacer));
-        style.addProperty("height", "4em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DashboardPanel2.StyleSuffix.Holder));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
-        style.addProperty("border", "1px solid #aaa");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DashboardPanel2.StyleSuffix.HolderSetup));
-        style.addProperty("background-color", ThemeColor.MANDATORY_TEXT_BACKGROUND);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DashboardPanel2.StyleSuffix.HolderCaption));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("font", "caption");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("color", "#444");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DashboardPanel2.StyleSuffix.HolderCaption) + ":hover");
-        style.addProperty("background-color", ThemeColor.SELECTION);
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DashboardPanel2.StyleSuffix.HolderHeading));
-        style.addProperty("padding-top", "2px");
-        style.addProperty("text-align", "center");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DashboardPanel2.StyleSuffix.HolderMenu));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
-        style.addProperty("border", "1px solid #aaa");
-        style.addProperty("font", "menu");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DashboardPanel2.StyleSuffix.DndPositioner));
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.DndRowPositioner));
         style.addProperty("background-color", "#dfffff");
         style.addProperty("border", "1px dashed #aaa");
         addStyle(style);

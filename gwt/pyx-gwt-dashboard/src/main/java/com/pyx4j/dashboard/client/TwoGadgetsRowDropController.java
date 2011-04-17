@@ -25,7 +25,6 @@ import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.allen_sauer.gwt.dnd.client.drop.SimpleDropController;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.dashboard.client.DashboardPanel2.GadgetHolder;
 
 /**
  * DropController which allows a widget to be dropped on a SimplePanel drop target when
@@ -44,7 +43,7 @@ public class TwoGadgetsRowDropController extends SimpleDropController {
     public void onEnter(DragContext context) {
         if (context.draggable instanceof GadgetHolder && !((GadgetHolder) context.draggable).isFullWidth()) {
             if (dropTarget.getWidget() == null || dropTarget.getWidget().equals(context.draggable)) {
-                dropTarget.addStyleName(DashboardPanel2.BASE_NAME + DashboardPanel2.StyleSuffix.DndPositioner);
+                dropTarget.addStyleName(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.DndRowPositioner);
 //            dropTarget.setHeight(context.draggable.getOffsetHeight() - DOMUtil.getVerticalBorders(dropTarget) + "px");
 //            dropTarget.setWidth(context.draggable.getOffsetWidth() - DOMUtil.getHorizontalBorders(dropTarget) + "px");
             }
@@ -53,7 +52,7 @@ public class TwoGadgetsRowDropController extends SimpleDropController {
 
     @Override
     public void onLeave(DragContext context) {
-        dropTarget.removeStyleName(DashboardPanel2.BASE_NAME + DashboardPanel2.StyleSuffix.DndPositioner);
+        dropTarget.removeStyleName(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.DndRowPositioner);
 //        dropTarget.setHeight("auto");
     }
 

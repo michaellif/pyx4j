@@ -24,7 +24,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -33,19 +32,15 @@ import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
-import com.pyx4j.dashboard.client.DashboardPanel2;
-import com.pyx4j.dashboard.client.IGadget;
 import com.pyx4j.dashboard.client.Layout;
 import com.pyx4j.widgets.client.style.StyleManger;
 
@@ -61,6 +56,8 @@ public final class DashboardDemo implements EntryPoint {
     protected static final String CSS_DASHBOARD_MENU = "Dashboard-menu";
 
     private static final String CSS_DASHBOARD_CAPTION = "Dashboard-caption";
+
+    private DashboardPanel dashboardPanel;
 
     @Override
     public void onModuleLoad() {
@@ -111,24 +108,23 @@ public final class DashboardDemo implements EntryPoint {
         dashboardWrapper.setWidth("100%");
         mainPanel.add(dashboardWrapper);
 
-        Layout layout = new Layout(1, 1, 12);
+        Layout layout = new Layout(3, 1, 12);
 
         // uncomment for captioned columns:     
-//        byte colWidths[] = { 30, 50, 20 };
-//        layout.setColumnWidths(colWidths);
+        byte colWidths[] = { 30, 50, 20 };
+        layout.setColumnWidths(colWidths);
 
 //        // uncomment for captioned columns: layout.useColumnNames = true; String
 //        String colNames[] = { "one", "two", "three" };
 //        layout.setColumnNames(colNames);
 
-//        DashboardPanel dashboardPanel = new DashboardPanel(layout);
-        DashboardPanel2 dashboardPanel = new DashboardPanel2(layout);
+        dashboardPanel = new DashboardPanel(layout);
 
         HorizontalPanel dashboardCaption = new HorizontalPanel();
         dashboardCaption.add(new Label());
         dashboardCaption.setCellWidth(dashboardCaption.getWidget(dashboardCaption.getWidgetCount() - 1), "90%");
         dashboardCaption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-//        dashboardCaption.add(createDashboardMenu(dashboardPanel));
+        dashboardCaption.add(createDashboardMenu(dashboardPanel));
         dashboardCaption.setCellWidth(dashboardCaption.getWidget(dashboardCaption.getWidgetCount() - 1), "10%");
         dashboardCaption.addStyleName(CSS_DASHBOARD_CAPTION);
         dashboardCaption.setWidth("100%");
@@ -137,121 +133,24 @@ public final class DashboardDemo implements EntryPoint {
         dashboardPanel.setWidth("100%");
         dashboardWrapper.add(dashboardPanel);
 
-        // define demo widget class: 
-        class MyHTML extends HTML implements IGadget {
+        fillDashboard(false);
+    }
 
-            boolean fullWidth = true;
+    private void fillDashboard(boolean useSubRows) {
 
-            MyHTML(String s) {
-                super(s);
-            }
-
-            // info:
-
-            @Override
-            public Widget getWidget() {
-                return this;
-            }
-
-            @Override
-            public String getName() {
-                return (getText() + " Title");
-            }
-
-            // flags:
-
-            @Override
-            public boolean isMaximizable() {
-                return true;
-            }
-
-            @Override
-            public boolean isMinimizable() {
-                return true;
-            }
-
-            @Override
-            public boolean isSetupable() {
-                return true;
-            }
-
-            @Override
-            public boolean isFullWidth() {
-                return fullWidth;
-            }
-
-            // setup:
-
-            public void setFullWidth(boolean fullWidth) {
-                this.fullWidth = fullWidth;
-            }
-
-            @Override
-            public ISetup getSetup() {
-                class MySetup implements ISetup {
-                    private final TextArea content = new TextArea();
-
-                    @Override
-                    public Widget getWidget() {
-                        FlowPanel setupPanel = new FlowPanel();
-                        setupPanel.add(new Label("Enter new gadget content:"));
-
-                        content.setText(getHTML());
-                        content.setWidth("100%");
-                        setupPanel.add(content);
-
-                        setupPanel.getElement().getStyle().setPadding(10, Unit.PX);
-                        setupPanel.getElement().getStyle().setPaddingBottom(0, Unit.PX);
-                        return setupPanel;
-                    }
-
-                    @Override
-                    public boolean onOk() {
-                        setHTML(content.getText());
-                        return true;
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        // TODO Auto-generated method stub
-
-                    }
-                }
-
-                return new MySetup();
-            }
-
-            // notifications:
-
-            @Override
-            public void onMaximize(boolean maximized_restored) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onMinimize(boolean minimized_restored) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onDelete() {
-                // TODO Auto-generated method stub
-
-            }
-        }
-
-        // fill the dashboard with demo widgets: 
+        // fill the dashboard with demo widgets:
+        dashboardPanel.removeAllGadgets();
 
         int count = 0;
         for (int col = 0; col < dashboardPanel.getLayout().getColumns(); ++col)
             for (int row = 0; row < 4; ++row) {
                 // initialize a widget
-                MyHTML widget = new MyHTML("&nbsp;Gadget&nbsp;#" + ++count);
+                DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
                 widget.setHeight(Random.nextInt(8) + 2 + "em");
-                widget.setFullWidth(row % 2 > 0);
-                //			dashboardPanel.insertWidget(widget, col, row);
+                if (useSubRows) {
+                    widget.setFullWidth(row % 2 > 0);
+                }
+                //          dashboardPanel.insertWidget(widget, col, row);
                 dashboardPanel.addGadget(widget, col);
             }
     }
@@ -320,30 +219,35 @@ public final class DashboardDemo implements EntryPoint {
                     }
                 };
 
-//                Command cmdLr = new Command() {
-//                    @Override
-//                    public void execute() {
-//                        pp.hide();
-//
-//                        dashboardPanel.getLayout().setColumnWidths(null);
-//                        dashboardPanel.refresh();
-//                    }
-//                };
+                Command cmdLr = new Command() {
+                    @Override
+                    public void execute() {
+                        pp.hide();
+
+                        dashboardPanel.clear();
+
+                        Layout layout = new Layout(1, 2, 12);
+                        dashboardPanel.setLayout(layout);
+
+                        fillDashboard(true);
+                        btn.removeFromParent();
+                    }
+                };
 
                 // create the menu:
                 MenuBar menu = new MenuBar(true);
-                menu.addItem("One row", cmdL1);
-                menu.addItem("Two rows (1/3)", cmdL21);
-                menu.addItem("Two rows (3/1)", cmdL22);
-                menu.addItem("Two equal rows", cmdL23);
-                menu.addItem("Three equal rows", cmdL3);
-//                menu.addSeparator();
-//                menu.addItem("Reset widths", cmdLr);
+                menu.addItem("One columns", cmdL1);
+                menu.addItem("Two columns(1/3)", cmdL21);
+                menu.addItem("Two columns (3/1)", cmdL22);
+                menu.addItem("Two equal columns", cmdL23);
+                menu.addItem("Three equal columns", cmdL3);
+                menu.addSeparator();
+                menu.addItem("<b>One-two gadgets per row...</b>", true, cmdLr);
 
                 menu.addStyleName(CSS_DASHBOARD_MENU);
 
                 pp.setWidget(menu);
-                pp.setPopupPosition(btn.getAbsoluteLeft() - 20, btn.getAbsoluteTop() + btn.getOffsetHeight());
+                pp.setPopupPosition(btn.getAbsoluteLeft() - 30, btn.getAbsoluteTop() + btn.getOffsetHeight());
                 pp.show();
             } // onClick button event handler...
         }); // ClickHandler class...
