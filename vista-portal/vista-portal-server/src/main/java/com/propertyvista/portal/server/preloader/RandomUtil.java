@@ -35,6 +35,9 @@ public class RandomUtil extends DataGenerator {
 
         // TODO have not done minutes/hours for now
 
+        // DB does not store Milliseconds
+        calendar.set(Calendar.MILLISECOND, 0);
+
         // Note:  Calendar.getTime() return FULL date (with hours/minutes/seconds!) despite it set just year and day...
         // our DatePicker control manipulates just rounded to days dates, so after just moving focus in/out in DatePicker 
         // it seems that it was date change - and some of our checks mis-behave... So I've rounded this calendar date:  

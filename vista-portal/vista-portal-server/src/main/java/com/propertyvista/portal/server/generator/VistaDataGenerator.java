@@ -66,6 +66,7 @@ import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.propertyvista.server.domain.UserCredential;
 
+import com.pyx4j.entity.server.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -505,12 +506,16 @@ public class VistaDataGenerator {
         criteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
         criteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
 
+        // from
+        Calendar availableFrom = TimeUtils.calRoundedNow();
+        DateUtils.dayStart(availableFrom);
+        criteria.availableFrom().setValue(availableFrom.getTime());
+
+        // to will be one month in the future
         Calendar avalableTo = new GregorianCalendar();
-        avalableTo.setTime(new Date());
+        avalableTo.setTime(availableFrom.getTime());
         avalableTo.add(Calendar.MONTH, 1);
         DateUtils.dayStart(avalableTo);
-
-        criteria.availableFrom().setValue(new Date());
         criteria.availableTo().setValue(avalableTo.getTime());
 
         unitSelection.selectionCriteria().set(criteria);

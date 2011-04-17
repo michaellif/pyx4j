@@ -176,10 +176,9 @@ public class ApartmentServiceTest extends VistaDBTestCase {
             @Override
             public void onSuccess(UnitSelection result) {
                 Assert.assertFalse("Result", result.isNull());
-
-                // TODO VLAD, this did not work as well
-
-                //                TestUtil.assertEqual("UnitSelection", unitSelection, result);
+                log.debug("Two dates are {} {}", unitSelection.selectionCriteria().availableFrom().getValue().getTime(), result.selectionCriteria()
+                        .availableFrom().getValue().getTime());
+                TestUtil.assertEqual("UnitSelection", unitSelection, result);
                 unitSelection = result; // update local unit
             }
         }, null);
