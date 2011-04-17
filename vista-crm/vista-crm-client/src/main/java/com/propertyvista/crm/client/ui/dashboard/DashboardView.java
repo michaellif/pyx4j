@@ -7,21 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-03-12
- * @author Vlad
+ * Created on Apr 16, 2011
+ * @author Misha
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui;
+package com.propertyvista.crm.client.ui.dashboard;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView {
-
-    private SecondNavigPresenter presenter;
-
-    @Override
-    public void setPresenter(SecondNavigPresenter presenter) {
-        this.presenter = presenter;
-    }
+public interface DashboardView extends IsWidget {
 
 }

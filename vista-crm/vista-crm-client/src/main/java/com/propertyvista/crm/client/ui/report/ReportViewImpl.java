@@ -7,21 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-20
- * @author Vlad
+ * Created on Feb 1, 2011
+ * @author Misha
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui;
+package com.propertyvista.crm.client.ui.report;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.crm.rpc.PasswordRetrievalRequest;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.inject.Singleton;
 
-public interface RetrievePasswordView extends IsWidget {
+@Singleton
+public class ReportViewImpl extends SimplePanel implements ReportView {
 
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
-
-        void retrievePassword(PasswordRetrievalRequest value);
+    public ReportViewImpl() {
+        HTML labael = new HTML("Report");
+        setWidget(labael);
     }
+
 }

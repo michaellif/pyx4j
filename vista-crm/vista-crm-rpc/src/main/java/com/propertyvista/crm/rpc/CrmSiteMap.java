@@ -36,7 +36,6 @@ public class CrmSiteMap {
     }
 
     public static class Properties extends AppPlace {
-
         @PlaceProperties(caption = "Buildings")
         @NavigationItem(navigLabel = "Buildings")
         public static class Buildings extends AppPlace {

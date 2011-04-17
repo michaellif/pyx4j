@@ -7,22 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-20
- * @author Vlad
+ * Created on Feb 1, 2011
+ * @author Misha
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui;
+package com.propertyvista.crm.client.ui.dashboard;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.common.client.Message;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.inject.Singleton;
 
-public interface GenericMessageView extends IsWidget {
+@Singleton
+public class DashboardViewImpl extends SimplePanel implements DashboardView {
 
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
-        void action();
+    public DashboardViewImpl() {
+        HTML labael = new HTML("Dashboard");
+        setWidget(labael);
     }
 
-    public void setMessage(Message message);
 }

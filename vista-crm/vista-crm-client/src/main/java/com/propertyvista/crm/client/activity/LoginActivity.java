@@ -18,7 +18,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.crm.client.ui.LoginView;
+import com.propertyvista.crm.client.ui.login.LoginView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;

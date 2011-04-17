@@ -7,14 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 16, 2011
+ * Created on Feb 1, 2011
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui;
+package com.propertyvista.crm.client.ui.login;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface DashboardView extends IsWidget {
+import com.pyx4j.security.rpc.AuthenticationRequest;
+
+public interface LoginView extends IsWidget {
+
+    public void setPresenter(Presenter presenter);
+
+    public interface Presenter {
+
+        void login(AuthenticationRequest value);
+
+        public void gotoRetrievePassword();
+
+    }
+
+    public void challengeVerificationRequired();
 
 }

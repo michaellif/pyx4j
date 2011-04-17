@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui;
+package com.propertyvista.crm.client.ui.login;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.common.client.ui.VistaWidgetDecorator;
-import com.propertyvista.crm.client.ui.NewPasswordView.ConversationType;
+import com.propertyvista.crm.client.ui.login.NewPasswordView.ConversationType;
 import com.propertyvista.crm.rpc.PasswordChangeRequest;
 
 import com.pyx4j.commons.HtmlUtils;

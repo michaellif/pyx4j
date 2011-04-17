@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.RetrievePasswordView;
+import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
 import com.propertyvista.crm.rpc.ActivationServices;
 import com.propertyvista.crm.rpc.PasswordRetrievalRequest;
 

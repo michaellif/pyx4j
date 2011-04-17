@@ -7,27 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 15, 2011
- * @author michaellif
+ * Created on 2011-02-20
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui;
+package com.propertyvista.crm.client.ui.login;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.crm.rpc.PasswordChangeRequest;
 
-public interface UserMessageView extends IsWidget {
+public interface NewPasswordView extends IsWidget {
+
+    public enum ConversationType {
+        RESET, CHANGE
+    }
 
     public void setPresenter(Presenter presenter);
 
-    void show(String userMessages, String debugMessages, UserMessageType type);
-
-    void hide(UserMessageType type);
-
-    void hideAll();
+    void setConversationType(ConversationType type);
 
     public interface Presenter {
 
-    }
+        void passwordReset(PasswordChangeRequest request);
 
+        void passwordChange(PasswordChangeRequest request);
+    }
 }

@@ -7,22 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on 2011-02-20
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui;
+package com.propertyvista.crm.client.ui.login;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.crm.rpc.PasswordRetrievalRequest;
 
-public interface StaticContentView extends IsWidget {
-
-    public void setContent(String content);
+public interface RetrievePasswordView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
     public interface Presenter {
-        public String getContent();
-    }
 
+        void retrievePassword(PasswordRetrievalRequest value);
+    }
 }
