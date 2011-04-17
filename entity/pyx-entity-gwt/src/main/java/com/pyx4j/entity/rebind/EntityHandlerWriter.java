@@ -36,6 +36,7 @@ import com.pyx4j.entity.client.impl.EntityImplNativeHelper;
 import com.pyx4j.entity.client.impl.EntityMemberMapCreator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.impl.PrimitiveHandler;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
@@ -184,7 +185,7 @@ public class EntityHandlerWriter {
 
                 writer.print("     ,");
                 if (valueClass.equals("byte[]")) {
-                    writer.print("@" + EntityImplNativeHelper.class.getName() + "::BYTE_ARRAY_CLASS");
+                    writer.print("@" + PrimitiveHandler.class.getName() + "::BYTE_ARRAY_CLASS");
                 } else {
                     writer.print("@" + valueClass + "::class");
                 }
