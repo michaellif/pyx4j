@@ -89,7 +89,7 @@
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
                             <warSourceDirectory>${basedir}/../../vista-server/src/main/webapp</warSourceDirectory>
-                            <generated>${project.build.directory}/gwt-generated</generated>
+                            <gen>${project.build.directory}/gwt-generated</gen>
                             <extra>${project.build.directory}/gwt-extra</extra>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
