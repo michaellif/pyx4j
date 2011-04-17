@@ -312,7 +312,7 @@
                 </exclusions>
             </dependency>
 
-		    <dependency>
+            <dependency>
                 <groupId>org.hsqldb</groupId>
                 <artifactId>hsqldb</artifactId>
                 <version>2.0.0-debug</version>
@@ -327,6 +327,7 @@
         <profile>
             <id>build-env</id>
             <properties>
+                <gwt.compiler.force>true</gwt.compiler.force>
                 <gwtCompileReport>true</gwtCompileReport>
             </properties>
         </profile>
@@ -352,6 +353,13 @@
             </activation>
             <properties>
                 <buildLabel>${project.version}-ci${label}</buildLabel>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>build-ci</id>
+            <properties>
+                <gwt.compiler.force>true</gwt.compiler.force>
             </properties>
         </profile>
 
