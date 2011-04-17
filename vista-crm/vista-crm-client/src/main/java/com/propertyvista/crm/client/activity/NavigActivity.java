@@ -22,6 +22,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.NavigView;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Properties.Arrears;
 import com.propertyvista.crm.rpc.CrmSiteMap.Properties.Budgets;
 import com.propertyvista.crm.rpc.CrmSiteMap.Properties.Buildings;
@@ -99,10 +100,12 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
         //Reports
         folder = new NavigFolder("Reports");
+        folder.addNavigItem(new CrmSiteMap.Report());
         list.add(folder);
 
         //Dashboards
         folder = new NavigFolder("Dashboards");
+        folder.addNavigItem(new CrmSiteMap.Dashboard());
         list.add(folder);
 
         return list;

@@ -81,9 +81,11 @@ public class CrmSiteMap {
     public static class Finance extends AppPlace {
     }
 
+    @NavigationItem(navigLabel = "Some Report")
     public static class Report extends AppPlace {
     }
 
+    @NavigationItem(navigLabel = "Default Dashboard")
     public static class Dashboard extends AppPlace {
     }
 
