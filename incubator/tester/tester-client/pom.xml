@@ -176,7 +176,7 @@
                             <style>${gwtCompilerOutputStyle}</style>
                             <inplace>true</inplace>
                             <warSourceDirectory>${basedir}/war</warSourceDirectory>
-                            <generated>${project.build.directory}/gwt-generated</generated>
+                            <gen>${project.build.directory}/gwt-generated</gen>
                             <extra>${project.build.directory}/gwt-extra</extra>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
