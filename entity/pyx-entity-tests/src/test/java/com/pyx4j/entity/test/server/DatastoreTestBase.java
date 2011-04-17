@@ -77,13 +77,6 @@ public abstract class DatastoreTestBase extends TestCase {
         return Integer.toHexString(++uniqueCount) + "_" + Long.toHexString(System.currentTimeMillis()) + " " + this.getName();
     }
 
-    public static Date getRoundedNow() {
-        Calendar c = new GregorianCalendar();
-        // DB does not store Milliseconds
-        c.set(Calendar.MILLISECOND, 0);
-        return c.getTime();
-    }
-
     protected Date randomDate() {
         Calendar c = new GregorianCalendar();
         c.add(Calendar.MONTH, -random.nextInt(1024));

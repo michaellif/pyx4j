@@ -26,6 +26,7 @@ import java.util.GregorianCalendar;
 
 import junit.framework.Assert;
 
+import com.pyx4j.entity.server.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -53,7 +54,7 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Class of Value", Date.class, emp.from().getValueClass());
         // Round to seconds
         GregorianCalendar c = new GregorianCalendar();
-        Date today = getRoundedNow();
+        Date today = TimeUtils.getRoundedNow();
         c.setTime(today);
         c.set(Calendar.YEAR, c.get(Calendar.YEAR) - 1);
         Date day = c.getTime();
