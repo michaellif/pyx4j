@@ -73,7 +73,7 @@ public class Context {
     /**
      * TODO remove public.
      * 
-     * @return
+     * @return current HttpSession
      */
     public static HttpSession getSession() {
         return requestLocal.get().session;

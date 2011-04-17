@@ -38,11 +38,10 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
 /**
- * This should not be used in GAE environment! Use <static-files></static-files> in
- * appengine-web.xml
+ * This should not be used in GAE environment! Use <static-files></static-files> in appengine-web.xml
  * 
- * @see http://code.google.com/appengine/docs/java/config/appconfig.html#
- *      Static_Files_and_Resource_Files
+ * @see <a href="http://code.google.com/appengine/docs/java/config/appconfig.html#Static_Files_and_Resource_Files">Configuration - Static Files and
+ *      Resources</a>
  * 
  */
 public class GWTCacheFilter implements Filter {

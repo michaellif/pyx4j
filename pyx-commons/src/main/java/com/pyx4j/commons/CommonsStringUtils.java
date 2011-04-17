@@ -22,8 +22,7 @@ package com.pyx4j.commons;
 import java.util.Date;
 
 /**
- * This class would be common for client and server.
- * 
+ * This class would be common for client (GWT) and server.
  */
 public class CommonsStringUtils {
 
@@ -67,7 +66,7 @@ public class CommonsStringUtils {
      * Mainly used to avoid automatic strings concatenation in generated GWT
      * 
      * @param strs
-     * @return
+     *            array of strings to be concatenated
      */
     public static String concat(String... strs) {
         StringBuilder b = new StringBuilder();

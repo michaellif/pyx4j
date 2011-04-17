@@ -38,7 +38,7 @@ public class DateUtils extends TimeUtils {
      * @param month
      *            starts with 0, January == 0
      * @param day
-     * @return
+     * @return new Date object
      */
     public static Date createDate(int year, int month, int day) {
         Calendar c = new GregorianCalendar();

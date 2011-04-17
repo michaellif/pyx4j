@@ -117,7 +117,7 @@ public class EntityGraph {
      * @param clientSide
      * @param received
      *            the entity after save in DB. new Pk may be assigned to values.
-     * @return
+     * @return the path to the first different value or null
      */
     public static Path getChangedDataPath(IEntity clientSide, IEntity received) {
         return getChangedDataPath(clientSide, received, new HashSet<IEntity>());

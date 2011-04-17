@@ -56,7 +56,7 @@ public class PersistenceServicesFactory {
         return instance;
     }
 
-    public static void dispose() {
+    public static synchronized void dispose() {
         if (instance != null) {
             try {
                 if (instance instanceof IEntityPersistenceServiceExt) {
@@ -68,7 +68,7 @@ public class PersistenceServicesFactory {
         }
     }
 
-    public static void deregister() {
+    public static synchronized void deregister() {
         if (instance != null) {
             try {
                 if (instance instanceof IEntityPersistenceServiceExt) {

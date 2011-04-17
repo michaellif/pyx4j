@@ -52,9 +52,7 @@ public class ContextChangeEvent extends GwtEvent<ContextChangeHandler> {
     }
 
     /**
-     * USER_VISIT_ATTRIBUTE if UserVisit object has been changed.
-     * 
-     * @return
+     * ClientContext.USER_VISIT_ATTRIBUTE if UserVisit object has been changed.
      */
     public String getAttributeName() {
         return attributeName;

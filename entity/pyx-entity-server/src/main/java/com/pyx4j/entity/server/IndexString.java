@@ -27,9 +27,9 @@ import java.util.Vector;
 
 public class IndexString {
 
-    public static String KEYWORD_SPLIT_PATTERN = "[\\W,.;\\-&&[^*]]";
+    public static final String KEYWORD_SPLIT_PATTERN = "[\\W,.;\\-&&[^*]]";
 
-    public static char WILDCARD_CHAR = '*';
+    public static final char WILDCARD_CHAR = '*';
 
     public static Set<String> getIndexKeys(int keywordLenght, String searchCriteria) {
         Set<String> set = new HashSet<String>();

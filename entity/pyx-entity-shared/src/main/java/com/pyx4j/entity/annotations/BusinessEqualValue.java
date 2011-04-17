@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
 public @interface BusinessEqualValue {
 
     /**
-     * @Deprecated this is not implemented yet
+     * @deprecated this is not implemented yet
      */
     @Deprecated
     boolean caseSensitive() default true;

@@ -93,7 +93,7 @@ import com.pyx4j.security.shared.SecurityViolationException;
 
 /**
  * 
- * @see PersistenceServicesFactory.GAE_IMPL_CLASS
+ * @see PersistenceServicesFactory#GAE_IMPL_CLASS
  * 
  */
 public class EntityPersistenceServiceGAE implements IEntityPersistenceService {

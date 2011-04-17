@@ -45,7 +45,7 @@ public class GeoPoint implements Serializable {
     /**
      * latitude
      * 
-     * @return
+     * @return latitude
      */
     public double getLat() {
         return lat;
@@ -58,7 +58,7 @@ public class GeoPoint implements Serializable {
     /**
      * longitude
      * 
-     * @return
+     * @return longitude
      */
     public double getLng() {
         return lng;

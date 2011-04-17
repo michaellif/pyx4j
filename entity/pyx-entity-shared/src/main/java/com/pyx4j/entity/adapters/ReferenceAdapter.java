@@ -43,7 +43,8 @@ public interface ReferenceAdapter<E extends IEntity> {
     /**
      * Sets additional members when new Entity is created
      * 
-     * @param new Entity to be persisted
+     * @param newEntity
+     *            new Entity to be persisted
      * @return the modified same newEntity
      */
     public E onEntityCreation(E newEntity);

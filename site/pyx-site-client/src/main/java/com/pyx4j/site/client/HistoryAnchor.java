@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.Anchor;
 /**
  * Fix for "Local anchor link causes reload in IE"
  * 
- * @see http://code.google.com/p/google-web-toolkit/issues/detail?id=2152
+ * @see <a href="http://code.google.com/p/google-web-toolkit/issues/detail?id=2152">issue</a>
  * 
  */
 public class HistoryAnchor extends Anchor implements ClickHandler {

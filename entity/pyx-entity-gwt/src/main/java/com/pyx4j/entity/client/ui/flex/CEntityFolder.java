@@ -83,8 +83,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     /**
      * This mainly use for columns creation when TableFolderDecorator is used
-     * 
-     * @return
      */
     public E proto() {
         return entityPrototype;

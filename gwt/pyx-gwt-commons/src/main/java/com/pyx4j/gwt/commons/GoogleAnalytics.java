@@ -30,7 +30,7 @@ import com.google.gwt.user.client.Window;
 /**
  * Injects Google Analytics Tracker code
  * 
- * @see http://code.google.com/apis/analytics/docs/tracking/gaTrackingOverview.html
+ * @see <a href="http://code.google.com/apis/analytics/docs/tracking/gaTrackingOverview.html">Google Analytics Tracker</a>
  * 
  */
 public class GoogleAnalytics {
@@ -60,7 +60,7 @@ public class GoogleAnalytics {
      * 
      * "none" or ".example-petstore.com"
      * 
-     * @see http://code.google.com/apis/analytics/docs/tracking/gaTrackingSite.html
+     * @see <a href="http://code.google.com/apis/analytics/docs/tracking/gaTrackingSite.html">Cross-Domain Tracking</a>
      */
     public static void setDomainName(String domainName) {
         GoogleAnalytics.domainName = domainName;

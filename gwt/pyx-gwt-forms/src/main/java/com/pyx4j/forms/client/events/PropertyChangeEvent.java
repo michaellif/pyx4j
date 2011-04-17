@@ -55,8 +55,8 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
      * Fires a property change event on all registered handlers in the handler manager. If
      * no such handlers exist, this method will do nothing.
      * 
-     * @param the
-     *            old value type
+     * @param propertyName
+     *            the new value
      * @param source
      *            the source of the handlers
      */

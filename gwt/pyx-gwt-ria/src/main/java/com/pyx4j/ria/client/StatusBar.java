@@ -27,10 +27,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.widgets.client.ProgressBar;
 import com.pyx4j.widgets.client.style.CSSClass;
 
-/**
- * @author michaellif
- * 
- */
 public class StatusBar extends HorizontalPanel {
 
     private final MessagePanel messagePanel;
@@ -97,23 +93,14 @@ public class StatusBar extends HorizontalPanel {
         this.setCellVerticalAlignment(separator, ALIGN_MIDDLE);
     }
 
-    /**
-     * @param i
-     */
-    public void setProgress(int i) {
-        progressBar.setProgress(i);
+    public void setProgress(int currentProgress) {
+        progressBar.setProgress(currentProgress);
     }
 
-    /**
-     * @return
-     */
     public double getProgress() {
         return progressBar.getProgress();
     }
 
-    /**
-     * @param b
-     */
     public void setProgressBarVisible(boolean visible) {
         progressBar.setVisible(visible);
     }

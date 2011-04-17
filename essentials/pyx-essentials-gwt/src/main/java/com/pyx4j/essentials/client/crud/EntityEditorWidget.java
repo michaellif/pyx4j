@@ -218,7 +218,6 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
 
     /**
      * @deprecated use Async version of this function
-     * @return
      */
     @Deprecated
     protected E createNewEntity() {

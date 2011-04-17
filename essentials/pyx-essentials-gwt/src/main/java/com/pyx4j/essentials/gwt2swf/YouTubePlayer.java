@@ -25,7 +25,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 /**
  * YouTube player API
  * 
- * @see http://code.google.com/apis/youtube/js_api_reference.html
+ * @see <a href="http://code.google.com/apis/youtube/js_api_reference.html">for more information</a>
  */
 public class YouTubePlayer extends JavaScriptObject {
 

@@ -61,7 +61,7 @@ public class ApplicationMode {
     static final class DevelopmentMode implements Mode {
 
         @Override
-        public final boolean isDevelopment() {
+        public boolean isDevelopment() {
             return true;
         }
     }
@@ -69,7 +69,7 @@ public class ApplicationMode {
     static final class ProductionMode implements Mode {
 
         @Override
-        public final boolean isDevelopment() {
+        public boolean isDevelopment() {
             return false;
         }
     }

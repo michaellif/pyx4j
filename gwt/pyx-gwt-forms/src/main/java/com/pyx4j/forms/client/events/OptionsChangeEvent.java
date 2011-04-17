@@ -43,8 +43,8 @@ public class OptionsChangeEvent<I> extends GwtEvent<OptionsChangeHandler<I>> {
      *            the options type
      * @param source
      *            the source of the handlers
-     * @param selectedItem
-     *            the options
+     * @param options
+     *            the new options
      */
     public static <I> void fire(HasOptionsChangeHandlers<I> source, I options) {
         if (TYPE != null) {

@@ -25,7 +25,7 @@ public class ApplicationMode {
     public static final class Mode implements com.pyx4j.config.shared.ApplicationMode.Mode {
 
         @Override
-        public final boolean isDevelopment() {
+        public boolean isDevelopment() {
             return ServerSideConfiguration.instance().isDevelopmentBehavior();
         }
 

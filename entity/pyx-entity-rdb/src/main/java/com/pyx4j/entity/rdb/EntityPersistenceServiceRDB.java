@@ -55,6 +55,7 @@ import com.pyx4j.entity.rdb.mapping.TableModel;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
@@ -67,6 +68,11 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.security.shared.SecurityViolationException;
 
+/**
+ * 
+ * @see PersistenceServicesFactory#RDBMS_IMPL_CLASS
+ * 
+ */
 public class EntityPersistenceServiceRDB implements IEntityPersistenceService, IEntityPersistenceServiceExt {
 
     private static final Logger log = LoggerFactory.getLogger(EntityPersistenceServiceRDB.class);

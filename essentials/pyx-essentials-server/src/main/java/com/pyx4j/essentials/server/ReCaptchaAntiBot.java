@@ -34,7 +34,6 @@ public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
      * 
      * @param serverName
      *            the host name of the server to which the request was sent.
-     * @return
      */
     protected String reCaptchaPrivateKey(String serverName) {
         return "6LdBxgoAAAAAALYkW6J6JDYH-Q10M-sfvvCGhs9y";

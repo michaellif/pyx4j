@@ -38,56 +38,56 @@ public interface MemberMeta {
     public String getFieldName();
 
     /**
-     * See com.pyx4j.entity.annotations.Caption
+     * @see com.pyx4j.entity.annotations.Caption
      */
     public String getCaption();
 
     /**
-     * See com.pyx4j.entity.annotations.Caption
+     * @see com.pyx4j.entity.annotations.Caption
      */
     public String getDescription();
 
     /**
-     * See com.pyx4j.entity.annotations.Caption
+     * @see com.pyx4j.entity.annotations.Caption
      */
     public String getWatermark();
 
     /**
-     * See com.pyx4j.entity.annotations.Transient
+     * @see com.pyx4j.entity.annotations.Transient
      */
     public boolean isTransient();
 
     /**
-     * See com.pyx4j.entity.annotations.RpcTransient
+     * @see com.pyx4j.entity.annotations.RpcTransient
      */
     public boolean isRpcTransient();
 
     /**
      * When @Indexed indexPrimaryValue != false
      * 
-     * @See com.pyx4j.entity.annotations.Indexed
+     * @see com.pyx4j.entity.annotations.Indexed
      */
     public boolean isIndexed();
 
     /**
-     * See com.pyx4j.entity.annotations.Detached
+     * @see com.pyx4j.entity.annotations.Detached
      */
     public boolean isDetached();
 
     /**
-     * See com.pyx4j.entity.annotations.Owned
+     * @see com.pyx4j.entity.annotations.Owned
      * 
-     * See com.pyx4j.entity.annotations.EmbeddedEntity
+     * @see com.pyx4j.entity.annotations.EmbeddedEntity
      */
     public boolean isOwnedRelationships();
 
     /**
-     * See com.pyx4j.entity.annotations.Owner
+     * @see com.pyx4j.entity.annotations.Owner
      */
     public boolean isOwner();
 
     /**
-     * See com.pyx4j.entity.annotations.EmbeddedEntity
+     * @see com.pyx4j.entity.annotations.EmbeddedEntity
      */
     public boolean isEmbedded();
 
@@ -98,9 +98,8 @@ public interface MemberMeta {
     public boolean isNumberValueClass();
 
     /**
-     * IList, ISet, IPrimitive, or extends IEntity
      * 
-     * @return
+     * @return IList, ISet, IPrimitive, or extends IEntity
      */
     public Class<? extends IObject<?>> getObjectClass();
 
@@ -120,7 +119,7 @@ public interface MemberMeta {
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass);
 
     /**
-     * See com.pyx4j.entity.annotations.Format
+     * @see com.pyx4j.entity.annotations.Format
      */
     public String getFormat();
 

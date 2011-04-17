@@ -34,8 +34,8 @@ public interface IEntityPersistenceService {
     public interface ICursorIterator<T> extends Iterator<T> {
 
         /**
-         * @see com.google.appengine.api.datastore.Cursor.toWebSafeString()
-         * @return
+         * @see com.google.appengine.api.datastore.Cursor#toWebSafeString()
+         * @return Encoded current cursor as a web safe string that can later be decoded
          */
         public String encodedCursorReference();
 
@@ -53,9 +53,9 @@ public interface IEntityPersistenceService {
 
     /**
      * Fill all the information to already existing entity object that has only PK value
-     * set. e.g. @Detached entity member.
+     * set. e.g. @link Detached entity member.
      * 
-     * @return false If entity not found;
+     * @return false If entity not found.
      */
     public <T extends IEntity> boolean retrieve(T entity);
 

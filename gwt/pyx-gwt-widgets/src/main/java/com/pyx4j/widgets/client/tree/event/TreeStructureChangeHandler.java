@@ -25,8 +25,6 @@ import com.google.gwt.event.shared.EventHandler;
 /**
  * Handler interface for {@link TreeStructureChangeEvent} events.
  * 
- * @param <I>
- *            the type about to be closed
  */
 public interface TreeStructureChangeHandler extends EventHandler {
 

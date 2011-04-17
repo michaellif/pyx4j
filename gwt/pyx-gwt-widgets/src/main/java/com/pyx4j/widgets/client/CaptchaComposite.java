@@ -40,8 +40,8 @@ import com.pyx4j.gwt.commons.AjaxJSLoader;
 /**
  * This class Injects reCAPTCHA Client API code.
  * 
- * @see http://code.google.com/apis/recaptcha/intro.html for more information.
- * @see http://code.google.com/apis/recaptcha/docs/customization.html
+ * @see <a href="http://code.google.com/apis/recaptcha/intro.html">for more information</a>
+ * @see <a href="http://code.google.com/apis/recaptcha/docs/customization.html">Customization</a>
  * 
  */
 public class CaptchaComposite extends SimplePanel {
