@@ -143,7 +143,7 @@ public final class DashboardDemo implements EntryPoint {
 
         int count = 0;
         for (int col = 0; col < dashboardPanel.getLayout().getColumns(); ++col)
-            for (int row = 0; row < 4; ++row) {
+            for (int row = 0; row < (useSubRows ? 7 : 4); ++row) {
                 // initialize a widget
                 DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
                 widget.setHeight(Random.nextInt(8) + 2 + "em");

@@ -132,14 +132,14 @@ final class GadgetHolder extends SimplePanel {
 
             @Override
             public void onDragStart(DragStartEvent event) {
-                if (event.getContext().draggable.equals(GadgetHolder.this) && holdedGadget.isFullWidth()) {
+                if (event.getContext().draggable.equals(GadgetHolder.this) && GadgetHolder.this.isFullWidth()) {
                     GadgetHolder.this.setWidth("100%"); // prevent draggable gadget from collapsing!.. 
                 }
             }
 
             @Override
             public void onDragEnd(DragEndEvent event) {
-                if (event.getContext().draggable.equals(GadgetHolder.this) && holdedGadget.isFullWidth()) {
+                if (event.getContext().draggable.equals(GadgetHolder.this) && GadgetHolder.this.isFullWidth()) {
                     GadgetHolder.this.setWidth("auto"); // restore automatic width calculation...
                 }
             }
