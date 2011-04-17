@@ -13,11 +13,27 @@
  */
 package com.propertyvista.crm.server.security;
 
+import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.security.EntityPermission;
+import com.pyx4j.rpc.shared.IServiceExecutePermission;
+import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
+    // Change this if you want to make it work temporary. Build will NOT fail!
+    private static final boolean allowAllDuringDevelopment = true;
+
     public VistaCrmAccessControlList() {
+
+        if (allowAllDuringDevelopment) {
+            // Debug
+            grant(new IServiceExecutePermission("*"));
+            grant(new ServiceExecutePermission(EntityServices.class, "*"));
+            grant(new ServiceExecutePermission("*"));
+            grant(new EntityPermission("*", EntityPermission.ALL));
+            grant(new EntityPermission("*", EntityPermission.READ));
+        }
 
     }
 }
