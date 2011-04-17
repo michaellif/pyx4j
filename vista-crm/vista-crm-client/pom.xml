@@ -92,6 +92,7 @@
                             <module>${gwtModuleCompile}</module>
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
+                            <inplace>true</inplace>
                             <target>${basedir}/../../vista-server/src/main/webapp</target>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <extra>${project.build.directory}/gwt-extra</extra>
