@@ -33,7 +33,7 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
         main.add(new HTML("<b>Dashboard Menu goes here...</b>"));
         main.add(dashboardPanel);
         main.setWidth("100%");
-        add(main);
+        setWidget(main);
 
         dashboardPanel.setLayout(new Layout(3, 1, 12));
         fillDashboard();
