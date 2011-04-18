@@ -147,15 +147,19 @@ class TwoGadgetsRowFlowPanel extends FlowPanel {
     }
 
     public void addLeft(Widget w) {
-        leftPlace.setWidget(w);
-        recalcHeight();
         System.out.println(">> addLeft");
+        if (isWidgetAllowed(w)) {
+            leftPlace.setWidget(w);
+            recalcHeight();
+        }
     }
 
     public void addRight(Widget w) {
-        rightPlace.setWidget(w);
-        recalcHeight();
         System.out.println(">> addRight");
+        if (isWidgetAllowed(w)) {
+            rightPlace.setWidget(w);
+            recalcHeight();
+        }
     }
 
     public boolean isLeft() {
@@ -195,5 +199,9 @@ class TwoGadgetsRowFlowPanel extends FlowPanel {
             leftPlace.getElement().getStyle().setHeight(maxHeight, Unit.PX);
             rightPlace.getElement().getStyle().setHeight(maxHeight, Unit.PX);
         }
+    }
+
+    private boolean isWidgetAllowed(Widget w) {
+        return ((w instanceof GadgetHolder) && !((GadgetHolder) w).isFullWidth());
     }
 }
