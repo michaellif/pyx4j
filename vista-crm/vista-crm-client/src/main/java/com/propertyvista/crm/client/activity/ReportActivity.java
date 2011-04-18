@@ -18,14 +18,14 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.crm.client.ui.FooterView;
+import com.propertyvista.crm.client.ui.report.ReportView;
 
 public class ReportActivity extends AbstractActivity {
 
-    private final FooterView view;
+    private final ReportView view;
 
     @Inject
-    public ReportActivity(FooterView view) {
+    public ReportActivity(ReportView view) {
         this.view = view;
     }
 

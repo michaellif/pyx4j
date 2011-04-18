@@ -18,7 +18,9 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.propertyvista.crm.client.activity.DashboardActivity;
 import com.propertyvista.crm.client.activity.LoginActivity;
+import com.propertyvista.crm.client.activity.ReportActivity;
 import com.propertyvista.crm.client.activity.ResetPasswordActivity;
 import com.propertyvista.crm.client.activity.RetrievePasswordActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -33,6 +35,10 @@ public class MainActivityMapper implements ActivityMapper {
 
     Provider<ResetPasswordActivity> resetPasswordActivityProvider;
 
+    Provider<DashboardActivity> dashboardActivityProvider;
+
+    Provider<ReportActivity> reportActivityProvider;
+
     @Inject
     public MainActivityMapper(
 
@@ -40,12 +46,17 @@ public class MainActivityMapper implements ActivityMapper {
 
     final Provider<RetrievePasswordActivity> retrievePasswordActivityProvider,
 
-    final Provider<ResetPasswordActivity> resetPasswordActivityProvider) {
+    final Provider<ResetPasswordActivity> resetPasswordActivityProvider,
 
+    final Provider<DashboardActivity> dashboardActivityProvider,
+
+    final Provider<ReportActivity> reportActivityProvider) {
         super();
         this.loginActivityProvider = loginActivityProvider;
         this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
         this.resetPasswordActivityProvider = resetPasswordActivityProvider;
+        this.dashboardActivityProvider = dashboardActivityProvider;
+        this.reportActivityProvider = reportActivityProvider;
     }
 
     @Override
@@ -56,6 +67,10 @@ public class MainActivityMapper implements ActivityMapper {
             return retrievePasswordActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof CrmSiteMap.ResetPassword) {
             return resetPasswordActivityProvider.get().withPlace((AppPlace) place);
+        } else if (place instanceof CrmSiteMap.Dashboard) {
+            return dashboardActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Report) {
+            return reportActivityProvider.get().withPlace(place);
         }
         //TODO what to do on other place
         return null;
