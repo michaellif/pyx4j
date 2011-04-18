@@ -51,7 +51,7 @@ class TwoGadgetsRowFlowPanel extends FlowPanel {
         leftPlace.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         leftPlace.getElement().getStyle().setMarginRight(this.columnPanel.layout.getHorizontalSpacing() / 2, Unit.PCT);
         leftPlace.getElement().getStyle().setProperty("minHeight", "50px");
-        leftPlace.setWidth(50.0 - this.columnPanel.layout.getHorizontalSpacing() / 2 - 0.09 + "%");
+        leftPlace.setWidth(50.0 - this.columnPanel.layout.getHorizontalSpacing() / 2 - 0.1 + "%");
         this.add(leftPlace);
 
         this.columnPanel.dragController.registerDropController(rightDP);
@@ -59,7 +59,7 @@ class TwoGadgetsRowFlowPanel extends FlowPanel {
         rightPlace.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         rightPlace.getElement().getStyle().setMarginLeft(this.columnPanel.layout.getHorizontalSpacing() / 2, Unit.PCT);
         rightPlace.getElement().getStyle().setProperty("minHeight", "50px");
-        rightPlace.setWidth(50.0 - this.columnPanel.layout.getHorizontalSpacing() / 2 - 0.09 + "%");
+        rightPlace.setWidth(50.0 - this.columnPanel.layout.getHorizontalSpacing() / 2 - 0.1 + "%");
         this.add(rightPlace);
 
         // style the row:   
