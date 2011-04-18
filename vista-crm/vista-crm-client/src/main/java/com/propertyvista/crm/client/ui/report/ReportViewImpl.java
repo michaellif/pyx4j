@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.report;
 
-import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -21,7 +20,6 @@ import com.google.inject.Singleton;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
 import com.pyx4j.dashboard.client.Layout;
-import com.pyx4j.dashboard.demo.client.DemoGadget;
 
 @Singleton
 public class ReportViewImpl extends SimplePanel implements ReportView {
@@ -48,10 +46,10 @@ public class ReportViewImpl extends SimplePanel implements ReportView {
         for (int col = 0; col < dashboardPanel.getLayout().getColumns(); ++col)
             for (int row = 0; row < 5; ++row) {
                 // initialize a widget
-                DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
-                widget.setHeight(Random.nextInt(8) + 3 + "em");
-                widget.setFullWidth(row % 2 > 0);
-                dashboardPanel.addGadget(widget, col);
+                //DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
+                //widget.setHeight(Random.nextInt(8) + 3 + "em");
+                //widget.setFullWidth(row % 2 > 0);
+                //dashboardPanel.addGadget(widget, col);
             }
     }
 }

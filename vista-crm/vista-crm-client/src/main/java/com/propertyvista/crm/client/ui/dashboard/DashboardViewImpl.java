@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -21,7 +20,6 @@ import com.google.inject.Singleton;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
 import com.pyx4j.dashboard.client.Layout;
-import com.pyx4j.dashboard.demo.client.DemoGadget;
 
 @Singleton
 public class DashboardViewImpl extends SimplePanel implements DashboardView {
@@ -48,9 +46,9 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
         for (int col = 0; col < dashboardPanel.getLayout().getColumns(); ++col)
             for (int row = 0; row < 3; ++row) {
                 // initialize a widget
-                DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
-                widget.setHeight(Random.nextInt(8) + 10 + "em");
-                dashboardPanel.addGadget(widget, col);
+                //DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
+                //widget.setHeight(Random.nextInt(8) + 10 + "em");
+                //dashboardPanel.addGadget(widget, col);
             }
     }
 }
