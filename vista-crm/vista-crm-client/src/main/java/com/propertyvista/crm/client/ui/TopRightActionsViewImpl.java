@@ -3,28 +3,32 @@ package com.propertyvista.crm.client.ui;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.inject.Inject;
+import com.propertyvista.crm.client.resources.CrmImages;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
-public class TopRightActionsViewImpl extends VerticalPanel implements TopRightActionsView {
+public class TopRightActionsViewImpl extends FlowPanel implements TopRightActionsView {
 
     public enum Theme {
         Gainsboro, VillageGreen
     }
 
     private static I18n i18n = I18nFactory.getI18n(TopRightActionsViewImpl.class);
-
-    private final HorizontalPanel topLinksPanel;
-
-    private final HorizontalPanel bottomLinksPanel;
 
     private Presenter presenter;
 
@@ -36,22 +40,32 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
     private final CHyperlink themes;
 
+    private final CHyperlink account;
+
+    private final CHyperlink settings;
+
+    private final Image message;
+
+    private final Image alert;
+
     private Theme otherTheme = Theme.VillageGreen;
 
     @Inject
     public TopRightActionsViewImpl() {
-        getElement().getStyle().setFontSize(0.9, Unit.EM);
+        setStyleName(CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Action);
+        setSize("100%", "100%");
 
-        topLinksPanel = new HorizontalPanel();
-        topLinksPanel.getElement().getStyle().setMargin(4, Unit.PX);
-        add(topLinksPanel);
+        HorizontalPanel leftcontainer = new HorizontalPanel();
+        leftcontainer.getElement().getStyle().setFloat(Style.Float.LEFT);
+        leftcontainer.setSize("72%", "100%");
 
-        bottomLinksPanel = new HorizontalPanel();
-        bottomLinksPanel.getElement().getStyle().setMargin(4, Unit.PX);
-        add(bottomLinksPanel);
+        HorizontalPanel rightcontainer = new HorizontalPanel();
+        rightcontainer.getElement().getStyle().setFloat(Style.Float.RIGHT);
+        rightcontainer.setSize("28%", "100%");
 
         greetings = new HTML("");
-        topLinksPanel.add(greetings);
+        greetings.getElement().getStyle().setDisplay(Display.INLINE);
+        greetings.getElement().getStyle().setMarginRight(2, Unit.EM);
 
         logout = new CHyperlink(null, new Command() {
             @Override
@@ -62,7 +76,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
         logout.setDebugId(new StringDebugId("logout"));
         logout.setValue(i18n.tr("LogOut"));
         logout.setVisible(false);
-        topLinksPanel.add(logout);
+        logout.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
         login = new CHyperlink(null, new Command() {
             @Override
@@ -72,9 +86,27 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
         });
         login.setDebugId(new StringDebugId("login"));
         login.setValue(i18n.tr("LogIn"));
-        topLinksPanel.add(login);
+        login.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        topLinksPanel.add(new HTML("&nbsp;-&nbsp;"));
+        account = new CHyperlink(null, new Command() {
+            @Override
+            public void execute() {
+                //TODO implement
+            }
+        });
+        account.setDebugId(new StringDebugId("account"));
+        account.setValue(i18n.tr("Account"));
+        account.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
+
+        settings = new CHyperlink(null, new Command() {
+            @Override
+            public void execute() {
+                //TODO implement
+            }
+        });
+        settings.setDebugId(new StringDebugId("settings"));
+        settings.setValue(i18n.tr("Settings"));
+        settings.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
         themes = new CHyperlink(null, new Command() {
             @Override
@@ -85,9 +117,47 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
             }
         });
         themes.setValue(otherTheme.name());
-
         themes.setDebugId(new StringDebugId("themes"));
-        topLinksPanel.add(themes);
+        themes.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
+
+        alert = new Image(CrmImages.INSTANCE.alert());
+        alert.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                //TODO implement
+                Window.alert("Alert");
+            }
+        });
+        alert.getElement().getStyle().setMarginRight(1, Unit.EM);
+        alert.getElement().getStyle().setCursor(Cursor.POINTER);
+
+        message = new Image(CrmImages.INSTANCE.message());
+        message.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                //TODO implement
+                Window.alert("Message");
+            }
+        });
+        message.getElement().getStyle().setMarginRight(1, Unit.EM);
+        message.getElement().getStyle().setCursor(Cursor.POINTER);
+
+        FlowPanel fp1 = new FlowPanel();
+        fp1.add(greetings);
+        fp1.add(account);
+        fp1.add(settings);
+        leftcontainer.add(fp1);
+
+        FlowPanel fp2 = new FlowPanel();
+        fp2.add(login);
+        fp2.add(logout);
+        fp2.add(themes);
+        fp2.add(message);
+        fp2.add(alert);
+        rightcontainer.add(fp2);
+
+        add(rightcontainer);
+        add(leftcontainer);
     }
 
     @Override
@@ -121,6 +191,6 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
     public void onLogedIn(String userName) {
         logout.setVisible(true);
         login.setVisible(false);
-        greetings.setHTML("Hello " + userName + "&nbsp;-&nbsp;");
+        greetings.setHTML("Welcome &nbsp;" + userName);
     }
 }

@@ -47,7 +47,7 @@ public class CrmView extends LayoutPanel {
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Header, MainNavig, Caption, SecondaryNavig, Message, Content, Center, Main, Left, Right, Footer, Display
+        Action, Header, MainNavig, Caption, SecondaryNavig, Message, Content, Center, Main, Left, Right, Footer, Display
     }
 
     @Inject
@@ -84,11 +84,14 @@ public class CrmView extends LayoutPanel {
         contentPanel.addNorth(headerPanel, 5);
 
         DisplayPanel logoDisplay = new DisplayPanel();
+        //VS should correspond with the logo size
+        logoDisplay.setSize("20%", "100%");
         logoDisplay.getElement().getStyle().setFloat(Style.Float.LEFT);
         headerPanel.add(logoDisplay);
 
         DisplayPanel actionsDisplay = new DisplayPanel();
-        actionsDisplay.setWidth("20em");
+        //actionsDisplay.setWidth("20em");
+        actionsDisplay.setSize("80%", "100%");
         actionsDisplay.getElement().getStyle().setFloat(Style.Float.RIGHT);
         headerPanel.add(actionsDisplay);
 
@@ -109,7 +112,7 @@ public class CrmView extends LayoutPanel {
 
         DisplayPanel navigDisplay = new DisplayPanel();
         leftPanel.add(navigDisplay);
-        navigDisplay.setSize("100%", "100%");
+        navigDisplay.setSize("100%", "98%");
         leftPanel.setCellWidth(navigDisplay, "100%");
         leftPanel.setCellHeight(navigDisplay, "100%");
 

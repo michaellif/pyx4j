@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.themes;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.CrmView;
+import com.propertyvista.crm.client.ui.NavigViewImpl;
 
 import com.pyx4j.forms.client.ui.NativeComboBox;
 import com.pyx4j.forms.client.ui.NativeTextBox;
@@ -65,6 +66,11 @@ public abstract class VistaCrmTheme extends Theme {
         initSuggestBoxStyle();
         initBannerStyle();
         initSiteViewStyles();
+
+        initDisplayStyle();
+        initFooterStyle();
+        intitNavigationStyle();
+        initActionStyle();
     }
 
     protected void initThemeColors() {
@@ -915,6 +921,85 @@ public abstract class VistaCrmTheme extends Theme {
         //        style.addProperty("color", ThemeColor.OBJECT_TONE5);
         //        addStyle(style);
 
+    }
+
+    protected void intitNavigationStyle() {
+        String prefix = "." + NavigViewImpl.DEFAULT_STYLE_PREFIX;
+
+        //generic class style
+        Style style = new Style(prefix);
+        style.addProperty("border", "solid " + getThemeColorString(ThemeColor.OBJECT_TONE3) + " !important");
+        addStyle(style);
+
+        //anchors within the class
+        style = new Style(prefix + " a:link, a:visited, a:active");
+        style.addProperty("text-decoration", "none");
+        style.addProperty("color", ThemeColor.TEXT);
+        addStyle(style);
+
+        style = new Style(prefix + " a:hover");
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+        /**
+         * components within the class
+         */
+        //stack header
+        style = new Style(prefix + " .gwt-StackLayoutPanelHeader");
+        style.addProperty("font-size", "1.4em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-left", "0.7em");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("margin-bottom", "0.2em");
+        style.addProperty("border-top", "solid 1px");
+        style.addProperty("border-bottom", "solid 1px");
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        addStyle(style);
+
+        //stack content
+        style = new Style(prefix + " .gwt-StackLayoutPanelContent");
+        style.addProperty("font-size", "1.3em");
+        style.addProperty("padding-left", "1em");
+        addStyle(style);
+
+        //Item style defines anchor specific styling
+        style = new Style(prefix + NavigViewImpl.StyleSuffix.Item);
+        style.addProperty("margin-bottom", "1em");
+        addStyle(style);
+    }
+
+    protected void initFooterStyle() {
+        String prefix = "." + CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Footer;
+        Style style = new Style(prefix);
+        style.addProperty("padding-top", "0.5em");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.logo().getURL() + "') no-repeat scroll left center transparent");
+
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("text-align", "center");
+        addStyle(style);
+    }
+
+    protected void initDisplayStyle() {
+        String prefix = "." + CrmView.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(prefix);
+        style.addProperty("color", "#757575");//TODO define constant for the font in accordance with the spec
+        addStyle(style);
+    }
+
+    protected void initActionStyle() {
+        String prefix = "." + CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Action;
+        Style style = new Style(prefix);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
+        style.addProperty("color", ThemeColor.TEXT_BACKGROUND);
+        style.addProperty("font-size", "1.3em");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(prefix + " td");
+        style.addProperty("text-align", "center !important");
+        style.addProperty("vertical-align", "middle !important");
+
+        addStyle(style);
     }
 
 }

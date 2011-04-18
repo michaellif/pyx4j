@@ -27,4 +27,13 @@ public interface CrmImages extends ClientBundle {
     @Source("user_message_info.png")
     ImageResource userMessageInfo();
 
+    @Source("logo.png")
+    ImageResource logo();
+
+    @Source("bell.png")
+    ImageResource alert();
+
+    @Source("envelop.png")
+    ImageResource message();
+
 }

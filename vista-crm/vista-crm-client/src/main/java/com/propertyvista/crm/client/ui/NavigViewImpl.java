@@ -34,11 +34,11 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
     public static String DEFAULT_STYLE_PREFIX = "vistaCrm_Navig";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Holder, Tab, LabelHolder, StatusHolder, Label
+        Holder, Tab, LabelHolder, StatusHolder, Label, Item
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        hover,
+        hover
     }
 
     private MainNavigPresenter presenter;
@@ -63,6 +63,8 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
 
             for (final AppPlace place : navigFolder.getNavigItems()) {
                 SimplePanel line = new SimplePanel();
+                //VS to add spacing
+                line.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Item);
                 Anchor anchor = new Anchor(presenter.getNavigLabel(place));
                 anchor.addClickHandler(new ClickHandler() {
                     @Override
@@ -75,7 +77,8 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
             }
 
             scroll.setWidget(list);
-            stackPanel.add(scroll, navigFolder.getTitle(), 2);
+            //VS 2 was chaned for 4
+            stackPanel.add(scroll, navigFolder.getTitle(), 4);
         }
 
         setWidget(stackPanel);

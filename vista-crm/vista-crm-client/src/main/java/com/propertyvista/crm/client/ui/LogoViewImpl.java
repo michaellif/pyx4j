@@ -26,9 +26,7 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
     private Presenter presenter;
 
     public LogoViewImpl() {
-        HTML logo = new HTML(
-                "<div style='font-size:15px; text-align:center; vertical-align:middle; padding-top:25px; width:900px; color:#E6E6E6'><h1>PO Branded Header</h1><div>");
-        //        logo.setStyleName("logo");
+        HTML logo = new HTML("<h1>PO Branded Header</h1>");
         logo.getElement().getStyle().setCursor(Cursor.POINTER);
         logo.addClickHandler(new ClickHandler() {
 
@@ -37,8 +35,6 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
                 presenter.navigToLanding();
             }
         });
-
-        logo.setSize("300px", "115px");
         setWidget(logo);
     }
 
