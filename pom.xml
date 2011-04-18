@@ -146,6 +146,7 @@
         <module>essentials/pyx-essentials-server</module>
         <module>essentials/pyx-essentials-j2se</module>
         <module>essentials/pyx-mail-server</module>
+        <module>essentials/pyx-quartz</module>
 
         <module>essentials/pyx-jetty-runtime</module>
 

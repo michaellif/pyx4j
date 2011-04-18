@@ -83,11 +83,15 @@ public class ConnectionProvider {
         if (namingConvention == null) {
             namingConvention = new NamingConventionOracle();
         }
-        if (cfg.driverClass().contains("mysql")) {
-            dialect = new MySQLDialect(namingConvention);
-        } else if (cfg.driverClass().contains("hsqldb")) {
+
+        switch (cfg.databaseType()) {
+        case HSQLDB:
             dialect = new HSQLDialect(namingConvention);
-        } else {
+            break;
+        case MySQL:
+            dialect = new MySQLDialect(namingConvention);
+            break;
+        default:
             throw new Error("Unsupported driver Dialect " + cfg.driverClass());
         }
     }

@@ -25,6 +25,11 @@ import com.pyx4j.entity.rdb.dialect.NamingConvention;
 public abstract class ConfigurationHSQL implements Configuration {
 
     @Override
+    public DatabaseType databaseType() {
+        return DatabaseType.HSQLDB;
+    }
+
+    @Override
     public String driverClass() {
         return "org.hsqldb.jdbcDriver";
     }

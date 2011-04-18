@@ -35,8 +35,6 @@ import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
-import com.pyx4j.config.server.IPersistenceConfiguration;
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
 import com.pyx4j.entity.adapters.ReferenceAdapter;
@@ -45,7 +43,6 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.CollectionsTableModel;
 import com.pyx4j.entity.rdb.mapping.Mappings;
@@ -87,14 +84,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     public EntityPersistenceServiceRDB() {
         try {
-            IPersistenceConfiguration cfg = ServerSideConfiguration.instance().getPersistenceConfiguration();
-            if (cfg == null) {
-                throw new RuntimeException("Persistence Configuration is not defined (is null)");
-            }
-            if (!(cfg instanceof Configuration)) {
-                throw new RuntimeException("Invalid RDB configuration class " + cfg);
-            }
-            connectionProvider = new ConnectionProvider((Configuration) cfg);
+            connectionProvider = new ConnectionProvider(RDBUtils.getRDBConfiguration());
         } catch (SQLException e) {
             log.error("RDB initialization error", e);
             throw new RuntimeException(e.getMessage());

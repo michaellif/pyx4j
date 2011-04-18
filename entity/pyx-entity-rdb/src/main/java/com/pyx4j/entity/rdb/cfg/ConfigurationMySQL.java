@@ -25,6 +25,11 @@ import com.pyx4j.entity.rdb.dialect.NamingConvention;
 public abstract class ConfigurationMySQL implements Configuration {
 
     @Override
+    public DatabaseType databaseType() {
+        return DatabaseType.MySQL;
+    }
+
+    @Override
     public String driverClass() {
         return "com.mysql.jdbc.Driver";
     }

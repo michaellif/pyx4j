@@ -154,9 +154,11 @@
         <gae.version>${gaeVersion}</gae.version>
         <pyx4jGwtVersion>0.5.6-SNAPSHOT</pyx4jGwtVersion>
 
+
         <jettyVersion>7.2.2.v20101205</jettyVersion>
 
         <jasperreportsVersion>4.0.1</jasperreportsVersion>
+        <quartzVersion>2.0.1</quartzVersion>
 
         <!-- Used for speed up the GWT compiler for developers -->
         <gwtDraftCompile>false</gwtDraftCompile>
@@ -277,6 +279,12 @@
     		    <artifactId>c3p0</artifactId>
     		    <version>0.9.1.2</version>
 		    </dependency>
+
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${quartzVersion}</version>
+            </dependency>
 
             <dependency>
                 <groupId>commons-fileupload</groupId>

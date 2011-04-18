@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.rdb.SQLUtils;
 
-class TableMetadata {
+public class TableMetadata {
 
     private static final Logger log = LoggerFactory.getLogger(TableMetadata.class);
 
@@ -45,7 +45,7 @@ class TableMetadata {
 
     private final Map<String, ColumnMetadata> columnsMetadata = new HashMap<String, ColumnMetadata>();
 
-    static TableMetadata getTableMetadata(Connection connection, String name) throws SQLException {
+    public static TableMetadata getTableMetadata(Connection connection, String name) throws SQLException {
         ResultSet rs = null;
         try {
             DatabaseMetaData dbMeta = connection.getMetaData();

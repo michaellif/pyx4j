@@ -89,18 +89,18 @@ public class TableModel {
             {
                 TableMetadata tableMetadata = TableMetadata.getTableMetadata(connection, tableName);
                 if (tableMetadata == null) {
-                    execute(connection, TableDDL.sqlCreate(connectionProvider.getDialect(), this));
+                    SQLUtils.execute(connection, TableDDL.sqlCreate(connectionProvider.getDialect(), this));
                 } else {
-                    execute(connection, TableDDL.validateAndAlter(connectionProvider.getDialect(), tableMetadata, this));
+                    SQLUtils.execute(connection, TableDDL.validateAndAlter(connectionProvider.getDialect(), tableMetadata, this));
                 }
             }
 
             for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
                 TableMetadata memberTableMetadata = TableMetadata.getTableMetadata(connection, member.sqlName());
                 if (memberTableMetadata == null) {
-                    execute(connection, TableDDL.sqlCreateCollectionMember(connectionProvider.getDialect(), this, member));
+                    SQLUtils.execute(connection, TableDDL.sqlCreateCollectionMember(connectionProvider.getDialect(), this, member));
                 } else {
-                    execute(connection,
+                    SQLUtils.execute(connection,
                             TableDDL.validateAndAlterCollectionMember(connection, connectionProvider.getDialect(), memberTableMetadata, this, member));
                 }
             }
@@ -145,7 +145,7 @@ public class TableModel {
                 }
             }
             sqls.add("drop table " + tableName);
-            execute(connection, sqls);
+            SQLUtils.execute(connection, sqls);
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -154,33 +154,9 @@ public class TableModel {
     public void execute(ConnectionProvider connectionProvider, List<String> sqls) throws SQLException {
         Connection connection = connectionProvider.getConnection();
         try {
-            execute(connection, sqls);
+            SQLUtils.execute(connection, sqls);
         } finally {
             SQLUtils.closeQuietly(connection);
-        }
-    }
-
-    public void execute(Connection connection, List<String> sqls) throws SQLException {
-        if (sqls.size() == 0) {
-            return;
-        }
-        Statement stmt = null;
-        try {
-            stmt = connection.createStatement();
-            for (String sql : sqls) {
-                boolean success = false;
-                log.debug("exec: {}", sql);
-                try {
-                    stmt.executeUpdate(sql);
-                    success = true;
-                } finally {
-                    if (!success) {
-                        log.error("Error executing SQL {}", sql);
-                    }
-                }
-            }
-        } finally {
-            SQLUtils.closeQuietly(stmt);
         }
     }
 

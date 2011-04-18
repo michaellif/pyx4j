@@ -29,7 +29,13 @@ public interface Configuration extends IPersistenceConfiguration {
         dbcp, c3p0
     };
 
+    public enum DatabaseType {
+        Oracle, MySQL, HSQLDB, Other
+    };
+
     public String driverClass();
+
+    public DatabaseType databaseType();
 
     public String dbHost();
 

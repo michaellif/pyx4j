@@ -22,9 +22,16 @@ package com.pyx4j.entity.rdb;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SQLUtils {
+
+    private static final Logger log = LoggerFactory.getLogger(SQLUtils.class);
 
     public static void closeQuietly(Connection connection) {
         try {
@@ -50,6 +57,30 @@ public class SQLUtils {
                 resultSet.close();
             }
         } catch (Throwable e) {
+        }
+    }
+
+    public static void execute(Connection connection, List<String> sqls) throws SQLException {
+        if (sqls.size() == 0) {
+            return;
+        }
+        Statement stmt = null;
+        try {
+            stmt = connection.createStatement();
+            for (String sql : sqls) {
+                boolean success = false;
+                log.debug("exec: {}", sql);
+                try {
+                    stmt.executeUpdate(sql);
+                    success = true;
+                } finally {
+                    if (!success) {
+                        log.error("Error executing SQL {}", sql);
+                    }
+                }
+            }
+        } finally {
+            SQLUtils.closeQuietly(stmt);
         }
     }
 
