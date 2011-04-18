@@ -53,8 +53,8 @@ import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 import com.pyx4j.widgets.client.combobox.ListBox;
+import com.pyx4j.widgets.client.dashboard.Dashboard;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
-import com.pyx4j.widgets.client.datepicker.DatePickerExtended;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -93,6 +93,11 @@ public class WidgetsDemo implements EntryPoint {
         RootPanel.get().add(contentPanel);
         contentPanel.setWidth("100%");
 
+        //========== Dashboard ==========//
+        contentPanel.add(new Dashboard());
+
+        //=================================//
+
         final Button sendButton = new Button("Send");
         final TextBox pageNameTextBox = new TextBox();
         pageNameTextBox.setText("page1");
@@ -120,11 +125,11 @@ public class WidgetsDemo implements EntryPoint {
             DatePickerComposite datePicker = new DatePickerComposite(1, starting, minDate, maxDate, disabledDates);
             datePicker.addDateChosenEventHandler(new DatePickerComposite.DateChosenEventHandler() {
 
-				@Override
-				public void onDateChosen(DatePickerComposite.DateChosenEvent event) {
+                @Override
+                public void onDateChosen(DatePickerComposite.DateChosenEvent event) {
                     String date = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(event.getChosenDate());
                     textBox.setText(date);
-				}
+                }
 
             });
             contentPanel.add(datePicker);
