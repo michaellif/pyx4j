@@ -17,6 +17,8 @@ import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 
 public class DemoData {
 
+    public static int PT_GENERATION_SEED = 100;
+    
     public static int MAX_CUSTOMERS = 20;
 
     public static int MAX_PROPERTY_MANAGER = 10;

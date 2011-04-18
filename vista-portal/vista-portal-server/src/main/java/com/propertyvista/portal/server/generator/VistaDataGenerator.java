@@ -18,6 +18,7 @@ import gwtupload.server.exceptions.UploadActionException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,9 +67,14 @@ import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.propertyvista.server.domain.UserCredential;
 
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
@@ -86,6 +92,15 @@ public class VistaDataGenerator {
         DataGenerator.setRandomSeed(seed);
     }
 
+
+    public User createUser(int number) {
+        String email = DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(number) + DemoData.USERS_DOMAIN;
+        User user = EntityFactory.create(User.class);
+        user.name().setValue(email.substring(0, email.indexOf('@')));
+        user.email().setValue(email);
+        return user;
+    }
+    
     public Summary createSummary(Application application, AptUnit selectedUnit) {
         Summary summary = EntityFactory.create(Summary.class);
         summary.application().set(application);

@@ -139,7 +139,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
     public String create() {
         user = loadUser(DemoData.PRELOADED_USERNAME);
 
-        VistaDataGenerator generator = new VistaDataGenerator();
+        VistaDataGenerator generator = new VistaDataGenerator(DemoData.PT_GENERATION_SEED);
         Application application = generator.createApplication(user);
         ApplicationProgress progress = generator.createApplicationProgress(application);
         // TODO retive some unit
