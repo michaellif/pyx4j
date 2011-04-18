@@ -29,6 +29,7 @@ import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.quartz.SchedulerHelper;
 
 public class VistaDBReset {
 
@@ -50,6 +51,7 @@ public class VistaDBReset {
                 srv.dropTable(meta.getEntityClass());
             }
         }
+        SchedulerHelper.dbReset();
         long start = System.currentTimeMillis();
         System.out.println(conf.getDataPreloaders().preloadAll());
         System.out.println("Preload time: " + TimeUtils.secSince(start));

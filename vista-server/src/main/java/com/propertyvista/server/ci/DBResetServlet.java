@@ -37,6 +37,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.quartz.SchedulerHelper;
 
 @SuppressWarnings("serial")
 public class DBResetServlet extends HttpServlet {
@@ -63,6 +64,11 @@ public class DBResetServlet extends HttpServlet {
                     srv.dropTable(meta.getEntityClass());
                 }
             }
+
+            SchedulerHelper.shutdown();
+            SchedulerHelper.dbReset();
+            SchedulerHelper.init();
+
             buf.append(conf.getDataPreloaders().preloadAll());
             buf.append("\nTotal time: " + TimeUtils.secSince(start));
 

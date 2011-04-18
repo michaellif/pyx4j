@@ -17,12 +17,14 @@ import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.quartz.SchedulerHelper;
 
 public class VistaDBClear {
 
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
         System.out.println("Remove All data");
+        SchedulerHelper.dbReset();
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
         System.out.println(conf.getDataPreloaders().delete());
