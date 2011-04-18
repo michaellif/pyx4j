@@ -30,11 +30,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.dashboard.client.IGadget;
 
 // define demo widget class: 
-class DemoGadget extends HTML implements IGadget {
+public class DemoGadget extends HTML implements IGadget {
 
     boolean fullWidth = true;
 
-    DemoGadget(String s) {
+    public DemoGadget(String s) {
         super(s);
     }
 
