@@ -51,22 +51,24 @@ public class CComponentTest extends BaseSeleniumTestCase {
         selenium.click(TestComponentDebugId.CButton, TesterDebugId.StartTestSufix);
     }
 
-    public void testCCheckBox() throws Exception {
-        selenium.click(TestComponentDebugId.CCheckBox, TesterDebugId.StartTestSufix);
-        //Enable/Disable
-        tstEnableDisable();
-        //Read-only
-        //  tstReadOnly();
-
-    }
-
-    public void testCComboBox() throws Exception {
-        selenium.click(TestComponentDebugId.CComboBox, TesterDebugId.StartTestSufix);
-        //Enable/Disable
-        tstEnableDisable();
-        //Read-only
-        //   tstReadOnly();
-    }
+/*
+ * public void testCCheckBox() throws Exception {
+ * selenium.click(TestComponentDebugId.CCheckBox, TesterDebugId.StartTestSufix);
+ * //Enable/Disable
+ * tstEnableDisable();
+ * //Read-only
+ * // tstReadOnly();
+ * 
+ * }
+ * 
+ * public void testCComboBox() throws Exception {
+ * selenium.click(TestComponentDebugId.CComboBox, TesterDebugId.StartTestSufix);
+ * //Enable/Disable
+ * tstEnableDisable();
+ * //Read-only
+ * // tstReadOnly();
+ * }
+ */
 
 //
 //    public void testCDatePicker() throws Exception {
