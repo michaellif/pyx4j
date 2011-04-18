@@ -30,8 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.server.maintenance.CleanOrphanApplicationDocumentDataRecordsJob;
-import com.propertyvista.server.common.security.DevelopmentSecurity;
-import com.pyx4j.config.shared.ApplicationMode;
 
 public class JobScheduler extends HttpServlet {
 
@@ -45,6 +43,10 @@ public class JobScheduler extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
+        final boolean todoMoveThisCodeToPReload = true;
+        if (todoMoveThisCodeToPReload) {
+            return;
+        }
         logger.info("JobScheduler.init() called");
         try {
             schedulerFactory = new StdSchedulerFactory();

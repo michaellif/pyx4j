@@ -15,7 +15,7 @@
     </context-param>
 
     <listener>
-        <listener-class>com.pyx4j.entity.server.servlet.InitializationServletContextListener</listener-class>
+        <listener-class>com.propertyvista.server.config.InitializationServletContextListener</listener-class>
     </listener>
 
     <security-constraint>
