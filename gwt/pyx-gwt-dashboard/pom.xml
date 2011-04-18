@@ -82,10 +82,11 @@
         </dependency>
 
         <dependency>
-        	<groupId>com.pyx4j</groupId>
-        	<artifactId>pyx-gwt-widgets</artifactId>
-        	<version>${project.version}</version>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-widgets</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
     </dependencies>
 
     <properties>
