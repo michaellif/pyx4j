@@ -45,6 +45,12 @@
             <artifactId>pyx-site-shared</artifactId>
         </dependency>
 
+        <dependency>
+        	<groupId>com.pyx4j</groupId>
+        	<artifactId>pyx-gwt-dashboard</artifactId>
+        	<version>2.0.2-SNAPSHOT</version>
+        	<scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <properties>

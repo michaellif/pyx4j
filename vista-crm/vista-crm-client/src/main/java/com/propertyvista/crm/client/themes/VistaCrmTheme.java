@@ -17,6 +17,7 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.CrmView;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
 
+import com.pyx4j.dashboard.client.DashboardPanel;
 import com.pyx4j.forms.client.ui.NativeComboBox;
 import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.widgets.client.ImageFactory;
@@ -71,6 +72,8 @@ public abstract class VistaCrmTheme extends Theme {
         initFooterStyle();
         intitNavigationStyle();
         initActionStyle();
+
+        initDashboard();
     }
 
     protected void initThemeColors() {
@@ -1002,4 +1005,69 @@ public abstract class VistaCrmTheme extends Theme {
         addStyle(style);
     }
 
+    protected void initDashboard() {
+        String prefix = DashboardPanel.BASE_NAME;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.Column));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.ColumnHeading));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("font-weight", "bold");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.ColumnSpacer));
+        style.addProperty("height", "4em");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.Holder));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("border", "1px solid #aaa");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderSetup));
+        style.addProperty("background-color", ThemeColor.MANDATORY_TEXT_BACKGROUND);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderCaption));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("font", "caption");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("color", "#444");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderCaption) + ":hover");
+        style.addProperty("background-color", ThemeColor.SELECTION);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderHeading));
+        style.addProperty("padding-top", "2px");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderMenu));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style.addProperty("border", "1px solid #aaa");
+        style.addProperty("font", "menu");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.DndPositioner));
+        style.addProperty("border", "1px dashed #aaa");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.DndRowPositioner));
+        style.addProperty("background-color", "#dfffff");
+        style.addProperty("border", "1px dashed #aaa");
+        addStyle(style);
+
+        // overriding gwt-dnd styles:
+        style = new Style(".dragdrop-handle");
+        style.addProperty("cursor", "default");
+        addStyle(style);
+    }
 }

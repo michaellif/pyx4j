@@ -13,16 +13,44 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Singleton;
+
+import com.pyx4j.dashboard.client.DashboardPanel;
+import com.pyx4j.dashboard.client.Layout;
+import com.pyx4j.dashboard.demo.client.DemoGadget;
 
 @Singleton
 public class DashboardViewImpl extends SimplePanel implements DashboardView {
 
+    DashboardPanel dashboardPanel = new DashboardPanel();
+
     public DashboardViewImpl() {
-        HTML labael = new HTML("Dashboard");
-        setWidget(labael);
+        VerticalPanel main = new VerticalPanel();
+        main.add(new HTML("<b>Dashboard Menu goes here...</b>"));
+        main.add(dashboardPanel);
+        main.setWidth("100%");
+        add(main);
+
+        dashboardPanel.setLayout(new Layout(3, 1, 12));
+        fillDashboard();
     }
 
+    private void fillDashboard() {
+
+        // fill the dashboard with demo widgets:
+        dashboardPanel.removeAllGadgets();
+
+        int count = 0;
+        for (int col = 0; col < dashboardPanel.getLayout().getColumns(); ++col)
+            for (int row = 0; row < 3; ++row) {
+                // initialize a widget
+                DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
+                widget.setHeight(Random.nextInt(8) + 10 + "em");
+                dashboardPanel.addGadget(widget, col);
+            }
+    }
 }

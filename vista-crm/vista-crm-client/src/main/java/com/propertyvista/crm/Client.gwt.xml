@@ -4,6 +4,9 @@
 <module rename-to='crm'>
 	
 	<inherits name='com.google.gwt.user.User'/>
+
+	<inherits name='com.pyx4j.dashboard.Dashboard'/>
+	<inherits name='com.pyx4j.dashboard.demo.DashboardDemo'/>
     
     <inherits name='com.propertyvista.crm.Rpc' />
     <inherits name='com.propertyvista.Domain' />
