@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Apr 18, 2011
+ * @author Dad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui;
@@ -26,38 +26,48 @@ import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.propertyvista.crm.client.activity.NavigFolder;
 
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class NavigViewImpl extends StackLayoutPanel implements NavigView {
+public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView {
 
     public static String DEFAULT_STYLE_PREFIX = CrmView.StyleSuffix.Navigation.name();
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Holder, Tab, LabelHolder, StatusHolder, Label, Item
+        Item, SearchBar
     }
 
-    public static enum StyleDependent implements IStyleDependent {
-        hover
-    }
+    private ShortCutsPresenter presenter;
 
-    private MainNavigPresenter presenter;
+    private final SearchBox search;
 
-    public NavigViewImpl() {
+    public ShortCutsViewImpl() {
         super(Unit.EM);
         setStyleName(DEFAULT_STYLE_PREFIX);
         setHeight("100%");
+        search = new SearchBox();
     }
 
+    /**
+     * TODO change implementation later
+     */
+
     @Override
-    public void setPresenter(final MainNavigPresenter presenter) {
+    public void setPresenter(final ShortCutsPresenter presenter) {
         this.presenter = presenter;
 
         List<NavigFolder> folders = presenter.getNavigFolders();
         for (NavigFolder navigFolder : folders) {
+
             ScrollPanel scroll = new ScrollPanel();
+            SimplePanel searchcontainer = new SimplePanel();
+            searchcontainer.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchBar);
+            searchcontainer.setHeight("2em");
+            searchcontainer.setWidth("100%");
+            searchcontainer.getElement().getStyle().setPaddingTop(0.4, Unit.EM);
+            searchcontainer.add(search);
 
             FlowPanel list = new FlowPanel();
+            list.add(searchcontainer);
 
             for (final AppPlace place : navigFolder.getNavigItems()) {
                 SimplePanel line = new SimplePanel();
@@ -75,10 +85,8 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
             }
 
             scroll.setWidget(list);
-            //VS 2 was chaned for 4
             this.add(scroll, navigFolder.getTitle(), 3);
+
         }
-
     }
-
 }

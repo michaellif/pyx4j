@@ -48,6 +48,8 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final Image alert;
 
+    private final SearchBox search;
+
     private Theme otherTheme = Theme.VillageGreen;
 
     @Inject
@@ -57,11 +59,12 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
         HorizontalPanel leftcontainer = new HorizontalPanel();
         leftcontainer.getElement().getStyle().setFloat(Style.Float.LEFT);
-        leftcontainer.setSize("72%", "100%");
+        leftcontainer.setSize("85%", "100%");
+        //   leftcontainer.setHeight("100%");    
 
         HorizontalPanel rightcontainer = new HorizontalPanel();
         rightcontainer.getElement().getStyle().setFloat(Style.Float.RIGHT);
-        rightcontainer.setSize("28%", "100%");
+        rightcontainer.setSize("15%", "100%");
 
         greetings = new HTML("");
         greetings.getElement().getStyle().setDisplay(Display.INLINE);
@@ -142,16 +145,18 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         message.getElement().getStyle().setMarginRight(1, Unit.EM);
         message.getElement().getStyle().setCursor(Cursor.POINTER);
 
+        search = new SearchBox();
+
         FlowPanel fp1 = new FlowPanel();
         fp1.add(greetings);
         fp1.add(account);
         fp1.add(settings);
+        fp1.add(login);
+        fp1.add(logout);
+        fp1.add(search);
         leftcontainer.add(fp1);
 
         FlowPanel fp2 = new FlowPanel();
-        fp2.add(login);
-        fp2.add(logout);
-        fp2.add(themes);
         fp2.add(message);
         fp2.add(alert);
         rightcontainer.add(fp2);

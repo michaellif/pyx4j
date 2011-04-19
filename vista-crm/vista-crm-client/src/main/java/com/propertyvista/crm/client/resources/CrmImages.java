@@ -36,4 +36,10 @@ public interface CrmImages extends ClientBundle {
     @Source("envelop.png")
     ImageResource message();
 
+    @Source("blank.gif")
+    ImageResource blank();
+
+    @Source("search.png")
+    ImageResource search();
+
 }

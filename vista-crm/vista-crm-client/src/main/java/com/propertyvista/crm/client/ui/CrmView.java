@@ -34,6 +34,7 @@ import com.propertyvista.crm.client.mvp.Left2ActivityMapper;
 import com.propertyvista.crm.client.mvp.LogoActivityMapper;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.mvp.NavigActivityMapper;
+import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AppSiteView;
@@ -47,7 +48,7 @@ public class CrmView extends LayoutPanel {
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Action, Header, MainNavig, Caption, SecondaryNavig, Message, Content, Center, Main, Left, Right, Footer, Display
+        Action, Header, Navigation, Footer, Display, NavigContainer;
     }
 
     @Inject
@@ -64,6 +65,8 @@ public class CrmView extends LayoutPanel {
     Left2ActivityMapper left2ActivityMapper,
 
     FooterActivityMapper footerActivityMapper,
+
+    ShortCutsActivityMapper shortcutsActivityMapper,
 
     Theme theme) {
 
@@ -82,6 +85,7 @@ public class CrmView extends LayoutPanel {
 
         FlowPanel headerPanel = new FlowPanel();
         contentPanel.addNorth(headerPanel, 5);
+        headerPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Header);
 
         DisplayPanel logoDisplay = new DisplayPanel();
         //VS should correspond with the logo size
@@ -98,7 +102,7 @@ public class CrmView extends LayoutPanel {
         //============ Footer Panel ============
 
         DisplayPanel footerDisplay = new DisplayPanel();
-        contentPanel.addSouth(footerDisplay, 5);
+        contentPanel.addSouth(footerDisplay, 3.2);
 
         SplitLayoutPanel splitPanel = new SplitLayoutPanel();
 
@@ -108,19 +112,31 @@ public class CrmView extends LayoutPanel {
 
         VerticalPanel leftPanel = new VerticalPanel();
         leftPanel.setSize("100%", "100%");
+
         splitPanel.addWest(leftPanel, 250);
 
         DisplayPanel navigDisplay = new DisplayPanel();
         leftPanel.add(navigDisplay);
-        navigDisplay.setSize("100%", "98%");
-        leftPanel.setCellWidth(navigDisplay, "100%");
-        leftPanel.setCellHeight(navigDisplay, "100%");
+        navigDisplay.setSize("100%", "100%");
 
         DisplayPanel left1Display = new DisplayPanel();
+        left1Display.setSize("100%", "100%");
         leftPanel.add(left1Display);
+        /**
+         * VS negatevly affects layout. Uncomment and implement when needed
+         */
+/*
+ * DisplayPanel left2Display = new DisplayPanel();
+ * leftPanel.add(left2Display);
+ */
 
-        DisplayPanel left2Display = new DisplayPanel();
-        leftPanel.add(left2Display);
+        leftPanel.setCellWidth(navigDisplay, "100%");
+        leftPanel.setCellHeight(navigDisplay, "65%");
+
+        leftPanel.setCellWidth(left1Display, "100%");
+        leftPanel.setCellHeight(left1Display, "35%");
+        leftPanel.setSpacing(4);
+        leftPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.NavigContainer);
 
         //============ Main ============
 
@@ -131,8 +147,11 @@ public class CrmView extends LayoutPanel {
         bind(actionsActivityMapper, actionsDisplay, eventBus);
         bind(footerActivityMapper, footerDisplay, eventBus);
         bind(navigActivityMapper, navigDisplay, eventBus);
-        bind(left1ActivityMapper, left1Display, eventBus);
-        bind(left2ActivityMapper, left2Display, eventBus);
+        bind(shortcutsActivityMapper, left1Display, eventBus);
+/*
+ * bind(left1ActivityMapper, left1Display, eventBus);
+ * bind(left2ActivityMapper, left2Display, eventBus);
+ */
         bind(mainActivityMapper, mainDisplay, eventBus);
 
     }

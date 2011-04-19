@@ -49,6 +49,6 @@ public class ViewModule extends AbstractGinModule {
         bind(DashboardView.class).to(DashboardViewImpl.class).in(Singleton.class);
 
         bind(Theme.class).to(GainsboroTheme.class).in(Singleton.class);
+        bind(ShortCutsView.class).to(ShortCutsViewImpl.class).in(Singleton.class);
     }
-
 }

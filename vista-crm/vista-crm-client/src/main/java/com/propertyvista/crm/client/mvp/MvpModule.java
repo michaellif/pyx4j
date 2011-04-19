@@ -30,6 +30,7 @@ public class MvpModule extends AbstractGinModule {
         bind(Left2ActivityMapper.class);
 
         bind(FooterActivityMapper.class);
+        bind(ShortCutsActivityMapper.class);
 
     }
 
