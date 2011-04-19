@@ -384,12 +384,23 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     public String getText(IObject<?> member) {
-        return driver.findElement(by(member)).getText();
+        WebElement element = driver.findElement(by(member));
+        String text = element.getText();
+        log("text of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), text);
+        return text;
     }
 
     public String getValue(String paramString) {
         return driver.findElement(elementLocator(paramString)).getValue();
     }
+
+    public String getValue(IObject<?> member) {
+        WebElement element = driver.findElement(by(member));
+        String text = element.getValue();
+        log("value of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), text);
+        return text;
+    }
+
 
     public void select(String id) {
         WebElement we = driver.findElement(By.id(id));
