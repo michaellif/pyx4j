@@ -69,9 +69,9 @@ public class Report extends SimplePanel {
         ReportDropController widgetDropController = new ReportDropController(reportLayoutPanel);
         widgetDragController.registerDropController(widgetDropController);
 
-        for (int row = 1; row <= 5; row++) {
+        for (int i = 0; i <= 7; i++) {
             GadgetHolder gadget = new GadgetHolder("Draggable&nbsp;#" + ++count, "green", "blue");
-            reportLayoutPanel.add(gadget);
+            reportLayoutPanel.addGadget(gadget, i % 3 - 1);
             widgetDragController.makeDraggable(gadget, gadget.getDragHandler());
         }
 
