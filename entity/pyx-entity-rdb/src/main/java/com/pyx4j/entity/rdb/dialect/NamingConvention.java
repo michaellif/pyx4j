@@ -26,6 +26,8 @@ public interface NamingConvention {
 
     public String sqlTableName(String javaPersistenceName);
 
+    public String sqlTableSequenceName(String javaPersistenceName);
+
     /**
      * Defines the name for table use in OneToMany associations.
      * 

@@ -1,0 +1,82 @@
+/*
+ * Pyx4j framework
+ * Copyright (C) 2008-2011 pyx4j.com.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ *
+ * Created on 2011-04-19
+ * @author vlads
+ * @version $Id$
+ */
+package com.pyx4j.entity.rdb.dialect;
+
+import java.sql.Types;
+
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+
+public class OracleDialect extends Dialect {
+
+    public OracleDialect(NamingConvention namingConvention) {
+        super(DatabaseType.Oracle, namingConvention);
+        addTypeMeta(Integer.class, "number", 10, 0);
+        addTypeMeta(Short.class, "number", 5, 0);
+        addTypeMeta(Long.class, "number", 19, 0);
+        addTypeMeta(Double.class, "double precision", "float");
+        addTypeMeta(Float.class, "float", "double precision");
+        addTypeMeta(Boolean.class, "number", 1, 0);
+        addTypeMeta(String.class, "varchar2");
+
+        addTypeMeta(byte[].class, "blob");
+
+        addTypeMeta(java.util.Date.class, "date");
+    }
+
+    @Override
+    public int getTargetSqlType(Class<?> valueClass) {
+        if (valueClass.equals(Boolean.class)) {
+            return Types.BIT;
+        } else {
+            return super.getTargetSqlType(valueClass);
+        }
+    }
+
+    @Override
+    public int identifierMaximumLength() {
+        return 32;
+    }
+
+    @Override
+    public String getGeneratedIdColumnString() {
+        return "NOT NULL";
+    }
+
+    @Override
+    public boolean isSequencesBaseIdentity() {
+        return true;
+    }
+
+    @Override
+    public String getSequenceNextValSql(String sequenceName) {
+        return sequenceName + ".nextval";
+    }
+
+    @Override
+    public String getCreateSequenceSql(String sequenceName) {
+        return "create sequence " + sequenceName;
+    }
+
+    @Override
+    public String getDropSequenceSql(String sequenceName) {
+        return "drop sequence " + sequenceName;
+    }
+}

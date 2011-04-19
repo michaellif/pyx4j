@@ -58,6 +58,11 @@ public class NamingConventionOracle implements NamingConvention {
     }
 
     @Override
+    public String sqlTableSequenceName(String javaPersistenceName) {
+        return splitCapitals(javaPersistenceName) + "_SEQ";
+    }
+
+    @Override
     public String sqlChildTableName(String javaPersistenceTableName, String javaPersistenceChildTableName) {
         return sqlTableName(javaPersistenceTableName) + "_" + sqlTableName(javaPersistenceChildTableName);
     }

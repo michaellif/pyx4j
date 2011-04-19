@@ -25,6 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,12 @@ public class SQLUtils {
             }
         } catch (Throwable e) {
         }
+    }
+
+    public static void execute(Connection connection, String sql) throws SQLException {
+        List<String> sqls = new Vector<String>();
+        sqls.add(sql);
+        execute(connection, sqls);
     }
 
     public static void execute(Connection connection, List<String> sqls) throws SQLException {

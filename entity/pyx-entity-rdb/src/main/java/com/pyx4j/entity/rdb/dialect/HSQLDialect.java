@@ -20,10 +20,12 @@
  */
 package com.pyx4j.entity.rdb.dialect;
 
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+
 public class HSQLDialect extends Dialect {
 
     public HSQLDialect(NamingConvention namingConvention) {
-        super(namingConvention);
+        super(DatabaseType.HSQLDB, namingConvention);
         addTypeMeta(Short.class, "smallint");
         addTypeMeta(Long.class, "bigint");
         addTypeMeta(Double.class, "double");

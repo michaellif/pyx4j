@@ -14,33 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 12, 2010
+ * Created on Dec 31, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.mysql;
+package com.pyx4j.entity.rdb.oracle;
 
-import com.pyx4j.commons.RuntimeExceptionSerializable;
-import com.pyx4j.entity.rdb.DDLTestCase;
-import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
+import com.pyx4j.entity.test.server.EnvCleanerTestCase;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public class DDLTest extends DDLTestCase {
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        try {
-            if (((EntityPersistenceServiceRDB) srv).isTableExists(TaskAlt1.class)) {
-                ((EntityPersistenceServiceRDB) srv).dropTable(TaskAlt1.class);
-            }
-        } catch (RuntimeExceptionSerializable ignore) {
-        }
-    }
+public class ZZEnvCleanerTest extends EnvCleanerTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getMySQLPersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getOraclePersistenceEnvironment();
     }
 }

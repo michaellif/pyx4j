@@ -32,6 +32,10 @@ public class TypeMeta {
 
     final int maxLength;
 
+    int precision = -1;
+
+    int scale = -1;
+
     String[] compatibleTypeNames;
 
     private TreeMap<Integer, String> extendedTypes;
@@ -49,13 +53,21 @@ public class TypeMeta {
         this.compatibleTypeNames = compatibleTypeNames;
     }
 
-    public TypeMeta(Class<?> javaClass, String sqlType, int maxLength) {
+    public TypeMeta(Class<?> javaClass, String sqlType, int precision, int scale) {
+        this.javaClass = javaClass;
+        this.sqlType = sqlType;
+        this.maxLength = 0;
+        this.scale = scale;
+        this.precision = precision;
+    }
+
+    public TypeMeta(Class<?> javaClass, int maxLength, String sqlType) {
         this.javaClass = javaClass;
         this.sqlType = sqlType;
         this.maxLength = maxLength;
     }
 
-    public void addSqlType(String sqlType, int maxLength) {
+    public void addSqlType(int maxLength, String sqlType) {
         if (extendedTypes == null) {
             extendedTypes = new TreeMap<Integer, String>();
         }
@@ -64,7 +76,11 @@ public class TypeMeta {
 
     public String getSqlType(int length) {
         if ((length < maxLength) || (maxLength == 0)) {
-            return this.sqlType;
+            if (precision >= 0) {
+                return this.sqlType + "(" + precision + ", " + scale + ")";
+            } else {
+                return this.sqlType;
+            }
         }
         if (extendedTypes != null) {
             for (Map.Entry<Integer, String> me : extendedTypes.entrySet()) {

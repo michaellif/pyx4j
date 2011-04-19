@@ -44,6 +44,11 @@ public class NamingConventionModern implements NamingConvention {
     }
 
     @Override
+    public String sqlTableSequenceName(String javaPersistenceName) {
+        return javaPersistenceName + "_seq";
+    }
+
+    @Override
     public String sqlChildTableName(String javaPersistenceTableName, String javaPersistenceChildTableName) {
         return sqlTableName(javaPersistenceTableName) + childSeparator + sqlTableName(javaPersistenceChildTableName);
     }

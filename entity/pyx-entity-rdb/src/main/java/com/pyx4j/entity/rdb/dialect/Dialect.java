@@ -24,6 +24,7 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.shared.IEntity;
 
 public abstract class Dialect {
@@ -32,7 +33,10 @@ public abstract class Dialect {
 
     private final NamingConvention namingConvention;
 
-    protected Dialect(NamingConvention namingConvention) {
+    private final DatabaseType databaseType;
+
+    protected Dialect(DatabaseType databaseType, NamingConvention namingConvention) {
+        this.databaseType = databaseType;
         this.namingConvention = namingConvention;
         addTypeMeta(Integer.class, "integer");
         addTypeMeta(Character.class, "char");
@@ -42,6 +46,10 @@ public abstract class Dialect {
 
         addTypeMeta(java.sql.Date.class, "date");
         addTypeMeta(java.sql.Time.class, "time");
+    }
+
+    public DatabaseType databaseType() {
+        return databaseType;
     }
 
     public abstract int identifierMaximumLength();
@@ -56,6 +64,10 @@ public abstract class Dialect {
 
     protected void addTypeMeta(Class<?> javaClass, String sqlType, String... compatibleTypeNames) {
         typeNames.put(javaClass, new TypeMeta(javaClass, sqlType, compatibleTypeNames));
+    }
+
+    protected void addTypeMeta(Class<?> javaClass, String sqlType, int precision, int scale) {
+        typeNames.put(javaClass, new TypeMeta(javaClass, sqlType, precision, scale));
     }
 
     public String getGeneratedIdColumnString() {
@@ -131,5 +143,21 @@ public abstract class Dialect {
         } else {
             return func.name() + "( " + args + " )";
         }
+    }
+
+    public boolean isSequencesBaseIdentity() {
+        return false;
+    }
+
+    public String getSequenceNextValSql(String sequenceName) {
+        throw new Error("Dialect does not support sequences");
+    }
+
+    public String getCreateSequenceSql(String sequenceName) {
+        throw new Error("Dialect does not support sequences");
+    }
+
+    public String getDropSequenceSql(String sequenceName) {
+        throw new Error("Dialect does not support sequences");
     }
 }

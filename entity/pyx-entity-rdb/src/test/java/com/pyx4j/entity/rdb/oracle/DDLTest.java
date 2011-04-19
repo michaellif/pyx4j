@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.mysql;
+package com.pyx4j.entity.rdb.oracle;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.entity.rdb.DDLTestCase;
@@ -41,6 +41,6 @@ public class DDLTest extends DDLTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getMySQLPersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getOraclePersistenceEnvironment();
     }
 }

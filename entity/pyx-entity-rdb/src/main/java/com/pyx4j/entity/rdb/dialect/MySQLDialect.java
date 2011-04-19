@@ -20,18 +20,20 @@
  */
 package com.pyx4j.entity.rdb.dialect;
 
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+
 public class MySQLDialect extends Dialect {
 
     public MySQLDialect(NamingConvention namingConvention) {
-        super(namingConvention);
+        super(DatabaseType.MySQL, namingConvention);
         addTypeMeta(Integer.class, "int");
         addTypeMeta(Short.class, "smallint");
         addTypeMeta(Long.class, "bigint");
         addTypeMeta(Double.class, "double");
         addTypeMeta(Boolean.class, "bit");
 
-        TypeMeta blobTypeMeta = new TypeMeta(byte[].class, "blob", 65535);
-        blobTypeMeta.addSqlType("mediumblob", 16777215);
+        TypeMeta blobTypeMeta = new TypeMeta(byte[].class, 65535, "blob");
+        blobTypeMeta.addSqlType(16777215, "mediumblob");
         typeNames.put(byte[].class, blobTypeMeta);
 
         addTypeMeta(java.util.Date.class, "datetime");

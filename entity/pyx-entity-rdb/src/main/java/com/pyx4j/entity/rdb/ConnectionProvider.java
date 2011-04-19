@@ -40,6 +40,7 @@ import com.pyx4j.entity.rdb.dialect.HSQLDialect;
 import com.pyx4j.entity.rdb.dialect.MySQLDialect;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
+import com.pyx4j.entity.rdb.dialect.OracleDialect;
 
 public class ConnectionProvider {
 
@@ -90,6 +91,9 @@ public class ConnectionProvider {
             break;
         case MySQL:
             dialect = new MySQLDialect(namingConvention);
+            break;
+        case Oracle:
+            dialect = new OracleDialect(namingConvention);
             break;
         default:
             throw new Error("Unsupported driver Dialect " + cfg.driverClass());
