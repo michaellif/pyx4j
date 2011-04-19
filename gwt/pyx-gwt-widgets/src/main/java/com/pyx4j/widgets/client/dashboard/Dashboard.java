@@ -20,7 +20,11 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
+import com.allen_sauer.gwt.dnd.client.DragEndEvent;
+import com.allen_sauer.gwt.dnd.client.DragHandler;
+import com.allen_sauer.gwt.dnd.client.DragStartEvent;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
@@ -42,6 +46,25 @@ public class Dashboard extends SimplePanel {
 
         PickupDragController widgetDragController = new PickupDragController(boundaryPanel, false);
         widgetDragController.setBehaviorMultipleSelection(false);
+        widgetDragController.addDragHandler(new DragHandler() {
+
+            @Override
+            public void onPreviewDragStart(DragStartEvent event) throws VetoDragException {
+            }
+
+            @Override
+            public void onPreviewDragEnd(DragEndEvent event) throws VetoDragException {
+            }
+
+            @Override
+            public void onDragStart(DragStartEvent event) {
+                ((SimplePanel) event.getSource()).setWidth(((SimplePanel) event.getSource()).getOffsetWidth() + "px");
+            }
+
+            @Override
+            public void onDragEnd(DragEndEvent event) {
+            }
+        });
 
         FlowPanel columnsContainerPanel = new FlowPanel();
         columnsContainerPanel.setWidth("100%");
@@ -63,12 +86,12 @@ public class Dashboard extends SimplePanel {
             for (int row = 1; row <= 5; row++) {
 
                 SimplePanel gadgetBorder = new SimplePanel();
+                gadgetBorder.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
+                gadgetBorder.getElement().getStyle().setProperty("MozBoxSizing", "border-box");
+                gadgetBorder.getElement().getStyle().setProperty("boxSizing", "border-box");
                 gadgetBorder.getElement().getStyle().setPadding(SPACING, Unit.PX);
 
                 HTML gadgetContainer = new HTML("Draggable&nbsp;#" + ++count);
-                gadgetContainer.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
-                gadgetContainer.getElement().getStyle().setProperty("MozBoxSizing", "border-box");
-                gadgetContainer.getElement().getStyle().setProperty("boxSizing", "border-box");
                 gadgetContainer.getElement().getStyle().setBackgroundColor("green");
                 gadgetContainer.setHeight(Random.nextInt(4) + 2 + "em");
 
