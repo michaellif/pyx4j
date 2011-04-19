@@ -21,7 +21,7 @@
 package com.pyx4j.widgets.client.dashboard;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
-import com.allen_sauer.gwt.dnd.client.drop.FlowPanelDropController;
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -32,6 +32,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class Dashboard extends SimplePanel {
+
+    public static final int SPACING = 10;
 
     public Dashboard() {
         AbsolutePanel boundaryPanel = new AbsolutePanel();
@@ -55,19 +57,29 @@ public class Dashboard extends SimplePanel {
             columnsContainerPanel.add(columnCompositePanel);
 
             // initialize a widget drop controller for the current column
-            FlowPanelDropController widgetDropController = new FlowPanelDropController(columnCompositePanel);
+            VerticalFlowPanelDropController widgetDropController = new VerticalFlowPanelDropController(columnCompositePanel);
             widgetDragController.registerDropController(widgetDropController);
 
             for (int row = 1; row <= 5; row++) {
-                // initialize a widget
-                HTML widget = new HTML("Draggable&nbsp;#" + ++count);
-                widget.getElement().getStyle().setBackgroundColor("green");
-                widget.getElement().getStyle().setMargin(1, Unit.PX);
-                widget.setHeight(Random.nextInt(4) + 2 + "em");
-                columnCompositePanel.add(widget);
 
-                // make the widget draggable
-                widgetDragController.makeDraggable(widget);
+                SimplePanel gadgetBorder = new SimplePanel();
+                gadgetBorder.getElement().getStyle().setPadding(SPACING, Unit.PX);
+
+                HTML gadgetContainer = new HTML("Draggable&nbsp;#" + ++count);
+                gadgetContainer.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
+                gadgetContainer.getElement().getStyle().setProperty("MozBoxSizing", "border-box");
+                gadgetContainer.getElement().getStyle().setProperty("boxSizing", "border-box");
+                gadgetContainer.getElement().getStyle().setBackgroundColor("green");
+                gadgetContainer.setHeight(Random.nextInt(4) + 2 + "em");
+
+                gadgetContainer.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+                gadgetContainer.getElement().getStyle().setBorderWidth(3, Unit.PX);
+                gadgetContainer.getElement().getStyle().setBorderColor("blue");
+
+                gadgetBorder.setWidget(gadgetContainer);
+                columnCompositePanel.add(gadgetBorder);
+
+                widgetDragController.makeDraggable(gadgetBorder, gadgetContainer);
             }
         }
 
