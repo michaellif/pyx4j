@@ -54,6 +54,7 @@ import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 import com.pyx4j.widgets.client.combobox.ListBox;
 import com.pyx4j.widgets.client.dashboard.Dashboard;
+import com.pyx4j.widgets.client.dashboard.Report;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
@@ -92,6 +93,9 @@ public class WidgetsDemo implements EntryPoint {
         RootPanel.get().add(GlassPanel.instance());
         RootPanel.get().add(contentPanel);
         contentPanel.setWidth("100%");
+
+        //========== Report ==========//
+        contentPanel.add(new Report());
 
         //========== Dashboard ==========//
         contentPanel.add(new Dashboard());

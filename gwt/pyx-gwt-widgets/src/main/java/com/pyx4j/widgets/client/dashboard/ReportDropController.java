@@ -23,18 +23,15 @@ package com.pyx4j.widgets.client.dashboard;
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.drop.FlowPanelDropController;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class VerticalFlowPanelDropController extends FlowPanelDropController {
+public class ReportDropController extends FlowPanelDropController {
 
     /**
      * @param dropTarget
      */
-    public VerticalFlowPanelDropController(FlowPanel dropTarget) {
+    public ReportDropController(FlowPanel dropTarget) {
         super(dropTarget);
     }
 
@@ -45,30 +42,14 @@ public class VerticalFlowPanelDropController extends FlowPanelDropController {
 
     @Override
     protected Widget newPositioner(DragContext context) {
-        SimplePanel positioner = new SimplePanel();
-        positioner.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
-        positioner.getElement().getStyle().setProperty("MozBoxSizing", "border-box");
-        positioner.getElement().getStyle().setProperty("boxSizing", "border-box");
-
         int width = 0;
         int height = 0;
-        for (Widget widget : context.selectedWidgets) {
+        if (context.selectedWidgets.size() == 1) {
+            Widget widget = context.selectedWidgets.get(0);
             width = Math.max(width, widget.getOffsetWidth());
-            height += widget.getOffsetHeight();
+            height = widget.getOffsetHeight();
         }
 
-        positioner.setPixelSize(width, height);
-
-        positioner.getElement().getStyle().setPadding(Dashboard.SPACING, Unit.PX);
-        positioner.getElement().getStyle().setZIndex(100);
-
-        SimplePanel positionerBorder = new SimplePanel();
-        positionerBorder.setHeight("100%");
-        positionerBorder.getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
-        positionerBorder.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        positionerBorder.getElement().getStyle().setBorderColor("#555");
-        positioner.setWidget(positionerBorder);
-
-        return positioner;
+        return new GadgetPositioner(width, height);
     }
 }

@@ -25,17 +25,14 @@ import com.allen_sauer.gwt.dnd.client.DragHandler;
 import com.allen_sauer.gwt.dnd.client.DragStartEvent;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class Dashboard extends SimplePanel {
+public class Report extends SimplePanel {
 
     public static final int SPACING = 10;
 
-    public Dashboard() {
+    public Report() {
         AbsolutePanel boundaryPanel = new AbsolutePanel();
         boundaryPanel.setSize("100%", "100%");
         setWidget(boundaryPanel);
@@ -63,28 +60,19 @@ public class Dashboard extends SimplePanel {
             }
         });
 
-        FlowPanel columnsContainerPanel = new FlowPanel();
-        columnsContainerPanel.setWidth("100%");
-        boundaryPanel.add(columnsContainerPanel);
-
         int count = 0;
 
-        for (int col = 0; col < 3; col++) {
-            FlowPanel columnCompositePanel = new FlowPanel();
-            columnCompositePanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            columnCompositePanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            columnCompositePanel.setWidth(100 / 3 + "%");
-            columnsContainerPanel.add(columnCompositePanel);
+        ReportLayoutPanel reportLayoutPanel = new ReportLayoutPanel();
+        boundaryPanel.add(reportLayoutPanel);
 
-            // initialize a widget drop controller for the current column
-            DashboardDropController widgetDropController = new DashboardDropController(columnCompositePanel);
-            widgetDragController.registerDropController(widgetDropController);
+        // initialize a widget drop controller for the current column
+        ReportDropController widgetDropController = new ReportDropController(reportLayoutPanel);
+        widgetDragController.registerDropController(widgetDropController);
 
-            for (int row = 1; row <= 5; row++) {
-                GadgetHolder gadget = new GadgetHolder("Draggable&nbsp;#" + ++count, "blue", "green");
-                columnCompositePanel.add(gadget);
-                widgetDragController.makeDraggable(gadget, gadget.getDragHandler());
-            }
+        for (int row = 1; row <= 5; row++) {
+            GadgetHolder gadget = new GadgetHolder("Draggable&nbsp;#" + ++count, "green", "blue");
+            reportLayoutPanel.add(gadget);
+            widgetDragController.makeDraggable(gadget, gadget.getDragHandler());
         }
 
     }
