@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
@@ -30,6 +31,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Table(prefix = "test", primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = Employee.class)
 public interface EmployeeData extends IEntity {
 
+    @MemberColumn(name = "cmnt")
     IPrimitive<String> comment();
 
     @ReadOnly
