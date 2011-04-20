@@ -58,6 +58,10 @@ public abstract class Dialect {
         return namingConvention;
     }
 
+    protected void addTypeMeta(TypeMeta typeMeta) {
+        typeNames.put(typeMeta.javaClass, typeMeta);
+    }
+
     protected void addTypeMeta(Class<?> javaClass, String sqlType) {
         typeNames.put(javaClass, new TypeMeta(javaClass, sqlType));
     }
@@ -123,7 +127,6 @@ public abstract class Dialect {
             return Types.TIME;
         } else if (valueClass.isEnum()) {
             return Types.VARCHAR;
-
         } else if (valueClass.equals(Boolean.class)) {
             return Types.BOOLEAN;
         } else if (valueClass.equals(Short.class)) {

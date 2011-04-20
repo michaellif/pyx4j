@@ -22,6 +22,8 @@ package com.pyx4j.entity.rdb.mapping;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -210,15 +212,26 @@ public class QueryBuilder<T extends IEntity> {
         }
     }
 
+    static Object encodeValue(Object value) {
+        if (value instanceof Enum) {
+            return ((Enum<?>) value).name();
+        } else if (value instanceof IEntity) {
+            return ((IEntity) value).getPrimaryKey();
+        } else if (value instanceof java.util.Date) {
+            Calendar c = new GregorianCalendar();
+            c.setTime((java.util.Date) value);
+            // DB does not store Milliseconds
+            c.set(Calendar.MILLISECOND, 0);
+            return new java.sql.Timestamp(c.getTimeInMillis());
+        } else {
+            return value;
+        }
+    }
+
     void bindParameters(PreparedStatement stmt) throws SQLException {
         int parameterIndex = 1;
         for (Object param : bindParams) {
-            if (param instanceof Enum) {
-                param = ((Enum<?>) param).name();
-            } else if (param instanceof IEntity) {
-                param = ((IEntity) param).getPrimaryKey();
-            }
-            stmt.setObject(parameterIndex, param);
+            stmt.setObject(parameterIndex, encodeValue(param));
             parameterIndex++;
         }
     }

@@ -27,6 +27,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -350,6 +352,12 @@ public class TableModel {
     static Object encodeValue(Class<?> valueClass, Object value) {
         if (valueClass.isEnum()) {
             return ((Enum<?>) value).name();
+        } else if (valueClass.equals(java.util.Date.class)) {
+            Calendar c = new GregorianCalendar();
+            c.setTime((java.util.Date) value);
+            // DB does not store Milliseconds
+            c.set(Calendar.MILLISECOND, 0);
+            return new java.sql.Timestamp(c.getTimeInMillis());
         } else {
             return value;
         }
@@ -366,7 +374,7 @@ public class TableModel {
         } else if (java.sql.Time.class.isAssignableFrom(memberMeta.getValueClass())) {
             return value;
         } else if (java.util.Date.class.isAssignableFrom(memberMeta.getValueClass())) {
-            return new java.util.Date(((java.sql.Timestamp) value).getTime());
+            return new java.util.Date(((java.util.Date) value).getTime());
         } else {
             if (value.getClass().equals(memberMeta.getValueClass())) {
                 return value;
@@ -409,6 +417,18 @@ public class TableModel {
         }
     }
 
+    public static Object getValue(ResultSet rs, String columnSqlName, MemberMeta memberMeta) throws SQLException {
+        Object value = rs.getObject(columnSqlName);
+        if (value == null) {
+            return null;
+        }
+        if (java.util.Date.class.isAssignableFrom(memberMeta.getValueClass())) {
+            value = rs.getTimestamp(columnSqlName);
+        }
+        return decodeValue(value, memberMeta);
+
+    }
+
     public static Long getLongValue(ResultSet rs, String columnSqlName) throws SQLException {
         Object value = rs.getObject(columnSqlName);
         if (value != null) {
@@ -430,7 +450,7 @@ public class TableModel {
             if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 ((IEntity) member.getMember(entity)).setPrimaryKey(getLongValue(rs, member.sqlName()));
             } else {
-                member.setMemberValue(entity, decodeValue(rs.getObject(member.sqlName()), memberMeta));
+                member.setMemberValue(entity, getValue(rs, member.sqlName(), memberMeta));
             }
         }
     }

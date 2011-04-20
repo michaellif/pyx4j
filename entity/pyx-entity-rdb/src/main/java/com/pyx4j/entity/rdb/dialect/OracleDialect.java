@@ -38,7 +38,9 @@ public class OracleDialect extends Dialect {
 
         addTypeMeta(byte[].class, "blob");
 
-        addTypeMeta(java.util.Date.class, "date");
+        TypeMeta dateTypeMeta = new TypeMeta(java.util.Date.class, "timestamp", 0, -1);
+        dateTypeMeta.setCompatibleTypeNames("timestamp(0)");
+        addTypeMeta(dateTypeMeta);
     }
 
     @Override

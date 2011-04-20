@@ -77,7 +77,11 @@ public class TypeMeta {
     public String getSqlType(int length) {
         if ((length < maxLength) || (maxLength == 0)) {
             if (precision >= 0) {
-                return this.sqlType + "(" + precision + ", " + scale + ")";
+                if (scale >= 0) {
+                    return this.sqlType + "(" + precision + ", " + scale + ")";
+                } else {
+                    return this.sqlType + "(" + precision + ")";
+                }
             } else {
                 return this.sqlType;
             }
@@ -90,6 +94,10 @@ public class TypeMeta {
             }
         }
         throw new RuntimeException("Undefined SQL type for length " + length + " for class " + javaClass.getName());
+    }
+
+    public void setCompatibleTypeNames(String... compatibleTypeNames) {
+        this.compatibleTypeNames = compatibleTypeNames;
     }
 
     public boolean isCompatibleType(String typeName) {
@@ -108,4 +116,5 @@ public class TypeMeta {
         }
         return false;
     }
+
 }

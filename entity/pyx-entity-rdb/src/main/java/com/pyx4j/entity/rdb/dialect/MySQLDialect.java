@@ -34,7 +34,7 @@ public class MySQLDialect extends Dialect {
 
         TypeMeta blobTypeMeta = new TypeMeta(byte[].class, 65535, "blob");
         blobTypeMeta.addSqlType(16777215, "mediumblob");
-        typeNames.put(byte[].class, blobTypeMeta);
+        addTypeMeta(blobTypeMeta);
 
         addTypeMeta(java.util.Date.class, "datetime");
     }
