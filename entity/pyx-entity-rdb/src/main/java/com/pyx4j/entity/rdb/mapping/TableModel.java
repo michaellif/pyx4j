@@ -96,11 +96,6 @@ public class TableModel {
                 }
             }
 
-            if (dialect.isSequencesBaseIdentity()) {
-                // TODO verify Sequence already exists
-                SQLUtils.execute(connection, dialect.getCreateSequenceSql(dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName())));
-            }
-
             for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
                 TableMetadata memberTableMetadata = TableMetadata.getTableMetadata(connection, member.sqlName());
                 if (memberTableMetadata == null) {
@@ -151,9 +146,6 @@ public class TableModel {
                 }
             }
             sqls.add("drop table " + tableName);
-            if (dialect.isSequencesBaseIdentity()) {
-                sqls.add(dialect.getDropSequenceSql(dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName())));
-            }
             SQLUtils.execute(connection, sqls);
         } finally {
             SQLUtils.closeQuietly(connection);
@@ -376,30 +368,69 @@ public class TableModel {
         } else if (java.util.Date.class.isAssignableFrom(memberMeta.getValueClass())) {
             return new java.util.Date(((java.sql.Timestamp) value).getTime());
         } else {
-            return value;
+            if (value.getClass().equals(memberMeta.getValueClass())) {
+                return value;
+            } else {
+                // This is manly used for Oracle
+                if (Long.class.equals(memberMeta.getValueClass())) {
+                    if (value instanceof Long) {
+                        return value;
+                    } else if (value instanceof Number) {
+                        return Long.valueOf(((Number) value).longValue());
+                    }
+                } else if (Integer.class.equals(memberMeta.getValueClass())) {
+                    if (value instanceof Integer) {
+                        return value;
+                    } else if (value instanceof Number) {
+                        return Integer.valueOf(((Number) value).intValue());
+                    }
+                } else if (Double.class.equals(memberMeta.getValueClass())) {
+                    if (value instanceof Double) {
+                        return value;
+                    } else if (value instanceof Number) {
+                        return Double.valueOf(((Number) value).doubleValue());
+                    }
+                } else if (Float.class.equals(memberMeta.getValueClass())) {
+                    if (value instanceof Float) {
+                        return value;
+                    } else if (value instanceof Number) {
+                        return Float.valueOf(((Number) value).floatValue());
+                    }
+                } else if (Boolean.class.equals(memberMeta.getValueClass())) {
+                    if (value instanceof Boolean) {
+                        return value;
+                    } else if (value instanceof Number) {
+                        return Boolean.valueOf(((Number) value).intValue() > 0);
+                    }
+                }
+
+                throw new Error("Type conversion " + value.getClass() + "->" + memberMeta.getValueClass() + " not implemanted");
+            }
+        }
+    }
+
+    public static Long getLongValue(ResultSet rs, String columnSqlName) throws SQLException {
+        Object value = rs.getObject(columnSqlName);
+        if (value != null) {
+            if (value instanceof Long) {
+                return (Long) value;
+            } else if (value instanceof Number) {
+                return ((Number) value).longValue();
+            } else {
+                return rs.getLong(columnSqlName);
+            }
+        } else {
+            return null;
         }
     }
 
     private void retrieveValues(ResultSet rs, IEntity entity) throws SQLException {
         for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
-            Object value = rs.getObject(member.sqlName());
             if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                Long pk;
-                if (value != null) {
-                    if (value instanceof Long) {
-                        pk = (Long) value;
-                    } else if (value instanceof Number) {
-                        pk = ((Number) value).longValue();
-                    } else {
-                        pk = rs.getLong(member.sqlName());
-                    }
-                } else {
-                    pk = null;
-                }
-                ((IEntity) member.getMember(entity)).setPrimaryKey(pk);
+                ((IEntity) member.getMember(entity)).setPrimaryKey(getLongValue(rs, member.sqlName()));
             } else {
-                member.setMemberValue(entity, decodeValue(value, memberMeta));
+                member.setMemberValue(entity, decodeValue(rs.getObject(member.sqlName()), memberMeta));
             }
         }
     }

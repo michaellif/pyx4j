@@ -20,16 +20,22 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.ConnectionProvider;
+import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -44,8 +50,17 @@ public class Mappings {
 
     private final Set<String> usedTableNames = new HashSet<String>();
 
+    private final Set<String> sequences;
+
     public Mappings(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
+
+        if (connectionProvider.getDialect().isSequencesBaseIdentity()) {
+            sequences = new HashSet<String>();
+            initSequences();
+        } else {
+            sequences = null;
+        }
     }
 
     public TableModel ensureTable(Dialect dialect, EntityMeta entityMeta) {
@@ -56,17 +71,33 @@ public class Mappings {
             TableModel model = tables.get(entityMeta.getEntityClass());
             if (model == null) {
                 model = new TableModel(dialect, entityMeta);
-                if (usedTableNames.contains(model.getTableName())) {
+                if (usedTableNames.contains(model.getTableName().toLowerCase(Locale.ENGLISH))) {
                     log.warn("redefining/extending table {} for class {}", model.getTableName(), entityMeta.getEntityClass());
                 }
                 try {
                     model.ensureExists(connectionProvider);
                 } catch (SQLException e) {
-                    log.error("SQL Error", e);
+                    log.error("table creation error", e);
                     throw new RuntimeException(e);
                 }
+                if (dialect.isSequencesBaseIdentity() && (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO)) {
+                    String sequenceName = dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName());
+                    // Verify Sequence already exists
+                    if (!sequences.contains(sequenceName.toLowerCase(Locale.ENGLISH))) {
+                        Connection connection = connectionProvider.getConnection();
+                        try {
+                            SQLUtils.execute(connection, dialect.getCreateSequenceSql(sequenceName));
+                        } catch (SQLException e) {
+                            log.error("sequence creation error", e);
+                            throw new RuntimeException(e);
+                        } finally {
+                            SQLUtils.closeQuietly(connection);
+                        }
+                        sequences.add(sequenceName.toLowerCase(Locale.ENGLISH));
+                    }
+                }
                 tables.put(entityMeta.getEntityClass(), model);
-                usedTableNames.add(model.getTableName());
+                usedTableNames.add(model.getTableName().toLowerCase(Locale.ENGLISH));
             }
             return model;
         }
@@ -77,7 +108,45 @@ public class Mappings {
         if (model == null) {
             model = new TableModel(dialect, entityMeta);
         }
-        usedTableNames.remove(model.getTableName());
+        usedTableNames.remove(model.getTableName().toLowerCase(Locale.ENGLISH));
         tables.remove(entityMeta.getEntityClass());
+
+        if (dialect.isSequencesBaseIdentity() && (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO)) {
+            String sequenceName = dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName());
+            if (sequences.contains(sequenceName.toLowerCase(Locale.ENGLISH))) {
+                Connection connection = connectionProvider.getConnection();
+                try {
+                    SQLUtils.execute(connection, dialect.getDropSequenceSql(sequenceName));
+                } catch (SQLException e) {
+                    log.error("sequence deletion error", e);
+                    throw new RuntimeException(e);
+                } finally {
+                    SQLUtils.closeQuietly(connection);
+                }
+                sequences.remove(sequenceName.toLowerCase(Locale.ENGLISH));
+            }
+        }
     }
+
+    private void initSequences() {
+        Connection connection = connectionProvider.getConnection();
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            connectionProvider.getDialect().sqlSequenceMetaData();
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery(connectionProvider.getDialect().sqlSequenceMetaData());
+            while (rs.next()) {
+                sequences.add(rs.getString(1).trim().toLowerCase(Locale.ENGLISH));
+            }
+        } catch (SQLException e) {
+            log.error("query sequences metadata error", e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(rs);
+            SQLUtils.closeQuietly(stmt);
+            SQLUtils.closeQuietly(connection);
+        }
+    }
+
 }

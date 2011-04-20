@@ -66,6 +66,22 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
+    public String sqlSequenceMetaData() {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT sequence_name ");
+        sql.append("  FROM user_sequences ");
+        sql.append("UNION ");
+        sql.append("SELECT synonym_name ");
+        sql.append("  FROM user_synonyms us ");
+        sql.append(" WHERE EXISTS ( ");
+        sql.append("           SELECT 1 ");
+        sql.append("             FROM all_sequences asq ");
+        sql.append("            WHERE asq.sequence_name  = us.table_name");
+        sql.append("              AND asq.sequence_owner = us.table_owner)");
+        return sql.toString();
+    }
+
+    @Override
     public String getSequenceNextValSql(String sequenceName) {
         return sequenceName + ".nextval";
     }

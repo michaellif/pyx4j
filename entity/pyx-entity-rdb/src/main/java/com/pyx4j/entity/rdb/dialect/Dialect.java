@@ -149,6 +149,10 @@ public abstract class Dialect {
         return false;
     }
 
+    public String sqlSequenceMetaData() {
+        throw new Error("Dialect does not support sequences");
+    }
+
     public String getSequenceNextValSql(String sequenceName) {
         throw new Error("Dialect does not support sequences");
     }

@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
@@ -90,6 +91,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             throw new RuntimeException(e.getMessage());
         }
         mappings = new Mappings(connectionProvider);
+        databaseVersion();
     }
 
     @Override
@@ -121,6 +123,20 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         } catch (SQLException e) {
             log.error("drop table error", e);
             throw new RuntimeExceptionSerializable(e);
+        }
+    }
+
+    private void databaseVersion() {
+        Connection connection = null;
+        try {
+            connection = connectionProvider.getConnection();
+            DatabaseMetaData dbMeta = connection.getMetaData();
+            log.debug("DB {} {}", dbMeta.getDatabaseProductName(), dbMeta.getDatabaseProductVersion());
+        } catch (SQLException e) {
+            log.error("databaseMetaData access error", e);
+            throw new RuntimeExceptionSerializable(e);
+        } finally {
+            SQLUtils.closeQuietly(connection);
         }
     }
 

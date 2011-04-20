@@ -74,6 +74,7 @@ public abstract class QueryTestCase extends DatastoreTestBase {
         String empName = "Bob " + uniqueString();
         emp.firstName().setValue(empName);
 
+        Assert.assertEquals("Search Value Class", value.getClass(), member.getValueClass());
         emp.setMemberValue(member.getFieldName(), value);
 
         srv.persist(emp);
@@ -86,6 +87,7 @@ public abstract class QueryTestCase extends DatastoreTestBase {
         Employee emp1 = srv.retrieve(criteria1);
         Assert.assertNotNull("retrieve", emp1);
         Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
+        Assert.assertEquals("Search Value Class", member.getValueClass(), emp1.getMemberValue(member.getFieldName()).getClass());
         Assert.assertEquals("Search Value", value, emp1.getMemberValue(member.getFieldName()));
         Assert.assertEquals("Verify Value", empName, emp1.firstName().getValue());
 
@@ -102,7 +104,7 @@ public abstract class QueryTestCase extends DatastoreTestBase {
     }
 
     public void testQueryByLong() {
-        execTestQuery(metaEmp.holidays(), new Date().getTime());
+        execTestQuery(metaEmp.holidays(), Long.valueOf(new Date().getTime()));
     }
 
     public void testQueryByInteger() {

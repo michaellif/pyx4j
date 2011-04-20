@@ -168,7 +168,12 @@ public class CollectionsTableModel {
             stmt.setLong(1, entity.getPrimaryKey());
             rs = stmt.executeQuery();
             while (rs.next()) {
-                Object value = TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta());
+                Object value;
+                if (isPrimitive) {
+                    value = TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta());
+                } else {
+                    value = TableModel.getLongValue(rs, "value");
+                }
                 int valueIdx = insertData.indexOf(value);
                 if (valueIdx != -1) {
                     if (isPrimitive) {
@@ -231,15 +236,13 @@ public class CollectionsTableModel {
             rs = stmt.executeQuery();
             Collection<Object> dataSet = isList ? new Vector<Object>() : new HashSet<Object>();
             while (rs.next()) {
-                Object value = TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta());
-
                 if (type == ObjectClassType.PrimitiveSet) {
-                    dataSet.add(value);
+                    dataSet.add(TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta()));
                 } else {
                     // TODO get type
                     @SuppressWarnings("unchecked")
                     IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMemberMeta().getValueClass());
-                    childIEntity.setPrimaryKey((Long) value);
+                    childIEntity.setPrimaryKey(TableModel.getLongValue(rs, "value"));
                     dataSet.add(childIEntity);
                 }
             }
@@ -343,20 +346,18 @@ public class CollectionsTableModel {
                 if (prevKey == -1) {
                     prevKey = currKey;
                 }
-                Object value = TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta());
-
                 if (currKey != prevKey) { // if we roll to new owner, then add dataSet to the retMap
                     retMap.put(prevKey, dataSet);
                     dataSet = isList ? new Vector<Object>() : new HashSet<Object>(); // create object for next owner
                     prevKey = currKey;
                 }
                 if (type == ObjectClassType.PrimitiveSet) {
-                    dataSet.add(value);
+                    dataSet.add(TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta()));
                 } else {
                     // TODO get type
                     @SuppressWarnings("unchecked")
                     IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMemberMeta().getValueClass());
-                    childIEntity.setPrimaryKey((Long) value);
+                    childIEntity.setPrimaryKey(TableModel.getLongValue(rs, "value"));
                     dataSet.add(childIEntity);
                 }
             }
