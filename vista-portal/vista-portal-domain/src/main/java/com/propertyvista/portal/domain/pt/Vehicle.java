@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -36,6 +37,7 @@ public interface Vehicle extends IEntity {
 
     @Format("yyyy")
     @Editor(type = EditorType.yearpicker)
+    @MemberColumn(name = "year_made")
     IPrimitive<java.sql.Date> year();
 
     IPrimitive<String> make();

@@ -19,6 +19,7 @@ import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
@@ -36,6 +37,7 @@ public interface UserCredential extends IEntity {
     IPrimitive<String> credential();
 
     @Detached
+    @MemberColumn(name = "usr")
     User user();
 
     IPrimitive<VistaBehavior> behavior();

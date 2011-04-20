@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -70,9 +71,11 @@ public interface ChargeLine extends Charge {
     }
 
     @Editor(type = EditorType.label)
+    @MemberColumn(name = "tp")
     IPrimitive<ChargeType> type();
 
     @Editor(type = EditorType.label)
     @ToString(index = 1)
+    @MemberColumn(name = "lbl")
     IPrimitive<String> label();
 }

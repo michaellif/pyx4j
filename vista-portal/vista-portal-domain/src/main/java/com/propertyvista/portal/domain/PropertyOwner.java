@@ -15,7 +15,7 @@ package com.propertyvista.portal.domain;
 
 import java.util.Date;
 
-
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -37,6 +37,7 @@ public interface PropertyOwner extends IEntity {
     /**
      * Percent of share
      */
+    @MemberColumn(name = "shr")
     IPrimitive<Double> share();
 
     IPrimitive<Date> startDate();

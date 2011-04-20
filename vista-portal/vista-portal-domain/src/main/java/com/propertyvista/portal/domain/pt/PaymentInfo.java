@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -37,6 +38,7 @@ public interface PaymentInfo extends IEntity, IBoundToApplication {
 
     @Caption(name = "Payment types")
     @Editor(type = EditorType.radiogroup)
+    @MemberColumn(name = "tp")
     IPrimitive<PaymentType> type();
 
     @EmbeddedEntity

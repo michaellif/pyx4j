@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import java.io.Serializable;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -29,6 +30,7 @@ public interface ApplicationDocument extends IEntity, IBoundToApplication {
     }
 
     // This is not shown in UI only defines where the document is attached.
+    @MemberColumn(name = "tp")
     IPrimitive<DocumentType> type();
 
     IPrimitive<Long> dataId();

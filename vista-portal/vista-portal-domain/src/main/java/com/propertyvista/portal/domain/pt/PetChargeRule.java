@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import com.propertyvista.portal.domain.ChargeType;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -22,6 +23,7 @@ public interface PetChargeRule extends IEntity {
 
     IPrimitive<ChargeType> chargeType();
 
+    @MemberColumn(name = "vl")
     IPrimitive<Integer> value(); // TODO this probably would have to be a double instead of an integer
 
 }

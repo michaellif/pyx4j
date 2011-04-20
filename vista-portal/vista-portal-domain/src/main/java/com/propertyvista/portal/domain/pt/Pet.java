@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -70,6 +71,7 @@ public interface Pet extends IEntity {
     @Caption(name = "Pet type")
     @NotNull
     @BusinessEqualValue
+    @MemberColumn(name = "tp")
     public IPrimitive<PetType> type();
 
     @NotNull
