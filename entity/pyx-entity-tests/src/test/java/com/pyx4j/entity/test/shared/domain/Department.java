@@ -21,6 +21,7 @@
 package com.pyx4j.entity.test.shared.domain;
 
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
@@ -41,6 +42,7 @@ public interface Department extends IEntity {
     @Owner
     @ReadOnly
     @Indexed
+    @MemberColumn(name = "org")
     Organization organization();
 
     @Transient

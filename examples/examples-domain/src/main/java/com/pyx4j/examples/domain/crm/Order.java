@@ -30,6 +30,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
@@ -71,6 +72,7 @@ public interface Order extends IEntity {
     IPrimitive<java.sql.Date> receivedDate();
 
     @Format("#.00")
+    @MemberColumn(name = "cst")
     IPrimitive<Double> cost();
 
     @Owner
@@ -93,6 +95,7 @@ public interface Order extends IEntity {
     IPrimitive<String> customerPhone();
 
     @Indexed
+    @MemberColumn(name = "rsrc")
     Resource resource();
 
     @ToString
