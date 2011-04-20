@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -33,33 +34,50 @@ public class ReportLayoutPanel extends FlowPanel {
     }
 
     public void addGadget(Widget widget, int column) {
-        if (column == -1) { //column -1 means full width
-            add(widget);
-        } else {
-            Widget lastRow = getWidget(getWidgetCount() - 1);
-            RowPanel row = null;
-            if (column == 0) {
-                if (lastRow instanceof RowPanel && !((RowPanel) lastRow).hasLeft()) {
-                    row = (RowPanel) lastRow;
-                } else {
-                    row = new RowPanel();
-                }
-                row.setLeftGadget(widget);
-            } else if (column == 1) {
-                if (lastRow instanceof RowPanel && !((RowPanel) lastRow).hasRight()) {
-                    row = (RowPanel) lastRow;
-                } else {
-                    row = new RowPanel();
-                }
-                row.setRightGadget(widget);
-            } else {
-                throw new Error("Column number can be -1, 0 or 1");
-            }
-            add(row);
-        }
+        insertGadget(widget, getWidgetCount(), column);
     }
 
     public void insertGadget(Widget widget, int row, int column) {
+        if (row > getWidgetCount()) {
+            throw new Error("Row is out of bounds");
+        } else if (column == -1) { //column -1 means full width
+            insert(widget, row);
+        } else {
+            if (row == getWidgetCount()) {
+                RowPanel rowPanel = new RowPanel();
+                if (column == 0) {
+                    rowPanel.setLeftGadget(widget);
+                } else if (column == 1) {
+                    rowPanel.setRightGadget(widget);
+                } else {
+                    throw new Error("Column number can be -1, 0 or 1");
+                }
+                insert(rowPanel, row);
+            } else {
+                Widget currentRow = getWidget(row);
+                RowPanel rowPanel = null;
+                if (column == 0) {
+                    if (currentRow instanceof RowPanel && !((RowPanel) currentRow).hasLeft()) {
+                        rowPanel = (RowPanel) currentRow;
+                    } else {
+                        rowPanel = new RowPanel();
+                        insert(rowPanel, row);
+                    }
+                    rowPanel.setLeftGadget(widget);
+                } else if (column == 1) {
+                    if (currentRow instanceof RowPanel && !((RowPanel) currentRow).hasRight()) {
+                        rowPanel = (RowPanel) currentRow;
+                    } else {
+                        rowPanel = new RowPanel();
+                        insert(rowPanel, row);
+                    }
+                    rowPanel.setRightGadget(widget);
+                } else {
+                    throw new Error("Column number can be -1, 0 or 1");
+                }
+
+            }
+        }
 
     }
 
@@ -80,9 +98,11 @@ public class ReportLayoutPanel extends FlowPanel {
         RowPanel() {
             setWidth("100%");
             left = new SimplePanel();
+            left.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             left.setWidth("50%");
             add(left);
             right = new SimplePanel();
+            right.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             right.setWidth("50%");
             add(right);
         }
