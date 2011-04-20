@@ -19,19 +19,17 @@ import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.propertyvista.crm.client.activity.DashboardActivity;
-import com.propertyvista.crm.client.activity.LoginActivity;
 import com.propertyvista.crm.client.activity.ReportActivity;
 import com.propertyvista.crm.client.activity.ResetPasswordActivity;
-import com.propertyvista.crm.client.activity.RetrievePasswordActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 import com.pyx4j.site.rpc.AppPlace;
 
 public class MainActivityMapper implements ActivityMapper {
 
-    Provider<LoginActivity> loginActivityProvider;
+    //  Provider<LoginActivity> loginActivityProvider;
 
-    Provider<RetrievePasswordActivity> retrievePasswordActivityProvider;
+    //  Provider<RetrievePasswordActivity> retrievePasswordActivityProvider;
 
     Provider<ResetPasswordActivity> resetPasswordActivityProvider;
 
@@ -42,9 +40,11 @@ public class MainActivityMapper implements ActivityMapper {
     @Inject
     public MainActivityMapper(
 
-    final Provider<LoginActivity> loginActivityProvider,
-
-    final Provider<RetrievePasswordActivity> retrievePasswordActivityProvider,
+/*
+ * final Provider<LoginActivity> loginActivityProvider,
+ * 
+ * final Provider<RetrievePasswordActivity> retrievePasswordActivityProvider,
+ */
 
     final Provider<ResetPasswordActivity> resetPasswordActivityProvider,
 
@@ -52,8 +52,8 @@ public class MainActivityMapper implements ActivityMapper {
 
     final Provider<ReportActivity> reportActivityProvider) {
         super();
-        this.loginActivityProvider = loginActivityProvider;
-        this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
+//        this.loginActivityProvider = loginActivityProvider;
+//        this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
         this.resetPasswordActivityProvider = resetPasswordActivityProvider;
         this.dashboardActivityProvider = dashboardActivityProvider;
         this.reportActivityProvider = reportActivityProvider;
@@ -61,11 +61,13 @@ public class MainActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (place instanceof CrmSiteMap.Login) {
-            return loginActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof CrmSiteMap.RetrievePassword) {
-            return retrievePasswordActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof CrmSiteMap.ResetPassword) {
+/*
+ * if (place instanceof CrmSiteMap.Login) {
+ * return loginActivityProvider.get().withPlace((AppPlace) place);
+ * } else if (place instanceof CrmSiteMap.RetrievePassword) {
+ * return retrievePasswordActivityProvider.get().withPlace((AppPlace) place);
+ * } else
+ */     if (place instanceof CrmSiteMap.ResetPassword) {
             return resetPasswordActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof CrmSiteMap.Dashboard) {
             return dashboardActivityProvider.get().withPlace(place);

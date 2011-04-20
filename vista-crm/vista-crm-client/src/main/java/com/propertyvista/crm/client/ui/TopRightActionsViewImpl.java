@@ -6,6 +6,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -64,11 +65,12 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
         HorizontalPanel rightcontainer = new HorizontalPanel();
         rightcontainer.getElement().getStyle().setFloat(Style.Float.RIGHT);
-        rightcontainer.setSize("15%", "100%");
+        rightcontainer.setSize("30%", "100%");
 
         greetings = new HTML("");
         greetings.getElement().getStyle().setDisplay(Display.INLINE);
-        greetings.getElement().getStyle().setMarginRight(2, Unit.EM);
+        greetings.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        greetings.getElement().getStyle().setMarginRight(1, Unit.EM);
 
         logout = new CHyperlink(null, new Command() {
             @Override
@@ -143,26 +145,40 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
             }
         });
         message.getElement().getStyle().setMarginRight(1, Unit.EM);
+        message.getElement().getStyle().setMarginLeft(1, Unit.EM);
         message.getElement().getStyle().setCursor(Cursor.POINTER);
 
         search = new SearchBox();
 
-        FlowPanel fp1 = new FlowPanel();
-        fp1.add(greetings);
-        fp1.add(account);
-        fp1.add(settings);
-        fp1.add(login);
-        fp1.add(logout);
-        fp1.add(search);
-        leftcontainer.add(fp1);
+/*
+ * FlowPanel fp1 = new FlowPanel();
+ * fp1.add(greetings);
+ * fp1.add(account);
+ * fp1.add(settings);
+ * fp1.add(login);
+ * fp1.add(logout);
+ * fp1.add(search);
+ * leftcontainer.add(fp1);
+ */
 
-        FlowPanel fp2 = new FlowPanel();
-        fp2.add(message);
-        fp2.add(alert);
-        rightcontainer.add(fp2);
+/*
+ * FlowPanel fp2 = new FlowPanel();
+ * fp2.add(message);
+ * fp2.add(alert);
+ * rightcontainer.add(fp2);
+ */
+
+        rightcontainer.add(greetings);
+        rightcontainer.add(account);
+        rightcontainer.add(settings);
+        rightcontainer.add(login);
+        rightcontainer.add(logout);
+        rightcontainer.add(search);
+        rightcontainer.add(message);
+        rightcontainer.add(alert);
 
         add(rightcontainer);
-        add(leftcontainer);
+        // add(leftcontainer);
     }
 
     @Override

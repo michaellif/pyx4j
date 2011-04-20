@@ -74,7 +74,9 @@ public abstract class VistaCrmTheme extends Theme {
         initDisplayStyle();
         initHeaderStyle();
         initFooterStyle();
+        initLeftMenuContainer();
         intitNavigationStyles();
+        intitShortCutStyles();
         initActionStyle();
 
         initDashboard();
@@ -176,14 +178,20 @@ public abstract class VistaCrmTheme extends Theme {
         style = new Style("." + SearchBox.DEFAULT_STYLE_NAME);
         style.addProperty("background", "#ffffff");
         style.addProperty("overflow", "hidden");
+        style.addProperty("border", "none");
         style.addProperty("border-radius", "15px");
         style.addProperty("-moz-border-radius", "15px");
+        style.addProperty("min-width", "8em !important");
+        style.addProperty("white-space", "normal !important");
+        style.addProperty("padding-left", "0.7em !important");
         addStyle(style);
         //textbox
         style = new Style("." + SearchBox.DEFAULT_STYLE_NAME + StyleSuffix.Text);
         style.addProperty("border-radius", "15px");
         style.addProperty("-moz-border-radius", "15px");
-        style.addProperty("margin-left", "0.2em !important");
+        style.addProperty("border", "none");
+        //  style.addProperty("min-width", "4em !important");
+
         addStyle(style);
         //trigger
         style = new Style("." + SearchBox.DEFAULT_STYLE_NAME + StyleSuffix.Trigger);
@@ -195,7 +203,12 @@ public abstract class VistaCrmTheme extends Theme {
         style.addProperty("width", "16px");
         style.addProperty("heigh", "16px");
         style.addProperty("float", "right !important");
+        style.addProperty("border", "none");
         style.addProperty("margin-right", "0.2em !important");
+        addStyle(style);
+
+        style = new Style("." + NavigViewImpl.DEFAULT_STYLE_PREFIX + NavigViewImpl.StyleSuffix.NoBottomMargin);
+        style.addProperty("margin-bottom", "0 !important");
         addStyle(style);
 
     }
@@ -960,17 +973,22 @@ public abstract class VistaCrmTheme extends Theme {
 
     }
 
-    protected void intitNavigationStyles() {
-        String prefix = "." + CrmView.StyleSuffix.Navigation;
+    protected void initLeftMenuContainer() {
         String containerprefix = "." + CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.NavigContainer;
         //navigation panels container style
         Style style = new Style(containerprefix);
         style.addProperty("min-height", "400px");
         addStyle(style);
         style = new Style(containerprefix + " td");
-        style.addProperty("border", "solid " + getThemeColorString(ThemeColor.OBJECT_TONE3) + " !important");
+        style.addProperty("border", "solid 1px " + getThemeColorString(ThemeColor.OBJECT_TONE4));
         addStyle(style);
 
+    }
+
+    protected void intitNavigationStyles() {
+        String prefix = "." + NavigViewImpl.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(prefix);
         //anchors within the class
         style = new Style(prefix + " a:link, a:visited, a:active");
         style.addProperty("text-decoration", "none");
@@ -985,32 +1003,76 @@ public abstract class VistaCrmTheme extends Theme {
          */
         //stack header
         style = new Style(prefix + " .gwt-StackLayoutPanelHeader");
-        style.addProperty("font-size", "1.4em");
-        //  style.addProperty("min-height", "4em");
-        // style.addProperty("vertical-align", "middle");
-        //  style.addProperty("display", "table-cell");
+        style.addProperty("font-size", "1.3em");
         style.addProperty("font-weight", "bold");
         style.addProperty("padding-left", "1em");
         style.addProperty("cursor", "pointer");
-        style.addProperty("margin-bottom", "0.2em");
+        style.addProperty("margin-bottom", "0.1em");
         style.addProperty("border-top", "solid 1px");
         style.addProperty("border-bottom", "solid 1px");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE4);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        //Vertical alignment. NOTE: must correspond with the header size defined by stackpanel
+        style.addProperty("line-height", "2em");
         addStyle(style);
 
         //stack content
         style = new Style(prefix + " .gwt-StackLayoutPanelContent");
-        style.addProperty("font-size", "1.3em");
+        style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "1em");
         addStyle(style);
 
         //Item style defines anchor specific styling
         style = new Style(prefix + NavigViewImpl.StyleSuffix.Item);
-        style.addProperty("margin-bottom", "1em");
+        style.addProperty("margin-bottom", "0.3em");
+        addStyle(style);
+    }
+
+    /**
+     * TODO When the layout is finalized it might make sense to combine
+     * Navigation and ShortCuts styling due to their similarity
+     */
+    protected void intitShortCutStyles() {
+        String prefix = "." + ShortCutsViewImpl.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(prefix);
+        //anchors within the class
+        style = new Style(prefix + " a:link, a:visited, a:active");
+        style.addProperty("text-decoration", "none");
+        style.addProperty("color", ThemeColor.TEXT);
         addStyle(style);
 
-        //Search line style if applicable
+        style = new Style(prefix + " a:hover");
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+        /**
+         * components within the class
+         */
+        //stack header
+        style = new Style(prefix + " .gwt-StackLayoutPanelHeader");
+        style.addProperty("font-size", "1.3em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-left", "1em");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("border-top", "solid 1px");
+        style.addProperty("border-bottom", "solid 1px");
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        //NOTE: must correspond with the header size defined by stackpanel
+        style.addProperty("line-height", "2em");
+        addStyle(style);
+
+        //stack content
+        style = new Style(prefix + " .gwt-StackLayoutPanelContent");
+        style.addProperty("font-size", "1.1em");
+        addStyle(style);
+
+        //Item style defines anchor specific styling
+        style = new Style(prefix + NavigViewImpl.StyleSuffix.Item);
+        style.addProperty("margin-bottom", "0.3em");
+        addStyle(style);
+
+        //Search line style
         style = new Style(prefix + ShortCutsViewImpl.StyleSuffix.SearchBar);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         addStyle(style);
@@ -1038,6 +1100,8 @@ public abstract class VistaCrmTheme extends Theme {
         String prefix = "." + CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Header;
         Style style = new Style(prefix);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("padding-left", "0.3em");
         addStyle(style);
 
     }
@@ -1046,16 +1110,14 @@ public abstract class VistaCrmTheme extends Theme {
         String prefix = "." + CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Action;
         Style style = new Style(prefix);
         style.addProperty("min-width", "700px");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
+        // style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
         style.addProperty("color", ThemeColor.TEXT_BACKGROUND);
-        style.addProperty("font-size", "1.3em");
-        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "1em");
         addStyle(style);
 
         style = new Style(prefix + " td");
-        style.addProperty("text-align", "center !important");
         style.addProperty("vertical-align", "middle !important");
-
+        style.addProperty("white-space", "nowrap");
         addStyle(style);
     }
 

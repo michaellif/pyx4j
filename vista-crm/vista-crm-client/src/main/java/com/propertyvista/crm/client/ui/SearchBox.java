@@ -1,7 +1,5 @@
 package com.propertyvista.crm.client.ui;
 
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -42,32 +40,38 @@ public class SearchBox extends Composite implements ClickHandler, KeyDownHandler
 
     public SearchBox() {
         container = new FlowPanel();
-        Style st = container.getElement().getStyle();
-        st.setDisplay(Display.INLINE_BLOCK);
-        st.setBorderStyle(BorderStyle.NONE);
+        container.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         searchfld = new TextBox();
         searchfld.setStyleName(DEFAULT_STYLE_NAME + StyleSuffix.Text);
-        searchfld.setWidth("12em");
-        st = searchfld.getElement().getStyle();
-        st.setBorderStyle(BorderStyle.NONE);
+        searchfld.setWidth("8em");
 
         trigger = new Image(CrmImages.INSTANCE.search());
-        st = trigger.getElement().getStyle();
-        st.setBorderStyle(BorderStyle.NONE);
-        //   trigger.setSize("16px", "16px");
         trigger.setStyleName(DEFAULT_STYLE_NAME + StyleSuffix.Trigger);
         trigger.getElement().getStyle().setCursor(Cursor.POINTER);
 
         container.add(searchfld);
         container.add(trigger);
-        container.setWidth("13em");
+        container.setWidth("10em");
         initWidget(container);
         setStyleName(DEFAULT_STYLE_NAME);
     }
 
-    public void setSize() {
-        //TODO implement
+    @Override
+    public void setWidth(String width) {
+        //TODO finish
+        container.setWidth(width);
+        searchfld.setWidth("85%");
+
+/*
+ * int cw = container.getElement().getClientWidth();
+ * int tw = trigger.getElement().getClientWidth();
+ * if (cw > 4) {
+ * System.out.println(cw + "  px " + tw);
+ * searchfld.setWidth(String.valueOf(cw - tw - 2) + "px");
+ * }
+ */
+
     }
 
     public SearchBox(String tooltip) {

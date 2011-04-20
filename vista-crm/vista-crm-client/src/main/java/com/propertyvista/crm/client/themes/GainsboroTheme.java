@@ -25,7 +25,7 @@ public class GainsboroTheme extends VistaCrmTheme {
         float brightness = (float) 0.25;
         putThemeColor(ThemeColor.OBJECT_TONE1, 0xF7F7F7);
         putThemeColor(ThemeColor.OBJECT_TONE2, 0xCCCCCC/* 0xE1E1E1 */);
-        putThemeColor(ThemeColor.OBJECT_TONE3, 0x999999/* 0xC8C8C8 */);
+        putThemeColor(ThemeColor.OBJECT_TONE3, /* 0x999999 */0xC8C8C8);
         putThemeColor(ThemeColor.OBJECT_TONE4, 0xB5B5B5);
         putThemeColor(ThemeColor.OBJECT_TONE5, 0xE6E6E6);
         putThemeColor(ThemeColor.BORDER, 0xe7e7e7);

@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView {
 
-    public static String DEFAULT_STYLE_PREFIX = CrmView.StyleSuffix.Navigation.name();
+    public static String DEFAULT_STYLE_PREFIX = "vistaCrm_ShortCuts";
 
     public static enum StyleSuffix implements IStyleSuffix {
         Item, SearchBar
@@ -45,6 +45,8 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
         setStyleName(DEFAULT_STYLE_PREFIX);
         setHeight("100%");
         search = new SearchBox();
+        search.setWidth("90%");
+        search.getElement().getStyle().setMarginLeft(0.33, Unit.EM);
     }
 
     /**
@@ -55,6 +57,9 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
     public void setPresenter(final ShortCutsPresenter presenter) {
         this.presenter = presenter;
 
+        //TODO Clean for now. Implement comparizon later
+        this.clear();
+
         List<NavigFolder> folders = presenter.getNavigFolders();
         for (NavigFolder navigFolder : folders) {
 
@@ -64,6 +69,7 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
             searchcontainer.setHeight("2em");
             searchcontainer.setWidth("100%");
             searchcontainer.getElement().getStyle().setPaddingTop(0.4, Unit.EM);
+            //   searchcontainer.getElement().getStyle().setPaddingLeft(0.4, Unit.EM);
             searchcontainer.add(search);
 
             FlowPanel list = new FlowPanel();

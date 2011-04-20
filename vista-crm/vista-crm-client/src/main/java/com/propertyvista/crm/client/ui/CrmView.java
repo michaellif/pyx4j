@@ -21,13 +21,16 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.propertyvista.crm.client.mvp.ActionsActivityMapper;
+import com.propertyvista.crm.client.mvp.EntryPointActivityMapper;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
 import com.propertyvista.crm.client.mvp.Left1ActivityMapper;
 import com.propertyvista.crm.client.mvp.Left2ActivityMapper;
@@ -64,6 +67,8 @@ public class CrmView extends LayoutPanel {
 
     Left2ActivityMapper left2ActivityMapper,
 
+    EntryPointActivityMapper utilityActivityMapper,
+
     FooterActivityMapper footerActivityMapper,
 
     ShortCutsActivityMapper shortcutsActivityMapper,
@@ -89,13 +94,13 @@ public class CrmView extends LayoutPanel {
 
         DisplayPanel logoDisplay = new DisplayPanel();
         //VS should correspond with the logo size
-        logoDisplay.setSize("20%", "100%");
+        logoDisplay.setSize("30%", "100%");
         logoDisplay.getElement().getStyle().setFloat(Style.Float.LEFT);
         headerPanel.add(logoDisplay);
 
         DisplayPanel actionsDisplay = new DisplayPanel();
         //actionsDisplay.setWidth("20em");
-        actionsDisplay.setSize("80%", "100%");
+        actionsDisplay.setSize("70%", "100%");
         actionsDisplay.getElement().getStyle().setFloat(Style.Float.RIGHT);
         headerPanel.add(actionsDisplay);
 
@@ -104,9 +109,28 @@ public class CrmView extends LayoutPanel {
         DisplayPanel footerDisplay = new DisplayPanel();
         contentPanel.addSouth(footerDisplay, 3.2);
 
-        SplitLayoutPanel splitPanel = new SplitLayoutPanel();
+        /**
+         * Main area of the app has to comprise two containers:
+         * Split Panel for main application navigation
+         * and entry point screens such as Login and Retrieve password
+         * Since the center area of DockLayoutPanel accepts only one element
+         * one more panel needs to be introduced
+         */
+        FlowPanel centerAreaContent = new FlowPanel();
+        centerAreaContent.ensureDebugId("just_checking");
+        contentPanel.add(centerAreaContent);
 
-        contentPanel.add(splitPanel);
+        //================ Main application area - splitter with navig menu and content ======= 
+
+        SplitLayoutPanel splitPanel = new SplitLayoutPanel();
+        splitPanel.ensureDebugId("splitPanel");
+        splitPanel.setSize("100%", "100%");
+        centerAreaContent.add(splitPanel);
+
+        //============= Container for login and retrieve password views ===========
+        UtilityDisplayPanel utilityDisplay = new UtilityDisplayPanel(splitPanel);
+        utilityDisplay.ensureDebugId("entrypointpanel");
+        centerAreaContent.add(utilityDisplay);
 
         //============ Left Panel ============
 
@@ -135,7 +159,7 @@ public class CrmView extends LayoutPanel {
 
         leftPanel.setCellWidth(left1Display, "100%");
         leftPanel.setCellHeight(left1Display, "35%");
-        leftPanel.setSpacing(4);
+        leftPanel.setSpacing(3);
         leftPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.NavigContainer);
 
         //============ Main ============
@@ -153,6 +177,7 @@ public class CrmView extends LayoutPanel {
  * bind(left2ActivityMapper, left2Display, eventBus);
  */
         bind(mainActivityMapper, mainDisplay, eventBus);
+        bind(utilityActivityMapper, utilityDisplay, eventBus);
 
     }
 
@@ -167,6 +192,25 @@ public class CrmView extends LayoutPanel {
             String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
             setStyleName(prefix + StyleSuffix.Display);
         }
+    }
+
+    class UtilityDisplayPanel extends SimplePanel {
+
+        private final Panel panel;
+
+        UtilityDisplayPanel(Panel panel) {
+            this.panel = panel;
+            String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
+            setStyleName(prefix + StyleSuffix.Display);
+        }
+
+        @Override
+        public void setWidget(IsWidget w) {
+            super.setWidget(w);
+            panel.setVisible(w == null);
+
+        }
+
     }
 
 }
