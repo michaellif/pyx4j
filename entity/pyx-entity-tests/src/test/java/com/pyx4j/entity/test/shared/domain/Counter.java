@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -27,6 +28,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Table(prefix = "test")
 public interface Counter extends IEntity {
 
+    @MemberColumn(name = "nmbr")
     IPrimitive<Integer> number();
 
 }
