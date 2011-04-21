@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.InsertPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -194,7 +195,13 @@ final class GadgetHolder extends SimplePanel {
                 }
 
                 pp.setWidget(menu);
-                pp.setPopupPosition(btn.getAbsoluteLeft(), btn.getAbsoluteTop() + btn.getOffsetHeight());
+                pp.setPopupPositionAndShow(new PositionCallback() {
+                    @Override
+                    public void setPosition(int offsetWidth, int offsetHeight) {
+                        pp.setPopupPosition(btn.getAbsoluteLeft() + btn.getOffsetWidth() - offsetWidth, btn.getAbsoluteTop() + btn.getOffsetHeight());
+                    }
+                });
+
                 pp.show();
             } // onClick button event handler...
         }); // ClickHandler class...
