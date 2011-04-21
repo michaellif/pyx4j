@@ -59,7 +59,11 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         form.initialize();
         form.get(form.proto().captcha()).setVisible(false);
         form.populate(null);
+
         add(form);
+        setWidth("300px");
+        setStyleName("pyx4j-horizontal-align-center", true);
+        getElement().getStyle().setMarginTop(10, Unit.PCT);
 
         Button loginButton = new Button("Login");
         loginButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
@@ -92,9 +96,6 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
             add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
             add(new HTML("Press <i>Ctrl+Q</i> to login"));
         }
-
-        getElement().getStyle().setMarginTop(1, Unit.EM);
-        getElement().getStyle().setMarginBottom(1, Unit.EM);
     }
 
     @Override

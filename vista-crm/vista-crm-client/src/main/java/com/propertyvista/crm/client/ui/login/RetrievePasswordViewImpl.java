@@ -41,6 +41,9 @@ public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePassw
         form.initialize();
         form.populate(null);
         add(form);
+        getElement().getStyle().setMarginTop(10, Unit.PCT);
+        setWidth("400px");
+        setStyleName("pyx4j-horizontal-align-center", true);
 
         Button retrievePasswordButton = new Button(i18n.tr("Retrieve Password"));
         retrievePasswordButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
@@ -61,11 +64,6 @@ public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePassw
         retrievePasswordButton.getElement().getStyle().setMarginRight(1, Unit.EM);
         retrievePasswordButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
         add(retrievePasswordButton);
-
-        setWidth("30%");
-
-        getElement().getStyle().setMarginTop(1, Unit.EM);
-        getElement().getStyle().setMarginBottom(1, Unit.EM);
     }
 
     @Override

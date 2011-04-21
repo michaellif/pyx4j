@@ -211,6 +211,14 @@ public abstract class VistaCrmTheme extends Theme {
         style.addProperty("margin-bottom", "0 !important");
         addStyle(style);
 
+        /**
+         * horizontal alignment for blocks
+         */
+        style = new Style(".pyx4j-horizontal-align-center");
+        style.addProperty("margin-left", "auto");
+        style.addProperty("margin-right", "auto");
+        addStyle(style);
+
     }
 
     protected void initBodyStyles() {
