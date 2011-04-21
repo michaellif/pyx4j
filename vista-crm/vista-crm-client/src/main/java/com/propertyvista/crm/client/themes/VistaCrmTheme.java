@@ -1135,6 +1135,8 @@ public abstract class VistaCrmTheme extends Theme {
         String prefix = DashboardPanel.BASE_NAME;
 
         Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style.addProperty("border", "1px solid #aaa");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.Column));
