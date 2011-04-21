@@ -129,21 +129,24 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
         }
 
         public void setLayout1() {
-            setDefaultImages();
-            layout1.setResource(CrmImages.INSTANCE.dashboardLayout11());
-            dashboard.setLayout(new Layout(1, 1, 12));
+            if (dashboard.setLayout(new Layout(1, 1, 12))) {
+                setDefaultImages();
+                layout1.setResource(CrmImages.INSTANCE.dashboardLayout11());
+            }
         }
 
         public void setLayout2() {
-            setDefaultImages();
-            layout2.setResource(CrmImages.INSTANCE.dashboardLayout21());
-            dashboard.setLayout(new Layout(2, 1, 12));
+            if (dashboard.setLayout(new Layout(2, 1, 12))) {
+                setDefaultImages();
+                layout2.setResource(CrmImages.INSTANCE.dashboardLayout21());
+            }
         }
 
         public void setLayout3() {
-            setDefaultImages();
-            layout3.setResource(CrmImages.INSTANCE.dashboardLayout31());
-            dashboard.setLayout(new Layout(3, 1, 12));
+            if (dashboard.setLayout(new Layout(3, 1, 12))) {
+                setDefaultImages();
+                layout3.setResource(CrmImages.INSTANCE.dashboardLayout31());
+            }
         }
 
         private void setDefaultImages() {
