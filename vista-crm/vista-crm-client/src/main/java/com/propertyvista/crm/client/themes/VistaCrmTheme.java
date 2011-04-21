@@ -1130,18 +1130,12 @@ public abstract class VistaCrmTheme extends Theme {
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.Column));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.ColumnHeading));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("font-weight", "bold");
-        style.addProperty("text-align", "center");
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.ColumnSpacer));
         style.addProperty("height", "4em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.Holder));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("border", "1px solid #aaa");
         addStyle(style);
 
