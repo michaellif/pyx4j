@@ -19,6 +19,7 @@ import com.propertyvista.crm.client.ui.NavigViewImpl;
 import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
+import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
 import com.pyx4j.forms.client.ui.NativeComboBox;
@@ -946,24 +947,25 @@ public abstract class VistaCrmTheme extends Theme {
         //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Display));
         //        addStyle(style);
         //
-        //        style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX));
-        //        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
-        //        style.addProperty("margin", "0.4em 0 0.4em 0");
-        //        style.addProperty("width", "960px");
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX, ViewHeaderDecorator.StyleSuffix.Caption));
-        //        style.addProperty("padding", "0.3em 1em 0.4em 1em");
-        //        style.addProperty("font-size", "1.3em");
-        //        style.addProperty("font-weight", "bold");
-        //        addStyle(style);
-        //
+        style = new Style(Selector.valueOf(CrmHeaderDecorator.DEFAULT_STYLE_PREFIX));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("margin", "0.4em 0 0.4em 0");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(CrmHeaderDecorator.DEFAULT_STYLE_PREFIX, CrmHeaderDecorator.StyleSuffix.Caption));
+        style.addProperty("padding", "0.3em 1em 0.4em 1em");
+        style.addProperty("font-size", "1.3em");
+//        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
         //        style = new Style(Selector.valueOf(ViewLineSeparator.DEFAULT_STYLE_PREFIX));
         //        style.addProperty("border-top-width", "1px");
         //        style.addProperty("border-top-style", "dotted");
         //        style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);
         //        style.addProperty("margin-bottom", "0.3em");
-        //        style.addProperty("width", "400px");
+        //        style.addProperty("width", "100%%");
         //        addStyle(style);
         //
         //        style = new Style(Selector.valueOf(VistaWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));
