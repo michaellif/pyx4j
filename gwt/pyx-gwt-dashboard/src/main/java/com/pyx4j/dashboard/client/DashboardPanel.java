@@ -28,10 +28,7 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -211,7 +208,7 @@ public class DashboardPanel extends SimplePanel {
 
         for (int col = 0; col < layout.getColumns(); ++col) {
             // vertical panel to hold the heading and a second vertical panel for widgets:
-            FlowPanel columnCompositePanel = new FlowPanel();
+            SimplePanel columnCompositePanel = new SimplePanel();
             columnCompositePanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             columnCompositePanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             columnCompositePanel.getElement().getStyle().setMarginLeft(layout.getHorizontalSpacing(), Unit.PCT);
@@ -220,19 +217,12 @@ public class DashboardPanel extends SimplePanel {
                             .getHorizontalSpacing() / layout.getColumns())
                             + "%");
 
-            // put column name if necessary:
-            if (layout.isColumnNames()) {
-                Label heading = new Label(layout.getCoumnName(col));
-                heading.addStyleName(BASE_NAME + StyleSuffix.ColumnHeading);
-                heading.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-                heading.setWidth("100%");
-
-                columnCompositePanel.add(heading);
-            }
-
             // inner vertical panel to hold individual widgets:
             ColumnFlowPanel columnPanel = new ColumnFlowPanel(widgetDragController, layout);
             columnPanel.addStyleName(BASE_NAME + StyleSuffix.Column);
+            columnPanel.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
+            columnPanel.getElement().getStyle().setProperty("MozBoxSizing", "border-box");
+            columnPanel.getElement().getStyle().setProperty("boxSizing", "border-box");
             columnPanel.setWidth("100%");
 
             // widget drop controller for the current column:
@@ -245,9 +235,7 @@ public class DashboardPanel extends SimplePanel {
 
     // internals:	
     protected ColumnFlowPanel getColumnWidgetsPanel(int column) {
-        ComplexPanel columnCompositePanel = (ComplexPanel) columnsContainerPanel.getWidget(column);
-        return (ColumnFlowPanel) columnCompositePanel.getWidget(columnCompositePanel.getWidgetCount() - 1);
-        // first element is label with column name, so always get last one!..
+        return (ColumnFlowPanel) ((SimplePanel) columnsContainerPanel.getWidget(column)).getWidget();
     }
 
     protected boolean checkIndexes(int column, int row, boolean insert) {

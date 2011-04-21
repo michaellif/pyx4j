@@ -109,11 +109,10 @@ final class GadgetHolder extends SimplePanel {
         frame.getElement().getStyle().setOverflow(Overflow.HIDDEN);
         this.setWidget(frame);
 
-        if (holdedGadget.isFullWidth()) {
-            this.setWidth("auto");
-        } else {
-            this.setWidth("100%");
-        }
+        this.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
+        this.getElement().getStyle().setProperty("MozBoxSizing", "border-box");
+        this.getElement().getStyle().setProperty("boxSizing", "border-box");
+        this.setWidth("auto");
 
         // don't forget about vertical spacing:
         setVerticalSpacing(this.dashboardPanel.layout.getVerticalSpacing());
@@ -132,16 +131,12 @@ final class GadgetHolder extends SimplePanel {
 
             @Override
             public void onDragStart(DragStartEvent event) {
-                if (event.getContext().draggable.equals(GadgetHolder.this) && GadgetHolder.this.isFullWidth()) {
-                    GadgetHolder.this.setWidth("100%"); // prevent draggable gadget from collapsing!.. 
-                }
+                ((GadgetHolder) event.getSource()).setWidth(((GadgetHolder) event.getSource()).getOffsetWidth() + "px");
             }
 
             @Override
             public void onDragEnd(DragEndEvent event) {
-                if (event.getContext().draggable.equals(GadgetHolder.this) && GadgetHolder.this.isFullWidth()) {
-                    GadgetHolder.this.setWidth("auto"); // restore automatic width calculation...
-                }
+                ((GadgetHolder) event.getSource()).setWidth("auto");
             }
         });
     }

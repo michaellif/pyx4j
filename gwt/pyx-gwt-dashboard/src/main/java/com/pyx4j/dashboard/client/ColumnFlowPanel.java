@@ -99,7 +99,7 @@ class ColumnFlowPanel extends FlowPanel /* VerticalPanel */{
         } else if (isRowGadgetIsDragging()) {
             needNewRow = (w.getStyleName().equals(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.DndPositioner));
 //        } else {
-//            needRow = (w.getStyleName().equals(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.DndRowPositioner));
+//            needNewRow = (w.getStyleName().equals(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.DndRowPositioner));
         }
 
         if (needNewRow) {

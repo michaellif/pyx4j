@@ -49,17 +49,23 @@ class TwoGadgetsRowFlowPanel extends FlowPanel {
         this.columnPanel.dragController.registerDropController(leftDP);
         leftPlace.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         leftPlace.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-        leftPlace.getElement().getStyle().setMarginRight(this.columnPanel.layout.getHorizontalSpacing() / 2, Unit.PCT);
+        leftPlace.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
+        leftPlace.getElement().getStyle().setProperty("MozBoxSizing", "border-box");
+        leftPlace.getElement().getStyle().setProperty("boxSizing", "border-box");
         leftPlace.getElement().getStyle().setProperty("minHeight", "50px");
-        leftPlace.setWidth(50.0 - this.columnPanel.layout.getHorizontalSpacing() / 2 - 0.1 + "%");
+        leftPlace.getElement().getStyle().setMarginRight(this.columnPanel.layout.getHorizontalSpacing() / 2, Unit.PCT);
+        leftPlace.setWidth(50.0 - this.columnPanel.layout.getHorizontalSpacing() / 2 + "%");
         this.add(leftPlace);
 
         this.columnPanel.dragController.registerDropController(rightDP);
         rightPlace.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         rightPlace.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-        rightPlace.getElement().getStyle().setMarginLeft(this.columnPanel.layout.getHorizontalSpacing() / 2, Unit.PCT);
+        rightPlace.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
+        rightPlace.getElement().getStyle().setProperty("MozBoxSizing", "border-box");
+        rightPlace.getElement().getStyle().setProperty("boxSizing", "border-box");
         rightPlace.getElement().getStyle().setProperty("minHeight", "50px");
-        rightPlace.setWidth(50.0 - this.columnPanel.layout.getHorizontalSpacing() / 2 - 0.1 + "%");
+        rightPlace.getElement().getStyle().setMarginLeft(this.columnPanel.layout.getHorizontalSpacing() / 2, Unit.PCT);
+        rightPlace.setWidth(50.0 - this.columnPanel.layout.getHorizontalSpacing() / 2 + "%");
         this.add(rightPlace);
 
         // style the row:   

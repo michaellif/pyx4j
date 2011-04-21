@@ -14,9 +14,6 @@ public class Layout {
     // column relative widths (in per-cents):
     private byte[] columnWidths = new byte[0]; // could be filled with widths...
 
-    // decoration:
-    private String[] columnNames = new String[0]; // could be filled with names...
-
     public Layout() {
     }
 
@@ -123,25 +120,5 @@ public class Layout {
 
     public float getCoumnWidth(int column) throws ArrayIndexOutOfBoundsException {
         return columnWidths[column];
-    }
-
-    public boolean isColumnNames() {
-        return (columnNames.length != 0);
-    }
-
-    public void setColumnNames(String[] columnNames) throws IllegalArgumentException {
-        if (columnNames == null) {
-            columnNames = new String[0];
-        }
-
-        if (columnNames.length < getColumns()) {
-            throw new IllegalArgumentException();
-        }
-
-        this.columnNames = columnNames;
-    }
-
-    public String getCoumnName(int column) throws ArrayIndexOutOfBoundsException {
-        return columnNames[column];
     }
 }
