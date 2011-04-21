@@ -81,6 +81,10 @@ public class DashboardPanel extends SimplePanel {
     }
 
     public boolean setLayout(Layout layout) {
+        if (!isRefreshAllowed()) {
+            return false;
+        }
+
         this.layout = layout; // accept new layout
         return refresh();
     }
