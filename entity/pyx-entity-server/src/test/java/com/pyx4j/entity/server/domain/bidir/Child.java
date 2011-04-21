@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.server.domain.bidir;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
@@ -32,6 +33,7 @@ public interface Child extends IEntity {
     IPrimitive<String> name();
 
     @Owner
+    @MemberColumn(name = "mstr")
     Master master();
 
     @RpcTransient
