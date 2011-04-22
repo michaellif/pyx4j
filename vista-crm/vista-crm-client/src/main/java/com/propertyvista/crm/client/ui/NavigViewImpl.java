@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -44,56 +45,199 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
     private MainNavigPresenter presenter;
 
+    private List<NavigFolderWidget> lastKnownPlaces;
+
     public NavigViewImpl() {
         super(Unit.EM);
         setStyleName(DEFAULT_STYLE_PREFIX);
         setHeight("100%");
+        lastKnownPlaces = null;
     }
 
     @Override
     public void setPresenter(final MainNavigPresenter presenter) {
         this.presenter = presenter;
 
-/*
- * for (Iterator<Widget> it = this.iterator(); it.hasNext();) {
- * Widget w = it.next();
- * System.out.println(w.toString());
- * 
- * }
- */
-        //TODO Clean for now. Implement comparison later
-        this.clear();
+        /**
+         * TODO when navigation item structure is finalized review this algorithm again
+         * 
+         * NOTE: the algorithm needs to be thoroughly tested with different data sets
+         * To refresh the stack every time uncomment the lines below
+         * 
+         * this.clear();
+         * lastKnownPlaces = null;
+         */
 
         List<NavigFolder> folders = presenter.getNavigFolders();
-        ScrollPanel scroll = null;
-        for (NavigFolder navigFolder : folders) {
-            scroll = new ScrollPanel();
+        List<NavigFolderWidget> obsoleteFolders = new ArrayList<NavigFolderWidget>(5);
+        if (lastKnownPlaces != null && lastKnownPlaces.size() > 0) {
+            for (NavigFolderWidget nw : lastKnownPlaces) {
 
-            FlowPanel list = new FlowPanel();
+                //scrolling through known stacks
+                String headerTitle = nw.getStackTitle();
+                boolean folderFound = false;
 
-            for (final AppPlace place : navigFolder.getNavigItems()) {
-                SimplePanel line = new SimplePanel();
-                //VS to add spacing
-                line.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Item);
-                Anchor anchor = new Anchor(presenter.getNavigLabel(place));
-                anchor.addClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        presenter.navigTo(place);
+                //matching new folders to the existing ones
+                for (NavigFolder navigFolder : folders) {
+                    if (navigFolder.getTitle().equals(headerTitle)) {//assume that the the stack is found
+                        folderFound = true;
+
+                        List<NavigItemAnchor> obsoleteAnchors = new ArrayList<NavigViewImpl.NavigItemAnchor>(10);
+
+                        //now scrolling through the existing content
+                        for (NavigItemAnchor anchor : nw.getItems()) {
+                            //matching new content to the existing one
+                            boolean itemFound = false;
+                            for (AppPlace place : navigFolder.getNavigItems()) {
+                                if (anchor.equals(place)) {
+                                    itemFound = true;
+                                    break;
+                                }
+                            }
+                            if (!itemFound)
+                                //existing item is obsolete remove it
+                                obsoleteAnchors.add(anchor);
+                        }
+                        for (NavigItemAnchor oa : obsoleteAnchors)
+                            nw.removeItem(oa);
+
+                        //now the other way around - match old content to the new one to find fresh items
+                        for (AppPlace place : navigFolder.getNavigItems()) {
+                            boolean itemFound = false;
+                            for (NavigItemAnchor anchor : nw.getItems()) {
+                                if (anchor.equals(place)) {
+                                    itemFound = true;
+                                    break;
+                                }
+                            }
+                            if (!itemFound)
+                                //brand new item
+                                nw.addItem(new NavigItemAnchor(place));
+                        }
+                        break;
+
                     }
-                });
-                line.setWidget(anchor);
-                list.add(line);
+
+                }
+                if (!folderFound)
+                    obsoleteFolders.add(nw);
+            }
+            //remove obsolete stacks
+            for (NavigFolderWidget nw : obsoleteFolders) {
+                remove(nw);
+                lastKnownPlaces.remove(nw);
+            }
+            /**
+             * now the other way around - add fresh folders
+             */
+            NavigFolderWidget nw = null;
+            for (NavigFolder navigFolder : folders) {
+                boolean folderFound = false;
+                for (NavigFolderWidget widget : lastKnownPlaces) {
+                    if (navigFolder.getTitle().equals(widget.getStackTitle())) {
+                        folderFound = true;
+                        break;
+                    }
+                }
+                if (!folderFound) {
+                    nw = new NavigFolderWidget(navigFolder.getTitle());
+                    for (final AppPlace place : navigFolder.getNavigItems()) {
+                        nw.addItem(new NavigItemAnchor(place));
+                        add(nw, nw.getStackTitle(), 3);
+                    }
+                    lastKnownPlaces.add(nw);
+                }
+
+            }
+            if (nw != null) {
+                Widget lastheader = this.getHeaderWidget(nw);
+                if (lastheader != null) {//the last stack - remove bottom margin
+                    lastheader.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.NoBottomMargin);
+                }
             }
 
-            scroll.setWidget(list);
-            this.add(scroll, navigFolder.getTitle(), 3);
+            //test
+/*
+ * for (NavigFolderWidget w : lastKnownPlaces) {
+ * System.out.println(w.getStackTitle());
+ * for (NavigItemAnchor a : w.getItems()) {
+ * System.out.println("     " + a.getElement().toString());
+ * }
+ * }
+ */
+
+        } else {
+            lastKnownPlaces = new ArrayList<NavigFolderWidget>(10);
+            NavigFolderWidget nw = null;
+            for (NavigFolder navigFolder : folders) {
+                nw = new NavigFolderWidget(navigFolder.getTitle());
+                for (final AppPlace place : navigFolder.getNavigItems()) {
+                    nw.addItem(new NavigItemAnchor(place));
+                    add(nw, nw.getStackTitle(), 3);
+                }
+                lastKnownPlaces.add(nw);
+            }
+            if (nw != null) {
+                Widget lastheader = this.getHeaderWidget(nw);
+                if (lastheader != null) {//the last stack - remove bottom margin
+                    lastheader.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.NoBottomMargin);
+                }
+            }
         }
 
-        Widget lastheader = this.getHeaderWidget(scroll);
+    }
 
-        if (lastheader != null) {//the last stack.Remove bottom margin
-            lastheader.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.NoBottomMargin);
+    class NavigFolderWidget extends ScrollPanel {
+        private final List<NavigItemAnchor> items;
+
+        private final String stackTitle;
+
+        private final FlowPanel list;
+
+        public NavigFolderWidget(String title) {
+            this.stackTitle = title;
+            list = new FlowPanel();
+            add(list);
+            items = new ArrayList<NavigItemAnchor>(10);
+        }
+
+        public void addItem(NavigItemAnchor item) {
+            if (item != null) {
+                items.add(item);
+                list.add(item);
+            }
+
+        }
+
+        public void removeItem(NavigItemAnchor item) {
+            if (item == null)
+                return;
+            for (NavigItemAnchor a : items) {
+                if (a.equals(item)) {
+                    items.remove(item);
+                    list.remove(item);
+                    break;
+                }
+            }
+
+        }
+
+        public String getStackTitle() {
+            return stackTitle;
+        }
+
+        public List<NavigItemAnchor> getItems() {
+            return items;
+        }
+
+        /**
+         * TODO implement better algorithm when NavigFolder is finalized
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (stackTitle == null)
+                return false;
+            return stackTitle.equals(obj);
         }
 
     }
@@ -117,14 +261,16 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
         @Override
         public boolean equals(Object obj) {
-            // TODO Auto-generated method stub
-            return super.equals(obj);
+            if (place == null)
+                return false;
+            return place.equals(obj);
         }
 
         @Override
         public int hashCode() {
-            // TODO Auto-generated method stub
-            return super.hashCode();
+            if (place == null)
+                return 0;
+            return place.hashCode();
         }
     }
 }
