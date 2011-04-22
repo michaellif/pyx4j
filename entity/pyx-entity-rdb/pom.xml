@@ -141,12 +141,6 @@
 
         <profile>
             <id>pyx4j-mysql-tests</id>
-            <activation>
-                <property>
-                    <name>user.name</name>
-                    <value>vlads</value>
-                </property>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -164,12 +158,6 @@
 
         <profile>
             <id>pyx4j-all-db-tests</id>
-            <activation>
-                <property>
-                    <name>user.name</name>
-                    <value>vlads</value>
-                </property>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
