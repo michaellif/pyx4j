@@ -17,6 +17,13 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.dev.DataDump;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.unit.server.TestServiceFactory;
+import com.pyx4j.unit.server.UnitTestsAsyncCallback;
+import com.pyx4j.unit.server.mock.TestLifecycle;
+
 import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
@@ -37,13 +44,6 @@ import com.propertyvista.portal.rpc.pt.services.TenantService;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
-
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.server.dev.DataDump;
-import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.unit.server.TestServiceFactory;
-import com.pyx4j.unit.server.UnitTestsAsyncCallback;
-import com.pyx4j.unit.server.mock.TestLifecycle;
 
 public class PortalServicesTest extends VistaDBTestCase {
 
@@ -130,10 +130,10 @@ public class PortalServicesTest extends VistaDBTestCase {
         Assert.assertNotNull("Unit selection", unitSelection);
         Assert.assertNotNull("Retrieved units", unitSelection.availableUnits().units());
         Assert.assertFalse("Found units", unitSelection.availableUnits().units().isEmpty());
-        log.info("Working with unit selection {}", unitSelection);
+        log.debug("Working with unit selection {}", unitSelection);
 
         for (ApartmentUnit unit : unitSelection.availableUnits().units()) {
-            log.info("Found unit {}", unit);
+            log.debug("Found unit {}", unit);
         }
 
         // select the first unit
@@ -151,7 +151,7 @@ public class PortalServicesTest extends VistaDBTestCase {
         }, unitSelection);
 
         Assert.assertFalse("Selected unit", unitSelection.selectedUnitId().isNull());
-        log.info("Successfully loaded unit {}", unitSelection.selectedUnitId());
+        log.debug("Successfully loaded unit {}", unitSelection.selectedUnitId());
     }
 
     public void subTestTenants(VistaDataGenerator generator, String email) {
@@ -198,12 +198,12 @@ public class PortalServicesTest extends VistaDBTestCase {
     public void subTestTenantInfo() {
         TenantInfoService tenantInfoService = TestServiceFactory.create(TenantInfoService.class);
         for (final PotentialTenantInfo tenant : tenantList.tenants()) {
-            log.info("Tenant {}", tenant);
+            log.debug("Tenant {}", tenant);
             tenantInfoService.retrieve(new UnitTestsAsyncCallback<PotentialTenantInfo>() {
                 @Override
                 public void onSuccess(PotentialTenantInfo result) {
                     Assert.assertFalse("Result", result.isNull());
-                    log.info("Retrieved {}", result);
+                    log.debug("Retrieved {}", result);
                     TestUtil.assertEqual("TenantList", tenant, result);
                 }
             }, tenant.id().getValue());
@@ -227,7 +227,7 @@ public class PortalServicesTest extends VistaDBTestCase {
                 @Override
                 public void onSuccess(PotentialTenantFinancial result) {
                     Assert.assertFalse("Result", result.isNull());
-                    log.info("Saved {}", result);
+                    log.debug("Saved {}", result);
                 }
             }, tenantFinancial);
 

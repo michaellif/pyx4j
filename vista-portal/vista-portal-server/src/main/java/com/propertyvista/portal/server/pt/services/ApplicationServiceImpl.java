@@ -17,6 +17,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
+import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
+
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
@@ -31,17 +43,6 @@ import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.services.ApplicationService;
 import com.propertyvista.portal.server.pt.PtAppContext;
-
-import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityFromatUtils;
-import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.rpc.shared.UserRuntimeException;
-import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class ApplicationServiceImpl extends ApplicationEntityServiceImpl implements ApplicationService {
 
@@ -64,7 +65,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 
             // TODO this message seems to be wrong, instead we should say that no units were found
             if (!new ApartmentServiceImpl().areUnitsAvailable(usCriteria)) {
-                log.info("Could not find building with propertyCode {}", usCriteria.propertyCode());
+                log.debug("Could not find building with propertyCode {}", usCriteria.propertyCode());
                 throw new UserRuntimeException("No units avalable");
             }
 

@@ -20,6 +20,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
 import com.propertyvista.portal.domain.AptUnit;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Floorplan;
@@ -32,11 +38,6 @@ import com.propertyvista.portal.rpc.pt.services.ApartmentService;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.portal.server.pt.util.Converter;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-
 public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implements ApartmentService {
 
     private final static Logger log = LoggerFactory.getLogger(ApartmentServiceImpl.class);
@@ -47,14 +48,14 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         UnitSelection unitSelection = secureRetrieve(criteria);
         if (unitSelection == null) {
-            log.info("Creating new unit selection");
+            log.debug("Creating new unit selection");
             unitSelection = EntityFactory.create(UnitSelection.class);
         } else {
             //            log.info("Loaded existing unit selection {}", unitSelection);
         }
 
         //        log.info("Found unit selection\n{}", PrintUtil.print(unitSelection));
-        log.info("Loading unit selection with criteria {}", unitSelection.selectionCriteria());
+        log.debug("Loading unit selection with criteria {}", unitSelection.selectionCriteria());
 
         loadTransientData(unitSelection);
 
@@ -64,8 +65,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
     @Override
     public void save(AsyncCallback<UnitSelection> callback, UnitSelection unitSelection) {
         log.debug("Saving unit selection\n{}", VistaDataPrinter.print(unitSelection));
-
-        log.info("Saving unit selection with criteria {}", unitSelection.selectionCriteria());
+        log.debug("Saving unit selection with criteria {}", unitSelection.selectionCriteria());
 
         saveApplicationEntity(unitSelection);
 
@@ -91,7 +91,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
         buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), selectionCriteria.propertyCode().getValue()));
         Building building = PersistenceServicesFactory.getPersistenceService().retrieve(buildingCriteria);
         if (building == null) {
-            log.info("Could not find building for propertyCode {}", selectionCriteria.propertyCode().getStringView());
+            log.debug("Could not find building for propertyCode {}", selectionCriteria.propertyCode().getStringView());
             return null;
         }
 
@@ -102,7 +102,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
         Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(floorplanCriteria);
 
         if (floorplan == null) {
-            log.info("Could not find floorplan {}", selectionCriteria.floorplanName());
+            log.debug("Could not find floorplan {}", selectionCriteria.floorplanName());
             return null;
         }
 
@@ -130,19 +130,19 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
             return false;
         }
         int count = PersistenceServicesFactory.getPersistenceService().count(criteria);
-        log.info("Found {} units", count);
+        log.debug("Found {} units", count);
         return (count > 0);
     }
 
     public AvailableUnitsByFloorplan loadAvailableUnits(UnitSelectionCriteria selectionCriteria) {
-        log.info("Loading available units {}", selectionCriteria);
+        log.debug("Loading available units {}", selectionCriteria);
         AvailableUnitsByFloorplan availableUnits = EntityFactory.create(AvailableUnitsByFloorplan.class);
         EntityQueryCriteria<AptUnit> criteria = createAptUnitCriteria(selectionCriteria);
         if (criteria == null) {
             return availableUnits;
         }
         List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
-        log.info("Found {} units", units.size());
+        log.debug("Found {} units", units.size());
         if (!units.isEmpty()) {
             AptUnit firstUnit = units.get(0);
             Floorplan floorplan = firstUnit.floorplan();

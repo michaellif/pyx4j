@@ -17,6 +17,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
+
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.TenantCharge;
@@ -25,24 +32,18 @@ import com.propertyvista.portal.rpc.pt.services.ChargesService;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PtAppContext;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityFromatUtils;
-
 public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements ChargesService {
 
     private final static Logger log = LoggerFactory.getLogger(ChargesServiceImpl.class);
 
     @Override
     public void retrieve(AsyncCallback<Charges> callback, Long tenantId) {
-        log.info("Retrieving charges for tenant {}", tenantId);
+        log.debug("Retrieving charges for tenant {}", tenantId);
         EntityQueryCriteria<Charges> criteria = EntityQueryCriteria.create(Charges.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         Charges charges = secureRetrieve(criteria);
         if (charges == null) {
-            log.info("Creating new charges");
+            log.debug("Creating new charges");
             charges = EntityFactory.create(Charges.class);
             charges.application().set(PtAppContext.getCurrentUserApplication());
         }
@@ -56,7 +57,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
 
     @Override
     public void save(AsyncCallback<Charges> callback, Charges charges) {
-        log.info("Saving charges\n{}", VistaDataPrinter.print(charges));
+        log.debug("Saving charges\n{}", VistaDataPrinter.print(charges));
 
         saveApplicationEntity(charges);
 

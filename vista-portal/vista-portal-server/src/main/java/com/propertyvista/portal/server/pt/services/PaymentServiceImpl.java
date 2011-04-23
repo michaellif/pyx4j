@@ -19,6 +19,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.shared.UserRuntimeException;
+
 import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.Charges;
@@ -32,22 +38,17 @@ import com.propertyvista.portal.server.campaign.CampaignManager;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.server.domain.CampaignTriger;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.rpc.shared.UserRuntimeException;
-
 public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements PaymentService {
     private final static Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
     @Override
     public void retrieve(AsyncCallback<PaymentInfo> callback, Long tenantId) {
-        log.info("Retrieving PaymentInfo for tenant {}", tenantId);
+        log.debug("Retrieving PaymentInfo for tenant {}", tenantId);
         EntityQueryCriteria<PaymentInfo> criteria = EntityQueryCriteria.create(PaymentInfo.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         PaymentInfo payment = secureRetrieve(criteria);
         if (payment == null) {
-            log.info("Creating new payment");
+            log.debug("Creating new payment");
             payment = EntityFactory.create(PaymentInfo.class);
             payment.type().setValue(PaymentType.Echeck);
             payment.preauthorised().setValue(Boolean.TRUE);

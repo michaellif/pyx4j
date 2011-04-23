@@ -17,29 +17,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.rpc.pt.services.TenantFinancialService;
-import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.rpc.pt.services.TenantFinancialService;
+import com.propertyvista.portal.server.pt.PtAppContext;
+
 public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl implements TenantFinancialService {
     private final static Logger log = LoggerFactory.getLogger(TenantFinancialServiceImpl.class);
 
     @Override
     public void retrieve(AsyncCallback<PotentialTenantFinancial> callback, Long tenantId) {
-        log.info("Retrieving summary for tenant {}", tenantId);
+        log.debug("Retrieving summary for tenant {}", tenantId);
         EntityQueryCriteria<PotentialTenantFinancial> criteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenantId));
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         PotentialTenantFinancial financial = secureRetrieve(criteria);
         if (financial == null) {
-            log.info("Creating new tenant financial");
+            log.debug("Creating new tenant financial for {}", tenantId);
             financial = createFinancial(tenantId);
         }
 
@@ -48,7 +49,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
 
     @Override
     public void save(AsyncCallback<PotentialTenantFinancial> callback, PotentialTenantFinancial tenantFinancial) {
-        log.info("Saving tenantFinancial {}", tenantFinancial);
+        log.debug("Saving tenantFinancial {}", tenantFinancial);
 
         saveApplicationEntity(tenantFinancial);
         callback.onSuccess(tenantFinancial);

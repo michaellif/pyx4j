@@ -27,19 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.portal.domain.User;
-import com.propertyvista.portal.domain.VistaBehavior;
-import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
-import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
-import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
-import com.propertyvista.portal.rpc.pt.services.ActivationService;
-import com.propertyvista.portal.server.mail.MessageTemplates;
-import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.common.security.AntiBot;
-import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
-import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -57,6 +44,20 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
+import com.propertyvista.portal.domain.User;
+import com.propertyvista.portal.domain.VistaBehavior;
+import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
+import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
+import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
+import com.propertyvista.portal.server.mail.MessageTemplates;
+import com.propertyvista.server.common.security.AccessKey;
+import com.propertyvista.server.common.security.AntiBot;
+import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
+import com.propertyvista.server.domain.UserCredential;
+
 public class ActivationServiceImpl extends ApplicationEntityServiceImpl implements ActivationService {
     private final static Logger log = LoggerFactory.getLogger(ActivationServiceImpl.class);
 
@@ -66,7 +67,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
      */
     @Override
     public void unitExists(AsyncCallback<Boolean> callback, UnitSelectionCriteria selectionCriteria) {
-        log.info("Checking if unit exists {}", selectionCriteria);
+        log.debug("Checking if unit exists {}", selectionCriteria);
         callback.onSuccess(new ApartmentServiceImpl().areUnitsAvailable(selectionCriteria));
     }
 
