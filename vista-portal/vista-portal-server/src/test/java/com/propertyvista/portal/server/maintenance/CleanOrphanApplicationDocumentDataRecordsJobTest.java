@@ -9,7 +9,7 @@
  *
  * Created on 2011-04-22
  * @author vlads
- * @version $Id: CleanOrphanApplicationDocumentDataRecordsJobTest.java 1223 2011-04-22 05:06:55Z dmitryt $
+ * @version $Id$
  */
 package com.propertyvista.portal.server.maintenance;
 
