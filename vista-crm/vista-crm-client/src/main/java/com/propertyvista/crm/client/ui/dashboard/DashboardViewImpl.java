@@ -79,7 +79,7 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
                 }
             });
 
-            layout3.setTitle(i18n.tr("Switch layout"));
+            layout2.setTitle(i18n.tr("Switch layout"));
             layout2.getElement().getStyle().setCursor(Cursor.POINTER);
             layout2.addClickHandler(new ClickHandler() {
                 @Override
