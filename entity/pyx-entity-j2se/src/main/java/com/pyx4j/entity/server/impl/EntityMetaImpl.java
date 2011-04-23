@@ -215,6 +215,7 @@ public class EntityMetaImpl implements EntityMeta {
                 switch (ts.value()) {
                 case Created:
                     createdTimestampMember = method.getName();
+                    break;
                 case Updated:
                     updatedTimestampMember = method.getName();
                 }
