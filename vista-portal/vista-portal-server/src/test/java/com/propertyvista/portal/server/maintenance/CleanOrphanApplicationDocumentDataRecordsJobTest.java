@@ -19,12 +19,10 @@ import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import junit.framework.Assert;
@@ -35,7 +33,6 @@ import org.slf4j.LoggerFactory;
 public class CleanOrphanApplicationDocumentDataRecordsJobTest extends VistaDBTestCase {
     private final static Logger logger = LoggerFactory.getLogger(CleanOrphanApplicationDocumentDataRecordsJobTest.class);
     
-    private static final long APPLICATION_DOCUMENT_ID = 1;
     private static final JobExecutionContext context = null;
     private CleanOrphanApplicationDocumentDataRecordsJob instance;
     
@@ -67,38 +64,54 @@ public class CleanOrphanApplicationDocumentDataRecordsJobTest extends VistaDBTes
         int totalCountAfter = PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
         Assert.assertEquals(totalCountBefore, totalCountAfter);
 
+        //unlink one record
+        EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().dataId(), 1L));
+        ApplicationDocument doc = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        logger.info("doc={}", doc);
+        PersistenceServicesFactory.getPersistenceService().delete(doc);
+        
+        //then run the job again - expect no changes since all records are recent
+        instance.execute(context);
+        totalCountAfter = PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
+        Assert.assertEquals(totalCountBefore, totalCountAfter);
+        
         //update record creation date to back in time to make it appear as old
         List<ApplicationDocumentData> allDocs = PersistenceServicesFactory.getPersistenceService().query(EntityQueryCriteria.create(ApplicationDocumentData.class));
         logger.info("allDocs.size={}",allDocs.size());
+        long appDocDataId=2;
         for(ApplicationDocumentData d: allDocs) {
-            //PersistenceServicesFactory.getPersistenceService().delete(d);
+            if (d.id().getValue()!=1) appDocDataId=d.id().getValue();
             Calendar c = new GregorianCalendar();
             c.add(Calendar.HOUR, -25);
             d.created().setValue(c.getTime());
-            System.out.println("d(before)="+d);
             PersistenceServicesFactory.getPersistenceService().persist(d);
-            System.out.println("d(after)="+d);
         }
+        logger.info("appDocDataId={}", appDocDataId);
         
-        allDocs = PersistenceServicesFactory.getPersistenceService().query(EntityQueryCriteria.create(ApplicationDocumentData.class));
-        //logger.info("allDocs={}",allDocs);
+        //then run the job again - expect one unlinked records to be deleted
+        instance.execute(context);
+        totalCountAfter = PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
+        totalCountBefore--;
+        Assert.assertEquals(totalCountBefore, totalCountAfter);
         
         //then run the job again - expect no changes again since all records are still linked
         instance.execute(context);
         totalCountAfter = PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
         Assert.assertEquals(totalCountBefore, totalCountAfter);
         
-        //unlink the first record
-        EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().dataId(), APPLICATION_DOCUMENT_ID));
-        ApplicationDocument doc = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        //unlink one more record
+        criteria = EntityQueryCriteria.create(ApplicationDocument.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().dataId(), appDocDataId));
+        doc = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         logger.info("doc={}", doc);
         PersistenceServicesFactory.getPersistenceService().delete(doc);
         
-        //then run the job again - expect one unlinked records to be deleted
+        //then run the job again - expect second unlinked records to be deleted
         instance.execute(context);
         totalCountAfter = PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
-        //Assert.assertEquals(totalCountBefore-1, totalCountAfter);
+        totalCountBefore--;
+        Assert.assertEquals(totalCountBefore, totalCountAfter);
         
     }
 }
