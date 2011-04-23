@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.rpc.domain;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -22,6 +23,7 @@ public interface GadgetMetadata extends IEntity {
      * Dashboard: 0, 1, 2;
      * Report : -1, 0, 1;
      */
+    @MemberColumn(name = "clmn")
     IPrimitive<Long> column();
 
     IPrimitive<String> title();
