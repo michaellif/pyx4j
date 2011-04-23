@@ -58,9 +58,14 @@ public class CleanOrphanApplicationDocumentDataRecordsJobTest extends VistaDBTes
         TestLifecycle.tearDown();
     }
 
+    public void testNothing() {
+
+    }
+
     /**
      * Test of execute method, of class CleanOrphanApplicationDocumentDataRecordsJob.
      */
+    //TODO Segey give yourself more then 1sec to think about the test name!
     public void TODO_testExecute() throws Exception {
         int totalCountBefore = PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
 
