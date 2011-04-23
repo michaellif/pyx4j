@@ -107,6 +107,11 @@ public class RpcEntityServiceFilter implements IServiceFilter {
                 }
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 if ((me.getValue() != null) && (!(memberMeta.getValueClass().isAssignableFrom(me.getValue().getClass())))) {
+                    // Ignore Date types changes
+                    if ((java.util.Date.class.isAssignableFrom(memberMeta.getValueClass())) && (me.getValue() instanceof java.util.Date)) {
+                        continue;
+                    }
+                    log.error("Got Value " + memberName + " {} instead of {}", me.getValue().getClass(), memberMeta.getValueClass());
                     throw new Error("Data type corruption");
                 }
             } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
