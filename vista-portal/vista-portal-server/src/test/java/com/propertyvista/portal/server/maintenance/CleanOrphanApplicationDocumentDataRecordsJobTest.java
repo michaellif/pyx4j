@@ -20,7 +20,6 @@ import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
