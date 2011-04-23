@@ -21,18 +21,10 @@ import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
-import com.propertyvista.portal.rpc.pt.CurrentApplication;
-import com.propertyvista.portal.rpc.pt.services.ActivationService;
 import com.propertyvista.portal.rpc.pt.services.ApartmentService;
-import com.propertyvista.portal.rpc.pt.services.ApplicationService;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
-import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
@@ -57,48 +49,22 @@ public class ApartmentServiceTest extends VistaDBTestCase {
         TestLifecycle.tearDown();
     }
 
-    private void createAccountAndApplication() {
-        final String email = BusinessDataGenerator.createEmail();
-
-        // first, create the user
-        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
-        request.email().setValue(email);
-        request.password().setValue("1234");
-        request.captcha().setValue(TestUtil.createCaptcha());
-
-        ActivationService activationService = TestServiceFactory.create(ActivationService.class);
-        activationService.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                Assert.assertNotNull("Got the visit", result.getUserVisit());
-                Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
-            }
-        }, request);
-
-        UnitSelectionCriteria unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
-        unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
-        unitSelectionCriteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
-
-        ApplicationService applicationService = TestServiceFactory.create(ApplicationService.class);
-        applicationService.getCurrentApplication(new UnitTestsAsyncCallback<CurrentApplication>() {
-            @Override
-            public void onSuccess(CurrentApplication result) {
-                Assert.assertNotNull("Application", result.application);
-                Assert.assertFalse("Application", result.application.isNull());
-                log.info("Received {}", result);
-                application = result.application; // we will need this for testing
-            }
-        }, unitSelectionCriteria);
-
-        log.info("\n\n\n");
+    private void happyPath() {
+        HappyPath.step1createAccount();
+        application = HappyPath.step2createApplication();
     }
 
     private ApartmentService createService() {
         return TestServiceFactory.create(ApartmentService.class);
     }
 
+    public void testHappyPath() {
+        happyPath();
+        HappyPath.step3loadUnitSelection();
+    }
+
     public void testLoadAndSave() {
-        createAccountAndApplication();
+        happyPath();
 
         // now let's load unit selection
         ApartmentService apartmentService = createService();
@@ -133,7 +99,7 @@ public class ApartmentServiceTest extends VistaDBTestCase {
     }
 
     public void testLoadAndGenerate() {
-        createAccountAndApplication();
+        happyPath();
         ApartmentService apartmentService = createService();
 
         // now let's load unit selection

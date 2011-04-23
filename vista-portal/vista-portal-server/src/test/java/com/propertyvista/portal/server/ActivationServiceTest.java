@@ -102,21 +102,7 @@ public class ActivationServiceTest extends VistaDBTestCase {
      * Submit a simple account creation request
      */
     public void testCreateAccount() {
-        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
-
-        final String email = BusinessDataGenerator.createEmail();
-        request.email().setValue(email);
-        request.password().setValue("1234");
-        request.captcha().setValue(TestUtil.createCaptcha());
-
-        ActivationService service = createService();
-        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                Assert.assertNotNull("Got the visit", result.getUserVisit());
-                Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
-            }
-        }, request);
+        HappyPath.step1createAccount();
     }
 
     /**
