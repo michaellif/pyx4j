@@ -23,7 +23,6 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -32,7 +31,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Singleton;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
-import com.propertyvista.crm.client.ui.gadgets.DemoGadget;
+import com.propertyvista.crm.rpc.domain.DashboardMetadata;
+import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
 import com.pyx4j.dashboard.client.Layout;
@@ -48,21 +49,48 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
 
     public DashboardViewImpl() {
         VerticalPanel main = new VerticalPanel();
-        main.add(new CrmHeaderDecorator("Dahboard Menu/Tools", layouts));
+        main.add(new CrmHeaderDecorator("Dashboard Menu/Tools", layouts));
         main.add(dashboard);
         main.setWidth("100%");
         setWidget(main);
+    }
 
-        layouts.setLayout2();
+    @Override
+    public void fillDashboard(DashboardMetadata dashboardMetadata) {
+        dashboard.removeAllGadgets();
 
-        fillDashboard();
+        if (dashboardMetadata.isEmpty()) {
+            return;
+        }
+
+        if (dashboardMetadata.layoutType().equals(LayoutType.One)) {
+            layouts.setLayout1();
+        } else if (dashboardMetadata.layoutType().equals(LayoutType.Two11)) {
+            layouts.setLayout22();
+        } else if (dashboardMetadata.layoutType().equals(LayoutType.Two12)) {
+            layouts.setLayout12();
+        } else if (dashboardMetadata.layoutType().equals(LayoutType.Two21)) {
+            layouts.setLayout21();
+        } else if (dashboardMetadata.layoutType().equals(LayoutType.Three)) {
+            layouts.setLayout3();
+        }
+
+        // fill the dashboard with demo widgets:
+
+        for (GadgetMetadata md : dashboardMetadata.gadgets()) {
+//            dashboard.addGadget(new Gadget(md), md.column());
+        }
     }
 
     private class LayoutsSet extends HorizontalPanel {
 
         final Image layout1 = new Image();
 
-        final Image layout2 = new Image();
+        final Image layout12 = new Image();
+
+        final Image layout21 = new Image();
+
+        final Image layout22 = new Image();
 
         final Image layout3 = new Image();
 
@@ -79,12 +107,30 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
                 }
             });
 
-            layout2.setTitle(i18n.tr("Switch layout"));
-            layout2.getElement().getStyle().setCursor(Cursor.POINTER);
-            layout2.addClickHandler(new ClickHandler() {
+            layout12.setTitle(i18n.tr("Switch layout"));
+            layout12.getElement().getStyle().setCursor(Cursor.POINTER);
+            layout12.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    setLayout2();
+                    setLayout12();
+                }
+            });
+
+            layout21.setTitle(i18n.tr("Switch layout"));
+            layout21.getElement().getStyle().setCursor(Cursor.POINTER);
+            layout21.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    setLayout21();
+                }
+            });
+
+            layout22.setTitle(i18n.tr("Switch layout"));
+            layout22.getElement().getStyle().setCursor(Cursor.POINTER);
+            layout22.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    setLayout22();
                 }
             });
 
@@ -121,7 +167,9 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
             });
 
             this.add(layout1);
-            this.add(layout2);
+            this.add(layout12);
+            this.add(layout21);
+            this.add(layout22);
             this.add(layout3);
             this.add(new HTML("&nbsp;&nbsp;&nbsp;&nbsp;"));
             this.add(addGadget);
@@ -131,43 +179,50 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
         public void setLayout1() {
             if (dashboard.setLayout(new Layout(1, 1, 12))) {
                 setDefaultImages();
-                layout1.setResource(CrmImages.INSTANCE.dashboardLayout11());
+                layout1.setResource(CrmImages.INSTANCE.dashboardLayout1_1());
             }
         }
 
-        public void setLayout2() {
+        public void setLayout12() {
+            Layout layout = new Layout(2, 1, 12);
+            byte colWidths[] = { 33, 67 };
+            layout.setColumnWidths(colWidths);
             if (dashboard.setLayout(new Layout(2, 1, 12))) {
                 setDefaultImages();
-                layout2.setResource(CrmImages.INSTANCE.dashboardLayout21());
+                layout12.setResource(CrmImages.INSTANCE.dashboardLayout12_1());
+            }
+        }
+
+        public void setLayout21() {
+            Layout layout = new Layout(2, 1, 12);
+            byte colWidths[] = { 67, 33 };
+            layout.setColumnWidths(colWidths);
+            if (dashboard.setLayout(layout)) {
+                setDefaultImages();
+                layout21.setResource(CrmImages.INSTANCE.dashboardLayout21_1());
+            }
+        }
+
+        public void setLayout22() {
+            if (dashboard.setLayout(new Layout(2, 1, 12))) {
+                setDefaultImages();
+                layout22.setResource(CrmImages.INSTANCE.dashboardLayout22_1());
             }
         }
 
         public void setLayout3() {
             if (dashboard.setLayout(new Layout(3, 1, 12))) {
                 setDefaultImages();
-                layout3.setResource(CrmImages.INSTANCE.dashboardLayout31());
+                layout3.setResource(CrmImages.INSTANCE.dashboardLayout3_1());
             }
         }
 
         private void setDefaultImages() {
-            layout1.setResource(CrmImages.INSTANCE.dashboardLayout10());
-            layout2.setResource(CrmImages.INSTANCE.dashboardLayout20());
-            layout3.setResource(CrmImages.INSTANCE.dashboardLayout30());
+            layout1.setResource(CrmImages.INSTANCE.dashboardLayout1_0());
+            layout12.setResource(CrmImages.INSTANCE.dashboardLayout12_0());
+            layout21.setResource(CrmImages.INSTANCE.dashboardLayout21_0());
+            layout22.setResource(CrmImages.INSTANCE.dashboardLayout22_0());
+            layout3.setResource(CrmImages.INSTANCE.dashboardLayout3_0());
         }
-    }
-
-    private void fillDashboard() {
-
-        // fill the dashboard with demo widgets:
-        dashboard.removeAllGadgets();
-
-        int count = 0;
-        for (int col = 0; col < dashboard.getLayout().getColumns(); ++col)
-            for (int row = 0; row < 3; ++row) {
-                // initialize a widget
-                DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
-                widget.setHeight(Random.nextInt(8) + 10 + "em");
-                dashboard.addGadget(widget, col);
-            }
     }
 }

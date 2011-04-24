@@ -42,23 +42,35 @@ public interface CrmImages extends ClientBundle {
     @Source("search.png")
     ImageResource search();
 
-    @Source("DashboardLayout10.png")
-    ImageResource dashboardLayout10();
+    @Source("DashboardLayout1-0.png")
+    ImageResource dashboardLayout1_0();
 
-    @Source("DashboardLayout11.png")
-    ImageResource dashboardLayout11();
+    @Source("DashboardLayout1-1.png")
+    ImageResource dashboardLayout1_1();
 
-    @Source("DashboardLayout20.png")
-    ImageResource dashboardLayout20();
+    @Source("DashboardLayout12-0.png")
+    ImageResource dashboardLayout12_0();
 
-    @Source("DashboardLayout21.png")
-    ImageResource dashboardLayout21();
+    @Source("DashboardLayout12-1.png")
+    ImageResource dashboardLayout12_1();
 
-    @Source("DashboardLayout30.png")
-    ImageResource dashboardLayout30();
+    @Source("DashboardLayout21-0.png")
+    ImageResource dashboardLayout21_0();
 
-    @Source("DashboardLayout31.png")
-    ImageResource dashboardLayout31();
+    @Source("DashboardLayout21-1.png")
+    ImageResource dashboardLayout21_1();
+
+    @Source("DashboardLayout22-0.png")
+    ImageResource dashboardLayout22_0();
+
+    @Source("DashboardLayout22-1.png")
+    ImageResource dashboardLayout22_1();
+
+    @Source("DashboardLayout3-0.png")
+    ImageResource dashboardLayout3_0();
+
+    @Source("DashboardLayout3-1.png")
+    ImageResource dashboardLayout3_1();
 
     @Source("DashboardAddGadget.png")
     ImageResource dashboardAddGadget();
