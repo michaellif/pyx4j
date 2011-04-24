@@ -63,15 +63,15 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
             return;
         }
 
-        if (dashboardMetadata.layoutType().equals(LayoutType.One)) {
+        if (dashboardMetadata.layoutType().getValue() == (LayoutType.One)) {
             layouts.setLayout1();
-        } else if (dashboardMetadata.layoutType().equals(LayoutType.Two11)) {
+        } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two11) {
             layouts.setLayout22();
-        } else if (dashboardMetadata.layoutType().equals(LayoutType.Two12)) {
+        } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two12) {
             layouts.setLayout12();
-        } else if (dashboardMetadata.layoutType().equals(LayoutType.Two21)) {
+        } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two21) {
             layouts.setLayout21();
-        } else if (dashboardMetadata.layoutType().equals(LayoutType.Three)) {
+        } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Three) {
             layouts.setLayout3();
         }
 

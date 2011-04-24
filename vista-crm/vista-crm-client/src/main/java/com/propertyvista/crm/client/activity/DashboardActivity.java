@@ -19,6 +19,10 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.rpc.domain.DashboardMetadata;
+import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
+
+import com.pyx4j.entity.shared.EntityFactory;
 
 public class DashboardActivity extends AbstractActivity {
 
@@ -36,6 +40,11 @@ public class DashboardActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
-    }
 
+        DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
+        dmd.name().setValue("test dashboard");
+        dmd.layoutType().setValue(LayoutType.Two12);
+
+        view.fillDashboard(dmd);
+    }
 }
