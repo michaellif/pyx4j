@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Singleton;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.gadgets.DemoGadget;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
@@ -78,7 +79,7 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
         // fill the dashboard with demo widgets:
 
         for (GadgetMetadata md : dashboardMetadata.gadgets()) {
-//            dashboard.addGadget(new Gadget(md), md.column());
+            dashboard.addGadget(new DemoGadget(md), md.column().getValue());
         }
     }
 
@@ -187,7 +188,7 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
             Layout layout = new Layout(2, 1, 12);
             byte colWidths[] = { 33, 67 };
             layout.setColumnWidths(colWidths);
-            if (dashboard.setLayout(new Layout(2, 1, 12))) {
+            if (dashboard.setLayout(layout)) {
                 setDefaultImages();
                 layout12.setResource(CrmImages.INSTANCE.dashboardLayout12_1());
             }

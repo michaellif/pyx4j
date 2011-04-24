@@ -16,11 +16,13 @@ package com.propertyvista.crm.client.activity;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -41,9 +43,18 @@ public class DashboardActivity extends AbstractActivity {
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
 
+        // TODO - load metadata with service...
+
+        // just create a demo dashboard: 
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
         dmd.name().setValue("test dashboard");
         dmd.layoutType().setValue(LayoutType.Two12);
+        for (int i = 0; i < 9; ++i) {
+            GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
+            gmd.title().setValue("Gadget #" + i);
+            gmd.column().setValue(Random.nextInt(2));
+            dmd.gadgets().add(gmd);
+        }
 
         view.fillDashboard(dmd);
     }

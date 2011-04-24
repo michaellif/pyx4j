@@ -13,15 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.report;
 
-import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Singleton;
 import com.propertyvista.crm.client.ui.gadgets.DemoGadget;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
 import com.pyx4j.dashboard.client.Layout;
+import com.pyx4j.entity.shared.EntityFactory;
 
 @Singleton
 public class ReportViewImpl extends SimplePanel implements ReportView {
@@ -35,7 +36,7 @@ public class ReportViewImpl extends SimplePanel implements ReportView {
         main.setWidth("100%");
         setWidget(main);
 
-        dashboardPanel.setLayout(new Layout(2, 1, 12));
+        dashboardPanel.setLayout(new Layout(1, 1, 12));
         fillDashboard();
     }
 
@@ -48,8 +49,10 @@ public class ReportViewImpl extends SimplePanel implements ReportView {
         for (int col = 0; col < dashboardPanel.getLayout().getColumns(); ++col)
             for (int row = 0; row < 5; ++row) {
                 // initialize a widget
-                DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
-                widget.setHeight(Random.nextInt(8) + 3 + "em");
+                GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
+                gmd.title().setValue("Gadget #" + ++count);
+                DemoGadget widget = new DemoGadget(gmd);
+//                widget.setHeight(Random.nextInt(8) + 3 + "em");
                 widget.setFullWidth(row % 2 > 0);
                 dashboardPanel.addGadget(widget, col);
             }

@@ -19,40 +19,27 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
-import com.pyx4j.dashboard.client.IGadget;
+public class DemoGadget extends GadgetBase {
 
-public class DemoGadget extends HTML implements IGadget {
+    private boolean fullWidth = true;
 
-    boolean fullWidth = true;
+    private final HTML widget = new HTML();
 
-    public DemoGadget(String s) {
-        super(s);
+    public DemoGadget(GadgetMetadata gmd) {
+        super(gmd);
+        widget.setText(getName() + " content");
     }
 
     // info:
 
     @Override
     public Widget getWidget() {
-        return this;
-    }
-
-    @Override
-    public String getName() {
-        return (getText() + " Title");
+        return widget;
     }
 
     // flags:
-
-    @Override
-    public boolean isMaximizable() {
-        return true;
-    }
-
-    @Override
-    public boolean isMinimizable() {
-        return true;
-    }
 
     @Override
     public boolean isSetupable() {
@@ -80,7 +67,7 @@ public class DemoGadget extends HTML implements IGadget {
                 FlowPanel setupPanel = new FlowPanel();
                 setupPanel.add(new Label("Enter new gadget content:"));
 
-                content.setText(getHTML());
+                content.setText(widget.getHTML());
                 content.setWidth("100%");
                 setupPanel.add(content);
 
@@ -91,7 +78,7 @@ public class DemoGadget extends HTML implements IGadget {
 
             @Override
             public boolean onOk() {
-                setHTML(content.getText());
+                widget.setHTML(content.getText());
                 return true;
             }
 
@@ -103,25 +90,5 @@ public class DemoGadget extends HTML implements IGadget {
         }
 
         return new MySetup();
-    }
-
-    // notifications:
-
-    @Override
-    public void onMaximize(boolean maximized_restored) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onMinimize(boolean minimized_restored) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onDelete() {
-        // TODO Auto-generated method stub
-
     }
 }

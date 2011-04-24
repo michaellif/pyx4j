@@ -24,7 +24,7 @@ public interface GadgetMetadata extends IEntity {
      * Report : -1, 0, 1;
      */
     @MemberColumn(name = "clmn")
-    IPrimitive<Long> column();
+    IPrimitive<Integer> column();
 
     IPrimitive<String> title();
 
