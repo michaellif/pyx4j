@@ -13,13 +13,13 @@
  */
 package com.propertyvista.unit.portal;
 
-import java.util.Date;
-
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
+import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.SharedData;
@@ -29,10 +29,11 @@ import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
 import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.selenium.D;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
@@ -56,8 +57,8 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         Summary summary = generator.createSummary(application, null);
 
         selenium.click(VistaFormsDebugId.Auth_Login);
-        selenium.type(meta(AuthenticationRequest.class).email(), user.email().getValue());
-        selenium.type(meta(AuthenticationRequest.class).password(), user.email().getValue());
+        selenium.type(D.id(proto(AuthenticationRequest.class).email()), user.email().getValue());
+        selenium.type(D.id(proto(AuthenticationRequest.class).password()), user.email().getValue());
         selenium.click(CrudDebugId.Criteria_Submit);
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
 
@@ -80,80 +81,71 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Info.class));
 
         PotentialTenantInfo tenant = (PotentialTenantInfo) summary.tenantList().tenants().get(0).cloneEntity();
-        //Assert all fields
 
-        //assertEquals(tenant.firstName().getMeta().getCaption(), tenant.firstName().getValue(), selenium.getValue(tenant.firstName()));
-        assertEqualsOnForm(tenant.firstName());
-        assertEqualsOnForm(tenant.lastName());
-        assertEqualsOnForm(tenant.middleName());
-        assertEqualsOnForm(tenant.email());
-        assertEqualsOnForm(tenant.homePhone());
-        assertEqualsOnForm(tenant.mobilePhone());
-        assertEqualsOnForm(tenant.driversLicense());
-        assertEqualsOnForm(tenant.secureIdentifier());
-        assertEqualsOnForm(tenant.notCanadianCitizen());
+        assertValueOnForm(tenant.firstName());
+        assertValueOnForm(tenant.lastName());
+        assertValueOnForm(tenant.middleName());
+        assertValueOnForm(tenant.email());
+        assertValueOnForm(tenant.homePhone());
+        assertValueOnForm(tenant.mobilePhone());
+        assertValueOnForm(tenant.driversLicense());
+        assertValueOnForm(tenant.secureIdentifier());
+        //assertValueOnForm(tenant.notCanadianCitizen()); //does not work anymore
+        //assertValueOnForm(tenant.driversLicenseState()); // doesn't work 
 
-        //ERRORS HERE!
-        //assertEqualsOnForm( tenant.driversLicenseState()); // doesn't compile - Province / Country are not IPrimitive<>, 
-        //assertEqualsOnForm( tenant.driversLicenseState().name()); //if I use this way, I get extra "$name" in selenium's element name
+        assertAddressForm(tenant.currentAddress().getPath(), (Address) tenant.currentAddress().cloneEntity());
+        assertAddressForm(tenant.previousAddress().getPath(), (Address) tenant.previousAddress().cloneEntity());
 
-        //debug-ids do not match for all lines below:
-
-        //assertEqualsOnForm(tenant.currentAddress().street1()); //PotentialTenantInfo$currentAddress$street1 instead of PotentialTenantInfo$currentAddress-Address$street1 
-        //assertEqualsOnForm(tenant.currentAddress().street2());  //and so on 
-        //assertEqualsOnForm(tenant.currentAddress().city());
-        //assertEqualsOnForm(tenant.currentAddress().phone());
-        //assertEqualsOnForm(tenant.currentAddress().postalCode());
-        //assertEqualsOnForm(tenant.currentAddress().rented()); //PotentialTenantInfo$currentAddress$rented instead of PotentialTenantInfo$currentAddress-Address$rented_Rented-input
-        //assertEqualsOnForm(tenant.currentAddress().moveInDate()); 
-        //assertEqualsOnForm(tenant.currentAddress().moveOutDate());
-        //assertEqualsOnForm(tenant.currentAddress().country());
-        //assertEqualsOnForm(tenant.currentAddress().province());
-
-        //assertEqualsOnForm(tenant.previousAddress().street1());
-        //assertEqualsOnForm(tenant.previousAddress().street2());
-        //assertEqualsOnForm(tenant.previousAddress().city());
-        //assertEqualsOnForm(tenant.previousAddress().phone());
-        //assertEqualsOnForm(tenant.previousAddress().postalCode());
-        //assertEqualsOnForm(tenant.previousAddress().rented());
-        //assertEqualsOnForm(tenant.previousAddress().moveInDate());
-        //assertEqualsOnForm(tenant.previousAddress().moveOutDate());
-        //assertEqualsOnForm(tenant.previousAddress().country());
-        //assertEqualsOnForm(tenant.previousAddress().province());
+        //assertEqualsOnForm(tenant.legalQuestions().everEvicted());
+        //...
 
         //TODO: 
         //Vehicles
+        int num = 0;
+        for (Vehicle vehicle : tenant.vehicles()) {
+            // No need for cloneEntity() since elements in list are detached, I think..
+            assertVehiclesForm(new CompositeDebugId(tenant.vehicles().getPath(), "row", num), vehicle);
+            ////assertVehiclesForm(D.id(tenant.vehicles().getPath().debugId(), num), vehicle);
+            num++;
+        }
+
         //Legal Questions
         //Emergency Contacts
 
         return;
     }
 
+    private void assertAddressForm(IDebugId fromDebugId, Address address) {
+        assertValueOnForm(fromDebugId, address.street1());
+        assertValueOnForm(fromDebugId, address.street2());
+        assertValueOnForm(fromDebugId, address.city());
+        assertValueOnForm(fromDebugId, address.phone());
+        assertValueOnForm(fromDebugId, address.postalCode());
+        assertValueOnForm(fromDebugId, address.moveInDate());
+        assertValueOnForm(fromDebugId, address.moveOutDate());
+
+        //TODO
+        //assertValueOnForm(fromDebugId, address.rented()); //PotentialTenantInfo$currentAddress$rented instead of PotentialTenantInfo$currentAddress-Address$rented_Rented-input
+        //assertValueOnForm(fromDebugId, address.country());
+        //assertValueOnForm(tenant.currentAddress().province());
+
+    }
+
+    private void assertVehiclesForm(CompositeDebugId fromDebugId, Vehicle vehicle) {
+        //TODO:
+        //assertValueOnForm(fromDebugId, vehicle.make());
+        //assertValueOnForm(fromDebugId, vehicle.model());
+
+    }
+
     //    private void assertEqualsOnForm(IPrimitive<?> member) {
-    private void assertEqualsOnForm(IPrimitive<?> member) {
-        ///member.getMeta().getObjectClassType() -- c
-        MemberMeta mm = member.getMeta();
-        if (mm.getValueClass().isEnum()) {
-            // CComboBox();
-            // assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(member));
-        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
-            // CDatePicker();
-            // assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(member));
-        } else if (mm.getValueClass().equals(Boolean.class)) {
-            // CCheckBox();
-            //  assertEquals(member.getMeta().getCaption(), (member.getStringView() == "true") ? "on" : "off", selenium.getValue(member));
-        } else if (mm.getValueClass().equals(Integer.class)) {
-            // CIntegerField();
-        } else if (mm.getValueClass().equals(Long.class)) {
-            // CLongField();
-        } else if (mm.getValueClass().equals(Double.class)) {
-            // CDoubleField();
-        } else if (mm.getValueClass().equals(String.class)) {
-            // CTextField();
-            // assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getValue(member));
-        } else {
-            throw new Error("No comparison defined for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
-        }
+    private void assertValueOnForm(IPrimitive<?> member) {
+        assertValueOnForm(null, member);
+    }
+
+    private void assertValueOnForm(IDebugId fromDebugId, IPrimitive<?> member) {
+        // All your existing code for data types...
+        assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
     }
 
 }
