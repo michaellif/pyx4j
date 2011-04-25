@@ -47,7 +47,12 @@ public class DemoGadget extends HTML implements IGadget {
 
     @Override
     public String getName() {
-        return (getText() + " Title");
+        return (getText() + " name");
+    }
+
+    @Override
+    public String getDescription() {
+        return (getText() + " description");
     }
 
     // flags:

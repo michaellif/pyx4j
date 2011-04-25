@@ -7,10 +7,13 @@ import com.google.gwt.user.client.ui.Widget;
  * and implement this interface.
  */
 public interface IGadget {
+
     // info:
     Widget getWidget(); // should be implemented meaningful!
 
     String getName();
+
+    String getDescription();
 
     // flags:	
     boolean isMaximizable();
