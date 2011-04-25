@@ -42,6 +42,7 @@ import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 
 /**
  * Compatibility layer with Selenium v1 i.e. with Selenium IDE generated scripts.
@@ -183,6 +184,10 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     public By by(IObject<?> member) {
         return By.id(gwtLocator(member.getPath().debugId()));
+    }
+
+    public By by(IDebugId parent, IObject<?> member) {
+        return By.id(gwtLocator(CompositeDebugId.debugId(parent, member.getPath().debugId())));
     }
 
     public boolean isElementPresent(String paramString) {
@@ -401,6 +406,57 @@ public class SeleniumExtended extends WebDriverWrapper {
         return text;
     }
 
+    public String getValue(IDebugId fromDebugId, IPrimitive<?> member) {
+        WebElement element = driver.findElement(by(fromDebugId, member));
+        String text = element.getValue();
+        log("value of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), text);
+        return text;
+    }
+
+    public <T extends Enum<T>> T getEnumValue(IPrimitive<T> member) {
+        WebElement we = findElement(by(member));
+        if (we.getTagName().equalsIgnoreCase("input") || we.getTagName().equalsIgnoreCase("select")) {
+            // CComboBox();
+            //TODO:
+            //log
+            log("value of element <{}> id={} text={}", we.getTagName(), we.getAttribute("id"), we.getValue());
+            //check for empty string -> null value
+            //?
+
+            return Enum.valueOf((Class<T>) member.getMeta().getValueClass(), we.getValue());
+        } else {
+            //else RadioButton
+            Enum<?> value = null;
+            for (WebElement cwe : we.findElements(By.tagName("input"))) {
+                String id = cwe.getAttribute("id");
+                if (id.startsWith(member.getPath().debugId())) {
+                    //subset from 'debug-id-....' and from "....-input"
+                    Enum<?> cvalue = Enum.valueOf((Class<Enum>) member.getMeta().getValueClass(), id);
+                    if (cwe.isSelected()) {
+                        value = cvalue;
+                        break;
+                    }
+                    //TODO:
+                    //log
+                    log("value of element <{}> id={} text={}", cwe.getTagName(), cwe.getAttribute("id"), cwe.getValue());
+                    //if there is no matching Enum.valueOf((Class<Enum>)mm.getValueClass(), id); then throw Exception();
+
+                    // member.getPath().debugId() + "_Y-input".equals(cwe.getAttribute("id"); {
+                    // cwe.isSelected() {
+                    //value = true;
+                    //break;
+                }
+
+            }
+
+        }
+        return null;
+    }
+
+    public Boolean getBooleanValue(IPrimitive<Boolean> member) {
+        return null;
+
+    }
 
     public void select(String id) {
         WebElement we = driver.findElement(By.id(id));
