@@ -44,6 +44,7 @@ public class DashboardActivity extends AbstractActivity {
         containerWidget.setWidget(view);
 
         // TODO - load metadata with service...
+//        DashboardMetadataService dmds = GWT.create(DashboardMetadataService.class);
 
         // just create a demo dashboard: 
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
@@ -51,7 +52,7 @@ public class DashboardActivity extends AbstractActivity {
         dmd.layoutType().setValue(LayoutType.Two12);
         for (int i = 0; i < 9; ++i) {
             GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
-            gmd.title().setValue("Gadget #" + i);
+            gmd.name().setValue("Gadget #" + i);
             gmd.column().setValue(Random.nextInt(2));
             dmd.gadgets().add(gmd);
         }

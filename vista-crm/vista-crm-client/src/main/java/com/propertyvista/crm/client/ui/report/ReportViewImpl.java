@@ -50,7 +50,7 @@ public class ReportViewImpl extends SimplePanel implements ReportView {
             for (int row = 0; row < 5; ++row) {
                 // initialize a widget
                 GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
-                gmd.title().setValue("Gadget #" + ++count);
+                gmd.name().setValue("Gadget #" + ++count);
                 DemoGadget widget = new DemoGadget(gmd);
 //                widget.setHeight(Random.nextInt(8) + 3 + "em");
                 widget.setFullWidth(row % 2 > 0);

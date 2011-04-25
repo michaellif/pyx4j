@@ -20,7 +20,7 @@ import com.pyx4j.dashboard.client.IGadget;
 
 public abstract class GadgetBase implements IGadget {
 
-    protected GadgetMetadata gadgetMetadata;
+    protected final GadgetMetadata gadgetMetadata;
 
     public GadgetBase(GadgetMetadata gmd) {
         super();
@@ -29,12 +29,21 @@ public abstract class GadgetBase implements IGadget {
 
     // info:
 
+    public GadgetMetadata getGadgetMetadata() {
+        return gadgetMetadata;
+    }
+
     @Override
     public abstract Widget getWidget();
 
     @Override
     public String getName() {
-        return gadgetMetadata.title().getValue();
+        return gadgetMetadata.name().getValue();
+    }
+
+    @Override
+    public String getDescription() {
+        return gadgetMetadata.description().getValue();
     }
 
     // flags:
