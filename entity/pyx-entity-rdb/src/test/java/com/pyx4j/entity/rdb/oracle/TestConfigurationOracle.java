@@ -20,6 +20,10 @@
  */
 package com.pyx4j.entity.rdb.oracle;
 
+import com.pyx4j.entity.rdb.dialect.NamingConvention;
+import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
+import com.pyx4j.entity.rdb.dialect.ShortWords;
+
 public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.ConfigurationOracle {
 
     @Override
@@ -50,6 +54,16 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
     @Override
     public int maxPoolSize() {
         return 1;
+    }
+
+    @Override
+    public NamingConvention namingConvention() {
+        ShortWords shortWords = new ShortWords();
+        shortWords.add("ORGANIZATION", "ORG");
+        shortWords.add("EMPLOYEE", "EMP");
+        shortWords.add("DEPARTMENTS", "DEPTS");
+        shortWords.add("ARCHIVE", "ARC");
+        return new NamingConventionOracle(32, shortWords);
     }
 
 }

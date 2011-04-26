@@ -80,26 +80,34 @@ public class Mappings {
                     log.error("table creation error", e);
                     throw new RuntimeException(e);
                 }
-                if (dialect.isSequencesBaseIdentity() && (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO)) {
-                    String sequenceName = dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName());
-                    // Verify Sequence already exists
-                    if (!sequences.contains(sequenceName.toLowerCase(Locale.ENGLISH))) {
-                        Connection connection = connectionProvider.getConnection();
-                        try {
-                            SQLUtils.execute(connection, dialect.getCreateSequenceSql(sequenceName));
-                        } catch (SQLException e) {
-                            log.error("sequence creation error", e);
-                            throw new RuntimeException(e);
-                        } finally {
-                            SQLUtils.closeQuietly(connection);
-                        }
-                        sequences.add(sequenceName.toLowerCase(Locale.ENGLISH));
+                if (dialect.isSequencesBaseIdentity()) {
+                    if (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
+                        ensureSequence(dialect, dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName()));
+                    }
+                    for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
+                        ensureSequence(dialect, member.getSqlSequenceName());
                     }
                 }
                 tables.put(entityMeta.getEntityClass(), model);
                 usedTableNames.add(model.getTableName().toLowerCase(Locale.ENGLISH));
             }
             return model;
+        }
+    }
+
+    private void ensureSequence(Dialect dialect, String sequenceName) {
+        // Verify Sequence already exists
+        if (!sequences.contains(sequenceName.toLowerCase(Locale.ENGLISH))) {
+            Connection connection = connectionProvider.getConnection();
+            try {
+                SQLUtils.execute(connection, dialect.getCreateSequenceSql(sequenceName));
+            } catch (SQLException e) {
+                log.error("sequence creation error", e);
+                throw new RuntimeException(e);
+            } finally {
+                SQLUtils.closeQuietly(connection);
+            }
+            sequences.add(sequenceName.toLowerCase(Locale.ENGLISH));
         }
     }
 
@@ -111,20 +119,28 @@ public class Mappings {
         usedTableNames.remove(model.getTableName().toLowerCase(Locale.ENGLISH));
         tables.remove(entityMeta.getEntityClass());
 
-        if (dialect.isSequencesBaseIdentity() && (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO)) {
-            String sequenceName = dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName());
-            if (sequences.contains(sequenceName.toLowerCase(Locale.ENGLISH))) {
-                Connection connection = connectionProvider.getConnection();
-                try {
-                    SQLUtils.execute(connection, dialect.getDropSequenceSql(sequenceName));
-                } catch (SQLException e) {
-                    log.error("sequence deletion error", e);
-                    throw new RuntimeException(e);
-                } finally {
-                    SQLUtils.closeQuietly(connection);
-                }
-                sequences.remove(sequenceName.toLowerCase(Locale.ENGLISH));
+        if (dialect.isSequencesBaseIdentity()) {
+            if (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
+                droppedSequence(dialect, dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName()));
             }
+            for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
+                droppedSequence(dialect, member.getSqlSequenceName());
+            }
+        }
+    }
+
+    private void droppedSequence(Dialect dialect, String sequenceName) {
+        if (sequences.contains(sequenceName.toLowerCase(Locale.ENGLISH))) {
+            Connection connection = connectionProvider.getConnection();
+            try {
+                SQLUtils.execute(connection, dialect.getDropSequenceSql(sequenceName));
+            } catch (SQLException e) {
+                log.error("sequence deletion error", e);
+                throw new RuntimeException(e);
+            } finally {
+                SQLUtils.closeQuietly(connection);
+            }
+            sequences.remove(sequenceName.toLowerCase(Locale.ENGLISH));
         }
     }
 

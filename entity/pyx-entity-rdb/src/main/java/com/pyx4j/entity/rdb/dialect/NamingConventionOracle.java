@@ -26,30 +26,56 @@ public class NamingConventionOracle implements NamingConvention {
 
     private final int identifierMaximumLength;
 
+    private final ShortWords shortWords;
+
     public NamingConventionOracle() {
-        this.identifierMaximumLength = -1;
+        this(-1, null);
     }
 
-    public NamingConventionOracle(int identifierMaximumLength) {
+    public NamingConventionOracle(int identifierMaximumLength, ShortWords shortWords) {
         this.identifierMaximumLength = identifierMaximumLength;
+        this.shortWords = shortWords;
     }
 
-    public static String splitCapitals(String word) {
+    public String splitCapitals(String word) {
         StringBuilder b = new StringBuilder();
-        boolean inWord = false;
+        StringBuilder currentWord = new StringBuilder();
+        boolean wordStart = true;
         for (char c : word.toCharArray()) {
-            if (Character.isUpperCase(c)) {
-                if (inWord) {
-                    b.append('_');
-                    inWord = false;
+            if (c == '_') {
+                if (currentWord.length() > 0) {
+                    b.append(shortForm(currentWord.toString()));
+                    currentWord = new StringBuilder();
+                    wordStart = true;
                 }
+                b.append('_');
+            } else if (Character.isUpperCase(c)) {
+                if (!wordStart) {
+                    b.append(shortForm(currentWord.toString()));
+                    currentWord = new StringBuilder();
+                    b.append('_');
+                    wordStart = true;
+                }
+                currentWord.append(c);
             } else {
-                c = Character.toUpperCase(c);
-                inWord = true;
+                wordStart = false;
+                currentWord.append(Character.toUpperCase(c));
             }
-            b.append(c);
         }
+
+        if (currentWord.length() > 0) {
+            b.append(shortForm(currentWord.toString()));
+        }
+
         return b.toString();
+    }
+
+    public String shortForm(String word) {
+        if (shortWords != null) {
+            return shortWords.getShortForm(word);
+        } else {
+            return word;
+        }
     }
 
     @Override
@@ -60,6 +86,11 @@ public class NamingConventionOracle implements NamingConvention {
     @Override
     public String sqlTableSequenceName(String javaPersistenceName) {
         return splitCapitals(javaPersistenceName) + "_SEQ";
+    }
+
+    @Override
+    public String sqlChildTableSequenceName(String tableName) {
+        return tableName + "_SEQ";
     }
 
     @Override

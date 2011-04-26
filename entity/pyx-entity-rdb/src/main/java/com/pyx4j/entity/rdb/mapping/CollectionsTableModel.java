@@ -110,12 +110,30 @@ public class CollectionsTableModel {
         }
 
         int targetSqlType = dialect.getTargetSqlType(valueClass);
+        StringBuilder sql = new StringBuilder();
         try {
+            sql.append("INSERT INTO ").append(member.sqlName()).append(" ( ");
+            sql.append("owner, value");
+
             if (isList) {
-                stmt = connection.prepareStatement("INSERT INTO " + member.sqlName() + " ( owner, value, seq ) VALUES (?, ?, ?)");
-            } else {
-                stmt = connection.prepareStatement("INSERT INTO " + member.sqlName() + " ( owner,  value ) VALUES (?, ?)");
+                sql.append(", seq");
             }
+            if (dialect.isSequencesBaseIdentity()) {
+                sql.append(", id");
+            }
+
+            sql.append(" ) VALUES (?, ?");
+
+            if (isList) {
+                sql.append(", ?");
+            }
+            if (dialect.isSequencesBaseIdentity()) {
+                sql.append(", ").append(dialect.getSequenceNextValSql(member.getSqlSequenceName()));
+            }
+
+            sql.append(")");
+
+            stmt = connection.prepareStatement(sql.toString());
             int seq = 0;
             for (Object value : dataSet) {
                 if ((value != null) || insertNull) {
@@ -132,6 +150,7 @@ public class CollectionsTableModel {
                 seq++;
             }
         } catch (SQLException e) {
+            log.error("{} SQL {}", member.sqlName(), sql);
             log.error("{} SQL insert error", member.sqlName(), e);
             throw new RuntimeException(e);
         } finally {

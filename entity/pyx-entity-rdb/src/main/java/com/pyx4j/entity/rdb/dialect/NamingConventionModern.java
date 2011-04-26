@@ -81,4 +81,9 @@ public class NamingConventionModern implements NamingConvention {
         return sql.toString();
     }
 
+    @Override
+    public String sqlChildTableSequenceName(String tableName) {
+        return tableName + "_seq";
+    }
+
 }

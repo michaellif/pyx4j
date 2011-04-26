@@ -38,6 +38,8 @@ public class MemberOperationsMeta {
 
     private final Class<?> indexValueClass;
 
+    private String sqlSequenceName;
+
     public MemberOperationsMeta(String sqlName, MemberMeta memberMeta) {
         this(sqlName, memberMeta, null, null);
     }
@@ -90,5 +92,13 @@ public class MemberOperationsMeta {
     public Object getIndexedValue(IEntity entity) {
         IndexAdapter adapter = AdapterFactory.getIndexAdapter(indexAdapterClass);
         return adapter.getIndexedValue(entity, memberMeta, memberMeta.isEntity() ? getMember(entity) : getMemberValue(entity));
+    }
+
+    public String getSqlSequenceName() {
+        return sqlSequenceName;
+    }
+
+    public void setSqlSequenceName(String sqlSequenceName) {
+        this.sqlSequenceName = sqlSequenceName;
     }
 }

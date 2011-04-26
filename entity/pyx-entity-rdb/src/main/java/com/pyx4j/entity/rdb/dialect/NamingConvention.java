@@ -41,4 +41,6 @@ public interface NamingConvention {
 
     public String sqlEmbededTableName(String javaPersistenceTableName, List<String> path, String javaPersistenceFieldName);
 
+    public String sqlChildTableSequenceName(String tableName);
+
 }

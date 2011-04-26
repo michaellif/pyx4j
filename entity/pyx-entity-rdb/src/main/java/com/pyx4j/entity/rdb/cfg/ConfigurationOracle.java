@@ -71,7 +71,7 @@ public abstract class ConfigurationOracle implements Configuration {
 
     @Override
     public NamingConvention namingConvention() {
-        return new NamingConventionOracle(32);
+        return new NamingConventionOracle(32, null);
     }
 
 }
