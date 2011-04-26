@@ -37,71 +37,139 @@ public class ReportLayoutPanel extends FlowPanel {
         insertGadget(widget, getWidgetCount(), column);
     }
 
-    public void insertGadget(Widget widget, int row, int column) {
-        if (row > getWidgetCount()) {
+    public void insertGadget(Widget widget, int beforeRow, int column) {
+        if (beforeRow > getWidgetCount()) {
             throw new Error("Row is out of bounds");
         } else if (column == -1) { //column -1 means full width
-            insert(widget, row);
+            insert(widget, beforeRow);
         } else {
-            if (row == getWidgetCount()) {
-                RowPanel rowPanel = new RowPanel();
-                if (column == 0) {
-                    rowPanel.setLeftGadget(widget);
-                } else if (column == 1) {
-                    rowPanel.setRightGadget(widget);
+            Widget currentRow = getWidget(beforeRow - 1);
+            RowPanel rowPanel = null;
+            if (column == 0) {
+                if (currentRow instanceof RowPanel && !((RowPanel) currentRow).hasLeft()) {
+                    rowPanel = (RowPanel) currentRow;
                 } else {
-                    throw new Error("Column number can be -1, 0 or 1");
+                    rowPanel = new RowPanel();
+                    insert(rowPanel, beforeRow);
                 }
-                insert(rowPanel, row);
+                rowPanel.setLeftGadget(widget);
+            } else if (column == 1) {
+                if (currentRow instanceof RowPanel && !((RowPanel) currentRow).hasRight()) {
+                    rowPanel = (RowPanel) currentRow;
+                } else {
+                    rowPanel = new RowPanel();
+                    insert(rowPanel, beforeRow);
+                }
+                rowPanel.setRightGadget(widget);
             } else {
-                Widget currentRow = getWidget(row);
-                RowPanel rowPanel = null;
-                if (column == 0) {
-                    if (currentRow instanceof RowPanel && !((RowPanel) currentRow).hasLeft()) {
-                        rowPanel = (RowPanel) currentRow;
-                    } else {
-                        rowPanel = new RowPanel();
-                        insert(rowPanel, row);
-                    }
-                    rowPanel.setLeftGadget(widget);
-                } else if (column == 1) {
-                    if (currentRow instanceof RowPanel && !((RowPanel) currentRow).hasRight()) {
-                        rowPanel = (RowPanel) currentRow;
-                    } else {
-                        rowPanel = new RowPanel();
-                        insert(rowPanel, row);
-                    }
-                    rowPanel.setRightGadget(widget);
-                } else {
-                    throw new Error("Column number can be -1, 0 or 1");
-                }
-
+                throw new Error("Column number can be -1, 0 or 1");
             }
+
         }
 
     }
 
-    public void removeGadget(int row, int column) {
+    public void removeGadget(Widget widget) {
+        int row = getGadgetRowIndex(widget);
+        int column = getGadgetColumnIndex(widget);
+        removeGadget(row, column);
+    }
 
+    public void removeGadget(int row, int column) {
+        Widget rowWidget = getWidget(row);
+        if (column == -1) {
+            if (rowWidget instanceof RowPanel) {
+                throw new Error("Column -1 should represent whole width gadget");
+            }
+            remove(rowWidget);
+        } else if (rowWidget instanceof RowPanel) {
+            RowPanel rowPanel = (RowPanel) rowWidget;
+            if (column == 0) {
+                rowPanel.removeLeftGadget();
+            } else if (column == 1) {
+                rowPanel.removeRightGadget();
+            } else {
+                throw new Error("Column number can be -1, 0 or 1");
+            }
+        } else {
+            throw new Error("Gadget coordinates are wrong: " + row + "/" + column);
+        }
     }
 
     public Widget getGadget(int row, int column) {
-        return null;
+        Widget rowWidget = getWidget(row);
+        if (column == -1) {
+            if (rowWidget instanceof RowPanel) {
+                throw new Error("Column -1 should represent whole width gadget");
+            }
+            return rowWidget;
+        } else if (rowWidget instanceof RowPanel) {
+            RowPanel rowPanel = (RowPanel) rowWidget;
+            if (column == 0) {
+                return rowPanel.getLeftGadget();
+            } else if (column == 1) {
+                return rowPanel.getRightGadget();
+            } else {
+                throw new Error("Column number can be -1, 0 or 1");
+            }
+        } else {
+            throw new Error("Gadget coordinates are wrong: " + row + "/" + column);
+        }
+    }
+
+    public int getGadgetRowIndex(Widget gadget) {
+        if (gadget == null) {
+            return -1;
+        }
+        int index = getWidgetIndex(gadget);
+        if (index > -1) {
+            return index;
+        }
+        for (int i = 0; i < getWidgetCount(); i++) {
+            if (getWidget(i) instanceof RowPanel) {
+                RowPanel rowPanel = (RowPanel) getWidget(i);
+                if (gadget.equals(rowPanel.getLeftGadget()) || gadget.equals(rowPanel.getRightGadget())) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public int getGadgetColumnIndex(Widget gadget) {
+        if (gadget == null) {
+            return -1;
+        }
+        int index = getWidgetIndex(gadget);
+        if (index > -1) {
+            return -1;
+        }
+        for (int i = 0; i < getWidgetCount(); i++) {
+            if (getWidget(i) instanceof RowPanel) {
+                RowPanel rowPanel = (RowPanel) getWidget(i);
+                if (gadget.equals(rowPanel.getLeftGadget())) {
+                    return 0;
+                } else if (gadget.equals(rowPanel.getRightGadget())) {
+                    return 1;
+                }
+            }
+        }
+        return -1;
     }
 
     class RowPanel extends FlowPanel {
 
-        private final SimplePanel left;
+        private final CellPanel left;
 
-        private final SimplePanel right;
+        private final CellPanel right;
 
         RowPanel() {
             setWidth("100%");
-            left = new SimplePanel();
+            left = new CellPanel();
             left.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             left.setWidth("50%");
             add(left);
-            right = new SimplePanel();
+            right = new CellPanel();
             right.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             right.setWidth("50%");
             add(right);
@@ -129,6 +197,31 @@ public class ReportLayoutPanel extends FlowPanel {
 
         boolean hasRight() {
             return right.getWidget() != null;
+        }
+
+        void removeLeftGadget() {
+            left.clear();
+
+        }
+
+        void removeRightGadget() {
+            right.clear();
+        }
+
+        void removeFromParentIfEmpty() {
+            if (!hasLeft() && !hasRight()) {
+                removeFromParent();
+            }
+        }
+
+        class CellPanel extends SimplePanel {
+            @Override
+            public boolean remove(Widget child) {
+                boolean removed = super.remove(child);
+                removeFromParentIfEmpty();
+                return removed;
+            }
+
         }
 
     }

@@ -21,26 +21,120 @@
 package com.pyx4j.widgets.client.dashboard;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
+import com.allen_sauer.gwt.dnd.client.VetoDragException;
+import com.allen_sauer.gwt.dnd.client.drop.AbstractPositioningDropController;
 import com.allen_sauer.gwt.dnd.client.drop.FlowPanelDropController;
+import com.allen_sauer.gwt.dnd.client.util.CoordinateLocation;
+import com.allen_sauer.gwt.dnd.client.util.DOMUtil;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ReportDropController extends FlowPanelDropController {
+public class ReportDropController extends AbstractPositioningDropController {
+
+    protected final ReportLayoutPanel dropTarget;
+
+    private int dropRowIndex;
+
+    private int dropColumnIndex;
+
+    private Widget positioner = null;
 
     /**
+     * @see FlowPanelDropController#FlowPanelDropController(com.google.gwt.user.client.ui.FlowPanel)
+     * 
      * @param dropTarget
+     *            the insert panel drop target
      */
-    public ReportDropController(FlowPanel dropTarget) {
+    public ReportDropController(ReportLayoutPanel dropTarget) {
         super(dropTarget);
+        this.dropTarget = dropTarget;
     }
 
     @Override
-    protected LocationWidgetComparator getLocationWidgetComparator() {
-        return LocationWidgetComparator.BOTTOM_HALF_COMPARATOR;
+    public void onDrop(DragContext context) {
+        assert dropRowIndex != -1 : "Should not happen after onPreviewDrop did not veto";
+        if (context.selectedWidgets.size() == 1) {
+            dropTarget.insertGadget(context.selectedWidgets.get(0), dropRowIndex, dropColumnIndex);
+        } else {
+            throw new Error("Single Gadget can be selected");
+        }
+        super.onDrop(context);
     }
 
     @Override
+    public void onEnter(DragContext context) {
+        super.onEnter(context);
+
+        positioner = newPositioner(context);
+
+        int targetRowIndex = DOMUtil.findIntersect(dropTarget, new CoordinateLocation(context.mouseX, context.mouseY),
+                LocationWidgetComparator.BOTTOM_HALF_COMPARATOR);
+
+        int targetColumnIndex = -2;
+
+        if (context.selectedWidgets.get(0).getOffsetWidth() > dropTarget.getOffsetWidth() * 2 / 3) {
+            targetColumnIndex = -1;
+        } else {
+            targetColumnIndex = (context.mouseX < (dropTarget.getOffsetWidth() / 2)) ? 0 : 1;
+        }
+
+        System.out.println("onEnter+++++++++++++++ " + targetRowIndex + " " + targetColumnIndex);
+
+        dropTarget.insertGadget(positioner, targetRowIndex, targetColumnIndex);
+    }
+
+    @Override
+    public void onLeave(DragContext context) {
+        dropTarget.removeGadget(positioner);
+        positioner = null;
+        super.onLeave(context);
+    }
+
+    @Override
+    public void onMove(DragContext context) {
+        super.onMove(context);
+
+        int targetRowIndex = DOMUtil.findIntersect(dropTarget, new CoordinateLocation(context.mouseX, context.mouseY),
+                LocationWidgetComparator.BOTTOM_HALF_COMPARATOR);
+        int targetColumnIndex = -2;
+        if (context.selectedWidgets.get(0).getOffsetWidth() > dropTarget.getOffsetWidth() * 2 / 3) {
+            targetColumnIndex = -1;
+        } else {
+            targetColumnIndex = (context.mouseX < (dropTarget.getOffsetWidth() / 2)) ? 0 : 1;
+        }
+
+        // check that positioner not already in the correct location
+        int positionerRowIndex = dropTarget.getGadgetRowIndex(positioner);
+        int positionerColumnIndex = dropTarget.getGadgetColumnIndex(positioner);
+
+        // System.out.println("onMove+++++++++++++++ " + positionerRowIndex + " " + positionerColumnIndex);
+
+        if (positionerRowIndex != targetRowIndex && (positionerRowIndex != targetRowIndex - 1 || targetRowIndex == 0)) {
+            if (positionerRowIndex == 0 && dropTarget.getWidgetCount() == 1) {
+                // do nothing, the positioner is the only widget
+            } else if (targetRowIndex == -1) {
+                // outside drop target, so remove positioner to indicate a drop will not happen
+                dropTarget.removeGadget(positioner);
+            } else {
+                dropTarget.insertGadget(positioner, targetRowIndex, targetColumnIndex);
+            }
+        }
+    }
+
+    @Override
+    public void onPreviewDrop(DragContext context) throws VetoDragException {
+
+        dropRowIndex = dropTarget.getGadgetRowIndex(positioner);
+        dropColumnIndex = dropTarget.getGadgetColumnIndex(positioner);
+
+        //System.out.println("onPreviewDrop+++++++++++++++ " + dropRowIndex + " " + dropColumnIndex);
+
+        if (dropRowIndex == -1) {
+            throw new VetoDragException();
+        }
+        super.onPreviewDrop(context);
+    }
+
     protected Widget newPositioner(DragContext context) {
         int width = 0;
         int height = 0;
@@ -48,6 +142,8 @@ public class ReportDropController extends FlowPanelDropController {
             Widget widget = context.selectedWidgets.get(0);
             width = Math.max(width, widget.getOffsetWidth());
             height = widget.getOffsetHeight();
+        } else {
+            throw new Error("Single Gadget can be selected");
         }
 
         return new GadgetPositioner(width, height);
