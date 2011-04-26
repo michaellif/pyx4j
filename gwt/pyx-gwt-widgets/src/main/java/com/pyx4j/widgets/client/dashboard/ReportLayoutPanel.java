@@ -69,6 +69,33 @@ public class ReportLayoutPanel extends FlowPanel {
 
     }
 
+    public void setGadget(Widget widget, int row, int column) {
+        if (row > getWidgetCount()) {
+            throw new Error("Row is out of bounds");
+        } else if (column == -1) { //column -1 means full width
+            remove(row);
+            insert(widget, row);
+        } else {
+            Widget currentRow = getWidget(row);
+            RowPanel rowPanel = null;
+            if (column == 0) {
+                if (currentRow instanceof RowPanel) {
+                    rowPanel = (RowPanel) currentRow;
+                    rowPanel.setLeftGadget(widget);
+                }
+            } else if (column == 1) {
+                if (currentRow instanceof RowPanel) {
+                    rowPanel = (RowPanel) currentRow;
+                    rowPanel.setRightGadget(widget);
+                }
+            } else {
+                throw new Error("Column number can be -1, 0 or 1");
+            }
+
+        }
+
+    }
+
     public void removeGadget(Widget widget) {
         int row = getGadgetRowIndex(widget);
         int column = getGadgetColumnIndex(widget);
@@ -167,10 +194,13 @@ public class ReportLayoutPanel extends FlowPanel {
             setWidth("100%");
             left = new CellPanel();
             left.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            left.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+
             left.setWidth("50%");
             add(left);
             right = new CellPanel();
             right.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            right.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             right.setWidth("50%");
             add(right);
         }
