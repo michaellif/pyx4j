@@ -55,6 +55,7 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         User user = generator.createUser(1);
         Application application = generator.createApplication(user);
         Summary summary = generator.createSummary(application, null);
+        //TODO UnitSelection unitSel = generator.createUnitSelection(application, null);
 
         selenium.click(VistaFormsDebugId.Auth_Login);
         selenium.type(D.id(proto(AuthenticationRequest.class).email()), user.email().getValue());
@@ -69,10 +70,24 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
     }
 
     protected void doTestAptPage(Summary summary) {
+        assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
+        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
+
+        //TODO use unitSel instead of code below:
+        selenium.click("UnitSelection$availableUnits$units-row-2-ApartmentUnit$unitType");
+        selenium.click("UnitSelection$availableUnits$units-row-2-leaseTerm_12");
+        selenium.click("Crud_Save");
+
         return;
     }
 
     protected void doTestTenantsPage(Summary summary) {
+        assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class)));
+        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class));
+
+        //TODO use summary/tenants instead of code below:
+        selenium.click("Crud_Save");
+
         return;
     }
 
@@ -90,8 +105,14 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         assertValueOnForm(tenant.mobilePhone());
         assertValueOnForm(tenant.driversLicense());
         assertValueOnForm(tenant.secureIdentifier());
-        //assertValueOnForm(tenant.notCanadianCitizen()); //does not work anymore
-        //assertValueOnForm(tenant.driversLicenseState()); // doesn't work 
+
+        //FIXME : To VLADS: does not work anymore: 'on' is not converted to 'true' in method assertValueOnForm (line 162 below) you provided
+        // in fact it should still use BaseSeleniumTestCase::assertValueOnForm to do such conversion...
+        //assertValueOnForm(tenant.notCanadianCitizen()); 
+
+        //FIXME : To VLADS
+        //doesn't work, enums still require logic similar to BaseSeleniumTestCase::assertValueOnForm
+        //assertValueOnForm(tenant.driversLicenseState()); 
 
         assertAddressForm(tenant.currentAddress().getPath(), (Address) tenant.currentAddress().cloneEntity());
         assertAddressForm(tenant.previousAddress().getPath(), (Address) tenant.previousAddress().cloneEntity());
@@ -125,7 +146,7 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         assertValueOnForm(fromDebugId, address.moveOutDate());
 
         //TODO
-        //assertValueOnForm(fromDebugId, address.rented()); //PotentialTenantInfo$currentAddress$rented instead of PotentialTenantInfo$currentAddress-Address$rented_Rented-input
+        //assertValueOnForm(fromDebugId, address.rented()); //PotentialTenantInfo$currentAddress$rented instead of PotentialTenantInfo$currentAddress-Address$rented_Rented
         //assertValueOnForm(fromDebugId, address.country());
         //assertValueOnForm(tenant.currentAddress().province());
 

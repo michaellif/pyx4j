@@ -189,7 +189,7 @@ public class ApartmentScreenTest extends VistaBaseSeleniumTestCase {
         String strStartRent = sdf.format(cdl.getTime());
         //ERROR HERE 
         selenium.type("UnitSelection$rentStart", strStartRent);
-        selenium.click("UnitSelection$availableUnits$units-row-2-leaseTerm_12-input");
+        selenium.click("UnitSelection$availableUnits$units-row-2-leaseTerm_12");
         selenium.click("Crud_Save");
         assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN));
         String warns = selenium.getText(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN);
@@ -218,7 +218,7 @@ public class ApartmentScreenTest extends VistaBaseSeleniumTestCase {
         cdl.add(Calendar.DATE, -10); // add one extra day
         String strStartRent = sdf.format(cdl.getTime());
         selenium.type("UnitSelection$rentStart", strStartRent);
-        selenium.click("UnitSelection$availableUnits$units-row-2-leaseTerm_12-input");
+        selenium.click("UnitSelection$availableUnits$units-row-2-leaseTerm_12");
         selenium.click("Crud_Save");
         assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN));
         String warns = selenium.getText(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN);

@@ -76,7 +76,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
 
     public void doTestAppartment1() throws Exception {
 
-        //selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
+        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         Calendar fromDate = Calendar.getInstance(); //current day-time
         fromDate.add(Calendar.DATE, 10); //add 10 extra days
@@ -98,7 +98,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         String strStartRent = sdf.format(cdl.getTime());
 
         selenium.type("UnitSelection$rentStart", strStartRent);
-        selenium.click("UnitSelection$availableUnits$units-row-2-leaseTerm_12-input");
+        selenium.click("UnitSelection$availableUnits$units-row-2-leaseTerm_12");
         assertNoMessages();
         // we do not save, just a test in this case
 
@@ -141,7 +141,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         String strAvailFrom = selenium.getText("UnitSelection$availableUnits$units-row-2-ApartmentUnit$avalableForRent");
 
         selenium.type("UnitSelection$rentStart", strAvailFrom); //to make sure it's the same date
-        selenium.click("gwt-debug-UnitSelection$availableUnits$units-row-2-leaseTerm_6-input");
+        selenium.click("gwt-debug-UnitSelection$availableUnits$units-row-2-leaseTerm_6");
         selenium.click("Crud_Save");
 
         //current time in this format appended to the user name
@@ -165,16 +165,16 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         selenium.type("PotentialTenantList$tenants-row-2-PotentialTenantInfo$birthDate", sdf2.format(cal.getTime()));
         selenium.type("PotentialTenantList$tenants-row-2-PotentialTenantInfo$email", testUser + "sha" + strNow + emailAt);
         selenium.setValue("id=gwt-debug-PotentialTenantList$tenants-row-2-PotentialTenantInfo$relationship", "Spouse");
-        assertEnabled("id=gwt-debug-PotentialTenantList$tenants-row-2-PotentialTenantInfo$status");  // status must be enabled for spouse
+        assertEnabled("id=gwt-debug-PotentialTenantList$tenants-row-2-PotentialTenantInfo$status"); // status must be enabled for spouse
         selenium.setValue("id=gwt-debug-PotentialTenantList$tenants-row-2-PotentialTenantInfo$status", "Co-applicant");
 
         selenium.click("Crud_Save");
         assertNoMessages();
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class));
 
-        assertEnabled("id=gwt-debug-PotentialTenantList$tenants-row-2-PotentialTenantInfo$status");  // status must be enabled for spouse
+        assertEnabled("id=gwt-debug-PotentialTenantList$tenants-row-2-PotentialTenantInfo$status"); // status must be enabled for spouse
         assertEquals(selenium.getValue("id=gwt-debug-PotentialTenantList$tenants-row-2-PotentialTenantInfo$status"), "Co-applicant");
-        
+
         selenium.click("logout");
 
     }
@@ -205,7 +205,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         selenium.type("PotentialTenantList$tenants-row-3-PotentialTenantInfo$birthDate", sdf2.format(cal.getTime()));
         selenium.type("PotentialTenantList$tenants-row-3-PotentialTenantInfo$email", testUser + "ovich" + strNow + emailAt);
         selenium.setValue("id=gwt-debug-PotentialTenantList$tenants-row-3-PotentialTenantInfo$relationship", "Son");
-        assertNotEnabled("id=gwt-debug-PotentialTenantList$tenants-row-3-PotentialTenantInfo$status");  // status must be enabled for spouse
+        assertNotEnabled("id=gwt-debug-PotentialTenantList$tenants-row-3-PotentialTenantInfo$status"); // status must be enabled for spouse
 
         selenium.click("Crud_Save");
         assertNoMessages();
@@ -230,23 +230,22 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
 
         selenium.type("PotentialTenantInfo$secureIdentifier", "123456789");
         selenium.type("PotentialTenantInfo$secureIdentifier", "134567890");
-        selenium.click("PotentialTenantInfo$legalQuestions$suedForRent_N-input");
-        selenium.click("PotentialTenantInfo$legalQuestions$suedForDamages_N-input");
-        selenium.click("PotentialTenantInfo$legalQuestions$everEvicted_N-input");
-        selenium.click("PotentialTenantInfo$legalQuestions$defaultedOnLease_N-input");
-        selenium.click("PotentialTenantInfo$legalQuestions$convictedOfFelony_N-input");
-        selenium.click("PotentialTenantInfo$legalQuestions$legalTroubles_N-input");
-        selenium.click("PotentialTenantInfo$legalQuestions$filedBankruptcy_N-input");
+        selenium.click("PotentialTenantInfo$legalQuestions$suedForRent_N");
+        selenium.click("PotentialTenantInfo$legalQuestions$suedForDamages_N");
+        selenium.click("PotentialTenantInfo$legalQuestions$everEvicted_N");
+        selenium.click("PotentialTenantInfo$legalQuestions$defaultedOnLease_N");
+        selenium.click("PotentialTenantInfo$legalQuestions$convictedOfFelony_N");
+        selenium.click("PotentialTenantInfo$legalQuestions$legalTroubles_N");
+        selenium.click("PotentialTenantInfo$legalQuestions$filedBankruptcy_N");
 
         // next part of page
         selenium.type("PotentialTenantInfo$currentAddress-Address$street1", "123 dundas");
         selenium.type("PotentialTenantInfo$currentAddress-Address$city", "Toronto");
         selenium.type("PotentialTenantInfo$currentAddress-Address$postalCode", "h3b1g9");
         selenium.type("PotentialTenantInfo$currentAddress-Address$country", "Canada");
-        selenium.click("PotentialTenantInfo$currentAddress-Address$rented_Rented-input");
+        selenium.click("PotentialTenantInfo$currentAddress-Address$rented_Rented");
 
         selenium.type("PotentialTenantInfo$currentAddress-Address$phone", "098-765-4321");
-        selenium.click("PotentialTenantInfo$currentAddress-Address$rented_Rented-input");
         //selenium.click("PotentialTenantInfo$emergencyContacts_fd__Form_Add");
         selenium.type("PotentialTenantInfo$emergencyContacts-row-1-EmergencyContact$firstName", "contact1");
         selenium.type("PotentialTenantInfo$emergencyContacts-row-1-EmergencyContact$lastName", "UFO");
