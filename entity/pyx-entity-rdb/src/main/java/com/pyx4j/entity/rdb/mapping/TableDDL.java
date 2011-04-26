@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
@@ -103,7 +102,7 @@ class TableDDL {
                 }
                 StringBuilder sql = new StringBuilder("alter table ");
                 sql.append(tableModel.tableName);
-                sql.append(" add column ");
+                sql.append(" add "); // [ column ]
                 sql.append(member.sqlName()).append(' ');
                 sql.append(indexSqlType(dialect, member));
                 alterSqls.add(sql.toString());
@@ -141,7 +140,7 @@ class TableDDL {
         return sql.toString();
     }
 
-    public static List<String> sqlCreateCollectionMember(Dialect dialect, TableModel tableModel, MemberOperationsMeta member) {
+    public static List<String> sqlCreateCollectionMember(Dialect dialect, MemberOperationsMeta member) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
         sql.append("create table ");
@@ -171,11 +170,34 @@ class TableDDL {
         return sqls;
     }
 
-    public static List<String> validateAndAlterCollectionMember(Connection connection, Dialect dialect, TableMetadata memberTableMetadata,
-            TableModel tableModel, MemberOperationsMeta member) {
+    public static List<String> validateAndAlterCollectionMember(Dialect dialect, TableMetadata memberTableMetadata, MemberOperationsMeta member) {
         List<String> alterSqls = new Vector<String>();
-        // TODO Auto-generated method stub
+
+        alterSqls.add(alterColumn(dialect, memberTableMetadata, "owner", Long.class, dialect.getSqlType(Long.class)));
+        alterSqls.add(alterColumn(dialect, memberTableMetadata, "value", member.getMemberMeta().getValueClass(), sqlType(dialect, member.getMemberMeta())));
+
+        if (member.getMemberMeta().getObjectClassType() == ObjectClassType.EntityList) {
+            alterSqls.add(alterColumn(dialect, memberTableMetadata, "seq", Integer.class, dialect.getSqlType(Integer.class)));
+        }
+
         return alterSqls;
     }
 
+    private static String alterColumn(Dialect dialect, TableMetadata tableMetadata, String sqlName, Class<?> klass, String sqlType) {
+        ColumnMetadata columnMeta = tableMetadata.getColumn(sqlName);
+        if (columnMeta == null) {
+            StringBuilder sql = new StringBuilder("alter table ");
+            sql.append(tableMetadata.getTableName());
+            sql.append(" add "); // [ column ]
+            sql.append(sqlName).append(' ');
+            sql.append(sqlType);
+            return sql.toString();
+        } else {
+            if (!dialect.isCompatibleType(klass, -1, columnMeta.getTypeName())) {
+                throw new RuntimeException(tableMetadata.getTableName() + "." + sqlName + " incompatible SQL type " + columnMeta.getTypeName() + " != "
+                        + dialect.getSqlType(klass));
+            }
+            return null;
+        }
+    }
 }

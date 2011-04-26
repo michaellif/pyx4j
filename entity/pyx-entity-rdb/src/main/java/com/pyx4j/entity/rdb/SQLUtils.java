@@ -75,6 +75,9 @@ public class SQLUtils {
         try {
             stmt = connection.createStatement();
             for (String sql : sqls) {
+                if (sql == null) {
+                    continue;
+                }
                 boolean success = false;
                 log.debug("exec: {}", sql);
                 try {

@@ -84,6 +84,10 @@ public class TableMetadata {
         return columnsMetadata.get(name.toUpperCase(Locale.ENGLISH));
     }
 
+    String getTableName() {
+        return name;
+    }
+
     static class ColumnMetadata {
 
         private final String name;

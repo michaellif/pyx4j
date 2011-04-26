@@ -25,14 +25,19 @@ import java.util.Date;
 import junit.framework.Assert;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.server.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Status;
+import com.pyx4j.entity.test.shared.domain.Task;
 
 public abstract class DDLTestCase extends DatastoreTestBase {
 
@@ -61,6 +66,9 @@ public abstract class DDLTestCase extends DatastoreTestBase {
         IPrimitive<Date> deadLine();
 
         IPrimitiveSet<String> notes();
+
+        @Owned
+        ISet<Task> tasks();
     }
 
     @Table(prefix = "test", name = "ddl")
@@ -79,9 +87,12 @@ public abstract class DDLTestCase extends DatastoreTestBase {
         IPrimitiveSet<String> notes();
 
         IPrimitive<String> notes2();
+
+        @Owned
+        IList<Task> tasks();
     }
 
-    public void testCreateTable() {
+    public void testCreateAndAlterTable() {
         TaskAlt1 task1 = EntityFactory.create(TaskAlt1.class);
         srv.persist(task1);
 
@@ -93,4 +104,20 @@ public abstract class DDLTestCase extends DatastoreTestBase {
         Assert.assertEquals("Value", task2.notes2().getValue(), task22.notes2().getValue());
     }
 
+    public void testAlterCollectionsTable() {
+        TaskAlt1 task1 = EntityFactory.create(TaskAlt1.class);
+
+        Task subTask11 = EntityFactory.create(Task.class);
+        subTask11.deadLine().setValue(TimeUtils.getRoundedNow());
+        subTask11.status().setValue(Status.DEACTIVATED);
+        task1.tasks().add(subTask11);
+
+        srv.persist(task1);
+
+        TaskAlt2 task2 = EntityFactory.create(TaskAlt2.class);
+        srv.persist(task2);
+
+        // retrieve original Set as List
+        TaskAlt2 task12 = srv.retrieve(TaskAlt2.class, task1.getPrimaryKey());
+    }
 }
