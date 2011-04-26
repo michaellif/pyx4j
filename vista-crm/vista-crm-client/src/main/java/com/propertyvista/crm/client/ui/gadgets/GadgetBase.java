@@ -33,6 +33,9 @@ public abstract class GadgetBase implements IGadget {
         return gadgetMetadata;
     }
 
+    /*
+     * Implement in derived class to represent desired gadget UI.
+     */
     @Override
     public abstract Widget getWidget();
 
@@ -44,6 +47,23 @@ public abstract class GadgetBase implements IGadget {
     @Override
     public String getDescription() {
         return gadgetMetadata.description().getValue();
+    }
+
+    // runtime scope:
+    @Override
+    public void start() {
+    }
+
+    @Override
+    public void suspend() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void stop() {
     }
 
     // flags:

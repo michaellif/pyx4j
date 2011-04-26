@@ -19,16 +19,23 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface GadgetMetadata extends IEntity {
 
-    /*
-     * Dashboard: 0, 1, 2;
-     * Report : -1, 0, 1;
-     */
-    @MemberColumn(name = "clmn")
-    IPrimitive<Integer> column();
+    public static enum GadgetType {
+        Test, Demo, BuildingLister
+    }
+
+    @MemberColumn(name = "gadget_type")
+    IPrimitive<GadgetType> type();
 
     IPrimitive<String> name();
 
     IPrimitive<String> description();
 
     IEntity settings();
+
+    /*
+     * Dashboard: 0, 1, 2;
+     * Report : -1, 0, 1;
+     */
+    @MemberColumn(name = "gadget_column")
+    IPrimitive<Integer> column();
 }

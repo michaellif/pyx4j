@@ -85,10 +85,33 @@ public class DemoGadget extends GadgetBase {
             @Override
             public void onCancel() {
                 // TODO Auto-generated method stub
-
             }
         }
 
         return new MySetup();
+    }
+
+    @Override
+    public void start() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void stop() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void suspend() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
+
     }
 }

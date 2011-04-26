@@ -23,6 +23,7 @@ import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -49,13 +50,20 @@ public class DashboardActivity extends AbstractActivity {
         // just create a demo dashboard: 
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
         dmd.name().setValue("test dashboard");
-        dmd.layoutType().setValue(LayoutType.Two12);
-        for (int i = 0; i < 9; ++i) {
+        dmd.layoutType().setValue(LayoutType.Two21);
+        for (int i = 0; i < 5; ++i) {
             GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
+            gmd.type().setValue(GadgetType.Demo);
             gmd.name().setValue("Gadget #" + i);
             gmd.column().setValue(Random.nextInt(2));
             dmd.gadgets().add(gmd);
         }
+
+        GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.type().setValue(GadgetType.BuildingLister);
+        gmd.name().setValue("Building lister");
+        gmd.column().setValue(0);
+        dmd.gadgets().add(gmd);
 
         view.fillDashboard(dmd);
     }

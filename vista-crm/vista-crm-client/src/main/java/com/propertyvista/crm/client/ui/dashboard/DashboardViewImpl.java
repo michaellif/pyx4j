@@ -31,12 +31,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Singleton;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
-import com.propertyvista.crm.client.ui.gadgets.DemoGadget;
+import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
+import com.pyx4j.dashboard.client.IGadget;
 import com.pyx4j.dashboard.client.Layout;
 
 @Singleton
@@ -64,6 +65,8 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
             return;
         }
 
+        // set dashboard layout:
+
         if (dashboardMetadata.layoutType().getValue() == (LayoutType.One)) {
             layouts.setLayout1();
         } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two11) {
@@ -76,10 +79,13 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
             layouts.setLayout3();
         }
 
-        // fill the dashboard with demo widgets:
-
-        for (GadgetMetadata md : dashboardMetadata.gadgets()) {
-            dashboard.addGadget(new DemoGadget(md), md.column().getValue());
+        // fill the dashboard with gadgets:
+        for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
+            IGadget gadget = GadgetsFactory.createGadget(gmd.type().getValue(), gmd);
+            if (gadget != null) {
+                dashboard.addGadget(gadget, gmd.column().getValue());
+                gadget.start(); // allow gadget execution... 
+            }
         }
     }
 
