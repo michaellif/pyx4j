@@ -15,6 +15,15 @@ public interface IGadget {
 
     String getDescription();
 
+    // runtime scope:
+    public void start();
+
+    public void suspend();
+
+    public void resume();
+
+    public void stop();
+
     // flags:	
     boolean isMaximizable();
 
