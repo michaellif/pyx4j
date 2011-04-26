@@ -20,24 +20,11 @@
  */
 package com.pyx4j.entity.rdb.oracle;
 
-import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.entity.rdb.DDLTestCase;
-import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
 public class DDLTest extends DDLTestCase {
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        try {
-            if (((EntityPersistenceServiceRDB) srv).isTableExists(TaskAlt1.class)) {
-                ((EntityPersistenceServiceRDB) srv).dropTable(TaskAlt1.class);
-            }
-        } catch (RuntimeExceptionSerializable ignore) {
-        }
-    }
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {

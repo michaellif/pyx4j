@@ -22,6 +22,9 @@ package com.pyx4j.entity.rdb;
 
 import java.util.Date;
 
+import junit.framework.Assert;
+
+import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -32,6 +35,17 @@ import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Status;
 
 public abstract class DDLTestCase extends DatastoreTestBase {
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        try {
+            if (((EntityPersistenceServiceRDB) srv).isTableExists(TaskAlt1.class)) {
+                ((EntityPersistenceServiceRDB) srv).dropTable(TaskAlt1.class);
+            }
+        } catch (RuntimeExceptionSerializable ignore) {
+        }
+    }
 
     @Table(prefix = "test", name = "ddl")
     public interface TaskAlt1 extends IEntity {
@@ -63,6 +77,8 @@ public abstract class DDLTestCase extends DatastoreTestBase {
         IPrimitive<Date> deadLine();
 
         IPrimitiveSet<String> notes();
+
+        IPrimitive<String> notes2();
     }
 
     public void testCreateTable() {
@@ -70,7 +86,11 @@ public abstract class DDLTestCase extends DatastoreTestBase {
         srv.persist(task1);
 
         TaskAlt2 task2 = EntityFactory.create(TaskAlt2.class);
+        task2.notes2().setValue(uniqueString());
         srv.persist(task2);
+
+        TaskAlt2 task22 = srv.retrieve(TaskAlt2.class, task2.getPrimaryKey());
+        Assert.assertEquals("Value", task2.notes2().getValue(), task22.notes2().getValue());
     }
 
 }

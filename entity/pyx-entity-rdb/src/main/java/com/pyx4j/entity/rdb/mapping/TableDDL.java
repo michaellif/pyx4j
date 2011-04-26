@@ -82,7 +82,7 @@ class TableDDL {
                 }
                 StringBuilder sql = new StringBuilder("alter table ");
                 sql.append(tableModel.tableName);
-                sql.append(" add column ");
+                sql.append(" add "); // [ column ]
                 sql.append(member.sqlName()).append(' ');
                 sql.append(sqlType(dialect, memberMeta));
                 alterSqls.add(sql.toString());
