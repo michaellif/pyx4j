@@ -1,6 +1,6 @@
 -- @version $Revision$ ($Author$) $Date$
 
-CREATE USER tst_entity BY tst_entity;
+CREATE USER tst_entity IDENTIFIED BY tst_entity;
 GRANT CONNECT TO tst_entity;
 GRANT RESOURCE TO tst_entity;
 
