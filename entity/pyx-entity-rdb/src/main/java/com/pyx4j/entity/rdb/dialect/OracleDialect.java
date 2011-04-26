@@ -41,6 +41,12 @@ public class OracleDialect extends Dialect {
         TypeMeta dateTypeMeta = new TypeMeta(java.util.Date.class, "timestamp", 0, -1);
         dateTypeMeta.setCompatibleTypeNames("timestamp(0)");
         addTypeMeta(dateTypeMeta);
+
+        addTypeMeta(java.sql.Date.class, "date");
+
+        TypeMeta timeTypeMeta = new TypeMeta(java.sql.Time.class, "timestamp", 0, -1);
+        timeTypeMeta.setCompatibleTypeNames("timestamp(0)");
+        addTypeMeta(timeTypeMeta);
     }
 
     @Override

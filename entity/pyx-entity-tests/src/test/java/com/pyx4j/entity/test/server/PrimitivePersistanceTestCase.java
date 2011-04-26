@@ -32,6 +32,7 @@ import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
 import com.pyx4j.entity.test.shared.domain.Status;
+import com.pyx4j.entity.test.shared.domain.temporal.Schedule;
 import com.pyx4j.geo.GeoPoint;
 
 public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
@@ -64,6 +65,44 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertEquals("Class of Value", Date.class, emp2.from().getValue().getClass());
         Assert.assertEquals("Value", day, emp2.from().getValue());
+    }
+
+    public void testSqlDate() {
+        Schedule s = EntityFactory.create(Schedule.class);
+        Assert.assertNull("Initial value", s.startsOn().getValue());
+        Assert.assertEquals("Class of Value", java.sql.Date.class, s.startsOn().getValueClass());
+        // Round to seconds
+        GregorianCalendar c = new GregorianCalendar();
+        Date today = TimeUtils.getRoundedNow();
+        c.setTime(today);
+        c.set(Calendar.YEAR, c.get(Calendar.YEAR) - 1);
+        java.sql.Date day = new java.sql.Date(TimeUtils.dayStart(c.getTime()).getTime());
+        s.startsOn().setValue(day);
+
+        srv.persist(s);
+        Schedule s2 = srv.retrieve(Schedule.class, s.getPrimaryKey());
+        Assert.assertEquals("Class of Value", java.sql.Date.class, s2.startsOn().getValue().getClass());
+        Assert.assertEquals("Value", day, s2.startsOn().getValue());
+    }
+
+    public void testSqlTime() {
+        Schedule s = EntityFactory.create(Schedule.class);
+        Assert.assertNull("Initial value", s.time().getValue());
+        Assert.assertEquals("Class of Value", java.sql.Time.class, s.time().getValueClass());
+        // Round to seconds
+        GregorianCalendar c = new GregorianCalendar();
+        c.setTime(TimeUtils.getRoundedNow());
+        c.set(Calendar.YEAR, 1970);
+        c.set(Calendar.DAY_OF_YEAR, 1);
+
+        java.sql.Time time = new java.sql.Time(c.getTime().getTime());
+
+        s.time().setValue(time);
+
+        srv.persist(s);
+        Schedule s2 = srv.retrieve(Schedule.class, s.getPrimaryKey());
+        Assert.assertEquals("Class of Value", java.sql.Time.class, s2.time().getValue().getClass());
+        Assert.assertEquals("Value", time, s2.time().getValue());
     }
 
     public void testBoolean() {

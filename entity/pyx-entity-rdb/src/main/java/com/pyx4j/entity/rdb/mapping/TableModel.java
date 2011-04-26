@@ -422,13 +422,21 @@ public class TableModel {
         }
     }
 
-    public static Object getValue(ResultSet rs, String columnSqlName, MemberMeta memberMeta) throws SQLException {
+    private Object getValue(ResultSet rs, String columnSqlName, MemberMeta memberMeta) throws SQLException {
         Object value = rs.getObject(columnSqlName);
         if (value == null) {
             return null;
         }
         if (java.util.Date.class.isAssignableFrom(memberMeta.getValueClass())) {
-            value = rs.getTimestamp(columnSqlName);
+            if (dialect.databaseType() == DatabaseType.Oracle) {
+                if (java.sql.Date.class.isAssignableFrom(memberMeta.getValueClass())) {
+                    value = rs.getDate(columnSqlName);
+                } else if (java.sql.Time.class.isAssignableFrom(memberMeta.getValueClass())) {
+                    value = rs.getTime(columnSqlName);
+                } else {
+                    value = rs.getTimestamp(columnSqlName);
+                }
+            }
         }
         return decodeValue(value, memberMeta);
 
