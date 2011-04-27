@@ -54,6 +54,7 @@ public class ReportDropController extends AbstractPositioningDropController {
     @Override
     public void onDrop(DragContext context) {
         if (dropCoordinates != null && context.selectedWidgets.size() == 1) {
+            System.out.println("onDrop+++++++++++++++ " + dropCoordinates);
             dropTarget.setGadget(context.selectedWidgets.get(0), dropCoordinates.getRow(), dropCoordinates.getColumn());
         } else {
             throw new Error("Single Gadget can be selected");
@@ -79,11 +80,11 @@ public class ReportDropController extends AbstractPositioningDropController {
     public void onMove(DragContext context) {
         super.onMove(context);
 
-        CellCoordinates targetLocation = dropTarget.getGadgetLocation(context.mouseX, context.mouseY);
+        CellCoordinates targetLocation = dropTarget.getGadgetInsertion(context.mouseX, context.mouseY);
         CellCoordinates positionerLocation = dropTarget.getGadgetLocation(positioner);
 
         System.out.println("onMove+++++++++++++++ " + targetLocation);
-        System.out.println("onMove----- " + positionerLocation);
+//        System.out.println("onMove----- " + positionerLocation);
 
         if (targetLocation != null && !targetLocation.equals(positionerLocation)) {
             dropTarget.insertGadget(positioner, targetLocation.getRow(), targetLocation.getColumn());
@@ -104,10 +105,12 @@ public class ReportDropController extends AbstractPositioningDropController {
     @Override
     public void onPreviewDrop(DragContext context) throws VetoDragException {
         dropCoordinates = dropTarget.getGadgetLocation(positioner);
+        System.out.println("onPreviewDrop+++++++++++++++ " + dropCoordinates);
+
         super.onPreviewDrop(context);
     }
 
-    protected Widget newPositioner(DragContext context) {
+    protected GadgetPositioner newPositioner(DragContext context) {
         int width = 0;
         int height = 0;
         if (context.selectedWidgets.size() == 1) {

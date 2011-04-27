@@ -189,12 +189,31 @@ public class ReportLayoutPanel extends FlowPanel {
         for (int i = 0; i < getWidgetCount(); i++) {
             Widget rowWidget = getWidget(i);
             WidgetArea rowArea = new WidgetArea(rowWidget, null);
-            if (rowArea.getTop() < y && y < rowArea.getBottom() && rowArea.getLeft() < x && x < rowArea.getRight()) {
+            if (rowArea.getTop() <= y && y <= rowArea.getBottom() && rowArea.getLeft() <= x && x <= rowArea.getRight()) {
                 if (rowWidget instanceof RowPanel) {
                     column = (rowArea.getWidth() / 2 > x) ? 0 : 1;
                 } else {
                     column = -1;
                 }
+                row = i;
+                break;
+            }
+        }
+        if (row == -1) {
+            return null;
+        } else {
+            return new CellCoordinates(row, column);
+        }
+    }
+
+    public CellCoordinates getGadgetInsertion(int x, int y) {
+        int row = -1;
+        int column = -2;
+        for (int i = 0; i < getWidgetCount(); i++) {
+            Widget rowWidget = getWidget(i);
+            WidgetArea rowArea = new WidgetArea(rowWidget, null);
+            if (rowArea.getTop() <= y && y <= rowArea.getBottom() && rowArea.getLeft() <= x && x <= rowArea.getRight()) {
+                column = (rowArea.getWidth() / 2 > x) ? 0 : 1;
                 row = i;
                 break;
             }
