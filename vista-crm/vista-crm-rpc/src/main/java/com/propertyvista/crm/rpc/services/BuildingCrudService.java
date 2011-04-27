@@ -13,11 +13,16 @@
  */
 package com.propertyvista.crm.rpc.services;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.domain.Building;
+
+import com.pyx4j.entity.shared.IEntity;
 
 public interface BuildingCrudService extends AbstractCrudService<Building> {
 
     public void getTestBuildingNomberOne(AsyncCallback<Building> callback);
 
+    public void getTestBuildingsList(AsyncCallback<Vector<? extends IEntity>> callback);
 }

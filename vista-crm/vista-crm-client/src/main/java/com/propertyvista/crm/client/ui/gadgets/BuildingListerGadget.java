@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.gadgets;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -24,11 +25,18 @@ import com.propertyvista.portal.domain.Building;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.rpc.client.RPCManager;
 
 public class BuildingListerGadget extends ListerGadgetBase<Building> {
 
     public BuildingListerGadget(GadgetMetadata gmd) {
         super(gmd, Building.class);
+        getListPanel().removeUpperActionsBar();
     }
 
     @Override
@@ -37,14 +45,15 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName(), "100px"));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode(), "100px"));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingType(), "100px"));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName(), "100px"));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.email(), "100px"));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.website(), "100px"));
     }
 
     @Override
     public void start() {
         super.start();
-        populateData();
+//        populateData();
+//        populateData2();
+        populateData3();
     }
 
     public void populateData() {
@@ -64,5 +73,40 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
                 }
             });
         }
+    }
+
+    public void populateData2() {
+        BuildingCrudService bcs = GWT.create(BuildingCrudService.class);
+        if (bcs != null) {
+            bcs.getTestBuildingsList(new AsyncCallback<Vector<? extends IEntity>>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                }
+
+                @SuppressWarnings("unchecked")
+                @Override
+                public void onSuccess(Vector<? extends IEntity> result) {
+                    BuildingListerGadget.this.getListPanel().populateData((Vector<Building>) result, 0, false);
+                }
+            });
+        }
+    }
+
+    public void populateData3() {
+        // Load all Order images.
+        AsyncCallback<Vector<? extends IEntity>> callback = new AsyncCallback<Vector<? extends IEntity>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onSuccess(Vector<? extends IEntity> result) {
+                BuildingListerGadget.this.getListPanel().populateData((Vector<Building>) result, 0, false);
+            }
+        };
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.add(new PropertyCriterion(criteria.proto().id().getFieldName(), Restriction.NOT_EQUAL, 0));
+        RPCManager.execute(EntityServices.Query.class, criteria, callback);
     }
 }
