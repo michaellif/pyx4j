@@ -56,7 +56,7 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
                 public void onSuccess(Building result) {
                     List<Building> data = new ArrayList<Building>();
                     data.add(result);
-                    BuildingListerGadget.this.getListPanel().populateData(data, 1, false);
+                    BuildingListerGadget.this.getListPanel().populateData(data, 0, false);
                 }
 
                 @Override

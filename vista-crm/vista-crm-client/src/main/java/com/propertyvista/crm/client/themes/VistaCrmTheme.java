@@ -22,6 +22,7 @@ import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
+import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.NativeComboBox;
 import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.widgets.client.ImageFactory;
@@ -81,6 +82,8 @@ public abstract class VistaCrmTheme extends Theme {
         initActionStyle();
 
         initDashboard();
+        initEntityDataTableStyles();
+
     }
 
     protected void initThemeColors() {
@@ -1190,6 +1193,42 @@ public abstract class VistaCrmTheme extends Theme {
         // overriding gwt-dnd styles:
         style = new Style(".dragdrop-handle");
         style.addProperty("cursor", "default");
+        addStyle(style);
+    }
+
+    protected void initEntityDataTableStyles() {
+        String prefix = DataTable.BASE_NAME;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("margin", "2px 0px 2px 0px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row));
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.even));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.odd));
+        style.addProperty("background-color", "white");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.nodetails));
+        style.addProperty("cursor", "default");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("color", "black");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));
+        style.addProperty("background-color", "#F6F9FF");
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
     }
 }
