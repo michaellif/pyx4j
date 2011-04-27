@@ -60,17 +60,12 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
         setWidth("100%");
 
         entityPrototype = EntityFactory.create(clazz);
-        dataTable = new DataTable<E>(false);
+
+        add(upperActionsBar = new DataTableActionsBar());
+        add(dataTable = new DataTable<E>(false));
+        add(lowerActionsBar = new DataTableActionsBar());
+
         dataTable.setWidth("100%");
-
-        upperActionsBar = new DataTableActionsBar();
-
-        lowerActionsBar = new DataTableActionsBar();
-
-        add(upperActionsBar);
-        add(dataTable);
-        add(lowerActionsBar);
-
         setCellWidth(dataTable, "100%");
 
         dataTableModel = new DataTableModel<E>(entityPrototype.getEntityMeta(), getColumnDescriptors());
@@ -93,7 +88,14 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
         upperActionsBar.setDataTableModel(dataTableModel);
         lowerActionsBar.setDataTableModel(dataTableModel);
+    }
 
+    public void removeUpperActionsBar() {
+        remove(upperActionsBar);
+    }
+
+    public void removeLowerActionsBar() {
+        remove(lowerActionsBar);
     }
 
     public abstract List<ColumnDescriptor<E>> getColumnDescriptors();

@@ -39,7 +39,7 @@ public class DataTableModel<E extends IEntity> {
 
     private final ArrayList<DataItem<E>> data = new ArrayList<DataItem<E>>();
 
-    private final List<ColumnDescriptor<E>> columnDescriptors;
+    private List<ColumnDescriptor<E>> columnDescriptors;
 
     private ColumnDescriptor<E> sortColumn;
 
@@ -69,6 +69,10 @@ public class DataTableModel<E extends IEntity> {
 
     public List<ColumnDescriptor<E>> getColumnDescriptors() {
         return columnDescriptors;
+    }
+
+    public void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
+        this.columnDescriptors = columnDescriptors;
     }
 
     public ColumnDescriptor<E> getColumnDescriptor(String columnName) {
