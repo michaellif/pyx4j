@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
+import com.allen_sauer.gwt.dnd.client.util.WidgetArea;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -38,8 +39,8 @@ public class ReportLayoutPanel extends FlowPanel {
     }
 
     public void insertGadget(Widget widget, int beforeRow, int column) {
-        if (beforeRow > getWidgetCount()) {
-            throw new Error("Row is out of bounds");
+        if (beforeRow > getWidgetCount() || beforeRow < 0) {
+            throw new Error("Row is out of bounds - " + beforeRow);
         } else if (column == -1) { //column -1 means full width
             insert(widget, beforeRow);
         } else {
@@ -97,9 +98,8 @@ public class ReportLayoutPanel extends FlowPanel {
     }
 
     public void removeGadget(Widget widget) {
-        int row = getGadgetRowIndex(widget);
-        int column = getGadgetColumnIndex(widget);
-        removeGadget(row, column);
+        CellCoordinates coordinates = getGadgetLocation(widget);
+        removeGadget(coordinates.getRow(), coordinates.getColumn());
     }
 
     public void removeGadget(int row, int column) {
@@ -144,44 +144,105 @@ public class ReportLayoutPanel extends FlowPanel {
         }
     }
 
-    public int getGadgetRowIndex(Widget gadget) {
+    public CellCoordinates getGadgetLocation(Widget gadget) {
+
         if (gadget == null) {
-            return -1;
+            return null;
         }
+
+        int row = -1;
+        int column = 0;
+
         int index = getWidgetIndex(gadget);
         if (index > -1) {
-            return index;
-        }
-        for (int i = 0; i < getWidgetCount(); i++) {
-            if (getWidget(i) instanceof RowPanel) {
-                RowPanel rowPanel = (RowPanel) getWidget(i);
-                if (gadget.equals(rowPanel.getLeftGadget()) || gadget.equals(rowPanel.getRightGadget())) {
-                    return i;
+            row = index;
+            column = -1;
+        } else {
+            for (int i = 0; i < getWidgetCount(); i++) {
+                if (getWidget(i) instanceof RowPanel) {
+                    RowPanel rowPanel = (RowPanel) getWidget(i);
+                    if (gadget.equals(rowPanel.getLeftGadget())) {
+                        row = i;
+                        column = 0;
+                        break;
+                    } else if (gadget.equals(rowPanel.getRightGadget())) {
+                        row = i;
+                        column = 1;
+                        break;
+                    }
                 }
             }
+
         }
-        return -1;
+
+        if (row == -1) {
+            return null;
+        } else {
+            return new CellCoordinates(row, column);
+        }
+
     }
 
-    public int getGadgetColumnIndex(Widget gadget) {
-        if (gadget == null) {
-            return -1;
-        }
-        int index = getWidgetIndex(gadget);
-        if (index > -1) {
-            return -1;
-        }
+    public CellCoordinates getGadgetLocation(int x, int y) {
+        int row = -1;
+        int column = -2;
         for (int i = 0; i < getWidgetCount(); i++) {
-            if (getWidget(i) instanceof RowPanel) {
-                RowPanel rowPanel = (RowPanel) getWidget(i);
-                if (gadget.equals(rowPanel.getLeftGadget())) {
-                    return 0;
-                } else if (gadget.equals(rowPanel.getRightGadget())) {
-                    return 1;
+            Widget rowWidget = getWidget(i);
+            WidgetArea rowArea = new WidgetArea(rowWidget, null);
+            if (rowArea.getTop() < y && y < rowArea.getBottom() && rowArea.getLeft() < x && x < rowArea.getRight()) {
+                if (rowWidget instanceof RowPanel) {
+                    column = (rowArea.getWidth() / 2 > x) ? 0 : 1;
+                } else {
+                    column = -1;
                 }
+                row = i;
+                break;
             }
         }
-        return -1;
+        if (row == -1) {
+            return null;
+        } else {
+            return new CellCoordinates(row, column);
+        }
+    }
+
+    class CellCoordinates {
+
+        private final int row;
+
+        private final int column;
+
+        public CellCoordinates(int row, int column) {
+            super();
+            this.row = row;
+            this.column = column;
+        }
+
+        public int getRow() {
+            return row;
+        }
+
+        public int getColumn() {
+            return column;
+        }
+
+        @Override
+        public String toString() {
+            return "[" + row + "/" + column + "]";
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof CellCoordinates) {
+                return row == ((CellCoordinates) obj).row && column == ((CellCoordinates) obj).column;
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return row ^ column;
+        }
     }
 
     class RowPanel extends FlowPanel {

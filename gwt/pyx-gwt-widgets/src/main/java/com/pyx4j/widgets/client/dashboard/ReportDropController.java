@@ -23,21 +23,18 @@ package com.pyx4j.widgets.client.dashboard;
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.allen_sauer.gwt.dnd.client.drop.AbstractPositioningDropController;
-import com.allen_sauer.gwt.dnd.client.drop.FlowPanelDropController;
 import com.allen_sauer.gwt.dnd.client.util.Area;
-import com.allen_sauer.gwt.dnd.client.util.CoordinateLocation;
-import com.allen_sauer.gwt.dnd.client.util.DOMUtil;
 import com.allen_sauer.gwt.dnd.client.util.Location;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.widgets.client.dashboard.ReportLayoutPanel.CellCoordinates;
 
 public class ReportDropController extends AbstractPositioningDropController {
 
     protected final ReportLayoutPanel dropTarget;
 
-    private int dropRowIndex;
-
-    private int dropColumnIndex;
+    private CellCoordinates dropCoordinates;
 
     private Widget positioner = null;
 
@@ -49,12 +46,6 @@ public class ReportDropController extends AbstractPositioningDropController {
         }
     };
 
-    /**
-     * @see FlowPanelDropController#FlowPanelDropController(com.google.gwt.user.client.ui.FlowPanel)
-     * 
-     * @param dropTarget
-     *            the insert panel drop target
-     */
     public ReportDropController(ReportLayoutPanel dropTarget) {
         super(dropTarget);
         this.dropTarget = dropTarget;
@@ -62,9 +53,8 @@ public class ReportDropController extends AbstractPositioningDropController {
 
     @Override
     public void onDrop(DragContext context) {
-        assert dropRowIndex != -1 : "Should not happen after onPreviewDrop did not veto";
-        if (context.selectedWidgets.size() == 1) {
-            dropTarget.setGadget(context.selectedWidgets.get(0), dropRowIndex, dropColumnIndex);
+        if (dropCoordinates != null && context.selectedWidgets.size() == 1) {
+            dropTarget.setGadget(context.selectedWidgets.get(0), dropCoordinates.getRow(), dropCoordinates.getColumn());
         } else {
             throw new Error("Single Gadget can be selected");
         }
@@ -74,27 +64,13 @@ public class ReportDropController extends AbstractPositioningDropController {
     @Override
     public void onEnter(DragContext context) {
         super.onEnter(context);
-
         positioner = newPositioner(context);
-
-        int targetRowIndex = DOMUtil.findIntersect(dropTarget, new CoordinateLocation(context.mouseX, context.mouseY), FULL_COMPARATOR);
-
-        int targetColumnIndex = -2;
-
-        if (context.selectedWidgets.get(0).getOffsetWidth() > dropTarget.getOffsetWidth() * 2 / 3) {
-            targetColumnIndex = -1;
-        } else {
-            targetColumnIndex = (context.mouseX < (dropTarget.getOffsetWidth() / 2)) ? 0 : 1;
-        }
-
-        //System.out.println("onEnter+++++++++++++++ " + targetRowIndex + " " + targetColumnIndex);
-
-        dropTarget.setGadget(positioner, targetRowIndex, targetColumnIndex);
+        CellCoordinates targetLocation = dropTarget.getGadgetLocation(context.mouseX, context.mouseY);
+        dropTarget.setGadget(positioner, targetLocation.getRow(), targetLocation.getColumn());
     }
 
     @Override
     public void onLeave(DragContext context) {
-        //dropTarget.removeGadget(positioner);
         positioner = null;
         super.onLeave(context);
     }
@@ -103,22 +79,15 @@ public class ReportDropController extends AbstractPositioningDropController {
     public void onMove(DragContext context) {
         super.onMove(context);
 
-        int targetRowIndex = DOMUtil.findIntersect(dropTarget, new CoordinateLocation(context.mouseX, context.mouseY),
-                LocationWidgetComparator.BOTTOM_HALF_COMPARATOR);
-        int targetColumnIndex = -2;
-        Widget row = dropTarget.getWidget(targetRowIndex);
-        if (row instanceof GadgetHolder) {
-            targetColumnIndex = -1;
-        } else {
-            targetColumnIndex = 1;
+        CellCoordinates targetLocation = dropTarget.getGadgetLocation(context.mouseX, context.mouseY);
+        CellCoordinates positionerLocation = dropTarget.getGadgetLocation(positioner);
+
+        System.out.println("onMove+++++++++++++++ " + targetLocation);
+        System.out.println("onMove----- " + positionerLocation);
+
+        if (targetLocation != null && !targetLocation.equals(positionerLocation)) {
+            dropTarget.insertGadget(positioner, targetLocation.getRow(), targetLocation.getColumn());
         }
-
-        // check that positioner not already in the correct location
-        int positionerRowIndex = dropTarget.getGadgetRowIndex(positioner);
-        int positionerColumnIndex = dropTarget.getGadgetColumnIndex(positioner);
-
-        System.out.println("onMove+++++++++++++++ " + targetRowIndex + " " + targetColumnIndex);
-        System.out.println("onMove----- " + positionerRowIndex + " " + positionerColumnIndex);
 
         //        if (positionerRowIndex != targetRowIndex && (positionerRowIndex != targetRowIndex - 1 || targetRowIndex == 0)) {
         //            if (positionerRowIndex == 0 && dropTarget.getWidgetCount() == 1) {
@@ -134,15 +103,7 @@ public class ReportDropController extends AbstractPositioningDropController {
 
     @Override
     public void onPreviewDrop(DragContext context) throws VetoDragException {
-
-        dropRowIndex = dropTarget.getGadgetRowIndex(positioner);
-        dropColumnIndex = dropTarget.getGadgetColumnIndex(positioner);
-
-        //System.out.println("onPreviewDrop+++++++++++++++ " + dropRowIndex + " " + dropColumnIndex);
-
-        if (dropRowIndex == -1) {
-            throw new VetoDragException();
-        }
+        dropCoordinates = dropTarget.getGadgetLocation(positioner);
         super.onPreviewDrop(context);
     }
 
