@@ -13,10 +13,6 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.ref.Country;
-import com.propertyvista.portal.domain.ref.CountryReferenceAdapter;
-import com.propertyvista.portal.domain.ref.Province;
-
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -28,6 +24,10 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.portal.domain.ref.CountryReferenceAdapter;
+import com.propertyvista.portal.domain.ref.Province;
 
 @Table(name = "pt_vehicle")
 public interface Vehicle extends IEntity {
@@ -48,7 +48,7 @@ public interface Vehicle extends IEntity {
     @Editor(type = EditorType.combo)
     Province province();
 
-    @Editor(type = EditorType.suggest)
+    @Editor(type = EditorType.combo)
     @NotNull
     @Reference(adapter = CountryReferenceAdapter.class)
     Country country();

@@ -19,8 +19,6 @@ import java.util.Vector;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.propertyvista.portal.domain.ref.Country;
-import com.propertyvista.portal.domain.ref.Province;
 
 import com.pyx4j.commons.CompareHelper;
 import com.pyx4j.commons.EqualsHelper;
@@ -28,6 +26,10 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntitySuggestBox;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.IAcceptText;
+
+import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.portal.domain.ref.Province;
 
 public class ProvinceContryFilters {
 
@@ -43,14 +45,11 @@ public class ProvinceContryFilters {
     /**
      * Add proper dependencies between shown list of countries and provinces/states
      */
-    public static void attachFilters(CEditableComponent<Province, ?> province, CEditableComponent<Country, ?> country) {
-        if ((!(province instanceof CEntityComboBox)) || (!(country instanceof CEntitySuggestBox))) {
+    public static void attachFilters(CEditableComponent<Province, ?> province, final CEditableComponent<Country, ?> country) {
+        if ((!(province instanceof CEntityComboBox)) || (!(country instanceof IAcceptText))) {
             return;
         }
-
-        // Province by Country
-        @SuppressWarnings("unchecked")
-        final CEntitySuggestBox<Country> countrySuggest = (CEntitySuggestBox<Country>) country;
+        // Filter Province by Country
         @SuppressWarnings("unchecked")
         final CEntityComboBox<Province> provinceCombo = (CEntityComboBox<Province>) province;
         final boolean provinceComboIsMandatoryInitialy = provinceCombo.isMandatory();
@@ -67,10 +66,10 @@ public class ProvinceContryFilters {
 
             @Override
             public boolean acceptOption(Province entity) {
-                return countrySuggest.isValueEmpty() ? true : EqualsHelper.equals(entity.country().name(), countrySuggest.getValue().name());
+                return country.isValueEmpty() ? true : EqualsHelper.equals(entity.country().name(), country.getValue().name());
             }
         });
-        countrySuggest.addValueChangeHandler(new ValueChangeHandler<Country>() {
+        country.addValueChangeHandler(new ValueChangeHandler<Country>() {
 
             @Override
             public void onValueChange(ValueChangeEvent<Country> event) {
@@ -92,9 +91,14 @@ public class ProvinceContryFilters {
 
             @Override
             public void onValueChange(ValueChangeEvent<Province> event) {
-                if ((!provinceCombo.isValueEmpty()) && (countrySuggest.isOptionsLoaded())) {
-                    countrySuggest.setValueByString(provinceCombo.getValue().country().name().getValue());
-                    countrySuggest.revalidate();
+                if (!provinceCombo.isValueEmpty()) {
+                    if ((country instanceof CEntitySuggestBox) && (((CEntitySuggestBox<?>) country).isOptionsLoaded())) {
+                        ((CEntitySuggestBox<?>) country).setValueByString(provinceCombo.getValue().country().name().getValue());
+                        country.revalidate();
+                    } else if ((country instanceof CEntityComboBox) && (((CEntityComboBox<?>) country).isOptionsLoaded())) {
+                        ((CEntityComboBox<?>) country).setValueByString(provinceCombo.getValue().country().name().getValue());
+                        country.revalidate();
+                    }
                 }
             }
         });

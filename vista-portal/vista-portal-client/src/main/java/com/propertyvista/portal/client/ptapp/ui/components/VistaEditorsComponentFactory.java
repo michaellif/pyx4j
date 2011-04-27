@@ -13,10 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui.components;
 
-import com.propertyvista.common.client.ui.CMoneyLabel;
-import com.propertyvista.portal.domain.Money;
-import com.propertyvista.portal.domain.ref.Country;
-
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.CEntitySuggestBox;
 import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -24,13 +21,17 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.IFormat;
 
+import com.propertyvista.common.client.ui.CMoneyLabel;
+import com.propertyvista.portal.domain.Money;
+import com.propertyvista.portal.domain.ref.Country;
+
 public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(Money.class)) {
             return new CMoneyLabel();
-        } else if (member.getValueClass().equals(Country.class)) {
+        } else if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
             final CEntitySuggestBox<Country> c = new CEntitySuggestBox<Country>(Country.class);
             c.setFormat(new IFormat<Country>() {
 

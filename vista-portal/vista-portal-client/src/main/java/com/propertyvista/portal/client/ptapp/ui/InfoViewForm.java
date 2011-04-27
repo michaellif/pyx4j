@@ -29,22 +29,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
-import com.propertyvista.common.client.ui.ViewLineSeparator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
-import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsFolderUploader;
-import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.portal.client.ptapp.ui.validators.CanadianSinValidator;
-import com.propertyvista.portal.domain.pt.Address;
-import com.propertyvista.portal.domain.pt.Address.OwnedRented;
-import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
-import com.propertyvista.portal.domain.pt.EmergencyContact;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.Vehicle;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;
@@ -65,6 +49,24 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+
+import com.propertyvista.common.client.ui.ViewLineSeparator;
+import com.propertyvista.common.client.ui.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
+import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsFolderUploader;
+import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.portal.client.ptapp.ui.validators.CanadianSinValidator;
+import com.propertyvista.portal.client.ptapp.ui.validators.ProvinceContryFilters;
+import com.propertyvista.portal.domain.pt.Address;
+import com.propertyvista.portal.domain.pt.Address.OwnedRented;
+import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
+import com.propertyvista.portal.domain.pt.EmergencyContact;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.pt.Vehicle;
 
 @Singleton
 public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
@@ -364,6 +366,11 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
                         return new TableFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), i18n.tr("Remove vehicle"));
+                    }
+
+                    @Override
+                    public void addValidations() {
+                        ProvinceContryFilters.attachFilters(get(proto().province()), get(proto().country()));
                     }
 
                 };
