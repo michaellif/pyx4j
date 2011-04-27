@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.dashboard;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Unit;
@@ -27,6 +28,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
@@ -260,22 +262,24 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
             public AddGadgetBox() {
                 super(false, true);
                 setCaption("Gadget Directory");
-                setSize("400px", "150px");
 
-                fillAvailableGadgets();
+                listAvailableGadgets();
 
                 HorizontalPanel gadgets = new HorizontalPanel();
                 gadgets.add(gadgetsList);
                 gadgets.add(gadgetDesc);
                 gadgets.setSpacing(10);
                 gadgets.setWidth("100%");
+
                 gadgets.setCellWidth(gadgetsList, "35%");
                 gadgetsList.setWidth("100%");
 
-                gadgetDesc.setSize("100%", "100%");
-                gadgetDesc.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-                gadgetDesc.getElement().getStyle().setBorderWidth(1, Unit.PX);
-                gadgetDesc.getElement().getStyle().setBorderColor("#bbb");
+                // style right (description) cell:
+                Element cell = DOM.getParent(gadgetDesc.getElement());
+                cell.getStyle().setPadding(3, Unit.PX);
+                cell.getStyle().setBorderStyle(BorderStyle.SOLID);
+                cell.getStyle().setBorderWidth(1, Unit.PX);
+                cell.getStyle().setBorderColor("#bbb");
 
                 HorizontalPanel buttons = new HorizontalPanel();
                 buttons.add(new Button("Add", new ClickHandler() {
@@ -298,19 +302,22 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
                 vPanel.add(buttons);
                 vPanel.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_CENTER);
                 vPanel.setSpacing(10);
-                vPanel.setWidth("100%");
-                vPanel.setHeight("100%");
+                vPanel.setSize("100%", "100%");
+
                 setWidget(vPanel);
+                setSize("400px", "150px");
+//              getElement().getStyle().setProperty("minWidth", "400px");
+//              getElement().getStyle().setProperty("minHeight", "150px");
             }
 
-            private void fillAvailableGadgets() {
-
+            private void listAvailableGadgets() {
+                gadgetsList.clear();
                 for (GadgetType gt : GadgetType.values()) {
                     gadgetsList.addItem(gt.name());
                 }
+                gadgetsList.setSelectedIndex(-1);
                 gadgetsList.setVisibleItemCount(8);
                 gadgetsList.addChangeHandler(new ChangeHandler() {
-
                     @Override
                     public void onChange(ChangeEvent event) {
                         if (gadgetsList.getSelectedIndex() >= 0) {

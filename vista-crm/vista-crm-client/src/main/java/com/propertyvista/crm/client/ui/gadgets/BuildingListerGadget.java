@@ -20,6 +20,7 @@ import java.util.Vector;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.portal.domain.Building;
 
@@ -40,12 +41,18 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
     }
 
     @Override
+    protected void selfInit(GadgetMetadata gmd) {
+        gmd.type().setValue(GadgetType.BuildingLister);
+        gmd.name().setValue("Building Lister");
+    }
+
+    @Override
     protected void fillColumnDescriptors(List<ColumnDescriptor<Building>> columnDescriptors, Building proto) {
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name(), "100px"));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName(), "100px"));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode(), "100px"));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingType(), "100px"));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.website(), "100px"));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingType()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.website()));
     }
 
     @Override

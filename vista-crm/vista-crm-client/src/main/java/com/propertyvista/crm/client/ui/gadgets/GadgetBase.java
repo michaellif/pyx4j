@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
 import com.pyx4j.dashboard.client.IGadget;
+import com.pyx4j.entity.shared.EntityFactory;
 
 public abstract class GadgetBase implements IGadget {
 
@@ -24,8 +25,23 @@ public abstract class GadgetBase implements IGadget {
 
     public GadgetBase(GadgetMetadata gmd) {
         super();
+
+        if (gmd == null) {
+            gmd = EntityFactory.create(GadgetMetadata.class);
+            assert (gmd != null);
+            selfInit(gmd);
+
+        }
         gadgetMetadata = gmd;
     }
+
+    /*
+     * This method is called in case of null GadgetMetadata in constructor.
+     * That means on-the-fly gadget creation (Add Gadget), without storage.
+     * implement it in derived class in order to set meaningful gadget
+     * name/description/type/etc...
+     */
+    protected abstract void selfInit(GadgetMetadata gmd);
 
     // info:
 
@@ -41,12 +57,12 @@ public abstract class GadgetBase implements IGadget {
 
     @Override
     public String getName() {
-        return (gadgetMetadata != null ? gadgetMetadata.name().getValue() : "");
+        return (gadgetMetadata.name().isNull() ? "" : gadgetMetadata.name().getValue());
     }
 
     @Override
     public String getDescription() {
-        return (gadgetMetadata != null ? gadgetMetadata.description().getValue() : "");
+        return (gadgetMetadata.description().isNull() ? "" : gadgetMetadata.description().getValue());
     }
 
     // runtime scope:

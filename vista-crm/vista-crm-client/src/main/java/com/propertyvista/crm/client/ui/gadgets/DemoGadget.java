@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
 public class DemoGadget extends GadgetBase {
 
@@ -30,6 +31,12 @@ public class DemoGadget extends GadgetBase {
     public DemoGadget(GadgetMetadata gmd) {
         super(gmd);
         widget.setText(getName() + " content");
+    }
+
+    @Override
+    protected void selfInit(GadgetMetadata gmd) {
+        gmd.type().setValue(GadgetType.Demo);
+        gmd.name().setValue("Demo gadget");
     }
 
     // info:
