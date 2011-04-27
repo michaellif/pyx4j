@@ -261,7 +261,7 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
 
             public AddGadgetBox() {
                 super(false, true);
-                setCaption("Gadget Directory");
+                setCaption(i18n.tr("Gadget Directory"));
 
                 listAvailableGadgets();
 
@@ -275,6 +275,7 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
                 gadgetsList.setWidth("100%");
 
                 // style right (description) cell:
+                gadgetDesc.setText(i18n.tr("Select desired gadget in the list..."));
                 Element cell = DOM.getParent(gadgetDesc.getElement());
                 cell.getStyle().setPadding(3, Unit.PX);
                 cell.getStyle().setBorderStyle(BorderStyle.SOLID);

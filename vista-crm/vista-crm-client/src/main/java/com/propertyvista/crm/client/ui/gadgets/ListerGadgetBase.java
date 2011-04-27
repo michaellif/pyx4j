@@ -93,7 +93,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             }
 
             FlowPanel setupPanel = new FlowPanel();
-            setupPanel.add(new Label("Select columns to show:"));
+            setupPanel.add(new Label(i18n.tr("Select columns to show:")));
 
             columns.setVisibleItemCount(8);
             setupPanel.add(columns);

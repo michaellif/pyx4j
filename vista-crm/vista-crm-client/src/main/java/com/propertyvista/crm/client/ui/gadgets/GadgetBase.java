@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
@@ -20,6 +23,8 @@ import com.pyx4j.dashboard.client.IGadget;
 import com.pyx4j.entity.shared.EntityFactory;
 
 public abstract class GadgetBase implements IGadget {
+
+    protected static I18n i18n = I18nFactory.getI18n(GadgetBase.class);
 
     protected final GadgetMetadata gadgetMetadata;
 
@@ -40,6 +45,7 @@ public abstract class GadgetBase implements IGadget {
      * That means on-the-fly gadget creation (Add Gadget), without storage.
      * implement it in derived class in order to set meaningful gadget
      * name/description/type/etc...
+     * Note, that it's called from within constructor!
      */
     protected abstract void selfInit(GadgetMetadata gmd);
 
