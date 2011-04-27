@@ -60,6 +60,8 @@ final class GadgetHolder extends SimplePanel {
 
     private final Image maximizer;
 
+    protected boolean inSetup = false;
+
     // public interface:
     public IGadget getIWidget() {
 
@@ -189,7 +191,7 @@ final class GadgetHolder extends SimplePanel {
 
                 menu.addItem("Delete", cmdDelete);
 
-                if (holdedGadget.isSetupable()) {
+                if (holdedGadget.isSetupable() && !inSetup) {
                     menu.addSeparator();
                     menu.addItem("Setup", cmdSetup);
                 }
@@ -348,6 +350,7 @@ final class GadgetHolder extends SimplePanel {
 
         // switch displayed widget with setup one:
         switchViewTo(setup);
+        inSetup = true;
     }
 
     private void switchViewTo(Widget view) {
@@ -357,5 +360,6 @@ final class GadgetHolder extends SimplePanel {
 
     private void switchViewToNormal() {
         switchViewTo(holdedGadget.getWidget());
+        inSetup = false;
     }
 }
