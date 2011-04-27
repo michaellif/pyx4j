@@ -210,6 +210,11 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
         return comp;
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends IEntity> CEditableComponent<T, ?> get(T member) {
+        return (CEditableComponent<T, ?>) binder.get((IObject<?>) member);
+    }
+
     public <T> CEditableComponent<T, ?> get(IObject<T> member) {
         return binder.get(member);
     }
