@@ -23,6 +23,8 @@ package com.pyx4j.log4j;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.LogManager;
+
 import com.pyx4j.commons.CommonsStringUtils;
 
 public class LoggerConfig {
@@ -53,5 +55,12 @@ public class LoggerConfig {
 
     public static void setVariable(String name, String value) {
         nameVariables.put(name, value);
+    }
+
+    public static void shutdown() {
+        try {
+            LogManager.shutdown();
+        } catch (NoClassDefFoundError ignore) {
+        }
     }
 }
