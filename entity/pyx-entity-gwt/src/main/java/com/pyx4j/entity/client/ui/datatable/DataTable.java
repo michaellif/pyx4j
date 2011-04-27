@@ -38,10 +38,22 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.UIObject;
 
-import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class DataTable<E extends IEntity> extends FlexTable implements DataTableModelListener {
+
+    // CSS style names: 
+    public static String BASE_NAME = "pyx4j_Entity_DataTable";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        Row, Header, ActionsBar
+    }
+
+    public static enum StyleDependent implements IStyleDependent {
+        disabled, selected, hover, even, odd, nodetails
+    }
 
     private static final Logger log = LoggerFactory.getLogger(DataTable.class);
 
@@ -79,14 +91,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 }
                 if (selectedRow >= 0) {
                     Element previous = getRowFormatter().getElement(selectedRow);
-                    UIObject.setStyleName(previous, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-selected", false);
+                    UIObject.setStyleName(previous, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), false);
                 }
                 selectedRow = cell.getRowIndex();
                 Element current = getRowFormatter().getElement(selectedRow);
-                UIObject.setStyleName(current, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-selected", true);
+                UIObject.setStyleName(current, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), true);
             }
         });
-        setStyleName(EntityCSSClass.pyx4j_Entity_DataTable.name());
+        setStyleName(BASE_NAME);
         DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
     }
 
@@ -124,14 +136,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 colIndex++;
             }
             Element rowElement = getRowFormatter().getElement(rowIndex);
-            UIObject.setStyleName(rowElement, EntityCSSClass.pyx4j_Entity_DataTableRow.name());
+            UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Row);
             if (rowIndex % 2 == 0) {
-                UIObject.setStyleName(rowElement, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-even", true);
+                UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Row + "-" + StyleDependent.even.name(), true);
             } else {
-                UIObject.setStyleName(rowElement, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-odd", true);
+                UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Row + "-" + StyleDependent.odd.name(), true);
             }
             if (!hasDetailsNavigation()) {
-                UIObject.setStyleName(rowElement, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-nodetails", true);
+                UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Row + "-" + StyleDependent.nodetails.name(), true);
             }
 
             rowIndex++;
@@ -178,7 +190,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             colIndex++;
         }
         Element rowElement = getRowFormatter().getElement(0);
-        UIObject.setStyleName(rowElement, EntityCSSClass.pyx4j_Entity_DataTableHeader.name());
+        UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Header);
 
     }
 
@@ -189,6 +201,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         renderBody();
     }
 
+    @Override
     public void onTableModelChanged(DataTableModelEvent e) {
         if (e.getType().equals(DataTableModelEvent.Type.REBUILD)) {
             renderTable();

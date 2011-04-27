@@ -21,6 +21,7 @@
 package com.pyx4j.entity.ria.client.theme;
 
 import com.pyx4j.entity.client.EntityCSSClass;
+import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.ria.client.theme.RiaTheme;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
@@ -53,23 +54,23 @@ public abstract class EntityRiaTheme extends RiaTheme {
     }
 
     protected void initEntityDataTableStyles() {
-        Style style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTable.name());
+        Style style = new Style("." + DataTable.BASE_NAME);
         style.addProperty("margin", "2px 0px 2px 0px");
         addStyle(style);
-        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name());
+        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Row);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         addStyle(style);
-        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-nodetails");
+        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Row + "-" + DataTable.StyleDependent.nodetails.name());
         style.addProperty("cursor", "default");
         addStyle(style);
-        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-even");
+        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Row + "-" + DataTable.StyleDependent.even.name());
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         addStyle(style);
-        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-odd");
+        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Row + "-" + DataTable.StyleDependent.odd.name());
         style.addProperty("background-color", "white");
         addStyle(style);
-        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableHeader.name());
+        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Header);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
         style.addProperty("color", "black");
         addStyle(style);

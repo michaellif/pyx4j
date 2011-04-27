@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.client.EntityCSSClass;
 
 public class DataTableActionsBar extends HorizontalPanel implements DataTableModelListener {
 
@@ -47,7 +46,7 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
     private HandlerRegistration nextActionHandlerRegistration;
 
     public DataTableActionsBar() {
-        setStyleName(EntityCSSClass.pyx4j_Entity_DataTableActionsBar.name());
+        setStyleName(DataTable.BASE_NAME + DataTable.StyleSuffix.ActionsBar);
         setWidth("100%");
         HorizontalPanel contentPanel = new HorizontalPanel();
         add(contentPanel);

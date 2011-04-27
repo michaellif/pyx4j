@@ -21,6 +21,7 @@
 package com.pyx4j.site.client.themes.console;
 
 import com.pyx4j.entity.client.EntityCSSClass;
+import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.SiteTheme;
 import com.pyx4j.widgets.client.style.Style;
@@ -332,24 +333,24 @@ public class ConsoleTheme extends SiteTheme {
 
     @Override
     protected void initEntityDataTableStyles() {
-        Style style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTable.name());
+        Style style = new Style("." + DataTable.BASE_NAME);
         style.addProperty("margin", "2px 0px 2px 0px");
         addStyle(style);
-        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name());
+        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Row);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         addStyle(style);
-        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-even");
+        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Row + "-" + DataTable.StyleDependent.even.name());
         style.addProperty("background-color", "#F4F4F4");
         addStyle(style);
-        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-odd");
+        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Row + "-" + DataTable.StyleDependent.odd.name());
         style.addProperty("background-color", "white");
         addStyle(style);
-        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableHeader.name());
+        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Header);
         style.addProperty("background-color", "#A0A0A0");
         style.addProperty("color", "white");
         addStyle(style);
-        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableActionsBar.name());
+        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.ActionsBar);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.BORDER);
