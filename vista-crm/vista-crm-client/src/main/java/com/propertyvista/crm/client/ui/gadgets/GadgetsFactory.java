@@ -29,4 +29,16 @@ public class GadgetsFactory {
         }
         return null;
     }
+
+    public static String getGadgetTypeDescription(GadgetType type) {
+        switch (type) {
+        case Test:
+            return "There is no such gadget - do not select it, sorry ;o)...";
+        case Demo:
+            return "Demo gadget to demonstrate basic gadget/dashboard functionality...";
+        case BuildingLister:
+            return "Table-list-like gadget which displays building data according to prefered rules. Query and display data can be set up";
+        }
+        return "";
+    }
 }

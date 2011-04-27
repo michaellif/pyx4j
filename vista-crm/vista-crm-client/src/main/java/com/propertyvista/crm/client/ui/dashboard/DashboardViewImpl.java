@@ -16,16 +16,26 @@ package com.propertyvista.crm.client.ui.dashboard;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Singleton;
@@ -35,10 +45,12 @@ import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
 import com.pyx4j.dashboard.client.IGadget;
 import com.pyx4j.dashboard.client.Layout;
+import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 @Singleton
 public class DashboardViewImpl extends SimplePanel implements DashboardView {
@@ -168,8 +180,14 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
             addGadget.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    // TODO Auto-generated method stub
-
+                    final AddGadgetBox agb = new AddGadgetBox();
+                    agb.setPopupPositionAndShow(new PositionCallback() {
+                        @Override
+                        public void setPosition(int offsetWidth, int offsetHeight) {
+                            agb.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 2);
+                        }
+                    });
+                    agb.show();
                 }
             });
 
@@ -230,6 +248,90 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
             layout21.setResource(CrmImages.INSTANCE.dashboardLayout21_0());
             layout22.setResource(CrmImages.INSTANCE.dashboardLayout22_0());
             layout3.setResource(CrmImages.INSTANCE.dashboardLayout3_0());
+        }
+
+        // add new gadget UI: 
+        class AddGadgetBox extends DialogPanel {
+
+            private final ListBox gadgetsList = new ListBox();
+
+            private final Label gadgetDesc = new Label();
+
+            public AddGadgetBox() {
+                super(false, true);
+                setCaption("Gadget Directory");
+                setSize("400px", "150px");
+
+                fillAvailableGadgets();
+
+                HorizontalPanel gadgets = new HorizontalPanel();
+                gadgets.add(gadgetsList);
+                gadgets.add(gadgetDesc);
+                gadgets.setSpacing(10);
+                gadgets.setWidth("100%");
+                gadgets.setCellWidth(gadgetsList, "35%");
+                gadgetsList.setWidth("100%");
+
+                gadgetDesc.setSize("100%", "100%");
+                gadgetDesc.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+                gadgetDesc.getElement().getStyle().setBorderWidth(1, Unit.PX);
+                gadgetDesc.getElement().getStyle().setBorderColor("#bbb");
+
+                HorizontalPanel buttons = new HorizontalPanel();
+                buttons.add(new Button("Add", new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        hide();
+                        addSelectedGadget();
+                    }
+                }));
+                buttons.add(new Button("Cancel", new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        hide();
+                    }
+                }));
+                buttons.setSpacing(10);
+
+                VerticalPanel vPanel = new VerticalPanel();
+                vPanel.add(gadgets);
+                vPanel.add(buttons);
+                vPanel.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_CENTER);
+                vPanel.setSpacing(10);
+                vPanel.setWidth("100%");
+                vPanel.setHeight("100%");
+                setWidget(vPanel);
+            }
+
+            private void fillAvailableGadgets() {
+
+                for (GadgetType gt : GadgetType.values()) {
+                    gadgetsList.addItem(gt.name());
+                }
+                gadgetsList.setVisibleItemCount(8);
+                gadgetsList.addChangeHandler(new ChangeHandler() {
+
+                    @Override
+                    public void onChange(ChangeEvent event) {
+                        if (gadgetsList.getSelectedIndex() >= 0) {
+                            gadgetDesc.setText(GadgetsFactory.getGadgetTypeDescription(GadgetType.valueOf(gadgetsList.getItemText(gadgetsList
+                                    .getSelectedIndex()))));
+                        }
+                    }
+                });
+            }
+
+            private void addSelectedGadget() {
+                IGadget gadget = null;
+                if (gadgetsList.getSelectedIndex() >= 0) {
+                    gadget = GadgetsFactory.createGadget(GadgetType.valueOf(gadgetsList.getItemText(gadgetsList.getSelectedIndex())), null);
+                }
+
+                if (gadget != null) {
+                    dashboard.addGadget(gadget);
+                    gadget.start();
+                }
+            }
         }
     }
 }

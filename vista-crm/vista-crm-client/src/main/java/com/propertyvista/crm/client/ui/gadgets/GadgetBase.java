@@ -41,12 +41,12 @@ public abstract class GadgetBase implements IGadget {
 
     @Override
     public String getName() {
-        return gadgetMetadata.name().getValue();
+        return (gadgetMetadata != null ? gadgetMetadata.name().getValue() : "");
     }
 
     @Override
     public String getDescription() {
-        return gadgetMetadata.description().getValue();
+        return (gadgetMetadata != null ? gadgetMetadata.description().getValue() : "");
     }
 
     // runtime scope:

@@ -73,59 +73,60 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     @Override
     public ISetup getSetup() {
-        class Setup implements ISetup {
-            private final ListBox columns = new ListBox(true);
+        return new Setup();
+    }
 
-            @Override
-            public Widget getWidget() {
-                suspend();
+    // Setup UI implementation:
+    class Setup implements ISetup {
+        protected final ListBox columns = new ListBox(true);
 
-                for (String name : getListPanel().proto().getEntityMeta().getMemberNames()) {
-                    MemberMeta meta = getListPanel().proto().getEntityMeta().getMemberMeta(name);
-                    if (meta.getObjectClassType() == ObjectClassType.Primitive) {
-                        columns.addItem(meta.getCaption());
-                        columns.setValue(columns.getItemCount() - 1, name);
-                    }
+        @Override
+        public Widget getWidget() {
+            suspend();
+
+            for (String name : getListPanel().proto().getEntityMeta().getMemberNames()) {
+                MemberMeta meta = getListPanel().proto().getEntityMeta().getMemberMeta(name);
+                if (meta.getObjectClassType() == ObjectClassType.Primitive) {
+                    columns.addItem(meta.getCaption());
+                    columns.setValue(columns.getItemCount() - 1, name);
                 }
-
-                FlowPanel setupPanel = new FlowPanel();
-                setupPanel.add(new Label("Select columns to show:"));
-
-                columns.setVisibleItemCount(8);
-                setupPanel.add(columns);
-
-                setupPanel.getElement().getStyle().setPadding(10, Unit.PX);
-                setupPanel.getElement().getStyle().setPaddingBottom(0, Unit.PX);
-                return setupPanel;
             }
 
-            @Override
-            public boolean onOk() {
-                ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
-                for (int i = 0; i < columns.getItemCount(); ++i) {
-                    if (columns.isItemSelected(i)) {
-                        columnDescriptors.add(new MemberPrimitiveColumnDescriptor<E>(getListPanel().proto().getMember(columns.getValue(i)).getPath(), columns
-                                .getItemText(i)));
-                    }
-                }
+            FlowPanel setupPanel = new FlowPanel();
+            setupPanel.add(new Label("Select columns to show:"));
 
-                if (!columnDescriptors.isEmpty()) {
-                    stop();
-                    getListPanel().getDataTable().getDataTableModel().setColumnDescriptors(columnDescriptors);
-                    start();
-                } else {
-                    resume();
-                }
+            columns.setVisibleItemCount(8);
+            setupPanel.add(columns);
 
-                return true;
-            }
-
-            @Override
-            public void onCancel() {
-                resume();
-            }
+            setupPanel.getElement().getStyle().setPadding(10, Unit.PX);
+            setupPanel.getElement().getStyle().setPaddingBottom(0, Unit.PX);
+            return setupPanel;
         }
 
-        return new Setup();
+        @Override
+        public boolean onOk() {
+            ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
+            for (int i = 0; i < columns.getItemCount(); ++i) {
+                if (columns.isItemSelected(i)) {
+                    columnDescriptors.add(new MemberPrimitiveColumnDescriptor<E>(getListPanel().proto().getMember(columns.getValue(i)).getPath(), columns
+                            .getItemText(i)));
+                }
+            }
+
+            if (!columnDescriptors.isEmpty()) {
+                stop();
+                getListPanel().getDataTable().getDataTableModel().setColumnDescriptors(columnDescriptors);
+                start();
+            } else {
+                resume();
+            }
+
+            return true;
+        }
+
+        @Override
+        public void onCancel() {
+            resume();
+        }
     }
 }
