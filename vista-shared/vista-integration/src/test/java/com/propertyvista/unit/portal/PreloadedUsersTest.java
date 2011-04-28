@@ -16,6 +16,7 @@ package com.propertyvista.unit.portal;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
+import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
@@ -107,16 +108,10 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
 
         assertValueOnForm(tenant.notCanadianCitizen());
 
-        //FIXME : To VLADS
-        //doesn't work, enums still require logic similar to BaseSeleniumTestCase::assertValueOnForm
-        //assertValueOnForm(tenant.driversLicenseState()); 
+        assertValueOnForm(tenant.driversLicenseState());
 
         assertAddressForm(tenant.currentAddress().getPath(), detach(tenant.currentAddress()));
         assertAddressForm(tenant.previousAddress().getPath(), detach(tenant.previousAddress()));
-
-        assertValueOnForm(tenant.legalQuestions().everEvicted());
-        assertValueOnForm(tenant.legalQuestions().defaultedOnLease());
-        //...
 
         //Vehicles
         int num = 0;
@@ -127,6 +122,10 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         //TODO Vadym, verify size (e.g. no next row exists)
 
         //Legal Questions
+        assertValueOnForm(tenant.legalQuestions().everEvicted());
+        assertValueOnForm(tenant.legalQuestions().defaultedOnLease());
+        //TODO Add all...
+
         //Emergency Contacts
 
         return;
@@ -142,15 +141,28 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         assertValueOnForm(fromDebugId, address.moveOutDate());
 
         assertValueOnForm(fromDebugId, address.rented());
-        //TODO
-        //assertValueOnForm(fromDebugId, address.country());
-        //assertValueOnForm(tenant.currentAddress().province());
+        assertValueOnForm(fromDebugId, address.country());
+        assertValueOnForm(fromDebugId, address.province());
+
+        if (OwnedRented.Owned == address.rented().getValue()) {
+            assertNotVisible(D.id(fromDebugId, address.payment()));
+            assertNotVisible(D.id(fromDebugId, address.managerName()));
+        } else {
+            assertVisible(D.id(fromDebugId, address.payment()));
+            assertVisible(D.id(fromDebugId, address.managerName()));
+            assertValueOnForm(fromDebugId, address.payment());
+            assertValueOnForm(fromDebugId, address.managerName());
+        }
 
     }
 
     private void assertVehiclesForm(IDebugId fromDebugId, Vehicle vehicle) {
+        //TODO Vlad
+        //assertValueOnForm(fromDebugId, vehicle.year());
+
         assertValueOnForm(fromDebugId, vehicle.make());
         assertValueOnForm(fromDebugId, vehicle.model());
+        assertValueOnForm(fromDebugId, vehicle.province());
         // TODO Vadym, Add all fields
     }
 

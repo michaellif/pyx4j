@@ -14,6 +14,7 @@
 package com.propertyvista.portal.domain;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -26,6 +27,7 @@ public interface Money extends IEntity {
 
     @ToString(index = 0)
     @NotNull
+    @Format("#0.00")
     IPrimitive<Double> amount();
 
     Currency currency();
