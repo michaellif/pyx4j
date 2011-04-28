@@ -19,6 +19,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -67,11 +68,16 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
     public DashboardViewImpl() {
         VerticalPanel main = new VerticalPanel();
         main.add(new CrmHeaderDecorator("Dashboard Menu/Tools", layouts));
+
         ScrollPanel scroll = new ScrollPanel(dashboard);
-//        scroll.setHeight("500px");
+        scroll.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        scroll.getElement().getStyle().setTop(45, Unit.PX);
+        scroll.getElement().getStyle().setLeft(0, Unit.PX);
+        scroll.getElement().getStyle().setRight(0, Unit.PX);
+        scroll.getElement().getStyle().setBottom(0, Unit.PX);
         main.add(scroll);
-        main.setWidth("100%");
-        main.setHeight("100%");
+
+        main.setSize("100%", "100%");
         setWidget(main);
     }
 
