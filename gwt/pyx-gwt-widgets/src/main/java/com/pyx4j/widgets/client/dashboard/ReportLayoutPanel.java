@@ -46,10 +46,15 @@ public class ReportLayoutPanel extends FlowPanel {
     }
 
     public void insertGadget(Widget widget, Location location, int beforeIndex) {
+        if (beforeIndex < 0 || beforeIndex > getWidgetCount()) {
+            System.out.println("Wrong beforeIndex - " + beforeIndex);
+            return;
+        }
         CellPanel beforeCell = null;
         Location beforeCellLocation = null;
         boolean isBeforeCellSpaceHolder = false;
         if (beforeIndex < getWidgetCount()) {
+            System.out.println("???" + beforeIndex);
             beforeCell = (CellPanel) getWidget(beforeIndex);
             beforeCellLocation = beforeCell.getLocation();
             isBeforeCellSpaceHolder = beforeCell.isSpaceHolder();
@@ -144,6 +149,16 @@ public class ReportLayoutPanel extends FlowPanel {
         return cell == null ? null : cell.getWidget();
     }
 
+    public Location getGadgetLocation(Widget widget) {
+        for (int i = 0; i < getWidgetCount(); i++) {
+            CellPanel cellPanel = (CellPanel) getWidget(i);
+            if (widget != null && widget.equals(cellPanel.getWidget())) {
+                return cellPanel.getLocation();
+            }
+        }
+        return null;
+    }
+
     public int getGadgetIndex(Widget widget) {
         for (int i = 0; i < getWidgetCount(); i++) {
             if (widget != null && widget.equals(((CellPanel) getWidget(i)).getWidget())) {
@@ -154,17 +169,6 @@ public class ReportLayoutPanel extends FlowPanel {
     }
 
     public int getGadgetIndex(int mouseX, int mouseY) {
-        for (int i = 0; i < getWidgetCount(); i++) {
-            CellPanel cellPanel = (CellPanel) getWidget(i);
-            WidgetArea cellArea = new WidgetArea(cellPanel, null);
-            if (cellArea.getLeft() <= mouseX && mouseX <= cellArea.getRight() && cellArea.getTop() <= mouseY && mouseY <= cellArea.getBottom()) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public int getInsertionIndex(int mouseX, int mouseY) {
         for (int i = 0; i < getWidgetCount(); i++) {
             CellPanel cellPanel = (CellPanel) getWidget(i);
             WidgetArea cellArea = new WidgetArea(cellPanel, null);

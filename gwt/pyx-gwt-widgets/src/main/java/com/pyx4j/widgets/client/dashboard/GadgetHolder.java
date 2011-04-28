@@ -41,7 +41,7 @@ public class GadgetHolder extends SimplePanel {
 
         gadgetContainer = new HTML(title);
         gadgetContainer.getElement().getStyle().setBackgroundColor(background);
-        gadgetContainer.setHeight(Random.nextInt(5) + 3 + "em");
+        gadgetContainer.setHeight(Random.nextInt(5) + 1 + "em");
 
         gadgetContainer.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
         gadgetContainer.getElement().getStyle().setBorderWidth(3, Unit.PX);

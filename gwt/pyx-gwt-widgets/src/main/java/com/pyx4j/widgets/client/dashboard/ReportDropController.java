@@ -28,6 +28,8 @@ import com.allen_sauer.gwt.dnd.client.util.Location;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.widgets.client.dashboard.ReportLayoutPanel.CellPanel;
+
 public class ReportDropController extends AbstractPositioningDropController {
 
     protected final ReportLayoutPanel dropTarget;
@@ -82,15 +84,20 @@ public class ReportDropController extends AbstractPositioningDropController {
     public void onMove(DragContext context) {
         super.onMove(context);
 
-        int targetIndex = dropTarget.getInsertionIndex(context.mouseX, context.mouseY);
+        int targetIndex = calculateInsertionIndex(context.mouseX, context.mouseY);
         int positionerIndex = dropTarget.getGadgetIndex(positioner);
 
+        System.out.println("targetIndex+++++++++++++++ " + targetIndex);
+        //System.out.println("positionerIndex----- " + positionerIndex);
+
         if (targetIndex > -1 && targetIndex != positionerIndex) {
-            System.out.println("targetIndex+++++++++++++++ " + targetIndex);
-            System.out.println("positionerIndex----- " + positionerIndex);
             Widget beforeGadget = dropTarget.getGadget(targetIndex);
+            ReportLayoutPanel.Location location = dropTarget.getGadgetLocation(positioner);
+            if (!ReportLayoutPanel.Location.Full.equals(location)) {
+                location = calculateInsertionLocation(context.mouseX);
+            }
 //            dropTarget.removeGadget(positioner);
-//            dropTarget.insertGadget(positioner, ReportLayoutPanel.Location.Right, dropTarget.getGadgetIndex(beforeGadget));
+//            dropTarget.insertGadget(positioner, location, dropTarget.getGadgetIndex(beforeGadget));
         }
     }
 
@@ -113,4 +120,39 @@ public class ReportDropController extends AbstractPositioningDropController {
         return new ReportGadgetPositioner(height);
     }
 
+    public int calculateInsertionIndex(int mouseX, int mouseY) {
+        int topCellIndex = -1;
+        int bottomCellIndex = -1;
+        for (int i = 0; i < dropTarget.getWidgetCount(); i++) {
+            CellPanel cellPanel = (CellPanel) dropTarget.getWidget(i);
+            if (bottomCellIndex == -1 && cellPanel.getAbsoluteTop() > mouseY) {
+                bottomCellIndex = i;
+                break;
+            } else {
+                topCellIndex = i;
+            }
+        }
+
+        System.out.println(")))))))))))))" + topCellIndex + " " + bottomCellIndex);
+
+        int cellIndex = -1;
+        CellPanel cellPanel = null;
+        for (int i = topCellIndex - 1; i <= topCellIndex; i++) {
+            if (i > -1 && i < dropTarget.getWidgetCount()) {
+                cellPanel = (CellPanel) dropTarget.getWidget(i);
+                if (cellPanel.getAbsoluteLeft() <= mouseX && mouseX <= (cellPanel.getAbsoluteLeft() + cellPanel.getOffsetWidth())) {
+                    cellIndex = i;
+                    break;
+                }
+            }
+        }
+
+        System.out.println(")))))))))))))" + cellIndex);
+
+        return cellIndex;
+    }
+
+    public ReportLayoutPanel.Location calculateInsertionLocation(int mouseX) {
+        return (mouseX > dropTarget.getOffsetWidth() / 2) ? ReportLayoutPanel.Location.Right : ReportLayoutPanel.Location.Left;
+    }
 }
