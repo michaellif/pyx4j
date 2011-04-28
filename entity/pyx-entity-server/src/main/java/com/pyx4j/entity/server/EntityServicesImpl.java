@@ -117,7 +117,7 @@ public class EntityServicesImpl {
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         public Vector execute(EntityQueryCriteria request) {
-            return (Vector) secureQuery(request);
+            return secureQuery(request);
         }
     }
 
@@ -176,7 +176,7 @@ public class EntityServicesImpl {
 
     }
 
-    public static <T extends IEntity> List<T> secureQuery(EntityQueryCriteria<T> criteria) {
+    public static <T extends IEntity> Vector<T> secureQuery(EntityQueryCriteria<T> criteria) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
         List<T> rc = PersistenceServicesFactory.getPersistenceService().query(criteria);
         Vector<T> v = new Vector<T>();
