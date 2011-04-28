@@ -266,6 +266,10 @@ public class BaseSeleniumTestCase extends TestCase {
         assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(member));
     }
 
+    public void assertValueOnForm(IDebugId fromDebugId, IEntity member) {
+        assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(D.id(fromDebugId, member)));
+    }
+
     /**
      * Helper function to avoid casts
      */
@@ -277,9 +281,8 @@ public class BaseSeleniumTestCase extends TestCase {
         assertValueOnForm(null, member);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void assertValueOnForm(IDebugId fromDebugId, IPrimitive<?> member) {
-        ///member.getMeta().getObjectClassType() -- c
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().isEnum()) {
             assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getEnumValue(fromDebugId, (IPrimitive<Enum>) member));
@@ -289,11 +292,14 @@ public class BaseSeleniumTestCase extends TestCase {
         } else if (mm.getValueClass().equals(Boolean.class)) {
             assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getBooleanValue(fromDebugId, (IPrimitive<Boolean>) member));
         } else if (mm.getValueClass().equals(Integer.class)) {
-            //TODO CIntegerField();
+            // CIntegerField();
+            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
         } else if (mm.getValueClass().equals(Long.class)) {
-            //TODO CLongField();
+            // CLongField();
+            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
         } else if (mm.getValueClass().equals(Double.class)) {
-            //TODO CDoubleField();
+            // CDoubleField();
+            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
         } else if (mm.getValueClass().equals(String.class)) {
             // CTextField();
             assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getValue(fromDebugId, member));

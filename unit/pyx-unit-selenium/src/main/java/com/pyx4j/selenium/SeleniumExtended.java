@@ -395,22 +395,26 @@ public class SeleniumExtended extends WebDriverWrapper {
         return text;
     }
 
+    private String getValue(WebElement element) {
+        String text = element.getValue();
+        log("value of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), text);
+        return text;
+    }
+
     public String getValue(String paramString) {
-        return driver.findElement(elementLocator(paramString)).getValue();
+        return getValue(driver.findElement(elementLocator(paramString)));
     }
 
     public String getValue(IObject<?> member) {
-        WebElement element = driver.findElement(by(member));
-        String text = element.getValue();
-        log("value of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), text);
-        return text;
+        return getValue(driver.findElement(by(member)));
+    }
+
+    public String getValue(IDebugId debugId) {
+        return getValue(driver.findElement(by(debugId)));
     }
 
     public String getValue(IDebugId fromDebugId, IPrimitive<?> member) {
-        WebElement element = driver.findElement(by(fromDebugId, member));
-        String text = element.getValue();
-        log("value of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), text);
-        return text;
+        return getValue(driver.findElement(by(fromDebugId, member)));
     }
 
     private <T extends Enum<T>> T getEnumValue(WebElement element, Class<T> enumClass) {

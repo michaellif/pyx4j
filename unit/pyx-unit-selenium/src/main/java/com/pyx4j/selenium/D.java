@@ -59,6 +59,10 @@ public class D {
         return new CompositeDebugId(parent, child);
     }
 
+    public static IDebugId id(IDebugId parent, IObject<?> member) {
+        return new CompositeDebugId(parent, member.getPath());
+    }
+
     public static IDebugId id(IDebugId parent, String child) {
         return new CompositeDebugId(parent, child);
     }
