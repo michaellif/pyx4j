@@ -15,7 +15,9 @@ package com.propertyvista.crm.rpc.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.rpc.shared.IService;
 
 public interface AbstractCrudService<EditableEntity extends IEntity> extends IService {
@@ -25,5 +27,7 @@ public interface AbstractCrudService<EditableEntity extends IEntity> extends ISe
     public void retrieve(AsyncCallback<EditableEntity> callback, long entityId);
 
     public void save(AsyncCallback<EditableEntity> callback, EditableEntity editableEntity);
+
+    public void search(AsyncCallback<EntitySearchResult<EditableEntity>> callback, EntitySearchCriteria<EditableEntity> criteria);
 
 }
