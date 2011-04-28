@@ -54,7 +54,6 @@ public class ReportLayoutPanel extends FlowPanel {
         Location beforeCellLocation = null;
         boolean isBeforeCellSpaceHolder = false;
         if (beforeIndex < getWidgetCount()) {
-            System.out.println("???" + beforeIndex);
             beforeCell = (CellPanel) getWidget(beforeIndex);
             beforeCellLocation = beforeCell.getLocation();
             isBeforeCellSpaceHolder = beforeCell.isSpaceHolder();
@@ -192,6 +191,10 @@ public class ReportLayoutPanel extends FlowPanel {
 
         public boolean isSpaceHolder() {
             return getWidget() == null || getWidget() instanceof SpaceHolder;
+        }
+
+        public boolean isPositioner() {
+            return getWidget() == null || getWidget() instanceof ReportGadgetPositioner;
         }
 
         public void setSpaceHolder() {

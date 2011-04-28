@@ -87,8 +87,8 @@ public class ReportDropController extends AbstractPositioningDropController {
         int targetIndex = calculateInsertionIndex(context.mouseX, context.mouseY);
         int positionerIndex = dropTarget.getGadgetIndex(positioner);
 
-        System.out.println("targetIndex+++++++++++++++ " + targetIndex);
-        //System.out.println("positionerIndex----- " + positionerIndex);
+        //System.out.println("targetIndex+++++++++++++++ " + targetIndex);
+        System.out.println("positionerIndex----- " + positionerIndex);
 
         if (targetIndex > -1 && targetIndex != positionerIndex) {
             Widget beforeGadget = dropTarget.getGadget(targetIndex);
@@ -96,8 +96,8 @@ public class ReportDropController extends AbstractPositioningDropController {
             if (!ReportLayoutPanel.Location.Full.equals(location)) {
                 location = calculateInsertionLocation(context.mouseX);
             }
-//            dropTarget.removeGadget(positioner);
-//            dropTarget.insertGadget(positioner, location, dropTarget.getGadgetIndex(beforeGadget));
+            dropTarget.removeGadget(positioner);
+            dropTarget.insertGadget(positioner, location, dropTarget.getGadgetIndex(beforeGadget));
         }
     }
 
@@ -133,21 +133,34 @@ public class ReportDropController extends AbstractPositioningDropController {
             }
         }
 
-        System.out.println(")))))))))))))" + topCellIndex + " " + bottomCellIndex);
+        int cellIndex = topCellIndex;
+        CellPanel cellPanel = (CellPanel) dropTarget.getWidget(topCellIndex);
+        if (!ReportLayoutPanel.Location.Full.equals(cellPanel.getLocation())) {
+            CellPanel leftCellPanel = (CellPanel) dropTarget.getWidget(topCellIndex - 1);
+            if (leftCellPanel.getAbsoluteLeft() <= mouseX && mouseX <= (leftCellPanel.getAbsoluteLeft() + leftCellPanel.getOffsetWidth())) {
+                cellIndex = topCellIndex - 1;
+                cellPanel = leftCellPanel;
+            }
+        }
 
-        int cellIndex = -1;
-        CellPanel cellPanel = null;
-        for (int i = topCellIndex - 1; i <= topCellIndex; i++) {
-            if (i > -1 && i < dropTarget.getWidgetCount()) {
-                cellPanel = (CellPanel) dropTarget.getWidget(i);
-                if (cellPanel.getAbsoluteLeft() <= mouseX && mouseX <= (cellPanel.getAbsoluteLeft() + cellPanel.getOffsetWidth())) {
-                    cellIndex = i;
-                    break;
+        System.out.println("))))))))))))) actual " + cellIndex);
+
+        if (cellPanel.isSpaceHolder() || cellPanel.isPositioner()) {
+
+        } else if (mouseY > (cellPanel.getAbsoluteTop() + cellPanel.getOffsetHeight() / 2)) {
+            if (bottomCellIndex == -1) {
+                cellIndex = dropTarget.getWidgetCount();
+            } else {
+                CellPanel bottomCellPanel = (CellPanel) dropTarget.getWidget(bottomCellIndex);
+                if (ReportLayoutPanel.Location.Right.equals(bottomCellPanel.getLocation())) {
+                    cellIndex = bottomCellIndex + 1;
+                } else {
+                    cellIndex = bottomCellIndex;
                 }
             }
         }
 
-        System.out.println(")))))))))))))" + cellIndex);
+        System.out.println("))))))))))))) insertion " + cellIndex);
 
         return cellIndex;
     }
