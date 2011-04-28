@@ -26,6 +26,10 @@ public class GadgetsFactory {
             return new DemoGadget(metaData);
         case BuildingLister:
             return new BuildingListerGadget(metaData);
+        case BarChartDisplay:
+            return new BarChartDisplayGadget(metaData);
+        case PieChartDisplay:
+            return new PieChartDisplayGadget(metaData);
         }
         return null;
     }
@@ -38,6 +42,10 @@ public class GadgetsFactory {
             return "Demo gadget to demonstrate basic gadget/dashboard functionality...";
         case BuildingLister:
             return "Table-list-like gadget which displays building data according to prefered rules. Query and display data can be set up";
+        case BarChartDisplay:
+            return "Gadget intended to demonstrate Bar Chart display functionality...";
+        case PieChartDisplay:
+            return "Gadget intended to demonstrate Pie Chart display functionality...";
         }
         return "";
     }

@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface GadgetMetadata extends IEntity {
 
     public static enum GadgetType {
-        Test, Demo, BuildingLister
+        Test, Demo, BuildingLister, BarChartDisplay, PieChartDisplay
     }
 
     @MemberColumn(name = "gadget_type")

@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
@@ -51,11 +50,11 @@ public class DashboardActivity extends AbstractActivity {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
         dmd.name().setValue("test dashboard");
         dmd.layoutType().setValue(LayoutType.Two21);
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 3; ++i) {
             GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
             gmd.type().setValue(GadgetType.Demo);
             gmd.name().setValue("Gadget #" + i);
-            gmd.column().setValue(Random.nextInt(2));
+            gmd.column().setValue(1);
             dmd.gadgets().add(gmd);
         }
 
@@ -63,6 +62,18 @@ public class DashboardActivity extends AbstractActivity {
         gmd.type().setValue(GadgetType.BuildingLister);
         gmd.name().setValue("Building lister");
         gmd.column().setValue(0);
+        dmd.gadgets().add(gmd);
+
+        gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.type().setValue(GadgetType.BarChartDisplay);
+        gmd.name().setValue("Bar Chart Demo");
+        gmd.column().setValue(0);
+        dmd.gadgets().add(gmd);
+
+        gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.type().setValue(GadgetType.PieChartDisplay);
+        gmd.name().setValue("Pie Chart Demo");
+        gmd.column().setValue(1);
         dmd.gadgets().add(gmd);
 
         view.fillDashboard(dmd);
