@@ -63,11 +63,11 @@ import com.pyx4j.geo.GeoCell;
 import com.pyx4j.geo.GeoCircle;
 import com.pyx4j.geo.GeoPoint;
 
-public class IndexedEntitySearch {
+public class IndexedEntitySearch<E extends IEntity> {
 
     private static final Logger log = LoggerFactory.getLogger(IndexedEntitySearch.class);
 
-    protected final EntitySearchCriteria<?> searchCriteria;
+    protected final EntitySearchCriteria<E> searchCriteria;
 
     protected final Class<? extends IEntity> entityClass;
 
@@ -77,18 +77,18 @@ public class IndexedEntitySearch {
 
     protected boolean hasInequalityFilter = false;
 
-    protected EntityQueryCriteria<?> queryCriteria;
+    protected EntityQueryCriteria<E> queryCriteria;
 
     protected List<InMemoryFilter> inMemoryFilters = new Vector<InMemoryFilter>();
 
-    public IndexedEntitySearch(EntitySearchCriteria<?> searchCriteria) {
+    public IndexedEntitySearch(EntitySearchCriteria<E> searchCriteria) {
         this.searchCriteria = searchCriteria;
         this.entityClass = searchCriteria.getEntityClass();
         this.meta = EntityFactory.getEntityMeta(entityClass);
     }
 
     public void buildQueryCriteria() {
-        queryCriteria = EntityQueryCriteria.create(entityClass);
+        queryCriteria = (EntityQueryCriteria<E>) EntityQueryCriteria.create(entityClass);
         queryCriteria.setSorts(searchCriteria.getSorts());
 
         // TODO use groups in EntitySearchCriteria
@@ -334,8 +334,8 @@ public class IndexedEntitySearch {
         log.debug("will have used {} inMemoryFilters", inMemoryFilters.size());
     }
 
-    public SearchResultIterator<IEntity> getResult(final String encodedCursorReference) {
-        final ICursorIterator<? extends IEntity> unfiltered = PersistenceServicesFactory.getPersistenceService().query(encodedCursorReference, queryCriteria);
+    public SearchResultIterator<E> getResult(final String encodedCursorReference) {
+        final ICursorIterator<E> unfiltered = PersistenceServicesFactory.getPersistenceService().query(encodedCursorReference, queryCriteria);
         final int maxResults;
         final int firstResult;
         if ((searchCriteria.getPageSize() > 0) && (encodedCursorReference == null)) {
@@ -349,15 +349,15 @@ public class IndexedEntitySearch {
             firstResult = -1;
         }
 
-        return new SearchResultIterator<IEntity>() {
+        return new SearchResultIterator<E>() {
 
             int count = 0;
 
-            IEntity next;
+            E next;
 
-            IEntity last;
+            E last;
 
-            IEntity more;
+            E more;
 
             @Override
             public boolean hasNext() {
@@ -379,7 +379,7 @@ public class IndexedEntitySearch {
                 }
 
                 while (unfiltered.hasNext()) {
-                    IEntity ent = unfiltered.next();
+                    E ent = unfiltered.next();
                     if (accept(ent)) {
                         next = ent;
                         break;
@@ -395,7 +395,7 @@ public class IndexedEntitySearch {
                 }
                 if (more == null) {
                     while (unfiltered.hasNext()) {
-                        IEntity ent = unfiltered.next();
+                        E ent = unfiltered.next();
                         if (accept(ent)) {
                             more = ent;
                             break;
@@ -411,7 +411,7 @@ public class IndexedEntitySearch {
             }
 
             @Override
-            public IEntity next() {
+            public E next() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }

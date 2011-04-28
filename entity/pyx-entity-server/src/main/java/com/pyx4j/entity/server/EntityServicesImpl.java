@@ -130,41 +130,45 @@ public class EntityServicesImpl {
 
         @Override
         public EntitySearchResult<?> execute(EntitySearchCriteria<?> request) {
-            long start = System.nanoTime();
-            int initCount = PersistenceServicesFactory.getPersistenceService().getDatastoreCallCount();
-
-            SecurityController.assertPermission(new EntityPermission(request.getEntityClass(), EntityPermission.READ));
-            IndexedEntitySearch search = new IndexedEntitySearch(request);
-            search.buildQueryCriteria();
-            EntitySearchResult<IEntity> r = new EntitySearchResult<IEntity>();
-            SearchResultIterator<IEntity> it = search.getResult(request.getEncodedCursorReference());
-            while (it.hasNext()) {
-                IEntity ent = it.next();
-                SecurityController.assertPermission(EntityPermission.permissionRead(ent));
-                r.add(ent);
-                if (System.nanoTime() > start + 20L * Consts.SEC2NANO) {
-                    r.setQuotaExceeded(true);
-                    break;
-                }
-            }
-            // The position is important, hasMoreData may retrieve one more row. 
-            r.setEncodedCursorReference(it.encodedCursorReference());
-            r.hasMoreData(it.hasMoreData());
-            it.completeRetrieval();
-
-            if (r.getData().size() != 0) {
-                log.debug("got {} ", r.getData().get(0));
-            }
-
-            long duration = System.nanoTime() - start;
-            int callsCount = PersistenceServicesFactory.getPersistenceService().getDatastoreCallCount() - initCount;
-            if (duration > Consts.SEC2NANO) {
-                log.warn("Long running search {} took {}ms; calls " + callsCount, request.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
-            } else {
-                log.debug("search {} took {}ms; calls " + callsCount, request.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
-            }
-            return r;
+            return secureSearch(request);
         }
+    }
+
+    public static <T extends IEntity> EntitySearchResult<T> secureSearch(EntitySearchCriteria<T> criteria) {
+        long start = System.nanoTime();
+        int initCount = PersistenceServicesFactory.getPersistenceService().getDatastoreCallCount();
+
+        SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
+
+        IndexedEntitySearch<T> search = new IndexedEntitySearch<T>(criteria);
+        search.buildQueryCriteria();
+
+        EntitySearchResult<T> r = new EntitySearchResult<T>();
+        SearchResultIterator<T> it = search.getResult(criteria.getEncodedCursorReference());
+
+        while (it.hasNext()) {
+            T ent = it.next();
+            SecurityController.assertPermission(EntityPermission.permissionRead(ent));
+            r.add(ent);
+            if (System.nanoTime() > start + 20L * Consts.SEC2NANO) {
+                r.setQuotaExceeded(true);
+                break;
+            }
+        }
+        // The position is important, hasMoreData may retrieve one more row. 
+        r.setEncodedCursorReference(it.encodedCursorReference());
+        r.hasMoreData(it.hasMoreData());
+        it.completeRetrieval();
+
+        long duration = System.nanoTime() - start;
+        int callsCount = PersistenceServicesFactory.getPersistenceService().getDatastoreCallCount() - initCount;
+        if (duration > Consts.SEC2NANO) {
+            log.warn("Long running search {} took {}ms; calls " + callsCount, criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
+        } else {
+            log.debug("search {} took {}ms; calls " + callsCount, criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
+        }
+
+        return r;
     }
 
     public static class RetrieveImpl implements EntityServices.Retrieve {
