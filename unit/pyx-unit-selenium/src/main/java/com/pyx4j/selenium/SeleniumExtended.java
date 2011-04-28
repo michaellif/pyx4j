@@ -413,44 +413,54 @@ public class SeleniumExtended extends WebDriverWrapper {
         return text;
     }
 
-    public <T extends Enum<T>> T getEnumValue(IPrimitive<T> member) {
-        WebElement we = findElement(by(member));
-        if (we.getTagName().equalsIgnoreCase("input") || we.getTagName().equalsIgnoreCase("select")) {
-            // CComboBox();
-            //TODO:
-            //log
-            log("value of element <{}> id={} text={}", we.getTagName(), we.getAttribute("id"), we.getValue());
-            //check for empty string -> null value
-            //?
-
-            return Enum.valueOf((Class<T>) member.getMeta().getValueClass(), we.getValue());
+    private <T extends Enum<T>> T getEnumValue(WebElement element, Class<T> enumClass) {
+        String tagName = element.getTagName();
+        if (element.getTagName().equalsIgnoreCase("input") || tagName.equalsIgnoreCase("select")) {
+            // ComboBox or Text
+            String text = element.getValue();
+            log("value of element <{}> id={} text={}", tagName, element.getAttribute("id"), text);
+            if (CommonsStringUtils.isEmpty(text)) {
+                return null;
+            }
+            return Enum.valueOf(enumClass, text);
         } else {
-            //else RadioButton
-            Enum<?> value = null;
-            for (WebElement cwe : we.findElements(By.tagName("input"))) {
-                String id = cwe.getAttribute("id");
-                if (id.startsWith(member.getPath().debugId())) {
-                    //subset from 'debug-id-....' and from "....-input"
-                    Enum<?> cvalue = Enum.valueOf((Class<Enum>) member.getMeta().getValueClass(), id);
-                    if (cwe.isSelected()) {
-                        value = cvalue;
-                        break;
+            // RadioGroup
+            String parentId = element.getAttribute("id");
+            boolean inputsFound = false;
+            for (WebElement childElement : element.findElements(By.tagName("input"))) {
+                String id = childElement.getAttribute("id");
+                if (id.startsWith(parentId)) {
+                    // Enum name is a part of element debugId
+                    String enumName = id.substring(parentId.length() + 1);
+                    T value;
+                    try {
+                        value = Enum.valueOf(enumClass, enumName);
+                    } catch (IllegalArgumentException e) {
+                        // Wrong input, ignore
+                        continue;
                     }
-                    //TODO:
-                    //log
-                    log("value of element <{}> id={} text={}", cwe.getTagName(), cwe.getAttribute("id"), cwe.getValue());
-                    //if there is no matching Enum.valueOf((Class<Enum>)mm.getValueClass(), id); then throw Exception();
-
-                    // member.getPath().debugId() + "_Y-input".equals(cwe.getAttribute("id"); {
-                    // cwe.isSelected() {
-                    //value = true;
-                    //break;
+                    if (childElement.isSelected()) {
+                        log("value of element <{}> id={} text={}", childElement.getTagName(), childElement.getAttribute("id"), value);
+                        return value;
+                    }
                 }
 
             }
-
+            if (!inputsFound) {
+                throw new Error("Can't find components inside RadioGroup " + parentId);
+            }
+            return null;
         }
-        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Enum<T>> T getEnumValue(IPrimitive<T> member) {
+        return getEnumValue(findElement(by(member)), (Class<T>) member.getMeta().getValueClass());
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Enum<T>> T getEnumValue(IDebugId fromDebugId, IPrimitive<T> member) {
+        return getEnumValue(findElement(by(fromDebugId, member)), (Class<T>) member.getMeta().getValueClass());
     }
 
     private Boolean getBooleanValue(WebElement element) {

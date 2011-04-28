@@ -26,10 +26,8 @@ import java.util.Date;
 import junit.framework.TestCase;
 
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -279,48 +277,23 @@ public class BaseSeleniumTestCase extends TestCase {
         assertValueOnForm(null, member);
     }
 
+    @SuppressWarnings("unchecked")
     public void assertValueOnForm(IDebugId fromDebugId, IPrimitive<?> member) {
         ///member.getMeta().getObjectClassType() -- c
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().isEnum()) {
-            WebElement we = selenium.findElement(selenium.by(fromDebugId, member));
-            if (we.getTagName().equalsIgnoreCase("input") || we.getTagName().equalsIgnoreCase("select")) {
-                // CComboBox();
-                assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
-
-            } else {
-                //else RadioButton
-                Enum<?> value = null;
-                for (WebElement cwe : we.findElements(By.tagName("input"))) {
-                    String id = cwe.getAttribute("id");
-                    if (id.startsWith(member.getPath().debugId())) {
-                        //subset from 'debug-id-....' and from "....-input"
-                        Enum<?> cvalue = Enum.valueOf((Class<Enum>) mm.getValueClass(), id);
-                        if (cwe.isSelected()) {
-                            value = cvalue;
-                            break;
-                        }
-                        /////////// member.getPath().debugId() + "_Y-input".equlas(cwe.getAttribute("id"); {
-                        /// cwe.isSelected() {
-                        //value = true;
-                        //break;
-                    }
-                    assertEquals(member.getMeta().getCaption(), member.getStringView(), value);
-                }
-                //CRadioGro valeyup -- everEvicted()
-
-            }
+            assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getEnumValue(fromDebugId, (IPrimitive<Enum>) member));
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
             // CDatePicker();
             assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
         } else if (mm.getValueClass().equals(Boolean.class)) {
             assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getBooleanValue(fromDebugId, (IPrimitive<Boolean>) member));
         } else if (mm.getValueClass().equals(Integer.class)) {
-            // CIntegerField();
+            //TODO CIntegerField();
         } else if (mm.getValueClass().equals(Long.class)) {
-            // CLongField();
+            //TODO CLongField();
         } else if (mm.getValueClass().equals(Double.class)) {
-            // CDoubleField();
+            //TODO CDoubleField();
         } else if (mm.getValueClass().equals(String.class)) {
             // CTextField();
             assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getValue(fromDebugId, member));
