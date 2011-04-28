@@ -19,20 +19,13 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.entity.rpc.EntityServices;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.rpc.client.RPCManager;
-
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.portal.domain.Building;
+
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 
 public class BuildingListerGadget extends ListerGadgetBase<Building> {
 
@@ -60,8 +53,7 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
     public void start() {
         super.start();
 //        populateData();
-//        populateData2();
-        populateData3();
+        populateData2();
     }
 
     public void populateData() {
@@ -97,23 +89,5 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
                 }
             });
         }
-    }
-
-    public void populateData3() {
-        // Load all Order images.
-        AsyncCallback<Vector<? extends IEntity>> callback = new AsyncCallback<Vector<? extends IEntity>>() {
-            @Override
-            public void onFailure(Throwable caught) {
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onSuccess(Vector<? extends IEntity> result) {
-                BuildingListerGadget.this.getListPanel().populateData((Vector<Building>) result, 0, false);
-            }
-        };
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(new PropertyCriterion(criteria.proto().id().getFieldName(), Restriction.NOT_EQUAL, 0));
-        RPCManager.execute(EntityServices.Query.class, criteria, callback);
     }
 }

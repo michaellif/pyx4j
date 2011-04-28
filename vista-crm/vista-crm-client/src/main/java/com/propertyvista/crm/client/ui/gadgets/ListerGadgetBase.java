@@ -21,9 +21,14 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
@@ -68,7 +73,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     @Override
     public Widget getWidget() {
         ScrollPanel scroll = new ScrollPanel(listPanel.asWidget());
-        scroll.setWidth("100%");
+//        scroll.setWidth("100%");
         return scroll;
     }
 
@@ -79,26 +84,30 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     @Override
     public ISetup getSetup() {
-        return new Setup();
+        return new SetupLister();
     }
 
     // Setup UI implementation:
-    class Setup implements ISetup {
+    class SetupLister implements ISetup {
 
-        protected final ListBox columns = new ListBox(true);
+        protected final HorizontalPanel setupPanel = new HorizontalPanel();
 
-        protected final FlowPanel setupPanel = new FlowPanel();
+        protected final ListBox columnsList = new ListBox(true);
 
-        protected Setup() {
+        protected final TextBox itemsPerPage = new TextBox();
+
+        protected final ListBox intervalList = new ListBox(false);
+
+        protected SetupLister() {
             super();
 
-            columns.addItem(i18n.tr("Default Set"));
-            columns.addChangeHandler(new ChangeHandler() {
+            columnsList.addItem(i18n.tr("Default Set"));
+            columnsList.addChangeHandler(new ChangeHandler() {
                 @Override
                 public void onChange(ChangeEvent event) {
-                    if (columns.getSelectedIndex() == 0) {
-                        for (int i = 1; i < columns.getItemCount(); ++i) {
-                            columns.setItemSelected(i, false);
+                    if (columnsList.getSelectedIndex() == 0) {
+                        for (int i = 1; i < columnsList.getItemCount(); ++i) {
+                            columnsList.setItemSelected(i, false);
                         }
                     }
                 }
@@ -107,18 +116,49 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             for (String name : getListPanel().proto().getEntityMeta().getMemberNames()) {
                 MemberMeta meta = getListPanel().proto().getEntityMeta().getMemberMeta(name);
                 if (meta.getObjectClassType() == ObjectClassType.Primitive) {
-                    columns.addItem(meta.getCaption());
-                    columns.setValue(columns.getItemCount() - 1, name);
+                    columnsList.addItem(meta.getCaption());
+                    columnsList.setValue(columnsList.getItemCount() - 1, name);
                 }
             }
 
-            setupPanel.add(new Label(i18n.tr("Select columns to show:")));
+            columnsList.setVisibleItemCount(8);
 
-            columns.setVisibleItemCount(8);
+            FlowPanel columns = new FlowPanel();
+            columns.add(new Label(i18n.tr("Select columns to display:")));
+            columns.add(columnsList);
+            columnsList.setWidth("100%");
+
+            VerticalPanel addition = new VerticalPanel();
+            addition.add(new HTML("&nbsp"));
+            HorizontalPanel items = new HorizontalPanel();
+            items.add(new HTML(i18n.tr("Items per page:")));
+            items.add(itemsPerPage);
+            items.setCellHorizontalAlignment(itemsPerPage, HasHorizontalAlignment.ALIGN_RIGHT);
+            itemsPerPage.setWidth("4em");
+            items.setSpacing(8);
+            items.setWidth("100%");
+            addition.add(items);
+
+            HorizontalPanel refresh = new HorizontalPanel();
+            refresh.add(new Label(i18n.tr("Refresh interval:")));
+            intervalList.addItem("Never");
+            intervalList.addItem("15 min");
+            intervalList.addItem("30 min");
+            intervalList.addItem("1 hour");
+            intervalList.addItem("2 hours");
+            intervalList.setWidth("5em");
+            refresh.add(intervalList);
+            refresh.setCellHorizontalAlignment(intervalList, HasHorizontalAlignment.ALIGN_RIGHT);
+            refresh.setSpacing(8);
+            refresh.setWidth("100%");
+            addition.add(refresh);
+            addition.getElement().getStyle().setPaddingLeft(10, Unit.PX);
+
             setupPanel.add(columns);
-
-            setupPanel.getElement().getStyle().setPadding(10, Unit.PX);
-            setupPanel.getElement().getStyle().setPaddingBottom(0, Unit.PX);
+//            setupPanel.setCellWidth(columns, "33%");
+            setupPanel.add(addition);
+            setupPanel.getElement().getStyle().setPadding(3, Unit.PX);
+//            setupPanel.setWidth("100%");
         }
 
         @Override
@@ -135,13 +175,13 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         @Override
         public boolean onOk() {
             ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
-            for (int i = 0; i < columns.getItemCount(); ++i) {
-                if (columns.isItemSelected(i)) {
+            for (int i = 0; i < columnsList.getItemCount(); ++i) {
+                if (columnsList.isItemSelected(i)) {
                     if (i == 0) {
                         ListerGadgetBase.this.fillColumnDescriptors(columnDescriptors, getListPanel().proto());
                     } else {
-                        columnDescriptors.add(new MemberPrimitiveColumnDescriptor<E>(getListPanel().proto().getMember(columns.getValue(i)).getPath(), columns
-                                .getItemText(i)));
+                        columnDescriptors.add(new MemberPrimitiveColumnDescriptor<E>(getListPanel().proto().getMember(columnsList.getValue(i)).getPath(),
+                                columnsList.getItemText(i)));
                     }
                 }
             }
