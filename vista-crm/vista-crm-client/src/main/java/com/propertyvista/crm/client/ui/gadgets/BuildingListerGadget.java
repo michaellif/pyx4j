@@ -50,11 +50,6 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
     }
 
     @Override
-    public void start() {
-        super.start();
-        populateData(0);
-    }
-
     public void populateData(final int pageNumber) {
         BuildingCrudService bcs = GWT.create(BuildingCrudService.class);
         if (bcs != null) {
@@ -73,15 +68,5 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
                 }
             }, criteria);
         }
-    }
-
-    @Override
-    protected void onPrevPage() {
-        populateData(getListPanel().getDataTable().getDataTableModel().getPageNumber() - 1);
-    }
-
-    @Override
-    protected void onNextPage() {
-        populateData(getListPanel().getDataTable().getDataTableModel().getPageNumber() + 1);
     }
 }

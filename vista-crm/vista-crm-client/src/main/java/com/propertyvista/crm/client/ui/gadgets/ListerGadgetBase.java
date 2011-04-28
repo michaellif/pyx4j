@@ -45,7 +45,29 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     protected final EntityListPanel<E> listPanel;
 
-    protected int refreshInterval = -1;
+    protected enum RefreshInterval {
+        Never(-1, "Never"), min15L(15, "15 min"), min30(30, "30 min"), hour1(60, "1 hour"), hour2(120, "2 hours");
+
+        RefreshInterval(int value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        private final int value;
+
+        private final String name;
+
+        public int value() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    };
+
+    protected RefreshInterval refreshInterval = RefreshInterval.Never;
 
     public ListerGadgetBase(GadgetMetadata gmd, Class<E> clazz) {
         super(gmd);
@@ -89,12 +111,27 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     protected abstract void fillDefaultColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
 
     /*
+     * Implement in derived class to fill table with data.
+     */
+    public abstract void populateData(int pageNumber);
+
+    /*
      * Override in derived class to fill pages with data.
      */
     protected void onPrevPage() {
+        populateData(getListPanel().getDataTable().getDataTableModel().getPageNumber() - 1);
     }
 
     protected void onNextPage() {
+        populateData(getListPanel().getDataTable().getDataTableModel().getPageNumber() + 1);
+    }
+
+    protected RefreshInterval getRefreshInterval() {
+        return refreshInterval;
+    }
+
+    protected void setRefreshInterval(RefreshInterval refreshInterval) {
+        this.refreshInterval = refreshInterval;
     }
 
     //
@@ -104,6 +141,12 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         ScrollPanel scroll = new ScrollPanel(listPanel.asWidget());
 //        scroll.setWidth("100%");
         return scroll;
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        populateData(0);
     }
 
     @Override
@@ -176,11 +219,13 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             HorizontalPanel refresh = new HorizontalPanel();
             refresh.add(new Label(i18n.tr("Refresh interval:")));
 
-            intervalList.addItem("Never");
-            intervalList.addItem("15 min");
-            intervalList.addItem("30 min");
-            intervalList.addItem("1 hour");
-            intervalList.addItem("2 hours");
+            for (RefreshInterval i : RefreshInterval.values()) {
+                intervalList.addItem(i.toString());
+                intervalList.setValue(intervalList.getItemCount() - 1, i.name());
+                if (getRefreshInterval() == i) {
+                    intervalList.setSelectedIndex(intervalList.getItemCount() - 1);
+                }
+            }
             refresh.add(intervalList);
             refresh.setCellHorizontalAlignment(intervalList, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -222,6 +267,10 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             }
 
             listPanel.setPageSize(Integer.parseInt(itemsPerPage.getText()));
+
+            if (intervalList.getSelectedIndex() > 0) {
+                setRefreshInterval(RefreshInterval.valueOf(intervalList.getValue(intervalList.getSelectedIndex())));
+            }
 
             if (!columnDescriptors.isEmpty()) {
                 getListPanel().getDataTable().getDataTableModel().setColumnDescriptors(columnDescriptors);
