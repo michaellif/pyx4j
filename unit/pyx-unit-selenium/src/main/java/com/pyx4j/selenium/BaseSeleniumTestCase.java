@@ -314,22 +314,7 @@ public class BaseSeleniumTestCase extends TestCase {
             // CDatePicker();
             assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
         } else if (mm.getValueClass().equals(Boolean.class)) {
-            WebElement we = selenium.findElement(selenium.by(fromDebugId, member));
-            if (we.getTagName().equalsIgnoreCase("input")) {
-                // CCheckBox(); -- notCanadianCitizen()
-                assertEquals(member.getMeta().getCaption(), (member.getStringView() == "true") ? "on" : "off", selenium.getValue(fromDebugId, member));
-            } else {
-                Boolean value = null;
-                //for(WebElement cwe: we.findElements(By.tagName("input"))){
-                // member.getPath().debugId() + "_Y-input".equlas(cwe.getAttribute("id); {
-                /// cwe.isSelected() {
-                //value = true;
-                //break;
-                /// }
-                //CRadioGroup
-                ///valeyup -- everEvicted()
-            }
-
+            assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getBooleanValue(fromDebugId, (IPrimitive<Boolean>) member));
         } else if (mm.getValueClass().equals(Integer.class)) {
             // CIntegerField();
         } else if (mm.getValueClass().equals(Long.class)) {

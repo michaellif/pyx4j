@@ -453,9 +453,46 @@ public class SeleniumExtended extends WebDriverWrapper {
         return null;
     }
 
-    public Boolean getBooleanValue(IPrimitive<Boolean> member) {
-        return null;
+    private Boolean getBooleanValue(WebElement element) {
+        Boolean value = null;
+        if (element.getTagName().equalsIgnoreCase("input")) {
+            // CheckBox
+            value = element.isSelected();
+        } else {
+            // RadioGroup
+            String parentId = element.getAttribute("id");
+            boolean inputsFound = false;
+            for (WebElement childElement : element.findElements(By.tagName("input"))) {
+                String id = childElement.getAttribute("id");
+                if (id.equals(parentId + "_Y")) {
+                    inputsFound = true;
+                    if (childElement.isSelected()) {
+                        value = Boolean.TRUE;
+                        break;
+                    }
+                } else if (id.equals(parentId + "_N")) {
+                    inputsFound = true;
+                    if (childElement.isSelected()) {
+                        value = Boolean.FALSE;
+                        break;
+                    }
+                }
+            }
+            if (!inputsFound) {
+                throw new Error("Can't find components inside RadioGroup " + parentId);
+            }
+        }
 
+        log("value of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), value);
+        return value;
+    }
+
+    public Boolean getBooleanValue(IPrimitive<Boolean> member) {
+        return getBooleanValue(driver.findElement(by(member)));
+    }
+
+    public Boolean getBooleanValue(IDebugId fromDebugId, IPrimitive<Boolean> member) {
+        return getBooleanValue(driver.findElement(by(fromDebugId, member)));
     }
 
     public void select(String id) {
