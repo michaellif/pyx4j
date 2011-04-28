@@ -53,7 +53,7 @@ public class ReportDropController extends AbstractPositioningDropController {
     public void onDrop(DragContext context) {
         System.out.println("onDrop+++++++++++++++ " + dropIndex);
         if (dropIndex >= -1 && dropIndex <= dropTarget.getWidgetCount() && context.selectedWidgets.size() == 1) {
-            dropTarget.setGadget(context.selectedWidgets.get(0), positioner.isFullWidth(), dropIndex);
+            dropTarget.setGadget(context.selectedWidgets.get(0), dropIndex);
         } else {
             throw new Error("Only single Gadget can be selected");
         }
@@ -66,7 +66,7 @@ public class ReportDropController extends AbstractPositioningDropController {
         if (context.selectedWidgets.size() == 1) {
             positioner = newPositioner(context);
             int index = dropTarget.getGadgetIndex(context.mouseX, context.mouseY);
-            dropTarget.setGadget(positioner, isFullWidthGadget(context.selectedWidgets.get(0)), index);
+            dropTarget.setGadget(positioner, index);
         } else {
             throw new Error("Only single Gadget can be selected");
         }
@@ -85,12 +85,12 @@ public class ReportDropController extends AbstractPositioningDropController {
         int targetIndex = dropTarget.getInsertionIndex(context.mouseX, context.mouseY);
         int positionerIndex = dropTarget.getGadgetIndex(positioner);
 
-        System.out.println("getInsertionIndex+++++++++++++++ " + targetIndex);
-        System.out.println("getGadgetIndex----- " + positionerIndex);
-
         if (targetIndex > -1 && targetIndex != positionerIndex) {
-            dropTarget.removeGadget(positioner);
-            dropTarget.insertGadget(positioner, positioner.isFullWidth(), targetIndex);
+            System.out.println("targetIndex+++++++++++++++ " + targetIndex);
+            System.out.println("positionerIndex----- " + positionerIndex);
+            Widget beforeGadget = dropTarget.getGadget(targetIndex);
+//            dropTarget.removeGadget(positioner);
+//            dropTarget.insertGadget(positioner, ReportLayoutPanel.Location.Right, dropTarget.getGadgetIndex(beforeGadget));
         }
     }
 
@@ -102,21 +102,15 @@ public class ReportDropController extends AbstractPositioningDropController {
     }
 
     protected ReportGadgetPositioner newPositioner(DragContext context) {
-        boolean fullWidth = false;
         int height = 0;
         if (context.selectedWidgets.size() == 1) {
             Widget widget = context.selectedWidgets.get(0);
-            fullWidth = isFullWidthGadget(widget);
             height = widget.getOffsetHeight();
         } else {
             throw new Error("Single Gadget can be selected");
         }
 
-        return new ReportGadgetPositioner(fullWidth, height);
-    }
-
-    boolean isFullWidthGadget(Widget widget) {
-        return widget.getOffsetWidth() > dropTarget.getOffsetWidth() * 2 / 3;
+        return new ReportGadgetPositioner(height);
     }
 
 }

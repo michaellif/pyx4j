@@ -28,6 +28,8 @@ import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.widgets.client.dashboard.ReportLayoutPanel.Location;
+
 public class Report extends SimplePanel {
 
     public static final int SPACING = 10;
@@ -69,9 +71,15 @@ public class Report extends SimplePanel {
         ReportDropController widgetDropController = new ReportDropController(reportLayoutPanel);
         widgetDragController.registerDropController(widgetDropController);
 
-        for (int i = 0; i <= 10; i++) {
+        for (int i = 0; i <= 15; i++) {
             GadgetHolder gadget = new GadgetHolder("Draggable&nbsp;#" + ++count, "green", "blue");
-            reportLayoutPanel.addGadget(gadget, i % 4 == 0);
+            if (i % 4 == 0) {
+                reportLayoutPanel.addGadget(gadget, Location.Full);
+            } else if (i % 4 == 1) {
+                reportLayoutPanel.addGadget(gadget, Location.Left);
+            } else if (i % 4 == 2 || i % 4 == 3) {
+                reportLayoutPanel.addGadget(gadget, Location.Right);
+            }
             widgetDragController.makeDraggable(gadget, gadget.getDragHandler());
         }
 

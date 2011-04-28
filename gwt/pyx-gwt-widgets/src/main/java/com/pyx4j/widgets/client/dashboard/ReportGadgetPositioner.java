@@ -26,11 +26,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 public class ReportGadgetPositioner extends SimplePanel {
 
-    private final boolean fullWidth;
-
-    public ReportGadgetPositioner(boolean fullWidth, int height) {
-
-        this.fullWidth = fullWidth;
+    public ReportGadgetPositioner(int height) {
 
         getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
         getElement().getStyle().setProperty("MozBoxSizing", "border-box");
@@ -47,10 +43,6 @@ public class ReportGadgetPositioner extends SimplePanel {
         positionerBorder.getElement().getStyle().setBorderColor("#555");
         setWidget(positionerBorder);
 
-    }
-
-    public boolean isFullWidth() {
-        return fullWidth;
     }
 
 }

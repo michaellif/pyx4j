@@ -24,41 +24,117 @@ import com.allen_sauer.gwt.dnd.client.util.WidgetArea;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ReportLayoutPanel extends FlowPanel {
+
+    private static int _counter = 0;
+
+    public static enum Location {
+        Left, Right, Full
+    }
 
     public ReportLayoutPanel() {
         getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         setWidth("100%");
     }
 
-    public void addGadget(Widget widget, boolean fullWidth) {
-        insertGadget(widget, fullWidth, getWidgetCount());
+    public void addGadget(Widget widget, Location location) {
+        insertGadget(widget, location, getWidgetCount());
     }
 
-    public void insertGadget(Widget widget, boolean fullWidth, int beforeIndex) {
-        CellPanel cell = new CellPanel(fullWidth);
+    public void insertGadget(Widget widget, Location location, int beforeIndex) {
+        CellPanel beforeCell = null;
+        Location beforeCellLocation = null;
+        boolean isBeforeCellSpaceHolder = false;
+        if (beforeIndex < getWidgetCount()) {
+            beforeCell = (CellPanel) getWidget(beforeIndex);
+            beforeCellLocation = beforeCell.getLocation();
+            isBeforeCellSpaceHolder = beforeCell.isSpaceHolder();
+        }
+
+        CellPanel afterCell = null;
+        Location afterCellLocation = null;
+        boolean isAfterCellSpaceHolder = false;
+        if (beforeIndex > 0) {
+            afterCell = (CellPanel) getWidget(beforeIndex - 1);
+            afterCellLocation = afterCell.getLocation();
+            isAfterCellSpaceHolder = afterCell.isSpaceHolder();
+        }
+
+        if (isBeforeCellSpaceHolder && location.equals(beforeCellLocation)) {
+            beforeCell.setWidget(widget);
+            return;
+        }
+
+        if (isAfterCellSpaceHolder && location.equals(afterCellLocation)) {
+            afterCell.setWidget(widget);
+            return;
+        }
+
+        CellPanel cell = new CellPanel(location);
         cell.setWidget(widget);
-        insert(cell, beforeIndex);
+
+        if (Location.Right.equals(beforeCellLocation)) {
+            beforeIndex = beforeIndex - 1;
+        }
+
+        switch (location) {
+        case Left:
+            insert(new CellPanel(Location.Right), beforeIndex);
+            insert(cell, beforeIndex);
+            break;
+        case Right:
+            insert(cell, beforeIndex);
+            insert(new CellPanel(Location.Left), beforeIndex);
+            break;
+        case Full:
+            insert(cell, beforeIndex);
+            break;
+        default:
+            break;
+        }
+
     }
 
-    public void setGadget(Widget widget, boolean fullWidth, int index) {
-        CellPanel cell = new CellPanel(fullWidth);
+    public void setGadget(Widget widget, int index) {
+        CellPanel cell = (CellPanel) getWidget(index);
         cell.setWidget(widget);
-        remove(index);
-        insert(cell, index);
     }
 
     public void removeGadget(int index) {
-        remove(index);
+        CellPanel cell = (CellPanel) getWidget(index);
+        if (Location.Full.equals(cell.getLocation())) {
+            remove(cell);
+        } else if (Location.Left.equals(cell.getLocation())) {
+            if (index + 1 < getWidgetCount()) {
+                CellPanel nextCell = (CellPanel) getWidget(index + 1);
+                if (nextCell.isSpaceHolder()) {
+                    remove(cell);
+                    remove(nextCell);
+                } else {
+                    cell.setSpaceHolder();
+                }
+            }
+        } else if (Location.Right.equals(cell.getLocation())) {
+            if (index > 0) {
+                CellPanel previousCell = (CellPanel) getWidget(index - 1);
+                if (previousCell.isSpaceHolder()) {
+                    remove(cell);
+                    remove(previousCell);
+                } else {
+                    cell.setSpaceHolder();
+                }
+            }
+        }
     }
 
     public void removeGadget(Widget widget) {
         for (int i = 0; i < getWidgetCount(); i++) {
             if (widget != null && widget.equals(((CellPanel) getWidget(i)).getWidget())) {
-                remove(i);
+                removeGadget(i);
             }
         }
     }
@@ -101,13 +177,45 @@ public class ReportLayoutPanel extends FlowPanel {
 
     class CellPanel extends SimplePanel {
 
-        public CellPanel(boolean fullWidth) {
+        private Location location;
+
+        public CellPanel(Location location) {
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            if (fullWidth) {
-                setWidth("100%");
-            } else {
+            setLocation(location);
+            setWidget(new SpaceHolder());
+        }
+
+        public boolean isSpaceHolder() {
+            return getWidget() == null || getWidget() instanceof SpaceHolder;
+        }
+
+        public void setSpaceHolder() {
+            setWidget(new SpaceHolder());
+        }
+
+        public void setLocation(Location location) {
+            this.location = location;
+            switch (location) {
+            case Left:
+            case Right:
                 setWidth("50%");
+                break;
+            case Full:
+                setWidth("100%");
+                break;
+            default:
+                break;
+            }
+        }
+
+        public Location getLocation() {
+            return location;
+        }
+
+        class SpaceHolder extends HTML {
+            SpaceHolder() {
+                super("aaa&nbsp;" + _counter++);
             }
         }
 
