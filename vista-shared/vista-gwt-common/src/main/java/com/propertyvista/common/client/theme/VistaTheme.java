@@ -25,6 +25,7 @@ import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
 import com.pyx4j.widgets.client.style.ThemeColor;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class VistaTheme extends Theme {
 
@@ -288,7 +289,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
     }
 
-    private void initTabPanelStyles() {
+    protected void initTabPanelStyles() {
         String prefix = TabPanel.DEFAULT_STYLE_PREFIX;
 
         Style style = new Style(Selector.valueOf(prefix));
@@ -542,6 +543,12 @@ public class VistaTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.BORDER);
+        if (!BrowserType.isIE7()) {
+            style.addProperty("padding", "2px 5px");
+        }
+        style.addProperty("box-sizing", "border-box");
+        style.addProperty("-moz-box-sizing", "border-box");
+        style.addProperty("-webkit-box-sizing", "border-box");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_TextBox, " td");
@@ -573,6 +580,8 @@ public class VistaTheme extends Theme {
 
     protected void initListBoxStyle() {
         Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX));
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
 
