@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.gadgets;
 
 import java.util.List;
-import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -25,6 +24,8 @@ import com.propertyvista.portal.domain.Building;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 public class BuildingListerGadget extends ListerGadgetBase<Building> {
 
@@ -40,7 +41,7 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
     }
 
     @Override
-    protected void fillColumnDescriptors(List<ColumnDescriptor<Building>> columnDescriptors, Building proto) {
+    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Building>> columnDescriptors, Building proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
@@ -51,22 +52,36 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
     @Override
     public void start() {
         super.start();
-        populateData();
+        populateData(0);
     }
 
-    public void populateData() {
+    public void populateData(final int pageNumber) {
         BuildingCrudService bcs = GWT.create(BuildingCrudService.class);
         if (bcs != null) {
-            bcs.getTestBuildingsList(new AsyncCallback<Vector<Building>>() {
+            EntitySearchCriteria<Building> criteria = new EntitySearchCriteria<Building>(Building.class);
+            criteria.setPageSize(getListPanel().getPageSize());
+            criteria.setPageNumber(pageNumber);
+
+            bcs.search(new AsyncCallback<EntitySearchResult<Building>>() {
                 @Override
                 public void onFailure(Throwable caught) {
                 }
 
                 @Override
-                public void onSuccess(Vector<Building> result) {
-                    BuildingListerGadget.this.getListPanel().populateData(result, 0, false);
+                public void onSuccess(EntitySearchResult<Building> result) {
+                    BuildingListerGadget.this.getListPanel().populateData(result.getData(), pageNumber, result.hasMoreData());
                 }
-            });
+            }, criteria);
         }
+    }
+
+    @Override
+    protected void onPrevPage() {
+        populateData(getListPanel().getDataTable().getDataTableModel().getPageNumber() - 1);
+    }
+
+    @Override
+    protected void onNextPage() {
+        populateData(getListPanel().getDataTable().getDataTableModel().getPageNumber() + 1);
     }
 }

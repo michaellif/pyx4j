@@ -19,6 +19,8 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -43,6 +45,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     protected final EntityListPanel<E> listPanel;
 
+    protected int refreshInterval = -1;
+
     public ListerGadgetBase(GadgetMetadata gmd, Class<E> clazz) {
         super(gmd);
 
@@ -50,13 +54,27 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             @Override
             public List<ColumnDescriptor<E>> getColumnDescriptors() {
                 ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
-                ListerGadgetBase.this.fillColumnDescriptors(columnDescriptors, proto());
+                ListerGadgetBase.this.fillDefaultColumnDescriptors(columnDescriptors, proto());
                 return columnDescriptors;
             }
         };
 
-        DOM.setStyleAttribute(listPanel.getDataTable().getElement(), "tableLayout", "auto");
         listPanel.setPageSize(10);
+
+        listPanel.setPrevActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                onPrevPage();
+            }
+        });
+        listPanel.setNextActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                onNextPage();
+            }
+        });
+
+        DOM.setStyleAttribute(listPanel.getDataTable().getElement(), "tableLayout", "auto");
     }
 
     // EntityListPanel access:
@@ -68,8 +86,18 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
      * Implement in derived class to set default table structure.
      * Note, that it's called from within constructor!
      */
-    protected abstract void fillColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
+    protected abstract void fillDefaultColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
 
+    /*
+     * Override in derived class to fill pages with data.
+     */
+    protected void onPrevPage() {
+    }
+
+    protected void onNextPage() {
+    }
+
+    //
     // IGadget:
     @Override
     public Widget getWidget() {
@@ -88,6 +116,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         return new SetupLister();
     }
 
+    //
     // Setup UI implementation:
     class SetupLister implements ISetup {
 
@@ -184,7 +213,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             for (int i = 0; i < columnsList.getItemCount(); ++i) {
                 if (columnsList.isItemSelected(i)) {
                     if (i == 0) {
-                        ListerGadgetBase.this.fillColumnDescriptors(columnDescriptors, getListPanel().proto());
+                        ListerGadgetBase.this.fillDefaultColumnDescriptors(columnDescriptors, getListPanel().proto());
                     } else {
                         columnDescriptors.add(new MemberPrimitiveColumnDescriptor<E>(getListPanel().proto().getMember(columnsList.getValue(i)).getPath(),
                                 columnsList.getItemText(i)));
@@ -195,13 +224,12 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             listPanel.setPageSize(Integer.parseInt(itemsPerPage.getText()));
 
             if (!columnDescriptors.isEmpty()) {
-                stop();
                 getListPanel().getDataTable().getDataTableModel().setColumnDescriptors(columnDescriptors);
-                start();
-            } else {
-                resume();
             }
 
+            // restart the gadget:
+            stop();
+            start();
             return true;
         }
 

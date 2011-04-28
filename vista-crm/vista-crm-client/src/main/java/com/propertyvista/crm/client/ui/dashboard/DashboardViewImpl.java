@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Singleton;
@@ -66,8 +67,11 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
     public DashboardViewImpl() {
         VerticalPanel main = new VerticalPanel();
         main.add(new CrmHeaderDecorator("Dashboard Menu/Tools", layouts));
-        main.add(dashboard);
+        ScrollPanel scroll = new ScrollPanel(dashboard);
+//        scroll.setHeight("500px");
+        main.add(scroll);
         main.setWidth("100%");
+        main.setHeight("100%");
         setWidget(main);
     }
 
