@@ -141,8 +141,8 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         assertValueOnForm(fromDebugId, address.moveInDate());
         assertValueOnForm(fromDebugId, address.moveOutDate());
 
+        assertValueOnForm(fromDebugId, address.rented());
         //TODO
-        //assertValueOnForm(fromDebugId, address.rented()); //PotentialTenantInfo$currentAddress$rented instead of PotentialTenantInfo$currentAddress-Address$rented_Rented
         //assertValueOnForm(fromDebugId, address.country());
         //assertValueOnForm(tenant.currentAddress().province());
 
