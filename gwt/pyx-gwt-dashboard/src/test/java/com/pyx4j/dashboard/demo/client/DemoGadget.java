@@ -103,6 +103,12 @@ public class DemoGadget extends HTML implements IGadget {
             }
 
             @Override
+            public boolean onStart() {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
             public boolean onOk() {
                 setHTML(content.getText());
                 return true;

@@ -41,6 +41,8 @@ public interface IGadget {
         Widget getWidget(); // should be implemented meaningful!
 
         // notifications:
+        boolean onStart();
+
         boolean onOk();
 
         void onCancel();

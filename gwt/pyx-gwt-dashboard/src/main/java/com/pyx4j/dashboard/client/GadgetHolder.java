@@ -350,6 +350,7 @@ final class GadgetHolder extends SimplePanel {
 
         // switch displayed widget with setup one:
         switchViewTo(setup);
+        setupGadget.onStart();
         inSetup = true;
     }
 
