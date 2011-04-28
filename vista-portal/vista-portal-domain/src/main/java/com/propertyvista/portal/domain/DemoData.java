@@ -18,7 +18,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 public class DemoData {
 
     public static int PT_GENERATION_SEED = 100;
-    
+
     public static int MAX_CUSTOMERS = 20;
 
     public static int MAX_PROPERTY_MANAGER = 10;
@@ -33,7 +33,7 @@ public class DemoData {
 
     public static String USERS_DOMAIN = "@pyx4j.com";
 
-    public static int NUM_RESIDENTIAL_BUILDINGS = 2;
+    public static int NUM_RESIDENTIAL_BUILDINGS = 50;
 
     public static int NUM_POTENTIAL_TENANTS = 4;
 
