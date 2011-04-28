@@ -54,6 +54,7 @@ import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.TimeUtils;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
@@ -149,7 +150,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
-            persist(connection, tableModel(entity.getEntityMeta()), entity, new Date());
+            persist(connection, tableModel(entity.getEntityMeta()), entity, TimeUtils.getRoundedNow());
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -204,6 +205,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private void insert(Connection connection, TableModel tm, IEntity entity, Date now) {
         if (trace) {
             log.info(Trace.enter() + "insert {}", tm.getTableName());
+        }
+        String createdTs = tm.entityMeta().getCreatedTimestampMember();
+        if (createdTs != null) {
+            entity.setMemberValue(createdTs, now);
         }
         try {
             tm.insert(connection, entity);
@@ -268,7 +273,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             connection = connectionProvider.getConnection();
             T entity = entityIterable.iterator().next();
-            persist(connection, tableModel(entity.getEntityMeta()), entityIterable, new Date());
+            persist(connection, tableModel(entity.getEntityMeta()), entityIterable, TimeUtils.getRoundedNow());
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -331,7 +336,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
-            merge(connection, tableModel(entity.getEntityMeta()), entity, new Date());
+            merge(connection, tableModel(entity.getEntityMeta()), entity, TimeUtils.getRoundedNow());
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -419,6 +424,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (!EqualsHelper.equals(entity.getMemberValue(updatedTs), baseEntity.getMemberValue(updatedTs))) {
             log.debug("Timestamp " + updatedTs + " change {} -> {}", baseEntity.getMemberValue(updatedTs), entity.getMemberValue(updatedTs));
             throw new ConcurrentUpdateException(i18n.tr("{0} updated externally", tm.entityMeta().getCaption()));
+        }
+        String createdTs = tm.entityMeta().getCreatedTimestampMember();
+        if (createdTs != null) {
+            if (!EqualsHelper.equals(entity.getMemberValue(createdTs), baseEntity.getMemberValue(createdTs))) {
+                log.debug("Timestamp " + createdTs + " change {} -> {}", baseEntity.getMemberValue(createdTs), entity.getMemberValue(createdTs));
+                throw new SecurityViolationException("Permission denied");
+            }
         }
         return applyModifications(connection, tm, baseEntity, entity);
     }
