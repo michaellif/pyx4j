@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -46,6 +49,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                 return columnDescriptors;
             }
         };
+
+        DOM.setStyleAttribute(listPanel.getDataTable().getElement(), "tableLayout", "auto");
     }
 
     // EntityListPanel access:
@@ -54,7 +59,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     }
 
     /*
-     * Implement in derived class to set desired table structure.
+     * Implement in derived class to set default table structure.
+     * Note, that it's called from within constructor!
      */
     protected abstract void fillColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
 
@@ -78,11 +84,25 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     // Setup UI implementation:
     class Setup implements ISetup {
+
         protected final ListBox columns = new ListBox(true);
 
-        @Override
-        public Widget getWidget() {
-            suspend();
+        protected final FlowPanel setupPanel = new FlowPanel();
+
+        protected Setup() {
+            super();
+
+            columns.addItem(i18n.tr("Default Set"));
+            columns.addChangeHandler(new ChangeHandler() {
+                @Override
+                public void onChange(ChangeEvent event) {
+                    if (columns.getSelectedIndex() == 0) {
+                        for (int i = 1; i < columns.getItemCount(); ++i) {
+                            columns.setItemSelected(i, false);
+                        }
+                    }
+                }
+            });
 
             for (String name : getListPanel().proto().getEntityMeta().getMemberNames()) {
                 MemberMeta meta = getListPanel().proto().getEntityMeta().getMemberMeta(name);
@@ -92,7 +112,6 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                 }
             }
 
-            FlowPanel setupPanel = new FlowPanel();
             setupPanel.add(new Label(i18n.tr("Select columns to show:")));
 
             columns.setVisibleItemCount(8);
@@ -100,7 +119,17 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
             setupPanel.getElement().getStyle().setPadding(10, Unit.PX);
             setupPanel.getElement().getStyle().setPaddingBottom(0, Unit.PX);
+        }
+
+        @Override
+        public Widget getWidget() {
             return setupPanel;
+        }
+
+        @Override
+        public boolean onStart() {
+            suspend();
+            return true;
         }
 
         @Override
@@ -108,8 +137,12 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
             for (int i = 0; i < columns.getItemCount(); ++i) {
                 if (columns.isItemSelected(i)) {
-                    columnDescriptors.add(new MemberPrimitiveColumnDescriptor<E>(getListPanel().proto().getMember(columns.getValue(i)).getPath(), columns
-                            .getItemText(i)));
+                    if (i == 0) {
+                        ListerGadgetBase.this.fillColumnDescriptors(columnDescriptors, getListPanel().proto());
+                    } else {
+                        columnDescriptors.add(new MemberPrimitiveColumnDescriptor<E>(getListPanel().proto().getMember(columns.getValue(i)).getPath(), columns
+                                .getItemText(i)));
+                    }
                 }
             }
 

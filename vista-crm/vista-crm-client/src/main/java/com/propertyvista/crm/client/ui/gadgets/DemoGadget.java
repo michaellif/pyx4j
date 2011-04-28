@@ -84,6 +84,11 @@ public class DemoGadget extends GadgetBase {
             }
 
             @Override
+            public boolean onStart() {
+                return true;
+            }
+
+            @Override
             public boolean onOk() {
                 widget.setHTML(content.getText());
                 return true;

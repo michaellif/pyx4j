@@ -43,7 +43,7 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
     @Override
     protected void selfInit(GadgetMetadata gmd) {
         gmd.type().setValue(GadgetType.BuildingLister);
-        gmd.name().setValue("Building Lister");
+        gmd.name().setValue(i18n.tr("Building Lister"));
     }
 
     @Override

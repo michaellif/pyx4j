@@ -268,7 +268,7 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
                 HorizontalPanel gadgets = new HorizontalPanel();
                 gadgets.add(gadgetsList);
                 gadgets.add(gadgetDesc);
-                gadgets.setSpacing(10);
+                gadgets.setSpacing(8);
                 gadgets.setWidth("100%");
 
                 gadgets.setCellWidth(gadgetsList, "35%");
@@ -296,13 +296,13 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
                         hide();
                     }
                 }));
-                buttons.setSpacing(10);
+                buttons.setSpacing(8);
 
                 VerticalPanel vPanel = new VerticalPanel();
                 vPanel.add(gadgets);
                 vPanel.add(buttons);
                 vPanel.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_CENTER);
-                vPanel.setSpacing(10);
+                vPanel.setSpacing(8);
                 vPanel.setSize("100%", "100%");
 
                 setWidget(vPanel);
