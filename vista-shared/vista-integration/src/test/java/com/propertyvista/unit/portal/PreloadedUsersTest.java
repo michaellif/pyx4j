@@ -30,7 +30,6 @@ import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.selenium.D;
@@ -95,7 +94,7 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Info.class)));
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Info.class));
 
-        PotentialTenantInfo tenant = (PotentialTenantInfo) summary.tenantList().tenants().get(0).cloneEntity();
+        PotentialTenantInfo tenant = summary.tenantList().tenants().get(0).detach();
 
         assertValueOnForm(tenant.firstName());
         assertValueOnForm(tenant.lastName());
@@ -114,21 +113,19 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         //doesn't work, enums still require logic similar to BaseSeleniumTestCase::assertValueOnForm
         //assertValueOnForm(tenant.driversLicenseState()); 
 
-        assertAddressForm(tenant.currentAddress().getPath(), (Address) tenant.currentAddress().cloneEntity());
-        assertAddressForm(tenant.previousAddress().getPath(), (Address) tenant.previousAddress().cloneEntity());
+        assertAddressForm(tenant.currentAddress().getPath(), detach(tenant.currentAddress()));
+        assertAddressForm(tenant.previousAddress().getPath(), detach(tenant.previousAddress()));
 
         //assertEqualsOnForm(tenant.legalQuestions().everEvicted());
         //...
 
-        //TODO: 
         //Vehicles
         int num = 0;
         for (Vehicle vehicle : tenant.vehicles()) {
-            // No need for cloneEntity() since elements in list are detached, I think..
-            assertVehiclesForm(new CompositeDebugId(tenant.vehicles().getPath(), "row", num), vehicle);
-            ////assertVehiclesForm(D.id(tenant.vehicles().getPath().debugId(), num), vehicle);
+            assertVehiclesForm(D.id(tenant.vehicles(), num), detach(vehicle));
             num++;
         }
+        //TODO Vadym, verify size (e.g. no next row exists)
 
         //Legal Questions
         //Emergency Contacts
@@ -152,21 +149,10 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
 
     }
 
-    private void assertVehiclesForm(CompositeDebugId fromDebugId, Vehicle vehicle) {
-        //TODO:
-        //assertValueOnForm(fromDebugId, vehicle.make());
-        //assertValueOnForm(fromDebugId, vehicle.model());
-
-    }
-
-    //    private void assertEqualsOnForm(IPrimitive<?> member) {
-    private void assertValueOnForm(IPrimitive<?> member) {
-        assertValueOnForm(null, member);
-    }
-
-    private void assertValueOnForm(IDebugId fromDebugId, IPrimitive<?> member) {
-        // All your existing code for data types...
-        assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
+    private void assertVehiclesForm(IDebugId fromDebugId, Vehicle vehicle) {
+        assertValueOnForm(fromDebugId, vehicle.make());
+        assertValueOnForm(fromDebugId, vehicle.model());
+        // TODO Vadym, Add all fields
     }
 
 }
