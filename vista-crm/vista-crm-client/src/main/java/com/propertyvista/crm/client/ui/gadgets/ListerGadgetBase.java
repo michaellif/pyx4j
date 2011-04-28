@@ -56,6 +56,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         };
 
         DOM.setStyleAttribute(listPanel.getDataTable().getElement(), "tableLayout", "auto");
+        listPanel.setPageSize(10);
     }
 
     // EntityListPanel access:
@@ -129,27 +130,32 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             columnsList.setWidth("100%");
 
             VerticalPanel addition = new VerticalPanel();
+
             addition.add(new HTML("&nbsp"));
             HorizontalPanel items = new HorizontalPanel();
             items.add(new HTML(i18n.tr("Items per page:")));
+
+            itemsPerPage.setText(String.valueOf(listPanel.getPageSize()));
+            itemsPerPage.setWidth("2em");
             items.add(itemsPerPage);
             items.setCellHorizontalAlignment(itemsPerPage, HasHorizontalAlignment.ALIGN_RIGHT);
-            itemsPerPage.setWidth("4em");
-            items.setSpacing(8);
+
+            items.setSpacing(4);
             items.setWidth("100%");
             addition.add(items);
 
             HorizontalPanel refresh = new HorizontalPanel();
             refresh.add(new Label(i18n.tr("Refresh interval:")));
+
             intervalList.addItem("Never");
             intervalList.addItem("15 min");
             intervalList.addItem("30 min");
             intervalList.addItem("1 hour");
             intervalList.addItem("2 hours");
-            intervalList.setWidth("5em");
             refresh.add(intervalList);
             refresh.setCellHorizontalAlignment(intervalList, HasHorizontalAlignment.ALIGN_RIGHT);
-            refresh.setSpacing(8);
+
+            refresh.setSpacing(4);
             refresh.setWidth("100%");
             addition.add(refresh);
             addition.getElement().getStyle().setPaddingLeft(10, Unit.PX);
@@ -185,6 +191,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                     }
                 }
             }
+
+            listPanel.setPageSize(Integer.parseInt(itemsPerPage.getText()));
 
             if (!columnDescriptors.isEmpty()) {
                 stop();

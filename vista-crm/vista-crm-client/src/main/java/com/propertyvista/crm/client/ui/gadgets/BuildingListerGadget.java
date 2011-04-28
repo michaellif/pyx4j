@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -52,30 +51,10 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
     @Override
     public void start() {
         super.start();
-//        populateData();
-        populateData2();
+        populateData();
     }
 
     public void populateData() {
-        BuildingCrudService bcs = GWT.create(BuildingCrudService.class);
-        if (bcs != null) {
-            bcs.getTestBuildingNomberOne(new AsyncCallback<Building>() {
-
-                @Override
-                public void onSuccess(Building result) {
-                    List<Building> data = new ArrayList<Building>();
-                    data.add(result);
-                    BuildingListerGadget.this.getListPanel().populateData(data, 0, false);
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-            });
-        }
-    }
-
-    public void populateData2() {
         BuildingCrudService bcs = GWT.create(BuildingCrudService.class);
         if (bcs != null) {
             bcs.getTestBuildingsList(new AsyncCallback<Vector<Building>>() {
