@@ -105,9 +105,7 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         assertValueOnForm(tenant.driversLicense());
         assertValueOnForm(tenant.secureIdentifier());
 
-        //FIXME : To VLADS: does not work anymore: 'on' is not converted to 'true' in method assertValueOnForm (line 162 below) you provided
-        // in fact it should still use BaseSeleniumTestCase::assertValueOnForm to do such conversion...
-        //assertValueOnForm(tenant.notCanadianCitizen()); 
+        assertValueOnForm(tenant.notCanadianCitizen());
 
         //FIXME : To VLADS
         //doesn't work, enums still require logic similar to BaseSeleniumTestCase::assertValueOnForm
@@ -116,7 +114,8 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         assertAddressForm(tenant.currentAddress().getPath(), detach(tenant.currentAddress()));
         assertAddressForm(tenant.previousAddress().getPath(), detach(tenant.previousAddress()));
 
-        //assertEqualsOnForm(tenant.legalQuestions().everEvicted());
+        assertValueOnForm(tenant.legalQuestions().everEvicted());
+        assertValueOnForm(tenant.legalQuestions().defaultedOnLease());
         //...
 
         //Vehicles
