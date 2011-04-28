@@ -30,4 +30,7 @@ public class RetrievalTest extends RetrievalTestCase {
         return GAEPersistenceEnvironmentFactory.getPersistenceEnvironment();
     }
 
+    public void testEmbeddedEntitySet() {
+        gaeOnlyTestEmbeddedEntitySet();
+    }
 }

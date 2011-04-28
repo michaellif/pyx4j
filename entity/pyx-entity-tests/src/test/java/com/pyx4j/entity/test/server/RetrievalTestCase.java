@@ -27,8 +27,8 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 
-import com.pyx4j.entity.server.TimeUtils;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
+import com.pyx4j.entity.server.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -272,7 +272,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         Assert.assertTrue("null is saved", address3.city().isNull());
     }
 
-    public void testEmbeddedEntitySet() {
+    public void gaeOnlyTestEmbeddedEntitySet() {
 
         Province prov = EntityFactory.create(Province.class);
         prov.name().setValue("Ontario" + uniqueString());
