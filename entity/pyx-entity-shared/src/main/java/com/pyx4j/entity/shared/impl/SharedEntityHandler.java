@@ -517,8 +517,16 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return entity;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings("unchecked")
+    public <T extends IEntity> T detach() {
+        IEntity entity = EntityFactory.create((Class<IEntity>) getObjectClass());
+        entity.setValue(getValue());
+        return (T) entity;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public <T extends IEntity> T cast() {
         Map<String, Object> entityValue = getValue();
         if ((entityValue == null) || (!entityValue.containsKey(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR))) {

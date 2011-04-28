@@ -303,8 +303,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         }
         itemsMap.put(component.getValue(), component);
 
-        currentRowDebugId++;
         IDebugId rowDebugId = new CompositeDebugId(this.getDebugId(), "row", currentRowDebugId);
+        currentRowDebugId++;
+
         component.setDebugId(rowDebugId);
         folderItemDecorator.asWidget().ensureDebugId(rowDebugId.debugId());
 

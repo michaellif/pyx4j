@@ -268,14 +268,25 @@ public class BaseSeleniumTestCase extends TestCase {
         assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(member));
     }
 
-    private void assertValueOnForm(IPrimitive<?> member) {
+    /**
+     * Helper function to avoid casts
+     */
+    public <T extends IEntity> T detach(T entity) {
+        return entity.detach();
+    }
+
+    public void assertValueOnForm(IPrimitive<?> member) {
+        assertValueOnForm(null, member);
+    }
+
+    public void assertValueOnForm(IDebugId fromDebugId, IPrimitive<?> member) {
         ///member.getMeta().getObjectClassType() -- c
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().isEnum()) {
-            WebElement we = selenium.findElement(selenium.by(member));
+            WebElement we = selenium.findElement(selenium.by(fromDebugId, member));
             if (we.getTagName().equalsIgnoreCase("input") || we.getTagName().equalsIgnoreCase("select")) {
                 // CComboBox();
-                assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(member));
+                assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
 
             } else {
                 //else RadioButton
@@ -301,12 +312,12 @@ public class BaseSeleniumTestCase extends TestCase {
             }
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
             // CDatePicker();
-            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(member));
+            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
         } else if (mm.getValueClass().equals(Boolean.class)) {
-            WebElement we = selenium.findElement(selenium.by(member));
+            WebElement we = selenium.findElement(selenium.by(fromDebugId, member));
             if (we.getTagName().equalsIgnoreCase("input")) {
                 // CCheckBox(); -- notCanadianCitizen()
-                assertEquals(member.getMeta().getCaption(), (member.getStringView() == "true") ? "on" : "off", selenium.getValue(member));
+                assertEquals(member.getMeta().getCaption(), (member.getStringView() == "true") ? "on" : "off", selenium.getValue(fromDebugId, member));
             } else {
                 Boolean value = null;
                 //for(WebElement cwe: we.findElements(By.tagName("input"))){
@@ -327,7 +338,7 @@ public class BaseSeleniumTestCase extends TestCase {
             // CDoubleField();
         } else if (mm.getValueClass().equals(String.class)) {
             // CTextField();
-            assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getValue(member));
+            assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getValue(fromDebugId, member));
         } else {
             throw new Error("No comparison defined for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
         }

@@ -94,14 +94,19 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
      */
     public EntityMeta getEntityMeta();
 
+    /**
+     * @see BusinessEqualValue
+     */
+    public boolean businessEquals(IEntity other);
+
     public List<Validator> getValidators(Path memberPath);
 
     public IEntity cloneEntity();
 
     /**
-     * @see BusinessEqualValue
+     * Detach IEntity from its parent but keep the same shared value object
      */
-    public boolean businessEquals(IEntity other);
+    public <T extends IEntity> T detach();
 
     public <T extends IEntity> T cast();
 
