@@ -20,8 +20,12 @@
  */
 package com.pyx4j.entity.client.ui.datatable;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Anchor;
@@ -30,16 +34,24 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.TargetLabel;
 
 public class DataTableActionsBar extends HorizontalPanel implements DataTableModelListener {
 
     private DataTableModel<?> model;
 
+    private final Label countLabel;
+
     private final Anchor prevAnchor;
 
     private final Anchor nextAnchor;
 
-    private final Label countLabel;
+    private final HorizontalPanel pageSizeContentPanel;
+
+    protected final ListBox pageSizeSelector;
+
+    protected List<Integer> pageSizeOptions;
 
     private HandlerRegistration prevActionHandlerRegistration;
 
@@ -51,6 +63,15 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         HorizontalPanel contentPanel = new HorizontalPanel();
         add(contentPanel);
         setCellHorizontalAlignment(contentPanel, HorizontalPanel.ALIGN_RIGHT);
+
+        pageSizeContentPanel = new HorizontalPanel();
+        pageSizeContentPanel.getElement().getStyle().setMarginRight(10, Unit.PX);
+        pageSizeContentPanel.setVisible(false);
+        pageSizeSelector = new ListBox();
+        pageSizeContentPanel.add(new TargetLabel("Page Size:", pageSizeSelector));
+        pageSizeContentPanel.add(pageSizeSelector);
+        pageSizeSelector.getElement().getStyle().setMarginLeft(3, Unit.PX);
+        contentPanel.add(pageSizeContentPanel);
 
         prevAnchor = new Anchor("&lt;&nbsp;Prev", true);
         prevAnchor.setVisible(false);
@@ -69,6 +90,17 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         getElement().getStyle().setProperty("textAlign", "right");
         getElement().getStyle().setProperty("padding", "6px");
 
+        pageSizeSelector.addChangeHandler(new ChangeHandler() {
+
+            @Override
+            public void onChange(ChangeEvent event) {
+                if (model != null) {
+                    model.setPageSize(Integer.valueOf(pageSizeSelector.getValue(pageSizeSelector.getSelectedIndex())));
+                    //TODO make it work, Actually fire event
+                }
+
+            }
+        });
     }
 
     public void setPrevActionHandler(ClickHandler prevActionHandler) {
@@ -129,6 +161,20 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         }
 
         nextAnchor.setVisible(nextActionHandlerRegistration != null && model.hasMoreData());
+
+        if (pageSizeOptions != null) {
+            //TODO make it work
+        }
+    }
+
+    public void setPageSizeOptions(List<Integer> pageSizeOptions) {
+        this.pageSizeOptions = pageSizeOptions;
+        pageSizeContentPanel.setVisible(this.pageSizeOptions != null);
+        if (this.pageSizeOptions != null) {
+            for (Integer size : pageSizeOptions) {
+                pageSizeSelector.addItem(String.valueOf(size));
+            }
+        }
     }
 
 }

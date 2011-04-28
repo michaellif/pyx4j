@@ -105,6 +105,10 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
         lowerActionsBar.setPrevActionHandler(prevActionHandler);
     }
 
+    public void setPageSizeOptions(List<Integer> pageSizeOptions) {
+        upperActionsBar.setPageSizeOptions(pageSizeOptions);
+    }
+
     public void setNextActionHandler(ClickHandler nextActionHandler) {
         upperActionsBar.setNextActionHandler(nextActionHandler);
         lowerActionsBar.setNextActionHandler(nextActionHandler);
