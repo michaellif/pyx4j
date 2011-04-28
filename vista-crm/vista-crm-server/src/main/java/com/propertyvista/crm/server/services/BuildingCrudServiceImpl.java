@@ -19,17 +19,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.DemoData;
-
-import com.pyx4j.entity.rpc.EntityServices;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.rpc.client.RPCManager;
 
 public class BuildingCrudServiceImpl implements BuildingCrudService {
 
@@ -63,10 +61,9 @@ public class BuildingCrudServiceImpl implements BuildingCrudService {
     }
 
     @Override
-    public void getTestBuildingsList(AsyncCallback<Vector<? extends IEntity>> callback) {
+    public void getTestBuildingsList(AsyncCallback<Vector<Building>> callback) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(new PropertyCriterion(criteria.proto().id().getFieldName(), Restriction.NOT_EQUAL, 0));
-        RPCManager.execute(EntityServices.Query.class, criteria, callback);
+        //criteria.add(new PropertyCriterion(criteria.proto().id().getFieldName(), Restriction.NOT_EQUAL, 0));
+        callback.onSuccess(EntityServicesImpl.secureQuery(criteria));
     }
-
 }

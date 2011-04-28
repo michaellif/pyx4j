@@ -19,10 +19,6 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.portal.domain.Building;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
@@ -32,6 +28,11 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.rpc.client.RPCManager;
+
+import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
+import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.portal.domain.Building;
 
 public class BuildingListerGadget extends ListerGadgetBase<Building> {
 
@@ -85,15 +86,14 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
     public void populateData2() {
         BuildingCrudService bcs = GWT.create(BuildingCrudService.class);
         if (bcs != null) {
-            bcs.getTestBuildingsList(new AsyncCallback<Vector<? extends IEntity>>() {
+            bcs.getTestBuildingsList(new AsyncCallback<Vector<Building>>() {
                 @Override
                 public void onFailure(Throwable caught) {
                 }
 
-                @SuppressWarnings("unchecked")
                 @Override
-                public void onSuccess(Vector<? extends IEntity> result) {
-                    BuildingListerGadget.this.getListPanel().populateData((Vector<Building>) result, 0, false);
+                public void onSuccess(Vector<Building> result) {
+                    BuildingListerGadget.this.getListPanel().populateData(result, 0, false);
                 }
             });
         }

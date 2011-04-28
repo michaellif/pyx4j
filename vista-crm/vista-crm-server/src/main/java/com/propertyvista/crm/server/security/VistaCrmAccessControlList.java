@@ -13,13 +13,14 @@
  */
 package com.propertyvista.crm.server.security;
 
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
-
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
+
+import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.portal.domain.Building;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
@@ -37,6 +38,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
             grant(new EntityPermission("*", EntityPermission.READ));
         }
 
+        grant(new EntityPermission(Building.class, EntityPermission.ALL));
         grant(new IServiceExecutePermission(BuildingCrudService.class));
     }
 }
