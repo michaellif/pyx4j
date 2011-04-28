@@ -28,15 +28,13 @@ import com.allen_sauer.gwt.dnd.client.util.Location;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.dashboard.ReportLayoutPanel.CellCoordinates;
-
 public class ReportDropController extends AbstractPositioningDropController {
 
     protected final ReportLayoutPanel dropTarget;
 
-    private CellCoordinates dropCoordinates;
+    private int dropIndex;
 
-    private Widget positioner = null;
+    private ReportGadgetPositioner positioner = null;
 
     public static final LocationWidgetComparator FULL_COMPARATOR = new LocationWidgetComparator() {
 
@@ -53,11 +51,11 @@ public class ReportDropController extends AbstractPositioningDropController {
 
     @Override
     public void onDrop(DragContext context) {
-        if (dropCoordinates != null && context.selectedWidgets.size() == 1) {
-            System.out.println("onDrop+++++++++++++++ " + dropCoordinates);
-            dropTarget.setGadget(context.selectedWidgets.get(0), dropCoordinates.getRow(), dropCoordinates.getColumn());
+        System.out.println("onDrop+++++++++++++++ " + dropIndex);
+        if (dropIndex >= -1 && dropIndex <= dropTarget.getWidgetCount() && context.selectedWidgets.size() == 1) {
+            dropTarget.setGadget(context.selectedWidgets.get(0), positioner.isFullWidth(), dropIndex);
         } else {
-            throw new Error("Single Gadget can be selected");
+            throw new Error("Only single Gadget can be selected");
         }
         super.onDrop(context);
     }
@@ -65,9 +63,13 @@ public class ReportDropController extends AbstractPositioningDropController {
     @Override
     public void onEnter(DragContext context) {
         super.onEnter(context);
-        positioner = newPositioner(context);
-        CellCoordinates targetLocation = dropTarget.getGadgetLocation(context.mouseX, context.mouseY);
-        dropTarget.setGadget(positioner, targetLocation.getRow(), targetLocation.getColumn());
+        if (context.selectedWidgets.size() == 1) {
+            positioner = newPositioner(context);
+            int index = dropTarget.getGadgetIndex(context.mouseX, context.mouseY);
+            dropTarget.setGadget(positioner, isFullWidthGadget(context.selectedWidgets.get(0)), index);
+        } else {
+            throw new Error("Only single Gadget can be selected");
+        }
     }
 
     @Override
@@ -80,48 +82,41 @@ public class ReportDropController extends AbstractPositioningDropController {
     public void onMove(DragContext context) {
         super.onMove(context);
 
-        CellCoordinates targetLocation = dropTarget.getGadgetInsertion(context.mouseX, context.mouseY);
-        CellCoordinates positionerLocation = dropTarget.getGadgetLocation(positioner);
+        int targetIndex = dropTarget.getInsertionIndex(context.mouseX, context.mouseY);
+        int positionerIndex = dropTarget.getGadgetIndex(positioner);
 
-        System.out.println("onMove+++++++++++++++ " + targetLocation);
-//        System.out.println("onMove----- " + positionerLocation);
+        System.out.println("getInsertionIndex+++++++++++++++ " + targetIndex);
+        System.out.println("getGadgetIndex----- " + positionerIndex);
 
-        if (targetLocation != null && !targetLocation.equals(positionerLocation)) {
-            dropTarget.insertGadget(positioner, targetLocation.getRow(), targetLocation.getColumn());
+        if (targetIndex > -1 && targetIndex != positionerIndex) {
+            dropTarget.removeGadget(positioner);
+            dropTarget.insertGadget(positioner, positioner.isFullWidth(), targetIndex);
         }
-
-        //        if (positionerRowIndex != targetRowIndex && (positionerRowIndex != targetRowIndex - 1 || targetRowIndex == 0)) {
-        //            if (positionerRowIndex == 0 && dropTarget.getWidgetCount() == 1) {
-        //                // do nothing, the positioner is the only widget
-        //            } else if (targetRowIndex == -1) {
-        //                // outside drop target, so remove positioner to indicate a drop will not happen
-        //                dropTarget.removeGadget(positioner);
-        //            } else {
-        // dropTarget.insertGadget(positioner, targetRowIndex, targetColumnIndex);
-        //            }
-        //        }
     }
 
     @Override
     public void onPreviewDrop(DragContext context) throws VetoDragException {
-        dropCoordinates = dropTarget.getGadgetLocation(positioner);
-        System.out.println("onPreviewDrop+++++++++++++++ " + dropCoordinates);
-
+        dropIndex = dropTarget.getGadgetIndex(positioner);
+        System.out.println("onPreviewDrop+++++++++++++++ " + dropIndex);
         super.onPreviewDrop(context);
     }
 
-    protected GadgetPositioner newPositioner(DragContext context) {
-        int width = 0;
+    protected ReportGadgetPositioner newPositioner(DragContext context) {
+        boolean fullWidth = false;
         int height = 0;
         if (context.selectedWidgets.size() == 1) {
             Widget widget = context.selectedWidgets.get(0);
-            width = Math.max(width, widget.getOffsetWidth());
+            fullWidth = isFullWidthGadget(widget);
             height = widget.getOffsetHeight();
         } else {
             throw new Error("Single Gadget can be selected");
         }
 
-        return new GadgetPositioner(width, height);
+        return new ReportGadgetPositioner(fullWidth, height);
+    }
+
+    boolean isFullWidthGadget(Widget widget) {
+        return widget.getOffsetWidth() > dropTarget.getOffsetWidth() * 2 / 3;
     }
 
 }

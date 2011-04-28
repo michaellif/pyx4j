@@ -22,37 +22,35 @@ package com.pyx4j.widgets.client.dashboard;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Random;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
-public class GadgetHolder extends SimplePanel {
+public class ReportGadgetPositioner extends SimplePanel {
 
-    public static final int SPACING = 10;
+    private final boolean fullWidth;
 
-    private final HTML gadgetContainer;
+    public ReportGadgetPositioner(boolean fullWidth, int height) {
 
-    public GadgetHolder(String title, String background, String border) {
+        this.fullWidth = fullWidth;
+
         getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
         getElement().getStyle().setProperty("MozBoxSizing", "border-box");
         getElement().getStyle().setProperty("boxSizing", "border-box");
-        getElement().getStyle().setPadding(SPACING, Unit.PX);
+        getElement().getStyle().setPadding(Dashboard.SPACING, Unit.PX);
+        getElement().getStyle().setZIndex(100);
 
-        gadgetContainer = new HTML(title);
-        gadgetContainer.getElement().getStyle().setBackgroundColor(background);
-        gadgetContainer.setHeight(Random.nextInt(5) + 3 + "em");
+        setHeight(height + "px");
 
-        gadgetContainer.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        gadgetContainer.getElement().getStyle().setBorderWidth(3, Unit.PX);
-        gadgetContainer.getElement().getStyle().setBorderColor(border);
-
-        setWidget(gadgetContainer);
+        SimplePanel positionerBorder = new SimplePanel();
+        positionerBorder.setHeight("100%");
+        positionerBorder.getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
+        positionerBorder.getElement().getStyle().setBorderWidth(1, Unit.PX);
+        positionerBorder.getElement().getStyle().setBorderColor("#555");
+        setWidget(positionerBorder);
 
     }
 
-    public Widget getDragHandler() {
-        return gadgetContainer;
+    public boolean isFullWidth() {
+        return fullWidth;
     }
 
 }
