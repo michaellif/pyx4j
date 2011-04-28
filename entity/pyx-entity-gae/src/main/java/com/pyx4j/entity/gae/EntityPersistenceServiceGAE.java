@@ -1640,6 +1640,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
+    public <T extends IEntity> void truncate(Class<T> entityClass) {
+        delete(new EntityQueryCriteria<T>(entityClass));
+    }
+
+    @Override
     public void requestsAggregationStart() {
         RetrieveRequestsAggregator aggregator = requestAggregator.get();
         if (aggregator == null) {

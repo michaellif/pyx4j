@@ -686,6 +686,20 @@ public class TableModel {
         }
     }
 
+    public void truncate(Connection connection) {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("TRUNCATE TABLE " + tableName);
+            stmt.execute();
+        } catch (SQLException e) {
+            log.error("{} SQL delete error", tableName, e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(stmt);
+        }
+
+    }
+
     public <T extends IEntity> boolean insert(Connection connection, Iterable<T> entityIterable) {
         PreparedStatement stmtIns = null;
         int[] vals = null;

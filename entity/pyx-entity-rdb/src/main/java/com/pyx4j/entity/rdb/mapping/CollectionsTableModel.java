@@ -312,6 +312,19 @@ public class CollectionsTableModel {
         }
     }
 
+    public static void truncate(Connection connection, MemberOperationsMeta member) {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("TRUNCATE TABLE " + member.sqlName());
+            stmt.execute();
+        } catch (SQLException e) {
+            log.error("{} SQL truncate error", member.sqlName(), e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(stmt);
+        }
+    }
+
     static <T extends IEntity> void retrieve(Connection connection, Map<Long, T> entities, MemberOperationsMeta member) {
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
 
@@ -389,4 +402,5 @@ public class CollectionsTableModel {
             SQLUtils.closeQuietly(stmt);
         }
     }
+
 }

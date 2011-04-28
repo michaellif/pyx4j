@@ -101,6 +101,8 @@ public interface IEntityPersistenceService {
      */
     public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Long> primaryKeys);
 
+    public <T extends IEntity> void truncate(Class<T> entityClass);
+
     /**
      * Only affects retrieve by PK functions.
      */

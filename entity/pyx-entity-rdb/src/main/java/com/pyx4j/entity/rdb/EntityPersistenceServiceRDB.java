@@ -828,6 +828,22 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
+    public <T extends IEntity> void truncate(Class<T> entityClass) {
+        Connection connection = null;
+        try {
+            connection = connectionProvider.getConnection();
+            EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+            TableModel tm = tableModel(entityMeta);
+            for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                CollectionsTableModel.truncate(connection, member);
+            }
+            tm.truncate(connection);
+        } finally {
+            SQLUtils.closeQuietly(connection);
+        }
+    }
+
+    @Override
     public void requestsAggregationStart() {
 
     }
