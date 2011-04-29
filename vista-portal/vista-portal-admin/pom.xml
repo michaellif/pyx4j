@@ -69,7 +69,7 @@
 
     <profiles>
         <profile>
-            <id>gwtc</id>
+            <id>gwtca</id>
             <build>
                 <plugins>
                     <plugin>
