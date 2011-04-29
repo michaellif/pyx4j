@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -43,10 +42,12 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.gwt.server.IOUtils;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SchedulerHelper {
 
-    private static final Logger log = LoggerFactory.getLogger(SchedulerHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(SchedulerHelper.class);
 
     //SimplePropertiesTriggerPersistenceDelegateSupport.TABLE_SIMPLE_PROPERTIES_TRIGGERS
     protected static final String TABLE_SIMPLE_PROPERTIES_TRIGGERS = "SIMPROP_TRIGGERS";
@@ -62,12 +63,15 @@ public class SchedulerHelper {
 
         InputStream propIn = null;
         try {
-            quartzProperties.load(propIn = Thread.currentThread().getContextClassLoader().getResourceAsStream("quartz.properties"));
+            propIn = Thread.currentThread().getContextClassLoader().getResourceAsStream("quartz.properties");
+            if (propIn != null)
+                quartzProperties.load(propIn);
         } catch (IOException e) {
-            log.error("quartz properties load error", e);
+            logger.error("quartz properties load error", e);
             throw new Error("quartz initialization error");
         } finally {
-            IOUtils.closeQuietly(propIn);
+            if (propIn != null)
+                IOUtils.closeQuietly(propIn);
         }
 
         // TODO other default quartz configurations.
@@ -111,8 +115,8 @@ public class SchedulerHelper {
             scheduler = schedulerFactory.getScheduler();
 
         } catch (SchedulerException e) {
-            log.error("quartz initialization error", e);
-            throw new Error("quartz initialization error");
+            logger.error("quartz initialization error", e);
+            throw new Error("quartz initialization error", e);
         }
 
     }
@@ -133,7 +137,7 @@ public class SchedulerHelper {
                     instance.scheduler.shutdown();
                 }
             } catch (SchedulerException e) {
-                log.error("error", e);
+                logger.error("error", e);
             } finally {
                 instance = null;
             }
@@ -152,7 +156,7 @@ public class SchedulerHelper {
                 }
             }
             if (allPresent) {
-                log.debug("All quartz tables are present");
+                logger.debug("All quartz tables are present");
             } else {
                 String sqlResourceName;
                 switch (RDBUtils.getRDBConfiguration().databaseType()) {
@@ -169,12 +173,17 @@ public class SchedulerHelper {
                     throw new Error("Unsupporte ddatabaseType " + RDBUtils.getRDBConfiguration().databaseType());
                 }
 
-                List<String> sqls = new Vector<String>();
+                //List<String> sqls = new Vector<String>();
                 //TODO Load file as resource.
                 String text = IOUtils.getTextResource(SchedulerHelper.class.getPackage().getName().replace('.', '/') + "/" + sqlResourceName);
                 // TODO split the text to SQL statements, Use ; separator
-
-                rdb.execute(sqls);
+                List<String> sqls = Arrays.asList(text.split(";"));
+                for(int i=0; i<sqls.size(); i++) {
+                    String query = sqls.get(i).trim();
+                    if (query.isEmpty()) continue;
+                    logger.info("Executing: {}", query);
+                    rdb.execute(sqls.subList(i, i+1));
+                }
             }
         } catch (SQLException e) {
             throw new Error("quartz tables creation error", e);
@@ -191,7 +200,7 @@ public class SchedulerHelper {
             rdb = new RDBUtils();
             for (String tableName : quartzTables()) {
                 if (rdb.isTableExists(tableName)) {
-                    log.info("drop table {}", tableName);
+                    logger.info("drop table {}", tableName);
                     rdb.dropTable(tableName);
                 }
             }
@@ -203,7 +212,7 @@ public class SchedulerHelper {
     }
 
     private static List<String> quartzTables() {
-        List<String> v = new Vector<String>();
+        List<String> v = new ArrayList<String>();
 
         String prefix = Constants.DEFAULT_TABLE_PREFIX;
         v.add(prefix + Constants.TABLE_FIRED_TRIGGERS);
@@ -222,7 +231,7 @@ public class SchedulerHelper {
     }
 
     public static Scheduler getScheduler() {
-        return null;
+        return instance.scheduler;
     }
 
 }
