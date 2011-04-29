@@ -13,7 +13,7 @@ maven profiles used in build:
         Generate IEnity implemenations on server
 
     * gwtc
-        Compile GWT modules to Java Scrip.
+        Compile Main GWT modules to Javascript.
 
         Additional profile to use with 'gwtc'
 
@@ -23,6 +23,8 @@ maven profiles used in build:
         * soyc
             Generate soyc reports for created GWT modules
 
+    * gwtct
+        Compile Test GWT modules to Javascript.
 
     * caledon-tests
         Enable caledon tests

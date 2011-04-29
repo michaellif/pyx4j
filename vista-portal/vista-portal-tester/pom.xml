@@ -101,7 +101,7 @@
 
     <profiles>
         <profile>
-            <id>gwtc</id>
+            <id>gwtct</id>
             <build>
                 <plugins>
                     <plugin>
