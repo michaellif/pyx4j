@@ -15,7 +15,7 @@
 
     <artifactId>pyx-gettext-i18n-gwt</artifactId>
     <name>pyx-gettext-i18n-gwt</name>
-    <description>pyx-slf4j-api-gwt gettext-commons GWT port</description>
+    <description>pyx i18n for gwt using gettext-commons GWT port</description>
 
 	<dependencies>
 
@@ -33,9 +33,10 @@
         </dependency>
 
         <dependency>
-        	<groupId>org.xnap.commons</groupId>
-	        <artifactId>gettext-commons</artifactId>
-		</dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-i18n-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>

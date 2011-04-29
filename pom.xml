@@ -91,6 +91,8 @@
         <module>log/pyx-slf4j-api-gwt</module>
         <module>log/pyx-log-gwt</module>
 
+        <module>gwt/pyx-i18n-shared</module>
+
         <module>gwt/pyx-gwt-commons</module>
         <module>gwt/pyx-gettext-i18n-gwt</module>
         <module>rpc/pyx-rpc-gwt</module>
