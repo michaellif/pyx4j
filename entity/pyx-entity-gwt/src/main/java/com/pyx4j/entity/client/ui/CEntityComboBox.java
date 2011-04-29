@@ -315,6 +315,12 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
             value = null;
         }
         super.populate(value);
+
+        if (optionsFilter != null) {
+            // Fire options reload since optionsFilter may depend on other values in the model.
+            resetOptions();
+            retriveOptions(null);
+        }
     }
 
     @Override
