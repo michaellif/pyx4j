@@ -18,10 +18,19 @@ import gwtupload.server.exceptions.UploadActionException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.server.TimeUtils;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.server.download.MimeMap;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
+import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.portal.domain.AptUnit;
 import com.propertyvista.portal.domain.DemoData;
@@ -67,20 +76,6 @@ import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.propertyvista.server.domain.UserCredential;
 
-import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.server.TimeUtils;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.server.download.MimeMap;
-import com.pyx4j.essentials.server.preloader.DataGenerator;
-import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.gwt.server.IOUtils;
-
 public class VistaDataGenerator {
 
     private final static Logger log = LoggerFactory.getLogger(VistaDataGenerator.class);
@@ -92,7 +87,6 @@ public class VistaDataGenerator {
         DataGenerator.setRandomSeed(seed);
     }
 
-
     public User createUser(int number) {
         String email = DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(number) + DemoData.USERS_DOMAIN;
         User user = EntityFactory.create(User.class);
@@ -100,7 +94,7 @@ public class VistaDataGenerator {
         user.email().setValue(email);
         return user;
     }
-    
+
     public Summary createSummary(Application application, AptUnit selectedUnit) {
         Summary summary = EntityFactory.create(Summary.class);
         summary.application().set(application);
@@ -130,9 +124,7 @@ public class VistaDataGenerator {
         vehicle.make().setValue(RandomUtil.random(DemoData.CAR_MAKES));
         vehicle.model().setValue(RandomUtil.random(DemoData.CAR_MODELS));
         vehicle.province().set(RandomUtil.random(SharedData.getProvinces()));
-        vehicle.country().set(SharedData.findCountryCanada());
-        //        vehicle.province().set(retrieveByMemeber(Province.class, vehicle.province().code(), RandomUtil.random(DemoData.PROVINCES)));
-        //        vehicle.country().set(retrieveNamed(Country.class, "Canada"));
+        vehicle.country().set(vehicle.province().country());
 
         return vehicle;
     }

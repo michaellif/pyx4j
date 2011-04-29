@@ -45,7 +45,8 @@ public class ProvinceContryFilters {
     /**
      * Add proper dependencies between shown list of countries and provinces/states
      */
-    public static void attachFilters(CEditableComponent<Province, ?> province, final CEditableComponent<Country, ?> country) {
+    public static void attachFilters(CEditableComponent<Province, ?> province, final CEditableComponent<Country, ?> country,
+            OptionsFilter<Province> provinceFilter) {
         if ((!(province instanceof CEntityComboBox)) || (!(country instanceof IAcceptText))) {
             return;
         }
@@ -62,13 +63,8 @@ public class ProvinceContryFilters {
             }
         });
 
-        provinceCombo.setOptionsFilter(new OptionsFilter<Province>() {
+        provinceCombo.setOptionsFilter(provinceFilter);
 
-            @Override
-            public boolean acceptOption(Province entity) {
-                return country.isValueEmpty() ? true : EqualsHelper.equals(entity.country().name(), country.getValue().name());
-            }
-        });
         country.addValueChangeHandler(new ValueChangeHandler<Country>() {
 
             @Override

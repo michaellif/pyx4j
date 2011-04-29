@@ -13,6 +13,11 @@
  */
 package com.propertyvista.portal.client.ptapp.ui.components;
 
+import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.client.ui.OptionsFilter;
+import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
+
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.validators.ProvinceContryFilters;
 import com.propertyvista.portal.client.ptapp.ui.validators.RevalidationTrigger;
@@ -21,13 +26,10 @@ import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
 
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
-import com.pyx4j.forms.client.ui.CEditableComponent;
-
 public class AddressUtils {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static void injectIAddress(VistaDecoratorsFlowPanel main, IAddress proto, CEntityEditableComponent<?> parent) {
+    public static void injectIAddress(VistaDecoratorsFlowPanel main, final IAddress proto, final CEntityEditableComponent<?> parent) {
 
         main.add(parent.inject(proto.street1()), 20);
         main.add(parent.inject(proto.street2()), 20);
@@ -46,6 +48,17 @@ public class AddressUtils {
         postalCode.addValueValidator(new ZipCodeValueValidator(parent, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger(postalCode));
 
-        ProvinceContryFilters.attachFilters(province, country);
+        // The filter does not use the CEditableComponent<Country, ?> and use Model directly. So it work fine on populate.
+        ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
+            @Override
+            public boolean acceptOption(Province entity) {
+                if (parent.getValue() == null) {
+                    return true;
+                } else {
+                    Country country = (Country) parent.getValue().getMember(proto.country().getPath());
+                    return country.isNull() || EqualsHelper.equals(entity.country().name(), country.name());
+                }
+            }
+        });
     }
 }
