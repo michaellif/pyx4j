@@ -28,11 +28,15 @@ import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.widgets.client.dashboard.ReportLayoutPanel.Location;
-
 public class Report extends SimplePanel {
 
+    public static enum Location {
+        Left, Right, Full
+    }
+
     public static final int SPACING = 10;
+
+    private final ReportLayoutPanel reportLayoutPanel;
 
     public Report() {
         AbsolutePanel boundaryPanel = new AbsolutePanel();
@@ -64,7 +68,7 @@ public class Report extends SimplePanel {
 
         int count = 0;
 
-        ReportLayoutPanel reportLayoutPanel = new ReportLayoutPanel();
+        reportLayoutPanel = new ReportLayoutPanel();
         boundaryPanel.add(reportLayoutPanel);
 
         // initialize a widget drop controller for the current column
@@ -74,15 +78,23 @@ public class Report extends SimplePanel {
         for (int i = 0; i <= 15; i++) {
             GadgetHolder gadget = new GadgetHolder("Draggable&nbsp;#" + ++count, "green", "blue");
             if (i % 4 == 0) {
-                reportLayoutPanel.addGadget(gadget, Location.Full);
+                reportLayoutPanel.addGadget(gadget, Report.Location.Full);
             } else if (i % 4 == 1) {
-                reportLayoutPanel.addGadget(gadget, Location.Left);
+                reportLayoutPanel.addGadget(gadget, Report.Location.Left);
             } else if (i % 4 == 2 || i % 4 == 3) {
-                reportLayoutPanel.addGadget(gadget, Location.Right);
+                reportLayoutPanel.addGadget(gadget, Report.Location.Right);
             }
             widgetDragController.makeDraggable(gadget, gadget.getDragHandler());
         }
 
+    }
+
+    public void addGadget(IGadget gadget, Report.Location location) {
+        reportLayoutPanel.addGadget(gadget.asWidget(), Report.Location.Full);
+    }
+
+    public void insertGadget(IGadget gadget, Report.Location location, int beforeRow) {
+        reportLayoutPanel.insertGadget(gadget.asWidget(), Report.Location.Full, beforeRow);
     }
 
 }

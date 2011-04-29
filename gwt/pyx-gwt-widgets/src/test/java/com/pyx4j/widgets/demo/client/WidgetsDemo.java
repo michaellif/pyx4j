@@ -95,7 +95,10 @@ public class WidgetsDemo implements EntryPoint {
         contentPanel.setWidth("100%");
 
         //========== Report ==========//
-        contentPanel.add(new Report());
+
+        Report report = new Report();
+        //report.addGadget(gadget, location);
+        contentPanel.add(report);
 
         //========== Dashboard ==========//
         contentPanel.add(new Dashboard());

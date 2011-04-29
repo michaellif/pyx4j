@@ -50,6 +50,6 @@ public class DashboardDropController extends FlowPanelDropController {
             height = widget.getOffsetHeight();
         }
 
-        return new GadgetPositioner(width, height);
+        return new DashboardGadgetPositioner(width, height);
     }
 }

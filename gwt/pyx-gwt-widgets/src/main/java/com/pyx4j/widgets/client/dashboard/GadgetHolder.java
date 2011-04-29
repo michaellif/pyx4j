@@ -31,28 +31,28 @@ public class GadgetHolder extends SimplePanel {
 
     public static final int SPACING = 10;
 
-    private final HTML gadgetContainer;
+    private final HTML gadget;
 
     public GadgetHolder(String title, String background, String border) {
         getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
         getElement().getStyle().setProperty("MozBoxSizing", "border-box");
         getElement().getStyle().setProperty("boxSizing", "border-box");
-        getElement().getStyle().setPadding(SPACING, Unit.PX);
+        getElement().getStyle().setMargin(SPACING, Unit.PX);
 
-        gadgetContainer = new HTML(title);
-        gadgetContainer.getElement().getStyle().setBackgroundColor(background);
-        gadgetContainer.setHeight(Random.nextInt(5) + 1 + "em");
+        getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+        getElement().getStyle().setBorderWidth(3, Unit.PX);
+        getElement().getStyle().setBorderColor(border);
 
-        gadgetContainer.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        gadgetContainer.getElement().getStyle().setBorderWidth(3, Unit.PX);
-        gadgetContainer.getElement().getStyle().setBorderColor(border);
+        gadget = new HTML(title);
+        gadget.getElement().getStyle().setBackgroundColor(background);
+        gadget.setHeight(Random.nextInt(5) + 1 + "em");
 
-        setWidget(gadgetContainer);
+        setWidget(gadget);
 
     }
 
     public Widget getDragHandler() {
-        return gadgetContainer;
+        return gadget;
     }
 
 }

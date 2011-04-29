@@ -33,7 +33,13 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 public class Dashboard extends SimplePanel {
 
+    enum LayoutType {
+        One, Two11, Two12, Two21, Three
+    }
+
     public static final int SPACING = 10;
+
+    protected LayoutType layoutType;
 
     public Dashboard() {
         AbsolutePanel boundaryPanel = new AbsolutePanel();
@@ -89,4 +95,21 @@ public class Dashboard extends SimplePanel {
 
     }
 
+    public boolean setLayout(LayoutType layoutType) {
+        this.layoutType = layoutType;
+        return refresh();
+    }
+
+    private boolean refresh() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public void addGadget(IGadget gadget, int column) {
+
+    }
+
+    public void insertGadget(IGadget gadget, int column, int row) {
+
+    }
 }

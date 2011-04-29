@@ -24,6 +24,7 @@ import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.SiteTheme;
+import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
@@ -344,27 +345,35 @@ public class LightTheme extends SiteTheme {
 
     @Override
     protected void initEntityDataTableStyles() {
-        Style style = new Style("." + DataTable.BASE_NAME);
+        String prefix = DataTable.BASE_NAME;
+
+        Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("margin", "2px 0px 2px 0px");
         addStyle(style);
-        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Row);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row));
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         addStyle(style);
-        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Row);
-        style.addProperty("cursor", "default");
-        addStyle(style);
-        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Row);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.even));
         style.addProperty("background-color", "#F4F4F4");
         addStyle(style);
-        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Row);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.odd));
         style.addProperty("background-color", "white");
         addStyle(style);
-        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.Header);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.nodetails));
+        style.addProperty("cursor", "default");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));
         style.addProperty("background-color", "#A0A0A0");
         style.addProperty("color", "white");
         addStyle(style);
-        style = new Style("." + DataTable.BASE_NAME + DataTable.StyleSuffix.ActionsBar);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.BORDER);

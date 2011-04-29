@@ -30,28 +30,22 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ReportLayoutPanel extends FlowPanel {
 
-    private static int _counter = 0;
-
-    public static enum Location {
-        Left, Right, Full
-    }
-
     public ReportLayoutPanel() {
         getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         setWidth("100%");
     }
 
-    public void addGadget(Widget widget, Location location) {
+    public void addGadget(Widget widget, Report.Location location) {
         insertGadget(widget, location, getWidgetCount());
     }
 
-    public void insertGadget(Widget widget, Location location, int beforeIndex) {
+    public void insertGadget(Widget widget, Report.Location location, int beforeIndex) {
         if (beforeIndex < 0 || beforeIndex > getWidgetCount()) {
             System.out.println("Wrong beforeIndex - " + beforeIndex);
             return;
         }
         CellPanel beforeCell = null;
-        Location beforeCellLocation = null;
+        Report.Location beforeCellLocation = null;
         boolean isBeforeCellSpaceHolder = false;
         if (beforeIndex < getWidgetCount()) {
             beforeCell = (CellPanel) getWidget(beforeIndex);
@@ -60,7 +54,7 @@ public class ReportLayoutPanel extends FlowPanel {
         }
 
         CellPanel afterCell = null;
-        Location afterCellLocation = null;
+        Report.Location afterCellLocation = null;
         boolean isAfterCellSpaceHolder = false;
         if (beforeIndex > 0) {
             afterCell = (CellPanel) getWidget(beforeIndex - 1);
@@ -81,18 +75,18 @@ public class ReportLayoutPanel extends FlowPanel {
         CellPanel cell = new CellPanel(location);
         cell.setWidget(widget);
 
-        if (Location.Right.equals(beforeCellLocation)) {
+        if (Report.Location.Right.equals(beforeCellLocation)) {
             beforeIndex = beforeIndex - 1;
         }
 
         switch (location) {
         case Left:
-            insert(new CellPanel(Location.Right), beforeIndex);
+            insert(new CellPanel(Report.Location.Right), beforeIndex);
             insert(cell, beforeIndex);
             break;
         case Right:
             insert(cell, beforeIndex);
-            insert(new CellPanel(Location.Left), beforeIndex);
+            insert(new CellPanel(Report.Location.Left), beforeIndex);
             break;
         case Full:
             insert(cell, beforeIndex);
@@ -110,9 +104,9 @@ public class ReportLayoutPanel extends FlowPanel {
 
     public void removeGadget(int index) {
         CellPanel cell = (CellPanel) getWidget(index);
-        if (Location.Full.equals(cell.getLocation())) {
+        if (Report.Location.Full.equals(cell.getLocation())) {
             remove(cell);
-        } else if (Location.Left.equals(cell.getLocation())) {
+        } else if (Report.Location.Left.equals(cell.getLocation())) {
             if (index + 1 < getWidgetCount()) {
                 CellPanel nextCell = (CellPanel) getWidget(index + 1);
                 if (nextCell.isSpaceHolder()) {
@@ -122,7 +116,7 @@ public class ReportLayoutPanel extends FlowPanel {
                     cell.setSpaceHolder();
                 }
             }
-        } else if (Location.Right.equals(cell.getLocation())) {
+        } else if (Report.Location.Right.equals(cell.getLocation())) {
             if (index > 0) {
                 CellPanel previousCell = (CellPanel) getWidget(index - 1);
                 if (previousCell.isSpaceHolder()) {
@@ -148,7 +142,7 @@ public class ReportLayoutPanel extends FlowPanel {
         return cell == null ? null : cell.getWidget();
     }
 
-    public Location getGadgetLocation(Widget widget) {
+    public Report.Location getGadgetLocation(Widget widget) {
         for (int i = 0; i < getWidgetCount(); i++) {
             CellPanel cellPanel = (CellPanel) getWidget(i);
             if (widget != null && widget.equals(cellPanel.getWidget())) {
@@ -180,9 +174,9 @@ public class ReportLayoutPanel extends FlowPanel {
 
     class CellPanel extends SimplePanel {
 
-        private Location location;
+        private Report.Location location;
 
-        public CellPanel(Location location) {
+        public CellPanel(Report.Location location) {
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             setLocation(location);
@@ -201,7 +195,7 @@ public class ReportLayoutPanel extends FlowPanel {
             setWidget(new SpaceHolder());
         }
 
-        public void setLocation(Location location) {
+        public void setLocation(Report.Location location) {
             this.location = location;
             switch (location) {
             case Left:
@@ -216,13 +210,13 @@ public class ReportLayoutPanel extends FlowPanel {
             }
         }
 
-        public Location getLocation() {
+        public Report.Location getLocation() {
             return location;
         }
 
         class SpaceHolder extends HTML {
             SpaceHolder() {
-                super("aaa&nbsp;" + _counter++);
+                super("&nbsp;");
             }
         }
 
