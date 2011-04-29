@@ -18,35 +18,35 @@
     <description>pyx-entity Server Side Implementations</description>
 
     <dependencies>
-            
+
             <dependency>
-            	<groupId>com.pyx4j</groupId>
-            	<artifactId>pyx-commons</artifactId>
-            	<version>${project.version}</version>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-commons</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
-			<dependency>
-            	<groupId>com.pyx4j</groupId>
-            	<artifactId>pyx-gettext-i18n-gwt</artifactId>
-            	<version>${project.version}</version>
-        	</dependency>
-        
-        	<dependency>
-            	<groupId>com.pyx4j</groupId>
-            	<artifactId>pyx-config-server</artifactId>
-            	<version>${project.version}</version>
-        	</dependency>
-        	
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-i18n-shared</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-config-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
             </dependency>
-            
+
             <dependency>
-            	<groupId>org.slf4j</groupId>
-            	<artifactId>slf4j-api</artifactId>
-        	</dependency>
-            
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+            </dependency>
+
     </dependencies>
 
 </project>
