@@ -55,14 +55,6 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeEdi
     }
 
     @Override
-    public void onEnsureDebugId(String debugID) {
-        yearSelector.ensureDebugId(debugID + "_yy");
-        if (monthSelector != null) {
-            monthSelector.ensureDebugId(debugID + "_mm");
-        }
-    }
-
-    @Override
     public void setNativeValue(Date value) {
         setDate(value);
     }

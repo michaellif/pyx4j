@@ -288,8 +288,8 @@ public class BaseSeleniumTestCase extends TestCase {
         if (mm.getValueClass().isEnum()) {
             assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getEnumValue(fromDebugId, (IPrimitive<Enum>) member));
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
-            // CDatePicker();
-            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
+            // CDatePicker, CMonthYearPicker
+            assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getDateValue(fromDebugId, (IPrimitive<Date>) member));
         } else if (mm.getValueClass().equals(Boolean.class)) {
             assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getBooleanValue(fromDebugId, (IPrimitive<Boolean>) member));
         } else if (mm.getValueClass().equals(Integer.class)) {

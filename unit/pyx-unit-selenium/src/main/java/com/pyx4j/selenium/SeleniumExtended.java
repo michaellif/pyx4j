@@ -20,6 +20,9 @@
  */
 package com.pyx4j.selenium;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import junit.framework.Assert;
@@ -43,6 +46,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.gwt.server.DateUtils;
 
 /**
  * Compatibility layer with Selenium v1 i.e. with Selenium IDE generated scripts.
@@ -457,6 +461,10 @@ public class SeleniumExtended extends WebDriverWrapper {
         }
     }
 
+    public <T extends Enum<T>> T getEnumValue(IDebugId debugId, Class<T> enumClass) {
+        return getEnumValue(findElement(by(debugId)), enumClass);
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends Enum<T>> T getEnumValue(IPrimitive<T> member) {
         return getEnumValue(findElement(by(member)), (Class<T>) member.getMeta().getValueClass());
@@ -501,12 +509,77 @@ public class SeleniumExtended extends WebDriverWrapper {
         return value;
     }
 
+    public Boolean getBooleanValue(IDebugId debugId) {
+        return getBooleanValue(driver.findElement(by(debugId)));
+    }
+
     public Boolean getBooleanValue(IPrimitive<Boolean> member) {
         return getBooleanValue(driver.findElement(by(member)));
     }
 
     public Boolean getBooleanValue(IDebugId fromDebugId, IPrimitive<Boolean> member) {
         return getBooleanValue(driver.findElement(by(fromDebugId, member)));
+    }
+
+    private Date getDateValue(WebElement element, String format) {
+        Date value = null;
+        if (element.getTagName().equalsIgnoreCase("input")) {
+            String text = element.getValue();
+            if (CommonsStringUtils.isStringSet(text)) {
+                if (format != null) {
+                    try {
+                        value = new SimpleDateFormat(format).parse(text);
+                    } catch (ParseException e) {
+                        throw new Error("Invalid date format" + text, e);
+                    }
+                } else {
+                    value = DateUtils.detectDateformat(text);
+                }
+            }
+        } else {
+            // RadioGroup
+            String parentId = element.getAttribute("id");
+            boolean inputsFound = false;
+
+            int y = 0;
+            try {
+                WebElement elementYY = element.findElement(By.id(parentId + "_yy"));
+                inputsFound = true;
+                y = Integer.valueOf(elementYY.getValue());
+            } catch (NoSuchElementException notFound) {
+            }
+
+            int m = 0;
+            try {
+                WebElement elementMM = element.findElement(By.id(parentId + "_mm"));
+                inputsFound = true;
+                m = Integer.valueOf(elementMM.getValue()) - 1;
+            } catch (NoSuchElementException notFound) {
+            }
+
+            if (!inputsFound) {
+                throw new Error("Can't find components inside DateGroup " + parentId);
+            }
+
+            if (y != 0) {
+                value = DateUtils.createDate(y, m, 1);
+            }
+        }
+
+        log("value of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), value);
+        return value;
+    }
+
+    public Date getDateValue(IDebugId debugId, String format) {
+        return getDateValue(driver.findElement(by(debugId)), format);
+    }
+
+    public Date getDateValue(IPrimitive<? extends Date> member) {
+        return getDateValue(driver.findElement(by(member)), member.getMeta().getFormat());
+    }
+
+    public Date getDateValue(IDebugId fromDebugId, IPrimitive<? extends Date> member) {
+        return getDateValue(driver.findElement(by(fromDebugId, member)), member.getMeta().getFormat());
     }
 
     public void select(String id) {

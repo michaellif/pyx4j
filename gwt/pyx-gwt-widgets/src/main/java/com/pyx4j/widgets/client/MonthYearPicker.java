@@ -132,4 +132,12 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         }
     }
 
+    @Override
+    public void onEnsureDebugId(String debugID) {
+        super.onEnsureDebugId(debugID);
+        yearSelector.ensureDebugId(debugID + "_yy");
+        if (monthSelector != null) {
+            monthSelector.ensureDebugId(debugID + "_mm");
+        }
+    }
 }
