@@ -22,16 +22,6 @@ import java.util.GregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.server.TimeUtils;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.server.download.MimeMap;
-import com.pyx4j.essentials.server.preloader.DataGenerator;
-import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.gwt.server.IOUtils;
-
 import com.propertyvista.portal.domain.AptUnit;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
@@ -75,6 +65,15 @@ import com.propertyvista.portal.server.pt.util.PreloadUtil;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.propertyvista.server.domain.UserCredential;
+
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.server.download.MimeMap;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
+import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.gwt.server.IOUtils;
 
 public class VistaDataGenerator {
 
@@ -514,7 +513,7 @@ public class VistaDataGenerator {
         criteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
 
         // from
-        Calendar availableFrom = TimeUtils.calRoundedNow();
+        Calendar availableFrom = DateUtils.calRoundedNow();
         DateUtils.dayStart(availableFrom);
         criteria.availableFrom().setValue(availableFrom.getTime());
 
