@@ -33,27 +33,27 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
 
-    private final static Logger logger = LoggerFactory.getLogger(CleanOrphanApplicationDocumentDataRecordsJob.class);
+    private final static Logger log = LoggerFactory.getLogger(CleanOrphanApplicationDocumentDataRecordsJob.class);
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        logger.info("CleanOrphanApplicationDocumentDataRecordsJob: STARTED");
+        log.info("CleanOrphanApplicationDocumentDataRecordsJob: STARTED");
 
         // select list of keys from addlicationDocumentData for records created within last 7 days,
         // but not later then last 24 hours (to avoid purging data that was recently created
         EntityQueryCriteria<ApplicationDocumentData> allDataCriteria = EntityQueryCriteria.create(ApplicationDocumentData.class);
         Calendar minDate = new GregorianCalendar();
         minDate.add(Calendar.DATE, -7);
-        logger.debug("minDate={}", minDate);
+        log.debug("minDate={}", minDate);
         allDataCriteria.add(new PropertyCriterion(allDataCriteria.proto().created(), Restriction.GREATER_THAN, minDate.getTime()));
         Calendar maxDate = new GregorianCalendar();
         maxDate.add(Calendar.HOUR, -24);
-        logger.debug("maxDate={}", maxDate);
+        log.debug("maxDate={}", maxDate);
         allDataCriteria.add(new PropertyCriterion(allDataCriteria.proto().created(), Restriction.LESS_THAN, maxDate.getTime()));
 
         List<Long> dataKeys = PersistenceServicesFactory.getPersistenceService().queryKeys(allDataCriteria);
-        logger.debug("Number of data records found within the timeframe: {}", dataKeys.size());
-        logger.trace("dataKeys={}", dataKeys);
+        log.debug("Number of data records found within the timeframe: {}", dataKeys.size());
+        log.trace("dataKeys={}", dataKeys);
 
         int deleted = 0;
         for (Long dataKey : dataKeys) {
@@ -61,11 +61,11 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
             criteria.add(PropertyCriterion.eq(criteria.proto().dataId(), dataKey));
             ApplicationDocument doc = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
             if (doc == null) {
-                logger.debug("CleanOrphanApplicationDocumentDataRecordsJob: Found orphan ApplicationDocumentData record - deleting. id={}", dataKey);
+                log.debug("CleanOrphanApplicationDocumentDataRecordsJob: Found orphan ApplicationDocumentData record - deleting. id={}", dataKey);
                 PersistenceServicesFactory.getPersistenceService().delete(ApplicationDocumentData.class, dataKey);
                 deleted++;
             }
         }
-        logger.info("CleanOrphanApplicationDocumentDataRecordsJob: FINISHED. {} applicationDocumentData record(s) deleted", deleted);
+        log.info("CleanOrphanApplicationDocumentDataRecordsJob: FINISHED. {} applicationDocumentData record(s) deleted", deleted);
     }
 }

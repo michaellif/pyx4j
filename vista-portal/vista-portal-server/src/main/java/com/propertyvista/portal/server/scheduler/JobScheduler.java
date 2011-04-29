@@ -39,7 +39,7 @@ public class JobScheduler extends HttpServlet {
 
     private Scheduler scheduler = null;
 
-    private final static Logger logger = LoggerFactory.getLogger(JobScheduler.class);
+    private final static Logger log = LoggerFactory.getLogger(JobScheduler.class);
 
     @Override
     public void init() throws ServletException {
@@ -47,7 +47,7 @@ public class JobScheduler extends HttpServlet {
         if (todoMoveThisCodeToPReload) {
             return;
         }
-        logger.info("JobScheduler.init() called");
+        log.info("JobScheduler.init() called");
         try {
             schedulerFactory = new StdSchedulerFactory();
             scheduler = schedulerFactory.getScheduler();
@@ -69,7 +69,7 @@ public class JobScheduler extends HttpServlet {
             }
             scheduler.scheduleJob(job, simpleTrigger);
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 }

@@ -41,7 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CleanOrphanApplicationDocumentDataRecordsJobTest extends VistaDBTestCase {
-    private final static Logger logger = LoggerFactory.getLogger(CleanOrphanApplicationDocumentDataRecordsJobTest.class);
+    private final static Logger log = LoggerFactory.getLogger(CleanOrphanApplicationDocumentDataRecordsJobTest.class);
 
     private final static boolean RUN_TESTS = true;
 
@@ -70,8 +70,9 @@ public class CleanOrphanApplicationDocumentDataRecordsJobTest extends VistaDBTes
      * Test of execute method, of class CleanOrphanApplicationDocumentDataRecordsJob.
      */
     public void testExecute() throws Exception {
-        if (!RUN_TESTS)
+        if (!RUN_TESTS) {
             return;
+        }
 
         int totalCountExpected = PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
 
@@ -187,8 +188,9 @@ public class CleanOrphanApplicationDocumentDataRecordsJobTest extends VistaDBTes
     }
 
     public void testQuartz() throws Exception {
-        if (!RUN_TESTS)
+        if (!RUN_TESTS) {
             return;
+        }
 
         SchedulerHelper.init();
 
