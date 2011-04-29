@@ -13,6 +13,11 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import java.util.Date;
+
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -24,6 +29,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderIte
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.domain.pt.IEmploymentInfo;
+import com.propertyvista.portal.domain.pt.IIncomeInfo;
 import com.propertyvista.portal.domain.pt.IncomeInfoEmployer;
 import com.propertyvista.portal.domain.pt.IncomeInfoOther;
 import com.propertyvista.portal.domain.pt.IncomeInfoSeasonallyEmployed;
@@ -38,9 +44,14 @@ import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
+
+    private static I18n i18n = I18nFactory.getI18n(FinancialViewIncomeForm.class);
 
     private final boolean summaryViewMode;
 
@@ -201,6 +212,11 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 return main;
             }
 
+            @Override
+            public void addValidations() {
+                super.addValidations();
+                validationOfStartStopDates(this);
+            }
         };
     }
 
@@ -216,6 +232,12 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 main.add(inject(proto().starts()), 14, 8.2);
                 main.add(inject(proto().ends()), 14, 8.2);
                 return main;
+            }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+                validationOfStartStopDates(this);
             }
         };
     }
@@ -238,6 +260,12 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 main.add(inject(proto().ends()), 14, 8.2);
                 return main;
             }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+                validationOfStartStopDates(this);
+            }
         };
     }
 
@@ -257,6 +285,12 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 main.add(inject(proto().ends()), 14, 8.2);
                 return main;
             }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+                validationOfStartStopDates(this);
+            }
         };
     }
 
@@ -273,6 +307,12 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 main.add(inject(proto().ends()), 14, 8.2);
                 return main;
             }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+                validationOfStartStopDates(this);
+            }
         };
     }
 
@@ -287,5 +327,33 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 return main;
             }
         };
+    }
+
+    void validationOfStartStopDates(final CEntityEditableComponent<? extends IIncomeInfo> comp) {
+        comp.get(comp.proto().starts()).addValueValidator(new EditableValueValidator<Date>() {
+            @Override
+            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                IPrimitive<Date> date = comp.getValue().ends();
+                return (value != null) && (date.isNull() || value.before(date.getValue()));
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                return i18n.tr("The start date can not be equal or after end date.");
+            }
+        });
+
+        comp.get(comp.proto().ends()).addValueValidator(new EditableValueValidator<Date>() {
+            @Override
+            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                IPrimitive<Date> date = comp.getValue().starts();
+                return (value != null) && (date.isNull() || value.after(date.getValue()));
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                return i18n.tr("The end date can not be before of equal to start date.");
+            }
+        });
     }
 }

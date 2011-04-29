@@ -63,6 +63,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -235,7 +236,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return (value != null) && value.before(getValue().previousAddress().moveOutDate().getValue());
+                IPrimitive<Date> date = getValue().previousAddress().moveOutDate();
+                return (value != null) && (date.isNull() || value.before(date.getValue()));
             }
 
             @Override
@@ -261,7 +263,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return (value != null) && value.after(getValue().previousAddress().moveInDate().getValue());
+                IPrimitive<Date> date = getValue().previousAddress().moveInDate();
+                return (value != null) && (date.isNull() || value.after(date.getValue()));
             }
 
             @Override
