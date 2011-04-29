@@ -23,6 +23,8 @@ package com.pyx4j.quartz;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -42,8 +44,6 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.gwt.server.IOUtils;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class SchedulerHelper {
 
@@ -164,7 +164,7 @@ public class SchedulerHelper {
                     sqlResourceName = "tables_hsqldb.sql";
                     break;
                 case MySQL:
-                    sqlResourceName = "tables_mysql_innodb.sql";
+                    sqlResourceName = "tables_mysql.sql";
                     break;
                 case Oracle:
                     sqlResourceName = "tables_oracle.sql";
@@ -178,11 +178,12 @@ public class SchedulerHelper {
                 String text = IOUtils.getTextResource(SchedulerHelper.class.getPackage().getName().replace('.', '/') + "/" + sqlResourceName);
                 // TODO split the text to SQL statements, Use ; separator
                 List<String> sqls = Arrays.asList(text.split(";"));
-                for(int i=0; i<sqls.size(); i++) {
+                for (int i = 0; i < sqls.size(); i++) {
                     String query = sqls.get(i).trim();
-                    if (query.isEmpty()) continue;
+                    if (query.isEmpty())
+                        continue;
                     log.info("Executing: {}", query);
-                    rdb.execute(sqls.subList(i, i+1));
+                    rdb.execute(sqls.subList(i, i + 1));
                 }
             }
         } catch (SQLException e) {
