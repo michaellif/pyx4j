@@ -255,7 +255,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public String getValidationMessage(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
-                return i18n.tr("Duplicate vehicles hspecified");
+                return i18n.tr("Duplicate vehicles specified");
             }
         });
 
