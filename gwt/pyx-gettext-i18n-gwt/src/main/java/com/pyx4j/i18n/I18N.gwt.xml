@@ -5,6 +5,8 @@
     <inherits name='com.google.gwt.user.User'/>
     <inherits name="com.google.gwt.i18n.I18N"/>
     
+    <inherits name='com.pyx4j.i18n.i18NShared'/>
+    
     <!-- our java.text.MessageFormat -->
     <inherits name='com.pyx4j.gwt.GwtCommons'/>
     
