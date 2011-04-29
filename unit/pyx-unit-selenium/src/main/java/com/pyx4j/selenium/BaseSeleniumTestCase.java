@@ -63,7 +63,7 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     /**
-     *
+     * 
      * @deprecated use proto(Class<T> clazz)
      */
     @Deprecated
@@ -273,10 +273,9 @@ public class BaseSeleniumTestCase extends TestCase {
     /**
      * Helper function to avoid casts
      */
+    @SuppressWarnings("unchecked")
     public <T extends IEntity> T detach(T entity) {
-        // formater:off
-        return (T)entity.detach();
-        // formater:on
+        return (T) entity.detach();
     }
 
     public void assertValueOnForm(IPrimitive<?> member) {
