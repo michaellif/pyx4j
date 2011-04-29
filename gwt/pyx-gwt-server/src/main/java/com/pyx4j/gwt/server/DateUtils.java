@@ -52,6 +52,11 @@ public class DateUtils extends TimeUtils {
         return c.getTime();
     }
 
+    public static Date getTodayDate() {
+        Date today = new Date();
+        return createDate(today.getYear(), today.getMonth(), today.getDate());
+    }
+
     public static void dayStart(Calendar calendar) {
         calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.SECOND, 0);
