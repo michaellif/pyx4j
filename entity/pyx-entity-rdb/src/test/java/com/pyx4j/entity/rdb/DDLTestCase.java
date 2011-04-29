@@ -28,7 +28,6 @@ import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.server.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -38,6 +37,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.gwt.server.DateUtils;
 
 public abstract class DDLTestCase extends DatastoreTestBase {
 
@@ -108,7 +108,7 @@ public abstract class DDLTestCase extends DatastoreTestBase {
         TaskAlt1 task1 = EntityFactory.create(TaskAlt1.class);
 
         Task subTask11 = EntityFactory.create(Task.class);
-        subTask11.deadLine().setValue(TimeUtils.getRoundedNow());
+        subTask11.deadLine().setValue(DateUtils.getRoundedNow());
         subTask11.status().setValue(Status.DEACTIVATED);
         task1.tasks().add(subTask11);
 

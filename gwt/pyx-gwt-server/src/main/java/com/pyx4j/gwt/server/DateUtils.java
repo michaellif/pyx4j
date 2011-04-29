@@ -42,19 +42,29 @@ public class DateUtils extends TimeUtils {
      */
     public static Date createDate(int year, int month, int day) {
         Calendar c = new GregorianCalendar();
-
         dayStart(c);
-
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, day);
-
         return c.getTime();
     }
 
     public static Date getTodayDate() {
-        Date today = new Date();
-        return createDate(today.getYear(), today.getMonth(), today.getDate());
+        Calendar c = new GregorianCalendar();
+        dayStart(c);
+        return c.getTime();
+    }
+
+    public static Date getRoundedNow() {
+        Calendar c = calRoundedNow();
+        return c.getTime();
+    }
+
+    public static Calendar calRoundedNow() {
+        Calendar c = new GregorianCalendar();
+        // DB does not store Milliseconds
+        c.set(Calendar.MILLISECOND, 0);
+        return c;
     }
 
     public static void dayStart(Calendar calendar) {
@@ -95,27 +105,25 @@ public class DateUtils extends TimeUtils {
 
         "yyyy-MM-dd HH:mm",
 
-                // We are North America after all.
+        "MM-dd-yyyy HH:mm:ss.SSS",
 
-                "MM-dd-yyyy HH:mm:ss.SSS",
+        "MM-dd-yyyy HH:mm:ss",
 
-                "MM-dd-yyyy HH:mm:ss",
+        "MM-dd-yyyy HH:mm",
 
-                "MM-dd-yyyy HH:mm",
+        "MM/dd/yyyy HH:mm:ss.SSS",
 
-                "MM/dd/yyyy HH:mm:ss.SSS",
+        "MM/dd/yyyy HH:mm:ss",
 
-                "MM/dd/yyyy HH:mm:ss",
+        "MM/dd/yyyy HH:mm",
 
-                "MM/dd/yyyy HH:mm",
+        "MM-dd-yyyy",
 
-                "MM-dd-yyyy",
+        "yyyy-MM-dd",
 
-                "yyyy-MM-dd",
+        "MM/dd/yyyy", "M/dd/yyyy", "MM/d/yyyy", "M/d/yyyy",
 
-                "MM/dd/yyyy", "M/dd/yyyy", "MM/d/yyyy", "M/d/yyyy",
-
-                "MMM-dd-yyyy", "MMM/dd/yyyy", "dd-MMM-yyyy", };
+        "MMM-dd-yyyy", "MMM/dd/yyyy", "dd-MMM-yyyy", };
 
         str = str.trim();
 

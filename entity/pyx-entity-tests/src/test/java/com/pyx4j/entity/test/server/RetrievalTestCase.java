@@ -28,7 +28,6 @@ import java.util.Vector;
 import junit.framework.Assert;
 
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
-import com.pyx4j.entity.server.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -42,6 +41,7 @@ import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Province;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.gwt.server.DateUtils;
 
 public abstract class RetrievalTestCase extends DatastoreTestBase {
 
@@ -64,7 +64,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         emp.firstName().setValue("Bob");
 
         Task task = EntityFactory.create(Task.class);
-        Date today = TimeUtils.getRoundedNow();
+        Date today = DateUtils.getRoundedNow();
         task.deadLine().setValue(today);
         task.status().setValue(Status.DEACTIVATED);
 
@@ -133,7 +133,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         emp.firstName().setValue("Bob");
 
         Task task = EntityFactory.create(Task.class);
-        Date today = TimeUtils.getRoundedNow();
+        Date today = DateUtils.getRoundedNow();
         task.deadLine().setValue(today);
         task.status().setValue(Status.DEACTIVATED);
 
@@ -158,7 +158,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         emp.firstName().setValue(empName);
 
         Task task = EntityFactory.create(Task.class);
-        Date today = TimeUtils.getRoundedNow();
+        Date today = DateUtils.getRoundedNow();
         task.deadLine().setValue(today);
         task.status().setValue(Status.DEACTIVATED);
 

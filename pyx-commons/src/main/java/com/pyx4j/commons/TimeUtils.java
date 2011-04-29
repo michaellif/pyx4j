@@ -144,6 +144,10 @@ public class TimeUtils {
         return new Date(d.getYear(), d.getMonth(), d.getDate(), 23, 59, 59);
     }
 
+    public static Date today() {
+        return dayStart(new Date());
+    }
+
     public static boolean isToday(Date d) {
         return isSameDay(d, new Date());
     }

@@ -26,7 +26,7 @@ import java.util.GregorianCalendar;
 
 import junit.framework.Assert;
 
-import com.pyx4j.entity.server.TimeUtils;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -34,6 +34,7 @@ import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.temporal.Schedule;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.gwt.server.DateUtils;
 
 public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
 
@@ -55,7 +56,7 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Class of Value", Date.class, emp.from().getValueClass());
         // Round to seconds
         GregorianCalendar c = new GregorianCalendar();
-        Date today = TimeUtils.getRoundedNow();
+        Date today = DateUtils.getRoundedNow();
         c.setTime(today);
         c.set(Calendar.YEAR, c.get(Calendar.YEAR) - 1);
         Date day = c.getTime();
@@ -73,7 +74,7 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Class of Value", java.sql.Date.class, s.startsOn().getValueClass());
         // Round to seconds
         GregorianCalendar c = new GregorianCalendar();
-        Date today = TimeUtils.getRoundedNow();
+        Date today = DateUtils.getRoundedNow();
         c.setTime(today);
         c.set(Calendar.YEAR, c.get(Calendar.YEAR) - 1);
         java.sql.Date day = new java.sql.Date(TimeUtils.dayStart(c.getTime()).getTime());
@@ -91,7 +92,7 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Class of Value", java.sql.Time.class, s.time().getValueClass());
         // Round to seconds
         GregorianCalendar c = new GregorianCalendar();
-        c.setTime(TimeUtils.getRoundedNow());
+        c.setTime(DateUtils.getRoundedNow());
         c.set(Calendar.YEAR, 1970);
         c.set(Calendar.DAY_OF_YEAR, 1);
 

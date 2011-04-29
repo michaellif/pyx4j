@@ -54,7 +54,6 @@ import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.server.TimeUtils;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
@@ -64,6 +63,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.security.shared.SecurityViolationException;
 
@@ -150,7 +150,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
-            persist(connection, tableModel(entity.getEntityMeta()), entity, TimeUtils.getRoundedNow());
+            persist(connection, tableModel(entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -273,7 +273,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             connection = connectionProvider.getConnection();
             T entity = entityIterable.iterator().next();
-            persist(connection, tableModel(entity.getEntityMeta()), entityIterable, TimeUtils.getRoundedNow());
+            persist(connection, tableModel(entity.getEntityMeta()), entityIterable, DateUtils.getRoundedNow());
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -336,7 +336,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
-            merge(connection, tableModel(entity.getEntityMeta()), entity, TimeUtils.getRoundedNow());
+            merge(connection, tableModel(entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
         } finally {
             SQLUtils.closeQuietly(connection);
         }
