@@ -30,4 +30,13 @@
         <project.jar-source-4gwt>true</project.jar-source-4gwt>
     </properties>
 
+    <build>
+		<resources>
+			<!-- super-source -->
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+    </build>
+
 </project>
