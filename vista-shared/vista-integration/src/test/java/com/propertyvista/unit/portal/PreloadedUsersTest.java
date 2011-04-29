@@ -157,8 +157,7 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
     }
 
     private void assertVehiclesForm(IDebugId fromDebugId, Vehicle vehicle) {
-        //TODO Vlad
-        //assertValueOnForm(fromDebugId, vehicle.year());
+        assertValueOnForm(fromDebugId, vehicle.year());
 
         assertValueOnForm(fromDebugId, vehicle.make());
         assertValueOnForm(fromDebugId, vehicle.model());

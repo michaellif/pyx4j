@@ -119,7 +119,7 @@ public class VistaDataGenerator {
         Vehicle vehicle = EntityFactory.create(Vehicle.class);
 
         vehicle.plateNumber().setValue("ML" + RandomUtil.randomInt(9999) + "K");
-        vehicle.year().setValue(RandomUtil.randomSqlDate(1992, 2012));
+        vehicle.year().setValue(RandomUtil.randomYear(1992, 2012));
         vehicle.make().setValue(RandomUtil.random(DemoData.CAR_MAKES));
         vehicle.model().setValue(RandomUtil.random(DemoData.CAR_MODELS));
         vehicle.province().set(RandomUtil.random(SharedData.getProvinces()));
