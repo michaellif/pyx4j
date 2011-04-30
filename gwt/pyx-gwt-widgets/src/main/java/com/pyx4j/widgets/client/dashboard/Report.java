@@ -31,21 +31,26 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class Report extends SimplePanel {
 
     public static enum Location {
-        Left, Right, Full
+        Full, Left, Right, Any
     }
 
     public static final int SPACING = 10;
 
     private final ReportLayoutPanel reportLayoutPanel;
 
+    private final PickupDragController gadgetDragController;
+
     public Report() {
         AbsolutePanel boundaryPanel = new AbsolutePanel();
         boundaryPanel.setSize("100%", "100%");
         setWidget(boundaryPanel);
 
-        PickupDragController widgetDragController = new PickupDragController(boundaryPanel, false);
-        widgetDragController.setBehaviorMultipleSelection(false);
-        widgetDragController.addDragHandler(new DragHandler() {
+        reportLayoutPanel = new ReportLayoutPanel();
+        boundaryPanel.add(reportLayoutPanel);
+
+        gadgetDragController = new PickupDragController(boundaryPanel, false);
+        gadgetDragController.setBehaviorMultipleSelection(false);
+        gadgetDragController.addDragHandler(new DragHandler() {
 
             @Override
             public void onPreviewDragStart(DragStartEvent event) throws VetoDragException {
@@ -57,44 +62,47 @@ public class Report extends SimplePanel {
 
             @Override
             public void onDragStart(DragStartEvent event) {
-                ((GadgetHolderOrg) event.getSource()).setWidth(((GadgetHolderOrg) event.getSource()).getOffsetWidth() + "px");
+                ((GadgetHolder) event.getSource()).setWidth(((GadgetHolder) event.getSource()).getOffsetWidth() + "px");
             }
 
             @Override
             public void onDragEnd(DragEndEvent event) {
-                ((GadgetHolderOrg) event.getSource()).setWidth("auto");
+                ((GadgetHolder) event.getSource()).setWidth("auto");
             }
         });
 
-        int count = 0;
+        gadgetDragController.registerDropController(new ReportDropController(reportLayoutPanel));
 
-        reportLayoutPanel = new ReportLayoutPanel();
-        boundaryPanel.add(reportLayoutPanel);
-
-        // initialize a widget drop controller for the current column
-        ReportDropController widgetDropController = new ReportDropController(reportLayoutPanel);
-        widgetDragController.registerDropController(widgetDropController);
-
-        for (int i = 0; i <= 15; i++) {
-            GadgetHolderOrg gadget = new GadgetHolderOrg("Draggable&nbsp;#" + ++count, "green", "blue");
-            if (i % 4 == 0) {
-                reportLayoutPanel.addGadget(gadget, Report.Location.Full);
-            } else if (i % 4 == 1) {
-                reportLayoutPanel.addGadget(gadget, Report.Location.Left);
-            } else if (i % 4 == 2 || i % 4 == 3) {
-                reportLayoutPanel.addGadget(gadget, Report.Location.Right);
-            }
-            widgetDragController.makeDraggable(gadget, gadget.getDragHandler());
-        }
+//        int count = 0;
+//        for (int i = 0; i <= 15; i++) {
+//            GadgetHolderOrg gadget = new GadgetHolderOrg("Draggable&nbsp;#" + ++count, "green", "blue");
+//            if (i % 4 == 0) {
+//                reportLayoutPanel.addGadget(gadget, Report.Location.Full);
+//            } else if (i % 4 == 1) {
+//                reportLayoutPanel.addGadget(gadget, Report.Location.Left);
+//            } else if (i % 4 == 2 || i % 4 == 3) {
+//                reportLayoutPanel.addGadget(gadget, Report.Location.Right);
+//            }
+//            gadgetDragController.makeDraggable(gadget, gadget.getDragHandler());
+//        }
 
     }
 
     public void addGadget(IGadget gadget, Report.Location location) {
-        reportLayoutPanel.addGadget(gadget.asWidget(), Report.Location.Full);
+        reportLayoutPanel.addGadget(new GadgetHolder(gadget, gadgetDragController), correctLocation(gadget, location));
     }
 
     public void insertGadget(IGadget gadget, Report.Location location, int beforeRow) {
-        reportLayoutPanel.insertGadget(gadget.asWidget(), Report.Location.Full, beforeRow);
+        reportLayoutPanel.insertGadget(new GadgetHolder(gadget, gadgetDragController), correctLocation(gadget, location), beforeRow);
+    }
+
+    private Report.Location correctLocation(IGadget gadget, Report.Location location) {
+        if (gadget.isFullWidth()) {
+            location = Report.Location.Full;
+        } else if (location == Report.Location.Full) {
+            location = Report.Location.Any;
+        }
+        return location;
     }
 
 }

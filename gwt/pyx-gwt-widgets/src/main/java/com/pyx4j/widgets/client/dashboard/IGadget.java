@@ -23,6 +23,8 @@ public interface IGadget extends IsWidget {
     public void stop();
 
     // flags:	
+    boolean isFullWidth(); // should be 'true' for regular gadgets/layouts...
+
     boolean isMaximizable();
 
     boolean isMinimizable();

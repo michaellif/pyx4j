@@ -34,6 +34,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -97,7 +98,7 @@ public class WidgetsDemo implements EntryPoint {
         //========== Report ==========//
 
         Report report = new Report();
-        //report.addGadget(gadget, location);
+        fillReport(report);
         contentPanel.add(report);
 
         //========== Dashboard ==========//
@@ -516,6 +517,17 @@ public class WidgetsDemo implements EntryPoint {
         panel.add(new Label(lable));
         panel.add(widget);
         return panel;
+    }
+
+    private void fillReport(Report report) {
+
+        int count = 0;
+        for (int row = 0; row < 5; ++row) {
+            DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
+            widget.setHeight(Random.nextInt(8) + 2 + "em");
+            widget.setFullWidth(row % 2 > 0);
+            report.addGadget(widget, Report.Location.Left);
+        }
     }
 
 }

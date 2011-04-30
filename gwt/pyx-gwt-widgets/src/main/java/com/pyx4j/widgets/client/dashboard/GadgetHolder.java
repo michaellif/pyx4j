@@ -18,15 +18,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.dashboard.client;
+package com.pyx4j.widgets.client.dashboard;
 
-import com.allen_sauer.gwt.dnd.client.DragEndEvent;
-import com.allen_sauer.gwt.dnd.client.DragHandler;
-import com.allen_sauer.gwt.dnd.client.DragStartEvent;
-import com.allen_sauer.gwt.dnd.client.VetoDragException;
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -36,7 +33,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.InsertPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -45,14 +41,18 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.dashboard.client.CSSNames.StyleSuffix;
-import com.pyx4j.dashboard.client.IGadget.ISetup;
+import com.pyx4j.widgets.client.dashboard.CSSNames.StyleSuffix;
+import com.pyx4j.widgets.client.dashboard.IGadget.ISetup;
+import com.pyx4j.widgets.client.dashboard.images.DashboardImages;
 
 final class GadgetHolder extends SimplePanel {
 
+    // resources:
+    protected static DashboardImages images = (DashboardImages) GWT.create(DashboardImages.class);
+
     private final IGadget holdedGadget;
 
-    private final CSSNames dashboardPanel;
+    private final PickupDragController gadgetDragController;
 
     private final VerticalPanel frame = new VerticalPanel();
 
@@ -68,9 +68,9 @@ final class GadgetHolder extends SimplePanel {
     }
 
     // internals:
-    public GadgetHolder(IGadget gadget, CSSNames dashboardPanel) {
+    public GadgetHolder(IGadget gadget, PickupDragController gadgetDragController) {
         this.holdedGadget = gadget;
-        this.dashboardPanel = dashboardPanel;
+        this.gadgetDragController = gadgetDragController;
         this.addStyleName(CSSNames.BASE_NAME + StyleSuffix.Holder);
 
         // create caption with title and menu:
@@ -84,7 +84,7 @@ final class GadgetHolder extends SimplePanel {
 
         caption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
-        maximizer = new Image(this.dashboardPanel.images.WindowMaximize());
+        maximizer = new Image(images.WindowMaximize());
         maximizer.setTitle("Maximize");
         maximizer.getElement().getStyle().setCursor(Cursor.POINTER);
         maximizer.addClickHandler(new ClickHandler() {
@@ -114,41 +114,34 @@ final class GadgetHolder extends SimplePanel {
         this.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
         this.getElement().getStyle().setProperty("MozBoxSizing", "border-box");
         this.getElement().getStyle().setProperty("boxSizing", "border-box");
-        this.setWidth("auto");
-
-        // don't forget about vertical spacing:
-        setVerticalSpacing(this.dashboardPanel.layout.getVerticalSpacing());
+//        this.setWidth("auto");
 
         // make the widget place holder draggable by its title:
-        this.dashboardPanel.widgetDragController.makeDraggable(this, title);
-        this.dashboardPanel.widgetDragController.addDragHandler(new DragHandler() {
-
-            @Override
-            public void onPreviewDragStart(DragStartEvent event) throws VetoDragException {
-            }
-
-            @Override
-            public void onPreviewDragEnd(DragEndEvent event) throws VetoDragException {
-            }
-
-            @Override
-            public void onDragStart(DragStartEvent event) {
-                ((GadgetHolder) event.getSource()).setWidth(((GadgetHolder) event.getSource()).getOffsetWidth() + "px");
-            }
-
-            @Override
-            public void onDragEnd(DragEndEvent event) {
-                ((GadgetHolder) event.getSource()).setWidth("auto");
-            }
-        });
-    }
-
-    public boolean isFullWidth() {
-        return holdedGadget.isFullWidth();
+        this.gadgetDragController.makeDraggable(this, title);
+//        this.gadgetDragController.addDragHandler(new DragHandler() {
+//
+//            @Override
+//            public void onPreviewDragStart(DragStartEvent event) throws VetoDragException {
+//            }
+//
+//            @Override
+//            public void onPreviewDragEnd(DragEndEvent event) throws VetoDragException {
+//            }
+//
+//            @Override
+//            public void onDragStart(DragStartEvent event) {
+//                ((GadgetHolder) event.getSource()).setWidth(((GadgetHolder) event.getSource()).getOffsetWidth() + "px");
+//            }
+//
+//            @Override
+//            public void onDragEnd(DragEndEvent event) {
+//                ((GadgetHolder) event.getSource()).setWidth("auto");
+//            }
+//        });
     }
 
     private Widget createWidgetMenu() {
-        final Image btn = new Image(this.dashboardPanel.images.WindowMenu());
+        final Image btn = new Image(images.WindowMenu());
         btn.getElement().getStyle().setCursor(Cursor.POINTER);
         btn.addClickHandler(new ClickHandler() {
             private final PopupPanel pp = new PopupPanel(true);
@@ -212,20 +205,18 @@ final class GadgetHolder extends SimplePanel {
     }
 
     private void setVerticalSpacing(int spacing) {
-        /**
-         * Note: dnd tricks with margin and uses DOM.getStyleAttribute(w,"margin")
-         * (com.allen_sauer.gwt.dnd.client.PickupDragController.
-         * saveSelectedWidgetsLocationAndStyle())
-         * to retrieve and save current widget margin, but... it doesn't read
-         * attributes set by getStyle().setMarginTop/Bottom methods!!??
-         * Thus using instead such combination:
-         */
-        // this.getElement().getStyle().setProperty("margin", layout.getVerticalSpacing() + "px" + " 0px");
-        if (holdedGadget.isFullWidth()) {
-            this.getElement().getStyle().setMargin(spacing, Unit.PX);
-            this.getElement().getStyle().setMarginLeft(0, Unit.PX);
-            this.getElement().getStyle().setMarginRight(0, Unit.PX);
-        }
+//        /**
+//         * Note: dnd tricks with margin and uses DOM.getStyleAttribute(w,"margin")
+//         * (com.allen_sauer.gwt.dnd.client.PickupDragController.
+//         * saveSelectedWidgetsLocationAndStyle())
+//         * to retrieve and save current widget margin, but... it doesn't read
+//         * attributes set by getStyle().setMarginTop/Bottom methods!!??
+//         * Thus using instead such combination:
+//         */
+//        // this.getElement().getStyle().setProperty("margin", layout.getVerticalSpacing() + "px" + " 0px");
+//        this.getElement().getStyle().setMargin(spacing, Unit.PX);
+//        this.getElement().getStyle().setMarginLeft(0, Unit.PX);
+//        this.getElement().getStyle().setMarginRight(0, Unit.PX);
     }
 
     // --------------------------------------------------------------
@@ -251,66 +242,72 @@ final class GadgetHolder extends SimplePanel {
     // --------------------------------------------------------------
 
     private void maximize() {
-        if (isMaximized()) {
-            maximizer.setResource(this.dashboardPanel.images.WindowMaximize());
-            maximizer.setTitle("Maximize");
-
-            maximizeData.restoreWidgetPosition(this);
-            dashboardPanel.setWidget(maximizeData.boundaryPanel);
-            maximizeData.clear();
-
-            this.dashboardPanel.widgetDragController.makeDraggable(this, title);
-            holdedGadget.onMaximize(false);
-            this.dashboardPanel.setRefreshAllowed(true);
-        } else { // maximize:
-            maximizer.setResource(this.dashboardPanel.images.WindowRestore());
-            maximizer.setTitle("Restore");
-
-            maximizeData.saveWidgetPosition(this);
-            maximizeData.boundaryPanel = dashboardPanel.getWidget();
-            dashboardPanel.setWidget(this);
-
-            this.dashboardPanel.widgetDragController.makeNotDraggable(this);
-            holdedGadget.onMaximize(true);
-            this.dashboardPanel.setRefreshAllowed(false);
-        }
+        // TODO: review commented below code!..
     }
 
-    private boolean isMaximized() {
-        return (maximizeData.boundaryPanel != null);
-    }
-
-    private class MaximizeData {
-        private InsertPanel hostPanel;
-
-        private int widgetIndex;
-
-        public Widget boundaryPanel;
-
-        public void saveWidgetPosition(GadgetHolder widget) {
-            Widget parent = getParent();
-            while (!(parent instanceof InsertPanel)) {
-                parent = parent.getParent();
-            }
-
-            hostPanel = (InsertPanel) parent;
-            widgetIndex = hostPanel.getWidgetIndex(widget);
-            widget.setVerticalSpacing(0);
-        }
-
-        public void restoreWidgetPosition(GadgetHolder widget) {
-            widget.setVerticalSpacing(GadgetHolder.this.dashboardPanel.layout.getVerticalSpacing());
-            hostPanel.insert(widget, widgetIndex);
-        }
-
-        public void clear() {
-            boundaryPanel = null;
-            hostPanel = null;
-        }
-    }
-
-    private final MaximizeData maximizeData = new MaximizeData();
-
+    /*
+     * private void maximize() {
+     * if (isMaximized()) {
+     * maximizer.setResource(images.WindowMaximize());
+     * maximizer.setTitle("Maximize");
+     * 
+     * maximizeData.restoreWidgetPosition(this);
+     * dashboardPanel.setWidget(maximizeData.boundaryPanel);
+     * maximizeData.clear();
+     * 
+     * this.gadgetDragController.makeDraggable(this, title);
+     * holdedGadget.onMaximize(false);
+     * // this.dashboardPanel.setRefreshAllowed(true);
+     * } else { // maximize:
+     * maximizer.setResource(images.WindowRestore());
+     * maximizer.setTitle("Restore");
+     * 
+     * maximizeData.saveWidgetPosition(this);
+     * maximizeData.boundaryPanel = dashboardPanel.getWidget();
+     * dashboardPanel.setWidget(this);
+     * 
+     * this.gadgetDragController.makeNotDraggable(this);
+     * holdedGadget.onMaximize(true);
+     * // this.dashboardPanel.setRefreshAllowed(false);
+     * }
+     * 
+     * }
+     * 
+     * private boolean isMaximized() {
+     * return (maximizeData.boundaryPanel != null);
+     * }
+     * 
+     * private class MaximizeData {
+     * private InsertPanel hostPanel;
+     * 
+     * private int widgetIndex;
+     * 
+     * public Widget boundaryPanel;
+     * 
+     * public void saveWidgetPosition(GadgetHolder widget) {
+     * Widget parent = getParent();
+     * while (!(parent instanceof InsertPanel)) {
+     * parent = parent.getParent();
+     * }
+     * 
+     * hostPanel = (InsertPanel) parent;
+     * widgetIndex = hostPanel.getWidgetIndex(widget);
+     * widget.setVerticalSpacing(0);
+     * }
+     * 
+     * public void restoreWidgetPosition(GadgetHolder widget) {
+     * // widget.setVerticalSpacing(GadgetHolder.this.dashboardPanel.layout.getVerticalSpacing());
+     * hostPanel.insert(widget, widgetIndex);
+     * }
+     * 
+     * public void clear() {
+     * boundaryPanel = null;
+     * hostPanel = null;
+     * }
+     * }
+     * 
+     * private final MaximizeData maximizeData = new MaximizeData();
+     */
     // --------------------------------------------------------------
 
     private void delete() {

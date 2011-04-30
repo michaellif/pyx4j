@@ -24,6 +24,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.ColorFactory;
@@ -71,6 +72,7 @@ public class WindowsTheme extends Theme {
         initSuggestBoxStyle();
         initBannerStyle();
         initMultipleDatePicker();
+        initDashboard_Report();
     }
 
     protected void initThemeColors() {
@@ -836,8 +838,8 @@ public class WindowsTheme extends Theme {
 
         style = new Style(".datePickerMonthSelector img.bottom");
         style.addProperty("top", "-3px");
-        addStyle(style);        
-        
+        addStyle(style);
+
         style = new Style(".datePickerMonthSelector");
         style.addProperty("background-color", "#E4E4EC");
         style.addProperty("margin", "0");
@@ -881,6 +883,73 @@ public class WindowsTheme extends Theme {
 
         style = new Style(".monthSelectorYearNavigation");
         style.addProperty("width", "10%");
+        addStyle(style);
+    }
+
+    protected void initDashboard_Report() {
+        String prefix = CSSNames.BASE_NAME;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Column));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.ColumnHeading));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("font-weight", "bold");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.ColumnSpacer));
+        style.addProperty("height", "4em");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Holder));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("border", "1px solid #aaa");
+        style.addProperty("margin", "5px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderSetup));
+        style.addProperty("background-color", ThemeColor.MANDATORY_TEXT_BACKGROUND);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("font", "caption");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("color", "#444");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption) + ":hover");
+        style.addProperty("background-color", ThemeColor.SELECTION);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderHeading));
+        style.addProperty("padding-top", "2px");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderMenu));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style.addProperty("border", "1px solid #aaa");
+        style.addProperty("font", "menu");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndPositioner));
+        style.addProperty("border", "1px dashed #aaa");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndRowPositioner));
+        style.addProperty("background-color", "#dfffff");
+        style.addProperty("border", "1px dashed #aaa");
+        addStyle(style);
+
+        // overriding gwt-dnd styles:
+        style = new Style(".dragdrop-handle");
+        style.addProperty("cursor", "default");
         addStyle(style);
     }
 }

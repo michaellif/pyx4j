@@ -97,7 +97,7 @@ class ColumnFlowPanel extends FlowPanel /* VerticalPanel */{
         if (w instanceof GadgetHolder) {
             needNewRow = !((GadgetHolder) w).isFullWidth();
         } else if (isRowGadgetIsDragging()) {
-            needNewRow = (w.getStyleName().equals(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.DndPositioner));
+            needNewRow = (w.getStyleName().equals(CSSNames.BASE_NAME + CSSNames.StyleSuffix.DndPositioner));
 //        } else {
 //            needNewRow = (w.getStyleName().equals(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.DndRowPositioner));
         }
@@ -138,7 +138,7 @@ class ColumnFlowPanel extends FlowPanel /* VerticalPanel */{
     public void clear() {
         super.clear();
         Label spacerLabel = new Label("");
-        spacerLabel.setStylePrimaryName(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.ColumnSpacer);
+        spacerLabel.setStylePrimaryName(CSSNames.BASE_NAME + CSSNames.StyleSuffix.ColumnSpacer);
         super.add(spacerLabel);
     }
 

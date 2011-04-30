@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.dashboard.client.DashboardPanel;
+import com.pyx4j.dashboard.client.CSSNames;
 import com.pyx4j.dashboard.client.Layout;
 import com.pyx4j.widgets.client.style.StyleManger;
 
@@ -57,7 +57,7 @@ public final class DashboardDemo implements EntryPoint {
 
     private static final String CSS_DASHBOARD_CAPTION = "Dashboard-caption";
 
-    private DashboardPanel dashboardPanel;
+    private CSSNames dashboardPanel;
 
     @Override
     public void onModuleLoad() {
@@ -118,7 +118,7 @@ public final class DashboardDemo implements EntryPoint {
 //        String colNames[] = { "one", "two", "three" };
 //        layout.setColumnNames(colNames);
 
-        dashboardPanel = new DashboardPanel(layout);
+        dashboardPanel = new CSSNames(layout);
 
         HorizontalPanel dashboardCaption = new HorizontalPanel();
         dashboardCaption.add(new Label());
@@ -155,7 +155,7 @@ public final class DashboardDemo implements EntryPoint {
             }
     }
 
-    private Widget createDashboardMenu(final DashboardPanel dashboardPanel) {
+    private Widget createDashboardMenu(final CSSNames dashboardPanel) {
         final Button btn = new Button("Layout...");
         btn.addClickHandler(new ClickHandler() {
             private final PopupPanel pp = new PopupPanel(true);
