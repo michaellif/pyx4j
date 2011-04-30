@@ -50,15 +50,15 @@ public class BarChart extends Group {
 
             x += 20;
 
-            String color = "green";
+            String color = "#333";
 
             if (i % 3 == 0) {
                 x += 10;
-                color = "red";
+                color = "#888";
             } else if (i % 3 == 1) {
-                color = "green";
+                color = "#666";
             } else if (i % 3 == 2) {
-                color = "blue";
+                color = "#ccc";
             }
 
             double height = Math.random() * 100;
