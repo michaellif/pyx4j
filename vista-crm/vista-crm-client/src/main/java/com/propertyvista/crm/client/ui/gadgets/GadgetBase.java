@@ -59,7 +59,7 @@ public abstract class GadgetBase implements IGadget {
      * Implement in derived class to represent desired gadget UI.
      */
     @Override
-    public abstract Widget getWidget();
+    public abstract Widget asWidget();
 
     @Override
     public String getName() {

@@ -49,7 +49,7 @@ public class PieChartDisplayGadget extends GadgetBase {
     }
 
     @Override
-    public Widget getWidget() {
+    public Widget asWidget() {
         return installerPanel;
     }
 }

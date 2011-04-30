@@ -42,7 +42,7 @@ public class DemoGadget extends GadgetBase {
     // info:
 
     @Override
-    public Widget getWidget() {
+    public Widget asWidget() {
         return widget;
     }
 
@@ -67,11 +67,13 @@ public class DemoGadget extends GadgetBase {
     @Override
     public ISetup getSetup() {
         class MySetup implements ISetup {
+
+            private final FlowPanel setupPanel = new FlowPanel();
+
             private final TextArea content = new TextArea();
 
-            @Override
-            public Widget getWidget() {
-                FlowPanel setupPanel = new FlowPanel();
+            public MySetup() {
+                super();
                 setupPanel.add(new Label("Enter new gadget content:"));
 
                 content.setText(widget.getHTML());
@@ -80,6 +82,10 @@ public class DemoGadget extends GadgetBase {
 
                 setupPanel.getElement().getStyle().setPadding(10, Unit.PX);
                 setupPanel.getElement().getStyle().setPaddingBottom(0, Unit.PX);
+            }
+
+            @Override
+            public Widget asWidget() {
                 return setupPanel;
             }
 

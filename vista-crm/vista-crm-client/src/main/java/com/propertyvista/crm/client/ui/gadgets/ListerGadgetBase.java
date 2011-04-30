@@ -137,7 +137,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     //
     // IGadget:
     @Override
-    public Widget getWidget() {
+    public Widget asWidget() {
         ScrollPanel scroll = new ScrollPanel(listPanel.asWidget());
 //        scroll.setWidth("100%");
         return scroll;
@@ -242,7 +242,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         }
 
         @Override
-        public Widget getWidget() {
+        public Widget asWidget() {
             return setupPanel;
         }
 

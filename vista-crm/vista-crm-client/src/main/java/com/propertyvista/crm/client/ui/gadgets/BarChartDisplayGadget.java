@@ -51,7 +51,7 @@ public class BarChartDisplayGadget extends GadgetBase {
     }
 
     @Override
-    public Widget getWidget() {
+    public Widget asWidget() {
         ScrollPanel scroll = new ScrollPanel(activeOrdersPanel);
         scroll.setWidth("100%");
         return scroll;
