@@ -65,7 +65,7 @@ class CustomFlowPanelDropController extends FlowPanelDropController {
         // excluding positioner border in quirks and strict modes
         SimplePanel outer = new SimplePanel();
         //        outer.addStyleName(DragClientBundle.INSTANCE.css().positioner());
-        outer.addStyleName(CSSNames.BASE_NAME + CSSNames.StyleSuffix.DndPositioner); // standard dnd styles set margin: 0 !important - so we replace them!!!! 
+        outer.addStyleName(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.DndPositioner); // standard dnd styles set margin: 0 !important - so we replace them!!!! 
 
         // place off screen for border calculation
         RootPanel.get().add(outer, -500, -500);

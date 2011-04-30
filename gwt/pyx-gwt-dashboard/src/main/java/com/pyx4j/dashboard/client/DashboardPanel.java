@@ -39,7 +39,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 /**
  * Dashboard panel.
  */
-public class CSSNames extends SimplePanel {
+public class DashboardPanel extends SimplePanel {
 
     // CSS style names: 
     public static String BASE_NAME = "pyx4j_DashboardPanel";
@@ -65,12 +65,12 @@ public class CSSNames extends SimplePanel {
     private boolean isRefreshAllowed;
 
     // construction:
-    public CSSNames() {
+    public DashboardPanel() {
         this.layout = new Layout();
         init();
     }
 
-    public CSSNames(Layout layout) {
+    public DashboardPanel(Layout layout) {
         this.layout = layout;
         init();
     }

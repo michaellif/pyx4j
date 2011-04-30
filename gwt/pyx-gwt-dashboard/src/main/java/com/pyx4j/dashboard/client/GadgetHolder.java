@@ -45,14 +45,14 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.dashboard.client.CSSNames.StyleSuffix;
+import com.pyx4j.dashboard.client.DashboardPanel.StyleSuffix;
 import com.pyx4j.dashboard.client.IGadget.ISetup;
 
 final class GadgetHolder extends SimplePanel {
 
     private final IGadget holdedGadget;
 
-    private final CSSNames dashboardPanel;
+    private final DashboardPanel dashboardPanel;
 
     private final VerticalPanel frame = new VerticalPanel();
 
@@ -68,17 +68,17 @@ final class GadgetHolder extends SimplePanel {
     }
 
     // internals:
-    public GadgetHolder(IGadget gadget, CSSNames dashboardPanel) {
+    public GadgetHolder(IGadget gadget, DashboardPanel dashboardPanel) {
         this.holdedGadget = gadget;
         this.dashboardPanel = dashboardPanel;
-        this.addStyleName(CSSNames.BASE_NAME + StyleSuffix.Holder);
+        this.addStyleName(DashboardPanel.BASE_NAME + StyleSuffix.Holder);
 
         // create caption with title and menu:
         final HorizontalPanel caption = new HorizontalPanel();
 
         title.setText(holdedGadget.getName());
-        title.addStyleName(CSSNames.BASE_NAME + StyleSuffix.HolderHeading);
-        caption.addStyleName(CSSNames.BASE_NAME + StyleSuffix.HolderCaption);
+        title.addStyleName(DashboardPanel.BASE_NAME + StyleSuffix.HolderHeading);
+        caption.addStyleName(DashboardPanel.BASE_NAME + StyleSuffix.HolderCaption);
         caption.add(title);
         caption.setCellWidth(caption.getWidget(caption.getWidgetCount() - 1), "98%");
 
@@ -182,7 +182,7 @@ final class GadgetHolder extends SimplePanel {
 
                 // create the menu:
                 MenuBar menu = new MenuBar(true);
-                menu.addStyleName(CSSNames.BASE_NAME + StyleSuffix.HolderMenu);
+                menu.addStyleName(DashboardPanel.BASE_NAME + StyleSuffix.HolderMenu);
 
                 if (holdedGadget.isMinimizable()) {
                     menu.addItem((isMinimized() ? "Expand" : "Minimize"), cmdMinimize);
@@ -325,7 +325,7 @@ final class GadgetHolder extends SimplePanel {
 
         // create main gadget setup panel: 
         final FlowPanel setup = new FlowPanel();
-        setup.addStyleName(CSSNames.BASE_NAME + StyleSuffix.HolderSetup);
+        setup.addStyleName(DashboardPanel.BASE_NAME + StyleSuffix.HolderSetup);
         setup.add(setupGadget.asWidget());
 
         // create panel with Ok/Cancel buttons:

@@ -42,7 +42,7 @@ class TwoGadgetsRowDropController extends SimpleDropController {
     public void onEnter(DragContext context) {
         if (context.draggable instanceof GadgetHolder && !((GadgetHolder) context.draggable).isFullWidth()) {
             if (dropTarget.getWidget() == null || dropTarget.getWidget().equals(context.draggable)) {
-                dropTarget.addStyleName(CSSNames.BASE_NAME + CSSNames.StyleSuffix.DndRowPositioner);
+                dropTarget.addStyleName(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.DndRowPositioner);
 //            dropTarget.setHeight(context.draggable.getOffsetHeight() - DOMUtil.getVerticalBorders(dropTarget) + "px");
 //            dropTarget.setWidth(context.draggable.getOffsetWidth() - DOMUtil.getHorizontalBorders(dropTarget) + "px");
             }
@@ -51,7 +51,7 @@ class TwoGadgetsRowDropController extends SimpleDropController {
 
     @Override
     public void onLeave(DragContext context) {
-        dropTarget.removeStyleName(CSSNames.BASE_NAME + CSSNames.StyleSuffix.DndRowPositioner);
+        dropTarget.removeStyleName(DashboardPanel.BASE_NAME + DashboardPanel.StyleSuffix.DndRowPositioner);
 //        dropTarget.setHeight("auto");
     }
 

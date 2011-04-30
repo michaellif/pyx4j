@@ -20,7 +20,7 @@
  */
 package com.pyx4j.dashboard.demo.client;
 
-import com.pyx4j.dashboard.client.CSSNames;
+import com.pyx4j.dashboard.client.DashboardPanel;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
@@ -154,61 +154,61 @@ public class VistaTheme extends Theme {
     }
 
     protected void initDashboard() {
-        String prefix = CSSNames.BASE_NAME;
+        String prefix = DashboardPanel.BASE_NAME;
 
         Style style = new Style(Selector.valueOf(prefix));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Column));
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.Column));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.ColumnHeading));
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.ColumnHeading));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
         style.addProperty("font-weight", "bold");
         style.addProperty("text-align", "center");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.ColumnSpacer));
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.ColumnSpacer));
         style.addProperty("height", "4em");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Holder));
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.Holder));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("border", "1px solid #aaa");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderSetup));
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderSetup));
         style.addProperty("background-color", ThemeColor.MANDATORY_TEXT_BACKGROUND);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption));
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderCaption));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
         style.addProperty("font", "caption");
         style.addProperty("font-weight", "bold");
         style.addProperty("color", "#444");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption) + ":hover");
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderCaption) + ":hover");
         style.addProperty("background-color", ThemeColor.SELECTION);
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderHeading));
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderHeading));
         style.addProperty("padding-top", "2px");
         style.addProperty("text-align", "center");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderMenu));
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderMenu));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("border", "1px solid #aaa");
         style.addProperty("font", "menu");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndPositioner));
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.DndPositioner));
         style.addProperty("border", "1px dashed #aaa");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndRowPositioner));
+        style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.DndRowPositioner));
         style.addProperty("background-color", "#dfffff");
         style.addProperty("border", "1px dashed #aaa");
         addStyle(style);
