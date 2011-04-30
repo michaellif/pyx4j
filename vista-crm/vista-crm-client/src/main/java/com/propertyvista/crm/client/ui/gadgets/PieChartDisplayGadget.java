@@ -14,13 +14,14 @@
 package com.propertyvista.crm.client.ui.gadgets;
 
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
 import com.pyx4j.widgets.client.svg.PieChart;
 import com.pyx4j.widgets.client.svg.PieChartModel;
 import com.pyx4j.widgets.client.svg.PieChartModel.PieChartSegment;
 import com.pyx4j.widgets.client.svg.SvgPanel;
+
+import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
 public class PieChartDisplayGadget extends GadgetBase {
 
@@ -30,11 +31,11 @@ public class PieChartDisplayGadget extends GadgetBase {
         super(gmd);
 
         PieChartModel installerChartModel = new PieChartModel();
-        installerChartModel.addSegment(new PieChartSegment(3, "s1", "red"));
-        installerChartModel.addSegment(new PieChartSegment(5, "s2", "green"));
-        installerChartModel.addSegment(new PieChartSegment(7, "s3", "orange"));
-        installerChartModel.addSegment(new PieChartSegment(9, "s4", "blue"));
-        installerChartModel.addSegment(new PieChartSegment(11, "s4", "yellow"));
+        installerChartModel.addSegment(new PieChartSegment(3, "s1", "#bbb"));
+        installerChartModel.addSegment(new PieChartSegment(5, "s2", "#222"));
+        installerChartModel.addSegment(new PieChartSegment(7, "s3", "#ddd"));
+        installerChartModel.addSegment(new PieChartSegment(9, "s4", "#999"));
+        installerChartModel.addSegment(new PieChartSegment(11, "s4", "#555"));
 
         PieChart installerChart = new PieChart(installerChartModel, 60);
 
