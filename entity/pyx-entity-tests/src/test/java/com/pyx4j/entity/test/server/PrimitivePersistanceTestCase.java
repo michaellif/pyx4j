@@ -156,6 +156,7 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
 
     public void testEnumExternal() {
         Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue(uniqueString());
         Assert.assertNull("Initial value", emp.accessStatus().getValue());
         Assert.assertEquals("Class of Value", Status.class, emp.accessStatus().getValueClass());
         emp.accessStatus().setValue(Status.SUSPENDED);
@@ -168,18 +169,21 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
 
     public void testEnumEmbeded() {
         Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue(uniqueString());
         Assert.assertNull("Initial value", emp.employmentStatus().getValue());
         Assert.assertEquals("Class of Value", EmploymentStatus.class, emp.employmentStatus().getValueClass());
         emp.employmentStatus().setValue(EmploymentStatus.FULL_TIME);
 
         srv.persist(emp);
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertNotNull("Value retrived", emp2.employmentStatus().getValue());
         Assert.assertEquals("Class of Value", EmploymentStatus.class, emp2.employmentStatus().getValue().getClass());
         Assert.assertEquals("Value", EmploymentStatus.FULL_TIME, emp2.employmentStatus().getValue());
     }
 
     public void testBlob() {
         Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue(uniqueString());
         byte[] value = new byte[] { 1, 2, 3 };
         emp.image().setValue(value);
 
