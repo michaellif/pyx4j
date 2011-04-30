@@ -29,6 +29,25 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
+import com.propertyvista.common.client.ui.ViewLineSeparator;
+import com.propertyvista.common.client.ui.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
+import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsFolderUploader;
+import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.portal.client.ptapp.ui.validators.CanadianSinValidator;
+import com.propertyvista.portal.client.ptapp.ui.validators.ProvinceContryFilters;
+import com.propertyvista.portal.domain.pt.Address;
+import com.propertyvista.portal.domain.pt.Address.OwnedRented;
+import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
+import com.propertyvista.portal.domain.pt.EmergencyContact;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.pt.Vehicle;
+import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.portal.domain.ref.Province;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
@@ -53,26 +72,6 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-import com.propertyvista.common.client.ui.ViewLineSeparator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
-import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsFolderUploader;
-import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.portal.client.ptapp.ui.validators.CanadianSinValidator;
-import com.propertyvista.portal.client.ptapp.ui.validators.ProvinceContryFilters;
-import com.propertyvista.portal.domain.pt.Address;
-import com.propertyvista.portal.domain.pt.Address.OwnedRented;
-import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
-import com.propertyvista.portal.domain.pt.EmergencyContact;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.Vehicle;
-import com.propertyvista.portal.domain.ref.Country;
-import com.propertyvista.portal.domain.ref.Province;
-
 @Singleton
 public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
@@ -87,7 +86,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
     @SuppressWarnings("deprecation")
     public InfoViewForm() {
         super(PotentialTenantInfo.class, new VistaEditorsComponentFactory());
-        Date now = new Date();
+        Date now = TimeUtils.today();
         needPreviousAddress = TimeUtils.createDate(now.getYear() - 3, now.getMonth(), now.getDate());
     }
 
@@ -200,7 +199,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return (value != null) && value.before(new Date());
+                return (value != null) && value.before(TimeUtils.today());
             }
 
             @Override
@@ -213,7 +212,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return (value != null) && value.after(new Date());
+                return (value != null) && value.after(TimeUtils.today());
             }
 
             @Override
@@ -228,7 +227,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return (value != null) && value.before(new Date());
+                return (value != null) && value.before(TimeUtils.today());
             }
 
             @Override
@@ -255,7 +254,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return (value != null) && value.before(new Date());
+                return (value != null) && value.before(TimeUtils.today());
             }
 
             @Override
