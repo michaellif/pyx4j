@@ -59,7 +59,7 @@ public abstract class ReferenceTestCase extends DatastoreTestBase {
         srv.persist(address);
 
         Address address2 = srv.retrieve(Address.class, address.getPrimaryKey());
-        Assert.assertNotNull("retrieve", address2);
+        Assert.assertNotNull("retrieve by PK " + address.getPrimaryKey(), address2);
 
         Assert.assertEquals("address.province Value", prov.name().getValue(), address2.province().name().getValue());
         Assert.assertNotNull("address.province Pk", address2.province().getPrimaryKey());
