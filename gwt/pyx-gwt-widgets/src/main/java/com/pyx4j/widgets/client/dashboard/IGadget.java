@@ -1,7 +1,6 @@
 package com.pyx4j.widgets.client.dashboard;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Dashboard Gadget interface. User-defined dashboard gadgets should extend GWT Widget
@@ -9,9 +8,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public interface IGadget extends IsWidget {
 
-    @Override
-    Widget asWidget();
-
+    // info:
     String getName();
 
     String getDescription();
@@ -32,14 +29,11 @@ public interface IGadget extends IsWidget {
 
     boolean isSetupable();
 
-    boolean isFullWidth(); // should be 'true' for regular gadgets/layouts...
-
     /**
      * Dashboard Gadget Setup interface. User-defined gadgets may implement this
      * interface in order to get gadget setup functionality.
      */
-    interface ISetup {
-        Widget getWidget(); // should be implemented meaningful!
+    interface ISetup extends IsWidget {
 
         // notifications:
         boolean onStart();

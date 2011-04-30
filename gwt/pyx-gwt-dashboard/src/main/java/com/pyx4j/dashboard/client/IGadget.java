@@ -1,16 +1,14 @@
 package com.pyx4j.dashboard.client;
 
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.IsWidget;
 
 /**
  * Dashboard Gadget interface. User-defined dashboard gadgets should extend GWT Widget
  * and implement this interface.
  */
-public interface IGadget {
+public interface IGadget extends IsWidget {
 
     // info:
-    Widget getWidget(); // should be implemented meaningful!
-
     String getName();
 
     String getDescription();
@@ -37,8 +35,7 @@ public interface IGadget {
      * Dashboard Gadget Setup interface. User-defined gadgets may implement this
      * interface in order to get gadget setup functionality.
      */
-    interface ISetup {
-        Widget getWidget(); // should be implemented meaningful!
+    interface ISetup extends IsWidget {
 
         // notifications:
         boolean onStart();

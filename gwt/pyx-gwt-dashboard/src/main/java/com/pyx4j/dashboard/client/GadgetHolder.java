@@ -63,14 +63,13 @@ final class GadgetHolder extends SimplePanel {
     protected boolean inSetup = false;
 
     // public interface:
-    public IGadget getIWidget() {
-
+    public IGadget getGadget() {
         return holdedGadget;
     }
 
     // internals:
-    public GadgetHolder(IGadget widget, DashboardPanel dashboardPanel) {
-        this.holdedGadget = widget;
+    public GadgetHolder(IGadget gadget, DashboardPanel dashboardPanel) {
+        this.holdedGadget = gadget;
         this.dashboardPanel = dashboardPanel;
         this.addStyleName(DashboardPanel.BASE_NAME + StyleSuffix.Holder);
 
@@ -107,7 +106,7 @@ final class GadgetHolder extends SimplePanel {
 
         // put it together:
         frame.add(caption);
-        frame.add(holdedGadget.getWidget());
+        frame.add(holdedGadget.asWidget());
         frame.setWidth("100%");
         frame.getElement().getStyle().setOverflow(Overflow.HIDDEN);
         this.setWidget(frame);
@@ -327,7 +326,7 @@ final class GadgetHolder extends SimplePanel {
         // create main gadget setup panel: 
         final FlowPanel setup = new FlowPanel();
         setup.addStyleName(DashboardPanel.BASE_NAME + StyleSuffix.HolderSetup);
-        setup.add(setupGadget.getWidget());
+        setup.add(setupGadget.asWidget());
 
         // create panel with Ok/Cancel buttons:
         HorizontalPanel buttons = new HorizontalPanel();
@@ -360,7 +359,7 @@ final class GadgetHolder extends SimplePanel {
     }
 
     private void switchViewToNormal() {
-        switchViewTo(holdedGadget.getWidget());
+        switchViewTo(holdedGadget.asWidget());
         inSetup = false;
     }
 }

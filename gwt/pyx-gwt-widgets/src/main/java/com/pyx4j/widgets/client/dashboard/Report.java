@@ -57,12 +57,12 @@ public class Report extends SimplePanel {
 
             @Override
             public void onDragStart(DragStartEvent event) {
-                ((GadgetHolder) event.getSource()).setWidth(((GadgetHolder) event.getSource()).getOffsetWidth() + "px");
+                ((GadgetHolderOrg) event.getSource()).setWidth(((GadgetHolderOrg) event.getSource()).getOffsetWidth() + "px");
             }
 
             @Override
             public void onDragEnd(DragEndEvent event) {
-                ((GadgetHolder) event.getSource()).setWidth("auto");
+                ((GadgetHolderOrg) event.getSource()).setWidth("auto");
             }
         });
 
@@ -76,7 +76,7 @@ public class Report extends SimplePanel {
         widgetDragController.registerDropController(widgetDropController);
 
         for (int i = 0; i <= 15; i++) {
-            GadgetHolder gadget = new GadgetHolder("Draggable&nbsp;#" + ++count, "green", "blue");
+            GadgetHolderOrg gadget = new GadgetHolderOrg("Draggable&nbsp;#" + ++count, "green", "blue");
             if (i % 4 == 0) {
                 reportLayoutPanel.addGadget(gadget, Report.Location.Full);
             } else if (i % 4 == 1) {

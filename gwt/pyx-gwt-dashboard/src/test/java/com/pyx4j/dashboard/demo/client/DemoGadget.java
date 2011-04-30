@@ -41,11 +41,6 @@ public class DemoGadget extends HTML implements IGadget {
     // info:
 
     @Override
-    public Widget getWidget() {
-        return this;
-    }
-
-    @Override
     public String getName() {
         return (getText() + " name");
     }
@@ -89,7 +84,7 @@ public class DemoGadget extends HTML implements IGadget {
             private final TextArea content = new TextArea();
 
             @Override
-            public Widget getWidget() {
+            public Widget asWidget() {
                 FlowPanel setupPanel = new FlowPanel();
                 setupPanel.add(new Label("Enter new gadget content:"));
 

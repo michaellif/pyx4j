@@ -60,12 +60,12 @@ public class Dashboard extends SimplePanel {
 
             @Override
             public void onDragStart(DragStartEvent event) {
-                ((GadgetHolder) event.getSource()).setWidth(((GadgetHolder) event.getSource()).getOffsetWidth() + "px");
+                ((GadgetHolderOrg) event.getSource()).setWidth(((GadgetHolderOrg) event.getSource()).getOffsetWidth() + "px");
             }
 
             @Override
             public void onDragEnd(DragEndEvent event) {
-                ((GadgetHolder) event.getSource()).setWidth("auto");
+                ((GadgetHolderOrg) event.getSource()).setWidth("auto");
             }
         });
 
@@ -87,7 +87,7 @@ public class Dashboard extends SimplePanel {
             widgetDragController.registerDropController(widgetDropController);
 
             for (int row = 1; row <= 5; row++) {
-                GadgetHolder gadget = new GadgetHolder("Draggable&nbsp;#" + ++count, "blue", "green");
+                GadgetHolderOrg gadget = new GadgetHolderOrg("Draggable&nbsp;#" + ++count, "blue", "green");
                 columnCompositePanel.add(gadget);
                 widgetDragController.makeDraggable(gadget, gadget.getDragHandler());
             }

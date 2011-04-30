@@ -27,13 +27,13 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class GadgetHolder extends SimplePanel {
+public class GadgetHolderOrg extends SimplePanel {
 
     public static final int SPACING = 10;
 
     private final HTML gadget;
 
-    public GadgetHolder(String title, String background, String border) {
+    public GadgetHolderOrg(String title, String background, String border) {
         getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
         getElement().getStyle().setProperty("MozBoxSizing", "border-box");
         getElement().getStyle().setProperty("boxSizing", "border-box");
