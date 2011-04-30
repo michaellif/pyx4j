@@ -140,6 +140,11 @@
         <module>site/pyx-site-admin</module>
 -->
 
+        <module>svg/pyx-svg-shared</module>
+        <module>svg/pyx-svg-j2se</module>
+        <module>svg/pyx-svg-gwt</module>
+
+
         <module>maven/maven-password-plugin</module>
 
         <module>essentials/pyx-essentials-shared</module>
