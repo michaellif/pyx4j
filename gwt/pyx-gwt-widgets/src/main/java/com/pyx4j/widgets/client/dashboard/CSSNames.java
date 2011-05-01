@@ -25,7 +25,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class CSSNames {
     // CSS style names: 
-    public static String BASE_NAME = "pyx4j_Dashboard";
+    public static String BASE_NAME = "pyx4j_DashboardReport";
 
     public static enum StyleSuffix implements IStyleSuffix {
         Column, ColumnHeading, ColumnSpacer, Holder, HolderSetup, HolderCaption, HolderHeading, HolderMenu, DndPositioner, DndReportPositioner

@@ -42,6 +42,8 @@ public class Dashboard extends SimplePanel {
     protected LayoutType layoutType;
 
     public Dashboard() {
+        addStyleName(CSSNames.BASE_NAME);
+
         AbsolutePanel boundaryPanel = new AbsolutePanel();
         boundaryPanel.setSize("100%", "100%");
         setWidget(boundaryPanel);
