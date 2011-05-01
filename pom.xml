@@ -360,6 +360,8 @@
             <id>build-ci</id>
             <properties>
                 <gwt.compiler.force>true</gwt.compiler.force>
+                <gwtDraftCompile>true</gwtDraftCompile>
+                <appGWTModuleSufix>Developer</appGWTModuleSufix>
             </properties>
         </profile>
 
@@ -368,6 +370,7 @@
             <id>draft</id>
             <properties>
                 <gwtDraftCompile>true</gwtDraftCompile>
+                <appGWTModuleSufix>Developer</appGWTModuleSufix>
             </properties>
         </profile>
 
