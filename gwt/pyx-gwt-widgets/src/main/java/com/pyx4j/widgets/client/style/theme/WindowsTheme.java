@@ -890,6 +890,7 @@ public class WindowsTheme extends Theme {
         String prefix = CSSNames.BASE_NAME;
 
         Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("border", "1px solid #aaa");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Column));
@@ -909,6 +910,10 @@ public class WindowsTheme extends Theme {
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("border", "1px solid #aaa");
         style.addProperty("margin", "5px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Holder, CSSNames.StyleDependent.maximized));
+        style.addProperty("margin", "0");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderSetup));
@@ -939,12 +944,13 @@ public class WindowsTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndPositioner));
+        style.addProperty("background-color", "#dfffff");
         style.addProperty("border", "1px dashed #aaa");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndRowPositioner));
-        style.addProperty("background-color", "#dfffff");
-        style.addProperty("border", "1px dashed #aaa");
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndReportPositioner));
+        style.addProperty("border", "1px dotted #555");
+        style.addProperty("margin", "5px");
         addStyle(style);
 
         // overriding gwt-dnd styles:

@@ -28,10 +28,10 @@ public class CSSNames {
     public static String BASE_NAME = "pyx4j_Dashboard";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Column, ColumnHeading, ColumnSpacer, Holder, HolderSetup, HolderCaption, HolderHeading, HolderMenu, DndPositioner, DndRowPositioner
+        Column, ColumnHeading, ColumnSpacer, Holder, HolderSetup, HolderCaption, HolderHeading, HolderMenu, DndPositioner, DndReportPositioner
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        disabled, selected, hover
+        disabled, selected, hover, maximized
     }
 }

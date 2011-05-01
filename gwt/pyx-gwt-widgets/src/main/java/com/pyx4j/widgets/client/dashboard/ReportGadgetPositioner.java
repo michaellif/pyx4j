@@ -20,29 +20,18 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class ReportGadgetPositioner extends SimplePanel {
 
     public ReportGadgetPositioner(int height) {
+        addStyleName(CSSNames.BASE_NAME + CSSNames.StyleSuffix.DndReportPositioner);
 
         getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
         getElement().getStyle().setProperty("MozBoxSizing", "border-box");
         getElement().getStyle().setProperty("boxSizing", "border-box");
-        getElement().getStyle().setPadding(Dashboard.SPACING, Unit.PX);
         getElement().getStyle().setZIndex(100);
 
         setHeight(height + "px");
-
-        SimplePanel positionerBorder = new SimplePanel();
-        positionerBorder.setHeight("100%");
-        positionerBorder.getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
-        positionerBorder.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        positionerBorder.getElement().getStyle().setBorderColor("#555");
-        setWidget(positionerBorder);
-
     }
-
 }
