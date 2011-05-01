@@ -93,32 +93,5 @@
         <project.jar-source-4gwt>true</project.jar-source-4gwt>
     </properties>
 
-    <build>
-
-        <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                            <stripVersion>true</stripVersion>
-                            <includeScope>test</includeScope>
-                            <outputDirectory>war/WEB-INF/lib</outputDirectory>
-                            <includeArtifactIds>pyx-gwt-server,slf4j-api,slf4j-jdk14</includeArtifactIds>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-        </plugins>
-    </build>
 
 </project>
