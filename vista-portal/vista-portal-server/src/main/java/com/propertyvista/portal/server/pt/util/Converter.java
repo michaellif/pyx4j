@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.server.pt.util;
 
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.portal.domain.AptUnit;
 import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.pt.ApartmentFloorplan;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
-
-import com.pyx4j.entity.shared.EntityFactory;
 
 public class Converter {
 
@@ -47,7 +47,8 @@ public class Converter {
         to.utilities().setValue(from.utilities().getStringView());
         to.addOns().setValue(from.addOns().getStringView());
 
-        to.status().set(from.status());
+        //TODO VS
+        //to.status().set(from.status());
 
         // primitives
         to.unitType().setValue(from.unitType().getValue());
