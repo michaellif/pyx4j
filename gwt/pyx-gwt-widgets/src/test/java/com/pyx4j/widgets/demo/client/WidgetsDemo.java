@@ -37,6 +37,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -96,12 +97,14 @@ public class WidgetsDemo implements EntryPoint {
         contentPanel.setWidth("100%");
 
         //========== Report ==========//
-
+        contentPanel.add(new HTML("<b>Report Test:</b>"));
         Report report = new Report();
         fillReport(report);
         contentPanel.add(report);
 
         //========== Dashboard ==========//
+        contentPanel.add(new HTML("&nbsp"));
+        contentPanel.add(new HTML("<b>Dashboard Test:</b>"));
         Dashboard dashboard = new Dashboard();
         fillDashboard(dashboard);
         contentPanel.add(dashboard);
