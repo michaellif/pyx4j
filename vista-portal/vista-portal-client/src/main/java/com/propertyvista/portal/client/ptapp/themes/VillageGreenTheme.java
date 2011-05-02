@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.client.ptapp.themes;
 
-import com.propertyvista.portal.client.ptapp.ui.ApartmentUnitsTable;
-
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
+
+import com.propertyvista.portal.client.ptapp.ui.ApartmentUnitsTable;
 
 public class VillageGreenTheme extends VistaTheme {
 
@@ -38,7 +38,7 @@ public class VillageGreenTheme extends VistaTheme {
         putThemeColor(ThemeColor.TEXT, 0x000000);
         putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
         putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
+        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xe5e5e5);
         putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
         putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
     }

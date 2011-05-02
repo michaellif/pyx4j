@@ -70,7 +70,7 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
         putThemeColor(ThemeColor.TEXT, 0x000000);
         putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
         putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
+        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xe5e5e5);
         putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
         putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
     }
