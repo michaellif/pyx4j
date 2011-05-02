@@ -29,6 +29,10 @@ public class BarChart extends Group {
 
     private final int height;
 
+    private final int R_SHIFT = 200;
+
+    private final int T_SHIFT = 20; //TODO Ideally both constants has to be calculated dynamically
+
     public BarChart(BarChartModel model, int width, int height) {
         this.width = width;
         this.height = height;
@@ -45,6 +49,9 @@ public class BarChart extends Group {
         ArrayList<GraphicsElement> components = new ArrayList<GraphicsElement>();
 
         double x = 0;
+
+        int legY = -height;
+        int legX = width + R_SHIFT;
 
         for (int i = 0; i < 18; i++) {
 
@@ -99,10 +106,35 @@ public class BarChart extends Group {
                 final Path topFacePath = new Path(topFace);
                 topFacePath.setFill(color);
                 components.add(topFacePath);
+
             }
 
         }
+        if (model.isWihtLegend()) {
+            String color = "";
+            String title;
+            for (int i = 0; i < 3; i++) {
+                title = "property: " + i;
+                LegendItem legend = new LegendItem(title, LegendIcon.Rect, legX, legY, 15);
+                if (i % 3 == 0) {
+                    color = "#888";
+                } else if (i % 3 == 1) {
+                    color = "#666";
+                } else if (i % 3 == 2) {
+                    color = "#ccc";
+                }
 
+                legend.setColor(color);
+                legend.setX(legX);
+                legend.setY(legY);
+                legY = legY + T_SHIFT;
+                components.add(legend.getIcon());
+                Text ltxt = legend.getText();
+                if (ltxt != null)
+                    components.add(ltxt);
+            }
+
+        }
         for (GraphicsElement element : components) {
             add(element);
         }

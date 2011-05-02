@@ -34,6 +34,10 @@ public class PieChart extends Group {
 
     private final int radius;
 
+    private final int R_SHIFT = 20;
+
+    private final int V_SHIFT = 20; //TODO Ideally both constants has to be calculated dynamically
+
     public PieChart(PieChartModel model, int radius) {
         this.radius = radius;
         setPieChartModel(model);
@@ -41,7 +45,7 @@ public class PieChart extends Group {
 
     }
 
-    public void setPieChartModel(PieChartModel model) {
+    private void setPieChartModel(PieChartModel model) {
         clear();
 
         double total = 0;
@@ -52,6 +56,9 @@ public class PieChart extends Group {
         double startangle = Math.PI;
 
         ArrayList<GraphicsElement> components = new ArrayList<GraphicsElement>();
+
+        int legY = -radius + V_SHIFT;
+        int legX = radius + R_SHIFT;
 
         for (int i = 0; i < model.getSegments().size(); i++) {
             //for (int i = 0; i < 3; i++) {
@@ -120,6 +127,18 @@ public class PieChart extends Group {
             facePath.setFill(segment.getColor());
 
             components.add(facePath);
+
+            if (model.isWihtLegend()) {
+                LegendItem legend = new LegendItem(segment.getCaption(), LegendIcon.Circle, legX, legY, 6);
+                legend.setColor(segment.getColor());
+                legend.setX(legX);
+                legend.setY(legY);
+                legY = legY + V_SHIFT;
+                components.add(legend.getIcon());
+                Text ltxt = legend.getText();
+                if (ltxt != null)
+                    components.add(ltxt);
+            }
 
             facePath.addMouseOverHandler(new MouseOverHandler() {
                 @Override

@@ -27,8 +27,11 @@ public class PieChartModel {
 
     private final List<PieChartSegment> segments;
 
+    private boolean wihtLegend;
+
     public PieChartModel() {
         this.segments = new ArrayList<PieChartSegment>();
+        this.wihtLegend = true;
     }
 
     public void addSegment(PieChartSegment segment) {
@@ -37,6 +40,14 @@ public class PieChartModel {
 
     public List<PieChartSegment> getSegments() {
         return segments;
+    }
+
+    public boolean isWihtLegend() {
+        return wihtLegend;
+    }
+
+    public void setWihtLegend(boolean wihtLegend) {
+        this.wihtLegend = wihtLegend;
     }
 
     public static class PieChartSegment {

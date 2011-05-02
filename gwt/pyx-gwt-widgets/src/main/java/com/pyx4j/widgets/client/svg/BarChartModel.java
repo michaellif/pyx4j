@@ -32,6 +32,8 @@ public class BarChartModel {
 
     private final List<String> colors;
 
+    private boolean wihtLegend;
+
     public BarChartModel(List<String> positions) {
         this.positions = positions;
         items = new HashMap<String, List<BarChartItem>>();
@@ -44,6 +46,7 @@ public class BarChartModel {
         colors.add("blue");
         colors.add("green");
         colors.add("orange");
+        this.wihtLegend = true;
     }
 
     public void addItem(BarChartItem item, String position) {
@@ -64,6 +67,14 @@ public class BarChartModel {
 
     public List<BarChartItem> getItems(String position) {
         return items.get(position);
+    }
+
+    public boolean isWihtLegend() {
+        return wihtLegend;
+    }
+
+    public void setWihtLegend(boolean wihtLegend) {
+        this.wihtLegend = wihtLegend;
     }
 
     public static class BarChartItem {
