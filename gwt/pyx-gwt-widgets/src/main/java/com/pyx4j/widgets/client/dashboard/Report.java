@@ -59,9 +59,9 @@ public class Report extends SimplePanel {
 
     private Report.Location correctLocation(IGadget gadget, Report.Location location) {
         if (gadget.isFullWidth()) {
-            location = Report.Location.Full;
+            location = Report.Location.Full; // just this one is possible!..
         } else if (location == Report.Location.Full) {
-            location = Report.Location.Any;
+            location = Report.Location.Any; // any (left or right) in this case!..
         }
         return location;
     }

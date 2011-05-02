@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.dashboard.ReportLayoutPanel.CellPanel;
 
-public class ReportDropController extends AbstractPositioningDropController {
+class ReportDropController extends AbstractPositioningDropController {
 
     protected final ReportLayoutPanel dropTarget;
 

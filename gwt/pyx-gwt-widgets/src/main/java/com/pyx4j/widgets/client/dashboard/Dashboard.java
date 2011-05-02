@@ -20,26 +20,29 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
-import com.allen_sauer.gwt.dnd.client.DragEndEvent;
-import com.allen_sauer.gwt.dnd.client.DragHandler;
-import com.allen_sauer.gwt.dnd.client.DragStartEvent;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
-import com.allen_sauer.gwt.dnd.client.VetoDragException;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class Dashboard extends SimplePanel {
 
-    enum LayoutType {
-        One, Two11, Two12, Two21, Three
+    public enum LayoutType {
+        One(1), Two11(2), Two12(2), Two21(2), Three(3);
+
+        private final int columns;
+
+        LayoutType(int columns) {
+            this.columns = columns;
+        }
+
+        public int columns() {
+            return columns;
+        }
     }
 
-    public static final int SPACING = 10;
+    private final DashboardLayoutPanel dashboardLayoutPanel;
 
-    protected LayoutType layoutType;
+    private final PickupDragController gadgetDragController;
 
     public Dashboard() {
         addStyleName(CSSNames.BASE_NAME);
@@ -48,70 +51,30 @@ public class Dashboard extends SimplePanel {
         boundaryPanel.setSize("100%", "100%");
         setWidget(boundaryPanel);
 
-        PickupDragController widgetDragController = new PickupDragController(boundaryPanel, false);
-        widgetDragController.setBehaviorMultipleSelection(false);
-        widgetDragController.addDragHandler(new DragHandler() {
+        gadgetDragController = new PickupDragController(boundaryPanel, false);
+        gadgetDragController.setBehaviorMultipleSelection(false);
 
-            @Override
-            public void onPreviewDragStart(DragStartEvent event) throws VetoDragException {
-            }
+        dashboardLayoutPanel = new DashboardLayoutPanel(gadgetDragController);
+        boundaryPanel.add(dashboardLayoutPanel);
+    }
 
-            @Override
-            public void onPreviewDragEnd(DragEndEvent event) throws VetoDragException {
-            }
-
-            @Override
-            public void onDragStart(DragStartEvent event) {
-                ((GadgetHolderOrg) event.getSource()).setWidth(((GadgetHolderOrg) event.getSource()).getOffsetWidth() + "px");
-            }
-
-            @Override
-            public void onDragEnd(DragEndEvent event) {
-                ((GadgetHolderOrg) event.getSource()).setWidth("auto");
-            }
-        });
-
-        FlowPanel columnsContainerPanel = new FlowPanel();
-        columnsContainerPanel.setWidth("100%");
-        boundaryPanel.add(columnsContainerPanel);
-
-        int count = 0;
-
-        for (int col = 0; col < 3; col++) {
-            FlowPanel columnCompositePanel = new FlowPanel();
-            columnCompositePanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            columnCompositePanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            columnCompositePanel.setWidth(100 / 3 + "%");
-            columnsContainerPanel.add(columnCompositePanel);
-
-            // initialize a widget drop controller for the current column
-            DashboardDropController widgetDropController = new DashboardDropController(columnCompositePanel);
-            widgetDragController.registerDropController(widgetDropController);
-
-            for (int row = 1; row <= 5; row++) {
-                GadgetHolderOrg gadget = new GadgetHolderOrg("Draggable&nbsp;#" + ++count, "blue", "green");
-                columnCompositePanel.add(gadget);
-                widgetDragController.makeDraggable(gadget, gadget.getDragHandler());
-            }
-        }
-
+    public LayoutType getLayout() {
+        return dashboardLayoutPanel.getLayout();
     }
 
     public boolean setLayout(LayoutType layoutType) {
-        this.layoutType = layoutType;
-        return refresh();
+        return dashboardLayoutPanel.setLayout(layoutType);
     }
 
-    private boolean refresh() {
-        // TODO Auto-generated method stub
-        return false;
+    public void addGadget(IGadget gadget) {
+        dashboardLayoutPanel.addGadget(new GadgetHolder(gadget, gadgetDragController, this));
     }
 
     public void addGadget(IGadget gadget, int column) {
-
+        dashboardLayoutPanel.addGadget(new GadgetHolder(gadget, gadgetDragController, this), column);
     }
 
     public void insertGadget(IGadget gadget, int column, int row) {
-
+        dashboardLayoutPanel.addGadget(new GadgetHolder(gadget, gadgetDragController, this), column, row);
     }
 }

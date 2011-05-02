@@ -103,7 +103,7 @@ public class DashboardPanel extends SimplePanel {
             // create holder for supplied widget and insert it into specified column,row:
             GadgetHolder gh = new GadgetHolder(widget, this);
 
-            if (row > 0) {
+            if (row >= 0) {
                 getColumnWidgetsPanel(column).insert(gh, row);
             } else {
                 // if row is negative - just add at the end:

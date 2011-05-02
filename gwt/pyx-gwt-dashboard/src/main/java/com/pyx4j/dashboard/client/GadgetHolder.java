@@ -314,6 +314,7 @@ final class GadgetHolder extends SimplePanel {
     // --------------------------------------------------------------
 
     private void delete() {
+        this.dashboardPanel.widgetDragController.makeNotDraggable(this);
         holdedGadget.onDelete();
         this.removeFromParent();
     }

@@ -896,12 +896,6 @@ public class WindowsTheme extends Theme {
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Column));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.ColumnHeading));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("font-weight", "bold");
-        style.addProperty("text-align", "center");
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.ColumnSpacer));
         style.addProperty("height", "4em");
         addStyle(style);
@@ -944,8 +938,8 @@ public class WindowsTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndPositioner));
-        style.addProperty("background-color", "#dfffff");
-        style.addProperty("border", "1px dashed #aaa");
+        style.addProperty("border", "1px dotted #555");
+        style.addProperty("margin", "5px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndReportPositioner));

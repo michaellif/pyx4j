@@ -22,7 +22,7 @@ package com.pyx4j.widgets.client.dashboard;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class ReportGadgetPositioner extends SimplePanel {
+class ReportGadgetPositioner extends SimplePanel {
 
     public ReportGadgetPositioner(int height) {
         addStyleName(CSSNames.BASE_NAME + CSSNames.StyleSuffix.DndReportPositioner);

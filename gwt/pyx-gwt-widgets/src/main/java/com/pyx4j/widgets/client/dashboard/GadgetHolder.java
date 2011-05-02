@@ -34,9 +34,12 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IndexedPanel;
+import com.google.gwt.user.client.ui.InsertPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -238,8 +241,8 @@ final class GadgetHolder extends SimplePanel {
             maximizer.setResource(images.WindowMaximize());
             maximizer.setTitle("Maximize");
 
-            maximizeData.restoreWidgetPosition(this);
             root.setWidget(maximizeData.layoutPanel);
+            maximizeData.restoreWidgetPosition(this);
             maximizeData.clear();
 
             removeStyleDependentName(CSSNames.StyleDependent.maximized.name());
@@ -267,31 +270,32 @@ final class GadgetHolder extends SimplePanel {
 
     private class MaximizeData {
 
-        private SimplePanel hostPanel;
+        private Widget parent;
 
-//        private int widgetIndex;
+        private int index;
 
         public Widget layoutPanel;
 
         public void saveWidgetPosition(GadgetHolder widget) {
-            Widget parent = getParent();
-            while (!(parent instanceof SimplePanel)) {
-                parent = parent.getParent();
+            parent = widget.getParent();
+            if (parent instanceof InsertPanel) {
+            } else if (parent instanceof IndexedPanel) {
+                index = ((InsertPanel) parent).getWidgetIndex(widget);
             }
 
-            hostPanel = (SimplePanel) parent;
-//            widgetIndex = hostPanel.getWidgetIndex(widget);
         }
 
         public void restoreWidgetPosition(GadgetHolder widget) {
-            // widget.setVerticalSpacing(GadgetHolder.this.dashboardPanel.layout.getVerticalSpacing());
-//            hostPanel.insert(widget, widgetIndex);
-            hostPanel.setWidget(widget);
+            if (parent instanceof HasOneWidget) {
+                ((HasOneWidget) parent).setWidget(widget);
+            } else if (parent instanceof InsertPanel) {
+                ((InsertPanel) parent).insert(widget, index);
+            }
         }
 
         public void clear() {
             layoutPanel = null;
-            hostPanel = null;
+            parent = null;
         }
     }
 
@@ -300,6 +304,7 @@ final class GadgetHolder extends SimplePanel {
     // --------------------------------------------------------------
 
     private void delete() {
+        gadgetDragController.makeNotDraggable(this);
         holdedGadget.onDelete();
         this.removeFromParent();
     }

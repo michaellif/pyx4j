@@ -44,6 +44,7 @@ public class ReportLayoutPanel extends FlowPanel {
             System.out.println("Wrong beforeIndex - " + beforeIndex);
             return;
         }
+
         CellPanel beforeCell = null;
         Report.Location beforeCellLocation = null;
         boolean isBeforeCellSpaceHolder = false;
@@ -62,16 +63,18 @@ public class ReportLayoutPanel extends FlowPanel {
             isAfterCellSpaceHolder = afterCell.isSpaceHolder();
         }
 
-        if (isBeforeCellSpaceHolder && location.equals(beforeCellLocation)) {
+        // try to find empty cell in current rows:
+        if (isBeforeCellSpaceHolder && (location.equals(beforeCellLocation) || Report.Location.Any.equals(location))) {
             beforeCell.setWidget(widget);
             return;
         }
 
-        if (isAfterCellSpaceHolder && location.equals(afterCellLocation)) {
+        if (isAfterCellSpaceHolder && (location.equals(afterCellLocation) || Report.Location.Any.equals(location))) {
             afterCell.setWidget(widget);
             return;
         }
 
+        // ok, create new row:
         CellPanel cell = new CellPanel(location);
         cell.setWidget(widget);
 
@@ -80,6 +83,7 @@ public class ReportLayoutPanel extends FlowPanel {
         }
 
         switch (location) {
+        case Any:
         case Left:
             insert(new CellPanel(Report.Location.Right), beforeIndex);
             insert(cell, beforeIndex);

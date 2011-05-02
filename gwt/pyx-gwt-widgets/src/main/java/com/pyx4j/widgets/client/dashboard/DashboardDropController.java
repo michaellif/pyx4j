@@ -26,7 +26,7 @@ import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class DashboardDropController extends FlowPanelDropController {
+class DashboardDropController extends FlowPanelDropController {
 
     /**
      * @param dropTarget
@@ -48,6 +48,8 @@ public class DashboardDropController extends FlowPanelDropController {
             Widget widget = context.selectedWidgets.get(0);
             width = Math.max(width, widget.getOffsetWidth());
             height = widget.getOffsetHeight();
+        } else {
+            throw new Error("Only single Gadget can be selected");
         }
 
         return new DashboardGadgetPositioner(width, height);

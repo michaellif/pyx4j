@@ -102,7 +102,9 @@ public class WidgetsDemo implements EntryPoint {
         contentPanel.add(report);
 
         //========== Dashboard ==========//
-        contentPanel.add(new Dashboard());
+        Dashboard dashboard = new Dashboard();
+        fillDashboard(dashboard);
+        contentPanel.add(dashboard);
 
         //=================================//
 
@@ -530,4 +532,15 @@ public class WidgetsDemo implements EntryPoint {
         }
     }
 
+    private void fillDashboard(Dashboard dashboard) {
+
+        int count = 0;
+        for (int col = 0; col < dashboard.getLayout().columns(); ++col)
+            for (int row = 0; row < 3; ++row) {
+                // initialize a widget
+                DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
+                widget.setHeight(Random.nextInt(8) + 2 + "em");
+                dashboard.addGadget(widget, col);
+            }
+    }
 }
