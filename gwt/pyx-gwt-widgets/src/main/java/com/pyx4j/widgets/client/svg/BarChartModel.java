@@ -32,7 +32,7 @@ public class BarChartModel {
 
     private final List<String> colors;
 
-    private boolean wihtLegend;
+    private boolean withLegend;
 
     public BarChartModel(List<String> positions) {
         this.positions = positions;
@@ -46,7 +46,7 @@ public class BarChartModel {
         colors.add("blue");
         colors.add("green");
         colors.add("orange");
-        this.wihtLegend = true;
+        this.withLegend = true;
     }
 
     public void addItem(BarChartItem item, String position) {
@@ -69,12 +69,12 @@ public class BarChartModel {
         return items.get(position);
     }
 
-    public boolean isWihtLegend() {
-        return wihtLegend;
+    public boolean isWhithLegend() {
+        return withLegend;
     }
 
-    public void setWihtLegend(boolean wihtLegend) {
-        this.wihtLegend = wihtLegend;
+    public void setWithLegend(boolean withLegend) {
+        this.withLegend = withLegend;
     }
 
     public static class BarChartItem {

@@ -110,7 +110,7 @@ public class BarChart extends Group {
             }
 
         }
-        if (model.isWihtLegend()) {
+        if (model.isWhithLegend()) {
             String color = "";
             String title;
             for (int i = 0; i < 3; i++) {

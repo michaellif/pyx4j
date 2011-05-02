@@ -128,7 +128,7 @@ public class PieChart extends Group {
 
             components.add(facePath);
 
-            if (model.isWihtLegend()) {
+            if (model.isWithLegend()) {
                 LegendItem legend = new LegendItem(segment.getCaption(), LegendIcon.Circle, legX, legY, 6);
                 legend.setColor(segment.getColor());
                 legend.setX(legX);
