@@ -21,14 +21,183 @@
 package com.pyx4j.svg.demo.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.svg.basic.Circle;
+import com.pyx4j.svg.basic.Ellipse;
+import com.pyx4j.svg.basic.Line;
+import com.pyx4j.svg.basic.Path;
+import com.pyx4j.svg.basic.Polygon;
+import com.pyx4j.svg.basic.Polyline;
+import com.pyx4j.svg.basic.Rect;
+import com.pyx4j.svg.basic.SvgFactory;
+import com.pyx4j.svg.basic.SvgRoot;
+import com.pyx4j.svg.basic.Text;
+import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
 public class SVGDemo implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
-        RootPanel.get().add(new Button("TODO"));
-    }
 
+        VerticalPanel content = new VerticalPanel();
+
+        RootPanel.get().add(content);
+
+        SvgFactory svgFactory = new SvgFactoryForGwt();
+
+        content.add(new HTML("<h5>SVG Demo</h5>"));
+
+        //=========================================//
+
+        content.add(new HTML("Rect"));
+        {
+            SvgRoot svgPanel = svgFactory.createSvgRoot();
+            ((Widget) svgPanel).setSize("150px", "100px");
+
+            Rect rect = svgFactory.createRect(5, 5, 50, 50, 0, 0);
+            svgPanel.add(rect);
+
+            rect = svgFactory.createRect(25, 25, 50, 50, 5, 5);
+            rect.setFill("blue");
+            rect.setStroke("green");
+            rect.setStrokeWidth("5");
+            svgPanel.add(rect);
+
+            content.add((Widget) svgPanel);
+        }
+
+        //=========================================//
+
+        content.add(new HTML("Line"));
+        {
+            SvgRoot svgPanel = svgFactory.createSvgRoot();
+            ((Widget) svgPanel).setSize("150px", "100px");
+
+            Line line = svgFactory.createLine(5, 5, 55, 55);
+            svgPanel.add(line);
+
+            line = svgFactory.createLine(25, 5, 75, 55);
+            line.setStroke("green");
+            line.setStrokeWidth("5");
+            svgPanel.add(line);
+
+            content.add((Widget) svgPanel);
+        }
+
+        //=========================================//
+
+        content.add(new HTML("Path"));
+        {
+            SvgRoot svgPanel = svgFactory.createSvgRoot();
+            ((Widget) svgPanel).setSize("150px", "100px");
+
+            Path path = svgFactory.createPath("M 10 10 L 60 10 L 35 60 z");
+            svgPanel.add(path);
+
+            path = svgFactory.createPath("M 20 20 L 40 20 L 30 40 z");
+            path.setFill("blue");
+            path.setStroke("green");
+            path.setStrokeWidth("3");
+            svgPanel.add(path);
+
+            content.add((Widget) svgPanel);
+        }
+
+        //=========================================//
+
+        content.add(new HTML("Circle"));
+        {
+            SvgRoot svgPanel = svgFactory.createSvgRoot();
+            ((Widget) svgPanel).setSize("150px", "100px");
+
+            Circle circle = svgFactory.createCircle(40, 40, 30);
+            svgPanel.add(circle);
+
+            circle = svgFactory.createCircle(50, 50, 30);
+            circle.setFill("blue");
+            circle.setStroke("green");
+            circle.setStrokeWidth("3");
+            svgPanel.add(circle);
+
+            content.add((Widget) svgPanel);
+        }
+
+        //=========================================//
+
+        content.add(new HTML("Elipse"));
+        {
+            SvgRoot svgPanel = svgFactory.createSvgRoot();
+            ((Widget) svgPanel).setSize("150px", "100px");
+
+            Ellipse ellipse = svgFactory.createEllipse(50, 50, 40, 20);
+            svgPanel.add(ellipse);
+
+            ellipse = svgFactory.createEllipse(50, 50, 20, 40);
+            ellipse.setFill("blue");
+            ellipse.setStroke("green");
+            ellipse.setStrokeWidth("3");
+            svgPanel.add(ellipse);
+
+            content.add((Widget) svgPanel);
+        }
+
+        //=========================================//
+
+        content.add(new HTML("Polyline"));
+        {
+            SvgRoot svgPanel = svgFactory.createSvgRoot();
+            ((Widget) svgPanel).setSize("150px", "100px");
+
+            Polyline polyline = svgFactory.createPolyline("5,5 5,50 50,10, 50,60");
+            svgPanel.add(polyline);
+
+            polyline = svgFactory.createPolyline("15,15 15,60 60,20 60,70");
+            polyline.setStroke("green");
+            polyline.setStrokeWidth("3");
+            svgPanel.add(polyline);
+
+            content.add((Widget) svgPanel);
+        }
+
+        //=========================================//
+
+        content.add(new HTML("Polyline"));
+        {
+            SvgRoot svgPanel = svgFactory.createSvgRoot();
+            ((Widget) svgPanel).setSize("150px", "100px");
+
+            Polygon polygon = svgFactory.createPolygon("5,5 5,50 50,10, 50,60");
+            svgPanel.add(polygon);
+
+            polygon = svgFactory.createPolygon("15,15 15,60 60,20 60,70");
+            polygon.setFill("blue");
+            polygon.setStroke("green");
+            polygon.setStrokeWidth("3");
+            svgPanel.add(polygon);
+
+            content.add((Widget) svgPanel);
+        }
+
+        //=========================================//
+
+        content.add(new HTML("Text"));
+        {
+            SvgRoot svgPanel = svgFactory.createSvgRoot();
+            ((Widget) svgPanel).setSize("150px", "100px");
+
+            Text text = svgFactory.createText("Example", 25, 25);
+            svgPanel.add(text);
+
+            text = svgFactory.createText("Example", 30, 30);
+            text.setFill("blue");
+            text.setStroke("green");
+            svgPanel.add(text);
+
+            content.add((Widget) svgPanel);
+        }
+    }
 }

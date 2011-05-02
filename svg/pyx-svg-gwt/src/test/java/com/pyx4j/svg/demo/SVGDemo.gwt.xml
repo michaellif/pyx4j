@@ -3,6 +3,7 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module rename-to='test'>
     <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.pyx4j.SVG'/>
 
     <entry-point class='com.pyx4j.svg.demo.client.SVGDemo'/>
 
