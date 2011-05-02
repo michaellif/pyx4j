@@ -85,6 +85,27 @@ class DashboardLayoutPanel extends FlowPanel {
         return false;
     }
 
+    public static class Location {
+        public int col;
+
+        public int row;
+    }
+
+    public boolean getWidgetLocation(Widget widget, Location loc) {
+
+        for (int i = 0; i < getColumnsCount(); ++i) {
+            for (int j = 0; j < getColumnPanel(i).getWidgetCount(); ++j) {
+                if (widget.equals(getColumnPanel(i).getWidget(j))) {
+                    loc.col = i;
+                    loc.row = j;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public boolean removeGadget(int column, int row) {
         return (checkIndexes(column, row, false) && getColumnPanel(column).remove(row));
     }
@@ -173,6 +194,10 @@ class DashboardLayoutPanel extends FlowPanel {
 
     protected DashboardColumnFlowPanel getColumnPanel(int column) {
         return (DashboardColumnFlowPanel) getWidget(column);
+    }
+
+    protected int getColumnsCount() {
+        return getWidgetCount();
     }
 
     protected boolean checkIndexes(int column, int row, boolean insert) {

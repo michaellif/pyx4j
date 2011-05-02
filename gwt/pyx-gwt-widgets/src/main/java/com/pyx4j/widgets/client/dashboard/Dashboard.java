@@ -22,9 +22,11 @@ package com.pyx4j.widgets.client.dashboard;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class Dashboard extends SimplePanel {
+public class Dashboard extends SimplePanel implements IBoardRoot {
 
     public enum LayoutType {
         One(1), Two11(2), Two12(2), Two21(2), Three(3);
@@ -44,10 +46,13 @@ public class Dashboard extends SimplePanel {
 
     private final PickupDragController gadgetDragController;
 
+    private final AbsolutePanel boundaryPanel = new AbsolutePanel();
+
+    private final HTML placeholder = new HTML("dashboard_placeholder");
+
     public Dashboard() {
         addStyleName(CSSNames.BASE_NAME);
 
-        AbsolutePanel boundaryPanel = new AbsolutePanel();
         boundaryPanel.setSize("100%", "100%");
         setWidget(boundaryPanel);
 
@@ -76,5 +81,38 @@ public class Dashboard extends SimplePanel {
 
     public void insertGadget(IGadget gadget, int column, int row) {
         dashboardLayoutPanel.addGadget(new GadgetHolder(gadget, gadgetDragController, this), column, row);
+    }
+
+    // Maximize Gadget mechanics:
+    @Override
+    public boolean showMaximized(Widget widget) {
+        if (getWidget().equals(boundaryPanel)) {
+            DashboardLayoutPanel.Location loc = new DashboardLayoutPanel.Location();
+            if (dashboardLayoutPanel.getWidgetLocation(widget, loc)) {
+                setWidget(widget);
+                dashboardLayoutPanel.addGadget(placeholder, loc.col, loc.row);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean showNormal(Widget widget) {
+        if (getWidget().equals(widget)) {
+            DashboardLayoutPanel.Location loc = new DashboardLayoutPanel.Location();
+            if (dashboardLayoutPanel.getWidgetLocation(placeholder, loc)) {
+                dashboardLayoutPanel.removeGadget(loc.col, loc.row);
+                dashboardLayoutPanel.addGadget(widget, loc.col, loc.row);
+                setWidget(boundaryPanel);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isMaximized(Widget widget) {
+        return (getWidget().equals(widget));
     }
 }

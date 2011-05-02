@@ -34,12 +34,9 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IndexedPanel;
-import com.google.gwt.user.client.ui.InsertPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -59,9 +56,9 @@ final class GadgetHolder extends SimplePanel {
 
     private final IGadget holdedGadget;
 
-    private final PickupDragController gadgetDragController;
+    private final IBoardRoot root;
 
-    private final SimplePanel root;
+    private final PickupDragController gadgetDragController;
 
     private final VerticalPanel frame = new VerticalPanel();
 
@@ -77,7 +74,7 @@ final class GadgetHolder extends SimplePanel {
     }
 
     // internals:
-    public GadgetHolder(IGadget gadget, PickupDragController gadgetDragController, SimplePanel root) {
+    public GadgetHolder(IGadget gadget, PickupDragController gadgetDragController, IBoardRoot root) {
         this.holdedGadget = gadget;
         this.gadgetDragController = gadgetDragController;
         this.root = root;
@@ -237,69 +234,26 @@ final class GadgetHolder extends SimplePanel {
     // --------------------------------------------------------------
 
     private void maximize() {
-        if (isMaximized()) {
-            maximizer.setResource(images.WindowMaximize());
-            maximizer.setTitle("Maximize");
-
-            root.setWidget(maximizeData.layoutPanel);
-            maximizeData.restoreWidgetPosition(this);
-            maximizeData.clear();
+        if (root.isMaximized(this)) {
+            root.showNormal(this);
 
             removeStyleDependentName(CSSNames.StyleDependent.maximized.name());
+            maximizer.setResource(images.WindowMaximize());
+            maximizer.setTitle("Maximize");
             gadgetDragController.makeDraggable(this, title);
             holdedGadget.onMaximize(false);
             // this.dashboardPanel.setRefreshAllowed(true);
         } else { // maximize:
-            maximizer.setResource(images.WindowRestore());
-            maximizer.setTitle("Restore");
-
-            maximizeData.saveWidgetPosition(this);
-            maximizeData.layoutPanel = root.getWidget();
-            root.setWidget(this);
+            root.showMaximized(this);
 
             addStyleDependentName(CSSNames.StyleDependent.maximized.name());
+            maximizer.setResource(images.WindowRestore());
+            maximizer.setTitle("Restore");
             gadgetDragController.makeNotDraggable(this);
             holdedGadget.onMaximize(true);
             // this.dashboardPanel.setRefreshAllowed(false);
         }
     }
-
-    private boolean isMaximized() {
-        return (maximizeData.layoutPanel != null);
-    }
-
-    private class MaximizeData {
-
-        private Widget parent;
-
-        private int index;
-
-        public Widget layoutPanel;
-
-        public void saveWidgetPosition(GadgetHolder widget) {
-            parent = widget.getParent();
-            if (parent instanceof InsertPanel) {
-            } else if (parent instanceof IndexedPanel) {
-                index = ((InsertPanel) parent).getWidgetIndex(widget);
-            }
-
-        }
-
-        public void restoreWidgetPosition(GadgetHolder widget) {
-            if (parent instanceof HasOneWidget) {
-                ((HasOneWidget) parent).setWidget(widget);
-            } else if (parent instanceof InsertPanel) {
-                ((InsertPanel) parent).insert(widget, index);
-            }
-        }
-
-        public void clear() {
-            layoutPanel = null;
-            parent = null;
-        }
-    }
-
-    private final MaximizeData maximizeData = new MaximizeData();
 
     // --------------------------------------------------------------
 

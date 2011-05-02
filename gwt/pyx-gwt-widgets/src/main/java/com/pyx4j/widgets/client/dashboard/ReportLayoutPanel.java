@@ -64,12 +64,14 @@ public class ReportLayoutPanel extends FlowPanel {
         }
 
         // try to find empty cell in current rows:
-        if (isBeforeCellSpaceHolder && (location.equals(beforeCellLocation) || Report.Location.Any.equals(location))) {
+        boolean anyPlace = (!Report.Location.Full.equals(location) && Report.Location.Any.equals(location));
+
+        if (isBeforeCellSpaceHolder && (location.equals(beforeCellLocation) || anyPlace)) {
             beforeCell.setWidget(widget);
             return;
         }
 
-        if (isAfterCellSpaceHolder && (location.equals(afterCellLocation) || Report.Location.Any.equals(location))) {
+        if (isAfterCellSpaceHolder && (location.equals(afterCellLocation) || anyPlace)) {
             afterCell.setWidget(widget);
             return;
         }
@@ -98,7 +100,6 @@ public class ReportLayoutPanel extends FlowPanel {
         default:
             break;
         }
-
     }
 
     public void setGadget(Widget widget, int index) {
@@ -174,6 +175,14 @@ public class ReportLayoutPanel extends FlowPanel {
             }
         }
         return -1;
+    }
+
+    public void replaceGadget(Widget widget, Widget widgetReplaceTo) {
+        for (int i = 0; i < getWidgetCount(); i++) {
+            if (widget != null && widget.equals(((CellPanel) getWidget(i)).getWidget())) {
+                ((CellPanel) getWidget(i)).setWidget(widgetReplaceTo);
+            }
+        }
     }
 
     class CellPanel extends SimplePanel {

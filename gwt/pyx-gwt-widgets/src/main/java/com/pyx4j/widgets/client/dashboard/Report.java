@@ -22,9 +22,11 @@ package com.pyx4j.widgets.client.dashboard;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class Report extends SimplePanel {
+public class Report extends SimplePanel implements IBoardRoot {
 
     public static enum Location {
         Full, Left, Right, Any
@@ -34,10 +36,13 @@ public class Report extends SimplePanel {
 
     private final PickupDragController gadgetDragController;
 
+    private final AbsolutePanel boundaryPanel = new AbsolutePanel();
+
+    private final HTML placeholder = new HTML("report_placeholder");
+
     public Report() {
         addStyleName(CSSNames.BASE_NAME);
 
-        AbsolutePanel boundaryPanel = new AbsolutePanel();
         boundaryPanel.setSize("100%", "100%");
         setWidget(boundaryPanel);
 
@@ -64,5 +69,31 @@ public class Report extends SimplePanel {
             location = Report.Location.Any; // any (left or right) in this case!..
         }
         return location;
+    }
+
+    // Maximize Gadget mechanics:
+    @Override
+    public boolean showMaximized(Widget widget) {
+        if (getWidget().equals(boundaryPanel)) {
+            reportLayoutPanel.replaceGadget(widget, placeholder);
+            setWidget(widget);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean showNormal(Widget widget) {
+        if (getWidget().equals(widget)) {
+            setWidget(boundaryPanel);
+            reportLayoutPanel.replaceGadget(placeholder, widget);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isMaximized(Widget widget) {
+        return (getWidget().equals(widget));
     }
 }
