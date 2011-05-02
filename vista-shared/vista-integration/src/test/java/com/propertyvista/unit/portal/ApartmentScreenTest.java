@@ -16,7 +16,6 @@ package com.propertyvista.unit.portal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.selenium.GaeAppLoginTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,13 +32,9 @@ import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-/**
- * @author vadym
- * 
- */
 public class ApartmentScreenTest extends VistaBaseSeleniumTestCase {
 
-    private static final Logger log = LoggerFactory.getLogger(GaeAppLoginTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ApartmentScreenTest.class);
 
     final public String testUser = "Bob";
 
