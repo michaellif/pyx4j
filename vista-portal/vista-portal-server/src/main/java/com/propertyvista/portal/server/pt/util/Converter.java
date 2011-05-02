@@ -26,7 +26,7 @@ public class Converter {
         ApartmentFloorplan to = EntityFactory.create(ApartmentFloorplan.class);
 
         to.name().setValue(from.name().getValue());
-        to.area().setValue(from.area().getValue());
+        to.area().setValue(from.minArea().getValue());
 
         return to;
     }

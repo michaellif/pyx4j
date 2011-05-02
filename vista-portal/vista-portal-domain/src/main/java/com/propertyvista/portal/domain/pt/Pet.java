@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Translation;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,7 +29,11 @@ public interface Pet extends IEntity {
 
         //TODO i18n
 
-        dog("Dog"), cat("Cat");
+        @Translation("Dog")
+        dog("Dog"),
+
+        @Translation("Cat")
+        cat("Cat");
 
         private final String label;
 

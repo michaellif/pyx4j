@@ -15,21 +15,35 @@ package com.propertyvista.portal.domain;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.pt.LeaseTerms;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
-public interface AptUnit extends Property {
+import com.propertyvista.portal.domain.pt.LeaseTerms;
 
-    IPrimitive<Integer> floor();
+public interface AptUnit extends IEntity {
+
+    IPrimitive<String> name();
+
+    IPrimitive<String> marketingName();
 
     @Caption(name = "Type")
     IPrimitive<String> unitType();
+
+    IPrimitive<AptUnitEcomomicStatus> unitEcomomicStatus();
+
+    /**
+     * @see AptUnitEcomomicStatus#other
+     */
+    IPrimitive<String> unitEcomomicStatusDescr();
+
+    IPrimitive<Integer> floor();
 
     /**
      * Number of the unit
@@ -43,6 +57,8 @@ public interface AptUnit extends Property {
      */
     @Caption(name = "Sq F")
     IPrimitive<Integer> area();
+
+    IPrimitive<AreaMeasurementType> areaMeasurementType();
 
     /**
      * Number of bedrooms in unit
@@ -65,19 +81,22 @@ public interface AptUnit extends Property {
     IPrimitive<Double> bathrooms();
 
     /**
+     * Keeps current and future occupancy data
      * Used for DB Denormalization
      */
-    Lease currentLease();
+    IList<AptUnitOccupancy> currentOccupancies();
+
+    @Format("MM/dd/yyyy")
+    @Caption(name = "Available")
+    @Indexed
+    /**
+     * Denormalizied field used for search, derived from @see AptUnitOccupancy
+     */
+    IPrimitive<Date> avalableForRent();
 
     @Owned
     @Caption(name = "Rent")
     IList<MarketRent> marketRent();
-
-    IPrimitive<Date> moveOut();
-
-    @Format("MM/dd/yyyy")
-    @Caption(name = "Available")
-    IPrimitive<Date> avalableForRent();
 
     @Detached
     LeaseTerms newLeaseTerms();
@@ -95,11 +114,6 @@ public interface AptUnit extends Property {
     @Caption(name = "Deposit")
     Money requiredDeposit();
 
-    // need a lease-terms object
-    //IPrimitive<String> unitLeaseStatus();
-
-    IPrimitive<ApartmentUnitStatus> status();
-
     IList<Amenity> amenities();
 
     IList<Utility> utilities();
@@ -109,4 +123,10 @@ public interface AptUnit extends Property {
     IList<Concession> concessions();
 
     IList<AddOn> addOns();
+
+    @Detached
+    @Deprecated
+    //TODO VladS to clean it up
+    ISet<Picture> pictures();
+
 }

@@ -7,13 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-24
- * @author aroytbur
+ * Created on May 2, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.domain;
 
-public enum ApartmentUnitStatus {
+public enum AreaMeasurementType {
 
-    available, reserved, leased, notice;
+    Internal, External
+
 }

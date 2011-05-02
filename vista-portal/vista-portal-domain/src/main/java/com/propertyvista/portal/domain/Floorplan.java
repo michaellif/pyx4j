@@ -32,10 +32,18 @@ public interface Floorplan extends IEntity {
      * Contains the pictures of the floorplan / model unit
      */
     @Owned
+    @Deprecated
+    //TODO VladS to clean it up
     IList<Picture> pictures();
 
     /**
-     * Approximate value of square ft. size of unit
+     * Min value of square ft. size of unit
      */
-    IPrimitive<Integer> area();
+    IPrimitive<Integer> minArea();
+
+    /**
+     * Max value of square ft. size of unit
+     */
+    IPrimitive<Integer> maxArea();
+
 }

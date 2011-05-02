@@ -15,7 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.ApartmentUnitStatus;
+import com.propertyvista.portal.domain.AptUnitStatusType;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.Money;
@@ -113,7 +113,7 @@ public interface ApartmentUnit extends IEntity {
 //        available, reserved, leased, notice;
 //    }
 
-    IPrimitive<ApartmentUnitStatus> status();
+    IPrimitive<AptUnitStatusType> status();
 
     IPrimitive<String> amenities();
 

@@ -32,7 +32,7 @@ public interface PropertyOwner extends IEntity {
      */
     Person person();
 
-    Property property();
+    Building building();
 
     /**
      * Percent of share

@@ -107,7 +107,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
     private Floorplan createFloorplan(String name) {
         Floorplan floorplan = EntityFactory.create(Floorplan.class);
 
-        floorplan.area().setValue(1200);
+        floorplan.minArea().setValue(1200);
         floorplan.name().setValue(name);
 
         // for now save just one picture
@@ -436,7 +436,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                         throw new IllegalStateException("No floorplan");
                     }
 
-                    int uarea = floorplan.area().getValue() + RandomUtil.randomInt(10);
+                    int uarea = floorplan.minArea().getValue() + RandomUtil.randomInt(10);
                     createUnit(building, suiteNumber, floor, uarea, bedrooms, bathrooms, floorplan, leaseTerms);
                 }
             }
