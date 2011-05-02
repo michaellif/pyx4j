@@ -69,8 +69,8 @@ public class ApartmentScreenTest extends VistaBaseSeleniumTestCase {
         String strNow = new SimpleDateFormat("yyyyMMdd-hhmmss").format(Calendar.getInstance().getTime());
 
         String ulogin = testUser + strNow + emailAt;
-        selenium.type(meta(AccountCreationRequest.class).email(), ulogin);
-        selenium.type(meta(AccountCreationRequest.class).password(), ulogin);
+        selenium.type(proto(AccountCreationRequest.class).email(), ulogin);
+        selenium.type(proto(AccountCreationRequest.class).password(), ulogin);
 
         selenium.type("id=recaptcha_response_field", "x");
         selenium.click(VistaFormsDebugId.Auth_LetsStart);
@@ -100,7 +100,7 @@ public class ApartmentScreenTest extends VistaBaseSeleniumTestCase {
         strTo = sdf.format(fromDate.getTime());
         fromDate.add(Calendar.MONTH, -1); ////Subtract yet 1 extra month
         strFrom = sdf.format(fromDate.getTime());
-        selenium.type(meta(UnitSelection.class).selectionCriteria().availableFrom(), strFrom);
+        selenium.type(proto(UnitSelection.class).selectionCriteria().availableFrom(), strFrom);
         selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
         assertNoMessages(); //this reflects current behavior...
@@ -123,8 +123,8 @@ public class ApartmentScreenTest extends VistaBaseSeleniumTestCase {
         String strNow = new SimpleDateFormat("yyyyMMdd-hhmmss").format(Calendar.getInstance().getTime());
 
         String ulogin = testUser + strNow + emailAt;
-        selenium.type(meta(AccountCreationRequest.class).email(), ulogin);
-        selenium.type(meta(AccountCreationRequest.class).password(), ulogin);
+        selenium.type(proto(AccountCreationRequest.class).email(), ulogin);
+        selenium.type(proto(AccountCreationRequest.class).password(), ulogin);
         selenium.type("id=recaptcha_response_field", "x");
         selenium.click(VistaFormsDebugId.Auth_LetsStart);
 
@@ -145,7 +145,7 @@ public class ApartmentScreenTest extends VistaBaseSeleniumTestCase {
         String strFrom = sdf.format(fromDate.getTime());
         fromDate.add(Calendar.MONTH, -1); ////minus 1 more month
         String strTo = sdf.format(fromDate.getTime());
-        selenium.type(meta(UnitSelection.class).selectionCriteria().availableFrom(), strFrom);
+        selenium.type(proto(UnitSelection.class).selectionCriteria().availableFrom(), strFrom);
         selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
         assertNotPresent("UnitSelection$availableUnits$units-row-1-ApartmentUnit$unitType");

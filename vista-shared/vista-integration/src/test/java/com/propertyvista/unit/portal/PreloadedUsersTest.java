@@ -17,9 +17,11 @@ import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
+import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
@@ -73,22 +75,19 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
 
-        //TODO use unitSel instead of code below:
-        selenium.click("UnitSelection$availableUnits$units-row-2-ApartmentUnit$unitType");
-        selenium.click("UnitSelection$availableUnits$units-row-2-leaseTerm_12");
-        selenium.click("Crud_Save");
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).unitType()));
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, "leaseTerm_12"));
 
-        return;
+        selenium.click(CrudDebugId.Crud_Save);
     }
 
     protected void doTestTenantsPage(Summary summary) {
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class)));
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class));
 
-        //TODO use summary/tenants instead of code below:
-        selenium.click("Crud_Save");
+        //TODO validate summary/tenants
 
-        return;
+        selenium.click(CrudDebugId.Crud_Save);
     }
 
     protected void doTestInfoPage(Summary summary) {
@@ -127,8 +126,6 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         //TODO Add all...
 
         //Emergency Contacts
-
-        return;
     }
 
     private void assertAddressForm(IDebugId fromDebugId, Address address) {
