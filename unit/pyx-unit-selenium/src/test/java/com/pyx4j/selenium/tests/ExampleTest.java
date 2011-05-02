@@ -98,10 +98,10 @@ public class ExampleTest extends BaseSeleniumTestCase {
 
         selenium.click("link=Sign In");
 
-        selenium.waitFor(meta(AuthenticationRequest.class).email());
+        selenium.waitFor(proto(AuthenticationRequest.class).email());
 
-        selenium.type(meta(AuthenticationRequest.class).email(), "emp001@pyx4j.com");
-        selenium.type(meta(AuthenticationRequest.class).password(), "emp001@pyx4j.com");
+        selenium.type(proto(AuthenticationRequest.class).email(), "emp001@pyx4j.com");
+        selenium.type(proto(AuthenticationRequest.class).password(), "emp001@pyx4j.com");
         selenium.click(DialogDebugId.Dialog_Ok);
 
         selenium.waitFor(CrudDebugId.Crud_New);

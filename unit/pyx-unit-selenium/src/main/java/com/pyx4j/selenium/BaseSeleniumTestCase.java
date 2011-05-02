@@ -62,15 +62,6 @@ public class BaseSeleniumTestCase extends TestCase {
         return new DefaultSeleniumTestConfiguration();
     }
 
-    /**
-     * 
-     * @deprecated use proto(Class<T> clazz)
-     */
-    @Deprecated
-    public <T extends IEntity> T meta(Class<T> clazz) {
-        return EntityFactory.getEntityPrototype(clazz);
-    }
-
     public <T extends IEntity> T proto(Class<T> clazz) {
         return EntityFactory.getEntityPrototype(clazz);
     }
