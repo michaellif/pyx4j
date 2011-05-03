@@ -294,7 +294,7 @@ public class BaseSeleniumTestCase extends TestCase {
             assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
         } else if (mm.getValueClass().equals(String.class)) {
             // CTextField();
-            assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getValue(fromDebugId, member));
+            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
         } else {
             throw new Error("No comparison defined for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
         }
