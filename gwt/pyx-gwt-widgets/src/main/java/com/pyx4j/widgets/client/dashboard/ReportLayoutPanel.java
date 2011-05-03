@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.allen_sauer.gwt.dnd.client.util.WidgetArea;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -29,6 +32,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ReportLayoutPanel extends FlowPanel {
+
+    protected static final Logger log = LoggerFactory.getLogger(ReportLayoutPanel.class);
 
     public ReportLayoutPanel() {
         getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
@@ -44,9 +49,6 @@ public class ReportLayoutPanel extends FlowPanel {
             return;
         }
 
-        // preconditions for any (left/right) place:
-        boolean anyPlace = (!Report.Location.Full.equals(location) && Report.Location.Any.equals(location));
-
         // check for empty cell in the index vicinity :
 
         CellPanel beforeCell = null;
@@ -58,7 +60,7 @@ public class ReportLayoutPanel extends FlowPanel {
             isBeforeCellSpaceHolder = beforeCell.isSpaceHolder();
         }
 
-        if (isBeforeCellSpaceHolder && (location.equals(beforeCellLocation) || anyPlace)) {
+        if (isBeforeCellSpaceHolder && location.equals(beforeCellLocation)) {
             beforeCell.setWidget(widget);
             return; // found!..
         }
@@ -72,16 +74,12 @@ public class ReportLayoutPanel extends FlowPanel {
             isAfterCellSpaceHolder = afterCell.isSpaceHolder();
         }
 
-        if (isAfterCellSpaceHolder && (location.equals(afterCellLocation) || anyPlace)) {
+        if (isAfterCellSpaceHolder && location.equals(afterCellLocation)) {
             afterCell.setWidget(widget);
             return; // found!..
         }
 
         // ok, from here - create new row:
-
-        if (anyPlace) {
-            location = Report.Location.Left; // replace 'Any' location with 'Left' one...
-        }
 
         CellPanel cell = new CellPanel(location);
         cell.setWidget(widget);
@@ -103,7 +101,7 @@ public class ReportLayoutPanel extends FlowPanel {
             insert(cell, beforeIndex);
             break;
         default:
-            System.out.println("Wrong beforeIndex - " + beforeIndex);
+            log.debug("Wrong beforeIndex - {}", beforeIndex);
             break;
         }
     }
@@ -205,7 +203,7 @@ public class ReportLayoutPanel extends FlowPanel {
 
     private boolean checkIndex(int index) {
         if (index < 0 || index > getWidgetCount()) {
-            System.out.println("Wrong index - " + index);
+            log.debug("Wrong index - {}", index);
             return false;
         }
         return true;
@@ -237,7 +235,6 @@ public class ReportLayoutPanel extends FlowPanel {
         public void setLocation(Report.Location location) {
             this.location = location;
             switch (location) {
-            case Any:
             case Left:
             case Right:
                 setWidth("50%");

@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class Report extends SimplePanel implements IBoardRoot {
 
     public static enum Location {
-        Full, Left, Right, Any
+        Full, Left, Right
     }
 
     private final ReportLayoutPanel reportLayoutPanel;
@@ -55,20 +55,11 @@ public class Report extends SimplePanel implements IBoardRoot {
     }
 
     public void addGadget(IGadget gadget, Report.Location location) {
-        reportLayoutPanel.addGadget(new GadgetHolder(gadget, gadgetDragController, this), correctLocation(gadget, location));
+        reportLayoutPanel.addGadget(new GadgetHolder(gadget, gadgetDragController, this), location);
     }
 
     public void insertGadget(IGadget gadget, Report.Location location, int beforeRow) {
-        reportLayoutPanel.insertGadget(new GadgetHolder(gadget, gadgetDragController, this), correctLocation(gadget, location), beforeRow);
-    }
-
-    private Report.Location correctLocation(IGadget gadget, Report.Location location) {
-//        if (gadget.isFullWidth()) {
-//            location = Report.Location.Full; // just this one is possible!..
-//        } else if (location == Report.Location.Full) {
-//            location = Report.Location.Any; // any (left or right) in this case!..
-//        }
-        return location;
+        reportLayoutPanel.insertGadget(new GadgetHolder(gadget, gadgetDragController, this), location, beforeRow);
     }
 
     // Maximize Gadget mechanics:

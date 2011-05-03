@@ -527,11 +527,10 @@ public class WidgetsDemo implements EntryPoint {
     private void fillReport(Report report) {
 
         int count = 0;
-        for (int row = 0; row < 5; ++row) {
+        for (int row = 0; row < 7; ++row) {
             DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
-            widget.setHeight(Random.nextInt(8) + 2 + "em");
-            widget.setFullWidth(row % 2 > 0);
-            report.addGadget(widget, Report.Location.Left);
+            widget.setHeight(Random.nextInt(10) + 1 + "em");
+            report.addGadget(widget, (row % 2 > 0 ? Report.Location.Full : Report.Location.Left));
         }
     }
 
