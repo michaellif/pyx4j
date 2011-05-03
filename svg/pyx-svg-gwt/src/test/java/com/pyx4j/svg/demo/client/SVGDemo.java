@@ -37,8 +37,8 @@ import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.LegendIconType;
+import com.pyx4j.svg.chart.LegendItem;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
-import com.pyx4j.svg.gwt.chart.LegendItem;
 
 public class SVGDemo implements EntryPoint {
 

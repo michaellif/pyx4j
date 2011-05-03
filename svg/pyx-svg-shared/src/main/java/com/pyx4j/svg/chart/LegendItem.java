@@ -18,15 +18,16 @@
  * @author Dad
  * @version $Id$
  */
-package com.pyx4j.svg.gwt.chart;
+package com.pyx4j.svg.chart;
 
+import com.pyx4j.svg.basic.Group;
+import com.pyx4j.svg.basic.IsSvgElement;
 import com.pyx4j.svg.basic.Shape;
+import com.pyx4j.svg.basic.SvgElement;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.Text;
-import com.pyx4j.svg.chart.LegendIconType;
-import com.pyx4j.svg.gwt.GroupImpl;
 
-public class LegendItem extends GroupImpl {
+public class LegendItem implements IsSvgElement {
 
     private final int X_SHIFT = 10;
 
@@ -48,10 +49,13 @@ public class LegendItem extends GroupImpl {
 
     private String color = "#000";
 
-    public LegendItem(LegendIconType iconType, SvgFactory svgFactory, int x, int y, int length) {
+    private final Group group;
 
+    public LegendItem(LegendIconType iconType, SvgFactory svgFactory, int x, int y, int length) {
         this.iconType = iconType;
         this.svgFactory = svgFactory;
+
+        group = svgFactory.createGroup();
 
         xc = x;
         yc = y;
@@ -69,14 +73,14 @@ public class LegendItem extends GroupImpl {
         }
         this.setColor(color);
         text = null;
-        add(this.icon);
+        group.add(this.icon);
 
     }
 
     public LegendItem(String text, LegendIconType iconType, SvgFactory svgFactory, int x, int y, int length) {
         this(iconType, svgFactory, x, y, length);
         this.text = svgFactory.createText(text, xc + X_SHIFT + length, yc + Y_SHIFT);
-        add(this.text);
+        group.add(this.text);
     }
 
     public Text getText() {
@@ -91,14 +95,15 @@ public class LegendItem extends GroupImpl {
         return iconType;
     }
 
-    public void setTransform(String transform) {
-        getElement().setAttribute("transform", transform);
-    }
-
     //TODO create a set of methods to change the initial size and position of the group 
     public void setColor(String color) {
         this.color = color;
         icon.setFill(color);
+    }
+
+    @Override
+    public SvgElement asSvgElement() {
+        return group;
     }
 
 }

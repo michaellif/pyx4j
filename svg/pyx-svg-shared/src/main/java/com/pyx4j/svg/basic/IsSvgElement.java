@@ -14,14 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 1, 2011
+ * Created on May 3, 2011
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.svg.basic;
 
-public interface Group extends ContainerElement {
+public interface IsSvgElement {
 
-    String getId();
+    SvgElement asSvgElement();
 
 }

@@ -21,9 +21,22 @@
 package com.pyx4j.svg.gwt;
 
 import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.svg.basic.ContainerElement;
+import com.pyx4j.svg.basic.IsSvgElement;
+import com.pyx4j.svg.basic.SvgElement;
 
 public class ContainerElementImpl extends ComplexPanel implements ContainerElement {
+
+    @Override
+    public void add(SvgElement w) {
+        super.add((Widget) w, getElement());
+    }
+
+    @Override
+    public void add(IsSvgElement element) {
+        add(element.asSvgElement());
+    }
 
 }

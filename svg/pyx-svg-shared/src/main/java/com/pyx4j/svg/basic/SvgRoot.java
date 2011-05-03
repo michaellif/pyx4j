@@ -24,6 +24,8 @@ public interface SvgRoot {
 
     void add(SvgElement element);
 
+    void add(IsSvgElement element);
+
     String getId();
 
     BBox getBBox();

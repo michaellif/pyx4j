@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.svg.basic.BBox;
+import com.pyx4j.svg.basic.IsSvgElement;
 import com.pyx4j.svg.basic.SvgElement;
 import com.pyx4j.svg.basic.SvgRoot;
 
@@ -41,6 +42,11 @@ public class SvgRootImpl extends ComplexPanel implements SvgRoot {
     @Override
     public void add(SvgElement w) {
         super.add((Widget) w, getElement());
+    }
+
+    @Override
+    public void add(IsSvgElement element) {
+        add(element.asSvgElement());
     }
 
     @Override

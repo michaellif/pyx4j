@@ -22,4 +22,8 @@ package com.pyx4j.svg.basic;
 
 public interface ContainerElement extends SvgElement {
 
+    void add(SvgElement element);
+
+    void add(IsSvgElement element);
+
 }
