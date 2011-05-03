@@ -27,9 +27,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.client.ptapp.activity.SecondNavigActivity;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -114,7 +114,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             this.place = AppSite.getHistoryMapper().getPlace(token);
 
             HashMap<String, String> args = new HashMap<String, String>();
-            args.put(SecondNavigActivity.STEP_ARG_NAME, substep.placeArgument().getStringView());
+            args.put(SiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
             place.setArgs(args);
 
             label = new Label(substep.name().getValue());
@@ -137,7 +137,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             }
 
             if (substep.placeArgument().getValue() != null && presenter.getWhere().getArgs() != null
-                    && substep.placeArgument().getValue().toString().equals(presenter.getWhere().getArgs().get(SecondNavigActivity.STEP_ARG_NAME))) {
+                    && substep.placeArgument().getValue().toString().equals(presenter.getWhere().getArgs().get(SiteMap.STEP_ARG_NAME))) {
                 addStyleDependentName(StyleDependent.current.name());
                 label.addStyleDependentName(StyleDependent.current.name());
             }

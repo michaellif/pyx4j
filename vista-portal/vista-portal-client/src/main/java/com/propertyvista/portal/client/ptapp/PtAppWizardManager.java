@@ -27,7 +27,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
-import com.propertyvista.portal.client.ptapp.activity.SecondNavigActivity;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
@@ -172,7 +171,7 @@ public class PtAppWizardManager {
         if ((place == null) || (currentStep == null)) {
             return null;
         }
-        String stepArg = place.getArgs().get(SecondNavigActivity.STEP_ARG_NAME);
+        String stepArg = place.getArgs().get(SiteMap.STEP_ARG_NAME);
         // Find current Substep
         if (stepArg == null) {
             return null;
@@ -211,7 +210,7 @@ public class PtAppWizardManager {
                     loopOversubsteps: for (ApplicationWizardSubstep substep : step.substeps()) {
                         if (shouldSelect(substep.status())) {
                             HashMap<String, String> args = new HashMap<String, String>();
-                            args.put(SecondNavigActivity.STEP_ARG_NAME, substep.placeArgument().getStringView());
+                            args.put(SiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
                             place.setArgs(args);
                             break loopOversubsteps;
                         }

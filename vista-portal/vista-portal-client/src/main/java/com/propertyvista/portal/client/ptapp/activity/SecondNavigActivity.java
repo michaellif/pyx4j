@@ -27,8 +27,6 @@ import com.pyx4j.site.rpc.AppPlace;
 
 public class SecondNavigActivity extends AbstractActivity implements SecondNavigView.SecondNavigPresenter {
 
-    public final static String STEP_ARG_NAME = "substep";
-
     private final SecondNavigView view;
 
     @Inject

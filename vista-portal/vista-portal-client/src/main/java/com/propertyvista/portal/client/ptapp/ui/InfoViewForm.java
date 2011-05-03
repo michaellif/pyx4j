@@ -48,6 +48,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
+import com.propertyvista.portal.rpc.pt.BusinessRules;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
@@ -77,17 +78,12 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
     private static I18n i18n = I18nFactory.getI18n(SummaryViewForm.class);
 
-    private static Date needPreviousAddress;
-
     private Widget previousAddressHeader;
 
     private ApplicationDocumentsFolderUploader fileUpload;
 
-    @SuppressWarnings("deprecation")
     public InfoViewForm() {
         super(PotentialTenantInfo.class, new VistaEditorsComponentFactory());
-        Date now = TimeUtils.today();
-        needPreviousAddress = TimeUtils.createDate(now.getYear() - 3, now.getMonth(), now.getDate());
     }
 
     @Override
@@ -187,10 +183,10 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
     public void addValidations() {
         @SuppressWarnings("unchecked")
         CEntityEditableComponent<Address> currentAddressForm = ((CEntityEditableComponent<Address>) getRaw(proto().currentAddress()));
-        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<Date>() {
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
 
             @Override
-            public void onValueChange(ValueChangeEvent<Date> event) {
+            public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
                 enablePreviousAddress();
             }
         });
@@ -240,8 +236,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                IPrimitive<Date> date = getValue().previousAddress().moveOutDate();
-                return (value != null) && (date.isNull() || value.before(date.getValue()));
+                IPrimitive<java.sql.Date> date = getValue().previousAddress().moveOutDate();
+                return (date.isNull() || value.before(date.getValue()));
             }
 
             @Override
@@ -267,8 +263,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                IPrimitive<Date> date = getValue().previousAddress().moveInDate();
-                return (value != null) && (date.isNull() || value.after(date.getValue()));
+                IPrimitive<java.sql.Date> date = getValue().previousAddress().moveInDate();
+                return (date.isNull() || value.after(date.getValue()));
             }
 
             @Override
@@ -307,10 +303,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
     }
 
     private void enablePreviousAddress() {
-        boolean enabled = false;
-        if (!getValue().currentAddress().moveInDate().isNull()) {
-            enabled = needPreviousAddress.before(getValue().currentAddress().moveInDate().getValue());
-        }
+        boolean enabled = BusinessRules.infoPageNeedPreviousAddress(getValue().currentAddress().moveInDate().getValue());
         get(proto().previousAddress()).setVisible(enabled);
         previousAddressHeader.setVisible(enabled);
     }

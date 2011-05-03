@@ -13,14 +13,6 @@
  */
 package com.propertyvista.unit.portal;
 
-import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.selenium.D;
-import com.pyx4j.selenium.ISeleniumTestConfiguration;
-import com.pyx4j.site.rpc.AppPlaceInfo;
-
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
@@ -32,24 +24,29 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.Vehicle;
+import com.propertyvista.portal.rpc.pt.BusinessRules;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
-import com.propertyvista.unit.VistaBaseSeleniumTestCase;
-import com.propertyvista.unit.config.ApplicationId;
-import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
+import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
 
-public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.selenium.D;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
-    @Override
-    protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {
-        return new VistaSeleniumTestConfiguration(ApplicationId.portal);
-    }
+public class PreloadedUsersTest extends WizardBaseSeleniumTestCase {
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+
+        // This is just to make the test more visual
+        selenium.setFocusOnGetValue(true);
+
         SharedData.init();
     }
 
@@ -68,7 +65,7 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
 
         doTestAptPage(unitSel);
         doTestTenantsPage(summary);
-        doTestInfoPage(summary);
+        doTestInfoPages(summary);
 
     }
 
@@ -97,7 +94,7 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
 
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).unitType()));
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, "leaseTerm_12"));
-        selenium.click(CrudDebugId.Crud_Save);
+        saveAndContinue();
     }
 
     protected void doTestTenantsPage(Summary summary) {
@@ -105,14 +102,27 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class));
 
         //TODO validate summary/tenants
-        selenium.click(CrudDebugId.Crud_Save);
+        saveAndContinue();
     }
 
-    protected void doTestInfoPage(Summary summary) {
-        assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Info.class)));
-        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Info.class));
+    protected void doTestInfoPages(Summary summary) {
+        int id = 0;
+        for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
+            if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
+                doTestInfoPage(detach(tenant), id);
+                saveAndContinue();
+                id++;
+            }
+        }
+        // Asset no next page
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Info.class));
+        assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Info.class, id));
+    }
 
-        PotentialTenantInfo tenant = summary.tenantList().tenants().get(0).detach();
+    protected void doTestInfoPage(PotentialTenantInfo tenant, int id) {
+        assertVisible(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Info.class));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Info.class));
+        selenium.click(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Info.class, id));
 
         assertValueOnForm(tenant.firstName());
         assertValueOnForm(tenant.lastName());
@@ -127,7 +137,11 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         assertValueOnForm(tenant.notCanadianCitizen());
 
         assertAddressForm(tenant.currentAddress().getPath(), detach(tenant.currentAddress()));
-        assertAddressForm(tenant.previousAddress().getPath(), detach(tenant.previousAddress()));
+        if (BusinessRules.infoPageNeedPreviousAddress(tenant.currentAddress().moveInDate().getValue())) {
+            assertAddressForm(tenant.previousAddress().getPath(), detach(tenant.previousAddress()));
+        } else {
+            assertNotVisible(D.id(tenant.previousAddress().getPath(), detach(tenant.previousAddress()).street1()));
+        }
 
         //Vehicles
         int num = 0;
@@ -197,8 +211,7 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         assertValueOnForm(fromDebugId, contact.lastName());
         assertValueOnForm(fromDebugId, contact.homePhone());
         assertValueOnForm(fromDebugId, contact.mobilePhone());
-        //TODO VLAD:: this isn't working
-        //assertValueOnForm(fromDebugId, contact.workPhone());
+        assertValueOnForm(fromDebugId, contact.workPhone());
         assertValueOnForm(fromDebugId, contact.address().street1());
         assertValueOnForm(fromDebugId, contact.address().street2());
         assertValueOnForm(fromDebugId, contact.address().city());

@@ -24,15 +24,11 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
-import com.propertyvista.unit.VistaBaseSeleniumTestCase;
-import com.propertyvista.unit.config.ApplicationId;
-import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-public class ApartmentScreenTest extends VistaBaseSeleniumTestCase {
+public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
 
     private static final Logger log = LoggerFactory.getLogger(ApartmentScreenTest.class);
 
@@ -53,17 +49,6 @@ public class ApartmentScreenTest extends VistaBaseSeleniumTestCase {
     final static public String warnRentDateBefore = "Field 'Start Rent Date' is not valid. Start Rent Date for this unit can not be before";
 
     final static public String warnRentDateAfter = "Field 'Start Rent Date' is not valid. Start Rent Date for this unit can not be later than";
-
-    @Override
-    protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {
-        return new VistaSeleniumTestConfiguration(ApplicationId.portal);
-    }
-
-    public void assertNoMessages() {
-        for (UserMessageType type : UserMessageType.values()) {
-            assertNotVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, type));
-        }
-    }
 
     public void testDateTimePickers() throws Exception {
         String strNow = new SimpleDateFormat("yyyyMMdd-hhmmss").format(Calendar.getInstance().getTime());

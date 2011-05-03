@@ -19,6 +19,8 @@ import com.pyx4j.site.rpc.annotations.PlaceProperties;
 
 public class SiteMap {
 
+    public final static String STEP_ARG_NAME = "substep";
+
     @PlaceProperties(caption = "Application Form")
     public static class CreateAccount extends AppPlace {
     }

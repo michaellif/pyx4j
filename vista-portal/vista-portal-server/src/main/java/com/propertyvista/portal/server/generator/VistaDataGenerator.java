@@ -302,8 +302,8 @@ public class VistaDataGenerator {
 
         populateAddress(address);
 
-        address.moveInDate().setValue(RandomUtil.randomDate(2008, 2010));
-        address.moveOutDate().setValue(RandomUtil.randomDate(2010, 2012));
+        address.moveInDate().setValue(RandomUtil.randomSqlDate(2008, 2010));
+        address.moveOutDate().setValue(RandomUtil.randomSqlDate(2010, 2012));
 
         address.payment().setValue(1000d + RandomUtil.randomInt(1000));
 
@@ -442,7 +442,7 @@ public class VistaDataGenerator {
         }
 
         Address currentAddress = createAddress();
-        currentAddress.moveOutDate().setValue(RandomUtil.randomDate(2012, 2013)); // this has to be in the future
+        currentAddress.moveOutDate().setValue(RandomUtil.randomSqlDate(2012, 2013)); // this has to be in the future
         pti.currentAddress().set(currentAddress);
 
         Address previousAddress = createAddress();
@@ -454,8 +454,8 @@ public class VistaDataGenerator {
         Date moveIn = DateUtils.yearsAdd(moveOut, years);
         log.debug("Moving {} years back", years);
         log.debug("Moving from {} to {}", moveOut, moveIn);
-        previousAddress.moveOutDate().setValue(moveOut);
-        previousAddress.moveInDate().setValue(moveIn);
+        previousAddress.moveOutDate().setValue(new java.sql.Date(moveOut.getTime()));
+        previousAddress.moveInDate().setValue(new java.sql.Date(moveIn.getTime()));
         pti.previousAddress().set(previousAddress);
 
         for (int i = 0; i < RandomUtil.randomInt(3); i++) {
