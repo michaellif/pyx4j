@@ -201,9 +201,10 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
                     agb.addCloseHandler(new CloseHandler<PopupPanel>() {
                         @Override
                         public void onClose(CloseEvent<PopupPanel> event) {
-                            if (agb.getSelectedGadget() != null) {
-                                dashboard.addGadget(agb.getSelectedGadget());
-                                agb.getSelectedGadget().start();
+                            IGadget gadget = agb.getSelectedGadget();
+                            if (gadget != null) {
+                                dashboard.addGadget(gadget);
+                                gadget.start();
                             }
                         }
                     });

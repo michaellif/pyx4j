@@ -138,9 +138,10 @@ public class ReportViewImpl extends SimplePanel implements ReportView {
                     agb.addCloseHandler(new CloseHandler<PopupPanel>() {
                         @Override
                         public void onClose(CloseEvent<PopupPanel> event) {
-                            if (agb.getSelectedGadget() != null) {
-                                report.insertGadget(agb.getSelectedGadget(), Report.Location.Any, 0);
-                                agb.getSelectedGadget().start();
+                            IGadget gadget = agb.getSelectedGadget();
+                            if (gadget != null) {
+                                report.insertGadget(gadget, (gadget.isFullWidth() ? Report.Location.Full : Report.Location.Left), 0);
+                                gadget.start();
                             }
                         }
                     });
