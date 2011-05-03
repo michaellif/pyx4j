@@ -63,11 +63,11 @@ public class Report extends SimplePanel implements IBoardRoot {
     }
 
     private Report.Location correctLocation(IGadget gadget, Report.Location location) {
-        if (gadget.isFullWidth()) {
-            location = Report.Location.Full; // just this one is possible!..
-        } else if (location == Report.Location.Full) {
-            location = Report.Location.Any; // any (left or right) in this case!..
-        }
+//        if (gadget.isFullWidth()) {
+//            location = Report.Location.Full; // just this one is possible!..
+//        } else if (location == Report.Location.Full) {
+//            location = Report.Location.Any; // any (left or right) in this case!..
+//        }
         return location;
     }
 

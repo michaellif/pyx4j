@@ -162,7 +162,7 @@ public class ReportLayoutPanel extends FlowPanel {
         }
 
         CellPanel cell = (CellPanel) getWidget(index);
-        return cell == null ? null : cell.getWidget();
+        return (cell == null ? null : cell.getWidget());
     }
 
     public Report.Location getGadgetLocation(Widget widget) {
@@ -237,6 +237,7 @@ public class ReportLayoutPanel extends FlowPanel {
         public void setLocation(Report.Location location) {
             this.location = location;
             switch (location) {
+            case Any:
             case Left:
             case Right:
                 setWidth("50%");
@@ -258,6 +259,5 @@ public class ReportLayoutPanel extends FlowPanel {
                 super("&nbsp;");
             }
         }
-
     }
 }
