@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.allen_sauer.gwt.dnd.client.drop.AbstractPositioningDropController;
@@ -32,6 +35,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.widgets.client.dashboard.ReportLayoutPanel.CellPanel;
 
 class ReportDropController extends AbstractPositioningDropController {
+
+    protected static final Logger log = LoggerFactory.getLogger(ReportDropController.class);
 
     protected final ReportLayoutPanel dropTarget;
 
@@ -84,19 +89,29 @@ class ReportDropController extends AbstractPositioningDropController {
     public void onMove(DragContext context) {
         super.onMove(context);
 
-        int targetIndex = calculateInsertionIndex(context.mouseX, context.mouseY);
+        Report.Location mouseLocation = calculateInsertionLocation(context.mouseX);
+        if (mouseLocation == null) {
+            return;
+        }
+
+        int insertionIndex = calculateInsertionIndex(context.mouseX, context.mouseY);
         int positionerIndex = dropTarget.getGadgetIndex(positioner);
 
-        if (positionerIndex > -1 && targetIndex > -1 && targetIndex != positionerIndex) {
+        if (positionerIndex > -1 && insertionIndex > -1 && insertionIndex != positionerIndex) {
 
             Report.Location location = dropTarget.getGadgetLocation(positioner);
             if (!Report.Location.Full.equals(location)) {
-                location = calculateInsertionLocation(context.mouseX);
+                location = mouseLocation;
             }
+
+            log.debug("Insertion index is {}, positioner index is {}", insertionIndex, positionerIndex);
+            log.debug("Mouse location is {}", mouseLocation.name());
+
             HTML keeper = new HTML();
             dropTarget.setGadget(keeper, positionerIndex);
-            dropTarget.insertGadget(positioner, location, targetIndex);
+            dropTarget.insertGadget(positioner, location, insertionIndex);
             dropTarget.removeGadget(keeper);
+
         }
     }
 
@@ -118,7 +133,7 @@ class ReportDropController extends AbstractPositioningDropController {
         return new ReportGadgetPositioner(height);
     }
 
-    public int calculateInsertionIndex(int mouseX, int mouseY) {
+    private int calculateInsertionIndex(int mouseX, int mouseY) {
         int topCellIndex = -1;
         int bottomCellIndex = -1;
         for (int i = 0; i < dropTarget.getWidgetCount(); i++) {
@@ -133,6 +148,8 @@ class ReportDropController extends AbstractPositioningDropController {
 
         int cellIndex = topCellIndex;
         CellPanel cellPanel = (CellPanel) dropTarget.getWidget(topCellIndex);
+
+        //check if we are over left cell
         if (!Report.Location.Full.equals(cellPanel.getLocation())) {
             CellPanel leftCellPanel = (CellPanel) dropTarget.getWidget(topCellIndex - 1);
             if (leftCellPanel.getAbsoluteLeft() <= mouseX && mouseX <= (leftCellPanel.getAbsoluteLeft() + leftCellPanel.getOffsetWidth())) {
@@ -142,7 +159,7 @@ class ReportDropController extends AbstractPositioningDropController {
         }
 
         if (cellPanel.isSpaceHolder() || cellPanel.isPositioner()) {
-
+            //do nothing
         } else if (mouseY > (cellPanel.getAbsoluteTop() + cellPanel.getOffsetHeight() / 2)) {
             if (bottomCellIndex == -1) {
                 cellIndex = dropTarget.getWidgetCount();
@@ -155,11 +172,17 @@ class ReportDropController extends AbstractPositioningDropController {
                 }
             }
         }
-
         return cellIndex;
     }
 
-    public Report.Location calculateInsertionLocation(int mouseX) {
-        return (mouseX > dropTarget.getOffsetWidth() / 2) ? Report.Location.Right : Report.Location.Left;
+    private Report.Location calculateInsertionLocation(int mouseX) {
+        int diff = (dropTarget.getOffsetWidth() / 2) - mouseX + dropTarget.getAbsoluteLeft();
+        if (diff > 2) {
+            return Report.Location.Left;
+        } else if (diff < -2) {
+            return Report.Location.Right;
+        } else {
+            return null;
+        }
     }
 }

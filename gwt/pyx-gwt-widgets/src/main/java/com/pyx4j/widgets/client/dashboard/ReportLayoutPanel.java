@@ -33,6 +33,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ReportLayoutPanel extends FlowPanel {
 
+    private static int counter;
+
     protected static final Logger log = LoggerFactory.getLogger(ReportLayoutPanel.class);
 
     public ReportLayoutPanel() {
@@ -252,8 +254,9 @@ public class ReportLayoutPanel extends FlowPanel {
         }
 
         class SpaceHolder extends HTML {
+
             SpaceHolder() {
-                super("&nbsp;");
+                super("&nbsp;" + counter++);
             }
         }
     }
