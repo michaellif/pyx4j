@@ -58,7 +58,7 @@ class InputHelper {
         } else if (tagName.equals("select")) {
             setSelectValue(element, textValue);
         } else {
-            throw new Error("Unsupported input " + element);
+            throw new Error("Unsupported input " + tagName + " for value " + textValue);
         }
     }
 
