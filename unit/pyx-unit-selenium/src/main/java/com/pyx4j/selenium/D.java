@@ -62,6 +62,10 @@ public class D {
         return new CompositeDebugId(id(formFolder, itemNumber), itemDebugId);
     }
 
+    public static IDebugId id(IList<?> formFolder, IDebugId child) {
+        return new CompositeDebugId(formFolder.getPath(), child);
+    }
+
     public static IDebugId id(IDebugId parent, IDebugId child) {
         return new CompositeDebugId(parent, child);
     }

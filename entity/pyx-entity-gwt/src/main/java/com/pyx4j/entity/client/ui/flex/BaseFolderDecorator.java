@@ -127,8 +127,11 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
         //TODO use inheritance of objects
         //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
         if (addable) {
-            image.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.debugId());
-            addButtonLabel.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.debugId() + "_label");
+            if (baseID.endsWith(FolderDecorator.DEBUGID_SUFIX)) {
+                baseID = baseID.substring(0, baseID.length() - FolderDecorator.DEBUGID_SUFIX.length());
+            }
+            image.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Add.debugId());
+            addButtonLabel.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Add.debugId() + "-label");
         }
     }
 

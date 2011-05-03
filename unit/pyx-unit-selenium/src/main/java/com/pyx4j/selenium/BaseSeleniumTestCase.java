@@ -260,20 +260,20 @@ public class BaseSeleniumTestCase extends TestCase {
         assertFalse(debugId.debugId() + " should not be visible", selenium.isVisible(debugId));
     }
 
-    public void assertValueOnForm(IEntity member) {
-        assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(member));
-    }
-
-    public void assertValueOnForm(IDebugId fromDebugId, IEntity member) {
-        assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(D.id(fromDebugId, member)));
-    }
-
     /**
      * Helper function to avoid casts
      */
     @SuppressWarnings("unchecked")
     public <T extends IEntity> T detach(T entity) {
         return (T) entity.detach();
+    }
+
+    public void assertValueOnForm(IEntity member) {
+        assertValueOnForm(null, member);
+    }
+
+    public void assertValueOnForm(IDebugId fromDebugId, IEntity member) {
+        assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(D.id(fromDebugId, member)));
     }
 
     public void assertValueOnForm(IPrimitive<?> member) {
@@ -307,4 +307,24 @@ public class BaseSeleniumTestCase extends TestCase {
         }
     }
 
+    public void setValueOnForm(IEntity member) {
+        setValueOnForm(null, member);
+    }
+
+    public void setValueOnForm(IDebugId fromDebugId, IEntity member) {
+        selenium.setValue(D.id(fromDebugId, member), member.getStringView());
+    }
+
+    public void setValueOnForm(IPrimitive<?> member) {
+        setValueOnForm(null, member);
+    }
+
+    public void setValueOnForm(IDebugId fromDebugId, IPrimitive<?> member) {
+        MemberMeta mm = member.getMeta();
+        if (mm.getValueClass().equals(Boolean.class)) {
+            selenium.setValue(D.id(fromDebugId, member), (Boolean) member.getValue());
+        } else {
+            selenium.setValue(D.id(fromDebugId, member), member.getStringView());
+        }
+    }
 }

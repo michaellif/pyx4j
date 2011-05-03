@@ -180,7 +180,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         });
         //TODO use components inheritance
         if (this.getDebugId() != null) {
-            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + "_fd_");
+            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + FolderDecorator.DEBUGID_SUFIX);
         }
     }
 
@@ -192,7 +192,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     public void setDebugId(IDebugId debugId) {
         super.setDebugId(debugId);
         if ((debugId != null) && (folderDecorator != null)) {
-            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + "_fd_");
+            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + FolderDecorator.DEBUGID_SUFIX);
         }
     }
 

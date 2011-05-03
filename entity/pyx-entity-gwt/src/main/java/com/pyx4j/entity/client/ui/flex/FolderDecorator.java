@@ -30,6 +30,8 @@ import com.pyx4j.entity.shared.IList;
 
 public interface FolderDecorator<E extends IEntity> extends IsWidget, ValueChangeHandler<IList<E>> {
 
+    public static String DEBUGID_SUFIX = "_fd_";
+
     HandlerRegistration addItemAddClickHandler(ClickHandler handler);
 
     void setFolder(CEntityFolder<?> w);
