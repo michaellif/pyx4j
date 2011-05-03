@@ -80,8 +80,8 @@ public class PreloadedUsersTest extends WizardBaseSeleniumTestCase {
     }
 
     protected void doTestAptPage(UnitSelection unitSel) {
-        assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
-        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
+        assertVisible(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Apartment.class));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Apartment.class));
 
         //verify all of them
         int num = 0;
@@ -167,8 +167,6 @@ public class PreloadedUsersTest extends WizardBaseSeleniumTestCase {
             assertEmContactsForm(D.id(tenant.emergencyContacts(), num), detach(contact));
             num++;
         }
-
-        return;
     }
 
     private void assertAddressForm(IDebugId fromDebugId, Address address) {

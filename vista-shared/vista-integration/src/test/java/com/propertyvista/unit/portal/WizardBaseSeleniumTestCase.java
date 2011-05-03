@@ -13,13 +13,19 @@
  */
 package com.propertyvista.unit.portal;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.portal.domain.DemoData;
+import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.unit.VistaBaseSeleniumTestCase;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
 import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 
@@ -43,6 +49,15 @@ abstract class WizardBaseSeleniumTestCase extends VistaBaseSeleniumTestCase {
         for (UserMessageType type : UserMessageType.values()) {
             assertNotVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, type));
         }
+    }
+
+    protected User createTestUser() {
+        String strNow = new SimpleDateFormat("MMdd-hhmmss").format(Calendar.getInstance().getTime());
+        String email = "tst" + strNow + DemoData.USERS_DOMAIN;
+        User user = EntityFactory.create(User.class);
+        user.name().setValue(email.substring(0, email.indexOf('@')));
+        user.email().setValue(email);
+        return user;
     }
 
 }
