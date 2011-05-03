@@ -32,7 +32,7 @@ class DashboardGadgetPositioner extends SimplePanel {
         getElement().getStyle().setProperty("boxSizing", "border-box");
         getElement().getStyle().setZIndex(100);
 
-        setPixelSize(width, height);
+        setHeight(height + "px");
+//        setPixelSize(width, height);
     }
-
 }

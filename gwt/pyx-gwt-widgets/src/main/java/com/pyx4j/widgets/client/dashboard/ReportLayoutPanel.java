@@ -40,10 +40,14 @@ public class ReportLayoutPanel extends FlowPanel {
     }
 
     public void insertGadget(Widget widget, Report.Location location, int beforeIndex) {
-        if (beforeIndex < 0 || beforeIndex > getWidgetCount()) {
-            System.out.println("Wrong beforeIndex - " + beforeIndex);
+        if (!checkIndex(beforeIndex)) {
             return;
         }
+
+        // preconditions for any (left/right) place:
+        boolean anyPlace = (!Report.Location.Full.equals(location) && Report.Location.Any.equals(location));
+
+        // check for empty cell in the index vicinity :
 
         CellPanel beforeCell = null;
         Report.Location beforeCellLocation = null;
@@ -52,6 +56,11 @@ public class ReportLayoutPanel extends FlowPanel {
             beforeCell = (CellPanel) getWidget(beforeIndex);
             beforeCellLocation = beforeCell.getLocation();
             isBeforeCellSpaceHolder = beforeCell.isSpaceHolder();
+        }
+
+        if (isBeforeCellSpaceHolder && (location.equals(beforeCellLocation) || anyPlace)) {
+            beforeCell.setWidget(widget);
+            return; // found!..
         }
 
         CellPanel afterCell = null;
@@ -63,20 +72,17 @@ public class ReportLayoutPanel extends FlowPanel {
             isAfterCellSpaceHolder = afterCell.isSpaceHolder();
         }
 
-        // try to find empty cell in current rows:
-        boolean anyPlace = (!Report.Location.Full.equals(location) && Report.Location.Any.equals(location));
-
-        if (isBeforeCellSpaceHolder && (location.equals(beforeCellLocation) || anyPlace)) {
-            beforeCell.setWidget(widget);
-            return;
-        }
-
         if (isAfterCellSpaceHolder && (location.equals(afterCellLocation) || anyPlace)) {
             afterCell.setWidget(widget);
-            return;
+            return; // found!..
         }
 
-        // ok, create new row:
+        // ok, from here - create new row:
+
+        if (anyPlace) {
+            location = Report.Location.Left; // replace 'Any' location with 'Left' one...
+        }
+
         CellPanel cell = new CellPanel(location);
         cell.setWidget(widget);
 
@@ -85,7 +91,6 @@ public class ReportLayoutPanel extends FlowPanel {
         }
 
         switch (location) {
-        case Any:
         case Left:
             insert(new CellPanel(Report.Location.Right), beforeIndex);
             insert(cell, beforeIndex);
@@ -98,16 +103,25 @@ public class ReportLayoutPanel extends FlowPanel {
             insert(cell, beforeIndex);
             break;
         default:
+            System.out.println("Wrong beforeIndex - " + beforeIndex);
             break;
         }
     }
 
     public void setGadget(Widget widget, int index) {
+        if (!checkIndex(index)) {
+            return;
+        }
+
         CellPanel cell = (CellPanel) getWidget(index);
         cell.setWidget(widget);
     }
 
     public void removeGadget(int index) {
+        if (!checkIndex(index)) {
+            return;
+        }
+
         CellPanel cell = (CellPanel) getWidget(index);
         if (Report.Location.Full.equals(cell.getLocation())) {
             remove(cell);
@@ -143,6 +157,10 @@ public class ReportLayoutPanel extends FlowPanel {
     }
 
     public Widget getGadget(int index) {
+        if (checkIndex(index)) {
+            return null;
+        }
+
         CellPanel cell = (CellPanel) getWidget(index);
         return cell == null ? null : cell.getWidget();
     }
@@ -185,7 +203,15 @@ public class ReportLayoutPanel extends FlowPanel {
         }
     }
 
-    class CellPanel extends SimplePanel {
+    private boolean checkIndex(int index) {
+        if (index < 0 || index > getWidgetCount()) {
+            System.out.println("Wrong index - " + index);
+            return false;
+        }
+        return true;
+    }
+
+    protected class CellPanel extends SimplePanel {
 
         private Report.Location location;
 
@@ -234,5 +260,4 @@ public class ReportLayoutPanel extends FlowPanel {
         }
 
     }
-
 }

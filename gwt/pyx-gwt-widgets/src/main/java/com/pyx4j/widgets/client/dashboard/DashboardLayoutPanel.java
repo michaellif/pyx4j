@@ -28,11 +28,11 @@ import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.dashboard.Dashboard.LayoutType;
+import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
 
 class DashboardLayoutPanel extends FlowPanel {
 
-    protected LayoutType layoutType = LayoutType.Three;
+    protected Layout layoutType = Layout.Three;
 
     private final PickupDragController gadgetDragController;
 
@@ -46,11 +46,11 @@ class DashboardLayoutPanel extends FlowPanel {
     }
 
     // Layout manipulation:
-    public LayoutType getLayout() {
+    public Layout getLayout() {
         return this.layoutType;
     }
 
-    public boolean setLayout(LayoutType layout) {
+    public boolean setLayout(Layout layout) {
         if (!isRefreshAllowed()) {
             return false;
         }

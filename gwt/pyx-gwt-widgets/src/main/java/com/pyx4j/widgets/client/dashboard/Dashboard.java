@@ -28,12 +28,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class Dashboard extends SimplePanel implements IBoardRoot {
 
-    public enum LayoutType {
+    public enum Layout {
         One(1), Two11(2), Two12(2), Two21(2), Three(3);
 
         private final int columns;
 
-        LayoutType(int columns) {
+        Layout(int columns) {
             this.columns = columns;
         }
 
@@ -63,11 +63,11 @@ public class Dashboard extends SimplePanel implements IBoardRoot {
         boundaryPanel.add(dashboardLayoutPanel);
     }
 
-    public LayoutType getLayout() {
+    public Layout getLayout() {
         return dashboardLayoutPanel.getLayout();
     }
 
-    public boolean setLayout(LayoutType layoutType) {
+    public boolean setLayout(Layout layoutType) {
         return dashboardLayoutPanel.setLayout(layoutType);
     }
 
