@@ -20,11 +20,14 @@
  */
 package com.pyx4j.selenium;
 
+import com.google.gwt.place.shared.Place;
+
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 /**
  * IDebugId builder.
@@ -65,6 +68,14 @@ public class D {
 
     public static IDebugId id(IDebugId parent, IObject<?> member) {
         return new CompositeDebugId(parent, member.getPath());
+    }
+
+    public static IDebugId id(IDebugId parent, Class<? extends Place> placeClass) {
+        return new CompositeDebugId(parent, AppPlaceInfo.getPlaceIDebugId(placeClass));
+    }
+
+    public static IDebugId id(IDebugId parent, Class<? extends Place> placeClass, int itemNumber) {
+        return new CompositeDebugId(parent, AppPlaceInfo.getPlaceIDebugId(placeClass), itemNumber);
     }
 
     public static IDebugId id(IDebugId parent, String child) {

@@ -32,6 +32,7 @@ import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -188,6 +189,12 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     // ====================== asserts  ===========================
+
+    static public void assertNotEquals(String message, String expected, String actual) {
+        if (CommonsStringUtils.equals(expected, actual)) {
+            fail(message + " has equal values [" + actual + "]");
+        }
+    }
 
     public void assertEditable(String locator) {
         assertTrue(locator + " should be editable", selenium.isEditable(locator));

@@ -405,12 +405,32 @@ public class SeleniumExtended extends WebDriverWrapper {
         focusOnGetValue = focus;
     }
 
+    /**
+     * This function may not work as expected in firefox!
+     */
+    private void focus(WebElement element) {
+        //driver.switchTo().window("");
+        //new JavascriptLibrary().executeScript(driver, "\"document.getElementById('" + element.getAttribute("id") + "').focus()\"");
+    }
+
+    /**
+     * This function may not work as expected in firefox!
+     */
+    protected void focus(IDebugId debugId) {
+        focus(driver.findElement(by(debugId)));
+    }
+
     private String getValue(WebElement element) {
+        String tagName = element.getTagName();
         if (focusOnGetValue) {
-            element.click();
+            if (tagName.equalsIgnoreCase("input")) {
+                element.click();
+            } else {
+                focus(element);
+            }
         }
         String text = element.getValue();
-        log("value of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), text);
+        log("value of element <{}> id={} text={}", tagName, element.getAttribute("id"), text);
         return text;
     }
 
@@ -432,10 +452,14 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     private <T extends Enum<T>> T getEnumValue(WebElement element, Class<T> enumClass) {
         String tagName = element.getTagName();
-        if (element.getTagName().equalsIgnoreCase("input") || tagName.equalsIgnoreCase("select")) {
+        if (tagName.equalsIgnoreCase("input") || tagName.equalsIgnoreCase("select")) {
             // ComboBox or Text
             if (focusOnGetValue) {
-                element.click();
+                if (tagName.equalsIgnoreCase("input")) {
+                    element.click();
+                } else {
+                    focus(element);
+                }
             }
             String text = element.getValue();
             log("value of element <{}> id={} text={}", tagName, element.getAttribute("id"), text);
@@ -537,7 +561,7 @@ public class SeleniumExtended extends WebDriverWrapper {
         Date value = null;
         if (element.getTagName().equalsIgnoreCase("input")) {
             if (focusOnGetValue) {
-                element.click();
+                focus(element);
             }
             String text = element.getValue();
             if (CommonsStringUtils.isStringSet(text)) {
@@ -560,7 +584,7 @@ public class SeleniumExtended extends WebDriverWrapper {
             try {
                 WebElement elementYY = element.findElement(By.id(parentId + "_yy"));
                 if (focusOnGetValue) {
-                    elementYY.click();
+                    focus(elementYY);
                 }
                 inputsFound = true;
                 y = Integer.valueOf(elementYY.getValue());

@@ -35,6 +35,10 @@ public class CompositeDebugId implements IDebugId {
         this(parent, new StringDebugId(child));
     }
 
+    public CompositeDebugId(IDebugId parent, IDebugId child, int itemNumber) {
+        this(parent, new CompositeDebugId(child, new StringDebugId(String.valueOf(itemNumber))));
+    }
+
     public CompositeDebugId(IDebugId parent, String child, int itemNumber) {
         this(parent, new StringDebugId(child + "-" + itemNumber));
     }
@@ -61,6 +65,6 @@ public class CompositeDebugId implements IDebugId {
     }
 
     public static String debugId(IDebugId parent, IDebugId child, int itemNumber) {
-        return new CompositeDebugId(parent, child).debugId() + "-" + itemNumber;
+        return new CompositeDebugId(parent, child, itemNumber).debugId();
     }
 }
