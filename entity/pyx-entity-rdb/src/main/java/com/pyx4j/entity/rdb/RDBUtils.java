@@ -93,4 +93,13 @@ public class RDBUtils implements Closeable {
             SQLUtils.closeQuietly(connection);
         }
     }
+
+    public void execute(String sql) throws SQLException {
+        Connection connection = connectionProvider.getConnection();
+        try {
+            SQLUtils.execute(connection, sql);
+        } finally {
+            SQLUtils.closeQuietly(connection);
+        }
+    }
 }
