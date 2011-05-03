@@ -65,6 +65,8 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     private boolean propagateLogToClient;
 
+    private boolean focusOnGetValue;
+
     public SeleniumExtended(ISeleniumTestConfiguration testConfig) {
         super(testConfig);
         driver.manage().timeouts().implicitlyWait(testConfig.implicitlyWaitSeconds(), TimeUnit.SECONDS);
@@ -399,7 +401,14 @@ public class SeleniumExtended extends WebDriverWrapper {
         return text;
     }
 
+    public void setFocusOnGetValue(boolean focus) {
+        focusOnGetValue = focus;
+    }
+
     private String getValue(WebElement element) {
+        if (focusOnGetValue) {
+            element.click();
+        }
         String text = element.getValue();
         log("value of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), text);
         return text;
@@ -425,6 +434,9 @@ public class SeleniumExtended extends WebDriverWrapper {
         String tagName = element.getTagName();
         if (element.getTagName().equalsIgnoreCase("input") || tagName.equalsIgnoreCase("select")) {
             // ComboBox or Text
+            if (focusOnGetValue) {
+                element.click();
+            }
             String text = element.getValue();
             log("value of element <{}> id={} text={}", tagName, element.getAttribute("id"), text);
             if (CommonsStringUtils.isEmpty(text)) {
@@ -524,6 +536,9 @@ public class SeleniumExtended extends WebDriverWrapper {
     private Date getDateValue(WebElement element, String format) {
         Date value = null;
         if (element.getTagName().equalsIgnoreCase("input")) {
+            if (focusOnGetValue) {
+                element.click();
+            }
             String text = element.getValue();
             if (CommonsStringUtils.isStringSet(text)) {
                 if (format != null) {
@@ -544,6 +559,9 @@ public class SeleniumExtended extends WebDriverWrapper {
             int y = 0;
             try {
                 WebElement elementYY = element.findElement(By.id(parentId + "_yy"));
+                if (focusOnGetValue) {
+                    elementYY.click();
+                }
                 inputsFound = true;
                 y = Integer.valueOf(elementYY.getValue());
             } catch (NoSuchElementException notFound) {
