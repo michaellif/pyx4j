@@ -16,28 +16,22 @@ package com.propertyvista.crm.client.ui.dashboard;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -47,15 +41,14 @@ import com.google.inject.Singleton;
 import com.pyx4j.widgets.client.dashboard.Dashboard;
 import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
 import com.pyx4j.widgets.client.dashboard.IGadget;
-import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.gadgets.AddGadgetBox;
 import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
 @Singleton
 public class DashboardViewImpl extends SimplePanel implements DashboardView {
@@ -92,7 +85,7 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
 
         dashboard = new Dashboard();
 
-        // set dashboard layout:
+        // decode dashboard layout:
 
         if (dashboardMetadata.layoutType().getValue() == (LayoutType.One)) {
             layouts.setLayout1();
@@ -204,6 +197,17 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
                             agb.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 2);
                         }
                     });
+
+                    agb.addCloseHandler(new CloseHandler<PopupPanel>() {
+                        @Override
+                        public void onClose(CloseEvent<PopupPanel> event) {
+                            if (agb.getSelectedGadget() != null) {
+                                dashboard.addGadget(agb.getSelectedGadget());
+                                agb.getSelectedGadget().start();
+                            }
+                        }
+                    });
+
                     agb.show();
                 }
             });
@@ -259,96 +263,6 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
             layout21.setResource(CrmImages.INSTANCE.dashboardLayout21_0());
             layout22.setResource(CrmImages.INSTANCE.dashboardLayout22_0());
             layout3.setResource(CrmImages.INSTANCE.dashboardLayout3_0());
-        }
-
-        // add new gadget UI: 
-        class AddGadgetBox extends DialogPanel {
-
-            private final ListBox gadgetsList = new ListBox();
-
-            private final Label gadgetDesc = new Label();
-
-            public AddGadgetBox() {
-                super(false, true);
-                setCaption(i18n.tr("Gadget Directory"));
-
-                listAvailableGadgets();
-
-                HorizontalPanel gadgets = new HorizontalPanel();
-                gadgets.add(gadgetsList);
-                gadgets.add(gadgetDesc);
-                gadgets.setSpacing(8);
-                gadgets.setWidth("100%");
-
-                gadgets.setCellWidth(gadgetsList, "35%");
-                gadgetsList.setWidth("100%");
-
-                // style right (description) cell:
-                gadgetDesc.setText(i18n.tr("Select desired gadget in the list..."));
-                Element cell = DOM.getParent(gadgetDesc.getElement());
-                cell.getStyle().setPadding(3, Unit.PX);
-                cell.getStyle().setBorderStyle(BorderStyle.SOLID);
-                cell.getStyle().setBorderWidth(1, Unit.PX);
-                cell.getStyle().setBorderColor("#bbb");
-
-                HorizontalPanel buttons = new HorizontalPanel();
-                buttons.add(new Button("Add", new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        hide();
-                        addSelectedGadget();
-                    }
-                }));
-                buttons.add(new Button("Cancel", new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        hide();
-                    }
-                }));
-                buttons.setSpacing(8);
-
-                VerticalPanel vPanel = new VerticalPanel();
-                vPanel.add(gadgets);
-                vPanel.add(buttons);
-                vPanel.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_CENTER);
-                vPanel.setSpacing(8);
-                vPanel.setSize("100%", "100%");
-
-                setWidget(vPanel);
-                setSize("400px", "150px");
-//              getElement().getStyle().setProperty("minWidth", "400px");
-//              getElement().getStyle().setProperty("minHeight", "150px");
-            }
-
-            private void listAvailableGadgets() {
-                gadgetsList.clear();
-                for (GadgetType gt : GadgetType.values()) {
-                    gadgetsList.addItem(gt.name());
-                }
-                gadgetsList.setSelectedIndex(-1);
-                gadgetsList.setVisibleItemCount(8);
-                gadgetsList.addChangeHandler(new ChangeHandler() {
-                    @Override
-                    public void onChange(ChangeEvent event) {
-                        if (gadgetsList.getSelectedIndex() >= 0) {
-                            gadgetDesc.setText(GadgetsFactory.getGadgetTypeDescription(GadgetType.valueOf(gadgetsList.getItemText(gadgetsList
-                                    .getSelectedIndex()))));
-                        }
-                    }
-                });
-            }
-
-            private void addSelectedGadget() {
-                IGadget gadget = null;
-                if (gadgetsList.getSelectedIndex() >= 0) {
-                    gadget = GadgetsFactory.createGadget(GadgetType.valueOf(gadgetsList.getItemText(gadgetsList.getSelectedIndex())), null);
-                }
-
-                if (gadget != null) {
-                    dashboard.addGadget(gadget);
-                    gadget.start();
-                }
-            }
         }
     }
 }

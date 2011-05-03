@@ -13,23 +13,44 @@
  */
 package com.propertyvista.crm.client.ui.report;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Singleton;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.Report;
 import com.pyx4j.widgets.client.dashboard.Report.Location;
 
+import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
-import com.propertyvista.crm.client.ui.gadgets.DemoGadget;
+import com.propertyvista.crm.client.ui.gadgets.AddGadgetBox;
+import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
+import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
 @Singleton
 public class ReportViewImpl extends SimplePanel implements ReportView {
+
+    private static I18n i18n = I18nFactory.getI18n(ReportViewImpl.class);
 
     private final ScrollPanel scroll;
 
@@ -37,7 +58,7 @@ public class ReportViewImpl extends SimplePanel implements ReportView {
 
     public ReportViewImpl() {
         VerticalPanel main = new VerticalPanel();
-        main.add(new CrmHeaderDecorator("Report Menu/Tools"));
+        main.add(new CrmHeaderDecorator("Report Menu/Tools", new AddWidgetButton()));
 
         scroll = new ScrollPanel();
         scroll.getElement().getStyle().setPosition(Position.ABSOLUTE);
@@ -49,25 +70,87 @@ public class ReportViewImpl extends SimplePanel implements ReportView {
 
         main.setSize("100%", "100%");
         setWidget(main);
-
-        fillReport();
     }
 
-    private void fillReport() {
+    @Override
+    public void fillDashboard(DashboardMetadata dashboardMetadata) {
+        if (dashboardMetadata.isEmpty()) {
+            return;
+        }
 
         report = new Report();
 
-        // fill the dashboard with demo widgets:
-        int count = 0;
-        for (int row = 0; row < 5; ++row) {
-            // initialize a widget
-            GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
-            gmd.name().setValue("Gadget #" + ++count);
-            DemoGadget widget = new DemoGadget(gmd);
-            widget.setFullWidth(row % 2 > 0);
-            report.addGadget(widget, Location.Any);
+        // fill the dashboard with gadgets:
+        for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
+            IGadget gadget = GadgetsFactory.createGadget(gmd.type().getValue(), gmd);
+            if (gadget != null) {
+                Report.Location location;
+                // decode columns:
+                switch (gmd.column().getValue()) {
+                case 0:
+                    location = Location.Left;
+                    break;
+                case 1:
+                    location = Location.Right;
+                    break;
+                default:
+                    location = Location.Full;
+                }
+                report.addGadget(gadget, location);
+                gadget.start(); // allow gadget execution... 
+            }
         }
 
         scroll.setWidget(report);
+    }
+
+    private class AddWidgetButton extends SimplePanel {
+
+        public AddWidgetButton() {
+            super();
+
+            final Image addGadget = new Image(CrmImages.INSTANCE.dashboardAddGadget());
+            addGadget.getElement().getStyle().setCursor(Cursor.POINTER);
+            addGadget.addMouseOverHandler(new MouseOverHandler() {
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    addGadget.setResource(CrmImages.INSTANCE.dashboardAddGadgetHover());
+                }
+            });
+            addGadget.addMouseOutHandler(new MouseOutHandler() {
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    addGadget.setResource(CrmImages.INSTANCE.dashboardAddGadget());
+                }
+            });
+            addGadget.setTitle(i18n.tr("Add Gadget..."));
+            addGadget.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    final AddGadgetBox agb = new AddGadgetBox();
+                    agb.setPopupPositionAndShow(new PositionCallback() {
+                        @Override
+                        public void setPosition(int offsetWidth, int offsetHeight) {
+                            agb.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 2);
+                        }
+                    });
+
+                    agb.addCloseHandler(new CloseHandler<PopupPanel>() {
+                        @Override
+                        public void onClose(CloseEvent<PopupPanel> event) {
+                            if (agb.getSelectedGadget() != null) {
+                                report.insertGadget(agb.getSelectedGadget(), Report.Location.Any, 0);
+                                agb.getSelectedGadget().start();
+                            }
+                        }
+                    });
+
+                    agb.show();
+                }
+            });
+
+            setWidget(addGadget);
+        }
+
     }
 }
