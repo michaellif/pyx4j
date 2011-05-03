@@ -42,6 +42,8 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupInteger;
 import com.pyx4j.widgets.client.AnimationCallback;
+import com.pyx4j.widgets.client.GlassPanel;
+import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
 public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers {
 
@@ -104,6 +106,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         protected void onComplete() {
             ApartmentUnitDetailsPanel.this.clear();
             callback.onComplete();
+            GlassPanel.hide();
         }
     }
 
@@ -196,6 +199,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         add(unitDetailPanel);
 
         if (animate) {
+            GlassPanel.show(GlassStyle.Transparent);
             new GrowAnimation(unitDetailPanel).run(500);
         }
     }
