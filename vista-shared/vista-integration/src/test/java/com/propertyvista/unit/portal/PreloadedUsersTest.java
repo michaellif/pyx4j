@@ -13,12 +13,21 @@
  */
 package com.propertyvista.unit.portal;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.selenium.D;
+import com.pyx4j.selenium.ISeleniumTestConfiguration;
+import com.pyx4j.site.rpc.AppPlaceInfo;
+
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.UnitSelection;
@@ -30,14 +39,6 @@ import com.propertyvista.portal.server.generator.VistaDataGenerator;
 import com.propertyvista.unit.VistaBaseSeleniumTestCase;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
-
-import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.selenium.D;
-import com.pyx4j.selenium.ISeleniumTestConfiguration;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
 
@@ -57,7 +58,7 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         User user = generator.createUser(1);
         Application application = generator.createApplication(user);
         Summary summary = generator.createSummary(application, null);
-        //TODO UnitSelection unitSel = generator.createUnitSelection(application, null);
+        UnitSelection unitSel = generator.createUnitSelection(application, null);
 
         selenium.click(VistaFormsDebugId.Auth_Login);
         selenium.type(D.id(proto(AuthenticationRequest.class).email()), user.email().getValue());
@@ -65,19 +66,37 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         selenium.click(CrudDebugId.Criteria_Submit);
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
 
-        doTestAptPage(summary);
+        doTestAptPage(unitSel);
         doTestTenantsPage(summary);
         doTestInfoPage(summary);
 
     }
 
-    protected void doTestAptPage(Summary summary) {
+    private void assertAptUnitForm(IDebugId fromDebugId, ApartmentUnit aUnit) {
+        assertValueOnForm(fromDebugId, aUnit.unitType());
+        assertValueOnForm(fromDebugId, aUnit.marketRent().get(aUnit.marketRent().size() - 1));
+        assertValueOnForm(fromDebugId, aUnit.requiredDeposit());
+        assertValueOnForm(fromDebugId, aUnit.bedrooms());
+        assertValueOnForm(fromDebugId, aUnit.bathrooms());
+        assertValueOnForm(fromDebugId, aUnit.area());
+        assertValueOnForm(fromDebugId, aUnit.avalableForRent());
+    }
+
+    protected void doTestAptPage(UnitSelection unitSel) {
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
 
+        //verify all of them
+        int num = 0;
+        //TODO VLAD:: why this always returns empty list? How to do that properly? 
+        int size2 = unitSel.availableUnits().units().size();
+        for (ApartmentUnit aUnit : unitSel.availableUnits().units()) {
+            assertAptUnitForm(D.id(unitSel.availableUnits().units(), num), detach(aUnit));
+            num++;
+        }
+
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).unitType()));
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, "leaseTerm_12"));
-
         selenium.click(CrudDebugId.Crud_Save);
     }
 
@@ -86,7 +105,6 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class));
 
         //TODO validate summary/tenants
-
         selenium.click(CrudDebugId.Crud_Save);
     }
 
@@ -102,12 +120,11 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
         assertValueOnForm(tenant.email());
         assertValueOnForm(tenant.homePhone());
         assertValueOnForm(tenant.mobilePhone());
+        assertValueOnForm(tenant.workPhone());
+        assertValueOnForm(tenant.driversLicenseState());
         assertValueOnForm(tenant.driversLicense());
         assertValueOnForm(tenant.secureIdentifier());
-
         assertValueOnForm(tenant.notCanadianCitizen());
-
-        assertValueOnForm(tenant.driversLicenseState());
 
         assertAddressForm(tenant.currentAddress().getPath(), detach(tenant.currentAddress()));
         assertAddressForm(tenant.previousAddress().getPath(), detach(tenant.previousAddress()));
@@ -118,14 +135,26 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
             assertVehiclesForm(D.id(tenant.vehicles(), num), detach(vehicle));
             num++;
         }
-        //TODO Vadym, verify size (e.g. no next row exists)
+        //verify size (e.g. no next row exists)
+        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantInfo.class).vehicles(), num, proto(Vehicle.class).plateNumber())));
 
         //Legal Questions
+        assertValueOnForm(tenant.legalQuestions().suedForRent());
+        assertValueOnForm(tenant.legalQuestions().suedForDamages());
         assertValueOnForm(tenant.legalQuestions().everEvicted());
         assertValueOnForm(tenant.legalQuestions().defaultedOnLease());
-        //TODO Add all...
+        assertValueOnForm(tenant.legalQuestions().convictedOfFelony());
+        assertValueOnForm(tenant.legalQuestions().legalTroubles());
+        assertValueOnForm(tenant.legalQuestions().filedBankruptcy());
 
         //Emergency Contacts
+        num = 0;
+        for (EmergencyContact contact : tenant.emergencyContacts()) {
+            assertEmContactsForm(D.id(tenant.emergencyContacts(), num), detach(contact));
+            num++;
+        }
+
+        return;
     }
 
     private void assertAddressForm(IDebugId fromDebugId, Address address) {
@@ -154,12 +183,28 @@ public class PreloadedUsersTest extends VistaBaseSeleniumTestCase {
     }
 
     private void assertVehiclesForm(IDebugId fromDebugId, Vehicle vehicle) {
+        assertValueOnForm(fromDebugId, vehicle.plateNumber());
         assertValueOnForm(fromDebugId, vehicle.year());
-
         assertValueOnForm(fromDebugId, vehicle.make());
         assertValueOnForm(fromDebugId, vehicle.model());
+        assertValueOnForm(fromDebugId, vehicle.country());
         assertValueOnForm(fromDebugId, vehicle.province());
-        // TODO Vadym, Add all fields
+    }
+
+    private void assertEmContactsForm(IDebugId fromDebugId, EmergencyContact contact) {
+        assertValueOnForm(fromDebugId, contact.firstName());
+        assertValueOnForm(fromDebugId, contact.middleName());
+        assertValueOnForm(fromDebugId, contact.lastName());
+        assertValueOnForm(fromDebugId, contact.homePhone());
+        assertValueOnForm(fromDebugId, contact.mobilePhone());
+        //TODO VLAD:: this isn't working
+        //assertValueOnForm(fromDebugId, contact.workPhone());
+        assertValueOnForm(fromDebugId, contact.address().street1());
+        assertValueOnForm(fromDebugId, contact.address().street2());
+        assertValueOnForm(fromDebugId, contact.address().city());
+        assertValueOnForm(fromDebugId, contact.address().province());
+        assertValueOnForm(fromDebugId, contact.address().country());
+        assertValueOnForm(fromDebugId, contact.address().postalCode());
     }
 
 }
