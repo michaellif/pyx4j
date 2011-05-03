@@ -20,20 +20,29 @@
  */
 package com.pyx4j.svg.gwt;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.SvgElement;
 
 public class GroupImpl extends ContainerElementImpl implements Group {
+    private final String id;
 
     public GroupImpl() {
         setElement(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "g"));
+        id = DOM.createUniqueId();
+        SvgDOM.setAttributeNS(getElement(), "id", id);
     }
 
     @Override
     public void add(SvgElement element) {
         super.add((Widget) element, getElement());
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
 }

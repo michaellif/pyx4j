@@ -14,17 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 1, 2011
+ * Created on May 2, 2011
  * @author Dad
  * @version $Id$
  */
-package com.pyx4j.svg.chart;
+package com.pyx4j.svg.gwt.chart;
 
 import com.pyx4j.svg.basic.Shape;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.Text;
+import com.pyx4j.svg.chart.LegendIconType;
+import com.pyx4j.svg.gwt.GroupImpl;
 
-public class LegendItem {
+public class LegendItem extends GroupImpl {
 
     private final int X_SHIFT = 10;
 
@@ -32,7 +34,7 @@ public class LegendItem {
 
     private final LegendIconType iconType;
 
-    private SvgFactory svgFactory;
+    private final SvgFactory svgFactory;
 
     private Shape icon;
 
@@ -46,14 +48,11 @@ public class LegendItem {
 
     private String color = "#000";
 
-    public LegendItem(LegendIconType iconType, SvgFactory svgFactory) {
+    public LegendItem(LegendIconType iconType, SvgFactory svgFactory, int x, int y, int length) {
+
         this.iconType = iconType;
         this.svgFactory = svgFactory;
-    }
 
-    public LegendItem(LegendIconType iconType, int x, int y, int length) {
-
-        this.iconType = iconType;
         xc = x;
         yc = y;
         this.length = length;
@@ -70,12 +69,14 @@ public class LegendItem {
         }
         this.setColor(color);
         text = null;
+        add(this.icon);
 
     }
 
-    public LegendItem(String text, LegendIconType iconType, int x, int y, int length) {
-        this(iconType, x, y, length);
+    public LegendItem(String text, LegendIconType iconType, SvgFactory svgFactory, int x, int y, int length) {
+        this(iconType, svgFactory, x, y, length);
         this.text = svgFactory.createText(text, xc + X_SHIFT + length, yc + Y_SHIFT);
+        add(this.text);
     }
 
     public Text getText() {
@@ -90,45 +91,14 @@ public class LegendItem {
         return iconType;
     }
 
-    //TODO create a set of methods to change the initial size of the group 
+    public void setTransform(String transform) {
+        getElement().setAttribute("transform", transform);
+    }
 
-//    public void setX(int x) {
-//        xc = x;
-//        icon.getElement().setAttribute("x", String.valueOf(xc));
-//        if (text != null)
-//            text.getElement().setAttribute("x", String.valueOf(xc + X_SHIFT + length));
-//
-//    }
-//
-//    public void setY(int y) {
-//        icon.getElement().setAttribute("y", String.valueOf(yc));
-//        if (text != null)
-//            text.getElement().setAttribute("y", String.valueOf(yc + Y_SHIFT));
-//    }
-//
-//    public void setTransform(String transform) {
-//        icon.getElement().setAttribute("transform", transform);
-//        if (text != null)
-//            text.getElement().setAttribute("transform", transform);
-//    }
-//
-//    public void setShapeLength(int length) {
-//        this.length = length;
-//        switch (iconType) {
-//        case Rect: {
-//            icon.getElement().setAttribute("width", String.valueOf(length));
-//            icon.getElement().setAttribute("height", String.valueOf(length));
-//        }
-//        default: {
-//            icon.getElement().setAttribute("r", String.valueOf(length));
-//        }
-//        }
-//        if (text != null)
-//            text.getElement().setAttribute("x", String.valueOf(xc + X_SHIFT + length));
-//    }
-
+    //TODO create a set of methods to change the initial size and position of the group 
     public void setColor(String color) {
         this.color = color;
         icon.setFill(color);
     }
+
 }

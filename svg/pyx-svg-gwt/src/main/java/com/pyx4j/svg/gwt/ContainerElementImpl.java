@@ -26,6 +26,4 @@ import com.pyx4j.svg.basic.ContainerElement;
 
 public class ContainerElementImpl extends ComplexPanel implements ContainerElement {
 
-    public ContainerElementImpl() {
-    }
 }

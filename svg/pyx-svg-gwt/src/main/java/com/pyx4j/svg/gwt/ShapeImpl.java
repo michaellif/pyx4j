@@ -21,13 +21,18 @@
 package com.pyx4j.svg.gwt;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.DOM;
 
 import com.pyx4j.svg.basic.Shape;
 
 public class ShapeImpl extends GraphicsElementImpl implements Shape {
 
+    private final String id;
+
     public ShapeImpl(Element elem) {
         setElement(elem);
+        id = DOM.createUniqueId();
+        SvgDOM.setAttributeNS(getElement(), "id", id);
         setStrokeWidth(String.valueOf(1));
         setStroke("black");
         setFill("transparent");
@@ -46,6 +51,11 @@ public class ShapeImpl extends GraphicsElementImpl implements Shape {
     @Override
     public void setStrokeWidth(String strokeWidth) {
         getElement().setAttribute("stroke-width", strokeWidth);
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
 }

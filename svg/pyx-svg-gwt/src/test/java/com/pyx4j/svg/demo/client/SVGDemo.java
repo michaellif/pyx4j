@@ -36,7 +36,9 @@ import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.basic.Text;
+import com.pyx4j.svg.chart.LegendIconType;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
+import com.pyx4j.svg.gwt.chart.LegendItem;
 
 public class SVGDemo implements EntryPoint {
 
@@ -197,6 +199,23 @@ public class SVGDemo implements EntryPoint {
             text.setStroke("green");
             svgPanel.add(text);
 
+            content.add((Widget) svgPanel);
+        }
+
+        //=========================================//
+
+        content.add(new HTML("Legend Item"));
+        {
+            SvgRoot svgPanel = svgFactory.createSvgRoot();
+            ((Widget) svgPanel).setSize("150px", "100px");
+
+            LegendItem lc = new LegendItem("Property 1", LegendIconType.Circle, svgFactory, 20, 25, 15);
+            lc.setColor("blue");
+            LegendItem lr = new LegendItem("Property 2", LegendIconType.Rect, svgFactory, 20, 55, 15);
+            lr.setColor("green");
+
+            svgPanel.add(lc);
+            svgPanel.add(lr);
             content.add((Widget) svgPanel);
         }
     }

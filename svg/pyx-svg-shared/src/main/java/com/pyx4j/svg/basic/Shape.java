@@ -28,4 +28,6 @@ public interface Shape extends GraphicsElement {
 
     public void setStrokeWidth(String strokeWidth);
 
+    public String getId();
+
 }

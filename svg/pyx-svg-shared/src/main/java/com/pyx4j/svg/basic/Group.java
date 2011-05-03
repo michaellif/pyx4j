@@ -24,4 +24,6 @@ public interface Group extends ContainerElement {
 
     void add(SvgElement element);
 
+    String getId();
+
 }

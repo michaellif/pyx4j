@@ -20,6 +20,7 @@
  */
 package com.pyx4j.svg.basic;
 
+
 public interface SvgElement {
 
 }

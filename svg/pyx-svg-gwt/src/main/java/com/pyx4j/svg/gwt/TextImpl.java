@@ -31,4 +31,13 @@ public class TextImpl extends ShapeImpl implements Text {
         getElement().setAttribute("y", String.valueOf(y));
     }
 
+    public void setFont(String font) {
+        getElement().setAttribute("font", font);
+    }
+
+    //possible values are :     start | middle | end |  inherit (think enumeration)
+    public void setTextAnchor(String anchor) {
+        getElement().setAttribute("text-anchor", anchor);
+    }
+
 }

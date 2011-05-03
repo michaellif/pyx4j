@@ -20,21 +20,44 @@
  */
 package com.pyx4j.svg.gwt;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.svg.basic.BBox;
 import com.pyx4j.svg.basic.SvgElement;
 import com.pyx4j.svg.basic.SvgRoot;
 
 public class SvgRootImpl extends ComplexPanel implements SvgRoot {
 
+    private final String id;
+
     public SvgRootImpl() {
         setElement(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "svg"));
+        id = DOM.createUniqueId();
+        SvgDOM.setAttributeNS(getElement(), "id", id);
     }
 
     @Override
     public void add(SvgElement w) {
         super.add((Widget) w, getElement());
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public BBox getBBox() {
+        // TODO Implement
+        return null;
+    }
+
+    @Override
+    public BBox getBBox(String elemenId) {
+        // TODO Implement
+        return null;
     }
 
 }
