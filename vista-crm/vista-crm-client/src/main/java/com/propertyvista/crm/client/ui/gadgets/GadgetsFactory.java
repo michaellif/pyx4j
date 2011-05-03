@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
+import com.pyx4j.widgets.client.dashboard.IGadget;
+
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
-
-import com.pyx4j.dashboard.client.IGadget;
 
 public class GadgetsFactory {
 

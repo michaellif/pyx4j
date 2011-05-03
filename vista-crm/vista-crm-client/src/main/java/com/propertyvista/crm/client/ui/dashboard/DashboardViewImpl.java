@@ -43,6 +43,12 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Singleton;
+
+import com.pyx4j.widgets.client.dashboard.Dashboard;
+import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
+import com.pyx4j.widgets.client.dashboard.IGadget;
+import com.pyx4j.widgets.client.dialog.DialogPanel;
+
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
@@ -51,25 +57,22 @@ import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
-import com.pyx4j.dashboard.client.DashboardPanel;
-import com.pyx4j.dashboard.client.IGadget;
-import com.pyx4j.dashboard.client.Layout;
-import com.pyx4j.widgets.client.dialog.DialogPanel;
-
 @Singleton
 public class DashboardViewImpl extends SimplePanel implements DashboardView {
 
     private static I18n i18n = I18nFactory.getI18n(DashboardViewImpl.class);
 
-    final DashboardPanel dashboard = new DashboardPanel();
+    private final LayoutsSet layouts = new LayoutsSet();
 
-    final LayoutsSet layouts = new LayoutsSet();
+    private final ScrollPanel scroll;
+
+    private Dashboard dashboard;
 
     public DashboardViewImpl() {
         VerticalPanel main = new VerticalPanel();
         main.add(new CrmHeaderDecorator("Dashboard Menu/Tools", layouts));
 
-        ScrollPanel scroll = new ScrollPanel(dashboard);
+        scroll = new ScrollPanel();
         scroll.getElement().getStyle().setPosition(Position.ABSOLUTE);
         scroll.getElement().getStyle().setTop(45, Unit.PX);
         scroll.getElement().getStyle().setLeft(0, Unit.PX);
@@ -83,11 +86,11 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
 
     @Override
     public void fillDashboard(DashboardMetadata dashboardMetadata) {
-        dashboard.removeAllGadgets();
-
         if (dashboardMetadata.isEmpty()) {
             return;
         }
+
+        dashboard = new Dashboard();
 
         // set dashboard layout:
 
@@ -111,6 +114,8 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
                 gadget.start(); // allow gadget execution... 
             }
         }
+
+        scroll.setWidget(dashboard);
     }
 
     private class LayoutsSet extends HorizontalPanel {
@@ -214,41 +219,35 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
         }
 
         public void setLayout1() {
-            if (dashboard.setLayout(new Layout(1, 1, 12))) {
+            if (dashboard.setLayout(Layout.One)) {
                 setDefaultImages();
                 layout1.setResource(CrmImages.INSTANCE.dashboardLayout1_1());
             }
         }
 
         public void setLayout12() {
-            Layout layout = new Layout(2, 1, 12);
-            byte colWidths[] = { 33, 67 };
-            layout.setColumnWidths(colWidths);
-            if (dashboard.setLayout(layout)) {
+            if (dashboard.setLayout(Layout.Two12)) {
                 setDefaultImages();
                 layout12.setResource(CrmImages.INSTANCE.dashboardLayout12_1());
             }
         }
 
         public void setLayout21() {
-            Layout layout = new Layout(2, 1, 12);
-            byte colWidths[] = { 67, 33 };
-            layout.setColumnWidths(colWidths);
-            if (dashboard.setLayout(layout)) {
+            if (dashboard.setLayout(Layout.Two21)) {
                 setDefaultImages();
                 layout21.setResource(CrmImages.INSTANCE.dashboardLayout21_1());
             }
         }
 
         public void setLayout22() {
-            if (dashboard.setLayout(new Layout(2, 1, 12))) {
+            if (dashboard.setLayout(Layout.Two11)) {
                 setDefaultImages();
                 layout22.setResource(CrmImages.INSTANCE.dashboardLayout22_1());
             }
         }
 
         public void setLayout3() {
-            if (dashboard.setLayout(new Layout(3, 1, 12))) {
+            if (dashboard.setLayout(Layout.Three)) {
                 setDefaultImages();
                 layout3.setResource(CrmImages.INSTANCE.dashboardLayout3_1());
             }

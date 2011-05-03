@@ -14,11 +14,13 @@
 package com.propertyvista.crm.client.ui.gadgets;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
@@ -31,6 +33,8 @@ public class DemoGadget extends GadgetBase {
     public DemoGadget(GadgetMetadata gmd) {
         super(gmd);
         widget.setText(getName() + " content");
+        widget.setHeight(Random.nextInt(8) + 2 + "em");
+        widget.setWidth("100%");
     }
 
     @Override
@@ -43,7 +47,7 @@ public class DemoGadget extends GadgetBase {
 
     @Override
     public Widget asWidget() {
-        return widget;
+        return widget.asWidget();
     }
 
     // flags:

@@ -17,10 +17,11 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
-import com.pyx4j.dashboard.client.IGadget;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.widgets.client.dashboard.IGadget;
+
+import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
 public abstract class GadgetBase implements IGadget {
 
