@@ -32,10 +32,6 @@ import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.common.client.ui.ViewLineSeparator;
-import com.propertyvista.portal.client.ptapp.resources.SiteResources;
-import com.propertyvista.portal.domain.MarketRent;
-import com.propertyvista.portal.domain.pt.ApartmentUnit;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -44,6 +40,11 @@ import com.pyx4j.forms.client.ui.CRadioGroupInteger;
 import com.pyx4j.widgets.client.AnimationCallback;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
+
+import com.propertyvista.common.client.ui.ViewLineSeparator;
+import com.propertyvista.portal.client.ptapp.resources.SiteResources;
+import com.propertyvista.portal.domain.MarketRent;
+import com.propertyvista.portal.domain.pt.ApartmentUnit;
 
 public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers {
 
@@ -66,6 +67,11 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         protected void onUpdate(final double progress) {
             panel.getElement().getStyle().setOpacity(progress);
         }
+
+        @Override
+        protected void onComplete() {
+            GlassPanel.hide();
+        }
     }
 
     public class GrowAnimation extends Animation {
@@ -81,6 +87,11 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         @Override
         protected void onUpdate(final double progress) {
             panel.setHeight(String.valueOf((int) (progress * this.height)) + "px");
+        }
+
+        @Override
+        protected void onComplete() {
+            GlassPanel.hide();
         }
     }
 
@@ -106,7 +117,6 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         protected void onComplete() {
             ApartmentUnitDetailsPanel.this.clear();
             callback.onComplete();
-            GlassPanel.hide();
         }
     }
 
