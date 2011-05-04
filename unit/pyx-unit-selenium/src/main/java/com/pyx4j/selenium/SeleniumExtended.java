@@ -20,8 +20,6 @@
  */
 package com.pyx4j.selenium;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +27,6 @@ import junit.framework.Assert;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
@@ -46,7 +43,6 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.gwt.server.DateUtils;
 
 /**
  * Compatibility layer with Selenium v1 i.e. with Selenium IDE generated scripts.
@@ -208,7 +204,7 @@ public class SeleniumExtended extends WebDriverWrapper {
         try {
             driver.findElement(paramBy);
             return true;
-        } catch (NoSuchElementException notFound) {
+        } catch (org.openqa.selenium.NoSuchElementException notFound) {
             return false;
         }
     }
@@ -224,7 +220,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     public boolean isVisible(By paramBy) {
         try {
             return ((RenderedWebElement) driver.findElement(paramBy)).isDisplayed();
-        } catch (NoSuchElementException notFound) {
+        } catch (org.openqa.selenium.NoSuchElementException notFound) {
             return false;
         }
     }
@@ -434,52 +430,9 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     private <T extends Enum<T>> T getEnumValue(WebElement element, Class<T> enumClass) {
-        String tagName = element.getTagName();
-        if (tagName.equalsIgnoreCase("input") || tagName.equalsIgnoreCase("select")) {
-            // ComboBox or Text
-            if (focusOnGetValue) {
-                if (tagName.equalsIgnoreCase("input")) {
-                    element.click();
-                } else {
-                    focus(element);
-                }
-            }
-            String text = element.getValue();
-            log("value of element <{}> id={} text={}", tagName, element.getAttribute("id"), text);
-            if (CommonsStringUtils.isEmpty(text)) {
-                return null;
-            }
-            return Enum.valueOf(enumClass, text);
-        } else {
-            // RadioGroup
-            String parentId = element.getAttribute("id");
-            boolean inputsFound = false;
-            for (WebElement childElement : element.findElements(By.tagName("input"))) {
-                String id = childElement.getAttribute("id");
-                if (id.startsWith(parentId)) {
-                    // Enum name is a part of element debugId
-                    String enumName = id.substring(parentId.length() + 1);
-                    T value;
-                    try {
-                        value = Enum.valueOf(enumClass, enumName);
-                    } catch (IllegalArgumentException e) {
-                        // Wrong input, ignore
-                        continue;
-                    }
-                    if (childElement.isSelected()) {
-                        log("value of element <{}> id={} text={}", childElement.getTagName(), childElement.getAttribute("id"), value);
-                        return value;
-                    } else {
-                        inputsFound = true;
-                    }
-                }
-
-            }
-            if (!inputsFound) {
-                throw new Error("Can't find components inside RadioGroup " + parentId);
-            }
-            return null;
-        }
+        T value = InputHelper.getEnumValue(element, enumClass, focusOnGetValue);
+        log("value of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), value);
+        return value;
     }
 
     public <T extends Enum<T>> T getEnumValue(IDebugId debugId, Class<T> enumClass) {
@@ -497,35 +450,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     private Boolean getBooleanValue(WebElement element) {
-        Boolean value = null;
-        if (element.getTagName().equalsIgnoreCase("input")) {
-            // CheckBox
-            value = element.isSelected();
-        } else {
-            // RadioGroup
-            String parentId = element.getAttribute("id");
-            boolean inputsFound = false;
-            for (WebElement childElement : element.findElements(By.tagName("input"))) {
-                String id = childElement.getAttribute("id");
-                if (id.equals(parentId + "_Y")) {
-                    inputsFound = true;
-                    if (childElement.isSelected()) {
-                        value = Boolean.TRUE;
-                        break;
-                    }
-                } else if (id.equals(parentId + "_N")) {
-                    inputsFound = true;
-                    if (childElement.isSelected()) {
-                        value = Boolean.FALSE;
-                        break;
-                    }
-                }
-            }
-            if (!inputsFound) {
-                throw new Error("Can't find components inside RadioGroup " + parentId);
-            }
-        }
-
+        Boolean value = InputHelper.getBooleanValue(element);
         log("value of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), value);
         return value;
     }
@@ -543,56 +468,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     private Date getDateValue(WebElement element, String format) {
-        Date value = null;
-        if (element.getTagName().equalsIgnoreCase("input")) {
-            if (focusOnGetValue) {
-                focus(element);
-            }
-            String text = element.getValue();
-            if (CommonsStringUtils.isStringSet(text)) {
-                if (format != null) {
-                    try {
-                        value = new SimpleDateFormat(format).parse(text);
-                    } catch (ParseException e) {
-                        throw new Error("Invalid date format" + text, e);
-                    }
-                } else {
-                    value = DateUtils.detectDateformat(text);
-                }
-            }
-        } else {
-            // RadioGroup
-            String parentId = element.getAttribute("id");
-            boolean inputsFound = false;
-
-            int y = 0;
-            try {
-                WebElement elementYY = element.findElement(By.id(parentId + "_yy"));
-                if (focusOnGetValue) {
-                    focus(elementYY);
-                }
-                inputsFound = true;
-                y = Integer.valueOf(elementYY.getValue());
-            } catch (NoSuchElementException notFound) {
-            }
-
-            int m = 0;
-            try {
-                WebElement elementMM = element.findElement(By.id(parentId + "_mm"));
-                inputsFound = true;
-                m = Integer.valueOf(elementMM.getValue()) - 1;
-            } catch (NoSuchElementException notFound) {
-            }
-
-            if (!inputsFound) {
-                throw new Error("Can't find components inside DateGroup " + parentId);
-            }
-
-            if (y != 0) {
-                value = DateUtils.createDate(y, m, 1);
-            }
-        }
-
+        Date value = InputHelper.getDateValue(element, format, focusOnGetValue);
         log("value of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), value);
         return value;
     }
@@ -607,6 +483,12 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     public Date getDateValue(IDebugId fromDebugId, IPrimitive<? extends Date> member) {
         return getDateValue(driver.findElement(by(fromDebugId, member)), member.getMeta().getFormat());
+    }
+
+    public void setDateValue(IDebugId debugId, Date dateValue, String format) {
+        WebElement element = driver.findElement(by(debugId));
+        log("setValue of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), dateValue);
+        InputHelper.setDateValue(element, dateValue, format);
     }
 
     public void select(String id) {
@@ -671,27 +553,8 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     private void setEnumValue(WebElement element, Enum<?> enumValue) {
-        String tagName = element.getTagName();
-        if (tagName.equalsIgnoreCase("input") || tagName.equalsIgnoreCase("select")) {
-            setValue(element, enumValue.toString());
-        } else {
-            // RadioGroup
-            String parentId = element.getAttribute("id");
-            for (WebElement childElement : element.findElements(By.tagName("input"))) {
-                String id = childElement.getAttribute("id");
-                if (id.startsWith(parentId)) {
-                    // Enum name is a part of element debugId
-                    String enumName = id.substring(parentId.length() + 1);
-                    if (enumName.equals(enumValue.name())) {
-                        log("setValue of element <{}> id={} value={}", tagName, parentId, enumValue);
-                        childElement.setSelected();
-                        InputHelper.fireEvent(driver, childElement, "click");
-                        return;
-                    }
-                }
-            }
-            throw new Error("Can't find enum " + enumValue + " component inside RadioGroup " + parentId);
-        }
+        log("setValue of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), enumValue);
+        InputHelper.setEnumValue(driver, element, enumValue);
     }
 
     public void setEnumValue(IDebugId debugId, Enum<?> enumValue) {

@@ -325,6 +325,8 @@ public class BaseSeleniumTestCase extends TestCase {
             selenium.setEnumValue(D.id(fromDebugId, member), (Enum<?>) member.getValue());
         } else if (mm.getValueClass().equals(Boolean.class)) {
             selenium.setValue(D.id(fromDebugId, member), (Boolean) member.getValue());
+        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
+            selenium.setDateValue(D.id(fromDebugId, member), (Date) member.getValue(), mm.getFormat());
         } else {
             selenium.setValue(D.id(fromDebugId, member), member.getStringView());
         }
