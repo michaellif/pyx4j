@@ -64,7 +64,7 @@ public class DataGeneratorTest extends TestCase {
         }
     }
 
-    public void testConsitentDataCreation() {
+    public void testConsistentDataCreation() {
 
         final long seed1 = 250;
         DataGenerator.setRandomSeed(seed1);
