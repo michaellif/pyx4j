@@ -321,7 +321,9 @@ public class BaseSeleniumTestCase extends TestCase {
 
     public void setValueOnForm(IDebugId fromDebugId, IPrimitive<?> member) {
         MemberMeta mm = member.getMeta();
-        if (mm.getValueClass().equals(Boolean.class)) {
+        if (mm.getValueClass().isEnum()) {
+            selenium.setEnumValue(D.id(fromDebugId, member), (Enum<?>) member.getValue());
+        } else if (mm.getValueClass().equals(Boolean.class)) {
             selenium.setValue(D.id(fromDebugId, member), (Boolean) member.getValue());
         } else {
             selenium.setValue(D.id(fromDebugId, member), member.getStringView());

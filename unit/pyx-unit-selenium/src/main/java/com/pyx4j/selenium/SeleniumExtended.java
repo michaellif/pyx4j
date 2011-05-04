@@ -365,23 +365,6 @@ public class SeleniumExtended extends WebDriverWrapper {
         type(by(member), keysToSend);
     }
 
-    public void setValue(WebElement element, String textValue) {
-        log("setValue of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), textValue);
-        InputHelper.setValue(element, textValue);
-    }
-
-    public void setValue(IDebugId debugId, String textValue) {
-        setValue(driver.findElement(by(debugId)), textValue);
-    }
-
-    public void setValue(String paramString, String textValue) {
-        setValue(driver.findElement(elementLocator(paramString)), textValue);
-    }
-
-    public void setValue(IObject<?> member, String textValue) {
-        setValue(driver.findElement(by(member)), textValue);
-    }
-
     public String getText(String paramString) {
         return driver.findElement(elementLocator(paramString)).getText();
     }
@@ -486,6 +469,8 @@ public class SeleniumExtended extends WebDriverWrapper {
                     if (childElement.isSelected()) {
                         log("value of element <{}> id={} text={}", childElement.getTagName(), childElement.getAttribute("id"), value);
                         return value;
+                    } else {
+                        inputsFound = true;
                     }
                 }
 
@@ -639,6 +624,23 @@ public class SeleniumExtended extends WebDriverWrapper {
         new JavascriptLibrary().callEmbeddedSelenium(driver, "doFireEvent", we, eventName);
     }
 
+    public void setValue(WebElement element, String textValue) {
+        log("setValue of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), textValue);
+        InputHelper.setValue(element, textValue);
+    }
+
+    public void setValue(IDebugId debugId, String textValue) {
+        setValue(driver.findElement(by(debugId)), textValue);
+    }
+
+    public void setValue(String paramString, String textValue) {
+        setValue(driver.findElement(elementLocator(paramString)), textValue);
+    }
+
+    public void setValue(IObject<?> member, String textValue) {
+        setValue(driver.findElement(by(member)), textValue);
+    }
+
     /**
      * @deprecated Use setValue(, boolean)
      */
@@ -666,6 +668,34 @@ public class SeleniumExtended extends WebDriverWrapper {
     //CheckBox special case
     public void setValue(IObject<?> member, boolean selectionValue) {
         setValue(driver.findElement(by(member)), selectionValue);
+    }
+
+    private void setEnumValue(WebElement element, Enum<?> enumValue) {
+        String tagName = element.getTagName();
+        if (tagName.equalsIgnoreCase("input") || tagName.equalsIgnoreCase("select")) {
+            setValue(element, enumValue.toString());
+        } else {
+            // RadioGroup
+            String parentId = element.getAttribute("id");
+            for (WebElement childElement : element.findElements(By.tagName("input"))) {
+                String id = childElement.getAttribute("id");
+                if (id.startsWith(parentId)) {
+                    // Enum name is a part of element debugId
+                    String enumName = id.substring(parentId.length() + 1);
+                    if (enumName.equals(enumValue.name())) {
+                        log("setValue of element <{}> id={} value={}", tagName, parentId, enumValue);
+                        childElement.setSelected();
+                        InputHelper.fireEvent(driver, childElement, "click");
+                        return;
+                    }
+                }
+            }
+            throw new Error("Can't find enum " + enumValue + " component inside RadioGroup " + parentId);
+        }
+    }
+
+    public void setEnumValue(IDebugId debugId, Enum<?> enumValue) {
+        setEnumValue(findElement(by(debugId)), enumValue);
     }
 
     public boolean isEnabled(String locator) {
