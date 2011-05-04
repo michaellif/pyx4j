@@ -38,12 +38,14 @@ public class VistaDataGeneratorTest extends TestCase {
 
         // To some other data generation
         VistaDataGenerator generatorX = new VistaDataGenerator(System.currentTimeMillis());
-        generatorX.createSummary(null, null);
+        User userX = generatorX.createUser(1);
+        Application applicationX = generatorX.createApplication(userX);
+        generatorX.createSummary(applicationX, null);
 
         SharedData.init();
 
         VistaDataGenerator generator2 = new VistaDataGenerator(seed1);
-        User user2 = generator1.createUser(1);
+        User user2 = generator2.createUser(1);
         Application application2 = generator2.createApplication(user2);
         Summary summary2 = generator2.createSummary(application2, null);
 
