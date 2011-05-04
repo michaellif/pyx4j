@@ -27,9 +27,10 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.common.client.ui.ViewLineSeparator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
+
+import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.client.ptapp.ui.components.BuildingPicture;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;

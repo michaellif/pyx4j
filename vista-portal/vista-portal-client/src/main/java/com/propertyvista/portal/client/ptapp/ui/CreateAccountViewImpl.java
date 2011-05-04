@@ -31,8 +31,9 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.propertyvista.common.client.ui.ViewLineSeparator;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+
+import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.portal.client.ptapp.resources.CrmImages;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
@@ -70,21 +71,21 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
         requirements.getElement().getStyle().setPaddingLeft(95, Unit.PX);
         requirements.getElement().getStyle().setPaddingBottom(45, Unit.PX);
 
-        requirements.getElement().getStyle().setProperty("background", "url(" + SiteImages.INSTANCE.requirements().getURL() + ") no-repeat");
+        requirements.getElement().getStyle().setProperty("background", "url(" + CrmImages.INSTANCE.requirements().getURL() + ") no-repeat");
         leftColumn.add(requirements);
 
         HTML time = new HTML(SiteResources.INSTANCE.time().getText());
         time.getElement().getStyle().setPaddingLeft(95, Unit.PX);
         time.getElement().getStyle().setPaddingBottom(45, Unit.PX);
 
-        time.getElement().getStyle().setProperty("background", "url(" + SiteImages.INSTANCE.time().getURL() + ") no-repeat");
+        time.getElement().getStyle().setProperty("background", "url(" + CrmImages.INSTANCE.time().getURL() + ") no-repeat");
         leftColumn.add(time);
 
         HTML dontWorry = new HTML(SiteResources.INSTANCE.dontWorry().getText());
         dontWorry.getElement().getStyle().setPaddingLeft(95, Unit.PX);
         dontWorry.getElement().getStyle().setPaddingBottom(45, Unit.PX);
 
-        dontWorry.getElement().getStyle().setProperty("background", "url(" + SiteImages.INSTANCE.dontWorry().getURL() + ") no-repeat");
+        dontWorry.getElement().getStyle().setProperty("background", "url(" + CrmImages.INSTANCE.dontWorry().getURL() + ") no-repeat");
         leftColumn.add(dontWorry);
 
         leftColumn.setWidth("45%");

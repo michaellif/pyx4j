@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.inject.Singleton;
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.resources.CrmImages;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -95,23 +95,23 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
             switch (type) {
             case INFO:
                 colour = "#BBB";
-                image = new Image(SiteImages.INSTANCE.info());
+                image = new Image(CrmImages.INSTANCE.info());
                 break;
 
             case WARN:
                 colour = "#F3931F";
-                image = new Image(SiteImages.INSTANCE.infoOrange());
+                image = new Image(CrmImages.INSTANCE.infoOrange());
                 break;
 
             case ERROR:
             case FAILURE:
                 colour = "#E12900";
-                image = new Image(SiteImages.INSTANCE.infoRed());
+                image = new Image(CrmImages.INSTANCE.infoRed());
                 break;
 
             default:
                 colour = "inherit";
-                image = new Image(SiteImages.INSTANCE.userMessageInfo());
+                image = new Image(CrmImages.INSTANCE.userMessageInfo());
             }
 
             HTML side = new HTML("&nbsp;&nbsp;&nbsp;");

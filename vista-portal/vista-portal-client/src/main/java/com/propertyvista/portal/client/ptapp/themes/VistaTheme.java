@@ -20,10 +20,10 @@ import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
-import com.propertyvista.common.client.ui.ViewLineSeparator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator.StyleSuffix;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
+import com.propertyvista.portal.client.ptapp.resources.CrmImages;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentUnitsTable;
 import com.propertyvista.portal.client.ptapp.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigViewImpl;
@@ -80,10 +80,10 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
     protected void initBodyStyles() {
         super.initBodyStyles();
         Style style = new Style(".body-nonavig");
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.body2Background().getURL() + "') repeat-x 0 0 #F7F7F7");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.body2Background().getURL() + "') repeat-x 0 0 #F7F7F7");
         addStyle(style);
         style = new Style(".body-navig");
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.bodyBackground().getURL() + "') repeat-x 0 0 #F7F7F7");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.bodyBackground().getURL() + "') repeat-x 0 0 #F7F7F7");
         addStyle(style);
 
     }
@@ -300,38 +300,38 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.step().getURL() + "') no-repeat scroll 0 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.step().getURL() + "') no-repeat scroll 0 0 transparent");
         style.addProperty("height", "57px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab, MainNavigViewImpl.StyleDependent.latest));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepLatest().getURL() + "') no-repeat scroll 0 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.stepLatest().getURL() + "') no-repeat scroll 0 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab, MainNavigViewImpl.StyleDependent.complete));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepValid().getURL() + "') no-repeat scroll 0 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.stepValid().getURL() + "') no-repeat scroll 0 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab, MainNavigViewImpl.StyleDependent.invalid));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepInvalid().getURL() + "') no-repeat scroll 0 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.stepInvalid().getURL() + "') no-repeat scroll 0 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepPointer().getURL() + "') no-repeat scroll 100% 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.stepPointer().getURL() + "') no-repeat scroll 100% 0 transparent");
         style.addProperty("margin-right", "-14px");
         style.addProperty("position", "relative");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.latest));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepPointerLatest().getURL() + "') no-repeat scroll 100% 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.stepPointerLatest().getURL() + "') no-repeat scroll 100% 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.complete));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepPointerValid().getURL() + "') no-repeat scroll 100% 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.stepPointerValid().getURL() + "') no-repeat scroll 100% 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.invalid));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepPointerInvalid().getURL() + "') no-repeat scroll 100% 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.stepPointerInvalid().getURL() + "') no-repeat scroll 100% 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder));
@@ -339,23 +339,23 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.complete));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.check().getURL() + "') no-repeat scroll 50% 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.check().getURL() + "') no-repeat scroll 50% 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.complete) + ":hover");
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.checkHover().getURL() + "') no-repeat scroll 50% 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.checkHover().getURL() + "') no-repeat scroll 50% 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.invalid));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.warning().getURL() + "') no-repeat scroll 50% 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.warning().getURL() + "') no-repeat scroll 50% 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.invalid) + ":hover");
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.warningHover().getURL() + "') no-repeat scroll 50% 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.warningHover().getURL() + "') no-repeat scroll 50% 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.pointer().getURL() + "') no-repeat scroll 50% 100% transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.pointer().getURL() + "') no-repeat scroll 50% 100% transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label));
@@ -391,7 +391,7 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Tab));
         style.addProperty("height", "46px");
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.step2().getURL() + "') no-repeat scroll 0 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.step2().getURL() + "') no-repeat scroll 0 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Tab, SecondNavigViewImpl.StyleDependent.current));
@@ -413,14 +413,14 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.StatusHolder, SecondNavigViewImpl.StyleDependent.complete));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.check().getURL() + "') no-repeat scroll 50% 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.check().getURL() + "') no-repeat scroll 50% 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.StatusHolder, SecondNavigViewImpl.StyleDependent.complete) + ":hover");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.StatusHolder, SecondNavigViewImpl.StyleDependent.invalid));
-        style.addProperty("background", "url('" + SiteImages.INSTANCE.warning().getURL() + "') no-repeat scroll 50% 0 transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.warning().getURL() + "') no-repeat scroll 50% 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.StatusHolder, SecondNavigViewImpl.StyleDependent.invalid) + ":hover");

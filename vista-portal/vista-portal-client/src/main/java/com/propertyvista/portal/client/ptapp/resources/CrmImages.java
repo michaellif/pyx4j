@@ -17,9 +17,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
-public interface SiteImages extends ClientBundle {
+public interface CrmImages extends ClientBundle {
 
-    SiteImages INSTANCE = GWT.create(SiteImages.class);
+    CrmImages INSTANCE = GWT.create(CrmImages.class);
 
     @Source("add.png")
     ImageResource addRow();

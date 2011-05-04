@@ -32,16 +32,17 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.propertyvista.common.client.ui.ViewLineSeparator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+
+import com.propertyvista.common.client.ui.AddressUtils;
+import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.portal.client.ptapp.resources.CrmImages;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
-import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
@@ -104,7 +105,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
         HorizontalPanel info = new HorizontalPanel();
         info.getElement().getStyle().setMarginTop(1, Unit.EM);
-        info.add(new Image(SiteImages.INSTANCE.userMessageInfo()));
+        info.add(new Image(CrmImages.INSTANCE.userMessageInfo()));
         info.add(new HTML(SiteResources.INSTANCE.paymentApprovalNotes().getText()));
         info.getElement().getStyle().setMarginBottom(1, Unit.EM);
         main.add(info);
@@ -120,22 +121,22 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         for (int i = 0; i < PaymentType.values().length; i++) {
             switch (i) {
             case 0:
-                paymentTypeImage = new Image(SiteImages.INSTANCE.paymentACH().getURL());
+                paymentTypeImage = new Image(CrmImages.INSTANCE.paymentACH().getURL());
                 break;
             case 1:
-                paymentTypeImage = new Image(SiteImages.INSTANCE.paymentVISA().getURL());
+                paymentTypeImage = new Image(CrmImages.INSTANCE.paymentVISA().getURL());
                 break;
             case 2:
-                paymentTypeImage = new Image(SiteImages.INSTANCE.paymentAMEX().getURL());
+                paymentTypeImage = new Image(CrmImages.INSTANCE.paymentAMEX().getURL());
                 break;
             case 3:
-                paymentTypeImage = new Image(SiteImages.INSTANCE.paymentMC().getURL());
+                paymentTypeImage = new Image(CrmImages.INSTANCE.paymentMC().getURL());
                 break;
             case 4:
-                paymentTypeImage = new Image(SiteImages.INSTANCE.paymentDiscover().getURL());
+                paymentTypeImage = new Image(CrmImages.INSTANCE.paymentDiscover().getURL());
                 break;
             default:
-                paymentTypeImage = new Image(SiteImages.INSTANCE.paymentInterac().getURL());
+                paymentTypeImage = new Image(CrmImages.INSTANCE.paymentInterac().getURL());
                 break;
             }
             paymentTypeImage.setHeight("20px");
@@ -359,7 +360,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
         public CheckPanel(CEntityEditableComponent<EcheckInfo> entityComponent) {
             this.entityComponent = entityComponent;
-            setWidget(1, 0, new Image(SiteImages.INSTANCE.chequeGuide()));
+            setWidget(1, 0, new Image(CrmImages.INSTANCE.chequeGuide()));
             getFlexCellFormatter().setColSpan(1, 0, 3);
         }
 

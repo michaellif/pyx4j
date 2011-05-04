@@ -41,7 +41,7 @@ import com.pyx4j.widgets.client.AnimationCallback;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
-import com.propertyvista.common.client.ui.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;

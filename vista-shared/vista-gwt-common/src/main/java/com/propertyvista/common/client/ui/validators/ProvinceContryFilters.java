@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.client.ptapp.ui.validators;
+package com.propertyvista.common.client.ui.validators;
 
 import java.util.Comparator;
 import java.util.List;

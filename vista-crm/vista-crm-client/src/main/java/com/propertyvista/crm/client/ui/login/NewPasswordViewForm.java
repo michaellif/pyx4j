@@ -20,7 +20,8 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator;
+
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.crm.client.ui.login.NewPasswordView.ConversationType;
 import com.propertyvista.crm.rpc.PasswordChangeRequest;
 

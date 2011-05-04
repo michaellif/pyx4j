@@ -17,12 +17,12 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.resources.CrmImages;
 
 public class BuildingPicture extends FlowPanel {
 
     public BuildingPicture() {
-        add(new Image(SiteImages.INSTANCE.building()));
+        add(new Image(CrmImages.INSTANCE.building()));
         add(new HTML("<b>ADDRESS: </b><br/>2060-2070 Prospect Street, Burlington"));
         getElement().getStyle().setMarginLeft(2, Unit.EM);
     }

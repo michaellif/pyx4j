@@ -21,6 +21,8 @@ import com.pyx4j.widgets.client.style.Theme;
 import com.propertyvista.crm.client.themes.GainsboroTheme;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
+import com.propertyvista.crm.client.ui.editors.BuildingEditorView;
+import com.propertyvista.crm.client.ui.editors.BuildingEditorViewImpl;
 import com.propertyvista.crm.client.ui.lister.ArrearsListerView;
 import com.propertyvista.crm.client.ui.lister.ArrearsListerViewImpl;
 import com.propertyvista.crm.client.ui.lister.BuildingListerView;
@@ -52,6 +54,8 @@ public class ViewModule extends AbstractGinModule {
 
         bind(BuildingListerView.class).to(BuildingListerViewImpl.class).in(Singleton.class);
         bind(ArrearsListerView.class).to(ArrearsListerViewImpl.class).in(Singleton.class);
+
+        bind(BuildingEditorView.class).to(BuildingEditorViewImpl.class).in(Singleton.class);
 
         bind(ReportView.class).to(ReportViewImpl.class).in(Singleton.class);
         bind(DashboardView.class).to(DashboardViewImpl.class).in(Singleton.class);

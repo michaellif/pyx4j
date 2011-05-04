@@ -29,17 +29,18 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
-import com.propertyvista.common.client.ui.ViewLineSeparator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
+
+import com.propertyvista.common.client.ui.AddressUtils;
+import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
+import com.propertyvista.portal.client.ptapp.resources.CrmImages;
 import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.validators.CanadianSinValidator;
-import com.propertyvista.portal.client.ptapp.ui.validators.ProvinceContryFilters;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
@@ -380,20 +381,20 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             protected FolderDecorator<Vehicle> createFolderDecorator() {
-                return new TableFolderDecorator<Vehicle>(columns, SiteImages.INSTANCE.addRow(), SiteImages.INSTANCE.addRowHover(), i18n.tr("Add a vehicle"));
+                return new TableFolderDecorator<Vehicle>(columns, CrmImages.INSTANCE.addRow(), CrmImages.INSTANCE.addRowHover(), i18n.tr("Add a vehicle"));
             }
 
             @Override
             protected CEntityFolderItem<Vehicle> createItem() {
-                return createEmployeeRowEditor(columns);
+                return createVehicleRowEditor(columns);
             }
 
-            private CEntityFolderItem<Vehicle> createEmployeeRowEditor(final List<EntityFolderColumnDescriptor> columns) {
+            private CEntityFolderItem<Vehicle> createVehicleRowEditor(final List<EntityFolderColumnDescriptor> columns) {
                 return new CEntityFolderRow<Vehicle>(Vehicle.class, columns) {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), i18n.tr("Remove vehicle"));
+                        return new TableFolderItemDecorator(CrmImages.INSTANCE.delRow(), CrmImages.INSTANCE.delRowHover(), i18n.tr("Remove vehicle"));
                     }
 
                     @Override
@@ -424,7 +425,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             protected FolderDecorator<EmergencyContact> createFolderDecorator() {
-                return new BoxFolderDecorator<EmergencyContact>(SiteImages.INSTANCE.addRow(), SiteImages.INSTANCE.addRowHover(),
+                return new BoxFolderDecorator<EmergencyContact>(CrmImages.INSTANCE.addRow(), CrmImages.INSTANCE.addRowHover(),
                         i18n.tr("Add one more contact"));
             }
 
@@ -462,7 +463,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public FolderItemDecorator createFolderItemDecorator() {
-                return new BoxFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), i18n.tr("Remove contact"), !isFirst());
+                return new BoxFolderItemDecorator(CrmImages.INSTANCE.delRow(), CrmImages.INSTANCE.delRowHover(), i18n.tr("Remove contact"), !isFirst());
             }
         };
     }

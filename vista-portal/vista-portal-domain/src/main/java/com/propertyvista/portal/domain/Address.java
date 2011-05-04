@@ -13,21 +13,16 @@
  */
 package com.propertyvista.portal.domain;
 
-import com.propertyvista.portal.domain.ref.Country;
-import com.propertyvista.portal.domain.ref.Province;
-
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.portal.domain.pt.IAddress;
+
 @EmbeddedEntity
 @ToStringFormat("{0} {1} {2} {3}, {4} {5}")
-public interface Address extends IEntity {
+public interface Address extends IEntity, IAddress {
 
     public enum AddressType {
 
@@ -51,41 +46,6 @@ public interface Address extends IEntity {
 
         other
     }
-
-    /**
-     * (max 100 char)
-     */
-    @Caption(name = "Address Line 1")
-    @ToString(index = 0)
-    IPrimitive<String> addressLine1();
-
-    /**
-     * (max 100 char)
-     */
-    @Caption(name = "Address Line 2")
-    @ToString(index = 1)
-    IPrimitive<String> addressLine2();
-
-    /**
-     * (max 60 char)
-     */
-    @ToString(index = 2)
-    IPrimitive<String> city();
-
-    @Caption(name = "Province/State")
-    @ToString(index = 3)
-    @Editor(type = EditorType.combo)
-    Province state();
-
-    /**
-     * (max 12 char)
-     */
-    @Caption(name = "Postal/Zip")
-    @ToString(index = 4)
-    IPrimitive<String> zip();
-
-    @ToString(index = 5)
-    Country country();
 
     //    IPrimitive<GeoPoint> location(); for now the database complains about this unknown type
 

@@ -16,9 +16,10 @@ package com.propertyvista.portal.client.ptapp.ui;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+
+import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;

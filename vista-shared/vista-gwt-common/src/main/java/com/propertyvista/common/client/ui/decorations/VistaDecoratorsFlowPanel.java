@@ -11,13 +11,11 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.client.ptapp.ui.decorations;
+package com.propertyvista.common.client.ui.decorations;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.VistaWidgetDecorator.DecorationData;
 
 import com.pyx4j.forms.client.ui.CComponent;
 
@@ -38,7 +36,7 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
     }
 
     public void add(final CComponent<?> component, double labelWidth, double componentWidth) {
-        DecorationData decorData = new DecorationData();
+        VistaWidgetDecorator.DecorationData decorData = new VistaWidgetDecorator.DecorationData();
         decorData.componentWidth = componentWidth;
         decorData.labelWidth = labelWidth;
         decorData.readOnlyMode = readOnlyMode;

@@ -22,11 +22,12 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.client.ptapp.ui.components.AddressUtils;
+
+import com.propertyvista.common.client.ui.AddressUtils;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.portal.client.ptapp.resources.CrmImages;
 import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.domain.pt.IEmploymentInfo;
 import com.propertyvista.portal.domain.pt.IIncomeInfo;
@@ -102,7 +103,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         if (summaryViewMode) {
             return new BoxReadOnlyFolderItemDecorator(!isFirst());
         } else {
-            return new BoxFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover());
+            return new BoxFolderItemDecorator(CrmImages.INSTANCE.delRow(), CrmImages.INSTANCE.delRowHover());
         }
     }
 

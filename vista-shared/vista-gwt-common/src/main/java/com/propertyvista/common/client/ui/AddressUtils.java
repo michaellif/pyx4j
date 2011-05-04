@@ -11,17 +11,14 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.portal.client.ptapp.ui.components;
+package com.propertyvista.common.client.ui;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.portal.client.ptapp.ui.validators.ProvinceContryFilters;
-import com.propertyvista.portal.client.ptapp.ui.validators.RevalidationTrigger;
-import com.propertyvista.portal.client.ptapp.ui.validators.ZipCodeValueValidator;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
@@ -45,11 +42,11 @@ public class AddressUtils {
         CEditableComponent<String, ?> postalCode;
         main.add(postalCode = (CEditableComponent<String, ?>) parent.inject(proto.postalCode()), 7);
 
-        postalCode.addValueValidator(new ZipCodeValueValidator(parent, proto.country()));
-        country.addValueChangeHandler(new RevalidationTrigger(postalCode));
+        postalCode.addValueValidator(new com.propertyvista.common.client.ui.validators.ZipCodeValueValidator(parent, proto.country()));
+        country.addValueChangeHandler(new com.propertyvista.common.client.ui.validators.RevalidationTrigger(postalCode));
 
         // The filter does not use the CEditableComponent<Country, ?> and use Model directly. So it work fine on populate.
-        ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
+        com.propertyvista.common.client.ui.validators.ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
             @Override
             public boolean acceptOption(Province entity) {
                 if (parent.getValue() == null) {

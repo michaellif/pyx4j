@@ -91,6 +91,10 @@ public class CrmSiteMap {
 
     @PlaceProperties(caption = "Editor")
     public static class Editor extends AppPlace {
+        @PlaceProperties(caption = "Building")
+        @NavigationItem(navigLabel = "Building")
+        public static class Building extends AppPlace {
+        }
     }
 
 }

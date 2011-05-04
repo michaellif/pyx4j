@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.resources.CrmImages;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
@@ -110,7 +110,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
             @Override
             public FolderItemDecorator createFolderItemDecorator() {
-                return new TableFolderItemDecorator(SiteImages.INSTANCE.delRow(), SiteImages.INSTANCE.delRowHover(), i18n.tr("Remove file"));
+                return new TableFolderItemDecorator(CrmImages.INSTANCE.delRow(), CrmImages.INSTANCE.delRowHover(), i18n.tr("Remove file"));
             }
         };
     }
@@ -139,7 +139,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             }
 
             add(new HTML("&nbsp;&nbsp;&nbsp;"));
-            add(new Image(SiteImages.INSTANCE.clip()));
+            add(new Image(CrmImages.INSTANCE.clip()));
 
             FlowPanel fp = new FlowPanel();
             fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);

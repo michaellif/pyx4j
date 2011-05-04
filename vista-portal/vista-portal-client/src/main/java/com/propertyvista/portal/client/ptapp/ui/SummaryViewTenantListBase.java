@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.resources.CrmImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
@@ -103,7 +103,7 @@ public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEnti
 
     protected IsWidget addViewSwitcher() {
 
-        final Image switcher = new Image(SiteImages.INSTANCE.pointerCollapsed());
+        final Image switcher = new Image(CrmImages.INSTANCE.pointerCollapsed());
         switcher.getElement().getStyle().setCursor(Cursor.POINTER);
         switcher.addClickHandler(new ClickHandler() {
 
@@ -111,10 +111,10 @@ public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEnti
             public void onClick(ClickEvent event) {
                 if (fullView.asWidget().isVisible()) {
                     fullView.asWidget().setVisible(false);
-                    switcher.setResource(SiteImages.INSTANCE.pointerCollapsed());
+                    switcher.setResource(CrmImages.INSTANCE.pointerCollapsed());
                 } else {
                     fullView.asWidget().setVisible(true);
-                    switcher.setResource(SiteImages.INSTANCE.pointerExpanded());
+                    switcher.setResource(CrmImages.INSTANCE.pointerExpanded());
                 }
             }
         });

@@ -24,6 +24,16 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.gwt.server.IOUtils;
+
 import com.propertyvista.portal.domain.AddOn;
 import com.propertyvista.portal.domain.Address;
 import com.propertyvista.portal.domain.Amenity;
@@ -48,16 +58,6 @@ import com.propertyvista.portal.domain.pt.LeaseTerms;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
 import com.propertyvista.portal.domain.pt.PropertyProfile;
 import com.propertyvista.portal.domain.util.DomainUtil;
-
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.gwt.server.IOUtils;
 
 public class PreloadBuildings extends BaseVistaDataPreloader {
 
@@ -472,9 +472,9 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             //            b.append(building.getStringView());
             sb.append(building.buildingType().getStringView());
             sb.append("\t");
-            sb.append(building.address().addressLine1().getStringView()).append(", ");
-            sb.append(building.address().city().getStringView()).append(" ").append(building.address().state().getStringView()).append(", ");
-            sb.append(building.address().zip().getStringView()).append(", ").append(building.address().country().getStringView());
+            sb.append(building.address().street1().getStringView()).append(", ");
+            sb.append(building.address().city().getStringView()).append(" ").append(building.address().province().getStringView()).append(", ");
+            sb.append(building.address().postalCode().getStringView()).append(", ").append(building.address().country().getStringView());
 
             // property profile
             sb.append("\nProperty Profile\n");

@@ -16,6 +16,7 @@ package com.propertyvista.common.client.ui;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.propertyvista.common.client.ui.validators.DefaultMoneyValidator;
 import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.forms.client.ui.CEditableComponent;

@@ -19,7 +19,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.common.client.ui.ViewLineSeparator;
+
+import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;

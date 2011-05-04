@@ -11,7 +11,7 @@
  * @author VladLL
  * @version $Id$
  */
-package com.propertyvista.common.client.ui;
+package com.propertyvista.common.client.ui.decorations;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
