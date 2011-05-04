@@ -201,7 +201,7 @@ public class EntityImplGenerator {
             }
         }
         if (jarCount == 0) {
-            log.warn("No jars found in ContextClassLoader webapp={}", webapp);
+            log.debug("No jars found in ContextClassLoader webapp={}", webapp);
             // Allow to work as eclipse plugin.
             pathToClose.add(pool.appendClassPath(new ClassClassPath(IEntity.class)));
         }
