@@ -16,6 +16,9 @@ package com.propertyvista.crm.client.ui.lister;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Unit;
@@ -27,13 +30,16 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
@@ -41,6 +47,8 @@ import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.propertyvista.crm.client.resources.CrmImages;
 
 public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
+
+    private static I18n i18n = I18nFactory.getI18n(ListerBase.class);
 
     protected final Filters filters;
 
@@ -78,7 +86,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
 
         filters = new Filters(listPanel);
 
-        Button apply = new Button("Apply", new ClickHandler() {
+        Button apply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 filters.getFiltersData();
@@ -87,16 +95,24 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
         });
 
         // put UI bricks together:
+        HTML heading = new HTML(HtmlUtils.h3(i18n.tr("FILTERS")));
+        add(heading);
+        Element cell = DOM.getParent(heading.getElement());
+        cell.getStyle().setPaddingLeft(1, Unit.EM);
+        cell.getStyle().setPaddingBottom(0.5, Unit.EM);
+
         add(filters);
         add(apply);
-        Element cell = DOM.getParent(apply.getElement());
+        cell = DOM.getParent(apply.getElement());
         cell.getStyle().setPaddingTop(7, Unit.PX);
         cell.getStyle().setProperty("borderTop", "2px dotted #bbb");
         cell.getStyle().setPaddingBottom(3, Unit.PX);
 
         apply.getElement().getStyle().setMarginRight(1, Unit.EM);
         setCellHorizontalAlignment(apply, HasHorizontalAlignment.ALIGN_RIGHT);
+
         add(listPanel);
+
         setWidth("100%");
     }
 
@@ -136,6 +152,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
 
     public static class FilterData {
         // TODO: formalise filter data here!..
+
+        public FilterData() {
+            // TODO Auto-generated constructor stub
+        }
     }
 
     // -------------------------
@@ -172,14 +192,20 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
                     fieldsList.addItem(cd.getColumnTitle());
                     fieldsList.setValue(fieldsList.getItemCount() - 1, cd.getColumnName());
                 }
+                fieldsList.setWidth("100%");
                 add(fieldsList);
+                formatCell(fieldsList);
 
                 for (Operands op : Operands.values()) {
                     operandsList.addItem(op.name());
                 }
+                operandsList.setWidth("100%");
                 add(operandsList);
+                formatCell(operandsList);
 
+                valuesText.setWidth("100%");
                 add(valuesText);
+                formatCell(valuesText);
 
                 final Image btnAdd = new Image(CrmImages.INSTANCE.add());
                 btnAdd.getElement().getStyle().setCursor(Cursor.POINTER);
@@ -225,12 +251,18 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
                 HorizontalPanel buttons = new HorizontalPanel();
                 buttons.add(btnAdd);
                 buttons.add(btnDel);
-                buttons.setSpacing(3);
                 add(buttons);
+                btnAdd.getElement().getStyle().setPaddingRight(8, Unit.PX);
                 buttons.getElement().getStyle().setMarginRight(1, Unit.EM);
                 setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_RIGHT);
 
                 setWidth("100%");
+            }
+
+            private void formatCell(Widget w) {
+                Element cell = DOM.getParent(w.getElement());
+                cell.getStyle().setPaddingLeft(1, Unit.EM);
+                cell.getStyle().setPaddingRight(1, Unit.EM);
             }
         }
     }
