@@ -17,13 +17,14 @@ import java.util.Arrays;
 
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
 import com.pyx4j.widgets.client.svg.BarChart;
 import com.pyx4j.widgets.client.svg.BarChartModel;
 import com.pyx4j.widgets.client.svg.BarChartModel.BarChartItem;
 import com.pyx4j.widgets.client.svg.SvgPanel;
+
+import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
 public class BarChartDisplayGadget extends GadgetBase {
 
@@ -41,7 +42,7 @@ public class BarChartDisplayGadget extends GadgetBase {
 
         BarChart activeOrdersChart = new BarChart(activeOrdersBarModel, 300, 100);
         activeOrdersPanel.add(activeOrdersChart);
-        activeOrdersPanel.setHeight("150px");
+        activeOrdersPanel.setSize("500px", "150px");
     }
 
     @Override

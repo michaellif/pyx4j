@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -140,9 +139,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     // IGadget:
     @Override
     public Widget asWidget() {
-        ScrollPanel scroll = new ScrollPanel(listPanel.asWidget());
-//        scroll.setWidth("100%");
-        return scroll;
+        return listPanel.asWidget();
     }
 
     @Override

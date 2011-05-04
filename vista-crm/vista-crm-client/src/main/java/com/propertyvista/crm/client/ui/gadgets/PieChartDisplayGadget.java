@@ -14,13 +14,14 @@
 package com.propertyvista.crm.client.ui.gadgets;
 
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
 import com.pyx4j.widgets.client.svg.PieChart;
 import com.pyx4j.widgets.client.svg.PieChartModel;
 import com.pyx4j.widgets.client.svg.PieChartModel.PieChartSegment;
 import com.pyx4j.widgets.client.svg.SvgPanel;
+
+import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
 public class PieChartDisplayGadget extends GadgetBase {
 
@@ -39,7 +40,7 @@ public class PieChartDisplayGadget extends GadgetBase {
         PieChart installerChart = new PieChart(installerChartModel, 60);
 
         installerPanel.add(installerChart);
-        installerPanel.setHeight("150px");
+        installerPanel.setSize("300px", "150px");
 
     }
 
