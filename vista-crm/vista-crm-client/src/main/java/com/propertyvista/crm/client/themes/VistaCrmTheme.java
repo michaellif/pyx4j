@@ -13,12 +13,7 @@
  */
 package com.propertyvista.crm.client.themes;
 
-import com.pyx4j.entity.client.ui.datatable.DataTable;
-import com.pyx4j.widgets.client.dashboard.CSSNames;
-import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColor;
+import java.util.List;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.CrmView;
@@ -28,10 +23,29 @@ import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
+import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.widgets.client.dashboard.CSSNames;
+import com.pyx4j.widgets.client.style.ColorFactory;
+import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.widgets.client.style.Style;
+import com.pyx4j.widgets.client.style.ThemeColor;
+
 public abstract class VistaCrmTheme extends com.propertyvista.common.client.theme.VistaTheme {
 
     public VistaCrmTheme() {
         super();
+        List<Style> styles = getStyles("body");
+        if (styles != null) {
+            for (Style s : styles) {
+                if (s.getSelector().equalsIgnoreCase("body")) {
+                    s.addProperty("min-width", "780px");
+                    s.addProperty("min-height", "580px");
+                    break;
+                }
+
+            }
+        }
+
     }
 
     @Override
@@ -250,7 +264,7 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
         String containerprefix = "." + CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.NavigContainer;
         //navigation panels container style
         Style style = new Style(containerprefix);
-        style.addProperty("min-height", "400px");
+        //style.addProperty("min-height", "400px");
         addStyle(style);
         style = new Style(containerprefix + " td");
         style.addProperty("border", "solid 1px " + getThemeColorString(ThemeColor.OBJECT_TONE4));
@@ -382,7 +396,7 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
     protected void initActionStyle() {
         String prefix = "." + CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Action;
         Style style = new Style(prefix);
-        style.addProperty("min-width", "700px");
+        //style.addProperty("min-width", "700px");
         // style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
         style.addProperty("color", ThemeColor.TEXT_BACKGROUND);
         style.addProperty("font-size", "1em");
