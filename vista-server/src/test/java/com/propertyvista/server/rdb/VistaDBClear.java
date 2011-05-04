@@ -13,22 +13,27 @@
  */
 package com.propertyvista.server.rdb;
 
-import com.propertyvista.server.config.VistaServerSideConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.quartz.SchedulerHelper;
 
+import com.propertyvista.server.config.VistaServerSideConfiguration;
+
 public class VistaDBClear {
+
+    private static final Logger log = LoggerFactory.getLogger(VistaDBPreload.class);
 
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
-        System.out.println("Remove All data");
+        log.info("Remove All data");
         SchedulerHelper.dbReset();
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
-        System.out.println(conf.getDataPreloaders().delete());
-        System.out.println("Total time: " + TimeUtils.secSince(start));
+        log.info(conf.getDataPreloaders().delete());
+        log.info("Total time: " + TimeUtils.secSince(start));
     }
 
 }

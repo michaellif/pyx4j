@@ -13,19 +13,25 @@
  */
 package com.propertyvista.server.rdb;
 
-import com.propertyvista.server.config.VistaServerSideConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
+import com.propertyvista.server.config.VistaServerSideConfiguration;
+
 public class VistaDBPreload {
 
+    private static final Logger log = LoggerFactory.getLogger(VistaDBPreload.class);
+
     public static void main(String[] args) {
+        log.info("Generating new Data...");
         long start = System.currentTimeMillis();
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
-        System.out.println(conf.getDataPreloaders().preloadAll());
-        System.out.println("Total time: " + TimeUtils.secSince(start));
+        log.info(conf.getDataPreloaders().preloadAll());
+        log.info("Total time: " + TimeUtils.secSince(start));
     }
 
 }
