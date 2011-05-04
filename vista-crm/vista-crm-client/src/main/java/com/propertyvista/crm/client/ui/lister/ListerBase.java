@@ -147,7 +147,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
     // Filter Data stuff:
 
     public enum Operands {
-        Is, IsNot, Contains, DoesNotcontain, BeginsWith, EndsWith, LessThen, GreaterThen
+        Is, IsNot, Contains, DoesNotContain, BeginsWith, EndsWith, LessThen, GreaterThen
     }
 
     public static class FilterData {
