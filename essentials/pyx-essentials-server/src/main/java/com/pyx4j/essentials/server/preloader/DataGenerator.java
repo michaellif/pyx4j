@@ -50,6 +50,13 @@ public class DataGenerator {
 
         private Map<String, FIFO<Integer>> duplicates;
 
+        private void setRandomSeed(long seed) {
+            random.setSeed(seed);
+            if (duplicates != null) {
+                duplicates.clear();
+            }
+        }
+
         /**
          * Avoid creation of same values during data generation
          */
@@ -84,7 +91,7 @@ public class DataGenerator {
     };
 
     public static void setRandomSeed(long seed) {
-        random().setSeed(seed);
+        generatorLocal.get().setRandomSeed(seed);
     }
 
     protected static Random random() {
