@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.generator;
 
 import junit.framework.TestCase;
 
+import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.server.TestUtil;
@@ -31,7 +32,8 @@ public class VistaDataGeneratorTest extends TestCase {
 
         SharedData.init();
         VistaDataGenerator generator1 = new VistaDataGenerator(seed1);
-        Application application1 = generator1.createApplication(null);
+        User user1 = generator1.createUser(1);
+        Application application1 = generator1.createApplication(user1);
         Summary summary1 = generator1.createSummary(application1, null);
 
         // To some other data generation
@@ -41,7 +43,8 @@ public class VistaDataGeneratorTest extends TestCase {
         SharedData.init();
 
         VistaDataGenerator generator2 = new VistaDataGenerator(seed1);
-        Application application2 = generator2.createApplication(null);
+        User user2 = generator1.createUser(1);
+        Application application2 = generator2.createApplication(user2);
         Summary summary2 = generator2.createSummary(application2, null);
 
         TestUtil.assertEqual("Same data expected", summary1, summary2);
