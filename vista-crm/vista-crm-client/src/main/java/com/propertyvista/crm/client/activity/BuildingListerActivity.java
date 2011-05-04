@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.propertyvista.crm.client.ui.lister.BuildingListerView;
+import com.propertyvista.crm.client.ui.listers.BuildingListerView;
 
 public class BuildingListerActivity extends AbstractActivity {
 

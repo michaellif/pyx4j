@@ -13,16 +13,22 @@
  */
 package com.propertyvista.crm.client.ui.listers;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.portal.domain.Building;
 
@@ -30,6 +36,20 @@ public class BuildingLister extends ListerBase<Building> {
 
     public BuildingLister() {
         super(Building.class);
+
+        // add editing omnn double-click: 
+        getListPanel().getDataTable().addDoubleClickHandler(new DoubleClickHandler() {
+            @Override
+            public void onDoubleClick(DoubleClickEvent event) {
+                AppPlace link = new CrmSiteMap.Properties.Buildings();
+                HashMap<String, String> args = new HashMap<String, String>();
+                args.put("BuildingID", "");
+                link.setArgs(args);
+
+                AppSite.getPlaceController().goTo(link);
+            }
+
+        });
     }
 
     @Override
