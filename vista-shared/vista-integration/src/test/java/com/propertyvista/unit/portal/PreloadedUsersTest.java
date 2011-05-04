@@ -35,11 +35,9 @@ public class PreloadedUsersTest extends PortalVerificationTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
+        SharedData.init();
         // This is just to make the test more visual
         selenium.setFocusOnGetValue(true);
-
-        SharedData.init();
     }
 
     public void testFullFlow() throws Exception {

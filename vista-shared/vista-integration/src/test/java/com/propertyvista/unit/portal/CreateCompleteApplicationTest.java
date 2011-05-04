@@ -47,6 +47,8 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         SharedData.init();
+        // This is just to make the test more visual
+        selenium.setFocusOnGetValue(true);
     }
 
     public void testFullFlow() throws Exception {
@@ -71,7 +73,8 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
 
         verifyTenantsPage(summary);
-        verifyInfoPages(summary);
+        //TODO
+        //verifyInfoPages(summary);
     }
 
     private void createAccount(User user) {
@@ -135,8 +138,10 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         setValueOnForm(tenant.workPhone());
         setValueOnForm(tenant.driversLicenseState());
         setValueOnForm(tenant.driversLicense());
-        setValueOnForm(tenant.secureIdentifier());
         setValueOnForm(tenant.notCanadianCitizen());
+        if (tenant.notCanadianCitizen().getValue() != Boolean.TRUE) {
+            setValueOnForm(tenant.secureIdentifier());
+        }
 
         enterAddressForm(tenant.currentAddress().getPath(), detach(tenant.currentAddress()));
         if (BusinessRules.infoPageNeedPreviousAddress(tenant.currentAddress().moveInDate().getValue())) {

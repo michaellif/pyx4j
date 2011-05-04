@@ -428,6 +428,10 @@ public class VistaDataGenerator {
 
         populatePotentialTenant(pti, pti.relationship().getValue(), pti.status().getValue());
 
+        if (index == 0) {
+            pti.email().setValue(application.user().email().getValue());
+        }
+
         String driversLicense = "JTVMX" + RandomUtil.randomInt(10) + "VMIEK";
         pti.driversLicense().setValue(driversLicense);
         pti.driversLicenseState().set(RandomUtil.random(SharedData.getProvinces()));
