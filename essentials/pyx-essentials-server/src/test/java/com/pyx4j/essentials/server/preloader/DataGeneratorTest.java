@@ -42,14 +42,23 @@ public class DataGeneratorTest extends TestCase {
 
         String lastName2;
 
-        AddressInfo address;
+        String streetName;
+
+        String municipality;
+
+        Double latitude;
 
         void generate() {
             postalCode = DataGenerator.randomPostalCode();
             phone = DataGenerator.randomPhone();
             date = DataGenerator.randomDate(100);
             lastName1 = DataGenerator.randomLastName();
-            address = DataGenerator.randomAddressInfo();
+
+            AddressInfo address = DataGenerator.randomAddressInfo();
+            streetName = address.streetName().getValue();
+            municipality = address.municipality().getValue();
+            latitude = address.latitude().getValue();
+
             lastName2 = DataGenerator.randomLastName();
         }
 

@@ -236,6 +236,14 @@ public class DataGenerator {
 
     public static Date randomDate(int month) {
         Calendar c = new GregorianCalendar();
+        c.set(Calendar.YEAR, 2011);
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 1);
+
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+
         c.add(Calendar.MONTH, (month > 0) ? random().nextInt(month) : -random().nextInt(-month));
         // DB does not store Milliseconds
         c.set(Calendar.MILLISECOND, 0);
