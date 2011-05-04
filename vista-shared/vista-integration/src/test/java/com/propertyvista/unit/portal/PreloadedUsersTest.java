@@ -13,6 +13,13 @@
  */
 package com.propertyvista.unit.portal;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.selenium.D;
+import com.pyx4j.site.rpc.AppPlaceInfo;
+
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
@@ -30,13 +37,6 @@ import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
 import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
-
-import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.selenium.D;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class PreloadedUsersTest extends WizardBaseSeleniumTestCase {
 
@@ -94,6 +94,8 @@ public class PreloadedUsersTest extends WizardBaseSeleniumTestCase {
 
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).unitType()));
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, "leaseTerm_12"));
+        String avlDate = selenium.getText(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).avalableForRent()));
+        selenium.setValue(D.id(proto(UnitSelection.class).rentStart()), avlDate);
         saveAndContinue();
     }
 
