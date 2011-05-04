@@ -101,7 +101,7 @@ public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
         assertTrue(warns.indexOf(warnFromFmt) >= 0 && warns.indexOf(warnToFmt) >= 0 && warns.indexOf(warnNoUnit) >= 0 && //this is in the error list too, but it's not the purpose of this test
                 warns.indexOf(warnRentDateFmt) >= 0);
 
-        selenium.click("logout");
+        selenium.click(VistaFormsDebugId.Auth_LogOutTop);
     }
 
     public void testDateTimePast() throws Exception {
@@ -205,7 +205,7 @@ public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
         assertTrue(warns.indexOf(warnRentDateBefore) >= 0);
 
         //selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
-        selenium.click("logout");
+        selenium.click(VistaFormsDebugId.Auth_LogOutTop);
     }
 
 }

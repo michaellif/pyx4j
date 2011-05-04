@@ -33,11 +33,15 @@ import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
 import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
+import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.selenium.D;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
-public class CreateCompleteApplicationTest extends WizardBaseSeleniumTestCase {
+public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
 
     @Override
     protected void setUp() throws Exception {
@@ -55,6 +59,19 @@ public class CreateCompleteApplicationTest extends WizardBaseSeleniumTestCase {
         enterUnitSelection();
         enterTenantsPage(summary);
         enterTestInfoPages(summary);
+
+        selenium.click(VistaFormsDebugId.Auth_LogOutTop);
+
+        // verify entered data
+
+        selenium.click(VistaFormsDebugId.Auth_Login);
+        selenium.type(D.id(proto(AuthenticationRequest.class).email()), user.email().getValue());
+        selenium.type(D.id(proto(AuthenticationRequest.class).password()), user.email().getValue());
+        selenium.click(CrudDebugId.Criteria_Submit);
+        assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
+
+        verifyTenantsPage(summary);
+        verifyInfoPages(summary);
     }
 
     private void createAccount(User user) {
@@ -77,13 +94,13 @@ public class CreateCompleteApplicationTest extends WizardBaseSeleniumTestCase {
             if (num != 0) {
                 selenium.click(D.id(proto(PotentialTenantList.class).tenants(), FormNavigationDebugId.Form_Add));
             }
-            enterTenant(D.id(proto(PotentialTenantList.class).tenants(), num), detach(tenant), (num != 0));
+            enterTenantRow(D.id(proto(PotentialTenantList.class).tenants(), num), detach(tenant), (num != 0));
             num++;
         }
         saveAndContinue();
     }
 
-    private void enterTenant(IDebugId fromDebugId, PotentialTenantInfo tenant, boolean fullInfo) {
+    private void enterTenantRow(IDebugId fromDebugId, PotentialTenantInfo tenant, boolean fullInfo) {
         setValueOnForm(fromDebugId, tenant.firstName());
         setValueOnForm(fromDebugId, tenant.lastName());
         setValueOnForm(fromDebugId, tenant.middleName());
@@ -132,7 +149,7 @@ public class CreateCompleteApplicationTest extends WizardBaseSeleniumTestCase {
         int num = 0;
         for (Vehicle vehicle : tenant.vehicles()) {
             selenium.click(D.id(tenant.vehicles(), FormNavigationDebugId.Form_Add));
-            enterVehiclesForm(D.id(tenant.vehicles(), num), detach(vehicle));
+            enterVehicleRow(D.id(tenant.vehicles(), num), detach(vehicle));
             num++;
         }
         //verify size (e.g. no next row exists)
@@ -183,7 +200,7 @@ public class CreateCompleteApplicationTest extends WizardBaseSeleniumTestCase {
 
     }
 
-    private void enterVehiclesForm(IDebugId fromDebugId, Vehicle vehicle) {
+    private void enterVehicleRow(IDebugId fromDebugId, Vehicle vehicle) {
         setValueOnForm(fromDebugId, vehicle.plateNumber());
         setValueOnForm(fromDebugId, vehicle.year());
         setValueOnForm(fromDebugId, vehicle.make());

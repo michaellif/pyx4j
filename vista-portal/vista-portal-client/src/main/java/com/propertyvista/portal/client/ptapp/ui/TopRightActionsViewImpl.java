@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Inject;
+import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
@@ -59,7 +60,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
                 presenter.logout();
             }
         });
-        logout.setDebugId(new StringDebugId("logout"));
+        logout.setDebugId(VistaFormsDebugId.Auth_LogOutTop);
         logout.setValue(i18n.tr("LogOut"));
         logout.setVisible(false);
         topLinksPanel.add(logout);
@@ -72,6 +73,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
         });
         login.setDebugId(new StringDebugId("login"));
         login.setValue(i18n.tr("LogIn"));
+        login.setDebugId(VistaFormsDebugId.Auth_LoginTop);
         topLinksPanel.add(login);
 
         topLinksPanel.add(new HTML("&nbsp;-&nbsp;"));

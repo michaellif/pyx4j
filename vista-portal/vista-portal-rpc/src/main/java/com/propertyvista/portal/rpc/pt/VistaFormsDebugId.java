@@ -19,6 +19,10 @@ public enum VistaFormsDebugId implements IDebugId {
 
     Auth_Login,
 
+    Auth_LoginTop,
+
+    Auth_LogOutTop,
+
     Auth_LetsStart,
 
     Auth_RetrivePassword,
