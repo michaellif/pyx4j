@@ -159,6 +159,7 @@
 
         <jasperreportsVersion>4.0.1</jasperreportsVersion>
         <quartzVersion>2.0.1</quartzVersion>
+        <batikVersion>1.7</batikVersion>
 
         <!-- Used for speed up the GWT compiler for developers -->
         <gwtDraftCompile>false</gwtDraftCompile>
@@ -484,6 +485,61 @@
                 <artifactId>mail</artifactId>
                 <version>1.4</version>
             </dependency>
+
+					<dependency>
+						<groupId>org.apache.xmlgraphics</groupId>
+						<artifactId>batik-bridge</artifactId>
+						<version>${batikVersion}</version>
+					</dependency>
+					
+					<dependency>
+						<groupId>org.apache.xmlgraphics</groupId>
+						<artifactId>batik-gvt</artifactId>
+						<version>${batikVersion}</version>
+					</dependency>
+					
+					<dependency>
+						<groupId>org.apache.xmlgraphics</groupId>
+						<artifactId>batik-util</artifactId>
+						<version>${batikVersion}</version>
+					</dependency>
+					
+					<dependency>
+						<groupId>org.apache.xmlgraphics</groupId>
+						<artifactId>batik-svg-dom</artifactId>
+						<version>${batikVersion}</version>
+					</dependency>
+					
+					<dependency>
+						<groupId>org.apache.xmlgraphics</groupId>
+						<artifactId>batik-dom</artifactId>
+						<version>${batikVersion}</version>
+					</dependency>
+					
+					<dependency>
+						<groupId>org.apache.xmlgraphics</groupId>
+						<artifactId>batik-script</artifactId>
+						<version>${batikVersion}</version>
+					</dependency>
+					
+					<dependency>
+						<groupId>org.apache.xmlgraphics</groupId>
+						<artifactId>batik-css</artifactId>
+						<version>${batikVersion}</version>
+					</dependency>
+					
+					<dependency>
+						<groupId>org.apache.xmlgraphics</groupId>
+						<artifactId>batik-svggen</artifactId>
+						<version>${batikVersion}</version>
+					</dependency>
+					
+					<dependency>
+						<groupId>org.apache.xmlgraphics</groupId>
+						<artifactId>batik-awt-util</artifactId>
+						<version>${batikVersion}</version>
+					</dependency>
+
 
         </dependencies>
 
