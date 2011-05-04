@@ -18,7 +18,6 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.site.client.AppSite;
@@ -26,7 +25,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
-public class BuildingListerViewImpl extends DockLayoutPanel implements BuildingListerView, RequiresResize {
+public class BuildingListerViewImpl extends DockLayoutPanel implements BuildingListerView {
 
     private static I18n i18n = I18nFactory.getI18n(BuildingListerViewImpl.class);
 
@@ -40,7 +39,5 @@ public class BuildingListerViewImpl extends DockLayoutPanel implements BuildingL
 
         add(scroll);
         lister.populateData(0);
-
     }
-
 }

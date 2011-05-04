@@ -18,7 +18,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -65,11 +64,7 @@ public class CrmSite extends VistaSite {
 
     private void loadCrm() {
 
-// WARNING: just for Building lister debug!
-        if (ApplicationMode.isDevelopment()) {
-            AppSite.getPlaceController().goTo(new CrmSiteMap.Properties.Buildings());
-
-        } else if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
+        if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
             AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard());
         } else {
             AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
