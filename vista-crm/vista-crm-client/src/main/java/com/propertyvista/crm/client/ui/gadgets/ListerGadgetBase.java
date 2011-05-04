@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberPrimitiveColumnDescriptor;
@@ -40,6 +39,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
+
+import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
 public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
@@ -96,6 +97,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             }
         });
 
+        listPanel.removeUpperActionsBar();
         DOM.setStyleAttribute(listPanel.getDataTable().getElement(), "tableLayout", "auto");
     }
 

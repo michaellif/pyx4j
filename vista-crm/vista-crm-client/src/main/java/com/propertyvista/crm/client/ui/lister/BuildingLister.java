@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-04-25
+ * Created on 2011-05-03
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets;
+package com.propertyvista.crm.client.ui.lister;
 
 import java.util.List;
 
@@ -23,21 +23,13 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.portal.domain.Building;
 
-public class BuildingListerGadget extends ListerGadgetBase<Building> {
+public class BuildingLister extends ListerBase<Building> {
 
-    public BuildingListerGadget(GadgetMetadata gmd) {
-        super(gmd, Building.class);
-    }
-
-    @Override
-    protected void selfInit(GadgetMetadata gmd) {
-        gmd.type().setValue(GadgetType.BuildingLister);
-        gmd.name().setValue(i18n.tr("Building Lister"));
+    public BuildingLister() {
+        super(Building.class);
     }
 
     @Override
@@ -64,7 +56,7 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
 
                 @Override
                 public void onSuccess(EntitySearchResult<Building> result) {
-                    BuildingListerGadget.this.getListPanel().populateData(result.getData(), pageNumber, result.hasMoreData());
+                    BuildingLister.this.getListPanel().populateData(result.getData(), pageNumber, result.hasMoreData());
                 }
             }, criteria);
         }

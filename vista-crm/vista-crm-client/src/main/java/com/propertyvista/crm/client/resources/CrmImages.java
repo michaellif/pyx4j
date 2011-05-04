@@ -42,6 +42,18 @@ public interface CrmImages extends ClientBundle {
     @Source("search.png")
     ImageResource search();
 
+    @Source("add.png")
+    ImageResource add();
+
+    @Source("add_hover.png")
+    ImageResource addHover();
+
+    @Source("del.png")
+    ImageResource del();
+
+    @Source("del_hover.png")
+    ImageResource delHover();
+
     @Source("DashboardLayout1-0.png")
     ImageResource dashboardLayout1_0();
 

@@ -17,11 +17,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.propertyvista.common.client.Message;
-import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.portal.domain.VistaBehavior;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -29,6 +26,11 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.common.client.Message;
+import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.portal.domain.VistaBehavior;
 
 public class CrmSite extends VistaSite {
 
@@ -62,7 +64,12 @@ public class CrmSite extends VistaSite {
     }
 
     private void loadCrm() {
-        if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
+
+// WARNING: just for Building lister debug!
+        if (ApplicationMode.isDevelopment()) {
+            AppSite.getPlaceController().goTo(new CrmSiteMap.Properties.Buildings());
+
+        } else if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
             AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard());
         } else {
             AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
