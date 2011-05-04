@@ -11,8 +11,10 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.lister;
+package com.propertyvista.crm.client.ui.listers;
 
-public interface BuildingListerView extends ListerView {
+import com.google.gwt.user.client.ui.IsWidget;
+
+public interface ListerView extends IsWidget {
 
 }

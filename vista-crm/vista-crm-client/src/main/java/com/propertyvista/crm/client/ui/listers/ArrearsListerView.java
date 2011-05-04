@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.lister;
+package com.propertyvista.crm.client.ui.listers;
 
 
 public interface ArrearsListerView extends ListerView {
