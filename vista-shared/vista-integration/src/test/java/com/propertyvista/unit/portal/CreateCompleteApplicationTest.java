@@ -13,10 +13,6 @@
  */
 package com.propertyvista.unit.portal;
 
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.ui.FormNavigationDebugId;
-import com.pyx4j.selenium.D;
-
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
@@ -37,6 +33,10 @@ import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
 import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
 
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.forms.client.ui.FormNavigationDebugId;
+import com.pyx4j.selenium.D;
+
 public class CreateCompleteApplicationTest extends WizardBaseSeleniumTestCase {
 
     @Override
@@ -54,8 +54,7 @@ public class CreateCompleteApplicationTest extends WizardBaseSeleniumTestCase {
         createAccount(user);
         enterUnitSelection();
         enterTenantsPage(summary);
-        //TODO
-        //enterTestInfoPages(summary);
+        enterTestInfoPages(summary);
     }
 
     private void createAccount(User user) {
@@ -140,14 +139,13 @@ public class CreateCompleteApplicationTest extends WizardBaseSeleniumTestCase {
         assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantInfo.class).vehicles(), num, proto(Vehicle.class).plateNumber())));
 
         //Legal Questions
-        //TODO
-//        setValueOnForm(tenant.legalQuestions().suedForRent());
-//        setValueOnForm(tenant.legalQuestions().suedForDamages());
-//        setValueOnForm(tenant.legalQuestions().everEvicted());
-//        setValueOnForm(tenant.legalQuestions().defaultedOnLease());
-//        setValueOnForm(tenant.legalQuestions().convictedOfFelony());
-//        setValueOnForm(tenant.legalQuestions().legalTroubles());
-//        setValueOnForm(tenant.legalQuestions().filedBankruptcy());
+        setValueOnForm(tenant.legalQuestions().suedForRent());
+        setValueOnForm(tenant.legalQuestions().suedForDamages());
+        setValueOnForm(tenant.legalQuestions().everEvicted());
+        setValueOnForm(tenant.legalQuestions().defaultedOnLease());
+        setValueOnForm(tenant.legalQuestions().convictedOfFelony());
+        setValueOnForm(tenant.legalQuestions().legalTroubles());
+        setValueOnForm(tenant.legalQuestions().filedBankruptcy());
 
         //Emergency Contacts
         num = 0;
@@ -187,8 +185,7 @@ public class CreateCompleteApplicationTest extends WizardBaseSeleniumTestCase {
 
     private void enterVehiclesForm(IDebugId fromDebugId, Vehicle vehicle) {
         setValueOnForm(fromDebugId, vehicle.plateNumber());
-        //TODO
-        //setValueOnForm(fromDebugId, vehicle.year());
+        setValueOnForm(fromDebugId, vehicle.year());
         setValueOnForm(fromDebugId, vehicle.make());
         setValueOnForm(fromDebugId, vehicle.model());
         setValueOnForm(fromDebugId, vehicle.country());
