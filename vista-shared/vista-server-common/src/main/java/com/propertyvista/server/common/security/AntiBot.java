@@ -51,7 +51,7 @@ public class AntiBot {
             throw new UserRuntimeException(i18n.tr("Captcha code is required"));
         }
         if (ServerSideConfiguration.instance().isDevelopmentBehavior() && challengeRresponse.getB().equals("x")) {
-            log.warn("Development CAPTCHA Ok");
+            log.debug("Development CAPTCHA Ok");
             return;
         }
 
