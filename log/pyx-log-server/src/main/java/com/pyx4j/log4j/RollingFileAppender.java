@@ -83,6 +83,10 @@ public class RollingFileAppender extends org.apache.log4j.RollingFileAppender {
     @Override
     public void append(LoggingEvent event) {
         if (activateOnFirstEvent && firstEvent) {
+            // Do not activate with Jetty generated events
+            if ("org.eclipse.jetty.util.log".equals(event.getLoggerName())) {
+                return;
+            }
             firstEvent = false;
             executeActivateOptions();
         }
