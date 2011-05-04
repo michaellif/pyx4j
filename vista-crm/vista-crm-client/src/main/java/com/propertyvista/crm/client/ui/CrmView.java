@@ -23,12 +23,21 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.AppSiteView;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.style.Theme;
+
 import com.propertyvista.crm.client.mvp.ActionsActivityMapper;
 import com.propertyvista.crm.client.mvp.EntryPointActivityMapper;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
@@ -38,12 +47,6 @@ import com.propertyvista.crm.client.mvp.LogoActivityMapper;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.mvp.NavigActivityMapper;
 import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
-
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.AppSiteView;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
-import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.Theme;
 
 @Singleton
 public class CrmView extends LayoutPanel {
@@ -116,7 +119,7 @@ public class CrmView extends LayoutPanel {
          * Since the center area of DockLayoutPanel accepts only one element
          * one more panel needs to be introduced
          */
-        FlowPanel centerAreaContent = new FlowPanel();
+        LayoutPanel centerAreaContent = new LayoutPanel();
         centerAreaContent.ensureDebugId("just_checking");
         contentPanel.add(centerAreaContent);
 
@@ -128,9 +131,8 @@ public class CrmView extends LayoutPanel {
         centerAreaContent.add(splitPanel);
 
         //============= Container for login and retrieve password views ===========
-        UtilityDisplayPanel utilityDisplay = new UtilityDisplayPanel(splitPanel);
+        UtilityDisplayPanel utilityDisplay = new UtilityDisplayPanel(centerAreaContent);
         utilityDisplay.ensureDebugId("entrypointpanel");
-        centerAreaContent.add(utilityDisplay);
 
         //============ Left Panel ============
 
@@ -187,19 +189,27 @@ public class CrmView extends LayoutPanel {
 
     }
 
-    class DisplayPanel extends SimplePanel {
+    class DisplayPanel extends SimplePanel implements RequiresResize, ProvidesResize {
         DisplayPanel() {
             String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
             setStyleName(prefix + StyleSuffix.Display);
+        }
+
+        @Override
+        public void onResize() {
+            Widget child = getWidget();
+            if ((child != null) && (child instanceof RequiresResize)) {
+                ((RequiresResize) child).onResize();
+            }
         }
     }
 
     class UtilityDisplayPanel extends SimplePanel {
 
-        private final Panel panel;
+        private final LayoutPanel parent;
 
-        UtilityDisplayPanel(Panel panel) {
-            this.panel = panel;
+        UtilityDisplayPanel(LayoutPanel parent) {
+            this.parent = parent;
             String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
             setStyleName(prefix + StyleSuffix.Display);
         }
@@ -207,8 +217,17 @@ public class CrmView extends LayoutPanel {
         @Override
         public void setWidget(IsWidget w) {
             super.setWidget(w);
-            panel.setVisible(w == null);
-
+            if (w == null) {
+                removeFromParent();
+                for (int i = 0; i < parent.getWidgetCount(); i++) {
+                    parent.getWidget(i).setVisible(true);
+                }
+            } else {
+                for (int i = 0; i < parent.getWidgetCount(); i++) {
+                    parent.getWidget(i).setVisible(false);
+                }
+                parent.add(this);
+            }
         }
 
     }
