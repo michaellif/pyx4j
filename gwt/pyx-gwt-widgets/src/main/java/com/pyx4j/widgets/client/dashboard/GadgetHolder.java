@@ -27,7 +27,6 @@ import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -41,8 +40,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.dashboard.CSSNames.StyleSuffix;
@@ -60,7 +59,7 @@ final class GadgetHolder extends SimplePanel {
 
     private final PickupDragController gadgetDragController;
 
-    private final VerticalPanel frame = new VerticalPanel();
+    private final ScrollPanel scroll = new ScrollPanel();
 
     private final Label title = new Label();
 
@@ -75,10 +74,15 @@ final class GadgetHolder extends SimplePanel {
 
     // internals:
     public GadgetHolder(IGadget gadget, PickupDragController gadgetDragController, IBoardRoot root) {
+
         this.holdedGadget = gadget;
         this.gadgetDragController = gadgetDragController;
         this.root = root;
         this.addStyleName(CSSNames.BASE_NAME + StyleSuffix.Holder);
+
+        FlowPanel content = new FlowPanel();
+
+        setWidget(content);
 
         // create caption with title and menu:
         final HorizontalPanel caption = new HorizontalPanel();
@@ -112,16 +116,15 @@ final class GadgetHolder extends SimplePanel {
         caption.setWidth("100%");
 
         // put it together:
-        frame.add(caption);
-        frame.add(holdedGadget.asWidget());
-        frame.setWidth("100%");
-        frame.getElement().getStyle().setOverflow(Overflow.HIDDEN);
-        this.setWidget(frame);
+        content.add(caption);
+
+        scroll.setWidget(holdedGadget.asWidget());
+
+        content.add(scroll);
 
         this.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
         this.getElement().getStyle().setProperty("MozBoxSizing", "border-box");
         this.getElement().getStyle().setProperty("boxSizing", "border-box");
-//        this.setWidth("auto");
 
         // make the widget place holder draggable by its title:
         this.gadgetDragController.makeDraggable(this, title);
@@ -211,27 +214,19 @@ final class GadgetHolder extends SimplePanel {
         return btn;
     }
 
-    // --------------------------------------------------------------
-
     private void minimize() {
         if (isMinimized()) {
-            frame.add(minimizedWidget);
-            minimizedWidget = null;
+            scroll.setVisible(true);
             holdedGadget.onMinimize(false);
         } else { // minimize:
-            minimizedWidget = frame.getWidget(frame.getWidgetCount() - 1);
-            frame.remove(minimizedWidget);
+            scroll.setVisible(false);
             holdedGadget.onMinimize(true);
         }
     }
 
     private boolean isMinimized() {
-        return (minimizedWidget != null);
+        return !scroll.isVisible();
     }
-
-    private Widget minimizedWidget;
-
-    // --------------------------------------------------------------
 
     private void maximize() {
         if (root.isMaximized(this)) {
@@ -299,8 +294,7 @@ final class GadgetHolder extends SimplePanel {
     }
 
     private void switchViewTo(Widget view) {
-        frame.remove(frame.getWidgetCount() - 1);
-        frame.add(view);
+        scroll.setWidget(view);
     }
 
     private void switchViewToNormal() {
