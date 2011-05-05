@@ -15,6 +15,7 @@ package com.propertyvista.unit.portal;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -356,12 +357,14 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         saveAndContinue();
     }
 
+    @SuppressWarnings("unchecked")
     private void enterSummaryPage(Summary summary) {
         // This data is not generated
         // Forge the  Digital Signature
         summary.agree().setValue(Boolean.TRUE);
 
-        summary.fullName().setValue(summary.tenantFinancials().get(0).tenantFullName().getValue());
+        PotentialTenantInfo mainTenant = summary.tenantList().tenants().get(0);
+        summary.fullName().setValue(EntityFromatUtils.nvl_concat("", mainTenant.firstName(), mainTenant.lastName()));
 
         setValueOnForm(summary.agree());
         setValueOnForm(summary.fullName());
