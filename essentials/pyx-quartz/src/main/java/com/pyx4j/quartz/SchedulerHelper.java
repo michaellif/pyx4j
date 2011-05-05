@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
 
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -173,18 +174,17 @@ public class SchedulerHelper {
                     throw new Error("Unsupporte ddatabaseType " + RDBUtils.getRDBConfiguration().databaseType());
                 }
 
-                //List<String> sqls = new Vector<String>();
-                //TODO Load file as resource.
                 String text = IOUtils.getTextResource(SchedulerHelper.class.getPackage().getName().replace('.', '/') + "/" + sqlResourceName);
-                // TODO split the text to SQL statements, Use ; separator
-                List<String> sqls = Arrays.asList(text.split(";"));
-                for (int i = 0; i < sqls.size(); i++) {
-                    String query = sqls.get(i).trim();
-                    if (query.isEmpty())
-                        continue;
-                    log.info("Executing: {}", query);
-                    rdb.execute(sqls.subList(i, i + 1));
+                List<String> sqls = new Vector<String>();
+                // split the text to SQL statements, Use ; separator
+                List<String> lines = Arrays.asList(text.split(";"));
+                for (String line : lines) {
+                    line = line.trim();
+                    if (!line.isEmpty()) {
+                        sqls.add(line);
+                    }
                 }
+                rdb.execute(sqls);
             }
         } catch (SQLException e) {
             throw new Error("quartz tables creation error", e);
