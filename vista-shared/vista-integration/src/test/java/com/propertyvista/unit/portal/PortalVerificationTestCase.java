@@ -121,13 +121,13 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         }
 
         //Vehicles
-        int num = 0;
+        int row = 0;
         for (Vehicle vehicle : tenant.vehicles()) {
-            assertVehicleRow(D.id(tenant.vehicles(), num), detach(vehicle));
-            num++;
+            assertVehicleRow(D.id(tenant.vehicles(), row), detach(vehicle));
+            row++;
         }
         //verify size (e.g. no next row exists)
-        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantInfo.class).vehicles(), num, proto(Vehicle.class).plateNumber())));
+        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantInfo.class).vehicles(), row, proto(Vehicle.class).plateNumber())));
 
         //Legal Questions
         assertValueOnForm(tenant.legalQuestions().suedForRent());
@@ -139,39 +139,75 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         assertValueOnForm(tenant.legalQuestions().filedBankruptcy());
 
         //Emergency Contacts
-        num = 0;
+        row = 0;
         for (EmergencyContact contact : tenant.emergencyContacts()) {
-            assertEmContactsForm(D.id(tenant.emergencyContacts(), num), detach(contact));
-            num++;
+            assertEmContactsForm(D.id(tenant.emergencyContacts(), row), detach(contact));
+            row++;
         }
     }
 
     protected void verifyFinancialPages(Summary summary) {
-        for (SummaryPotentialTenantFinancial tenant : summary.tenantFinancials()) {
-            verifyFinancialPage(detach(tenant.tenantFinancial()));
-            saveAndContinue();
+        int num = 0;
+        int i = 0;
+        for (SummaryPotentialTenantFinancial tenantFin : summary.tenantFinancials()) {
+            // tenants and tenantFinancials are mapped one to one in created data
+            PotentialTenantInfo tenant = summary.tenantList().tenants().get(i);
+            i++;
+
+            if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
+                verifyFinancialPage(detach(tenantFin.tenantFinancial()), num);
+                saveAndContinue();
+                num++;
+            }
         }
         // Asset no next page
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Info.class));
-        assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Info.class));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Financial.class));
+        assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Financial.class));
     }
 
-    private void verifyFinancialPage(PotentialTenantFinancial financial) {
+    private void verifyFinancialPage(PotentialTenantFinancial financial, int id) {
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Financial.class));
+        selenium.click(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Financial.class, id));
+
         IDebugId debugID;
-        int financialID = 0;
+        int row = 0;
         for (TenantIncome income : financial.incomes()) {
-            debugID = D.id(financial.incomes(), financialID);
+            debugID = D.id(financial.incomes(), row);
             verifyIncome(debugID, detach(income));
-            financialID++;
+            row++;
         }
     }
 
-    private void verifyIncome(IDebugId debugID, TenantIncome income) {
-        verifyEmployer(debugID, income.employer());
+    private void verifyIncome(IDebugId formDebugID, TenantIncome income) {
+        switch (income.incomeSource().getValue()) {
+        case fulltime:
+        case parttime:
+            assertEmployerForm(D.id(formDebugID, income.employer()), detach(income.employer()));
+            break;
+        case selfemployed:
+            // TODO Leon
+            // income.selfEmployed();
+            break;
+        case seasonallyEmployed:
+            // TODO Leon
+            // income.seasonallyEmployed()
+            break;
+        case socialServices:
+            // TODO Leon
+            // income.socialServices()
+            break;
+        case student:
+            // TODO Leon
+            // income.studentIncome()
+            break;
+        default:
+            // TODO Leon
+            // income.otherIncomeInfo());
+        }
     }
 
-    private void verifyEmployer(IDebugId debugID, IncomeInfoEmployer employer) {
-        assertValueOnForm(D.id(debugID, proto(IncomeInfoEmployer.class)), employer.name());
+    private void assertEmployerForm(IDebugId formDebugID, IncomeInfoEmployer employer) {
+        assertValueOnForm(formDebugID, employer.name());
     }
 
     protected void assertAddressForm(IDebugId fromDebugId, Address address) {
