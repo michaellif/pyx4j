@@ -63,7 +63,7 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
 
     public DashboardViewImpl() {
         VerticalPanel main = new VerticalPanel();
-        main.add(new CrmHeaderDecorator("Dashboard Menu/Tools", layouts));
+        main.add(new CrmHeaderDecorator("Dashboard&nbsp;Menu/Tools", layouts));
 
         scroll = new ScrollPanel();
         scroll.getElement().getStyle().setPosition(Position.ABSOLUTE);

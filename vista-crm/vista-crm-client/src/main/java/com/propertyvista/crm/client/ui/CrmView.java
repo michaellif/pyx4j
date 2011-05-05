@@ -54,7 +54,7 @@ public class CrmView extends LayoutPanel {
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Action, Header, Navigation, Footer, Display, NavigContainer;
+        Content, Action, Header, Navigation, Footer, Display, NavigContainer;
     }
 
     @Inject
@@ -87,6 +87,8 @@ public class CrmView extends LayoutPanel {
         setStyleName(prefix);
 
         DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
+        contentPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content);
+
         add(contentPanel);
 
         //============ Header Panel ============

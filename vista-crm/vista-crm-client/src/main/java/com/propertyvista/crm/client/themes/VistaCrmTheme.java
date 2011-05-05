@@ -49,7 +49,7 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
         intitShortCutStyles();
         initActionStyle();
 
-        initDashboard_Report();
+        initDashboardReport();
         initEntityDataTableStyles();
 
     }
@@ -152,9 +152,9 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
     protected void initSiteViewStyles() {
         String prefix = CrmView.DEFAULT_STYLE_PREFIX;
 
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("min-width", "40em");
-        style.addProperty("min-height", "20em");
+        Style style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Content));
+        style.addProperty("min-width", "700px");
+        style.addProperty("min-height", "500px");
         addStyle(style);
 
         //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Header));
@@ -394,7 +394,7 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
         addStyle(style);
     }
 
-    protected void initDashboard_Report() {
+    protected void initDashboardReport() {
         String prefix = CSSNames.BASE_NAME;
 
         Style style = new Style(Selector.valueOf(prefix));
