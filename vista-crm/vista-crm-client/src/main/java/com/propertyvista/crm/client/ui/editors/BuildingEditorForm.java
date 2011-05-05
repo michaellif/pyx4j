@@ -57,7 +57,7 @@ public class BuildingEditorForm extends CEntityForm<Building> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Building Details")));
+        main.add(new CrmHeaderDecorator(i18n.tr("Details")));
 
         DecorationData decorData = new DecorationData(14d, 12);
         main.add(new VistaWidgetDecorator(inject(proto().name()), decorData));
