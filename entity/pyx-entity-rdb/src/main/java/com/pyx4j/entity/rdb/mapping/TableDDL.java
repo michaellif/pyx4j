@@ -38,7 +38,7 @@ class TableDDL {
     static List<String> sqlCreate(Dialect dialect, TableModel tableModel) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
-        sql.append("create table ");
+        sql.append("CREATE TABLE ");
         sql.append(tableModel.tableName);
         sql.append(" (");
         sql.append(" id ").append(dialect.getSqlType(Long.class));
@@ -60,8 +60,7 @@ class TableDDL {
             sql.append(indexSqlType(dialect, member));
         }
 
-        // TODO other dialects
-        sql.append(", PRIMARY KEY (id)");
+        sql.append(", CONSTRAINT ").append(dialect.getNamingConvention().sqlTablePKName(tableModel.tableName)).append(" PRIMARY KEY (id)");
 
         sql.append(')');
         sqls.add(sql.toString());
@@ -79,9 +78,9 @@ class TableDDL {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     continue;
                 }
-                StringBuilder sql = new StringBuilder("alter table ");
+                StringBuilder sql = new StringBuilder("ALTER TABLE ");
                 sql.append(tableModel.tableName);
-                sql.append(" add "); // [ column ]
+                sql.append(" ADD "); // [ column ]
                 sql.append(member.sqlName()).append(' ');
                 sql.append(sqlType(dialect, memberMeta));
                 alterSqls.add(sql.toString());
@@ -100,9 +99,9 @@ class TableDDL {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     continue;
                 }
-                StringBuilder sql = new StringBuilder("alter table ");
+                StringBuilder sql = new StringBuilder("ALTER TABLE ");
                 sql.append(tableModel.tableName);
-                sql.append(" add "); // [ column ]
+                sql.append(" ADD "); // [ column ]
                 sql.append(member.sqlName()).append(' ');
                 sql.append(indexSqlType(dialect, member));
                 alterSqls.add(sql.toString());
@@ -143,7 +142,7 @@ class TableDDL {
     public static List<String> sqlCreateCollectionMember(Dialect dialect, MemberOperationsMeta member) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
-        sql.append("create table ");
+        sql.append("CREATE TABLE ");
 
         sql.append(member.sqlName());
 
@@ -160,8 +159,7 @@ class TableDDL {
             sql.append(" seq ").append(dialect.getSqlType(Integer.class));
         }
 
-        // TODO other dialects
-        sql.append(", PRIMARY KEY (id)");
+        sql.append(", CONSTRAINT ").append(dialect.getNamingConvention().sqlTablePKName(member.sqlName())).append(" PRIMARY KEY (id)");
 
         sql.append(')');
 

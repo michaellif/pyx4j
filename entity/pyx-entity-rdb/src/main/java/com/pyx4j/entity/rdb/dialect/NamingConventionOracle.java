@@ -89,6 +89,11 @@ public class NamingConventionOracle implements NamingConvention {
     }
 
     @Override
+    public String sqlTablePKName(String tableName) {
+        return tableName + "_PK";
+    }
+
+    @Override
     public String sqlChildTableSequenceName(String tableName) {
         return tableName + "_SEQ";
     }
