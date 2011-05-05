@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.themes;
 
-import java.util.List;
-
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.style.ColorFactory;
@@ -34,17 +32,6 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
 
     public VistaCrmTheme() {
         super();
-        List<Style> styles = getStyles("body");
-        if (styles != null) {
-            for (Style s : styles) {
-                if (s.getSelector().equalsIgnoreCase("body")) {
-                    s.addProperty("min-width", "780px");
-                    break;
-                }
-
-            }
-        }
-
     }
 
     @Override
