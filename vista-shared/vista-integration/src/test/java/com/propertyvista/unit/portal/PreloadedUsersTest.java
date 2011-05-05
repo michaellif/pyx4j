@@ -13,6 +13,12 @@
  */
 package com.propertyvista.unit.portal;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.selenium.D;
+import com.pyx4j.site.rpc.AppPlaceInfo;
+
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
@@ -23,12 +29,6 @@ import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
-
-import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.selenium.D;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class PreloadedUsersTest extends PortalVerificationTestCase {
 
@@ -56,6 +56,7 @@ public class PreloadedUsersTest extends PortalVerificationTestCase {
         verifyAptPage(unitSel);
         verifyTenantsPage(summary);
         verifyInfoPages(summary);
+        verifyFinancialPages(summary);
 
     }
 

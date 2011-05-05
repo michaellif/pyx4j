@@ -13,23 +13,27 @@
  */
 package com.propertyvista.unit.portal;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.selenium.D;
+import com.pyx4j.site.rpc.AppPlaceInfo;
+
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
+import com.propertyvista.portal.domain.pt.IncomeInfoEmployer;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
+import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.rpc.pt.BusinessRules;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
-
-import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.selenium.D;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
 
@@ -140,6 +144,34 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             assertEmContactsForm(D.id(tenant.emergencyContacts(), num), detach(contact));
             num++;
         }
+    }
+
+    protected void verifyFinancialPages(Summary summary) {
+        for (SummaryPotentialTenantFinancial tenant : summary.tenantFinancials()) {
+            verifyFinancialPage(detach(tenant.tenantFinancial()));
+            saveAndContinue();
+        }
+        // Asset no next page
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Info.class));
+        assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Info.class));
+    }
+
+    private void verifyFinancialPage(PotentialTenantFinancial financial) {
+        IDebugId debugID;
+        int financialID = 0;
+        for (TenantIncome income : financial.incomes()) {
+            debugID = D.id(financial.incomes(), financialID);
+            verifyIncome(debugID, detach(income));
+            financialID++;
+        }
+    }
+
+    private void verifyIncome(IDebugId debugID, TenantIncome income) {
+        verifyEmployer(debugID, income.employer());
+    }
+
+    private void verifyEmployer(IDebugId debugID, IncomeInfoEmployer employer) {
+        assertValueOnForm(D.id(debugID, proto(IncomeInfoEmployer.class)), employer.name());
     }
 
     protected void assertAddressForm(IDebugId fromDebugId, Address address) {
