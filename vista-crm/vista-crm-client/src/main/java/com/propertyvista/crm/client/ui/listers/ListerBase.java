@@ -21,6 +21,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -35,6 +36,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -108,7 +110,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
         cell.getStyle().setProperty("borderTop", "2px dotted #bbb");
         cell.getStyle().setPaddingBottom(3, Unit.PX);
 
-        apply.getElement().getStyle().setMarginRight(1, Unit.EM);
+        apply.getElement().getStyle().setMarginRight(2, Unit.EM);
         setCellHorizontalAlignment(apply, HasHorizontalAlignment.ALIGN_RIGHT);
 
         add(listPanel);
@@ -167,7 +169,33 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
         public Filters(EntityListPanel<E> listPanel) {
             this.listPanel = listPanel;
 
-            add(new Filter());
+            final Image btnAdd = new Image(CrmImages.INSTANCE.add());
+            btnAdd.getElement().getStyle().setCursor(Cursor.POINTER);
+            btnAdd.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    Filters.this.add(new Filter());
+                }
+            });
+            btnAdd.addMouseOverHandler(new MouseOverHandler() {
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    btnAdd.setResource(CrmImages.INSTANCE.addHover());
+                }
+            });
+            btnAdd.addMouseOutHandler(new MouseOutHandler() {
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    btnAdd.setResource(CrmImages.INSTANCE.add());
+                }
+            });
+
+            HorizontalPanel wrap = new HorizontalPanel();
+            wrap.add(btnAdd);
+            HTML lblAdd = new HTML(i18n.tr("Add new filter..."));
+            lblAdd.getElement().getStyle().setPaddingLeft(1.3, Unit.EM);
+            wrap.add(lblAdd);
+            add(wrap);
             setWidth("100%");
         }
 
@@ -188,47 +216,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
 
             Filter() {
 
-                for (ColumnDescriptor<E> cd : listPanel.getDataTable().getDataTableModel().getColumnDescriptors()) {
-                    fieldsList.addItem(cd.getColumnTitle());
-                    fieldsList.setValue(fieldsList.getItemCount() - 1, cd.getColumnName());
-                }
-                fieldsList.setWidth("100%");
-                add(fieldsList);
-                formatCell(fieldsList);
-
-                for (Operands op : Operands.values()) {
-                    operandsList.addItem(op.name());
-                }
-                operandsList.setWidth("100%");
-                add(operandsList);
-                formatCell(operandsList);
-
-                valuesText.setWidth("100%");
-                add(valuesText);
-                formatCell(valuesText);
-
-                final Image btnAdd = new Image(CrmImages.INSTANCE.add());
-                btnAdd.getElement().getStyle().setCursor(Cursor.POINTER);
-                btnAdd.addClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        Filters.this.add(new Filter());
-                    }
-                });
-                btnAdd.addMouseOverHandler(new MouseOverHandler() {
-                    @Override
-                    public void onMouseOver(MouseOverEvent event) {
-                        btnAdd.setResource(CrmImages.INSTANCE.addHover());
-                    }
-                });
-                btnAdd.addMouseOutHandler(new MouseOutHandler() {
-                    @Override
-                    public void onMouseOut(MouseOutEvent event) {
-                        btnAdd.setResource(CrmImages.INSTANCE.add());
-                    }
-                });
                 final Image btnDel = new Image(CrmImages.INSTANCE.del());
                 btnDel.getElement().getStyle().setCursor(Cursor.POINTER);
+                btnDel.setTitle(i18n.tr("Remove filter"));
                 btnDel.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
@@ -248,21 +238,36 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
                     }
                 });
 
-                HorizontalPanel buttons = new HorizontalPanel();
-                buttons.add(btnAdd);
-                buttons.add(btnDel);
-                add(buttons);
-                btnAdd.getElement().getStyle().setPaddingRight(8, Unit.PX);
-                buttons.getElement().getStyle().setMarginRight(1, Unit.EM);
-                setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_RIGHT);
+                SimplePanel wrap = new SimplePanel();
+                wrap.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                wrap.getElement().getStyle().setPaddingLeft(1.3, Unit.EM);
+                wrap.setWidget(btnDel);
+                add(wrap);
+                formatCell(wrap);
 
-                setWidth("100%");
+                for (ColumnDescriptor<E> cd : listPanel.getDataTable().getDataTableModel().getColumnDescriptors()) {
+                    fieldsList.addItem(cd.getColumnTitle());
+                    fieldsList.setValue(fieldsList.getItemCount() - 1, cd.getColumnName());
+                }
+                fieldsList.setWidth("15em");
+                add(fieldsList);
+                formatCell(fieldsList);
+
+                for (Operands op : Operands.values()) {
+                    operandsList.addItem(op.name());
+                }
+                operandsList.setWidth("10em");
+                add(operandsList);
+                formatCell(operandsList);
+
+                valuesText.setWidth("20em");
+                add(valuesText);
+                formatCell(valuesText);
             }
 
             private void formatCell(Widget w) {
                 Element cell = DOM.getParent(w.getElement());
-                cell.getStyle().setPaddingLeft(1, Unit.EM);
-                cell.getStyle().setPaddingRight(1, Unit.EM);
+                cell.getStyle().setPaddingRight(1.5, Unit.EM);
             }
         }
     }
