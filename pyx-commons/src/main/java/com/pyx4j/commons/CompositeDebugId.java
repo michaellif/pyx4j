@@ -52,6 +52,11 @@ public class CompositeDebugId implements IDebugId {
         return (parent != null ? parent.debugId() + "-" : "") + (child != null ? child.debugId() : "unknown");
     }
 
+    @Override
+    public String toString() {
+        return debugId();
+    }
+
     public static String debugId(IDebugId parent, IDebugId child) {
         return new CompositeDebugId(parent, child).debugId();
     }
