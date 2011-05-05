@@ -364,7 +364,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         summary.agree().setValue(Boolean.TRUE);
 
         PotentialTenantInfo mainTenant = summary.tenantList().tenants().get(0);
-        summary.fullName().setValue(EntityFromatUtils.nvl_concat("", mainTenant.firstName(), mainTenant.lastName()));
+        summary.fullName().setValue(EntityFromatUtils.nvl_concat(" ", mainTenant.firstName(), mainTenant.lastName()));
 
         setValueOnForm(summary.agree());
         setValueOnForm(summary.fullName());
