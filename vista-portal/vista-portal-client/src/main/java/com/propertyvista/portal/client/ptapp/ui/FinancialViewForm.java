@@ -32,7 +32,7 @@ import com.google.inject.Singleton;
 import com.propertyvista.common.client.ui.CMoney;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.portal.client.ptapp.resources.CrmImages;
+import com.propertyvista.portal.client.ptapp.resources.PortalImages;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
@@ -156,7 +156,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                         }
                     };
                 } else {
-                    return new BoxFolderDecorator<TenantIncome>(CrmImages.INSTANCE.addRow(), CrmImages.INSTANCE.addRowHover(),
+                    return new BoxFolderDecorator<TenantIncome>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                             i18n.tr("Add an income source"));
                 }
             }
@@ -191,7 +191,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                         }
                     };
                 } else {
-                    return new TableFolderDecorator<TenantAsset>(columns, CrmImages.INSTANCE.addRow(), CrmImages.INSTANCE.addRowHover(),
+                    return new TableFolderDecorator<TenantAsset>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                             i18n.tr("Add an asset"));
                 }
             }
@@ -205,7 +205,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new TableFolderItemDecorator(CrmImages.INSTANCE.delRow(), CrmImages.INSTANCE.delRowHover(), i18n.tr("Remove asset"));
+                            return new TableFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove asset"));
                         }
                     }
 
@@ -256,7 +256,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                         }
                     };
                 } else {
-                    return new BoxFolderDecorator<TenantGuarantor>(CrmImages.INSTANCE.addRow(), CrmImages.INSTANCE.addRowHover(), i18n.tr("Add guarantor"));
+                    return new BoxFolderDecorator<TenantGuarantor>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(), i18n.tr("Add guarantor"));
                 }
             }
 
@@ -295,7 +295,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new BoxFolderItemDecorator(CrmImages.INSTANCE.delRow(), CrmImages.INSTANCE.delRowHover(), i18n.tr("Remove guarantor"));
+                            return new BoxFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove guarantor"));
                         }
                     }
 

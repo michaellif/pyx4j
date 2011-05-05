@@ -17,9 +17,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
-public interface CrmImages extends ClientBundle {
+public interface PortalImages extends ClientBundle {
 
-    CrmImages INSTANCE = GWT.create(CrmImages.class);
+    PortalImages INSTANCE = GWT.create(PortalImages.class);
 
     @Source("add.png")
     ImageResource addRow();

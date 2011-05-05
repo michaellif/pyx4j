@@ -42,7 +42,7 @@ import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
-import com.propertyvista.portal.client.ptapp.resources.SiteResources;
+import com.propertyvista.portal.client.ptapp.resources.PortalResources;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 
@@ -197,7 +197,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         mrg.asWidget().getElement().getStyle().setFloat(Float.LEFT);
         unitDetailPanel.add(mrg);
 
-        HTML availabilityAndPricing = new HTML(SiteResources.INSTANCE.availabilityAndPricing().getText());
+        HTML availabilityAndPricing = new HTML(PortalResources.INSTANCE.availabilityAndPricing().getText());
         availabilityAndPricing.getElement().getStyle().setFloat(Float.RIGHT);
         unitDetailPanel.add(availabilityAndPricing);
         availabilityAndPricing.setWidth("70%");

@@ -22,7 +22,7 @@ import com.google.gwt.resources.client.ResourcePrototype;
 import com.google.gwt.resources.client.TextResource;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ptapp.resources.SiteResources;
+import com.propertyvista.portal.client.ptapp.resources.PortalResources;
 import com.propertyvista.portal.client.ptapp.ui.StaticContentView;
 
 import com.pyx4j.site.client.AppSite;
@@ -47,7 +47,7 @@ public class StaticContentActivity extends AbstractActivity implements StaticCon
         AppPlaceInfo info = AppSite.getHistoryMapper().getPlaceInfo(place);
         String resource = info.getResource();
         if (info.getResource() != null) {
-            ResourcePrototype prototype = SiteResources.INSTANCE.getResource(resource);
+            ResourcePrototype prototype = PortalResources.INSTANCE.getResource(resource);
             if (prototype != null && prototype instanceof TextResource) {
                 setContent(((TextResource) prototype).getText());
             } else {

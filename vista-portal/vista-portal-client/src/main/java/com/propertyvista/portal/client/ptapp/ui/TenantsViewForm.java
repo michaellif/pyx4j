@@ -22,7 +22,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Singleton;
-import com.propertyvista.portal.client.ptapp.resources.CrmImages;
+import com.propertyvista.portal.client.ptapp.resources.PortalImages;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 
@@ -104,7 +104,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
             @Override
             protected FolderDecorator<PotentialTenantInfo> createFolderDecorator() {
-                return new TableFolderDecorator<PotentialTenantInfo>(columns, CrmImages.INSTANCE.addRow(), CrmImages.INSTANCE.addRowHover(),
+                return new TableFolderDecorator<PotentialTenantInfo>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                         i18n.tr("Add a person"));
             }
 

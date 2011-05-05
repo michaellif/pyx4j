@@ -45,7 +45,7 @@ import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.portal.client.ptapp.resources.SiteResources;
+import com.propertyvista.portal.client.ptapp.resources.PortalResources;
 import com.propertyvista.portal.client.ptapp.ui.components.BuildingPicture;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaReadOnlyComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
@@ -305,7 +305,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             setCellWidth(content, "30%");
 
             // add static lease terms blah-blah:
-            HTML availabilityAndPricing = new HTML(SiteResources.INSTANCE.availabilityAndPricing().getText());
+            HTML availabilityAndPricing = new HTML(PortalResources.INSTANCE.availabilityAndPricing().getText());
             availabilityAndPricing.getElement().getStyle().setPaddingRight(1, Unit.EM);
             add(availabilityAndPricing);
             setCellWidth(availabilityAndPricing, "70%");
@@ -499,7 +499,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             alignWidth(this);
 
-            HTML signatureTerms = new HTML(SiteResources.INSTANCE.digitalSignature().getText());
+            HTML signatureTerms = new HTML(PortalResources.INSTANCE.digitalSignature().getText());
             add(signatureTerms);
 
             // signature composure:

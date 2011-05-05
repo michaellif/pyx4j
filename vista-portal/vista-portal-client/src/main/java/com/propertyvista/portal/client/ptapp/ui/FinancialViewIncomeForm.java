@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.ui.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.portal.client.ptapp.resources.CrmImages;
+import com.propertyvista.portal.client.ptapp.resources.PortalImages;
 import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
@@ -103,7 +103,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         if (summaryViewMode) {
             return new BoxReadOnlyFolderItemDecorator(!isFirst());
         } else {
-            return new BoxFolderItemDecorator(CrmImages.INSTANCE.delRow(), CrmImages.INSTANCE.delRowHover());
+            return new BoxFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover());
         }
     }
 

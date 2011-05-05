@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
-import com.propertyvista.portal.client.ptapp.resources.CrmImages;
+import com.propertyvista.portal.client.ptapp.resources.PortalImages;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaReadOnlyComponentFactory;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
@@ -201,7 +201,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
             Widget widgetToInsert = null;
 
             if (proto().floorplan().name() == column.getObject()) {
-                widgetToInsert = new Image(CrmImages.INSTANCE.floorplan());
+                widgetToInsert = new Image(PortalImages.INSTANCE.floorplan());
                 widgetToInsert.ensureDebugId(VistaFormsDebugId.Available_Units_ViewPlan.debugId());
             } else if (proto().unitType() == column.getObject()) {
                 caption = availableUnits.floorplan().name().getStringView();

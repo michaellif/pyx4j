@@ -22,7 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.client.ptapp.resources.CrmImages;
+import com.propertyvista.portal.client.ptapp.resources.PortalImages;
 import com.propertyvista.portal.client.ptapp.ui.validators.BirthdayDateValidator;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
@@ -149,7 +149,7 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
 
     @Override
     public FolderItemDecorator createFolderItemDecorator() {
-        return new TableFolderItemDecorator(CrmImages.INSTANCE.delRow(), CrmImages.INSTANCE.delRowHover(), TenantsViewForm.i18n.tr("Remove person"),
+        return new TableFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), TenantsViewForm.i18n.tr("Remove person"),
                 !isFirst());
     }
 

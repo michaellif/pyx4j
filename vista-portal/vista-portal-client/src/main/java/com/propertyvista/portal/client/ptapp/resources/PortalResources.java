@@ -16,9 +16,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.resources.client.TextResource;
 
-public interface SiteResources extends ClientBundleWithLookup {
+public interface PortalResources extends ClientBundleWithLookup {
 
-    SiteResources INSTANCE = GWT.create(SiteResources.class);
+    PortalResources INSTANCE = GWT.create(PortalResources.class);
 
     @Source("dont_worry.html")
     TextResource dontWorry();
