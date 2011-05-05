@@ -14,10 +14,11 @@
 package com.propertyvista.common.client.ui;
 
 import com.google.gwt.i18n.client.NumberFormat;
-import com.propertyvista.portal.domain.Money;
-import com.propertyvista.portal.domain.util.DomainUtil;
 
 import com.pyx4j.forms.client.ui.IFormat;
+
+import com.propertyvista.portal.domain.Money;
+import com.propertyvista.portal.domain.util.DomainUtil;
 
 public class DefaultMoneyFormatter implements IFormat<Money> {
 
@@ -70,6 +71,11 @@ public class DefaultMoneyFormatter implements IFormat<Money> {
         try {
             string = string.replaceAll("\\s", "");
             string = string.replaceAll("\\D^.", "");
+            if (string.startsWith("$")) {
+                string = string.substring(1);
+            } else if (string.endsWith("$")) {
+                string = string.substring(0, string.length() - 1);
+            }
             return DomainUtil.createMoney(Double.valueOf(string));
         } catch (NumberFormatException e) {
             return DomainUtil.createMoney(Double.NaN); // incorrect user entry case (checked by validator!)

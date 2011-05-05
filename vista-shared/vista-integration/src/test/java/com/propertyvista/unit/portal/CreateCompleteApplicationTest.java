@@ -60,7 +60,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
 
     public void testFullFlow() throws Exception {
         long seed = DemoData.PT_GENERATION_SEED;
-        seed = 50;
+        //seed = 50;
         //seed = 2;
         VistaDataGenerator generator = new VistaDataGenerator(seed);
         User user = createTestUser();
@@ -72,6 +72,10 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         enterTenantsPage(summary);
         enterTestInfoPages(summary);
         enterFinancialPages(summary);
+        enterPetsPage(summary);
+        enterChargesPage(summary);
+
+        enterSummaryPage(summary);
 
         selenium.click(VistaFormsDebugId.Auth_LogOutTop);
 
@@ -84,9 +88,10 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
 
         verifyTenantsPage(summary);
-        //TODO
-        //verifyInfoPages(summary);
-        //verifyFinancialPages(summary);
+        verifyInfoPages(summary);
+        verifyFinancialPages(summary);
+
+        //TODO Leon
     }
 
     private void createAccount(User user) {
@@ -318,7 +323,6 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
     private void enterEmployerForm(IDebugId formDebugId, IncomeInfoEmployer employer) {
         setValueOnForm(formDebugId, employer.name());
         enterIAddressForm(formDebugId, employer);
-        //TODO VladS
         setValueOnForm(formDebugId, employer.monthlyAmount());
         // TODO Leon
     }
@@ -326,8 +330,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
     private void enterAssetRow(IDebugId formDebugId, TenantAsset asset) {
         setValueOnForm(formDebugId, asset.assetType());
         setValueOnForm(formDebugId, asset.percent());
-        //TODO VladS
-        setValueOnForm(formDebugId, asset.assetValue().amount());
+        setValueOnForm(formDebugId, asset.assetValue());
     }
 
     private void enterGuarantorRow(IDebugId fromDebugId, TenantGuarantor guarantor) {
@@ -341,4 +344,29 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         setValueOnForm(fromDebugId, guarantor.email());
     }
 
+    private void enterPetsPage(Summary summary) {
+        // TODO Leon
+
+        saveAndContinue();
+    }
+
+    private void enterChargesPage(Summary summary) {
+        // TODO Leon
+
+        saveAndContinue();
+    }
+
+    private void enterSummaryPage(Summary summary) {
+        // This data is not generated
+        // Forge the  Digital Signature
+        summary.agree().setValue(Boolean.TRUE);
+
+        summary.fullName().setValue(summary.tenantFinancials().get(0).tenantFullName().getValue());
+
+        setValueOnForm(summary.agree());
+        setValueOnForm(summary.fullName());
+
+        saveAndContinue();
+
+    }
 }
