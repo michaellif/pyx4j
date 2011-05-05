@@ -39,7 +39,6 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
             for (Style s : styles) {
                 if (s.getSelector().equalsIgnoreCase("body")) {
                     s.addProperty("min-width", "780px");
-                    s.addProperty("min-height", "580px");
                     break;
                 }
 
