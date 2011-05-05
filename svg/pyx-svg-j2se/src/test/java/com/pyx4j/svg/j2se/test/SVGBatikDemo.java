@@ -25,8 +25,12 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import javax.swing.JFrame;
+
 import org.apache.batik.svggen.SVGGraphics2D;
+import org.apache.batik.swing.JSVGCanvas;
 import org.w3c.dom.Document;
+import org.w3c.dom.svg.SVGDocument;
 
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
@@ -68,15 +72,12 @@ public class SVGBatikDemo {
         Writer out = new OutputStreamWriter(System.out, "UTF-8");
         g.stream(((SvgRootImpl) svgroot).getRootNode(), out, true, true);
 
-/*
- * TODO import more batik jars
- * JSVGCanvas canvas = new JSVGCanvas();
- * JFrame f = new JFrame();
- * f.getContentPane().add(canvas);
- * canvas.setSVGDocument((SVGDocument) doc);
- * f.pack();
- * f.setVisible(true);
- */
+        JSVGCanvas canvas = new JSVGCanvas();
+        JFrame f = new JFrame();
+        f.getContentPane().add(canvas);
+        canvas.setSVGDocument((SVGDocument) doc);
+        f.pack();
+        f.setVisible(true);
 
     }
 
