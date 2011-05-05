@@ -181,6 +181,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
     private void verifyIncome(IDebugId formDebugID, TenantIncome income) {
         switch (income.incomeSource().getValue()) {
         case fulltime:
+            assertEmployerForm(D.id(formDebugID, income.employer()), detach(income.employer()));
         case parttime:
             assertEmployerForm(D.id(formDebugID, income.employer()), detach(income.employer()));
             break;
@@ -208,6 +209,19 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
 
     private void assertEmployerForm(IDebugId formDebugID, IncomeInfoEmployer employer) {
         assertValueOnForm(formDebugID, employer.name());
+        assertValueOnForm(formDebugID, employer.employedForYears());
+        assertValueOnForm(formDebugID, employer.street1());
+        assertValueOnForm(formDebugID, employer.street2());
+        assertValueOnForm(formDebugID, employer.city());
+        assertValueOnForm(formDebugID, employer.province());
+        assertValueOnForm(formDebugID, employer.country());
+        assertValueOnForm(formDebugID, employer.postalCode());
+        assertValueOnForm(formDebugID, employer.supervisorName());
+        assertValueOnForm(formDebugID, employer.supervisorPhone());
+        //assertValueOnForm(formDebugID, employer.monthlyAmount().amount());
+        assertValueOnForm(formDebugID, employer.position());
+        assertValueOnForm(formDebugID, employer.starts());
+        assertValueOnForm(formDebugID, employer.ends());
     }
 
     protected void assertAddressForm(IDebugId fromDebugId, Address address) {
