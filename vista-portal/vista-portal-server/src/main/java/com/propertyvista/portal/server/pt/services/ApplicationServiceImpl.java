@@ -242,7 +242,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         if (tenant.status().getValue() == Status.Applicant) {
             return true;
         }
-        if (!tenant.takeOwnership().isNull() && !tenant.takeOwnership().getValue()) {
+        if (!tenant.takeOwnership().isBooleanTrue()) {
             return false;
         }
         return (TimeUtils.isOlderThen(tenant.birthDate().getValue(), 18));
