@@ -19,6 +19,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
 import com.propertyvista.portal.domain.AptUnit;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
@@ -32,11 +37,6 @@ import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
-
-import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 public class ChargesServerCalculation extends ChargesSharedCalculation {
 
@@ -139,7 +139,9 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
      * @return true if pets are changed
      */
     public static boolean needToUpdateChargesForPets(Pets pets, Pets existingPets) {
-
+        if (existingPets == null) {
+            return true;
+        }
         if (pets.pets().size() != existingPets.pets().size()) {
             log.info("Number of pets has changed from {} to {}", existingPets.pets().size(), pets.pets().size());
             return true;
