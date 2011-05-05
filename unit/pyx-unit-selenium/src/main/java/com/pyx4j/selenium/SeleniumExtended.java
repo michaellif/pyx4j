@@ -425,8 +425,8 @@ public class SeleniumExtended extends WebDriverWrapper {
         return getValue(driver.findElement(by(debugId)));
     }
 
-    public String getValue(IDebugId fromDebugId, IPrimitive<?> member) {
-        return getValue(driver.findElement(by(fromDebugId, member)));
+    public String getValue(IDebugId formDebugId, IPrimitive<?> member) {
+        return getValue(driver.findElement(by(formDebugId, member)));
     }
 
     private <T extends Enum<T>> T getEnumValue(WebElement element, Class<T> enumClass) {
@@ -445,8 +445,8 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Enum<T>> T getEnumValue(IDebugId fromDebugId, IPrimitive<T> member) {
-        return getEnumValue(findElement(by(fromDebugId, member)), (Class<T>) member.getMeta().getValueClass());
+    public <T extends Enum<T>> T getEnumValue(IDebugId formDebugId, IPrimitive<T> member) {
+        return getEnumValue(findElement(by(formDebugId, member)), (Class<T>) member.getMeta().getValueClass());
     }
 
     private Boolean getBooleanValue(WebElement element) {
@@ -463,8 +463,8 @@ public class SeleniumExtended extends WebDriverWrapper {
         return getBooleanValue(driver.findElement(by(member)));
     }
 
-    public Boolean getBooleanValue(IDebugId fromDebugId, IPrimitive<Boolean> member) {
-        return getBooleanValue(driver.findElement(by(fromDebugId, member)));
+    public Boolean getBooleanValue(IDebugId formDebugId, IPrimitive<Boolean> member) {
+        return getBooleanValue(driver.findElement(by(formDebugId, member)));
     }
 
     private Date getDateValue(WebElement element, String format) {
@@ -481,8 +481,8 @@ public class SeleniumExtended extends WebDriverWrapper {
         return getDateValue(driver.findElement(by(member)), member.getMeta().getFormat());
     }
 
-    public Date getDateValue(IDebugId fromDebugId, IPrimitive<? extends Date> member) {
-        return getDateValue(driver.findElement(by(fromDebugId, member)), member.getMeta().getFormat());
+    public Date getDateValue(IDebugId formDebugId, IPrimitive<? extends Date> member) {
+        return getDateValue(driver.findElement(by(formDebugId, member)), member.getMeta().getFormat());
     }
 
     public void setDateValue(IDebugId debugId, Date dateValue, String format) {

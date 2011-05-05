@@ -272,8 +272,8 @@ public class BaseSeleniumTestCase extends TestCase {
         assertValueOnForm(null, member);
     }
 
-    public void assertValueOnForm(IDebugId fromDebugId, IEntity member) {
-        assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(D.id(fromDebugId, member)));
+    public void assertValueOnForm(IDebugId formDebugId, IEntity member) {
+        assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(D.id(formDebugId, member)));
     }
 
     public void assertValueOnForm(IPrimitive<?> member) {
@@ -281,27 +281,27 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void assertValueOnForm(IDebugId fromDebugId, IPrimitive<?> member) {
+    public void assertValueOnForm(IDebugId formDebugId, IPrimitive<?> member) {
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().isEnum()) {
-            assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getEnumValue(fromDebugId, (IPrimitive<Enum>) member));
+            assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getEnumValue(formDebugId, (IPrimitive<Enum>) member));
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
             // CDatePicker, CMonthYearPicker
-            assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getDateValue(fromDebugId, (IPrimitive<Date>) member));
+            assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getDateValue(formDebugId, (IPrimitive<Date>) member));
         } else if (mm.getValueClass().equals(Boolean.class)) {
-            assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getBooleanValue(fromDebugId, (IPrimitive<Boolean>) member));
+            assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getBooleanValue(formDebugId, (IPrimitive<Boolean>) member));
         } else if (mm.getValueClass().equals(Integer.class)) {
             // CIntegerField();
-            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
+            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(formDebugId, member));
         } else if (mm.getValueClass().equals(Long.class)) {
             // CLongField();
-            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
+            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(formDebugId, member));
         } else if (mm.getValueClass().equals(Double.class)) {
             // CDoubleField();
-            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
+            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(formDebugId, member));
         } else if (mm.getValueClass().equals(String.class)) {
             // CTextField();
-            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(fromDebugId, member));
+            assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(formDebugId, member));
         } else {
             throw new Error("No comparison defined for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
         }
@@ -311,24 +311,24 @@ public class BaseSeleniumTestCase extends TestCase {
         setValueOnForm(null, member);
     }
 
-    public void setValueOnForm(IDebugId fromDebugId, IEntity member) {
-        selenium.setValue(D.id(fromDebugId, member), member.getStringView());
+    public void setValueOnForm(IDebugId formDebugId, IEntity member) {
+        selenium.setValue(D.id(formDebugId, member), member.getStringView());
     }
 
     public void setValueOnForm(IPrimitive<?> member) {
         setValueOnForm(null, member);
     }
 
-    public void setValueOnForm(IDebugId fromDebugId, IPrimitive<?> member) {
+    public void setValueOnForm(IDebugId formDebugId, IPrimitive<?> member) {
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().isEnum()) {
-            selenium.setEnumValue(D.id(fromDebugId, member), (Enum<?>) member.getValue());
+            selenium.setEnumValue(D.id(formDebugId, member), (Enum<?>) member.getValue());
         } else if (mm.getValueClass().equals(Boolean.class)) {
-            selenium.setValue(D.id(fromDebugId, member), (Boolean) member.getValue());
+            selenium.setValue(D.id(formDebugId, member), (Boolean) member.getValue());
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
-            selenium.setDateValue(D.id(fromDebugId, member), (Date) member.getValue(), mm.getFormat());
+            selenium.setDateValue(D.id(formDebugId, member), (Date) member.getValue(), mm.getFormat());
         } else {
-            selenium.setValue(D.id(fromDebugId, member), member.getStringView());
+            selenium.setValue(D.id(formDebugId, member), member.getStringView());
         }
     }
 }
