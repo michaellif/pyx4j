@@ -13,19 +13,14 @@
  */
 package com.propertyvista.common.client.ui;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
-import com.propertyvista.common.client.ui.validators.DefaultMoneyValidator;
-import com.propertyvista.portal.domain.Money;
-
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-public class CMoney extends CEditableComponent<Money, NativeMoney> {
+import com.propertyvista.common.client.ui.validators.DefaultMoneyValidator;
+import com.propertyvista.portal.domain.Money;
 
-    private static I18n i18n = I18nFactory.getI18n(CMoney.class);
+public class CMoney extends CEditableComponent<Money, NativeMoney> {
 
     private IFormat<Money> format;
 

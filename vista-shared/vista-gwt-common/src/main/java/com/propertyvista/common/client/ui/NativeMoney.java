@@ -23,13 +23,14 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.Selector;
+
+import com.propertyvista.portal.domain.Money;
 
 public class NativeMoney extends HorizontalPanel implements INativeEditableComponent<Money> {
 
@@ -178,5 +179,10 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
     public void installStyles(String stylePrefix) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    protected void onEnsureDebugId(String baseID) {
+        amount.ensureDebugId(baseID);
     }
 }
