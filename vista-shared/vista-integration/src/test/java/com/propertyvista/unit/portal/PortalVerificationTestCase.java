@@ -218,7 +218,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         assertValueOnForm(formDebugID, employer.postalCode());
         assertValueOnForm(formDebugID, employer.supervisorName());
         assertValueOnForm(formDebugID, employer.supervisorPhone());
-        //assertValueOnForm(formDebugID, employer.monthlyAmount().amount());
+        assertValueOnForm(formDebugID, employer.monthlyAmount());
         assertValueOnForm(formDebugID, employer.position());
         assertValueOnForm(formDebugID, employer.starts());
         assertValueOnForm(formDebugID, employer.ends());
