@@ -15,6 +15,13 @@ package com.propertyvista.crm.client.themes;
 
 import java.util.List;
 
+import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.widgets.client.dashboard.CSSNames;
+import com.pyx4j.widgets.client.style.ColorFactory;
+import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.widgets.client.style.Style;
+import com.pyx4j.widgets.client.style.ThemeColor;
+
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.CrmView;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
@@ -22,13 +29,6 @@ import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
-
-import com.pyx4j.entity.client.ui.datatable.DataTable;
-import com.pyx4j.widgets.client.dashboard.CSSNames;
-import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColor;
 
 public abstract class VistaCrmTheme extends com.propertyvista.common.client.theme.VistaTheme {
 
@@ -443,8 +443,6 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption) + ":hover");
-        style.addProperty("background-color", ThemeColor.SELECTION);
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderHeading));
@@ -470,7 +468,7 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
 
         // overriding gwt-dnd styles:
         style = new Style(".dragdrop-handle");
-        style.addProperty("cursor", "default");
+//        style.addProperty("cursor", "default");
         addStyle(style);
     }
 
@@ -496,6 +494,12 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.nodetails));
         style.addProperty("cursor", "default");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.selected));
+        style.addProperty("background-color", ThemeColor.SELECTION);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("cursor", "hand");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));

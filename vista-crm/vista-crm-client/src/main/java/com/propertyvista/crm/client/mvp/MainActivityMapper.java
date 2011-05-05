@@ -72,7 +72,7 @@ public class MainActivityMapper implements ActivityMapper {
 //        this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
         this.resetPasswordActivityProvider = resetPasswordActivityProvider;
         this.buildingListerActivityProvider = buildingListerActivityProvider;
-        this.buildingListerActivityProvider = buildingListerActivityProvider;
+        this.buildingEditorActivityProvider = buildingEditorActivityProvider;
         this.arrearsListerActivityProvider = arrearsListerActivityProvider;
         this.dashboardActivityProvider = dashboardActivityProvider;
         this.reportActivityProvider = reportActivityProvider;
@@ -94,8 +94,8 @@ public class MainActivityMapper implements ActivityMapper {
         } else if (place instanceof CrmSiteMap.Properties.Arrears) {
             return arrearsListerActivityProvider.get().withPlace(place);
 // Editors:      
-        } else if (place instanceof CrmSiteMap.Editor.Building) {
-            return buildingListerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Editors.Building) {
+            return buildingEditorActivityProvider.get().withPlace(place);
 
         } else if (place instanceof CrmSiteMap.Dashboard) {
             return dashboardActivityProvider.get().withPlace(place);

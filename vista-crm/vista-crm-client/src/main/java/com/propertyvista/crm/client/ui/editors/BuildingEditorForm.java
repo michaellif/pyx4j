@@ -40,6 +40,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.portal.domain.Address;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Phone;
@@ -56,21 +57,27 @@ public class BuildingEditorForm extends CEntityForm<Building> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
+        main.add(new CrmHeaderDecorator(i18n.tr("Building Details")));
+
         DecorationData decorData = new DecorationData(14d, 12);
         main.add(new VistaWidgetDecorator(inject(proto().name()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().marketingName()), decorData));
 
-        main.add(new VistaWidgetDecorator(inject(proto().complex()), decorData));
+// TODO - add this complex data processing later! :
+//        main.add(new VistaWidgetDecorator(inject(proto().complex()), decorData));
 
         main.add(new VistaWidgetDecorator(inject(proto().propertyCode()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().buildingType()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().structureDescription()), decorData));
 
         main.add(new VistaWidgetDecorator(inject(proto().website()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().email()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().email().emailAddress()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().email().emailType()), decorData));
 
+        main.add(new CrmHeaderDecorator(i18n.tr("Contact Phones")));
         main.add(inject(proto().phoneList(), createPhonesFolderEditorColumns()));
 
+        main.add(new CrmHeaderDecorator(i18n.tr("Address")));
         main.add(inject(proto().address()));
 
 // TODO - add this complex data processing later! :

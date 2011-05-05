@@ -37,18 +37,20 @@ public class BuildingLister extends ListerBase<Building> {
     public BuildingLister() {
         super(Building.class);
 
-        // add editing omnn double-click: 
+        // add editing on double-click: 
         getListPanel().getDataTable().addDoubleClickHandler(new DoubleClickHandler() {
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
-                AppPlace link = new CrmSiteMap.Properties.Buildings();
+                AppPlace link = new CrmSiteMap.Editors.Building();
+                // put selected item ID in link arguments:
                 HashMap<String, String> args = new HashMap<String, String>();
-                args.put("BuildingID", "");
+                int selectedRow = getListPanel().getDataTable().getSelectedRow();
+                Building building = getListPanel().getDataTable().getDataTableModel().getData().get(selectedRow).getEntity();
+                args.put(CrmSiteMap.EDITOR_ARG_NAME_BUILDING, building.getPrimaryKey().toString());
                 link.setArgs(args);
 
                 AppSite.getPlaceController().goTo(link);
             }
-
         });
     }
 

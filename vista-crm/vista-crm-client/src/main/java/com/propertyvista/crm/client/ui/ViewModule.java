@@ -51,10 +51,10 @@ public class ViewModule extends AbstractGinModule {
         bind(LoginView.class).to(LoginViewImpl.class).in(Singleton.class);
         bind(RetrievePasswordView.class).to(RetrievePasswordViewImpl.class).in(Singleton.class);
         bind(NewPasswordView.class).to(NewPasswordViewImpl.class).in(Singleton.class);
-
+// Listers:      
         bind(BuildingListerView.class).to(BuildingListerViewImpl.class).in(Singleton.class);
         bind(ArrearsListerView.class).to(ArrearsListerViewImpl.class).in(Singleton.class);
-
+// Editors:      
         bind(BuildingEditorView.class).to(BuildingEditorViewImpl.class).in(Singleton.class);
 
         bind(ReportView.class).to(ReportViewImpl.class).in(Singleton.class);

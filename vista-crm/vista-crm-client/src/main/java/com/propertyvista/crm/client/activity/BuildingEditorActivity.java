@@ -19,7 +19,10 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
+import com.pyx4j.site.rpc.AppPlace;
+
 import com.propertyvista.crm.client.ui.editors.BuildingEditorView;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class BuildingEditorActivity extends AbstractActivity {
 
@@ -31,6 +34,11 @@ public class BuildingEditorActivity extends AbstractActivity {
     }
 
     public BuildingEditorActivity withPlace(Place place) {
+        String stepArg = ((AppPlace) place).getArgs().get(CrmSiteMap.EDITOR_ARG_NAME_BUILDING);
+        if (stepArg != null) {
+            view.setEditingEntityId(Long.valueOf(stepArg));
+        }
+
         return this;
     }
 

@@ -19,6 +19,8 @@ import com.pyx4j.site.rpc.annotations.PlaceProperties;
 
 public class CrmSiteMap {
 
+    public static String EDITOR_ARG_NAME_BUILDING = "BuildingID";
+
     @PlaceProperties(caption = "Application Form")
     public static class Login extends AppPlace {
     }
@@ -72,6 +74,13 @@ public class CrmSiteMap {
         }
     }
 
+    public static class Editors extends AppPlace {
+        @PlaceProperties(caption = "Building")
+        @NavigationItem(navigLabel = "Building")
+        public static class Building extends AppPlace {
+        }
+    }
+
     public static class Marketing extends AppPlace {
     }
 
@@ -88,13 +97,4 @@ public class CrmSiteMap {
     @NavigationItem(navigLabel = "Default Dashboard")
     public static class Dashboard extends AppPlace {
     }
-
-    @PlaceProperties(caption = "Editor")
-    public static class Editor extends AppPlace {
-        @PlaceProperties(caption = "Building")
-        @NavigationItem(navigLabel = "Building")
-        public static class Building extends AppPlace {
-        }
-    }
-
 }

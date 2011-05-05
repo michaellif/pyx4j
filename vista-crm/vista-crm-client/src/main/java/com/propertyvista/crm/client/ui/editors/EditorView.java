@@ -13,5 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.editors;
 
-public interface BuildingEditorView extends EditorView {
+import com.google.gwt.user.client.ui.IsWidget;
+
+public interface EditorView extends IsWidget {
+
+    void setEditingEntityId(long entityId);
 }
