@@ -14,11 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 1, 2011
- * @author michaellif
+ * Created on May 4, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.pyx4j.svg.gwt;
+package com.pyx4j.svg.j2se;
 
 import com.pyx4j.svg.basic.Circle;
 import com.pyx4j.svg.basic.ClipPath;
@@ -34,66 +34,74 @@ import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.basic.Text;
 
-public class SvgFactoryForGwt implements SvgFactory {
+public class SvgFactoryForBatik implements SvgFactory {
+
+    private final SvgRootImpl rootSVG;
+
+    public SvgFactoryForBatik() {
+        rootSVG = new SvgRootImpl();
+    }
 
     @Override
     public SvgRoot getSvgRoot() {
-        return new SvgRootImpl();
+        return rootSVG;
     }
 
     @Override
     public Group createGroup() {
-        return new GroupImpl();
+        return new GroupImpl(rootSVG.getDocument());
     }
 
     @Override
     public Path createPath(String d) {
-        return new PathImpl(d);
+        return new PathImpl(rootSVG.getDocument(), d);
     }
 
     @Override
     public Rect createRect(int x, int y, int width, int height, int rx, int ry) {
-        return new RectImpl(x, y, width, height, rx, ry);
+        return new RectImpl(rootSVG.getDocument(), x, y, width, height, rx, ry);
     }
 
     @Override
     public Circle createCircle(int cx, int cy, int r) {
-        return new CircleImpl(cx, cy, r);
+        return new CircleImpl(rootSVG.getDocument(), cx, cy, r);
     }
 
     @Override
     public Ellipse createEllipse(int cx, int cy, int rx, int ry) {
-        return new EllipseImpl(cx, cy, rx, ry);
+        return new EllipseImpl(rootSVG.getDocument(), cx, cy, rx, ry);
     }
 
     @Override
     public Line createLine(int x1, int y1, int x2, int y2) {
-        return new LineImpl(x1, y1, x2, y2);
+        return new LineImpl(rootSVG.getDocument(), x1, y1, x2, y2);
     }
 
     @Override
     public Polyline createPolyline(String points) {
-        return new PolylineImpl(points);
+        return new PolylineImpl(rootSVG.getDocument(), points);
     }
 
     @Override
     public Polygon createPolygon(String points) {
-        return new PolygonImpl(points);
-    }
-
-    @Override
-    public Text createText(String text, int x, int y) {
-        return new TextImpl(text, x, y);
+        return new PolygonImpl(rootSVG.getDocument(), points);
     }
 
     @Override
     public Image createImage(String url, int x, int y, int width, int height) {
-        throw new Error("Not implemented");
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Text createText(String text, int x, int y) {
+        return new TextImpl(rootSVG.getDocument(), text, x, y);
     }
 
     @Override
     public ClipPath createClipPath(String id, String path) {
-        throw new Error("Not implemented");
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

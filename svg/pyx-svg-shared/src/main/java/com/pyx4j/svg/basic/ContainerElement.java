@@ -26,4 +26,6 @@ public interface ContainerElement extends SvgElement {
 
     void add(IsSvgElement element);
 
+    public void setTransform(String transform);
+
 }

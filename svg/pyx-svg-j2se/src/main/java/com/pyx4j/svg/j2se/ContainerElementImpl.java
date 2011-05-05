@@ -14,35 +14,56 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 1, 2011
- * @author michaellif
+ * Created on May 4, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.pyx4j.svg.gwt;
+package com.pyx4j.svg.j2se;
 
-import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.Widget;
+import org.w3c.dom.Element;
 
 import com.pyx4j.svg.basic.ContainerElement;
 import com.pyx4j.svg.basic.IsSvgElement;
 import com.pyx4j.svg.basic.SvgElement;
 
-public class ContainerElementImpl extends ComplexPanel implements ContainerElement {
+public class ContainerElementImpl implements ContainerElement {
+
+    private final String id;
+
+    private final Element container;
+
+    public ContainerElementImpl(Element element) {
+        this.container = element;
+        id = SvgRootImpl.createUniqueId();
+        element.setAttribute("id", id);
+    }
 
     @Override
-    public void add(SvgElement w) {
-        super.add((Widget) w, getElement());
+    public void add(SvgElement element) {
+        container.appendChild(((ShapeImpl) element).getElement());
     }
 
     @Override
     public void add(IsSvgElement element) {
-        add(element.asSvgElement());
+        container.appendChild(((ContainerElementImpl) element.asSvgElement()).getElement());
     }
 
     @Override
     public void setTransform(String transform) {
-        SvgDOM.setAttributeNS(getElement(), "transform", transform);
+        container.setAttribute("transform", transform);
 
+    }
+
+    public void setAttributeNS(String attr0, String attr1, String attr2) {
+        container.setAttributeNS(attr0, attr1, attr2);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Element getElement() {
+        return container;
     }
 
 }

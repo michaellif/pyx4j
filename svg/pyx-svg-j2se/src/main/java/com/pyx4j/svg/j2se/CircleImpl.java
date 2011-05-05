@@ -14,22 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 1, 2011
- * @author michaellif
+ * Created on May 4, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.pyx4j.svg.basic;
+package com.pyx4j.svg.j2se;
 
-public interface Shape extends GraphicsElement {
+import org.w3c.dom.Document;
 
-    public void setFill(String fill);
+import com.pyx4j.svg.basic.Circle;
 
-    public void setStroke(String stroke);
+public class CircleImpl extends ShapeImpl implements Circle {
 
-    public void setStrokeWidth(String strokeWidth);
-
-    public String getId();
-
-    public void setTransform(String transform);
+    public CircleImpl(Document document, int cx, int cy, int r) {
+        super(document.createElementNS(SvgRootImpl.SVG_NAMESPACE, "circle"));
+        getElement().setAttribute("cx", String.valueOf(cx));
+        getElement().setAttribute("cy", String.valueOf(cy));
+        getElement().setAttribute("r", String.valueOf(r));
+    }
 
 }

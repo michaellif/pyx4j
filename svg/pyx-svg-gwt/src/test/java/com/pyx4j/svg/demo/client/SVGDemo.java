@@ -26,19 +26,10 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.svg.basic.Circle;
-import com.pyx4j.svg.basic.Ellipse;
-import com.pyx4j.svg.basic.Line;
-import com.pyx4j.svg.basic.Path;
-import com.pyx4j.svg.basic.Polygon;
-import com.pyx4j.svg.basic.Polyline;
-import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
-import com.pyx4j.svg.basic.Text;
-import com.pyx4j.svg.chart.LegendIconType;
-import com.pyx4j.svg.chart.LegendItem;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
+import com.pyx4j.svg.test.SvgTestFactory;
 
 public class SVGDemo implements EntryPoint {
 
@@ -51,172 +42,86 @@ public class SVGDemo implements EntryPoint {
 
         SvgFactory svgFactory = new SvgFactoryForGwt();
 
+        SvgRoot svgPanel;
+
         content.add(new HTML("<h5>SVG Demo</h5>"));
 
         //=========================================//
 
         content.add(new HTML("Rect"));
-        {
-            SvgRoot svgPanel = svgFactory.createSvgRoot();
-            ((Widget) svgPanel).setSize("150px", "100px");
-
-            Rect rect = svgFactory.createRect(5, 5, 50, 50, 0, 0);
-            svgPanel.add(rect);
-
-            rect = svgFactory.createRect(25, 25, 50, 50, 5, 5);
-            rect.setFill("blue");
-            rect.setStroke("green");
-            rect.setStrokeWidth("5");
-            svgPanel.add(rect);
-
-            content.add((Widget) svgPanel);
-        }
+        svgPanel = SvgTestFactory.createTestRect(svgFactory);
+        ((Widget) svgPanel).setSize("150px", "100px");
+        content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Line"));
-        {
-            SvgRoot svgPanel = svgFactory.createSvgRoot();
-            ((Widget) svgPanel).setSize("150px", "100px");
-
-            Line line = svgFactory.createLine(5, 5, 55, 55);
-            svgPanel.add(line);
-
-            line = svgFactory.createLine(25, 5, 75, 55);
-            line.setStroke("green");
-            line.setStrokeWidth("5");
-            svgPanel.add(line);
-
-            content.add((Widget) svgPanel);
-        }
+        svgPanel = SvgTestFactory.createTestLine(svgFactory);
+        ((Widget) svgPanel).setSize("150px", "100px");
+        content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Path"));
-        {
-            SvgRoot svgPanel = svgFactory.createSvgRoot();
-            ((Widget) svgPanel).setSize("150px", "100px");
-
-            Path path = svgFactory.createPath("M 10 10 L 60 10 L 35 60 z");
-            svgPanel.add(path);
-
-            path = svgFactory.createPath("M 20 20 L 40 20 L 30 40 z");
-            path.setFill("blue");
-            path.setStroke("green");
-            path.setStrokeWidth("3");
-            svgPanel.add(path);
-
-            content.add((Widget) svgPanel);
-        }
+        svgPanel = SvgTestFactory.createTestPath(svgFactory);
+        ((Widget) svgPanel).setSize("150px", "100px");
+        content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Circle"));
-        {
-            SvgRoot svgPanel = svgFactory.createSvgRoot();
-            ((Widget) svgPanel).setSize("150px", "100px");
-
-            Circle circle = svgFactory.createCircle(40, 40, 30);
-            svgPanel.add(circle);
-
-            circle = svgFactory.createCircle(50, 50, 30);
-            circle.setFill("blue");
-            circle.setStroke("green");
-            circle.setStrokeWidth("3");
-            svgPanel.add(circle);
-
-            content.add((Widget) svgPanel);
-        }
+        svgPanel = SvgTestFactory.createTestCircle(svgFactory);
+        ((Widget) svgPanel).setSize("150px", "100px");
+        content.add((Widget) svgPanel);
 
         //=========================================//
 
-        content.add(new HTML("Elipse"));
-        {
-            SvgRoot svgPanel = svgFactory.createSvgRoot();
-            ((Widget) svgPanel).setSize("150px", "100px");
-
-            Ellipse ellipse = svgFactory.createEllipse(50, 50, 40, 20);
-            svgPanel.add(ellipse);
-
-            ellipse = svgFactory.createEllipse(50, 50, 20, 40);
-            ellipse.setFill("blue");
-            ellipse.setStroke("green");
-            ellipse.setStrokeWidth("3");
-            svgPanel.add(ellipse);
-
-            content.add((Widget) svgPanel);
-        }
+        content.add(new HTML("Ellipse"));
+        svgPanel = SvgTestFactory.createTestEllipse(svgFactory);
+        ((Widget) svgPanel).setSize("150px", "100px");
+        content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Polyline"));
-        {
-            SvgRoot svgPanel = svgFactory.createSvgRoot();
-            ((Widget) svgPanel).setSize("150px", "100px");
-
-            Polyline polyline = svgFactory.createPolyline("5,5 5,50 50,10, 50,60");
-            svgPanel.add(polyline);
-
-            polyline = svgFactory.createPolyline("15,15 15,60 60,20 60,70");
-            polyline.setStroke("green");
-            polyline.setStrokeWidth("3");
-            svgPanel.add(polyline);
-
-            content.add((Widget) svgPanel);
-        }
+        svgPanel = SvgTestFactory.createTestPolyline(svgFactory);
+        ((Widget) svgPanel).setSize("150px", "100px");
+        content.add((Widget) svgPanel);
 
         //=========================================//
 
-        content.add(new HTML("Polyline"));
-        {
-            SvgRoot svgPanel = svgFactory.createSvgRoot();
-            ((Widget) svgPanel).setSize("150px", "100px");
-
-            Polygon polygon = svgFactory.createPolygon("5,5 5,50 50,10, 50,60");
-            svgPanel.add(polygon);
-
-            polygon = svgFactory.createPolygon("15,15 15,60 60,20 60,70");
-            polygon.setFill("blue");
-            polygon.setStroke("green");
-            polygon.setStrokeWidth("3");
-            svgPanel.add(polygon);
-
-            content.add((Widget) svgPanel);
-        }
+        content.add(new HTML("Polygon"));
+        svgPanel = SvgTestFactory.createTestPolygon(svgFactory);
+        ((Widget) svgPanel).setSize("150px", "100px");
+        content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Text"));
-        {
-            SvgRoot svgPanel = svgFactory.createSvgRoot();
-            ((Widget) svgPanel).setSize("150px", "100px");
-
-            Text text = svgFactory.createText("Example", 25, 25);
-            svgPanel.add(text);
-
-            text = svgFactory.createText("Example", 30, 30);
-            text.setFill("blue");
-            text.setStroke("green");
-            svgPanel.add(text);
-
-            content.add((Widget) svgPanel);
-        }
+        svgPanel = SvgTestFactory.createTestText(svgFactory);
+        ((Widget) svgPanel).setSize("150px", "100px");
+        content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Legend Item"));
-        {
-            SvgRoot svgPanel = svgFactory.createSvgRoot();
-            ((Widget) svgPanel).setSize("150px", "100px");
+        svgPanel = SvgTestFactory.createTestLegendItem(svgFactory);
+        ((Widget) svgPanel).setSize("150px", "150px");
+        content.add((Widget) svgPanel);
 
-            LegendItem lc = new LegendItem("Property 1", LegendIconType.Circle, svgFactory, 20, 25, 15);
-            lc.setColor("blue");
-            LegendItem lr = new LegendItem("Property 2", LegendIconType.Rect, svgFactory, 20, 55, 15);
-            lr.setColor("green");
+        //=========================================//
 
-            svgPanel.add(lc);
-            svgPanel.add(lr);
-            content.add((Widget) svgPanel);
-        }
+        content.add(new HTML("Pie Chart"));
+        svgPanel = SvgTestFactory.createTestPieChart(svgFactory);
+        ((Widget) svgPanel).setSize("300px", "200px");
+        content.add((Widget) svgPanel);
+
+        //=========================================//
+
+        content.add(new HTML("Bar Chart"));
+        svgPanel = SvgTestFactory.createTestBarChart(svgFactory);
+        ((Widget) svgPanel).setSize("750px", "150px");
+        content.add((Widget) svgPanel);
+
     }
 }

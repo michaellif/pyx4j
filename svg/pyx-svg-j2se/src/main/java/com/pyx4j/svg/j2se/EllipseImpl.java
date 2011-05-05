@@ -14,22 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 1, 2011
- * @author michaellif
+ * Created on May 4, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.pyx4j.svg.basic;
+package com.pyx4j.svg.j2se;
 
-public interface Shape extends GraphicsElement {
+import org.w3c.dom.Document;
 
-    public void setFill(String fill);
+import com.pyx4j.svg.basic.Ellipse;
 
-    public void setStroke(String stroke);
+public class EllipseImpl extends ShapeImpl implements Ellipse {
 
-    public void setStrokeWidth(String strokeWidth);
-
-    public String getId();
-
-    public void setTransform(String transform);
+    public EllipseImpl(Document document, int cx, int cy, int rx, int ry) {
+        super(document.createElementNS(SvgRootImpl.SVG_NAMESPACE, "ellipse"));
+        getElement().setAttribute("cx", String.valueOf(cx));
+        getElement().setAttribute("cy", String.valueOf(cy));
+        getElement().setAttribute("rx", String.valueOf(rx));
+        getElement().setAttribute("ry", String.valueOf(ry));
+    }
 
 }

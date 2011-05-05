@@ -14,22 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 1, 2011
- * @author michaellif
+ * Created on May 4, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.pyx4j.svg.basic;
+package com.pyx4j.svg.j2se;
 
-public interface Shape extends GraphicsElement {
+import org.w3c.dom.Document;
 
-    public void setFill(String fill);
+import com.pyx4j.svg.basic.Polygon;
 
-    public void setStroke(String stroke);
+public class PolygonImpl extends ShapeImpl implements Polygon {
 
-    public void setStrokeWidth(String strokeWidth);
-
-    public String getId();
-
-    public void setTransform(String transform);
+    public PolygonImpl(Document document, String points) {
+        super(document.createElementNS(SvgRootImpl.SVG_NAMESPACE, "polygon"));
+        getElement().setAttribute("points", points);
+    }
 
 }

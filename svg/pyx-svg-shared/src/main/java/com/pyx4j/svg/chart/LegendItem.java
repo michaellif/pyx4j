@@ -51,7 +51,7 @@ public class LegendItem implements IsSvgElement {
 
     private final Group group;
 
-    public LegendItem(LegendIconType iconType, SvgFactory svgFactory, int x, int y, int length) {
+    public LegendItem(SvgFactory svgFactory, LegendIconType iconType, int x, int y, int length) {
         this.iconType = iconType;
         this.svgFactory = svgFactory;
 
@@ -77,8 +77,8 @@ public class LegendItem implements IsSvgElement {
 
     }
 
-    public LegendItem(String text, LegendIconType iconType, SvgFactory svgFactory, int x, int y, int length) {
-        this(iconType, svgFactory, x, y, length);
+    public LegendItem(SvgFactory svgFactory, String text, LegendIconType iconType, int x, int y, int length) {
+        this(svgFactory, iconType, x, y, length);
         this.text = svgFactory.createText(text, xc + X_SHIFT + length, yc + Y_SHIFT);
         group.add(this.text);
     }

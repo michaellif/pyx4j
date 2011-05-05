@@ -14,22 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 1, 2011
- * @author michaellif
+ * Created on May 4, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.pyx4j.svg.basic;
+package com.pyx4j.svg.j2se;
 
-public interface Shape extends GraphicsElement {
+import org.w3c.dom.Document;
 
-    public void setFill(String fill);
+import com.pyx4j.svg.basic.Line;
 
-    public void setStroke(String stroke);
+public class LineImpl extends ShapeImpl implements Line {
 
-    public void setStrokeWidth(String strokeWidth);
-
-    public String getId();
-
-    public void setTransform(String transform);
+    public LineImpl(Document document, int x1, int y1, int x2, int y2) {
+        super(document.createElementNS(SvgRootImpl.SVG_NAMESPACE, "line"));
+        getElement().setAttribute("x1", String.valueOf(x1));
+        getElement().setAttribute("y1", String.valueOf(y1));
+        getElement().setAttribute("x2", String.valueOf(x2));
+        getElement().setAttribute("y2", String.valueOf(y2));
+    }
 
 }

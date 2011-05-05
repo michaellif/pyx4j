@@ -22,7 +22,7 @@ package com.pyx4j.svg.basic;
 
 public interface SvgFactory {
 
-    SvgRoot createSvgRoot();
+    SvgRoot getSvgRoot();
 
     Group createGroup();
 

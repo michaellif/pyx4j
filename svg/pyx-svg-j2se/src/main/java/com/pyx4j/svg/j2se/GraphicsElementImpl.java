@@ -14,22 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 1, 2011
- * @author michaellif
+ * Created on May 4, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.pyx4j.svg.basic;
+package com.pyx4j.svg.j2se;
 
-public interface Shape extends GraphicsElement {
+import com.pyx4j.svg.basic.GraphicsElement;
 
-    public void setFill(String fill);
-
-    public void setStroke(String stroke);
-
-    public void setStrokeWidth(String strokeWidth);
-
-    public String getId();
-
-    public void setTransform(String transform);
+public class GraphicsElementImpl implements GraphicsElement {
 
 }

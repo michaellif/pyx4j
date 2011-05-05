@@ -14,14 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 1, 2011
- * @author michaellif
+ * Created on May 4, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.pyx4j.svg.gwt;
+package com.pyx4j.svg.j2se;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.user.client.DOM;
+import org.w3c.dom.Element;
 
 import com.pyx4j.svg.basic.Shape;
 
@@ -29,28 +28,35 @@ public class ShapeImpl extends GraphicsElementImpl implements Shape {
 
     private final String id;
 
+    private final Element el;
+
     public ShapeImpl(Element elem) {
-        setElement(elem);
-        id = DOM.createUniqueId();
-        SvgDOM.setAttributeNS(getElement(), "id", id);
+        el = elem;
+        id = SvgRootImpl.createUniqueId();
+        el.setAttribute("id", id);
         setStrokeWidth(String.valueOf(1));
         setStroke("black");
-        setFill("transparent");
+        //TODO transparent is not valid. Finish later
+        // setFill("transparent");
     }
 
     @Override
     public void setFill(String fill) {
-        getElement().setAttribute("fill", fill);
+
+        el.setAttribute("fill", fill);
+
     }
 
     @Override
     public void setStroke(String stroke) {
-        getElement().setAttribute("stroke", stroke);
+        el.setAttribute("stroke", stroke);
+
     }
 
     @Override
     public void setStrokeWidth(String strokeWidth) {
-        getElement().setAttribute("stroke-width", strokeWidth);
+        el.setAttribute("stroke-width", strokeWidth);
+
     }
 
     @Override
@@ -58,9 +64,13 @@ public class ShapeImpl extends GraphicsElementImpl implements Shape {
         return id;
     }
 
+    public Element getElement() {
+        return el;
+    }
+
     @Override
     public void setTransform(String transform) {
-        getElement().setAttribute("transform", transform);
+        el.setAttribute("transform", transform);
 
     }
 
