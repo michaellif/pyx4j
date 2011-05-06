@@ -13,17 +13,14 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import java.util.Date;
-
-import com.propertyvista.portal.domain.Money;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.portal.domain.Money;
+
 /**
  * General required information for all Income types.
- * 
  */
 public interface IIncomeInfo {
 
@@ -37,8 +34,8 @@ public interface IIncomeInfo {
      * Start of income period. For employment that would be employment start date.
      */
     @Caption(name = "Start on")
-    IPrimitive<Date> starts();
+    IPrimitive<java.sql.Date> starts();
 
     @Caption(name = "Stop on")
-    IPrimitive<Date> ends();
+    IPrimitive<java.sql.Date> ends();
 }

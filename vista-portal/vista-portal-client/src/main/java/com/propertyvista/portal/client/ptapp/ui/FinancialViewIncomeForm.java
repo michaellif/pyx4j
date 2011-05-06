@@ -23,6 +23,16 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+
 import com.propertyvista.common.client.ui.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.resources.PortalImages;
@@ -39,16 +49,6 @@ import com.propertyvista.portal.domain.pt.IncomeInfoSocialServices;
 import com.propertyvista.portal.domain.pt.IncomeInfoStudentIncome;
 import com.propertyvista.portal.domain.pt.IncomeSource;
 import com.propertyvista.portal.domain.pt.TenantIncome;
-
-import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
@@ -334,7 +334,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         comp.get(comp.proto().starts()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                IPrimitive<Date> date = comp.getValue().ends();
+                IPrimitive<java.sql.Date> date = comp.getValue().ends();
                 return (value != null) && (date.isNull() || value.before(date.getValue()));
             }
 
@@ -347,7 +347,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         comp.get(comp.proto().ends()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                IPrimitive<Date> date = comp.getValue().starts();
+                IPrimitive<java.sql.Date> date = comp.getValue().starts();
                 return (value != null) && (date.isNull() || value.after(date.getValue()));
             }
 

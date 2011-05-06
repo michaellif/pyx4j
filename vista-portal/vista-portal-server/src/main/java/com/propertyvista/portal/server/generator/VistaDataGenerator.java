@@ -176,8 +176,8 @@ public class VistaDataGenerator {
         int startYear = 1990 + RandomUtil.randomInt(20);
         int endYear = startYear + 1 + RandomUtil.randomInt(8);
 
-        employer.starts().setValue(DateUtils.createDate(startYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)));
-        employer.ends().setValue(DateUtils.createDate(endYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)));
+        employer.starts().setValue(new java.sql.Date(DateUtils.createDate(startYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)).getTime()));
+        employer.ends().setValue(new java.sql.Date(DateUtils.createDate(endYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)).getTime()));
 
         return employer;
     }
