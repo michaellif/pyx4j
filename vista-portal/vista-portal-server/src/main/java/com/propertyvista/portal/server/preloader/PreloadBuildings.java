@@ -229,9 +229,12 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
         building.propertyProfile().set(propertyProfile);
 
-        PersistenceServicesFactory.getPersistenceService().persist(building);
+        building.name().setValue(RandomUtil.randomLetters(3));
+        building.marketingName().setValue(RandomUtil.randomLetters(4) + " " + RandomUtil.randomLetters(6));
 
         building.email().set(email); // not sure yet what to do about the email and its type
+
+        PersistenceServicesFactory.getPersistenceService().persist(building);
 
         buildingCount++;
         return building;
@@ -383,7 +386,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
             // address
             String street = RandomUtil.randomInt(10000) + " Yonge St";
-            String zip = "L" + (b + 1 % 10) + "C " + (b + 5 % 10) + "M" + (b + 7 % 10);
+            String zip = RandomUtil.randomPostalCode();
             Address address = createAddress(street, zip);
 
             // phones
