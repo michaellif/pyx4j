@@ -54,9 +54,9 @@ public class PreloadedUsersTest extends PortalVerificationTestCase {
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
 
         verifyAptPage(unitSel);
-        verifyTenantsPage(summary);
-        verifyInfoPages(summary);
-        verifyFinancialPages(summary);
+        verifyTenantsPage(summary, true);
+        verifyInfoPages(summary, true);
+        verifyFinancialPages(summary, true);
 
     }
 

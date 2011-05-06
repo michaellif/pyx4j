@@ -22,6 +22,7 @@ import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
+import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.pt.IncomeInfoEmployer;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
@@ -37,17 +38,17 @@ import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
 
 abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
 
-    protected void assertAptUnitForm(IDebugId fromDebugId, ApartmentUnit aUnit) {
-        assertValueOnForm(fromDebugId, aUnit.unitType());
-        assertValueOnForm(fromDebugId, aUnit.marketRent().get(aUnit.marketRent().size() - 1));
-        assertValueOnForm(fromDebugId, aUnit.requiredDeposit());
-        assertValueOnForm(fromDebugId, aUnit.bedrooms());
-        assertValueOnForm(fromDebugId, aUnit.bathrooms());
-        assertValueOnForm(fromDebugId, aUnit.area());
-        assertValueOnForm(fromDebugId, aUnit.avalableForRent());
+    protected void assertAptUnitForm(IDebugId formDebugId, ApartmentUnit aUnit) {
+        assertValueOnForm(formDebugId, aUnit.unitType());
+        assertValueOnForm(formDebugId, aUnit.marketRent().get(aUnit.marketRent().size() - 1));
+        assertValueOnForm(formDebugId, aUnit.requiredDeposit());
+        assertValueOnForm(formDebugId, aUnit.bedrooms());
+        assertValueOnForm(formDebugId, aUnit.bathrooms());
+        assertValueOnForm(formDebugId, aUnit.area());
+        assertValueOnForm(formDebugId, aUnit.avalableForRent());
     }
 
-    protected void verifyTenantsPage(Summary summary) {
+    protected void verifyTenantsPage(Summary summary, boolean doSave) {
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class)));
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class));
 
@@ -57,32 +58,36 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             num++;
         }
 
-        saveAndContinue();
-    }
-
-    protected void assertTenantRow(IDebugId fromDebugId, PotentialTenantInfo tenant, boolean fullInfo) {
-        assertValueOnForm(fromDebugId, tenant.firstName());
-        assertValueOnForm(fromDebugId, tenant.lastName());
-        assertValueOnForm(fromDebugId, tenant.middleName());
-
-        //TODO
-        //assertValueOnForm(fromDebugId, tenant.birthDate());
-
-        if (fullInfo) {
-            assertValueOnForm(fromDebugId, tenant.email());
-            assertValueOnForm(fromDebugId, tenant.relationship());
-            //TODO
-            //assertValueOnForm(fromDebugId, tenant.status());
-            assertValueOnForm(fromDebugId, tenant.takeOwnership());
+        if (doSave) {
+            saveAndContinue();
         }
     }
 
-    protected void verifyInfoPages(Summary summary) {
+    protected void assertTenantRow(IDebugId formDebugId, PotentialTenantInfo tenant, boolean fullInfo) {
+        assertValueOnForm(formDebugId, tenant.firstName());
+        assertValueOnForm(formDebugId, tenant.lastName());
+        assertValueOnForm(formDebugId, tenant.middleName());
+
+        //TODO VladS
+        assertValueOnForm(formDebugId, tenant.birthDate());
+
+        if (fullInfo) {
+            assertValueOnForm(formDebugId, tenant.email());
+            assertValueOnForm(formDebugId, tenant.relationship());
+            //TODO VladS
+            //assertValueOnForm(fromDebugId, tenant.status());
+            assertValueOnForm(formDebugId, tenant.takeOwnership());
+        }
+    }
+
+    protected void verifyInfoPages(Summary summary, boolean doSave) {
         int id = 0;
         for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
             if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
                 verifyInfoPage(detach(tenant), id);
-                saveAndContinue();
+                if (doSave) {
+                    saveAndContinue();
+                }
                 id++;
             }
         }
@@ -146,7 +151,57 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         }
     }
 
-    protected void verifyFinancialPages(Summary summary) {
+    private void assertIAddressForm(IDebugId formDebugId, IAddress address) {
+        assertValueOnForm(formDebugId, address.street1());
+        assertValueOnForm(formDebugId, address.street2());
+        assertValueOnForm(formDebugId, address.city());
+        assertValueOnForm(formDebugId, address.country());
+        assertValueOnForm(formDebugId, address.postalCode());
+        assertValueOnForm(formDebugId, address.province());
+    }
+
+    protected void assertAddressForm(IDebugId formDebugId, Address address) {
+        assertIAddressForm(formDebugId, address);
+
+        assertValueOnForm(formDebugId, address.phone());
+
+        assertValueOnForm(formDebugId, address.moveInDate());
+        assertValueOnForm(formDebugId, address.moveOutDate());
+        assertValueOnForm(formDebugId, address.rented());
+
+        if (OwnedRented.Owned == address.rented().getValue()) {
+            assertNotVisible(D.id(formDebugId, address.payment()));
+            assertNotVisible(D.id(formDebugId, address.managerName()));
+        } else {
+            assertVisible(D.id(formDebugId, address.payment()));
+            assertVisible(D.id(formDebugId, address.managerName()));
+            assertValueOnForm(formDebugId, address.payment());
+            assertValueOnForm(formDebugId, address.managerName());
+        }
+
+    }
+
+    protected void assertVehicleRow(IDebugId formDebugId, Vehicle vehicle) {
+        assertValueOnForm(formDebugId, vehicle.plateNumber());
+        assertValueOnForm(formDebugId, vehicle.year());
+        assertValueOnForm(formDebugId, vehicle.make());
+        assertValueOnForm(formDebugId, vehicle.model());
+        assertValueOnForm(formDebugId, vehicle.country());
+        assertValueOnForm(formDebugId, vehicle.province());
+    }
+
+    protected void assertEmContactsForm(IDebugId formDebugId, EmergencyContact contact) {
+        assertValueOnForm(formDebugId, contact.firstName());
+        assertValueOnForm(formDebugId, contact.middleName());
+        assertValueOnForm(formDebugId, contact.lastName());
+        assertValueOnForm(formDebugId, contact.homePhone());
+        assertValueOnForm(formDebugId, contact.mobilePhone());
+        assertValueOnForm(formDebugId, contact.workPhone());
+
+        assertIAddressForm(formDebugId, contact.address());
+    }
+
+    protected void verifyFinancialPages(Summary summary, boolean doSave) {
         int num = 0;
         int i = 0;
         for (SummaryPotentialTenantFinancial tenantFin : summary.tenantFinancials()) {
@@ -156,7 +211,9 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
 
             if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
                 verifyFinancialPage(detach(tenantFin.tenantFinancial()), num);
-                saveAndContinue();
+                if (doSave) {
+                    saveAndContinue();
+                }
                 num++;
             }
         }
@@ -178,12 +235,12 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         }
     }
 
-    private void verifyIncome(IDebugId formDebugID, TenantIncome income) {
+    private void verifyIncome(IDebugId formDebugId, TenantIncome income) {
         switch (income.incomeSource().getValue()) {
         case fulltime:
-            assertEmployerForm(D.id(formDebugID, income.employer()), detach(income.employer()));
+            assertEmployerForm(D.id(formDebugId, income.employer()), detach(income.employer()));
         case parttime:
-            assertEmployerForm(D.id(formDebugID, income.employer()), detach(income.employer()));
+            assertEmployerForm(D.id(formDebugId, income.employer()), detach(income.employer()));
             break;
         case selfemployed:
             // TODO Leon
@@ -207,69 +264,18 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         }
     }
 
-    private void assertEmployerForm(IDebugId formDebugID, IncomeInfoEmployer employer) {
-        assertValueOnForm(formDebugID, employer.name());
-        assertValueOnForm(formDebugID, employer.employedForYears());
-        assertValueOnForm(formDebugID, employer.street1());
-        assertValueOnForm(formDebugID, employer.street2());
-        assertValueOnForm(formDebugID, employer.city());
-        assertValueOnForm(formDebugID, employer.province());
-        assertValueOnForm(formDebugID, employer.country());
-        assertValueOnForm(formDebugID, employer.postalCode());
-        assertValueOnForm(formDebugID, employer.supervisorName());
-        assertValueOnForm(formDebugID, employer.supervisorPhone());
-        assertValueOnForm(formDebugID, employer.monthlyAmount());
-        assertValueOnForm(formDebugID, employer.position());
-        assertValueOnForm(formDebugID, employer.starts());
-        assertValueOnForm(formDebugID, employer.ends());
+    private void assertEmployerForm(IDebugId formDebugId, IncomeInfoEmployer employer) {
+        assertValueOnForm(formDebugId, employer.name());
+        assertValueOnForm(formDebugId, employer.employedForYears());
+
+        assertIAddressForm(formDebugId, employer);
+
+        assertValueOnForm(formDebugId, employer.supervisorName());
+        assertValueOnForm(formDebugId, employer.supervisorPhone());
+        assertValueOnForm(formDebugId, employer.monthlyAmount());
+        assertValueOnForm(formDebugId, employer.position());
+        assertValueOnForm(formDebugId, employer.starts());
+        assertValueOnForm(formDebugId, employer.ends());
     }
 
-    protected void assertAddressForm(IDebugId fromDebugId, Address address) {
-        assertValueOnForm(fromDebugId, address.street1());
-        assertValueOnForm(fromDebugId, address.street2());
-        assertValueOnForm(fromDebugId, address.city());
-        assertValueOnForm(fromDebugId, address.phone());
-        assertValueOnForm(fromDebugId, address.postalCode());
-        assertValueOnForm(fromDebugId, address.moveInDate());
-        assertValueOnForm(fromDebugId, address.moveOutDate());
-
-        assertValueOnForm(fromDebugId, address.rented());
-        assertValueOnForm(fromDebugId, address.country());
-        assertValueOnForm(fromDebugId, address.province());
-
-        if (OwnedRented.Owned == address.rented().getValue()) {
-            assertNotVisible(D.id(fromDebugId, address.payment()));
-            assertNotVisible(D.id(fromDebugId, address.managerName()));
-        } else {
-            assertVisible(D.id(fromDebugId, address.payment()));
-            assertVisible(D.id(fromDebugId, address.managerName()));
-            assertValueOnForm(fromDebugId, address.payment());
-            assertValueOnForm(fromDebugId, address.managerName());
-        }
-
-    }
-
-    protected void assertVehicleRow(IDebugId fromDebugId, Vehicle vehicle) {
-        assertValueOnForm(fromDebugId, vehicle.plateNumber());
-        assertValueOnForm(fromDebugId, vehicle.year());
-        assertValueOnForm(fromDebugId, vehicle.make());
-        assertValueOnForm(fromDebugId, vehicle.model());
-        assertValueOnForm(fromDebugId, vehicle.country());
-        assertValueOnForm(fromDebugId, vehicle.province());
-    }
-
-    protected void assertEmContactsForm(IDebugId fromDebugId, EmergencyContact contact) {
-        assertValueOnForm(fromDebugId, contact.firstName());
-        assertValueOnForm(fromDebugId, contact.middleName());
-        assertValueOnForm(fromDebugId, contact.lastName());
-        assertValueOnForm(fromDebugId, contact.homePhone());
-        assertValueOnForm(fromDebugId, contact.mobilePhone());
-        assertValueOnForm(fromDebugId, contact.workPhone());
-        assertValueOnForm(fromDebugId, contact.address().street1());
-        assertValueOnForm(fromDebugId, contact.address().street2());
-        assertValueOnForm(fromDebugId, contact.address().city());
-        assertValueOnForm(fromDebugId, contact.address().province());
-        assertValueOnForm(fromDebugId, contact.address().country());
-        assertValueOnForm(fromDebugId, contact.address().postalCode());
-    }
 }

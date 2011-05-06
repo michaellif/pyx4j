@@ -88,9 +88,9 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         selenium.click(CrudDebugId.Criteria_Submit);
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
 
-        verifyTenantsPage(summary);
-        verifyInfoPages(summary);
-        verifyFinancialPages(summary);
+        verifyTenantsPage(summary, false);
+        verifyInfoPages(summary, false);
+        verifyFinancialPages(summary, false);
 
         //TODO Leon
     }
@@ -323,9 +323,15 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
 
     private void enterEmployerForm(IDebugId formDebugId, IncomeInfoEmployer employer) {
         setValueOnForm(formDebugId, employer.name());
+        setValueOnForm(formDebugId, employer.employedForYears());
         enterIAddressForm(formDebugId, employer);
         setValueOnForm(formDebugId, employer.monthlyAmount());
-        // TODO Leon
+
+        setValueOnForm(formDebugId, employer.supervisorName());
+        setValueOnForm(formDebugId, employer.supervisorPhone());
+        setValueOnForm(formDebugId, employer.position());
+        setValueOnForm(formDebugId, employer.starts());
+        setValueOnForm(formDebugId, employer.ends());
     }
 
     private void enterAssetRow(IDebugId formDebugId, TenantAsset asset) {
