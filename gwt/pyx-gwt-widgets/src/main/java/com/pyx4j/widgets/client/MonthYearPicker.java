@@ -37,7 +37,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
 
     protected final ListBox yearSelector;
 
-    private final Range yearRange;
+    private Range yearRange;
 
     private final boolean showYearOnly;
 
@@ -107,6 +107,10 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
             month = monthSelector.getSelectedIndex() == 0 ? 0 : monthSelector.getSelectedIndex() - 1;
         }
         return new Date(year - 1900, month, 1);
+    }
+
+    public void setYearRange(Range yearRange) {
+        this.yearRange = yearRange;
     }
 
     @Override

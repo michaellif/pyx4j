@@ -44,9 +44,11 @@ public class CMonthYearPicker extends CEditableComponent<Date, NativeMonthYearPi
         return yearOnly;
     }
 
-    //TODO allow propagation of values to native component after creation of widget
-    public void setYearOptionsRange(int from, int to) {
-        yearRange = new Range(from, to - from);
+    public void setYearRange(Range yearRange) {
+        this.yearRange = yearRange;
+        if (isWidgetCreated()) {
+            asWidget().setYearRange(yearRange);
+        }
     }
 
     public Range getYearRange() {
