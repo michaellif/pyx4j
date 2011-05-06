@@ -30,27 +30,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 
-import com.propertyvista.common.client.ui.AddressUtils;
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
-import com.propertyvista.portal.client.ptapp.resources.PortalImages;
-import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsFolderUploader;
-import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
-import com.propertyvista.portal.client.ptapp.ui.validators.CanadianSinValidator;
-import com.propertyvista.portal.domain.pt.Address;
-import com.propertyvista.portal.domain.pt.Address.OwnedRented;
-import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
-import com.propertyvista.portal.domain.pt.EmergencyContact;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.Vehicle;
-import com.propertyvista.portal.domain.ref.Country;
-import com.propertyvista.portal.domain.ref.Province;
-import com.propertyvista.portal.rpc.pt.BusinessRules;
-
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.OptionsFilter;
@@ -73,6 +52,27 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+
+import com.propertyvista.common.client.ui.AddressUtils;
+import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
+import com.propertyvista.portal.client.ptapp.resources.PortalImages;
+import com.propertyvista.portal.client.ptapp.ui.components.ApplicationDocumentsFolderUploader;
+import com.propertyvista.portal.client.ptapp.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.validators.CanadianSinValidator;
+import com.propertyvista.portal.domain.pt.Address;
+import com.propertyvista.portal.domain.pt.Address.OwnedRented;
+import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
+import com.propertyvista.portal.domain.pt.EmergencyContact;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.pt.Vehicle;
+import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.portal.domain.ref.Province;
+import com.propertyvista.portal.rpc.pt.BusinessRules;
 
 @Singleton
 public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
@@ -164,7 +164,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         main.add(new ViewHeaderDecorator(proto().emergencyContacts()));
         main.add(inject(proto().emergencyContacts(), createIncomeFolderEditor()));
 
-        main.setWidth("700px");
+        main.setWidth("800px");
 
         addValidations();
 
@@ -373,9 +373,9 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().plateNumber(), "8em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().year(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().make(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().model(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().country(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().make(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().model(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().country(), "9em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().province(), "17em"));
             }
 
