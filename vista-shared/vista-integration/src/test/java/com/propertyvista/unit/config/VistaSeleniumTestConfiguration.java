@@ -13,11 +13,11 @@
  */
 package com.propertyvista.unit.config;
 
-import com.propertyvista.config.SystemConfig;
-import com.propertyvista.config.VistaDeploymentId;
-
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 import com.pyx4j.selenium.DefaultSeleniumTestConfiguration;
+
+import com.propertyvista.config.SystemConfig;
+import com.propertyvista.config.VistaDeploymentId;
 
 /**
  * This is local Global configurator for all tests.
@@ -101,4 +101,12 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
         return SystemConfig.instance().getProxyConfig();
     }
 
+    @Override
+    public Driver getDriver() {
+        return super.getDriver();
+
+        // Lazy man switch, See next version
+        //return Driver.Chrome;
+        //return Driver.IE;
+    }
 }

@@ -79,11 +79,11 @@ public class VistaDataGenerator {
 
     private final static Logger log = LoggerFactory.getLogger(VistaDataGenerator.class);
 
-    public VistaDataGenerator() {
-    }
+    private final long seed;
 
     public VistaDataGenerator(long seed) {
         DataGenerator.setRandomSeed(seed);
+        this.seed = seed;
     }
 
     public User createUser(int number) {
@@ -250,7 +250,14 @@ public class VistaDataGenerator {
         Pets pets = EntityFactory.create(Pets.class);
         pets.application().set(application);
 
-        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
+        int maxPets;
+        if (Math.abs(this.seed) < 1000) {
+            maxPets = 1 + RandomUtil.randomInt(2);
+        } else {
+            maxPets = RandomUtil.randomInt(6);
+        }
+
+        for (int i = 0; i < maxPets; i++) {
             Pet pet = EntityFactory.create(Pet.class);
 
             pet.type().setValue(Pet.PetType.dog);
@@ -381,7 +388,12 @@ public class VistaDataGenerator {
         PotentialTenantList tenants = EntityFactory.create(PotentialTenantList.class);
         tenants.application().set(application);
 
-        for (int i = 0; i < DemoData.NUM_POTENTIAL_TENANTS; i++) {
+        int maxTenants = DemoData.NUM_POTENTIAL_TENANTS;
+        if (Math.abs(this.seed) > 1000) {
+            maxTenants = 1 + RandomUtil.randomInt(7);
+        }
+
+        for (int i = 0; i < maxTenants; i++) {
             PotentialTenantInfo tenantInfo = createPotentialTenantInfo(application, i);
             tenants.tenants().add(tenantInfo);
         }

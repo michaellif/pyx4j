@@ -21,16 +21,6 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
-import com.propertyvista.portal.domain.DemoData;
-import com.propertyvista.portal.domain.User;
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.Summary;
-import com.propertyvista.portal.server.generator.VistaDataGenerator;
-import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
-import com.propertyvista.portal.server.pt.services.SummaryServiceImpl;
-
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.report.test.ReportsTestBase;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -40,6 +30,16 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.unit.server.mock.TestLifecycle;
+
+import com.propertyvista.config.tests.VistaTestDBSetup;
+import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
+import com.propertyvista.portal.domain.DemoData;
+import com.propertyvista.portal.domain.User;
+import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.server.generator.VistaDataGenerator;
+import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
+import com.propertyvista.portal.server.pt.services.SummaryServiceImpl;
 
 public class SummaryReportTest extends ReportsTestBase {
 
@@ -91,7 +91,7 @@ public class SummaryReportTest extends ReportsTestBase {
     }
 
     private static Summary retreiveSummaryTodo() throws IOException {
-        VistaDataGenerator generator = new VistaDataGenerator();
+        VistaDataGenerator generator = new VistaDataGenerator(DemoData.PT_GENERATION_SEED);
         Application application = generator.createApplication(VistaDataGenerator.createUser());
         Summary summary = generator.createSummary(application, null);
         return summary;

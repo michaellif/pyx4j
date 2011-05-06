@@ -13,6 +13,11 @@
  */
 package com.propertyvista.unit.portal;
 
+import java.util.Random;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
@@ -22,7 +27,6 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
@@ -51,6 +55,8 @@ import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
 
 public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
 
+    private static final Logger log = LoggerFactory.getLogger(CreateCompleteApplicationTest.class);
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -59,10 +65,26 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         selenium.setFocusOnGetValue(true);
     }
 
-    public void testFullFlow() throws Exception {
-        long seed = DemoData.PT_GENERATION_SEED;
-        //seed = 50;
-        //seed = 2;
+    public void testFullFlow() {
+        long seed = 101;
+
+        //TODO VladS
+        //This breaks Date validation
+        //seed = -3341811257066812540L;
+
+        exectuteFlow(seed);
+    }
+
+    // Whiled goose chase
+    public void OFF_testRandomizedData() {
+        for (int n = 1; n <= 10; n++) {
+            Random random = new Random();
+            exectuteFlow(random.nextLong());
+        }
+    }
+
+    public void exectuteFlow(long seed) {
+        log.info("execute flow with seed {}", seed);
         VistaDataGenerator generator = new VistaDataGenerator(seed);
         User user = createTestUser();
         Application application = generator.createApplication(user);
@@ -93,6 +115,9 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         verifyFinancialPages(summary, false);
 
         //TODO Leon
+
+        // End test so we can start again
+        selenium.click(VistaFormsDebugId.Auth_LogOutTop);
     }
 
     private void createAccount(User user) {
