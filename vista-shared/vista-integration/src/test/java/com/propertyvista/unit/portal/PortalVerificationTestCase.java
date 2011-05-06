@@ -23,7 +23,11 @@ import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.IAddress;
+import com.propertyvista.portal.domain.pt.IEmploymentInfo;
+import com.propertyvista.portal.domain.pt.IIncomeInfo;
 import com.propertyvista.portal.domain.pt.IncomeInfoEmployer;
+import com.propertyvista.portal.domain.pt.IncomeInfoSelfEmployed;
+import com.propertyvista.portal.domain.pt.IncomeInfoStudentIncome;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
@@ -257,43 +261,63 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         switch (income.incomeSource().getValue()) {
         case fulltime:
             assertEmployerForm(D.id(formDebugId, income.employer()), detach(income.employer()));
+            break;
         case parttime:
             assertEmployerForm(D.id(formDebugId, income.employer()), detach(income.employer()));
             break;
         case selfemployed:
-            // TODO Leon
-            // income.selfEmployed();
+            assertSelfEmployedForm(D.id(formDebugId, income.employer()), detach(income.selfEmployed()));
             break;
         case seasonallyEmployed:
-            // TODO Leon
-            // income.seasonallyEmployed()
+            assertEmployedForm(D.id(formDebugId, income.employer()), detach(income.seasonallyEmployed()));
             break;
         case socialServices:
-            // TODO Leon
-            // income.socialServices()
+            assertEmployedForm(D.id(formDebugId, income.employer()), detach(income.socialServices()));
             break;
         case student:
-            // TODO Leon
-            // income.studentIncome()
+            assertStudentForm(D.id(formDebugId, income.employer()), detach(income.studentIncome()));
             break;
         default:
-            // TODO Leon
-            // income.otherIncomeInfo());
+            assertIncomeForm(D.id(formDebugId, income.employer()), detach(income.otherIncomeInfo()));
+            break;
         }
     }
 
     private void assertEmployerForm(IDebugId formDebugId, IncomeInfoEmployer employer) {
-        assertValueOnForm(formDebugId, employer.name());
+        assertEmployedForm(formDebugId, employer);
         assertValueOnForm(formDebugId, employer.employedForYears());
-
-        assertIAddressForm(formDebugId, employer);
-
-        assertValueOnForm(formDebugId, employer.supervisorName());
-        assertValueOnForm(formDebugId, employer.supervisorPhone());
-        assertValueOnForm(formDebugId, employer.monthlyAmount());
-        assertValueOnForm(formDebugId, employer.position());
         assertValueOnForm(formDebugId, employer.starts());
         assertValueOnForm(formDebugId, employer.ends());
+    }
+
+    private void assertSelfEmployedForm(IDebugId formDebugId, IncomeInfoSelfEmployed employer) {
+        assertEmployedForm(formDebugId, employer);
+        assertValueOnForm(formDebugId, employer.fullyOwned());
+        assertValueOnForm(formDebugId, employer.monthlyRevenue());
+        assertValueOnForm(formDebugId, employer.numberOfEmployees());
+    }
+
+    private void assertStudentForm(IDebugId formDebugId, IncomeInfoStudentIncome student) {
+        assertIncomeForm(formDebugId, student);
+        assertIAddressForm(formDebugId, student);
+        assertValueOnForm(formDebugId, student.program());
+        assertValueOnForm(formDebugId, student.fieldOfStudy());
+        assertValueOnForm(formDebugId, student.fundingChoices());
+    }
+
+    private void assertEmployedForm(IDebugId formDebugId, IEmploymentInfo employer) {
+        assertIncomeForm(formDebugId, employer);
+        assertIAddressForm(formDebugId, employer);
+        assertValueOnForm(formDebugId, employer.supervisorName());
+        assertValueOnForm(formDebugId, employer.supervisorPhone());
+        assertValueOnForm(formDebugId, employer.position());
+    }
+
+    private void assertIncomeForm(IDebugId formDebugId, IIncomeInfo income) {
+        assertValueOnForm(formDebugId, income.name());
+        assertValueOnForm(formDebugId, income.monthlyAmount());
+        assertValueOnForm(formDebugId, income.starts());
+        assertValueOnForm(formDebugId, income.ends());
     }
 
     private void verifyAsset(IDebugId debugID, TenantAsset asset) {
