@@ -25,38 +25,46 @@ import net.tanesha.recaptcha.ReCaptchaException;
 import net.tanesha.recaptcha.ReCaptchaFactory;
 import net.tanesha.recaptcha.ReCaptchaResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
+
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.RuntimeExceptionSerializable;
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 
 public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
 
-    /**
-     * TODO Use build server configuration file to load the keys from resources.
-     * 
-     * @param serverName
-     *            the host name of the server to which the request was sent.
-     */
-    protected String reCaptchaPrivateKey(String serverName) {
-        return "6LdBxgoAAAAAALYkW6J6JDYH-Q10M-sfvvCGhs9y";
-    }
+    private final static Logger log = LoggerFactory.getLogger(ReCaptchaAntiBot.class);
 
-    protected String reCaptchaPublicKey(String serverName) {
-        return "6LdBxgoAAAAAAP7RdZ3kbHwVA99j1qKB97pdo6Mq";
-    }
+    private static I18n i18n = I18nFactory.getI18n();
 
     @Override
-    protected void assertCaptcha(String email, String challenge, String response) {
-        String serverName = Context.getRequestServerName();
-        ReCaptcha rc = ReCaptchaFactory.newReCaptcha(reCaptchaPublicKey(serverName), reCaptchaPrivateKey(serverName), false);
+    public void assertCaptcha(String challenge, String response) {
+        if (CommonsStringUtils.isEmpty(challenge) || CommonsStringUtils.isEmpty(response)) {
+            throw new UserRuntimeException(i18n.tr("Captcha code is required"));
+        }
+        String privateKey = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPrivateKey();
+        String publicKey = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey();
+        ReCaptcha rc = ReCaptchaFactory.newReCaptcha(publicKey, privateKey, false);
         ReCaptchaResponse captchaResponse;
         try {
             captchaResponse = rc.checkAnswer(Context.getRequestRemoteAddr(), challenge, response);
         } catch (ReCaptchaException e) {
-            throw new RuntimeException("reCAPTCHA connection failed");
+            log.error("Error", e);
+            throw new RuntimeExceptionSerializable(i18n.tr("reCAPTCHA connection failed"));
         }
-
         if (!captchaResponse.isValid()) {
-            throw new RuntimeException(captchaResponse.getErrorMessage());
+            if ("incorrect-captcha-sol".equals(captchaResponse.getErrorMessage())) {
+                throw new UserRuntimeException(i18n.tr("The CAPTCHA solution was incorrect"));
+            } else {
+                throw new RuntimeExceptionSerializable(captchaResponse.getErrorMessage());
+            }
         }
+        log.debug("CAPTCHA Ok");
     }
 
 }

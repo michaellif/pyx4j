@@ -31,7 +31,7 @@ public abstract class AbstractAntiBot {
 
     public static final String GENERIC_LOGIN_FAILED_MESSAGE = "Invalid login/password";
 
-    protected abstract void assertCaptcha(String email, String challenge, String response);
+    public abstract void assertCaptcha(String challenge, String response);
 
     protected abstract boolean isCaptchaRequired(String email);
 
@@ -46,7 +46,7 @@ public abstract class AbstractAntiBot {
             if ((challengeResponse == null) || CommonsStringUtils.isEmpty(challengeResponse.getA()) || CommonsStringUtils.isEmpty(challengeResponse.getB())) {
                 throw new RuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
             }
-            ab.assertCaptcha(email, challengeResponse.getA(), challengeResponse.getB());
+            ab.assertCaptcha(challengeResponse.getA(), challengeResponse.getB());
         }
     }
 
