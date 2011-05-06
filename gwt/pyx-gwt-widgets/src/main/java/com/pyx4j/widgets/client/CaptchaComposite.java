@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.AjaxJSLoader;
 
 /**
@@ -228,6 +229,9 @@ public class CaptchaComposite extends SimplePanel {
     }
 
     private void createChallenge() {
+        if (ApplicationMode.offlineDevelopment) {
+            return;
+        }
         AjaxJSLoader.load(javaScriptURL, new AjaxJSLoader.IsJSLoaded() {
 
             @Override

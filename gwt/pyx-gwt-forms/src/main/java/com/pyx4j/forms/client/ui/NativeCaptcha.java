@@ -27,6 +27,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.Pair;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.Selector;
@@ -67,7 +68,11 @@ public class NativeCaptcha extends CaptchaComposite implements INativeEditableCo
 
     @Override
     public Pair<String, String> getNativeValue() {
-        return new Pair<String, String>(super.getValueChallenge(), super.getValueResponse());
+        if (ApplicationMode.offlineDevelopment) {
+            return new Pair<String, String>("off", super.getValueResponse());
+        } else {
+            return new Pair<String, String>(super.getValueChallenge(), super.getValueResponse());
+        }
     }
 
     @Override

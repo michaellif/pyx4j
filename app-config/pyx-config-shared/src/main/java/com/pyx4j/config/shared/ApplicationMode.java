@@ -31,6 +31,11 @@ public class ApplicationMode {
      */
     public static final String DEV = "(DEV:)";
 
+    /**
+     * Use this for testing application on computer completely disconnected from network.
+     */
+    public static final boolean offlineDevelopment = false;
+
     private final static Mode impl;
 
     static {
