@@ -63,6 +63,8 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     private boolean focusOnGetValue;
 
+    private String applicationDateFormat = "MM/dd/yyyy";
+
     public SeleniumExtended(ISeleniumTestConfiguration testConfig) {
         super(testConfig);
         driver.manage().timeouts().implicitlyWait(testConfig.implicitlyWaitSeconds(), TimeUnit.SECONDS);
@@ -70,6 +72,10 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     public void setPropagateLogToClient(boolean enable) {
         propagateLogToClient = enable;
+    }
+
+    public void setApplicationDateFormat(String applicationDateFormat) {
+        this.applicationDateFormat = applicationDateFormat;
     }
 
     private void log(String format, Object... args) {
@@ -468,7 +474,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     private Date getDateValue(WebElement element, String format) {
-        Date value = InputHelper.getDateValue(element, format, focusOnGetValue);
+        Date value = InputHelper.getDateValue(element, (format == null) ? applicationDateFormat : format, focusOnGetValue);
         log("value of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), value);
         return value;
     }
@@ -488,7 +494,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     public void setDateValue(IDebugId debugId, Date dateValue, String format) {
         WebElement element = driver.findElement(by(debugId));
         log("setValue of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), dateValue);
-        InputHelper.setDateValue(element, dateValue, format);
+        InputHelper.setDateValue(element, dateValue, (format == null) ? applicationDateFormat : format);
     }
 
     public void select(String id) {

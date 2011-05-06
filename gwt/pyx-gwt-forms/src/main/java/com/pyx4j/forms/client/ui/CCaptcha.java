@@ -20,13 +20,18 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Pair;
 
 public class CCaptcha extends CEditableComponent<Pair<String, String>, NativeCaptcha> {
 
+    protected static I18n i18n = I18nFactory.getI18n(CCaptcha.class);
+
     public CCaptcha() {
-        setMandatoryValidationMessage("Captcha code is required.");
+        setMandatoryValidationMessage(i18n.tr("Captcha code is required."));
     }
 
     public void retrieveValue() {

@@ -22,6 +22,9 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Date;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -29,6 +32,8 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
+
+    protected static I18n i18n = I18nFactory.getI18n(CDatePicker.class);
 
     private boolean pastDateSelectionAllowed = true;
 
@@ -43,7 +48,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
     public CDatePicker(String title) {
         super(title);
         setFormat(new DateFormat());
-        addValueValidator(new TextBoxParserValidator<Date>("Should be in format MM/dd/yyyy"));
+        addValueValidator(new TextBoxParserValidator<Date>(i18n.tr("Should be in format MM/dd/yyyy")));
     }
 
     @Override
@@ -74,7 +79,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
         @Override
         public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
             if (dateConditionValidationMessage == null) {
-                return "Date must be future date or equal to today's date";
+                return i18n.tr("Date must be future date or equal to today's date");
             } else {
                 return dateConditionValidationMessage;
             }
@@ -97,9 +102,9 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
     static class DateFormat implements IFormat<Date> {
 
-        private static DateTimeFormat parser = DateTimeFormat.getFormat("MM/dd/yy");
+        private static DateTimeFormat parser = DateTimeFormat.getFormat(i18n.tr("MM/dd/yy"));
 
-        private static DateTimeFormat formatter = DateTimeFormat.getFormat("MM/dd/yyyy");
+        private static DateTimeFormat formatter = DateTimeFormat.getFormat(i18n.tr("MM/dd/yyyy"));
 
         @Override
         public String format(Date value) {
