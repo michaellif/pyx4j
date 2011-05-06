@@ -57,6 +57,7 @@ public class PreloadedUsersTest extends PortalVerificationTestCase {
         verifyTenantsPage(summary, true);
         verifyInfoPages(summary, true);
         verifyFinancialPages(summary, true);
+        verifyPetsPages(summary);
 
     }
 

@@ -24,11 +24,15 @@ import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.pt.IncomeInfoEmployer;
+import com.propertyvista.portal.domain.pt.Pet;
+import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
+import com.propertyvista.portal.domain.pt.TenantAsset;
+import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.rpc.pt.BusinessRules;
@@ -217,9 +221,9 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
                 num++;
             }
         }
-        // Asset no next page
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Financial.class));
-        assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Financial.class));
+//        // Asset no next page
+//        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Financial.class));
+//        assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Financial.class));
     }
 
     private void verifyFinancialPage(PotentialTenantFinancial financial, int id) {
@@ -231,6 +235,20 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         for (TenantIncome income : financial.incomes()) {
             debugID = D.id(financial.incomes(), row);
             verifyIncome(debugID, detach(income));
+            row++;
+        }
+
+        row = 0;
+        for (TenantAsset asset : financial.assets()) {
+            debugID = D.id(financial.assets(), row);
+            verifyAsset(debugID, detach(asset));
+            row++;
+        }
+
+        row = 0;
+        for (TenantGuarantor guarantor : financial.guarantors()) {
+            debugID = D.id(financial.assets(), row);
+            verifyGuarantor(debugID, detach(guarantor));
             row++;
         }
     }
@@ -276,6 +294,59 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         assertValueOnForm(formDebugId, employer.position());
         assertValueOnForm(formDebugId, employer.starts());
         assertValueOnForm(formDebugId, employer.ends());
+    }
+
+    private void verifyAsset(IDebugId debugID, TenantAsset asset) {
+        //TODO VladS
+        //To pass this asset types need to be capitalized.
+        //I didn't want to change it without talking to you.
+        //assertValueOnForm(debugID, asset.assetType());
+
+        //TODO VladS
+        //I think ownership % isn't being formatted correctly
+        //assertValueOnForm(debugID, asset.percent());
+        assertValueOnForm(debugID, asset.assetValue());
+    }
+
+    private void verifyGuarantor(IDebugId debugID, TenantGuarantor guarantor) {
+        assertValueOnForm(debugID, guarantor.firstName());
+        assertValueOnForm(debugID, guarantor.middleName());
+        assertValueOnForm(debugID, guarantor.lastName());
+        assertValueOnForm(debugID, guarantor.homePhone());
+        assertValueOnForm(debugID, guarantor.mobilePhone());
+        assertValueOnForm(debugID, guarantor.workPhone());
+        assertValueOnForm(debugID, guarantor.birthDate());
+        assertValueOnForm(debugID, guarantor.email());
+    }
+
+    protected void verifyPetsPages(Summary summary) {
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Pets.class));
+        int num = 0;
+        for (Pet pet : summary.pets().pets()) {
+            verifyPetRow(D.id(proto(Pets.class).pets(), num), detach(pet));
+            num++;
+        }
+        saveAndContinue();
+    }
+
+    private void verifyPetRow(IDebugId debugID, Pet pet) {
+        //TODO VladS
+        //Seems like the same problem here with the types.
+        //They need to be capitalized.
+        //assertValueOnForm(debugID, pet.type());
+        assertValueOnForm(debugID, pet.name());
+        assertValueOnForm(debugID, pet.color());
+        assertValueOnForm(debugID, pet.breed());
+        assertValueOnForm(debugID, pet.weight());
+
+        //TODO VladS
+        //And here.        
+        //assertValueOnForm(debugID, pet.weightUnit());
+        assertValueOnForm(debugID, pet.birthDate());
+
+        //TODO VladS
+        //This is being rendered as a div instead of input    
+        //assertValueOnForm(debugID, pet.chargeLine());
     }
 
 }
