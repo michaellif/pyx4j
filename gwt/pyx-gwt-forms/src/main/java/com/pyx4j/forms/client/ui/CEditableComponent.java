@@ -102,8 +102,8 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         if (!isValuesEquals(getValue(), value)) {
             this.value = value;
             setNativeValue(value);
-            //TODO Evaluate if revalidate is needed here
-            //revalidate();
+//  TODO Evaluate if revalidate is needed here
+//            revalidate();
             ValueChangeEvent.fire(this, value);
         }
     }
@@ -118,12 +118,15 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     public void populate(DATA_TYPE value) {
 
         this.value = value;
+        setNativeValue(value);
+        /*
+         * Note: isValueEmpty() is overrided in some ancestors (CTextFieldBase) to check value emptiness of native component.
+         * In case of form RE-population that native component already created and holds some PREVIOUS value!.. So it's necessary
+         * to set native component to populating value BEFORE evaluation of visited status!
+         */
         this.visited = !isValueEmpty();
 
-        setNativeValue(value);
-
         revalidate();
-
     }
 
     @SuppressWarnings("unchecked")
