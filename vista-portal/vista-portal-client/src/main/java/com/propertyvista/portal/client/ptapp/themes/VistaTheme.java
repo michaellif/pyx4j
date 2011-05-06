@@ -430,7 +430,6 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         style.addProperty("color", "#fff");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-style", "normal");
-        style.addProperty("text-shadow", "0 -1px 0 #333333");
         style.addProperty("padding-left", "1em");
         style.addProperty("padding-right", "1em");
         style.addProperty("padding-top", "2em");
@@ -438,7 +437,6 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Label, SecondNavigViewImpl.StyleDependent.current));
         style.addProperty("color", ThemeColor.TEXT);
-        style.addProperty("text-shadow", "0");
         addStyle(style);
     }
 
