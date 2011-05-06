@@ -43,6 +43,8 @@ public class BuildingEditorViewImpl extends DockLayoutPanel implements BuildingE
 
     private final BuildingEditorForm editor = new BuildingEditorForm();
 
+    private final BuildingCrudService bcs = GWT.create(BuildingCrudService.class);
+
     public BuildingEditorViewImpl() {
         super(Unit.EM);
         setSize("100%", "100%");
@@ -55,7 +57,6 @@ public class BuildingEditorViewImpl extends DockLayoutPanel implements BuildingE
 
     @Override
     public void setEditingEntityId(long entityId) {
-        BuildingCrudService bcs = GWT.create(BuildingCrudService.class);
         if (bcs != null) {
             bcs.retrieve(new AsyncCallback<Building>() {
 
@@ -81,10 +82,19 @@ public class BuildingEditorViewImpl extends DockLayoutPanel implements BuildingE
                     throw new UserRuntimeException(editor.getValidationResults().getMessagesText(true));
                 }
 
-                // TODO: save to service here...
-                editor.getValue();
+                if (bcs != null) {
+                    bcs.save(new AsyncCallback<Building>() {
 
-                History.back();
+                        @Override
+                        public void onSuccess(Building result) {
+                            History.back();
+                        }
+
+                        @Override
+                        public void onFailure(Throwable caught) {
+                        }
+                    }, editor.getValue());
+                }
             }
         }));
         buttons.add(new Button("Cancel", new ClickHandler() {
