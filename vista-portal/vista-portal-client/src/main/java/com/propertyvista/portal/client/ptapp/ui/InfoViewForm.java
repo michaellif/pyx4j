@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.Range;
 import com.google.inject.Singleton;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -50,7 +51,9 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.AddressUtils;
@@ -395,6 +398,15 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
                         return new TableFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove vehicle"));
+                    }
+
+                    @Override
+                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                        CComponent<?> comp = super.createCell(column);
+                        if (column.getObject() == proto().year() && comp instanceof CMonthYearPicker) {
+                            ((CMonthYearPicker) comp).setYearRange(new Range(1900, TimeUtils.today().getYear() + 1));
+                        }
+                        return comp;
                     }
 
                     @Override

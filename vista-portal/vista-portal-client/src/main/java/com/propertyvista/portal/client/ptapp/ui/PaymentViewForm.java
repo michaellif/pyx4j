@@ -32,6 +32,20 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.view.client.Range;
+
+import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CMonthYearPicker;
+import com.pyx4j.forms.client.ui.CRadioGroup;
+import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.Selector;
 
 import com.propertyvista.common.client.ui.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
@@ -50,19 +64,6 @@ import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.pt.PaymentInfo;
 import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
-
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CMonthYearPicker;
-import com.pyx4j.forms.client.ui.CRadioGroup;
-import com.pyx4j.forms.client.ui.CRadioGroupEnum;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
-import com.pyx4j.widgets.client.style.Selector;
 
 public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
@@ -320,7 +321,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
                     Date now = new Date();
                     @SuppressWarnings("deprecation")
                     int y = 1900 + now.getYear();
-                    ((CMonthYearPicker) comp).setYearOptionsRange(y, y + 10);
+                    ((CMonthYearPicker) comp).setYearRange(new Range(y, y + 10));
 
                     ((CMonthYearPicker) comp).addValueValidator(new EditableValueValidator<Date>() {
 

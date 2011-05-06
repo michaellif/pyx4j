@@ -35,6 +35,7 @@ public interface Vehicle extends IEntity {
     @BusinessEqualValue
     IPrimitive<String> plateNumber();
 
+    @NotNull
     @Format("yyyy")
     @Editor(type = EditorType.yearpicker)
     @MemberColumn(name = "year_made")
@@ -48,8 +49,8 @@ public interface Vehicle extends IEntity {
     @Editor(type = EditorType.combo)
     Province province();
 
-    @Editor(type = EditorType.combo)
     @NotNull
+    @Editor(type = EditorType.combo)
     @Reference(adapter = CountryReferenceAdapter.class)
     Country country();
 }
