@@ -19,62 +19,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import net.tanesha.recaptcha.ReCaptcha;
-import net.tanesha.recaptcha.ReCaptchaException;
-import net.tanesha.recaptcha.ReCaptchaFactory;
-import net.tanesha.recaptcha.ReCaptchaResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Pair;
-import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
-import com.pyx4j.i18n.shared.I18nFactory;
-import com.pyx4j.rpc.shared.UserRuntimeException;
-import com.pyx4j.server.contexts.Context;
 
 public class AntiBot {
 
     private final static Logger log = LoggerFactory.getLogger(AntiBot.class);
 
-    private static I18n i18n = I18nFactory.getI18n();
-
     private static final long LIFE_DURATION = 3 * Consts.MIN2MSEC;
 
     public static void assertCaptcha(Pair<String, String> challengeRresponse) {
-        if (challengeRresponse == null || CommonsStringUtils.isEmpty(challengeRresponse.getA()) || CommonsStringUtils.isEmpty(challengeRresponse.getB())) {
-            throw new UserRuntimeException(i18n.tr("Captcha code is required"));
-        }
         if (ServerSideConfiguration.instance().isDevelopmentBehavior() && challengeRresponse.getB().equals("x")) {
             log.debug("Development CAPTCHA Ok");
             return;
         }
-
-        String privateKey = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPrivateKey();
-        String publicKey = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey();
-        ReCaptcha rc = ReCaptchaFactory.newReCaptcha(publicKey, privateKey, false);
-
-        ReCaptchaResponse captchaResponse;
-        try {
-            captchaResponse = rc.checkAnswer(Context.getRequestRemoteAddr(), challengeRresponse.getA(), challengeRresponse.getB());
-        } catch (ReCaptchaException e) {
-            log.error("Error", e);
-            throw new RuntimeExceptionSerializable(i18n.tr("reCAPTCHA connection failed"));
-        }
-
-        if (!captchaResponse.isValid()) {
-            if ("incorrect-captcha-sol".equals(captchaResponse.getErrorMessage())) {
-                throw new UserRuntimeException(i18n.tr("The CAPTCHA solution was incorrect"));
-            } else {
-                throw new RuntimeExceptionSerializable(captchaResponse.getErrorMessage());
-            }
-        }
-        log.debug("CAPTCHA Ok");
+        ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getAntiBot().assertCaptcha(challengeRresponse.getA(),
+                challengeRresponse.getB());
     }
 
     public static class InvalidLoginAttempts {

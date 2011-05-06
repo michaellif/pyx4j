@@ -59,6 +59,7 @@ import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.UserCredential;
 
 public class ActivationServiceImpl extends ApplicationEntityServiceImpl implements ActivationService {
+
     private final static Logger log = LoggerFactory.getLogger(ActivationServiceImpl.class);
 
     /**
