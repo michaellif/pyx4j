@@ -33,6 +33,9 @@ public class ApplicationMode {
 
     /**
      * Use this for testing application on computer completely disconnected from network.
+     * 
+     * Change this if you want to make it work temporary. Tests in Build will fail!
+     * local build run like this: mvn -Dmaven.test.failure.ignore=true
      */
     public static final boolean offlineDevelopment = false;
 
