@@ -13,8 +13,11 @@
  */
 package com.propertyvista.common.client.ui;
 
+import java.text.ParseException;
+
 import com.google.gwt.i18n.client.NumberFormat;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.IFormat;
 
 import com.propertyvista.portal.domain.Money;
@@ -64,8 +67,8 @@ public class DefaultMoneyFormatter implements IFormat<Money> {
     }
 
     @Override
-    public Money parse(String string) {
-        if (string == null || string.trim().equals("")) {
+    public Money parse(String string) throws ParseException {
+        if (CommonsStringUtils.isEmpty(string)) {
             return null; // empty value case
         }
         try {
@@ -78,7 +81,7 @@ public class DefaultMoneyFormatter implements IFormat<Money> {
             }
             return DomainUtil.createMoney(Double.valueOf(string));
         } catch (NumberFormatException e) {
-            return DomainUtil.createMoney(Double.NaN); // incorrect user entry case (checked by validator!)
+            throw new ParseException("DefaultMoneyFormatter", 0);
         }
     }
 }

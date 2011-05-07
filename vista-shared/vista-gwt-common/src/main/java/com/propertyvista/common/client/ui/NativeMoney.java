@@ -13,6 +13,8 @@
  */
 package com.propertyvista.common.client.ui;
 
+import java.text.ParseException;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -168,7 +170,12 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
 
     @Override
     public Money getNativeValue() {
-        Money value = cComponent.getFormat().parse(amount.getText());
+        Money value;
+        try {
+            value = cComponent.getFormat().parse(amount.getText());
+        } catch (ParseException e) {
+            value = null;
+        }
         if (value != null && currency != null) {
             value.currency().name().setValue(currency.getText());
         }
@@ -178,7 +185,6 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
     @Override
     public void installStyles(String stylePrefix) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
