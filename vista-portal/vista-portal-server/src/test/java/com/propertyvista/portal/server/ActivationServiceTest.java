@@ -153,8 +153,7 @@ public class ActivationServiceTest extends VistaDBTestCase {
         }, request);
     }
 
-    //TODO VladS
-    public void TODO_testCreateAccountNoCaptcha() {
+    public void testCreateAccountNoCaptcha() {
         AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
 
         final String email = BusinessDataGenerator.createEmail();

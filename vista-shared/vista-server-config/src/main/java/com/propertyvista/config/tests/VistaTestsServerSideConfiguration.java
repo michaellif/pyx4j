@@ -13,11 +13,19 @@
  */
 package com.propertyvista.config.tests;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
+import com.pyx4j.essentials.server.ReCaptchaAntiBot;
 import com.pyx4j.security.shared.AclCreator;
 
 public class VistaTestsServerSideConfiguration extends EssentialsServerSideConfiguration {
+
+    private final static Logger log = LoggerFactory.getLogger(VistaTestsServerSideConfiguration.class);
 
     private final boolean testOnMySQL;
 
@@ -42,6 +50,21 @@ public class VistaTestsServerSideConfiguration extends EssentialsServerSideConfi
     @Override
     public boolean isDevelopmentBehavior() {
         return true;
+    }
+
+    @Override
+    public AbstractAntiBot getAntiBot() {
+        return new ReCaptchaAntiBot() {
+
+            @Override
+            public void assertCaptcha(String challenge, String response) {
+                if (ServerSideConfiguration.instance().isDevelopmentBehavior() && "x".equals(response)) {
+                    log.debug("Development CAPTCHA Ok");
+                } else {
+                    super.assertCaptcha(challenge, response);
+                }
+            }
+        };
     }
 
     @Override

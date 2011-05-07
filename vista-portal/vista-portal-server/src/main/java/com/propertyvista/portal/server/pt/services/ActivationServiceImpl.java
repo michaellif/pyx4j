@@ -35,6 +35,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -53,7 +54,6 @@ import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
 import com.propertyvista.portal.rpc.pt.services.ActivationService;
 import com.propertyvista.portal.server.mail.MessageTemplates;
 import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.common.security.AntiBot;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.UserCredential;
@@ -109,7 +109,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         }
 
         // captcha (TODO this should probably go even before we validate email)
-        AntiBot.assertCaptcha(request.captcha().getValue());
+        AbstractAntiBot.assertCaptcha(request.captcha().getValue());
 
         // check if user is already registered
         EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
@@ -164,7 +164,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         if (!validEmailAddress(request.email().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Email"));
         }
-        AntiBot.assertCaptcha(request.captcha().getValue());
+        AbstractAntiBot.assertCaptcha(request.captcha().getValue());
 
         // find user(s) with the same email
         EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
@@ -230,7 +230,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
             throw new RuntimeExceptionSerializable(i18n.tr("Your account is suspended"));
         }
         if (!token.accessKey.equals(cr.accessKey().getValue())) {
-            AntiBot.authenticationFailed(token.email);
+            AbstractAntiBot.authenticationFailed(token.email);
             throw new RuntimeException(i18n.tr("Invalid request"));
         }
         if ((new Date().after(cr.accessKeyExpire().getValue()))) {

@@ -15,19 +15,21 @@ package com.propertyvista.server.config;
 
 import javax.servlet.ServletContext;
 
-import com.propertyvista.config.VistaSMTPMailServiceConfig;
-import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
-import com.propertyvista.server.security.VistaAccessControlList;
-
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
+
+import com.propertyvista.config.VistaSMTPMailServiceConfig;
+import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
+import com.propertyvista.server.common.security.VistaAntiBot;
+import com.propertyvista.server.security.VistaAccessControlList;
 
 public class VistaServerSideConfiguration extends EssentialsServerSideConfiguration {
 
@@ -108,10 +110,17 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
         return true;
     }
 
+    @Override
+    public AbstractAntiBot getAntiBot() {
+        return new VistaAntiBot();
+    }
+
+    @Override
     public String getReCaptchaPrivateKey() {
         return recaptchaPrivateKey;
     }
 
+    @Override
     public String getReCaptchaPublicKey() {
         return recaptchaPublicKey;
     }
