@@ -20,9 +20,13 @@
  */
 package com.pyx4j.essentials.server;
 
+import org.xnap.commons.i18n.I18n;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 
 /**
  * Empty implementation of AntiBot, Application should redefine its own implementation
@@ -30,6 +34,8 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 public abstract class AbstractAntiBot {
 
     public static final String GENERIC_LOGIN_FAILED_MESSAGE = "Invalid login/password";
+
+    private static I18n i18n = I18nFactory.getI18n();
 
     public abstract void assertCaptcha(String challenge, String response);
 
@@ -44,10 +50,18 @@ public abstract class AbstractAntiBot {
         }
         if (ab.isCaptchaRequired(email)) {
             if ((challengeResponse == null) || CommonsStringUtils.isEmpty(challengeResponse.getA()) || CommonsStringUtils.isEmpty(challengeResponse.getB())) {
-                throw new RuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
+                throw new ChallengeVerificationRequired(i18n.tr("Human verification required"));
             }
             ab.assertCaptcha(challengeResponse.getA(), challengeResponse.getB());
         }
+    }
+
+    public static void assertCaptcha(Pair<String, String> challengeRresponse) {
+        if (challengeRresponse == null) {
+            throw new RuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
+        }
+        ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getAntiBot().assertCaptcha(challengeRresponse.getA(),
+                challengeRresponse.getB());
     }
 
     /**
