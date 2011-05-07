@@ -129,7 +129,6 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     @Override
     public HandlerRegistration addChangeHandler(final ChangeHandler handler) {
         return addSelectionHandler(new SelectionHandler() {
-
             @Override
             public void onSelection(SelectionEvent event) {
                 handler.onChange(null);
@@ -161,5 +160,10 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     public void installStyles(String stylePrefix) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public boolean isParsedSuccesfully() {
+        return !delegate.isParseFailed();
     }
 }

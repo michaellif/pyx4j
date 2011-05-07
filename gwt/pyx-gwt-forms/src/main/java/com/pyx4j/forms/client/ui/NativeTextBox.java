@@ -58,6 +58,11 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     }
 
     @Override
+    public boolean isParsedSuccesfully() {
+        return !delegate.isParseFailed();
+    }
+
+    @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         String dependentSuffix = Selector.getDependentName(StyleDependent.disabled);

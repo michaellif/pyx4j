@@ -71,8 +71,9 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     }
 
     public void revalidate() {
+        boolean newValid =
 
-        boolean newValid = !isVisible() ||
+        !isVisible() ||
 
         !isEditable() ||
 
@@ -90,12 +91,14 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     }
 
-    void update(DATA_TYPE value) {
+    protected boolean update(DATA_TYPE value) {
         if (!isValuesEquals(getValue(), value)) {
             this.value = value;
             revalidate();
             ValueChangeEvent.fire(this, value);
+            return true;
         }
+        return false;
     }
 
     public void setValue(DATA_TYPE value) {
@@ -221,15 +224,13 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected boolean isValidationConditionMet() {
-        if (validators == null) {
-            return true;
-        }
-
-        validationMessage = null;
-        for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
-            if (!validator.isValid((CEditableComponent) this, getValue())) {
-                validationMessage = validator.getValidationMessage((CEditableComponent) this, getValue());
-                return false;
+        if (validators != null) {
+            validationMessage = null;
+            for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
+                if (!validator.isValid((CEditableComponent) this, getValue())) {
+                    validationMessage = validator.getValidationMessage((CEditableComponent) this, getValue());
+                    return false;
+                }
             }
         }
         return true;

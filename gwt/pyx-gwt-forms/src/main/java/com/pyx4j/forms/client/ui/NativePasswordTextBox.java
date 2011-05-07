@@ -88,4 +88,9 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public boolean isParsedSuccesfully() {
+        return !delegate.isParseFailed();
+    }
 }

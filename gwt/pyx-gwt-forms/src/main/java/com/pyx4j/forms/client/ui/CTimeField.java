@@ -21,12 +21,14 @@
 package com.pyx4j.forms.client.ui;
 
 import java.sql.Time;
+import java.text.ParseException;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
@@ -72,14 +74,14 @@ public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
         }
 
         @Override
-        public Time parse(String string) {
-            if (string == null) {
-                return null;
+        public Time parse(String string) throws ParseException {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null; // empty value case
             } else {
                 try {
                     return new Time(parser.parseStrict(string).getTime());
                 } catch (IllegalArgumentException e) {
-                    return null;
+                    throw new ParseException("TimeFormat", 0);
                 }
             }
         }

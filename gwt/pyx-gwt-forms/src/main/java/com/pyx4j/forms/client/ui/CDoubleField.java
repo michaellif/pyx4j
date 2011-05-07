@@ -20,10 +20,14 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.i18n.client.NumberFormat;
+
+import com.pyx4j.commons.CommonsStringUtils;
 
 public class CDoubleField extends CNumberField<Double> {
 
@@ -72,11 +76,14 @@ public class CDoubleField extends CNumberField<Double> {
         }
 
         @Override
-        public Double parse(String string) {
+        public Double parse(String string) throws ParseException {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null; // empty value case
+            }
             try {
                 return valueOf(string);
             } catch (NumberFormatException e) {
-                return null;
+                throw new ParseException("DoubleNumberFormat", 0);
             }
         }
 

@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.ui.FocusWidget;
@@ -61,7 +63,11 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
 
     @Override
     public void setValueByString(String name) {
-        setValue(getFormat().parse(name));
+        try {
+            setValue(getFormat().parse(name));
+        } catch (ParseException e) {
+            // TODO : log something here?..
+        }
     }
 
     public void requestFocus() {
@@ -88,23 +94,26 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
 
     public boolean isParsedSuccesfully() {
         if (isWidgetCreated()) {
-            String text = asWidget().getNativeText();
-            if (text != null && !text.trim().equals("") && getValue() == null) {
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            return true;
+            return asWidget().isParsedSuccesfully();
         }
+        return true;
     }
 
     @Override
     public void onEditingStop() {
         super.onEditingStop();
+
         if (isParsedSuccesfully()) {
             setNativeValue(getValue());
         }
     }
 
+    @Override
+    protected boolean update(DATA_TYPE value) {
+        boolean res = super.update(value);
+        if (!res) {
+            revalidate(); // let TextBoxParserValidator to work!..
+        }
+        return res;
+    }
 }

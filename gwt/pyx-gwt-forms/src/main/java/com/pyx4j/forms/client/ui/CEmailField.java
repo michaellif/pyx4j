@@ -20,6 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 public class CEmailField extends CTextFieldBase<String, NativeTextBox<String>> {
@@ -60,9 +63,12 @@ public class CEmailField extends CTextFieldBase<String, NativeTextBox<String>> {
         }
 
         @Override
-        public String parse(String string) {
-            if (string == null || !string.matches(EMAIL_REGEXPR)) {
-                return null;
+        public String parse(String string) throws ParseException {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null; // empty value case
+            }
+            if (!string.matches(EMAIL_REGEXPR)) {
+                throw new ParseException("EmailFormat", 0);
             }
             return string;
         }

@@ -20,9 +20,12 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, NativeTextBox<E>> {
@@ -57,11 +60,14 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         }
 
         @Override
-        public E parse(String string) {
+        public E parse(String string) throws ParseException {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null; // empty value case
+            }
             try {
                 return valueOf(string);
             } catch (NumberFormatException e) {
-                return null;
+                throw new ParseException("DefaultNumberFormat", 0);
             }
         }
 

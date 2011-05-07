@@ -20,10 +20,20 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 public interface IFormat<E> {
 
     public String format(E value);
 
-    public E parse(String string);
-
+    /**
+     * Note on triple logic return/except behaviour:
+     * 
+     * @param string
+     *            input string to parse
+     * @return null - if input string is empty (null or ""); parsed E-type data if ok and
+     * @throws ParseException
+     *             if parsing is failed!..
+     */
+    public E parse(String string) throws ParseException;
 }

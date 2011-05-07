@@ -20,6 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
@@ -74,13 +77,15 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
         }
 
         @Override
-        public String parse(String string) {
-            if (string == null || !string.matches(regex)) {
-                return null;
+        public String parse(String string) throws ParseException {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null; // empty value case
+            }
+            if (!string.matches(regex)) {
+                throw new ParseException("PhoneFormat", 0);
             }
             return format(string);
         }
-
     }
 
     public static class PhoneSearchFormat implements IFormat<String> {
@@ -91,14 +96,14 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
         }
 
         @Override
-        public String parse(String string) {
-            if (string == null) {
-                return null;
+        public String parse(String string) throws ParseException {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null; // empty value case
             }
             if (string.contains("*")) {
                 return string;
             } else if (string.matches(".*[^0-9\\s\\(\\)-]+.*")) {
-                return null;
+                throw new ParseException("PhoneSearchFormat", 0);
             }
             String unformatedPhone = PhoneFormat.normalize(string);
             if (unformatedPhone.length() == 10) {
@@ -112,6 +117,5 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
                 return string;
             }
         }
-
     }
 }

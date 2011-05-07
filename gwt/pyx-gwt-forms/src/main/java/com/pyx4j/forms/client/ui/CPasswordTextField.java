@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.RegexValidator;
 
@@ -64,9 +66,9 @@ public class CPasswordTextField extends CTextFieldBase<String, NativePasswordTex
         }
 
         @Override
-        public String parse(String string) {
+        public String parse(String string) throws ParseException {
             if (CommonsStringUtils.isEmpty(string)) {
-                return null;
+                return null; // empty value case
             }
             return string;
         }

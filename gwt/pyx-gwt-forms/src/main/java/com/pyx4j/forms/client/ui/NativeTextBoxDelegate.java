@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -30,6 +32,8 @@ public class NativeTextBoxDelegate<E> {
 
     private final INativeTextComponent<E> nativeTextBox;
 
+    private boolean parseFailed = false;
+
     public NativeTextBoxDelegate(final INativeTextComponent<E> nativeTextBox, final CTextFieldBase<E, ?> cTextField) {
         super();
         this.nativeTextBox = nativeTextBox;
@@ -37,7 +41,6 @@ public class NativeTextBoxDelegate<E> {
 
         //In dialogs or Forms the KeyDown will submit the form. We need values to be there.
         nativeTextBox.addKeyDownHandler(new KeyDownHandler() {
-
             @Override
             public void onKeyDown(KeyDownEvent event) {
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
@@ -61,7 +64,17 @@ public class NativeTextBoxDelegate<E> {
     }
 
     public E getNativeValue() {
-        return cTextBox.getFormat().parse(nativeTextBox.getNativeText());
+        try {
+            parseFailed = false;
+            return cTextBox.getFormat().parse(nativeTextBox.getNativeText());
+        } catch (ParseException e) {
+            parseFailed = true;
+            return null;
+        }
+    }
+
+    public boolean isParseFailed() {
+        return parseFailed;
     }
 
     public CTextFieldBase<E, ?> getCComponent() {

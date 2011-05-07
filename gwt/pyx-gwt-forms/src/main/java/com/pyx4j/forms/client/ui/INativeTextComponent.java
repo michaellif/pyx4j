@@ -31,10 +31,17 @@ public interface INativeTextComponent<E> extends INativeEditableComponent<E> {
 
     public String getNativeText();
 
+    /**
+     * Note, that getNativeText() in general involves parsing (via IFormat)
+     * so here we can get the parsing success status.
+     * 
+     * @return true/false.
+     */
+    public boolean isParsedSuccesfully();
+
     public HandlerRegistration addChangeHandler(ChangeHandler handler);
 
     public HandlerRegistration addKeyDownHandler(KeyDownHandler handler);
 
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler);
-
 }

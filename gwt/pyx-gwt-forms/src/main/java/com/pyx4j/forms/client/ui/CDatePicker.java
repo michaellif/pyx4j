@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import org.xnap.commons.i18n.I18n;
@@ -112,14 +113,14 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
         }
 
         @Override
-        public Date parse(String string) {
+        public Date parse(String string) throws ParseException {
             if (CommonsStringUtils.isEmpty(string)) {
-                return null;
+                return null; // empty value case
             }
             try {
                 return parser.parseStrict(string.replace('-', '/'));
             } catch (IllegalArgumentException e) {
-                return null;
+                throw new ParseException("DateFormat", 0);
             }
         }
 

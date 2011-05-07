@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -87,12 +88,10 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
     public void showDatePicker() {
         Date selectedDate = null;
         String value = nativeDatePicker.getNativeText().trim();
-        if (!value.equals("")) {
-            try {
-                selectedDate = dateFormat.parse(value);
-            } catch (IllegalArgumentException e) {
-                log.info("Cannot parse as date: " + value);
-            }
+        try {
+            selectedDate = dateFormat.parse(value);
+        } catch (ParseException e) {
+            log.info("Cannot parse as date: " + value);
         }
         if (selectedDate == null) {
             selectedDate = new Date();
