@@ -26,6 +26,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 
 /**
@@ -46,7 +47,7 @@ public abstract class AbstractAntiBot {
     public static void assertLogin(String email, Pair<String, String> challengeResponse) {
         AbstractAntiBot ab = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getAntiBot();
         if (ab == null) {
-            throw new RuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
+            throw new UserRuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
         }
         if (ab.isCaptchaRequired(email)) {
             if ((challengeResponse == null) || CommonsStringUtils.isEmpty(challengeResponse.getA()) || CommonsStringUtils.isEmpty(challengeResponse.getB())) {
@@ -58,7 +59,7 @@ public abstract class AbstractAntiBot {
 
     public static void assertCaptcha(Pair<String, String> challengeRresponse) {
         if (challengeRresponse == null) {
-            throw new RuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
+            throw new UserRuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
         }
         ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getAntiBot().assertCaptcha(challengeRresponse.getA(),
                 challengeRresponse.getB());
