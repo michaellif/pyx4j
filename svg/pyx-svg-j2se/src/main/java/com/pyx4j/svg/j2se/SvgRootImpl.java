@@ -51,7 +51,7 @@ public class SvgRootImpl implements SvgRoot {
 
     @Override
     public void add(SvgElement element) {
-        rootnode.appendChild(((ShapeImpl) element).getElement());
+        rootnode.appendChild(((SvgElementImpl) element).getElement());
     }
 
     @Override
@@ -77,6 +77,6 @@ public class SvgRootImpl implements SvgRoot {
 
     @Override
     public void add(IsSvgElement element) {
-        rootnode.appendChild(((ContainerElementImpl) element.asSvgElement()).getElement());
+        add(element.asSvgElement());
     }
 }

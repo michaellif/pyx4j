@@ -26,52 +26,28 @@ import com.pyx4j.svg.basic.Shape;
 
 public class ShapeImpl extends GraphicsElementImpl implements Shape {
 
-    private final String id;
-
-    private final Element el;
-
     public ShapeImpl(Element elem) {
-        el = elem;
-        id = SvgRootImpl.createUniqueId();
-        el.setAttribute("id", id);
+        super(elem);
         setStrokeWidth(String.valueOf(1));
         setStroke("black");
         //TODO transparent is not valid. Finish later
-        // setFill("transparent");
+        setFill("none");
     }
 
     @Override
     public void setFill(String fill) {
-
-        el.setAttribute("fill", fill);
-
+        setAttribute("fill", fill);
     }
 
     @Override
     public void setStroke(String stroke) {
-        el.setAttribute("stroke", stroke);
+        setAttribute("stroke", stroke);
 
     }
 
     @Override
     public void setStrokeWidth(String strokeWidth) {
-        el.setAttribute("stroke-width", strokeWidth);
-
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    public Element getElement() {
-        return el;
-    }
-
-    @Override
-    public void setTransform(String transform) {
-        el.setAttribute("transform", transform);
-
+        setAttribute("stroke-width", strokeWidth);
     }
 
 }

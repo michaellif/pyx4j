@@ -29,6 +29,7 @@ import javax.swing.JFrame;
 
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.batik.swing.JSVGCanvas;
+import org.apache.batik.swing.JSVGScrollPane;
 import org.w3c.dom.Document;
 import org.w3c.dom.svg.SVGDocument;
 
@@ -46,37 +47,42 @@ public class SVGBatikDemo {
         SvgRoot svgroot = factory.getSvgRoot();
         Document doc = ((SvgRootImpl) svgroot).getDocument();
 
-        ((SvgRootImpl) svgroot).setAttributeNS(null, "width", "1000");
-        ((SvgRootImpl) svgroot).setAttributeNS(null, "height", "800");
+        ((SvgRootImpl) svgroot).setAttributeNS(null, "width", "800");
+        ((SvgRootImpl) svgroot).setAttributeNS(null, "height", "1400");
 
         /**
          * TODO Most likely will not render properly. Finish it up when the JSVGCanvas is
          * resolved
          */
-        SvgTestFactory.createTestRect(factory);
-        SvgTestFactory.createTestLine(factory);
-        SvgTestFactory.createTestPath(factory);
-        SvgTestFactory.createTestCircle(factory);
-        SvgTestFactory.createTestEllipse(factory);
-        SvgTestFactory.createTestPolyline(factory);
-        SvgTestFactory.createTestPolygon(factory);
-        SvgTestFactory.createTestText(factory);
-        SvgTestFactory.createTestLegendItem(factory);
-        SvgTestFactory.createTestPieChart(factory);
-        SvgTestFactory.createTestBarChart(factory);
+        SvgTestFactory.createTestRect(factory, 10, 10);
+        SvgTestFactory.createTestLine(factory, 10, 110);
+        SvgTestFactory.createTestPath(factory, 10, 210);
+        SvgTestFactory.createTestCircle(factory, 10, 310);
+        SvgTestFactory.createTestEllipse(factory, 10, 410);
+        SvgTestFactory.createTestPolyline(factory, 10, 510);
+        SvgTestFactory.createTestPolygon(factory, 10, 610);
+        SvgTestFactory.createTestText(factory, 10, 710);
+        SvgTestFactory.createTestLegendItem(factory, 10, 810);
+        SvgTestFactory.createTestPieChart(factory, 10, 910);
+        SvgTestFactory.createTestBarChart(factory, 10, 1100);
 
         SVGGraphics2D g = new SVGGraphics2D(doc);
-        g.setSVGCanvasSize(new Dimension(800, 1000));
+        g.setSVGCanvasSize(new Dimension(800, 1400));
 
         //TODO output into the log
         Writer out = new OutputStreamWriter(System.out, "UTF-8");
         g.stream(((SvgRootImpl) svgroot).getRootNode(), out, true, true);
 
         JSVGCanvas canvas = new JSVGCanvas();
-        JFrame f = new JFrame();
-        f.getContentPane().add(canvas);
         canvas.setSVGDocument((SVGDocument) doc);
+        JSVGScrollPane view = new JSVGScrollPane(canvas);
+        view.setScrollbarsAlwaysVisible(true);
+        //  view.setVisible(true);
+
+        JFrame f = new JFrame();
+        f.getContentPane().add(view);
         f.pack();
+        f.setSize(700, 900);
         f.setVisible(true);
 
     }

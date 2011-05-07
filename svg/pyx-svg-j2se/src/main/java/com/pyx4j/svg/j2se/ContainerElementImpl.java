@@ -26,44 +26,20 @@ import com.pyx4j.svg.basic.ContainerElement;
 import com.pyx4j.svg.basic.IsSvgElement;
 import com.pyx4j.svg.basic.SvgElement;
 
-public class ContainerElementImpl implements ContainerElement {
-
-    private final String id;
-
-    private final Element container;
+public class ContainerElementImpl extends SvgElementImpl implements ContainerElement {
 
     public ContainerElementImpl(Element element) {
-        this.container = element;
-        id = SvgRootImpl.createUniqueId();
-        element.setAttribute("id", id);
+        super(element);
     }
 
     @Override
     public void add(SvgElement element) {
-        container.appendChild(((ShapeImpl) element).getElement());
+        getElement().appendChild(((ShapeImpl) element).getElement());
     }
 
     @Override
     public void add(IsSvgElement element) {
-        container.appendChild(((ContainerElementImpl) element.asSvgElement()).getElement());
-    }
-
-    @Override
-    public void setTransform(String transform) {
-        container.setAttribute("transform", transform);
-
-    }
-
-    public void setAttributeNS(String attr0, String attr1, String attr2) {
-        container.setAttributeNS(attr0, attr1, attr2);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public Element getElement() {
-        return container;
+        getElement().appendChild(((ContainerElementImpl) element.asSvgElement()).getElement());
     }
 
 }

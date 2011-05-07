@@ -49,77 +49,77 @@ public class SVGDemo implements EntryPoint {
         //=========================================//
 
         content.add(new HTML("Rect"));
-        svgPanel = SvgTestFactory.createTestRect(svgFactory);
+        svgPanel = SvgTestFactory.createTestRect(svgFactory, 0, 0);
         ((Widget) svgPanel).setSize("150px", "100px");
         content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Line"));
-        svgPanel = SvgTestFactory.createTestLine(svgFactory);
+        svgPanel = SvgTestFactory.createTestLine(svgFactory, 0, 0);
         ((Widget) svgPanel).setSize("150px", "100px");
         content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Path"));
-        svgPanel = SvgTestFactory.createTestPath(svgFactory);
+        svgPanel = SvgTestFactory.createTestPath(svgFactory, 0, 0);
         ((Widget) svgPanel).setSize("150px", "100px");
         content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Circle"));
-        svgPanel = SvgTestFactory.createTestCircle(svgFactory);
+        svgPanel = SvgTestFactory.createTestCircle(svgFactory, 0, 0);
         ((Widget) svgPanel).setSize("150px", "100px");
         content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Ellipse"));
-        svgPanel = SvgTestFactory.createTestEllipse(svgFactory);
+        svgPanel = SvgTestFactory.createTestEllipse(svgFactory, 0, 0);
         ((Widget) svgPanel).setSize("150px", "100px");
         content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Polyline"));
-        svgPanel = SvgTestFactory.createTestPolyline(svgFactory);
+        svgPanel = SvgTestFactory.createTestPolyline(svgFactory, 0, 0);
         ((Widget) svgPanel).setSize("150px", "100px");
         content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Polygon"));
-        svgPanel = SvgTestFactory.createTestPolygon(svgFactory);
+        svgPanel = SvgTestFactory.createTestPolygon(svgFactory, 0, 0);
         ((Widget) svgPanel).setSize("150px", "100px");
         content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Text"));
-        svgPanel = SvgTestFactory.createTestText(svgFactory);
+        svgPanel = SvgTestFactory.createTestText(svgFactory, 0, 0);
         ((Widget) svgPanel).setSize("150px", "100px");
         content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Legend Item"));
-        svgPanel = SvgTestFactory.createTestLegendItem(svgFactory);
+        svgPanel = SvgTestFactory.createTestLegendItem(svgFactory, 0, 0);
         ((Widget) svgPanel).setSize("150px", "150px");
         content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Pie Chart"));
-        svgPanel = SvgTestFactory.createTestPieChart(svgFactory);
+        svgPanel = SvgTestFactory.createTestPieChart(svgFactory, 0, 0);
         ((Widget) svgPanel).setSize("300px", "200px");
         content.add((Widget) svgPanel);
 
         //=========================================//
 
         content.add(new HTML("Bar Chart"));
-        svgPanel = SvgTestFactory.createTestBarChart(svgFactory);
+        svgPanel = SvgTestFactory.createTestBarChart(svgFactory, 0, 0);
         ((Widget) svgPanel).setSize("750px", "150px");
         content.add((Widget) svgPanel);
 

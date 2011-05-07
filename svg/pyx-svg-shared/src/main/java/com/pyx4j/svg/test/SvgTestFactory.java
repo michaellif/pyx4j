@@ -24,6 +24,7 @@ import java.util.Arrays;
 
 import com.pyx4j.svg.basic.Circle;
 import com.pyx4j.svg.basic.Ellipse;
+import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.Line;
 import com.pyx4j.svg.basic.Path;
 import com.pyx4j.svg.basic.Polygon;
@@ -43,112 +44,139 @@ import com.pyx4j.svg.chart.PieChartModel.PieChartSegment;
 
 public class SvgTestFactory {
 
-    public static SvgRoot createTestRect(SvgFactory factory) {
+    public static SvgRoot createTestRect(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
-        Rect rect = factory.createRect(5, 5, 50, 50, 0, 0);
-        svgroot.add(rect);
-        rect = factory.createRect(25, 25, 50, 50, 5, 5);
+        Group g = factory.createGroup();
+        Rect rect = factory.createRect(x, y, 50, 50, 0, 0);
+        g.add(rect);
+        rect = factory.createRect(x + 20, y + 20, 50, 50, 5, 5);
         rect.setFill("blue");
         rect.setStroke("green");
         rect.setStrokeWidth("5");
-        svgroot.add(rect);
+        g.add(rect);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
         return svgroot;
     }
 
-    public static SvgRoot createTestLine(SvgFactory factory) {
+    public static SvgRoot createTestLine(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
         Line line = factory.createLine(5, 5, 55, 55);
-        svgroot.add(line);
+        g.add(line);
         line = factory.createLine(25, 5, 75, 55);
         line.setStroke("green");
         line.setStrokeWidth("5");
-        svgroot.add(line);
+        g.add(line);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
         return svgroot;
     }
 
-    public static SvgRoot createTestPath(SvgFactory factory) {
+    public static SvgRoot createTestPath(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
         Path path = factory.createPath("M 10 10 L 60 10 L 35 60 z");
-        svgroot.add(path);
+        g.add(path);
         path = factory.createPath("M 20 20 L 40 20 L 30 40 z");
         path.setFill("blue");
         path.setStroke("green");
         path.setStrokeWidth("3");
-        svgroot.add(path);
+        g.add(path);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
         return svgroot;
     }
 
-    public static SvgRoot createTestCircle(SvgFactory factory) {
+    public static SvgRoot createTestCircle(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
         Circle circle = factory.createCircle(40, 40, 30);
-        svgroot.add(circle);
+        g.add(circle);
         circle = factory.createCircle(50, 50, 30);
         circle.setFill("blue");
         circle.setStroke("green");
         circle.setStrokeWidth("3");
-        svgroot.add(circle);
+        g.add(circle);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
         return svgroot;
     }
 
-    public static SvgRoot createTestEllipse(SvgFactory factory) {
+    public static SvgRoot createTestEllipse(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
         Ellipse ellipse = factory.createEllipse(50, 50, 40, 20);
-        svgroot.add(ellipse);
+        g.add(ellipse);
         ellipse = factory.createEllipse(50, 50, 20, 40);
         ellipse.setFill("blue");
         ellipse.setStroke("green");
         ellipse.setStrokeWidth("3");
-        svgroot.add(ellipse);
+        g.add(ellipse);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
         return svgroot;
     }
 
-    public static SvgRoot createTestPolyline(SvgFactory factory) {
+    public static SvgRoot createTestPolyline(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
         Polyline polyline = factory.createPolyline("5,5 5,50 50,10, 50,60");
-        svgroot.add(polyline);
+        g.add(polyline);
         polyline = factory.createPolyline("15,15 15,60 60,20 60,70");
         polyline.setStroke("green");
         polyline.setStrokeWidth("3");
-        svgroot.add(polyline);
+        g.add(polyline);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
         return svgroot;
     }
 
-    public static SvgRoot createTestPolygon(SvgFactory factory) {
+    public static SvgRoot createTestPolygon(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
         Polygon polygon = factory.createPolygon("5,5 5,50 50,10, 50,60");
-        svgroot.add(polygon);
+        g.add(polygon);
         polygon = factory.createPolygon("15,15 15,60 60,20 60,70");
         polygon.setFill("blue");
         polygon.setStroke("green");
         polygon.setStrokeWidth("3");
-        svgroot.add(polygon);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
         return svgroot;
     }
 
-    public static SvgRoot createTestText(SvgFactory factory) {
+    public static SvgRoot createTestText(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
         Text text = factory.createText("Example", 25, 25);
-        svgroot.add(text);
+        g.add(text);
         text = factory.createText("Example", 30, 30);
         text.setFill("blue");
         text.setStroke("green");
-        svgroot.add(text);
+        g.add(text);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
         return svgroot;
     }
 
-    public static SvgRoot createTestLegendItem(SvgFactory factory) {
+    public static SvgRoot createTestLegendItem(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
         LegendItem lc = new LegendItem(factory, "Property 1", LegendIconType.Circle, 20, 25, 10);
         lc.setColor("blue");
         LegendItem lr = new LegendItem(factory, "Property 2", LegendIconType.Rect, 20, 55, 15);
         lr.setColor("green");
-        svgroot.add(lc);
-        svgroot.add(lr);
+        g.add(lc);
+        g.add(lr);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
         return svgroot;
     }
 
-    public static SvgRoot createTestPieChart(SvgFactory factory) {
+    public static SvgRoot createTestPieChart(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
         PieChartModel pchartModel = new PieChartModel();
         pchartModel.addSegment(new PieChartSegment(3, "p1", "red"));
         pchartModel.addSegment(new PieChartSegment(5, "p2", "blue"));
@@ -156,12 +184,15 @@ public class SvgTestFactory {
         pchartModel.addSegment(new PieChartSegment(9, "p4", "yellow"));
         pchartModel.addSegment(new PieChartSegment(11, "p5", "grey"));
         PieChart pchart = new PieChart(factory, pchartModel, 60);
-        svgroot.add(pchart);
+        g.add(pchart);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
         return svgroot;
     }
 
-    public static SvgRoot createTestBarChart(SvgFactory factory) {
+    public static SvgRoot createTestBarChart(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
         BarChartModel bchartModel = new BarChartModel(Arrays.asList(new String[] { "2008", "2009", "2010" }));
         bchartModel.addItem(new BarChartItem(3, "b1"), "2008");
         bchartModel.addItem(new BarChartItem(5, "b2"), "2008");
@@ -170,7 +201,9 @@ public class SvgTestFactory {
         bchartModel.addItem(new BarChartItem(11, "b4"), "2010");
 
         BarChart bchart = new BarChart(factory, bchartModel, 300, 100);
-        svgroot.add(bchart);
+        g.add(bchart);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
         return svgroot;
     }
 

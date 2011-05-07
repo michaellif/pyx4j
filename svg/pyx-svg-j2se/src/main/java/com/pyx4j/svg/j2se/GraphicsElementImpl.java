@@ -20,8 +20,14 @@
  */
 package com.pyx4j.svg.j2se;
 
+import org.w3c.dom.Element;
+
 import com.pyx4j.svg.basic.GraphicsElement;
 
-public class GraphicsElementImpl implements GraphicsElement {
+public class GraphicsElementImpl extends SvgElementImpl implements GraphicsElement {
+
+    public GraphicsElementImpl(Element element) {
+        super(element);
+    }
 
 }
