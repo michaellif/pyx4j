@@ -19,14 +19,17 @@ import java.util.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.selenium.D;
+import com.pyx4j.site.rpc.AppPlaceInfo;
+
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
-
-import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
 
@@ -74,8 +77,8 @@ public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
         String strFrom = sdf.format(fromDate.getTime());
         fromDate.add(Calendar.MONTH, 1); ////add yet 1 extra month
         String strTo = sdf.format(fromDate.getTime());
-        selenium.type("UnitSelection$selectionCriteria$availableFrom", strFrom);
-        selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
+        selenium.type(D.id(proto(UnitSelection.class).selectionCriteria().availableFrom()), strFrom);
+        selenium.type(D.id(proto(UnitSelection.class).selectionCriteria().availableTo()), strTo);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
         assertNoMessages();
 
@@ -86,16 +89,16 @@ public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
         fromDate.add(Calendar.MONTH, -1); ////Subtract yet 1 extra month
         strFrom = sdf.format(fromDate.getTime());
         selenium.type(proto(UnitSelection.class).selectionCriteria().availableFrom(), strFrom);
-        selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
+        selenium.type(D.id(proto(UnitSelection.class).selectionCriteria().availableTo()), strTo);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
         assertNoMessages(); //this reflects current behavior...
 
-        selenium.type("UnitSelection$selectionCriteria$availableFrom", "00/00/123");
-        selenium.type("UnitSelection$selectionCriteria$availableTo", "13/32/20011");
+        selenium.type(D.id(proto(UnitSelection.class).selectionCriteria().availableFrom()), "00/00/123");
+        selenium.type(D.id(proto(UnitSelection.class).selectionCriteria().availableTo()), "13/32/20011");
         selenium.click(VistaFormsDebugId.Available_Units_Change);
-        selenium.type("UnitSelection$rentStart", "32/32/32");
+        selenium.setValue(D.id(proto(UnitSelection.class).rentStart()), "32/32/32");
+        selenium.click(CrudDebugId.Crud_Save);
 
-        selenium.click("Crud_Save");
         assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN));
         String warns = selenium.getText(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN);
         assertTrue(warns.indexOf(warnFromFmt) >= 0 && warns.indexOf(warnToFmt) >= 0 && warns.indexOf(warnNoUnit) >= 0 && //this is in the error list too, but it's not the purpose of this test
@@ -131,11 +134,11 @@ public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
         fromDate.add(Calendar.MONTH, -1); ////minus 1 more month
         String strTo = sdf.format(fromDate.getTime());
         selenium.type(proto(UnitSelection.class).selectionCriteria().availableFrom(), strFrom);
-        selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
+        selenium.type(proto(UnitSelection.class).selectionCriteria().availableTo(), strTo);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
-        assertNotPresent("UnitSelection$availableUnits$units-row-1-ApartmentUnit$unitType");
+        assertNotPresent(D.id(proto(UnitSelection.class).availableUnits().units(), 0, proto(ApartmentUnit.class).unitType()));
 
-        selenium.click("Crud_Save");
+        selenium.click(CrudDebugId.Crud_Save);
 
         assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN));
         String warns = selenium.getText(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN);
@@ -152,25 +155,23 @@ public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
         String strFrom = sdf.format(fromDate.getTime());
         fromDate.add(Calendar.MONTH, 1); ////add 1  month
         String strTo = sdf.format(fromDate.getTime());
-        selenium.type("UnitSelection$selectionCriteria$availableFrom", strFrom);
-        selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
+        selenium.type(D.id(proto(UnitSelection.class).selectionCriteria().availableFrom()), strFrom);
+        selenium.type(D.id(proto(UnitSelection.class).selectionCriteria().availableTo()), strTo);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
-        //TODO tmp Hack #1
-        //selenium.click(VistaFormsDebugId.Available_Units_Change);
 
         //selenium.click(meta(UnitSelection.class).availableUnits().units().$(2).unitType());
-        // UnitSelection/availableUnits/units/[2]/ApartmentUnit/unitType
-        selenium.click("UnitSelection$availableUnits$units-row-2-ApartmentUnit$unitType");
-        String strAvailFrom = selenium.getText("UnitSelection$availableUnits$units-row-2-ApartmentUnit$avalableForRent");
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).unitType()));
+        String strAvailFrom = selenium.getText(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).avalableForRent()));
+
         java.util.Date dateAvail = sdf.parse(strAvailFrom);
         Calendar cdl = Calendar.getInstance();
         cdl.setTime(dateAvail);
         cdl.add(Calendar.DATE, 1000); // add 1000 extra days
         String strStartRent = sdf.format(cdl.getTime());
-        //ERROR HERE 
-        selenium.type("UnitSelection$rentStart", strStartRent);
-        selenium.click("UnitSelection$availableUnits$units-row-2-leaseTerm_12");
-        selenium.click("Crud_Save");
+        selenium.setValue(D.id(proto(UnitSelection.class).rentStart()), strStartRent);
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, "leaseTerm_12"));
+
+        selenium.click(CrudDebugId.Crud_Save);
         assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN));
         String warns = selenium.getText(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN);
         assertTrue(warns.indexOf(warnRentDateAfter) >= 0);
@@ -185,21 +186,21 @@ public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
         String strFrom = sdf.format(fromDate.getTime());
         fromDate.add(Calendar.MONTH, 1); ////add 1  month
         String strTo = sdf.format(fromDate.getTime());
-        selenium.type("UnitSelection$selectionCriteria$availableFrom", strFrom);
-        selenium.type("UnitSelection$selectionCriteria$availableTo", strTo);
-        //ERROR HERE 
+        selenium.type(D.id(proto(UnitSelection.class).selectionCriteria().availableFrom()), strFrom);
+        selenium.type(D.id(proto(UnitSelection.class).selectionCriteria().availableTo()), strTo);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
 
-        selenium.click("UnitSelection$availableUnits$units-row-2-ApartmentUnit$unitType");
-        String strAvailFrom = selenium.getText("UnitSelection$availableUnits$units-row-2-ApartmentUnit$avalableForRent");
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).unitType()));
+        String strAvailFrom = selenium.getText(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).avalableForRent()));
         java.util.Date dateAvail = sdf.parse(strAvailFrom);
         Calendar cdl = Calendar.getInstance();
         cdl.setTime(dateAvail);
         cdl.add(Calendar.DATE, -10); // add one extra day
         String strStartRent = sdf.format(cdl.getTime());
-        selenium.type("UnitSelection$rentStart", strStartRent);
-        selenium.click("UnitSelection$availableUnits$units-row-2-leaseTerm_12");
-        selenium.click("Crud_Save");
+        selenium.setValue(D.id(proto(UnitSelection.class).rentStart()), strStartRent);
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, "leaseTerm_12"));
+
+        selenium.click(CrudDebugId.Crud_Save);
         assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN));
         String warns = selenium.getText(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN);
         assertTrue(warns.indexOf(warnRentDateBefore) >= 0);
