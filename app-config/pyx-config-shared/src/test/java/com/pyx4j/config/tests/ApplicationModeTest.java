@@ -18,7 +18,9 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.config.shared;
+package com.pyx4j.config.tests;
+
+import com.pyx4j.config.shared.ApplicationMode;
 
 import junit.framework.TestCase;
 
