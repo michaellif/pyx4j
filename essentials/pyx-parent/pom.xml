@@ -149,7 +149,7 @@
     <properties>
         <buildLabel>${project.version}</buildLabel>
 
-        <gwtVersion>2.2.0</gwtVersion>
+        <gwtVersion>2.3.0</gwtVersion>
         <gaeVersion>1.4.3</gaeVersion>
         <gae.version>${gaeVersion}</gae.version>
         <pyx4jGwtVersion>0.5.6-SNAPSHOT</pyx4jGwtVersion>
@@ -197,6 +197,19 @@
                 <artifactId>gwt-user</artifactId>
                 <version>${gwtVersion}</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>1.0.0.GA</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <classifier>sources</classifier>
+                <version>1.0.0.GA</version>
             </dependency>
 
             <dependency>
@@ -607,11 +620,13 @@
                     <version>${pyx4jGwtVersion}</version>
                 </plugin>
 
+                <!--
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>gwt-maven-plugin</artifactId>
                     <version>2.2.0</version>
                 </plugin>
+                -->
 
                 <plugin>
                     <groupId>net.kindleit</groupId>

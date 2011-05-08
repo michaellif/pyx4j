@@ -31,11 +31,11 @@
 
     <dependencies>
 
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-			<scope>provided</scope>
-		</dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
@@ -129,35 +129,32 @@
             <id>gwtct</id>
             <build>
                 <plugins>
-                    <!-- pyx4j plugin is not used -->
+
                     <plugin>
                         <groupId>com.pyx4j</groupId>
                         <artifactId>maven-gwt-plugin</artifactId>
                         <executions>
-                            <!--execution>
+                            <execution>
                                 <id>compile-java2script</id>
                                 <phase>prepare-package</phase>
                                 <goals>
                                     <goal>compile</goal>
                                 </goals>
-                            </execution-->
+                            </execution>
                         </executions>
                         <configuration>
                             <module>${gwtModuleCompile}</module>
-                            <sourceDirectories>
-                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                            </sourceDirectories>
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <target>${basedir}/war</target>
+                            <warSourceDirectory>${basedir}/war</warSourceDirectory>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
                             <compileReport>false</compileReport>
-                            <!--compileReport>${gwtCompileReport}</compileReport-->
                         </configuration>
                     </plugin>
 
+                    <!--
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>gwt-maven-plugin</artifactId>
@@ -183,6 +180,7 @@
                             <compileReport>false</compileReport>
                         </configuration>
                     </plugin>
+                    -->
 
                 </plugins>
             </build>

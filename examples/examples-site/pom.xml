@@ -1,17 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.pyx4j</groupId>
-		<artifactId>pyx</artifactId>
-		<version>2.0.2-SNAPSHOT</version><!--pyx-version-->
-		<relativePath>../../pom.xml</relativePath>
-	</parent>
+    <parent>
+        <groupId>com.pyx4j</groupId>
+        <artifactId>pyx</artifactId>
+        <version>2.0.2-SNAPSHOT</version><!--pyx-version-->
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
-	<artifactId>examples-site</artifactId>
-	<name>examples-site</name>
-	<description>examples-site Implementations</description>
+    <artifactId>examples-site</artifactId>
+    <name>examples-site</name>
+    <description>examples-site Implementations</description>
 
     <distributionManagement>
         <!-- not for deployment in repository -->
@@ -25,24 +25,24 @@
         </snapshotRepository>
     </distributionManagement>
 
-	<dependencies>
-
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.gwt.google-apis</groupId>
-			<artifactId>gwt-maps</artifactId>
-			<scope>provided</scope>
-		</dependency>
+    <dependencies>
 
         <dependency>
-		    <groupId>com.google.gwt.google-apis</groupId>
-			<artifactId>gwt-ajaxloader</artifactId>
-			<scope>provided</scope>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt.google-apis</groupId>
+            <artifactId>gwt-maps</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt.google-apis</groupId>
+            <artifactId>gwt-ajaxloader</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -58,17 +58,17 @@
         </dependency>
 
         <dependency>
-			<groupId>com.pyx4j</groupId>
-			<artifactId>pyx-site-client</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-site-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>pl.rmalinowski.gwt2swf</groupId>
             <artifactId>gwt2swf</artifactId>
         </dependency>
 
-	</dependencies>
+    </dependencies>
 
     <properties>
         <gwtModule>g.site</gwtModule>
@@ -98,7 +98,7 @@
             </plugin>
 
         </plugins>
-	</build>
+    </build>
 
     <profiles>
 
@@ -114,28 +114,23 @@
             <build>
                 <plugins>
 
-                    <!-- pyx4j plugin is not used -->
                     <plugin>
                         <groupId>com.pyx4j</groupId>
                         <artifactId>maven-gwt-plugin</artifactId>
                         <executions>
-                            <!--execution>
+                            <execution>
                                 <id>compile-java2script</id>
                                 <phase>prepare-package</phase>
                                 <goals>
                                     <goal>compile</goal>
                                 </goals>
-                            </execution-->
+                            </execution>
                         </executions>
                         <configuration>
                             <module>${gwtModuleCompile}</module>
-                            <sourceDirectories>
-                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                            </sourceDirectories>
-                            <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <target>${basedir}/../examples-gae-server/war</target>
+                            <webappDirectory>${basedir}/../examples-gae-server/war</webappDirectory>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
@@ -144,6 +139,7 @@
                     </plugin>
 
 
+                    <!--
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>gwt-maven-plugin</artifactId>
@@ -158,7 +154,6 @@
                         </executions>
                         <configuration>
                             <module>${gwtModuleCompile}</module>
-                            <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
                             <inplace>true</inplace>
@@ -170,6 +165,7 @@
                             <compileReport>${gwtCompileReport}</compileReport>
                         </configuration>
                     </plugin>
+                    -->
 
                 </plugins>
             </build>

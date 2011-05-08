@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
-	<!-- @version $Revision$ ($Author$) $Date$ -->
-	<modelVersion>4.0.0</modelVersion>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.pyx4j</groupId>
@@ -12,8 +12,8 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-	<artifactId>examples-ria</artifactId>
-	<name>examples-ria</name>
+    <artifactId>examples-ria</artifactId>
+    <name>examples-ria</name>
 
     <distributionManagement>
         <!-- not for deployment in repository -->
@@ -27,7 +27,7 @@
         </snapshotRepository>
     </distributionManagement>
 
-	<dependencies>
+    <dependencies>
 
         <dependency>
             <groupId>com.google.gwt</groupId>
@@ -58,13 +58,13 @@
             <version>${project.version}</version>
         </dependency>
 
-	</dependencies>
+    </dependencies>
 
     <properties>
         <project.jar-source-4gwt>true</project.jar-source-4gwt>
     </properties>
 
-	<build>
+    <build>
 
         <plugins>
 
@@ -116,7 +116,7 @@
                             </sourceDirectories>
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <target>${basedir}/../examples-gae-server/war</target>
+                            <warSourceDirectory>${basedir}/../examples-gae-server/war</warSourceDirectory>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <compilerClass>com.google.gwt.dev.Compiler</compilerClass>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
@@ -128,40 +128,6 @@
             </build>
         </profile>
 -->
-        <profile>
-            <id>gwtcex</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <!-- Not working -->
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>gwt-maven-plugin</artifactId>
-                        <version>1.2</version>
-                        <executions>
-                            <execution>
-                                <id>compile-java2script</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>compile</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <force>true</force>
-                            <module>g.ria</module>
-                            <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                            <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
-                            <logLevel>INFO</logLevel>
-                            <style>${gwtCompilerOutputStyle}</style>
-                            <webappDirectory>${basedir}/../examples-gae-server/war</webappDirectory>
-                            <generated>${project.build.directory}/gwt-generated</generated>
-                            <localWorkers>${gwtLocalWorkers}</localWorkers>
-                            <draftCompile>${gwtDraftCompile}</draftCompile>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
 
     </profiles>
 
