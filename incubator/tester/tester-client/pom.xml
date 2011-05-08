@@ -123,6 +123,32 @@
         <gwtModuleCompile>${gwtModule}</gwtModuleCompile>
     </properties>
 
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>clean.app-gwt-generated</id>
+                        <phase>clean</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration>
+                            <target>
+                                <delete quiet="true" includeemptydirs="true">
+                                    <fileset dir="${basedir}/../tester-gae-server/war/${gwtModule}"/>
+                                    <fileset dir="${basedir}/../tester-gae-server/war/WEB-INF/deploy/${gwtModule}"/>
+                                </delete>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
     <profiles>
 
         <profile>
@@ -146,41 +172,13 @@
                             <module>${gwtModuleCompile}</module>
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <warSourceDirectory>${basedir}/war</warSourceDirectory>
+                            <warSourceDirectory>${basedir}/../tester-gae-server/war</warSourceDirectory>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
                             <compileReport>false</compileReport>
                         </configuration>
                     </plugin>
-
-                    <!--
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>gwt-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>compile-java2script</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>compile</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <module>${gwtModuleCompile}</module>
-                            <logLevel>INFO</logLevel>
-                            <style>${gwtCompilerOutputStyle}</style>
-                            <inplace>true</inplace>
-                            <warSourceDirectory>${basedir}/war</warSourceDirectory>
-                            <gen>${project.build.directory}/gwt-generated</gen>
-                            <extra>${project.build.directory}/gwt-extra</extra>
-                            <localWorkers>${gwtLocalWorkers}</localWorkers>
-                            <draftCompile>${gwtDraftCompile}</draftCompile>
-                            <compileReport>false</compileReport>
-                        </configuration>
-                    </plugin>
-                    -->
 
                 </plugins>
             </build>

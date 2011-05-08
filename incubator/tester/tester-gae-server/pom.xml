@@ -126,11 +126,11 @@
         </dependency>
 
         <dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>itextpdf</artifactId>
-		</dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+        </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
         </dependency>
@@ -159,8 +159,8 @@
                         </goals>
                         <configuration>
                             <overWriteSnapshots>true</overWriteSnapshots>
-                        	<stripVersion>true</stripVersion>
-                        	<excludeScope>provided</excludeScope>
+                            <stripVersion>true</stripVersion>
+                            <excludeScope>provided</excludeScope>
                             <outputDirectory>war/WEB-INF/lib</outputDirectory>
                             <!-- TODO use dependencies to manage this excluse, like in MEF -->
                             <excludeArtifactIds>gwt-user,pyx-unit-gwt,pyx-gwt-widgets,pyx-gwt-ria,pyx-slf4j-api-gwt,pyx-log-gwt,pyx-entity-gwt,pyx-log-gwt-rpcappender</excludeArtifactIds>
@@ -202,7 +202,7 @@
 
             <plugin>
                 <groupId>net.kindleit</groupId>
-	            <artifactId>maven-gae-plugin</artifactId>
+                <artifactId>maven-gae-plugin</artifactId>
             </plugin>
 
         </plugins>
@@ -210,31 +210,6 @@
     </build>
 
     <profiles>
-
-        <profile>
-            <id>gwtct</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>gwtct.gwt-js-copy</id>
-                                <phase>prepare-package</phase>
-                                <goals><goal>run</goal></goals>
-                                <configuration>
-                                    <target>
-                                        <copy todir="${basedir}/war/test">
-                                            <fileset dir="${basedir}/../tester-client/war/test"/>
-                                        </copy>
-                                    </target>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
 
         <profile>
             <id>prod</id>
@@ -288,7 +263,7 @@
                 <plugins>
                     <plugin>
                         <groupId>net.kindleit</groupId>
-	                    <artifactId>maven-gae-plugin</artifactId>
+                        <artifactId>maven-gae-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>gae-deploy</id>
