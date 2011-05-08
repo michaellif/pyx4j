@@ -118,16 +118,12 @@
                         </executions>
                         <configuration>
                             <module>${gwtModuleCompile}</module>
-                            <sourceDirectories>
-                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                            </sourceDirectories>
                             <usePluginDependencies>com.propertyvista*</usePluginDependencies>
                             <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <target>${basedir}/../../vista-server/src/main/webapp</target>
+                            <webappDirectory>${basedir}/../../vista-server/src/main/webapp</webappDirectory>
                             <generated>${project.build.directory}/gwt-generated</generated>
-                            <compilerClass>com.google.gwt.dev.Compiler</compilerClass>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
                             <!--compileReport>${gwtCompileReport}</compileReport -->
