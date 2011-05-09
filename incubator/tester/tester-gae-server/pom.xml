@@ -85,6 +85,12 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-server</artifactId>
             <version>${project.version}</version>
             <classifier>tests</classifier>
