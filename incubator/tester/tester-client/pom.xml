@@ -172,7 +172,7 @@
                             <module>${gwtModuleCompile}</module>
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <warSourceDirectory>${basedir}/../tester-gae-server/war</warSourceDirectory>
+                            <webappDirectory>${basedir}/../tester-gae-server/war</webappDirectory>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
