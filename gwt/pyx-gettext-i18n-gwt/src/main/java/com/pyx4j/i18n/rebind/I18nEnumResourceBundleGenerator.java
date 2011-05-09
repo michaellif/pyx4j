@@ -34,6 +34,7 @@ import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
 import com.pyx4j.i18n.client.I18nEnumResourceBundleImpl;
+import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.i18n.shared.Translation;
 
 public class I18nEnumResourceBundleGenerator extends Generator {
@@ -71,13 +72,18 @@ public class I18nEnumResourceBundleGenerator extends Generator {
         for (JClassType type : context.getTypeOracle().getTypes()) {
             if ((type instanceof JEnumType) && (type.isPublic())) {
 
-                boolean translationPresent = false;
-                for (JEnumConstant field : ((JEnumType) type).getEnumConstants()) {
-                    if (field.getAnnotation(Translation.class) != null) {
-                        translationPresent = true;
-                        break;
+                boolean translationPresent = (type.getAnnotation(Translatable.class) != null);
+
+                if (!translationPresent) {
+                    // Find if @Translation present on any declaration
+                    for (JEnumConstant field : ((JEnumType) type).getEnumConstants()) {
+                        if (field.getAnnotation(Translation.class) != null) {
+                            translationPresent = true;
+                            break;
+                        }
                     }
                 }
+
                 if (translationPresent) {
                     for (JEnumConstant field : ((JEnumType) type).getEnumConstants()) {
 
