@@ -18,6 +18,10 @@
         <when-type-assignable class="com.pyx4j.i18n.client.I18nResourceBundle"/>
     </generate-with>
 
+    <generate-with class="com.pyx4j.i18n.rebind.I18nEnumResourceBundleGenerator">
+        <when-type-assignable class="com.pyx4j.i18n.client.I18nEnumResourceBundle"/>
+    </generate-with>
+    
     <super-source path="super-source"/>
 
     <source path="client"/>

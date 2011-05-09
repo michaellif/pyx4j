@@ -14,17 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 2, 2011
- * @author michaellif
+ * Created on 2011-05-09
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.i18n.test.shared;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import junit.framework.TestCase;
 
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Translation {
+import com.pyx4j.i18n.shared.I18nEnum;
 
-    String value();
+public class I18nEnumTest extends TestCase {
+
+    public void testTranslation() {
+        assertEquals("Dog", I18nEnum.tr(Pet.dog));
+        assertEquals("Cat", I18nEnum.tr(Pet.cat));
+        assertEquals("ferret", I18nEnum.tr(Pet.ferret));
+    }
 }
