@@ -18,58 +18,39 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Translation;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translation;
 
 public interface Pet extends IEntity {
 
     public enum PetType {
 
-        //TODO i18n
-
         @Translation("Dog")
-        dog("Dog"),
+        dog,
 
         @Translation("Cat")
-        cat("Cat");
-
-        private final String label;
-
-        PetType() {
-            this.label = name();
-        }
-
-        PetType(String label) {
-            this.label = label;
-        }
+        cat;
 
         @Override
         public String toString() {
-            return label;
+            return I18nEnum.tr(this);
         }
     }
 
     public enum WeightUnit {
 
-        //TODO i18n
+        @Translation("LB")
+        lb,
 
-        lb("LB"), kg("KG");
-
-        private final String label;
-
-        WeightUnit() {
-            this.label = name();
-        }
-
-        WeightUnit(String label) {
-            this.label = label;
-        }
+        @Translation("KG")
+        kg;
 
         @Override
         public String toString() {
-            return label;
+            return I18nEnum.tr(this);
         }
     }
 
