@@ -65,6 +65,8 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             assertTenantRow(D.id(proto(PotentialTenantList.class).tenants(), num), detach(tenant), (num != 0));
             num++;
         }
+        //verify size (e.g. no next row exists)
+        // TODO Leon, see Vehicle as example
 
         if (doSave) {
             saveAndContinue();
@@ -82,8 +84,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         if (fullInfo) {
             assertValueOnForm(formDebugId, tenant.email());
             assertValueOnForm(formDebugId, tenant.relationship());
-            //TODO VladS
-            //assertValueOnForm(fromDebugId, tenant.status());
+            assertValueOnForm(formDebugId, tenant.status());
             assertValueOnForm(formDebugId, tenant.takeOwnership());
         }
     }
@@ -157,6 +158,8 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             assertEmContactsForm(D.id(tenant.emergencyContacts(), row), detach(contact));
             row++;
         }
+        //verify size (e.g. no next row exists)
+        // TODO Leon, see Vehicle as example
     }
 
     private void assertIAddressForm(IDebugId formDebugId, IAddress address) {
@@ -225,9 +228,9 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
                 num++;
             }
         }
-//        // Asset no next page
-//        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Financial.class));
-//        assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Financial.class));
+        // Asset no next page
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Financial.class));
+        assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Financial.class, num));
     }
 
     private void verifyFinancialPage(PotentialTenantFinancial financial, int id) {
@@ -241,6 +244,8 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             verifyIncome(debugID, detach(income));
             row++;
         }
+        //verify size (e.g. no next row exists)
+        // TODO Leon, see Vehicle
 
         row = 0;
         for (TenantAsset asset : financial.assets()) {
@@ -248,6 +253,8 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             verifyAsset(debugID, detach(asset));
             row++;
         }
+        //verify size (e.g. no next row exists)
+        // TODO Leon, see Vehicle
 
         row = 0;
         for (TenantGuarantor guarantor : financial.guarantors()) {
@@ -255,6 +262,8 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             verifyGuarantor(debugID, detach(guarantor));
             row++;
         }
+        //verify size (e.g. no next row exists)
+        // TODO Leon, see Vehicle
     }
 
     private void verifyIncome(IDebugId formDebugId, TenantIncome income) {
@@ -321,10 +330,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
     }
 
     private void verifyAsset(IDebugId debugID, TenantAsset asset) {
-        //TODO VladS
-        //To pass this asset types need to be capitalized.
-        //I didn't want to change it without talking to you.
-        //assertValueOnForm(debugID, asset.assetType());
+        assertValueOnForm(debugID, asset.assetType());
 
         //TODO VladS
         //I think ownership % isn't being formatted correctly
@@ -350,22 +356,19 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             verifyPetRow(D.id(proto(Pets.class).pets(), num), detach(pet));
             num++;
         }
+        //verify size (e.g. no next row exists)
+        // TODO Leon, see Vehicle
         saveAndContinue();
     }
 
     private void verifyPetRow(IDebugId debugID, Pet pet) {
-        //TODO VladS
-        //Seems like the same problem here with the types.
-        //They need to be capitalized.
-        //assertValueOnForm(debugID, pet.type());
+        assertValueOnForm(debugID, pet.type());
         assertValueOnForm(debugID, pet.name());
         assertValueOnForm(debugID, pet.color());
         assertValueOnForm(debugID, pet.breed());
         assertValueOnForm(debugID, pet.weight());
 
-        //TODO VladS
-        //And here.        
-        //assertValueOnForm(debugID, pet.weightUnit());
+        assertValueOnForm(debugID, pet.weightUnit());
         assertValueOnForm(debugID, pet.birthDate());
 
         //TODO VladS
