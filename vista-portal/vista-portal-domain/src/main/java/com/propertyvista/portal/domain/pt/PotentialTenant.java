@@ -23,14 +23,16 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.shared.Translation;
 
 @AbstractEntity
 @ToStringFormat("{0} {1} {2}")
 public interface PotentialTenant extends IEntity, IPerson, IBoundToApplication {
 
+    @Translatable
     public enum Relationship implements Serializable {
-
-        //TODO i18n
 
         Spouse,
 
@@ -52,45 +54,24 @@ public interface PotentialTenant extends IEntity, IPerson, IBoundToApplication {
 
         Other;
 
-        private final String label;
-
-        Relationship() {
-            this.label = name();
-        }
-
-        Relationship(String label) {
-            this.label = label;
-        }
-
         @Override
         public String toString() {
-            return label;
+            return I18nEnum.tr(this);
         }
     }
 
     public enum Status implements Serializable {
 
-        //TODO i18n
-
         Applicant,
 
-        CoApplicant("Co-applicant"),
+        @Translation("Co-applicant")
+        CoApplicant,
 
         Dependant;
 
-        private final String label;
-
-        Status() {
-            this.label = name();
-        }
-
-        Status(String label) {
-            this.label = label;
-        }
-
         @Override
         public String toString() {
-            return label;
+            return I18nEnum.tr(this);
         }
     }
 

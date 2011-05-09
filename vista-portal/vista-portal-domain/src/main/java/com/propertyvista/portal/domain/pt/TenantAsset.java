@@ -13,49 +13,47 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.Money;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translation;
+
+import com.propertyvista.portal.domain.Money;
 
 public interface TenantAsset extends IEntity {
 
     public enum AssetType {
 
-        //TODO i18n
+        @Translation("Bank Accounts")
+        bankAccounts,
 
-        bankAccounts("Bank Accounts"),
+        @Translation("Real Estate Properties")
+        realEstateProperties,
 
-        realEstateProperties("Real Estate Properties"),
+        @Translation("Insurance Policies")
+        insurancePolicies,
 
-        insurancePolicies("Insurance Policies"),
+        @Translation("Shares")
+        shares,
 
-        shares("Shares"),
+        @Translation("Unit Trusts")
+        unitTrusts,
 
-        unitTrusts("Unit Trusts"),
+        @Translation("Businesses")
+        businesses,
 
-        businesses("Businesses"),
+        @Translation("Cars")
+        cars,
 
-        cars("Cars"),
-
-        other("Other");
-
-        private final String label;
-
-        AssetType() {
-            this.label = name();
-        }
-
-        AssetType(String label) {
-            this.label = label;
-        }
+        @Translation("Other")
+        other;
 
         @Override
         public String toString() {
-            return label;
+            return I18nEnum.tr(this);
         }
     }
 

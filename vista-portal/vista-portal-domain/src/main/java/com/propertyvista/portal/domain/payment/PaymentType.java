@@ -13,11 +13,13 @@
  */
 package com.propertyvista.portal.domain.payment;
 
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translation;
+
 public enum PaymentType {
 
-    //TODO i18n
-
-    Echeck("eCheck"),
+    @Translation("eCheck")
+    Echeck,
 
     Visa,
 
@@ -29,19 +31,9 @@ public enum PaymentType {
 
     Interac;
 
-    private final String label;
-
-    PaymentType() {
-        this.label = name();
-    }
-
-    PaymentType(String label) {
-        this.label = label;
-    }
-
     @Override
     public String toString() {
-        return label;
+        return I18nEnum.tr(this);
     }
 
 }

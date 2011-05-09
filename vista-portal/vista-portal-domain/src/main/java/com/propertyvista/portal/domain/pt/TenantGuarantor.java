@@ -19,11 +19,20 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 public interface TenantGuarantor extends IEntity, IPerson {
 
+    @Translatable
     public enum Relationship {
-        Mother, Father, Grandfather, Grandmother, Uncle, Aunt, Friend, Other
+
+        Mother, Father, Grandfather, Grandmother, Uncle, Aunt, Friend, Other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     @ToString(index = 0)

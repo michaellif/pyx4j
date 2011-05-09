@@ -13,47 +13,50 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translation;
+
 public enum IncomeSource {
 
-    //TODO i18n
+    @Translation("Full time")
+    fulltime,
 
-    fulltime("Full time"),
+    @Translation("Part time")
+    parttime,
 
-    parttime("Part time"),
+    @Translation("Self employed")
+    selfemployed,
 
-    selfemployed("Self employed"),
+    @Translation("Seasonally Employed")
+    seasonallyEmployed,
 
-    seasonallyEmployed("Seasonally Employed"),
+    @Translation("Social Services")
+    socialServices,
 
-    socialServices("Social Services"),
+    @Translation("Pension")
+    pension,
 
-    pension("Pension"),
+    @Translation("Retired")
+    retired,
 
-    retired("Retired"),
+    @Translation("Student")
+    student,
 
-    student("Student"),
+    @Translation("Unemployment")
+    unemployment,
 
-    unemployment("Unemployment"),
+    @Translation("ODSP")
+    odsp,
 
-    odsp("ODSP"),
+    @Translation("Dividends")
+    dividends,
 
-    dividends("Dividends"),
-
-    other("Other");
-
-    private final String label;
-
-    IncomeSource() {
-        this.label = name();
-    }
-
-    IncomeSource(String label) {
-        this.label = label;
-    }
+    @Translation("Other")
+    other;
 
     @Override
     public String toString() {
-        return label;
+        return I18nEnum.tr(this);
     }
 
 }

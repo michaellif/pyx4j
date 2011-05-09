@@ -19,54 +19,56 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translation;
 
 @ToStringFormat("{0} {1}")
 public interface ChargeLine extends Charge {
 
     public enum ChargeType {
-        deposit("Deposit"),
 
-        applicationFee("Application Fee"),
+        @Translation("Deposit")
+        deposit,
 
-        rent("Monthly Rent"),
+        @Translation("Application Fee")
+        applicationFee,
 
-        firstMonthRent("Monthly Rent"),
+        @Translation("Monthly Rent")
+        rent,
 
-        parking("Parking"),
+        @Translation("Monthly Rent")
+        firstMonthRent,
 
-        parking2("Second Parking"),
+        @Translation("Parking")
+        parking,
 
-        locker("Locker"),
+        @Translation("Second Parking")
+        parking2,
 
-        petDeposit("Pet Deposit"),
+        @Translation("Locker")
+        locker,
 
-        petCharge("Pet Charge"),
+        @Translation("Pet Deposit")
+        petDeposit,
 
-        extraParking("Extra Parking"),
+        @Translation("Pet Charge")
+        petCharge,
 
-        extraLocker("Extra Locker"),
+        @Translation("Extra Parking")
+        extraParking,
 
-        cableTv("Cable TV"),
+        @Translation("Extra Locker")
+        extraLocker,
 
-        prorated("Prorated");
+        @Translation("Cable TV")
+        cableTv,
 
-        private final String label;
-
-        ChargeType() {
-            this.label = name();
-        }
-
-        ChargeType(String label) {
-            this.label = label;
-        }
-
-        public String getLabel() {
-            return label;
-        }
+        @Translation("Prorated")
+        prorated;
 
         @Override
         public String toString() {
-            return label;
+            return I18nEnum.tr(this);
         }
     }
 
