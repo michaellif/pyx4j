@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -279,6 +280,15 @@ class InputHelper {
         }
     }
 
+    public static <T extends Enum<T>> T enumByText(Class<T> enumClass, String text) {
+        for (T value : EnumSet.allOf(enumClass)) {
+            if (value.toString().equals(text)) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("No enum " + enumClass.getModifiers() + " text " + text);
+    }
+
     static <T extends Enum<T>> T getEnumValue(WebElement element, Class<T> enumClass, boolean focusOnGetValue) {
         String tagName = element.getTagName();
         if (tagName.equalsIgnoreCase("input") || tagName.equalsIgnoreCase("select")) {
@@ -288,11 +298,12 @@ class InputHelper {
                     element.click();
                 }
             }
+            //This is textual representation of Enum, i18n.tr(), not is name!
             String text = element.getValue();
             if (CommonsStringUtils.isEmpty(text)) {
                 return null;
             } else {
-                return Enum.valueOf(enumClass, text);
+                return enumByText(enumClass, text);
             }
         } else {
             // RadioGroup
