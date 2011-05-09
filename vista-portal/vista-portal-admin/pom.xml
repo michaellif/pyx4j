@@ -57,6 +57,7 @@
                             <target>
                                 <delete quiet="true" includeemptydirs="true">
                                     <fileset dir="${basedir}/../../vista-server/src/main/webapp/${gwtModule}"/>
+                                    <fileset dir="${basedir}/../../vista-server/src/main/webapp/WEB-INF/deploy/${gwtModule}" />
                                 </delete>
                             </target>
                         </configuration>
@@ -73,8 +74,8 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>gwt-maven-plugin</artifactId>
+                        <groupId>com.pyx4j</groupId>
+                        <artifactId>maven-gwt-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>compile-java2script</id>
@@ -88,8 +89,8 @@
                             <module>${gwtModuleCompile}</module>
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <warSourceDirectory>${basedir}/../../vista-server/src/main/webapp</warSourceDirectory>
-                            <gen>${project.build.directory}/gwt-generated</gen>
+                            <webappDirectory>${basedir}/../../vista-server/src/main/webapp</webappDirectory>
+                            <generated>${project.build.directory}/gwt-generated</generated>
                             <extra>${project.build.directory}/gwt-extra</extra>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
