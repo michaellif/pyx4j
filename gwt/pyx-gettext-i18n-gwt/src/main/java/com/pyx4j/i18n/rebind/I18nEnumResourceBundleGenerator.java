@@ -70,7 +70,7 @@ public class I18nEnumResourceBundleGenerator extends Generator {
         writer.println("super();");
 
         for (JClassType type : context.getTypeOracle().getTypes()) {
-            if ((type instanceof JEnumType) && (type.isPublic())) {
+            if (type instanceof JEnumType) {
 
                 boolean translationPresent = (type.getAnnotation(Translatable.class) != null);
 
@@ -85,6 +85,9 @@ public class I18nEnumResourceBundleGenerator extends Generator {
                 }
 
                 if (translationPresent) {
+                    if (!type.isPublic()) {
+                        logger.log(TreeLogger.ERROR, "enum " + type.getQualifiedSourceName() + " should be declared public to be used in internationalization");
+                    }
                     for (JEnumConstant field : ((JEnumType) type).getEnumConstants()) {
 
                         writer.print("add(");
