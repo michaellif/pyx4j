@@ -114,6 +114,7 @@ public class SchedulerHelper {
             schedulerFactory = new StdSchedulerFactory(quartzProperties);
 
             scheduler = schedulerFactory.getScheduler();
+            scheduler.start();
 
         } catch (SchedulerException e) {
             log.error("quartz initialization error", e);
