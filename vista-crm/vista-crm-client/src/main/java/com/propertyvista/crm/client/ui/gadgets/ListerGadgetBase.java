@@ -47,7 +47,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     protected final EntityListPanel<E> listPanel;
 
-    enum RefreshInterval {
+    public enum RefreshInterval {
 
         @Translation("Never")
         Never(-1),
