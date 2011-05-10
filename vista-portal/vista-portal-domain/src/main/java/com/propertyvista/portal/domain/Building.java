@@ -23,6 +23,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.portal.domain.pt.PropertyProfile;
 
@@ -30,6 +32,7 @@ import com.propertyvista.portal.domain.pt.PropertyProfile;
 //TODO rename to Property
 public interface Building extends IEntity {
 
+    @Translatable
     public enum BuildingType {
 
         agricultural,
@@ -44,7 +47,12 @@ public interface Building extends IEntity {
 
         parking_storage,
 
-        other
+        other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     /**

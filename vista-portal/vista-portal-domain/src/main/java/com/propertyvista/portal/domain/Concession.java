@@ -13,9 +13,12 @@
  */
 package com.propertyvista.portal.domain;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 /**
  * For now we just assume 2 types of concessions: - Free Months: certain number of months
@@ -42,20 +45,27 @@ public interface Concession extends IEntity {
     @ToString
     IPrimitive<String> name();
 
+    @Translatable
     public enum ConcessionType {
-        freeMonths, percentDiscount
+        freeMonths, percentDiscount;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
+
+    @MemberColumn(name = "cons_type")
+    IPrimitive<ConcessionType> type();
 
     /**
      * Number of months to apply concession to
-     * 
-     * TODO needs to be float
      */
-    IPrimitive<String> freeMonths();
+    IPrimitive<Double> months();
 
     /**
-     * Percent discount, if applicable TODO needs to be float
+     * Percent discount
      */
-    IPrimitive<String> percentage();
+    IPrimitive<Double> percentage();
 
 }

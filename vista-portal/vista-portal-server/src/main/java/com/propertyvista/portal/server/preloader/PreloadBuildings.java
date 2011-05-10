@@ -152,27 +152,27 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         return item;
     }
 
-    public static Concession createConcession(ConcessionType type, int freeMonths, int percentage) {
+    public static Concession createConcession(ConcessionType type, double months, double percentage) {
         Concession concession = EntityFactory.create(Concession.class);
 
         StringBuilder sb = new StringBuilder();
 
         if (type == ConcessionType.freeMonths) {
-            sb.append(freeMonths).append(" free month");
-            if (freeMonths != 1) {
+            sb.append(months).append(" free month");
+            if (months != 1) {
                 sb.append("s");
             }
         } else if (type == ConcessionType.percentDiscount) {
             sb.append(percentage).append("% discount for ");
-            sb.append(freeMonths).append(" month");
-            if (freeMonths != 1) {
+            sb.append(months).append(" month");
+            if (months != 1) {
                 sb.append("s");
             }
         }
         concession.name().setValue(sb.toString());
-
-        concession.freeMonths().setValue("" + freeMonths);
-        concession.percentage().setValue("" + percentage);
+        concession.type().setValue(type);
+        concession.months().setValue(months);
+        concession.percentage().setValue(percentage);
 
         persist(concession);
         return concession;
@@ -304,10 +304,10 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
         // concessions
         if (RandomUtil.randomBoolean()) {
-            unit.concessions().add(createConcession(ConcessionType.freeMonths, 1 + RandomUtil.randomInt(3), 0));
+            unit.concessions().add(createConcession(ConcessionType.freeMonths, 1.0 + RandomUtil.randomInt(3), 0));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.concessions().add(createConcession(ConcessionType.percentDiscount, 1 + RandomUtil.randomInt(11), 15));
+            unit.concessions().add(createConcession(ConcessionType.percentDiscount, 1.0 + RandomUtil.randomInt(11), 15.8));
         }
 
         // add-ons

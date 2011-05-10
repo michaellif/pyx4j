@@ -13,8 +13,22 @@
  */
 package com.propertyvista.portal.domain;
 
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
+
+@Translatable
 public enum AptUnitEcomomicStatus {
 
-    residential, commercial, offMarket, other
+    residential,
 
+    commercial,
+
+    offMarket,
+
+    other;
+
+    @Override
+    public String toString() {
+        return I18nEnum.tr(this);
+    }
 }
