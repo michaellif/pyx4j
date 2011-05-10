@@ -104,8 +104,8 @@ class ReportDropController extends AbstractPositioningDropController {
                 location = mouseLocation;
             }
 
-            log.debug("Insertion index is {}, positioner index is {}", insertionIndex, positionerIndex);
-            log.debug("Mouse location is {}", mouseLocation.name());
+            log.trace("Insertion index is {}, positioner index is {}", insertionIndex, positionerIndex);
+            log.trace("Mouse location is {}", mouseLocation.name());
 
             HTML keeper = new HTML();
             dropTarget.setGadget(keeper, positionerIndex);
