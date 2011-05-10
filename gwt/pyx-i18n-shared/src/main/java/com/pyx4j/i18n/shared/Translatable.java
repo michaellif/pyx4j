@@ -33,4 +33,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Translatable {
 
+    boolean capitalize() default true;
+
 }

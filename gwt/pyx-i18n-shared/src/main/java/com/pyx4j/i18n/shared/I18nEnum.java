@@ -24,6 +24,8 @@ import java.lang.reflect.Field;
 
 import org.xnap.commons.i18n.I18n;
 
+import com.pyx4j.commons.EnglishGrammar;
+
 public class I18nEnum {
 
     private static I18n i18n = I18nFactory.getI18n();
@@ -33,12 +35,17 @@ public class I18nEnum {
             return null;
         } else {
             try {
+                Translatable trCfg = enumValue.getClass().getAnnotation(Translatable.class);
                 Field field = enumValue.getClass().getDeclaredField(enumValue.name());
                 Translation tr = field.getAnnotation(Translation.class);
                 if (tr != null) {
                     return i18n.tr(tr.value());
                 } else {
-                    return i18n.tr(enumValue.name());
+                    if ((trCfg != null) && trCfg.capitalize()) {
+                        return i18n.tr(EnglishGrammar.capitalize(enumValue.name()));
+                    } else {
+                        return i18n.tr(enumValue.name());
+                    }
                 }
             } catch (NoSuchFieldException e) {
                 return null;

@@ -20,25 +20,14 @@
  */
 package com.pyx4j.i18n.test.shared;
 
-import junit.framework.TestCase;
+import com.pyx4j.i18n.shared.Translatable;
 
-import com.pyx4j.i18n.shared.I18nEnum;
+@Translatable
+public enum Cats {
 
-public class I18nEnumTest extends TestCase {
+    FelisCatus,
 
-    public void testTranslation() {
-        assertEquals("Dog", I18nEnum.tr(Pet.dog));
-        assertEquals("Cat", I18nEnum.tr(Pet.cat));
-        assertEquals("ferret", I18nEnum.tr(Pet.ferret));
-    }
+    africanWildcat,
 
-    public void testUnAnotedEnum() {
-        assertEquals("Hoof", I18nEnum.tr(HorseFood.Hoof));
-        assertEquals("Grain", I18nEnum.tr(HorseFood.Grain));
-    }
-
-    public void testCapitalizeNames() {
-        assertEquals("Felis Catus", I18nEnum.tr(Cats.FelisCatus));
-        assertEquals("African Wildcat", I18nEnum.tr(Cats.africanWildcat));
-    }
+    ChineseMountainCat;
 }

@@ -33,6 +33,7 @@ import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
+import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.i18n.client.I18nEnumResourceBundleImpl;
 import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.i18n.shared.Translation;
@@ -72,7 +73,8 @@ public class I18nEnumResourceBundleGenerator extends Generator {
         for (JClassType type : context.getTypeOracle().getTypes()) {
             if (type instanceof JEnumType) {
 
-                boolean translationPresent = (type.getAnnotation(Translatable.class) != null);
+                Translatable trCfg = type.getAnnotation(Translatable.class);
+                boolean translationPresent = (trCfg != null);
 
                 if (!translationPresent) {
                     // Find if @Translation present on any declaration
@@ -102,6 +104,8 @@ public class I18nEnumResourceBundleGenerator extends Generator {
                         Translation tr = field.getAnnotation(Translation.class);
                         if (tr != null) {
                             name = tr.value();
+                        } else if ((trCfg != null) && trCfg.capitalize()) {
+                            name = EnglishGrammar.capitalize(field.getName());
                         } else {
                             name = field.getName();
                         }
