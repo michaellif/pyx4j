@@ -50,7 +50,7 @@ public class BuildingEditorForm extends CEntityForm<Building> {
     private static I18n i18n = I18nFactory.getI18n(BuildingEditorForm.class);
 
     public BuildingEditorForm() {
-        super(Building.class);
+        super(Building.class, new CrmEditorsComponentFactory());
     }
 
     @Override
@@ -103,7 +103,7 @@ public class BuildingEditorForm extends CEntityForm<Building> {
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
                 AddressUtils.injectIAddress(main, proto(), this);
-                main.add(inject(proto().addressType()), 8);
+                main.add(inject(proto().addressType()), 12);
                 main.add(new HTML());
                 return main;
             }

@@ -31,7 +31,7 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
     private static I18n i18n = I18nFactory.getI18n(UnitEditorForm.class);
 
     public UnitEditorForm() {
-        super(AptUnit.class);
+        super(AptUnit.class, new CrmEditorsComponentFactory());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
 // TODO: arrange available floorplans in drop-down box? 
 //      main.add(new VistaWidgetDecorator(inject(proto().floorplan()), decorData));
 
-//        main.add(new VistaWidgetDecorator(inject(proto().requiredDeposit()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().requiredDeposit()), decorData));
 
 // TODO: amenities list goes here: 
 //      main.add(new VistaWidgetDecorator(inject(proto().amenities()), decorData));
