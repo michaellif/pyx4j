@@ -15,14 +15,15 @@ package com.propertyvista.crm.client.ui;
 
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
-
-import com.pyx4j.widgets.client.style.Theme;
-
 import com.propertyvista.crm.client.themes.GainsboroTheme;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
+import com.propertyvista.crm.client.ui.editors.AccountView;
+import com.propertyvista.crm.client.ui.editors.AccountViewImpl;
 import com.propertyvista.crm.client.ui.editors.BuildingEditorView;
 import com.propertyvista.crm.client.ui.editors.BuildingEditorViewImpl;
+import com.propertyvista.crm.client.ui.editors.SettingsView;
+import com.propertyvista.crm.client.ui.editors.SettingsViewImpl;
 import com.propertyvista.crm.client.ui.editors.UnitEditorView;
 import com.propertyvista.crm.client.ui.editors.UnitEditorViewImpl;
 import com.propertyvista.crm.client.ui.listers.ArrearsListerView;
@@ -39,6 +40,8 @@ import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
 import com.propertyvista.crm.client.ui.login.RetrievePasswordViewImpl;
 import com.propertyvista.crm.client.ui.report.ReportView;
 import com.propertyvista.crm.client.ui.report.ReportViewImpl;
+
+import com.pyx4j.widgets.client.style.Theme;
 
 public class ViewModule extends AbstractGinModule {
 
@@ -68,5 +71,10 @@ public class ViewModule extends AbstractGinModule {
 
         bind(Theme.class).to(GainsboroTheme.class).in(Singleton.class);
         bind(ShortCutsView.class).to(ShortCutsViewImpl.class).in(Singleton.class);
+
+        bind(AccountView.class).to(AccountViewImpl.class).in(Singleton.class);
+        bind(AlertView.class).to(AlertViewImpl.class).in(Singleton.class);
+        bind(MessageView.class).to(MessageViewImpl.class).in(Singleton.class);
+        bind(SettingsView.class).to(SettingsViewImpl.class).in(Singleton.class);
     }
 }
