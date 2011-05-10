@@ -34,7 +34,13 @@ import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.IAddress;
+import com.propertyvista.portal.domain.pt.IEmploymentInfo;
+import com.propertyvista.portal.domain.pt.IIncomeInfo;
 import com.propertyvista.portal.domain.pt.IncomeInfoEmployer;
+import com.propertyvista.portal.domain.pt.IncomeInfoSelfEmployed;
+import com.propertyvista.portal.domain.pt.IncomeInfoStudentIncome;
+import com.propertyvista.portal.domain.pt.Pet;
+import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
@@ -113,6 +119,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         verifyTenantsPage(summary, false);
         verifyInfoPages(summary, false);
         verifyFinancialPages(summary, false);
+        verifyPetsPages(summary, false);
 
         //TODO Leon
 
@@ -320,43 +327,64 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
 
         switch (income.incomeSource().getValue()) {
         case fulltime:
+            enterEmployerForm(D.id(formDebugId, income.employer()), detach(income.employer()));
+            break;
         case parttime:
             enterEmployerForm(D.id(formDebugId, income.employer()), detach(income.employer()));
             break;
         case selfemployed:
-            // TODO Leon
-            // income.selfEmployed();
+            enterSelfEmployedForm(D.id(formDebugId, income.selfEmployed()), detach(income.selfEmployed()));
             break;
         case seasonallyEmployed:
-            // TODO Leon
-            // income.seasonallyEmployed()
+            enterEmployedForm(D.id(formDebugId, income.seasonallyEmployed()), detach(income.seasonallyEmployed()));
             break;
         case socialServices:
-            // TODO Leon
-            // income.socialServices()
+            enterEmployedForm(D.id(formDebugId, income.socialServices()), detach(income.socialServices()));
             break;
         case student:
-            // TODO Leon
-            // income.studentIncome()
+            enterStudentForm(D.id(formDebugId, income.studentIncome()), detach(income.studentIncome()));
             break;
         default:
-            // TODO Leon
-            // income.otherIncomeInfo());
+            enterIncomeForm(D.id(formDebugId, income.otherIncomeInfo()), detach(income.otherIncomeInfo()));
+            break;
         }
-
     }
 
     private void enterEmployerForm(IDebugId formDebugId, IncomeInfoEmployer employer) {
-        setValueOnForm(formDebugId, employer.name());
+        enterEmployedForm(formDebugId, employer);
         setValueOnForm(formDebugId, employer.employedForYears());
-        enterIAddressForm(formDebugId, employer);
-        setValueOnForm(formDebugId, employer.monthlyAmount());
+        setValueOnForm(formDebugId, employer.starts());
+        setValueOnForm(formDebugId, employer.ends());
+    }
 
+    private void enterSelfEmployedForm(IDebugId formDebugId, IncomeInfoSelfEmployed employer) {
+        enterEmployedForm(formDebugId, employer);
+        setValueOnForm(formDebugId, employer.fullyOwned());
+        setValueOnForm(formDebugId, employer.monthlyRevenue());
+        setValueOnForm(formDebugId, employer.numberOfEmployees());
+    }
+
+    private void enterStudentForm(IDebugId formDebugId, IncomeInfoStudentIncome student) {
+        enterIncomeForm(formDebugId, student);
+        enterIAddressForm(formDebugId, student);
+        setValueOnForm(formDebugId, student.program());
+        setValueOnForm(formDebugId, student.fieldOfStudy());
+        setValueOnForm(formDebugId, student.fundingChoices());
+    }
+
+    private void enterEmployedForm(IDebugId formDebugId, IEmploymentInfo employer) {
+        enterIncomeForm(formDebugId, employer);
+        enterIAddressForm(formDebugId, employer);
         setValueOnForm(formDebugId, employer.supervisorName());
         setValueOnForm(formDebugId, employer.supervisorPhone());
         setValueOnForm(formDebugId, employer.position());
-        setValueOnForm(formDebugId, employer.starts());
-        setValueOnForm(formDebugId, employer.ends());
+    }
+
+    private void enterIncomeForm(IDebugId formDebugId, IIncomeInfo income) {
+        setValueOnForm(formDebugId, income.name());
+        setValueOnForm(formDebugId, income.monthlyAmount());
+        setValueOnForm(formDebugId, income.starts());
+        setValueOnForm(formDebugId, income.ends());
     }
 
     private void enterAssetRow(IDebugId formDebugId, TenantAsset asset) {
@@ -369,17 +397,38 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         setValueOnForm(fromDebugId, guarantor.firstName());
         setValueOnForm(fromDebugId, guarantor.middleName());
         setValueOnForm(fromDebugId, guarantor.lastName());
-
-        // TODO Leon
-
+        setValueOnForm(fromDebugId, guarantor.homePhone());
+        setValueOnForm(fromDebugId, guarantor.mobilePhone());
+        setValueOnForm(fromDebugId, guarantor.workPhone());
         setValueOnForm(fromDebugId, guarantor.birthDate());
         setValueOnForm(fromDebugId, guarantor.email());
     }
 
     private void enterPetsPage(Summary summary) {
-        // TODO Leon
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Pets.class));
+        int num = 0;
+        for (Pet pet : summary.pets().pets()) {
+            selenium.click(D.id(proto(Pets.class).pets(), FormNavigationDebugId.Form_Add));
+            enterPetRow(D.id(proto(Pets.class).pets(), num), detach(pet));
+            num++;
+        }
 
         saveAndContinue();
+    }
+
+    private void enterPetRow(IDebugId debugID, Pet pet) {
+        setValueOnForm(debugID, pet.type());
+        setValueOnForm(debugID, pet.name());
+        setValueOnForm(debugID, pet.color());
+        setValueOnForm(debugID, pet.breed());
+        setValueOnForm(debugID, pet.weight());
+
+        setValueOnForm(debugID, pet.weightUnit());
+        setValueOnForm(debugID, pet.birthDate());
+
+        //TODO VladS
+        //This is being rendered as a div instead of input    
+        //assertValueOnForm(debugID, pet.chargeLine());
     }
 
     private void enterChargesPage(Summary summary) {

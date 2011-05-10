@@ -65,8 +65,8 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             assertTenantRow(D.id(proto(PotentialTenantList.class).tenants(), num), detach(tenant), (num != 0));
             num++;
         }
-        //verify size (e.g. no next row exists)
-        // TODO Leon, see Vehicle as example
+
+        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantList.class).tenants(), num, proto(PotentialTenantInfo.class).firstName())));
 
         if (doSave) {
             saveAndContinue();
@@ -79,7 +79,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         assertValueOnForm(formDebugId, tenant.middleName());
 
         //TODO VladS
-        //assertValueOnForm(formDebugId, tenant.birthDate());
+        assertValueOnForm(formDebugId, tenant.birthDate());
 
         if (fullInfo) {
             assertValueOnForm(formDebugId, tenant.email());
@@ -158,8 +158,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             assertEmContactsForm(D.id(tenant.emergencyContacts(), row), detach(contact));
             row++;
         }
-        //verify size (e.g. no next row exists)
-        // TODO Leon, see Vehicle as example
+        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantInfo.class).emergencyContacts(), row, proto(EmergencyContact.class).firstName())));
     }
 
     private void assertIAddressForm(IDebugId formDebugId, IAddress address) {
@@ -244,8 +243,9 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             verifyIncome(debugID, detach(income));
             row++;
         }
-        //verify size (e.g. no next row exists)
-        // TODO Leon, see Vehicle
+        //TODO VladS
+        //I'm not sure how to test this one
+        //assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantFinancial.class).incomes(), row, proto(TenantIncome.class).())));
 
         row = 0;
         for (TenantAsset asset : financial.assets()) {
@@ -253,8 +253,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             verifyAsset(debugID, detach(asset));
             row++;
         }
-        //verify size (e.g. no next row exists)
-        // TODO Leon, see Vehicle
+        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantFinancial.class).assets(), row, proto(TenantAsset.class).assetType())));
 
         row = 0;
         for (TenantGuarantor guarantor : financial.guarantors()) {
@@ -262,8 +261,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             verifyGuarantor(debugID, detach(guarantor));
             row++;
         }
-        //verify size (e.g. no next row exists)
-        // TODO Leon, see Vehicle
+        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantFinancial.class).guarantors(), row, proto(TenantGuarantor.class).firstName())));
     }
 
     private void verifyIncome(IDebugId formDebugId, TenantIncome income) {
@@ -275,19 +273,19 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             assertEmployerForm(D.id(formDebugId, income.employer()), detach(income.employer()));
             break;
         case selfemployed:
-            assertSelfEmployedForm(D.id(formDebugId, income.employer()), detach(income.selfEmployed()));
+            assertSelfEmployedForm(D.id(formDebugId, income.selfEmployed()), detach(income.selfEmployed()));
             break;
         case seasonallyEmployed:
-            assertEmployedForm(D.id(formDebugId, income.employer()), detach(income.seasonallyEmployed()));
+            assertEmployedForm(D.id(formDebugId, income.seasonallyEmployed()), detach(income.seasonallyEmployed()));
             break;
         case socialServices:
-            assertEmployedForm(D.id(formDebugId, income.employer()), detach(income.socialServices()));
+            assertEmployedForm(D.id(formDebugId, income.socialServices()), detach(income.socialServices()));
             break;
         case student:
-            assertStudentForm(D.id(formDebugId, income.employer()), detach(income.studentIncome()));
+            assertStudentForm(D.id(formDebugId, income.studentIncome()), detach(income.studentIncome()));
             break;
         default:
-            assertIncomeForm(D.id(formDebugId, income.employer()), detach(income.otherIncomeInfo()));
+            assertIncomeForm(D.id(formDebugId, income.otherIncomeInfo()), detach(income.otherIncomeInfo()));
             break;
         }
     }
@@ -349,16 +347,17 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         assertValueOnForm(debugID, guarantor.email());
     }
 
-    protected void verifyPetsPages(Summary summary) {
+    protected void verifyPetsPages(Summary summary, boolean doSave) {
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Pets.class));
         int num = 0;
         for (Pet pet : summary.pets().pets()) {
             verifyPetRow(D.id(proto(Pets.class).pets(), num), detach(pet));
             num++;
         }
-        //verify size (e.g. no next row exists)
-        // TODO Leon, see Vehicle
-        saveAndContinue();
+        assertFalse(selenium.isElementPresent(D.id(proto(Pets.class).pets(), num, proto(Pet.class).type())));
+        if (doSave) {
+            saveAndContinue();
+        }
     }
 
     private void verifyPetRow(IDebugId debugID, Pet pet) {
