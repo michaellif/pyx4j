@@ -46,6 +46,7 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 
@@ -68,7 +69,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
             }
         };
 
-        listPanel.setPageSize(20);
+        listPanel.setPageSize(30);
 
         listPanel.setPrevActionHandler(new ClickHandler() {
             @Override
@@ -150,6 +151,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
     // -------------------------
     // Filter Data stuff:
 
+    @Translatable
     public enum Operands {
         Is,
 

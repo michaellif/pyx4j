@@ -35,7 +35,7 @@ public class CrmHeaderDecorator extends HorizontalPanel {
         captionHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Caption.name());
         add(captionHolder);
         setCellVerticalAlignment(captionHolder, HorizontalPanel.ALIGN_MIDDLE);
-        setCellWidth(captionHolder, "30%");
+        setCellWidth(captionHolder, "50%");
 
         if (widget != null) {
             add(widget);

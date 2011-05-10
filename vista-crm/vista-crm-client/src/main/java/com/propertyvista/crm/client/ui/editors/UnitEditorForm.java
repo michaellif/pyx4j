@@ -19,7 +19,9 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
@@ -56,7 +58,9 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Details")));
+        Widget header = new CrmHeaderDecorator(i18n.tr("Details"));
+        header.getElement().getStyle().setMarginTop(0, Unit.EM); // remove default for header top margin...
+        main.add(header);
 
         DecorationData decorData = new DecorationData(14d, 12);
         main.add(new VistaWidgetDecorator(inject(proto().name()), decorData));
@@ -117,8 +121,8 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
 
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().leaseTerm(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().rent(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().leaseTerm(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().rent(), "7em"));
             }
 
             @Override
@@ -230,8 +234,9 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
 
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "35em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().freeMonths(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "22em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "11em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().months(), "5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().percentage(), "5em"));
             }
 

@@ -49,7 +49,7 @@ public class UnitEditorViewImpl extends DockLayoutPanel implements UnitEditorVie
         super(Unit.EM);
         setSize("100%", "100%");
         addNorth(new CrmHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(new CrmSiteMap.Editors.Unit()).getCaption()), 3);
-        addSouth(createButtons(), 4);
+        addNorth(createButtons(), 3);
 
         editor.initialize();
         add(new ScrollPanel(editor.asWidget()));
@@ -103,9 +103,8 @@ public class UnitEditorViewImpl extends DockLayoutPanel implements UnitEditorVie
                 History.back();
             }
         }));
-        buttons.setSpacing(10);
+        buttons.setSpacing(5);
         SimplePanel wrap = new SimplePanel();
-        wrap.getElement().getStyle().setProperty("borderTop", "1px solid #bbb");
         wrap.setWidget(buttons);
         wrap.setWidth("100%");
         return wrap;
