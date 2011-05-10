@@ -41,7 +41,7 @@ public class I18nEnum {
                 if (tr != null) {
                     return i18n.tr(tr.value());
                 } else {
-                    if ((trCfg != null) && trCfg.capitalize()) {
+                    if ((trCfg == null) || ((trCfg != null) && trCfg.capitalize())) {
                         return i18n.tr(EnglishGrammar.capitalize(enumValue.name()));
                     } else {
                         return i18n.tr(enumValue.name());

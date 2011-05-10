@@ -104,7 +104,7 @@ public class I18nEnumResourceBundleGenerator extends Generator {
                         Translation tr = field.getAnnotation(Translation.class);
                         if (tr != null) {
                             name = tr.value();
-                        } else if ((trCfg != null) && trCfg.capitalize()) {
+                        } else if ((trCfg == null) || ((trCfg != null) && trCfg.capitalize())) {
                             name = EnglishGrammar.capitalize(field.getName());
                         } else {
                             name = field.getName();

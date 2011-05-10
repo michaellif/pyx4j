@@ -29,7 +29,7 @@ public class I18nEnumTest extends TestCase {
     public void testTranslation() {
         assertEquals("Dog", I18nEnum.tr(Pet.dog));
         assertEquals("Cat", I18nEnum.tr(Pet.cat));
-        assertEquals("ferret", I18nEnum.tr(Pet.ferret));
+        assertEquals("Ferret", I18nEnum.tr(Pet.ferret));
     }
 
     public void testUnAnotedEnum() {

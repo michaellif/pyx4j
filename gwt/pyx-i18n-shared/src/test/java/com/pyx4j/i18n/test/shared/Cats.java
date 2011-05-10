@@ -20,6 +20,7 @@
  */
 package com.pyx4j.i18n.test.shared;
 
+import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
 @Translatable
@@ -30,4 +31,9 @@ public enum Cats {
     africanWildcat,
 
     ChineseMountainCat;
+
+    @Override
+    public String toString() {
+        return I18nEnum.tr(this);
+    }
 }
