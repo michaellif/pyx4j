@@ -1,98 +1,87 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
-	<!--
-		@version $Revision$ ($Author$) $Date: 2009-12-27
-		15:41:17 -0500 (Sun, 27 Dec 2009) $
-	-->
-	<modelVersion>4.0.0</modelVersion>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+    <!--
+        @version $Revision$ ($Author$) $Date: 2009-12-27
+        15:41:17 -0500 (Sun, 27 Dec 2009) $
+    -->
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.pyx4j</groupId>
-		<artifactId>pyx</artifactId>
-		<version>2.0.2-SNAPSHOT</version><!--pyx-version-->
-		<relativePath>../../pom.xml</relativePath>
-	</parent>
+    <parent>
+        <groupId>com.pyx4j</groupId>
+        <artifactId>pyx</artifactId>
+        <version>2.0.2-SNAPSHOT</version><!--pyx-version-->
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
-	<artifactId>pyx-unit-gwt</artifactId>
-	<name>pyx-unit-gwt</name>
-	<description>Asynchronous Unit Tests for GWT</description>
+    <artifactId>pyx-unit-gwt</artifactId>
+    <name>pyx-unit-gwt</name>
+    <description>Asynchronous Unit Tests for GWT</description>
 
-	<dependencies>
+    <dependencies>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
 
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-			<scope>provided</scope>
-		</dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>com.pyx4j</groupId>
-			<artifactId>pyx-commons</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-unit-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
-                
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-dev</artifactId>
-			<optional>true</optional>
-			<scope>provided</scope>
-		</dependency>
 
-		<dependency>
-			<groupId>com.pyx4j</groupId>
-			<artifactId>pyx-gwt-widgets</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <optional>true</optional>
+            <scope>provided</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>com.pyx4j</groupId>
-			<artifactId>pyx-gwt-server</artifactId>
-			<version>${project.version}</version>
-			<optional>true</optional>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-widgets</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-server</artifactId>
+            <version>${project.version}</version>
+            <optional>true</optional>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
             <optional>true</optional>
-			<scope>test</scope>
+            <scope>test</scope>
         </dependency>
 
-	</dependencies>
+    </dependencies>
 
     <properties>
         <project.jar-source-4gwt>true</project.jar-source-4gwt>
+        <project.test-jar-source-4gwt>true</project.test-jar-source-4gwt>
     </properties>
 
-	<build>
-		<!-- need this for GWT -->
-		<resources>
-			<!-- JUnit super-source -->
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-		</resources>
-        <testResources>
-            <testResource>
-                <directory>src/test/java</directory>
-            </testResource>
-        </testResources>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -101,6 +90,18 @@
                     <execution>
                         <goals>
                             <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>maven-gwt-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-source-jar</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -129,6 +130,6 @@
 
         </plugins>
 
-	</build>
+    </build>
 
 </project>

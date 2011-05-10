@@ -620,15 +620,7 @@
                     <version>${pyx4jGwtVersion}</version>
                 </plugin>
 
-                <!--
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>gwt-maven-plugin</artifactId>
-                    <version>2.2.0</version>
-                </plugin>
-                -->
-
-                <plugin>
+                 <plugin>
                     <groupId>net.kindleit</groupId>
                     <artifactId>maven-gae-plugin</artifactId>
                     <version>0.8.4</version>
