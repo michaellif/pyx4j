@@ -107,4 +107,20 @@ public class CrmSiteMap {
     @NavigationItem(navigLabel = "Default Dashboard")
     public static class Dashboard extends AppPlace {
     }
+
+    @NavigationItem(navigLabel = "User Account")
+    public static class Account extends AppPlace {
+    }
+
+    @NavigationItem(navigLabel = "User Settings")
+    public static class Settings extends AppPlace {
+    }
+
+    @NavigationItem(navigLabel = "Alerts")
+    public static class Alert extends AppPlace {
+    }
+
+    @NavigationItem(navigLabel = "Messages")
+    public static class Message extends AppPlace {
+    }
 }

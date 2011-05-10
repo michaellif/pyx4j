@@ -11,11 +11,11 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Inject;
 import com.propertyvista.crm.client.resources.CrmImages;
 
@@ -96,7 +96,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         account = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
-                //TODO implement
+                presenter.showAccount();
             }
         });
         account.setDebugId(new StringDebugId("account"));
@@ -106,7 +106,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         settings = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
-                //TODO implement
+                presenter.showSettings();
             }
         });
         settings.setDebugId(new StringDebugId("settings"));
@@ -129,23 +129,21 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         alert.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                //TODO implement
-                Window.alert("Alert");
+                presenter.showAlerts();
             }
         });
-        alert.getElement().getStyle().setMarginRight(1, Unit.EM);
+        //  alert.getElement().getStyle().setMarginRight(1, Unit.EM);
         alert.getElement().getStyle().setCursor(Cursor.POINTER);
 
         message = new Image(CrmImages.INSTANCE.message());
         message.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                //TODO implement
-                Window.alert("Message");
+                presenter.showMessages();
             }
         });
-        message.getElement().getStyle().setMarginRight(1, Unit.EM);
-        message.getElement().getStyle().setMarginLeft(1, Unit.EM);
+        //    message.getElement().getStyle().setMarginRight(1, Unit.EM);
+        //   message.getElement().getStyle().setMarginLeft(1, Unit.EM);
         message.getElement().getStyle().setCursor(Cursor.POINTER);
 
         search = new SearchBox();
@@ -167,15 +165,30 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
  * fp2.add(alert);
  * rightcontainer.add(fp2);
  */
+        /**
+         * the following set of wrappers keep login/logout group relatively steady when
+         * the elements right of it disappear
+         */
+        SimplePanel searchwr = new SimplePanel();
+        searchwr.getElement().setAttribute("style", "min-width:12em");
+        searchwr.add(search);
+
+        SimplePanel messagewr = new SimplePanel();
+        messagewr.getElement().setAttribute("style", "min-width:3em");
+        messagewr.add(message);
+
+        SimplePanel alertwr = new SimplePanel();
+        alertwr.getElement().setAttribute("style", "min-width:3em");
+        alertwr.add(alert);
 
         rightcontainer.add(greetings);
         rightcontainer.add(account);
         rightcontainer.add(settings);
         rightcontainer.add(login);
         rightcontainer.add(logout);
-        rightcontainer.add(search);
-        rightcontainer.add(message);
-        rightcontainer.add(alert);
+        rightcontainer.add(searchwr);
+        rightcontainer.add(messagewr);
+        rightcontainer.add(alertwr);
 
         add(rightcontainer);
         // add(leftcontainer);
@@ -204,6 +217,11 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     @Override
     public void onLogedOut() {
         logout.setVisible(false);
+        alert.setVisible(false);
+        message.setVisible(false);
+        search.setVisible(false);
+        account.setVisible(false);
+        settings.setVisible(false);
         login.setVisible(true);
         greetings.setHTML("");
     }
@@ -212,6 +230,11 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     public void onLogedIn(String userName) {
         logout.setVisible(true);
         login.setVisible(false);
+        alert.setVisible(true);
+        message.setVisible(true);
+        account.setVisible(true);
+        settings.setVisible(true);
+        search.setVisible(true);
         greetings.setHTML("Welcome &nbsp;" + userName);
     }
 }

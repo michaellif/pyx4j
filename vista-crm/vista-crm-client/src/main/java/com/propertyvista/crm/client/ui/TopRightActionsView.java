@@ -18,6 +18,14 @@ public interface TopRightActionsView extends IsWidget {
 
         public void login();
 
+        public void showAccount();
+
+        public void showAlerts();
+
+        public void showSettings();
+
+        public void showMessages();
+
     }
 
     public void onLogedOut();

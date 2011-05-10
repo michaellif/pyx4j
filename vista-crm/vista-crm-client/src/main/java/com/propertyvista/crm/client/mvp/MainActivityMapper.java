@@ -18,18 +18,21 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-
-import com.pyx4j.site.rpc.AppPlace;
-
+import com.propertyvista.crm.client.activity.AccountActivity;
+import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.ArrearsListerActivity;
 import com.propertyvista.crm.client.activity.BuildingEditorActivity;
 import com.propertyvista.crm.client.activity.BuildingListerActivity;
 import com.propertyvista.crm.client.activity.DashboardActivity;
+import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.ReportActivity;
 import com.propertyvista.crm.client.activity.ResetPasswordActivity;
+import com.propertyvista.crm.client.activity.SettingsActivity;
 import com.propertyvista.crm.client.activity.UnitEditorActivity;
 import com.propertyvista.crm.client.activity.UnitListerActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+
+import com.pyx4j.site.rpc.AppPlace;
 
 public class MainActivityMapper implements ActivityMapper {
 
@@ -52,6 +55,14 @@ public class MainActivityMapper implements ActivityMapper {
     Provider<DashboardActivity> dashboardActivityProvider;
 
     Provider<ReportActivity> reportActivityProvider;
+
+    Provider<AccountActivity> accountActivityProvider;
+
+    Provider<AlertActivity> alertActivityProvider;
+
+    Provider<MessageActivity> messageActivityProvider;
+
+    Provider<SettingsActivity> settingsActivityProvider;
 
     @Inject
     public MainActivityMapper(
@@ -76,7 +87,15 @@ public class MainActivityMapper implements ActivityMapper {
 
     final Provider<DashboardActivity> dashboardActivityProvider,
 
-    final Provider<ReportActivity> reportActivityProvider) {
+    final Provider<ReportActivity> reportActivityProvider,
+
+    final Provider<AccountActivity> accountActivityProvider,
+
+    final Provider<AlertActivity> alertActivityProvider,
+
+    final Provider<MessageActivity> messageActivityProvider,
+
+    final Provider<SettingsActivity> settingsActivityProvider) {
         super();
 //        this.loginActivityProvider = loginActivityProvider;
 //        this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
@@ -89,6 +108,10 @@ public class MainActivityMapper implements ActivityMapper {
         this.arrearsListerActivityProvider = arrearsListerActivityProvider;
         this.dashboardActivityProvider = dashboardActivityProvider;
         this.reportActivityProvider = reportActivityProvider;
+        this.accountActivityProvider = accountActivityProvider;
+        this.alertActivityProvider = alertActivityProvider;
+        this.messageActivityProvider = messageActivityProvider;
+        this.settingsActivityProvider = settingsActivityProvider;
     }
 
     @Override
@@ -118,6 +141,14 @@ public class MainActivityMapper implements ActivityMapper {
             return dashboardActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Report) {
             return reportActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Account) {
+            return accountActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Alert) {
+            return alertActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Message) {
+            return messageActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Settings) {
+            return settingsActivityProvider.get().withPlace(place);
         }
         //TODO what to do on other place
         return null;

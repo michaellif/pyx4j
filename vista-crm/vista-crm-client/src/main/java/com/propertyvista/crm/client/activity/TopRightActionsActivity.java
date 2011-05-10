@@ -83,4 +83,24 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
         return this;
     }
 
+    @Override
+    public void showAccount() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Account());
+    }
+
+    @Override
+    public void showAlerts() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Alert());
+    }
+
+    @Override
+    public void showSettings() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Settings());
+    }
+
+    @Override
+    public void showMessages() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Message());
+    }
+
 }
