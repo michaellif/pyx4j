@@ -44,6 +44,46 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
         main.add(new VistaWidgetDecorator(inject(proto().name()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().marketingName()), decorData));
 
+        main.add(new VistaWidgetDecorator(inject(proto().unitType()), decorData));
+
+        main.add(new VistaWidgetDecorator(inject(proto().unitEcomomicStatus()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().unitEcomomicStatusDescr()), decorData));
+
+        main.add(new VistaWidgetDecorator(inject(proto().floor()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().suiteNumber()), decorData));
+// TODO: arrange available building in drop-down box? 
+//        main.add(new VistaWidgetDecorator(inject(proto().building()), decorData));
+
+        main.add(new VistaWidgetDecorator(inject(proto().area()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().areaMeasurementType()), decorData));
+
+        main.add(new VistaWidgetDecorator(inject(proto().bedrooms()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().bathrooms()), decorData));
+
+// TODO: complex data editing here: 
+//        main.add(new VistaWidgetDecorator(inject(proto().currentOccupancies()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().avalableForRent()), decorData));
+
+// TODO: market rent list goes here: 
+//        main.add(new VistaWidgetDecorator(inject(proto().marketRent()), decorData));
+// TODO: arrange available Lease Terms in drop-down box? 
+//      main.add(new VistaWidgetDecorator(inject(proto().newLeaseTerms()), decorData));
+// TODO: arrange available floorplans in drop-down box? 
+//      main.add(new VistaWidgetDecorator(inject(proto().floorplan()), decorData));
+
+//        main.add(new VistaWidgetDecorator(inject(proto().requiredDeposit()), decorData));
+
+// TODO: amenities list goes here: 
+//      main.add(new VistaWidgetDecorator(inject(proto().amenities()), decorData));
+// TODO: utilities list goes here: 
+//      main.add(new VistaWidgetDecorator(inject(proto().utilities()), decorData));
+// TODO: infoDetails list goes here: 
+//      main.add(new VistaWidgetDecorator(inject(proto().infoDetails()), decorData));
+// TODO: concessions list goes here: 
+//      main.add(new VistaWidgetDecorator(inject(proto().concessions()), decorData));
+// TODO: addOns list goes here: 
+//      main.add(new VistaWidgetDecorator(inject(proto().addOns()), decorData));
+
         main.setWidth("100%");
         return main;
     }

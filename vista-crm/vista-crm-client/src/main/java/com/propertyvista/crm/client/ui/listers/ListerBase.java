@@ -275,7 +275,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
                 formatCell(fieldsList);
 
                 for (Operands op : Operands.values()) {
-                    operandsList.addItem(op.name());
+                    operandsList.addItem(op.toString());
+                    operandsList.setValue(operandsList.getItemCount() - 1, op.name());
                 }
                 operandsList.setWidth("10em");
                 add(operandsList);
