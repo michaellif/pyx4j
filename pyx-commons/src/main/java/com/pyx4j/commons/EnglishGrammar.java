@@ -20,9 +20,6 @@
  */
 package com.pyx4j.commons;
 
-/**
- *
- */
 public class EnglishGrammar {
 
     public static String prefixArticleIndefinite(String word, boolean capital) {
@@ -64,15 +61,37 @@ public class EnglishGrammar {
 
     public static String capitalize(String word) {
         StringBuilder b = new StringBuilder();
-        for (int i = 0; i < word.length(); i++) {
-            Character c = word.charAt(i);
-            if (i == 0) {
-                c = Character.toUpperCase(c);
+        StringBuilder currentWord = new StringBuilder();
+        boolean wordStart = true;
+        for (char c : word.toCharArray()) {
+            if (c == '_') {
+                if (currentWord.length() > 0) {
+                    b.append(currentWord.toString());
+                    currentWord = new StringBuilder();
+                    wordStart = true;
+                }
+                b.append(' ');
             } else if (Character.isUpperCase(c)) {
-                b.append(" ");
+                if (!wordStart) {
+                    b.append(currentWord.toString());
+                    currentWord = new StringBuilder();
+                    b.append(' ');
+                    wordStart = true;
+                }
+                currentWord.append(c);
+            } else {
+                wordStart = false;
+                if (currentWord.length() == 0) {
+                    c = Character.toUpperCase(c);
+                }
+                currentWord.append(c);
             }
-            b.append(c);
         }
+
+        if (currentWord.length() > 0) {
+            b.append(currentWord.toString());
+        }
+
         return b.toString();
     }
 }
