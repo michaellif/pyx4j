@@ -81,7 +81,7 @@ public class DefaultMoneyFormatter implements IFormat<Money> {
             }
             return DomainUtil.createMoney(Double.valueOf(string));
         } catch (NumberFormatException e) {
-            throw new ParseException("DefaultMoneyFormatter", 0);
+            return DomainUtil.createMoney(Double.NaN); // incorrect user entry case (checked by validator!)
         }
     }
 }

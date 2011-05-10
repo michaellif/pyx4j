@@ -75,7 +75,7 @@ public class BuildingEditorForm extends CEntityForm<Building> {
         main.add(new VistaWidgetDecorator(inject(proto().email().emailType()), decorData));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Contact Phones")));
-        main.add(inject(proto().phoneList(), createPhonesFolderEditorColumns()));
+        main.add(inject(proto().phoneList(), createPhonesListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Address")));
         main.add(inject(proto().address()));
@@ -110,7 +110,7 @@ public class BuildingEditorForm extends CEntityForm<Building> {
         };
     }
 
-    private CEntityFolder<Phone> createPhonesFolderEditorColumns() {
+    private CEntityFolder<Phone> createPhonesListEditor() {
         return new CEntityFolder<Phone>(Phone.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
@@ -129,10 +129,6 @@ public class BuildingEditorForm extends CEntityForm<Building> {
 
             @Override
             protected CEntityFolderItem<Phone> createItem() {
-                return createPhoneRowEditor(columns);
-            }
-
-            private CEntityFolderItem<Phone> createPhoneRowEditor(final List<EntityFolderColumnDescriptor> columns) {
                 return new CEntityFolderRow<Phone>(Phone.class, columns) {
 
                     @Override
