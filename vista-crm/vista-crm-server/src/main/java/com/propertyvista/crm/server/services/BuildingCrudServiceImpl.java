@@ -19,9 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.portal.domain.Building;
-import com.propertyvista.portal.domain.DemoData;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.EntityServicesImpl;
@@ -29,6 +26,10 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
+import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.portal.domain.Building;
+import com.propertyvista.portal.domain.DemoData;
 
 public class BuildingCrudServiceImpl implements BuildingCrudService {
 
@@ -53,6 +54,11 @@ public class BuildingCrudServiceImpl implements BuildingCrudService {
     }
 
     @Override
+    public void search(AsyncCallback<EntitySearchResult<Building>> callback, EntitySearchCriteria<Building> criteria) {
+        callback.onSuccess(EntityServicesImpl.secureSearch(criteria));
+    }
+
+    @Override
     public void getTestBuildingNomberOne(AsyncCallback<Building> callback) {
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
         buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE));
@@ -66,10 +72,5 @@ public class BuildingCrudServiceImpl implements BuildingCrudService {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         //criteria.add(new PropertyCriterion(criteria.proto().id().getFieldName(), Restriction.NOT_EQUAL, 0));
         callback.onSuccess(EntityServicesImpl.secureQuery(criteria));
-    }
-
-    @Override
-    public void search(AsyncCallback<EntitySearchResult<Building>> callback, EntitySearchCriteria<Building> criteria) {
-        callback.onSuccess(EntityServicesImpl.secureSearch(criteria));
     }
 }

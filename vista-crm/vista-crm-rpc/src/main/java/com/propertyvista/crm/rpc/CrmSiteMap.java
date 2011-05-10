@@ -19,7 +19,7 @@ import com.pyx4j.site.rpc.annotations.PlaceProperties;
 
 public class CrmSiteMap {
 
-    public static String EDITOR_ARG_NAME_BUILDING = "BuildingID";
+    public static String ARG_NAME_ITEM_ID = "ItemID";
 
     @PlaceProperties(caption = "Application Form")
     public static class Login extends AppPlace {
@@ -41,6 +41,11 @@ public class CrmSiteMap {
         @PlaceProperties(caption = "Buildings")
         @NavigationItem(navigLabel = "Buildings")
         public static class Buildings extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Units")
+        @NavigationItem(navigLabel = "Units")
+        public static class Units extends AppPlace {
         }
 
         @PlaceProperties(caption = "Arrears")
@@ -78,6 +83,11 @@ public class CrmSiteMap {
         @PlaceProperties(caption = "Building")
         @NavigationItem(navigLabel = "Building")
         public static class Building extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Unit")
+        @NavigationItem(navigLabel = "Unit")
+        public static class Unit extends AppPlace {
         }
     }
 

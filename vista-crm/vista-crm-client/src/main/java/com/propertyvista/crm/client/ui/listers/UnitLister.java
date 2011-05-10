@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-03
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
@@ -29,23 +29,23 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.portal.domain.Building;
+import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.portal.domain.AptUnit;
 
-public class BuildingLister extends ListerBase<Building> {
+public class UnitLister extends ListerBase<AptUnit> {
 
-    public BuildingLister() {
-        super(Building.class);
+    public UnitLister() {
+        super(AptUnit.class);
 
         // add editing on double-click: 
         getListPanel().getDataTable().addDoubleClickHandler(new DoubleClickHandler() {
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
-                AppPlace link = new CrmSiteMap.Editors.Building();
+                AppPlace link = new CrmSiteMap.Editors.Unit();
                 // put selected item ID in link arguments:
                 HashMap<String, String> args = new HashMap<String, String>();
                 int selectedRow = getListPanel().getDataTable().getSelectedRow();
-                Building item = getListPanel().getDataTable().getDataTableModel().getData().get(selectedRow).getEntity();
+                AptUnit item = getListPanel().getDataTable().getDataTableModel().getData().get(selectedRow).getEntity();
                 args.put(CrmSiteMap.ARG_NAME_ITEM_ID, item.getPrimaryKey().toString());
                 link.setArgs(args);
 
@@ -55,33 +55,38 @@ public class BuildingLister extends ListerBase<Building> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Building>> columnDescriptors, Building proto) {
+    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<AptUnit>> columnDescriptors, AptUnit proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingType()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.website()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.email().emailAddress()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address().province()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address().country()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitType()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitEcomomicStatus()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitEcomomicStatusDescr()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floor()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.suiteNumber()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.building().name()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.area()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bedrooms()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bathrooms()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.currentOccupancies()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.avalableForRent()));
     }
 
     @Override
     public void populateData(final int pageNumber) {
-        BuildingCrudService service = GWT.create(BuildingCrudService.class);
+        UnitCrudService service = GWT.create(UnitCrudService.class);
         if (service != null) {
-            EntitySearchCriteria<Building> criteria = new EntitySearchCriteria<Building>(Building.class);
+            EntitySearchCriteria<AptUnit> criteria = new EntitySearchCriteria<AptUnit>(AptUnit.class);
             criteria.setPageSize(getListPanel().getPageSize());
             criteria.setPageNumber(pageNumber);
 
-            service.search(new AsyncCallback<EntitySearchResult<Building>>() {
+            service.search(new AsyncCallback<EntitySearchResult<AptUnit>>() {
                 @Override
                 public void onFailure(Throwable caught) {
                 }
 
                 @Override
-                public void onSuccess(EntitySearchResult<Building> result) {
-                    BuildingLister.this.getListPanel().populateData(result.getData(), pageNumber, result.hasMoreData());
+                public void onSuccess(EntitySearchResult<AptUnit> result) {
+                    UnitLister.this.getListPanel().populateData(result.getData(), pageNumber, result.hasMoreData());
                 }
             }, criteria);
         }

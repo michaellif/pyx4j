@@ -27,6 +27,8 @@ import com.propertyvista.crm.client.activity.BuildingListerActivity;
 import com.propertyvista.crm.client.activity.DashboardActivity;
 import com.propertyvista.crm.client.activity.ReportActivity;
 import com.propertyvista.crm.client.activity.ResetPasswordActivity;
+import com.propertyvista.crm.client.activity.UnitEditorActivity;
+import com.propertyvista.crm.client.activity.UnitListerActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class MainActivityMapper implements ActivityMapper {
@@ -40,6 +42,10 @@ public class MainActivityMapper implements ActivityMapper {
     Provider<BuildingListerActivity> buildingListerActivityProvider;
 
     Provider<BuildingEditorActivity> buildingEditorActivityProvider;
+
+    Provider<UnitListerActivity> unitListerActivityProvider;
+
+    Provider<UnitEditorActivity> unitEditorActivityProvider;
 
     Provider<ArrearsListerActivity> arrearsListerActivityProvider;
 
@@ -62,6 +68,10 @@ public class MainActivityMapper implements ActivityMapper {
 
     final Provider<BuildingEditorActivity> buildingEditorActivityProvider,
 
+    final Provider<UnitListerActivity> unitListerActivityProvider,
+
+    final Provider<UnitEditorActivity> unitEditorActivityProvider,
+
     final Provider<ArrearsListerActivity> arrearsListerActivityProvider,
 
     final Provider<DashboardActivity> dashboardActivityProvider,
@@ -72,7 +82,10 @@ public class MainActivityMapper implements ActivityMapper {
 //        this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
         this.resetPasswordActivityProvider = resetPasswordActivityProvider;
         this.buildingListerActivityProvider = buildingListerActivityProvider;
+// Listers:      
         this.buildingEditorActivityProvider = buildingEditorActivityProvider;
+        this.unitListerActivityProvider = unitListerActivityProvider;
+        this.unitEditorActivityProvider = unitEditorActivityProvider;
         this.arrearsListerActivityProvider = arrearsListerActivityProvider;
         this.dashboardActivityProvider = dashboardActivityProvider;
         this.reportActivityProvider = reportActivityProvider;
@@ -91,12 +104,16 @@ public class MainActivityMapper implements ActivityMapper {
 // Listers:      
         } else if (place instanceof CrmSiteMap.Properties.Buildings) {
             return buildingListerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Properties.Units) {
+            return unitListerActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Properties.Arrears) {
             return arrearsListerActivityProvider.get().withPlace(place);
 // Editors:      
         } else if (place instanceof CrmSiteMap.Editors.Building) {
             return buildingEditorActivityProvider.get().withPlace(place);
-
+        } else if (place instanceof CrmSiteMap.Editors.Unit) {
+            return unitEditorActivityProvider.get().withPlace(place);
+// Others:      
         } else if (place instanceof CrmSiteMap.Dashboard) {
             return dashboardActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Report) {

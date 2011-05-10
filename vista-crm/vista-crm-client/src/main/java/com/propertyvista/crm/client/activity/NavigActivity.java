@@ -32,6 +32,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Properties.Budgets;
 import com.propertyvista.crm.rpc.CrmSiteMap.Properties.Buildings;
 import com.propertyvista.crm.rpc.CrmSiteMap.Properties.CityOrders;
 import com.propertyvista.crm.rpc.CrmSiteMap.Properties.PurchaseOrders;
+import com.propertyvista.crm.rpc.CrmSiteMap.Properties.Units;
 import com.propertyvista.crm.rpc.CrmSiteMap.Tenants.AllTenants;
 import com.propertyvista.crm.rpc.CrmSiteMap.Tenants.CurrentTenants;
 
@@ -76,6 +77,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         //Properties
         NavigFolder folder = new NavigFolder("Properties");
         folder.addNavigItem(new Buildings());
+        folder.addNavigItem(new Units());
         folder.addNavigItem(new Arrears());
         folder.addNavigItem(new Budgets());
         folder.addNavigItem(new PurchaseOrders());

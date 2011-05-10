@@ -45,6 +45,7 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 
@@ -83,6 +84,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
         });
 
         listPanel.removeUpperActionsBar();
+        DOM.setStyleAttribute(listPanel.getDataTable().getElement(), "tableLayout", "auto");
 
         // -------------------------
 
@@ -149,7 +151,26 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
     // Filter Data stuff:
 
     public enum Operands {
-        Is, IsNot, Contains, DoesNotContain, BeginsWith, EndsWith, LessThen, GreaterThen
+        Is,
+
+        IsNot,
+
+        Contains,
+
+        DoesNotContain,
+
+        BeginsWith,
+
+        EndsWith,
+
+        LessThen,
+
+        GreaterThen;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     public static class FilterData {

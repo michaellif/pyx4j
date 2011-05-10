@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-04
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
@@ -34,21 +34,21 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.portal.domain.Building;
+import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.portal.domain.AptUnit;
 
-public class BuildingEditorViewImpl extends DockLayoutPanel implements BuildingEditorView {
+public class UnitEditorViewImpl extends DockLayoutPanel implements UnitEditorView {
 
-    private static I18n i18n = I18nFactory.getI18n(BuildingEditorViewImpl.class);
+    private static I18n i18n = I18nFactory.getI18n(UnitEditorViewImpl.class);
 
-    private final BuildingEditorForm editor = new BuildingEditorForm();
+    private final UnitEditorForm editor = new UnitEditorForm();
 
-    private final BuildingCrudService service = GWT.create(BuildingCrudService.class);
+    private final UnitCrudService service = GWT.create(UnitCrudService.class);
 
-    public BuildingEditorViewImpl() {
+    public UnitEditorViewImpl() {
         super(Unit.EM);
         setSize("100%", "100%");
-        addNorth(new CrmHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(new CrmSiteMap.Editors.Building()).getCaption()), 3);
+        addNorth(new CrmHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(new CrmSiteMap.Editors.Unit()).getCaption()), 3);
         addSouth(createButtons(), 4);
 
         editor.initialize();
@@ -58,10 +58,10 @@ public class BuildingEditorViewImpl extends DockLayoutPanel implements BuildingE
     @Override
     public void setEditingEntityId(long entityId) {
         if (service != null) {
-            service.retrieve(new AsyncCallback<Building>() {
+            service.retrieve(new AsyncCallback<AptUnit>() {
 
                 @Override
-                public void onSuccess(Building result) {
+                public void onSuccess(AptUnit result) {
                     editor.populate(result);
                 }
 
@@ -83,10 +83,10 @@ public class BuildingEditorViewImpl extends DockLayoutPanel implements BuildingE
                 }
 
                 if (service != null) {
-                    service.save(new AsyncCallback<Building>() {
+                    service.save(new AsyncCallback<AptUnit>() {
 
                         @Override
-                        public void onSuccess(Building result) {
+                        public void onSuccess(AptUnit result) {
                             History.back();
                         }
 

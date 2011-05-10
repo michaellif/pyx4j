@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-04
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
@@ -19,31 +19,23 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.pyx4j.site.rpc.AppPlace;
+import com.propertyvista.crm.client.ui.listers.UnitListerView;
 
-import com.propertyvista.crm.client.ui.editors.BuildingEditorView;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+public class UnitListerActivity extends AbstractActivity {
 
-public class BuildingEditorActivity extends AbstractActivity {
-
-    private final BuildingEditorView view;
+    private final UnitListerView view;
 
     @Inject
-    public BuildingEditorActivity(BuildingEditorView view) {
+    public UnitListerActivity(UnitListerView view) {
         this.view = view;
     }
 
-    public BuildingEditorActivity withPlace(Place place) {
-        String stepArg = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
-        if (stepArg != null) {
-            view.setEditingEntityId(Long.valueOf(stepArg));
-        }
-
+    public UnitListerActivity withPlace(Place place) {
         return this;
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
+    public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
+        containerWidget.setWidget(view);
     }
 }

@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-04
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
@@ -21,19 +21,19 @@ import com.google.inject.Inject;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.editors.BuildingEditorView;
+import com.propertyvista.crm.client.ui.editors.UnitEditorView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
-public class BuildingEditorActivity extends AbstractActivity {
+public class UnitEditorActivity extends AbstractActivity {
 
-    private final BuildingEditorView view;
+    private final UnitEditorView view;
 
     @Inject
-    public BuildingEditorActivity(BuildingEditorView view) {
+    public UnitEditorActivity(UnitEditorView view) {
         this.view = view;
     }
 
-    public BuildingEditorActivity withPlace(Place place) {
+    public UnitEditorActivity withPlace(Place place) {
         String stepArg = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
         if (stepArg != null) {
             view.setEditingEntityId(Long.valueOf(stepArg));

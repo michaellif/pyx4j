@@ -38,6 +38,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
@@ -45,17 +47,28 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     protected final EntityListPanel<E> listPanel;
 
-    protected enum RefreshInterval {
-        Never(-1, "Never"), min15L(15, "15 min"), min30(30, "30 min"), hour1(60, "1 hour"), hour2(120, "2 hours");
+    enum RefreshInterval {
 
-        RefreshInterval(int value, String name) {
+        @Translation("Never")
+        Never(-1),
+
+        @Translation("15 min")
+        min15L(15),
+
+        @Translation("30 min")
+        min30(30),
+
+        @Translation("1 hours")
+        hour1(60),
+
+        @Translation("2 hours")
+        hour2(120);
+
+        RefreshInterval(int value) {
             this.value = value;
-            this.name = name;
         }
 
         private final int value;
-
-        private final String name;
 
         public int value() {
             return value;
@@ -63,7 +76,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
         @Override
         public String toString() {
-            return name;
+            return I18nEnum.tr(this);
         }
     };
 
