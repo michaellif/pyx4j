@@ -19,16 +19,18 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.propertyvista.common.client.events.UserMessageEvent;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.common.client.events.UserMessageEvent;
 
 public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter<E>> extends FlowPanel implements WizardStepView<E, T> {
 
@@ -52,12 +54,12 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
                 AppSite.getEventBus().fireEvent(new UserMessageEvent(null, null, null));
                 form.setVisited(true);
                 if (!form.isValid()) {
+                    Window.scrollTo(0, 0);
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
                 presenter.save(getValue());
-                scrollToTop();
+                Window.scrollTo(0, 0);
             }
-
         });
 
         HTML separator = new HTML();
@@ -97,8 +99,4 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
     protected CEntityForm<E> getForm() {
         return form;
     }
-
-    public static native void scrollToTop() /*-{
-		$wnd.scroll(0, 0);
-    }-*/;
 }
