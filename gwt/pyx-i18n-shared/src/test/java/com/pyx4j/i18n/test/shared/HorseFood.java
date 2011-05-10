@@ -20,20 +20,14 @@
  */
 package com.pyx4j.i18n.test.shared;
 
-import junit.framework.TestCase;
+public enum HorseFood {
 
-import com.pyx4j.i18n.shared.I18nEnum;
+    Hoof,
 
-public class I18nEnumTest extends TestCase {
+    Grain;
 
-    public void testTranslation() {
-        assertEquals("Dog", I18nEnum.tr(Pet.dog));
-        assertEquals("Cat", I18nEnum.tr(Pet.cat));
-        assertEquals("ferret", I18nEnum.tr(Pet.ferret));
-    }
-
-    public void testUnAnotedEnum() {
-        assertEquals("Hoof", I18nEnum.tr(HorseFood.Hoof));
-        assertEquals("Grain", I18nEnum.tr(HorseFood.Grain));
+    @Override
+    public String toString() {
+        return this.name() + "Mix";
     }
 }

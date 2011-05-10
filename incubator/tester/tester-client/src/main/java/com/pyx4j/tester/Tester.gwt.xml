@@ -16,6 +16,7 @@
 
 	<inherits name='com.pyx4j.serialization.test.SerializationTests'/>
 	<inherits name='com.pyx4j.webstorage.test.HTML5LocalStorageTests'/>
+    <inherits name='com.pyx4j.i18n.test.I18NSharedTests'/>
 	
 	<inherits name='com.pyx4j.log4gwt.Log4gwtRPCAppender'/>
 

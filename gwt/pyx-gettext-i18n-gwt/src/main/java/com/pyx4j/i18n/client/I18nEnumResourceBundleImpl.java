@@ -35,7 +35,12 @@ public abstract class I18nEnumResourceBundleImpl implements I18nEnumResourceBund
 
     @Override
     public String getTranslatedString(Enum<?> enumValue) {
-        return translationsMap.get(enumValue);
+        String mapped = translationsMap.get(enumValue);
+        if (mapped != null) {
+            return mapped;
+        } else {
+            return enumValue.name();
+        }
     }
 
     protected void add(Enum<?> enumValue, String translation) {
