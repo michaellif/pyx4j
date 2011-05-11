@@ -21,6 +21,7 @@
         <module>vista-portal-domain</module>
         <module>vista-portal-rpc</module>
         <module>vista-portal-client</module>
+        <module>vista-portal-ptapp</module>
         <module>vista-portal-tester</module>
         <module>vista-portal-admin</module>
         <module>vista-portal-server</module>
