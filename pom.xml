@@ -183,6 +183,7 @@
     <properties>
         <appGWTModuleSufix></appGWTModuleSufix>
         <scm.revision></scm.revision>
+        <axis2Version>1.5.4</axis2Version>
     </properties>
 
     <dependencyManagement>
