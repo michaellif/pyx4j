@@ -19,13 +19,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
-import com.propertyvista.portal.rpc.pt.SiteMap;
-import com.propertyvista.portal.rpc.pt.services.ActivationService;
-
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.site.rpc.AppPlaceInfo;
+
+import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.services.ActivationService;
 
 public class MessageTemplates {
 
@@ -51,10 +52,9 @@ public class MessageTemplates {
         return wrapHtml(i18n.tr("Dear {0},<br/>\n"
                 + "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n"
                 + "Click the link below to go to the Property Vista site and create new password for your account:<br/>\n"
-                + "    <a style=\"color:#929733\" href=\"{1}\">Change Your Password</a>", name,
+                + "    <a style=\"color:#929733\" href=\"{1}{2}\">Change Your Password</a>", name,
 
-        AppPlaceInfo.absoluteUrl(ServerSideConfiguration.instance().getMainApplicationURL(), SiteMap.ResetPassword.class, ActivationService.PASSWORD_TOKEN,
-                token)));
+        ServerSideConfiguration.instance().getMainApplicationURL(),
+                AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, SiteMap.ResetPassword.class, ActivationService.PASSWORD_TOKEN, token)));
     }
-
 }

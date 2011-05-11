@@ -178,6 +178,11 @@
 
     <servlet-mapping>
         <servlet-name>RemoteServiceServlet</servlet-name>
+        <url-pattern>/ptapp/srv/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RemoteServiceServlet</servlet-name>
         <url-pattern>/tester/srv/*</url-pattern>
     </servlet-mapping>
 
@@ -209,7 +214,7 @@
 	<!-- See ServletMapping class when moving to Servlet v3 -->
     <servlet-mapping>
         <servlet-name>DownloadServlet</servlet-name>
-        <url-pattern>/portal/download/*</url-pattern>
+        <url-pattern>/ptapp/download/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -230,7 +235,7 @@
     <!-- See ServletMapping class when moving to Servlet v3 -->
     <servlet-mapping>
         <servlet-name>ApplicationDocumentServlet</servlet-name>
-        <url-pattern>/portal/application_document</url-pattern>
+        <url-pattern>/ptapp/application_document</url-pattern>
     </servlet-mapping>
 
     <servlet>

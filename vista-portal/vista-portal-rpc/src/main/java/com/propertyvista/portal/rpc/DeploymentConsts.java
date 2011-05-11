@@ -7,20 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 23, 2011
+ * Created on 2011-05-11
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.unit.config;
+package com.propertyvista.portal.rpc;
 
-public enum ApplicationId {
+public interface DeploymentConsts {
 
-    portal,
+    public static final String PORTAL_URL = "";
 
-    ptapp,
+    public static final String PTAPP_URL = "ptapp/";
 
-    crm,
-
-    tester
+    public static final String CRM_URL = "crm/";
 
 }

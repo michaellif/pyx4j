@@ -36,7 +36,7 @@ abstract class WizardBaseSeleniumTestCase extends VistaBaseSeleniumTestCase {
 
     @Override
     protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {
-        return new VistaSeleniumTestConfiguration(ApplicationId.portal);
+        return new VistaSeleniumTestConfiguration(ApplicationId.ptapp);
     }
 
     protected void saveAndContinue() {
