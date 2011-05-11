@@ -2,7 +2,7 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module rename-to="ptapp">
-    <inherits name='com.propertyvista.portal.Client'/>
+    <inherits name='com.propertyvista.portal.ptapp.PtAppSite'/>
 
     <extend-property name="locale" values="en_US"/>
 	<set-property name="locale" value="en_US"/>
