@@ -125,27 +125,9 @@
             <timezone>-5</timezone>
         </developer>
         <developer>
-            <name>Konstantin Lysenko</name>
-            <id>kostya</id>
-            <email>kostya@birchwoodsoftwaregroup.com</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>-5</timezone>
-        </developer>
-        <developer>
             <name>Leon Tager</name>
             <id>leont</id>
             <email>leont@birchwoodsoftwaregroup.com</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>-5</timezone>
-        </developer>
-        <developer>
-            <name>Mark Levitin</name>
-            <id>markl</id>
-            <email>markl@birchwoodsoftwaregroup.com</email>
             <roles>
                 <role>developer</role>
             </roles>
