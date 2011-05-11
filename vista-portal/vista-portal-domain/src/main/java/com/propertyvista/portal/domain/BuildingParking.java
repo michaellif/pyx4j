@@ -7,45 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 27, 2011
- * @author Misha
+ * Created on 2011-05-10
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.portal.domain;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.portal.domain.pt.IAddress;
+public interface BuildingParking extends IEntity {
 
-@EmbeddedEntity
-@ToStringFormat("{0} {1} {2} {3}, {4} {5}")
-public interface Address extends IEntity, IAddress {
+    IPrimitive<String> description();
 
     @Translatable
-    public enum AddressType {
+    public enum Type {
 
-        property,
+        indoor,
 
-        mailing,
+        outdoor,
 
-        shipping,
-
-        billing,
-
-        current,
-
-        previous,
-
-        forwarding, // on move out this is the address
-
-        legal_notice,
-
-        termination_notice,
+        covered,
 
         other;
 
@@ -55,7 +40,12 @@ public interface Address extends IEntity, IAddress {
         }
     }
 
-    //    IPrimitive<GeoPoint> location(); for now the database complains about this unknown type
+    @MemberColumn(name = "parkingType")
+    IPrimitive<BuildingParking.Type> type();
 
-    IPrimitive<AddressType> addressType();
+    IPrimitive<Double> levels();
+
+    IPrimitive<Integer> spots();
+
+    IPrimitive<String> notes();
 }

@@ -13,16 +13,16 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.ref.Country;
-import com.propertyvista.portal.domain.ref.CountryReferenceAdapter;
-import com.propertyvista.portal.domain.ref.Province;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.portal.domain.ref.CountryReferenceAdapter;
+import com.propertyvista.portal.domain.ref.Province;
 
 public interface IAddress {
 
@@ -48,5 +48,4 @@ public interface IAddress {
 
     @NotNull
     IPrimitive<String> postalCode();
-
 }

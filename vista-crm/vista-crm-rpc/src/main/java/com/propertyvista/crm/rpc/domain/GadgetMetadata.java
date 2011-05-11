@@ -23,7 +23,7 @@ public interface GadgetMetadata extends IEntity {
         Test, Demo, BuildingLister, BarChartDisplay, PieChartDisplay
     }
 
-    @MemberColumn(name = "gadget_type")
+    @MemberColumn(name = "gadgetType")
     IPrimitive<GadgetType> type();
 
     IPrimitive<String> name();
@@ -36,6 +36,6 @@ public interface GadgetMetadata extends IEntity {
      * Dashboard: 0, 1, 2;
      * Report : -1, 0, 1;
      */
-    @MemberColumn(name = "gadget_column")
+    @MemberColumn(name = "gadgetColumn")
     IPrimitive<Integer> column();
 }

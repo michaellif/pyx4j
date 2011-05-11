@@ -15,11 +15,31 @@ package com.propertyvista.portal.domain;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
+// TODO define basic phone + contactPhone + BuildingPhone etc. which has different types enum...
 public interface Phone extends IEntity {
 
+    @Translatable
     public enum PhoneType {
-        mobile, work, home, work_fax, home_fax, other
+
+        mobile,
+
+        work,
+
+        home,
+
+        work_fax,
+
+        home_fax,
+
+        other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     IPrimitive<PhoneType> phoneType();
@@ -33,5 +53,4 @@ public interface Phone extends IEntity {
      * (max 20 char)
      */
     IPrimitive<String> extension();
-
 }

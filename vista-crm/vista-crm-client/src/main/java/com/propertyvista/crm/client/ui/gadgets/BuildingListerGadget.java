@@ -45,7 +45,7 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingType()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.website()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.email().emailAddress()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address().province()));

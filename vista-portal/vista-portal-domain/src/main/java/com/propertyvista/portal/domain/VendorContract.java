@@ -7,14 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 27, 2011
- * @author Misha
+ * Created on 2011-05-10
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.portal.domain;
 
-import com.pyx4j.entity.shared.IEntity;
+import java.sql.Date;
 
-public interface Contact extends IEntity {
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+public interface VendorContract extends IEntity {
+
+    Vendor vendor();
+
+    @MemberColumn(name = "vendorCost")
+    IPrimitive<Money> cost();
+
+    IPrimitive<Date> expiration();
+
+    IPrimitive<Date> renewal();
 
 }

@@ -7,16 +7,35 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 28, 2011
- * @author Misha
+ * Created on 2011-05-10
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.portal.domain;
 
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface CompanyRole extends IEntity {
+public interface BuildingBoiler extends IEntity {
 
-    IPrimitive<String> name();
+    IPrimitive<String> description();
+
+    @MemberColumn(name = "boilerType")
+    IPrimitive<String> type();
+
+    IPrimitive<String> make();
+
+    @MemberColumn(name = "boilerYear")
+    IPrimitive<Date> year();
+
+    IPrimitive<String> build();
+
+    IPrimitive<String> warrantee();
+
+    IPrimitive<VendorContract> maitenanceContractor();
+
+    IPrimitive<String> notes();
 }

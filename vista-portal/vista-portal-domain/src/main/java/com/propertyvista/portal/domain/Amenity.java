@@ -24,5 +24,4 @@ public interface Amenity extends IEntity {
      */
     @ToString
     IPrimitive<String> name();
-
 }

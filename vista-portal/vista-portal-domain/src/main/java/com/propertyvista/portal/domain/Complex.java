@@ -14,10 +14,15 @@
 package com.propertyvista.portal.domain;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 public interface Complex extends IEntity {
 
-    ISet<Building> buildings();
+    /**
+     * Legal name of the property (max 120 char)
+     */
+    IPrimitive<String> name();
 
+    ISet<Building> buildings();
 }

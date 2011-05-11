@@ -39,7 +39,6 @@ import com.propertyvista.portal.domain.Address;
 import com.propertyvista.portal.domain.Amenity;
 import com.propertyvista.portal.domain.AptUnit;
 import com.propertyvista.portal.domain.Building;
-import com.propertyvista.portal.domain.Building.BuildingType;
 import com.propertyvista.portal.domain.ChargeType;
 import com.propertyvista.portal.domain.Complex;
 import com.propertyvista.portal.domain.Concession;
@@ -211,13 +210,13 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         return propertyProfile;
     }
 
-    private Building createBuilding(String propertyCode, BuildingType buildingType, Complex complex, String website, Address address, List<Phone> phones,
+    private Building createBuilding(String propertyCode, Building.Type buildingType, Complex complex, String website, Address address, List<Phone> phones,
             Email email, PropertyProfile propertyProfile) {
         Building building = EntityFactory.create(Building.class);
 
         building.propertyCode().setValue(propertyCode);
 
-        building.buildingType().setValue(buildingType);
+        building.type().setValue(buildingType);
         //		building.complex().
         building.website().setValue(website);
 
@@ -375,7 +374,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         for (int b = 0; b < DemoData.NUM_RESIDENTIAL_BUILDINGS; b++) {
 
             // building type
-            BuildingType buildingType = RandomUtil.random(BuildingType.values());
+            Building.Type buildingType = RandomUtil.random(Building.Type.values());
 
             Complex complex = null;
             if (b % 3 == 0) {
@@ -473,7 +472,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         sb.append("\n\nLoaded ").append(buildings.size()).append(" buildings\n\n");
         for (Building building : buildings) {
             //            b.append(building.getStringView());
-            sb.append(building.buildingType().getStringView());
+            sb.append(building.type().getStringView());
             sb.append("\t");
             sb.append(building.address().street1().getStringView()).append(", ");
             sb.append(building.address().city().getStringView()).append(" ").append(building.address().province().getStringView()).append(", ");

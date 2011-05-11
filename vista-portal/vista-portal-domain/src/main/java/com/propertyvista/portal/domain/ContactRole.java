@@ -21,5 +21,4 @@ public interface ContactRole extends IEntity {
 
     @ToString
     IPrimitive<String> name();
-
 }

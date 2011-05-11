@@ -62,12 +62,13 @@ public class BuildingEditorForm extends CEntityForm<Building> {
         DecorationData decorData = new DecorationData(14d, 12);
         main.add(new VistaWidgetDecorator(inject(proto().name()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().marketingName()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().marketingDescription()), decorData));
 
 // TODO - add this complex data processing later! :
 //        main.add(new VistaWidgetDecorator(inject(proto().complex()), decorData));
 
         main.add(new VistaWidgetDecorator(inject(proto().propertyCode()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().buildingType()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().type()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().structureDescription()), decorData));
 
         main.add(new VistaWidgetDecorator(inject(proto().website()), decorData));
@@ -78,7 +79,6 @@ public class BuildingEditorForm extends CEntityForm<Building> {
         main.add(inject(proto().phoneList(), createPhonesListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Address")));
-        main.add(inject(proto().address()));
 
 // TODO - add this complex data processing later! :
 //        main.add(inject(proto().contactsList(), createPhonesFolderEditorColumns()));

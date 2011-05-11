@@ -13,10 +13,11 @@
  */
 package com.propertyvista.portal.domain;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.ISet;
 
-public interface Person extends Contact {
+public interface Person extends IEntity {
 
     Name name();
 
