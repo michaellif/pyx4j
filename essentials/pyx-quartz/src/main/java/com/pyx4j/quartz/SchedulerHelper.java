@@ -59,7 +59,7 @@ public class SchedulerHelper {
 
     private final Scheduler scheduler;
 
-    SchedulerHelper() {
+    protected SchedulerHelper() throws SchedulerException {
         Properties quartzProperties = new Properties();
 
         InputStream propIn = null;
@@ -97,7 +97,7 @@ public class SchedulerHelper {
             quartzProperties.put(delegateProperty, OracleDelegate.class.getName());
             break;
         default:
-            throw new Error("Unsupporte ddatabaseType " + rdbConfiguration.databaseType());
+            throw new Error("Unsupporte databaseType " + rdbConfiguration.databaseType());
         }
 
         // Lets quartz manage its connections pool for now.
@@ -110,25 +110,23 @@ public class SchedulerHelper {
         quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_PASSWORD, rdbConfiguration.password());
         quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_MAX_CONNECTIONS, "4");
 
-        try {
-            schedulerFactory = new StdSchedulerFactory(quartzProperties);
+        schedulerFactory = new StdSchedulerFactory(quartzProperties);
 
-            scheduler = schedulerFactory.getScheduler();
-            scheduler.start();
-
-        } catch (SchedulerException e) {
-            log.error("quartz initialization error", e);
-            throw new Error("quartz initialization error", e);
-        }
+        scheduler = schedulerFactory.getScheduler();
+        scheduler.start();
 
     }
 
     public static synchronized void init() {
-        if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-            createQuartzTables();
+        try {
+            if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                createQuartzTables();
+            }
+            instance = new SchedulerHelper();
+        } catch (Throwable e) {
+            log.error("quartz initialization error", e);
+            throw new Error("quartz initialization error", e);
         }
-
-        instance = new SchedulerHelper();
     }
 
     public static synchronized void shutdown() {
@@ -138,8 +136,8 @@ public class SchedulerHelper {
                 if (instance.scheduler != null) {
                     instance.scheduler.shutdown();
                 }
-            } catch (SchedulerException e) {
-                log.error("error", e);
+            } catch (Throwable e) {
+                log.error("quartz shutdown error", e);
             } finally {
                 instance = null;
             }
