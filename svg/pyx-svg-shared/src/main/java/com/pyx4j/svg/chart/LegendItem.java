@@ -31,55 +31,55 @@ public class LegendItem implements IsSvgElement {
 
     private final int X_SHIFT = 10;
 
-    private int Y_SHIFT;//TODO ideally needs to be calculated. Need to know text height 
-
     private final LegendIconType iconType;
 
     private final SvgFactory svgFactory;
 
     private Shape icon;
 
-    private Text text;
+    private final Text text;
 
     private int xc = 0;
 
     private int yc = 0;
 
-    private int length = 5;
+    private int length = 7;
 
     private String color = "#000";
 
     private final Group group;
 
-    public LegendItem(SvgFactory svgFactory, LegendIconType iconType, int x, int y, int length) {
+    //private 
+
+    public LegendItem(SvgFactory svgFactory, String text, LegendIconType iconType, int x, int y) {
         this.iconType = iconType;
         this.svgFactory = svgFactory;
 
         group = svgFactory.createGroup();
-
         xc = x;
         yc = y;
-        this.length = length;
+        this.text = svgFactory.createText(text, xc + X_SHIFT + length, y);
+        //move Y to be in the middle of the text
+        String fs = this.text.getAttribute("font-size");
+
+        if (fs == null)
+            yc = y - Text.DEFAULT_FONT_SIZE / 2;
+        else
+            //assume that font size contains digits only 
+            yc = y - Integer.valueOf(fs) / 2;
+
         switch (iconType) {
         case Rect: {
-            this.icon = svgFactory.createRect(xc, yc, length, length, 0, 0);
-            Y_SHIFT = 10;
+            length = 14;
+            this.icon = svgFactory.createRect(xc - length / 2, yc - length / 2, length, length, 0, 0);
             break;
         }
         default: {
-            Y_SHIFT = 4;
             this.icon = svgFactory.createCircle(xc, yc, length);
         }
         }
         this.setColor(color);
-        text = null;
         group.add(this.icon);
-
-    }
-
-    public LegendItem(SvgFactory svgFactory, String text, LegendIconType iconType, int x, int y, int length) {
-        this(svgFactory, iconType, x, y, length);
-        this.text = svgFactory.createText(text, xc + X_SHIFT + length, yc + Y_SHIFT);
         group.add(this.text);
     }
 
@@ -95,15 +95,36 @@ public class LegendItem implements IsSvgElement {
         return iconType;
     }
 
-    //TODO create a set of methods to change the initial size and position of the group 
     public void setColor(String color) {
         this.color = color;
         icon.setFill(color);
+        icon.setStroke(color);
     }
 
     @Override
     public SvgElement asSvgElement() {
         return group;
+    }
+
+    /**
+     * TODO need to calculate font width;
+     * 
+     * @return
+     */
+    public int getWidth() {
+        int textlen = text.getTextValue() == null ? 0 : text.getTextValue().length();
+        int width = length + X_SHIFT + (int) (textlen * Text.DEFAULT_FONT_SIZE * .65);
+        if (iconType == LegendIconType.Circle)
+            width += length;
+        return width;
+    }
+
+    public int getHeight() {
+        return Text.DEFAULT_FONT_SIZE;
+    }
+
+    public int getIconSize() {
+        return length;
     }
 
 }

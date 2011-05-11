@@ -20,10 +20,8 @@
  */
 package com.pyx4j.svg.gwt;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.svg.basic.GraphicsElement;
 
-public class GraphicsElementImpl extends Widget implements GraphicsElement {
+public class GraphicsElementImpl extends SvgElementImpl implements GraphicsElement {
 
 }

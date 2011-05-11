@@ -20,7 +20,9 @@
  */
 package com.pyx4j.svg.test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.pyx4j.svg.basic.Circle;
 import com.pyx4j.svg.basic.Ellipse;
@@ -36,13 +38,76 @@ import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.BarChart;
 import com.pyx4j.svg.chart.BarChartModel;
 import com.pyx4j.svg.chart.BarChartModel.BarChartItem;
+import com.pyx4j.svg.chart.ChartTheme;
+import com.pyx4j.svg.chart.DataSource;
 import com.pyx4j.svg.chart.LegendIconType;
 import com.pyx4j.svg.chart.LegendItem;
 import com.pyx4j.svg.chart.PieChart;
+import com.pyx4j.svg.chart.PieChart2D;
 import com.pyx4j.svg.chart.PieChartModel;
 import com.pyx4j.svg.chart.PieChartModel.PieChartSegment;
 
 public class SvgTestFactory {
+
+    public static SvgRoot createPieChart2DTest(SvgFactory factory, int x, int y) {
+        SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
+        DataSource ds = new DataSource();
+        List<Double> values = new ArrayList<Double>(5);
+        values.add(180.0);
+        values.add(160.0);
+        values.add(10.0);
+        ds.addDataSet(ds.new Metric("Building 1"), values);
+
+        values = new ArrayList<Double>(5);
+        values.add(880.0);
+        values.add(580.0);
+        values.add(250.0);
+        ds.addDataSet(ds.new Metric("Building 2"), values);
+
+        values = new ArrayList<Double>(5);
+        values.add(380.0);
+        values.add(0.0);
+        values.add(380.0);
+        ds.addDataSet(ds.new Metric("Building 3"), values);
+
+        values = new ArrayList<Double>(5);
+        values.add(380.0);
+        values.add(300.0);
+        values.add(300.0);
+        ds.addDataSet(ds.new Metric("Building 4"), values);
+
+        values = new ArrayList<Double>(5);
+        values.add(280.0);
+        values.add(300.0);
+        values.add(100.0);
+        ds.addDataSet(ds.new Metric("Building 5"), values);
+
+        values = new ArrayList<Double>(5);
+        values.add(80.0);
+        values.add(300.0);
+        values.add(100.0);
+        ds.addDataSet(ds.new Metric("Building 6"), values);
+
+        values = new ArrayList<Double>(5);
+        values.add(480.0);
+        values.add(200.0);
+        values.add(101.0);
+        ds.addDataSet(ds.new Metric("Building 7"), values);
+
+        //series descriptors
+        List<String> sd = new ArrayList<String>(3);
+        sd.add("2008");
+        sd.add("2009");
+        sd.add("2010");
+        ds.setSeriesDescription(sd);
+
+        PieChart2D pchart = new PieChart2D(factory, ds, 100, ChartTheme.Bright, true);
+        g.add(pchart);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
+        return svgroot;
+    }
 
     public static SvgRoot createTestRect(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
@@ -163,9 +228,9 @@ public class SvgTestFactory {
     public static SvgRoot createTestLegendItem(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
         Group g = factory.createGroup();
-        LegendItem lc = new LegendItem(factory, "Property 1", LegendIconType.Circle, 20, 25, 10);
+        LegendItem lc = new LegendItem(factory, "Property 1", LegendIconType.Circle, 20, 25);
         lc.setColor("blue");
-        LegendItem lr = new LegendItem(factory, "Property 2", LegendIconType.Rect, 20, 55, 15);
+        LegendItem lr = new LegendItem(factory, "Property 2", LegendIconType.Rect, 20, 55);
         lr.setColor("green");
         g.add(lc);
         g.add(lr);
@@ -179,10 +244,12 @@ public class SvgTestFactory {
         Group g = factory.createGroup();
         PieChartModel pchartModel = new PieChartModel();
         pchartModel.addSegment(new PieChartSegment(3, "p1", "red"));
-        pchartModel.addSegment(new PieChartSegment(5, "p2", "blue"));
-        pchartModel.addSegment(new PieChartSegment(7, "p3", "green"));
-        pchartModel.addSegment(new PieChartSegment(9, "p4", "yellow"));
-        pchartModel.addSegment(new PieChartSegment(11, "p5", "grey"));
+        //  pchartModel.addSegment(new PieChartSegment(5, "p2", "blue"));
+/*
+ * pchartModel.addSegment(new PieChartSegment(7, "p3", "green"));
+ * pchartModel.addSegment(new PieChartSegment(9, "p4", "yellow"));
+ * pchartModel.addSegment(new PieChartSegment(11, "p5", "grey"))
+ */     ;
         PieChart pchart = new PieChart(factory, pchartModel, 60);
         g.add(pchart);
         g.setTransform("translate(" + x + "," + y + ")");

@@ -123,7 +123,7 @@ public class BarChart implements IsSvgElement {
             String title;
             for (int i = 0; i < 3; i++) {
                 title = "property: " + i;
-                LegendItem legend = new LegendItem(svgFactory, title, LegendIconType.Rect, legX, legY, 15);
+                LegendItem legend = new LegendItem(svgFactory, title, LegendIconType.Rect, legX, legY);
                 if (i % 3 == 0) {
                     color = "#888";
                 } else if (i % 3 == 1) {

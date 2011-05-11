@@ -34,12 +34,12 @@ public class ContainerElementImpl extends SvgElementImpl implements ContainerEle
 
     @Override
     public void add(SvgElement element) {
-        getElement().appendChild(((ShapeImpl) element).getElement());
+        getElement().appendChild(((SvgElementImpl) element).getElement());
     }
 
     @Override
     public void add(IsSvgElement element) {
-        getElement().appendChild(((ContainerElementImpl) element.asSvgElement()).getElement());
+        add(element.asSvgElement());
     }
 
 }

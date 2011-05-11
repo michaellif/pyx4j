@@ -20,7 +20,8 @@
  */
 package com.pyx4j.svg.basic;
 
-
 public interface SvgElement {
+    public void setAttribute(String param, String value);
 
+    public String getAttribute(String param);
 }

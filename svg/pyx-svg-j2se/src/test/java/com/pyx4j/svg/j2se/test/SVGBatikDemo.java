@@ -48,12 +48,8 @@ public class SVGBatikDemo {
         Document doc = ((SvgRootImpl) svgroot).getDocument();
 
         ((SvgRootImpl) svgroot).setAttributeNS(null, "width", "800");
-        ((SvgRootImpl) svgroot).setAttributeNS(null, "height", "1400");
+        ((SvgRootImpl) svgroot).setAttributeNS(null, "height", "2000");
 
-        /**
-         * TODO Most likely will not render properly. Finish it up when the JSVGCanvas is
-         * resolved
-         */
         SvgTestFactory.createTestRect(factory, 10, 10);
         SvgTestFactory.createTestLine(factory, 10, 110);
         SvgTestFactory.createTestPath(factory, 10, 210);
@@ -63,8 +59,10 @@ public class SVGBatikDemo {
         SvgTestFactory.createTestPolygon(factory, 10, 610);
         SvgTestFactory.createTestText(factory, 10, 710);
         SvgTestFactory.createTestLegendItem(factory, 10, 810);
-        SvgTestFactory.createTestPieChart(factory, 10, 910);
-        SvgTestFactory.createTestBarChart(factory, 10, 1100);
+        SvgTestFactory.createPieChart2DTest(factory, 10, 910);
+        /*
+         * SvgTestFactory.createTestBarChart(factory, 10, 1100);
+         */
 
         SVGGraphics2D g = new SVGGraphics2D(doc);
         g.setSVGCanvasSize(new Dimension(800, 1400));
@@ -86,5 +84,4 @@ public class SVGBatikDemo {
         f.setVisible(true);
 
     }
-
 }

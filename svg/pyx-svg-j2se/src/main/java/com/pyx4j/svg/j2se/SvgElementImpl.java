@@ -47,12 +47,18 @@ public class SvgElementImpl implements SvgElement {
         element.setAttributeNS(attr0, attr1, attr2);
     }
 
+    @Override
     public void setAttribute(String attr1, String attr2) {
         element.setAttribute(attr1, attr2);
     }
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public String getAttribute(String param) {
+        return element.getAttribute(param);
     }
 
 }

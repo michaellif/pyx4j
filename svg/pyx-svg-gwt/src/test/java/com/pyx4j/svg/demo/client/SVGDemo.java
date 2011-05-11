@@ -111,17 +111,20 @@ public class SVGDemo implements EntryPoint {
 
         //=========================================//
 
-        content.add(new HTML("Pie Chart"));
-        svgPanel = SvgTestFactory.createTestPieChart(svgFactory, 0, 0);
-        ((Widget) svgPanel).setSize("300px", "200px");
+        content.add(new HTML("Multi-Series Pie Chart"));
+        svgPanel = SvgTestFactory.createPieChart2DTest(svgFactory, 0, 0);
+        //SvgTestFactory.createTestPieChart(svgFactory, 0, 0);
+        ((Widget) svgPanel).setSize("450px", "1250px");
         content.add((Widget) svgPanel);
 
         //=========================================//
 
-        content.add(new HTML("Bar Chart"));
-        svgPanel = SvgTestFactory.createTestBarChart(svgFactory, 0, 0);
-        ((Widget) svgPanel).setSize("750px", "150px");
-        content.add((Widget) svgPanel);
+/*
+ * content.add(new HTML("Bar Chart"));
+ * svgPanel = SvgTestFactory.createTestBarChart(svgFactory, 0, 0);
+ * ((Widget) svgPanel).setSize("750px", "150px");
+ * content.add((Widget) svgPanel);
+ */
 
     }
 }

@@ -14,41 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 1, 2011
- * @author michaellif
+ * Created on May 11, 2011
+ * @author Dad
  * @version $Id$
  */
 package com.pyx4j.svg.gwt;
 
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.svg.basic.ContainerElement;
-import com.pyx4j.svg.basic.IsSvgElement;
 import com.pyx4j.svg.basic.SvgElement;
 
-public class ContainerElementImpl extends ComplexPanel implements ContainerElement {
-
-    @Override
-    public void add(SvgElement w) {
-        super.add((Widget) w, getElement());
-    }
-
-    @Override
-    public void add(IsSvgElement element) {
-        add(element.asSvgElement());
-    }
-
-    @Override
-    public void setTransform(String transform) {
-        SvgDOM.setAttributeNS(getElement(), "transform", transform);
-
-    }
+public class SvgElementImpl extends Widget implements SvgElement {
 
     @Override
     public void setAttribute(String param, String value) {
         getElement().setAttribute(param, value);
-
     }
 
     @Override

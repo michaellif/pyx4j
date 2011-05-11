@@ -21,5 +21,7 @@
 package com.pyx4j.svg.basic;
 
 public interface Text extends Shape {
+    public static final int DEFAULT_FONT_SIZE = 12;
 
+    public String getTextValue();
 }

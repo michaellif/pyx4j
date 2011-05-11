@@ -128,7 +128,7 @@ public class PieChart implements IsSvgElement {
             group.add(facePath);
 
             if (model.isWithLegend()) {
-                LegendItem legend = new LegendItem(svgFactory, segment.getCaption(), LegendIconType.Circle, legX, legY, 6);
+                LegendItem legend = new LegendItem(svgFactory, segment.getCaption(), LegendIconType.Circle, legX, legY);
                 legend.setColor(segment.getColor());
                 legY = legY + V_SHIFT;
                 group.add(legend);
