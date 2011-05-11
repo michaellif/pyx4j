@@ -33,9 +33,9 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.portal.client.ptapp.resources.PortalImages;
 import com.propertyvista.portal.client.ptapp.resources.PortalResources;
-import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 

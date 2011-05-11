@@ -27,8 +27,9 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
-import com.propertyvista.portal.domain.DemoData;
-import com.propertyvista.portal.domain.VistaBehavior;
+
+import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep.Status;

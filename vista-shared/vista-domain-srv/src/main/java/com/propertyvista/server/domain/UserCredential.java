@@ -15,8 +15,8 @@ package com.propertyvista.server.domain;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.User;
-import com.propertyvista.portal.domain.VistaBehavior;
+import com.propertyvista.common.domain.User;
+import com.propertyvista.common.domain.VistaBehavior;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;

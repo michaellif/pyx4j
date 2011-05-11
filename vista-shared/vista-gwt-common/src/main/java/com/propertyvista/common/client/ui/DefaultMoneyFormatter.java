@@ -20,7 +20,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.IFormat;
 
-import com.propertyvista.portal.domain.Money;
+import com.propertyvista.common.domain.Money;
 import com.propertyvista.portal.domain.util.DomainUtil;
 
 public class DefaultMoneyFormatter implements IFormat<Money> {

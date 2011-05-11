@@ -18,11 +18,11 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
-import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.pt.IEmploymentInfo;
 import com.propertyvista.portal.domain.pt.IIncomeInfo;
 import com.propertyvista.portal.domain.pt.IncomeInfoEmployer;

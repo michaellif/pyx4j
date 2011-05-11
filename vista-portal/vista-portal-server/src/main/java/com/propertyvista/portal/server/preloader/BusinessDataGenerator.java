@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import com.propertyvista.portal.domain.DemoData;
+import com.propertyvista.common.domain.DemoData;
 
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 

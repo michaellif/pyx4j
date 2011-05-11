@@ -20,7 +20,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translation;
 
-import com.propertyvista.portal.domain.Money;
+import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.common.domain.Money;
 
 public interface IncomeInfoStudentIncome extends IEntity, IAddress, IIncomeInfo {
 

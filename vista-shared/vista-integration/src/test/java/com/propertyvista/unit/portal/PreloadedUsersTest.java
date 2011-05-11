@@ -19,8 +19,8 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.portal.domain.DemoData;
-import com.propertyvista.portal.domain.User;
+import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.Summary;

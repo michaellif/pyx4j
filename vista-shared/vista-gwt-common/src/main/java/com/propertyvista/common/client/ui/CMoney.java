@@ -18,7 +18,7 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.validators.DefaultMoneyValidator;
-import com.propertyvista.portal.domain.Money;
+import com.propertyvista.common.domain.Money;
 
 public class CMoney extends CEditableComponent<Money, NativeMoney> {
 

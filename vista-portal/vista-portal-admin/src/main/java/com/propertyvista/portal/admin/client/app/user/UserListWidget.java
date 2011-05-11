@@ -14,9 +14,9 @@ package com.propertyvista.portal.admin.client.app.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.admin.client.app.VistaAdminAppSiteMap;
 import com.propertyvista.portal.admin.rpc.VistaAdminServices;
-import com.propertyvista.portal.domain.User;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;

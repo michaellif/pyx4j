@@ -24,6 +24,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+import com.propertyvista.common.domain.IAddress;
+
 @Table(name = "pt_address")
 public interface Address extends IEntity, IAddress {
 

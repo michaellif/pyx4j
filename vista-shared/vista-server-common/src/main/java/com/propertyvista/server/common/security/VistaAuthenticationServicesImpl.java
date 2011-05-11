@@ -22,9 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
+import com.propertyvista.common.domain.User;
+import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.crm.rpc.CrmUserVisit;
-import com.propertyvista.portal.domain.User;
-import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.rpc.pt.PtUserVisit;
 import com.propertyvista.server.domain.UserCredential;
 

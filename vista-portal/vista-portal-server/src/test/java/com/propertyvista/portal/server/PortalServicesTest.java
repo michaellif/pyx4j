@@ -17,8 +17,8 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.config.tests.VistaDBTestCase;
-import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.domain.util;
 
-import com.propertyvista.portal.domain.User;
+import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.marketing.yield.MarketRent;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;

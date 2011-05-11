@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.domain.payment;
 
-import com.propertyvista.portal.domain.pt.IAddress;
+import com.propertyvista.common.domain.IAddress;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;

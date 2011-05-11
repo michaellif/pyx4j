@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.server.maintenance;
 
+import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.config.tests.VistaDBTestCase;
-import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.domain.ApplicationDocumentData;

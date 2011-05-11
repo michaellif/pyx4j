@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.portal.domain.Money;
+import com.propertyvista.common.domain.Money;
 import com.propertyvista.portal.domain.property.asset.AptUnit;
 import com.propertyvista.portal.domain.tenant.tenant.Tenant;
 

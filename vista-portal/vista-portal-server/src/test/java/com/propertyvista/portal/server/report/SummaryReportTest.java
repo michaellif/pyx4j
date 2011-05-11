@@ -31,10 +31,10 @@ import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
+import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.User;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
-import com.propertyvista.portal.domain.DemoData;
-import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;

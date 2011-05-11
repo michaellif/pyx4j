@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.common.security;
 
-import com.propertyvista.portal.domain.IUserEntity;
+import com.propertyvista.common.domain.IUserEntity;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.security.InstanceAccess;

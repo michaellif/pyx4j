@@ -3,8 +3,6 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.pyx4j.entity.EntityShared'/>
-   
-    <inherits name='com.propertyvista.common.Domain' />
-   
+
     <source path="domain"/>
 </module>

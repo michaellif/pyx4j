@@ -15,7 +15,7 @@ package com.propertyvista.portal.server.generator;
 
 import junit.framework.TestCase;
 
-import com.propertyvista.portal.domain.User;
+import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.server.TestUtil;

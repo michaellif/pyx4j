@@ -34,8 +34,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.portal.domain.Address;
-import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.Email;
 import com.propertyvista.portal.domain.Email.EmailType;
 import com.propertyvista.portal.domain.Phone;

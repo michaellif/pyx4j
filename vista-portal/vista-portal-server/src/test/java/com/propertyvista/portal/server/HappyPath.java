@@ -15,7 +15,7 @@ package com.propertyvista.portal.server;
 
 import org.junit.Assert;
 
-import com.propertyvista.portal.domain.DemoData;
+import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.UnitSelection;

@@ -15,7 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.Money;
+import com.propertyvista.common.domain.Money;
 import com.propertyvista.portal.domain.marketing.yield.MarketRent;
 import com.propertyvista.portal.domain.property.asset.AptUnitStatusType;
 import com.propertyvista.portal.domain.property.asset.Building;

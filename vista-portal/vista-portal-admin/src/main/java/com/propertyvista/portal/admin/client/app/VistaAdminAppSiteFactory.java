@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.admin.client.app;
 
+import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.portal.admin.client.site.VistaAdminPublicResources;
-import com.propertyvista.portal.domain.VistaBehavior;
 
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.shared.domain.Site;

@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.portal.domain.pt.IAddress;
+import com.propertyvista.common.domain.IAddress;
 
 @EmbeddedEntity
 @ToStringFormat("{0} {1} {2} {3}, {4} {5}")

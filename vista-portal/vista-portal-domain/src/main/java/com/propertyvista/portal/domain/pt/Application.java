@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.IUserEntity;
-import com.propertyvista.portal.domain.Money;
+import com.propertyvista.common.domain.IUserEntity;
+import com.propertyvista.common.domain.Money;
 
 import com.pyx4j.entity.shared.IEntity;
 

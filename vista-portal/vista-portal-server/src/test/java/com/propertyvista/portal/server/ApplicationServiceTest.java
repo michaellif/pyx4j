@@ -15,8 +15,8 @@ package com.propertyvista.portal.server;
 
 import org.junit.Assert;
 
+import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.config.tests.VistaDBTestCase;
-import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.services.ApplicationService;

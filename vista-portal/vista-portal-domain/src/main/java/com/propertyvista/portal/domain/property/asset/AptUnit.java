@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.portal.domain.Money;
+import com.propertyvista.common.domain.Money;
 import com.propertyvista.portal.domain.Picture;
 import com.propertyvista.portal.domain.marketing.yield.AddOn;
 import com.propertyvista.portal.domain.marketing.yield.Amenity;

@@ -7,21 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 26, 2011
- * @author michaellif
+ * Created on 2011-02-15
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain;
+package com.propertyvista.common.domain;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
-@EmbeddedEntity
-public interface Currency extends IEntity {
+@AbstractEntity
+public interface IUserEntity extends IEntity {
 
-    @ToString
-    IPrimitive<String> name();
-
+    @ReadOnly
+    @Detached
+    @NotNull
+    @MemberColumn(name = "user_id")
+    User user();
 }

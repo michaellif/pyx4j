@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.admin.rpc;
 
-import com.propertyvista.portal.domain.User;
-import com.propertyvista.portal.domain.VistaBehavior;
+import com.propertyvista.common.domain.User;
+import com.propertyvista.common.domain.VistaBehavior;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.Currency;
+import com.propertyvista.common.domain.Currency;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.IEntity;

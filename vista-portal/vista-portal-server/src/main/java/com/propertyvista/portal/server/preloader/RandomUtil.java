@@ -16,7 +16,7 @@ package com.propertyvista.portal.server.preloader;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.propertyvista.portal.domain.DemoData;
+import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.portal.domain.pt.IPerson;
 
 import com.pyx4j.essentials.server.preloader.DataGenerator;

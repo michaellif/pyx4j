@@ -13,10 +13,10 @@
  */
 package com.propertyvista.server.security;
 
+import com.propertyvista.common.domain.User;
+import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
 import com.propertyvista.portal.admin.rpc.VistaAdminServices;
-import com.propertyvista.portal.domain.User;
-import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
 import com.propertyvista.server.domain.UserCredential;
 

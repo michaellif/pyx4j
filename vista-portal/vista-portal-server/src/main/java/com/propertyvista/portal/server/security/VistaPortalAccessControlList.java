@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.server.security;
 
-import com.propertyvista.portal.domain.VistaBehavior;
+import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;

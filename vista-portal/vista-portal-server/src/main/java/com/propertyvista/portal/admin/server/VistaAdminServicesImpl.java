@@ -18,9 +18,9 @@ import java.util.Locale;
 
 import org.xnap.commons.i18n.I18n;
 
+import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.admin.rpc.EditableUser;
 import com.propertyvista.portal.admin.rpc.VistaAdminServices;
-import com.propertyvista.portal.domain.User;
 import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;

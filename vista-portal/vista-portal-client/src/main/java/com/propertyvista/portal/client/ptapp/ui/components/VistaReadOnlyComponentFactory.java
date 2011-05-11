@@ -16,7 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui.components;
 import java.util.Date;
 
 import com.propertyvista.common.client.ui.CMoneyLabel;
-import com.propertyvista.portal.domain.Money;
+import com.propertyvista.common.domain.Money;
 import com.propertyvista.portal.domain.ref.Country;
 import com.propertyvista.portal.domain.ref.Province;
 
