@@ -78,7 +78,12 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
     @Override
     protected void initGeneralStyles() {
         super.initGeneralStyles();
-        Style style = new Style(".gwt-SplitLayoutPanel");
+
+        Style style = new Style("a");
+        style.addProperty("color", "#333");
+        addStyle(style);
+
+        style = new Style(".gwt-SplitLayoutPanel");
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-HDragger");
