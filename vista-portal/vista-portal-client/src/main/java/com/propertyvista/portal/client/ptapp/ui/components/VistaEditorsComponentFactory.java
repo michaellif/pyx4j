@@ -22,8 +22,8 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.IFormat;
 
 import com.propertyvista.common.client.ui.CMoneyLabel;
-import com.propertyvista.common.domain.Money;
-import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.common.domain.ref.Country;
 
 public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
 

@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.validators;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.propertyvista.portal.domain.ref.Country;
+import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.portal.domain.util.ValidationUtils;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;

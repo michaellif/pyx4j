@@ -15,8 +15,8 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.List;
 
-import com.propertyvista.portal.domain.ref.Country;
-import com.propertyvista.portal.domain.ref.Province;
+import com.propertyvista.common.domain.ref.Country;
+import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.server.generator.LocationsGenerator;
 import com.propertyvista.portal.server.generator.SharedData;
 

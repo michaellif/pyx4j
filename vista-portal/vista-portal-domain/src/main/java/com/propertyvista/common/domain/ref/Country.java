@@ -7,28 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 26, 2011
- * @author michaellif
+ * Created on Jan 28, 2011
+ * @author Misha
  * @version $Id$
  */
-package com.propertyvista.common.domain;
+package com.propertyvista.common.domain.ref;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.adapters.index.CaseInsensitiveIndexAdapter;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@EmbeddedEntity
-@ToStringFormat("${0,number,#0.00}")
-public interface Money extends IEntity {
+public interface Country extends IEntity {
 
-    @ToString(index = 0)
-    @NotNull
-    @Format("#0.00")
-    IPrimitive<Double> amount();
+    @ToString
+    @Indexed(adapters = CaseInsensitiveIndexAdapter.class)
+    IPrimitive<String> name();
 
-    Currency currency();
 }

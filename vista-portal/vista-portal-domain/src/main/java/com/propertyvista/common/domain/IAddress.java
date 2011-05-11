@@ -20,9 +20,9 @@ import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.portal.domain.ref.Country;
-import com.propertyvista.portal.domain.ref.CountryReferenceAdapter;
-import com.propertyvista.portal.domain.ref.Province;
+import com.propertyvista.common.domain.ref.Country;
+import com.propertyvista.common.domain.ref.CountryReferenceAdapter;
+import com.propertyvista.common.domain.ref.Province;
 
 public interface IAddress {
 

@@ -25,12 +25,12 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.common.domain.Money;
+import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.common.domain.marketing.MarketRent;
 import com.propertyvista.portal.domain.Picture;
 import com.propertyvista.portal.domain.marketing.yield.AddOn;
 import com.propertyvista.portal.domain.marketing.yield.Amenity;
 import com.propertyvista.portal.domain.marketing.yield.Concession;
-import com.propertyvista.portal.domain.marketing.yield.MarketRent;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
 
 public interface AptUnit extends IEntity {

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.ref.Province;
+import com.propertyvista.common.domain.ref.Province;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;

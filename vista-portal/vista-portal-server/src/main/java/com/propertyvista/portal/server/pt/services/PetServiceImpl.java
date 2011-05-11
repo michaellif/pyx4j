@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.portal.domain.financial.ChargeType;
+import com.propertyvista.common.domain.financial.ChargeType;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
 import com.propertyvista.portal.domain.pt.Pets;

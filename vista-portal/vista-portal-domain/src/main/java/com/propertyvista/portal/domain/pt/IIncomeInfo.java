@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.Money;
+import com.propertyvista.common.domain.financial.Money;
 
 /**
  * General required information for all Income types.

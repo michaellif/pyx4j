@@ -19,7 +19,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.Money;
+import com.propertyvista.common.domain.financial.Money;
 
 public interface Contract extends IEntity {
 

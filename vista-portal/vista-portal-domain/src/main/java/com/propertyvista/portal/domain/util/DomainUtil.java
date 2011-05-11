@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.domain.util;
 
-import com.propertyvista.common.domain.Currency;
-import com.propertyvista.common.domain.Money;
+import com.propertyvista.common.domain.financial.Currency;
+import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;

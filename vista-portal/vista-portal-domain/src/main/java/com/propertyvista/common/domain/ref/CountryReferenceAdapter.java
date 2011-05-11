@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ref;
+package com.propertyvista.common.domain.ref;
 
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.adapters.ReferenceAdapter;

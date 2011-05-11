@@ -13,8 +13,10 @@
  */
 package com.propertyvista.portal.domain.util;
 
+import com.pyx4j.entity.shared.IList;
+
 import com.propertyvista.common.domain.User;
-import com.propertyvista.portal.domain.marketing.yield.MarketRent;
+import com.propertyvista.common.domain.marketing.MarketRent;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
@@ -34,8 +36,6 @@ import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.Vehicle;
-
-import com.pyx4j.entity.shared.IList;
 
 public class VistaDataPrinter {
 
@@ -276,7 +276,7 @@ public class VistaDataPrinter {
 
             //            log.info("Available {}", unit.building());
 
-            sb.append(", status: ").append(unit.status().getStringView());
+            //sb.append(", status: ").append(unit.status().getStringView());
 
             sb.append("\n");
 

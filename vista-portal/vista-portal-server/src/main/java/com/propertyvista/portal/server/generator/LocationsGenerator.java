@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import com.propertyvista.portal.domain.ref.Country;
-import com.propertyvista.portal.domain.ref.Province;
+import com.propertyvista.common.domain.ref.Country;
+import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.server.preloader.LocationsPreload;
 import com.propertyvista.portal.server.pt.util.PreloadUtil;
 

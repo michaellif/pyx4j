@@ -7,14 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-24
- * @author aroytbur
+ * Created on Jan 26, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.domain.financial;
+package com.propertyvista.common.domain.financial;
 
-public enum ChargeType {
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-    monthly, deposit, oneTime
+@EmbeddedEntity
+public interface Currency extends IEntity {
+
+    @ToString
+    IPrimitive<String> name();
 
 }

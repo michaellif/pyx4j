@@ -17,10 +17,10 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
+import com.propertyvista.common.domain.ref.Country;
+import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.domain.Address;
 import com.propertyvista.portal.domain.Address.AddressType;
-import com.propertyvista.portal.domain.ref.Country;
-import com.propertyvista.portal.domain.ref.Province;
 
 abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
 

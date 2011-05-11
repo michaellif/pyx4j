@@ -7,21 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 26, 2011
- * @author michaellif
+ * Created on 2011-02-25
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.common.domain;
+package com.propertyvista.common.domain.ref;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@EmbeddedEntity
-public interface Currency extends IEntity {
+public interface Province extends IEntity {
 
     @ToString
+    @Indexed
     IPrimitive<String> name();
+
+    @Indexed
+    IPrimitive<String> code();
+
+    Country country();
 
 }

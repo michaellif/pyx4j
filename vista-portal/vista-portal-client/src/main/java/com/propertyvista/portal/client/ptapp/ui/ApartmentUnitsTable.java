@@ -39,15 +39,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
-import com.propertyvista.portal.client.ptapp.resources.PortalImages;
-import com.propertyvista.portal.client.ptapp.ui.components.VistaReadOnlyComponentFactory;
-import com.propertyvista.portal.domain.marketing.yield.MarketRent;
-import com.propertyvista.portal.domain.pt.ApartmentUnit;
-import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
-import com.propertyvista.portal.domain.util.DomainUtil;
-import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
-
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -67,6 +58,15 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.widgets.client.AnimationCallback;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.domain.marketing.MarketRent;
+import com.propertyvista.portal.client.ptapp.resources.PortalImages;
+import com.propertyvista.portal.client.ptapp.ui.components.VistaReadOnlyComponentFactory;
+import com.propertyvista.portal.domain.pt.ApartmentUnit;
+import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
+import com.propertyvista.portal.domain.util.DomainUtil;
+import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 

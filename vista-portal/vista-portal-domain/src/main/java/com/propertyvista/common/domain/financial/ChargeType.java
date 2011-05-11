@@ -7,22 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 28, 2011
- * @author Misha
+ * Created on 2011-02-24
+ * @author aroytbur
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ref;
+package com.propertyvista.common.domain.financial;
 
-import com.pyx4j.entity.adapters.index.CaseInsensitiveIndexAdapter;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+public enum ChargeType {
 
-public interface Country extends IEntity {
-
-    @ToString
-    @Indexed(adapters = CaseInsensitiveIndexAdapter.class)
-    IPrimitive<String> name();
+    monthly, deposit, oneTime
 
 }

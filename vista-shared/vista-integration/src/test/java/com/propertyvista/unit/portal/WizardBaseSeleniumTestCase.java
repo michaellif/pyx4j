@@ -25,8 +25,8 @@ import com.pyx4j.selenium.ISeleniumTestConfiguration;
 
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.Money;
 import com.propertyvista.common.domain.User;
+import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.unit.VistaBaseSeleniumTestCase;
 import com.propertyvista.unit.config.ApplicationId;

@@ -15,11 +15,6 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
-import com.propertyvista.common.domain.Money;
-import com.propertyvista.portal.domain.marketing.yield.MarketRent;
-import com.propertyvista.portal.domain.property.asset.AptUnitStatusType;
-import com.propertyvista.portal.domain.property.asset.Building;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
@@ -28,6 +23,9 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.common.domain.marketing.MarketRent;
 
 @Transient
 public interface ApartmentUnit extends IEntity {
@@ -43,7 +41,7 @@ public interface ApartmentUnit extends IEntity {
 //     */
 //    IPrimitive<String> suiteNumber();
 
-    Building building();
+    //Building building();
 
     /**
      * Square ft. size of unit
@@ -113,7 +111,7 @@ public interface ApartmentUnit extends IEntity {
 //        available, reserved, leased, notice;
 //    }
 
-    IPrimitive<AptUnitStatusType> status();
+    //IPrimitive<AptUnitStatusType> status();
 
     IPrimitive<String> amenities();
 

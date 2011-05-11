@@ -19,11 +19,11 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
+import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.portal.domain.property.asset.AptUnit;
 import com.propertyvista.portal.domain.property.asset.Building;
-import com.propertyvista.portal.domain.ref.Country;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 

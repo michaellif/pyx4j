@@ -7,26 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-25
+ * Created on 2011-02-09
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ref;
+package com.propertyvista.common.domain.marketing;
 
-import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Province extends IEntity {
+import com.propertyvista.common.domain.financial.Money;
 
-    @ToString
-    @Indexed
-    IPrimitive<String> name();
+public interface MarketRent extends IEntity {
 
-    @Indexed
-    IPrimitive<String> code();
+    IPrimitive<Integer> leaseTerm();
 
-    Country country();
-
+    @Owned
+    @ToString(index = 0)
+    Money rent();
 }

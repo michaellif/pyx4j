@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.common.domain.Money;
+import com.propertyvista.common.domain.financial.Money;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;

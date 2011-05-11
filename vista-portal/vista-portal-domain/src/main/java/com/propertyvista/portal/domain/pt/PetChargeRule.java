@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.financial.ChargeType;
-
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.common.domain.financial.ChargeType;
 
 public interface PetChargeRule extends IEntity {
 

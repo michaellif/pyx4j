@@ -7,24 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-09
- * @author vlads
+ * Created on Jan 26, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.domain.marketing.yield;
+package com.propertyvista.common.domain.financial;
 
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.Money;
+@EmbeddedEntity
+@ToStringFormat("${0,number,#0.00}")
+public interface Money extends IEntity {
 
-public interface MarketRent extends IEntity {
-
-    IPrimitive<Integer> leaseTerm();
-
-    @Owned
     @ToString(index = 0)
-    Money rent();
+    @NotNull
+    @Format("#0.00")
+    IPrimitive<Double> amount();
+
+    Currency currency();
 }

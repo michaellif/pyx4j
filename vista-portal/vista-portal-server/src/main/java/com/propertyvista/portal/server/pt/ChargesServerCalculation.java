@@ -24,7 +24,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.portal.domain.marketing.yield.MarketRent;
+import com.propertyvista.common.domain.marketing.MarketRent;
 import com.propertyvista.portal.domain.property.asset.AptUnit;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.Charges;
