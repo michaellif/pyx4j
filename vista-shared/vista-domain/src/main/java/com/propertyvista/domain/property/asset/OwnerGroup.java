@@ -7,13 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on 2011-02-07
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.domain.property.asset;
 
-import com.propertyvista.domain.property.asset.AptUnit;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
-public interface UnitCrudService extends AbstractCrudService<AptUnit> {
+
+public interface OwnerGroup extends IEntity {
+
+    IPrimitive<String> name();
+
+    ISet<Owner> ownerList();
+
 }

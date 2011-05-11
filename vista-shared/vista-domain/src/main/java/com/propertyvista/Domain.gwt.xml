@@ -7,6 +7,4 @@
     <inherits name='com.propertyvista.portal.Domain' />
 
     <source path="domain"/>
-    <!-- temp for refactoring -->
-    <source path="portal"/>
 </module>

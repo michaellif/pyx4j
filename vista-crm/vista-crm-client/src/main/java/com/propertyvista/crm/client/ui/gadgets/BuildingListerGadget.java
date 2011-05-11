@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.portal.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.Building;
 
 public class BuildingListerGadget extends ListerGadgetBase<Building> {
 

@@ -7,13 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on Jan 26, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.domain;
 
-import com.propertyvista.domain.property.asset.AptUnit;
+import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface UnitCrudService extends AbstractCrudService<AptUnit> {
+public interface Picture extends File {
+
+    @RpcTransient
+    @Length(5 * 1024 * 1024)
+    IPrimitive<byte[]> content();
+
+    IPrimitive<String> contentBase64();
+
 }

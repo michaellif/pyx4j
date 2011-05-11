@@ -7,13 +7,12 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on Jan 27, 2011
+ * @author Misha
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.domain;
 
-import com.propertyvista.domain.property.asset.AptUnit;
+public interface Document extends File {
 
-public interface UnitCrudService extends AbstractCrudService<AptUnit> {
 }

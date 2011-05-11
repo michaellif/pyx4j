@@ -35,7 +35,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
-import com.propertyvista.portal.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.AptUnit;
 
 public class UnitEditorViewImpl extends DockLayoutPanel implements UnitEditorView {
 

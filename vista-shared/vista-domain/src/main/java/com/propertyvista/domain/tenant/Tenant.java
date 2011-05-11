@@ -7,13 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on 2011-02-07
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.domain.tenant;
 
+import com.pyx4j.entity.shared.IEntity;
+
+import com.propertyvista.domain.Person;
 import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface UnitCrudService extends AbstractCrudService<AptUnit> {
+public interface Tenant extends IEntity {
+
+    // TODO make a RentingEntity (May be Company or Government)
+    Person rentingEntity();
+
+    AptUnit unit();
+
+    /**
+     * Used for DB Denormalization
+     */
+    Lease lease();
+
 }

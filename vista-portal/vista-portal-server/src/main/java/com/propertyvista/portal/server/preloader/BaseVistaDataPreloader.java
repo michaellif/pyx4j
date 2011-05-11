@@ -19,8 +19,8 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.Province;
-import com.propertyvista.portal.domain.Address;
-import com.propertyvista.portal.domain.Address.AddressType;
+import com.propertyvista.domain.Address;
+import com.propertyvista.domain.Address.AddressType;
 
 abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
 

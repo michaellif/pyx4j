@@ -36,7 +36,7 @@ import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.common.domain.ref.Province;
-import com.propertyvista.portal.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.AptUnit;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;

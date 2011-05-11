@@ -41,9 +41,9 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
-import com.propertyvista.portal.domain.Address;
-import com.propertyvista.portal.domain.Phone;
-import com.propertyvista.portal.domain.property.asset.Building;
+import com.propertyvista.domain.Address;
+import com.propertyvista.domain.Phone;
+import com.propertyvista.domain.property.asset.Building;
 
 public class BuildingEditorForm extends CEntityForm<Building> {
 

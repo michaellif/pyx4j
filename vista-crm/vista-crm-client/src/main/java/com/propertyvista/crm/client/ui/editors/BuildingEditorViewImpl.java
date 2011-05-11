@@ -35,7 +35,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.portal.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.Building;
 
 public class BuildingEditorViewImpl extends DockLayoutPanel implements BuildingEditorView {
 

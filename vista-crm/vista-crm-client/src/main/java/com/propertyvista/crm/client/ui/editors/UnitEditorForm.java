@@ -39,12 +39,12 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.Decor
 import com.propertyvista.common.domain.marketing.MarketRent;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
-import com.propertyvista.portal.domain.marketing.yield.AddOn;
-import com.propertyvista.portal.domain.marketing.yield.Amenity;
-import com.propertyvista.portal.domain.marketing.yield.Concession;
-import com.propertyvista.portal.domain.property.asset.AptUnit;
-import com.propertyvista.portal.domain.property.asset.AptUnitInfoItem;
-import com.propertyvista.portal.domain.property.asset.Utility;
+import com.propertyvista.domain.marketing.yield.AddOn;
+import com.propertyvista.domain.marketing.yield.Amenity;
+import com.propertyvista.domain.marketing.yield.Concession;
+import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.AptUnitInfoItem;
+import com.propertyvista.domain.property.asset.Utility;
 
 public class UnitEditorForm extends CEntityForm<AptUnit> {
 

@@ -30,7 +30,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.portal.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.Building;
 
 public class BuildingLister extends ListerBase<Building> {
 

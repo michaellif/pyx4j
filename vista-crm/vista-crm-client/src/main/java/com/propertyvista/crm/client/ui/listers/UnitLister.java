@@ -30,7 +30,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
-import com.propertyvista.portal.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.AptUnit;
 
 public class UnitLister extends ListerBase<AptUnit> {
 
