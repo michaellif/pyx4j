@@ -13,7 +13,7 @@
 
     <source path="client"/>
 
-    <entry-point class='com.propertyvista.portal.client.ptapp.PtAppSite'/>
+    <entry-point class='com.propertyvista.portal.client.PortalSite'/>
 
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.client.*" />
 
