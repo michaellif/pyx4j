@@ -7,13 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on 2011-02-09
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.portal.domain.marketing.yield;
 
-import com.propertyvista.portal.domain.property.asset.AptUnit;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface UnitCrudService extends AbstractCrudService<AptUnit> {
+import com.propertyvista.portal.domain.Money;
+
+public interface MarketRent extends IEntity {
+
+    IPrimitive<Integer> leaseTerm();
+
+    @Owned
+    @ToString(index = 0)
+    Money rent();
 }

@@ -26,10 +26,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.portal.domain.AptUnit;
-import com.propertyvista.portal.domain.Building;
-import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.Picture;
+import com.propertyvista.portal.domain.property.asset.AptUnit;
+import com.propertyvista.portal.domain.property.asset.Building;
+import com.propertyvista.portal.domain.property.asset.Floorplan;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;

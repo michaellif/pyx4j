@@ -7,23 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-24
+ * Created on 2011-02-22
  * @author aroytbur
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.domain.marketing.yield;
 
-import com.propertyvista.portal.domain.financial.ChargeType;
-
-import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface PetChargeRule extends IEntity {
+/**
+ * For now assume add-ons have monthly cost to be used in calculation of total monthly
+ * cost
+ * 
+ * @author aroytbur
+ * 
+ */
+public interface AddOn extends IEntity {
 
-    IPrimitive<ChargeType> chargeType();
+    /**
+     * Amenity type (max 32 chars)
+     */
+    @ToString
+    IPrimitive<String> name();
 
-    @MemberColumn(name = "vl")
-    IPrimitive<Integer> value(); // TODO this probably would have to be a double instead of an integer
+    /**
+     * How much it costs monthly for this add-on
+     */
+    IPrimitive<Double> monthlyCost();
 
 }

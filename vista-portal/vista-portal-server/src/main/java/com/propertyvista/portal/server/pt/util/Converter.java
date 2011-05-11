@@ -15,8 +15,8 @@ package com.propertyvista.portal.server.pt.util;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.portal.domain.AptUnit;
-import com.propertyvista.portal.domain.Floorplan;
+import com.propertyvista.portal.domain.property.asset.AptUnit;
+import com.propertyvista.portal.domain.property.asset.Floorplan;
 import com.propertyvista.portal.domain.pt.ApartmentFloorplan;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 

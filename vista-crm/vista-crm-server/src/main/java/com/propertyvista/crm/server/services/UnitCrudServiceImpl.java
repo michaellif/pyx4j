@@ -24,7 +24,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 import com.propertyvista.crm.rpc.services.UnitCrudService;
-import com.propertyvista.portal.domain.AptUnit;
+import com.propertyvista.portal.domain.property.asset.AptUnit;
 
 public class UnitCrudServiceImpl implements UnitCrudService {
 

@@ -34,25 +34,25 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.portal.domain.AddOn;
 import com.propertyvista.portal.domain.Address;
-import com.propertyvista.portal.domain.Amenity;
-import com.propertyvista.portal.domain.AptUnit;
-import com.propertyvista.portal.domain.Building;
-import com.propertyvista.portal.domain.ChargeType;
-import com.propertyvista.portal.domain.Complex;
-import com.propertyvista.portal.domain.Concession;
-import com.propertyvista.portal.domain.Concession.ConcessionType;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.Email;
 import com.propertyvista.portal.domain.Email.EmailType;
-import com.propertyvista.portal.domain.Floorplan;
-import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.Phone;
 import com.propertyvista.portal.domain.Phone.PhoneType;
 import com.propertyvista.portal.domain.Picture;
-import com.propertyvista.portal.domain.UnitInfoItem;
-import com.propertyvista.portal.domain.Utility;
+import com.propertyvista.portal.domain.financial.ChargeType;
+import com.propertyvista.portal.domain.marketing.yield.AddOn;
+import com.propertyvista.portal.domain.marketing.yield.Amenity;
+import com.propertyvista.portal.domain.marketing.yield.Concession;
+import com.propertyvista.portal.domain.marketing.yield.MarketRent;
+import com.propertyvista.portal.domain.marketing.yield.Concession.ConcessionType;
+import com.propertyvista.portal.domain.property.asset.AptUnit;
+import com.propertyvista.portal.domain.property.asset.Building;
+import com.propertyvista.portal.domain.property.asset.AptUnitInfoItem;
+import com.propertyvista.portal.domain.property.asset.Complex;
+import com.propertyvista.portal.domain.property.asset.Floorplan;
+import com.propertyvista.portal.domain.property.asset.Utility;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
 import com.propertyvista.portal.domain.pt.PropertyProfile;
@@ -144,8 +144,8 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         return amenity;
     }
 
-    public static UnitInfoItem createUnitInfoItem(String name) {
-        UnitInfoItem item = EntityFactory.create(UnitInfoItem.class);
+    public static AptUnitInfoItem createUnitInfoItem(String name) {
+        AptUnitInfoItem item = EntityFactory.create(AptUnitInfoItem.class);
         item.name().setValue(name);
         persist(item);
         return item;
@@ -353,7 +353,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Building.class, AptUnit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, UnitInfoItem.class,
+            return deleteAll(Building.class, AptUnit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, AptUnitInfoItem.class,
                     Amenity.class, Concession.class, AddOn.class, LeaseTerms.class);
         } else {
             return "This is production";

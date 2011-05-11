@@ -7,13 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on 2011-02-24
+ * @author aroytbur
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.portal.domain.property.asset;
 
-import com.propertyvista.portal.domain.property.asset.AptUnit;
+public enum AptUnitStatusType {
 
-public interface UnitCrudService extends AbstractCrudService<AptUnit> {
+    /**
+     * combines leased, approved, on_notice, leased_on_notice, leased_reserved
+     */
+    leased,
+
+    available,
+
+    reserved,
+
+    vacant,
+
+    offMarket,
+
+    other;
+
 }

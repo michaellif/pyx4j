@@ -43,7 +43,7 @@ import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.resources.PortalResources;
-import com.propertyvista.portal.domain.MarketRent;
+import com.propertyvista.portal.domain.marketing.yield.MarketRent;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 
 public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers {

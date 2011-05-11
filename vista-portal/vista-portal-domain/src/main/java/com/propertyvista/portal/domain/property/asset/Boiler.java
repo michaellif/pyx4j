@@ -7,23 +7,37 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-24
- * @author aroytbur
+ * Created on 2011-05-10
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.domain.property.asset;
 
-import com.propertyvista.portal.domain.financial.ChargeType;
+import java.util.Date;
 
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface PetChargeRule extends IEntity {
+import com.propertyvista.portal.domain.property.vendor.Contract;
 
-    IPrimitive<ChargeType> chargeType();
+public interface Boiler extends IEntity {
 
-    @MemberColumn(name = "vl")
-    IPrimitive<Integer> value(); // TODO this probably would have to be a double instead of an integer
+    IPrimitive<String> description();
 
+    @MemberColumn(name = "boilerType")
+    IPrimitive<String> type();
+
+    IPrimitive<String> make();
+
+    @MemberColumn(name = "boilerYear")
+    IPrimitive<Date> year();
+
+    IPrimitive<String> build();
+
+    IPrimitive<String> warrantee();
+
+    IPrimitive<Contract> maitenanceContractor();
+
+    IPrimitive<String> notes();
 }

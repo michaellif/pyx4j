@@ -42,8 +42,8 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.Decor
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.portal.domain.Address;
-import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Phone;
+import com.propertyvista.portal.domain.property.asset.Building;
 
 public class BuildingEditorForm extends CEntityForm<Building> {
 
@@ -79,6 +79,7 @@ public class BuildingEditorForm extends CEntityForm<Building> {
         main.add(inject(proto().phoneList(), createPhonesListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Address")));
+        main.add(inject(proto().address()));
 
 // TODO - add this complex data processing later! :
 //        main.add(inject(proto().contactsList(), createPhonesFolderEditorColumns()));

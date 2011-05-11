@@ -7,23 +7,35 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-24
- * @author aroytbur
+ * Created on May 2, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.domain.property.asset;
 
-import com.propertyvista.portal.domain.financial.ChargeType;
-
-import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface PetChargeRule extends IEntity {
+import com.propertyvista.portal.domain.tenant.lease.Lease;
 
-    IPrimitive<ChargeType> chargeType();
+public interface AptUnitOccupancy extends IEntity {
 
-    @MemberColumn(name = "vl")
-    IPrimitive<Integer> value(); // TODO this probably would have to be a double instead of an integer
+    @Detached
+    @Owner
+    AptUnit unit();
+
+    IPrimitive<java.sql.Date> dateFrom();
+
+    IPrimitive<java.sql.Date> dateTo();
+
+    IPrimitive<AptUnitStatusType> status();
+
+    IPrimitive<AptUnitOffMarketType> offMarket();
+
+    IPrimitive<String> description();
+
+    Lease lease();
 
 }

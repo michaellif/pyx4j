@@ -31,10 +31,10 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.portal.domain.AptUnit;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
+import com.propertyvista.portal.domain.property.asset.AptUnit;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationDocument;

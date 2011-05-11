@@ -19,8 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.portal.domain.AptUnit;
-import com.propertyvista.portal.domain.MarketRent;
+
+import com.propertyvista.portal.domain.marketing.yield.MarketRent;
+import com.propertyvista.portal.domain.property.asset.AptUnit;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;

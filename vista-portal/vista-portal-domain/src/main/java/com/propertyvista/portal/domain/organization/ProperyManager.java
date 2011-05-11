@@ -7,13 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-11
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.portal.domain.organization;
 
-import com.propertyvista.portal.domain.property.asset.AptUnit;
+import com.pyx4j.entity.annotations.Owned;
 
-public interface UnitCrudService extends AbstractCrudService<AptUnit> {
+import com.propertyvista.portal.domain.Company;
+import com.propertyvista.portal.domain.organization.portal.PortalPreferences;
+
+
+public interface ProperyManager extends Company {
+
+    @Owned
+    PortalPreferences portalPreferences();
 }

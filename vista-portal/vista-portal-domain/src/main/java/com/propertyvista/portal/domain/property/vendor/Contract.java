@@ -7,13 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-10
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.portal.domain.property.vendor;
 
-import com.propertyvista.portal.domain.property.asset.AptUnit;
+import java.sql.Date;
 
-public interface UnitCrudService extends AbstractCrudService<AptUnit> {
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.portal.domain.Money;
+
+public interface Contract extends IEntity {
+
+    Vendor vendor();
+
+    @MemberColumn(name = "vendorCost")
+    IPrimitive<Money> cost();
+
+    IPrimitive<Date> expiration();
+
+    IPrimitive<Date> renewal();
+
 }

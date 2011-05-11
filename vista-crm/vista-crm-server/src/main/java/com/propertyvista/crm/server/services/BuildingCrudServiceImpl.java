@@ -28,8 +28,8 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.DemoData;
+import com.propertyvista.portal.domain.property.asset.Building;
 
 public class BuildingCrudServiceImpl implements BuildingCrudService {
 

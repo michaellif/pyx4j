@@ -38,13 +38,13 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
-import com.propertyvista.portal.domain.AddOn;
-import com.propertyvista.portal.domain.Amenity;
-import com.propertyvista.portal.domain.AptUnit;
-import com.propertyvista.portal.domain.Concession;
-import com.propertyvista.portal.domain.MarketRent;
-import com.propertyvista.portal.domain.UnitInfoItem;
-import com.propertyvista.portal.domain.Utility;
+import com.propertyvista.portal.domain.marketing.yield.AddOn;
+import com.propertyvista.portal.domain.marketing.yield.Amenity;
+import com.propertyvista.portal.domain.marketing.yield.Concession;
+import com.propertyvista.portal.domain.marketing.yield.MarketRent;
+import com.propertyvista.portal.domain.property.asset.AptUnit;
+import com.propertyvista.portal.domain.property.asset.AptUnitInfoItem;
+import com.propertyvista.portal.domain.property.asset.Utility;
 
 public class UnitEditorForm extends CEntityForm<AptUnit> {
 
@@ -199,8 +199,8 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
         };
     }
 
-    private CEntityFolder<UnitInfoItem> createInfoDetailsListEditor() {
-        return new CEntityFolder<UnitInfoItem>(UnitInfoItem.class) {
+    private CEntityFolder<AptUnitInfoItem> createInfoDetailsListEditor() {
+        return new CEntityFolder<AptUnitInfoItem>(AptUnitInfoItem.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
 
@@ -210,13 +210,13 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
             }
 
             @Override
-            protected FolderDecorator<UnitInfoItem> createFolderDecorator() {
-                return new TableFolderDecorator<UnitInfoItem>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add Unit Info"));
+            protected FolderDecorator<AptUnitInfoItem> createFolderDecorator() {
+                return new TableFolderDecorator<AptUnitInfoItem>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add Unit Info"));
             }
 
             @Override
-            protected CEntityFolderItem<UnitInfoItem> createItem() {
-                return new CEntityFolderRow<UnitInfoItem>(UnitInfoItem.class, columns) {
+            protected CEntityFolderItem<AptUnitInfoItem> createItem() {
+                return new CEntityFolderRow<AptUnitInfoItem>(AptUnitInfoItem.class, columns) {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {

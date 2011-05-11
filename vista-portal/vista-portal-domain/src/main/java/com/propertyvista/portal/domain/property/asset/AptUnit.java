@@ -11,37 +11,50 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.domain.property.asset;
 
 import java.util.Date;
-
-import com.propertyvista.portal.domain.Money;
-import com.propertyvista.portal.domain.marketing.yield.MarketRent;
-import com.propertyvista.portal.domain.property.asset.AptUnitStatusType;
-import com.propertyvista.portal.domain.property.asset.Building;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
-@Transient
-public interface ApartmentUnit extends IEntity {
+import com.propertyvista.portal.domain.Money;
+import com.propertyvista.portal.domain.Picture;
+import com.propertyvista.portal.domain.marketing.yield.AddOn;
+import com.propertyvista.portal.domain.marketing.yield.Amenity;
+import com.propertyvista.portal.domain.marketing.yield.Concession;
+import com.propertyvista.portal.domain.marketing.yield.MarketRent;
+import com.propertyvista.portal.domain.pt.LeaseTerms;
 
-//    IPrimitive<Integer> floor();
+public interface AptUnit extends IEntity {
+
+    IPrimitive<String> name();
+
+    IPrimitive<String> marketingName();
 
     @Caption(name = "Type")
     IPrimitive<String> unitType();
 
-//
-//    /**
-//     * Number of the unit
-//     */
-//    IPrimitive<String> suiteNumber();
+    IPrimitive<AptUnitEcomomicStatus> unitEcomomicStatus();
+
+    /**
+     * @see AptUnitEcomomicStatus#other
+     */
+    IPrimitive<String> unitEcomomicStatusDescr();
+
+    IPrimitive<Integer> floor();
+
+    /**
+     * Number of the unit
+     */
+    IPrimitive<String> suiteNumber();
 
     Building building();
 
@@ -50,6 +63,8 @@ public interface ApartmentUnit extends IEntity {
      */
     @Caption(name = "Sq F")
     IPrimitive<Integer> area();
+
+    IPrimitive<AreaMeasurementType> areaMeasurementType();
 
     /**
      * Number of bedrooms in unit
@@ -71,22 +86,23 @@ public interface ApartmentUnit extends IEntity {
     @Caption(name = "Baths")
     IPrimitive<Double> bathrooms();
 
-//
-//    /**
-//     * Used for DB Denormalization
-//     */
-//    Lease currentLease();
-//
+    /**
+     * Keeps current and future occupancy data
+     * Used for DB Denormalization
+     */
+    IList<AptUnitOccupancy> currentOccupancies();
+
+    @Format("MM/dd/yyyy")
+    @Caption(name = "Available")
+    @Indexed
+    /**
+     * Denormalizied field used for search, derived from @see AptUnitOccupancy
+     */
+    IPrimitive<Date> avalableForRent();
+
     @Owned
     @Caption(name = "Rent")
     IList<MarketRent> marketRent();
-
-//
-//    IPrimitive<Date> moveOut();
-//
-    @Format("MM/dd/yyyy")
-    @Caption(name = "Available")
-    IPrimitive<Date> avalableForRent();
 
     @Detached
     LeaseTerms newLeaseTerms();
@@ -96,7 +112,7 @@ public interface ApartmentUnit extends IEntity {
      * and appearance of unit.
      */
     @Detached
-    ApartmentFloorplan floorplan();
+    Floorplan floorplan();
 
     /**
      * How much does the user need to put down
@@ -104,26 +120,19 @@ public interface ApartmentUnit extends IEntity {
     @Caption(name = "Deposit")
     Money requiredDeposit();
 
-//    // need a lease-terms object
-//    //IPrimitive<String> unitLeaseStatus();
-//
-//    //IPrimitive<String> unitOccpStatus();
-//
-//    public static enum Status {
-//        available, reserved, leased, notice;
-//    }
+    IList<Amenity> amenities();
 
-    IPrimitive<AptUnitStatusType> status();
+    IList<Utility> utilities();
 
-    IPrimitive<String> amenities();
+    IList<AptUnitInfoItem> infoDetails();
 
-//    IList<Amenity> amenities();
+    IList<Concession> concessions();
 
-    IPrimitive<String> utilities();
+    IList<AddOn> addOns();
 
-    IPrimitive<String> infoDetails();
+    @Detached
+    @Deprecated
+    //TODO VladS to clean it up
+    ISet<Picture> pictures();
 
-    IPrimitive<String> concessions();
-
-    IPrimitive<String> addOns();
 }

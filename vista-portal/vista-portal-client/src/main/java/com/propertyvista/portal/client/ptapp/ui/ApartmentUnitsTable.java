@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.resources.PortalImages;
 import com.propertyvista.portal.client.ptapp.ui.components.VistaReadOnlyComponentFactory;
-import com.propertyvista.portal.domain.MarketRent;
+import com.propertyvista.portal.domain.marketing.yield.MarketRent;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.util.DomainUtil;

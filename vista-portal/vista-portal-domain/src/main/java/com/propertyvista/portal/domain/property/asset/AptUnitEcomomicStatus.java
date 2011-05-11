@@ -7,13 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on May 2, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.portal.domain.property.asset;
 
-import com.propertyvista.portal.domain.property.asset.AptUnit;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
-public interface UnitCrudService extends AbstractCrudService<AptUnit> {
+@Translatable
+public enum AptUnitEcomomicStatus {
+
+    residential,
+
+    commercial,
+
+    offMarket,
+
+    other;
+
+    @Override
+    public String toString() {
+        return I18nEnum.tr(this);
+    }
 }
