@@ -70,11 +70,11 @@ public abstract class HostConfig {
 
     protected ProxyConfig proxy;
 
-    public void configure() {
+    protected void configure() {
         configure(getLocalHostName());
     }
 
-    public abstract void configure(String hostName);
+    protected abstract void configure(String hostName);
 
     public String getLocalHostName() {
         try {
