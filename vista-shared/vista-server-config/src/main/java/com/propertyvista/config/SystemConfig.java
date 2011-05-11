@@ -45,7 +45,7 @@ public class SystemConfig extends HostConfig {
     }
 
     @Override
-    public void configure() {
+    protected void configure() {
         super.configure();
         if (this.getProxyConfig() != null) {
             log.info("proxy defined {} ", this.getProxyConfig().getHost());
@@ -53,7 +53,7 @@ public class SystemConfig extends HostConfig {
     }
 
     @Override
-    public void configure(String hostName) {
+    protected void configure(String hostName) {
         if (doxHost.contains(hostName)) {
             setDoxProxy();
         } else if (!noCaledonProxyHost.contains(hostName)) {
@@ -61,16 +61,16 @@ public class SystemConfig extends HostConfig {
         }
     }
 
-    public void setDoxProxy() {
+    private void setDoxProxy() {
         setProxy("torproxy1", "8080");
         caledonProxy = getProxyConfig();
     }
 
-    public void setVistaCaledonProxy() {
+    private void setVistaCaledonProxy() {
         setCaledonProxy("ve.kvrmmdsf.vesrv.com", 8888, "vista", "Vista1102");
     }
 
-    public void setCaledonProxy(String proxyHost, int proxyPort, String user, String password) {
+    private void setCaledonProxy(String proxyHost, int proxyPort, String user, String password) {
         this.caledonProxy = new ProxyConfig(proxyHost, proxyPort, user, password);
     }
 
