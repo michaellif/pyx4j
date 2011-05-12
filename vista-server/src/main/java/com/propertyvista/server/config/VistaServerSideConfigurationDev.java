@@ -15,8 +15,10 @@ package com.propertyvista.server.config;
 
 import javax.servlet.ServletContext;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.security.server.ThrottleConfig;
 
 public class VistaServerSideConfigurationDev extends VistaServerSideConfiguration {
 
@@ -37,6 +39,26 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
             @Override
             public int maxPoolSize() {
                 return 2;
+            }
+        };
+    }
+
+    @Override
+    public ThrottleConfig getThrottleConfig() {
+        return new ThrottleConfig() {
+            @Override
+            public long getInterval() {
+                return 30 * Consts.SEC2MSEC;
+            }
+
+            @Override
+            public long getMaxRequests() {
+                return 600;
+            }
+
+            @Override
+            public long getMaxTimeUsage() {
+                return Consts.MIN2MSEC;
             }
         };
     }

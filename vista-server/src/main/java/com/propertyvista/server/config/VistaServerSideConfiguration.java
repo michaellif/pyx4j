@@ -89,14 +89,20 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
     @Override
     public ThrottleConfig getThrottleConfig() {
         return new ThrottleConfig() {
+
             @Override
             public long getInterval() {
-                return Consts.SEC2MSEC;
+                return 3 * Consts.MIN2MSEC;
+            }
+
+            @Override
+            public long getMaxTimeUsage() {
+                return 2 * Consts.MIN2MSEC;
             }
 
             @Override
             public long getMaxRequests() {
-                return 60000;
+                return 120;
             }
         };
     }
