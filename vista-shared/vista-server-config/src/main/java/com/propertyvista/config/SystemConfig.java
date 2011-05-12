@@ -48,7 +48,7 @@ public class SystemConfig extends HostConfig {
     protected void configure() {
         super.configure();
         if (this.getProxyConfig() != null) {
-            log.info("proxy defined {} ", this.getProxyConfig().getHost());
+            log.info("proxy defined {}:{} ", this.getProxyConfig().getHost(), this.getProxyConfig().getPort());
         }
     }
 
@@ -63,6 +63,7 @@ public class SystemConfig extends HostConfig {
 
     private void setDoxProxy() {
         setProxy("torproxy1", "8080");
+        //setProxy("localhost", "3129");
         caledonProxy = getProxyConfig();
     }
 

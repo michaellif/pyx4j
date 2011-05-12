@@ -37,16 +37,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.axis2</groupId>
-            <artifactId>axis2</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.axis2</groupId>
-            <artifactId>axis2-kernel</artifactId>
-        </dependency>
-
-        <dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-adb</artifactId>
 		</dependency>
