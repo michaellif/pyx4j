@@ -66,6 +66,10 @@ public class CSVLoad {
     }
 
     public static void loadFile(InputStream is, CSVReciver reciver) {
+        loadFile(is, new CSVParser(), reciver);
+    }
+
+    public static void loadFile(InputStream is, TextParser parser, CSVReciver reciver) {
         int lineNumber = 0;
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -74,14 +78,15 @@ public class CSVLoad {
 
             while (((line = reader.readLine()) != null) && (reciver.canContuneLoad())) {
                 lineNumber++;
-                if (line.startsWith("#") || (line.length() == 0)) {
+                String[] values = parser.parse(line);
+                if (values == null) {
                     continue;
                 }
                 if (header) {
                     header = false;
-                    reciver.onHeader(CSVParser.parse(line));
+                    reciver.onHeader(values);
                 } else {
-                    reciver.onRow(CSVParser.parse(line));
+                    reciver.onRow(values);
                 }
             }
             reader.close();

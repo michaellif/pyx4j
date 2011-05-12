@@ -23,9 +23,13 @@ package com.pyx4j.essentials.server.csv;
 import java.util.List;
 import java.util.Vector;
 
-public class CSVParser {
+public class CSVParser implements TextParser {
 
-    public static String[] parse(String line) {
+    @Override
+    public String[] parse(String line) {
+        if (line.startsWith("#") || (line.length() == 0)) {
+            return null;
+        }
         List<String> columns = new Vector<String>();
 
         StringBuilder col = new StringBuilder();
