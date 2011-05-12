@@ -44,7 +44,7 @@ public class YardiClient {
 
     private int requestCount = 0;
 
-    protected Long transactionId;
+    public Long transactionId;
 
     private final long timeOutInMinutes = 10;
 
