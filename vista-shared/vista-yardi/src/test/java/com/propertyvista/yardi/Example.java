@@ -13,9 +13,25 @@
  */
 package com.propertyvista.yardi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.yardi.ws.operations.Ping;
+import com.yardi.ws.operations.PingResponse;
+
 public class Example {
 
-    public static void main(String[] args) {
+    private final static Logger log = LoggerFactory.getLogger(Example.class);
 
+    public static void main(String[] args) {
+        YardiClient c = new YardiClient();
+
+        try {
+            Ping ping = new Ping();
+            PingResponse pr = c.getResidentTransactionsService().ping(ping);
+            log.info("result [{}]", pr.getPingResult());
+        } catch (Throwable e) {
+            log.error("error", e);
+        }
     }
 }

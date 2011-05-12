@@ -19,12 +19,15 @@ import org.apache.axis2.client.Stub;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.context.ServiceContext;
 import org.apache.axis2.description.MessageContextListener;
+import org.apache.axis2.transport.http.HTTPConstants;
+import org.apache.axis2.transport.http.HttpTransportProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.ws.ItfResidentTransactions2_0;
 import com.yardi.ws.ItfResidentTransactions2_0Stub;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
@@ -97,19 +100,19 @@ public class YardiClient {
         }
         options.setTimeOutInMilliSeconds(Consts.MIN2MSEC * timeOutInMinutes);
 
+        options.setProperty(HTTPConstants.HTTP_PROTOCOL_VERSION, HTTPConstants.HEADER_PROTOCOL_11);
+
         ProxyConfig proxyConfig = SystemConfig.instance().getProxyConfig();
         if (proxyConfig != null) {
+            HttpTransportProperties.ProxyProperties proxy = new HttpTransportProperties.ProxyProperties();
+            proxy.setProxyName(proxyConfig.getHost());
+            proxy.setProxyPort(proxyConfig.getPort());
+            if (CommonsStringUtils.isStringSet(proxyConfig.getUser())) {
+                proxy.setUserName(proxyConfig.getUser());
+                proxy.setPassWord(proxyConfig.getPassword());
+            }
 
-//            HttpTransportProperties.ProxyProperties proxy = new HttpTransportProperties.ProxyProperties();
-//            proxy.setProxyName(proxyConfig.getHost());
-//            proxy.setProxyPort(proxyConfig.getPort());
-//            if (CommonsStringUtils.isStringSet(proxyConfig.getUser())) {
-//                proxy.setUserName(proxyConfig.getUser());
-//                proxy.setPassWord(proxyConfig.getPassword());
-//            }
-//
-//            options.setProperty(HTTPConstants.PROXY, proxy);
-
+            options.setProperty(HTTPConstants.PROXY, proxy);
         }
 
         stub._getServiceClient().setOptions(options);
