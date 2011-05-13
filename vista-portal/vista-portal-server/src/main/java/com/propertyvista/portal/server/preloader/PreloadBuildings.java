@@ -39,10 +39,10 @@ import com.propertyvista.common.domain.financial.ChargeType;
 import com.propertyvista.common.domain.marketing.MarketRent;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Email;
-import com.propertyvista.domain.Phone;
-import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.Email.EmailType;
+import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.Phone.PhoneType;
+import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.marketing.yield.Concession;
@@ -225,8 +225,6 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         for (Phone phone : phones) {
             building.phoneList().add(phone);
         }
-
-        building.propertyProfile().set(propertyProfile);
 
         building.name().setValue(RandomUtil.randomLetters(3));
         building.marketingName().setValue(RandomUtil.randomLetters(4) + " " + RandomUtil.randomLetters(6));
@@ -477,15 +475,6 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             sb.append(building.address().street1().getStringView()).append(", ");
             sb.append(building.address().city().getStringView()).append(" ").append(building.address().province().getStringView()).append(", ");
             sb.append(building.address().postalCode().getStringView()).append(", ").append(building.address().country().getStringView());
-
-            // property profile
-            sb.append("\nProperty Profile\n");
-            sb.append(building.propertyProfile());
-            sb.append("\t");
-
-            sb.append("\nPet Charge");
-            sb.append(building.propertyProfile().petCharge());
-            sb.append("\t");
 
             // phones
             sb.append("\t");

@@ -69,7 +69,7 @@ public class BuildingEditorForm extends CEntityForm<Building> {
 
         main.add(new VistaWidgetDecorator(inject(proto().propertyCode()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().type()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().structureDescription()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().structureType()), decorData));
 
         main.add(new VistaWidgetDecorator(inject(proto().website()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().email().emailAddress()), decorData));

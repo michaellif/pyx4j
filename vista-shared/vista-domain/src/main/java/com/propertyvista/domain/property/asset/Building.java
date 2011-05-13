@@ -13,8 +13,13 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import java.sql.Date;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -23,18 +28,17 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.i18n.shared.Translation;
 
+import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Email;
+import com.propertyvista.domain.Medium;
 import com.propertyvista.domain.OrganizationContacts;
 import com.propertyvista.domain.Phone;
-import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.marketing.yield.Amenity;
-import com.propertyvista.portal.domain.pt.PropertyProfile;
 
 @ToStringFormat("{0} {1}")
 //TODO rename to Property
@@ -125,7 +129,34 @@ public interface Building extends IEntity {
 
     IPrimitive<String> residentialStories();
 
-    IPrimitive<String> structureDescription();
+    @Translatable
+    public enum StructureType {
+
+        @Translation("Low-Rise")
+        lowRise,
+
+        @Translation("High-Rise")
+        highRise,
+
+        @Translation("Mid-Rise")
+        midRise,
+
+        @Translation("Walk-up")
+        walkUp,
+
+        townhouse,
+
+        condo,
+
+        other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    IPrimitive<StructureType> structureType();
 
     // there is a drop-down box with create new complex  
     Complex complex();
@@ -140,9 +171,105 @@ public interface Building extends IEntity {
 
     IList<Parking> parkings();
 
+    IList<Locker> lockers();
+
     IList<Amenity> amenities();
 
-// TODO General unit attributes (via unit setup)?
+    // --------------------------------------------------------------------------------------
+
+    @Translatable
+    public enum ConstructionType {
+
+        brick,
+
+        wood,
+
+        block,
+
+        panel,
+
+        other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    IPrimitive<ConstructionType> constructionType();
+
+    @Translatable
+    public enum FoundationType {
+
+        pile,
+
+        continuousFooting,
+
+        spreadFooting,
+
+        foundationWalls,
+
+        other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    IPrimitive<FoundationType> foundationType();
+
+    IPrimitive<Boolean> centralAir();
+
+    IPrimitive<Boolean> centralHeat();
+
+    @Translatable
+    public enum FloorType {
+
+        hardwood,
+
+        tile,
+
+        laminate,
+
+        carpet,
+
+        mixed,
+
+        other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    IPrimitive<FloorType> floorType();
+
+    IPrimitive<String> landArea();
+
+    @Translatable
+    public enum WaterSupply {
+
+        municipal,
+
+        privateWell,
+
+        privateCommunityWell,
+
+        other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    IPrimitive<WaterSupply> waterSupply();
+
+    @Format("yyyy")
+    @Editor(type = EditorType.yearpicker)
+    IPrimitive<Date> structureBuildYear();
 
 // --------------------------------------------------------------------------------------
 
@@ -158,10 +285,20 @@ public interface Building extends IEntity {
 // TODO discuss with Artur which contacts fill here!..    
     IList<OrganizationContacts> contactsList();
 
-    PropertyProfile propertyProfile();
+// --------------------------------------------------------------------------------------
+
+    IPrimitive<Date> dateAquired();
+
+    IPrimitive<Money> purchasePrice();
+
+    IPrimitive<Money> marketPrice();
+
+    IPrimitive<Date> lastAppraisalDate();
+
+    IPrimitive<Money> lastAppraisalValue();
+
+// --------------------------------------------------------------------------------------
 
     @Detached
-    @Deprecated
-    //TODO VladS to clean it up
-    ISet<Picture> pictures();
+    IList<Medium> media();
 }

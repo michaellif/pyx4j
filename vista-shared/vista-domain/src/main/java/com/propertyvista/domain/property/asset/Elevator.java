@@ -13,41 +13,44 @@
  */
 package com.propertyvista.domain.property.asset;
 
-import java.util.Date;
+import java.sql.Date;
 
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.domain.property.vendor.Contract;
 
 public interface Elevator extends IEntity {
 
-        IPrimitive<String> description();
+    IPrimitive<String> description();
 
-        @MemberColumn(name = "elevatorType")
-        IPrimitive<String> type();
+    @MemberColumn(name = "elevatorType")
+    IPrimitive<String> type();
 
-        IPrimitive<String> make();
+    IPrimitive<String> make();
 
-        @MemberColumn(name = "elevatorYear")
-        IPrimitive<Date> year();
+    IPrimitive<String> model();
 
-        IPrimitive<String> build();
+    @MemberColumn(name = "elevatorYear")
+    IPrimitive<Date> year();
 
-        IPrimitive<String> warrantee();
+    IPrimitive<String> build();
 
-        IPrimitive<Date> licenceExpiration();
+    IPrimitive<String> warranty();
 
-        Contract maitenanceContractor();
+    IPrimitive<Date> warrantyExpiration();
 
-        IPrimitive<Boolean> usedForMoveInOut();
+    IPrimitive<String> licence();
 
-        Money bookingDeposit();
+    IPrimitive<Date> licenceExpiration();
 
-        IPrimitive<String> bookingRestrictoion();
+    Contract maitenanceContractor();
+
+    IPrimitive<Boolean> usedForMoveInOut();
+
+    BookingSchedule bookingSchedule();
 
 // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...
-        IPrimitive<String> notes();
-    }
+    IPrimitive<String> notes();
+}
