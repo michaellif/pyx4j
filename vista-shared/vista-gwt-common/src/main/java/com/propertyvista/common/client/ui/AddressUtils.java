@@ -20,6 +20,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.common.domain.IAddressFull;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.Province;
 
@@ -31,6 +32,47 @@ public class AddressUtils {
         main.add(parent.inject(proto.street1()), 20);
         main.add(parent.inject(proto.street2()), 20);
         main.add(parent.inject(proto.city()), 15);
+
+        // Need local variables to avoid extended casting that make the code unreadable
+        CEditableComponent<Province, ?> province;
+        main.add(province = (CEditableComponent<Province, ?>) parent.inject(proto.province()), 17);
+
+        CEditableComponent<Country, ?> country;
+        main.add(country = (CEditableComponent<Country, ?>) parent.inject(proto.country()), 15);
+
+        CEditableComponent<String, ?> postalCode;
+        main.add(postalCode = (CEditableComponent<String, ?>) parent.inject(proto.postalCode()), 7);
+
+        postalCode.addValueValidator(new com.propertyvista.common.client.ui.validators.ZipCodeValueValidator(parent, proto.country()));
+        country.addValueChangeHandler(new com.propertyvista.common.client.ui.validators.RevalidationTrigger(postalCode));
+
+        // The filter does not use the CEditableComponent<Country, ?> and use Model directly. So it work fine on populate.
+        com.propertyvista.common.client.ui.validators.ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
+            @Override
+            public boolean acceptOption(Province entity) {
+                if (parent.getValue() == null) {
+                    return true;
+                } else {
+                    Country country = (Country) parent.getValue().getMember(proto.country().getPath());
+                    return country.isNull() || EqualsHelper.equals(entity.country().name(), country.name());
+                }
+            }
+        });
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static void injectIAddress(VistaDecoratorsFlowPanel main, final IAddressFull proto, final CEntityEditableComponent<?> parent) {
+
+        main.add(parent.inject(proto.unitNumber()), 5);
+        main.add(parent.inject(proto.streetNumber()), 5);
+        main.add(parent.inject(proto.streetNumberSuffix()), 5);
+        main.add(parent.inject(proto.streetName()), 15);
+        main.add(parent.inject(proto.streetType()), 10);
+        main.add(parent.inject(proto.streetDirection()), 10);
+        main.add(parent.inject(proto.streetNumber()), 5);
+
+        main.add(parent.inject(proto.city()), 15);
+        main.add(parent.inject(proto.county()), 15);
 
         // Need local variables to avoid extended casting that make the code unreadable
         CEditableComponent<Province, ?> province;

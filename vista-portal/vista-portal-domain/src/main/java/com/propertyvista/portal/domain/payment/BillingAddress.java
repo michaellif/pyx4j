@@ -13,16 +13,15 @@
  */
 package com.propertyvista.portal.domain.payment;
 
-import com.propertyvista.common.domain.IAddress;
-
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface BillingAddress extends IEntity, IAddress {
+import com.propertyvista.common.domain.IAddressFull;
+
+public interface BillingAddress extends IEntity, IAddressFull {
 
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
-
 }

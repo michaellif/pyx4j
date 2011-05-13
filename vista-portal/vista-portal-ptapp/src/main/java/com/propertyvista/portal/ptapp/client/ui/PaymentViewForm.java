@@ -242,9 +242,14 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         boolean editable = true;
         if (value == Boolean.TRUE) {
             //TODO use a better forms and copy of data
-            get(proto().billingAddress().street1()).setValue(getValue().currentAddress().street1().getValue());
-            get(proto().billingAddress().street2()).setValue(getValue().currentAddress().street2().getValue());
+            get(proto().billingAddress().unitNumber()).setValue(getValue().currentAddress().unitNumber().getValue());
+            get(proto().billingAddress().streetNumber()).setValue(getValue().currentAddress().streetNumber().getValue());
+            get(proto().billingAddress().streetNumberSuffix()).setValue(getValue().currentAddress().streetNumberSuffix().getValue());
+            get(proto().billingAddress().streetName()).setValue(getValue().currentAddress().streetName().getValue());
+            get(proto().billingAddress().streetType()).setValue(getValue().currentAddress().streetType().getValue());
+            get(proto().billingAddress().streetDirection()).setValue(getValue().currentAddress().streetDirection().getValue());
             get(proto().billingAddress().city()).setValue(getValue().currentAddress().city().getValue());
+            get(proto().billingAddress().county()).setValue(getValue().currentAddress().county().getValue());
             get(proto().billingAddress().postalCode()).setValue(getValue().currentAddress().postalCode().getValue());
             get(proto().billingAddress().phone()).setValue(getValue().currentPhone().getValue());
 
@@ -259,9 +264,14 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
             editable = false;
         }
 
-        get(proto().billingAddress().street1()).setEditable(editable);
-        get(proto().billingAddress().street2()).setEditable(editable);
+        get(proto().billingAddress().unitNumber()).setEditable(editable);
+        get(proto().billingAddress().streetNumber()).setEditable(editable);
+        get(proto().billingAddress().streetNumberSuffix()).setEditable(editable);
+        get(proto().billingAddress().streetName()).setEditable(editable);
+        get(proto().billingAddress().streetType()).setEditable(editable);
+        get(proto().billingAddress().streetDirection()).setEditable(editable);
         get(proto().billingAddress().city()).setEditable(editable);
+        get(proto().billingAddress().county()).setEditable(editable);
         get(proto().billingAddress().province()).setEditable(editable);
         get(proto().billingAddress().country()).setEditable(editable);
         get(proto().billingAddress().postalCode()).setEditable(editable);

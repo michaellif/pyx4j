@@ -20,10 +20,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translation;
 
-import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.common.domain.IAddressFull;
 import com.propertyvista.common.domain.financial.Money;
 
-public interface IncomeInfoStudentIncome extends IEntity, IAddress, IIncomeInfo {
+public interface IncomeInfoStudentIncome extends IEntity, IAddressFull, IIncomeInfo {
 
     public enum FundingChoice {
         scolarship, bursary, grant, loan

@@ -29,6 +29,13 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.flex.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.FolderDecorator;
+import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
@@ -39,13 +46,6 @@ import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.VistaReadOnlyDecorator;
-
-import com.pyx4j.entity.client.ui.flex.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 
 public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTenantInfo> {
 
@@ -182,9 +182,13 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.country()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.postalCode()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.city()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.county()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.province()), dd2ColumnsTable));
-        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.street1()), dd2ColumnsTable));
-        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.street2()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.unitNumber()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.streetNumber()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.streetNumberSuffix()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.streetType()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.streetDirection()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.moveInDate()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.moveOutDate()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.payment()), dd2ColumnsTable));
@@ -265,9 +269,14 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
                         contactPanel.add(new VistaReadOnlyDecorator(inject(proto().homePhone()), dd));
                         contactPanel.add(new VistaReadOnlyDecorator(inject(proto().mobilePhone()), dd));
                         contactPanel.add(new VistaReadOnlyDecorator(inject(proto().workPhone()), dd));
-                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().street1()), dd));
-                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().street2()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().unitNumber()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().streetNumber()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().streetNumberSuffix()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().streetName()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().streetType()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().streetDirection()), dd));
                         contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().city()), dd));
+                        contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().county()), dd));
                         contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().province()), dd));
                         contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().country()), dd));
                         contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().postalCode()), dd));

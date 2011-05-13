@@ -380,7 +380,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             }
 
             private void setVizibility(Address value) {
-                boolean rented = OwnedRented.Rented.equals(value.rented().getValue());
+                boolean rented = OwnedRented.rented.equals(value.rented().getValue());
                 get(proto().payment()).setVisible(rented);
                 get(proto().managerName()).setVisible(rented);
             }

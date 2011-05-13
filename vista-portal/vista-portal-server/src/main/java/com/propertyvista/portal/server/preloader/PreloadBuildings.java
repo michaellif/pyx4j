@@ -382,9 +382,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             String website = "www.property" + (b + 1) + ".com";
 
             // address
-            String street = RandomUtil.randomInt(10000) + " Yonge St";
-            String zip = RandomUtil.randomPostalCode();
-            Address address = createAddress(street, zip);
+            Address address = createAddress();
 
             // phones
             List<Phone> phones = new ArrayList<Phone>();
@@ -472,7 +470,9 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             //            b.append(building.getStringView());
             sb.append(building.type().getStringView());
             sb.append("\t");
-            sb.append(building.address().street1().getStringView()).append(", ");
+            sb.append(building.address().streetNumber().getStringView()).append(", ");
+            sb.append(building.address().streetName().getStringView()).append(", ");
+            sb.append(building.address().streetType().getStringView()).append(", ");
             sb.append(building.address().city().getStringView()).append(" ").append(building.address().province().getStringView()).append(", ");
             sb.append(building.address().postalCode().getStringView()).append(", ").append(building.address().country().getStringView());
 

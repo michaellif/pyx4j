@@ -33,6 +33,9 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.common.domain.IAddressFull;
+import com.propertyvista.common.domain.IAddressFull.StreetDirection;
+import com.propertyvista.common.domain.IAddressFull.StreetType;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.common.domain.ref.Province;
@@ -295,6 +298,31 @@ public class VistaDataGenerator {
         address.country().set(province.country());
 
         address.city().setValue(RandomUtil.random(DemoData.CITIES));
+
+        // for now we support only two countries
+        if (address.country().name().getValue().toLowerCase().startsWith("c")) {
+            address.postalCode().setValue(RandomUtil.randomPostalCode());
+        } else {
+            address.postalCode().setValue(RandomUtil.randomZipCode());
+        }
+    }
+
+    public void populateAddress(IAddressFull address) {
+
+        address.unitNumber().setValue(Integer.toString(RandomUtil.randomInt(1000)));
+        address.streetNumber().setValue(Integer.toString(RandomUtil.randomInt(10000)));
+        address.streetNumberSuffix().setValue("");
+
+        address.streetName().setValue(RandomUtil.random(DemoData.STREETS));
+        address.streetType().setValue(RandomUtil.random(StreetType.values()));
+        address.streetDirection().setValue(RandomUtil.random(StreetDirection.values()));
+
+        Province province = RandomUtil.random(SharedData.getProvinces());
+        address.province().set(province);
+        address.country().set(province.country());
+
+        address.city().setValue(RandomUtil.random(DemoData.CITIES));
+        address.county().setValue("");
 
         // for now we support only two countries
         if (address.country().name().getValue().toLowerCase().startsWith("c")) {

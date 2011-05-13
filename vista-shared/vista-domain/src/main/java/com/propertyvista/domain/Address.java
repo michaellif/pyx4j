@@ -20,11 +20,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.common.domain.IAddressFull;
 
 @EmbeddedEntity
 @ToStringFormat("{0} {1} {2} {3}, {4} {5}")
-public interface Address extends IEntity, IAddress {
+public interface Address extends IEntity, IAddressFull {
 
     @Translatable
     public enum AddressType {

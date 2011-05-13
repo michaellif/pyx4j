@@ -241,7 +241,15 @@ public class VistaDataPrinter {
     public static String print(Address address) {
         StringBuilder sb = new StringBuilder();
         sb.append("\n");
-        sb.append(address.street1().getValue());
+        sb.append(address.unitNumber().getValue());
+        sb.append(" ");
+        sb.append(address.streetNumber().getValue());
+        sb.append(" ");
+        sb.append(address.streetName().getValue());
+        sb.append(" ");
+        sb.append(address.streetType().getStringView());
+        sb.append(", ");
+        sb.append(address.streetDirection().getStringView());
         sb.append(", ").append(address.city().getStringView());
         sb.append(", ").append(address.province().getStringView());
         sb.append(" ").append(address.postalCode().getStringView());

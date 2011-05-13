@@ -19,6 +19,7 @@ import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.common.domain.IAddressFull;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
@@ -131,7 +132,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         if (BusinessRules.infoPageNeedPreviousAddress(tenant.currentAddress().moveInDate().getValue())) {
             assertAddressForm(tenant.previousAddress().getPath(), detach(tenant.previousAddress()));
         } else {
-            assertNotVisible(D.id(tenant.previousAddress().getPath(), detach(tenant.previousAddress()).street1()));
+            assertNotVisible(D.id(tenant.previousAddress().getPath(), detach(tenant.previousAddress()).streetName()));
         }
 
         //Vehicles
@@ -170,6 +171,20 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         assertValueOnForm(formDebugId, address.province());
     }
 
+    private void assertIAddressForm(IDebugId formDebugId, IAddressFull address) {
+        assertValueOnForm(formDebugId, address.unitNumber());
+        assertValueOnForm(formDebugId, address.streetNumber());
+        assertValueOnForm(formDebugId, address.streetNumberSuffix());
+        assertValueOnForm(formDebugId, address.streetName());
+        assertValueOnForm(formDebugId, address.streetType());
+        assertValueOnForm(formDebugId, address.streetDirection());
+        assertValueOnForm(formDebugId, address.city());
+        assertValueOnForm(formDebugId, address.county());
+        assertValueOnForm(formDebugId, address.province());
+        assertValueOnForm(formDebugId, address.postalCode());
+        assertValueOnForm(formDebugId, address.country());
+    }
+
     protected void assertAddressForm(IDebugId formDebugId, Address address) {
         assertIAddressForm(formDebugId, address);
 
@@ -179,7 +194,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         assertValueOnForm(formDebugId, address.moveOutDate());
         assertValueOnForm(formDebugId, address.rented());
 
-        if (OwnedRented.Owned == address.rented().getValue()) {
+        if (OwnedRented.owned == address.rented().getValue()) {
             assertNotVisible(D.id(formDebugId, address.payment()));
             assertNotVisible(D.id(formDebugId, address.managerName()));
         } else {

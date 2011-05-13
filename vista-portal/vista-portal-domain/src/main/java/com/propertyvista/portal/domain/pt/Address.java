@@ -24,17 +24,17 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.common.domain.IAddressFull;
 
 @Table(name = "pt_address")
-public interface Address extends IEntity, IAddress {
+public interface Address extends IEntity, IAddressFull {
 
     @Translatable
     public enum OwnedRented {
 
-        Owned,
+        owned,
 
-        Rented;
+        rented;
 
         @Override
         public String toString() {
@@ -56,9 +56,9 @@ public interface Address extends IEntity, IAddress {
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 
+    @NotNull
     @Caption(name = "Owned/Rented")
     @Editor(type = EditorType.radiogroup)
-    @NotNull
     IPrimitive<OwnedRented> rented();
 
     IPrimitive<String> managerName();

@@ -28,6 +28,7 @@ import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.common.domain.IAddressFull;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
@@ -197,7 +198,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         if (BusinessRules.infoPageNeedPreviousAddress(tenant.currentAddress().moveInDate().getValue())) {
             enterAddressForm(tenant.previousAddress().getPath(), detach(tenant.previousAddress()));
         } else {
-            assertNotVisible(D.id(tenant.previousAddress().getPath(), detach(tenant.previousAddress()).street1()));
+            assertNotVisible(D.id(tenant.previousAddress().getPath(), detach(tenant.previousAddress()).streetName()));
         }
 
         //Vehicles
@@ -239,6 +240,20 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         setValueOnForm(formDebugId, address.province());
     }
 
+    private void enterIAddressForm(IDebugId formDebugId, IAddressFull address) {
+        setValueOnForm(formDebugId, address.unitNumber());
+        setValueOnForm(formDebugId, address.streetNumber());
+        setValueOnForm(formDebugId, address.streetNumberSuffix());
+        setValueOnForm(formDebugId, address.streetName());
+        setValueOnForm(formDebugId, address.streetType());
+        setValueOnForm(formDebugId, address.streetDirection());
+        setValueOnForm(formDebugId, address.city());
+        setValueOnForm(formDebugId, address.county());
+        setValueOnForm(formDebugId, address.province());
+        setValueOnForm(formDebugId, address.postalCode());
+        setValueOnForm(formDebugId, address.country());
+    }
+
     private void enterAddressForm(IDebugId formDebugId, Address address) {
         enterIAddressForm(formDebugId, address);
 
@@ -247,7 +262,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         setValueOnForm(formDebugId, address.moveOutDate());
 
         setValueOnForm(formDebugId, address.rented());
-        if (OwnedRented.Owned == address.rented().getValue()) {
+        if (OwnedRented.owned == address.rented().getValue()) {
             assertNotVisible(D.id(formDebugId, address.payment()));
             assertNotVisible(D.id(formDebugId, address.managerName()));
         } else {
@@ -275,12 +290,16 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         setValueOnForm(fomrDebugId, contact.homePhone());
         setValueOnForm(fomrDebugId, contact.mobilePhone());
         setValueOnForm(fomrDebugId, contact.workPhone());
-        setValueOnForm(fomrDebugId, contact.address().street1());
-        setValueOnForm(fomrDebugId, contact.address().street2());
+        setValueOnForm(fomrDebugId, contact.address().unitNumber());
+        setValueOnForm(fomrDebugId, contact.address().streetNumber());
+        setValueOnForm(fomrDebugId, contact.address().streetName());
+        setValueOnForm(fomrDebugId, contact.address().streetType());
+        setValueOnForm(fomrDebugId, contact.address().streetDirection());
         setValueOnForm(fomrDebugId, contact.address().city());
-        setValueOnForm(fomrDebugId, contact.address().country());
-        setValueOnForm(fomrDebugId, contact.address().postalCode());
+        setValueOnForm(fomrDebugId, contact.address().county());
         setValueOnForm(fomrDebugId, contact.address().province());
+        setValueOnForm(fomrDebugId, contact.address().postalCode());
+        setValueOnForm(fomrDebugId, contact.address().country());
     }
 
     private void enterFinancialPages(Summary summary) {
