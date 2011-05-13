@@ -74,6 +74,8 @@ public interface Building extends IEntity {
 
         commercial,
 
+        mixed_residential,
+
         residential,
 
         industrial,
@@ -96,6 +98,8 @@ public interface Building extends IEntity {
 
     @Translatable
     public enum Shape {
+
+        regular,
 
         @Translation("L-shape")
         lShape,
