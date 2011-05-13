@@ -70,6 +70,12 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Value", day, emp2.from().getValue());
     }
 
+    @SuppressWarnings("deprecation")
+    public static java.sql.Date createSqlDate(int year, int month, int day) {
+        //return new java.sql.Date(DateUtils.createDate(year - 1900, month - 1, day).getTime());
+        return new java.sql.Date(new Date(year - 1900, month - 1, day).getTime());
+    }
+
     public void testSqlDate() {
         Schedule s = EntityFactory.create(Schedule.class);
         Assert.assertNull("Initial value", s.startsOn().getValue());
@@ -87,6 +93,19 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         Assert.assertNotNull("retrieve by PK " + s.getPrimaryKey(), s2);
         Assert.assertEquals("Class of Value", java.sql.Date.class, s2.startsOn().getValue().getClass());
         Assert.assertEquals("Value", day, s2.startsOn().getValue());
+
+        // Test specific to ETD dates.
+        s.startsOn().setValue(createSqlDate(1999, 04, 04));
+        srv.persist(s);
+        Assert.assertEquals("Value", s.startsOn().getValue(), srv.retrieve(Schedule.class, s.getPrimaryKey()).startsOn().getValue());
+
+        s.startsOn().setValue(createSqlDate(1962, 03, 12));
+        srv.persist(s);
+        Assert.assertEquals("Value", s.startsOn().getValue(), srv.retrieve(Schedule.class, s.getPrimaryKey()).startsOn().getValue());
+
+        s.startsOn().setValue(createSqlDate(1962, 03, 29));
+        srv.persist(s);
+        Assert.assertEquals("Value", s.startsOn().getValue(), srv.retrieve(Schedule.class, s.getPrimaryKey()).startsOn().getValue());
     }
 
     public void testSqlTime() {
