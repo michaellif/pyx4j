@@ -221,6 +221,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             }
         });
 
+        // ------------------------------------------------------------------------------------------------        
+
         @SuppressWarnings("unchecked")
         final CEntityEditableComponent<Address> previousAddressForm = ((CEntityEditableComponent<Address>) getRaw(proto().previousAddress()));
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
@@ -250,6 +252,16 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             }
         });
 
+        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
+                previousAddressForm.get(previousAddressForm.proto().moveOutDate()).revalidate();
+            }
+        });
+
+        // ------------------------------------------------------------------------------------------------        
+
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
 
             @Override
@@ -276,6 +288,16 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
                 return i18n.tr("The move out date can not be before or equal move in one.");
             }
         });
+
+        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
+                previousAddressForm.get(previousAddressForm.proto().moveInDate()).revalidate();
+            }
+        });
+
+        // ------------------------------------------------------------------------------------------------
 
         get(proto().secureIdentifier()).addValueValidator(new CanadianSinValidator());
 

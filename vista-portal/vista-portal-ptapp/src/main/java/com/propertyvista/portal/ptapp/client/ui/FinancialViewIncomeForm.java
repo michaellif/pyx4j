@@ -344,6 +344,14 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             }
         });
 
+        comp.get(comp.proto().starts()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
+                comp.get(comp.proto().ends()).revalidate();
+            }
+        });
+
         comp.get(comp.proto().ends()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
@@ -354,6 +362,14 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
                 return i18n.tr("The end date can not be before of equal to start date.");
+            }
+        });
+
+        comp.get(comp.proto().ends()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
+                comp.get(comp.proto().starts()).revalidate();
             }
         });
     }
