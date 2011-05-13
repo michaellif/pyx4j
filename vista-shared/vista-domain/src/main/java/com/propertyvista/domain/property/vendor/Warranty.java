@@ -7,12 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-10
+ * Created on 2011-05-13
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset;
+package com.propertyvista.domain.property.vendor;
 
+import java.sql.Date;
 
-public interface Boiler extends Equipment {
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+public interface Warranty extends IEntity {
+
+    IPrimitive<String> identification();
+
+    IPrimitive<Date> expiration();
 }

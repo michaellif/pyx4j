@@ -13,44 +13,11 @@
  */
 package com.propertyvista.domain.property.asset;
 
-import java.sql.Date;
-
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.property.vendor.Contract;
+public interface Elevator extends Equipment {
 
-public interface Elevator extends IEntity {
-
-    IPrimitive<String> description();
-
-    @MemberColumn(name = "elevatorType")
-    IPrimitive<String> type();
-
-    IPrimitive<String> make();
-
-    IPrimitive<String> model();
-
-    @MemberColumn(name = "elevatorYear")
-    IPrimitive<Date> year();
-
-    IPrimitive<String> build();
-
-    IPrimitive<String> warranty();
-
-    IPrimitive<Date> warrantyExpiration();
-
-    IPrimitive<String> licence();
-
-    IPrimitive<Date> licenceExpiration();
-
-    Contract maitenanceContractor();
-
-    IPrimitive<Boolean> usedForMoveInOut();
+    IPrimitive<Boolean> isForMoveInOut();
 
     BookingSchedule bookingSchedule();
-
-// TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...
-    IPrimitive<String> notes();
 }

@@ -289,13 +289,13 @@ public interface Building extends IEntity {
 
     IPrimitive<Date> dateAquired();
 
-    IPrimitive<Money> purchasePrice();
+    Money purchasePrice();
 
-    IPrimitive<Money> marketPrice();
+    Money marketPrice();
 
     IPrimitive<Date> lastAppraisalDate();
 
-    IPrimitive<Money> lastAppraisalValue();
+    Money lastAppraisalValue();
 
 // --------------------------------------------------------------------------------------
 
