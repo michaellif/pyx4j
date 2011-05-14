@@ -13,15 +13,42 @@
  */
 package com.propertyvista.portal.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
-
+import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+
+import com.pyx4j.essentials.client.SessionInactiveDialog;
+import com.pyx4j.site.client.AppSite;
 
 public class PortalSite extends VistaSite {
+    private PortalGinjector ginjector;
+
+    @Override
+    public void onSiteLoad() {
+        super.onSiteLoad();
+
+        ginjector = GWT.create(PortalGinjector.class);
+        getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.FindApartment());
+
+        RootPanel.get().add(RootLayoutPanel.get());
+
+        RootLayoutPanel.get().add(ginjector.getSiteView());
+
+        hideLoadingIndicator();
+
+        SessionInactiveDialog.register();
+
+        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment());
+
+    }
 
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        // TODO Auto-generated method stub
+        setMessage(new Message(message, title, buttonText, command));
     }
 
 }
