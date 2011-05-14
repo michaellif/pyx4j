@@ -47,7 +47,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement x="292" y="54" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{street2}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="15" y="34" width="165" height="20"/>
