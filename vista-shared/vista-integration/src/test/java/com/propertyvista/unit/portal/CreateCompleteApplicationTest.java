@@ -248,10 +248,10 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         setValueOnForm(formDebugId, address.streetType());
         setValueOnForm(formDebugId, address.streetDirection());
         setValueOnForm(formDebugId, address.city());
-        setValueOnForm(formDebugId, address.county());
-        setValueOnForm(formDebugId, address.province());
-        setValueOnForm(formDebugId, address.postalCode());
         setValueOnForm(formDebugId, address.country());
+        setValueOnForm(formDebugId, address.postalCode());
+        setValueOnForm(formDebugId, address.province());
+        setValueOnForm(formDebugId, address.county());
     }
 
     private void enterAddressForm(IDebugId formDebugId, Address address) {
@@ -290,16 +290,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         setValueOnForm(fomrDebugId, contact.homePhone());
         setValueOnForm(fomrDebugId, contact.mobilePhone());
         setValueOnForm(fomrDebugId, contact.workPhone());
-        setValueOnForm(fomrDebugId, contact.address().unitNumber());
-        setValueOnForm(fomrDebugId, contact.address().streetNumber());
-        setValueOnForm(fomrDebugId, contact.address().streetName());
-        setValueOnForm(fomrDebugId, contact.address().streetType());
-        setValueOnForm(fomrDebugId, contact.address().streetDirection());
-        setValueOnForm(fomrDebugId, contact.address().city());
-        setValueOnForm(fomrDebugId, contact.address().county());
-        setValueOnForm(fomrDebugId, contact.address().province());
-        setValueOnForm(fomrDebugId, contact.address().postalCode());
-        setValueOnForm(fomrDebugId, contact.address().country());
+        enterIAddressForm(fomrDebugId, contact.address());
     }
 
     private void enterFinancialPages(Summary summary) {

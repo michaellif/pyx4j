@@ -162,7 +162,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantInfo.class).emergencyContacts(), row, proto(EmergencyContact.class).firstName())));
     }
 
-    private void assertIAddressForm(IDebugId formDebugId, IAddress address) {
+    protected void assertIAddressForm(IDebugId formDebugId, IAddress address) {
         assertValueOnForm(formDebugId, address.street1());
         assertValueOnForm(formDebugId, address.street2());
         assertValueOnForm(formDebugId, address.city());
@@ -171,7 +171,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         assertValueOnForm(formDebugId, address.province());
     }
 
-    private void assertIAddressForm(IDebugId formDebugId, IAddressFull address) {
+    protected void assertIAddressForm(IDebugId formDebugId, IAddressFull address) {
         assertValueOnForm(formDebugId, address.unitNumber());
         assertValueOnForm(formDebugId, address.streetNumber());
         assertValueOnForm(formDebugId, address.streetNumberSuffix());
@@ -247,7 +247,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
         assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Financial.class, num));
     }
 
-    private void verifyFinancialPage(PotentialTenantFinancial financial, int id) {
+    protected void verifyFinancialPage(PotentialTenantFinancial financial, int id) {
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Financial.class));
         selenium.click(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Financial.class, id));
 
