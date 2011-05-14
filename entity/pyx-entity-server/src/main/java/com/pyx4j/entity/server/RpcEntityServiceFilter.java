@@ -21,7 +21,6 @@
 package com.pyx4j.entity.server;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -112,25 +111,15 @@ public class RpcEntityServiceFilter implements IServiceFilter {
                     filterMembers(value, processed, in);
                 }
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                if (me.getValue() != null) {
-                    if (!(memberMeta.getValueClass().isAssignableFrom(me.getValue().getClass()))) {
-                        log.error("Got Value " + memberName + " {} instead of {}", me.getValue().getClass(), memberMeta.getValueClass());
-                        throw new Error("Data type corruption");
-                    }
-                    if (in && memberMeta.getValueClass().equals(java.sql.Date.class)) {
-                        fixTimeZoneErrors(memberName, (java.sql.Date) me.getValue());
-                    }
+                if ((me.getValue() != null) && (!(memberMeta.getValueClass().isAssignableFrom(me.getValue().getClass())))) {
+                    log.error("Got Value " + memberName + " {} instead of {}", me.getValue().getClass(), memberMeta.getValueClass());
+                    throw new Error("Data type corruption");
                 }
             } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 for (Object value : (IPrimitiveSet<?>) entity.getMember(memberName)) {
-                    if (value != null) {
-                        if (!(memberMeta.getValueClass().isAssignableFrom(value.getClass()))) {
-                            log.error("Got Value " + memberName + " {} instead of {}", value.getClass(), memberMeta.getValueClass());
-                            throw new Error("Data type corruption");
-                        }
-                        if (in && memberMeta.getValueClass().equals(java.sql.Date.class)) {
-                            fixTimeZoneErrors(memberName, (java.sql.Date) value);
-                        }
+                    if ((value != null) && (!(memberMeta.getValueClass().isAssignableFrom(value.getClass())))) {
+                        log.error("Got Value " + memberName + " {} instead of {}", value.getClass(), memberMeta.getValueClass());
+                        throw new Error("Data type corruption");
                     }
                 }
             } else {
@@ -139,8 +128,4 @@ public class RpcEntityServiceFilter implements IServiceFilter {
         }
     }
 
-    private void fixTimeZoneErrors(String memberName, Date value) {
-        log.info("got date {} = {}", memberName, value.getTime());
-        log.info("         {} = {}", memberName, value.toGMTString());
-    }
 }

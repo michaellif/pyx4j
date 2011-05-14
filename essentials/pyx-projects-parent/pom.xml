@@ -97,6 +97,12 @@
 
             <dependency>
                 <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-rpc-shared</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
                 <artifactId>pyx-entity-rpc</artifactId>
                 <version>${pyxVersion}</version>
             </dependency>
