@@ -230,6 +230,7 @@ public class CaptchaComposite extends SimplePanel {
 
     private void createChallenge() {
         if (ApplicationMode.offlineDevelopment) {
+            assigneRecaptchaId();
             return;
         }
         AjaxJSLoader.load(javaScriptURL, new AjaxJSLoader.IsJSLoaded() {
