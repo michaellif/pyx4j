@@ -432,6 +432,7 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
         style.addProperty("font", "caption");
         style.addProperty("font-weight", "bold");
         style.addProperty("color", "#444");
+        style.addProperty("height", "20px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption) + ":hover");
@@ -439,7 +440,7 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderHeading));
         style.addProperty("padding-top", "2px");
-        style.addProperty("text-align", "center");
+        style.addProperty("padding-left", "1em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderMenu));
