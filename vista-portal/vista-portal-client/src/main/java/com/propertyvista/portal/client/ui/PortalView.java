@@ -29,6 +29,12 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
 
+import com.propertyvista.portal.client.mvp.ActionsActivityMapper;
+import com.propertyvista.portal.client.mvp.BottomActivityMapper;
+import com.propertyvista.portal.client.mvp.ContentActivityMapper;
+import com.propertyvista.portal.client.mvp.LogoActivityMapper;
+import com.propertyvista.portal.client.mvp.MainNavigActivityMapper;
+
 @Singleton
 public class PortalView extends FlowPanel {
 
@@ -39,15 +45,15 @@ public class PortalView extends FlowPanel {
     }
 
     @Inject
-    public PortalView(ActivityMapper logoActivityMapper,
+    public PortalView(LogoActivityMapper logoActivityMapper,
 
-    ActivityMapper actionsActivityMapper,
+    ActionsActivityMapper actionsActivityMapper,
 
-    ActivityMapper mainNavigActivityMapper,
+    MainNavigActivityMapper mainNavigActivityMapper,
 
-    ActivityMapper contentActivityMapper,
+    ContentActivityMapper contentActivityMapper,
 
-    ActivityMapper bottomActivityMapper,
+    BottomActivityMapper bottomActivityMapper,
 
     Theme theme) {
 
