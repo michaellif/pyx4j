@@ -18,6 +18,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
 import com.propertyvista.common.domain.financial.ChargeType;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
@@ -26,10 +30,6 @@ import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.pt.services.PetService;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PtAppContext;
-
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 public class PetServiceImpl extends ApplicationEntityServiceImpl implements PetService {
     private final static Logger log = LoggerFactory.getLogger(PetServiceImpl.class);

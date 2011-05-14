@@ -257,7 +257,7 @@ public class VistaDataGenerator {
         if (Math.abs(this.seed) < 1000) {
             maxPets = 1 + RandomUtil.randomInt(2);
         } else {
-            maxPets = RandomUtil.randomInt(6);
+            maxPets = RandomUtil.randomInt(3);
         }
 
         for (int i = 0; i < maxPets; i++) {
@@ -418,7 +418,7 @@ public class VistaDataGenerator {
 
         int maxTenants = DemoData.NUM_POTENTIAL_TENANTS;
         if (Math.abs(this.seed) > 1000) {
-            maxTenants = 1 + RandomUtil.randomInt(7);
+            maxTenants = 1 + RandomUtil.randomInt(5);
         }
 
         for (int i = 0; i < maxTenants; i++) {

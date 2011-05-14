@@ -83,7 +83,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
     }
 
     // Whiled goose chase
-    public void OFF_testRandomizedData() {
+    public void testRandomizedData() {
         for (int n = 1; n <= 10; n++) {
             Random random = new Random();
             exectuteFlow(random.nextLong());
@@ -180,9 +180,12 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
     }
 
     private void enterTestInfo(PotentialTenantInfo tenant) {
-        setValueOnForm(tenant.firstName());
-        setValueOnForm(tenant.lastName());
+        assertValueOnForm(tenant.firstName());
+        assertValueOnForm(tenant.lastName());
+        //setValueOnForm(tenant.firstName());
+        //setValueOnForm(tenant.lastName());
         setValueOnForm(tenant.middleName());
+
         setValueOnForm(tenant.email());
         setValueOnForm(tenant.homePhone());
         setValueOnForm(tenant.mobilePhone());

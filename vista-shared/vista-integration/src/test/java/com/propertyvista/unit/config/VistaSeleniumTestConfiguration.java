@@ -129,7 +129,7 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
     @Override
     public String getRemoteDriverHost() {
         // Fail safe switch: if we committed private config
-        if (System.getProperty("bamboo.buildNumber") == null) {
+        if (System.getProperty("bamboo.buildNumber") != null) {
             return null;
         } else {
             return null;
