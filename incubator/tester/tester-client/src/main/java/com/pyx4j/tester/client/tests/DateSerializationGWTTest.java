@@ -125,7 +125,7 @@ public class DateSerializationGWTTest extends TestCase {
 
         boolean testRandomizedData = true;
         if (testRandomizedData) {
-            for (int i = 1; i < 100; i++) {
+            for (int i = 1; i < 5; i++) {
                 scenarios.push(new ScenarioData() {
                     {
                         addr.effectiveFrom().setValue(createSqlDate(1900 + Random.nextInt(200), 1 + Random.nextInt(12), Random.nextInt(28)));
