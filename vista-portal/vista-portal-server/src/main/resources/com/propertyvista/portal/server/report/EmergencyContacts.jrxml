@@ -9,8 +9,10 @@
 	<field name="homePhone" class="java.lang.String"/>
 	<field name="mobilePhone" class="java.lang.String"/>
 	<field name="workPhone" class="java.lang.String"/>
-	<field name="address/street1" class="java.lang.String"/>
-	<field name="address/street2" class="java.lang.String"/>
+	<field name="address/unitNumber" class="java.lang.String"/>
+	<field name="address/streetNumber" class="java.lang.String"/>
+	<field name="address/streetName" class="java.lang.String"/>
+	<field name="address/streetType" class="com.propertyvista.common.domain.IAddressFull.StreetType"/>
 	<field name="address/city" class="java.lang.String"/>
 	<field name="address/province/name" class="java.lang.String"/>
 	<field name="address/country/name" class="java.lang.String"/>
@@ -93,12 +95,12 @@
 			<textField isBlankWhenNull="true">
 				<reportElement x="288" y="100" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{address/street2}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="288" y="80" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{address/street1}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{address/streetNumber}+ " " + $F{address/streetName} + " " + $F{address/streetType} + " " + $F{address/unitNumber}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="288" y="120" width="100" height="20"/>

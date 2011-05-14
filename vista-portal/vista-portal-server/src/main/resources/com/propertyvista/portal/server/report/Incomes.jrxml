@@ -10,8 +10,10 @@
 	<field name="employer/postalCode" class="java.lang.String"/>
 	<field name="employer/city" class="java.lang.String"/>
 	<field name="employer/province/name" class="java.lang.String"/>
-	<field name="employer/street1" class="java.lang.String"/>
-	<field name="employer/street2" class="java.lang.String"/>
+	<field name="employer/unitNumber" class="java.lang.String"/>
+	<field name="employer/streetNumber" class="java.lang.String"/>
+	<field name="employer/streetName" class="java.lang.String"/>
+	<field name="employer/streetType" class="com.propertyvista.common.domain.IAddressFull.StreetType"/>
 	<field name="employer/supervisorName" class="java.lang.String"/>
 	<field name="employer/supervisorPhone" class="java.lang.String"/>
 	<field name="employer/monthlyAmount/amount" class="java.lang.Double"/>
@@ -78,7 +80,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement x="288" y="58" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{employer/street1}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employer/streetNumber}+ " " + $F{employer/streetName} + " " + $F{employer/streetType} + " " + $F{employer/unitNumber}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="288" y="78" width="100" height="20"/>
