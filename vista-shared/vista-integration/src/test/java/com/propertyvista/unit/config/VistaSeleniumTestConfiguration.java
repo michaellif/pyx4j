@@ -13,6 +13,7 @@
  */
 package com.propertyvista.unit.config;
 
+import com.pyx4j.essentials.j2se.HostConfig;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 import com.pyx4j.selenium.DefaultSeleniumTestConfiguration;
 
@@ -61,10 +62,20 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
 
         switch (deploymentId) {
         case local:
-            url.append("localhost:8888/vista/");
+            if (getRemoteDriverHost() == null) {
+                url.append("localhost");
+            } else {
+                url.append(HostConfig.getLocalHostIP());
+            }
+            url.append(":8888/vista/");
             break;
         case local_9000:
-            url.append("localhost:9000/vista/");
+            if (getRemoteDriverHost() == null) {
+                url.append("localhost");
+            } else {
+                url.append(HostConfig.getLocalHostIP());
+            }
+            url.append(":9000/vista/");
             break;
         case www22:
             url.append("www22.birchwoodsoftwaregroup.com/");
@@ -113,5 +124,19 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
         // Lazy man switch, See next version
         //return Driver.Chrome;
         //return Driver.IE;
+    }
+
+    @Override
+    public String getRemoteDriverHost() {
+        // Fail safe switch: if we committed private config
+        if (System.getProperty("bamboo.buildNumber") == null) {
+            return null;
+        } else {
+            return null;
+            // e.g. Run Firefox Application in another VM
+            // Just download http://code.google.com/p/selenium/downloads/detail?name=selenium-server-standalone-2.0b3.jar
+            // And run java -jar selenium-server-standalone-2.0b3.jar
+            //return "10.1.1.125";
+        }
     }
 }
