@@ -76,10 +76,19 @@ public abstract class HostConfig {
 
     protected abstract void configure(String hostName);
 
-    public String getLocalHostName() {
+    public static String getLocalHostName() {
         try {
             InetAddress local = InetAddress.getLocalHost();
             return local.getHostName().toLowerCase(Locale.ENGLISH);
+        } catch (UnknownHostException e) {
+            throw new Error(e);
+        }
+    }
+
+    public static String getLocalHostIP() {
+        try {
+            InetAddress local = InetAddress.getLocalHost();
+            return local.getHostAddress();
         } catch (UnknownHostException e) {
             throw new Error(e);
         }

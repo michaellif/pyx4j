@@ -37,6 +37,8 @@ public interface ISeleniumTestConfiguration {
 
     public Driver getDriver();
 
+    public String getRemoteDriverHost();
+
     public int waitSeconds();
 
     public int implicitlyWaitSeconds();

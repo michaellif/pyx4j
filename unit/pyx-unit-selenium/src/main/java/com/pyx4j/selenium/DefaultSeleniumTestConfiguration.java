@@ -72,6 +72,11 @@ public class DefaultSeleniumTestConfiguration implements ISeleniumTestConfigurat
     }
 
     @Override
+    public String getRemoteDriverHost() {
+        return null;
+    }
+
+    @Override
     public ProxyConfig getProxyConfig() {
         return null;
     }

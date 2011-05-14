@@ -20,6 +20,8 @@
  */
 package com.pyx4j.selenium;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +33,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,26 +50,53 @@ public class WebDriverWrapper implements WebDriver {
 
     public WebDriverWrapper(ISeleniumTestConfiguration testConfig) {
         this.testConfig = testConfig;
-        switch (this.testConfig.getDriver()) {
-        case Chrome:
-            driver = new ChromeDriver();
-            break;
-        case Friefox:
-            FirefoxProfile profile = null;
-            ProxyConfig proxyConfig = testConfig.getProxyConfig();
-            if (proxyConfig != null) {
-                profile = new FirefoxProfile();
-                Proxy proxy = new Proxy();
-                proxy.setProxyType(Proxy.ProxyType.MANUAL);
-                proxy.setHttpProxy(proxyConfig.getHost() + ":" + proxyConfig.getPort());
-                proxy.setNoProxy("localhost");
-                profile.setProxyPreferences(proxy);
+        if (this.testConfig.getRemoteDriverHost() == null) {
+            switch (this.testConfig.getDriver()) {
+            case Chrome:
+                driver = new ChromeDriver();
+                break;
+            case Friefox:
+                FirefoxProfile profile = null;
+                ProxyConfig proxyConfig = testConfig.getProxyConfig();
+                if (proxyConfig != null) {
+                    profile = new FirefoxProfile();
+                    Proxy proxy = new Proxy();
+                    proxy.setProxyType(Proxy.ProxyType.MANUAL);
+                    proxy.setHttpProxy(proxyConfig.getHost() + ":" + proxyConfig.getPort());
+                    proxy.setNoProxy("localhost");
+                    profile.setProxyPreferences(proxy);
+                }
+                driver = new FirefoxDriver(profile);
+                break;
+            case IE:
+                driver = new InternetExplorerDriver();
+                break;
+            default:
+                throw new IllegalArgumentException();
             }
-            driver = new FirefoxDriver(profile);
-            break;
-        case IE:
-            driver = new InternetExplorerDriver();
-            break;
+        } else {
+            DesiredCapabilities capabilities;
+            switch (this.testConfig.getDriver()) {
+            case Chrome:
+                capabilities = DesiredCapabilities.chrome();
+                break;
+            case Friefox:
+                capabilities = DesiredCapabilities.firefox();
+                break;
+            case IE:
+                capabilities = DesiredCapabilities.internetExplorer();
+                break;
+            default:
+                throw new IllegalArgumentException();
+            }
+            capabilities.setJavascriptEnabled(true);
+            URL remoteAddress = null;
+            try {
+                remoteAddress = new URL("http://" + this.testConfig.getRemoteDriverHost() + ":4444/wd/hub");
+            } catch (MalformedURLException ignore) {
+            }
+            driver = new RemoteWebDriver(remoteAddress, capabilities);
+
         }
         log.debug("WebDriver {} created", this.testConfig.getDriver());
         String testUrl = this.testConfig.getTestUrl();
