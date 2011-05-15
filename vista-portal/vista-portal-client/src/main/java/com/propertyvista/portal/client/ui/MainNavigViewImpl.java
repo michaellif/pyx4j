@@ -34,6 +34,8 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
+import com.propertyvista.portal.domain.site.NavigItem;
+
 public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
     public static String DEFAULT_STYLE_PREFIX = "MainMenu";
@@ -60,8 +62,8 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         clear();
         tabsHolder = new NavigTabList();
-        for (AppPlace menuitem : presenter.getMainNavigMenu().getMenuItems()) {
-            tabsHolder.add(new NavigTab(menuitem));
+        for (NavigItem item : presenter.getMainNavig().items()) {
+            tabsHolder.add(new NavigTab(item));
         }
         setWidget(tabsHolder);
 
@@ -93,9 +95,9 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             return place;
         }
 
-        NavigTab(AppPlace menuItem) {
+        NavigTab(NavigItem menuItem) {
             super();
-            this.place = menuItem;
+            this.place = AppSite.getHistoryMapper().getPlace(menuItem.placeId().getValue());
 
             setElement(DOM.createElement("li"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
@@ -111,7 +113,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
-            label = new Label(presenter.getCaption(menuItem));
+            label = new Label(menuItem.title().getValue());
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             statusHolder.add(label);
 

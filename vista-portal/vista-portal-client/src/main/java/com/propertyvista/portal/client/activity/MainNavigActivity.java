@@ -18,12 +18,16 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ui.MainNavigView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.FindApartment;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.portal.client.ui.MainNavigView;
+import com.propertyvista.portal.domain.site.MainNavig;
+import com.propertyvista.portal.domain.site.NavigItem;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.FindApartment;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
 
@@ -60,11 +64,20 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     }
 
     @Override
-    public MainNavigMenu getMainNavigMenu() {
-        MainNavigMenu menu = new MainNavigMenu();
-        menu.addMenuItem(new FindApartment());
-        menu.addMenuItem(new Residents());
-        return menu;
+    public MainNavig getMainNavig() {
+        MainNavig navig = EntityFactory.create(MainNavig.class);
+
+        NavigItem findApt = EntityFactory.create(NavigItem.class);
+        findApt.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new FindApartment()));
+        findApt.title().setValue("Find Apartment");
+        navig.items().add(findApt);
+
+        NavigItem residents = EntityFactory.create(NavigItem.class);
+        residents.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents()));
+        residents.title().setValue("Residents");
+        navig.items().add(residents);
+
+        return navig;
 
     }
 

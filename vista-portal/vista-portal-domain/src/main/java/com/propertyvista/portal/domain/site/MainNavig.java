@@ -7,31 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
- * @author vadims
+ * Created on May 15, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity;
+package com.propertyvista.portal.domain.site;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
-import com.pyx4j.site.rpc.AppPlace;
+public interface MainNavig extends IEntity {
 
-public class MainNavigMenu {
-
-    private final List<AppPlace> menu;
-
-    public MainNavigMenu() {
-        menu = new ArrayList<AppPlace>(10);
-    }
-
-    public List<AppPlace> getMenuItems() {
-        return menu;
-    }
-
-    public void addMenuItem(AppPlace menuItem) {
-        menu.add(menuItem);
-    }
+    @Owned
+    IList<NavigItem> items();
 
 }
