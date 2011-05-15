@@ -13,16 +13,14 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface LoginView extends IsWidget {
+public class PaymentViewImpl extends SimplePanel implements PaymentView {
 
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
-
-        public void gotoResidentsNavig();
+    public PaymentViewImpl() {
+        HTML label = new HTML("Payment");
+        setWidget(label);
 
     }
-
 }

@@ -13,15 +13,14 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface LoginView extends IsWidget {
+public class TenantProfileViewImpl extends SimplePanel implements TenantProfileView {
 
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
-
-        public void gotoResidentsNavig();
+    public TenantProfileViewImpl() {
+        HTML label = new HTML("Tenant Profile");
+        setWidget(label);
 
     }
 

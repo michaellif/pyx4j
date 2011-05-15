@@ -8,20 +8,31 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on May 15, 2011
- * @author Dad
+ * @author vadims
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.domain.site.MainNavig;
 
-public interface LoginView extends IsWidget {
+import com.pyx4j.site.rpc.AppPlace;
 
-    public void setPresenter(Presenter presenter);
+public interface ResidentsNavigView extends IsWidget {
 
-    public interface Presenter {
+    public void setPresenter(ResidentsNavigPresenter presenter);
 
-        public void gotoResidentsNavig();
+    public interface ResidentsNavigPresenter {
+        public void navigTo(Place place);
+
+        public String getNavigLabel(AppPlace place);
+
+        public String getCaption(AppPlace place);
+
+        public Place getWhere();
+
+        public MainNavig getResidentsNavig();
 
     }
 

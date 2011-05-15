@@ -13,14 +13,39 @@
  */
 package com.propertyvista.portal.client.ui;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class LoginViewImpl extends SimplePanel implements LoginView {
+    private Presenter presenter;
 
     public LoginViewImpl() {
-        HTML label = new HTML("This form should allow submitting authentification request via https");
-        setWidget(label);
+        FlowPanel panel = new FlowPanel();
+        HTML label = new HTML("This form should allow submitting authentification request via https<br>");
+        panel.add(label);
+
+        Button btn = new Button("Sign In");
+        btn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.gotoResidentsNavig();
+            }
+
+        });
+        panel.add(btn);
+
+        setWidget(panel);
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+
     }
 
 }

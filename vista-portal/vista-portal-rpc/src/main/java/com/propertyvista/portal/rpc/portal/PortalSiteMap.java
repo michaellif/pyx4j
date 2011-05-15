@@ -45,24 +45,28 @@ public class PortalSiteMap implements SiteMap {
         public static class Login extends AppPlace {
         }
 
-        @PlaceProperties(caption = "Tenant Profile")
-        @NavigationItem(navigLabel = "Profile")
-        public static class TenantProfile extends AppPlace {
-        }
+        @PlaceProperties(caption = "Sign In")
+        @NavigationItem(navigLabel = "navig")
+        public static class Navigator extends AppPlace {
+            @PlaceProperties(caption = "Tenant Profile")
+            @NavigationItem(navigLabel = "Profile")
+            public static class TenantProfile extends AppPlace {
+            }
 
-        @PlaceProperties(caption = "Maintenance")
-        @NavigationItem(navigLabel = "Maintenance")
-        public static class Maintenance extends AppPlace {
-        }
+            @PlaceProperties(caption = "Maintenance")
+            @NavigationItem(navigLabel = "Maintenance")
+            public static class Maintenance extends AppPlace {
+            }
 
-        @PlaceProperties(caption = "Payment")
-        @NavigationItem(navigLabel = "Payment")
-        public static class Payment extends AppPlace {
-        }
+            @PlaceProperties(caption = "Payment")
+            @NavigationItem(navigLabel = "Payment")
+            public static class Payment extends AppPlace {
+            }
 
-        @PlaceProperties(caption = "Lease Application")
-        @NavigationItem(navigLabel = "LeaseApp")
-        public static class LeaseApplication extends AppPlace {
+            @PlaceProperties(caption = "Lease Application")
+            @NavigationItem(navigLabel = "LeaseApp")
+            public static class LeaseApplication extends AppPlace {
+            }
         }
 
     }

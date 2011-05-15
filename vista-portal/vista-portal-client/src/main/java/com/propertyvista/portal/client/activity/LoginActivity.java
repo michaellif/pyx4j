@@ -19,13 +19,17 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ui.LoginView;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class LoginActivity extends AbstractActivity {
+import com.pyx4j.site.client.AppSite;
+
+public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
     LoginView view;
 
     @Inject
     public LoginActivity(LoginView view) {
         this.view = view;
+        this.view.setPresenter(this);
     }
 
     public LoginActivity withPlace(Place place) {
@@ -38,4 +42,9 @@ public class LoginActivity extends AbstractActivity {
 
     }
 
+    @Override
+    public void gotoResidentsNavig() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Navigator());
+
+    }
 }

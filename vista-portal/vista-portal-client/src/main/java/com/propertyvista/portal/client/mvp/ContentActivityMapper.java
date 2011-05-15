@@ -23,6 +23,7 @@ import com.propertyvista.portal.client.activity.FindApartmentActivity;
 import com.propertyvista.portal.client.activity.LoginActivity;
 import com.propertyvista.portal.client.activity.PropertyMapActivity;
 import com.propertyvista.portal.client.activity.ResidentsActivity;
+import com.propertyvista.portal.client.activity.ResidentsNavigActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class ContentActivityMapper implements ActivityMapper {
@@ -37,6 +38,8 @@ public class ContentActivityMapper implements ActivityMapper {
 
     Provider<PropertyMapActivity> propertyMapActivity;
 
+    Provider<ResidentsNavigActivity> residentsNavigActivity;
+
     @Inject
     public ContentActivityMapper(Provider<FindApartmentActivity> findApartmentActivityProvider,
 
@@ -46,13 +49,16 @@ public class ContentActivityMapper implements ActivityMapper {
 
     Provider<CityMapActivity> cityMapActivity,
 
-    Provider<PropertyMapActivity> propertyMapActivity) {
+    Provider<PropertyMapActivity> propertyMapActivity,
+
+    Provider<ResidentsNavigActivity> residentsNavigActivity) {
         super();
         this.findApartmentActivityProvider = findApartmentActivityProvider;
         this.residentsActivityProvider = residentsActivityProvider;
         this.loginActivityProvider = loginActivityProvider;
         this.cityMapActivity = cityMapActivity;
         this.propertyMapActivity = propertyMapActivity;
+        this.residentsNavigActivity = residentsNavigActivity;
 
     }
 
@@ -68,6 +74,8 @@ public class ContentActivityMapper implements ActivityMapper {
             return cityMapActivity.get().withPlace(place);
         else if (place instanceof PortalSiteMap.FindApartment.PropertyMap)
             return propertyMapActivity.get().withPlace(place);
+        else if (place instanceof PortalSiteMap.Residents.Navigator)
+            return residentsNavigActivity.get().withPlace(place);
 
         return null;
 

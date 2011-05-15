@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on May 15, 2011
+ * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui;
@@ -35,9 +35,8 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
-
-    public static String DEFAULT_STYLE_PREFIX = "MainMenu";
+public class ResidentsNavigViewImpl extends SimplePanel implements ResidentsNavigView {
+    public static String DEFAULT_STYLE_PREFIX = "ResidentsMenu";
 
     public static enum StyleSuffix implements IStyleSuffix {
         Holder, Tab, LabelHolder, StatusHolder, Label
@@ -47,23 +46,25 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
         hover, current
     }
 
-    private MainNavigPresenter presenter;
+    private ResidentsNavigPresenter presenter;
 
     private NavigTabList tabsHolder;
 
-    public MainNavigViewImpl() {
+    public ResidentsNavigViewImpl() {
         setStyleName(DEFAULT_STYLE_PREFIX);
+
     }
 
     @Override
-    public void setPresenter(MainNavigPresenter presenter) {
+    public void setPresenter(ResidentsNavigPresenter presenter) {
         this.presenter = presenter;
-
         clear();
         tabsHolder = new NavigTabList();
-        for (NavigItem item : presenter.getMainNavig().items()) {
+        for (NavigItem item : presenter.getResidentsNavig().items()) {
             tabsHolder.add(new NavigTab(item));
         }
+        //AppPlace defaultitem = new PortalSiteMap.Residents.Navigator.TenantProfile();
+
         setWidget(tabsHolder);
 
     }
@@ -118,6 +119,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
             String placeid = AppSite.getPlaceId(place);
             String current = AppSite.getPlaceId(presenter.getWhere());
+            //TODO change logic
             if (current != null) {
                 String[] path = current.split("/");
                 if (path.length > 0)
@@ -165,4 +167,5 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             super.add(w, getElement());
         }
     }
+
 }

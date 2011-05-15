@@ -18,6 +18,7 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalView;
+import com.propertyvista.portal.client.ui.ResidentsNavigViewImpl;
 
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.style.ColorFactory;
@@ -39,6 +40,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
         initSiteViewStyles();
         initVistaMainNavigViewStyles();
+        initSubNavigViewStyles();
     }
 
     @Override
@@ -172,54 +174,14 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("height", "57px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab, MainNavigViewImpl.StyleDependent.latest));
-        //    style.addProperty("background", "url('" + PortalImages.INSTANCE.stepLatest().getURL() + "') no-repeat scroll 0 0 transparent");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab, MainNavigViewImpl.StyleDependent.complete));
-        //   style.addProperty("background", "url('" + PortalImages.INSTANCE.stepValid().getURL() + "') no-repeat scroll 0 0 transparent");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab, MainNavigViewImpl.StyleDependent.invalid));
-        //   style.addProperty("background", "url('" + PortalImages.INSTANCE.stepInvalid().getURL() + "') no-repeat scroll 0 0 transparent");
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder));
         // style.addProperty("background", "url('" + PortalImages.INSTANCE.stepPointer().getURL() + "') no-repeat scroll 100% 0 transparent");
         style.addProperty("margin-right", "-14px");
         style.addProperty("position", "relative");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.latest));
-        //    style.addProperty("background", "url('" + PortalImages.INSTANCE.stepPointerLatest().getURL() + "') no-repeat scroll 100% 0 transparent");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.complete));
-        //  style.addProperty("background", "url('" + PortalImages.INSTANCE.stepPointerValid().getURL() + "') no-repeat scroll 100% 0 transparent");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.invalid));
-        //   style.addProperty("background", "url('" + PortalImages.INSTANCE.stepPointerInvalid().getURL() + "') no-repeat scroll 100% 0 transparent");
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder));
         style.addProperty("background", "transparent");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.complete));
-        //   style.addProperty("background", "url('" + PortalImages.INSTANCE.check().getURL() + "') no-repeat scroll 50% 0 transparent");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.complete) + ":hover");
-        //     style.addProperty("background", "url('" + PortalImages.INSTANCE.checkHover().getURL() + "') no-repeat scroll 50% 0 transparent");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.invalid));
-        //    style.addProperty("background", "url('" + PortalImages.INSTANCE.warning().getURL() + "') no-repeat scroll 50% 0 transparent");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.invalid) + ":hover");
-        //   style.addProperty("background", "url('" + PortalImages.INSTANCE.warningHover().getURL() + "') no-repeat scroll 50% 0 transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
@@ -240,6 +202,59 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
+        //style.addProperty("background", "#654");
+        addStyle(style);
+
+    }
+
+    private void initSubNavigViewStyles() {
+        String prefix = ResidentsNavigViewImpl.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("width", "100%");
+        style.addProperty("height", "40px");
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.Holder));
+        style.addProperty("height", "40px");
+        style.addProperty("margin", "0");
+        style.addProperty("padding", "0");
+        style.addProperty("list-style", "none");
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.Tab));
+        //     style.addProperty("background", "url('" + PortalImages.INSTANCE.step().getURL() + "') no-repeat scroll 0 0 transparent");
+        style.addProperty("height", "40px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.LabelHolder));
+        // style.addProperty("background", "url('" + PortalImages.INSTANCE.stepPointer().getURL() + "') no-repeat scroll 100% 0 transparent");
+        style.addProperty("margin-right", "-14px");
+        style.addProperty("position", "relative");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.StatusHolder));
+        style.addProperty("background", "transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.Label, ResidentsNavigViewImpl.StyleDependent.current));
+        //  style.addProperty("background", "url('" + PortalImages.INSTANCE.pointer().getURL() + "') no-repeat scroll 50% 100% transparent");
+        style.addProperty("text-decoration", "underline !important");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.Label));
+        style.addProperty("height", "40px");
+        style.addProperty("line-height", "54px");
+        style.addProperty("color", "#7B8388");
+        style.addProperty("font-size", "15px");
+        style.addProperty("font-style", "normal");
+        style.addProperty("padding-left", "29px");
+        style.addProperty("padding-right", "29px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.Label, ResidentsNavigViewImpl.StyleDependent.current));
         //style.addProperty("background", "#654");
         addStyle(style);
 
