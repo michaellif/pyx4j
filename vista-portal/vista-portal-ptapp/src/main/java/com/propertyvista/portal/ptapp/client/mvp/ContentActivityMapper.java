@@ -35,7 +35,7 @@ import com.propertyvista.portal.ptapp.client.activity.RetrievePasswordActivity;
 import com.propertyvista.portal.ptapp.client.activity.StaticContentActivity;
 import com.propertyvista.portal.ptapp.client.activity.SummaryActivity;
 import com.propertyvista.portal.ptapp.client.activity.TenantsActivity;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -127,35 +127,35 @@ public class ContentActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (place instanceof SiteMap.CreateAccount) {
+        if (place instanceof PtSiteMap.CreateAccount) {
             return createAccountActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.Login) {
+        } else if (place instanceof PtSiteMap.Login) {
             return loginActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.RetrievePassword) {
+        } else if (place instanceof PtSiteMap.RetrievePassword) {
             return retrievePasswordActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.ChangePassword) {
+        } else if (place instanceof PtSiteMap.ChangePassword) {
             return changePasswordActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.ResetPassword) {
+        } else if (place instanceof PtSiteMap.ResetPassword) {
             return resetPasswordActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.Apartment) {
+        } else if (place instanceof PtSiteMap.Apartment) {
             return apartmentActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.Tenants) {
+        } else if (place instanceof PtSiteMap.Tenants) {
             return tenantsActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.Info) {
+        } else if (place instanceof PtSiteMap.Info) {
             return infoActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.Financial) {
+        } else if (place instanceof PtSiteMap.Financial) {
             return financialActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.Pets) {
+        } else if (place instanceof PtSiteMap.Pets) {
             return petsActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.Charges) {
+        } else if (place instanceof PtSiteMap.Charges) {
             return chargesActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.Payment) {
+        } else if (place instanceof PtSiteMap.Payment) {
             return paymentActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.Summary) {
+        } else if (place instanceof PtSiteMap.Summary) {
             return summaryActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.Completion) {
+        } else if (place instanceof PtSiteMap.Completion) {
             return completionActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.GenericMessage) {
+        } else if (place instanceof PtSiteMap.GenericMessage) {
             return genericMessageActivity.get().withPlace((AppPlace) place);
         }
         //TODO what to do on other place

@@ -55,7 +55,7 @@ import com.propertyvista.portal.ptapp.client.ui.components.VistaReadOnlyComponen
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.services.SummaryService;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -118,17 +118,17 @@ public class SummaryViewForm extends CEntityForm<Summary> {
         main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Lease Term"))));
         main.add(new LeaseTermView());
 
-        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Tenants"), new SiteMap.Tenants())));
+        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Tenants"), new PtSiteMap.Tenants())));
         main.add(tenantsTable = new TenantsTable());
         main.add(inject(proto().tenantList().tenants(), tenantsTable.createTenantTable()));
 
-        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Info"), new SiteMap.Info())));
+        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Info"), new PtSiteMap.Info())));
         main.add(inject(proto().tenantsWithInfo().tenants(), createTenantView()));
 
-        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new SiteMap.Financial())));
+        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new PtSiteMap.Financial())));
         main.add(inject(proto().tenantFinancials(), createFinancialView()));
 
-        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Pets"), new SiteMap.Pets())));
+        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Pets"), new PtSiteMap.Pets())));
         main.add(inject(proto().pets(), new PetsViewForm(this)));
 
         main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Lease Terms"))));
@@ -190,10 +190,10 @@ public class SummaryViewForm extends CEntityForm<Summary> {
 
             @Override
             public void onClick(ClickEvent event) {
-                if (link.getClass().equals(SiteMap.Info.class) || link.getClass().equals(SiteMap.Financial.class)) {
+                if (link.getClass().equals(PtSiteMap.Info.class) || link.getClass().equals(PtSiteMap.Financial.class)) {
                     if (!getValue().tenantList().tenants().isEmpty()) {
                         HashMap<String, String> args = new HashMap<String, String>();
-                        args.put(SiteMap.STEP_ARG_NAME, getValue().tenantList().tenants().get(0).getPrimaryKey().toString());
+                        args.put(PtSiteMap.STEP_ARG_NAME, getValue().tenantList().tenants().get(0).getPrimaryKey().toString());
                         link.setArgs(args);
                     }
                 }

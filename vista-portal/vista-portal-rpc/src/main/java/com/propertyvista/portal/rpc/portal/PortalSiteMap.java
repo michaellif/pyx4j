@@ -16,8 +16,9 @@ package com.propertyvista.portal.rpc.portal;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
+import com.pyx4j.site.shared.meta.SiteMap;
 
-public class PortalSiteMap {
+public class PortalSiteMap implements SiteMap {
     public static String ARG_NAME_ITEM_ID = "ItemID";
 
     @PlaceProperties(caption = "Find an Apartment")

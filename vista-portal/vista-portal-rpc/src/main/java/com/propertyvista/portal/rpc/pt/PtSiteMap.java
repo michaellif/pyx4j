@@ -16,8 +16,9 @@ package com.propertyvista.portal.rpc.pt;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
+import com.pyx4j.site.shared.meta.SiteMap;
 
-public class SiteMap {
+public class PtSiteMap implements SiteMap {
 
     public final static String STEP_ARG_NAME = "substep";
 

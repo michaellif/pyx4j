@@ -36,7 +36,7 @@ import com.propertyvista.portal.domain.pt.ApplicationWizardStep.Status;
 import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.services.ActivationService;
 import com.propertyvista.portal.rpc.pt.services.ApplicationService;
 
@@ -172,7 +172,7 @@ public class PtAppWizardManager {
         if ((place == null) || (currentStep == null)) {
             return null;
         }
-        String stepArg = place.getArgs().get(SiteMap.STEP_ARG_NAME);
+        String stepArg = place.getArgs().get(PtSiteMap.STEP_ARG_NAME);
         // Find current Substep
         if (stepArg == null) {
             return null;
@@ -211,7 +211,7 @@ public class PtAppWizardManager {
                     loopOversubsteps: for (ApplicationWizardSubstep substep : step.substeps()) {
                         if (shouldSelect(substep.status())) {
                             HashMap<String, String> args = new HashMap<String, String>();
-                            args.put(SiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
+                            args.put(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
                             place.setArgs(args);
                             break loopOversubsteps;
                         }
@@ -242,7 +242,7 @@ public class PtAppWizardManager {
 
         } else {
             applicationProgress = null;
-            AppSite.getPlaceController().goTo(new SiteMap.CreateAccount());
+            AppSite.getPlaceController().goTo(new PtSiteMap.CreateAccount());
         }
     }
 

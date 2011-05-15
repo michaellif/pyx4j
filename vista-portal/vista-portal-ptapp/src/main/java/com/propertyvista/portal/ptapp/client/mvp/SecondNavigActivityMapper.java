@@ -20,7 +20,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import com.propertyvista.portal.ptapp.client.activity.SecondNavigActivity;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 
 import com.pyx4j.security.client.ClientContext;
 
@@ -36,7 +36,7 @@ public class SecondNavigActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (ClientContext.isAuthenticated() && !(place instanceof SiteMap.Completion)) {
+        if (ClientContext.isAuthenticated() && !(place instanceof PtSiteMap.Completion)) {
             return secondNavigActivityProvider.get().withPlace(place);
         } else {
             return null;

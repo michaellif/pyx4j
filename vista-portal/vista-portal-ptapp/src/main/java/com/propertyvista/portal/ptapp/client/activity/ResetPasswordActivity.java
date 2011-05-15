@@ -29,7 +29,7 @@ import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.ui.NewPasswordView;
 import com.propertyvista.portal.ptapp.client.ui.NewPasswordView.ConversationType;
 import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.services.ActivationService;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -66,7 +66,7 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
                     i18n.tr("LogIn"), new Command() {
                         @Override
                         public void execute() {
-                            AppSite.getPlaceController().goTo(new SiteMap.Login());
+                            AppSite.getPlaceController().goTo(new PtSiteMap.Login());
                         }
                     });
         }

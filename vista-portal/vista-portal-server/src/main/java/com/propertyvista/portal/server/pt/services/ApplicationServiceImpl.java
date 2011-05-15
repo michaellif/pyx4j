@@ -40,7 +40,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.services.ApplicationService;
 import com.propertyvista.portal.server.pt.PtAppContext;
 
@@ -203,15 +203,15 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 
     public static ApplicationProgress createApplicationProgress() {
         ApplicationProgress progress = EntityFactory.create(ApplicationProgress.class);
-        progress.steps().add(createWizardStep(SiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
-        progress.steps().add(createWizardStep(SiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(SiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(SiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(SiteMap.Pets.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(SiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(SiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(SiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(SiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
+        progress.steps().add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(PtSiteMap.Pets.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
         return progress;
     }
 
@@ -252,7 +252,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
         applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), application));
         ApplicationProgress progress = secureRetrieve(applicationProgressCriteria);
-        ApplicationWizardStep chargesStep = findWizardStep(progress, SiteMap.Charges.class);
+        ApplicationWizardStep chargesStep = findWizardStep(progress, PtSiteMap.Charges.class);
         switch (chargesStep.status().getValue()) {
         case latest:
         case complete:
@@ -266,8 +266,8 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), tenantsNew.application()));
         ApplicationProgress progress = secureRetrieve(applicationProgressCriteria);
 
-        ApplicationWizardStep infoStep = findWizardStep(progress, SiteMap.Info.class);
-        ApplicationWizardStep financialStep = findWizardStep(progress, SiteMap.Financial.class);
+        ApplicationWizardStep infoStep = findWizardStep(progress, PtSiteMap.Info.class);
+        ApplicationWizardStep financialStep = findWizardStep(progress, PtSiteMap.Financial.class);
         //Keep original values to be able to merge Steps
         ApplicationWizardSubstep[] infoSubSteps = infoStep.substeps().toArray(new ApplicationWizardSubstep[infoStep.substeps().size()]);
         ApplicationWizardSubstep[] financialSubSteps = financialStep.substeps().toArray(new ApplicationWizardSubstep[financialStep.substeps().size()]);

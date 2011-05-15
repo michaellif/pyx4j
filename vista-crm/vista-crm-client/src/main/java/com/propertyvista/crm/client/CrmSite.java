@@ -35,6 +35,10 @@ public class CrmSite extends VistaSite {
 
     private CrmGinjector ginjector;
 
+    public CrmSite() {
+        super(CrmSiteMap.class);
+    }
+
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();

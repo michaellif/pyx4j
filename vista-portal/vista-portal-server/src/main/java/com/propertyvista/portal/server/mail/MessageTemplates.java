@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.portal.rpc.DeploymentConsts;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.services.ActivationService;
 
 public class MessageTemplates {
@@ -55,6 +55,6 @@ public class MessageTemplates {
                 + "    <a style=\"color:#929733\" href=\"{1}{2}\">Change Your Password</a>", name,
 
         ServerSideConfiguration.instance().getMainApplicationURL(),
-                AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, SiteMap.ResetPassword.class, ActivationService.PASSWORD_TOKEN, token)));
+                AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.ResetPassword.class, ActivationService.PASSWORD_TOKEN, token)));
     }
 }

@@ -16,8 +16,9 @@ package com.propertyvista.tester.client;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
+import com.pyx4j.site.shared.meta.SiteMap;
 
-public class TesterSiteMap {
+public class TesterSiteMap implements SiteMap {
 
     @NavigationItem(navigLabel = "Forms")
     @PlaceProperties(caption = "Forms")

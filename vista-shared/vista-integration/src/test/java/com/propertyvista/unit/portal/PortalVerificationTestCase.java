@@ -41,7 +41,7 @@ import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.rpc.pt.BusinessRules;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
 
@@ -58,8 +58,8 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
     }
 
     protected void verifyTenantsPage(Summary summary, boolean doSave) {
-        assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class)));
-        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Tenants.class));
+        assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Tenants.class)));
+        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Tenants.class));
 
         int num = 0;
         for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
@@ -101,14 +101,14 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             }
         }
         // Asset no next page
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Info.class));
-        assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Info.class, id));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Info.class));
+        assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, PtSiteMap.Info.class, id));
     }
 
     protected void verifyInfoPage(PotentialTenantInfo tenant, int id) {
-        assertVisible(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Info.class));
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Info.class));
-        selenium.click(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Info.class, id));
+        assertVisible(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Info.class));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Info.class));
+        selenium.click(D.id(VistaFormsDebugId.SecondNavigation_Prefix, PtSiteMap.Info.class, id));
         assertInfoPage(tenant);
     }
 
@@ -242,13 +242,13 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             }
         }
         // Asset no next page
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Financial.class));
-        assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Financial.class, num));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Financial.class));
+        assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, PtSiteMap.Financial.class, num));
     }
 
     protected void verifyFinancialPage(PotentialTenantFinancial financial, int id) {
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Financial.class));
-        selenium.click(D.id(VistaFormsDebugId.SecondNavigation_Prefix, SiteMap.Financial.class, id));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Financial.class));
+        selenium.click(D.id(VistaFormsDebugId.SecondNavigation_Prefix, PtSiteMap.Financial.class, id));
 
         IDebugId debugID;
         int row = 0;
@@ -362,7 +362,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
     }
 
     protected void verifyPetsPages(Summary summary, boolean doSave) {
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Pets.class));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Pets.class));
         int num = 0;
         for (Pet pet : summary.pets().pets()) {
             verifyPetRow(D.id(proto(Pets.class).pets(), num), detach(pet));

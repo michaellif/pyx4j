@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -125,7 +125,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             if (step.substeps().size() > 0) {
                 ApplicationWizardSubstep substep = step.substeps().get(0);
                 HashMap<String, String> args = new HashMap<String, String>();
-                args.put(SiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
+                args.put(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
                 place.setArgs(args);
             }
             label = new Label(presenter.getNavigLabel(place));

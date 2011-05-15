@@ -25,7 +25,7 @@ import com.google.inject.Inject;
 
 import com.propertyvista.portal.ptapp.client.ui.CreateAccountView;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.services.ActivationService;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -57,7 +57,7 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
 
     @Override
     public void goToSignin() {
-        AppSite.getPlaceController().goTo(new SiteMap.Login());
+        AppSite.getPlaceController().goTo(new PtSiteMap.Login());
     }
 
     @Override

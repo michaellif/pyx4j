@@ -17,16 +17,21 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.propertyvista.common.client.Message;
-import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.Message;
+import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+
 public class PortalSite extends VistaSite {
     private PortalGinjector ginjector;
+
+    public PortalSite() {
+        super(PortalSiteMap.class);
+    }
 
     @Override
     public void onSiteLoad() {

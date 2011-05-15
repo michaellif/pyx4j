@@ -95,6 +95,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         NavigTab(AppPlace menuItem) {
             super();
+            this.place = menuItem;
 
             setElement(DOM.createElement("li"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
@@ -110,7 +111,6 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
-            this.place = AppSite.getHistoryMapper().getPlace(presenter.getNavigLabel(menuItem));
             label = new Label(presenter.getCaption(menuItem));
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             statusHolder.add(label);

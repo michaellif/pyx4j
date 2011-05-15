@@ -28,7 +28,7 @@ import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 
 public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
@@ -118,7 +118,7 @@ public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
 
         log.info("User {} logged in", ulogin);
         //if we go on some other screen, return back to APARTMENT screen
-        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
+        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Apartment.class));
 
         doTestDateTimePast();
         doTestStartRent10DaysAfter();
@@ -144,7 +144,7 @@ public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
         String warns = selenium.getText(VistaFormsDebugId.UserMessage_Prefix, UserMessageType.WARN);
         assertTrue(warns.indexOf(warnRentDateFmt) >= 0);
         assertTrue(warns.indexOf(warnNoUnit) >= 0);
-        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class));
+        selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Apartment.class));
     }
 
     protected void doTestStartRent10DaysAfter() throws Exception {

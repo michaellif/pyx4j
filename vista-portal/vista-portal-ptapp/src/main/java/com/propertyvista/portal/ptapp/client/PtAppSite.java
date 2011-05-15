@@ -16,17 +16,19 @@ package com.propertyvista.portal.ptapp.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.propertyvista.common.client.Message;
-import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.portal.rpc.pt.SiteMap;
 
 import com.pyx4j.essentials.client.SessionInactiveDialog;
+
+import com.propertyvista.common.client.Message;
+import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 
 public class PtAppSite extends VistaSite {
 
     private SiteGinjector ginjector;
 
     public PtAppSite() {
+        super(PtSiteMap.class);
     }
 
     @Override
@@ -34,7 +36,7 @@ public class PtAppSite extends VistaSite {
         super.onSiteLoad();
 
         ginjector = GWT.create(SiteGinjector.class);
-        getHistoryHandler().register(getPlaceController(), getEventBus(), new SiteMap.CreateAccount());
+        getHistoryHandler().register(getPlaceController(), getEventBus(), new PtSiteMap.CreateAccount());
 
         RootPanel.get().add(ginjector.getSiteView());
         hideLoadingIndicator();
@@ -48,7 +50,7 @@ public class PtAppSite extends VistaSite {
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
         setMessage(new Message(message, title, buttonText, command));
-        getPlaceController().goTo(new SiteMap.GenericMessage());
+        getPlaceController().goTo(new PtSiteMap.GenericMessage());
     }
 
 }

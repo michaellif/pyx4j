@@ -17,14 +17,20 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.propertyvista.common.client.VistaSite;
 
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.common.client.VistaSite;
+
 public class TesterSite extends VistaSite {
 
     private TesterGinjector ginjector;
+
+    public TesterSite() {
+        super(TesterSiteMap.class);
+        // TODO Auto-generated constructor stub
+    }
 
     @Override
     public void onSiteLoad() {

@@ -36,9 +36,6 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.tester.ui.EditDepartmentViewImpl;
-import com.propertyvista.portal.tester.ui.TestedCComponentWraper;
-import com.propertyvista.portal.tester.unit.TestDeferredCommands;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.entity.client.ClientEntityFactory;
@@ -74,7 +71,12 @@ import com.pyx4j.widgets.client.style.Theme;
 import com.pyx4j.widgets.client.style.ThemeColor;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
+import com.propertyvista.portal.tester.ui.EditDepartmentViewImpl;
+import com.propertyvista.portal.tester.ui.TestedCComponentWraper;
+import com.propertyvista.portal.tester.unit.TestDeferredCommands;
+
 public class ComponentTester extends AppSite {
+
     private DecoratedStackPanel mainmenu;
 
     private SplitLayoutPanel maincontainer;
@@ -88,6 +90,10 @@ public class ComponentTester extends AppSite {
     private Widget beingtested;
 
     private LayoutPanel testcontainer;
+
+    public ComponentTester() {
+        super(null);
+    }
 
     @Override
     public void onModuleLoad() {

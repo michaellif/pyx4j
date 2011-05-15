@@ -17,7 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.propertyvista.common.client.resources.FormImageBundle;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -27,12 +26,19 @@ import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.log4gwt.shared.Level;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.GlassPanel;
+
+import com.propertyvista.common.client.resources.FormImageBundle;
 
 public abstract class VistaSite extends AppSite {
 
     private Message message;
+
+    public VistaSite(Class<? extends SiteMap> siteMapClass) {
+        super(siteMapClass);
+    }
 
     @Override
     public void onSiteLoad() {

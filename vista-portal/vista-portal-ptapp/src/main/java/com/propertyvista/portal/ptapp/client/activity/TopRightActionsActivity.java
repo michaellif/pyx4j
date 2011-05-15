@@ -23,7 +23,7 @@ import com.propertyvista.portal.ptapp.client.themes.GainsboroTheme;
 import com.propertyvista.portal.ptapp.client.themes.VillageGreenTheme;
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsView;
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsViewImpl.Theme;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
@@ -91,7 +91,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void login() {
-        AppSite.getPlaceController().goTo(new SiteMap.Login());
+        AppSite.getPlaceController().goTo(new PtSiteMap.Login());
     }
 
 }

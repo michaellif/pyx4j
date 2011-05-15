@@ -54,7 +54,7 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.BusinessRules;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
@@ -115,7 +115,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         selenium.type(D.id(proto(AuthenticationRequest.class).email()), user.email().getValue());
         selenium.type(D.id(proto(AuthenticationRequest.class).password()), user.email().getValue());
         selenium.click(CrudDebugId.Criteria_Submit);
-        assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
+        assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Apartment.class)));
 
         verifyTenantsPage(summary, false);
         verifyInfoPages(summary, false);
@@ -136,7 +136,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
     }
 
     private void enterUnitSelection() {
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Apartment.class));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Apartment.class));
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, proto(ApartmentUnit.class).unitType()));
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, "leaseTerm_12"));
         saveAndContinue();
@@ -418,7 +418,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
     }
 
     private void enterPetsPage(Summary summary) {
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Pets.class));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Pets.class));
         int num = 0;
         for (Pet pet : summary.pets().pets()) {
             selenium.click(D.id(proto(Pets.class).pets(), FormNavigationDebugId.Form_Add));

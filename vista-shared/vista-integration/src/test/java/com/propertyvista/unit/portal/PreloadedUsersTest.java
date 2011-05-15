@@ -25,7 +25,7 @@ import com.propertyvista.portal.domain.pt.ApartmentUnit;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.generator.VistaDataGenerator;
@@ -51,7 +51,7 @@ public class PreloadedUsersTest extends PortalVerificationTestCase {
         selenium.type(D.id(proto(AuthenticationRequest.class).email()), user.email().getValue());
         selenium.type(D.id(proto(AuthenticationRequest.class).password()), user.email().getValue());
         selenium.click(CrudDebugId.Criteria_Submit);
-        assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(SiteMap.Apartment.class)));
+        assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Apartment.class)));
 
         verifyAptPage(unitSel);
         verifyTenantsPage(summary, true);
@@ -62,8 +62,8 @@ public class PreloadedUsersTest extends PortalVerificationTestCase {
     }
 
     private void verifyAptPage(UnitSelection unitSel) {
-        assertVisible(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Apartment.class));
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, SiteMap.Apartment.class));
+        assertVisible(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Apartment.class));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Apartment.class));
 
         //verify all of them
         int num = 0;

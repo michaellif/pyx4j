@@ -17,6 +17,10 @@ import com.pyx4j.site.client.AppSite;
 
 public class VistaTesterSite extends AppSite {
 
+    public VistaTesterSite() {
+        super(null);
+    }
+
     @Override
     public void onSiteLoad() {
 
