@@ -74,7 +74,7 @@ public class J2SEServiceConnector extends J2SEService {
         c.email = p.getProperty("email");
         c.password = p.getProperty("password");
         String encrypt = p.getProperty("encrypt");
-        if ("false".equals(encrypt)) {
+        if ("false".equalsIgnoreCase(encrypt)) {
             return c;
         }
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
