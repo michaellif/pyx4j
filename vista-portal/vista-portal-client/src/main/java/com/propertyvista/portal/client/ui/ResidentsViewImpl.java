@@ -13,13 +13,40 @@
  */
 package com.propertyvista.portal.client.ui;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class ResidentsViewImpl extends SimplePanel implements ResidentsView {
+    private Presenter presenter;
+
     public ResidentsViewImpl() {
-        HTML label = new HTML("Residents view");
-        setWidget(label);
+
+        FlowPanel panel = new FlowPanel();
+        HTML message = new HTML("Upon selecting <b>Login</b> button the portal has to be reloaded via https<br>"
+                + "The portal should navigate a user to this very point and depict a login form<br>");
+
+        panel.add(message);
+        Button btn = new Button("Login");
+        btn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.gotoLoginForm();
+            }
+
+        });
+        panel.add(btn);
+        setWidget(panel);
+
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
 
     }
 

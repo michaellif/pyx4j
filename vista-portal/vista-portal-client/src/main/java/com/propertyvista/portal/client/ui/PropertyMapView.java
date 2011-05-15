@@ -8,22 +8,13 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on May 14, 2011
- * @author vadims
+ * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface FindApartmentView extends IsWidget {
-
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
-
-        public void gotoCityMap();
-
-        public void gotoPropertyMap();
-    }
+public interface PropertyMapView extends IsWidget {
 
 }

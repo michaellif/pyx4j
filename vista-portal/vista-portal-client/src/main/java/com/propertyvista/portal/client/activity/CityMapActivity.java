@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
+ * Created on May 15, 2011
  * @author Dad
  * @version $Id$
  */
@@ -18,19 +18,18 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ui.FindApartmentView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.client.ui.CityMapView;
 
-import com.pyx4j.site.client.AppSite;
-
-public class FindApartmentActivity extends AbstractActivity implements FindApartmentView.Presenter {
-
-    private final FindApartmentView view;
+public class CityMapActivity extends AbstractActivity {
+    CityMapView view;
 
     @Inject
-    public FindApartmentActivity(FindApartmentView view) {
+    public CityMapActivity(CityMapView view) {
         this.view = view;
-        this.view.setPresenter(this);
+    }
+
+    public CityMapActivity withPlace(Place place) {
+        return this;
     }
 
     @Override
@@ -39,19 +38,4 @@ public class FindApartmentActivity extends AbstractActivity implements FindApart
 
     }
 
-    public FindApartmentActivity withPlace(Place place) {
-        return this;
-    }
-
-    @Override
-    public void gotoCityMap() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.CityMap());
-
-    }
-
-    @Override
-    public void gotoPropertyMap() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.PropertyMap());
-
-    }
 }

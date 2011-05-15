@@ -7,23 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
- * @author vadims
+ * Created on May 15, 2011
+ * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface FindApartmentView extends IsWidget {
+public class LoginViewImpl extends SimplePanel implements LoginView {
 
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
-
-        public void gotoCityMap();
-
-        public void gotoPropertyMap();
+    public LoginViewImpl() {
+        HTML label = new HTML("This form should allow submitting authentification request via https");
+        setWidget(label);
     }
 
 }

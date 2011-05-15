@@ -13,14 +13,54 @@
  */
 package com.propertyvista.portal.client.ui;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class FindApartmentViewImpl extends SimplePanel implements FindApartmentView {
+    private Presenter presenter;
 
     public FindApartmentViewImpl() {
-        HTML label = new HTML("Find Apartment view");
-        setWidget(label);
+
+        FlowPanel panel = new FlowPanel();
+        HTML message = new HTML("Find Apartment view allows auser to enter property serach criteria<br>"
+                + "Depending on the criteria of the selection the portal will navigate a user<br>"
+                + "to either a city map (of only a province was specified)<br>" + "Or property map (at least a province and a city were specified)<br>"
+                + "The two buttons below mock both scenarios<br>");
+
+        panel.add(message);
+        Button citybtn = new Button("Only Province was Spceified");
+        citybtn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.gotoCityMap();
+            }
+
+        });
+        panel.add(citybtn);
+
+        Button unitbtn = new Button("Province and City were Specified");
+        unitbtn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.gotoPropertyMap();
+            }
+
+        });
+        panel.add(unitbtn);
+
+        setWidget(panel);
+
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
 
     }
 }

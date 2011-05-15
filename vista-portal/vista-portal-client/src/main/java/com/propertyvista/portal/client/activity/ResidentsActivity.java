@@ -19,13 +19,17 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ui.ResidentsView;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class ResidentsActivity extends AbstractActivity {
+import com.pyx4j.site.client.AppSite;
+
+public class ResidentsActivity extends AbstractActivity implements ResidentsView.Presenter {
     private final ResidentsView view;
 
     @Inject
     public ResidentsActivity(ResidentsView view) {
         this.view = view;
+        this.view.setPresenter(this);
     }
 
     @Override
@@ -36,6 +40,12 @@ public class ResidentsActivity extends AbstractActivity {
 
     public ResidentsActivity withPlace(Place place) {
         return this;
+    }
+
+    @Override
+    public void gotoLoginForm() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Login());
+
     }
 
 }

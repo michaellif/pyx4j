@@ -224,6 +224,8 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
         //  style.addProperty("background", "url('" + PortalImages.INSTANCE.pointer().getURL() + "') no-repeat scroll 50% 100% transparent");
+        style.addProperty("color", "white !important");
+        style.addProperty("background-color", "#7B8388");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label));

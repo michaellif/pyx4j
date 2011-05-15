@@ -17,4 +17,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface ResidentsView extends IsWidget {
 
+    public void setPresenter(Presenter presenter);
+
+    public interface Presenter {
+
+        public void gotoLoginForm();
+
+    }
+
 }

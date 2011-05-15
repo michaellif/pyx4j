@@ -31,6 +31,8 @@ public class ViewModule extends AbstractGinModule {
         bind(TopRightActionsView.class).to(TopRightActionsViewImpl.class).in(Singleton.class);
         bind(FindApartmentView.class).to(FindApartmentViewImpl.class).in(Singleton.class);
         bind(ResidentsView.class).to(ResidentsViewImpl.class).in(Singleton.class);
-
+        bind(LoginView.class).to(LoginViewImpl.class).in(Singleton.class);
+        bind(CityMapView.class).to(CityMapViewImpl.class).in(Singleton.class);
+        bind(PropertyMapView.class).to(PropertyMapViewImpl.class).in(Singleton.class);
     }
 }
