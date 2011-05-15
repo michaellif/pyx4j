@@ -83,6 +83,7 @@ public class J2SEServiceConnector extends J2SEService {
             c.password = PropertyValueEncryptionUtils.decrypt(c.password, encryptor);
         } else {
             p.put("password", PropertyValueEncryptionUtils.encrypt(c.password, encryptor));
+            p.put("encrypt", "true");
             Writer writer = null;
             try {
                 p.store(writer = new FileWriter(fileName), null);
