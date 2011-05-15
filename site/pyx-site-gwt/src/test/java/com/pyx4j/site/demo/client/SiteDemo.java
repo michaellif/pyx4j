@@ -27,6 +27,10 @@ import com.pyx4j.site.client.AppSite;
  */
 public class SiteDemo extends AppSite {
 
+    public SiteDemo() {
+        super(null);
+    }
+
     @Override
     public void onSiteLoad() {
 

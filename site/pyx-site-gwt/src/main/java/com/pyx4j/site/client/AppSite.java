@@ -38,6 +38,7 @@ import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 /**
@@ -57,13 +58,13 @@ public abstract class AppSite implements EntryPoint {
 
     private final PlaceController placeController;
 
-    public AppSite() {
+    public AppSite(Class<? extends SiteMap> siteMapClass) {
         ClientEntityFactory.ensureIEntityImplementations();
         instance = this;
         Element head = Document.get().getElementsByTagName("html").getItem(0);
         head.setPropertyString("xmlns:pyx", "");
 
-        historyMapper = new AppPlaceHistoryMapper();
+        historyMapper = new AppPlaceHistoryMapper(siteMapClass);
         historyHandler = new PlaceHistoryHandler(historyMapper);
         eventBus = new AppSiteEventBus();
         placeController = new PlaceController(eventBus);

@@ -44,6 +44,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
+import com.pyx4j.site.shared.meta.SiteMap;
 
 public class AppPlaceListingGenerator extends Generator {
 
@@ -69,6 +70,7 @@ public class AppPlaceListingGenerator extends Generator {
             composer.addImport(AppPlaceInfo.class.getName());
             composer.addImport(NavigationItem.class.getName());
             composer.addImport(PlaceProperties.class.getName());
+            composer.addImport(SiteMap.class.getName());
 
             PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
             if (printWriter == null) {
@@ -100,12 +102,13 @@ public class AppPlaceListingGenerator extends Generator {
 
         //getPlace()
         writer.println("@Override");
-        writer.println("public AppPlace getPlace(String token) {");
+        writer.println("public AppPlace getPlace(Class<? extends SiteMap> siteMapClass, String token) {");
         writer.indent();
 
         for (JClassType jClassType : placeClasses) {
             String type = jClassType.getQualifiedSourceName();
-            writer.println("if (token.equals(AppPlaceInfo.getPlaceId(" + type + ".class))) {");
+            writer.println("if (\"" + type + "\".contains(siteMapClass.getName()) && ");
+            writer.println("    token.equals(AppPlaceInfo.getPlaceId(" + type + ".class))) {");
             writer.indent();
             writer.println("return new " + type + "();");
             writer.outdent();

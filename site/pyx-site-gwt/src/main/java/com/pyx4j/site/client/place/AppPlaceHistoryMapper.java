@@ -17,6 +17,7 @@ import com.google.gwt.place.shared.PlaceHistoryMapper;
 
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
+import com.pyx4j.site.shared.meta.SiteMap;
 
 public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
 
@@ -24,7 +25,10 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
 
     private final static AppPlaceListing listing = GWT.create(AppPlaceListing.class);
 
-    public AppPlaceHistoryMapper() {
+    private final Class<? extends SiteMap> siteMapClass;
+
+    public AppPlaceHistoryMapper(Class<? extends SiteMap> siteMapClass) {
+        this.siteMapClass = siteMapClass;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
             }
         }
 
-        AppPlace place = listing.getPlace(placeId);
+        AppPlace place = listing.getPlace(siteMapClass, placeId);
 
         if (queryString != null) {
             place.setArgs(parseQueryString(queryString));
