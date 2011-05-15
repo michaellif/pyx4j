@@ -21,6 +21,15 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.common.client.ui.AddressUtils;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.domain.Address;
+import com.propertyvista.domain.Phone;
+import com.propertyvista.domain.property.asset.Building;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -32,18 +41,9 @@ import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-
-import com.propertyvista.common.client.ui.AddressUtils;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
-import com.propertyvista.domain.Address;
-import com.propertyvista.domain.Phone;
-import com.propertyvista.domain.property.asset.Building;
 
 public class BuildingEditorForm extends CEntityForm<Building> {
 
@@ -131,58 +131,52 @@ public class BuildingEditorForm extends CEntityForm<Building> {
         };
     }
 
-//    private class CEntityFolderForm<E extends IEntity> extends CEntityFolder<E> {
-//
-//        private List<EntityFolderColumnDescriptor> columns;
-//
-//        public CEntityFolderForm(Class<E> rowClass) {
-//            super(rowClass);
-//        }
-//
-//        @Override
-//        protected CEntityFolderItem<E> createItem() {
-//            return new CEntityFolderRow<E>(E.class, columns) {
-//
-//                @Override
-//                public FolderItemDecorator createFolderItemDecorator() {
-//                    return new TableFolderItemDecorator(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove phone"));
-//                }
-//            };
-//        }
-//
-//        @Override
-//        protected FolderDecorator<E> createFolderDecorator() {
-//            return new TableFolderDecorator<E>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add phone"));
-//        }
-//
-//    }
+    private abstract class CEntityFolderForm<E extends IEntity> extends CEntityFolder<E> {
+
+        private final Class<E> clazz;
+
+        private String remove = "";
+
+        private String add = "";
+
+        public CEntityFolderForm(Class<E> rowClass, String remove, String add) {
+            super(rowClass);
+            clazz = rowClass;
+            this.remove = remove;
+            this.add = add;
+        }
+
+        protected abstract List<EntityFolderColumnDescriptor> columns();
+
+        @Override
+        protected CEntityFolderItem<E> createItem() {
+            return new CEntityFolderRow<E>(clazz, columns()) {
+
+                @Override
+                public FolderItemDecorator createFolderItemDecorator() {
+                    return new TableFolderItemDecorator(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr(remove));
+                }
+            };
+        }
+
+        @Override
+        protected FolderDecorator<E> createFolderDecorator() {
+            return new TableFolderDecorator<E>(columns(), CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr(add));
+        }
+
+    }
 
     private CEntityFolder<Phone> createPhonesListEditor() {
-        return new CEntityFolder<Phone>(Phone.class) {
 
-            private List<EntityFolderColumnDescriptor> columns;
+        return new CEntityFolderForm<Phone>(Phone.class, "Add phone", "Remove Phone") {
 
-            {
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().phoneType(), "8em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().phoneNumber(), "15em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().extension(), "5em"));
-            }
-
-            @Override
-            protected FolderDecorator<Phone> createFolderDecorator() {
-                return new TableFolderDecorator<Phone>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add phone"));
-            }
-
-            @Override
-            protected CEntityFolderItem<Phone> createItem() {
-                return new CEntityFolderRow<Phone>(Phone.class, columns) {
-
-                    @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove phone"));
-                    }
-                };
+                return columns;
             }
         };
     }
