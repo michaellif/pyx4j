@@ -78,13 +78,13 @@ import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.propertyvista.server.domain.UserCredential;
 
-public class VistaDataGenerator {
+public class VistaDataPTGenerator {
 
-    private final static Logger log = LoggerFactory.getLogger(VistaDataGenerator.class);
+    private final static Logger log = LoggerFactory.getLogger(VistaDataPTGenerator.class);
 
     private final long seed;
 
-    public VistaDataGenerator(long seed) {
+    public VistaDataPTGenerator(long seed) {
         DataGenerator.setRandomSeed(seed);
         this.seed = seed;
     }

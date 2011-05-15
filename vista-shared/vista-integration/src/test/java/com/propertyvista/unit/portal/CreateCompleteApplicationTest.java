@@ -57,7 +57,7 @@ import com.propertyvista.portal.rpc.pt.BusinessRules;
 import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.SharedData;
-import com.propertyvista.portal.server.generator.VistaDataGenerator;
+import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
 import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
 
 public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
@@ -92,7 +92,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
 
     public void exectuteFlow(long seed) {
         log.info("execute flow with seed {}", seed);
-        VistaDataGenerator generator = new VistaDataGenerator(seed);
+        VistaDataPTGenerator generator = new VistaDataPTGenerator(seed);
         User user = createTestUser();
         Application application = generator.createApplication(user);
         Summary summary = generator.createSummary(application, null);

@@ -37,7 +37,7 @@ import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.Summary;
-import com.propertyvista.portal.server.generator.VistaDataGenerator;
+import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.portal.server.pt.services.SummaryServiceImpl;
 
@@ -91,8 +91,8 @@ public class SummaryReportTest extends ReportsTestBase {
     }
 
     private static Summary retreiveSummaryTodo() throws IOException {
-        VistaDataGenerator generator = new VistaDataGenerator(DemoData.PT_GENERATION_SEED);
-        Application application = generator.createApplication(VistaDataGenerator.createUser());
+        VistaDataPTGenerator generator = new VistaDataPTGenerator(DemoData.PT_GENERATION_SEED);
+        Application application = generator.createApplication(VistaDataPTGenerator.createUser());
         Summary summary = generator.createSummary(application, null);
         return summary;
     }

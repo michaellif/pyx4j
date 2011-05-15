@@ -38,7 +38,7 @@ import com.propertyvista.portal.domain.pt.TenantChargeList;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
-import com.propertyvista.portal.server.generator.VistaDataGenerator;
+import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
 import com.propertyvista.portal.server.pt.services.ApplicationDebug;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
@@ -139,10 +139,10 @@ public class PreloadPT extends BaseVistaDataPreloader {
     public String create() {
         user = loadUser(DemoData.PRELOADED_USERNAME);
 
-        VistaDataGenerator generator = new VistaDataGenerator(DemoData.PT_GENERATION_SEED);
+        VistaDataPTGenerator generator = new VistaDataPTGenerator(DemoData.PT_GENERATION_SEED);
         Application application = generator.createApplication(user);
         ApplicationProgress progress = generator.createApplicationProgress(application);
-        // TODO retive some unit
+        // TODO retrieve some unit
         Summary summary = generator.createSummary(application, null);
         persistFullApplication(summary, progress, generator);
         //List<ApplicationDocument> adocs = PersistenceServicesFactory.getPersistenceService().query(EntityQueryCriteria.create(ApplicationDocument.class));
@@ -154,7 +154,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         return b.toString();
     }
 
-    private void persistFullApplication(Summary summary, ApplicationProgress progress, VistaDataGenerator generator) {
+    private void persistFullApplication(Summary summary, ApplicationProgress progress, VistaDataPTGenerator generator) {
         persist(summary.application());
         persist(progress);
         persist(summary.unitSelection());

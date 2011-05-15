@@ -28,7 +28,7 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.rpc.pt.PtSiteMap;
 import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.SharedData;
-import com.propertyvista.portal.server.generator.VistaDataGenerator;
+import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
 
 public class PreloadedUsersTest extends PortalVerificationTestCase {
 
@@ -41,7 +41,7 @@ public class PreloadedUsersTest extends PortalVerificationTestCase {
     }
 
     public void testFullFlow() throws Exception {
-        VistaDataGenerator generator = new VistaDataGenerator(DemoData.PT_GENERATION_SEED);
+        VistaDataPTGenerator generator = new VistaDataPTGenerator(DemoData.PT_GENERATION_SEED);
         User user = generator.createUser(1);
         Application application = generator.createApplication(user);
         Summary summary = generator.createSummary(application, null);

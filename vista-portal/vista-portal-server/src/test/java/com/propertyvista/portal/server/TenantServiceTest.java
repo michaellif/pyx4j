@@ -24,7 +24,7 @@ import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
-import com.propertyvista.portal.server.generator.VistaDataGenerator;
+import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
@@ -75,7 +75,7 @@ public class TenantServiceTest extends VistaDBTestCase {
     public void testLoadAndSave() {
         happyPath();
 
-        VistaDataGenerator generator = new VistaDataGenerator(10l);
+        VistaDataPTGenerator generator = new VistaDataPTGenerator(10l);
 
         PotentialTenantList tenantList = HappyPath.step4createTenants();
         PotentialTenantList tenantList2 = generator.createPotentialTenantList(application);
