@@ -24,26 +24,26 @@ public class PortalSiteMap implements SiteMap {
     @PlaceProperties(caption = "Find an Apartment")
     @NavigationItem(navigLabel = "FindApartment")
     public static class FindApartment extends AppPlace {
-    }
 
-    @PlaceProperties(caption = "Found Cities")
-    @NavigationItem(navigLabel = "cityMap")
-    public static class CityMap extends AppPlace {
-    }
+        @PlaceProperties(caption = "Found Cities")
+        @NavigationItem(navigLabel = "cityMap")
+        public static class CityMap extends AppPlace {
+        }
 
-    @PlaceProperties(caption = "Found Properties")
-    @NavigationItem(navigLabel = "propertyMap")
-    public static class PropertyMap extends AppPlace {
-    }
-
-    @PlaceProperties(caption = "Sign In")
-    @NavigationItem(navigLabel = "residentLogin")
-    public static class Login extends AppPlace {
+        @PlaceProperties(caption = "Found Properties")
+        @NavigationItem(navigLabel = "propertyMap")
+        public static class PropertyMap extends AppPlace {
+        }
     }
 
     @PlaceProperties(caption = "Residents")
     @NavigationItem(navigLabel = "Residents")
     public static class Residents extends AppPlace {
+
+        @PlaceProperties(caption = "Sign In")
+        @NavigationItem(navigLabel = "residentLogin")
+        public static class Login extends AppPlace {
+        }
 
         @PlaceProperties(caption = "Tenant Profile")
         @NavigationItem(navigLabel = "Profile")

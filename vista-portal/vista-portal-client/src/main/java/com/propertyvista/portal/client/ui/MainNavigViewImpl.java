@@ -28,13 +28,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.domain.site.NavigItem;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
-
-import com.propertyvista.portal.domain.site.NavigItem;
 
 public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
@@ -118,8 +117,15 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             statusHolder.add(label);
 
             String placeid = AppSite.getPlaceId(place);
+            String current = AppSite.getPlaceId(presenter.getWhere());
+            if (current != null) {
+                String[] path = current.split("/");
+                if (path.length > 0)
+                    current = path[0];
 
-            if (placeid != null && placeid.equals(AppSite.getPlaceId(presenter.getWhere()))) {
+            }
+
+            if (placeid != null && placeid.equals(current)) {
                 label.addStyleDependentName(StyleDependent.current.name());
             }
 

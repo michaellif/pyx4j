@@ -44,7 +44,7 @@ public class ResidentsActivity extends AbstractActivity implements ResidentsView
 
     @Override
     public void gotoLoginForm() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Login());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Login());
 
     }
 

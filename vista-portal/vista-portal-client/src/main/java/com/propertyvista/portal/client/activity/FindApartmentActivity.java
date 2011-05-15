@@ -45,13 +45,13 @@ public class FindApartmentActivity extends AbstractActivity implements FindApart
 
     @Override
     public void gotoCityMap() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.CityMap());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.CityMap());
 
     }
 
     @Override
     public void gotoPropertyMap() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.PropertyMap());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.PropertyMap());
 
     }
 }

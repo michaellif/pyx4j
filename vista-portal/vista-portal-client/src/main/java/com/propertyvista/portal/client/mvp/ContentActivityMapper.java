@@ -62,11 +62,11 @@ public class ContentActivityMapper implements ActivityMapper {
             return findApartmentActivityProvider.get().withPlace(place);
         else if (place instanceof PortalSiteMap.Residents)
             return residentsActivityProvider.get().withPlace(place);
-        else if (place instanceof PortalSiteMap.Login)
+        else if (place instanceof PortalSiteMap.Residents.Login)
             return loginActivityProvider.get().withPlace(place);
-        else if (place instanceof PortalSiteMap.CityMap)
+        else if (place instanceof PortalSiteMap.FindApartment.CityMap)
             return cityMapActivity.get().withPlace(place);
-        else if (place instanceof PortalSiteMap.PropertyMap)
+        else if (place instanceof PortalSiteMap.FindApartment.PropertyMap)
             return propertyMapActivity.get().withPlace(place);
 
         return null;
