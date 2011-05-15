@@ -21,8 +21,6 @@
 package com.pyx4j.server.contexts;
 
 import java.io.IOException;
-import java.util.Hashtable;
-import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -39,35 +37,20 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.RequestDebug;
-import com.pyx4j.security.server.ThrottleConfig;
+import com.pyx4j.server.contexts.AntiDoS.AccessCounter;
 
 /**
  * Setup Context thread locals.
- * 
- * Also rejects requests from IPs that are sending too many requests and spend too much
- * application time.
  */
 public class LifecycleFilter implements Filter {
 
     private static Logger log = LoggerFactory.getLogger(LifecycleFilter.class);
 
-    private ThrottleConfig throttleConfig;
-
-    private static long nextIntervalResetTime;
-
-    private static Map<String, AccessCounter> accessByIP = new Hashtable<String, AccessCounter>();
-
-    private static class AccessCounter {
-
-        int requests = 1;
-
-        long duration = 0;
-
-    }
+    private AntiDoS antiDoS;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        throttleConfig = ServerSideConfiguration.instance().getThrottleConfig();
+        antiDoS = new AntiDoS();
     }
 
     @Override
@@ -76,44 +59,16 @@ public class LifecycleFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        long start = System.currentTimeMillis();
-        AccessCounter counter = null;
+        long requestStart = System.currentTimeMillis();
+        AccessCounter counter = antiDoS.beginRequest(request, requestStart);
+        if (counter == null) {
+            if (response instanceof HttpServletResponse) {
+                ((HttpServletResponse) response).sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
+            }
+            return;
+        }
+
         try {
-            if (start > nextIntervalResetTime) {
-                accessByIP.clear();
-                nextIntervalResetTime = start + throttleConfig.getInterval();
-            }
-            counter = accessByIP.get(request.getRemoteAddr());
-            if (counter == null) {
-                counter = new AccessCounter();
-                accessByIP.put(request.getRemoteAddr(), counter);
-            } else {
-                if (request instanceof HttpServletRequest) {
-                    String uri = ((HttpServletRequest) request).getRequestURI();
-                    String[] split = uri.split("/", 4);
-                    if (split.length >= 3) {
-                        String uriPart = "/" + split[1] + "/" + split[2];
-                        if (throttleConfig.whiteRequestURIs().contains(uriPart)) {
-                            counter = null;
-                        }
-                    }
-                }
-
-                if (counter != null) {
-                    counter.requests++;
-                    if ((counter.requests > throttleConfig.getMaxRequests()) || (counter.duration > throttleConfig.getMaxTimeUsage())) {
-                        if (response instanceof HttpServletResponse) {
-                            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
-                        }
-                        if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-                            RequestDebug.debug(request);
-                        }
-                        log.error("possible denial-of-service attack from {}", request.getRemoteAddr());
-                        return;
-                    }
-                }
-            }
-
             if (!(request instanceof HttpServletRequest)) {
                 chain.doFilter(request, response);
             } else {
@@ -139,9 +94,7 @@ public class LifecycleFilter implements Filter {
                 }
             }
         } finally {
-            if (counter != null) {
-                counter.duration += System.currentTimeMillis() - start;
-            }
+            antiDoS.endRequest(counter, requestStart);
         }
 
     }

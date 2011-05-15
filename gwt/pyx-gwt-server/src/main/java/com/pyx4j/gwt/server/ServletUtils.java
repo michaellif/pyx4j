@@ -20,6 +20,7 @@
  */
 package com.pyx4j.gwt.server;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -32,9 +33,10 @@ public class ServletUtils {
 
     public static String getActualRequestURL(HttpServletRequest request, boolean queryString) {
         StringBuffer receivingURL;
-        if (request.getHeader("x-forwarded-host") != null) {
+        String forwarded = request.getHeader("x-forwarded-host");
+        if (forwarded != null) {
             receivingURL = new StringBuffer();
-            receivingURL.append("http://").append(request.getHeader("x-forwarded-host"));
+            receivingURL.append("http://").append(forwarded);
             if (ServerSideConfiguration.instance().isContextLessDeployment()) {
                 String contextPath = request.getContextPath();
                 receivingURL.append(request.getRequestURI().substring(contextPath.length()));
@@ -51,5 +53,18 @@ public class ServletUtils {
             }
         }
         return receivingURL.toString();
+    }
+
+    public static String getActualRequestRemoteAddr(ServletRequest request) {
+        if (request instanceof HttpServletRequest) {
+            String forwarded = ((HttpServletRequest) request).getHeader("x-forwarded-for");
+            if (forwarded != null) {
+                return forwarded;
+            } else {
+                return request.getRemoteAddr();
+            }
+        } else {
+            return request.getRemoteAddr();
+        }
     }
 }

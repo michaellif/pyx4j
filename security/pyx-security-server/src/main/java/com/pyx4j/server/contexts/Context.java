@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.pyx4j.gwt.server.ServletUtils;
+
 /**
  * 
  */
@@ -146,7 +148,7 @@ public class Context {
     }
 
     public static String getRequestRemoteAddr() {
-        return getRequest().getRemoteAddr();
+        return ServletUtils.getActualRequestRemoteAddr(getRequest());
     }
 
     static void remove() {
