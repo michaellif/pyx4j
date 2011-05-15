@@ -27,13 +27,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.server.config.VistaServerSideConfiguration;
-
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.AntiDoS;
 import com.pyx4j.server.contexts.Context;
+
+import com.propertyvista.server.common.security.DevelopmentSecurity;
+import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 public class OpenIdFilter implements Filter {
 
@@ -53,6 +55,10 @@ public class OpenIdFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (SecurityController.checkBehavior(CoreBehavior.USER)) {
             chain.doFilter(request, response);
+            String email = (String) Context.getVisit().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE);
+            if ((email != null) && email.startsWith("tester")) {
+                AntiDoS.resetRequestCount(request);
+            }
         } else {
             HttpServletRequest httprequest = (HttpServletRequest) request;
             if ((!((VistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdrequired()) || httprequest.getServletPath().startsWith("/o/")) {

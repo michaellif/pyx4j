@@ -136,7 +136,13 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
             // e.g. Run Firefox Application in another VM
             // Just download http://code.google.com/p/selenium/downloads/detail?name=selenium-server-standalone-2.0b3.jar
             // And run java -jar selenium-server-standalone-2.0b3.jar
-            //return "10.1.1.125";
+
+            // VladS Settings
+            // XP-IE7, FF 3.6
+            //return "10.1.1.153";
+
+            // XP-IE8, FF 4
+            //return "10.1.1.152";
         }
     }
 }

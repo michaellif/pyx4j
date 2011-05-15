@@ -13,13 +13,13 @@
  */
 package com.propertyvista.server.common.security;
 
-import com.propertyvista.config.SystemConfig;
-import com.propertyvista.server.domain.dev.DevelopmentUser;
-
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
+
+import com.propertyvista.config.SystemConfig;
+import com.propertyvista.server.domain.dev.DevelopmentUser;
 
 public class DevelopmentSecurity {
 
@@ -60,7 +60,7 @@ public class DevelopmentSecurity {
             return developmentUserHostBased;
         }
         hostQueryDone = true;
-        String host = SystemConfig.instance().getLocalHostName();
+        String host = SystemConfig.getLocalHostName();
         EntityQueryCriteria<DevelopmentUser> criteria = EntityQueryCriteria.create(DevelopmentUser.class);
 
         criteria.add(PropertyCriterion.eq(criteria.proto().host1(), host));
