@@ -25,18 +25,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Singleton;
 
-import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
-import com.propertyvista.portal.domain.pt.ChargeLine;
-import com.propertyvista.portal.domain.pt.Pet;
-import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
-import com.propertyvista.portal.domain.pt.Pets;
-import com.propertyvista.portal.domain.util.DomainUtil;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
-import com.propertyvista.portal.ptapp.client.ui.validators.BirthdayDateValidator;
-import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
-
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -52,6 +40,18 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+
+import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
+import com.propertyvista.portal.domain.pt.ChargeLine;
+import com.propertyvista.portal.domain.pt.Pet;
+import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
+import com.propertyvista.portal.domain.pt.Pets;
+import com.propertyvista.portal.domain.util.DomainUtil;
+import com.propertyvista.portal.ptapp.client.resources.PortalImages;
+import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
+import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
+import com.propertyvista.portal.ptapp.client.ui.validators.BirthdayDateValidator;
+import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
 @Singleton
 public class PetsViewForm extends CEntityForm<Pets> {
@@ -176,8 +176,9 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
                             @Override
                             public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
-                                return DomainUtil.getWeightKg(value, getValue().weightUnit().getValue()) <= PetsViewForm.this.getValue().petWeightMaximum()
-                                        .getValue();
+                                return (value == null)
+                                        || DomainUtil.getWeightKg(value, getValue().weightUnit().getValue()) <= PetsViewForm.this.getValue().petWeightMaximum()
+                                                .getValue();
                             }
 
                             @Override
