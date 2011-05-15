@@ -62,6 +62,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
+import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.domain.pt.Address;
@@ -252,13 +253,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             }
         });
 
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
-                previousAddressForm.get(previousAddressForm.proto().moveOutDate()).revalidate();
-            }
-        });
+        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
+                new RevalidationTrigger<java.sql.Date>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
 
         // ------------------------------------------------------------------------------------------------        
 
@@ -289,13 +285,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             }
         });
 
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
-                previousAddressForm.get(previousAddressForm.proto().moveInDate()).revalidate();
-            }
-        });
+        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
+                new RevalidationTrigger<java.sql.Date>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
 
         // ------------------------------------------------------------------------------------------------
 

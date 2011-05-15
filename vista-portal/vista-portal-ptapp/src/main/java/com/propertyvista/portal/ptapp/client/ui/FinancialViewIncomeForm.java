@@ -35,6 +35,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.domain.pt.IEmploymentInfo;
 import com.propertyvista.portal.domain.pt.IIncomeInfo;
@@ -344,13 +345,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             }
         });
 
-        comp.get(comp.proto().starts()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
-                comp.get(comp.proto().ends()).revalidate();
-            }
-        });
+        comp.get(comp.proto().starts()).addValueChangeHandler(new RevalidationTrigger<java.sql.Date>(comp.get(comp.proto().ends())));
 
         comp.get(comp.proto().ends()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
@@ -365,12 +360,6 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             }
         });
 
-        comp.get(comp.proto().ends()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
-                comp.get(comp.proto().starts()).revalidate();
-            }
-        });
+        comp.get(comp.proto().ends()).addValueChangeHandler(new RevalidationTrigger<java.sql.Date>(comp.get(comp.proto().starts())));
     }
 }
