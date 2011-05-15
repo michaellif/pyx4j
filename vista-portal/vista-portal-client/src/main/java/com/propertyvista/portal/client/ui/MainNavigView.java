@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.client.activity.MainNavigMenu;
 
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -27,7 +28,11 @@ public interface MainNavigView extends IsWidget {
 
         public String getNavigLabel(AppPlace place);
 
+        public String getCaption(AppPlace place);
+
         public Place getWhere();
+
+        public MainNavigMenu getMainNavigMenu();
 
     }
 }

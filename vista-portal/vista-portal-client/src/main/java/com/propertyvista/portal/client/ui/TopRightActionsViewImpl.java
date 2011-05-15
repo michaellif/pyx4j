@@ -35,9 +35,6 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
         greetings = new HTML("Welcome");
         topLinksPanel.add(greetings);
-        ;
-
-        topLinksPanel.add(new HTML("&nbsp;-&nbsp;"));
 
     }
 

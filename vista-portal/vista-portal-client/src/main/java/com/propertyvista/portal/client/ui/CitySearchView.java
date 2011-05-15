@@ -13,14 +13,8 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class FindApartmentViewImpl extends SimplePanel implements FindApartmentView {
+public interface CitySearchView extends IsWidget {
 
-    public FindApartmentViewImpl() {
-        HTML label = new HTML("Find Apartment view");
-        setWidget(label);
-
-    }
 }

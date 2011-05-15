@@ -22,6 +22,11 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.propertyvista.portal.client.mvp.ActionsActivityMapper;
+import com.propertyvista.portal.client.mvp.BottomActivityMapper;
+import com.propertyvista.portal.client.mvp.ContentActivityMapper;
+import com.propertyvista.portal.client.mvp.LogoActivityMapper;
+import com.propertyvista.portal.client.mvp.MainNavigActivityMapper;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AppSiteView;
@@ -29,19 +34,13 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
 
-import com.propertyvista.portal.client.mvp.ActionsActivityMapper;
-import com.propertyvista.portal.client.mvp.BottomActivityMapper;
-import com.propertyvista.portal.client.mvp.ContentActivityMapper;
-import com.propertyvista.portal.client.mvp.LogoActivityMapper;
-import com.propertyvista.portal.client.mvp.MainNavigActivityMapper;
-
 @Singleton
 public class PortalView extends FlowPanel {
 
-    public static String DEFAULT_STYLE_PREFIX = "SiteView";
+    public static String DEFAULT_STYLE_PREFIX = "PortalView";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Content, Header, Footer, MainNavig, Center, Main, Display
+        Content, Header, Footer, MainNavig, Center, Main, Left, Right, Display
     }
 
     @Inject
@@ -61,7 +60,7 @@ public class PortalView extends FlowPanel {
 
         StyleManger.installTheme(theme);
 
-        String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
+        String prefix = DEFAULT_STYLE_PREFIX;
 
         setStyleName(prefix);
 

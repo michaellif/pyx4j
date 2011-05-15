@@ -15,17 +15,22 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
+import com.propertyvista.portal.client.themes.GainsboroTheme;
+
+import com.pyx4j.widgets.client.style.Theme;
 
 public class ViewModule extends AbstractGinModule {
 
     @Override
     protected void configure() {
         bind(PortalView.class);
+        bind(Theme.class).to(GainsboroTheme.class).in(Singleton.class);
         bind(LogoView.class).to(LogoViewImpl.class).in(Singleton.class);
         bind(FooterView.class).to(FooterViewImpl.class).in(Singleton.class);
         bind(MainNavigView.class).to(MainNavigViewImpl.class).in(Singleton.class);
         bind(TopRightActionsView.class).to(TopRightActionsViewImpl.class).in(Singleton.class);
         bind(FindApartmentView.class).to(FindApartmentViewImpl.class).in(Singleton.class);
+        bind(ResidentsView.class).to(ResidentsViewImpl.class).in(Singleton.class);
 
     }
 }

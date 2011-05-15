@@ -23,6 +23,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class PortalSite extends VistaSite {
     private PortalGinjector ginjector;
@@ -32,7 +33,8 @@ public class PortalSite extends VistaSite {
         super.onSiteLoad();
 
         ginjector = GWT.create(PortalGinjector.class);
-        getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.FindApartment());
+        AppPlace defaultplace = new PortalSiteMap.FindApartment();
+        getHistoryHandler().register(getPlaceController(), getEventBus(), defaultplace);
 
         RootPanel.get().add(RootLayoutPanel.get());
 
@@ -42,7 +44,7 @@ public class PortalSite extends VistaSite {
 
         SessionInactiveDialog.register();
 
-        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment());
+        AppSite.getPlaceController().goTo(defaultplace);
 
     }
 

@@ -19,6 +19,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ui.MainNavigView;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.FindApartment;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -55,6 +57,20 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     @Override
     public Place getWhere() {
         return AppSite.getPlaceController().getWhere();
+    }
+
+    @Override
+    public MainNavigMenu getMainNavigMenu() {
+        MainNavigMenu menu = new MainNavigMenu();
+        menu.addMenuItem(new FindApartment());
+        menu.addMenuItem(new Residents());
+        return menu;
+
+    }
+
+    @Override
+    public String getCaption(AppPlace place) {
+        return AppSite.getHistoryMapper().getPlaceInfo(place).getCaption();
     }
 
 }

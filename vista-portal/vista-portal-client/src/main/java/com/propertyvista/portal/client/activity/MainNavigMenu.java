@@ -8,19 +8,30 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on May 14, 2011
- * @author Dad
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.activity;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import java.util.ArrayList;
+import java.util.List;
 
-public class FindApartmentViewImpl extends SimplePanel implements FindApartmentView {
+import com.pyx4j.site.rpc.AppPlace;
 
-    public FindApartmentViewImpl() {
-        HTML label = new HTML("Find Apartment view");
-        setWidget(label);
+public class MainNavigMenu {
 
+    private final List<AppPlace> menu;
+
+    public MainNavigMenu() {
+        menu = new ArrayList<AppPlace>(10);
     }
+
+    public List<AppPlace> getMenuItems() {
+        return menu;
+    }
+
+    public void addMenuItem(AppPlace menuItem) {
+        menu.add(menuItem);
+    }
+
 }

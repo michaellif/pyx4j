@@ -14,39 +14,41 @@
 package com.propertyvista.portal.rpc.portal;
 
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 
 public class PortalSiteMap {
     public static String ARG_NAME_ITEM_ID = "ItemID";
 
     @PlaceProperties(caption = "Find an Apartment")
+    @NavigationItem(navigLabel = "FindApartment")
     public static class FindApartment extends AppPlace {
+    }
+
+    @PlaceProperties(caption = "Residents")
+    @NavigationItem(navigLabel = "Residents")
+    public static class Residents extends AppPlace {
+
+        @PlaceProperties(caption = "Tenant Profile")
+        @NavigationItem(navigLabel = "Profile")
+        public static class TenantProfile extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Maintenance")
+        @NavigationItem(navigLabel = "Maintenance")
+        public static class Maintenance extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Payment")
+        @NavigationItem(navigLabel = "Payment")
+        public static class Payment extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Lease Application")
+        @NavigationItem(navigLabel = "LeaseApp")
+        public static class LeaseApplication extends AppPlace {
+        }
 
     }
-/*
- * @NavigationItem(navigLabel = "CityMap")
- * 
- * @PlaceProperties(caption = "Find an Apartment")
- * public static class CityMap extends AppPlace {
- * }
- * 
- * @NavigationItem(navigLabel = "PropertyMap")
- * 
- * @PlaceProperties(caption = "Find an Apartment")
- * public static class PropertyMap extends AppPlace {
- * }
- * 
- * @NavigationItem(navigLabel = "Resident")
- * 
- * @PlaceProperties(caption = "Resident")
- * public static class Resident extends AppPlace {
- * 
- * @NavigationItem(navigLabel = "Resident")
- * 
- * @PlaceProperties(caption = "Resident Login")
- * public static class Login extends AppPlace {
- * }
- * }
- */
 
 }

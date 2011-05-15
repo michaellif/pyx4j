@@ -19,16 +19,20 @@ import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.propertyvista.portal.client.activity.FindApartmentActivity;
+import com.propertyvista.portal.client.activity.ResidentsActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class ContentActivityMapper implements ActivityMapper {
 
     Provider<FindApartmentActivity> findApartmentActivityProvider;
 
+    Provider<ResidentsActivity> residentsActivityProvider;
+
     @Inject
-    public ContentActivityMapper(Provider<FindApartmentActivity> findApartmentActivityProvider) {
+    public ContentActivityMapper(Provider<FindApartmentActivity> findApartmentActivityProvider, Provider<ResidentsActivity> residentsActivityProvider) {
         super();
         this.findApartmentActivityProvider = findApartmentActivityProvider;
+        this.residentsActivityProvider = residentsActivityProvider;
 
     }
 
@@ -36,6 +40,8 @@ public class ContentActivityMapper implements ActivityMapper {
     public Activity getActivity(Place place) {
         if (place instanceof PortalSiteMap.FindApartment)
             return findApartmentActivityProvider.get().withPlace(place);
+        else if (place instanceof PortalSiteMap.Residents)
+            return residentsActivityProvider.get().withPlace(place);
 
         return null;
 
