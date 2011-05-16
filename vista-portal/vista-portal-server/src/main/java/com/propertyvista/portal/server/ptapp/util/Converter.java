@@ -16,9 +16,12 @@ package com.propertyvista.portal.server.ptapp.util;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.BuildingAmenity;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class Converter {
 
@@ -55,6 +58,25 @@ public class Converter {
         to.bathrooms().setValue(from.bathrooms().getValue());
         to.bedrooms().setValue(from.bedrooms().getValue());
 //        to.marketRent().setValue(from.marketRent().getValue());
+
+        return to;
+    }
+
+    public static PropertyDTO convert(Building from) {
+        PropertyDTO to = EntityFactory.create(PropertyDTO.class);
+        to.id().set(from.id());
+        to.address().setValue(from.address().getStringView());
+        //to.location().setValue(value);
+
+        // List of Floorplans
+        //TODO get this from building
+        to.size().add("3 Bedroom");
+        to.size().add("Bachelor");
+
+        // List of amenities
+        for (BuildingAmenity ba : from.amenities()) {
+            to.details().add(ba.type().getStringView());
+        }
 
         return to;
     }
