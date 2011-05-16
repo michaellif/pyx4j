@@ -7,16 +7,35 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2011
- * @author michaellif
+ * Created on 2011-02-07
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.domain.dto;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
 public interface FloorplanDTO extends IEntity {
 
+//    @Detached
+//    Building building();
+//
+    @Caption(name = "Plan")
+    IPrimitive<String> name();
+
+//
+//    /**
+//     * Contains the pictures of the floorplan / model unit
+//     */
+//    @Owned
+//    IList<Picture> pictures();
+//
+    /**
+     * Approximate value of square ft. size of unit
+     */
+    IPrimitive<Integer> area();
 }
