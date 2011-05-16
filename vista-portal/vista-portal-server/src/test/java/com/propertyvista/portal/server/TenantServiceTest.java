@@ -20,10 +20,10 @@ import org.slf4j.LoggerFactory;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.config.tests.VistaDBTestCase;
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.PotentialTenant;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.PotentialTenant;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 

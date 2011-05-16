@@ -17,7 +17,8 @@ import java.util.List;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
+
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
 
 import com.pyx4j.site.rpc.AppPlace;
 

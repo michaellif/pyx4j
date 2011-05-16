@@ -21,7 +21,7 @@ import com.pyx4j.essentials.client.SessionInactiveDialog;
 
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.portal.rpc.pt.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class PtAppSite extends VistaSite {
 

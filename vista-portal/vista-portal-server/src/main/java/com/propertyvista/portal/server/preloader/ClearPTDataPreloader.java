@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
-import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;

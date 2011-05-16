@@ -14,7 +14,8 @@
 package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
+
+import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
 
 public interface NewPasswordView extends IsWidget {
 

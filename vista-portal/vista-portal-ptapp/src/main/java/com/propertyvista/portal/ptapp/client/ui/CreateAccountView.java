@@ -14,7 +14,8 @@
 package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
+
+import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 
 public interface CreateAccountView extends IsWidget {
 

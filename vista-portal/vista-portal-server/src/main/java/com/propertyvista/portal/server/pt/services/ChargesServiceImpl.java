@@ -24,11 +24,11 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
-import com.propertyvista.portal.domain.pt.Charges;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.TenantCharge;
+import com.propertyvista.portal.domain.ptapp.Charges;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
-import com.propertyvista.portal.rpc.pt.services.ChargesService;
+import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PtAppContext;
 

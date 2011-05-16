@@ -15,10 +15,11 @@ package com.propertyvista.portal.ptapp.client.activity;
 
 import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.ptapp.client.ui.InfoView;
 import com.propertyvista.portal.ptapp.client.ui.InfoViewPresenter;
-import com.propertyvista.portal.rpc.pt.services.TenantInfoService;
+import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
 
 public class InfoActivity extends WizardStepWithSubstepsActivity<PotentialTenantInfo, InfoViewPresenter> implements InfoViewPresenter {
 

@@ -14,7 +14,8 @@
 package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
+
+import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 
 public class SummaryViewTenantFinancial extends SummaryViewTenantListBase<SummaryPotentialTenantFinancial> {
 

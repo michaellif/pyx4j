@@ -14,7 +14,7 @@
 package com.propertyvista.portal.domain;
 
 import com.propertyvista.config.tests.VistaDBTestCase;
-import com.propertyvista.portal.domain.pt.ChargeLine;
+import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.util.DomainUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;

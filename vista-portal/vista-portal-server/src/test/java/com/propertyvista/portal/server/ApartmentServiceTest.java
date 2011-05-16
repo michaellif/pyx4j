@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.config.tests.VistaDBTestCase;
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.rpc.pt.services.ApartmentService;
+import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 

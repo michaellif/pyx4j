@@ -47,11 +47,11 @@ import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.VistaBehavior;
-import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
-import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
-import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
-import com.propertyvista.portal.rpc.pt.services.ActivationService;
+import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
+import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
+import com.propertyvista.portal.rpc.ptapp.PasswordRetrievalRequest;
+import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.portal.server.mail.MessageTemplates;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;

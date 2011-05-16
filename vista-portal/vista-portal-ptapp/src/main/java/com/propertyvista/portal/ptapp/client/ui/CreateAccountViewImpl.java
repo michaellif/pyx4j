@@ -36,8 +36,8 @@ import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
-import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
-import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
+import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
+import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.HtmlUtils;

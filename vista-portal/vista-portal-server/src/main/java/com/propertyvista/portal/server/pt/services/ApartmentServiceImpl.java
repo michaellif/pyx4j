@@ -30,11 +30,11 @@ import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.property.asset.AptUnit;
 import com.propertyvista.domain.property.asset.Building;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
-import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
+import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
-import com.propertyvista.portal.rpc.pt.services.ApartmentService;
+import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.portal.server.pt.util.Converter;
 

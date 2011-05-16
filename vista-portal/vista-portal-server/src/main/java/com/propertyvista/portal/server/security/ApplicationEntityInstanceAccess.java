@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.server.security;
 
-import com.propertyvista.portal.domain.pt.IBoundToApplication;
+import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
 import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.commons.EqualsHelper;

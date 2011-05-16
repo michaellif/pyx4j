@@ -58,7 +58,7 @@ import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
 import com.propertyvista.portal.domain.payment.PaymentType;
-import com.propertyvista.portal.domain.pt.PaymentInfo;
+import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;

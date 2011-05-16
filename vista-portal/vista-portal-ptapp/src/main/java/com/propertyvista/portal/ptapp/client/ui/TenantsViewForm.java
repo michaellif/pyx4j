@@ -22,8 +22,9 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Singleton;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
+
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;

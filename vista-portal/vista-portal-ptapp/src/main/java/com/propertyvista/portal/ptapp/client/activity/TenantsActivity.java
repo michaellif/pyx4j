@@ -15,10 +15,11 @@ package com.propertyvista.portal.ptapp.client.activity;
 
 import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
+
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.ptapp.client.ui.TenantsView;
 import com.propertyvista.portal.ptapp.client.ui.TenantsViewPresenter;
-import com.propertyvista.portal.rpc.pt.services.TenantService;
+import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 
 public class TenantsActivity extends WizardStepActivity<PotentialTenantList, TenantsViewPresenter> implements TenantsViewPresenter {
 

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.unit;
 
-import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
+import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 import com.pyx4j.selenium.BaseSeleniumTestCase;
 

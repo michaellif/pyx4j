@@ -23,7 +23,7 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.portal.domain.pt.ApplicationDocument;
+import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;

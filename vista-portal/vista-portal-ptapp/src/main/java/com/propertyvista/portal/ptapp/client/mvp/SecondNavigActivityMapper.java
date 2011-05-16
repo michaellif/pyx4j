@@ -20,7 +20,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import com.propertyvista.portal.ptapp.client.activity.SecondNavigActivity;
-import com.propertyvista.portal.rpc.pt.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 import com.pyx4j.security.client.ClientContext;
 

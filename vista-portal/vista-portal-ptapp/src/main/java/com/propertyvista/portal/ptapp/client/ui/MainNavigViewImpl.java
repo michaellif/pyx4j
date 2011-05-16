@@ -31,10 +31,11 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
-import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
-import com.propertyvista.portal.rpc.pt.PtSiteMap;
-import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
+
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.site.client.AppSite;

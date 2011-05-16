@@ -17,25 +17,25 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.marketing.MarketRent;
-import com.propertyvista.portal.domain.pt.Address;
-import com.propertyvista.portal.domain.pt.ApartmentUnit;
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.ChargeLine;
-import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
-import com.propertyvista.portal.domain.pt.Charges;
-import com.propertyvista.portal.domain.pt.Pet;
-import com.propertyvista.portal.domain.pt.Pets;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
-import com.propertyvista.portal.domain.pt.Summary;
-import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
-import com.propertyvista.portal.domain.pt.TenantAsset;
-import com.propertyvista.portal.domain.pt.TenantCharge;
-import com.propertyvista.portal.domain.pt.TenantGuarantor;
-import com.propertyvista.portal.domain.pt.TenantIncome;
-import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.domain.pt.Vehicle;
+import com.propertyvista.portal.domain.ptapp.Address;
+import com.propertyvista.portal.domain.ptapp.ApartmentUnit;
+import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.ChargeLine;
+import com.propertyvista.portal.domain.ptapp.ChargeLineSelectable;
+import com.propertyvista.portal.domain.ptapp.Charges;
+import com.propertyvista.portal.domain.ptapp.Pet;
+import com.propertyvista.portal.domain.ptapp.Pets;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Summary;
+import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
+import com.propertyvista.portal.domain.ptapp.TenantAsset;
+import com.propertyvista.portal.domain.ptapp.TenantCharge;
+import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
+import com.propertyvista.portal.domain.ptapp.TenantIncome;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.domain.ptapp.Vehicle;
 
 public class VistaDataPrinter {
 

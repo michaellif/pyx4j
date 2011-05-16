@@ -15,10 +15,11 @@ package com.propertyvista.portal.ptapp.client.activity;
 
 import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
-import com.propertyvista.portal.domain.pt.Charges;
+
+import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.ptapp.client.ui.ChargesView;
 import com.propertyvista.portal.ptapp.client.ui.ChargesViewPresenter;
-import com.propertyvista.portal.rpc.pt.services.ChargesService;
+import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 
 public class ChargesActivity extends WizardStepActivity<Charges, ChargesViewPresenter> implements ChargesViewPresenter {
 

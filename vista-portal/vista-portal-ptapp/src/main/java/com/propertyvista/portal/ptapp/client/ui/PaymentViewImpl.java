@@ -17,7 +17,8 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.inject.Singleton;
-import com.propertyvista.portal.domain.pt.PaymentInfo;
+
+import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.ptapp.client.ui.PaymentView.PaymentPresenter;
 
 @Singleton

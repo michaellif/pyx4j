@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 
 public interface TenantsViewPresenter extends WizardStepPresenter<PotentialTenantList> {
 

@@ -42,16 +42,16 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
-import com.propertyvista.portal.domain.pt.ChargeLine;
-import com.propertyvista.portal.domain.pt.Pet;
-import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
-import com.propertyvista.portal.domain.pt.Pets;
+import com.propertyvista.portal.domain.ptapp.ChargeLine;
+import com.propertyvista.portal.domain.ptapp.Pet;
+import com.propertyvista.portal.domain.ptapp.Pets;
+import com.propertyvista.portal.domain.ptapp.Pet.WeightUnit;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.ptapp.client.ui.validators.BirthdayDateValidator;
-import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
+import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
 @Singleton
 public class PetsViewForm extends CEntityForm<Pets> {

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.portal.domain.pt.ChargeLine;
+import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 

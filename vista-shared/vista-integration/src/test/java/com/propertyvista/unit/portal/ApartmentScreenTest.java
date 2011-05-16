@@ -25,11 +25,11 @@ import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
-import com.propertyvista.portal.domain.pt.ApartmentUnit;
-import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
-import com.propertyvista.portal.rpc.pt.PtSiteMap;
-import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
+import com.propertyvista.portal.domain.ptapp.ApartmentUnit;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
 

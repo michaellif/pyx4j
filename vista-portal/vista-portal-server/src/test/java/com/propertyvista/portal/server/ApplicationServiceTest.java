@@ -17,9 +17,9 @@ import org.junit.Assert;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.config.tests.VistaDBTestCase;
-import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.CurrentApplication;
-import com.propertyvista.portal.rpc.pt.services.ApplicationService;
+import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
+import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;

@@ -17,8 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.rpc.pt.PtUserVisit;
+import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.server.common.security.VistaContext;
 
 import com.pyx4j.entity.shared.EntityFactory;

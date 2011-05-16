@@ -14,7 +14,8 @@
 package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.inject.Singleton;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
+
+import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 
 @Singleton
 public class FinancialViewImpl extends WizardStepViewImpl<PotentialTenantFinancial, FinancialViewPresenter> implements FinancialView {

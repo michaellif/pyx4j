@@ -61,12 +61,12 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.domain.marketing.MarketRent;
-import com.propertyvista.portal.domain.pt.ApartmentUnit;
-import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
+import com.propertyvista.portal.domain.ptapp.ApartmentUnit;
+import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.components.VistaReadOnlyComponentFactory;
-import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
+import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 

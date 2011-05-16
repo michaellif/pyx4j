@@ -15,7 +15,7 @@ package com.propertyvista.server.domain;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Timestamp;

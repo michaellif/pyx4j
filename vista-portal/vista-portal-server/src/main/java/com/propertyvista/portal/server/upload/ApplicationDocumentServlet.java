@@ -14,7 +14,7 @@
 
 package com.propertyvista.portal.server.upload;
 
-import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
+import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.pt.PtAppContext;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.pyx4j.entity.server.PersistenceServicesFactory;

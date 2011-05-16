@@ -25,8 +25,8 @@ import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.portal.rpc.DeploymentConsts;
-import com.propertyvista.portal.rpc.pt.PtSiteMap;
-import com.propertyvista.portal.rpc.pt.services.ActivationService;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 public class MessageTemplates {
 

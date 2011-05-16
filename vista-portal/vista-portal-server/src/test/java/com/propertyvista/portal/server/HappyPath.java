@@ -16,12 +16,12 @@ package com.propertyvista.portal.server;
 import org.junit.Assert;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
-import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
-import com.propertyvista.portal.rpc.pt.CurrentApplication;
+import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
+import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.sync.ActivationServiceSync;
 import com.propertyvista.portal.server.sync.ApartmentServiceSync;

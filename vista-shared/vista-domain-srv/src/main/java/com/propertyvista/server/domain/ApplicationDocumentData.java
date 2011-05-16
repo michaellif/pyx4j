@@ -13,8 +13,9 @@
  */
 package com.propertyvista.server.domain;
 
-import com.propertyvista.portal.domain.pt.IBoundToApplication;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;

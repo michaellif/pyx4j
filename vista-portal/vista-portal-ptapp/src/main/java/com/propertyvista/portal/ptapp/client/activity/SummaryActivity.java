@@ -15,10 +15,11 @@ package com.propertyvista.portal.ptapp.client.activity;
 
 import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
-import com.propertyvista.portal.domain.pt.Summary;
+
+import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.ptapp.client.ui.SummaryView;
 import com.propertyvista.portal.ptapp.client.ui.SummaryViewPresenter;
-import com.propertyvista.portal.rpc.pt.services.SummaryService;
+import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;

@@ -15,10 +15,11 @@ package com.propertyvista.portal.ptapp.client.activity;
 
 import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
-import com.propertyvista.portal.domain.pt.Pets;
+
+import com.propertyvista.portal.domain.ptapp.Pets;
 import com.propertyvista.portal.ptapp.client.ui.PetsView;
 import com.propertyvista.portal.ptapp.client.ui.PetsViewPresenter;
-import com.propertyvista.portal.rpc.pt.services.PetService;
+import com.propertyvista.portal.rpc.ptapp.services.PetService;
 
 public class PetsActivity extends WizardStepActivity<Pets, PetsViewPresenter> implements PetsViewPresenter {
 

@@ -28,9 +28,9 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.ui.NewPasswordView;
 import com.propertyvista.portal.ptapp.client.ui.NewPasswordView.ConversationType;
-import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
-import com.propertyvista.portal.rpc.pt.PtSiteMap;
-import com.propertyvista.portal.rpc.pt.services.ActivationService;
+import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;

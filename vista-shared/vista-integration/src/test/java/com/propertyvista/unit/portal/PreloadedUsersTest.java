@@ -21,12 +21,12 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.User;
-import com.propertyvista.portal.domain.pt.ApartmentUnit;
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.Summary;
-import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.rpc.pt.PtSiteMap;
-import com.propertyvista.portal.rpc.pt.VistaFormsDebugId;
+import com.propertyvista.portal.domain.ptapp.ApartmentUnit;
+import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.Summary;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
 

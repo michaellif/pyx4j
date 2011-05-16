@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
-import com.propertyvista.portal.domain.pt.TenantCharge;
+import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;

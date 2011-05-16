@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.ptapp.client.ui.NewPasswordView.ConversationType;
-import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
+import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;

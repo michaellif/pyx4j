@@ -14,7 +14,8 @@
 package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.inject.Singleton;
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
+
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 
 @Singleton
 public class TenantsViewImpl extends WizardStepViewImpl<PotentialTenantList, TenantsViewPresenter> implements TenantsView {

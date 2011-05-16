@@ -23,11 +23,11 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.common.domain.financial.ChargeType;
-import com.propertyvista.portal.domain.pt.Pet;
-import com.propertyvista.portal.domain.pt.PetChargeRule;
-import com.propertyvista.portal.domain.pt.Pets;
-import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
-import com.propertyvista.portal.rpc.pt.services.PetService;
+import com.propertyvista.portal.domain.ptapp.Pet;
+import com.propertyvista.portal.domain.ptapp.PetChargeRule;
+import com.propertyvista.portal.domain.ptapp.Pets;
+import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
+import com.propertyvista.portal.rpc.ptapp.services.PetService;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PtAppContext;
 

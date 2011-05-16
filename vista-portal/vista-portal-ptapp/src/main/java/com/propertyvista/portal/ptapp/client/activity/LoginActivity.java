@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
 import com.propertyvista.portal.ptapp.client.ui.LoginView;
-import com.propertyvista.portal.rpc.pt.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;

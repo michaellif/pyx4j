@@ -14,7 +14,8 @@
 package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.inject.Singleton;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
 @Singleton
 public class InfoViewImpl extends WizardStepViewImpl<PotentialTenantInfo, InfoViewPresenter> implements InfoView {

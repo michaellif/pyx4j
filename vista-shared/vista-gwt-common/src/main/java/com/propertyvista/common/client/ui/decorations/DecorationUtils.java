@@ -18,7 +18,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.domain.pt.IPerson;
+
+import com.propertyvista.portal.domain.ptapp.IPerson;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 

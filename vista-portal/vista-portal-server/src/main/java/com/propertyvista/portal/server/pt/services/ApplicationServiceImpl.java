@@ -30,18 +30,18 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.domain.User;
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.ApplicationProgress;
-import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
-import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
-import com.propertyvista.portal.domain.pt.PotentialTenant.Status;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
-import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.CurrentApplication;
-import com.propertyvista.portal.rpc.pt.PtSiteMap;
-import com.propertyvista.portal.rpc.pt.services.ApplicationService;
+import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
+import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
+import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.pt.PtAppContext;
 
 public class ApplicationServiceImpl extends ApplicationEntityServiceImpl implements ApplicationService {

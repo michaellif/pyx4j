@@ -25,7 +25,7 @@ import org.xnap.commons.i18n.I18n;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.crm.rpc.CrmUserVisit;
-import com.propertyvista.portal.rpc.pt.PtUserVisit;
+import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.commons.CommonsStringUtils;

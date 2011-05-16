@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.ptapp.Charges;
 
 public interface ChargesViewPresenter extends WizardStepPresenter<Charges> {
 

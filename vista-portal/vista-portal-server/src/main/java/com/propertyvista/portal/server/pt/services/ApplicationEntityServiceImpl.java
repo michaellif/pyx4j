@@ -15,8 +15,8 @@ package com.propertyvista.portal.server.pt.services;
 
 import org.xnap.commons.i18n.I18n;
 
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.IBoundToApplication;
+import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
 import com.propertyvista.portal.server.pt.PtAppContext;
 
 import com.pyx4j.entity.server.EntityServicesImpl;

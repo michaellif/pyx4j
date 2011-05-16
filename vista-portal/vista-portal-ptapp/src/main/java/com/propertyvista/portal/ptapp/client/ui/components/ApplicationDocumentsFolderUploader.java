@@ -43,11 +43,12 @@ import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.propertyvista.portal.domain.pt.ApplicationDocument;
-import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
+
+import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
+import com.propertyvista.portal.domain.ptapp.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.rpc.pt.ApplicationDocumentServletParameters;
-import com.propertyvista.portal.rpc.pt.ServletMapping;
+import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
+import com.propertyvista.portal.rpc.ptapp.ServletMapping;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;

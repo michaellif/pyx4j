@@ -15,12 +15,13 @@ package com.propertyvista.portal.ptapp.client.activity;
 
 import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
-import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
-import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
+
+import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.ptapp.client.ui.ApartmentView;
 import com.propertyvista.portal.ptapp.client.ui.ApartmentViewPresenter;
-import com.propertyvista.portal.rpc.pt.services.ApartmentService;
+import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 

@@ -16,9 +16,9 @@ package com.propertyvista.portal.test.rpc.pt;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.util.DomainUtil;
-import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
+import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
 import com.pyx4j.entity.shared.EntityFactory;
 

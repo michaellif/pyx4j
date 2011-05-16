@@ -35,7 +35,7 @@ import com.propertyvista.portal.ptapp.client.activity.RetrievePasswordActivity;
 import com.propertyvista.portal.ptapp.client.activity.StaticContentActivity;
 import com.propertyvista.portal.ptapp.client.activity.SummaryActivity;
 import com.propertyvista.portal.ptapp.client.activity.TenantsActivity;
-import com.propertyvista.portal.rpc.pt.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 import com.pyx4j.site.rpc.AppPlace;
 

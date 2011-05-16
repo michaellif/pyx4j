@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import com.propertyvista.portal.domain.pt.PaymentInfo;
+import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.ptapp.client.ui.PaymentView.PaymentPresenter;
 
 public interface PaymentView extends WizardStepView<PaymentInfo, PaymentPresenter> {

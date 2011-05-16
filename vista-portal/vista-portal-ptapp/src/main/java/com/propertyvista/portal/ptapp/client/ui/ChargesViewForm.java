@@ -26,12 +26,12 @@ import com.google.inject.Singleton;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.domain.financial.Money;
-import com.propertyvista.portal.domain.pt.ChargeLine;
-import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.ptapp.ChargeLine;
+import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
-import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
+import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;

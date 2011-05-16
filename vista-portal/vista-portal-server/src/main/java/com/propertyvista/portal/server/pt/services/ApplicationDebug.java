@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.server.pt.services;
 
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.IBoundToApplication;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
-import com.propertyvista.portal.domain.pt.Summary;
-import com.propertyvista.portal.domain.pt.SummaryPotentialTenantFinancial;
+import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
+import com.propertyvista.portal.domain.ptapp.Summary;
+import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;

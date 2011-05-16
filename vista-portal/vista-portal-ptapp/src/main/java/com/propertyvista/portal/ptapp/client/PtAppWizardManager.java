@@ -30,15 +30,15 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.VistaBehavior;
-import com.propertyvista.portal.domain.pt.ApplicationProgress;
-import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
-import com.propertyvista.portal.domain.pt.ApplicationWizardStep.Status;
-import com.propertyvista.portal.domain.pt.ApplicationWizardSubstep;
-import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.CurrentApplication;
-import com.propertyvista.portal.rpc.pt.PtSiteMap;
-import com.propertyvista.portal.rpc.pt.services.ActivationService;
-import com.propertyvista.portal.rpc.pt.services.ApplicationService;
+import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep.Status;
+import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
+import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;

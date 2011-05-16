@@ -15,8 +15,8 @@ package com.propertyvista.portal.server.sync;
 
 import org.junit.Assert;
 
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
-import com.propertyvista.portal.rpc.pt.services.TenantService;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;

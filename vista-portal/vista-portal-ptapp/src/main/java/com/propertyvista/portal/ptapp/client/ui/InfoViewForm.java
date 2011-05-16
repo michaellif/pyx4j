@@ -65,18 +65,18 @@ import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.Province;
-import com.propertyvista.portal.domain.pt.Address;
-import com.propertyvista.portal.domain.pt.Address.OwnedRented;
-import com.propertyvista.portal.domain.pt.ApplicationDocument.DocumentType;
-import com.propertyvista.portal.domain.pt.EmergencyContact;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.Vehicle;
+import com.propertyvista.portal.domain.ptapp.Address;
+import com.propertyvista.portal.domain.ptapp.EmergencyContact;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.Vehicle;
+import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
+import com.propertyvista.portal.domain.ptapp.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.validators.CanadianSinValidator;
-import com.propertyvista.portal.rpc.pt.BusinessRules;
+import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 
 @Singleton
 public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {

@@ -14,7 +14,8 @@
 package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.inject.Singleton;
-import com.propertyvista.portal.domain.pt.Pets;
+
+import com.propertyvista.portal.domain.ptapp.Pets;
 
 @Singleton
 public class PetsViewImpl extends WizardStepViewImpl<Pets, PetsViewPresenter> implements PetsView {

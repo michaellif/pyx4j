@@ -52,9 +52,9 @@ import com.propertyvista.domain.property.asset.Building;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
-import com.propertyvista.portal.domain.pt.LeaseTerms;
-import com.propertyvista.portal.domain.pt.PetChargeRule;
-import com.propertyvista.portal.domain.pt.PropertyProfile;
+import com.propertyvista.portal.domain.ptapp.LeaseTerms;
+import com.propertyvista.portal.domain.ptapp.PetChargeRule;
+import com.propertyvista.portal.domain.ptapp.PropertyProfile;
 
 public class PreloadBuildings extends BaseVistaDataPreloader {
 

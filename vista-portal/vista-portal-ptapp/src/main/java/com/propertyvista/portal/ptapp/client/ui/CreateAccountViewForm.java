@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
+import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 

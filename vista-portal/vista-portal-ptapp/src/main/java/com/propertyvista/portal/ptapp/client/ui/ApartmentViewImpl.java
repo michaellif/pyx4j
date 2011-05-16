@@ -14,8 +14,9 @@
 package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.inject.Singleton;
-import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
-import com.propertyvista.portal.domain.pt.UnitSelection;
+
+import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
 @Singleton
 public class ApartmentViewImpl extends WizardStepViewImpl<UnitSelection, ApartmentViewPresenter> implements ApartmentView {

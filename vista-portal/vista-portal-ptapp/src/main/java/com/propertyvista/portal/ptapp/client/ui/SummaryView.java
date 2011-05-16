@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.domain.ptapp.Summary;
 
 public interface SummaryView extends WizardStepView<Summary, SummaryViewPresenter> {
 }

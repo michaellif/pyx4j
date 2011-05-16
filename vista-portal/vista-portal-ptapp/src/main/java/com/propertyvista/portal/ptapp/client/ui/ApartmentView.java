@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
-import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
 public interface ApartmentView extends WizardStepView<UnitSelection, ApartmentViewPresenter> {
 

@@ -15,10 +15,11 @@ package com.propertyvista.portal.ptapp.client.activity;
 
 import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
+
+import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.ptapp.client.ui.FinancialView;
 import com.propertyvista.portal.ptapp.client.ui.FinancialViewPresenter;
-import com.propertyvista.portal.rpc.pt.services.TenantFinancialService;
+import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 
 public class FinancialActivity extends WizardStepWithSubstepsActivity<PotentialTenantFinancial, FinancialViewPresenter> implements FinancialViewPresenter {
 
