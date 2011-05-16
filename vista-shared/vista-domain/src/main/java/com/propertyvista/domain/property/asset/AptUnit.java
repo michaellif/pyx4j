@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,7 +27,6 @@ import com.pyx4j.i18n.shared.Translatable;
 import com.propertyvista.domain.Medium;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.yield.AddOn;
-import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.marketing.yield.Concession;
 
 public interface AptUnit extends IEntity {
@@ -106,6 +106,7 @@ public interface AptUnit extends IEntity {
      */
     IList<AptUnitOccupancy> currentOccupancies();
 
+    @Transient
     IPrimitive<Double> numberOfOccupants();
 
     // ------------------ Financials ------------------------------------------------------------------
@@ -133,7 +134,7 @@ public interface AptUnit extends IEntity {
     @Detached
     Floorplan floorplan();
 
-    IList<Amenity> amenities();
+    IList<AptUnitAmenity> amenities();
 
     IList<Concession> concessions();
 

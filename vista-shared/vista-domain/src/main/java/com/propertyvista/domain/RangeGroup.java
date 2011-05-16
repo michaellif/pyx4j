@@ -7,25 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-22
- * @author aroytbur
+ * Created on 2011-05-15
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.marketing.yield;
+package com.propertyvista.domain;
 
-import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Amenity extends IEntity {
+public interface RangeGroup extends IEntity {
 
-    IPrimitive<Integer> rank();
+    IPrimitive<Double> average();
 
-    IPrimitive<String> description();
+    @MemberColumn(name = "rangeGroupMin")
+    IPrimitive<Double> min();
 
-    @Format("#0.00")
-    IPrimitive<Double> rent();
-
-    @Format("#0.00")
-    IPrimitive<Double> deposit();
+    @MemberColumn(name = "rangeGroupMax")
+    IPrimitive<Double> max();
 }

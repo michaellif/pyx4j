@@ -13,8 +13,63 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 public interface Locker extends IEntity {
 
+    @Translatable
+    public enum Size {
+
+        large,
+
+        small,
+
+        regular;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    // ----------- Infromation --------------------------------------------------------------------------
+
+    IPrimitive<String> name();
+
+    IPrimitive<String> description();
+
+    IPrimitive<Boolean> isPrivate();
+
+    @MemberColumn(name = "lockerSize")
+    IPrimitive<Size> size();
+
+    @Format("#0.#")
+    IPrimitive<Double> levels();
+
+    IPrimitive<Integer> totalLockers();
+
+    IPrimitive<Integer> regularLockers();
+
+    IPrimitive<Integer> largeLockers();
+
+    IPrimitive<Integer> smallLockers();
+
+    // ------------------ Financials ------------------------------------------------------------------
+
+    @Format("#0.00")
+    IPrimitive<Double> regularRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> largeRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> smallRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> deposit();
 }

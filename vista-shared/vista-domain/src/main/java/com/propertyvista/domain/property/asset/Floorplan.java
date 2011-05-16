@@ -13,26 +13,76 @@
  */
 package com.propertyvista.domain.property.asset;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
+import com.propertyvista.domain.Medium;
 import com.propertyvista.domain.Picture;
+import com.propertyvista.domain.RangeGroup;
+import com.propertyvista.domain.marketing.yield.Concession;
 
 public interface Floorplan extends IEntity {
 
-    @Detached
-    Building building();
+    @Translatable
+    public enum Type {
 
-    @Caption(name = "Plan")
+// TODO: ask Artur which types goes here:
+
+        other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    // ----------- Infromation --------------------------------------------------------------------------
+
+    @MemberColumn(name = "floorplanType")
+    IPrimitive<Type> type();
+
     IPrimitive<String> name();
 
-    /**
-     * Contains the pictures of the floorplan / model unit
-     */
+    IPrimitive<String> description();
+
+    IPrimitive<Integer> unitCount();
+
+    IPrimitive<String> availabilityUrl();
+
+    @Transient
+    IPrimitive<Integer> unitsAvailable();
+
+    @Transient
+    IPrimitive<Integer> displayedUnitsAvailable();
+
+    IPrimitive<Integer> floorCount();
+
+    IPrimitive<Integer> totalRoomCount();
+
+    RangeGroup squareFeet();
+
+    RangeGroup marketRent();
+
+    RangeGroup effectiveRent();
+
+    IList<Concession> concessions();
+
+    @Detached
+    IList<Medium> media();
+
+    // ----------- Old data:--------------------------------------------------------------------------
+
+    @Detached
+    @Deprecated
+    Building building();
+
     @Owned
     @Deprecated
     //TODO VladS to clean it up
@@ -41,11 +91,12 @@ public interface Floorplan extends IEntity {
     /**
      * Min value of square ft. size of unit
      */
+    @Deprecated
     IPrimitive<Integer> minArea();
 
     /**
      * Max value of square ft. size of unit
      */
+    @Deprecated
     IPrimitive<Integer> maxArea();
-
 }

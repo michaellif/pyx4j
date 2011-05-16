@@ -7,25 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-22
- * @author aroytbur
+ * Created on 2011-05-16
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.marketing.yield;
+package com.propertyvista.domain.property.vendor;
 
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Amenity extends IEntity {
+public interface WarrantyItem extends IEntity {
 
-    IPrimitive<Integer> rank();
-
-    IPrimitive<String> description();
-
-    @Format("#0.00")
-    IPrimitive<Double> rent();
-
-    @Format("#0.00")
-    IPrimitive<Double> deposit();
+    IPrimitive<String> name();
 }

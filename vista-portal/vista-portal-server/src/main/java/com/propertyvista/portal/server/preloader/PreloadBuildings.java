@@ -46,6 +46,7 @@ import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.AptUnitDetail;
 import com.propertyvista.domain.property.asset.Building;
 import com.propertyvista.domain.property.asset.Complex;
@@ -127,21 +128,21 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         return floorplan;
     }
 
-    public static Utility createUtility(String name) {
+    public static Utility createUtility(Utility.Type type) {
         Utility utility = EntityFactory.create(Utility.class);
-        utility.name().setValue(name);
+        utility.type().setValue(type);
         persist(utility);
         return utility;
     }
 
-    public static Amenity createAmenity(String name) {
-        Amenity amenity = EntityFactory.create(Amenity.class);
-        amenity.name().setValue(name);
+    public static AptUnitAmenity createUnitAmenity(AptUnitAmenity.Type type) {
+        AptUnitAmenity amenity = EntityFactory.create(AptUnitAmenity.class);
+        amenity.type().setValue(type);
         persist(amenity);
         return amenity;
     }
 
-    public static AptUnitDetail createUnitInfoItem(AptUnitDetail.Type type) {
+    public static AptUnitDetail createUnitDetailItem(AptUnitDetail.Type type) {
         AptUnitDetail item = EntityFactory.create(AptUnitDetail.class);
         item.type().setValue(type);
 
@@ -263,44 +264,44 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         unit.marketRent().setValue(900. + RandomUtil.randomInt(200));
 
         // mandatory utilities
-        unit.utilities().add(createUtility("Water"));
-        unit.utilities().add(createUtility("Heat"));
-        unit.utilities().add(createUtility("Gas"));
-        unit.utilities().add(createUtility("Hydro"));
+        unit.utilities().add(createUtility(Utility.Type.water));
+        unit.utilities().add(createUtility(Utility.Type.heat));
+        unit.utilities().add(createUtility(Utility.Type.gas));
+        unit.utilities().add(createUtility(Utility.Type.electric));
 
         // optional utilities
         if (RandomUtil.randomBoolean()) {
-            unit.utilities().add(createUtility("Cable"));
+            unit.utilities().add(createUtility(Utility.Type.cable));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.utilities().add(createUtility("Internet"));
+            unit.utilities().add(createUtility(Utility.Type.internet));
         }
 
         // amenity, all optional
         if (RandomUtil.randomBoolean()) {
-            unit.amenities().add(createAmenity("1 Indoor Parking"));
+            unit.amenities().add(createUnitAmenity(RandomUtil.random(AptUnitAmenity.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.amenities().add(createAmenity("Double Locker"));
+            unit.amenities().add(createUnitAmenity(RandomUtil.random(AptUnitAmenity.Type.values())));
         }
 
         // info items
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitInfoItem(RandomUtil.random(AptUnitDetail.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
         } else {
-            unit.details().add(createUnitInfoItem(RandomUtil.random(AptUnitDetail.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitInfoItem(RandomUtil.random(AptUnitDetail.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitInfoItem(RandomUtil.random(AptUnitDetail.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitInfoItem(RandomUtil.random(AptUnitDetail.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitInfoItem(RandomUtil.random(AptUnitDetail.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
         }
 
         // concessions

@@ -103,6 +103,8 @@ public interface Concession extends IEntity {
 
     IPrimitive<String> description();
 
+// --------------------------------------------------------------------------------------------------------------------
+
     IPrimitive<Status> status();
 
     IPrimitive<String> approvedBy();

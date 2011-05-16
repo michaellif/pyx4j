@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -21,16 +22,18 @@ import com.pyx4j.i18n.shared.Translatable;
 
 public interface Parking extends IEntity {
 
-    IPrimitive<String> description();
-
     @Translatable
     public enum Type {
 
-        indoor,
+        surfaceLot,
 
-        outdoor,
+        garageLot,
 
-        covered,
+        coveredLot,
+
+        street,
+
+        none,
 
         other;
 
@@ -40,12 +43,42 @@ public interface Parking extends IEntity {
         }
     }
 
+    // ----------- Infromation --------------------------------------------------------------------------
+
+    IPrimitive<String> name();
+
+    IPrimitive<String> description();
+
     @MemberColumn(name = "parkingType")
     IPrimitive<Parking.Type> type();
 
+    @Format("#0.#")
     IPrimitive<Double> levels();
 
-    IPrimitive<Integer> spots();
+    IPrimitive<Integer> totalSpaces();
 
-    IPrimitive<String> notes();
+    IPrimitive<Integer> disabledSpaces();
+
+    IPrimitive<Integer> regularSpaces();
+
+    IPrimitive<Integer> doubleSpaces();
+
+    IPrimitive<Integer> narrowSpaces();
+
+    // ------------------ Financials ------------------------------------------------------------------
+
+    @Format("#0.00")
+    IPrimitive<Double> disableRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> regularRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> doubleRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> narrowRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> deposit();
 }

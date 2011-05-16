@@ -13,15 +13,53 @@
  */
 package com.propertyvista.domain.property.asset;
 
-import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 public interface Utility extends IEntity {
 
-    /**
-     * Utility type (max 32 chars)
-     */
-    @ToString
-    IPrimitive<String> name();
+    @Translatable
+    public enum Type {
+
+        airCon,
+
+        internet,
+
+        cable,
+
+        electric,
+
+        gas,
+
+        heat,
+
+        hotWater,
+
+        satellite,
+
+        sewer,
+
+        telephone,
+
+        trash,
+
+        water,
+
+        utilityPortionIncluded,
+
+        other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @MemberColumn(name = "utilityType")
+    IPrimitive<Type> type();
+
+    IPrimitive<String> description();
 }

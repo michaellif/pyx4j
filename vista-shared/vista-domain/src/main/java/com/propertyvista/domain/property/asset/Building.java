@@ -38,7 +38,6 @@ import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Medium;
 import com.propertyvista.domain.OrganizationContacts;
 import com.propertyvista.domain.Phone;
-import com.propertyvista.domain.marketing.yield.Amenity;
 
 @ToStringFormat("{0} {1}")
 //TODO rename to Property
@@ -238,7 +237,7 @@ public interface Building extends IEntity {
 
     IList<Locker> lockers();
 
-    IList<Amenity> amenities();
+    IList<BuildingAmenity> amenities();
 
     IPrimitive<ConstructionType> constructionType();
 
@@ -254,7 +253,7 @@ public interface Building extends IEntity {
 
     IPrimitive<WaterSupply> waterSupply();
 
-    // ------------------Financials--------------------------------------------------------------------
+    // ------------------Financial--------------------------------------------------------------------
 
     IPrimitive<Date> dateAquired();
 
