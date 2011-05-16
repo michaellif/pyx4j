@@ -35,6 +35,7 @@ public class MapUtils {
         AjaxLoader.AjaxLoaderOptions settings = AjaxLoader.AjaxLoaderOptions.newInstance();
         settings.setOtherParms("sensor=false");
         AjaxLoader.loadApi("maps", "2", new Runnable() {
+            @Override
             public void run() {
                 new Geocoder().getLatLng(address, callback);
             }
@@ -46,6 +47,7 @@ public class MapUtils {
         AjaxLoader.AjaxLoaderOptions settings = AjaxLoader.AjaxLoaderOptions.newInstance();
         settings.setOtherParms("sensor=false");
         AjaxLoader.loadApi("maps", "2", new Runnable() {
+            @Override
             public void run() {
                 new Geocoder().getLocations(address, callback);
             }
