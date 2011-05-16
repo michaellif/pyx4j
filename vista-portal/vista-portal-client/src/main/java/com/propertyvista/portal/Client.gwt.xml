@@ -10,6 +10,9 @@
     <inherits name='com.propertyvista.portal.Domain' />
 
     <inherits name='com.propertyvista.common.VistaCommon' />
+    
+    <inherits name='com.pyx4j.gwt.GwtGeo' />
+    <inherits name="com.google.gwt.maps.GoogleMaps" />
 
     <source path="client"/>
 

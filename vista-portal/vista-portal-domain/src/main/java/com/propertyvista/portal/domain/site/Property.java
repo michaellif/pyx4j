@@ -8,16 +8,24 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on May 15, 2011
- * @author Dad
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.domain.site;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.geo.GeoPoint;
 
-public class CityMapViewImpl extends SimplePanel implements CityMapView {
+public interface Property extends IEntity {
 
-    public CityMapViewImpl() {
-        setWidget(new PropertyMapWidget());
-    }
+    IPrimitive<String> address();
+
+    IPrimitive<GeoPoint> location();
+
+    IList<Floorplan> floorplans();
+
+    IList<Amenity> amenities();
+
 }
