@@ -11,28 +11,37 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.ui.maps;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.geom.Point;
+import com.google.gwt.maps.client.geom.Size;
+import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.gwt.geo.CircleOverlay;
 import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.gwt.geo.MapUtils;
 
+import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.domain.site.Property;
 
-public class PropertyMapWidget extends SimplePanel {
+public class PropertiesMapWidget extends SimplePanel {
 
     private MapWidget map;
 
@@ -48,7 +57,7 @@ public class PropertyMapWidget extends SimplePanel {
 
     private CircleOverlay distanceOverlay;
 
-    public PropertyMapWidget() {
+    public PropertiesMapWidget() {
         setWidth("100%");
         getElement().getStyle().setMarginTop(10, Unit.PX);
         getElement().getStyle().setMarginBottom(10, Unit.PX);
@@ -66,7 +75,7 @@ public class PropertyMapWidget extends SimplePanel {
         LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
 
         map = new MapWidget(pos, 10);
-        map.setSize("300px", "300px");
+        map.setSize("100%", "500px");
         //TODO
         //map.setStyleName();
 
@@ -128,13 +137,14 @@ public class PropertyMapWidget extends SimplePanel {
         MarkerOptions markerOptions = MarkerOptions.newInstance();
         markerOptions.setTitle(property.address().getValue());
 
-//        Icon icon = Icon.newInstance(FmRiaResources.INSTANCE.mapMarkerHouse().getURL());
-//        icon.setShadowURL(FmRiaResources.INSTANCE.mapMarkerHouseShadow().getURL());
-//        icon.setIconSize(Size.newInstance(30, 30));
-//        icon.setShadowSize(Size.newInstance(44, 35));
-//        icon.setIconAnchor(Point.newInstance(15, 20));
-//        icon.setInfoWindowAnchor(Point.newInstance(15, 5));
-//        markerOptions.setIcon(icon);
+        Icon icon = Icon.newInstance(PortalImages.INSTANCE.mapMarker().getURL());
+        //TODO get shadow URL
+        //icon.setShadowURL(FmRiaResources.INSTANCE.mapMarkerHouseShadow().getURL());
+        icon.setIconSize(Size.newInstance(38, 41));
+        icon.setShadowSize(Size.newInstance(44, 35));
+        icon.setIconAnchor(Point.newInstance(15, 20));
+        icon.setInfoWindowAnchor(Point.newInstance(15, 5));
+        markerOptions.setIcon(icon);
 
         if (!property.location().isNull()) {
             final Marker marker = new Marker(MapUtils.newLatLngInstance(property.location().getValue()), markerOptions);
@@ -143,16 +153,7 @@ public class PropertyMapWidget extends SimplePanel {
 
                 @Override
                 public void onClick(MarkerClickEvent event) {
-//                    map.getInfoWindow().open(
-//                            marker,
-//                            new InfoWindowContent("<div style='text-align:center; font-size:14px;background-color:white; padding:2px;'><a href='#"
-//                                    + NavigUtils.getPageUri(FmRiaSiteMap.Crm.Customers.Edit.class) + "?" + NavigUtils.ENTITY_ID + "="
-//                                    + customer.getPrimaryKey() + "'><b>" + customer.name().getValue() + "</b></a><br>"
-//
-//                                    + customer.address().street().getValue() + ", " + customer.address().city().getValue() + "<br/>"
-//                                    + customer.address().province().getValue() + ", " + customer.address().zip().getValue()
-//
-//                                    + "</div>"));
+                    map.getInfoWindow().open(marker, new InfoWindowContent(new PropertyInfo(property)));
 
                 }
             });
@@ -160,5 +161,18 @@ public class PropertyMapWidget extends SimplePanel {
         } else {
             return null;
         }
+    }
+
+    class PropertyInfo extends DockPanel {
+
+        PropertyInfo(Property property) {
+            super();
+            add(new Label("[Image]"), DockPanel.WEST);
+
+            add(new Button("Details"), DockPanel.SOUTH);
+
+            add(new HTML("[Property Descr]"), DockPanel.CENTER);
+        }
+
     }
 }

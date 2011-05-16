@@ -15,9 +15,11 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
+
 public class CityMapViewImpl extends SimplePanel implements CityMapView {
 
     public CityMapViewImpl() {
-        setWidget(new PropertyMapWidget());
+        setWidget(new PropertiesMapWidget());
     }
 }
