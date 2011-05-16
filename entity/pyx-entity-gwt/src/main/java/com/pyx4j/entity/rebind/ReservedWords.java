@@ -38,19 +38,20 @@ public class ReservedWords {
 
     private static Set<String> keywords;
 
-    public static void validate(TreeLogger logger, JClassType interfaceType, JMethod memberMethod) throws UnableToCompleteException {
+    public static boolean validate(TreeLogger logger, JClassType interfaceType, JMethod memberMethod) throws UnableToCompleteException {
         if (interfaceType.getAnnotation(Transient.class) != null) {
-            return;
+            return true;
         }
         String name = memberMethod.getName();
         MemberColumn memberColumn = memberMethod.getAnnotation(MemberColumn.class);
         if ((memberColumn != null) && (CommonsStringUtils.isStringSet(memberColumn.name()))) {
             name = memberColumn.name();
         }
-        //TODO read file, to HashSet() 
         if (getKeywords().contains(name.toUpperCase(Locale.ENGLISH))) {
             logger.log(TreeLogger.Type.ERROR, "Reserved keyword '" + name + "' used in class " + interfaceType.getQualifiedSourceName());
-            throw new UnableToCompleteException();
+            return false;
+        } else {
+            return true;
         }
     }
 

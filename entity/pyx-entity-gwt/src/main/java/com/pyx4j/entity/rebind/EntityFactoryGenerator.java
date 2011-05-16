@@ -80,6 +80,7 @@ public class EntityFactoryGenerator extends Generator {
 
             List<JClassType> cases = new Vector<JClassType>();
 
+            int validationErrors = 0;
             for (JClassType type : oracle.getTypes()) {
                 if (contextHelper.isInstantiabeEntity(type)) {
                     cases.add(type);
@@ -90,8 +91,13 @@ public class EntityFactoryGenerator extends Generator {
                     }
 
                     EntityHandlerWriter.createEntityHandlerImpl(logger, contextHelper, type);
-                    EntityMetaWriter.createEntityMetaImpl(logger, contextHelper, type);
+                    validationErrors += EntityMetaWriter.createEntityMetaImpl(logger, contextHelper, type);
                 }
+            }
+
+            if (validationErrors > 0) {
+                logger.log(TreeLogger.Type.WARN, "There are " + validationErrors + " validation errors in IEntity declaration");
+                throw new UnableToCompleteException();
             }
 
             if (cases.size() == 0) {

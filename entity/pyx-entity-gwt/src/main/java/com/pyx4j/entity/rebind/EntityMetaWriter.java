@@ -69,7 +69,7 @@ public class EntityMetaWriter {
 
     static String META_IMPL = "_Meta" + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
 
-    static void createEntityMetaImpl(TreeLogger logger, ContextHelper contextHelper, JClassType interfaceType) throws UnableToCompleteException {
+    static int createEntityMetaImpl(TreeLogger logger, ContextHelper contextHelper, JClassType interfaceType) throws UnableToCompleteException {
         TreeLogger implLogger = logger.branch(TreeLogger.DEBUG, "Creating EntityMeta implementation for " + interfaceType.getName());
         String packageName = interfaceType.getPackage().getName();
         String simpleName = interfaceType.getSimpleSourceName() + META_IMPL;
@@ -85,11 +85,12 @@ public class EntityMetaWriter {
         PrintWriter printWriter = contextHelper.context.tryCreate(implLogger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
         if (printWriter == null) {
             // the generated type already exists
-            return;
+            return 0;
         }
         SourceWriter writer = composer.createSourceWriter(contextHelper.context, printWriter);
-        writeEntityMetaImpl(implLogger, contextHelper, writer, simpleName, interfaceType);
+        int validationErrors = writeEntityMetaImpl(implLogger, contextHelper, writer, simpleName, interfaceType);
         writer.commit(implLogger);
+        return validationErrors;
     }
 
     static String escapeSourceString(String value) {
@@ -109,7 +110,7 @@ public class EntityMetaWriter {
         }
     }
 
-    static void writeEntityMetaImpl(TreeLogger logger, ContextHelper contextHelper, SourceWriter writer, String simpleName, JClassType interfaceType)
+    static int writeEntityMetaImpl(TreeLogger logger, ContextHelper contextHelper, SourceWriter writer, String simpleName, JClassType interfaceType)
             throws UnableToCompleteException {
 
         String caption;
@@ -237,9 +238,10 @@ public class EntityMetaWriter {
         writer.outdent();
         writer.println("}");
 
-        writeEntityMemberMetaImpl(logger, contextHelper, writer, allMethods, interfaceType);
+        int validationErrors = writeEntityMemberMetaImpl(logger, contextHelper, writer, allMethods, interfaceType);
 
         writer.outdent();
+        return validationErrors;
     }
 
     static boolean addValidatorAnnotation(SourceWriter writer, JMethod method, Class<? extends Annotation> annotationClass) {
@@ -275,12 +277,14 @@ public class EntityMetaWriter {
     }
 
     //----------
-    static void writeEntityMemberMetaImpl(TreeLogger logger, ContextHelper contextHelper, SourceWriter writer, List<JMethod> allMethods,
-            JClassType interfaceType) throws UnableToCompleteException {
+    static int writeEntityMemberMetaImpl(TreeLogger logger, ContextHelper contextHelper, SourceWriter writer, List<JMethod> allMethods, JClassType interfaceType)
+            throws UnableToCompleteException {
         writer.println();
         writer.println("@Override");
         writer.println("protected MemberMeta createMemberMeta(String memberName) {");
         writer.indent();
+
+        int validationErrors = 0;
 
         for (JMethod method : allMethods) {
             if (!contextHelper.isEntityMember(method)) {
@@ -358,7 +362,9 @@ public class EntityMetaWriter {
 
             data.persistenceTransient = (method.getAnnotation(Transient.class) != null);
             if ((!data.persistenceTransient) && (contextHelper.validateReservedKeywordsMembers)) {
-                ReservedWords.validate(logger, interfaceType, method);
+                if (!ReservedWords.validate(logger, interfaceType, method)) {
+                    validationErrors++;
+                }
             }
             data.rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
             data.detached = (method.getAnnotation(Detached.class) != null);
@@ -451,6 +457,8 @@ public class EntityMetaWriter {
         writer.println("return null;");
         writer.outdent();
         writer.println("}");
+
+        return validationErrors;
     }
 
     private static void writeDataParams(SourceWriter writer, MemberMetaData data, boolean indexed) {
