@@ -21,7 +21,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.common.domain.IAddressFull;
 import com.propertyvista.portal.domain.ptapp.Address;
-import com.propertyvista.portal.domain.ptapp.ApartmentUnit;
+import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.IEmploymentInfo;
 import com.propertyvista.portal.domain.ptapp.IIncomeInfo;
@@ -47,7 +47,7 @@ import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
 
 abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
 
-    protected void assertAptUnitForm(IDebugId formDebugId, ApartmentUnit aUnit) {
+    protected void assertAptUnitForm(IDebugId formDebugId, AptUnitDTO aUnit) {
         assertValueOnForm(formDebugId, aUnit.unitType());
         assertValueOnForm(formDebugId, aUnit.marketRent().get(aUnit.marketRent().size() - 1));
         assertValueOnForm(formDebugId, aUnit.requiredDeposit());

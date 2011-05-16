@@ -21,7 +21,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.User;
-import com.propertyvista.portal.domain.ptapp.ApartmentUnit;
+import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
@@ -69,14 +69,14 @@ public class PreloadedUsersTest extends PortalVerificationTestCase {
         int num = 0;
         //TODO VLAD:: why this always returns empty list? How to do that properly? 
         int size2 = unitSel.availableUnits().units().size();
-        for (ApartmentUnit aUnit : unitSel.availableUnits().units()) {
+        for (AptUnitDTO aUnit : unitSel.availableUnits().units()) {
             assertAptUnitForm(D.id(unitSel.availableUnits().units(), num), detach(aUnit));
             num++;
         }
 
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).unitType()));
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(AptUnitDTO.class).unitType()));
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, "leaseTerm_12"));
-        String avlDate = selenium.getText(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).avalableForRent()));
+        String avlDate = selenium.getText(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(AptUnitDTO.class).avalableForRent()));
         selenium.setValue(D.id(proto(UnitSelection.class).rentStart()), avlDate);
         saveAndContinue();
     }

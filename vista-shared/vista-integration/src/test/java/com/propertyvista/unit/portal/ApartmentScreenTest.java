@@ -25,7 +25,7 @@ import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
-import com.propertyvista.portal.domain.ptapp.ApartmentUnit;
+import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -136,7 +136,7 @@ public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
         selenium.type(proto(UnitSelection.class).selectionCriteria().availableFrom(), strFrom);
         selenium.type(proto(UnitSelection.class).selectionCriteria().availableTo(), strTo);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
-        assertNotPresent(D.id(proto(UnitSelection.class).availableUnits().units(), 0, proto(ApartmentUnit.class).unitType()));
+        assertNotPresent(D.id(proto(UnitSelection.class).availableUnits().units(), 0, proto(AptUnitDTO.class).unitType()));
 
         selenium.click(CrudDebugId.Crud_Save);
 
@@ -160,8 +160,8 @@ public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
         selenium.click(VistaFormsDebugId.Available_Units_Change);
 
         //selenium.click(meta(UnitSelection.class).availableUnits().units().$(2).unitType());
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).unitType()));
-        String strAvailFrom = selenium.getText(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).avalableForRent()));
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(AptUnitDTO.class).unitType()));
+        String strAvailFrom = selenium.getText(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(AptUnitDTO.class).avalableForRent()));
 
         java.util.Date dateAvail = sdf.parse(strAvailFrom);
         Calendar cdl = Calendar.getInstance();
@@ -190,8 +190,8 @@ public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
         selenium.type(D.id(proto(UnitSelection.class).selectionCriteria().availableTo()), strTo);
         selenium.click(VistaFormsDebugId.Available_Units_Change);
 
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).unitType()));
-        String strAvailFrom = selenium.getText(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(ApartmentUnit.class).avalableForRent()));
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(AptUnitDTO.class).unitType()));
+        String strAvailFrom = selenium.getText(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(AptUnitDTO.class).avalableForRent()));
         java.util.Date dateAvail = sdf.parse(strAvailFrom);
         Calendar cdl = Calendar.getInstance();
         cdl.setTime(dateAvail);

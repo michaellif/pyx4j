@@ -31,7 +31,7 @@ import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.common.domain.IAddressFull;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.ptapp.Address;
-import com.propertyvista.portal.domain.ptapp.ApartmentUnit;
+import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.IEmploymentInfo;
@@ -137,7 +137,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
 
     private void enterUnitSelection() {
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Apartment.class));
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, proto(ApartmentUnit.class).unitType()));
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, proto(AptUnitDTO.class).unitType()));
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, "leaseTerm_12"));
         saveAndContinue();
     }
