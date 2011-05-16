@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
-import com.propertyvista.portal.rpc.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView {
 

@@ -40,7 +40,7 @@ import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.gwt.geo.MapUtils;
 
 import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.rpc.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class PropertiesMapWidget extends SimplePanel {
 

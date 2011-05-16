@@ -7,29 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2011
- * @author michaellif
+ * Created on 2011-05-16
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.dto;
+package com.propertyvista.portal.domain.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.entity.shared.IList;
 
 @Transient
-public interface PropertyDTO extends IEntity {
+public interface PropertyDetailsDTO extends PropertyDTO {
 
-    IPrimitive<String> address();
+    IList<FloorplanDTO> floorplans();
 
-    IPrimitive<GeoPoint> location();
-
-    // List of Floorplans
-    IPrimitiveSet<String> size();
-
-    // List of amenities
-    IPrimitiveSet<String> details();
-
+    IList<AmenityDTO> amenities();
 }

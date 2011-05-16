@@ -21,9 +21,9 @@ import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.common.domain.ref.City;
-import com.propertyvista.portal.rpc.dto.FloorplanDetailsDTO;
-import com.propertyvista.portal.rpc.dto.PropertyDTO;
-import com.propertyvista.portal.rpc.dto.PropertyDetailsDTO;
+import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
 public interface PortalSiteServices extends IService {
 

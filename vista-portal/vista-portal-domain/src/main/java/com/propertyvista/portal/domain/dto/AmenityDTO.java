@@ -7,16 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-16
- * @author vlads
+ * Created on May 15, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.dto;
+package com.propertyvista.portal.domain.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface FloorplanDetailsDTO extends FloorplanDTO {
+public interface AmenityDTO extends IEntity {
 
-    // TODO sync with ptapp
+    IPrimitive<String> name();
+
 }
