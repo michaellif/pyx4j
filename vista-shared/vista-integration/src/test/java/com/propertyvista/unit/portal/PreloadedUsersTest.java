@@ -21,7 +21,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.User;
-import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;

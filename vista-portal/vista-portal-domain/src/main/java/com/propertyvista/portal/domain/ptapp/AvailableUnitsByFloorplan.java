@@ -14,6 +14,8 @@
 package com.propertyvista.portal.domain.ptapp;
 
 import com.propertyvista.common.domain.financial.Currency;
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
+import com.propertyvista.portal.domain.dto.FloorplanDTO;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.IEntity;

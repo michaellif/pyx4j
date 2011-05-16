@@ -17,8 +17,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.AptUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.portal.domain.ptapp.FloorplanDTO;
-import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
+import com.propertyvista.portal.domain.dto.FloorplanDTO;
 
 public class Converter {
 

@@ -17,8 +17,8 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.marketing.MarketRent;
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Address;
-import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.ptapp.ChargeLineSelectable;

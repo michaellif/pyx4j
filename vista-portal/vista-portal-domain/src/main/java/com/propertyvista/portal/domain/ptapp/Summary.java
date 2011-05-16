@@ -14,6 +14,7 @@
 package com.propertyvista.portal.domain.ptapp;
 
 import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;

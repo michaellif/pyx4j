@@ -20,8 +20,8 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.common.domain.IAddressFull;
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Address;
-import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.IEmploymentInfo;
 import com.propertyvista.portal.domain.ptapp.IIncomeInfo;

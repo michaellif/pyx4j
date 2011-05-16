@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;

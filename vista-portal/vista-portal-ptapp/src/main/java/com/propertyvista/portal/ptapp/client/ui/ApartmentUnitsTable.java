@@ -61,7 +61,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.domain.marketing.MarketRent;
-import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;

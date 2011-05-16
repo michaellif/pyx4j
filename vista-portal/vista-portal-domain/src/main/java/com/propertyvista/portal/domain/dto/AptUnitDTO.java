@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ptapp;
+package com.propertyvista.portal.domain.dto;
 
 import java.util.Date;
 
@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.common.domain.marketing.MarketRent;
+import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 
 @Transient
 public interface AptUnitDTO extends IEntity {
