@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server;
+package com.propertyvista.portal.server.ptapp;
 
 import org.junit.Assert;
 
@@ -22,6 +22,7 @@ import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
+import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.sync.ActivationServiceSync;
 import com.propertyvista.portal.server.sync.ApartmentServiceSync;

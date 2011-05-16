@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server;
+package com.propertyvista.portal.server.ptapp;
 
 import java.util.Date;
 
@@ -31,6 +31,7 @@ import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
+import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 

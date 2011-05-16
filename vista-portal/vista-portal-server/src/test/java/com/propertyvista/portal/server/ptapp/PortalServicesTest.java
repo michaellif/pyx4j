@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server;
+package com.propertyvista.portal.server.ptapp;
 
 import org.junit.Assert;
 import org.slf4j.Logger;
@@ -26,6 +26,7 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
+import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;

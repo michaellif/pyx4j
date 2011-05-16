@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server;
+package com.propertyvista.portal.server.ptapp;
 
 import org.junit.Assert;
 import org.slf4j.Logger;
@@ -22,6 +22,7 @@ import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
+import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 

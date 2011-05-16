@@ -23,6 +23,8 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.essentials.server.dev.DataDump;
 
+import com.propertyvista.portal.server.ptapp.PortalServicesTest;
+
 public class TestUtil {
     private final static Logger log = LoggerFactory.getLogger(PortalServicesTest.class);
 

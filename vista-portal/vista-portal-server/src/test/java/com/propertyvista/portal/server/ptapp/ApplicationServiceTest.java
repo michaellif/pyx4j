@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server;
+package com.propertyvista.portal.server.ptapp;
 
 import org.junit.Assert;
 
