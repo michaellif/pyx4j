@@ -11,13 +11,12 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.domain.site;
+package com.propertyvista.portal.rpc.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Amenity extends IEntity {
-
-    IPrimitive<String> name();
+@Transient
+public interface FloorplanDTO extends IEntity {
 
 }

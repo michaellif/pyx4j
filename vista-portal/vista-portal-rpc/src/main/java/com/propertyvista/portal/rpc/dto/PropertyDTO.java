@@ -11,21 +11,25 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.domain.site;
+package com.propertyvista.portal.rpc.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.geo.GeoPoint;
 
-public interface Property extends IEntity {
+@Transient
+public interface PropertyDTO extends IEntity {
 
     IPrimitive<String> address();
 
     IPrimitive<GeoPoint> location();
 
-    IList<Floorplan> floorplans();
+    // List of Floorplans
+    IPrimitiveSet<String> size();
 
-    IList<Amenity> amenities();
+    // List of amenities
+    IPrimitiveSet<String> details();
 
 }
