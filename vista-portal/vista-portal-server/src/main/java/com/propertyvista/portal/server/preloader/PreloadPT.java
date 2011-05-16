@@ -39,7 +39,7 @@ import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
 import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
-import com.propertyvista.portal.server.pt.services.ApplicationDebug;
+import com.propertyvista.portal.server.ptapp.services.ApplicationDebug;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
 import com.pyx4j.config.shared.ApplicationMode;

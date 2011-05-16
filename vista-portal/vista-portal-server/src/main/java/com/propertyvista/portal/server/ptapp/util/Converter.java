@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.pt.util;
+package com.propertyvista.portal.server.ptapp.util;
 
 import com.pyx4j.entity.shared.EntityFactory;
 

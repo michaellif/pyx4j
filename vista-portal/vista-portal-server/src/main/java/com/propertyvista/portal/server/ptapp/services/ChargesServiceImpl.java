@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.pt.services;
+package com.propertyvista.portal.server.ptapp.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +29,8 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
-import com.propertyvista.portal.server.pt.ChargesServerCalculation;
-import com.propertyvista.portal.server.pt.PtAppContext;
+import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements ChargesService {
 

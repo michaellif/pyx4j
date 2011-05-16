@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.pt.services;
+package com.propertyvista.portal.server.ptapp.services;
 
 import java.io.ByteArrayOutputStream;
 
@@ -31,8 +31,8 @@ import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.ServletMapping;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
-import com.propertyvista.portal.server.pt.PtAppContext;
-import com.propertyvista.portal.server.pt.util.Converter;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.util.Converter;
 import com.propertyvista.portal.server.report.SummaryReport;
 
 import com.pyx4j.entity.report.JasperFileFormat;

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.pt.services;
+package com.propertyvista.portal.server.ptapp.services;
 
 import java.util.EnumSet;
 
@@ -35,7 +35,7 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
-import com.propertyvista.portal.server.pt.PtAppContext;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.domain.CampaignTriger;
 
 public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements PaymentService {

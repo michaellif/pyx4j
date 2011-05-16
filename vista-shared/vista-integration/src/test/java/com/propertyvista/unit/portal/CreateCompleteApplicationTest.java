@@ -58,7 +58,7 @@ import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
-import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
+import com.propertyvista.portal.server.ptapp.services.ApplicationServiceImpl;
 
 public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
 

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.pt.services;
+package com.propertyvista.portal.server.ptapp.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
-import com.propertyvista.portal.server.pt.ChargesServerCalculation;
+import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.server.domain.CampaignTriger;
 
 import com.pyx4j.entity.shared.EntityFactory;

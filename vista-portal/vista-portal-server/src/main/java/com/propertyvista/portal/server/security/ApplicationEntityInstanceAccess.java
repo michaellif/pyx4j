@@ -14,7 +14,7 @@
 package com.propertyvista.portal.server.security;
 
 import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
-import com.propertyvista.portal.server.pt.PtAppContext;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.security.InstanceAccess;

@@ -47,7 +47,7 @@ import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
-import com.propertyvista.portal.server.pt.PtAppContext;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.security.EntityPermission;

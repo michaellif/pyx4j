@@ -11,13 +11,13 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.pt.services;
+package com.propertyvista.portal.server.ptapp.services;
 
 import org.xnap.commons.i18n.I18n;
 
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
-import com.propertyvista.portal.server.pt.PtAppContext;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.shared.IEntity;

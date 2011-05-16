@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.pt.services;
+package com.propertyvista.portal.server.ptapp.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +28,8 @@ import com.propertyvista.portal.domain.ptapp.PetChargeRule;
 import com.propertyvista.portal.domain.ptapp.Pets;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.services.PetService;
-import com.propertyvista.portal.server.pt.ChargesServerCalculation;
-import com.propertyvista.portal.server.pt.PtAppContext;
+import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class PetServiceImpl extends ApplicationEntityServiceImpl implements PetService {
     private final static Logger log = LoggerFactory.getLogger(PetServiceImpl.class);

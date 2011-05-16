@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.pt.services;
+package com.propertyvista.portal.server.ptapp.services;
 
 import java.util.List;
 
@@ -35,8 +35,8 @@ import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
-import com.propertyvista.portal.server.pt.PtAppContext;
-import com.propertyvista.portal.server.pt.util.Converter;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.util.Converter;
 
 public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implements ApartmentService {
 

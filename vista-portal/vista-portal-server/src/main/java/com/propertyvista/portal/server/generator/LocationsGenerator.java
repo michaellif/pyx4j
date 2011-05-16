@@ -21,7 +21,7 @@ import java.util.Vector;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.server.preloader.LocationsPreload;
-import com.propertyvista.portal.server.pt.util.PreloadUtil;
+import com.propertyvista.portal.server.ptapp.util.PreloadUtil;
 
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.pt.services;
+package com.propertyvista.portal.server.ptapp.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
-import com.propertyvista.portal.server.pt.PtAppContext;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl implements TenantFinancialService {
     private final static Logger log = LoggerFactory.getLogger(TenantFinancialServiceImpl.class);

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.pt.services;
+package com.propertyvista.portal.server.ptapp.services;
 
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.IBoundToApplication;

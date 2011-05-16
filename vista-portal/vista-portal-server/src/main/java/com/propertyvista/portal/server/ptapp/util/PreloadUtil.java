@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.pt.util;
+package com.propertyvista.portal.server.ptapp.util;
 
 public class PreloadUtil {
     @SuppressWarnings("rawtypes")

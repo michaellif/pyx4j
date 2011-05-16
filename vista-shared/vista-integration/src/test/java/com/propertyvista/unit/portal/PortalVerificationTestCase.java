@@ -43,7 +43,7 @@ import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
 import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.pt.services.ApplicationServiceImpl;
+import com.propertyvista.portal.server.ptapp.services.ApplicationServiceImpl;
 
 abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
 

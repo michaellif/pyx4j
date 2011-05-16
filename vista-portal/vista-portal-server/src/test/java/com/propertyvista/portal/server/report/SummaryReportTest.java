@@ -39,7 +39,7 @@ import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
-import com.propertyvista.portal.server.pt.services.SummaryServiceImpl;
+import com.propertyvista.portal.server.ptapp.services.SummaryServiceImpl;
 
 public class SummaryReportTest extends ReportsTestBase {
 
