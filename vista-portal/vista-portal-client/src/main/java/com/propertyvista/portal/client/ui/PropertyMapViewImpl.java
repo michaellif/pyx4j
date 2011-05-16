@@ -20,9 +20,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.gwt.geo.MapUtils;
 
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
-import com.propertyvista.portal.domain.site.Property;
+import com.propertyvista.portal.rpc.dto.PropertyDTO;
 
 public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView {
 
@@ -30,15 +31,17 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
 
         PropertiesMapWidget map = new PropertiesMapWidget();
 
-        List<Property> properties = new ArrayList<Property>();
+        List<PropertyDTO> properties = new ArrayList<PropertyDTO>();
         {
-            Property property = EntityFactory.create(Property.class);
+            PropertyDTO property = EntityFactory.create(PropertyDTO.class);
             property.address().setValue("<div>320 Avenue Road</div><div>Toronto</div><div>ON M4V 2H3</div>");
             property.location().setValue(new GeoPoint(43.697665, -79.402313));
             properties.add(property);
         }
 
         map.populate(properties);
+
+        map.setDistanceOverlay(MapUtils.newLatLngInstance(new GeoPoint(43.697665, -79.402313)), 5);
 
         setWidget(map);
     }

@@ -39,7 +39,7 @@ import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.gwt.geo.MapUtils;
 
 import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.domain.site.Property;
+import com.propertyvista.portal.rpc.dto.PropertyDTO;
 
 public class PropertiesMapWidget extends SimplePanel {
 
@@ -49,7 +49,7 @@ public class PropertiesMapWidget extends SimplePanel {
 
     private final List<Marker> markers = new ArrayList<Marker>();
 
-    private List<Property> properties;
+    private List<PropertyDTO> properties;
 
     private LatLng latLng;
 
@@ -95,14 +95,14 @@ public class PropertiesMapWidget extends SimplePanel {
 
     }
 
-    public void populate(List<Property> properties) {
+    public void populate(List<PropertyDTO> properties) {
         this.properties = properties;
         if (mapLoadComplete) {
             for (Marker marker : markers) {
                 map.removeOverlay(marker);
             }
             markers.clear();
-            for (Property property : properties) {
+            for (PropertyDTO property : properties) {
                 Marker marker = createMarker(property);
                 if (marker != null) {
                     map.addOverlay(marker);
@@ -133,7 +133,7 @@ public class PropertiesMapWidget extends SimplePanel {
         }
     }
 
-    private Marker createMarker(final Property property) {
+    private Marker createMarker(final PropertyDTO property) {
         MarkerOptions markerOptions = MarkerOptions.newInstance();
         markerOptions.setTitle(property.address().getValue());
 
@@ -165,7 +165,7 @@ public class PropertiesMapWidget extends SimplePanel {
 
     class PropertyInfo extends DockPanel {
 
-        PropertyInfo(Property property) {
+        PropertyInfo(PropertyDTO property) {
             super();
             add(new Label("[Image]"), DockPanel.WEST);
 
