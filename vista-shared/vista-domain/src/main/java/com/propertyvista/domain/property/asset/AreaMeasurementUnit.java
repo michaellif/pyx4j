@@ -7,22 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-22
- * @author aroytbur
+ * Created on 2011-05-15
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.domain.property.asset;
 
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
-public interface AptUnitInfoItem extends IEntity {
+@Translatable
+public enum AreaMeasurementUnit {
 
-    /**
-     * UnitInfo type (max 128 chars)
-     */
-    @ToString
-    IPrimitive<String> name();
+    sqFeet,
 
+    sqMeters;
+
+    @Override
+    public String toString() {
+        return I18nEnum.tr(this);
+    }
 }

@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.i18n.shared.Translation;
 
-import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.common.domain.financial.Currency;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Medium;
@@ -258,13 +258,22 @@ public interface Building extends IEntity {
 
     IPrimitive<Date> dateAquired();
 
-    Money purchasePrice();
+    @Format("#0.00")
+    IPrimitive<Double> purchasePrice();
 
-    Money marketPrice();
+    @Format("#0.00")
+    IPrimitive<Double> marketPrice();
 
     IPrimitive<Date> lastAppraisalDate();
 
-    Money lastAppraisalValue();
+    @Format("#0.00")
+    IPrimitive<Double> lastAppraisalValue();
+
+    /*
+     * Type of currency used for this particular building
+     * in all money-related fields.
+     */
+    Currency currency();
 
     // ----------------Contact information----------------------------------------------------------------------
 
@@ -300,5 +309,4 @@ public interface Building extends IEntity {
 
     // there is a drop-down box with create new complex  
     Complex complex();
-
 }

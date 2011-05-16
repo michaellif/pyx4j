@@ -36,7 +36,6 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.financial.ChargeType;
-import com.propertyvista.common.domain.marketing.MarketRent;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Email.EmailType;
@@ -46,9 +45,8 @@ import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.marketing.yield.Concession;
-import com.propertyvista.domain.marketing.yield.Concession.ConcessionType;
 import com.propertyvista.domain.property.asset.AptUnit;
-import com.propertyvista.domain.property.asset.AptUnitInfoItem;
+import com.propertyvista.domain.property.asset.AptUnitDetail;
 import com.propertyvista.domain.property.asset.Building;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -56,7 +54,6 @@ import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
 import com.propertyvista.portal.domain.pt.PropertyProfile;
-import com.propertyvista.portal.domain.util.DomainUtil;
 
 public class PreloadBuildings extends BaseVistaDataPreloader {
 
@@ -144,33 +141,47 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         return amenity;
     }
 
-    public static AptUnitInfoItem createUnitInfoItem(String name) {
-        AptUnitInfoItem item = EntityFactory.create(AptUnitInfoItem.class);
-        item.name().setValue(name);
+    public static AptUnitDetail createUnitInfoItem(AptUnitDetail.Type type) {
+        AptUnitDetail item = EntityFactory.create(AptUnitDetail.class);
+        item.type().setValue(type);
+
+        item.flooringType().setValue(RandomUtil.random(AptUnitDetail.FlooringType.values()));
+        item.flooringInstallDate().setValue(RandomUtil.randomSqlDate());
+        item.flooringValue().setValue(1800. + RandomUtil.randomInt(200));
+
+        item.counterTopType().setValue(RandomUtil.random(AptUnitDetail.CounterTopType.values()));
+        item.counterTopInstallDate().setValue(RandomUtil.randomSqlDate());
+        item.counterTopValue().setValue(800. + RandomUtil.randomInt(200));
+
+        item.cabinetsType().setValue(RandomUtil.random(AptUnitDetail.CabinetsType.values()));
+        item.cabinetsInstallDate().setValue(RandomUtil.randomSqlDate());
+        item.cabinetsValue().setValue(1000. + RandomUtil.randomInt(200));
+
         persist(item);
         return item;
     }
 
-    public static Concession createConcession(ConcessionType type, double months, double percentage) {
+    public static Concession createConcession(Concession.AppliedTo appliedTo, double months, double percentage) {
         Concession concession = EntityFactory.create(Concession.class);
 
         StringBuilder sb = new StringBuilder();
 
-        if (type == ConcessionType.freeMonths) {
+        if (appliedTo == Concession.AppliedTo.monthly) {
             sb.append(months).append(" free month");
             if (months != 1) {
                 sb.append("s");
             }
-        } else if (type == ConcessionType.percentDiscount) {
+        } else if (appliedTo == Concession.AppliedTo.amount) {
             sb.append(percentage).append("% discount for ");
             sb.append(months).append(" month");
             if (months != 1) {
                 sb.append("s");
             }
         }
-        concession.name().setValue(sb.toString());
-        concession.type().setValue(type);
-        concession.months().setValue(months);
+
+        concession.type().setValue(sb.toString());
+        concession.termType().setValue("month");
+        concession.numberOfTerms().setValue(months);
         concession.percentage().setValue(percentage);
 
         persist(concession);
@@ -179,8 +190,8 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
     public static AddOn createAddOn(String name, double monthlyCost) {
         AddOn addOn = EntityFactory.create(AddOn.class);
-        addOn.name().setValue(name);
-        addOn.monthlyCost().setValue(monthlyCost);
+        addOn.type().setValue(name);
+        addOn.value().setValue(monthlyCost);
         persist(addOn);
         return addOn;
     }
@@ -237,26 +248,19 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         return building;
     }
 
-    private AptUnit createUnit(Building building, String suiteNumber, int floor, int area, double bedrooms, double bathrooms, Floorplan floorplan,
-            LeaseTerms leaseTerms) {
+    private AptUnit createUnit(Building building, String suiteNumber, int floor, double area, double bedrooms, double bathrooms, Floorplan floorplan) {
         AptUnit unit = EntityFactory.create(AptUnit.class);
 
-        unit.suiteNumber().setValue(suiteNumber);
+        unit.number().setValue(suiteNumber);
         unit.building().set(building);
         unit.floor().setValue(floor);
-        unit.unitType().setValue(floor + "-230" + RandomUtil.randomInt(10));
+        unit.type().setValue(RandomUtil.random(AptUnit.Type.values()));
         unit.area().setValue(area);
         unit.bedrooms().setValue(bedrooms);
         unit.bathrooms().setValue(bathrooms);
-        unit.newLeaseTerms().set(leaseTerms);
 
-        double rent = 900 + RandomUtil.randomInt(200);
-        for (int i = 1; i < 4; i++) {
-            MarketRent marketRent = EntityFactory.create(MarketRent.class);
-            marketRent.leaseTerm().setValue(i * 6);
-            marketRent.rent().amount().setValue(rent - 35 * i);
-            unit.marketRent().add(marketRent);
-        }
+        unit.marketRent().setValue(800. + RandomUtil.randomInt(200));
+        unit.marketRent().setValue(900. + RandomUtil.randomInt(200));
 
         // mandatory utilities
         unit.utilities().add(createUtility("Water"));
@@ -282,29 +286,29 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
         // info items
         if (RandomUtil.randomBoolean()) {
-            unit.infoDetails().add(createUnitInfoItem("Partially Furnished"));
+            unit.details().add(createUnitInfoItem(RandomUtil.random(AptUnitDetail.Type.values())));
         } else {
-            unit.infoDetails().add(createUnitInfoItem("Fully Furnished"));
+            unit.details().add(createUnitInfoItem(RandomUtil.random(AptUnitDetail.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.infoDetails().add(createUnitInfoItem("Colour TV"));
+            unit.details().add(createUnitInfoItem(RandomUtil.random(AptUnitDetail.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.infoDetails().add(createUnitInfoItem("Breathtaking View"));
+            unit.details().add(createUnitInfoItem(RandomUtil.random(AptUnitDetail.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.infoDetails().add(createUnitInfoItem("Walk-in Closet"));
+            unit.details().add(createUnitInfoItem(RandomUtil.random(AptUnitDetail.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.infoDetails().add(createUnitInfoItem("Jacuzzi"));
+            unit.details().add(createUnitInfoItem(RandomUtil.random(AptUnitDetail.Type.values())));
         }
 
         // concessions
         if (RandomUtil.randomBoolean()) {
-            unit.concessions().add(createConcession(ConcessionType.freeMonths, 1.0 + RandomUtil.randomInt(3), 0));
+            unit.concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(3), 0));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.concessions().add(createConcession(ConcessionType.percentDiscount, 1.0 + RandomUtil.randomInt(11), 15.8));
+            unit.concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(11), 15.8));
         }
 
         // add-ons
@@ -330,14 +334,10 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             unit.addOns().add(createAddOn("Dishwasher", 30));
         }
 
-        unit.requiredDeposit().set(DomainUtil.createMoney(150d + 5 * RandomUtil.randomInt(20)));
-
         Calendar avalable = new GregorianCalendar();
         avalable.setTime(new Date());
         avalable.add(Calendar.DATE, 5 + RandomUtil.randomInt(30));
         DateUtils.dayStart(avalable);
-
-        unit.avalableForRent().setValue(avalable.getTime());
 
         unit.floorplan().set(floorplan);
 
@@ -351,7 +351,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Building.class, AptUnit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, AptUnitInfoItem.class,
+            return deleteAll(Building.class, AptUnit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, AptUnitDetail.class,
                     Amenity.class, Concession.class, AddOn.class, LeaseTerms.class);
         } else {
             return "This is production";
@@ -435,7 +435,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                     }
 
                     int uarea = floorplan.minArea().getValue() + RandomUtil.randomInt(10);
-                    createUnit(building, suiteNumber, floor, uarea, bedrooms, bathrooms, floorplan, leaseTerms);
+                    createUnit(building, suiteNumber, floor, uarea, bedrooms, bathrooms, floorplan);
                 }
             }
         }
@@ -510,7 +510,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 sb.append("\n");
                 sb.append("\t\t").append(unit.utilities()).append("\n");
                 sb.append("\t\t").append(unit.amenities()).append("\n");
-                sb.append("\t\t").append(unit.infoDetails()).append("\n");
+                sb.append("\t\t").append(unit.details()).append("\n");
                 sb.append("\t\t").append(unit.concessions()).append("\n");
                 sb.append("\t\t").append(unit.addOns()).append("\n");
             }

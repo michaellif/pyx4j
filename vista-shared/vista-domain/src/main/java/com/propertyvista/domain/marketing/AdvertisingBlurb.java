@@ -7,14 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 2, 2011
- * @author michaellif
+ * Created on 2011-05-15
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset;
+package com.propertyvista.domain.marketing;
 
-public enum AreaMeasurementType {
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-    Internal, External
+public interface AdvertisingBlurb extends IEntity {
 
+    IPrimitive<String> content();
 }

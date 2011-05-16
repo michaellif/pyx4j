@@ -112,14 +112,15 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
 
-        if (!selectionCriteria.availableFrom().isNull()) {
-            criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.GREATER_THAN_OR_EQUAL, selectionCriteria
-                    .availableFrom().getValue()));
-        }
-        if (!selectionCriteria.availableTo().isNull()) {
-            criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.LESS_THAN_OR_EQUAL, selectionCriteria
-                    .availableTo().getValue()));
-        }
+//TODO: there is no availableFrom/To in AptUnit now!?.
+//        if (!selectionCriteria.availableFrom().isNull()) {
+//            criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.GREATER_THAN_OR_EQUAL, selectionCriteria
+//                    .availableFrom().getValue()));
+//        }
+//        if (!selectionCriteria.availableTo().isNull()) {
+//            criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.LESS_THAN_OR_EQUAL, selectionCriteria
+//                    .availableTo().getValue()));
+//        }
         return criteria;
     }
 

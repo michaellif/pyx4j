@@ -37,5 +37,4 @@ public interface AptUnitOccupancy extends IEntity {
     IPrimitive<String> description();
 
     Lease lease();
-
 }

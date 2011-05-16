@@ -58,17 +58,16 @@ public class UnitLister extends ListerBase<AptUnit> {
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<AptUnit>> columnDescriptors, AptUnit proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitType()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitEcomomicStatus()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitEcomomicStatusDescr()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.economicStatus()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.economicStatusDescription()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floor()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.suiteNumber()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.number()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.building().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.area()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bedrooms()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bathrooms()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.currentOccupancies()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.avalableForRent()));
     }
 
     @Override

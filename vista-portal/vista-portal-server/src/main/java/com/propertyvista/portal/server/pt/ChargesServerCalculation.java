@@ -24,7 +24,6 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.common.domain.marketing.MarketRent;
 import com.propertyvista.domain.property.asset.AptUnit;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.Charges;
@@ -74,14 +73,11 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
     public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, AptUnit selectedUnit, PotentialTenantList tenantList, Pets pets) {
         double rentAmount = 0;
         double depositAmount = 0;
+
         if (selectedUnit != null) {
-            for (MarketRent mr : selectedUnit.marketRent()) {
-                if (mr.leaseTerm().equals(unitSelection.selectedLeaseTerm())) {
-                    rentAmount = mr.rent().amount().getValue();
-                    break;
-                }
-            }
-            depositAmount = selectedUnit.requiredDeposit().amount().getValue();
+            rentAmount = selectedUnit.unitRent().getValue();
+// TODO: there is no requiredDeposit in Unit now!?
+//            depositAmount = selectedUnit.requiredDeposit().amount().getValue();
         }
 
         charges.rentStart().setValue(unitSelection.rentStart().getValue());

@@ -576,7 +576,8 @@ public class VistaDataPTGenerator {
 
         if (selectedUnit != null) {
             unitSelection.selectedUnitId().setValue(selectedUnit.getPrimaryKey());
-            unitSelection.selectedLeaseTerm().set(RandomUtil.random(selectedUnit.marketRent()).leaseTerm());
+// TODO: there is no list of MarketRent in Unit now!?.             
+//            unitSelection.selectedLeaseTerm().set(RandomUtil.random(selectedUnit.marketRent()).leaseTerm());
         }
 
         return unitSelection;

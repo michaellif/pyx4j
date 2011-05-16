@@ -13,8 +13,11 @@
  */
 package com.propertyvista.domain.marketing.yield;
 
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -38,16 +41,20 @@ import com.pyx4j.i18n.shared.Translatable;
  */
 public interface Concession extends IEntity {
 
-    /**
-     * Concession type (max 128 chars) TODO we will need to have this of type
-     * ConcessionType
-     */
-    @ToString
-    IPrimitive<String> name();
-
     @Translatable
-    public enum ConcessionType {
-        freeMonths, percentDiscount;
+    public enum AppliedTo {
+
+        full,
+
+        monthly,
+
+        amount,
+
+        rent,
+
+        parking,
+
+        utilities;
 
         @Override
         public String toString() {
@@ -55,17 +62,56 @@ public interface Concession extends IEntity {
         }
     }
 
-    @MemberColumn(name = "cons_type")
-    IPrimitive<ConcessionType> type();
+    @Translatable
+    public enum Status {
+
+        suggested,
+
+        approved;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+    @MemberColumn(name = "concessionType")
+    IPrimitive<String> type();
 
     /**
-     * Number of months to apply concession to
+     * Value discount
      */
-    IPrimitive<Double> months();
+    @Format("#0.00")
+    @MemberColumn(name = "concessionValue")
+    IPrimitive<Double> value();
 
     /**
      * Percent discount
      */
     IPrimitive<Double> percentage();
 
+    IPrimitive<AppliedTo> appliedTo();
+
+    IPrimitive<String> termType();
+
+    /**
+     * Number of terms to apply concession to
+     */
+    IPrimitive<Double> numberOfTerms();
+
+    IPrimitive<String> description();
+
+    IPrimitive<Status> status();
+
+    IPrimitive<String> approvedBy();
+
+    @Caption(name = "Available From")
+    @MemberColumn(name = "concessionStart")
+    IPrimitive<Date> start();
+
+    @Caption(name = "Available Till")
+    @MemberColumn(name = "concessionEnd")
+    IPrimitive<Date> end();
 }

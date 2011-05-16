@@ -13,11 +13,12 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
+
+@Translatable
 public enum AptUnitStatusType {
 
-    /**
-     * combines leased, approved, on_notice, leased_on_notice, leased_reserved
-     */
     leased,
 
     available,
@@ -26,8 +27,10 @@ public enum AptUnitStatusType {
 
     vacant,
 
-    offMarket,
+    offMarket;
 
-    other;
-
+    @Override
+    public String toString() {
+        return I18nEnum.tr(this);
+    }
 }

@@ -13,28 +13,25 @@
  */
 package com.propertyvista.domain.marketing.yield;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-/**
- * For now assume add-ons have monthly cost to be used in calculation of total monthly
- * cost
- * 
- * @author aroytbur
- * 
- */
 public interface AddOn extends IEntity {
 
-    /**
-     * Amenity type (max 32 chars)
-     */
     @ToString
-    IPrimitive<String> name();
+    @MemberColumn(name = "addOnType")
+    IPrimitive<String> type();
 
-    /**
-     * How much it costs monthly for this add-on
-     */
-    IPrimitive<Double> monthlyCost();
+    IPrimitive<String> description();
 
+    IPrimitive<String> term();
+
+    @Format("#0.00")
+    @Caption(name = "Estimated Value")
+    @MemberColumn(name = "addOnValue")
+    IPrimitive<Double> value();
 }

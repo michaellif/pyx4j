@@ -38,10 +38,7 @@ public class Converter {
 
         // iEntity
         to.floorplan().set(convert(from.floorplan()));
-        to.newLeaseTerms().set(from.newLeaseTerms());
-        to.requiredDeposit().set(from.requiredDeposit());
-
-        to.infoDetails().setValue(from.infoDetails().getStringView());
+        to.infoDetails().setValue(from.details().getStringView());
         to.amenities().setValue(from.amenities().getStringView());
         to.concessions().setValue(from.concessions().getStringView());
         to.utilities().setValue(from.utilities().getStringView());
@@ -51,12 +48,13 @@ public class Converter {
         //to.status().set(from.status());
 
         // primitives
-        to.unitType().setValue(from.unitType().getValue());
-        to.area().setValue(from.area().getValue());
-        to.avalableForRent().setValue(from.avalableForRent().getValue());
+        to.unitType().setValue(from.type().getStringView());
+// TODO : AptUnit.area is Double!?.         
+//        to.area().setValue(from.area().getValue());
+//        to.avalableForRent().setValue(from.avalableForRent().getValue());
         to.bathrooms().setValue(from.bathrooms().getValue());
         to.bedrooms().setValue(from.bedrooms().getValue());
-        to.marketRent().setValue(from.marketRent().getValue());
+//        to.marketRent().setValue(from.marketRent().getValue());
 
         return to;
     }

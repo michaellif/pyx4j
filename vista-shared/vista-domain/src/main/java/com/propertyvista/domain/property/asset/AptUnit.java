@@ -13,78 +13,92 @@
  */
 package com.propertyvista.domain.property.asset;
 
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.common.domain.financial.Money;
-import com.propertyvista.common.domain.marketing.MarketRent;
-import com.propertyvista.domain.Picture;
+import com.propertyvista.domain.Medium;
+import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.marketing.yield.Concession;
-import com.propertyvista.portal.domain.pt.LeaseTerms;
 
 public interface AptUnit extends IEntity {
 
+    @Translatable
+    public enum Type {
+
+        oneBathroom,
+
+        oneBathroomAndDen,
+
+        twoBathroom,
+
+        twoBathroomAndDen,
+
+        threeBathroom,
+
+        threeBathroomAndDen,
+
+        fourBathroom,
+
+        fourBathroomAndDen,
+
+        fivebathroom,
+
+        fivebathroomAndDen,
+
+        other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    // ----------- Infromation --------------------------------------------------------------------------
+
     IPrimitive<String> name();
 
-    IPrimitive<String> marketingName();
+    @MemberColumn(name = "unitType")
+    IPrimitive<Type> type();
 
-    @Caption(name = "Type")
-    IPrimitive<String> unitType();
+    IPrimitive<String> typeDescription();
 
-    IPrimitive<AptUnitEcomomicStatus> unitEcomomicStatus();
+    IPrimitive<AptUnitEcomomicStatus> economicStatus();
 
-    /**
-     * @see AptUnitEcomomicStatus#other
-     */
-    IPrimitive<String> unitEcomomicStatusDescr();
+    IPrimitive<String> economicStatusDescription();
 
     IPrimitive<Integer> floor();
 
-    /**
-     * Number of the unit
-     */
-    IPrimitive<String> suiteNumber();
+    @MemberColumn(name = "unitNumber")
+    IPrimitive<String> number();
 
     Building building();
 
-    /**
-     * Square ft. size of unit
-     */
-    @Caption(name = "Sq F")
-    IPrimitive<Integer> area();
+    // ----------- Details --------------------------------------------------------------------------
 
-    IPrimitive<AreaMeasurementType> areaMeasurementType();
+    IPrimitive<Double> area();
 
-    /**
-     * Number of bedrooms in unit
-     * 
-     * TODO Artur: Can we move this to floorplan?
-     */
+    IPrimitive<AreaMeasurementUnit> areaUnits();
+
     @Format("#0.#")
     @Caption(name = "Beds")
     IPrimitive<Double> bedrooms();
 
-    /**
-     * Number of bathrooms in unit
-     * 
-     * TODO Artur: Can we move this to floorplan?
-     * 
-     * TODO Are the units with the same number of b*rooms have the same plan.
-     */
     @Format("#0.#")
     @Caption(name = "Baths")
     IPrimitive<Double> bathrooms();
+
+    IList<Utility> utilities();
+
+    IList<AptUnitDetail> details();
 
     /**
      * Keeps current and future occupancy data
@@ -92,20 +106,25 @@ public interface AptUnit extends IEntity {
      */
     IList<AptUnitOccupancy> currentOccupancies();
 
-    @Format("MM/dd/yyyy")
-    @Caption(name = "Available")
-    @Indexed
-    /**
-     * Denormalizied field used for search, derived from @see AptUnitOccupancy
-     */
-    IPrimitive<Date> avalableForRent();
+    IPrimitive<Double> numberOfOccupants();
 
-    @Owned
-    @Caption(name = "Rent")
-    IList<MarketRent> marketRent();
+    // ------------------ Financials ------------------------------------------------------------------
+    @Format("#0.00")
+    IPrimitive<Double> unitRent();
 
-    @Detached
-    LeaseTerms newLeaseTerms();
+    @Format("#0.00")
+    IPrimitive<Double> netRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> marketRent();
+
+    // ----------------------- Marketing --------------------------------------------------------------
+
+    IPrimitive<String> marketingName();
+
+    IPrimitive<String> marketingDescription();
+
+    IList<AdvertisingBlurb> addBlurbs();
 
     /**
      * Object used as part of a marketing campaign to demonstrate the design, structure,
@@ -114,25 +133,12 @@ public interface AptUnit extends IEntity {
     @Detached
     Floorplan floorplan();
 
-    /**
-     * How much does the user need to put down
-     */
-    @Caption(name = "Deposit")
-    Money requiredDeposit();
-
     IList<Amenity> amenities();
-
-    IList<Utility> utilities();
-
-    IList<AptUnitInfoItem> infoDetails();
 
     IList<Concession> concessions();
 
     IList<AddOn> addOns();
 
     @Detached
-    @Deprecated
-    //TODO VladS to clean it up
-    ISet<Picture> pictures();
-
+    IList<Medium> media();
 }

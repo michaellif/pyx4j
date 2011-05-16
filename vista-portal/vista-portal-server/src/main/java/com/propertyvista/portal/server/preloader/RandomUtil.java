@@ -16,11 +16,11 @@ package com.propertyvista.portal.server.preloader;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.portal.domain.pt.IPerson;
-
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
+
+import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.portal.domain.pt.IPerson;
 
 public class RandomUtil extends DataGenerator {
 
@@ -34,6 +34,10 @@ public class RandomUtil extends DataGenerator {
         calendar.set(Calendar.DAY_OF_YEAR, randomInt(365));
         DateUtils.dayStart(calendar);
         return calendar.getTime();
+    }
+
+    public static java.sql.Date randomSqlDate() {
+        return randomSqlDate(1930, 2020);
     }
 
     public static java.sql.Date randomSqlDate(int yearFrom, int yearTo) {

@@ -36,14 +36,13 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.common.domain.marketing.MarketRent;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.AptUnit;
-import com.propertyvista.domain.property.asset.AptUnitInfoItem;
+import com.propertyvista.domain.property.asset.AptUnitDetail;
 import com.propertyvista.domain.property.asset.Utility;
 
 public class UnitEditorForm extends CEntityForm<AptUnit> {
@@ -66,29 +65,28 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
         main.add(new VistaWidgetDecorator(inject(proto().name()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().marketingName()), decorData));
 
-        main.add(new VistaWidgetDecorator(inject(proto().unitType()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().type()), decorData));
 
-        main.add(new VistaWidgetDecorator(inject(proto().unitEcomomicStatus()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().unitEcomomicStatusDescr()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().economicStatus()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().economicStatusDescription()), decorData));
 
         main.add(new VistaWidgetDecorator(inject(proto().floor()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().suiteNumber()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().number()), decorData));
 // TODO: arrange available building in drop-down box? 
 //        main.add(new VistaWidgetDecorator(inject(proto().building()), decorData));
 
         main.add(new VistaWidgetDecorator(inject(proto().area()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().areaMeasurementType()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().areaUnits()), decorData));
 
         main.add(new VistaWidgetDecorator(inject(proto().bedrooms()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().bathrooms()), decorData));
 
 // TODO: complex data editing here: 
 //        main.add(new VistaWidgetDecorator(inject(proto().currentOccupancies()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().avalableForRent()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().requiredDeposit()), decorData));
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Market Rents")));
-        main.add(inject(proto().marketRent(), createMarketRentListEditor()));
+        main.add(new CrmHeaderDecorator(i18n.tr("Rents")));
+        main.add(new VistaWidgetDecorator(inject(proto().unitRent()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().marketRent()), decorData));
 
 // TODO: arrange available Lease Terms in drop-down box? 
 //      main.add(new VistaWidgetDecorator(inject(proto().newLeaseTerms()), decorData));
@@ -102,7 +100,7 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
         main.add(inject(proto().utilities(), createUtilitiesListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Info Details")));
-        main.add(inject(proto().infoDetails(), createInfoDetailsListEditor()));
+        main.add(inject(proto().details(), createDetailsListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Concessions")));
         main.add(inject(proto().concessions(), createConcessionsListEditor()));
@@ -112,35 +110,6 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
 
         main.setWidth("100%");
         return main;
-    }
-
-    private CEntityFolder<MarketRent> createMarketRentListEditor() {
-        return new CEntityFolder<MarketRent>(MarketRent.class) {
-
-            private List<EntityFolderColumnDescriptor> columns;
-
-            {
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().leaseTerm(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().rent(), "7em"));
-            }
-
-            @Override
-            protected FolderDecorator<MarketRent> createFolderDecorator() {
-                return new TableFolderDecorator<MarketRent>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add Rent"));
-            }
-
-            @Override
-            protected CEntityFolderItem<MarketRent> createItem() {
-                return new CEntityFolderRow<MarketRent>(MarketRent.class, columns) {
-
-                    @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove Rent"));
-                    }
-                };
-            }
-        };
     }
 
     private CEntityFolder<Amenity> createAmenitiesListEditor() {
@@ -199,24 +168,24 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
         };
     }
 
-    private CEntityFolder<AptUnitInfoItem> createInfoDetailsListEditor() {
-        return new CEntityFolder<AptUnitInfoItem>(AptUnitInfoItem.class) {
+    private CEntityFolder<AptUnitDetail> createDetailsListEditor() {
+        return new CEntityFolder<AptUnitDetail>(AptUnitDetail.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
 
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "45em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "45em"));
             }
 
             @Override
-            protected FolderDecorator<AptUnitInfoItem> createFolderDecorator() {
-                return new TableFolderDecorator<AptUnitInfoItem>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add Unit Info"));
+            protected FolderDecorator<AptUnitDetail> createFolderDecorator() {
+                return new TableFolderDecorator<AptUnitDetail>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add Unit Info"));
             }
 
             @Override
-            protected CEntityFolderItem<AptUnitInfoItem> createItem() {
-                return new CEntityFolderRow<AptUnitInfoItem>(AptUnitInfoItem.class, columns) {
+            protected CEntityFolderItem<AptUnitDetail> createItem() {
+                return new CEntityFolderRow<AptUnitDetail>(AptUnitDetail.class, columns) {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
@@ -234,9 +203,7 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
 
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "22em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "11em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().months(), "5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().percentage(), "5em"));
             }
 
@@ -265,8 +232,8 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
 
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "40em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().monthlyCost(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "40em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().term(), "5em"));
             }
 
             @Override
