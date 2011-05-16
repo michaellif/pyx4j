@@ -44,6 +44,10 @@ public class DataGenerator {
 
     private static int areCodes[] = { 416, 905, 647 };
 
+    public static enum GeneratorType {
+        Boolean, FirstName, LastName, Letter, Name, Phone, Address, PostalCode, ZipCode,
+    }
+
     private static class GeneratorContext {
 
         Random random = new Random();
@@ -141,6 +145,10 @@ public class DataGenerator {
             adresses = EntityCSVReciver.create(AddressInfo.class).loadFile(resourceFileName("postal_codes.csv"));
         }
         return adresses.get(nextInt(adresses.size(), "address", 10));
+    }
+
+    public static String randomAddress() {
+        return randomAddressInfo().getStringView();
     }
 
     /**
@@ -248,5 +256,30 @@ public class DataGenerator {
         // DB does not store Milliseconds
         c.set(Calendar.MILLISECOND, 0);
         return c.getTime();
+    }
+
+    public static String random(GeneratorType type) {
+        switch (type) {
+        case Boolean:
+            return String.valueOf(randomBoolean());
+        case FirstName:
+            return randomFirstName();
+        case LastName:
+            return randomLastName();
+        case Name:
+            return randomName();
+        case Letter:
+            return String.valueOf(randomLetter());
+        case Phone:
+            return randomPhone();
+        case Address:
+            return randomAddress();
+        case PostalCode:
+            return randomPostalCode();
+        case ZipCode:
+            return randomZipCode();
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 }
