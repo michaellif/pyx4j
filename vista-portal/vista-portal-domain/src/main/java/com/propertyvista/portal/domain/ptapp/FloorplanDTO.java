@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface ApartmentFloorplan extends IEntity {
+public interface FloorplanDTO extends IEntity {
 
 //    @Detached
 //    Building building();

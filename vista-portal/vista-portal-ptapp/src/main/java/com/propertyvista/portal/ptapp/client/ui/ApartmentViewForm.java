@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.portal.domain.ptapp.ApartmentUnit;
+import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
@@ -52,7 +52,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
     private ApartmentViewPresenter presenter;
 
-    private ApartmentUnit selectedUnit = EntityFactory.create(ApartmentUnit.class);
+    private AptUnitDTO selectedUnit = EntityFactory.create(AptUnitDTO.class);
 
     public ApartmentViewForm() {
         super(UnitSelection.class, new VistaEditorsComponentFactory());
@@ -100,10 +100,10 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         main.add(new ViewHeaderDecorator(i18n.tr("Available Units"), header, "100%"));
 
         // units table:
-        main.add(inject(proto().availableUnits().units(), new ApartmentUnitsTable(new ValueChangeHandler<ApartmentUnit>() {
+        main.add(inject(proto().availableUnits().units(), new ApartmentUnitsTable(new ValueChangeHandler<AptUnitDTO>() {
 
             @Override
-            public void onValueChange(ValueChangeEvent<ApartmentUnit> event) {
+            public void onValueChange(ValueChangeEvent<AptUnitDTO> event) {
                 selectedUnit = event.getValue();
                 getValue().selectedUnitId().set(selectedUnit.id());
                 getValue().selectedLeaseTerm().setValue(null);

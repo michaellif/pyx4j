@@ -29,7 +29,7 @@ public interface Summary extends IEntity, IBoundToApplication {
     UnitSelection unitSelection();
 
     @Transient
-    ApartmentUnit selectedUnit();
+    AptUnitDTO selectedUnit();
 
     @Transient
     Money selectedRent();

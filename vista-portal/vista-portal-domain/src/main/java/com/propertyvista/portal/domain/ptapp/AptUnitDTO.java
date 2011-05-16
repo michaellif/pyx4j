@@ -28,7 +28,7 @@ import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.common.domain.marketing.MarketRent;
 
 @Transient
-public interface ApartmentUnit extends IEntity {
+public interface AptUnitDTO extends IEntity {
 
 //    IPrimitive<Integer> floor();
 
@@ -94,7 +94,7 @@ public interface ApartmentUnit extends IEntity {
      * and appearance of unit.
      */
     @Detached
-    ApartmentFloorplan floorplan();
+    FloorplanDTO floorplan();
 
     /**
      * How much does the user need to put down

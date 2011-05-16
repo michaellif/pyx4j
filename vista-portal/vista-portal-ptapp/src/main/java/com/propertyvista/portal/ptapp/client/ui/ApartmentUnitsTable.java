@@ -61,14 +61,14 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.domain.marketing.MarketRent;
-import com.propertyvista.portal.domain.ptapp.ApartmentUnit;
+import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.components.VistaReadOnlyComponentFactory;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
-public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
+public class ApartmentUnitsTable extends CEntityFolder<AptUnitDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentUnitsTable.class);
 
@@ -86,18 +86,18 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
     private final VistaReadOnlyComponentFactory factory = new VistaReadOnlyComponentFactory();
 
-    private final ValueChangeHandler<ApartmentUnit> selectedUnitChangeHandler;
+    private final ValueChangeHandler<AptUnitDTO> selectedUnitChangeHandler;
 
     private final ValueChangeHandler<Integer> selectedMarketRentChangeHandler;
 
     private HorizontalPanel floorplanRawPanel;
 
-    private ApartmentUnit currentApartmentUnit = null;
+    private AptUnitDTO currentApartmentUnit = null;
 
     private Integer selectedLeaseTerm = null;
 
-    public ApartmentUnitsTable(ValueChangeHandler<ApartmentUnit> selectedUnitChangeHandler, ValueChangeHandler<Integer> selectedMarketRentChangeHandler) {
-        super(ApartmentUnit.class);
+    public ApartmentUnitsTable(ValueChangeHandler<AptUnitDTO> selectedUnitChangeHandler, ValueChangeHandler<Integer> selectedMarketRentChangeHandler) {
+        super(AptUnitDTO.class);
         this.selectedUnitChangeHandler = selectedUnitChangeHandler;
         this.selectedMarketRentChangeHandler = selectedMarketRentChangeHandler;
 
@@ -125,10 +125,10 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
         createFloorplanRaw(availableUnits);
     }
 
-    ApartmentUnit setSelectedUnit(Long unitId, Integer selectedLeaseTerm) {
-        ApartmentUnit unitToSelect = null;
+    AptUnitDTO setSelectedUnit(Long unitId, Integer selectedLeaseTerm) {
+        AptUnitDTO unitToSelect = null;
         if (unitId != null) {
-            ApartmentUnit unit = EntityFactory.create(ApartmentUnit.class);
+            AptUnitDTO unit = EntityFactory.create(AptUnitDTO.class);
             unit.setPrimaryKey(unitId);
             int idx = getValue().indexOf(unit);
             if (idx != -1) {
@@ -142,7 +142,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
         return unitToSelect;
     }
 
-    private void setSelectedUnit(ApartmentUnit unit, boolean onClick) {
+    private void setSelectedUnit(AptUnitDTO unit, boolean onClick) {
         if ((currentApartmentUnit != null) && currentApartmentUnit.equals(unit)) {
             return;
         }
@@ -152,25 +152,25 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
             selectedLeaseTerm = null;
         }
 
-        for (ApartmentUnit au : getValue()) {
+        for (AptUnitDTO au : getValue()) {
             UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(au);
             unitTableRow.setSelected(unitTableRow.getValue().equals(unit), onClick);
         }
 
         if (onClick) {
-            selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApartmentUnit>(unit) {
+            selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<AptUnitDTO>(unit) {
             });
         }
     }
 
     @Override
-    protected CEntityFolderItem<ApartmentUnit> createItem() {
-        return new UnitTableRow(ApartmentUnit.class, columns);
+    protected CEntityFolderItem<AptUnitDTO> createItem() {
+        return new UnitTableRow(AptUnitDTO.class, columns);
     }
 
     @Override
-    protected FolderDecorator<ApartmentUnit> createFolderDecorator() {
-        TableFolderDecorator<ApartmentUnit> tfd = new TableFolderDecorator<ApartmentUnit>(columns);
+    protected FolderDecorator<AptUnitDTO> createFolderDecorator() {
+        TableFolderDecorator<AptUnitDTO> tfd = new TableFolderDecorator<AptUnitDTO>(columns);
         tfd.getHeader().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.UnitListHeader);
 
         floorplanRawPanel = new HorizontalPanel();
@@ -254,13 +254,13 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
         }
     }
 
-    private class UnitTableRow extends CEntityFolderRow<ApartmentUnit> {
+    private class UnitTableRow extends CEntityFolderRow<AptUnitDTO> {
 
         private ApartmentUnitDetailsPanel unitDetailsPanel;
 
         private Widget header;
 
-        public UnitTableRow(Class<ApartmentUnit> clazz, List<EntityFolderColumnDescriptor> columns) {
+        public UnitTableRow(Class<AptUnitDTO> clazz, List<EntityFolderColumnDescriptor> columns) {
             super(clazz, columns);
         }
 
@@ -355,14 +355,14 @@ public class ApartmentUnitsTable extends CEntityFolder<ApartmentUnit> {
 
         public Date minAvalableForRent;
 
-        public UnitsDataCalc(IList<ApartmentUnit> units) {
+        public UnitsDataCalc(IList<AptUnitDTO> units) {
             minRent = Double.MAX_VALUE;
             minDeposit = Double.MAX_VALUE;
             minBed = Double.MAX_VALUE;
             minBath = Double.MAX_VALUE;
             minSqFt = Double.MAX_VALUE;
 
-            for (ApartmentUnit u : units) {
+            for (AptUnitDTO u : units) {
                 for (MarketRent mr : u.marketRent()) {
                     minRent = Math.min(minRent, mr.rent().amount().getValue());
                 }

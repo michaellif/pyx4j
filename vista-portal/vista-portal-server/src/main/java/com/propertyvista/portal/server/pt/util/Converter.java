@@ -17,13 +17,13 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.AptUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.portal.domain.ptapp.ApartmentFloorplan;
-import com.propertyvista.portal.domain.ptapp.ApartmentUnit;
+import com.propertyvista.portal.domain.ptapp.FloorplanDTO;
+import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
 
 public class Converter {
 
-    public static ApartmentFloorplan convert(Floorplan from) {
-        ApartmentFloorplan to = EntityFactory.create(ApartmentFloorplan.class);
+    public static FloorplanDTO convert(Floorplan from) {
+        FloorplanDTO to = EntityFactory.create(FloorplanDTO.class);
 
         to.name().setValue(from.name().getValue());
         to.area().setValue(from.minArea().getValue());
@@ -31,8 +31,8 @@ public class Converter {
         return to;
     }
 
-    public static ApartmentUnit convert(AptUnit from) {
-        ApartmentUnit to = EntityFactory.create(ApartmentUnit.class);
+    public static AptUnitDTO convert(AptUnit from) {
+        AptUnitDTO to = EntityFactory.create(AptUnitDTO.class);
 
         to.id().set(from.id());
 

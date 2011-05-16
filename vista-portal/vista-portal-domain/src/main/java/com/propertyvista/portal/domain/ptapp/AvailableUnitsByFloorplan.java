@@ -25,11 +25,11 @@ import com.pyx4j.entity.shared.IPrimitive;
  */
 public interface AvailableUnitsByFloorplan extends IEntity {
 
-    ApartmentFloorplan floorplan();
+    FloorplanDTO floorplan();
 
     IPrimitive<Pair<Double, Double>> rent();
 
     Currency rentCurrency();
 
-    IList<ApartmentUnit> units();
+    IList<AptUnitDTO> units();
 }

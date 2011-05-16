@@ -43,7 +43,7 @@ import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.domain.marketing.MarketRent;
-import com.propertyvista.portal.domain.ptapp.ApartmentUnit;
+import com.propertyvista.portal.domain.ptapp.AptUnitDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 
 public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers {
@@ -126,7 +126,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         setWidth(header.getOffsetWidth() + "px");
     }
 
-    public void showUnitDetails(final ApartmentUnit unit, final Integer selectedLeaseTerm, final ValueChangeHandler<Integer> selectedMarketRentChangeHandler,
+    public void showUnitDetails(final AptUnitDTO unit, final Integer selectedLeaseTerm, final ValueChangeHandler<Integer> selectedMarketRentChangeHandler,
             boolean animate, IDebugId debugId) {
 
         this.clear();
