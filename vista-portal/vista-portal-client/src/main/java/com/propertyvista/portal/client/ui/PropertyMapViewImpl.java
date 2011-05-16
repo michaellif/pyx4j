@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.geo.GeoPoint;
-import com.pyx4j.gwt.geo.MapUtils;
 
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.rpc.dto.PropertyDTO;
@@ -41,7 +40,7 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
 
         map.populate(properties);
 
-        map.setDistanceOverlay(MapUtils.newLatLngInstance(new GeoPoint(43.697665, -79.402313)), 5);
+        map.setDistanceOverlay(new GeoPoint(43.697665, -79.402313), 5);
 
         setWidget(map);
     }

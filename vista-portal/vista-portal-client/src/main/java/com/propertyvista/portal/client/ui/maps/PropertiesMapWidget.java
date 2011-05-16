@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.CircleOverlay;
 import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.gwt.geo.MapUtils;
@@ -51,7 +52,7 @@ public class PropertiesMapWidget extends SimplePanel {
 
     private List<PropertyDTO> properties;
 
-    private LatLng latLng;
+    private GeoPoint geoPoint;
 
     private double distance;
 
@@ -89,8 +90,8 @@ public class PropertiesMapWidget extends SimplePanel {
             populate(properties);
         }
 
-        if (latLng != null) {
-            setDistanceOverlay(latLng, distance);
+        if (geoPoint != null) {
+            setDistanceOverlay(geoPoint, distance);
         }
 
     }
@@ -112,10 +113,11 @@ public class PropertiesMapWidget extends SimplePanel {
         }
     }
 
-    public void setDistanceOverlay(LatLng latLng, final double distance) {
-        this.latLng = latLng;
+    public void setDistanceOverlay(GeoPoint geoPoint, final double distance) {
+        this.geoPoint = geoPoint;
         this.distance = distance;
         if (mapLoadComplete) {
+            LatLng latLng = MapUtils.newLatLngInstance(geoPoint);
             if (distanceOverlay != null) {
                 map.removeOverlay(distanceOverlay);
                 distanceOverlay = null;
