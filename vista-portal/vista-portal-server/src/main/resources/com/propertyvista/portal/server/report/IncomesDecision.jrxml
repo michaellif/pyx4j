@@ -3,15 +3,15 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="incomeSource" class="com.propertyvista.portal.domain.pt.IncomeSource"/>
-	<field name="employer" class="com.propertyvista.portal.domain.pt.IncomeInfoEmployer"/>
-	<field name="selfEmployed" class="com.propertyvista.portal.domain.pt.IncomeInfoSelfEmployed">
+	<field name="incomeSource" class="com.propertyvista.portal.domain.ptapp.IncomeSource"/>
+	<field name="employer" class="com.propertyvista.portal.domain.ptapp.IncomeInfoEmployer"/>
+	<field name="selfEmployed" class="com.propertyvista.portal.domain.ptapp.IncomeInfoSelfEmployed">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="seasonallyEmployed" class="com.propertyvista.portal.domain.pt.IncomeInfoSeasonallyEmployed"/>
-	<field name="socialServices" class="com.propertyvista.portal.domain.pt.IncomeInfoSocialServices"/>
-	<field name="studentIncome" class="com.propertyvista.portal.domain.pt.IncomeInfoStudentIncome"/>
-	<field name="otherIncomeInfo" class="com.propertyvista.portal.domain.pt.IncomeInfoOther"/>
+	<field name="seasonallyEmployed" class="com.propertyvista.portal.domain.ptapp.IncomeInfoSeasonallyEmployed"/>
+	<field name="socialServices" class="com.propertyvista.portal.domain.ptapp.IncomeInfoSocialServices"/>
+	<field name="studentIncome" class="com.propertyvista.portal.domain.ptapp.IncomeInfoStudentIncome"/>
+	<field name="otherIncomeInfo" class="com.propertyvista.portal.domain.ptapp.IncomeInfoOther"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -37,16 +37,16 @@
 			<subreport isUsingCache="true">
 				<reportElement x="0" y="44" width="572" height="61"/>
 				<dataSourceExpression><![CDATA[( $F{incomeSource}.toString().equals("Full time") ?
-    new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.pt.IEmploymentInfo[]{$F{employer}})) :
+    new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.ptapp.IEmploymentInfo[]{$F{employer}})) :
     ( $F{incomeSource}.toString().equals("Self employed") ?
-		new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.pt.IEmploymentInfo[]{$F{selfEmployed}})) :
+		new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.ptapp.IEmploymentInfo[]{$F{selfEmployed}})) :
 		( $F{incomeSource}.toString().equals("Seasonally Employed") ?
-			new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.pt.IEmploymentInfo[]{$F{seasonallyEmployed}})) :
+			new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.ptapp.IEmploymentInfo[]{$F{seasonallyEmployed}})) :
 			( $F{incomeSource}.toString().equals("Social Services") ?
-				new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.pt.IEmploymentInfo[]{$F{socialServices}})) :
+				new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.ptapp.IEmploymentInfo[]{$F{socialServices}})) :
 				( $F{incomeSource}.toString().equals("Student") ?
-					new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.pt.IIncomeInfo[]{$F{studentIncome}})) :
-					new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.pt.IIncomeInfo[]{$F{otherIncomeInfo}})))))))]]></dataSourceExpression>
+					new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.ptapp.IIncomeInfo[]{$F{studentIncome}})) :
+					new com.pyx4j.entity.report.JRIEntityCollectionDataSource(Arrays.asList(new com.propertyvista.portal.domain.ptapp.IIncomeInfo[]{$F{otherIncomeInfo}})))))))]]></dataSourceExpression>
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[( $F{incomeSource}.toString().equals("Full time") ?
     com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.portal.server.report.IncomesEmployed") :
     ( $F{incomeSource}.toString().equals("Self employed") ?

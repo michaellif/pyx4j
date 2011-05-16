@@ -3,12 +3,12 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="type" class="com.propertyvista.portal.domain.pt.Pet.PetType"/>
+	<field name="type" class="com.propertyvista.portal.domain.ptapp.Pet.PetType"/>
 	<field name="name" class="java.lang.String"/>
 	<field name="color" class="java.lang.String"/>
 	<field name="breed" class="java.lang.String"/>
 	<field name="weight" class="java.lang.Integer"/>
-	<field name="weightUnit" class="com.propertyvista.portal.domain.pt.Pet.WeightUnit"/>
+	<field name="weightUnit" class="com.propertyvista.portal.domain.ptapp.Pet.WeightUnit"/>
 	<field name="birthDate" class="java.util.Date"/>
 	<background>
 		<band splitType="Stretch"/>

@@ -3,7 +3,7 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="assetType" class="com.propertyvista.portal.domain.pt.TenantAsset.AssetType"/>
+	<field name="assetType" class="com.propertyvista.portal.domain.ptapp.TenantAsset.AssetType"/>
 	<field name="percent" class="java.lang.Double"/>
 	<field name="assetValue/amount" class="java.lang.Double"/>
 	<background>

@@ -15,9 +15,9 @@
 	<field name="monthlyAmount/amount" class="java.lang.Double"/>
 	<field name="starts" class="java.util.Date"/>
 	<field name="ends" class="java.util.Date"/>
-	<field name="program" class="com.propertyvista.portal.domain.pt.IncomeInfoStudentIncome.Program"/>
+	<field name="program" class="com.propertyvista.portal.domain.ptapp.IncomeInfoStudentIncome.Program"/>
 	<field name="fieldOfStudy" class="java.lang.String"/>
-	<field name="fundingChoices" class="com.propertyvista.portal.domain.pt.IncomeInfoStudentIncome.FundingChoice"/>
+	<field name="fundingChoices" class="com.propertyvista.portal.domain.ptapp.IncomeInfoStudentIncome.FundingChoice"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

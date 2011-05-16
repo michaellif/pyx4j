@@ -3,7 +3,7 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="incomeSource" class="com.propertyvista.portal.domain.pt.IncomeSource"/>
+	<field name="incomeSource" class="com.propertyvista.portal.domain.ptapp.IncomeSource"/>
 	<field name="employer/name" class="java.lang.String"/>
 	<field name="employer/employedForYears" class="java.lang.Integer"/>
 	<field name="employer/country/name" class="java.lang.String"/>

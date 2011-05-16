@@ -32,7 +32,7 @@
 	<field name="currentAddress/moveOutDate" class="java.util.Date"/>
 	<field name="currentAddress/payment" class="java.lang.Double"/>
 	<field name="currentAddress/phone" class="java.lang.String"/>
-	<field name="currentAddress/rented" class="com.propertyvista.portal.domain.pt.Address.OwnedRented"/>
+	<field name="currentAddress/rented" class="com.propertyvista.portal.domain.ptapp.Address.OwnedRented"/>
 	<field name="currentAddress/managerName" class="java.lang.String"/>
 	<field name="previousAddress/country/name" class="java.lang.String"/>
 	<field name="previousAddress/postalCode" class="java.lang.String"/>
@@ -49,7 +49,7 @@
 	<field name="previousAddress/moveOutDate" class="java.util.Date"/>
 	<field name="previousAddress/payment" class="java.lang.Double"/>
 	<field name="previousAddress/phone" class="java.lang.String"/>
-	<field name="previousAddress/rented" class="com.propertyvista.portal.domain.pt.Address.OwnedRented"/>
+	<field name="previousAddress/rented" class="com.propertyvista.portal.domain.ptapp.Address.OwnedRented"/>
 	<field name="previousAddress/managerName" class="java.lang.String"/>
 	<field name="vehicles" class="com.pyx4j.entity.shared.IList"/>
 	<field name="legalQuestions/suedForRent" class="java.lang.Boolean"/>
