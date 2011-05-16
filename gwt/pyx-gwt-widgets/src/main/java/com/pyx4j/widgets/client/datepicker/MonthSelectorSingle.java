@@ -20,20 +20,20 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.widgets.client.datepicker.HoldableImage.HoldElapsedEvent;
 import com.pyx4j.widgets.client.datepicker.HoldableImage.HoldElapsedEventHandler;
+import com.pyx4j.widgets.client.datepicker.ImageWithDebugId.MonthSelectorButtonsId;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 import com.pyx4j.widgets.client.style.Selector;
 
 @SuppressWarnings("deprecation")
 public class MonthSelectorSingle extends MonthSelectorExtended {
 
-    private Image backwards;
+    private ImageWithDebugId backwards;
 
-    private Image forwards;
+    private ImageWithDebugId forwards;
 
     private HoldableImage backwardsYear;
 
@@ -78,7 +78,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
     protected void setup() {
         DatePickerImages resource = (DatePickerImages) GWT.create(DatePickerImages.class);
         // Set up backwards.        
-        backwards = new Image(resource.MonthPrevious());
+        backwards = new ImageWithDebugId(resource.MonthPrevious(), MonthSelectorButtonsId.MonthSelectorButton_BackwardsMonth);
         backwards.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.middle));
         backwards.addClickHandler(new ClickHandler() {
             @Override
@@ -88,7 +88,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
             }
         });
 
-        forwards = new Image(resource.MonthNext());
+        forwards = new ImageWithDebugId(resource.MonthNext(), MonthSelectorButtonsId.MonthSelectorButton_ForwardMonth);
         forwards.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.middle));
         forwards.addClickHandler(new ClickHandler() {
             @Override
@@ -98,7 +98,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
             }
         });
         // Set up backwards year
-        backwardsYear = new HoldableImage(resource.YearPrevious(), 300);
+        backwardsYear = new HoldableImage(resource.YearPrevious(), 300, MonthSelectorButtonsId.MonthSelectorButton_BackwardsYear);
         backwardsYear.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.bottom));
         backwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
 
@@ -109,7 +109,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
             }
         });
 
-        forwardsYear = new HoldableImage(resource.YearNext(), 300);
+        forwardsYear = new HoldableImage(resource.YearNext(), 300, MonthSelectorButtonsId.MonthSelectorButton_ForwardYear);
         forwardsYear.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.top));
         forwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
 
