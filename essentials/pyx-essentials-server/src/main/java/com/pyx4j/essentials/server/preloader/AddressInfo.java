@@ -21,18 +21,24 @@
 package com.pyx4j.essentials.server.preloader;
 
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @RpcTransient
 @Transient
+@ToStringFormat("{1} {2}, {3}")
 public interface AddressInfo extends IEntity {
 
+    @ToString
     IPrimitive<String> streetName();
 
+    @ToString
     IPrimitive<String> municipality();
 
+    @ToString
     IPrimitive<String> postalCode();
 
     IPrimitive<Double> latitude();
