@@ -13,14 +13,12 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+
 import com.propertyvista.common.domain.financial.Currency;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
-
-import com.pyx4j.commons.Pair;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
 
 /*
  * This is cache of units for Rent
@@ -29,7 +27,8 @@ public interface AvailableUnitsByFloorplan extends IEntity {
 
     FloorplanDTO floorplan();
 
-    IPrimitive<Pair<Double, Double>> rent();
+// TODO to VladS - make IPrimitive<Pair<>> support...  
+//    IPrimitive<Pair<Double, Double>> rent();
 
     Currency rentCurrency();
 
