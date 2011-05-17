@@ -26,14 +26,22 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.widgets.client.style.Selector;
 
 @SuppressWarnings(/* Date manipulation required */{ "deprecation" })
 public class DateGrid extends Grid {
 
+    public enum DateGridDebugID {
+        DateGrid_Index_
+    }
+
     private DateCell selectedCell;
 
     private Date selectedDate;
+
+    private IDebugId debugId;
 
     private final Date minDate;
 
@@ -57,11 +65,23 @@ public class DateGrid extends Grid {
         drawCells();
     }
 
+    public void setDebugId(int index) {
+        DateCell cell;
+        debugId = new StringDebugId(DateGridDebugID.DateGrid_Index_.toString() + index);
+        this.ensureDebugId(debugId.debugId());
+        for (int row = 1; row < this.numRows; row++) {
+            for (int col = 0; col < this.numColumns; col++) {
+                cell = (DateCell) getWidget(row, col);
+                cell.setDebugId(row, col, debugId);
+            }
+        }
+    }
+
     public void drawCells() {
         DateCell cell;
         for (int row = 1; row < this.numRows; row++) {
             for (int col = 0; col < this.numColumns; col++) {
-                cell = new DateCell(row, col);
+                cell = new DateCell();
                 cell.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {

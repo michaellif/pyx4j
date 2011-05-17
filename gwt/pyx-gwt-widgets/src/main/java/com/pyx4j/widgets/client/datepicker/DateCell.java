@@ -26,19 +26,31 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.widgets.client.style.Selector;
 
 public class DateCell extends Label {
+
+    public enum DateCellDebugID {
+        row_, _col_
+    }
+
     private boolean enabled = true;
 
     private Date date;
 
     private DateGrid parent;
 
-    private String debugId;
-
-    public DateCell(int row, int column) {
+    public DateCell() {
         addHandlers();
+    }
+
+    public void setDebugId(int row, int column, IDebugId parent) {
+        StringDebugId child = new StringDebugId(DateCellDebugID.row_.name() + row + DateCellDebugID._col_.name() + column);
+        IDebugId debugId = new CompositeDebugId(parent, child);
+        //this.ensureDebugId(debugId.toString());
     }
 
     public void addHandlers() {

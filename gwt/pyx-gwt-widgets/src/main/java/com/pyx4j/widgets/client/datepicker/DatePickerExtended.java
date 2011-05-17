@@ -89,4 +89,8 @@ public abstract class DatePickerExtended extends DatePicker {
     public void setSelectedDate(Date selectedDate) {
         getMyView().setSelectedDate(selectedDate);
     }
+
+    public void setDebugId(int index) {
+        this.getMyView().setDebugId(index);
+    }
 }

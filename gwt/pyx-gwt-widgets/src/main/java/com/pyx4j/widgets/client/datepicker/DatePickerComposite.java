@@ -94,6 +94,7 @@ public class DatePickerComposite extends Composite implements HasHandlers {
             } else {
                 picker = new DatePickerMultiple(starting, minDate, maxDate, disabledDates);
             }
+            picker.setDebugId(i);
             pickers.add(picker);
             picker.addValueChangeHandler(new ValueChangeHandler<Date>() {
                 @Override
