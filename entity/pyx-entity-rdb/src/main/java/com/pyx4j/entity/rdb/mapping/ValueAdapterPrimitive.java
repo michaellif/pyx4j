@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.util.List;
+import java.util.Vector;
+
 import com.pyx4j.entity.rdb.dialect.Dialect;
 
 abstract class ValueAdapterPrimitive implements ValueAdapter {
@@ -28,6 +31,24 @@ abstract class ValueAdapterPrimitive implements ValueAdapter {
 
     protected ValueAdapterPrimitive(Dialect dialect, Class<?> valueClass) {
         sqlType = dialect.getTargetSqlType(valueClass);
+    }
+
+    @Override
+    public List<String> getColumnNames(MemberOperationsMeta member) {
+        List<String> columnNames = new Vector<String>();
+        columnNames.add(member.sqlName());
+        return columnNames;
+    }
+
+    @Override
+    public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName) {
+        return dialect.isCompatibleType(member.getMemberMeta().getValueClass(), member.getMemberMeta().getLength(), typeName);
+    }
+
+    @Override
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member) {
+        sql.append(member.sqlName()).append(' ');
+        sql.append(dialect.getSqlType(member.getMemberMeta().getValueClass(), member.getMemberMeta().getLength()));
     }
 
 }

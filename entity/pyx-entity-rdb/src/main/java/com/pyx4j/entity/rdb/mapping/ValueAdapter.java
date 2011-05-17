@@ -23,10 +23,18 @@ package com.pyx4j.entity.rdb.mapping;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
+import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 
 interface ValueAdapter {
+
+    List<String> getColumnNames(MemberOperationsMeta member);
+
+    boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName);
+
+    void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member);
 
     int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException;
 

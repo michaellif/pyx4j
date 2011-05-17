@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -175,11 +174,13 @@ public class TableModel {
             sql.append(" (");
             int numberOfParams = 0;
             for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
-                if (numberOfParams != 0) {
-                    sql.append(", ");
+                for (String name : member.getValueAdapter().getColumnNames(member)) {
+                    if (numberOfParams != 0) {
+                        sql.append(", ");
+                    }
+                    sql.append(name);
+                    numberOfParams++;
                 }
-                sql.append(member.sqlName());
-                numberOfParams++;
             }
 
             for (MemberOperationsMeta member : entityOperationsMeta.getIndexMembers()) {
@@ -221,12 +222,14 @@ public class TableModel {
             sql.append(" SET ");
             boolean first = true;
             for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
-                if (first) {
-                    first = false;
-                } else {
-                    sql.append(',');
+                for (String name : member.getValueAdapter().getColumnNames(member)) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sql.append(", ");
+                    }
+                    sql.append(name).append(" = ? ");
                 }
-                sql.append(member.sqlName()).append(" = ? ");
             }
             for (MemberOperationsMeta member : entityOperationsMeta.getIndexMembers()) {
                 sql.append(',').append(member.sqlName()).append(" = ? ");
@@ -242,18 +245,6 @@ public class TableModel {
         if (value == null) {
             stmt.setNull(parameterIndex, dialect.getTargetSqlType(valueClass));
         } else {
-            if ((memberMeta != null) && (memberMeta.getLength() > 0)) {
-                int size = 0;
-                if (value instanceof String) {
-                    size = ((String) value).length();
-                } else if (value.getClass().isArray()) {
-                    size = Array.getLength(value);
-                }
-                if (size > memberMeta.getLength()) {
-                    throw new RuntimeException("Member size vialoation member '" + memberMeta.getFieldName() + "' size " + size
-                            + " is greater than max allowed " + memberMeta.getLength());
-                }
-            }
             stmt.setObject(parameterIndex, encodeValue(valueClass, value), dialect.getTargetSqlType(valueClass));
         }
     }
@@ -329,6 +320,7 @@ public class TableModel {
             }
             return updated;
         } catch (SQLException e) {
+            log.error("{} SQL {}", tableName, sqlUpdate());
             log.error("{} SQL update error", tableName, e);
             throw new RuntimeException(e);
         } finally {

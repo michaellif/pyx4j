@@ -23,17 +23,41 @@ package com.pyx4j.entity.rdb.mapping;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Vector;
 
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.geo.GeoPoint;
 
-public class ValueAdapterGeoPoint implements ValueAdapter {
+class ValueAdapterGeoPoint implements ValueAdapter {
 
     protected int sqlType;
 
     protected ValueAdapterGeoPoint(Dialect dialect) {
         sqlType = dialect.getTargetSqlType(Double.class);
+    }
+
+    @Override
+    public List<String> getColumnNames(MemberOperationsMeta member) {
+        List<String> columnNames = new Vector<String>();
+        columnNames.add(member.sqlName() + "_lat");
+        columnNames.add(member.sqlName() + "_lng");
+        return columnNames;
+    }
+
+    @Override
+    public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName) {
+        return dialect.isCompatibleType(Double.class, 0, typeName);
+    }
+
+    @Override
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member) {
+        sql.append(member.sqlName()).append("_lat ");
+        sql.append(dialect.getSqlType(Double.class));
+        sql.append(", ");
+        sql.append(member.sqlName()).append("_lng ");
+        sql.append(dialect.getSqlType(Double.class));
     }
 
     @Override

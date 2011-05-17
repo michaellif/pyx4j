@@ -27,7 +27,7 @@ import java.sql.SQLException;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 
-public class ValueAdapterTime extends ValueAdapterPrimitive {
+class ValueAdapterTime extends ValueAdapterPrimitive {
 
     protected ValueAdapterTime(Dialect dialect) {
         super(dialect, java.sql.Time.class);

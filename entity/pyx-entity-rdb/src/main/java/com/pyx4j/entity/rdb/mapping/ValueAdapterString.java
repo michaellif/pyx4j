@@ -27,10 +27,20 @@ import java.sql.SQLException;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 
-public class ValueAdapterString extends ValueAdapterPrimitive {
+class ValueAdapterString extends ValueAdapterPrimitive {
 
     protected ValueAdapterString(Dialect dialect) {
         super(dialect, String.class);
+    }
+
+    @Override
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member) {
+        super.appendColumnDefinition(sql, dialect, member);
+        int maxLength = member.getMemberMeta().getLength();
+        if (maxLength == 0) {
+            maxLength = TableModel.ORDINARY_STRING_LENGHT_MAX;
+        }
+        sql.append('(').append(maxLength).append(')');
     }
 
     @Override
@@ -40,12 +50,13 @@ public class ValueAdapterString extends ValueAdapterPrimitive {
             stmt.setNull(parameterIndex, sqlType);
         } else {
             int maxLength = member.getMemberMeta().getLength();
-            if (maxLength > 0) {
-                int size = value.length();
-                if (size > maxLength) {
-                    throw new RuntimeException("Member size vialoation member '" + member.getMemberMeta().getFieldName() + "' size " + size
-                            + " is greater than max allowed " + maxLength);
-                }
+            if (maxLength == 0) {
+                maxLength = TableModel.ORDINARY_STRING_LENGHT_MAX;
+            }
+            int size = value.length();
+            if (size > maxLength) {
+                throw new RuntimeException("Member size vialoation member '" + member.getMemberMeta().getFieldName() + "' size " + size
+                        + " is greater than max allowed " + maxLength);
             }
             stmt.setString(parameterIndex, value);
         }

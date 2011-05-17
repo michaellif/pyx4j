@@ -28,11 +28,12 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.test.shared.adapters.ProvinceReferenceAdapter;
+import com.pyx4j.geo.GeoPoint;
 
 @Table(prefix = "test")
 public interface Address extends IEntity {
 
-    public static int TEST_DECLARED_MEMBERS = 6;
+    public static int TEST_DECLARED_MEMBERS = 7;
 
     @ToString(index = 3)
     Country country();
@@ -50,6 +51,5 @@ public interface Address extends IEntity {
 
     IPrimitive<Date> effectiveTo();
 
-    //TODO
-    //IPrimitive<GeoPoint> location();
+    IPrimitive<GeoPoint> location();
 }

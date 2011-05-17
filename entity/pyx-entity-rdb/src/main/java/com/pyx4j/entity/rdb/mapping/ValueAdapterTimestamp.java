@@ -30,7 +30,7 @@ import java.util.GregorianCalendar;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 
-public class ValueAdapterTimestamp extends ValueAdapterPrimitive {
+class ValueAdapterTimestamp extends ValueAdapterPrimitive {
 
     protected ValueAdapterTimestamp(Dialect dialect) {
         super(dialect, java.util.Date.class);

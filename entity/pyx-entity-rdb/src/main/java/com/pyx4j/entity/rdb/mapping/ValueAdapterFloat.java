@@ -27,7 +27,7 @@ import java.sql.SQLException;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 
-public class ValueAdapterFloat extends ValueAdapterPrimitive {
+class ValueAdapterFloat extends ValueAdapterPrimitive {
 
     protected ValueAdapterFloat(Dialect dialect) {
         super(dialect, Float.class);

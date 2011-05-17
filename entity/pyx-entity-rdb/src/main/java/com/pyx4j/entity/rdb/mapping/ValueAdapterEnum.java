@@ -27,10 +27,16 @@ import java.sql.SQLException;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 
-public class ValueAdapterEnum extends ValueAdapterPrimitive {
+class ValueAdapterEnum extends ValueAdapterPrimitive {
 
     protected ValueAdapterEnum(Dialect dialect, Class<?> valueClass) {
         super(dialect, valueClass);
+    }
+
+    @Override
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member) {
+        super.appendColumnDefinition(sql, dialect, member);
+        sql.append('(').append(TableModel.ENUM_STRING_LENGHT_MAX).append(')');
     }
 
     @Override

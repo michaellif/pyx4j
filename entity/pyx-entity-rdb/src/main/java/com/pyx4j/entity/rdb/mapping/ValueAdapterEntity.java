@@ -23,6 +23,8 @@ package com.pyx4j.entity.rdb.mapping;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 
-public class ValueAdapterEntity implements ValueAdapter {
+class ValueAdapterEntity implements ValueAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(ValueAdapterEntity.class);
 
@@ -38,6 +40,24 @@ public class ValueAdapterEntity implements ValueAdapter {
 
     protected ValueAdapterEntity(Dialect dialect) {
         sqlType = dialect.getTargetSqlType(Long.class);
+    }
+
+    @Override
+    public List<String> getColumnNames(MemberOperationsMeta member) {
+        List<String> columnNames = new Vector<String>();
+        columnNames.add(member.sqlName());
+        return columnNames;
+    }
+
+    @Override
+    public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName) {
+        return dialect.isCompatibleType(Long.class, 0, typeName);
+    }
+
+    @Override
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member) {
+        sql.append(member.sqlName()).append(' ');
+        sql.append(dialect.getSqlType(Long.class));
     }
 
     @Override

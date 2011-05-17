@@ -229,12 +229,12 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
     public void testGeoPoint() {
         Address address = EntityFactory.create(Address.class);
         GeoPoint value = new GeoPoint(23, 45);
-        //address.location().setValue(value);
+        address.location().setValue(value);
         srv.persist(address);
         Address address2 = srv.retrieve(Address.class, address.getPrimaryKey());
 
-        //Assert.assertEquals("Class of Value", GeoPoint.class, address2.location().getValue().getClass());
-        //Assert.assertEquals("Value", value, address2.location().getValue());
+        Assert.assertEquals("Class of Value", GeoPoint.class, address2.location().getValue().getClass());
+        Assert.assertEquals("Value", value, address2.location().getValue());
     }
 
     // TODO

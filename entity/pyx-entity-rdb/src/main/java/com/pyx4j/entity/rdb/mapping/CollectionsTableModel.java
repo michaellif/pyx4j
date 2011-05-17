@@ -181,8 +181,9 @@ public class CollectionsTableModel {
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        String sql = null;
         try {
-            String sql = "SELECT id, value " + (isList ? ", seq" : "") + " FROM " + member.sqlName() + " WHERE owner = ?";
+            sql = "SELECT id, value " + (isList ? ", seq" : "") + " FROM " + member.sqlName() + " WHERE owner = ?";
             stmt = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.setLong(1, entity.getPrimaryKey());
             rs = stmt.executeQuery();
@@ -215,6 +216,7 @@ public class CollectionsTableModel {
                 }
             }
         } catch (SQLException e) {
+            log.error("{} SQL {}", member.sqlName(), sql);
             log.error("{} SQL update error", member.sqlName(), e);
             throw new RuntimeException(e);
         } finally {
