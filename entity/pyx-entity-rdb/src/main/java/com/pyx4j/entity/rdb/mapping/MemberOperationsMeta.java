@@ -26,11 +26,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public class MemberOperationsMeta {
+public class MemberOperationsMeta implements EntityMemberAccess {
 
     private final MemberMeta memberMeta;
 
-    protected final String memberName;
+    private final EntityMemberAccess memberAccess;
 
     private final String sqlName;
 
@@ -40,20 +40,22 @@ public class MemberOperationsMeta {
 
     private String sqlSequenceName;
 
-    public MemberOperationsMeta(String sqlName, MemberMeta memberMeta) {
-        this(sqlName, memberMeta, null, null);
+    public MemberOperationsMeta(EntityMemberAccess memberAccess, String sqlName, MemberMeta memberMeta) {
+        this(memberAccess, sqlName, memberMeta, null, null);
     }
 
-    public MemberOperationsMeta(String sqlName, MemberMeta memberMeta, Class<? extends IndexAdapter<?>> indexAdapterClass, Class<?> indexValueClass) {
+    public MemberOperationsMeta(EntityMemberAccess memberAccess, String sqlName, MemberMeta memberMeta, Class<? extends IndexAdapter<?>> indexAdapterClass,
+            Class<?> indexValueClass) {
         this.memberMeta = memberMeta;
-        this.memberName = memberMeta.getFieldName();
+        this.memberAccess = memberAccess;
         this.sqlName = sqlName;
         this.indexAdapterClass = indexAdapterClass;
         this.indexValueClass = indexValueClass;
     }
 
+    @Override
     public String getMemberName() {
-        return memberName;
+        return memberAccess.getMemberName();
     }
 
     public MemberMeta getMemberMeta() {
@@ -64,20 +66,24 @@ public class MemberOperationsMeta {
         return sqlName;
     }
 
+    @Override
     public Object getMemberValue(IEntity entity) {
-        return entity.getMemberValue(memberName);
+        return memberAccess.getMemberValue(entity);
     }
 
+    @Override
     public boolean containsMemberValue(IEntity entity) {
-        return entity.containsMemberValue(memberName);
+        return memberAccess.containsMemberValue(entity);
     }
 
+    @Override
     public void setMemberValue(IEntity entity, Object value) {
-        entity.setMemberValue(memberName, value);
+        memberAccess.setMemberValue(entity, value);
     }
 
+    @Override
     public IObject<?> getMember(IEntity entity) {
-        return entity.getMember(memberName);
+        return memberAccess.getMember(entity);
     }
 
     public Class<? extends IndexAdapter<?>> getIndexAdapter() {

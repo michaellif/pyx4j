@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-01-03
+ * Created on 2011-05-17
  * @author vlads
  * @version $Id$
  */
@@ -24,18 +24,24 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public class MemberEmbeddedOperationsMeta extends MemberOperationsMeta {
+class EntityMemberEmbeddedAccess implements EntityMemberAccess {
 
     private final List<String> path;
 
-    public MemberEmbeddedOperationsMeta(String sqlName, List<String> path, MemberMeta memberMeta) {
-        super(sqlName, memberMeta);
+    private final String memberName;
+
+    public EntityMemberEmbeddedAccess(List<String> path, String memberName) {
+        this.memberName = memberName;
         this.path = path;
     }
 
-    protected IEntity actualEntity(IEntity entity) {
+    @Override
+    public String getMemberName() {
+        return memberName;
+    }
+
+    private IEntity actualEntity(IEntity entity) {
         for (String memberName : path) {
             entity = (IEntity) entity.getMember(memberName);
         }
