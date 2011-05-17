@@ -28,6 +28,7 @@ import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Reference;
+import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -36,6 +37,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.geo.GeoPoint;
 
 /**
  * Categorize member types for later use in the frequent update/select operations
@@ -56,11 +58,11 @@ public class EntityOperationsMeta {
 
     private final List<MemberOperationsMeta> indexMembers = new Vector<MemberOperationsMeta>();
 
-    EntityOperationsMeta(NamingConvention namingConvention, EntityMeta entityMeta) {
-        build(namingConvention, null, null, entityMeta);
+    EntityOperationsMeta(Dialect dialect, EntityMeta entityMeta) {
+        build(dialect, dialect.getNamingConvention(), null, null, entityMeta);
     }
 
-    private void build(NamingConvention namingConvention, List<String> accessPath, List<String> namesPath, EntityMeta entityMeta) {
+    private void build(Dialect dialect, NamingConvention namingConvention, List<String> accessPath, List<String> namesPath, EntityMeta entityMeta) {
         for (String memberName : entityMeta.getMemberNames()) {
             MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
             if (memberMeta.isTransient()) {
@@ -88,10 +90,9 @@ public class EntityOperationsMeta {
                     }
                     namesPathChild.add(memberPersistenceName);
 
-                    build(namingConvention, accessPathChild, namesPathChild, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
+                    build(dialect, namingConvention, accessPathChild, namesPathChild, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
                 }
             } else {
-
                 EntityMemberAccess memberAccess;
                 if (accessPath == null) {
                     memberAccess = new EntityMemberDirectAccess(memberName);
@@ -106,7 +107,7 @@ public class EntityOperationsMeta {
                     } else {
                         sqlName = namingConvention.sqlChildTableName(entityMeta.getPersistenceName(), memberPersistenceName);
                     }
-                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, sqlName, memberMeta);
+                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta);
                     collectionMembers.add(member);
                     allMembers.add(member);
                     if (!memberMeta.isDetached()) {
@@ -119,7 +120,7 @@ public class EntityOperationsMeta {
                     } else {
                         sqlName = namingConvention.sqlFieldName(memberPersistenceName);
                     }
-                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, sqlName, memberMeta);
+                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, new ValueAdapterEntity(dialect), sqlName, memberMeta);
                     columnMembers.add(member);
                     allMembers.add(member);
                     if (memberMeta.isOwnedRelationships()) {
@@ -138,7 +139,7 @@ public class EntityOperationsMeta {
                     } else {
                         sqlName = namingConvention.sqlChildTableName(entityMeta.getPersistenceName(), memberPersistenceName);
                     }
-                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, sqlName, memberMeta);
+                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta);
                     collectionMembers.add(member);
                 } else {
                     String sqlName;
@@ -147,7 +148,12 @@ public class EntityOperationsMeta {
                     } else {
                         sqlName = namingConvention.sqlFieldName(memberPersistenceName);
                     }
-                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, sqlName, memberMeta);
+                    ValueAdapter valueAdapter = createValueAdapter(dialect, memberMeta.getValueClass());
+                    if (valueAdapter == null) {
+                        throw new Error("Unsupported IPrimitive<" + memberMeta.getValueClass().getName() + "> " + memberName + " in "
+                                + entityMeta.getEntityClass().getName());
+                    }
+                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta);
                     columnMembers.add(member);
                     allMembers.add(member);
                 }
@@ -157,10 +163,45 @@ public class EntityOperationsMeta {
                     for (Class<? extends IndexAdapter<?>> adapterClass : index.adapters()) {
                         IndexAdapter<?> adapter = AdapterFactory.getIndexAdapter(adapterClass);
                         String indexedPropertyName = namingConvention.sqlFieldName(adapter.getIndexedColumnName(null, memberMeta));
-                        indexMembers.add(new MemberOperationsMeta(memberAccess, indexedPropertyName, memberMeta, adapterClass, adapter.getIndexValueClass()));
+                        indexMembers.add(new MemberOperationsMeta(memberAccess, null, indexedPropertyName, memberMeta, adapterClass, adapter
+                                .getIndexValueClass()));
                     }
                 }
             }
+        }
+    }
+
+    private ValueAdapter createValueAdapter(Dialect dialect, Class<?> valueClass) {
+        if (valueClass.equals(String.class)) {
+            return new ValueAdapterString(dialect);
+        } else if (valueClass.equals(Double.class)) {
+            return new ValueAdapterDouble(dialect);
+        } else if (valueClass.equals(Float.class)) {
+            return new ValueAdapterFloat(dialect);
+        } else if (valueClass.equals(Long.class)) {
+            return new ValueAdapterLong(dialect);
+        } else if (valueClass.equals(Integer.class)) {
+            return new ValueAdapterInteger(dialect);
+        } else if (valueClass.equals(java.sql.Date.class)) {
+            return new ValueAdapterDate(dialect);
+        } else if (valueClass.equals(java.util.Date.class)) {
+            return new ValueAdapterTimestamp(dialect);
+        } else if (valueClass.equals(java.sql.Time.class)) {
+            return new ValueAdapterTime(dialect);
+        } else if (valueClass.isEnum()) {
+            return new ValueAdapterEnum(dialect, valueClass);
+        } else if (valueClass.equals(Boolean.class)) {
+            return new ValueAdapterBoolean(dialect);
+        } else if (valueClass.equals(Short.class)) {
+            return new ValueAdapterShort(dialect);
+        } else if (valueClass.equals(Byte.class)) {
+            return new ValueAdapterByte(dialect);
+        } else if (valueClass.equals(byte[].class)) {
+            return new ValueAdapterByteArray(dialect);
+        } else if (valueClass.equals(GeoPoint.class)) {
+            return new ValueAdapterGeoPoint(dialect);
+        } else {
+            return null;
         }
     }
 

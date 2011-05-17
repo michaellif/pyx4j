@@ -32,6 +32,8 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     private final EntityMemberAccess memberAccess;
 
+    private final ValueAdapter valueAdapter;
+
     private final String sqlName;
 
     private final Class<? extends IndexAdapter<?>> indexAdapterClass;
@@ -40,14 +42,15 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     private String sqlSequenceName;
 
-    public MemberOperationsMeta(EntityMemberAccess memberAccess, String sqlName, MemberMeta memberMeta) {
-        this(memberAccess, sqlName, memberMeta, null, null);
+    public MemberOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta) {
+        this(memberAccess, valueAdapter, sqlName, memberMeta, null, null);
     }
 
-    public MemberOperationsMeta(EntityMemberAccess memberAccess, String sqlName, MemberMeta memberMeta, Class<? extends IndexAdapter<?>> indexAdapterClass,
-            Class<?> indexValueClass) {
+    public MemberOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta,
+            Class<? extends IndexAdapter<?>> indexAdapterClass, Class<?> indexValueClass) {
         this.memberMeta = memberMeta;
         this.memberAccess = memberAccess;
+        this.valueAdapter = valueAdapter;
         this.sqlName = sqlName;
         this.indexAdapterClass = indexAdapterClass;
         this.indexValueClass = indexValueClass;
@@ -56,6 +59,10 @@ public class MemberOperationsMeta implements EntityMemberAccess {
     @Override
     public String getMemberName() {
         return memberAccess.getMemberName();
+    }
+
+    public ValueAdapter getValueAdapter() {
+        return valueAdapter;
     }
 
     public MemberMeta getMemberMeta() {

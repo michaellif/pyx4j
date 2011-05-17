@@ -26,7 +26,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -83,7 +82,7 @@ public class TableModel {
             primaryKeyStrategy = Table.PrimaryKeyStrategy.AUTO;
         }
         tableName = dialect.getNamingConvention().sqlTableName(entityMeta.getPersistenceName());
-        entityOperationsMeta = new EntityOperationsMeta(dialect.getNamingConvention(), entityMeta);
+        entityOperationsMeta = new EntityOperationsMeta(dialect, entityMeta);
 
         if (dialect.isSequencesBaseIdentity()) {
             for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
@@ -262,24 +261,7 @@ public class TableModel {
     private int bindPersistParameters(Dialect dialect, PreparedStatement stmt, IEntity entity) throws SQLException {
         int parameterIndex = 1;
         for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
-            MemberMeta memberMeta = member.getMemberMeta();
-            if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                IEntity childEntity = (IEntity) member.getMember(entity);
-                Long primaryKey = childEntity.getPrimaryKey();
-                if (primaryKey == null) {
-                    if (!childEntity.isNull()) {
-                        log.error("Saving non persisted reference {}", childEntity);
-                        throw new Error("Saving non persisted reference " + memberMeta.getValueClass() + " " + memberMeta.getCaption() + " of "
-                                + entity.getEntityMeta().getCaption());
-                    }
-                    stmt.setNull(parameterIndex, Types.BIGINT);
-                } else {
-                    stmt.setLong(parameterIndex, primaryKey);
-                }
-            } else {
-                bindParameter(dialect, stmt, parameterIndex, memberMeta.getValueClass(), member.getMemberValue(entity), memberMeta);
-            }
-            parameterIndex++;
+            parameterIndex += member.getValueAdapter().bindValue(stmt, parameterIndex, entity, member);
         }
         for (MemberOperationsMeta member : entityOperationsMeta.getIndexMembers()) {
             bindParameter(dialect, stmt, parameterIndex, member.getIndexValueClass(), member.getIndexedValue(entity), null);
@@ -422,26 +404,6 @@ public class TableModel {
         }
     }
 
-    private Object getValue(ResultSet rs, String columnSqlName, MemberMeta memberMeta) throws SQLException {
-        Object value = rs.getObject(columnSqlName);
-        if (value == null) {
-            return null;
-        }
-        if (java.util.Date.class.isAssignableFrom(memberMeta.getValueClass())) {
-            if (dialect.databaseType() == DatabaseType.Oracle) {
-                if (java.sql.Date.class.isAssignableFrom(memberMeta.getValueClass())) {
-                    value = rs.getDate(columnSqlName);
-                } else if (java.sql.Time.class.isAssignableFrom(memberMeta.getValueClass())) {
-                    value = rs.getTime(columnSqlName);
-                } else {
-                    value = rs.getTimestamp(columnSqlName);
-                }
-            }
-        }
-        return decodeValue(value, memberMeta);
-
-    }
-
     public static Long getLongValue(ResultSet rs, String columnSqlName) throws SQLException {
         Object value = rs.getObject(columnSqlName);
         if (value != null) {
@@ -459,12 +421,7 @@ public class TableModel {
 
     private void retrieveValues(ResultSet rs, IEntity entity) throws SQLException {
         for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
-            MemberMeta memberMeta = member.getMemberMeta();
-            if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                ((IEntity) member.getMember(entity)).setPrimaryKey(getLongValue(rs, member.sqlName()));
-            } else {
-                member.setMemberValue(entity, getValue(rs, member.sqlName(), memberMeta));
-            }
+            member.getValueAdapter().retrieveValue(rs, entity, member);
         }
     }
 
