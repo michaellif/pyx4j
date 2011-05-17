@@ -34,8 +34,8 @@ class ValueAdapterString extends ValueAdapterPrimitive {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member) {
-        super.appendColumnDefinition(sql, dialect, member);
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName) {
+        super.appendColumnDefinition(sql, dialect, member, coumnName);
         int maxLength = member.getMemberMeta().getLength();
         if (maxLength == 0) {
             maxLength = TableModel.ORDINARY_STRING_LENGHT_MAX;

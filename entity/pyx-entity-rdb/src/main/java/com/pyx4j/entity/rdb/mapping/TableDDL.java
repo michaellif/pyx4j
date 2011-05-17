@@ -46,8 +46,11 @@ class TableDDL {
         }
 
         for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
-            sql.append(", ");
-            member.getValueAdapter().appendColumnDefinition(sql, dialect, member);
+            for (String sqlName : member.getValueAdapter().getColumnNames(member)) {
+                sql.append(", ");
+                sql.append(sqlName).append(' ');
+                member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
+            }
 
             // TODO create FK
 //            MemberMeta memberMeta = member.getMemberMeta();
@@ -71,7 +74,7 @@ class TableDDL {
 
     static List<String> validateAndAlter(Dialect dialect, TableMetadata tableMetadata, TableModel tableModel) throws SQLException {
         List<String> alterSqls = new Vector<String>();
-        members: for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
+        for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
             if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 continue;
@@ -81,11 +84,10 @@ class TableDDL {
                 if (columnMeta == null) {
                     StringBuilder sql = new StringBuilder("ALTER TABLE ");
                     sql.append(tableModel.tableName);
-                    sql.append(" ADD ("); // [ column ]
-                    member.getValueAdapter().appendColumnDefinition(sql, dialect, member);
-                    sql.append(")");
+                    sql.append(" ADD "); // [ column ]
+                    sql.append(sqlName).append(' ');
+                    member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
                     alterSqls.add(sql.toString());
-                    continue members;
                 } else {
                     if (!member.getValueAdapter().isCompatibleType(dialect, columnMeta.getTypeName(), member, sqlName)) {
                         throw new RuntimeException(tableModel.tableName + "." + member.sqlName() + " incompatible SQL type " + columnMeta.getTypeName()

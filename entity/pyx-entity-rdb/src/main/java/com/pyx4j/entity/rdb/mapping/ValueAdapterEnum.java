@@ -34,8 +34,8 @@ class ValueAdapterEnum extends ValueAdapterPrimitive {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member) {
-        super.appendColumnDefinition(sql, dialect, member);
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName) {
+        super.appendColumnDefinition(sql, dialect, member, coumnName);
         sql.append('(').append(TableModel.ENUM_STRING_LENGHT_MAX).append(')');
     }
 

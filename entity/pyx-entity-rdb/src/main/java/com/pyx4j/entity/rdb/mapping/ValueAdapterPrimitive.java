@@ -46,8 +46,7 @@ abstract class ValueAdapterPrimitive implements ValueAdapter {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member) {
-        sql.append(member.sqlName()).append(' ');
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName) {
         sql.append(dialect.getSqlType(member.getMemberMeta().getValueClass(), member.getMemberMeta().getLength()));
     }
 

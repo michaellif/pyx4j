@@ -52,11 +52,7 @@ class ValueAdapterGeoPoint implements ValueAdapter {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member) {
-        sql.append(member.sqlName()).append("_lat ");
-        sql.append(dialect.getSqlType(Double.class));
-        sql.append(", ");
-        sql.append(member.sqlName()).append("_lng ");
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName) {
         sql.append(dialect.getSqlType(Double.class));
     }
 

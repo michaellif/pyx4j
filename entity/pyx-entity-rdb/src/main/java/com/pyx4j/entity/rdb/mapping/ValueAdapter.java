@@ -34,7 +34,7 @@ interface ValueAdapter {
 
     boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName);
 
-    void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member);
+    void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName);
 
     int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException;
 
