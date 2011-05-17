@@ -35,7 +35,7 @@ public interface Roof extends IEntity {
 
     IPrimitive<String> warrantee();
 
-    IPrimitive<Contract> maitenanceContractor();
+    Contract contractor();
 
     IPrimitive<String> notes();
 }

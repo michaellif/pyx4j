@@ -13,7 +13,7 @@
  */
 package com.propertyvista.domain;
 
-
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -24,17 +24,14 @@ public interface Company extends IEntity {
 
     ISet<Address> addressList();
 
-    /**
-     * (max 100 char)
-     */
-    IPrimitive<String> website();
-
-    IPrimitive<Picture> logo();
-
     ISet<Phone> phoneList();
+
+    IPrimitive<String> website();
 
     ISet<Email> emailList();
 
     ISet<OrganizationContacts> contactList();
 
+    @Detached
+    Picture logo();
 }
