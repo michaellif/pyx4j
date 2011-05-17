@@ -18,6 +18,8 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -39,6 +41,7 @@ import com.pyx4j.i18n.shared.Translatable;
  * @author aroytbur
  * 
  */
+@ToStringFormat("{0} {1}")
 public interface Concession extends IEntity {
 
     @Translatable
@@ -77,12 +80,14 @@ public interface Concession extends IEntity {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+    @ToString(index = 0)
     @MemberColumn(name = "concessionType")
     IPrimitive<String> type();
 
     /**
      * Value discount
      */
+    @ToString(index = 1)
     @Format("#0.00")
     @MemberColumn(name = "concessionValue")
     IPrimitive<Double> value();

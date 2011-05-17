@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.domain.dto;
 
-import java.util.Date;
+import java.sql.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -21,11 +21,8 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.financial.Money;
-import com.propertyvista.common.domain.marketing.MarketRent;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 
 @Transient
@@ -47,8 +44,9 @@ public interface AptUnitDTO extends IEntity {
     /**
      * Square ft. size of unit
      */
+    @Format("#0.#")
     @Caption(name = "Sq F")
-    IPrimitive<Integer> area();
+    IPrimitive<Double> area();
 
     /**
      * Number of bedrooms in unit
@@ -77,8 +75,11 @@ public interface AptUnitDTO extends IEntity {
 //    Lease currentLease();
 //
     @Owned
-    @Caption(name = "Rent")
-    IList<MarketRent> marketRent();
+    @Format("#0.00")
+    IPrimitive<Double> unitRent();
+
+    @Caption(name = "Deposit")
+    IPrimitive<Double> requiredDeposit();
 
 //
 //    IPrimitive<Date> moveOut();
@@ -96,12 +97,6 @@ public interface AptUnitDTO extends IEntity {
      */
     @Detached
     FloorplanDTO floorplan();
-
-    /**
-     * How much does the user need to put down
-     */
-    @Caption(name = "Deposit")
-    Money requiredDeposit();
 
 //    // need a lease-terms object
 //    //IPrimitive<String> unitLeaseStatus();

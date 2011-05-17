@@ -14,9 +14,6 @@ package com.propertyvista.portal.server.preloader;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +28,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.common.domain.DemoData;
@@ -260,7 +256,8 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         unit.bedrooms().setValue(bedrooms);
         unit.bathrooms().setValue(bathrooms);
 
-        unit.marketRent().setValue(800. + RandomUtil.randomInt(200));
+        unit.unitRent().setValue(800. + RandomUtil.randomInt(200));
+        unit.netRent().setValue(1200. + RandomUtil.randomInt(200));
         unit.marketRent().setValue(900. + RandomUtil.randomInt(200));
 
         // mandatory utilities
@@ -334,11 +331,6 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         if (RandomUtil.randomBoolean()) {
             unit.addOns().add(createAddOn("Dishwasher", 30));
         }
-
-        Calendar avalable = new GregorianCalendar();
-        avalable.setTime(new Date());
-        avalable.add(Calendar.DATE, 5 + RandomUtil.randomInt(30));
-        DateUtils.dayStart(avalable);
 
         unit.floorplan().set(floorplan);
 

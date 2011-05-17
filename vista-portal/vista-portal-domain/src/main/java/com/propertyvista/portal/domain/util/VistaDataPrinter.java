@@ -16,7 +16,6 @@ package com.propertyvista.portal.domain.util;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.marketing.MarketRent;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Application;
@@ -289,12 +288,9 @@ public class VistaDataPrinter {
             sb.append("\n");
 
             // show rent
-            for (MarketRent rent : unit.marketRent()) {
-                sb.append("\t\t");
-                sb.append(rent.leaseTerm().getValue()).append(" months $");
-                sb.append(rent.rent().amount().getValue()).append("");
-                sb.append("\n");
-            }
+            sb.append("\t\t");
+            sb.append(unit.unitRent().getValue()).append("");
+            sb.append("\n");
 
             sb.append("\t\tDeposit: $").append(unit.requiredDeposit().getValue()).append("\n");
         }

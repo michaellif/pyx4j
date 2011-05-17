@@ -14,12 +14,15 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.marketing.yield.Amenity;
 
+@ToStringFormat("{0} {1}")
 public interface AptUnitAmenity extends Amenity {
 
     @Translatable
@@ -128,8 +131,10 @@ public interface AptUnitAmenity extends Amenity {
         }
     }
 
+    @ToString(index = 0)
     @MemberColumn(name = "unitAmenityType")
     IPrimitive<Type> type();
 
+    @ToString(index = 1)
     IPrimitive<Type> subType();
 }

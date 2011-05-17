@@ -212,7 +212,6 @@ public interface Building extends IEntity {
     @MemberColumn(name = "buildingType")
     IPrimitive<Type> type();
 
-    @ToString(index = 0)
     IPrimitive<Type> shape();
 
     IPrimitive<String> totalStories();

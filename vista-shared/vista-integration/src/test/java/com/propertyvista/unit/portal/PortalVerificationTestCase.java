@@ -22,6 +22,7 @@ import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.common.domain.IAddressFull;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Address;
+import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.IEmploymentInfo;
 import com.propertyvista.portal.domain.ptapp.IIncomeInfo;
@@ -39,7 +40,6 @@ import com.propertyvista.portal.domain.ptapp.TenantAsset;
 import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
 import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.ptapp.Vehicle;
-import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
 import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
@@ -49,7 +49,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
 
     protected void assertAptUnitForm(IDebugId formDebugId, AptUnitDTO aUnit) {
         assertValueOnForm(formDebugId, aUnit.unitType());
-        assertValueOnForm(formDebugId, aUnit.marketRent().get(aUnit.marketRent().size() - 1));
+        assertValueOnForm(formDebugId, aUnit.unitRent());
         assertValueOnForm(formDebugId, aUnit.requiredDeposit());
         assertValueOnForm(formDebugId, aUnit.bedrooms());
         assertValueOnForm(formDebugId, aUnit.bathrooms());

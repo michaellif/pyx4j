@@ -22,6 +22,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.server.preloader.RandomUtil;
 
 public class Converter {
 
@@ -52,12 +53,16 @@ public class Converter {
 
         // primitives
         to.unitType().setValue(from.type().getStringView());
-// TODO : AptUnit.area is Double!?.         
-//        to.area().setValue(from.area().getValue());
-//        to.avalableForRent().setValue(from.avalableForRent().getValue());
+        to.area().setValue(from.area().getValue());
         to.bathrooms().setValue(from.bathrooms().getValue());
         to.bedrooms().setValue(from.bedrooms().getValue());
-//        to.marketRent().setValue(from.marketRent().getValue());
+
+        to.unitRent().setValue(from.unitRent().getValue());
+
+// TODO calculate somehow (!?) from current Unit data those values:          
+        to.requiredDeposit().setValue(100. + RandomUtil.randomInt(50));
+// TODO especially this one:          
+        to.avalableForRent().setValue(RandomUtil.randomSqlDate());
 
         return to;
     }

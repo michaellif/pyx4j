@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import com.propertyvista.common.domain.financial.Money;
-import com.propertyvista.portal.domain.dto.AptUnitDTO;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
@@ -24,6 +21,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
+
 public interface Summary extends IEntity, IBoundToApplication {
 
     @Transient
@@ -31,9 +30,6 @@ public interface Summary extends IEntity, IBoundToApplication {
 
     @Transient
     AptUnitDTO selectedUnit();
-
-    @Transient
-    Money selectedRent();
 
     @Transient
     PotentialTenantList tenantList();
@@ -54,11 +50,11 @@ public interface Summary extends IEntity, IBoundToApplication {
 
     LeaseTerms leaseTerms();
 
-    @Caption(name = "I Agree")
     @NotNull
+    @Caption(name = "I Agree")
     IPrimitive<Boolean> agree();
 
-    @Caption(name = "Type Your Full Name")
     @NotNull
+    @Caption(name = "Type Your Full Name")
     IPrimitive<String> fullName();
 }

@@ -17,11 +17,14 @@ import java.sql.Date;
 
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+@ToStringFormat("{0} {1}")
 public interface AptUnitDetail extends IEntity {
 
     @Translatable
@@ -126,9 +129,11 @@ public interface AptUnitDetail extends IEntity {
 
     // ----------- Info --------------------------------------------------------------------------
 
+    @ToString(index = 0)
     @MemberColumn(name = "unitDetailType")
     IPrimitive<Type> type();
 
+    @ToString(index = 1)
     IPrimitive<String> description();
 
     IPrimitive<String> conditionNotes();

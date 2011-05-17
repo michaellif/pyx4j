@@ -42,7 +42,6 @@ import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
-import com.propertyvista.common.domain.marketing.MarketRent;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 
@@ -182,9 +181,10 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         unitDetailPanel.add(new HTML(h3(i18n.tr("Lease Terms"))));
 
         Map<Integer, String> options = new TreeMap<Integer, String>();
-        for (final MarketRent mr : unit.marketRent()) {
-            options.put(mr.leaseTerm().getValue(), mr.leaseTerm().getStringView() + i18n.tr(" month ") + mr.rent().getStringView());
-        }
+// TODO: change this on some kind of formula (!?) for calculation:        
+        options.put(6, 6 + i18n.tr("  months ") + unit.unitRent().getValue());
+        options.put(12, 12 + i18n.tr(" months ") + (unit.unitRent().getValue() + 50.));
+        options.put(18, 18 + i18n.tr(" months ") + (unit.unitRent().getValue() + 100.));
 
         CRadioGroupInteger mrg = new CRadioGroupInteger(CRadioGroup.Layout.VERTICAL, options);
         mrg.setDebugId(new CompositeDebugId(debugId, "leaseTerm"));

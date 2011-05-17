@@ -103,13 +103,13 @@ public class ApartmentUnitsTable extends CEntityFolder<AptUnitDTO> {
 
         columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().floorplan().name(), "70px"));
-        columns.add(new EntityFolderColumnDescriptor(proto().unitType(), "122px"));
-        columns.add(new EntityFolderColumnDescriptor(proto().marketRent(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().unitType(), "142px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().unitRent(), "70px"));
         columns.add(new EntityFolderColumnDescriptor(proto().requiredDeposit(), "70px"));
         columns.add(new EntityFolderColumnDescriptor(proto().bedrooms(), "60px"));
         columns.add(new EntityFolderColumnDescriptor(proto().bathrooms(), "60px"));
         columns.add(new EntityFolderColumnDescriptor(proto().area(), "60px"));
-        columns.add(new EntityFolderColumnDescriptor(proto().avalableForRent(), "140px"));
+        columns.add(new EntityFolderColumnDescriptor(proto().avalableForRent(), "120px"));
     }
 
     @Override
@@ -209,7 +209,7 @@ public class ApartmentUnitsTable extends CEntityFolder<AptUnitDTO> {
                 if (availableUnits.units().size() != 0) {
                     UnitsDataCalc calcs = new UnitsDataCalc(availableUnits.units());
                     // fill the row:
-                    if (proto().marketRent() == column.getObject()) {
+                    if (proto().unitRent() == column.getObject()) {
                         caption = i18n.tr("From") + "<br />" + DomainUtil.createMoney(calcs.minRent).getStringView();
                     } else if (proto().requiredDeposit() == column.getObject()) {
                         caption = i18n.tr("From") + "<br />" + DomainUtil.createMoney(calcs.minDeposit).getStringView();
@@ -363,14 +363,11 @@ public class ApartmentUnitsTable extends CEntityFolder<AptUnitDTO> {
             minSqFt = Double.MAX_VALUE;
 
             for (AptUnitDTO u : units) {
-                for (MarketRent mr : u.marketRent()) {
-                    minRent = Math.min(minRent, mr.rent().amount().getValue());
-                }
-                minDeposit = Math.min(minDeposit, u.requiredDeposit().amount().getValue());
+                minRent = Math.min(minRent, u.unitRent().getValue());
+                minDeposit = Math.min(minDeposit, u.requiredDeposit().getValue());
                 minBed = Math.min(minBed, u.bedrooms().getValue());
                 minBath = Math.min(minBath, u.bathrooms().getValue());
                 minSqFt = Math.min(minSqFt, u.area().getValue());
-
                 if ((minAvalableForRent == null) || (minAvalableForRent.after(u.avalableForRent().getValue()))) {
                     minAvalableForRent = u.avalableForRent().getValue();
                 }

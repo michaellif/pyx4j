@@ -17,6 +17,8 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -29,6 +31,7 @@ import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
 
+@ToStringFormat("{0} {1} {2}")
 public interface AptUnit extends IEntity {
 
     @Translatable
@@ -50,7 +53,7 @@ public interface AptUnit extends IEntity {
 
         fourBathroomAndDen,
 
-        fivebathroom,
+        fiveBathroom,
 
         fivebathroomAndDen,
 
@@ -66,6 +69,7 @@ public interface AptUnit extends IEntity {
 
     IPrimitive<String> name();
 
+    @ToString(index = 0)
     @MemberColumn(name = "unitType")
     IPrimitive<Type> type();
 
@@ -77,9 +81,11 @@ public interface AptUnit extends IEntity {
 
     IPrimitive<Integer> floor();
 
+    @ToString(index = 1)
     @MemberColumn(name = "unitNumber")
     IPrimitive<String> number();
 
+    @ToString(index = 2)
     Building building();
 
     // ----------- Details --------------------------------------------------------------------------
@@ -108,6 +114,12 @@ public interface AptUnit extends IEntity {
 
     @Transient
     IPrimitive<Double> numberOfOccupants();
+
+//  TODO should be calculated somehow!?
+//    @Transient
+//    @Format("MM/dd/yyyy")
+//    @Caption(name = "Available")
+//    IPrimitive<Date> avalableForRent();
 
     // ------------------ Financials ------------------------------------------------------------------
     @Format("#0.00")

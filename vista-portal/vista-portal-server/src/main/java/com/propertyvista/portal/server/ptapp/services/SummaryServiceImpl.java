@@ -20,7 +20,18 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.common.domain.marketing.MarketRent;
+import com.pyx4j.entity.report.JasperFileFormat;
+import com.pyx4j.entity.report.JasperReportProcessor;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.rpc.shared.VoidSerializable;
+
 import com.propertyvista.domain.property.asset.AptUnit;
 import com.propertyvista.portal.domain.ptapp.ChargeLineSelectable;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
@@ -34,18 +45,6 @@ import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.Converter;
 import com.propertyvista.portal.server.report.SummaryReport;
-
-import com.pyx4j.entity.report.JasperFileFormat;
-import com.pyx4j.entity.report.JasperReportProcessor;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityFromatUtils;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.server.download.Downloadable;
-import com.pyx4j.gwt.server.IOUtils;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements SummaryService {
 
@@ -86,12 +85,6 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             summary.selectedUnit().set(
                     Converter.convert(PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class,
                             summary.unitSelection().selectedUnitId().getValue())));
-            for (MarketRent mr : summary.selectedUnit().marketRent()) {
-                if (mr.leaseTerm().equals(summary.unitSelection().selectedLeaseTerm())) {
-                    summary.selectedRent().set(mr.rent());
-                    break;
-                }
-            }
         }
 
         // I have no idea so far for why this line gets called
