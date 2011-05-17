@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.maps;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.gwt.ajaxloader.client.AjaxLoader;
@@ -48,7 +48,7 @@ public class PropertiesMapWidget extends SimplePanel {
 
     private boolean mapLoadComplete = false;
 
-    private final List<Marker> markers = new ArrayList<Marker>();
+    private final HashMap<PropertyDTO, Marker> markers = new HashMap<PropertyDTO, Marker>();
 
     private List<PropertyDTO> properties;
 
@@ -100,7 +100,7 @@ public class PropertiesMapWidget extends SimplePanel {
     public void populate(List<PropertyDTO> properties) {
         this.properties = properties;
         if (mapLoadComplete) {
-            for (Marker marker : markers) {
+            for (Marker marker : markers.values()) {
                 map.removeOverlay(marker);
             }
             markers.clear();
@@ -108,7 +108,7 @@ public class PropertiesMapWidget extends SimplePanel {
                 Marker marker = createMarker(property);
                 if (marker != null) {
                     map.addOverlay(marker);
-                    markers.add(marker);
+                    markers.put(property, marker);
                 }
             }
         }
@@ -156,7 +156,7 @@ public class PropertiesMapWidget extends SimplePanel {
 
                 @Override
                 public void onClick(MarkerClickEvent event) {
-                    map.getInfoWindow().open(marker, new InfoWindowContent(new PropertyInfo(property)));
+                    showMarker(property);
 
                 }
             });
@@ -164,6 +164,10 @@ public class PropertiesMapWidget extends SimplePanel {
         } else {
             return null;
         }
+    }
+
+    public void showMarker(PropertyDTO property) {
+        map.getInfoWindow().open(markers.get(property), new InfoWindowContent(new PropertyInfo(property)));
     }
 
     class PropertyInfo extends DockPanel {

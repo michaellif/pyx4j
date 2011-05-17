@@ -20,22 +20,27 @@ import java.util.Set;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
+import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+
 public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView {
 
     public static String DEFAULT_STYLE_PREFIX = "PropertyTable";
+
+    private final PropertiesMapWidget map;
 
     public static enum StyleSuffix implements IStyleSuffix {
         Header, Footer, Body, Row, Numerator, Cell, CellSize, CellDetails, MapButton, DetailsButton
@@ -48,7 +53,7 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
         container.setWidth("100%");
         container.setHeight("100%");
         BuildingList buildingList = new BuildingList();
-        PropertiesMapWidget map = new PropertiesMapWidget();
+        map = new PropertiesMapWidget();
 
         List<PropertyDTO> properties = new ArrayList<PropertyDTO>();
         {
@@ -60,7 +65,8 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
 
             property = EntityFactory.create(PropertyDTO.class);
             property.address().setValue("<div>1000 Yonge Street</div><div>Toronto</div><div>ON M4W</div>");
-            //      property.location().setValue(new GeoPoint(43.697665, -79.402313));
+            property.location().setValue(new GeoPoint(43.675599, -79.389042));
+
             properties.add(property);
             buildingList.addProperty(property);
 
@@ -102,7 +108,7 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
             setText(idx, 1, i18n.tr("Photo"));
             getCellFormatter().addStyleName(idx, 1, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
 
-            setWidget(idx, 2, formatAddressCell(property.address().getValue()));
+            setWidget(idx, 2, formatAddressCell(property));
             getCellFormatter().addStyleName(idx, 2, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
 
             setHTML(idx, 3, formatStringSet(property.size().getValue()));
@@ -133,12 +139,20 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
             return html;
         }
 
-        private Widget formatAddressCell(String address) {
+        private Widget formatAddressCell(final PropertyDTO property) {
+            String address = property.address().getValue();
             FlowPanel cell = new FlowPanel();
             if (address == null)
                 return cell;
             HTML addr = new HTML(address);
             Button mapbtn = new Button(i18n.tr("Show on Map"));
+            mapbtn.addClickHandler(new ClickHandler() {
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    map.showMarker(property);
+                }
+            });
             mapbtn.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.MapButton.name());
             cell.add(addr);
             cell.add(mapbtn);
