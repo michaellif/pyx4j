@@ -32,7 +32,7 @@ public class FindApartmentViewImpl extends SimplePanel implements FindApartmentV
                 + "The two buttons below mock both scenarios<br>");
 
         panel.add(message);
-        Button citybtn = new Button("Only Province was Spceified");
+        Button citybtn = new Button("Only Province was Specified");
         citybtn.addClickHandler(new ClickHandler() {
 
             @Override

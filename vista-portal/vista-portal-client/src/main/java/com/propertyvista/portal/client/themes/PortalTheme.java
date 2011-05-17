@@ -18,6 +18,7 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalView;
+import com.propertyvista.portal.client.ui.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.ResidentsNavigViewImpl;
 
 import com.pyx4j.widgets.client.ListBox;
@@ -41,6 +42,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         initSiteViewStyles();
         initVistaMainNavigViewStyles();
         initSubNavigViewStyles();
+        initPropertyTableStyles();
     }
 
     @Override
@@ -256,6 +258,36 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
         style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.Label, ResidentsNavigViewImpl.StyleDependent.current));
         //style.addProperty("background", "#654");
+        addStyle(style);
+
+    }
+
+    private void initPropertyTableStyles() {
+        String prefix = PropertyMapViewImpl.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Body));
+        style.addProperty("table-layout", "fixed");
+        style.addProperty("border-spacing", "0px !important");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Numerator));
+        style.addProperty("font-size", "30px");
+        style.addProperty("color", "#7B8388");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Header));
+        style.addProperty("font-size", "15px");
+        style.addProperty("color", "#7B8388");
+        style.addProperty("text-align", "left");
+        style.addProperty("height", "30px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Cell));
+        style.addProperty("border-color", "#999999");
+        style.addProperty("border-top-style", "dotted");
+        style.addProperty("border-top-width", "1px");
+        style.addProperty("vertical-align", "top");
+        style.addProperty("padding-top", "10px");
+        style.addProperty("padding-bottom", "10px");
         addStyle(style);
 
     }
