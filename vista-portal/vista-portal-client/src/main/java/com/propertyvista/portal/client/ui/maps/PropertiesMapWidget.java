@@ -77,6 +77,7 @@ public class PropertiesMapWidget extends SimplePanel {
 
         map = new MapWidget(pos, 10);
         map.setSize("100%", "500px");
+        map.setScrollWheelZoomEnabled(true);
         //TODO
         //map.setStyleName();
 
