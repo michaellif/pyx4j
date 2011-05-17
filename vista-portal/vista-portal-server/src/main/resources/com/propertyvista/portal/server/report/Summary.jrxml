@@ -13,13 +13,13 @@
 	<parameter name="DIGITAL_SIG" class="java.lang.String"/>
 	<field name="selectedUnit/floorplan/name" class="java.lang.String"/>
 	<field name="selectedUnit/unitType" class="java.lang.String"/>
-	<field name="selectedUnit/requiredDeposit/amount" class="java.lang.Double"/>
+	<field name="selectedUnit/unitRent" class="java.lang.Double"/>
+	<field name="selectedUnit/requiredDeposit" class="java.lang.Double"/>
 	<field name="selectedUnit/bedrooms" class="java.lang.Double"/>
 	<field name="selectedUnit/bathrooms" class="java.lang.Double"/>
 	<field name="selectedUnit/area" class="java.lang.Integer"/>
 	<field name="selectedUnit/avalableForRent" class="java.util.Date"/>
 	<field name="unitSelection/selectedLeaseTerm" class="java.lang.Integer"/>
-	<field name="selectedRent/amount" class="java.lang.Double"/>
 	<field name="tenantList/tenants" class="com.pyx4j.entity.shared.IList"/>
 	<field name="tenantFinancials" class="com.pyx4j.entity.shared.IList"/>
 	<field name="pets/pets" class="com.pyx4j.entity.shared.IList"/>
@@ -105,7 +105,7 @@
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="153" y="39" width="77" height="19"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{selectedUnit/requiredDeposit/amount}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{selectedUnit/requiredDeposit}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.0" isBlankWhenNull="true">
 				<reportElement x="230" y="39" width="77" height="19"/>
@@ -148,7 +148,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["$ "+$F{selectedRent/amount}+" / month"]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["$ "+$F{selectedUnit/unitRent}+" / month"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="88" width="100" height="20"/>
