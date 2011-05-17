@@ -15,7 +15,6 @@ package com.propertyvista.portal.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.essentials.client.SessionInactiveDialog;
@@ -44,9 +43,7 @@ public class PortalSite extends VistaSite {
         AppPlace defaultplace = new PortalSiteMap.FindApartment();
         getHistoryHandler().register(getPlaceController(), getEventBus(), defaultplace);
 
-        RootPanel.get().add(RootLayoutPanel.get());
-
-        RootLayoutPanel.get().add(ginjector.getSiteView());
+        RootPanel.get().add(ginjector.getSiteView());
 
         hideLoadingIndicator();
 
