@@ -112,15 +112,14 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
 
-// TODO there is no apparent start rent date!? should be calculated somehow...         
-//        if (!selectionCriteria.availableFrom().isNull()) {
-//            criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.GREATER_THAN_OR_EQUAL, selectionCriteria
-//                    .availableFrom().getValue()));
-//        }
-//        if (!selectionCriteria.availableTo().isNull()) {
-//            criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.LESS_THAN_OR_EQUAL, selectionCriteria
-//                    .availableTo().getValue()));
-//        }
+        if (!selectionCriteria.availableFrom().isNull()) {
+            criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.GREATER_THAN_OR_EQUAL, selectionCriteria
+                    .availableFrom().getValue()));
+        }
+        if (!selectionCriteria.availableTo().isNull()) {
+            criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.LESS_THAN_OR_EQUAL, selectionCriteria
+                    .availableTo().getValue()));
+        }
         return criteria;
     }
 

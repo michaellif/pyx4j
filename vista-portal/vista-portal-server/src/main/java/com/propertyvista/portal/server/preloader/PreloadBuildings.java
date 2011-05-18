@@ -14,6 +14,9 @@ package com.propertyvista.portal.server.preloader;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +31,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.common.domain.DemoData;
@@ -331,6 +335,15 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         if (RandomUtil.randomBoolean()) {
             unit.addOns().add(createAddOn("Dishwasher", 30));
         }
+
+        Calendar avalable = new GregorianCalendar();
+        // TODO Dima, We need to Use fixed date for values used in tests, and current time for Ctrl+Q user :)
+        avalable.setTime(new Date());
+        avalable.add(Calendar.DATE, 5 + RandomUtil.randomInt(30));
+        DateUtils.dayStart(avalable);
+
+        //TODO populate currentOccupancies and then set avalableForRent using some ServerSideDomainUtils
+        unit.avalableForRent().setValue(new java.sql.Date(avalable.getTime().getTime()));
 
         unit.floorplan().set(floorplan);
 

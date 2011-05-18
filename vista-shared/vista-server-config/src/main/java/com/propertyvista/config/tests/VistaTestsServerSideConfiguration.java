@@ -21,9 +21,14 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.essentials.server.ReCaptchaAntiBot;
+import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.security.shared.AclCreator;
 
 public class VistaTestsServerSideConfiguration extends EssentialsServerSideConfiguration {
+
+    static {
+        LoggerConfig.setContextName("tests");
+    }
 
     private final static Logger log = LoggerFactory.getLogger(VistaTestsServerSideConfiguration.class);
 

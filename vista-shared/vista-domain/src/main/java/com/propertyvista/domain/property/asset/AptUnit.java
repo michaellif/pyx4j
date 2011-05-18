@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -108,18 +109,21 @@ public interface AptUnit extends IEntity {
 
     /**
      * Keeps current and future occupancy data
-     * Used for DB Denormalization
      */
     IList<AptUnitOccupancy> currentOccupancies();
 
     @Transient
     IPrimitive<Double> numberOfOccupants();
 
-//  TODO should be calculated somehow!?
-//    @Transient
-//    @Format("MM/dd/yyyy")
-//    @Caption(name = "Available")
-//    IPrimitive<Date> avalableForRent();
+    @Format("MM/dd/yyyy")
+    @Caption(name = "Available")
+    @Indexed
+    /**
+     * Denormalizied field used for search, derived from @see AptUnitOccupancy
+     * TODO should be calculated during Entity save 
+     * @deprecated remove deprecated once it is calulated and filled properly.
+     */
+    IPrimitive<java.sql.Date> avalableForRent();
 
     // ------------------ Financials ------------------------------------------------------------------
     @Format("#0.00")
