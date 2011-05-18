@@ -23,6 +23,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -51,6 +52,10 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
 
     public UnitEditorForm() {
         super(AptUnit.class, new CrmEditorsComponentFactory());
+    }
+
+    public UnitEditorForm(IEditableComponentFactory factory) {
+        super(AptUnit.class, factory);
     }
 
     @Override

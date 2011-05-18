@@ -15,6 +15,9 @@ package com.propertyvista.crm.client.ui;
 
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
+
+import com.pyx4j.widgets.client.style.Theme;
+
 import com.propertyvista.crm.client.themes.GainsboroTheme;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
@@ -40,8 +43,10 @@ import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
 import com.propertyvista.crm.client.ui.login.RetrievePasswordViewImpl;
 import com.propertyvista.crm.client.ui.report.ReportView;
 import com.propertyvista.crm.client.ui.report.ReportViewImpl;
-
-import com.pyx4j.widgets.client.style.Theme;
+import com.propertyvista.crm.client.ui.vewers.BuildingViewerView;
+import com.propertyvista.crm.client.ui.vewers.BuildingViewerViewImpl;
+import com.propertyvista.crm.client.ui.vewers.UnitViewerView;
+import com.propertyvista.crm.client.ui.vewers.UnitViewerViewImpl;
 
 public class ViewModule extends AbstractGinModule {
 
@@ -62,6 +67,9 @@ public class ViewModule extends AbstractGinModule {
         bind(BuildingListerView.class).to(BuildingListerViewImpl.class).in(Singleton.class);
         bind(UnitListerView.class).to(UnitListerViewImpl.class).in(Singleton.class);
         bind(ArrearsListerView.class).to(ArrearsListerViewImpl.class).in(Singleton.class);
+// Viewers:      
+        bind(BuildingViewerView.class).to(BuildingViewerViewImpl.class).in(Singleton.class);
+        bind(UnitViewerView.class).to(UnitViewerViewImpl.class).in(Singleton.class);
 // Editors:      
         bind(BuildingEditorView.class).to(BuildingEditorViewImpl.class).in(Singleton.class);
         bind(UnitEditorView.class).to(UnitEditorViewImpl.class).in(Singleton.class);

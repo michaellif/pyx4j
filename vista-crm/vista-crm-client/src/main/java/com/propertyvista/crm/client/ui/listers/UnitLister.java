@@ -41,7 +41,8 @@ public class UnitLister extends ListerBase<AptUnit> {
         getListPanel().getDataTable().addDoubleClickHandler(new DoubleClickHandler() {
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
-                AppPlace link = new CrmSiteMap.Editors.Unit();
+//                AppPlace link = new CrmSiteMap.Editors.Unit();
+                AppPlace link = new CrmSiteMap.Viewers.Unit();
                 // put selected item ID in link arguments:
                 HashMap<String, String> args = new HashMap<String, String>();
                 int selectedRow = getListPanel().getDataTable().getSelectedRow();

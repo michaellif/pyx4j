@@ -21,16 +21,8 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.common.client.ui.AddressUtils;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
-import com.propertyvista.domain.Address;
-import com.propertyvista.domain.Phone;
-import com.propertyvista.domain.property.asset.Building;
 
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
@@ -45,12 +37,26 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
+import com.propertyvista.common.client.ui.AddressUtils;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.domain.Address;
+import com.propertyvista.domain.Phone;
+import com.propertyvista.domain.property.asset.Building;
+
 public class BuildingEditorForm extends CEntityForm<Building> {
 
     private static I18n i18n = I18nFactory.getI18n(BuildingEditorForm.class);
 
     public BuildingEditorForm() {
         super(Building.class, new CrmEditorsComponentFactory());
+    }
+
+    public BuildingEditorForm(IEditableComponentFactory factory) {
+        super(Building.class, factory);
     }
 
     @Override

@@ -42,6 +42,7 @@ public class BuildingLister extends ListerBase<Building> {
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
                 AppPlace link = new CrmSiteMap.Editors.Building();
+//                AppPlace link = new CrmSiteMap.Viewers.Building();
                 // put selected item ID in link arguments:
                 HashMap<String, String> args = new HashMap<String, String>();
                 int selectedRow = getListPanel().getDataTable().getSelectedRow();

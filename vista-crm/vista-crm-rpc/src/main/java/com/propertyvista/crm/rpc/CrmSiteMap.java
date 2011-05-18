@@ -80,6 +80,18 @@ public class CrmSiteMap implements SiteMap {
         }
     }
 
+    public static class Viewers extends AppPlace {
+        @PlaceProperties(caption = "Building")
+        @NavigationItem(navigLabel = "Building")
+        public static class Building extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Unit")
+        @NavigationItem(navigLabel = "Unit")
+        public static class Unit extends AppPlace {
+        }
+    }
+
     public static class Editors extends AppPlace {
         @PlaceProperties(caption = "Building")
         @NavigationItem(navigLabel = "Building")
