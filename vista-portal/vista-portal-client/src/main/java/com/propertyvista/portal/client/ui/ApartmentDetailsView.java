@@ -15,6 +15,18 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
+import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
+
 public interface ApartmentDetailsView extends IsWidget {
 
+    void setPresenter(Presenter presenter);
+
+    void populate(PropertyDetailsDTO property);
+
+    interface Presenter {
+
+        public void goToUnitDetails(AptUnitDTO unit);
+
+    }
 }

@@ -99,6 +99,7 @@ public class PropertiesMapWidget extends SimplePanel {
 
     public void populate(List<PropertyDTO> properties) {
         this.properties = properties;
+
         if (mapLoadComplete) {
             for (Marker marker : markers.values()) {
                 map.removeOverlay(marker);
@@ -111,6 +112,9 @@ public class PropertiesMapWidget extends SimplePanel {
                     markers.put(property, marker);
                 }
             }
+            //TODO calc base on  markers
+            map.setCenter(LatLng.newInstance(43.7571145, -79.5082499));
+            map.setZoomLevel(10);
         }
     }
 

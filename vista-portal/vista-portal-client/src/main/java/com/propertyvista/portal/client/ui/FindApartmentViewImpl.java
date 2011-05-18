@@ -20,6 +20,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.propertyvista.common.domain.ref.City;
+
 public class FindApartmentViewImpl extends SimplePanel implements FindApartmentView {
     private Presenter presenter;
 
@@ -37,7 +39,7 @@ public class FindApartmentViewImpl extends SimplePanel implements FindApartmentV
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.gotoCityMap();
+                presenter.goToCityMap(null);
             }
 
         });
@@ -48,7 +50,7 @@ public class FindApartmentViewImpl extends SimplePanel implements FindApartmentV
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.gotoPropertyMap();
+                presenter.goToPropertyMap((City) null);
             }
 
         });

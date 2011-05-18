@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2011
- * @author Dad
+ * Created on May 18, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.client.activity;
@@ -21,19 +21,21 @@ import com.google.inject.Inject;
 
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.common.domain.ref.City;
-import com.propertyvista.portal.client.ui.CityMapView;
+import com.propertyvista.portal.client.ui.ApartmentDetailsView;
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class CityMapActivity extends AbstractActivity implements CityMapView.Presenter {
-    CityMapView view;
+public class ApartmentDetailsActivity extends AbstractActivity implements ApartmentDetailsView.Presenter {
+
+    private final ApartmentDetailsView view;
 
     @Inject
-    public CityMapActivity(CityMapView view) {
+    public ApartmentDetailsActivity(ApartmentDetailsView view) {
         this.view = view;
+        this.view.setPresenter(this);
     }
 
-    public CityMapActivity withPlace(Place place) {
+    public ApartmentDetailsActivity withPlace(Place place) {
         return this;
     }
 
@@ -43,8 +45,8 @@ public class CityMapActivity extends AbstractActivity implements CityMapView.Pre
     }
 
     @Override
-    public void goToPropertyMap(City city) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.PropertyMap());
+    public void goToUnitDetails(AptUnitDTO unit) {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.UnitDetails());
     }
 
 }

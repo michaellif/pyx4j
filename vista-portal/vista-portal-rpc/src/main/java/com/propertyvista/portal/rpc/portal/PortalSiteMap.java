@@ -34,6 +34,13 @@ public class PortalSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "propertyMap")
         public static class PropertyMap extends AppPlace {
         }
+
+        public static class AppartmentDetails extends AppPlace {
+        }
+
+        public static class UnitDetails extends AppPlace {
+        }
+
     }
 
     @PlaceProperties(caption = "Residents")

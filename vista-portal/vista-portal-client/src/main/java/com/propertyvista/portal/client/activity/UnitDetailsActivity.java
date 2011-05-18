@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2011
- * @author Dad
+ * Created on May 18, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.client.activity;
@@ -19,21 +19,19 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.pyx4j.site.client.AppSite;
+import com.propertyvista.portal.client.ui.UnitDetailsView;
 
-import com.propertyvista.common.domain.ref.City;
-import com.propertyvista.portal.client.ui.CityMapView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+public class UnitDetailsActivity extends AbstractActivity implements UnitDetailsView.Presenter {
 
-public class CityMapActivity extends AbstractActivity implements CityMapView.Presenter {
-    CityMapView view;
+    private final UnitDetailsView view;
 
     @Inject
-    public CityMapActivity(CityMapView view) {
+    public UnitDetailsActivity(UnitDetailsView view) {
         this.view = view;
+        this.view.setPresenter(this);
     }
 
-    public CityMapActivity withPlace(Place place) {
+    public UnitDetailsActivity withPlace(Place place) {
         return this;
     }
 
@@ -43,8 +41,15 @@ public class CityMapActivity extends AbstractActivity implements CityMapView.Pre
     }
 
     @Override
-    public void goToPropertyMap(City city) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.PropertyMap());
+    public void apply() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void inquiry() {
+        // TODO Auto-generated method stub
+
     }
 
 }

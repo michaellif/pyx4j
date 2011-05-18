@@ -13,8 +13,22 @@
  */
 package com.propertyvista.portal.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+
 public interface PropertyMapView extends IsWidget {
+
+    public void setPresenter(Presenter presenter);
+
+    public void populate(List<PropertyDTO> properties);
+
+    public interface Presenter {
+
+        public void goToAppartmentDetails(PropertyDTO property);
+
+    }
 
 }

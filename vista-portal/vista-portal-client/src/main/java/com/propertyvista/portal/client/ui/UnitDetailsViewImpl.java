@@ -7,25 +7,36 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2011
+ * Created on May 14, 2011
  * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui;
 
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
 
-public class CityMapViewImpl extends SimplePanel implements CityMapView {
+public class UnitDetailsViewImpl extends SimplePanel implements UnitDetailsView {
 
-    public CityMapViewImpl() {
-        setWidget(new PropertiesMapWidget());
+    private Presenter presenter;
+
+    private final HTML label;
+
+    public UnitDetailsViewImpl() {
+        label = new HTML("Unit Details");
+        setWidget(label);
+
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
-        // TODO Auto-generated method stub
+        this.presenter = presenter;
+    }
 
+    @Override
+    public void populate(AptUnitDTO unit) {
+        label.setText(unit.getStringView());
     }
 }

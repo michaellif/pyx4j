@@ -16,11 +16,27 @@ package com.propertyvista.portal.client.ui;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
+
 public class ApartmentDetailsViewImpl extends SimplePanel implements ApartmentDetailsView {
 
+    private Presenter presenter;
+
+    private final HTML label;
+
     public ApartmentDetailsViewImpl() {
-        HTML label = new HTML("Apartment view");
+        label = new HTML("Apartment Details");
         setWidget(label);
 
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void populate(PropertyDetailsDTO property) {
+        label.setText(property.getStringView());
     }
 }

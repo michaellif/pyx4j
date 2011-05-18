@@ -18,10 +18,14 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+
+import com.pyx4j.entity.rpc.GeoCriteria;
+import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.common.domain.ref.City;
+import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.client.ui.FindApartmentView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-
-import com.pyx4j.site.client.AppSite;
 
 public class FindApartmentActivity extends AbstractActivity implements FindApartmentView.Presenter {
 
@@ -44,14 +48,18 @@ public class FindApartmentActivity extends AbstractActivity implements FindApart
     }
 
     @Override
-    public void gotoCityMap() {
+    public void goToCityMap(Province province) {
         AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.CityMap());
 
     }
 
     @Override
-    public void gotoPropertyMap() {
+    public void goToPropertyMap(City city) {
         AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.PropertyMap());
+    }
 
+    @Override
+    public void goToPropertyMap(GeoCriteria geoCriteria) {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.PropertyMap());
     }
 }

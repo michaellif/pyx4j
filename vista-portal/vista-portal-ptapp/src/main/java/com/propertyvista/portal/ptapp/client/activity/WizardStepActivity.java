@@ -21,16 +21,16 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.rpc.AppPlace;
+
 import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
 import com.propertyvista.portal.ptapp.client.PtAppWizardManager;
 import com.propertyvista.portal.ptapp.client.ui.WizardStepPresenter;
 import com.propertyvista.portal.ptapp.client.ui.WizardStepView;
 import com.propertyvista.portal.rpc.ptapp.services.AbstractWizardService;
-
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.rpc.AppPlace;
 
 public class WizardStepActivity<E extends IEntity & IBoundToApplication, T extends WizardStepPresenter<E>> extends AbstractActivity implements
         WizardStepPresenter<E> {

@@ -15,6 +15,15 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.common.domain.ref.City;
+
 public interface CityMapView extends IsWidget {
 
+    public void setPresenter(Presenter presenter);
+
+    public interface Presenter {
+
+        public void goToPropertyMap(City city);
+
+    }
 }

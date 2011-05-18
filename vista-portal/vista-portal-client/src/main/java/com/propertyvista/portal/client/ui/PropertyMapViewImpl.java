@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -29,7 +28,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
@@ -42,6 +40,10 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
 
     private final PropertiesMapWidget map;
 
+    private final BuildingList buildingList;
+
+    private Presenter presenter;
+
     public static enum StyleSuffix implements IStyleSuffix {
         Header, Footer, Body, Row, Numerator, Cell, CellSize, CellDetails, MapButton, DetailsButton
     }
@@ -52,30 +54,12 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
         FlowPanel container = new FlowPanel();
         container.setWidth("100%");
         container.setHeight("100%");
-        BuildingList buildingList = new BuildingList();
+
         map = new PropertiesMapWidget();
-
-        List<PropertyDTO> properties = new ArrayList<PropertyDTO>();
-        {
-            PropertyDTO property = EntityFactory.create(PropertyDTO.class);
-            property.address().setValue("<div>320 Avenue Road</div><div>Toronto</div><div>ON M4V 2H3</div>");
-            property.location().setValue(new GeoPoint(43.697665, -79.402313));
-            properties.add(property);
-            buildingList.addProperty(property);
-
-            property = EntityFactory.create(PropertyDTO.class);
-            property.address().setValue("<div>1000 Yonge Street</div><div>Toronto</div><div>ON M4W</div>");
-            property.location().setValue(new GeoPoint(43.675599, -79.389042));
-
-            properties.add(property);
-            buildingList.addProperty(property);
-
-        }
-
-        map.populate(properties);
         map.setDistanceOverlay(new GeoPoint(43.697665, -79.402313), 5);
-
         container.add(map);
+
+        buildingList = new BuildingList();
         container.add(buildingList);
 
         setWidget(container);
@@ -95,6 +79,13 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
             setText(0, 5, i18n.tr("Availability"));
             setText(0, 6, i18n.tr("Price"));
             getRowFormatter().addStyleName(0, DEFAULT_STYLE_PREFIX + StyleSuffix.Header.name());
+        }
+
+        void populate(List<PropertyDTO> properties) {
+            removeAllRows();
+            for (PropertyDTO property : properties) {
+                addProperty(property);
+            }
         }
 
         void addProperty(PropertyDTO property) {
@@ -122,7 +113,7 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
             setText(idx, 5, "?");
             getCellFormatter().addStyleName(idx, 5, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
 
-            setWidget(idx, 6, formatPriceCell(null));
+            setWidget(idx, 6, formatPriceCell(property, null));
             getCellFormatter().addStyleName(idx, 6, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
 
             getRowFormatter().addStyleName(idx, DEFAULT_STYLE_PREFIX + StyleSuffix.Row.name());
@@ -160,13 +151,21 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
 
         }
 
-        private Widget formatPriceCell(String price) {
+        private Widget formatPriceCell(final PropertyDTO property, String price) {
             FlowPanel cell = new FlowPanel();
 
             HTML p = null;
             if (price != null)
                 p = new HTML(price);
             Button dbtn = new Button(i18n.tr("Details"));
+            dbtn.addClickHandler(new ClickHandler() {
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    presenter.goToAppartmentDetails(property);
+
+                }
+            });
             dbtn.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.DetailsButton.name());
             if (p != null)
                 cell.add(p);
@@ -174,6 +173,17 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
             return cell;
 
         }
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void populate(List<PropertyDTO> properties) {
+        map.populate(properties);
+        buildingList.populate(properties);
     }
 
 }
