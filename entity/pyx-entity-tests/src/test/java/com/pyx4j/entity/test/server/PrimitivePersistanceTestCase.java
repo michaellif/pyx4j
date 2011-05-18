@@ -224,6 +224,11 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         for (int i = 0; i < value.length; i++) {
             assertEquals("Value " + i, value[i], emp2.image().getValue()[i]);
         }
+
+        emp.image().setValue(null);
+        srv.persist(emp);
+        emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        assertNull("Erase Blob value Value", emp2.image().getValue());
     }
 
     public void testGeoPoint() {

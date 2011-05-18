@@ -36,7 +36,7 @@ class ValueAdapterByteArray extends ValueAdapterPrimitive {
 
     @Override
     public int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        Object value = member.getMemberValue(entity);
+        byte[] value = (byte[]) member.getMemberValue(entity);
         if (value == null) {
             stmt.setNull(parameterIndex, sqlType);
         } else {
@@ -48,19 +48,15 @@ class ValueAdapterByteArray extends ValueAdapterPrimitive {
                             + " is greater than max allowed " + maxLength);
                 }
             }
-            stmt.setObject(parameterIndex, value, sqlType);
+            stmt.setBytes(parameterIndex, value);
         }
         return 1;
     }
 
     @Override
     public void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        Object value = rs.getObject(member.sqlName());
-        if (value == null) {
-            member.setMemberValue(entity, null);
-        } else {
-            member.setMemberValue(entity, value);
-        }
+        byte[] value = rs.getBytes(member.sqlName());
+        member.setMemberValue(entity, value);
     }
 
 }
