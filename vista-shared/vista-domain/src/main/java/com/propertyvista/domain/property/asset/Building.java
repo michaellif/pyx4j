@@ -230,11 +230,13 @@ public interface Building extends IEntity {
 
     IList<Boiler> boilers();
 
-    Roof roofData();
+    Roof roof();
 
     IList<Parking> parkings();
 
     IList<Locker> lockers();
+
+    // -------------------------------------------------------------------------------------------------------
 
     IList<BuildingAmenity> amenities();
 

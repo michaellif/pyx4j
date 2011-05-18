@@ -77,7 +77,7 @@ public class BuildingEditorForm extends CEntityForm<Building> {
         main.add(new CrmHeaderDecorator(i18n.tr("Building Details")));
         //main.add(new VistaWidgetDecorator(inject(proto().elevators()), decorData));
         //main.add(new VistaWidgetDecorator(inject(proto().boilers()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().roofData()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().roof()), decorData));
         //main.add(new VistaWidgetDecorator(inject(proto().parkings()), decorData));
         //main.add(new VistaWidgetDecorator(inject(proto().lockers()), decorData));
         //main.add(new VistaWidgetDecorator(inject(proto().amenities()), decorData));

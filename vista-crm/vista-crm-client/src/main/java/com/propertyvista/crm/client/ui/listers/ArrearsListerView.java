@@ -14,6 +14,6 @@
 package com.propertyvista.crm.client.ui.listers;
 
 
-public interface ArrearsListerView extends ListerView {
+public interface ArrearsListerView extends IListerView {
 
 }

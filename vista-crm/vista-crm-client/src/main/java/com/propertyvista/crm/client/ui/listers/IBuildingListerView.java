@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.listers;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.domain.property.asset.Building;
 
-public interface ListerView extends IsWidget {
+public interface IBuildingListerView extends IListerView<Building> {
 
 }

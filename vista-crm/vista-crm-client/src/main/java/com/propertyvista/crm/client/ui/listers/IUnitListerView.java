@@ -7,12 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-03
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.listers;
 
-public interface BuildingListerView extends ListerView {
+import com.propertyvista.domain.property.asset.AptUnit;
+
+public interface IUnitListerView extends IListerView<AptUnit> {
 
 }

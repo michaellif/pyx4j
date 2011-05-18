@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.listers;
 
+import java.util.List;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
@@ -32,5 +34,23 @@ public class ArrearsListerViewImpl extends SimplePanel implements ArrearsListerV
 
         main.setSize("100%", "100%");
         setWidget(main);
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getPageSize() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void populateData(List entityes, int pageNumber, boolean hasMoreData) {
+        // TODO Auto-generated method stub
+
     }
 }

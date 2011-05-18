@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.listers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.xnap.commons.i18n.I18n;
@@ -25,6 +26,8 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -47,16 +50,21 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 
-public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
+public abstract class ListerBase<E extends IEntity> extends VerticalPanel implements IListerView<E> {
 
     private static I18n i18n = I18nFactory.getI18n(ListerBase.class);
 
     protected final Filters filters;
 
     protected final EntityListPanel<E> listPanel;
+
+    protected Presenter presenter;
 
     public ListerBase(Class<E> clazz) {
 
@@ -121,6 +129,25 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
         setWidth("100%");
     }
 
+    public ListerBase(Class<E> clazz, final AppPlace link) {
+        this(clazz);
+
+        // add editing on double-click: 
+        getListPanel().getDataTable().addDoubleClickHandler(new DoubleClickHandler() {
+            @Override
+            public void onDoubleClick(DoubleClickEvent event) {
+                // put selected item ID in link arguments:
+                HashMap<String, String> args = new HashMap<String, String>();
+                int selectedRow = getListPanel().getDataTable().getSelectedRow();
+                E item = getListPanel().getDataTable().getDataTableModel().getData().get(selectedRow).getEntity();
+                args.put(CrmSiteMap.ARG_NAME_ITEM_ID, item.getPrimaryKey().toString());
+                link.setArgs(args);
+
+                AppSite.getPlaceController().goTo(link);
+            }
+        });
+    }
+
     // EntityListPanel access:
     protected EntityListPanel<E> getListPanel() {
         return listPanel;
@@ -132,10 +159,28 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel {
      */
     protected abstract void fillDefaultColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
 
-    /*
-     * Implement in derived class to fill table with data.
-     */
-    public abstract void populateData(int pageNumber);
+    // IListerView implementation:
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public int getPageSize() {
+        return getListPanel().getPageSize();
+    }
+
+    @Override
+    public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData) {
+        getListPanel().populateData(entityes, pageNumber, hasMoreData);
+    }
+
+    protected void populateData(int pageNumber) {
+        if (presenter != null) {
+            presenter.populateData(pageNumber);
+        }
+    }
 
     /*
      * Override in derived class to fill pages with data.

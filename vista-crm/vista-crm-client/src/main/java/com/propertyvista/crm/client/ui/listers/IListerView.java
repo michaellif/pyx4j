@@ -7,12 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-03
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.listers;
 
-public interface UnitListerView extends ListerView {
+import java.util.List;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.entity.shared.IEntity;
+
+public interface IListerView<E extends IEntity> extends IsWidget {
+
+    public interface Presenter {
+        public void populateData(final int pageNumber);
+    }
+
+    void setPresenter(Presenter presenter);
+
+    int getPageSize();
+
+    public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData);
 }

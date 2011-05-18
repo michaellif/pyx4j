@@ -13,46 +13,19 @@
  */
 package com.propertyvista.crm.client.ui.listers;
 
-import java.util.HashMap;
 import java.util.List;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.domain.property.asset.AptUnit;
 
 public class UnitLister extends ListerBase<AptUnit> {
 
     public UnitLister() {
-        super(AptUnit.class);
-
-        // add editing on double-click: 
-        getListPanel().getDataTable().addDoubleClickHandler(new DoubleClickHandler() {
-            @Override
-            public void onDoubleClick(DoubleClickEvent event) {
-//                AppPlace link = new CrmSiteMap.Editors.Unit();
-                AppPlace link = new CrmSiteMap.Viewers.Unit();
-                // put selected item ID in link arguments:
-                HashMap<String, String> args = new HashMap<String, String>();
-                int selectedRow = getListPanel().getDataTable().getSelectedRow();
-                AptUnit item = getListPanel().getDataTable().getDataTableModel().getData().get(selectedRow).getEntity();
-                args.put(CrmSiteMap.ARG_NAME_ITEM_ID, item.getPrimaryKey().toString());
-                link.setArgs(args);
-
-                AppSite.getPlaceController().goTo(link);
-            }
-        });
+        super(AptUnit.class, new CrmSiteMap.Viewers.Unit());
+//        super(AptUnit.class, new CrmSiteMap.Editors.Unit());
     }
 
     @Override
@@ -69,26 +42,5 @@ public class UnitLister extends ListerBase<AptUnit> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bedrooms()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bathrooms()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.currentOccupancies()));
-    }
-
-    @Override
-    public void populateData(final int pageNumber) {
-        UnitCrudService service = GWT.create(UnitCrudService.class);
-        if (service != null) {
-            EntitySearchCriteria<AptUnit> criteria = new EntitySearchCriteria<AptUnit>(AptUnit.class);
-            criteria.setPageSize(getListPanel().getPageSize());
-            criteria.setPageNumber(pageNumber);
-
-            service.search(new AsyncCallback<EntitySearchResult<AptUnit>>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-
-                @Override
-                public void onSuccess(EntitySearchResult<AptUnit> result) {
-                    UnitLister.this.getListPanel().populateData(result.getData(), pageNumber, result.hasMoreData());
-                }
-            }, criteria);
-        }
     }
 }

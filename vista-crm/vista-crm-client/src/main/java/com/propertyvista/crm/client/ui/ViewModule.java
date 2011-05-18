@@ -31,9 +31,9 @@ import com.propertyvista.crm.client.ui.editors.UnitEditorView;
 import com.propertyvista.crm.client.ui.editors.UnitEditorViewImpl;
 import com.propertyvista.crm.client.ui.listers.ArrearsListerView;
 import com.propertyvista.crm.client.ui.listers.ArrearsListerViewImpl;
-import com.propertyvista.crm.client.ui.listers.BuildingListerView;
+import com.propertyvista.crm.client.ui.listers.IBuildingListerView;
 import com.propertyvista.crm.client.ui.listers.BuildingListerViewImpl;
-import com.propertyvista.crm.client.ui.listers.UnitListerView;
+import com.propertyvista.crm.client.ui.listers.IUnitListerView;
 import com.propertyvista.crm.client.ui.listers.UnitListerViewImpl;
 import com.propertyvista.crm.client.ui.login.LoginView;
 import com.propertyvista.crm.client.ui.login.LoginViewImpl;
@@ -64,8 +64,8 @@ public class ViewModule extends AbstractGinModule {
         bind(RetrievePasswordView.class).to(RetrievePasswordViewImpl.class).in(Singleton.class);
         bind(NewPasswordView.class).to(NewPasswordViewImpl.class).in(Singleton.class);
 // Listers:      
-        bind(BuildingListerView.class).to(BuildingListerViewImpl.class).in(Singleton.class);
-        bind(UnitListerView.class).to(UnitListerViewImpl.class).in(Singleton.class);
+        bind(IBuildingListerView.class).to(BuildingListerViewImpl.class).in(Singleton.class);
+        bind(IUnitListerView.class).to(UnitListerViewImpl.class).in(Singleton.class);
         bind(ArrearsListerView.class).to(ArrearsListerViewImpl.class).in(Singleton.class);
 // Viewers:      
         bind(BuildingViewerView.class).to(BuildingViewerViewImpl.class).in(Singleton.class);

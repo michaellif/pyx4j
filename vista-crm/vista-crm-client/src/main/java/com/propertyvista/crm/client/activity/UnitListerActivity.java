@@ -14,20 +14,30 @@
 package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.propertyvista.crm.client.ui.listers.UnitListerView;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
-public class UnitListerActivity extends AbstractActivity {
+import com.propertyvista.crm.client.ui.listers.IListerView;
+import com.propertyvista.crm.client.ui.listers.IUnitListerView;
+import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.domain.property.asset.AptUnit;
 
-    private final UnitListerView view;
+public class UnitListerActivity extends AbstractActivity implements IListerView.Presenter {
+
+    private final IUnitListerView view;
 
     @Inject
-    public UnitListerActivity(UnitListerView view) {
+    public UnitListerActivity(IUnitListerView view) {
         this.view = view;
+        view.setPresenter(this);
+        populateData(0);
     }
 
     public UnitListerActivity withPlace(Place place) {
@@ -37,5 +47,26 @@ public class UnitListerActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
+    }
+
+    @Override
+    public void populateData(final int pageNumber) {
+        UnitCrudService service = GWT.create(UnitCrudService.class);
+        if (service != null) {
+            EntitySearchCriteria<AptUnit> criteria = new EntitySearchCriteria<AptUnit>(AptUnit.class);
+            criteria.setPageSize(view.getPageSize());
+            criteria.setPageNumber(pageNumber);
+
+            service.search(new AsyncCallback<EntitySearchResult<AptUnit>>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                }
+
+                @Override
+                public void onSuccess(EntitySearchResult<AptUnit> result) {
+                    view.populateData(result.getData(), pageNumber, result.hasMoreData());
+                }
+            }, criteria);
+        }
     }
 }
