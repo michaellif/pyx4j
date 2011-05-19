@@ -55,7 +55,7 @@ public class PropertyCriterion implements Criterion {
     }
 
     public static PropertyCriterion eq(IObject<?> member, Serializable value) {
-        return new PropertyCriterion(member.getFieldName(), Restriction.EQUAL, value);
+        return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
     }
 
     public static PropertyCriterion eq(String propertyName, Serializable value) {

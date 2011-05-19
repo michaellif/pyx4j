@@ -20,10 +20,13 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -35,6 +38,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.geo.GeoPoint;
@@ -48,6 +52,8 @@ public class EntityOperationsMeta {
 
     private final List<MemberOperationsMeta> columnMembers = new Vector<MemberOperationsMeta>();
 
+    private final Map<String, MemberOperationsMeta> membersByPath = new HashMap<String, MemberOperationsMeta>();
+
     private final List<MemberOperationsMeta> cascadePersistMembers = new Vector<MemberOperationsMeta>();
 
     private final List<MemberOperationsMeta> cascadeDeleteMembers = new Vector<MemberOperationsMeta>();
@@ -59,10 +65,10 @@ public class EntityOperationsMeta {
     private final List<MemberOperationsMeta> indexMembers = new Vector<MemberOperationsMeta>();
 
     EntityOperationsMeta(Dialect dialect, EntityMeta entityMeta) {
-        build(dialect, dialect.getNamingConvention(), null, null, entityMeta);
+        build(dialect, dialect.getNamingConvention(), GWTJava5Helper.getSimpleName(entityMeta.getEntityClass()), null, null, entityMeta);
     }
 
-    private void build(Dialect dialect, NamingConvention namingConvention, List<String> accessPath, List<String> namesPath, EntityMeta entityMeta) {
+    private void build(Dialect dialect, NamingConvention namingConvention, String path, List<String> accessPath, List<String> namesPath, EntityMeta entityMeta) {
         for (String memberName : entityMeta.getMemberNames()) {
             MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
             if (memberMeta.isTransient()) {
@@ -90,7 +96,8 @@ public class EntityOperationsMeta {
                     }
                     namesPathChild.add(memberPersistenceName);
 
-                    build(dialect, namingConvention, accessPathChild, namesPathChild, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
+                    build(dialect, namingConvention, path + Path.PATH_SEPARATOR + memberName, accessPathChild, namesPathChild,
+                            EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
                 }
             } else {
                 EntityMemberAccess memberAccess;
@@ -99,7 +106,6 @@ public class EntityOperationsMeta {
                 } else {
                     memberAccess = new EntityMemberEmbeddedAccess(accessPath, memberName);
                 }
-
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     String sqlName;
                     if (namesPath != null) {
@@ -109,6 +115,7 @@ public class EntityOperationsMeta {
                     }
                     MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta);
                     collectionMembers.add(member);
+                    membersByPath.put(path + Path.PATH_SEPARATOR + memberName + Path.PATH_SEPARATOR, member);
                     allMembers.add(member);
                     if (!memberMeta.isDetached()) {
                         cascadeRetrieveMembers.add(member);
@@ -122,6 +129,7 @@ public class EntityOperationsMeta {
                     }
                     MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, new ValueAdapterEntity(dialect), sqlName, memberMeta);
                     columnMembers.add(member);
+                    membersByPath.put(path + Path.PATH_SEPARATOR + memberName + Path.PATH_SEPARATOR, member);
                     allMembers.add(member);
                     if (memberMeta.isOwnedRelationships()) {
                         cascadePersistMembers.add(member);
@@ -141,6 +149,7 @@ public class EntityOperationsMeta {
                     }
                     MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta);
                     collectionMembers.add(member);
+                    membersByPath.put(path + Path.PATH_SEPARATOR + memberName + Path.PATH_SEPARATOR, member);
                 } else {
                     String sqlName;
                     if (namesPath != null) {
@@ -155,6 +164,7 @@ public class EntityOperationsMeta {
                     }
                     MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta);
                     columnMembers.add(member);
+                    membersByPath.put(path + Path.PATH_SEPARATOR + memberName + Path.PATH_SEPARATOR, member);
                     allMembers.add(member);
                 }
 
@@ -211,6 +221,10 @@ public class EntityOperationsMeta {
 
     public List<MemberOperationsMeta> getColumnMembers() {
         return columnMembers;
+    }
+
+    public MemberOperationsMeta getMember(String path) {
+        return membersByPath.get(path);
     }
 
     public List<MemberOperationsMeta> getCascadePersistMembers() {

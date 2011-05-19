@@ -1242,11 +1242,20 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private Query.FilterOperator addFilter(Query query, EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
         String propertyName = propertyCriterion.getPropertyName();
-        Object value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
+        Object value;
         if (propertyName.equals(IEntity.PRIMARY_KEY)) {
+            value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
             propertyName = Entity.KEY_RESERVED_PROPERTY;
-        } else if ((!propertyName.endsWith(SECONDARY_PRROPERTY_SUFIX)) && !entityMeta.getMemberMeta(propertyName).isIndexed()) {
-            throw new Error("Query by Unindexed property " + propertyName + " of " + entityMeta.getCaption());
+        } else if (!propertyName.endsWith(SECONDARY_PRROPERTY_SUFIX)) {
+            MemberMeta mm = entityMeta.getMemberMeta(new Path(propertyName));
+            // TODO Query by embeded properies
+            propertyName = mm.getFieldName();
+            value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
+            if (!mm.isIndexed()) {
+                throw new Error("Query by Unindexed property " + propertyName + " of " + entityMeta.getCaption());
+            }
+        } else {
+            value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
         }
         Query.FilterOperator oprator = operator(propertyCriterion.getRestriction());
         query.addFilter(propertyName, oprator, value);
