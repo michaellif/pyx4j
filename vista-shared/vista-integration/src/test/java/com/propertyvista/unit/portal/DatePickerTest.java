@@ -13,6 +13,16 @@
  */
 package com.propertyvista.unit.portal;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.StringDebugId;
+import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.CCompDebugId;
+import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.selenium.D;
+import com.pyx4j.site.rpc.AppPlaceInfo;
+import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
+
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.ptapp.Application;
@@ -22,16 +32,6 @@ import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
-
-import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.commons.StringDebugId;
-import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.forms.client.ui.NativeTriggerComponent;
-import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.selenium.D;
-import com.pyx4j.site.rpc.AppPlaceInfo;
-import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 
 public class DatePickerTest extends WizardBaseSeleniumTestCase {
 
@@ -62,8 +62,7 @@ public class DatePickerTest extends WizardBaseSeleniumTestCase {
     }
 
     private void startRentDateTest() {
-        IDebugId from = new CompositeDebugId(D.id(proto(UnitSelection.class).selectionCriteria().availableFrom()),
-                NativeTriggerComponent.NativeTriggerId.trigger.name());
+        IDebugId image = D.id(D.id(proto(UnitSelection.class).selectionCriteria().availableFrom()), CCompDebugId.trigger);
         //selenium.click(from);
         //selenium.click(getCellDebugId(1, 1, gridId));
         //selenium.click(D.id(proto(UnitSelection.class).selectionCriteria().availableTo()));
