@@ -124,7 +124,11 @@ public class PathSearch extends Path implements Comparable<PathSearch> {
 
     @Override
     public String toString() {
-        return super.toString() + " (" + pathProperty + ")";
+        if (pathProperty == null) {
+            return super.toString();
+        } else {
+            return super.toString() + "&" + pathProperty;
+        }
     }
 
     @Override
