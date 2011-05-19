@@ -29,7 +29,15 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.StringDebugId;
+
 public class NativeTriggerButton extends FocusPanel {
+
+    public static enum NativeTriggerButtonID {
+        button
+    }
 
     private final Image gwtPushButton;
 
@@ -50,6 +58,15 @@ public class NativeTriggerButton extends FocusPanel {
             }
         });
 
+    }
+
+    @Override
+    protected void onEnsureDebugId(String baseID) {
+        IDebugId parent = new StringDebugId(baseID);
+        IDebugId child = new StringDebugId(NativeTriggerButtonID.button.name());
+
+        //triggerButton.ensureDebugId(baseID + "-trigger");
+        gwtPushButton.ensureDebugId(new CompositeDebugId(parent, child).debugId());
     }
 
     @Override
