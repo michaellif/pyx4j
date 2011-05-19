@@ -70,6 +70,11 @@ public abstract class DatePickerExtended extends DatePicker {
         calendarView.setPicker(this);
     }
 
+    @Override
+    protected void onEnsureDebugId(String id) {
+        getMyView().ensureDebugId(id);
+    }
+
     public void refreshComponents() {
         super.refreshAll();
     }
@@ -96,9 +101,5 @@ public abstract class DatePickerExtended extends DatePicker {
 
     public void setSelectedDate(Date selectedDate) {
         getMyView().setSelectedDate(selectedDate);
-    }
-
-    public void setDebugId(int index) {
-        this.getMyView().setDebugId(index);
     }
 }

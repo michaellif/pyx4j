@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.MonthSelector;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.widgets.client.style.Selector;
 
 public class DatePickerComposite extends Composite implements HasHandlers {
@@ -68,14 +69,6 @@ public class DatePickerComposite extends Composite implements HasHandlers {
 
     public interface DateChosenEventHandler extends EventHandler {
         void onDateChosen(DateChosenEvent event);
-    }
-
-    public static enum DateGridDebugID {
-        DateGrid_Index_
-    }
-
-    public enum DateCellDebugID {
-        row_, _col_
     }
 
     HandlerManager handlerManager;
@@ -110,7 +103,6 @@ public class DatePickerComposite extends Composite implements HasHandlers {
             } else {
                 picker = new DatePickerMultiple(starting, minDate, maxDate, disabledDates);
             }
-            picker.setDebugId(i);
             pickers.add(picker);
             picker.addValueChangeHandler(new ValueChangeHandler<Date>() {
                 @Override
@@ -121,6 +113,7 @@ public class DatePickerComposite extends Composite implements HasHandlers {
             picker.setParent(this);
             panel.add(picker);
             CalendarUtil.addMonthsToDate(starting, 1);
+            picker.ensureDebugId(new CompositeDebugId(DatePickerDebugIDs.DatePicker, Integer.toString(i)).debugId());
         }
         if (numberOfMonths > 1) {
             pickers.get(0).addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.first));

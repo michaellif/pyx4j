@@ -35,8 +35,9 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Image;
 
-public class HoldableImage extends ImageWithDebugId {
+public class HoldableImage extends Image {
 
     public static final Type<HoldElapsedEventHandler> TYPE = new Type<HoldElapsedEventHandler>();
 
@@ -74,8 +75,8 @@ public class HoldableImage extends ImageWithDebugId {
 
     int count = 0;
 
-    public HoldableImage(ImageResource resource, final int schedule, MonthSelectorButtonsId id) {
-        super(resource, id);
+    public HoldableImage(ImageResource resource, final int schedule) {
+        super(resource);
 
         handlerManager = new HandlerManager(TYPE);
 

@@ -56,12 +56,12 @@ public class CalendarViewExtended extends CalendarView {
                 DateGrid grid = (DateGrid) event.getSource();
                 picker.setValue(grid.getSelectedValue(), true);
             }
-
         });
     }
 
-    public void setDebugId(int index) {
-        grid.setDebugId(index);
+    @Override
+    protected void onEnsureDebugId(String id) {
+        grid.ensureDebugId(id);
     }
 
     public void clearSelection() {

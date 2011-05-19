@@ -29,17 +29,17 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.widgets.client.datepicker.ImageWithDebugId.MonthSelectorButtonsId;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 import com.pyx4j.widgets.client.style.Selector;
 
 @SuppressWarnings("deprecation")
 public class MonthSelectorMultiple extends MonthSelectorExtended {
 
-    private ImageWithDebugId backwards;
+    private Image backwards;
 
-    private ImageWithDebugId forwards;
+    private Image forwards;
 
     private final int previousColumn = 0;
 
@@ -77,7 +77,8 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
     protected void setup() {
         DatePickerImages resource = (DatePickerImages) GWT.create(DatePickerImages.class);
         // Set up backwards.
-        backwards = new ImageWithDebugId(resource.MonthPrevious(), MonthSelectorButtonsId.MonthSelectorButton_BackwardsYear);
+        backwards = new Image(resource.MonthPrevious());
+        backwards.ensureDebugId(DatePickerDebugIDs.MonthSelectorButton_BackwardsYear.debugId());
         backwards.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.top));
         backwards.addClickHandler(new ClickHandler() {
             @Override
@@ -87,7 +88,8 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
             }
         });
 
-        forwards = new ImageWithDebugId(resource.MonthNext(), MonthSelectorButtonsId.MonthSelectorButton_ForwardYear);
+        forwards = new Image(resource.MonthNext());
+        forwards.ensureDebugId(DatePickerDebugIDs.MonthSelectorButton_ForwardYear.debugId());
         forwards.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.top));
         forwards.addClickHandler(new ClickHandler() {
             @Override

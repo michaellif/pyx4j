@@ -34,7 +34,6 @@ import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.widgets.client.style.Selector;
 
 @SuppressWarnings(/* Date manipulation required */{ "deprecation" })
@@ -68,14 +67,13 @@ public class DateGrid extends Grid {
         drawCells();
     }
 
-    public void setDebugId(int index) {
+    @Override
+    protected void onEnsureDebugId(String id) {
         DateCell cell;
-        debugId = new StringDebugId(DatePickerComposite.DateGridDebugID.DateGrid_Index_.toString() + index);
-        this.ensureDebugId(debugId.debugId());
         for (int row = 1; row < this.numRows; row++) {
             for (int col = 0; col < this.numColumns; col++) {
                 cell = (DateCell) getWidget(row, col);
-                cell.setDebugId(row, col, debugId);
+                cell.ensureDebugId(id + "_" + row + "_" + col);
             }
         }
     }

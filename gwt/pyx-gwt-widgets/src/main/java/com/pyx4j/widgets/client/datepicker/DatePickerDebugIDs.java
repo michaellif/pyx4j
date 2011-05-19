@@ -14,33 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-05-15
- * @author leon
+ * Created on 2011-05-19
+ * @author TPRGLET
  * @version $Id$
  */
 package com.pyx4j.widgets.client.datepicker;
 
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.Image;
-
 import com.pyx4j.commons.IDebugId;
 
-public class ImageWithDebugId extends Image implements IDebugId {
+public enum DatePickerDebugIDs implements IDebugId {
+    DatePicker,
 
-    public enum MonthSelectorButtonsId {
-        MonthSelectorButton_ForwardYear, MonthSelectorButton_BackwardsYear, MonthSelectorButton_BackwardsMonth, MonthSelectorButton_ForwardMonth
-    }
+    MonthSelectorButton_ForwardYear,
 
-    String debugId = "";
+    MonthSelectorButton_BackwardsYear,
 
-    public ImageWithDebugId(ImageResource resource, MonthSelectorButtonsId id) {
-        super(resource);
-        debugId = id.toString();
-        this.ensureDebugId(debugId);
-    }
+    MonthSelectorButton_BackwardsMonth,
+
+    MonthSelectorButton_ForwardMonth;
 
     @Override
     public String debugId() {
-        return debugId;
+        return name();
     }
+
 }
