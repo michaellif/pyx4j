@@ -13,54 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.vewers;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
-import com.pyx4j.site.client.AppSite;
-
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.client.ui.editors.UnitEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.domain.property.asset.AptUnit;
 
-public class UnitViewerViewImpl extends DockLayoutPanel implements UnitViewerView {
-
-    private static I18n i18n = I18nFactory.getI18n(UnitViewerViewImpl.class);
-
-    private final UnitCrudService service = GWT.create(UnitCrudService.class);
-
-    private final UnitEditorForm viewer = new UnitEditorForm(new CrmViewersComponentFactory());
+public class UnitViewerViewImpl extends ViewerViewImplBase<AptUnit> implements IUnitViewerView {
 
     public UnitViewerViewImpl() {
-        super(Unit.EM);
-        setSize("100%", "100%");
-        addNorth(new CrmHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(new CrmSiteMap.Viewers.Unit()).getCaption()), 3);
-
-        viewer.initialize();
-        add(new ScrollPanel(viewer.asWidget()));
-    }
-
-    @Override
-    public void setViewingEntityId(long entityId) {
-        if (service != null) {
-            service.retrieve(new AsyncCallback<AptUnit>() {
-
-                @Override
-                public void onSuccess(AptUnit result) {
-                    viewer.populate(result);
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-            }, entityId);
-        }
+        super(new CrmSiteMap.Viewers.Unit());
+        setViewer(new UnitEditorForm(new CrmViewersComponentFactory()));
     }
 }

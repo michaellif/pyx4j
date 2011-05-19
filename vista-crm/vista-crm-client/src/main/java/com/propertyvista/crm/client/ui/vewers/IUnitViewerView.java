@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.vewers;
 
-public interface BuildingViewerView extends ViewerView {
+import com.propertyvista.domain.property.asset.AptUnit;
+
+public interface IUnitViewerView extends IViewerView<AptUnit> {
 
 }

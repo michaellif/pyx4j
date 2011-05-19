@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-17
+ * Created on 2011-05-03
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity;
+package com.propertyvista.crm.client.activity.listers;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -19,31 +19,23 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.pyx4j.site.rpc.AppPlace;
+import com.propertyvista.crm.client.ui.listers.ArrearsListerView;
 
-import com.propertyvista.crm.client.ui.vewers.UnitViewerView;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+public class ArrearsListerActivity extends AbstractActivity {
 
-public class UnitViewerActivity extends AbstractActivity {
-
-    private final UnitViewerView view;
+    private final ArrearsListerView view;
 
     @Inject
-    public UnitViewerActivity(UnitViewerView view) {
+    public ArrearsListerActivity(ArrearsListerView view) {
         this.view = view;
     }
 
-    public UnitViewerActivity withPlace(Place place) {
-        String stepArg = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
-        if (stepArg != null) {
-            view.setViewingEntityId(Long.valueOf(stepArg));
-        }
-
+    public ArrearsListerActivity withPlace(Place place) {
         return this;
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
+    public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
+        containerWidget.setWidget(view);
     }
 }

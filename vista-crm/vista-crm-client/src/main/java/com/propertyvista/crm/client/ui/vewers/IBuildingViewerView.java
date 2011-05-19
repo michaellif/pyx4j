@@ -13,9 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.vewers;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.domain.property.asset.Building;
 
-public interface ViewerView extends IsWidget {
+public interface IBuildingViewerView extends IViewerView<Building> {
 
-    void setViewingEntityId(long entityId);
 }

@@ -43,9 +43,9 @@ import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
 import com.propertyvista.crm.client.ui.login.RetrievePasswordViewImpl;
 import com.propertyvista.crm.client.ui.report.ReportView;
 import com.propertyvista.crm.client.ui.report.ReportViewImpl;
-import com.propertyvista.crm.client.ui.vewers.BuildingViewerView;
+import com.propertyvista.crm.client.ui.vewers.IBuildingViewerView;
 import com.propertyvista.crm.client.ui.vewers.BuildingViewerViewImpl;
-import com.propertyvista.crm.client.ui.vewers.UnitViewerView;
+import com.propertyvista.crm.client.ui.vewers.IUnitViewerView;
 import com.propertyvista.crm.client.ui.vewers.UnitViewerViewImpl;
 
 public class ViewModule extends AbstractGinModule {
@@ -68,8 +68,8 @@ public class ViewModule extends AbstractGinModule {
         bind(IUnitListerView.class).to(UnitListerViewImpl.class).in(Singleton.class);
         bind(ArrearsListerView.class).to(ArrearsListerViewImpl.class).in(Singleton.class);
 // Viewers:      
-        bind(BuildingViewerView.class).to(BuildingViewerViewImpl.class).in(Singleton.class);
-        bind(UnitViewerView.class).to(UnitViewerViewImpl.class).in(Singleton.class);
+        bind(IBuildingViewerView.class).to(BuildingViewerViewImpl.class).in(Singleton.class);
+        bind(IUnitViewerView.class).to(UnitViewerViewImpl.class).in(Singleton.class);
 // Editors:      
         bind(IBuildingEditorView.class).to(BuildingEditorViewImpl.class).in(Singleton.class);
         bind(IUnitEditorView.class).to(UnitEditorViewImpl.class).in(Singleton.class);

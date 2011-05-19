@@ -23,18 +23,18 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.activity.AccountActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
-import com.propertyvista.crm.client.activity.ArrearsListerActivity;
-import com.propertyvista.crm.client.activity.BuildingEditorActivity;
-import com.propertyvista.crm.client.activity.BuildingListerActivity;
-import com.propertyvista.crm.client.activity.BuildingViewerActivity;
 import com.propertyvista.crm.client.activity.DashboardActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.ReportActivity;
 import com.propertyvista.crm.client.activity.ResetPasswordActivity;
 import com.propertyvista.crm.client.activity.SettingsActivity;
-import com.propertyvista.crm.client.activity.UnitEditorActivity;
-import com.propertyvista.crm.client.activity.UnitListerActivity;
-import com.propertyvista.crm.client.activity.UnitViewerActivity;
+import com.propertyvista.crm.client.activity.editors.BuildingEditorActivity;
+import com.propertyvista.crm.client.activity.editors.UnitEditorActivity;
+import com.propertyvista.crm.client.activity.listers.ArrearsListerActivity;
+import com.propertyvista.crm.client.activity.listers.BuildingListerActivity;
+import com.propertyvista.crm.client.activity.listers.UnitListerActivity;
+import com.propertyvista.crm.client.activity.viewers.BuildingViewerActivity;
+import com.propertyvista.crm.client.activity.viewers.UnitViewerActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class MainActivityMapper implements ActivityMapper {

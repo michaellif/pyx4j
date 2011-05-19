@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-03
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity;
+package com.propertyvista.crm.client.activity.listers;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -24,23 +24,23 @@ import com.google.inject.Inject;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
+import com.propertyvista.crm.client.ui.listers.IBuildingListerView;
 import com.propertyvista.crm.client.ui.listers.IListerView;
-import com.propertyvista.crm.client.ui.listers.IUnitListerView;
-import com.propertyvista.crm.rpc.services.UnitCrudService;
-import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.domain.property.asset.Building;
 
-public class UnitListerActivity extends AbstractActivity implements IListerView.Presenter {
+public class BuildingListerActivity extends AbstractActivity implements IListerView.Presenter {
 
-    private final IUnitListerView view;
+    private final IBuildingListerView view;
 
     @Inject
-    public UnitListerActivity(IUnitListerView view) {
+    public BuildingListerActivity(IBuildingListerView view) {
         this.view = view;
         view.setPresenter(this);
         populateData(0);
     }
 
-    public UnitListerActivity withPlace(Place place) {
+    public BuildingListerActivity withPlace(Place place) {
         return this;
     }
 
@@ -51,19 +51,19 @@ public class UnitListerActivity extends AbstractActivity implements IListerView.
 
     @Override
     public void populateData(final int pageNumber) {
-        UnitCrudService service = GWT.create(UnitCrudService.class);
+        BuildingCrudService service = GWT.create(BuildingCrudService.class);
         if (service != null) {
-            EntitySearchCriteria<AptUnit> criteria = new EntitySearchCriteria<AptUnit>(AptUnit.class);
+            EntitySearchCriteria<Building> criteria = new EntitySearchCriteria<Building>(Building.class);
             criteria.setPageSize(view.getPageSize());
             criteria.setPageNumber(pageNumber);
 
-            service.search(new AsyncCallback<EntitySearchResult<AptUnit>>() {
+            service.search(new AsyncCallback<EntitySearchResult<Building>>() {
                 @Override
                 public void onFailure(Throwable caught) {
                 }
 
                 @Override
-                public void onSuccess(EntitySearchResult<AptUnit> result) {
+                public void onSuccess(EntitySearchResult<Building> result) {
                     view.populateData(result.getData(), pageNumber, result.hasMoreData());
                 }
             }, criteria);

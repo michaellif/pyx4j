@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-04
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity;
+package com.propertyvista.crm.client.activity.editors;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -24,26 +24,27 @@ import com.google.inject.Inject;
 
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.crm.client.ui.editors.IBuildingEditorView;
 import com.propertyvista.crm.client.ui.editors.IEditorView;
-import com.propertyvista.crm.client.ui.editors.IUnitEditorView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.UnitCrudService;
-import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.domain.property.asset.Building;
 
-public class UnitEditorActivity extends AbstractActivity implements IEditorView.Presenter {
+public class BuildingEditorActivity extends AbstractActivity implements IEditorView.Presenter {
 
-    private final IUnitEditorView view;
+    private final IBuildingEditorView view;
 
-    private final UnitCrudService service = GWT.create(UnitCrudService.class);
+    private final BuildingCrudService service = GWT.create(BuildingCrudService.class);
 
     private long entityId = -1;
 
     @Inject
-    public UnitEditorActivity(IUnitEditorView view) {
+    public BuildingEditorActivity(IBuildingEditorView view) {
         this.view = view;
+        view.setPresenter(this);
     }
 
-    public UnitEditorActivity withPlace(Place place) {
+    public BuildingEditorActivity withPlace(Place place) {
         String stepArg = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
         if (stepArg != null) {
             entityId = Long.valueOf(stepArg);
@@ -61,10 +62,10 @@ public class UnitEditorActivity extends AbstractActivity implements IEditorView.
     @Override
     public void populate() {
         if (service != null) {
-            service.retrieve(new AsyncCallback<AptUnit>() {
+            service.retrieve(new AsyncCallback<Building>() {
 
                 @Override
-                public void onSuccess(AptUnit result) {
+                public void onSuccess(Building result) {
                     view.populate(result);
                 }
 
@@ -78,10 +79,10 @@ public class UnitEditorActivity extends AbstractActivity implements IEditorView.
     @Override
     public void save() {
         if (service != null) {
-            service.save(new AsyncCallback<AptUnit>() {
+            service.save(new AsyncCallback<Building>() {
 
                 @Override
-                public void onSuccess(AptUnit result) {
+                public void onSuccess(Building result) {
                     History.back();
                 }
 

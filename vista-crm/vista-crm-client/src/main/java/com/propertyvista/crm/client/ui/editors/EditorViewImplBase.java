@@ -40,7 +40,7 @@ public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel imple
 
     private final ScrollPanel scroll = new ScrollPanel();
 
-    private CEntityForm<E> editor = null;
+    protected CEntityForm<E> editor = null;
 
     protected Presenter presenter;
 
