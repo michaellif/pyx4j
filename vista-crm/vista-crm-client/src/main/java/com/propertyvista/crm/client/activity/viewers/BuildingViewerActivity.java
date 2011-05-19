@@ -13,65 +13,19 @@
  */
 package com.propertyvista.crm.client.activity.viewers;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.pyx4j.site.rpc.AppPlace;
-
 import com.propertyvista.crm.client.ui.vewers.IBuildingViewerView;
-import com.propertyvista.crm.client.ui.vewers.IViewerView;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.domain.property.asset.Building;
 
-public class BuildingViewerActivity extends AbstractActivity implements IViewerView.Presenter {
-
-    private final IBuildingViewerView view;
-
-    private final BuildingCrudService service = GWT.create(BuildingCrudService.class);
-
-    private long entityId = -1;
+public class BuildingViewerActivity extends ViewerActivityBase<Building> {
 
     @Inject
+    @SuppressWarnings("unchecked")
     public BuildingViewerActivity(IBuildingViewerView view) {
-        this.view = view;
-        view.setPresenter(this);
-    }
-
-    public BuildingViewerActivity withPlace(Place place) {
-        String stepArg = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
-        if (stepArg != null) {
-            entityId = Long.valueOf(stepArg);
-        }
-
-        return this;
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-        populate();
-    }
-
-    @Override
-    public void populate() {
-        if (service != null) {
-            service.retrieve(new AsyncCallback<Building>() {
-
-                @Override
-                public void onSuccess(Building result) {
-                    view.populate(result);
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-            }, entityId);
-        }
+        super(view, (AbstractCrudService<Building>) GWT.create(BuildingCrudService.class));
     }
 }

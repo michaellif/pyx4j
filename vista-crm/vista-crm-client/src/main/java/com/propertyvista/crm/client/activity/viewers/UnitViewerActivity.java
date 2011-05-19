@@ -13,65 +13,20 @@
  */
 package com.propertyvista.crm.client.activity.viewers;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.pyx4j.site.rpc.AppPlace;
-
 import com.propertyvista.crm.client.ui.vewers.IUnitViewerView;
-import com.propertyvista.crm.client.ui.vewers.IViewerView;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.domain.property.asset.AptUnit;
 
-public class UnitViewerActivity extends AbstractActivity implements IViewerView.Presenter {
-
-    private final IUnitViewerView view;
-
-    private final UnitCrudService service = GWT.create(UnitCrudService.class);
-
-    private long entityId = -1;
+public class UnitViewerActivity extends ViewerActivityBase<AptUnit> {
 
     @Inject
+    @SuppressWarnings("unchecked")
     public UnitViewerActivity(IUnitViewerView view) {
-        this.view = view;
-        view.setPresenter(this);
+        super(view, (AbstractCrudService<AptUnit>) GWT.create(UnitCrudService.class));
     }
 
-    public UnitViewerActivity withPlace(Place place) {
-        String stepArg = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
-        if (stepArg != null) {
-            entityId = Long.valueOf(stepArg);
-        }
-
-        return this;
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-        populate();
-    }
-
-    @Override
-    public void populate() {
-        if (service != null) {
-            service.retrieve(new AsyncCallback<AptUnit>() {
-
-                @Override
-                public void onSuccess(AptUnit result) {
-                    view.populate(result);
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-            }, entityId);
-        }
-    }
 }

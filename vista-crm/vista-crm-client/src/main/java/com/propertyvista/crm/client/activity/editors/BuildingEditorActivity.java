@@ -13,88 +13,19 @@
  */
 package com.propertyvista.crm.client.activity.editors;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.pyx4j.site.rpc.AppPlace;
-
 import com.propertyvista.crm.client.ui.editors.IBuildingEditorView;
-import com.propertyvista.crm.client.ui.editors.IEditorView;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.domain.property.asset.Building;
 
-public class BuildingEditorActivity extends AbstractActivity implements IEditorView.Presenter {
-
-    private final IBuildingEditorView view;
-
-    private final BuildingCrudService service = GWT.create(BuildingCrudService.class);
-
-    private long entityId = -1;
+public class BuildingEditorActivity extends EditorActivityBase<Building> {
 
     @Inject
+    @SuppressWarnings("unchecked")
     public BuildingEditorActivity(IBuildingEditorView view) {
-        this.view = view;
-        view.setPresenter(this);
-    }
-
-    public BuildingEditorActivity withPlace(Place place) {
-        String stepArg = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
-        if (stepArg != null) {
-            entityId = Long.valueOf(stepArg);
-        }
-
-        return this;
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-        populate();
-    }
-
-    @Override
-    public void populate() {
-        if (service != null) {
-            service.retrieve(new AsyncCallback<Building>() {
-
-                @Override
-                public void onSuccess(Building result) {
-                    view.populate(result);
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-            }, entityId);
-        }
-    }
-
-    @Override
-    public void save() {
-        if (service != null) {
-            service.save(new AsyncCallback<Building>() {
-
-                @Override
-                public void onSuccess(Building result) {
-                    History.back();
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-            }, view.getValue());
-        }
-    }
-
-    @Override
-    public void cancel() {
-        History.back();
+        super(view, (AbstractCrudService<Building>) GWT.create(BuildingCrudService.class));
     }
 }
