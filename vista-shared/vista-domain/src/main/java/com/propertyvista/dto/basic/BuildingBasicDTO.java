@@ -7,25 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 27, 2011
- * @author Misha
+ * Created on May 19, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset;
+package com.propertyvista.dto.basic;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.Address;
 
+@Transient
+public interface BuildingBasicDTO extends IEntity {
 
-public interface Complex extends IEntity {
+    @Caption(name = "Building Code")
+    IPrimitive<String> propertyCode();
 
-    /**
-     * Legal name of the property (max 120 char)
-     */
     IPrimitive<String> name();
 
-    ISet<Building> buildings();
+    @ToString(index = 1)
+    Address address();
 }

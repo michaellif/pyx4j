@@ -19,9 +19,13 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.Notes;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.vendor.Contract;
 
-public interface Roof extends IEntity {
+public interface Roof extends IEntity, Notes {
+
+    Building belongsTo();
 
     @MemberColumn(name = "roofType")
     IPrimitive<String> type();
@@ -37,5 +41,4 @@ public interface Roof extends IEntity {
 
     Contract contractor();
 
-    IPrimitive<String> notes();
 }

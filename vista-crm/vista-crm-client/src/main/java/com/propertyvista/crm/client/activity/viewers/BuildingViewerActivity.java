@@ -19,7 +19,7 @@ import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.vewers.IBuildingViewerView;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingViewerActivity extends ViewerActivityBase<Building> {
 

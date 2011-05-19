@@ -19,7 +19,7 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingLister extends ListerBase<Building> {
 
@@ -30,13 +30,13 @@ public class BuildingLister extends ListerBase<Building> {
 
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Building>> columnDescriptors, Building proto) {
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.website()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.email().emailAddress()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address().province()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address().country()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().propertyCode()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.contactInfo().website()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.contactInfo().email().emailAddress()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().province()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
     }
 }

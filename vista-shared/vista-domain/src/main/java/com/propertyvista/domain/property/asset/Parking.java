@@ -20,6 +20,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+import com.propertyvista.domain.property.asset.building.Building;
+
 public interface Parking extends IEntity {
 
     @Translatable
@@ -43,7 +45,7 @@ public interface Parking extends IEntity {
         }
     }
 
-    // ----------- Infromation --------------------------------------------------------------------------
+    Building belongsTo();
 
     IPrimitive<String> name();
 

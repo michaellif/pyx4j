@@ -7,14 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-17
- * @author Vlad
+ * Created on May 19, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.vewers;
+package com.propertyvista.dto.basic;
 
-import com.propertyvista.domain.property.asset.building.Building;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 
-public interface IBuildingViewerView extends IViewerView<Building> {
+@Transient
+public interface RoofBasicDTO extends IEntity {
 
 }

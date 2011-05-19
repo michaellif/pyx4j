@@ -31,6 +31,7 @@ import com.propertyvista.domain.Medium;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
+import com.propertyvista.domain.property.asset.building.Building;
 
 @ToStringFormat("{0} {1} {2}")
 public interface AptUnit extends IEntity {

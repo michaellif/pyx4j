@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.listers;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingListerViewImpl extends ListerViewImplBase<Building> implements IBuildingListerView {
 

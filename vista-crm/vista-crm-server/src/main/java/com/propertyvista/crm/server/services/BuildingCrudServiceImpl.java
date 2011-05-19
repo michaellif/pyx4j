@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingCrudServiceImpl implements BuildingCrudService {
 
@@ -61,7 +61,7 @@ public class BuildingCrudServiceImpl implements BuildingCrudService {
     @Override
     public void getTestBuildingNomberOne(AsyncCallback<Building> callback) {
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
-        buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE));
+        buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().info().propertyCode(), DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE));
         Building building = PersistenceServicesFactory.getPersistenceService().retrieve(buildingCriteria);
         log.info("this demo building {}", building);
         callback.onSuccess(building);

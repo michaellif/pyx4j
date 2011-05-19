@@ -45,7 +45,7 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Phone;
-import com.propertyvista.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingEditorForm extends CEntityForm<Building> {
 
@@ -65,29 +65,29 @@ public class BuildingEditorForm extends CEntityForm<Building> {
 
         main.add(new CrmHeaderDecorator(i18n.tr("Building Information")));
         DecorationData decorData = new DecorationData(14d, 12);
-        main.add(new VistaWidgetDecorator(inject(proto().name()), decorData));
-        main.add(inject(proto().address()));
-        main.add(new VistaWidgetDecorator(inject(proto().propertyCode()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().type()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().shape()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().structureType()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().totalStories()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().residentialStories()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().name()), decorData));
+        main.add(inject(proto().info().address()));
+        main.add(new VistaWidgetDecorator(inject(proto().info().propertyCode()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().type()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().shape()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().structureType()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().totalStories()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().residentialStories()), decorData));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Building Details")));
         //main.add(new VistaWidgetDecorator(inject(proto().elevators()), decorData));
         //main.add(new VistaWidgetDecorator(inject(proto().boilers()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().roof()), decorData));
+        //main.add(new VistaWidgetDecorator(inject(proto().roof()), decorData));
         //main.add(new VistaWidgetDecorator(inject(proto().parkings()), decorData));
         //main.add(new VistaWidgetDecorator(inject(proto().lockers()), decorData));
         //main.add(new VistaWidgetDecorator(inject(proto().amenities()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().constructionType()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().foundationType()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().centralAir()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().centralHeat()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().floorType()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().landArea()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().waterSupply()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().constructionType()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().foundationType()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().centralAir()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().centralHeat()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().floorType()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().landArea()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().waterSupply()), decorData));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Marketing")));
         main.add(new VistaWidgetDecorator(inject(proto().marketingName()), decorData));
@@ -95,16 +95,16 @@ public class BuildingEditorForm extends CEntityForm<Building> {
 //        main.add(new VistaWidgetDecorator(inject(proto().media()), decorData));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Financials")));
-        main.add(new VistaWidgetDecorator(inject(proto().dateAquired()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().purchasePrice()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().marketPrice()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().lastAppraisalDate()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().lastAppraisalValue()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().financial().dateAquired()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().financial().purchasePrice()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().financial().marketPrice()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().financial().lastAppraisalDate()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().financial().lastAppraisalValue()), decorData));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Contact Information")));
-        main.add(new VistaWidgetDecorator(inject(proto().website()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().contactInfo().website()), decorData));
 //        main.add(new VistaWidgetDecorator(inject(proto().email()), decorData));
-        main.add(inject(proto().phoneList(), createPhonesListEditor()));
+        main.add(inject(proto().contactInfo().phoneList(), createPhonesListEditor()));
         // TODO - add this complex data processing later! :
 //        main.add(new VistaWidgetDecorator(inject(proto().contactsList()), decorData));
 

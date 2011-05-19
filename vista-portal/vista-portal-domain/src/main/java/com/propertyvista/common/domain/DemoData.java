@@ -33,7 +33,7 @@ public class DemoData {
 
     public static String USERS_DOMAIN = "@pyx4j.com";
 
-    public static int NUM_RESIDENTIAL_BUILDINGS = 50;
+    public static int NUM_RESIDENTIAL_BUILDINGS = 10;
 
     public static int NUM_POTENTIAL_TENANTS = 4;
 

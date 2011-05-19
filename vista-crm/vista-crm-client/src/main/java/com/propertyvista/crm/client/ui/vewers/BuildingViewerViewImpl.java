@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.vewers;
 
 import com.propertyvista.crm.client.ui.editors.BuildingEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingViewerViewImpl extends ViewerViewImplBase<Building> implements IBuildingViewerView {
 

@@ -17,7 +17,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public interface BuildingCrudService extends AbstractCrudService<Building> {
 

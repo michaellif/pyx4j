@@ -15,9 +15,8 @@ package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Elevator extends Equipment {
+public interface Elevator extends Equipment, BookingSchedule {
 
     IPrimitive<Boolean> isForMoveInOut();
 
-    BookingSchedule bookingSchedule();
 }

@@ -20,6 +20,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+import com.propertyvista.domain.property.asset.building.Building;
+
 public interface Locker extends IEntity {
 
     @Translatable
@@ -36,6 +38,8 @@ public interface Locker extends IEntity {
             return I18nEnum.tr(this);
         }
     }
+
+    Building belongsTo();
 
     // ----------- Infromation --------------------------------------------------------------------------
 

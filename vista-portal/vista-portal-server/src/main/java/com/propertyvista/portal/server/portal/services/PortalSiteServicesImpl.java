@@ -24,7 +24,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.common.domain.ref.City;
-import com.propertyvista.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;

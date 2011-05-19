@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.editors;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingEditorViewImpl extends EditorViewImplBase<Building> implements IBuildingEditorView {
 

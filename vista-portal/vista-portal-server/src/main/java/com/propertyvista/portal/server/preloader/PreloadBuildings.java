@@ -48,10 +48,11 @@ import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.AptUnit;
 import com.propertyvista.domain.property.asset.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.AptUnitDetail;
-import com.propertyvista.domain.property.asset.Building;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PetChargeRule;
 import com.propertyvista.portal.domain.ptapp.PropertyProfile;
@@ -222,26 +223,26 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         return propertyProfile;
     }
 
-    private Building createBuilding(String propertyCode, Building.Type buildingType, Complex complex, String website, Address address, List<Phone> phones,
+    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, Complex complex, String website, Address address, List<Phone> phones,
             Email email, PropertyProfile propertyProfile) {
         Building building = EntityFactory.create(Building.class);
 
-        building.propertyCode().setValue(propertyCode);
+        building.info().propertyCode().setValue(propertyCode);
 
-        building.type().setValue(buildingType);
+        building.info().type().setValue(buildingType);
         //		building.complex().
-        building.website().setValue(website);
+        building.contactInfo().website().setValue(website);
 
-        building.address().set(address);
+        building.info().address().set(address);
 
         for (Phone phone : phones) {
-            building.phoneList().add(phone);
+            building.contactInfo().phoneList().add(phone);
         }
 
-        building.name().setValue(RandomUtil.randomLetters(3));
+        building.info().name().setValue(RandomUtil.randomLetters(3));
         building.marketingName().setValue(RandomUtil.randomLetters(4) + " " + RandomUtil.randomLetters(6));
 
-        building.email().set(email); // not sure yet what to do about the email and its type
+        building.contactInfo().email().set(email); // not sure yet what to do about the email and its type
 
         PersistenceServicesFactory.getPersistenceService().persist(building);
 
@@ -378,7 +379,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         for (int b = 0; b < DemoData.NUM_RESIDENTIAL_BUILDINGS; b++) {
 
             // building type
-            Building.Type buildingType = RandomUtil.random(Building.Type.values());
+            BuildingInfo.Type buildingType = RandomUtil.random(BuildingInfo.Type.values());
 
             Complex complex = null;
             if (b % 3 == 0) {
@@ -474,18 +475,18 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         sb.append("\n\nLoaded ").append(buildings.size()).append(" buildings\n\n");
         for (Building building : buildings) {
             //            b.append(building.getStringView());
-            sb.append(building.type().getStringView());
+            sb.append(building.info().type().getStringView());
             sb.append("\t");
-            sb.append(building.address().streetNumber().getStringView()).append(", ");
-            sb.append(building.address().streetName().getStringView()).append(", ");
-            sb.append(building.address().streetType().getStringView()).append(", ");
-            sb.append(building.address().city().getStringView()).append(" ").append(building.address().province().getStringView()).append(", ");
-            sb.append(building.address().postalCode().getStringView()).append(", ").append(building.address().country().getStringView());
+            sb.append(building.info().address().streetNumber().getStringView()).append(", ");
+            sb.append(building.info().address().streetName().getStringView()).append(", ");
+            sb.append(building.info().address().streetType().getStringView()).append(", ");
+            sb.append(building.info().address().city().getStringView()).append(" ").append(building.info().address().province().getStringView()).append(", ");
+            sb.append(building.info().address().postalCode().getStringView()).append(", ").append(building.info().address().country().getStringView());
 
             // phones
             sb.append("\t");
 
-            for (Phone phone : building.phoneList()) {
+            for (Phone phone : building.contactInfo().phoneList()) {
                 sb.append(phone.phoneNumber().getStringView());
                 sb.append("/").append(phone.phoneType().getStringView());
             }
@@ -508,7 +509,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 sb.append(" ");
                 sb.append(unit.area().getStringView()).append(" sq. ft.");
                 sb.append(" ");
-                sb.append(unit.building().propertyCode().getStringView());
+                sb.append(unit.building().info().propertyCode().getStringView());
                 sb.append(" ");
                 sb.append(unit.floorplan());
                 sb.append(" | ");

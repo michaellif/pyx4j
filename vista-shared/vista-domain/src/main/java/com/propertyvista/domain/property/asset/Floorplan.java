@@ -27,6 +27,7 @@ import com.propertyvista.domain.Medium;
 import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.marketing.yield.Concession;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public interface Floorplan extends IEntity {
 

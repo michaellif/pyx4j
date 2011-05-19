@@ -37,7 +37,7 @@ public class UnitLister extends ListerBase<AptUnit> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.economicStatusDescription()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floor()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.number()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.building().name()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.building().info().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.area()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bedrooms()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bathrooms()));

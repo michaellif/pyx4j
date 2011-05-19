@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.listers;
 
-import com.propertyvista.domain.property.asset.Building;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public interface IBuildingListerView extends IListerView<Building> {
 

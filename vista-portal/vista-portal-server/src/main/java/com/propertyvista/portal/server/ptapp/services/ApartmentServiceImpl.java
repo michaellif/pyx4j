@@ -28,8 +28,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.property.asset.AptUnit;
-import com.propertyvista.domain.property.asset.Building;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
@@ -88,7 +88,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
 
         // find building first, don't use building from unit selection
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
-        buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), selectionCriteria.propertyCode().getValue()));
+        buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().info().propertyCode(), selectionCriteria.propertyCode().getValue()));
         Building building = PersistenceServicesFactory.getPersistenceService().retrieve(buildingCriteria);
         if (building == null) {
             log.debug("Could not find building for propertyCode {}", selectionCriteria.propertyCode().getStringView());
