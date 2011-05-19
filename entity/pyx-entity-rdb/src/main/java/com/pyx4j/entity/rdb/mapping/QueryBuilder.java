@@ -32,10 +32,12 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -73,8 +75,10 @@ public class QueryBuilder<T extends IEntity> {
                     ObjectClassType objectClassType = ObjectClassType.Primitive;
                     MemberMeta memberMeta = null;
                     String memberPersistenceName = propertyCriterion.getPropertyName();
-                    if ((!propertyCriterion.getPropertyName().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX))
-                            && (!IEntity.PRIMARY_KEY.equals(propertyCriterion.getPropertyName()))) {
+                    String pkPath = GWTJava5Helper.getSimpleName(entityMeta.getEntityClass()) + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR;
+                    if (pkPath.equals(propertyCriterion.getPropertyName()) || IEntity.PRIMARY_KEY.equals(propertyCriterion.getPropertyName())) {
+                        memberPersistenceName = IEntity.PRIMARY_KEY;
+                    } else if (!propertyCriterion.getPropertyName().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
                         MemberOperationsMeta memberOper = operationsMeta.getMember(propertyCriterion.getPropertyName());
                         if (memberOper == null) {
                             throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyName() + " in " + entityMeta.getEntityClass().getName());
