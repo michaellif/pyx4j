@@ -16,7 +16,7 @@
  *
  * Created on Feb 12, 2011
  * @author vlads
- * @version $Id: FormsFolderDecorator.java 8142 2011-02-13 04:31:26Z vlads $
+ * @version $Id$
  */
 package com.pyx4j.entity.client.ui.flex;
 

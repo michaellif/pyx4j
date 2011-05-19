@@ -16,7 +16,7 @@
  *
  * Created on Apr 29, 2009
  * @author michaellif
- * @version $Id: TabPanelComposite.java 7601 2010-11-27 15:40:11Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.widgets.client.tabpanel;
 

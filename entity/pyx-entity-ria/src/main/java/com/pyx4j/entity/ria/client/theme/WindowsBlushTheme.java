@@ -16,7 +16,7 @@
  *
  * Created on Nov 17, 2010
  * @author Misha
- * @version $Id: code-templates.xml 4670 2010-01-10 07:33:42Z vlads $
+ * @version $Id$
  */
 package com.pyx4j.entity.ria.client.theme;
 

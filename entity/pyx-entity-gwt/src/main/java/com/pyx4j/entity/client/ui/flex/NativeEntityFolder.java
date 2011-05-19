@@ -16,7 +16,7 @@
  *
  * Created on 2011-02-09
  * @author vlads
- * @version $Id: NativeEntityEditor.java 8113 2011-02-11 21:27:01Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.entity.client.ui.flex;
 

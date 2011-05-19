@@ -16,7 +16,7 @@
  *
  * Created on Jan 11, 2010
  * @author Michael
- * @version $Id: DropDownPanel.java 4707 2010-01-12 12:18:45Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.widgets.client;
 

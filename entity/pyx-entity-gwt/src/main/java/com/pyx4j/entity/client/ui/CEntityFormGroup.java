@@ -16,7 +16,7 @@
  *
  * Created on May 25, 2010
  * @author michaellif
- * @version $Id: CEntityFormFolder.java 6523 2010-07-15 15:46:44Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.entity.client.ui;
 

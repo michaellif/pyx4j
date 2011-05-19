@@ -16,7 +16,7 @@
  *
  * Created on Apr 28, 2009
  * @author michaellif
- * @version $Id: TestView.java 7492 2010-11-13 17:57:45Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.entity.ria.client;
 

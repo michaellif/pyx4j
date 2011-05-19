@@ -16,7 +16,7 @@
  *
  * Created on Feb 12, 2011
  * @author Misha
- * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
+ * @version $Id$
  */
 package com.pyx4j.entity.client.ui.flex;
 

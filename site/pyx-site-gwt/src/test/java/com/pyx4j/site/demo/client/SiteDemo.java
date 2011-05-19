@@ -16,7 +16,7 @@
  *
  * Created on Dec 22, 2009
  * @author vlads
- * @version $Id: SiteDemo.java 7954 2011-02-02 14:01:03Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.site.demo.client;
 

@@ -16,7 +16,7 @@
  *
  * Created on Apr 23, 2010
  * @author Misha
- * @version $Id: CFormFolder.java 6669 2010-08-03 21:45:51Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 

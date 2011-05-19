@@ -16,7 +16,7 @@
  *
  * Created on May 26, 2010
  * @author michaellif
- * @version $Id: EntityFormFactory.java 7109 2010-09-29 15:22:51Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.entity.client.ui;
 

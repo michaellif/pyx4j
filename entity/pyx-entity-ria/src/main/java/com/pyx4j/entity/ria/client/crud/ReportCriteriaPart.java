@@ -16,7 +16,7 @@
  *
  * Created on Feb 18, 2010
  * @author michaellif
- * @version $Id: EntitySearchCriteriaPart.java 7552 2010-11-19 17:03:47Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.entity.ria.client.crud;
 

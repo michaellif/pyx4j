@@ -16,7 +16,7 @@
  *
  * Created on May 28, 2010
  * @author michaellif
- * @version $Id: NativeFormFolder.java 6714 2010-08-09 18:41:29Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 

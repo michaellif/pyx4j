@@ -16,7 +16,7 @@
  *
  * Created on Apr 24, 2010
  * @author Misha
- * @version $Id: EntityListPanel.java 6955 2010-09-08 19:41:44Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.entity.ria.client.crud;
 

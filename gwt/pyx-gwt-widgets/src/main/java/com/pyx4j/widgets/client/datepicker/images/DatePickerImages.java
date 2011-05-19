@@ -16,7 +16,7 @@
  *
  * Created on 2011-03-26
  * @author yura
- * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
+ * @version $Id$
  */
 package com.pyx4j.widgets.client.datepicker.images;
 

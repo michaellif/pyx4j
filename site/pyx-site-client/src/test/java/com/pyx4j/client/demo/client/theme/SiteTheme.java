@@ -16,7 +16,7 @@
  *
  * Created on Jan 18, 2010
  * @author michaellif
- * @version $Id: SiteTheme.java 7522 2010-11-17 11:36:20Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.client.demo.client.theme;
 

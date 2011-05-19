@@ -16,7 +16,7 @@
  *
  * Created on Jun 4, 2010
  * @author michaellif
- * @version $Id: CRichTextArea.java 7343 2010-11-02 17:26:27Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 

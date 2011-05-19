@@ -16,7 +16,7 @@
  *
  * Created on Jan 7, 2010
  * @author michaellif
- * @version $Id: SiteCSSClass.java 6879 2010-08-26 17:48:05Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.client.demo.client.theme;
 

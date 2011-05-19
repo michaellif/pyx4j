@@ -16,7 +16,7 @@
  *
  * Created on Apr 22, 2009
  * @author michaellif
- * @version $Id: TabBarItem.java 7480 2010-11-13 03:06:33Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.widgets.client.tabpanel;
 

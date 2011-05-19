@@ -16,7 +16,7 @@
  *
  * Created on Apr 24, 2010
  * @author michaellif
- * @version $Id: EntityEditorPanel.java 6674 2010-08-04 11:16:46Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.entity.ria.client.crud;
 

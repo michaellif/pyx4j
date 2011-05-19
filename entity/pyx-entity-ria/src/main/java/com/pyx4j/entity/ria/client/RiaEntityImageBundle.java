@@ -16,7 +16,7 @@
  *
  * Created on Dec 26, 2009
  * @author Michael
- * @version $Id: RiaDemoImageBundle.java 4671 2010-01-10 08:04:15Z vlads $
+ * @version $Id$
  */
 package com.pyx4j.entity.ria.client;
 
