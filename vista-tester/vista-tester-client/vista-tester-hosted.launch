@@ -15,8 +15,8 @@
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="com.google.gdt.eclipse.maven.mavenClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.GWTShell"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-codeServerPort 9997 -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -logLevel INFO -noserver -extra &quot;${workspace_loc:vista-tester-client}/target/hosted-extra&quot; -gen &quot;${workspace_loc:vista-tester-client}/target/hosted-gen&quot; http://localhost:8888/tester/index.html"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.DevMode"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-startupUrl http://localhost:8888/tester/index.html -codeServerPort 9997 -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -logLevel INFO -noserver -extra &quot;${workspace_loc:vista-tester-client}/target/hosted-extra&quot; -gen &quot;${workspace_loc:vista-tester-client}/target/hosted-gen&quot; -war &quot;${workspace_loc:vista-tester-server}/src/main/webapp&quot; vista.testerDeveloper"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="vista-tester-client"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m -DUSE_REMOTE_UI=false"/>
 </launchConfiguration>
