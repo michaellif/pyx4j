@@ -12,36 +12,14 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.gwt.server.IOUtils;
-
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.financial.ChargeType;
-import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Email;
-import com.propertyvista.domain.Email.EmailType;
 import com.propertyvista.domain.Phone;
-import com.propertyvista.domain.Phone.PhoneType;
-import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.marketing.yield.Concession;
@@ -52,306 +30,21 @@ import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
-import com.propertyvista.portal.domain.ptapp.PetChargeRule;
-import com.propertyvista.portal.domain.ptapp.PropertyProfile;
+import com.propertyvista.portal.server.generator.BuildingsGenerator;
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 public class PreloadBuildings extends BaseVistaDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(PreloadBuildings.class);
 
-    private int buildingCount;
-
-    private int unitCount;
-
     private static String resourceFileName(String fileName) {
         return PreloadBuildings.class.getPackage().getName().replace('.', '/') + "/" + fileName;
-    }
-
-    private Email createEmail(String emailAddress) {
-        Email email = EntityFactory.create(Email.class);
-
-        email.emailType().setValue(EmailType.work);
-        email.emailAddress().setValue(emailAddress);
-
-        return email;
-    }
-
-    private Phone createPhone() {
-        Phone phone = EntityFactory.create(Phone.class);
-
-        phone.phoneType().setValue(PhoneType.work);
-        String code = RandomUtil.randomBoolean() ? "416" : "905";
-        int digits = RandomUtil.randomInt(10) * 1000 + RandomUtil.randomInt(10) * 100 + RandomUtil.randomInt(10) * 10 + RandomUtil.randomInt(10);
-        phone.phoneNumber().setValue("(" + code + ") 555-" + digits);
-
-        return phone;
-    }
-
-    private Complex createComplex(int numBuildings) {
-        if (numBuildings == 0)
-            return null;
-
-        Complex complex = EntityFactory.create(Complex.class);
-
-        for (int i = 0; i < numBuildings; i++) {
-            //			Building building 
-        }
-
-        return complex;
-    }
-
-    private Floorplan createFloorplan(String name) {
-        Floorplan floorplan = EntityFactory.create(Floorplan.class);
-
-        floorplan.minArea().setValue(1200);
-        floorplan.name().setValue(name);
-
-        // for now save just one picture
-        int imageIndex = RandomUtil.randomInt(3) + 1;
-        String filename = resourceFileName("apartment" + imageIndex + ".jpg");
-        try {
-            byte[] picture = IOUtils.getResource(filename);
-            if (picture == null) {
-                log.warn("Could not find picture [{}] in classpath", filename);
-            } else {
-                //            log.info("Picture size is: " + picture.length);
-                Picture blob = EntityFactory.create(Picture.class);
-                blob.content().setValue(picture);
-                floorplan.pictures().add(blob);
-            }
-        } catch (Exception e) {
-            log.error("Failed to read the file [{}]", filename, e);
-            throw new Error("Failed to read the file [" + filename + "]");
-        }
-
-        return floorplan;
-    }
-
-    public static Utility createUtility(Utility.Type type) {
-        Utility utility = EntityFactory.create(Utility.class);
-        utility.type().setValue(type);
-        persist(utility);
-        return utility;
-    }
-
-    public static AptUnitAmenity createUnitAmenity(AptUnitAmenity.Type type) {
-        AptUnitAmenity amenity = EntityFactory.create(AptUnitAmenity.class);
-        amenity.type().setValue(type);
-        persist(amenity);
-        return amenity;
-    }
-
-    public static AptUnitDetail createUnitDetailItem(AptUnitDetail.Type type) {
-        AptUnitDetail item = EntityFactory.create(AptUnitDetail.class);
-        item.type().setValue(type);
-
-        item.flooringType().setValue(RandomUtil.random(AptUnitDetail.FlooringType.values()));
-        item.flooringInstallDate().setValue(RandomUtil.randomSqlDate());
-        item.flooringValue().setValue(1800. + RandomUtil.randomInt(200));
-
-        item.counterTopType().setValue(RandomUtil.random(AptUnitDetail.CounterTopType.values()));
-        item.counterTopInstallDate().setValue(RandomUtil.randomSqlDate());
-        item.counterTopValue().setValue(800. + RandomUtil.randomInt(200));
-
-        item.cabinetsType().setValue(RandomUtil.random(AptUnitDetail.CabinetsType.values()));
-        item.cabinetsInstallDate().setValue(RandomUtil.randomSqlDate());
-        item.cabinetsValue().setValue(1000. + RandomUtil.randomInt(200));
-
-        persist(item);
-        return item;
-    }
-
-    public static Concession createConcession(Concession.AppliedTo appliedTo, double months, double percentage) {
-        Concession concession = EntityFactory.create(Concession.class);
-
-        StringBuilder sb = new StringBuilder();
-
-        if (appliedTo == Concession.AppliedTo.monthly) {
-            sb.append(months).append(" free month");
-            if (months != 1) {
-                sb.append("s");
-            }
-        } else if (appliedTo == Concession.AppliedTo.amount) {
-            sb.append(percentage).append("% discount for ");
-            sb.append(months).append(" month");
-            if (months != 1) {
-                sb.append("s");
-            }
-        }
-
-        concession.type().setValue(sb.toString());
-        concession.termType().setValue("month");
-        concession.numberOfTerms().setValue(months);
-        concession.percentage().setValue(percentage);
-
-        persist(concession);
-        return concession;
-    }
-
-    public static AddOn createAddOn(String name, double monthlyCost) {
-        AddOn addOn = EntityFactory.create(AddOn.class);
-        addOn.type().setValue(name);
-        addOn.value().setValue(monthlyCost);
-        persist(addOn);
-        return addOn;
-    }
-
-    public static PetChargeRule createPetCharge(ChargeType mode, int value) {
-        PetChargeRule petCharge = EntityFactory.create(PetChargeRule.class);
-        petCharge.chargeType().setValue(mode);
-        petCharge.value().setValue(value);
-        persist(petCharge);
-        return petCharge;
-    }
-
-    public static PropertyProfile createPropertyProfile(int index) {
-        PropertyProfile propertyProfile = EntityFactory.create(PropertyProfile.class);
-
-        PetChargeRule petCharge;
-        if (index == 0) {
-            petCharge = createPetCharge(ChargeType.deposit, 100);
-        } else if (index == 1) {
-            petCharge = createPetCharge(ChargeType.oneTime, 50);
-        } else {
-            petCharge = createPetCharge(ChargeType.monthly, 200);
-        }
-        propertyProfile.petCharge().set(petCharge);
-
-        persist(propertyProfile);
-        return propertyProfile;
-    }
-
-    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, Complex complex, String website, Address address, List<Phone> phones,
-            Email email, PropertyProfile propertyProfile) {
-        Building building = EntityFactory.create(Building.class);
-
-        building.info().propertyCode().setValue(propertyCode);
-
-        building.info().type().setValue(buildingType);
-        //		building.complex().
-        building.contactInfo().website().setValue(website);
-
-        building.info().address().set(address);
-
-        for (Phone phone : phones) {
-            building.contactInfo().phoneList().add(phone);
-        }
-
-        building.info().name().setValue(RandomUtil.randomLetters(3));
-        building.marketingName().setValue(RandomUtil.randomLetters(4) + " " + RandomUtil.randomLetters(6));
-
-        building.contactInfo().email().set(email); // not sure yet what to do about the email and its type
-
-        PersistenceServicesFactory.getPersistenceService().persist(building);
-
-        buildingCount++;
-        return building;
-    }
-
-    private AptUnit createUnit(Building building, String suiteNumber, int floor, double area, double bedrooms, double bathrooms, Floorplan floorplan) {
-        AptUnit unit = EntityFactory.create(AptUnit.class);
-
-        unit.number().setValue(suiteNumber);
-        unit.building().set(building);
-        unit.floor().setValue(floor);
-        unit.type().setValue(RandomUtil.random(AptUnit.Type.values()));
-        unit.area().setValue(area);
-        unit.bedrooms().setValue(bedrooms);
-        unit.bathrooms().setValue(bathrooms);
-
-        unit.unitRent().setValue(800. + RandomUtil.randomInt(200));
-        unit.netRent().setValue(1200. + RandomUtil.randomInt(200));
-        unit.marketRent().setValue(900. + RandomUtil.randomInt(200));
-
-        // mandatory utilities
-        unit.utilities().add(createUtility(Utility.Type.water));
-        unit.utilities().add(createUtility(Utility.Type.heat));
-        unit.utilities().add(createUtility(Utility.Type.gas));
-        unit.utilities().add(createUtility(Utility.Type.electric));
-
-        // optional utilities
-        if (RandomUtil.randomBoolean()) {
-            unit.utilities().add(createUtility(Utility.Type.cable));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.utilities().add(createUtility(Utility.Type.internet));
-        }
-
-        // amenity, all optional
-        if (RandomUtil.randomBoolean()) {
-            unit.amenities().add(createUnitAmenity(RandomUtil.random(AptUnitAmenity.Type.values())));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.amenities().add(createUnitAmenity(RandomUtil.random(AptUnitAmenity.Type.values())));
-        }
-
-        // info items
-        if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
-        } else {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
-        }
-
-        // concessions
-        if (RandomUtil.randomBoolean()) {
-            unit.concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(3), 0));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(11), 15.8));
-        }
-
-        // add-ons
-        if (RandomUtil.randomBoolean()) {
-            unit.addOns().add(createAddOn("2nd Parking", 50));
-            if (RandomUtil.randomBoolean()) {
-                unit.addOns().add(createAddOn("3rd Parking", 50));
-            }
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.addOns().add(createAddOn("2nd Locker", 30));
-            if (RandomUtil.randomBoolean()) {
-                unit.addOns().add(createAddOn("3rd Locker", 20));
-            }
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.addOns().add(createAddOn("Conditioner", 100));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.addOns().add(createAddOn("Espresso Machine", 30));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.addOns().add(createAddOn("Dishwasher", 30));
-        }
-
-        Calendar avalable = new GregorianCalendar();
-        // TODO Dima, We need to Use fixed date for values used in tests, and current time for Ctrl+Q user :)
-        avalable.setTime(new Date());
-        avalable.add(Calendar.DATE, 5 + RandomUtil.randomInt(30));
-        DateUtils.dayStart(avalable);
-
-        //TODO populate currentOccupancies and then set avalableForRent using some ServerSideDomainUtils
-        unit.avalableForRent().setValue(new java.sql.Date(avalable.getTime().getTime()));
-
-        unit.floorplan().set(floorplan);
-
-        PersistenceServicesFactory.getPersistenceService().persist(unit);
-
-        unitCount++;
-        return unit;
     }
 
     @SuppressWarnings("unchecked")
@@ -367,88 +60,54 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
     @Override
     public String create() {
-
-        LeaseTerms leaseTerms = EntityFactory.create(LeaseTerms.class);
-        try {
-            leaseTerms.text().setValue(IOUtils.getTextResource(resourceFileName("leaseTerms.html")));
-        } catch (IOException e) {
-            throw new Error(e);
-        }
+    	BuildingsGenerator generator = new BuildingsGenerator(DemoData.BUILDINGS_GENERATION_SEED);
+    	
+    	LeaseTerms leaseTerms = generator.createLeaseTerms();
         PersistenceServicesFactory.getPersistenceService().persist(leaseTerms);
 
-        for (int b = 0; b < DemoData.NUM_RESIDENTIAL_BUILDINGS; b++) {
-
-            // building type
-            BuildingInfo.Type buildingType = RandomUtil.random(BuildingInfo.Type.values());
-
-            Complex complex = null;
-            if (b % 3 == 0) {
-                complex = createComplex(2);
-            }
-
-            String website = "www.property" + (b + 1) + ".com";
-
-            // address
-            Address address = createAddress();
-
-            // phones
-            List<Phone> phones = new ArrayList<Phone>();
-            phones.add(createPhone());
-
-            // email
-            String emailAddress = "building" + (b + 1) + "@propertyvista.com";
-            Email email = createEmail(emailAddress);
-
-            // organization contacts - not many fields there at the moment, will do this later
-            String propertyCode = "A" + String.valueOf(b);
-            if (b == 0) {
-                //UI is looking for this building, see references!
-                propertyCode = DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE;
-            }
-
-            // property profile
-            PropertyProfile propertyProfile = createPropertyProfile(b);
-
-            Building building = createBuilding(propertyCode, buildingType, complex, website, address, phones, email, propertyProfile);
-            //			log.info("Created: " + building);
-
-            // create floorplans
-            Map<Integer, Floorplan> floorplans = new HashMap<Integer, Floorplan>();
-            for (int i = 0; i < DemoData.NUM_FLOORPLANS; i++) {
-                String floorplanName = b + "-" + i;
-                if (i == 1) {
-                    floorplanName = DemoData.REGISTRATION_DEFAULT_FLOORPLAN;
-                }
-
-                Floorplan floorplan = createFloorplan(floorplanName);
-                floorplan.building().set(building);
-                PersistenceServicesFactory.getPersistenceService().persist(floorplan);
-                floorplans.put(i, floorplan);
-            }
-
-            // now create units for the building
-            for (int floor = 1; floor < DemoData.NUM_FLOORS + 1; floor++) {
-
-                // for each floor we want to create the same number of units
-                for (int j = 1; j < DemoData.NUM_UNITS_PER_FLOOR + 1; j++) {
-
-                    String suiteNumber = "#" + (floor * 100 + j);
-                    float bedrooms = 2.0f;
-                    float bathrooms = 2.0f;
-
-                    Floorplan floorplan = floorplans.get(j % DemoData.NUM_FLOORPLANS);
-                    if (floorplan == null) {
-                        throw new IllegalStateException("No floorplan");
-                    }
-
-                    int uarea = floorplan.minArea().getValue() + RandomUtil.randomInt(10);
-                    createUnit(building, suiteNumber, floor, uarea, bedrooms, bathrooms, floorplan);
-                }
-            }
+        List<Building> buildings = generator.createBuildings(DemoData.NUM_RESIDENTIAL_BUILDINGS);
+        int unitCount = 0;
+        for (Building building : buildings)
+        {
+        	// TODO Need to be saving PropertyProfile, PetCharge
+        	persist(building);
+        	
+        	List<Floorplan> floorplans = generator.createFloorplans(building, DemoData.NUM_FLOORPLANS);
+        	for (Floorplan floorplan : floorplans)
+        	{
+        		persist(floorplan);
+        	}
+        	
+        	List<AptUnit> units = generator.createUnits(building, floorplans, DemoData.NUM_FLOORS, DemoData.NUM_UNITS_PER_FLOOR);
+        	unitCount += units.size();
+        	for (AptUnit unit : units)
+        	{
+        		for (Utility utility : unit.utilities())
+        		{
+        			persist(utility);
+        		}
+        		for (AptUnitAmenity amenity : unit.amenities())
+        		{
+        			persist(amenity);
+        		}
+        		for (AptUnitDetail detail : unit.details())
+        		{
+        			persist(detail);
+        		}
+        		for (AddOn addOn : unit.addOns())
+        		{
+        			persist(addOn);
+        		}
+        		for (Concession concession : unit.concessions())
+        		{
+        			persist(concession);
+        		}
+        		persist(unit);
+        	}
         }
 
         StringBuilder b = new StringBuilder();
-        b.append("Created ").append(buildingCount).append(" buildings, ").append(unitCount).append(" units");
+        b.append("Created ").append(buildings.size()).append(" buildings, ").append(unitCount).append(" units");
         return b.toString();
     }
 

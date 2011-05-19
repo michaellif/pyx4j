@@ -30,34 +30,4 @@ abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
     protected BaseVistaDataPreloader() {
         DataGenerator.setRandomSeed(100);
     }
-
-    public Address createAddress() {
-        Address address = EntityFactory.create(Address.class);
-
-        address.addressType().setValue(AddressType.property);
-
-        address.unitNumber().setValue(Integer.toString(RandomUtil.randomInt(1000)));
-        address.streetNumber().setValue(Integer.toString(RandomUtil.randomInt(10000)));
-        address.streetNumberSuffix().setValue("");
-
-        address.streetName().setValue(RandomUtil.random(DemoData.STREETS));
-        address.streetType().setValue(RandomUtil.random(StreetType.values()));
-        address.streetDirection().setValue(RandomUtil.random(StreetDirection.values()));
-
-        address.city().setValue(RandomUtil.random(DemoData.CITIES));
-        address.county().setValue("");
-
-        Province province = RandomUtil.random(SharedData.getProvinces());
-        address.province().set(province);
-        address.country().set(province.country());
-
-        // for now we support only two countries
-        if (address.country().name().getValue().toLowerCase().startsWith("c")) {
-            address.postalCode().setValue(RandomUtil.randomPostalCode());
-        } else {
-            address.postalCode().setValue(RandomUtil.randomZipCode());
-        }
-
-        return address;
-    }
 }
