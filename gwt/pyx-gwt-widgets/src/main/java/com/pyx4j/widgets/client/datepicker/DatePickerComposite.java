@@ -62,6 +62,14 @@ public class DatePickerComposite extends Composite implements HasHandlers {
         void onDateChosen(DateChosenEvent event);
     }
 
+    public static enum DateGridDebugID {
+        DateGrid_Index_
+    }
+
+    public enum DateCellDebugID {
+        row_, _col_
+    }
+
     HandlerManager handlerManager;
 
     HorizontalPanel panel = new HorizontalPanel();

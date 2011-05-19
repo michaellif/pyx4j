@@ -33,10 +33,6 @@ import com.pyx4j.widgets.client.style.Selector;
 @SuppressWarnings(/* Date manipulation required */{ "deprecation" })
 public class DateGrid extends Grid {
 
-    public enum DateGridDebugID {
-        DateGrid_Index_
-    }
-
     private DateCell selectedCell;
 
     private Date selectedDate;
@@ -67,7 +63,7 @@ public class DateGrid extends Grid {
 
     public void setDebugId(int index) {
         DateCell cell;
-        debugId = new StringDebugId(DateGridDebugID.DateGrid_Index_.toString() + index);
+        debugId = new StringDebugId(DatePickerComposite.DateGridDebugID.DateGrid_Index_.toString() + index);
         this.ensureDebugId(debugId.debugId());
         for (int row = 1; row < this.numRows; row++) {
             for (int col = 0; col < this.numColumns; col++) {

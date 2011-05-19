@@ -33,10 +33,6 @@ import com.pyx4j.widgets.client.style.Selector;
 
 public class DateCell extends Label {
 
-    public enum DateCellDebugID {
-        row_, _col_
-    }
-
     private boolean enabled = true;
 
     private Date date;
@@ -48,9 +44,10 @@ public class DateCell extends Label {
     }
 
     public void setDebugId(int row, int column, IDebugId parent) {
-        StringDebugId child = new StringDebugId(DateCellDebugID.row_.name() + row + DateCellDebugID._col_.name() + column);
+        StringDebugId child = new StringDebugId(DatePickerComposite.DateCellDebugID.row_.name() + row + DatePickerComposite.DateCellDebugID._col_.name()
+                + column);
         IDebugId debugId = new CompositeDebugId(parent, child);
-        //this.ensureDebugId(debugId.toString());
+        this.ensureDebugId(debugId.toString());
     }
 
     public void addHandlers() {
