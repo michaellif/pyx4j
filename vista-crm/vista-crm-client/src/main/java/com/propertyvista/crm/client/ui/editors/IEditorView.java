@@ -7,12 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-04
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.editors;
 
-public interface UnitEditorView extends EditorView {
+import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.shared.IEntity;
+
+public interface IEditorView<E extends IEntity> extends IsWidget {
+
+    public interface Presenter {
+
+        public void populate();
+
+        public void save();
+
+        public void cancel();
+    }
+
+    void setPresenter(Presenter presenter);
+
+    public void populate(E value);
+
+    public E getValue();
 }

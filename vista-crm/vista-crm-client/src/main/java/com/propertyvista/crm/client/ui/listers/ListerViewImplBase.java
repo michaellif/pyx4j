@@ -34,7 +34,7 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
 
     private final ScrollPanel scroll = new ScrollPanel();
 
-    protected ListerBase<E> lister;
+    protected ListerBase<E> lister = null;
 
     public ListerViewImplBase(AppPlace place) {
         super(Unit.EM);
@@ -55,7 +55,7 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     }
 
     @Override
-    public void setPresenter(com.propertyvista.crm.client.ui.listers.IListerView.Presenter presenter) {
+    public void setPresenter(Presenter presenter) {
         assert (lister != null);
         lister.setPresenter(presenter);
     }

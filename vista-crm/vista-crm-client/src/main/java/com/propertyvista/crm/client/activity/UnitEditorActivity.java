@@ -14,29 +14,39 @@
 package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.editors.UnitEditorView;
+import com.propertyvista.crm.client.ui.editors.IEditorView;
+import com.propertyvista.crm.client.ui.editors.IUnitEditorView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.domain.property.asset.AptUnit;
 
-public class UnitEditorActivity extends AbstractActivity {
+public class UnitEditorActivity extends AbstractActivity implements IEditorView.Presenter {
 
-    private final UnitEditorView view;
+    private final IUnitEditorView view;
+
+    private final UnitCrudService service = GWT.create(UnitCrudService.class);
+
+    private long entityId = -1;
 
     @Inject
-    public UnitEditorActivity(UnitEditorView view) {
+    public UnitEditorActivity(IUnitEditorView view) {
         this.view = view;
     }
 
     public UnitEditorActivity withPlace(Place place) {
         String stepArg = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
         if (stepArg != null) {
-            view.setEditingEntityId(Long.valueOf(stepArg));
+            entityId = Long.valueOf(stepArg);
         }
 
         return this;
@@ -45,5 +55,45 @@ public class UnitEditorActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        populate();
+    }
+
+    @Override
+    public void populate() {
+        if (service != null) {
+            service.retrieve(new AsyncCallback<AptUnit>() {
+
+                @Override
+                public void onSuccess(AptUnit result) {
+                    view.populate(result);
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                }
+            }, entityId);
+        }
+    }
+
+    @Override
+    public void save() {
+        if (service != null) {
+            service.save(new AsyncCallback<AptUnit>() {
+
+                @Override
+                public void onSuccess(AptUnit result) {
+                    History.back();
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                }
+            }, view.getValue());
+        }
+    }
+
+    @Override
+    public void cancel() {
+        History.back();
     }
 }

@@ -23,11 +23,11 @@ import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.crm.client.ui.editors.AccountView;
 import com.propertyvista.crm.client.ui.editors.AccountViewImpl;
-import com.propertyvista.crm.client.ui.editors.BuildingEditorView;
+import com.propertyvista.crm.client.ui.editors.IBuildingEditorView;
 import com.propertyvista.crm.client.ui.editors.BuildingEditorViewImpl;
 import com.propertyvista.crm.client.ui.editors.SettingsView;
 import com.propertyvista.crm.client.ui.editors.SettingsViewImpl;
-import com.propertyvista.crm.client.ui.editors.UnitEditorView;
+import com.propertyvista.crm.client.ui.editors.IUnitEditorView;
 import com.propertyvista.crm.client.ui.editors.UnitEditorViewImpl;
 import com.propertyvista.crm.client.ui.listers.ArrearsListerView;
 import com.propertyvista.crm.client.ui.listers.ArrearsListerViewImpl;
@@ -71,8 +71,8 @@ public class ViewModule extends AbstractGinModule {
         bind(BuildingViewerView.class).to(BuildingViewerViewImpl.class).in(Singleton.class);
         bind(UnitViewerView.class).to(UnitViewerViewImpl.class).in(Singleton.class);
 // Editors:      
-        bind(BuildingEditorView.class).to(BuildingEditorViewImpl.class).in(Singleton.class);
-        bind(UnitEditorView.class).to(UnitEditorViewImpl.class).in(Singleton.class);
+        bind(IBuildingEditorView.class).to(BuildingEditorViewImpl.class).in(Singleton.class);
+        bind(IUnitEditorView.class).to(UnitEditorViewImpl.class).in(Singleton.class);
 
         bind(ReportView.class).to(ReportViewImpl.class).in(Singleton.class);
         bind(DashboardView.class).to(DashboardViewImpl.class).in(Singleton.class);

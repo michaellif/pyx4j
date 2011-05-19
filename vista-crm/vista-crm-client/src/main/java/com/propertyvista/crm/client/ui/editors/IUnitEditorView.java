@@ -7,15 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-04
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.editors;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.domain.property.asset.AptUnit;
 
-public interface EditorView extends IsWidget {
+public interface IUnitEditorView extends IEditorView<AptUnit> {
 
-    void setEditingEntityId(long entityId);
 }

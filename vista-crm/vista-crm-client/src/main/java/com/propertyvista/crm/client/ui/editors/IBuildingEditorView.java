@@ -13,5 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.editors;
 
-public interface BuildingEditorView extends EditorView {
+import com.propertyvista.domain.property.asset.Building;
+
+public interface IBuildingEditorView extends IEditorView<Building> {
 }
