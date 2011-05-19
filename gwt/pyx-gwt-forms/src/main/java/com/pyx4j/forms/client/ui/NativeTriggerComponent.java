@@ -41,16 +41,10 @@ import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public abstract class NativeTriggerComponent<E> extends HorizontalPanel implements Focusable, HasDoubleClickHandlers, INativeEditableComponent<E> {
-
-    public static enum NativeTriggerId {
-        trigger
-    }
 
     private FocusWidget focusWidget;
 
@@ -157,11 +151,7 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
         //super.onEnsureDebugId(baseID);
         focusWidget.ensureDebugId(baseID);
         // Special name for selenium to fire events instead of click
-        IDebugId parent = new StringDebugId(baseID);
-        IDebugId child = new StringDebugId(NativeTriggerId.trigger.name());
-
-        //triggerButton.ensureDebugId(baseID + "-trigger");
-        triggerButton.ensureDebugId(new CompositeDebugId(parent, child).debugId());
+        triggerButton.ensureDebugId(CompositeDebugId.debugId(baseID, CCompDebugId.trigger));
     }
 
     //TODO This is display/view property and should be done differently
