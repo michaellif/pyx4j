@@ -34,4 +34,14 @@ public class UnRecoverableRuntimeException extends RuntimeExceptionSerializable 
         super(message);
     }
 
+    /**
+     * Use only in unit tests!
+     */
+    public UnRecoverableRuntimeException(String message, Throwable cause) {
+        super(message);
+        if (cause != null) {
+            initCause(cause);
+        }
+    }
+
 }

@@ -24,6 +24,8 @@ import junit.framework.Assert;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+
 public abstract class UnitTestsAsyncCallback<E> implements AsyncCallback<E> {
 
     @Override
@@ -31,7 +33,11 @@ public abstract class UnitTestsAsyncCallback<E> implements AsyncCallback<E> {
         if (caught instanceof AssertionError) {
             throw (AssertionError) caught;
         } else {
-            Assert.fail(caught.getClass().getName() + " " + caught.getMessage());
+            if (ServerSideConfiguration.isStartedUnderEclipse()) {
+                throw new AssertionError(caught);
+            } else {
+                Assert.fail(caught.getClass().getName() + " " + caught.getMessage());
+            }
         }
     }
 

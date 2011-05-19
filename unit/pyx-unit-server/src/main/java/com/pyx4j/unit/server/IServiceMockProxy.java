@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.server.IServiceAdapterImpl;
 import com.pyx4j.rpc.shared.IService;
@@ -65,7 +66,7 @@ class IServiceMockProxy implements java.lang.reflect.InvocationHandler {
                 serviceArgs[i - 1] = serializationClone((Serializable) args[i]);
             }
         } catch (Throwable e) {
-            callback.onFailure(new UnRecoverableRuntimeException(e.getMessage()));
+            callback.onFailure(new UnRecoverableRuntimeException(e.getMessage(), ServerSideConfiguration.isStartedUnderEclipse() ? e : null));
         }
         IServiceRequest request = new IServiceRequest(serviceInterfaceClass.getName(), method.getName(), serviceArgs, ++rpcCallCount);
 
@@ -91,7 +92,7 @@ class IServiceMockProxy implements java.lang.reflect.InvocationHandler {
             if (e instanceof RuntimeExceptionSerializable) {
                 callback.onFailure((Throwable) serializationClone(e));
             } else {
-                callback.onFailure(new UnRecoverableRuntimeException(e.getMessage()));
+                callback.onFailure(new UnRecoverableRuntimeException(e.getMessage(), ServerSideConfiguration.isStartedUnderEclipse() ? e : null));
             }
         }
 
