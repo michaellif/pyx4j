@@ -23,7 +23,7 @@ import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.server.TestUtil;
-import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
+import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 import com.pyx4j.unit.server.TestServiceFactory;
@@ -114,7 +114,7 @@ public class ApartmentServiceTest extends VistaDBTestCase {
         Assert.assertNotNull("PrimaryKey", unitSelection.id().getValue());
 
         // select the first unit
-        VistaDataPTGenerator generator = new VistaDataPTGenerator(1l);
+        PTGenerator generator = new PTGenerator(1l);
         UnitSelection generatedUnitSelection = generator.createUnitSelection(application, null);
         Assert.assertNull("Id not set yet", generatedUnitSelection.id().getValue());
         generatedUnitSelection.id().setValue(unitSelection.id().getValue()); // copy ids

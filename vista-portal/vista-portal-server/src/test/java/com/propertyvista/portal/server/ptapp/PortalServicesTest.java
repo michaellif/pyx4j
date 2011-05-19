@@ -27,7 +27,7 @@ import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.TestUtil;
-import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
+import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
@@ -60,7 +60,7 @@ public class PortalServicesTest extends VistaDBTestCase {
      * Create application. Do full life cycle test from the beginning.
      */
     public void testFullLifecycle() {
-        VistaDataPTGenerator generator = new VistaDataPTGenerator(500l);
+        PTGenerator generator = new PTGenerator(500l);
 
         final String email = BusinessDataGenerator.createEmail();
         HappyPath.step1createAccount(email);
@@ -69,7 +69,7 @@ public class PortalServicesTest extends VistaDBTestCase {
         subTestTenants(generator, email);
     }
 
-    public void subTestTenants(VistaDataPTGenerator generator, String email) {
+    public void subTestTenants(PTGenerator generator, String email) {
         tenantList = generator.createPotentialTenantList(application);
         tenantList.tenants().get(0).email().setValue(email);
 
@@ -125,7 +125,7 @@ public class PortalServicesTest extends VistaDBTestCase {
         }
     }
 
-    public void subTestTenantFinancial(VistaDataPTGenerator generator) {
+    public void subTestTenantFinancial(PTGenerator generator) {
         TenantFinancialService tenantFinancialService = TestServiceFactory.create(TenantFinancialService.class);
         for (final PotentialTenantInfo tenant : tenantList.tenants()) {
 

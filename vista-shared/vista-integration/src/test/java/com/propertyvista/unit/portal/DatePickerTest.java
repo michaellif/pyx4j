@@ -31,7 +31,7 @@ import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.SharedData;
-import com.propertyvista.portal.server.generator.VistaDataPTGenerator;
+import com.propertyvista.portal.server.generator.PTGenerator;
 
 public class DatePickerTest extends WizardBaseSeleniumTestCase {
 
@@ -46,7 +46,7 @@ public class DatePickerTest extends WizardBaseSeleniumTestCase {
     }
 
     public void testDatePicker() throws Exception {
-        VistaDataPTGenerator generator = new VistaDataPTGenerator(DemoData.PT_GENERATION_SEED);
+        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED);
         User user = generator.createUser(1);
         Application application = generator.createApplication(user);
         Summary summary = generator.createSummary(application, null);

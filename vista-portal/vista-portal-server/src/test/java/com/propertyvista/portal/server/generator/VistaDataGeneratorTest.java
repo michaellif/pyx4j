@@ -31,20 +31,20 @@ public class VistaDataGeneratorTest extends TestCase {
         final long seed1 = 250;
 
         SharedData.init();
-        VistaDataPTGenerator generator1 = new VistaDataPTGenerator(seed1);
+        PTGenerator generator1 = new PTGenerator(seed1);
         User user1 = generator1.createUser(1);
         Application application1 = generator1.createApplication(user1);
         Summary summary1 = generator1.createSummary(application1, null);
 
         // To some other data generation
-        VistaDataPTGenerator generatorX = new VistaDataPTGenerator(System.currentTimeMillis());
+        PTGenerator generatorX = new PTGenerator(System.currentTimeMillis());
         User userX = generatorX.createUser(1);
         Application applicationX = generatorX.createApplication(userX);
         generatorX.createSummary(applicationX, null);
 
         SharedData.init();
 
-        VistaDataPTGenerator generator2 = new VistaDataPTGenerator(seed1);
+        PTGenerator generator2 = new PTGenerator(seed1);
         User user2 = generator2.createUser(1);
         Application application2 = generator2.createApplication(user2);
         Summary summary2 = generator2.createSummary(application2, null);
