@@ -17,6 +17,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Phone;
@@ -32,12 +39,6 @@ import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 public class PreloadBuildings extends BaseVistaDataPreloader {
 
@@ -60,50 +61,42 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
     @Override
     public String create() {
-    	BuildingsGenerator generator = new BuildingsGenerator(DemoData.BUILDINGS_GENERATION_SEED);
-    	
-    	LeaseTerms leaseTerms = generator.createLeaseTerms();
+        BuildingsGenerator generator = new BuildingsGenerator(DemoData.BUILDINGS_GENERATION_SEED);
+
+        LeaseTerms leaseTerms = generator.createLeaseTerms();
         PersistenceServicesFactory.getPersistenceService().persist(leaseTerms);
 
         List<Building> buildings = generator.createBuildings(DemoData.NUM_RESIDENTIAL_BUILDINGS);
         int unitCount = 0;
-        for (Building building : buildings)
-        {
-        	// TODO Need to be saving PropertyProfile, PetCharge
-        	persist(building);
-        	
-        	List<Floorplan> floorplans = generator.createFloorplans(building, DemoData.NUM_FLOORPLANS);
-        	for (Floorplan floorplan : floorplans)
-        	{
-        		persist(floorplan);
-        	}
-        	
-        	List<AptUnit> units = generator.createUnits(building, floorplans, DemoData.NUM_FLOORS, DemoData.NUM_UNITS_PER_FLOOR);
-        	unitCount += units.size();
-        	for (AptUnit unit : units)
-        	{
-        		for (Utility utility : unit.utilities())
-        		{
-        			persist(utility);
-        		}
-        		for (AptUnitAmenity amenity : unit.amenities())
-        		{
-        			persist(amenity);
-        		}
-        		for (AptUnitDetail detail : unit.details())
-        		{
-        			persist(detail);
-        		}
-        		for (AddOn addOn : unit.addOns())
-        		{
-        			persist(addOn);
-        		}
-        		for (Concession concession : unit.concessions())
-        		{
-        			persist(concession);
-        		}
-        		persist(unit);
-        	}
+        for (Building building : buildings) {
+            // TODO Need to be saving PropertyProfile, PetCharge
+            persist(building);
+
+            List<Floorplan> floorplans = generator.createFloorplans(building, DemoData.NUM_FLOORPLANS);
+            for (Floorplan floorplan : floorplans) {
+                persist(floorplan);
+            }
+
+            List<AptUnit> units = generator.createUnits(building, floorplans, DemoData.NUM_FLOORS, DemoData.NUM_UNITS_PER_FLOOR);
+            unitCount += units.size();
+            for (AptUnit unit : units) {
+                for (Utility utility : unit.utilities()) {
+                    persist(utility);
+                }
+                for (AptUnitAmenity amenity : unit.amenities()) {
+                    persist(amenity);
+                }
+                for (AptUnitDetail detail : unit.details()) {
+                    persist(detail);
+                }
+                for (AddOn addOn : unit.addOns()) {
+                    persist(addOn);
+                }
+                for (Concession concession : unit.concessions()) {
+                    persist(concession);
+                }
+                persist(unit);
+            }
         }
 
         StringBuilder b = new StringBuilder();
@@ -158,7 +151,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
             // get the units
             EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-            criteria.add(new PropertyCriterion("building", Restriction.EQUAL, building.getPrimaryKey()));
+            criteria.add(new PropertyCriterion(criteria.proto().building(), Restriction.EQUAL, building.getPrimaryKey()));
             List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
             sb.append("\tBuilding has ").append(units.size()).append(" units\n");
 
