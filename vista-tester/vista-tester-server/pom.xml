@@ -67,7 +67,7 @@
     <properties>
         <deployableName>vista-tester</deployableName>
         <deployContext>vista-tester</deployContext>
-        <vista-tomcat-url>http://ve.kvrmmdsf.vesrv.com</vista-tomcat-url>
+        <vista-tomcat-url>http://dev.birchwoodsoftwaregroup.com</vista-tomcat-url>
         <vista-tomcat-username>vista</vista-tomcat-username>
         <vista-tomcat-pwd>Vista1102</vista-tomcat-pwd>
 

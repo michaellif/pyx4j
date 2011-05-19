@@ -18,9 +18,9 @@ Property Vista
 
     {{{http://www44.birchwoodsoftwaregroup.com/}www44}} Customer Delivery Application (staging env)
 
-    {{{http://ve.kvrmmdsf.vesrv.com/managedb/}ve.kvrmmdsf.vesrv.com/managedb/}}  Testing Environment DB Browsing
+    {{{http://dev.birchwoodsoftwaregroup.com/managedb/}dev.birchwoodsoftwaregroup.com/managedb/}} Testing Environment DB Browsing
 
-    {{{http://ve.kvrmmdsf.vesrv.com/}mediatemple.net Admin site}}
+    {{{http://dev.birchwoodsoftwaregroup.com/} Admin site}}
 
     {{{http://code.pyx4j.com/}Framework site}}
 
