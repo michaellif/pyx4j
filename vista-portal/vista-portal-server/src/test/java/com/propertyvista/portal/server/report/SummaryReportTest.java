@@ -45,6 +45,10 @@ public class SummaryReportTest extends ReportsTestBase {
 
     @BeforeClass
     public static void init() throws Exception {
+        if (!ServerSideConfiguration.isStartedUnderEclipse()) {
+            //TODO I disabled test for now
+            return;
+        }
 
         boolean realTimeDevelopment = ServerSideConfiguration.isStartedUnderEclipse();
         if (realTimeDevelopment) {
