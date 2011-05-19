@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
-import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
+import com.pyx4j.widgets.client.datepicker.DatePickerDebugIDs;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.User;
@@ -30,12 +30,12 @@ import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.generator.PTGenerator;
+import com.propertyvista.portal.server.generator.SharedData;
 
 public class DatePickerTest extends WizardBaseSeleniumTestCase {
 
-    private final IDebugId gridId = new StringDebugId(DatePickerComposite.DateGridDebugID.DateGrid_Index_.toString() + 0);
+    private final IDebugId gridId = new CompositeDebugId(DatePickerDebugIDs.DatePicker, "0");
 
     @Override
     protected void setUp() throws Exception {
@@ -63,16 +63,13 @@ public class DatePickerTest extends WizardBaseSeleniumTestCase {
 
     private void startRentDateTest() {
         IDebugId image = D.id(D.id(proto(UnitSelection.class).selectionCriteria().availableFrom()), CCompDebugId.trigger);
-        //selenium.click(from);
-        //selenium.click(getCellDebugId(1, 1, gridId));
-        //selenium.click(D.id(proto(UnitSelection.class).selectionCriteria().availableTo()));
+        selenium.click(image);
+        selenium.click(getCellDebugId(1, 1, gridId));
+        selenium.click(D.id(proto(UnitSelection.class).selectionCriteria().availableTo()));
     }
 
     private IDebugId getCellDebugId(int row, int column, IDebugId parent) {
-        StringDebugId child = new StringDebugId(DatePickerComposite.DateCellDebugID.row_.name() + row + DatePickerComposite.DateCellDebugID._col_.name()
-                + column);
-        IDebugId debugId = new CompositeDebugId(parent, child);
-        return debugId;
+        return new StringDebugId(parent.debugId() + "_" + row + "_" + column);
     }
 
 }
