@@ -7,26 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
+ * Created on May 19, 2011
  * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.common.domain.ref.City;
 
-public class FindApartmentViewImpl extends SimplePanel implements FindApartmentView {
+public interface BackToSearchView extends IsWidget {
 
-    public FindApartmentViewImpl() {
+    public void setPresenter(Presenter presenter);
 
-        FlowPanel panel = new FlowPanel();
-        HTML message = new HTML("Featured Apartments<br>Testimonials<br>News<br>Why Us");
+    public interface Presenter {
 
-        panel.add(message);
+        //TODO the previous criteria of selection have to be memorized or the whole search result
 
-        setWidget(panel);
+        public void goToSearchApartment();
+
+        public void goToPropertyMap(City city);
 
     }
 

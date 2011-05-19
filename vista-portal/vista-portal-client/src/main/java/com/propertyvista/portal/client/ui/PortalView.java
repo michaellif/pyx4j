@@ -27,6 +27,7 @@ import com.propertyvista.portal.client.mvp.BottomActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
 import com.propertyvista.portal.client.mvp.LogoActivityMapper;
 import com.propertyvista.portal.client.mvp.MainNavigActivityMapper;
+import com.propertyvista.portal.client.mvp.SubContentActivityMapper;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AppSiteView;
@@ -40,7 +41,7 @@ public class PortalView extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "PortalView";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Content, Header, Footer, MainNavig, Center, Main, Left, Right, Display
+        Content, Header, Footer, MainNavig, Center, Main, Left, Right, Display, SubContent
     }
 
     @Inject
@@ -53,6 +54,8 @@ public class PortalView extends FlowPanel {
     ContentActivityMapper contentActivityMapper,
 
     BottomActivityMapper bottomActivityMapper,
+
+    SubContentActivityMapper subContentActivityMapper,
 
     Theme theme) {
 
@@ -94,6 +97,10 @@ public class PortalView extends FlowPanel {
         mainWrapper.setStyleName(prefix + StyleSuffix.Main);
         centerWrapper.add(mainWrapper);
 
+        DisplayPanel subContentDisplayPanel = new DisplayPanel();
+        subContentDisplayPanel.setStyleName(prefix + StyleSuffix.SubContent);
+        mainWrapper.add(subContentDisplayPanel);
+
         DisplayPanel contentDisplayPanel = new DisplayPanel();
         contentDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
         mainWrapper.add(contentDisplayPanel);
@@ -111,6 +118,7 @@ public class PortalView extends FlowPanel {
         bind(actionsActivityMapper, actionsDisplayPanel, eventBus);
         bind(mainNavigActivityMapper, mainNavigDisplayPanel, eventBus);
         bind(contentActivityMapper, contentDisplayPanel, eventBus);
+        bind(subContentActivityMapper, subContentDisplayPanel, eventBus);
         bind(bottomActivityMapper, bottomDisplayPanel, eventBus);
 
     }

@@ -18,14 +18,15 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-
 import com.propertyvista.portal.client.activity.ApartmentDetailsActivity;
 import com.propertyvista.portal.client.activity.CityMapActivity;
 import com.propertyvista.portal.client.activity.FindApartmentActivity;
 import com.propertyvista.portal.client.activity.LoginActivity;
+import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
+import com.propertyvista.portal.client.activity.PaymentActivity;
 import com.propertyvista.portal.client.activity.PropertyMapActivity;
 import com.propertyvista.portal.client.activity.ResidentsActivity;
-import com.propertyvista.portal.client.activity.ResidentsNavigActivity;
+import com.propertyvista.portal.client.activity.TenantProfileActivity;
 import com.propertyvista.portal.client.activity.UnitDetailsActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
@@ -45,7 +46,11 @@ public class ContentActivityMapper implements ActivityMapper {
 
     Provider<UnitDetailsActivity> unitDetailsActivity;
 
-    Provider<ResidentsNavigActivity> residentsNavigActivity;
+    Provider<TenantProfileActivity> tenantProfileActivity;
+
+    Provider<MaintenanceAcitvity> maintenanceActivity;
+
+    Provider<PaymentActivity> paymentActivity;
 
     @Inject
     public ContentActivityMapper(Provider<FindApartmentActivity> findApartmentActivityProvider,
@@ -62,7 +67,11 @@ public class ContentActivityMapper implements ActivityMapper {
 
     Provider<UnitDetailsActivity> unitDetailsActivity,
 
-    Provider<ResidentsNavigActivity> residentsNavigActivity) {
+    Provider<TenantProfileActivity> tenantProfileActivity,
+
+    Provider<MaintenanceAcitvity> maintenanceActivity,
+
+    Provider<PaymentActivity> paymentActivity) {
         super();
         this.findApartmentActivityProvider = findApartmentActivityProvider;
         this.residentsActivityProvider = residentsActivityProvider;
@@ -70,7 +79,9 @@ public class ContentActivityMapper implements ActivityMapper {
         this.cityMapActivity = cityMapActivity;
         this.propertyMapActivity = propertyMapActivity;
         this.apartmentDetailsActivity = apartmentDetailsActivity;
-        this.residentsNavigActivity = residentsNavigActivity;
+        this.tenantProfileActivity = tenantProfileActivity;
+        this.maintenanceActivity = maintenanceActivity;
+        this.paymentActivity = paymentActivity;
 
     }
 
@@ -86,12 +97,16 @@ public class ContentActivityMapper implements ActivityMapper {
             return cityMapActivity.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.FindApartment.PropertyMap) {
             return propertyMapActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.FindApartment.AppartmentDetails) {
+        } else if (place instanceof PortalSiteMap.FindApartment.ApartmentDetails) {
             return apartmentDetailsActivity.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.FindApartment.UnitDetails) {
             return unitDetailsActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.Residents.Navigator) {
-            return residentsNavigActivity.get().withPlace(place);
+        } else if (place instanceof PortalSiteMap.Residents.Navigator.TenantProfile) {
+            return tenantProfileActivity.get().withPlace(place);
+        } else if (place instanceof PortalSiteMap.Residents.Navigator.Maintenance) {
+            return maintenanceActivity.get().withPlace(place);
+        } else if (place instanceof PortalSiteMap.Residents.Navigator.Payment) {
+            return paymentActivity.get().withPlace(place);
         }
         return null;
 

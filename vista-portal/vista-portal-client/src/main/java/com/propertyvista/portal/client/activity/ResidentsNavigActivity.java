@@ -35,7 +35,7 @@ public class ResidentsNavigActivity extends AbstractActivity implements Resident
     @Inject
     public ResidentsNavigActivity(ResidentsNavigView view) {
         this.view = view;
-        view.setPresenter(this);
+        this.view.setPresenter(this);
     }
 
     @Override

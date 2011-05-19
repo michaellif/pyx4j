@@ -27,12 +27,11 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
-
-import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView {
 
@@ -82,7 +81,12 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
         }
 
         void populate(List<PropertyDTO> properties) {
-            removeAllRows();
+            // removeAllRows(); VS: removes header as well. We do not want this
+            int total = getRowCount();
+            if (total > 1) {
+                for (int i = 1; i < total; i++)
+                    removeRow(1);
+            }
             for (PropertyDTO property : properties) {
                 addProperty(property);
             }

@@ -7,26 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
+ * Created on May 19, 2011
  * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.common.domain.ref.City;
+import com.propertyvista.common.domain.ref.Province;
 
-public class FindApartmentViewImpl extends SimplePanel implements FindApartmentView {
+import com.pyx4j.entity.rpc.GeoCriteria;
 
-    public FindApartmentViewImpl() {
+public interface SearchApartmentView extends IsWidget {
 
-        FlowPanel panel = new FlowPanel();
-        HTML message = new HTML("Featured Apartments<br>Testimonials<br>News<br>Why Us");
+    public void setPresenter(Presenter presenter);
 
-        panel.add(message);
+    public interface Presenter {
 
-        setWidget(panel);
+        public void goToCityMap(Province province);
+
+        public void goToPropertyMap(City city);
+
+        public void goToPropertyMap(GeoCriteria geoCriteria);
 
     }
 

@@ -15,23 +15,6 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.rpc.GeoCriteria;
-
-import com.propertyvista.common.domain.ref.City;
-import com.propertyvista.common.domain.ref.Province;
-
 public interface FindApartmentView extends IsWidget {
-
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
-
-        public void goToCityMap(Province province);
-
-        public void goToPropertyMap(City city);
-
-        public void goToPropertyMap(GeoCriteria geoCriteria);
-
-    }
 
 }

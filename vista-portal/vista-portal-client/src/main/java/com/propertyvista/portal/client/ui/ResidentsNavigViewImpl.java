@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.domain.site.NavigItem;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -50,22 +51,28 @@ public class ResidentsNavigViewImpl extends SimplePanel implements ResidentsNavi
 
     private NavigTabList tabsHolder;
 
+    private AppPlace defaultitem;
+
     public ResidentsNavigViewImpl() {
         setStyleName(DEFAULT_STYLE_PREFIX);
-
+        defaultitem = null;
     }
 
     @Override
     public void setPresenter(ResidentsNavigPresenter presenter) {
         this.presenter = presenter;
+
         clear();
         tabsHolder = new NavigTabList();
         for (NavigItem item : presenter.getResidentsNavig().items()) {
             tabsHolder.add(new NavigTab(item));
         }
-        //AppPlace defaultitem = new PortalSiteMap.Residents.Navigator.TenantProfile();
-
         setWidget(tabsHolder);
+        //TODO need a better way to initialize on the first landing
+        if (defaultitem != null)
+            return;
+        defaultitem = new PortalSiteMap.Residents.Navigator.TenantProfile();
+        AppSite.getPlaceController().goTo(defaultitem);
 
     }
 
@@ -119,13 +126,6 @@ public class ResidentsNavigViewImpl extends SimplePanel implements ResidentsNavi
 
             String placeid = AppSite.getPlaceId(place);
             String current = AppSite.getPlaceId(presenter.getWhere());
-            //TODO change logic
-            if (current != null) {
-                String[] path = current.split("/");
-                if (path.length > 0)
-                    current = path[0];
-
-            }
 
             if (placeid != null && placeid.equals(current)) {
                 label.addStyleDependentName(StyleDependent.current.name());

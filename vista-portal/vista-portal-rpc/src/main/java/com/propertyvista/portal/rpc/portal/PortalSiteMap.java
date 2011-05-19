@@ -35,12 +35,11 @@ public class PortalSiteMap implements SiteMap {
         public static class PropertyMap extends AppPlace {
         }
 
-        public static class AppartmentDetails extends AppPlace {
+        public static class ApartmentDetails extends AppPlace {
         }
 
         public static class UnitDetails extends AppPlace {
         }
-
     }
 
     @PlaceProperties(caption = "Residents")

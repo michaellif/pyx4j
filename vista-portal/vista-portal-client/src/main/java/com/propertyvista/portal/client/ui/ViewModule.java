@@ -15,10 +15,9 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
+import com.propertyvista.portal.client.themes.GainsboroTheme;
 
 import com.pyx4j.widgets.client.style.Theme;
-
-import com.propertyvista.portal.client.themes.GainsboroTheme;
 
 public class ViewModule extends AbstractGinModule {
 
@@ -43,6 +42,8 @@ public class ViewModule extends AbstractGinModule {
 
         bind(ApartmentDetailsView.class).to(ApartmentDetailsViewImpl.class).in(Singleton.class);
         bind(UnitDetailsView.class).to(UnitDetailsViewImpl.class).in(Singleton.class);
+        bind(SearchApartmentView.class).to(SearchApartmentViewImpl.class).in(Singleton.class);
+        bind(BackToSearchView.class).to(BackToSearchViewImpl.class).in(Singleton.class);
 
     }
 

@@ -65,7 +65,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
 
     @Override
     public void goToAppartmentDetails(PropertyDTO property) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.AppartmentDetails());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.ApartmentDetails());
     }
 
 }

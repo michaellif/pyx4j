@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
- * @author Dad
+ * Created on May 18, 2011
+ * @author vadims
  * @version $Id$
  */
 package com.propertyvista.portal.client.activity;
@@ -18,24 +18,25 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ui.FindApartmentView;
+import com.propertyvista.portal.client.ui.TenantProfileView;
 
-public class FindApartmentActivity extends AbstractActivity {
+public class TenantProfileActivity extends AbstractActivity {
 
-    private final FindApartmentView view;
+    private final TenantProfileView view;
 
     @Inject
-    public FindApartmentActivity(FindApartmentView view) {
+    public TenantProfileActivity(TenantProfileView view) {
         this.view = view;
     }
 
-    @Override
-    public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
-        containerWidget.setWidget(view);
-
-    }
-
-    public FindApartmentActivity withPlace(Place place) {
+    public TenantProfileActivity withPlace(Place place) {
         return this;
     }
+
+    @Override
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        panel.setWidget(view);
+
+    }
+
 }
