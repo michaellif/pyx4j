@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.listers;
 
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.dto.AptUnitDTO;
 
-public interface IUnitListerView extends IListerView<AptUnit> {
+public interface IUnitListerView extends IListerView<AptUnitDTO> {
 
 }

@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.vewers;
 
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.dto.AptUnitDTO;
 
-public interface IUnitViewerView extends IViewerView<AptUnit> {
+public interface IUnitViewerView extends IViewerView<AptUnitDTO> {
 
 }

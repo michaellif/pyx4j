@@ -19,14 +19,15 @@ import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.listers.IBuildingListerView;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingListerActivity extends ListerActivityBase<BuildingDTO> {
+public class BuildingListerActivity extends ListerActivityBase<Building, BuildingDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
     public BuildingListerActivity(IBuildingListerView view) {
-        super(view, (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class), BuildingDTO.class);
+        super(view, (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class), Building.class);
     }
 
 }

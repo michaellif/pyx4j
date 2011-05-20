@@ -19,14 +19,14 @@ import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.vewers.IUnitViewerView;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitViewerActivity extends ViewerActivityBase<AptUnit> {
+public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
     public UnitViewerActivity(IUnitViewerView view) {
-        super(view, (AbstractCrudService<AptUnit>) GWT.create(UnitCrudService.class));
+        super(view, (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
     }
 
 }

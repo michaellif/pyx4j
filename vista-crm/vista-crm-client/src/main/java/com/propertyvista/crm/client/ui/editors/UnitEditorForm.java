@@ -42,20 +42,20 @@ import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Utility;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
+import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitEditorForm extends CEntityForm<AptUnit> {
+public class UnitEditorForm extends CEntityForm<AptUnitDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(UnitEditorForm.class);
 
     public UnitEditorForm() {
-        super(AptUnit.class, new CrmEditorsComponentFactory());
+        super(AptUnitDTO.class, new CrmEditorsComponentFactory());
     }
 
     public UnitEditorForm(IEditableComponentFactory factory) {
-        super(AptUnit.class, factory);
+        super(AptUnitDTO.class, factory);
     }
 
     @Override

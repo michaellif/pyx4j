@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.vewers;
 
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.BuildingDTO;
 
-public interface IBuildingViewerView extends IViewerView<Building> {
+public interface IBuildingViewerView extends IViewerView<BuildingDTO> {
 
 }

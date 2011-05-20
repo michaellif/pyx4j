@@ -19,13 +19,13 @@ import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.editors.IBuildingEditorView;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingEditorActivity extends EditorActivityBase<Building> {
+public class BuildingEditorActivity extends EditorActivityBase<BuildingDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
     public BuildingEditorActivity(IBuildingEditorView view) {
-        super(view, (AbstractCrudService<Building>) GWT.create(BuildingCrudService.class));
+        super(view, (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
     }
 }

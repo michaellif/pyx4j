@@ -7,20 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-17
+ * Created on 2011-05-20
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.vewers;
+package com.propertyvista.dto;
 
-import com.propertyvista.crm.client.ui.editors.UnitEditorForm;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public class UnitViewerViewImpl extends ViewerViewImplBase<AptUnitDTO> implements IUnitViewerView {
-
-    public UnitViewerViewImpl() {
-        super(new CrmSiteMap.Viewers.Unit());
-        setViewer(new UnitEditorForm(new CrmViewersComponentFactory()));
-    }
+public interface AptUnitDTO extends AptUnit {
 }

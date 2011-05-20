@@ -45,25 +45,25 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Phone;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingEditorForm extends CEntityForm<Building> {
+public class BuildingEditorForm extends CEntityForm<BuildingDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(BuildingEditorForm.class);
 
     public BuildingEditorForm() {
-        super(Building.class, new CrmEditorsComponentFactory());
+        super(BuildingDTO.class, new CrmEditorsComponentFactory());
     }
 
     public BuildingEditorForm(IEditableComponentFactory factory) {
-        super(Building.class, factory);
+        super(BuildingDTO.class, factory);
     }
 
     @Override
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Building Information")));
+        main.add(new CrmHeaderDecorator(i18n.tr("BuildingDTO Information")));
         DecorationData decorData = new DecorationData(14d, 12);
         main.add(new VistaWidgetDecorator(inject(proto().info().name()), decorData));
         main.add(inject(proto().info().address()));
@@ -74,7 +74,7 @@ public class BuildingEditorForm extends CEntityForm<Building> {
         main.add(new VistaWidgetDecorator(inject(proto().info().totalStories()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().info().residentialStories()), decorData));
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Building Details")));
+        main.add(new CrmHeaderDecorator(i18n.tr("BuildingDTO Details")));
         //main.add(new VistaWidgetDecorator(inject(proto().elevators()), decorData));
         //main.add(new VistaWidgetDecorator(inject(proto().boilers()), decorData));
         //main.add(new VistaWidgetDecorator(inject(proto().roof()), decorData));

@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.ui.editors;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingEditorViewImpl extends EditorViewImplBase<Building> implements IBuildingEditorView {
+public class BuildingEditorViewImpl extends EditorViewImplBase<BuildingDTO> implements IBuildingEditorView {
 
     public BuildingEditorViewImpl() {
         super(new CrmSiteMap.Editors.Building());

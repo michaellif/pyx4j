@@ -27,23 +27,23 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.propertyvista.crm.client.ui.listers.IListerView;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 
-public class ListerActivityBase<E extends IEntity> extends AbstractActivity implements IListerView.Presenter {
+public class ListerActivityBase<B extends IEntity, E extends B> extends AbstractActivity implements IListerView.Presenter {
 
     private final IListerView<E> view;
 
     private final AbstractCrudService<E> service;
 
-    private final Class<E> entityClass;
+    private final Class<B> entityClass;
 
     @Inject
-    public ListerActivityBase(IListerView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
+    public ListerActivityBase(IListerView<E> view, AbstractCrudService<E> service, Class<B> entityClass) {
         this.view = view;
         this.service = service;
         this.entityClass = entityClass;
         view.setPresenter(this);
     }
 
-    public ListerActivityBase<E> withPlace(Place place) {
+    public ListerActivityBase<B, E> withPlace(Place place) {
         return this;
     }
 
@@ -56,8 +56,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void populateData(final int pageNumber) {
         @SuppressWarnings("unchecked")
-//        EntitySearchCriteria<E> criteria = (EntitySearchCriteria<E>) new EntitySearchCriteria<Building>(Building.class);
-        EntitySearchCriteria<E> criteria = new EntitySearchCriteria<E>(entityClass);
+        EntitySearchCriteria<E> criteria = (EntitySearchCriteria<E>) new EntitySearchCriteria<B>(entityClass);
         criteria.setPageSize(view.getPageSize());
         criteria.setPageNumber(pageNumber);
 

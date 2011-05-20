@@ -19,17 +19,16 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitLister extends ListerBase<AptUnit> {
+public class UnitLister extends ListerBase<AptUnitDTO> {
 
     public UnitLister() {
-        super(AptUnit.class, new CrmSiteMap.Viewers.Unit());
-//        super(AptUnit.class, new CrmSiteMap.Editors.Unit());
+        super(AptUnitDTO.class, new CrmSiteMap.Viewers.Unit());
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<AptUnit>> columnDescriptors, AptUnit proto) {
+    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<AptUnitDTO>> columnDescriptors, AptUnitDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketing().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));
