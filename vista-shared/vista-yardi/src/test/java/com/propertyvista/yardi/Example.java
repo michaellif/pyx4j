@@ -23,43 +23,52 @@ import com.yardi.ws.operations.PingResponse;
 
 public class Example {
 
-    private final static Logger log = LoggerFactory.getLogger(Example.class);
+	private final static Logger log = LoggerFactory.getLogger(Example.class);
 
-    public static void main(String[] args) {
-        YardiClient c = new YardiClient();
+	public static void main(String[] args) {
+		YardiClient c = new YardiClient();
 
-        try {
-            c.transactionId = 1L;
-            Ping ping = new Ping();
-            PingResponse pr = c.getResidentTransactionsService().ping(ping);
-            log.info("result [{}]", pr.getPingResult());
+		try {
+			c.transactionId = 1L;
 
-            c.transactionId = 2L;
-            {
-                GetPropertyConfigurations l = new GetPropertyConfigurations();
-                l.setUserName("propertyvistaws");
-                l.setPassword("52673");
-                l.setServerName("aspdb04");
-                l.setDatabase("afqoml_live");
-                l.setPlatform("SQL");
-                l.setInterfaceEntity("Property Vista");
-                c.getResidentTransactionsService().getPropertyConfigurations(l);
-            }
+			// The Ping function accepts no parameters, but will return the
+			// assembly name of the function being called. Use it to test
+			// connectivity.
+			Ping ping = new Ping();
+			PingResponse pr = c.getResidentTransactionsService().ping(ping);
+			log.info("result [{}]", pr.getPingResult());
 
-            c.transactionId = 3L;
-            {
-                GetUnitInformation_Login l = new GetUnitInformation_Login();
-                l.setUserName("propertyvistaws");
-                l.setPassword("52673");
-                l.setServerName("aspdb04");
-                l.setDatabase("afqoml_live");
-                l.setPlatform("SQL");
-                l.setYardiPropertyId("prvista1");
-                l.setInterfaceEntity("Property Vista");
-                c.getResidentTransactionsService().getUnitInformation_Login(l);
-            }
-        } catch (Throwable e) {
-            log.error("error", e);
-        }
-    }
+			c.transactionId = 2L;
+			{
+				// Allows export of the Property Configuration with the
+				// Database. The Unique Interface Entity name is needed in order
+				// to return the Property ID's the third-party has access to.
+				GetPropertyConfigurations l = new GetPropertyConfigurations();
+				l.setUserName("propertyvistaws");
+				l.setPassword("52673");
+				l.setServerName("aspdb04");
+				l.setDatabase("afqoml_live");
+				l.setPlatform("SQL");
+				l.setInterfaceEntity("Property Vista");
+				c.getResidentTransactionsService().getPropertyConfigurations(l);
+			}
+
+			c.transactionId = 3L;
+			{
+				// Allows export of all units and corresponding occupancy status
+				// for a given property/property list.
+				GetUnitInformation_Login l = new GetUnitInformation_Login();
+				l.setUserName("propertyvistaws");
+				l.setPassword("52673");
+				l.setServerName("aspdb04");
+				l.setDatabase("afqoml_live");
+				l.setPlatform("SQL");
+				l.setYardiPropertyId("prvista1");
+				l.setInterfaceEntity("Property Vista");
+				c.getResidentTransactionsService().getUnitInformation_Login(l);
+			}
+		} catch (Throwable e) {
+			log.error("error", e);
+		}
+	}
 }
