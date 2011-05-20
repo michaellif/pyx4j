@@ -339,6 +339,13 @@
                     <groupId>org.apache.axis2</groupId>
 				    <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
 				    <version>${axis2Version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.neethi</groupId>
+                            <artifactId>neethi</artifactId>
+                            <version>2.0.4</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -472,7 +479,7 @@
                                         </configuration>
                                         <reports>
                                             <report>index</report>
-                                            <!--report>dependencies</report-->
+                                            <report>dependencies</report>
                                             <report>modules</report>
                                             <report>license</report>
                                         </reports>
