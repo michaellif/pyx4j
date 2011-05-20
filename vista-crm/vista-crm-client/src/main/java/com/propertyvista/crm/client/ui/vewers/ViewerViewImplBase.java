@@ -17,8 +17,13 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
@@ -37,10 +42,13 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
 
     protected Presenter presenter;
 
-    public ViewerViewImplBase(AppPlace place) {
+    protected final AppPlace editPlace;
+
+    public ViewerViewImplBase(AppPlace viewPlace, AppPlace editPlace) {
         super(Unit.EM);
+        this.editPlace = editPlace;
         setSize("100%", "100%");
-        addNorth(new CrmHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(place).getCaption()), 3);
+        addNorth(new CrmHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(viewPlace).getCaption(), createActionsPanel()), 3);
         add(scroll);
     }
 
@@ -61,5 +69,16 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     public void populate(E value) {
         assert (viewer != null);
         viewer.populate(value);
+    }
+
+    private Widget createActionsPanel() {
+        HorizontalPanel buttons = new HorizontalPanel();
+        buttons.add(new Button("Edit", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.edit(editPlace);
+            }
+        }));
+        return buttons;
     }
 }

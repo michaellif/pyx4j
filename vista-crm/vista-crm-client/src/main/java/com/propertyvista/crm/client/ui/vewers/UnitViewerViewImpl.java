@@ -20,7 +20,7 @@ import com.propertyvista.dto.AptUnitDTO;
 public class UnitViewerViewImpl extends ViewerViewImplBase<AptUnitDTO> implements IUnitViewerView {
 
     public UnitViewerViewImpl() {
-        super(new CrmSiteMap.Viewers.Unit());
+        super(new CrmSiteMap.Viewers.Unit(), new CrmSiteMap.Editors.Unit());
         setViewer(new UnitEditorForm(new CrmViewersComponentFactory()));
     }
 }

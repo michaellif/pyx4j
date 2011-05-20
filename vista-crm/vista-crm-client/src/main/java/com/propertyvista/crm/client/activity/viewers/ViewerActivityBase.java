@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.viewers;
 
+import java.util.HashMap;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -21,6 +23,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.vewers.IViewerView;
@@ -72,5 +75,14 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
                 }
             }, entityId);
         }
+    }
+
+    @Override
+    public void edit(AppPlace editPlace) {
+        HashMap<String, String> args = new HashMap<String, String>();
+        args.put(CrmSiteMap.ARG_NAME_ITEM_ID, String.valueOf(entityId));
+        editPlace.setArgs(args);
+
+        AppSite.getPlaceController().goTo(editPlace);
     }
 }
