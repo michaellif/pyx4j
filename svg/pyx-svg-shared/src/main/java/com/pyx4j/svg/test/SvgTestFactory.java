@@ -38,6 +38,8 @@ import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.BarChart;
 import com.pyx4j.svg.chart.BarChartModel;
 import com.pyx4j.svg.chart.BarChartModel.BarChartItem;
+import com.pyx4j.svg.chart.ChartAxis;
+import com.pyx4j.svg.chart.ChartGridType;
 import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.DataSource;
 import com.pyx4j.svg.chart.LegendIconType;
@@ -103,6 +105,43 @@ public class SvgTestFactory {
         ds.setSeriesDescription(sd);
 
         PieChart2D pchart = new PieChart2D(factory, ds, 100, ChartTheme.Bright, true);
+        g.add(pchart);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
+        return svgroot;
+    }
+
+    public static SvgRoot createBarChart2DTest(SvgFactory factory, int x, int y) {
+        SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
+
+        DataSource ds = new DataSource();
+        List<Double> values = new ArrayList<Double>(5);
+        values.add(180.0);
+        values.add(160.0);
+        values.add(10.0);
+        ds.addDataSet(ds.new Metric("Building 1"), values);
+
+        values = new ArrayList<Double>(5);
+        values.add(880.0);
+        values.add(580.0);
+        values.add(250.0);
+        ds.addDataSet(ds.new Metric("Building 2"), values);
+
+        values = new ArrayList<Double>(5);
+        values.add(380.0);
+        values.add(0.0);
+        values.add(380.0);
+        ds.addDataSet(ds.new Metric("Building 3"), values);
+
+        //series descriptors
+        List<String> sd = new ArrayList<String>(3);
+        sd.add("2008");
+        sd.add("2009");
+        sd.add("2010");
+        ds.setSeriesDescription(sd);
+
+        ChartAxis pchart = new ChartAxis(factory, ds, 600, 400, ChartGridType.Both, true);
         g.add(pchart);
         g.setTransform("translate(" + x + "," + y + ")");
         svgroot.add(g);

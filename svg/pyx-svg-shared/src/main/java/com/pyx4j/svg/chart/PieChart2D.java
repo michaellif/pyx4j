@@ -37,11 +37,11 @@ import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.DataSource.Metric;
 
 public class PieChart2D implements IsSvgElement {
-    DataSource datasource;
+    private final DataSource datasource;
 
-    SvgFactory factory;
+    private final SvgFactory factory;
 
-    int radius;
+    private final int radius;
 
     private final static int X_SHIFT = 40;
 

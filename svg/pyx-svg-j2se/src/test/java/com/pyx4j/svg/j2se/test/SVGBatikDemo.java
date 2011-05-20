@@ -59,7 +59,9 @@ public class SVGBatikDemo {
         SvgTestFactory.createTestPolygon(factory, 10, 610);
         SvgTestFactory.createTestText(factory, 10, 710);
         SvgTestFactory.createTestLegendItem(factory, 10, 810);
-        SvgTestFactory.createPieChart2DTest(factory, 10, 910);
+        SvgTestFactory.createBarChart2DTest(factory, 10, 910);
+
+        //    SvgTestFactory.createPieChart2DTest(factory, 10, 910);
         /*
          * SvgTestFactory.createTestBarChart(factory, 10, 1100);
          */
