@@ -16,18 +16,27 @@ package com.propertyvista.server.tests;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
-
 import com.pyx4j.commons.TimeUtils;
 
 public class VistaDBPreloadTest extends VistaDBTestCase {
 
-    private final static Logger log = LoggerFactory.getLogger(VistaDBPreloadTest.class);
+	private final static Logger log = LoggerFactory
+			.getLogger(VistaDBPreloadTest.class);
 
-    public void testDefaultPreload() {
-        long start = System.currentTimeMillis();
-        new VistaDataPreloaders().preloadAll();
-        log.info("Preload time {}", TimeUtils.secSince(start));
-    }
+	public void testDefaultPreload() {
+
+		// make things faster
+		DemoData.NUM_RESIDENTIAL_BUILDINGS = 1;
+		DemoData.NUM_FLOORPLANS = 2;
+		DemoData.NUM_UNITS_PER_FLOOR = 2;
+		DemoData.NUM_FLOORS = 2;
+		DemoData.NUM_POTENTIAL_TENANTS = 2;
+
+		long start = System.currentTimeMillis();
+		new VistaDataPreloaders().preloadAll();
+		log.info("Preload time {}", TimeUtils.secSince(start));
+	}
 }
