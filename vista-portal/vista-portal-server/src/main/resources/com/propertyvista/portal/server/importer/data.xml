@@ -1,0 +1,2462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<residential>
+  <region code="AB">
+    <city name="Brooks">
+      <property code="cent1219">
+        <name>1219 Centre Street</name>
+        <type>High Rise</type>
+        <unitcount>24</unitcount>
+        <sqft>0</sqft>
+        <floors>3</floors>
+        <rentrange>$750.00 - $860.00</rentrange>
+        <address>
+          <street>1219 Centre Street</street>
+          <city>Brooks</city>
+          <post>T1R 1M7</post>
+          <province>Alberta</province>
+          <prv>AB</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN BROOKS: a beautiful and accommodating property, matched only by the quality of its amenities.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>1</featured>
+      </property>
+    </city>
+    <city name="Calgary">
+      <property code="rund5300">
+        <name>5300 Rundlehorn Drive NE</name>
+        <type />
+        <unitcount>253</unitcount>
+        <sqft>0</sqft>
+        <floors>3</floors>
+        <rentrange>$879.00 - $1399.00</rentrange>
+        <address>
+          <street>5300 Rundlehorn Drive NE</street>
+          <city>Calgary</city>
+          <post>T1Y 3V5</post>
+          <province>Alberta</province>
+          <prv>AB</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN CALGARY: a beautiful rental community that combines practical amenities and a lively location with our pet-friendly policies.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions</otherinfo>
+        <youtube />
+        <building>Pineridge Green</building>
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>1</featured>
+      </property>
+      <property code="xtent123">
+        <name>123 10TH Avenue S.W.</name>
+        <type>High Rise</type>
+        <unitcount>359</unitcount>
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$899.00 - $1399.00</rentrange>
+        <address>
+          <street>123 10TH Avenue S.W.</street>
+          <city>Calgary</city>
+          <post>T2R 1K8</post>
+          <province>Alberta</province>
+          <prv>AB</prv>
+          <country>Canada</country>
+        </address>
+        <introduction />
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">175.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">175.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel />
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty />
+        <website />
+        <featured>0</featured>
+      </property>
+    </city>
+    <city name="Lethbridge">
+      <property code="23rd210r">
+        <name>3210 23rd Avenue South</name>
+        <type>Low Rise</type>
+        <unitcount>30</unitcount>
+        <sqft>0</sqft>
+        <floors>3</floors>
+        <rentrange>$830.00 - $930.00</rentrange>
+        <address>
+          <street>3210 23rd Avenue South</street>
+          <city>Lethbridge</city>
+          <post>T1K 4K4</post>
+          <province>Alberta</province>
+          <prv>AB</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN LETHBRIDGE: are you looking to grab a bite to eat, catch a movie or if you simply lead an active lifestyle? This location will offer you the best Lethbridge has to offer.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+          <include>Electricity</include>
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>1</featured>
+      </property>
+      <property code="32nd201r">
+        <name>2201 32ND</name>
+        <type>High Rise</type>
+        <unitcount>50</unitcount>
+        <sqft>0</sqft>
+        <floors>9</floors>
+        <rentrange>$835.00 - $1145.00</rentrange>
+        <address>
+          <street>2201 32ND</street>
+          <city>Lethbridge</city>
+          <post>T1K 3A7</post>
+          <province>Alberta</province>
+          <prv>AB</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN LETHBRIDGE: an accommodating high-rise is surrounded by many shops and is just minutes from the Lethbridge Community College.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+          <include>Hydro</include>
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>1</featured>
+      </property>
+    </city>
+  </region>
+  <region code="BC">
+    <city name="Abbotsford">
+      <property code="mars69tp">
+        <name>33690 Marshall Road</name>
+        <type>High Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>4</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>33690 Marshall Road</street>
+          <city>Abbotsford</city>
+          <post>V2S 1L2</post>
+          <province>BC</province>
+          <prv>BC</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENT RENTALS IN ABBOTSFORD.  Surrounded by lush foliage - this beautiful low rise is perfect for those who want it all - affordability, quality and convenience.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">20.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Gateway Property Management</name>
+          <tel>(604)-615-5382</tel>
+          <hours />
+          <email>RentCedarApartments@gmail.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="Columbia Bible College" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building>Cedar Apartments</building>
+        <thirdparty>Gateway Property Management</thirdparty>
+        <website>http://www.gatewaypm.com/ViewBuilding.aspx?id=538</website>
+        <featured>1</featured>
+      </property>
+      <property code="mcca48tp">
+        <name>1948 McCallum Road</name>
+        <type>Low Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>3</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>1948 McCallum Road</street>
+          <city>Abbotsford</city>
+          <post>V2S 3M9</post>
+          <province>BC</province>
+          <prv>BC</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENT RENTALS IN ABBOTSFORD.  A place to call home.  Experience rental living in this beautiful 3 storey low rise.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">20.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Gateway Property Management</name>
+          <tel>(604)-615-5382</tel>
+          <hours />
+          <email>RentArbutusApartments@gmail.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building>Arbutus Apartments</building>
+        <thirdparty>Gateway Property Management</thirdparty>
+        <website>http://www.gatewaypm.com/ViewBuilding.aspx?id=540</website>
+        <featured>1</featured>
+        <featured>1</featured>
+      </property>
+      <property code="mcca68tp">
+        <name>1968 McCallum Road</name>
+        <type>Low Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>3</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>1968 McCallum Road</street>
+          <city>Abbotsford</city>
+          <post>V2S 3M6</post>
+          <province>BC</province>
+          <prv>BC</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENT RENTALS IN ABBOTSFORD.  This picturesque building offers cozy rentals and convenience to nearby amenities.  Welcome home!</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">20.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Gateway Property Management</name>
+          <tel>(604)-615-5382</tel>
+          <hours />
+          <email>RentBalsamApartments@gmail.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building>Balsam Apartments</building>
+        <thirdparty>Gateway Property Management</thirdparty>
+        <website>http://www.gatewaypm.com/ViewBuilding.aspx?id=539</website>
+        <featured>1</featured>
+        <featured>1</featured>
+      </property>
+    </city>
+    <city name="Mission">
+      <property code="12th33tp">
+        <name>33333 Twelfth Avenue</name>
+        <type>High Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>5</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>33333 Twelfth Avenue</street>
+          <city>Mission</city>
+          <post>V2V 5W2</post>
+          <province>BC</province>
+          <prv>BC</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN MISSION: this accommodating low-rise complex is located in one of city's quiet residential areas.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">20.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">10.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Gateway Property Management</name>
+          <tel>(778)-788-1857</tel>
+          <hours />
+          <email>RentRichardsCourt@gmail.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building>Richards Court</building>
+        <thirdparty>Gateway Property Management</thirdparty>
+        <website>http://www.gatewaypm.com/ViewBuilding.aspx?id=553</website>
+        <featured>1</featured>
+      </property>
+    </city>
+    <city name="Vancouver">
+      <property code="camb30tp">
+        <name>2130 Cambridge</name>
+        <type>Low Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>3</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>2130 Cambridge</street>
+          <city>Vancouver</city>
+          <post>V5L 1E3</post>
+          <province>BC</province>
+          <prv>BC</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENT RENTALS IN VANCOUVER.  Situated in one of Vancouver's most welcoming communities, this 3 storey low rise is a must see.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">25.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Gateway Property Management</name>
+          <tel>(604)-635-5045</tel>
+          <hours />
+          <email>RentCambridgeEstates@gmail.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="City University" />
+          <school shortname="Columbia College" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building>Cambridge Estates</building>
+        <thirdparty>Gateway Property Management</thirdparty>
+        <website>http://www.gatewaypm.com/ViewBuilding.aspx?id=574</website>
+        <featured>1</featured>
+      </property>
+    </city>
+    <city name="Victoria">
+      <property code="simc25tp">
+        <name>425 Simcoe Street</name>
+        <type>High Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>7</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>425 Simcoe Street</street>
+          <city>Victoria</city>
+          <post>V8V 4T3</post>
+          <province>BC</province>
+          <prv>BC</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN VICTORIA: this charming building sits in the heart of the James Bay area - one of Victoria's most sought after communities.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">40.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Gateway Property Management</name>
+          <tel>(250)-508-8037</tel>
+          <hours />
+          <email>RentJamesBaySquare@gmail.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty>Gateway Property Management</thirdparty>
+        <website>http://www.gatewaypm.com/ViewBuilding.aspx?id=587</website>
+        <featured>0</featured>
+      </property>
+    </city>
+  </region>
+  <region code="NB">
+    <city name="Fredericton">
+      <property code="park70tp">
+        <name>270 Parkside Drive</name>
+        <type>High Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>4</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>270 Parkside Drive</street>
+          <city>Fredericton</city>
+          <post>E3B 5V7</post>
+          <province>New Brunswick</province>
+          <prv>NB</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>"Experience this great combination of a busy residential neighbourhood and accommodating property amenities"</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Greenwin Property Management</name>
+          <tel />
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty>Greenwin Property Management</thirdparty>
+        <website>http://www.greenwinpm.com</website>
+        <featured>1</featured>
+      </property>
+    </city>
+    <city name="Saint John">
+      <property code="alph01tp">
+        <name>1 Alpha Place</name>
+        <type>Low Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>3</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>1 Alpha Place</street>
+          <city>Saint John</city>
+          <post>E2K 4K9</post>
+          <province>New Brunswick</province>
+          <prv>NB</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN SAINT JOHN: affordable three-story low-rise conveniently located near university and regional hospital.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Greenwin Property Management</name>
+          <tel />
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty>Greenwin Property Management</thirdparty>
+        <website>http://www.greenwinpm.com</website>
+        <featured>1</featured>
+      </property>
+      <property code="alph05tp">
+        <name>5 Alpha Place</name>
+        <type>Low Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>3</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>5 Alpha Place</street>
+          <city>Saint John</city>
+          <post>E2K 4K9</post>
+          <province>New Brunswick</province>
+          <prv>NB</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN SAINT JOHN: affordable three-story low-rise conveniently located near university and regional hospital.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Greenwin Property Management</name>
+          <tel />
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty>Greenwin Property Management</thirdparty>
+        <website>http://www.greenwinpm.com</website>
+        <featured>1</featured>
+      </property>
+    </city>
+  </region>
+  <region code="NS">
+    <city name="Dartmouth">
+      <property code="jack07tp">
+        <name>7 Jackson Road</name>
+        <type>Low Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>3</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>7 Jackson Road</street>
+          <city>Dartmouth</city>
+          <post>B3A 4A4</post>
+          <province>Nova Scotia</province>
+          <prv>NS</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN DARTMOUTH: just minutes from Mic Mac Mall, Burnside Industrial Park and a local Community Centre.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>CitiGroup Property Ltd.</name>
+          <tel>(902)-407-3667</tel>
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty>CitiGroup Property Ltd.</thirdparty>
+        <website>http://www.citigroup.ns.ca/default.aspx?id=32&amp;table=apartment</website>
+        <featured>1</featured>
+      </property>
+      <property code="jack14tp">
+        <name>14 Jackson Road</name>
+        <type>Low Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>3</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>14 Jackson Road</street>
+          <city>Dartmouth</city>
+          <post>B3A 4A3</post>
+          <province>Nova Scotia</province>
+          <prv>NS</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN DARTMOUTH: just minutes from Mic Mac Mall, Burnside Industrial Park and a local Community Centre.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>CitiGroup Property Ltd.</name>
+          <tel>(902)-407-3667</tel>
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty>CitiGroup Property Ltd.</thirdparty>
+        <website>http://www.citigroup.ns.ca/default.aspx?id=32&amp;table=apartment</website>
+        <featured>1</featured>
+      </property>
+      <property code="kenn15tp">
+        <name>15 Kennedy Drive</name>
+        <type>High Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>8</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>15 Kennedy Drive</street>
+          <city>Dartmouth</city>
+          <post>B2X 1N7</post>
+          <province>Nova Scotia</province>
+          <prv>NS</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN DARTMOUTH: a modern, perfectly-maintained building in a residential area.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>CitiGroup Property Ltd.</name>
+          <tel>(902)-407-3667</tel>
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building>Kennedy Place</building>
+        <thirdparty>CitiGroup Property Ltd.</thirdparty>
+        <website>http://www.citigroup.ns.ca/default.aspx?id=33&amp;table=apartment</website>
+        <featured>0</featured>
+      </property>
+    </city>
+    <city name="Halifax">
+      <property code="brun09tp">
+        <name>2309 Brunswick Street</name>
+        <type>High Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>17</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>2309 Brunswick Street</street>
+          <city>Halifax</city>
+          <post>B3K 2Z1</post>
+          <province>Nova Scotia</province>
+          <prv>NS</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN HALIFAX: waterfront living you can afford! Condo-like amenities, terrific location and friendly onsite staff.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">70.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">50.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Ashford Properties Inc.</name>
+          <tel>(902)-446-3399</tel>
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="Atlantic School of Theology" />
+          <school shortname="Dalhousie University" />
+          <school shortname="St Marys University" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube>yWXBjxisi9U&amp;hl=en&amp;fs=1&amp;color1=0x006699&amp;color2=0x54abd6</youtube>
+        <building>Ocean Towers</building>
+        <thirdparty>Ashford Properties Inc.</thirdparty>
+        <website>http://www.greenwinpm.com/apartments-for-rent/7/halifax/</website>
+        <featured>1</featured>
+      </property>
+      <property code="brun19tp">
+        <name>2319 Brunswick Street</name>
+        <type>High Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>2319 Brunswick Street</street>
+          <city>Halifax</city>
+          <post>B3K 2Y9</post>
+          <province>Nova Scotia</province>
+          <prv>NS</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN HALIFAX: waterfront living you can afford! Condo-like amenities, terrific location and friendly onsite staff.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">70.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">50.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Ashford Properties Inc.</name>
+          <tel>(902)-446-3399</tel>
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="Atlantic School of Theology" />
+          <school shortname="Dalhousie University" />
+          <school shortname="St Marys University" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube>yWXBjxisi9U&amp;hl=en&amp;fs=1&amp;color1=0x006699&amp;color2=0x54abd6</youtube>
+        <building>Ocean Towers (Heritage House)</building>
+        <thirdparty>Ashford Properties Inc.</thirdparty>
+        <website>http://www.greenwinpm.com/apartments-for-rent/7/halifax/</website>
+        <featured>1</featured>
+      </property>
+      <property code="brun27tp">
+        <name>2327 Brunswick Street</name>
+        <type>High Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>2327 Brunswick Street</street>
+          <city>Halifax</city>
+          <post>B3k 2Z2</post>
+          <province>Nova Scotia</province>
+          <prv>NS</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN HALIFAX: waterfront living you can afford! Condo-like amenities, terrific location and friendly onsite staff.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">70.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">50.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Ashford Properties Inc.</name>
+          <tel>(902)-446-3399</tel>
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="Atlantic School of Theology" />
+          <school shortname="St Marys University" />
+          <school shortname="Dalhousie University" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube>yWXBjxisi9U&amp;hl=en&amp;fs=1&amp;color1=0x006699&amp;color2=0x54abd6</youtube>
+        <building>Ocean Towers</building>
+        <thirdparty>Ashford Properties Inc.</thirdparty>
+        <website>http://www.greenwinpm.com/apartments-for-rent/7/halifax/</website>
+        <featured>1</featured>
+      </property>
+      <property code="brun34tp">
+        <name>2334 Brunswick Street</name>
+        <type>Townhouse</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>2334 Brunswick Street</street>
+          <city>Halifax</city>
+          <post>B3K 5K6</post>
+          <province>Nova Scotia</province>
+          <prv>NS</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN HALIFAX: waterfront living you can afford! Condo-like amenities, terrific location and friendly onsite staff.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="4 Bedroom">4bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">70.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">50.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Ashford Properties Inc.</name>
+          <tel>(902)-446-3399</tel>
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube>yWXBjxisi9U&amp;hl=en&amp;fs=1&amp;color1=0x006699&amp;color2=0x54abd6</youtube>
+        <building>Ocean Towers</building>
+        <thirdparty>Ashford Properties Inc.</thirdparty>
+        <website>http://www.greenwinpm.com/apartments-for-rent/7/halifax/</website>
+        <featured>1</featured>
+      </property>
+      <property code="gerr14tp">
+        <name>5214 Gerrish Street</name>
+        <type>High Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>16</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>5214 Gerrish Street</street>
+          <city>Halifax</city>
+          <post>B3K 5K3</post>
+          <province>Nova Scotia</province>
+          <prv>NS</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN HALIFAX: waterfront living you can afford! Condo-like amenities, terrific location, friendly onsite staff and breathtaking views of the city and the harbour.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">70.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">50.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Ashford Properties Inc.</name>
+          <tel>(902)-446-3399</tel>
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="Atlantic School of Theology" />
+          <school shortname="Dalhousie University" />
+          <school shortname="St Marys University" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube>yWXBjxisi9U&amp;hl=en&amp;fs=1&amp;color1=0x006699&amp;color2=0x54abd6</youtube>
+        <building>Ocean Towers</building>
+        <thirdparty>Ashford Properties Inc.</thirdparty>
+        <website>http://www.citigroup.ns.ca/default.aspx?pageid=132</website>
+        <featured>1</featured>
+      </property>
+    </city>
+  </region>
+  <region code="ON">
+    <city name="Kitchener">
+      <property code="cent060r">
+        <name>60 Centreville Street</name>
+        <type>Townhouse</type>
+        <unitcount>29</unitcount>
+        <sqft>0</sqft>
+        <floors>2</floors>
+        <rentrange>$985.00 - $985.00</rentrange>
+        <address>
+          <street>60 Centreville Street</street>
+          <city>Kitchener</city>
+          <post>N2A 1R9</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>"Warm Townhome Community with private backyards and Community Courtyard"</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Outdoor Parking" parkcode="outpark">20.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>0</featured>
+      </property>
+      <property code="xbel0545">
+        <name>545 &amp; 547 Belmont Ave W.</name>
+        <type>High Rise</type>
+        <unitcount>225</unitcount>
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$797.00 - $899.00</rentrange>
+        <address>
+          <street>545 &amp; 547 Belmont Ave W.</street>
+          <city>Kitchener</city>
+          <post>N2M 5G7</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction />
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="1 bedroom + den">1.den</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">45.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">30.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel />
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty />
+        <website />
+        <featured>0</featured>
+      </property>
+      <property code="xbel0565">
+        <name>565 Belmont Ave W.</name>
+        <type>Townhouse</type>
+        <unitcount>54</unitcount>
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$1030.00 - $1040.00</rentrange>
+        <address>
+          <street>565 Belmont Ave W.</street>
+          <city>Kitchener</city>
+          <post>N2M 5E7</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction />
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel />
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty />
+        <website />
+        <featured>0</featured>
+      </property>
+    </city>
+    <city name="London">
+      <property code="kipp0654">
+        <name>654 Kipps Lane</name>
+        <type>Walk Up</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>654 Kipps Lane</street>
+          <city>London</city>
+          <post>N5Y 6M2</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction />
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="" />
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel />
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty />
+        <website />
+        <featured>0</featured>
+      </property>
+      <property code="kipp0740">
+        <name>740 Kipps Lane</name>
+        <type>High Rise</type>
+        <unitcount>89</unitcount>
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$625.00 - $725.00</rentrange>
+        <address>
+          <street>740 Kipps Lane</street>
+          <city>London</city>
+          <post>N5Y 4R8</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction />
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hydro</include>
+          <include>Hot Water</include>
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>0</featured>
+      </property>
+      <property code="kipp0750">
+        <name>750 Kipps Lane</name>
+        <type>High Rise</type>
+        <unitcount>112</unitcount>
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$625.00 - $725.00</rentrange>
+        <address>
+          <street>750 Kipps Lane</street>
+          <city>London</city>
+          <post>N5Y 4R9</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction />
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hydro</include>
+          <include>Hot Water</include>
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>0</featured>
+      </property>
+      <property code="kipp0752">
+        <name>752 Kipps Lane</name>
+        <type>High Rise</type>
+        <unitcount>90</unitcount>
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$625.00 - $725.00</rentrange>
+        <address>
+          <street>752 Kipps Lane</street>
+          <city>London</city>
+          <post>N5Y 4V4</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction />
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+          <include>Hydro</include>
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>0</featured>
+      </property>
+      <property code="kipp0754">
+        <name>754 Kipps Lane</name>
+        <type>High Rise</type>
+        <unitcount>111</unitcount>
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$625.00 - $725.00</rentrange>
+        <address>
+          <street>754 Kipps Lane</street>
+          <city>London</city>
+          <post>N5Y 4V3</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction />
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+          <include>Hydro</include>
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>1</featured>
+      </property>
+      <property code="kipp0756">
+        <name>756 Kipps Lane</name>
+        <type>High Rise</type>
+        <unitcount>131</unitcount>
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$700.00 - $800.00</rentrange>
+        <address>
+          <street>756 Kipps Lane</street>
+          <city>London</city>
+          <post>N5Y 4X9</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction />
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hydro</include>
+          <include>Hot Water</include>
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>0</featured>
+      </property>
+      <property code="kipp0758">
+        <name>758 Kipps Lane</name>
+        <type>High Rise</type>
+        <unitcount>131</unitcount>
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$700.00 - $800.00</rentrange>
+        <address>
+          <street>758 Kipps Lane</street>
+          <city>London</city>
+          <post>N5Y 4Y1</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction />
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+          <include>Hydro</include>
+        </includes>
+        <parkingtypes>
+          <parking display="" parkcode="" />
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>0</featured>
+      </property>
+      <property code="rich675r">
+        <name>675 Richmond Street</name>
+        <type>High Rise</type>
+        <unitcount>185</unitcount>
+        <sqft>0</sqft>
+        <floors>17</floors>
+        <rentrange>$1100.00 - $1949.00</rentrange>
+        <address>
+          <street>675 Richmond Street</street>
+          <city>London</city>
+          <post>N6A 5X4</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>"A beautiful seventeen storey building located in Richmond Row - one of London's finest shopping and restaurant districts"</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="1 bedroom + den">1.den</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 bedroom + den">2.den</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom + den">3.den</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">75.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>&lt;/br&gt;&lt;/br&gt;
+****Ask us about our newly designed 2 bedroom apartments coming July 2011
+&lt;/br&gt;&lt;/br&gt;</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>0</featured>
+      </property>
+    </city>
+    <city name="Toronto">
+      <property code="aven0320">
+        <name>320 Avenue Road</name>
+        <type>Low Rise</type>
+        <unitcount>24</unitcount>
+        <sqft>0</sqft>
+        <floors>3</floors>
+        <rentrange>$810.00 - $975.00</rentrange>
+        <address>
+          <street>320 Avenue Road</street>
+          <city>Toronto</city>
+          <post>M4V 2H3</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN TORONTO: this building breathes character and style and puts you close to Toronto's downtown core and all of its attractions.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">60.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">45.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="University of Toronto" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions
+&lt;/br&gt;&lt;/br&gt;
+
+   ******
+&lt;/br&gt;&lt;/br&gt;
+Please Note: Limited parking space available or waiting list only. City permit street parking where available.</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>0</featured>
+      </property>
+      <property code="aven0326">
+        <name>326 Avenue Road</name>
+        <type>Low Rise</type>
+        <unitcount>18</unitcount>
+        <sqft>0</sqft>
+        <floors />
+        <rentrange>$810.00 - $975.00</rentrange>
+        <address>
+          <street>326 Avenue Road</street>
+          <city>Toronto</city>
+          <post>M4V 2H3</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>"These accommodating buildings breathe character and style and put you close to Toronto's downtown core and all of its attractions."</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">60.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">45.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="University of Toronto" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>0</featured>
+      </property>
+      <property code="aven0330">
+        <name>330 Avenue Road</name>
+        <type>Low Rise</type>
+        <unitcount>19</unitcount>
+        <sqft>0</sqft>
+        <floors>4</floors>
+        <rentrange>$810.00 - $975.00</rentrange>
+        <address>
+          <street>330 Avenue Road</street>
+          <city>Toronto</city>
+          <post>M4V 2H3</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN TORONTO: move in close to Toronto's downtown core and all of its lively attractions.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">60.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">45.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="University of Toronto" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions
+&lt;/br&gt;
+&lt;/br&gt;
+
+   ******
+&lt;/br&gt;&lt;/br&gt;
+Please Note: Limited parking space available or waiting list only. City permit street parking where available.</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>1</featured>
+      </property>
+      <property code="aven0340">
+        <name>340 Avenue Road</name>
+        <type>Low Rise</type>
+        <unitcount>24</unitcount>
+        <sqft>0</sqft>
+        <floors>4</floors>
+        <rentrange>$975.00 - $975.00</rentrange>
+        <address>
+          <street>340 Avenue Road</street>
+          <city>Toronto</city>
+          <post>M4V 2H4</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN TORONTO: stylish and elegant building close to Toronto's downtown core.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">60.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">45.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="University of Toronto" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>1</featured>
+      </property>
+      <property code="aven0342">
+        <name>342 Avenue Road</name>
+        <type>Low Rise</type>
+        <unitcount>24</unitcount>
+        <sqft>0</sqft>
+        <floors>4</floors>
+        <rentrange>$975.00 - $975.00</rentrange>
+        <address>
+          <street>342 Avenue Road</street>
+          <city>Toronto</city>
+          <post>M4V 2H4</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN TORONTO: beautiful building in a beautiful downtown setting.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">60.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">45.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="University of Toronto" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions
+&lt;/br&gt;
+&lt;/br&gt;
+   ******
+&lt;/br&gt;
+&lt;/br&gt;
+
+Please Note: Limited parking space available or waiting list only. City permit street parking where available.</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>0</featured>
+      </property>
+      <property code="bath020r">
+        <name>6020 Bathurst Street</name>
+        <type>High Rise</type>
+        <unitcount>147</unitcount>
+        <sqft>0</sqft>
+        <floors>11</floors>
+        <rentrange>$979.00 - $1425.00</rentrange>
+        <address>
+          <street>6020 Bathurst Street</street>
+          <city>Toronto</city>
+          <post>M2R 1Z8</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN TORONTO: an accommodating combination of quality rental living and proximity to the busy junction of Bathurst and Steeles.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+          <include>Hydro</include>
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">67.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">57.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>1</featured>
+      </property>
+      <property code="bath030r">
+        <name>6030 Bathurst Street</name>
+        <type>High Rise</type>
+        <unitcount>246</unitcount>
+        <sqft>0</sqft>
+        <floors>19</floors>
+        <rentrange>$889.00 - $1475.00</rentrange>
+        <address>
+          <street>6030 Bathurst Street</street>
+          <city>Toronto</city>
+          <post>M2R 1Z9</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN TORONTO: right here you can shop, right here you can enjoy an accommodating rental environment, right here you will find your new home.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+          <include>Hydro</include>
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">67.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">57.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>1</featured>
+      </property>
+      <property code="well0155">
+        <name>155 Wellesley Street East</name>
+        <type>High Rise</type>
+        <unitcount>115</unitcount>
+        <sqft>0</sqft>
+        <floors>17</floors>
+        <rentrange>$1020.00 - $4000.00</rentrange>
+        <address>
+          <street>155 Wellesley Street East</street>
+          <city>Toronto</city>
+          <post>M4Y 1J4</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>"A well-maintained 17-storey high-rise that combines quality rental living accommodations with proximity to Toronto's downtown core."</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+          <include>Hydro</include>
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">95.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">85.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call our toll free number to speak with a customer care agent regarding any applicable promotions</otherinfo>
+        <youtube />
+        <building>Wellesley Square</building>
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>0</featured>
+      </property>
+    </city>
+    <city name="Waterloo">
+      <property code="regi300r">
+        <name>300 Regina Street North</name>
+        <type>High Rise</type>
+        <unitcount>412</unitcount>
+        <sqft>0</sqft>
+        <floors>18/19</floors>
+        <rentrange>$859.00 - $2222.00</rentrange>
+        <address>
+          <street>300 Regina Street North</street>
+          <city>Waterloo</city>
+          <post>N2J 3B8</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>These condo-like twin towers are perfect for everyone, including students.  U of Waterloo, Laurier, Conestoga College - Waterloo, RIM, and all amenities are within close proximity!  Enjoy the on site amenities which include BBQ area, sauna, fitness room, squash and basketball court, indoor swimming pool, games room and party room!</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+          <room brcount="" rate="" sqft="" display="4 Bedroom">4bdrm</room>
+          <room brcount="" rate="" sqft="" display="Bachelor">bach</room>
+        </rooms>
+        <includes>
+          <include>Heat</include>
+          <include>Hot Water</include>
+          <include>Hydro</include>
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">45.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">25.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>1</featured>
+      </property>
+      <property code="shak200r">
+        <name>200 Shakespeare Drive</name>
+        <type>High Rise</type>
+        <unitcount>84</unitcount>
+        <sqft>0</sqft>
+        <floors>11</floors>
+        <rentrange>$1204.00 - $1755.00</rentrange>
+        <address>
+          <street>200 Shakespeare Drive</street>
+          <city>Waterloo</city>
+          <post>N2L 6C1</post>
+          <province>Ontario</province>
+          <prv>ON</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>In this high-rise building, known for its comfort and class, you can relax while enjoying condo-like living!  This building offers spacious apartments with unique layouts, laundry rooms on every floor, large windows, walk-in closets, 1.5 bathrooms, dishwashers, in-unit storage, central A/C and electric heating.  This is a well-kept building with beautifully landscaped grounds.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1 Bedroom">1bdrm</room>
+          <room brcount="" rate="" sqft="" display="1 bedroom + den">1.den</room>
+          <room brcount="" rate="" sqft="" display="2 Bedroom">2bdrm</room>
+          <room brcount="" rate="" sqft="" display="3 Bedroom">3bdrm</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">30.00</parking>
+          <parking display="Outdoor Parking" parkcode="outpark">25.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Transglobe Property Management</name>
+          <tel>1-888-310-7000</tel>
+          <hours />
+          <email>info@gotransglobe.com</email>
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo>Call to find out if a promotion applies!</otherinfo>
+        <youtube />
+        <building />
+        <thirdparty />
+        <website>http://www.gotransglobe.com</website>
+        <featured>0</featured>
+      </property>
+    </city>
+  </region>
+  <region code="PQ">
+    <city name="Montreal">
+      <property code="pins12tp">
+        <name>1212 des Pins Avenue W</name>
+        <type>High Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>18</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>1212 des Pins Avenue W</street>
+          <city>Montreal</city>
+          <post>H3G 1A9</post>
+          <province>Quebec</province>
+          <prv>PQ</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN MONTREAL: downtown core location and luxurious, condo-like amenities including a fitness room, indoor pool, sauna, sundeck, roof top garden and onsite security guard.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1.5 Rooms">1.5rooms</room>
+          <room brcount="" rate="" sqft="" display="3.5 Rooms">3.5rooms</room>
+          <room brcount="" rate="" sqft="" display="4.5 Rooms">4.5rooms</room>
+          <room brcount="" rate="" sqft="" display="5.5 Rooms">5.5rooms</room>
+          <room brcount="" rate="" sqft="" display="6.5 Rooms">6.5rooms</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">175.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Cogir</name>
+          <tel />
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube>bB5Jn9Uzmok&amp;hl=en_US&amp;fs=1&amp;color1=0x006699&amp;color2=0x54abd6</youtube>
+        <building>pins1212</building>
+        <thirdparty>Cogir</thirdparty>
+        <website>http://www.cogir.net/properties-details.asp?property=206</website>
+        <featured>0</featured>
+      </property>
+    </city>
+    <city name="Pointe-Claire">
+      <property code="delm95tp">
+        <name>495 - 509 Delmar Avenue</name>
+        <type>High Rise</type>
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>4 (each building)</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>495 - 509 Delmar Avenue</street>
+          <city>Pointe-Claire</city>
+          <post>H9R 4A5</post>
+          <province>Quebec</province>
+          <prv>PQ</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>QUALITY APARTMENTS IN POINTE-CLAIRE: this quiet residential community offers outstanding accommodations, great onsite amenities and a convenient location.</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="1.5 Rooms">1.5rooms</room>
+          <room brcount="" rate="" sqft="" display="2.5 Rooms">2.5rooms</room>
+          <room brcount="" rate="" sqft="" display="3.5 Rooms">3.5rooms</room>
+          <room brcount="" rate="" sqft="" display="4.5 Rooms">4.5rooms</room>
+          <room brcount="" rate="" sqft="" display="5.5 Rooms">5.5rooms</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">55.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Cogir</name>
+          <tel />
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building>495 - 509 Delmar Avenue</building>
+        <thirdparty>Cogir</thirdparty>
+        <website>http://www.cogir.net/showMap.asp?dept=1&amp;prov=0&amp;region=0</website>
+        <featured>0</featured>
+      </property>
+    </city>
+    <city name="Saint Laurent">
+      <property code="lafr55tp">
+        <name>55 Rue Laframboise</name>
+        <type />
+        <unitcount />
+        <sqft>0</sqft>
+        <floors>12</floors>
+        <rentrange>$N/A - $N/A</rentrange>
+        <address>
+          <street>55 Rue Laframboise</street>
+          <city>Saint Laurent</city>
+          <post>H4N 3B7</post>
+          <province>Quebec</province>
+          <prv>PQ</prv>
+          <country>Canada</country>
+        </address>
+        <introduction>"An impressive high-rise in a residential neighbourhood of St. Laurent"</introduction>
+        <amenities>
+          <comforts />
+        </amenities>
+        <rooms>
+          <room brcount="" rate="" sqft="" display="2.5 Rooms">2.5rooms</room>
+          <room brcount="" rate="" sqft="" display="3.5 Rooms">3.5rooms</room>
+          <room brcount="" rate="" sqft="" display="4.5 Rooms">4.5rooms</room>
+        </rooms>
+        <includes>
+          <include />
+        </includes>
+        <parkingtypes>
+          <parking display="Indoor Parking" parkcode="inpark">75.00</parking>
+        </parkingtypes>
+        <contact>
+          <name>Cogir</name>
+          <tel />
+          <hours />
+          <email />
+        </contact>
+        <adjacentprop>
+          <propcode />
+        </adjacentprop>
+        <schools>
+          <school shortname="" />
+        </schools>
+        <promotions />
+        <maplink />
+        <otherinfo />
+        <youtube />
+        <building />
+        <thirdparty>Cogir</thirdparty>
+        <website>http://www.cogir.net/properties-details.asp?property=207</website>
+        <featured>0</featured>
+      </property>
+    </city>
+  </region>
+</residential>
