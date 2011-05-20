@@ -65,7 +65,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
             Date currentDate = this.model.getCurrentMonth();
             int monthIndex = currentDate.getMonth();
             int year = currentDate.getYear() + 1900;
-            String month = monthName[monthIndex];
+            String month = DatePickerIDs.monthName[monthIndex];
             HTML monthWidget = new HTML(month + " " + year);
 
             monthWidget.setStyleName("headerCenter");
@@ -78,7 +78,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
         DatePickerImages resource = (DatePickerImages) GWT.create(DatePickerImages.class);
         // Set up backwards.
         backwards = new Image(resource.MonthPrevious());
-        backwards.ensureDebugId(DatePickerDebugIDs.MonthSelectorButton_BackwardsYear.debugId());
+        backwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_BackwardsYear.debugId());
         backwards.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.top));
         backwards.addClickHandler(new ClickHandler() {
             @Override
@@ -89,7 +89,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
         });
 
         forwards = new Image(resource.MonthNext());
-        forwards.ensureDebugId(DatePickerDebugIDs.MonthSelectorButton_ForwardYear.debugId());
+        forwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardYear.debugId());
         forwards.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.top));
         forwards.addClickHandler(new ClickHandler() {
             @Override

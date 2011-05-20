@@ -15,14 +15,14 @@
  * the License.
  *
  * Created on 2011-05-19
- * @author TPRGLET
+ * @author leont
  * @version $Id$
  */
 package com.pyx4j.widgets.client.datepicker;
 
 import com.pyx4j.commons.IDebugId;
 
-public enum DatePickerDebugIDs implements IDebugId {
+public enum DatePickerIDs implements IDebugId {
     DatePicker,
 
     MonthSelectorButton_ForwardYear,
@@ -31,11 +31,18 @@ public enum DatePickerDebugIDs implements IDebugId {
 
     MonthSelectorButton_BackwardsMonth,
 
-    MonthSelectorButton_ForwardMonth;
+    MonthSelectorButton_ForwardMonth,
+
+    MonthSelectorLabel_Month,
+
+    MonthSelectorLabel_Year;
 
     @Override
     public String debugId() {
         return name();
     }
+
+    public static String[] monthName = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
+            "December" };
 
 }

@@ -76,7 +76,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
         if (this.model != null) {
             Date current = this.model.getCurrentMonth();
             if (current != null && lblMonth != null && lblYear != null) {
-                lblMonth.setText(monthName[current.getMonth()]);
+                lblMonth.setText(DatePickerIDs.monthName[current.getMonth()]);
                 lblYear.setText(String.valueOf(current.getYear() + 1900));
             }
         }
@@ -87,7 +87,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
         DatePickerImages resource = (DatePickerImages) GWT.create(DatePickerImages.class);
         // Set up backwards.        
         backwards = new Image(resource.MonthPrevious());
-        backwards.ensureDebugId(DatePickerDebugIDs.MonthSelectorButton_BackwardsMonth.debugId());
+        backwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_BackwardsMonth.debugId());
         backwards.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.middle));
         backwards.addClickHandler(new ClickHandler() {
             @Override
@@ -98,7 +98,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
         });
 
         forwards = new Image(resource.MonthNext());
-        forwards.ensureDebugId(DatePickerDebugIDs.MonthSelectorButton_ForwardMonth.debugId());
+        forwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardMonth.debugId());
         forwards.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.middle));
         forwards.addClickHandler(new ClickHandler() {
             @Override
@@ -109,7 +109,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
         });
         // Set up backwards year
         backwardsYear = new HoldableImage(resource.YearPrevious(), 300);
-        backwardsYear.ensureDebugId(DatePickerDebugIDs.MonthSelectorButton_BackwardsYear.debugId());
+        backwardsYear.ensureDebugId(DatePickerIDs.MonthSelectorButton_BackwardsYear.debugId());
         backwardsYear.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.bottom));
         backwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
 
@@ -121,7 +121,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
         });
 
         forwardsYear = new HoldableImage(resource.YearNext(), 300);
-        forwardsYear.ensureDebugId(DatePickerDebugIDs.MonthSelectorButton_ForwardYear.debugId());
+        forwardsYear.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardYear.debugId());
         forwardsYear.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.top));
         forwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
 
@@ -133,7 +133,9 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
         });
 
         lblMonth = new Label();
+        lblMonth.ensureDebugId(DatePickerIDs.MonthSelectorLabel_Month.debugId());
         lblYear = new Label();
+        lblYear.ensureDebugId(DatePickerIDs.MonthSelectorLabel_Year.debugId());
         grid = new Grid(1, 5);
         Grid yearGrid = new Grid(2, 1);
 

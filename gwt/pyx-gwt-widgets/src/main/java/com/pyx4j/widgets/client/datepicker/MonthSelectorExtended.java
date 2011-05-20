@@ -44,8 +44,6 @@ public abstract class MonthSelectorExtended extends MonthSelector {
 
     protected Grid grid;
 
-    protected String[] monthName = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-
     public MonthSelectorExtended(Date minDate, Date maxDate) {
         this.minDate = minDate;
         this.maxDate = maxDate;

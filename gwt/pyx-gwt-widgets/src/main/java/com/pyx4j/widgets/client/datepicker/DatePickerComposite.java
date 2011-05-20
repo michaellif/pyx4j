@@ -113,7 +113,7 @@ public class DatePickerComposite extends Composite implements HasHandlers {
             picker.setParent(this);
             panel.add(picker);
             CalendarUtil.addMonthsToDate(starting, 1);
-            picker.ensureDebugId(new CompositeDebugId(DatePickerDebugIDs.DatePicker, Integer.toString(i)).debugId());
+            picker.ensureDebugId(new CompositeDebugId(DatePickerIDs.DatePicker, Integer.toString(i)).debugId());
         }
         if (numberOfMonths > 1) {
             pickers.get(0).addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.first));
