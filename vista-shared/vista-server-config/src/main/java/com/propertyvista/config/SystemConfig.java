@@ -25,7 +25,7 @@ public class SystemConfig extends HostConfig {
 
     private final static Logger log = LoggerFactory.getLogger(SystemConfig.class);
 
-    private static List<String> noCaledonProxyHost = Arrays.asList("vlads-w520", "ve.kvrmmdsf.vesrv.com");
+    private static List<String> noCaledonProxyHost = Arrays.asList("vlads-w520", "dev");
 
     private static List<String> doxHost = Arrays.asList("vlads-i7", "michaellif01");
 
