@@ -19,11 +19,14 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.vendor.Contract;
 import com.propertyvista.domain.property.vendor.Licence;
 import com.propertyvista.domain.property.vendor.Warranty;
 
 public interface Equipment extends IEntity {
+
+    Building belongsTo();
 
     IPrimitive<String> description();
 

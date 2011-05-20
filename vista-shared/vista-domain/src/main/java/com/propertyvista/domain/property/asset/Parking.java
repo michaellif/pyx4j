@@ -67,7 +67,7 @@ public interface Parking extends IEntity {
 
     IPrimitive<Integer> narrowSpaces();
 
-    // ------------------ Financials ------------------------------------------------------------------
+    // ----- Financials -----------------
 
     @Format("#0.00")
     IPrimitive<Double> disableRent();
