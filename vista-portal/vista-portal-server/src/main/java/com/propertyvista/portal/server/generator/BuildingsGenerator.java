@@ -36,14 +36,15 @@ import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
-import com.propertyvista.domain.property.asset.AptUnit;
-import com.propertyvista.domain.property.asset.AptUnitAmenity;
-import com.propertyvista.domain.property.asset.AptUnitDetail;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
+import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PetChargeRule;
 import com.propertyvista.portal.domain.ptapp.PropertyProfile;
@@ -203,19 +204,19 @@ public class BuildingsGenerator {
         return floorplan;
     }
 
-    public static AptUnitDetail createUnitDetailItem(AptUnitDetail.Type type) {
-        AptUnitDetail item = EntityFactory.create(AptUnitDetail.class);
+    public static AptUnitItem createUnitDetailItem(AptUnitItem.Type type) {
+        AptUnitItem item = EntityFactory.create(AptUnitItem.class);
         item.type().setValue(type);
 
-        item.flooringType().setValue(RandomUtil.random(AptUnitDetail.FlooringType.values()));
+        item.flooringType().setValue(RandomUtil.random(AptUnitItem.FlooringType.values()));
         item.flooringInstallDate().setValue(RandomUtil.randomSqlDate());
         item.flooringValue().setValue(1800. + RandomUtil.randomInt(200));
 
-        item.counterTopType().setValue(RandomUtil.random(AptUnitDetail.CounterTopType.values()));
+        item.counterTopType().setValue(RandomUtil.random(AptUnitItem.CounterTopType.values()));
         item.counterTopInstallDate().setValue(RandomUtil.randomSqlDate());
         item.counterTopValue().setValue(800. + RandomUtil.randomInt(200));
 
-        item.cabinetsType().setValue(RandomUtil.random(AptUnitDetail.CabinetsType.values()));
+        item.cabinetsType().setValue(RandomUtil.random(AptUnitItem.CabinetsType.values()));
         item.cabinetsInstallDate().setValue(RandomUtil.randomSqlDate());
         item.cabinetsValue().setValue(1000. + RandomUtil.randomInt(200));
 
@@ -270,30 +271,30 @@ public class BuildingsGenerator {
     private AptUnit createUnit(Building building, String suiteNumber, int floor, double area, double bedrooms, double bathrooms, Floorplan floorplan) {
         AptUnit unit = EntityFactory.create(AptUnit.class);
 
-        unit.number().setValue(suiteNumber);
-        unit.building().set(building);
-        unit.floor().setValue(floor);
-        unit.type().setValue(RandomUtil.random(AptUnit.Type.values()));
-        unit.area().setValue(area);
-        unit.bedrooms().setValue(bedrooms);
-        unit.bathrooms().setValue(bathrooms);
+        unit.info().number().setValue(suiteNumber);
+        unit.info().building().set(building);
+        unit.info().floor().setValue(floor);
+        unit.info().type().setValue(RandomUtil.random(AptUnitInfo.Type.values()));
+        unit.info().area().setValue(area);
+        unit.info().bedrooms().setValue(bedrooms);
+        unit.info().bathrooms().setValue(bathrooms);
 
-        unit.unitRent().setValue(800. + RandomUtil.randomInt(200));
-        unit.netRent().setValue(1200. + RandomUtil.randomInt(200));
-        unit.marketRent().setValue(900. + RandomUtil.randomInt(200));
+        unit.financial().unitRent().setValue(800. + RandomUtil.randomInt(200));
+        unit.financial().netRent().setValue(1200. + RandomUtil.randomInt(200));
+        unit.financial().marketRent().setValue(900. + RandomUtil.randomInt(200));
 
         // mandatory utilities
-        unit.utilities().add(createUtility(Utility.Type.water));
-        unit.utilities().add(createUtility(Utility.Type.heat));
-        unit.utilities().add(createUtility(Utility.Type.gas));
-        unit.utilities().add(createUtility(Utility.Type.electric));
+        unit.info().utilities().add(createUtility(Utility.Type.water));
+        unit.info().utilities().add(createUtility(Utility.Type.heat));
+        unit.info().utilities().add(createUtility(Utility.Type.gas));
+        unit.info().utilities().add(createUtility(Utility.Type.electric));
 
         // optional utilities
         if (RandomUtil.randomBoolean()) {
-            unit.utilities().add(createUtility(Utility.Type.cable));
+            unit.info().utilities().add(createUtility(Utility.Type.cable));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.utilities().add(createUtility(Utility.Type.internet));
+            unit.info().utilities().add(createUtility(Utility.Type.internet));
         }
 
         // amenity, all optional
@@ -306,21 +307,21 @@ public class BuildingsGenerator {
 
         // info items
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
+            unit.info().details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         } else {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
+            unit.info().details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
+            unit.info().details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
+            unit.info().details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
+            unit.info().details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitDetail.Type.values())));
+            unit.info().details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
 
         // concessions
@@ -363,7 +364,7 @@ public class BuildingsGenerator {
         //TODO populate currentOccupancies and then set avalableForRent using some ServerSideDomainUtils
         unit.avalableForRent().setValue(new java.sql.Date(avalable.getTime().getTime()));
 
-        unit.floorplan().set(floorplan);
+        unit.marketing().floorplan().set(floorplan);
 
         return unit;
     }

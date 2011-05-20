@@ -32,7 +32,7 @@ import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.domain.ptapp.ChargeLineSelectable;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;

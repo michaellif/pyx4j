@@ -39,7 +39,7 @@ import com.propertyvista.common.domain.IAddressFull.StreetType;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.common.domain.ref.Province;
-import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.ApplicationDocument;

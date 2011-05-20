@@ -30,13 +30,13 @@ import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.marketing.yield.Concession;
-import com.propertyvista.domain.property.asset.AptUnit;
-import com.propertyvista.domain.property.asset.AptUnitAmenity;
-import com.propertyvista.domain.property.asset.AptUnitDetail;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
 
@@ -52,7 +52,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Building.class, AptUnit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, AptUnitDetail.class,
+            return deleteAll(Building.class, AptUnit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, AptUnitItem.class,
                     Amenity.class, Concession.class, AddOn.class, LeaseTerms.class);
         } else {
             return "This is production";
@@ -80,13 +80,13 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             List<AptUnit> units = generator.createUnits(building, floorplans, DemoData.NUM_FLOORS, DemoData.NUM_UNITS_PER_FLOOR);
             unitCount += units.size();
             for (AptUnit unit : units) {
-                for (Utility utility : unit.utilities()) {
+                for (Utility utility : unit.info().utilities()) {
                     persist(utility);
                 }
                 for (AptUnitAmenity amenity : unit.amenities()) {
                     persist(amenity);
                 }
-                for (AptUnitDetail detail : unit.details()) {
+                for (AptUnitItem detail : unit.info().details()) {
                     persist(detail);
                 }
                 for (AddOn addOn : unit.addOns()) {
@@ -151,25 +151,25 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
             // get the units
             EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-            criteria.add(new PropertyCriterion(criteria.proto().building(), Restriction.EQUAL, building.getPrimaryKey()));
+            criteria.add(new PropertyCriterion(criteria.proto().info().building(), Restriction.EQUAL, building.getPrimaryKey()));
             List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
             sb.append("\tBuilding has ").append(units.size()).append(" units\n");
 
             for (AptUnit unit : units) {
                 sb.append("\t");
-                sb.append(unit.floor().getStringView()).append(" floor");
+                sb.append(unit.info().floor().getStringView()).append(" floor");
                 sb.append(" ");
-                sb.append(unit.area().getStringView()).append(" sq. ft.");
+                sb.append(unit.info().area().getStringView()).append(" sq. ft.");
                 sb.append(" ");
-                sb.append(unit.building().info().propertyCode().getStringView());
+                sb.append(unit.info().building().info().propertyCode().getStringView());
                 sb.append(" ");
-                sb.append(unit.floorplan());
+                sb.append(unit.marketing().floorplan());
                 sb.append(" | ");
-                sb.append(unit.floorplan().name().getStringView()); //.append(" ").append(unit.floorplan().pictures());
+                sb.append(unit.marketing().floorplan().name().getStringView()); //.append(" ").append(unit.floorplan().pictures());
                 sb.append("\n");
-                sb.append("\t\t").append(unit.utilities()).append("\n");
+                sb.append("\t\t").append(unit.info().utilities()).append("\n");
                 sb.append("\t\t").append(unit.amenities()).append("\n");
-                sb.append("\t\t").append(unit.details()).append("\n");
+                sb.append("\t\t").append(unit.info().details()).append("\n");
                 sb.append("\t\t").append(unit.concessions()).append("\n");
                 sb.append("\t\t").append(unit.addOns()).append("\n");
             }

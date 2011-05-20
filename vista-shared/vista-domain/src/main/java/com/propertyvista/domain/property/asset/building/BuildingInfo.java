@@ -20,7 +20,6 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -191,10 +190,8 @@ public interface BuildingInfo extends IEntity {
      */
     IPrimitive<String> name();
 
-    @ToString(index = 1)
     Address address();
 
-    @ToString(index = 0)
     @MemberColumn(name = "buildingType")
     IPrimitive<Type> type();
 

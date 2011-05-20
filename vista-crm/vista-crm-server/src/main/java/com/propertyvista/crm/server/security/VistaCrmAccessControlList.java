@@ -22,8 +22,8 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
-import com.propertyvista.domain.property.asset.AptUnit;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 

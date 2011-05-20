@@ -27,9 +27,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.Picture;
-import com.propertyvista.domain.property.asset.AptUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
@@ -109,8 +109,8 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
         // find units
         log.debug("Found floorplan {}, now can look for Units in building {}", floorplan, building);
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+        criteria.add(PropertyCriterion.eq(criteria.proto().info().building(), building));
+        criteria.add(PropertyCriterion.eq(criteria.proto().marketing().floorplan(), floorplan));
 
         if (!selectionCriteria.availableFrom().isNull()) {
             criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.GREATER_THAN_OR_EQUAL, selectionCriteria
@@ -145,7 +145,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
         log.debug("Found {} units", units.size());
         if (!units.isEmpty()) {
             AptUnit firstUnit = units.get(0);
-            Floorplan floorplan = firstUnit.floorplan();
+            Floorplan floorplan = firstUnit.marketing().floorplan();
 
             for (Picture picture : floorplan.pictures()) {
                 prepareImage(picture);

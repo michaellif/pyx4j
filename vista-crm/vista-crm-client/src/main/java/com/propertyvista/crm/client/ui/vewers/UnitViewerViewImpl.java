@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.vewers;
 
 import com.propertyvista.crm.client.ui.editors.UnitEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class UnitViewerViewImpl extends ViewerViewImplBase<AptUnit> implements IUnitViewerView {
 

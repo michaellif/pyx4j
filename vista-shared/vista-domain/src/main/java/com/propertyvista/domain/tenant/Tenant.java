@@ -16,7 +16,7 @@ package com.propertyvista.domain.tenant;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.Person;
-import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface Tenant extends IEntity {

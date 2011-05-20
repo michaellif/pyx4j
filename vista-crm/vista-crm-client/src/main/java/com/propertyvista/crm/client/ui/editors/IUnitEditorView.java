@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.editors;
 
-import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public interface IUnitEditorView extends IEditorView<AptUnit> {
 

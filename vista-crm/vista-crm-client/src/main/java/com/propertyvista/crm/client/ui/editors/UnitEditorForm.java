@@ -41,10 +41,10 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
-import com.propertyvista.domain.property.asset.AptUnit;
-import com.propertyvista.domain.property.asset.AptUnitAmenity;
-import com.propertyvista.domain.property.asset.AptUnitDetail;
 import com.propertyvista.domain.property.asset.Utility;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
 public class UnitEditorForm extends CEntityForm<AptUnit> {
 
@@ -67,31 +67,31 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
         main.add(header);
 
         DecorationData decorData = new DecorationData(14d, 12);
-        main.add(new VistaWidgetDecorator(inject(proto().name()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().marketingName()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().name()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().marketing().name()), decorData));
 
-        main.add(new VistaWidgetDecorator(inject(proto().type()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().type()), decorData));
 
-        main.add(new VistaWidgetDecorator(inject(proto().economicStatus()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().economicStatusDescription()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().economicStatus()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().economicStatusDescription()), decorData));
 
-        main.add(new VistaWidgetDecorator(inject(proto().floor()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().number()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().floor()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().number()), decorData));
 // TODO: arrange available building in drop-down box? 
 //        main.add(new VistaWidgetDecorator(inject(proto().building()), decorData));
 
-        main.add(new VistaWidgetDecorator(inject(proto().area()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().areaUnits()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().area()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().areaUnits()), decorData));
 
-        main.add(new VistaWidgetDecorator(inject(proto().bedrooms()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().bathrooms()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().bedrooms()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().info().bathrooms()), decorData));
 
 // TODO: complex data editing here: 
 //        main.add(new VistaWidgetDecorator(inject(proto().currentOccupancies()), decorData));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Rents")));
-        main.add(new VistaWidgetDecorator(inject(proto().unitRent()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().marketRent()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().financial().unitRent()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().financial().marketRent()), decorData));
 
 // TODO: arrange available Lease Terms in drop-down box? 
 //      main.add(new VistaWidgetDecorator(inject(proto().newLeaseTerms()), decorData));
@@ -102,10 +102,10 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Utilities")));
-        main.add(inject(proto().utilities(), createUtilitiesListEditor()));
+        main.add(inject(proto().info().utilities(), createUtilitiesListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Info Details")));
-        main.add(inject(proto().details(), createDetailsListEditor()));
+        main.add(inject(proto().info().details(), createDetailsListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Concessions")));
         main.add(inject(proto().concessions(), createConcessionsListEditor()));
@@ -173,8 +173,8 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
         };
     }
 
-    private CEntityFolder<AptUnitDetail> createDetailsListEditor() {
-        return new CEntityFolder<AptUnitDetail>(AptUnitDetail.class) {
+    private CEntityFolder<AptUnitItem> createDetailsListEditor() {
+        return new CEntityFolder<AptUnitItem>(AptUnitItem.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
 
@@ -184,13 +184,13 @@ public class UnitEditorForm extends CEntityForm<AptUnit> {
             }
 
             @Override
-            protected FolderDecorator<AptUnitDetail> createFolderDecorator() {
-                return new TableFolderDecorator<AptUnitDetail>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add Unit Info"));
+            protected FolderDecorator<AptUnitItem> createFolderDecorator() {
+                return new TableFolderDecorator<AptUnitItem>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add Unit Info"));
             }
 
             @Override
-            protected CEntityFolderItem<AptUnitDetail> createItem() {
-                return new CEntityFolderRow<AptUnitDetail>(AptUnitDetail.class, columns) {
+            protected CEntityFolderItem<AptUnitItem> createItem() {
+                return new CEntityFolderRow<AptUnitItem>(AptUnitItem.class, columns) {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {

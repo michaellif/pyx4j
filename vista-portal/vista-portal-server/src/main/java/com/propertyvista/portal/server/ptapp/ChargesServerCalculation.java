@@ -24,16 +24,16 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.Pets;
+import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
@@ -75,7 +75,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         double depositAmount = 0;
 
         if (selectedUnit != null) {
-            rentAmount = selectedUnit.unitRent().getValue();
+            rentAmount = selectedUnit.financial().unitRent().getValue();
 // TODO: there is no requiredDeposit in Unit now!?
 //            depositAmount = selectedUnit.requiredDeposit().amount().getValue();
         }

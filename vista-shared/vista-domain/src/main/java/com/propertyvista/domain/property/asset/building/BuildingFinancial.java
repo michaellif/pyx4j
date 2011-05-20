@@ -23,8 +23,6 @@ import com.propertyvista.common.domain.financial.Currency;
 
 public interface BuildingFinancial extends IEntity {
 
-    // ------------------Financial--------------------------------------------------------------------
-
     IPrimitive<Date> dateAquired();
 
     @Format("#0.00")

@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset;
+package com.propertyvista.domain.property.asset.unit;
 
 import java.sql.Date;
 
@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
 @ToStringFormat("{0} {1}")
-public interface AptUnitDetail extends IEntity {
+public interface AptUnitItem extends IEntity {
 
     @Translatable
     public enum Type {
@@ -127,7 +127,7 @@ public interface AptUnitDetail extends IEntity {
         }
     }
 
-    // ----------- Info --------------------------------------------------------------------------
+    // ----------- Info --------------------------
 
     @ToString(index = 0)
     @MemberColumn(name = "unitDetailType")
@@ -138,7 +138,7 @@ public interface AptUnitDetail extends IEntity {
 
     IPrimitive<String> conditionNotes();
 
-    // ----------- Details -----------------------------------------------------------------------
+    // ----------- Details -----------------------
 
     IPrimitive<String> wallColour();
 

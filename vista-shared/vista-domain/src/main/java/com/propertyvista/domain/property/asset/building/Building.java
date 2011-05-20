@@ -13,16 +13,16 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.property.asset.BuildingAmenity;
+import com.propertyvista.domain.Medium;
+import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.Complex;
 
-@ToStringFormat("{0} {1}")
-//TODO rename to Property
+//TODO rename to Property?!
 public interface Building extends IEntity {
 
     @EmbeddedEntity
@@ -37,8 +37,11 @@ public interface Building extends IEntity {
     BuildingContactInfo contacts();
 
     @EmbeddedEntity
-    BuildingMarketing marketing();
+    Marketing marketing();
 
     // there is a drop-down box with create new complex  
     Complex complex();
+
+    @Detached
+    IList<Medium> media();
 }

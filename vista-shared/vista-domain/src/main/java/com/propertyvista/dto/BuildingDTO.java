@@ -16,7 +16,7 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.property.asset.BuildingAmenity;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingContactInfo;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;

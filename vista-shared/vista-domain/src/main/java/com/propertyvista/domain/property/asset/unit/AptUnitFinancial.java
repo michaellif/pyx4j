@@ -7,28 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 2, 2011
- * @author michaellif
+ * Created on 2011-05-19
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset;
+package com.propertyvista.domain.property.asset.unit;
 
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-@Translatable
-public enum AptUnitEcomomicStatus {
+public interface AptUnitFinancial extends IEntity {
 
-    residential,
+    @Format("#0.00")
+    IPrimitive<Double> unitRent();
 
-    commercial,
+    @Format("#0.00")
+    IPrimitive<Double> netRent();
 
-    offMarket,
-
-    other;
-
-    @Override
-    public String toString() {
-        return I18nEnum.tr(this);
-    }
+    @Format("#0.00")
+    IPrimitive<Double> marketRent();
 }

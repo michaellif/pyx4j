@@ -7,30 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-24
- * @author aroytbur
+ * Created on 2011-05-19
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset;
+package com.propertyvista.domain.marketing;
 
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-@Translatable
-public enum AptUnitStatusType {
+public interface Marketing extends IEntity {
 
-    leased,
+    IPrimitive<String> name();
 
-    available,
+    IPrimitive<String> description();
 
-    reserved,
-
-    vacant,
-
-    offMarket;
-
-    @Override
-    public String toString() {
-        return I18nEnum.tr(this);
-    }
+    IList<AdvertisingBlurb> addBlurbs();
 }

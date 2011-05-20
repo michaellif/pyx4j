@@ -15,10 +15,10 @@ package com.propertyvista.portal.server.ptapp.util;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.property.asset.AptUnit;
-import com.propertyvista.domain.property.asset.BuildingAmenity;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
@@ -40,23 +40,23 @@ public class Converter {
         to.id().set(from.id());
 
         // iEntity
-        to.floorplan().set(convert(from.floorplan()));
-        to.infoDetails().setValue(from.details().getStringView());
+        to.floorplan().set(convert(from.marketing().floorplan()));
+        to.infoDetails().setValue(from.info().details().getStringView());
         to.amenities().setValue(from.amenities().getStringView());
         to.concessions().setValue(from.concessions().getStringView());
-        to.utilities().setValue(from.utilities().getStringView());
+        to.utilities().setValue(from.info().utilities().getStringView());
         to.addOns().setValue(from.addOns().getStringView());
 
         //TODO VS
         //to.status().set(from.status());
 
         // primitives
-        to.unitType().setValue(from.type().getStringView());
-        to.area().setValue(from.area().getValue());
-        to.bathrooms().setValue(from.bathrooms().getValue());
-        to.bedrooms().set(from.bedrooms());
+        to.unitType().setValue(from.info().type().getStringView());
+        to.area().setValue(from.info().area().getValue());
+        to.bathrooms().setValue(from.info().bathrooms().getValue());
+        to.bedrooms().set(from.info().bedrooms());
 
-        to.unitRent().set(from.unitRent());
+        to.unitRent().set(from.financial().unitRent());
 
 // TODO calculate somehow (!?) from current Unit data those values:          
         to.requiredDeposit().setValue(-77.0);

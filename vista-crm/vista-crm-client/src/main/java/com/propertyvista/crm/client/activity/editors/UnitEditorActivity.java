@@ -19,7 +19,7 @@ import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.editors.IUnitEditorView;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
-import com.propertyvista.domain.property.asset.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class UnitEditorActivity extends EditorActivityBase<AptUnit> {
 

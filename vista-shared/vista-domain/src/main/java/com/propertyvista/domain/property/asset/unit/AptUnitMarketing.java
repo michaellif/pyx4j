@@ -7,32 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-24
- * @author aroytbur
+ * Created on 2011-05-19
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset;
+package com.propertyvista.domain.property.asset.unit;
 
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.entity.annotations.Detached;
 
-@Translatable
-public enum AptUnitOffMarketType {
+import com.propertyvista.domain.marketing.Marketing;
+import com.propertyvista.domain.property.asset.Floorplan;
 
-    down,
+public interface AptUnitMarketing extends Marketing {
 
-    model,
-
-    employee,
-
-    construction,
-
-    office,
-
-    other;
-
-    @Override
-    public String toString() {
-        return I18nEnum.tr(this);
-    }
+    /**
+     * Object used as part of a marketing campaign to demonstrate the design, structure,
+     * and appearance of unit.
+     */
+    @Detached
+    Floorplan floorplan();
 }
