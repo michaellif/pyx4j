@@ -23,6 +23,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
+import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.gwt.server.IOUtils;
+
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.financial.ChargeType;
 import com.propertyvista.domain.Address;
@@ -43,13 +48,9 @@ import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PetChargeRule;
 import com.propertyvista.portal.domain.ptapp.PropertyProfile;
 import com.propertyvista.portal.server.preloader.RandomUtil;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.server.preloader.DataGenerator;
-import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.gwt.server.IOUtils;
 
 public class BuildingsGenerator {
-	
+
     private final static Logger log = LoggerFactory.getLogger(BuildingsGenerator.class);
 
     private final long seed;
@@ -58,23 +59,21 @@ public class BuildingsGenerator {
         DataGenerator.setRandomSeed(seed);
         this.seed = seed;
     }
-    
+
     private static String resourceFileName(String fileName) {
         return BuildingsGenerator.class.getPackage().getName().replace('.', '/') + "/" + fileName;
     }
-    
-    public List<Building> createBuildings(int numBuildings)
-    {
-    	List<Building> buildings = new ArrayList<Building>();
+
+    public List<Building> createBuildings(int numBuildings) {
+        List<Building> buildings = new ArrayList<Building>();
         for (int b = 0; b < numBuildings; b++) {
-        	Building building = createBuilding(b);
-        	buildings.add(building);
+            Building building = createBuilding(b);
+            buildings.add(building);
         }
         return buildings;
     }
-  
-    public Building createBuilding(int b)
-    {
+
+    public Building createBuilding(int b) {
         // building type
         BuildingInfo.Type buildingType = RandomUtil.random(BuildingInfo.Type.values());
 
@@ -111,10 +110,9 @@ public class BuildingsGenerator {
 
         return building;
     }
-    
-    public List<Floorplan> createFloorplans(Building building, int numFloorplans)
-    {
-    	List<Floorplan> floorplans = new ArrayList<Floorplan>();
+
+    public List<Floorplan> createFloorplans(Building building, int numFloorplans) {
+        List<Floorplan> floorplans = new ArrayList<Floorplan>();
         // create floorplans
         for (int i = 0; i < numFloorplans; i++) {
             String floorplanName = building.info().propertyCode() + "-" + i;
@@ -128,10 +126,9 @@ public class BuildingsGenerator {
         }
         return floorplans;
     }
-    
-    public List<AptUnit> createUnits(Building building, List<Floorplan> floorplans, int numFloors, int numUnitsPerFloor)
-    {
-    	List<AptUnit> units = new ArrayList<AptUnit>(); 
+
+    public List<AptUnit> createUnits(Building building, List<Floorplan> floorplans, int numFloors, int numUnitsPerFloor) {
+        List<AptUnit> units = new ArrayList<AptUnit>();
         // now create units for the building
         for (int floor = 1; floor < numFloors + 1; floor++) {
 
@@ -152,9 +149,9 @@ public class BuildingsGenerator {
                 units.add(unit);
             }
         }
-    	return units;
+        return units;
     }
-    
+
     private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, Complex complex, String website, Address address, List<Phone> phones,
             Email email) {
         Building building = EntityFactory.create(Building.class);
@@ -163,22 +160,22 @@ public class BuildingsGenerator {
 
         building.info().type().setValue(buildingType);
         //		building.complex().
-        building.contactInfo().website().setValue(website);
+        building.contacts().website().setValue(website);
 
         building.info().address().set(address);
 
         for (Phone phone : phones) {
-            building.contactInfo().phoneList().add(phone);
+            building.contacts().phoneList().add(phone);
         }
 
         building.info().name().setValue(RandomUtil.randomLetters(3));
-        building.marketingName().setValue(RandomUtil.randomLetters(4) + " " + RandomUtil.randomLetters(6));
+        building.marketing().name().setValue(RandomUtil.randomLetters(4) + " " + RandomUtil.randomLetters(6));
 
-        building.contactInfo().email().set(email); // not sure yet what to do about the email and its type
-        
+        building.contacts().email().set(email); // not sure yet what to do about the email and its type
+
         return building;
     }
-    
+
     private Floorplan createFloorplan(String name) {
         Floorplan floorplan = EntityFactory.create(Floorplan.class);
 
@@ -250,7 +247,7 @@ public class BuildingsGenerator {
 
         return concession;
     }
-    
+
     public static Utility createUtility(Utility.Type type) {
         Utility utility = EntityFactory.create(Utility.class);
         utility.type().setValue(type);
@@ -369,8 +366,8 @@ public class BuildingsGenerator {
         unit.floorplan().set(floorplan);
 
         return unit;
-    }    
-    
+    }
+
     public static PropertyProfile createPropertyProfile(int index) {
         PropertyProfile propertyProfile = EntityFactory.create(PropertyProfile.class);
 
@@ -385,15 +382,15 @@ public class BuildingsGenerator {
         propertyProfile.petCharge().set(petCharge);
 
         return propertyProfile;
-    }    
-    
+    }
+
     public static PetChargeRule createPetCharge(ChargeType mode, int value) {
         PetChargeRule petCharge = EntityFactory.create(PetChargeRule.class);
         petCharge.chargeType().setValue(mode);
         petCharge.value().setValue(value);
         return petCharge;
     }
-    
+
     private Complex createComplex(int numBuildings) {
         if (numBuildings == 0)
             return null;
@@ -406,9 +403,8 @@ public class BuildingsGenerator {
 
         return complex;
     }
-    
-    public LeaseTerms createLeaseTerms()
-    {
+
+    public LeaseTerms createLeaseTerms() {
         LeaseTerms leaseTerms = EntityFactory.create(LeaseTerms.class);
         try {
             leaseTerms.text().setValue(IOUtils.getTextResource(resourceFileName("leaseTerms.html")));

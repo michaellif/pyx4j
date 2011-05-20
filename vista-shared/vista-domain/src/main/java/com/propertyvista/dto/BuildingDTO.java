@@ -20,6 +20,7 @@ import com.propertyvista.domain.property.asset.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingContactInfo;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
+import com.propertyvista.dto.basic.BoilerBasicDTO;
 import com.propertyvista.dto.basic.ElevatorBasicDTO;
 import com.propertyvista.dto.basic.LockerBasicDTO;
 import com.propertyvista.dto.basic.ParkingBasicDTO;

@@ -15,9 +15,9 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.property.asset.Elevator;
+import com.propertyvista.domain.property.asset.Boiler;
 
 @Transient
-public interface ElevatorDTO extends Elevator {
+public interface BoilerDTO extends Boiler {
 
 }

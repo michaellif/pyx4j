@@ -138,7 +138,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             // phones
             sb.append("\t");
 
-            for (Phone phone : building.contactInfo().phoneList()) {
+            for (Phone phone : building.contacts().phoneList()) {
                 sb.append(phone.phoneNumber().getStringView());
                 sb.append("/").append(phone.phoneType().getStringView());
             }

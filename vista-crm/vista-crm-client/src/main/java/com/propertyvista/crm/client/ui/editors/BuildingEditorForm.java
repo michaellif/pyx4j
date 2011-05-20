@@ -90,8 +90,8 @@ public class BuildingEditorForm extends CEntityForm<Building> {
         main.add(new VistaWidgetDecorator(inject(proto().info().waterSupply()), decorData));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Marketing")));
-        main.add(new VistaWidgetDecorator(inject(proto().marketingName()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().marketingDescription()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().marketing().name()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().marketing().description()), decorData));
 //        main.add(new VistaWidgetDecorator(inject(proto().media()), decorData));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Financials")));
@@ -102,9 +102,9 @@ public class BuildingEditorForm extends CEntityForm<Building> {
         main.add(new VistaWidgetDecorator(inject(proto().financial().lastAppraisalValue()), decorData));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Contact Information")));
-        main.add(new VistaWidgetDecorator(inject(proto().contactInfo().website()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().contacts().website()), decorData));
 //        main.add(new VistaWidgetDecorator(inject(proto().email()), decorData));
-        main.add(inject(proto().contactInfo().phoneList(), createPhonesListEditor()));
+        main.add(inject(proto().contacts().phoneList(), createPhonesListEditor()));
         // TODO - add this complex data processing later! :
 //        main.add(new VistaWidgetDecorator(inject(proto().contactsList()), decorData));
 

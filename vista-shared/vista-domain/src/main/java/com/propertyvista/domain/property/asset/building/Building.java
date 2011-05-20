@@ -13,126 +13,17 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
-import com.pyx4j.i18n.shared.Translation;
 
-import com.propertyvista.domain.Medium;
 import com.propertyvista.domain.property.asset.BuildingAmenity;
 import com.propertyvista.domain.property.asset.Complex;
 
 @ToStringFormat("{0} {1}")
 //TODO rename to Property
 public interface Building extends IEntity {
-
-    @Translatable
-    public enum StructureType {
-
-        @Translation("Low-Rise")
-        lowRise,
-
-        @Translation("High-Rise")
-        highRise,
-
-        @Translation("Mid-Rise")
-        midRise,
-
-        @Translation("Walk-up")
-        walkUp,
-
-        townhouse,
-
-        condo,
-
-        other;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
-    @Translatable
-    public enum ConstructionType {
-
-        brick,
-
-        wood,
-
-        block,
-
-        panel,
-
-        other;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
-    @Translatable
-    public enum FoundationType {
-
-        pile,
-
-        continuousFooting,
-
-        spreadFooting,
-
-        foundationWalls,
-
-        other;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
-    @Translatable
-    public enum FloorType {
-
-        hardwood,
-
-        tile,
-
-        laminate,
-
-        carpet,
-
-        mixed,
-
-        other;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
-    @Translatable
-    public enum WaterSupply {
-
-        municipal,
-
-        privateWell,
-
-        privateCommunityWell,
-
-        other;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
 
     @EmbeddedEntity
     BuildingInfo info();
@@ -143,25 +34,10 @@ public interface Building extends IEntity {
     BuildingFinancial financial();
 
     @EmbeddedEntity
-    BuildingContactInfo contactInfo();
+    BuildingContactInfo contacts();
 
-    // -----------------------Marketing---------------------------------------------------------------
-    /**
-     * Property name used for marketing purposes (max 120 char)
-     */
-    IPrimitive<String> marketingName();
-
-    /**
-     * Property description used for marketing purposes
-     */
-    IPrimitive<String> marketingDescription();
-
-    // TODO - add list of property owners here...
-
-    @Detached
-    IList<Medium> media();
-
-// --------------------------------------------------------------------------------------
+    @EmbeddedEntity
+    BuildingMarketing marketing();
 
     // there is a drop-down box with create new complex  
     Complex complex();
