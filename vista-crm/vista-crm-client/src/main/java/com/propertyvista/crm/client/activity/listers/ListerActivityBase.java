@@ -55,6 +55,8 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void populateData(final int pageNumber) {
+        @SuppressWarnings("unchecked")
+//        EntitySearchCriteria<E> criteria = (EntitySearchCriteria<E>) new EntitySearchCriteria<Building>(Building.class);
         EntitySearchCriteria<E> criteria = new EntitySearchCriteria<E>(entityClass);
         criteria.setPageSize(view.getPageSize());
         criteria.setPageNumber(pageNumber);

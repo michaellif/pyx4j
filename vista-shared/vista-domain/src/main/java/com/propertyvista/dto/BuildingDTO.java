@@ -16,28 +16,22 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
-import com.propertyvista.domain.property.asset.building.BuildingContactInfo;
-import com.propertyvista.domain.property.asset.building.BuildingFinancial;
-import com.propertyvista.domain.property.asset.building.BuildingInfo;
-import com.propertyvista.dto.basic.BoilerBasicDTO;
-import com.propertyvista.dto.basic.ElevatorBasicDTO;
-import com.propertyvista.dto.basic.LockerBasicDTO;
-import com.propertyvista.dto.basic.ParkingBasicDTO;
-import com.propertyvista.dto.basic.RoofBasicDTO;
 
 @Transient
-public interface BuildingDTO extends BuildingInfo, BuildingFinancial, BuildingContactInfo {
+public interface BuildingDTO extends Building {
 
+    @Override
     IList<BuildingAmenity> amenities();
 
-    IList<ElevatorBasicDTO> elevators();
+    IList<ElevatorDTO> elevators();
 
-    IList<BoilerBasicDTO> boilers();
+    IList<BoilerDTO> boilers();
 
-    IList<RoofBasicDTO> roofs();
+    IList<RoofDTO> roofs();
 
-    IList<ParkingBasicDTO> parkings();
+    IList<ParkingDTO> parkings();
 
-    IList<LockerBasicDTO> lockers();
+    IList<LockerDTO> lockers();
 }
