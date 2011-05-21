@@ -31,6 +31,7 @@ import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
 
+//TODO: refactor to use BuildingDTO!.. 
 public class BuildingCrudServiceImpl implements BuildingCrudService {
 
     private final static Logger log = LoggerFactory.getLogger(BuildingCrudServiceImpl.class);

@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
+//TODO: refactor to use AptUnitDTO!.. 
 public class UnitCrudServiceImpl implements UnitCrudService {
 
     private final static Logger log = LoggerFactory.getLogger(UnitCrudServiceImpl.class);
