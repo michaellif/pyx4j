@@ -13,26 +13,20 @@
  */
 package com.propertyvista.portal.server.importer.bean;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 
-public class Region {
+public class Property {
 	private String code;
 
-	private List<City> cities = new ArrayList<City>();
+	private String name;
+
+	private String type;
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(code);
-
-		for (City city : cities) {
-			sb.append("\n");
-			sb.append(city);
-		}
+		sb.append(" ").append(name).append(" (").append(type).append(")");
 
 		return sb.toString();
 	}
@@ -46,12 +40,19 @@ public class Region {
 		this.code = code;
 	}
 
-	@XmlElement(name = "city")
-	public List<City> getCities() {
-		return cities;
+	public String getName() {
+		return name;
 	}
 
-	public void setCities(List<City> cities) {
-		this.cities = cities;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

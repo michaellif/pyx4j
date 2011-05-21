@@ -31,7 +31,7 @@ public class Importer {
 			log.info("Loaded " + xml);
 
 			Residential residential = XmlUtil.unmarshallResidential(xml);
-			log.info("Residential: " + residential);
+			log.info("Residential\n " + residential + "\n");
 		} catch (Exception e) {
 			log.error("Problem with generating xml", e);
 		}

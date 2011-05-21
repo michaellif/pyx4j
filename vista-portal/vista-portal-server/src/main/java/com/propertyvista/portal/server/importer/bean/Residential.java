@@ -13,9 +13,35 @@
  */
 package com.propertyvista.portal.server.importer.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Residential {
 
+	List<Region> regions = new ArrayList<Region>();
+
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(regions.size()).append(" regions");
+
+		for (Region region : regions) {
+			sb.append("\n");
+			sb.append(region);
+		}
+
+		return sb.toString();
+	}
+
+	@XmlElement(name = "region")
+	public List<Region> getRegions() {
+		return regions;
+	}
+
+	public void setRegions(List<Region> regions) {
+		this.regions = regions;
+	}
 }

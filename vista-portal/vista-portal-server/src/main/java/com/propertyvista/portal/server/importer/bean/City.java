@@ -19,39 +19,39 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
-public class Region {
-	private String code;
+public class City {
+	private String name;
 
-	private List<City> cities = new ArrayList<City>();
+	private List<Property> properties = new ArrayList<Property>();
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(code);
+		sb.append(name);
 
-		for (City city : cities) {
-			sb.append("\n");
-			sb.append(city);
+		for (Property property : properties) {
+			sb.append("\n\t");
+			sb.append(property);
 		}
 
 		return sb.toString();
 	}
 
 	@XmlAttribute
-	public String getCode() {
-		return code;
+	public String getName() {
+		return name;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	@XmlElement(name = "city")
-	public List<City> getCities() {
-		return cities;
+	@XmlElement(name = "property")
+	public List<Property> getProperties() {
+		return properties;
 	}
 
-	public void setCities(List<City> cities) {
-		this.cities = cities;
+	public void setProperties(List<Property> properties) {
+		this.properties = properties;
 	}
 }
