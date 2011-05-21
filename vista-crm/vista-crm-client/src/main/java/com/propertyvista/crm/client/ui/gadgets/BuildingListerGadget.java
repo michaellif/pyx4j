@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.crm.rpc.services.BuildingCrudServiceOld;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingListerGadget extends ListerGadgetBase<Building> {
@@ -54,7 +54,7 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
 
     @Override
     public void populateData(final int pageNumber) {
-        BuildingCrudService bcs = GWT.create(BuildingCrudService.class);
+        BuildingCrudServiceOld bcs = GWT.create(BuildingCrudServiceOld.class);
         if (bcs != null) {
             EntitySearchCriteria<Building> criteria = new EntitySearchCriteria<Building>(Building.class);
             criteria.setPageSize(getListPanel().getPageSize());

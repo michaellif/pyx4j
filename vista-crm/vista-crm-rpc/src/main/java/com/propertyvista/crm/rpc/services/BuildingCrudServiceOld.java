@@ -19,7 +19,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface BuildingCrudService extends AbstractCrudService<Building> {
+@Deprecated
+public interface BuildingCrudServiceOld extends AbstractCrudService<Building> {
 
     public void getTestBuildingNomberOne(AsyncCallback<Building> callback);
 

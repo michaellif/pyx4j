@@ -28,13 +28,13 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.crm.rpc.services.BuildingCrudServiceOld;
 import com.propertyvista.domain.property.asset.building.Building;
 
 //TODO: refactor to use BuildingDTO!.. 
-public class BuildingCrudServiceImpl implements BuildingCrudService {
+public class BuildingCrudServiceOldImpl implements BuildingCrudServiceOld {
 
-    private final static Logger log = LoggerFactory.getLogger(BuildingCrudServiceImpl.class);
+    private final static Logger log = LoggerFactory.getLogger(BuildingCrudServiceOldImpl.class);
 
     @Override
     public void create(AsyncCallback<Building> callback, Building building) {

@@ -20,7 +20,7 @@ import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.common.domain.ref.Country;
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.crm.rpc.services.BuildingCrudServiceOld;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -42,7 +42,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         }
 
         grant(new EntityPermission(Building.class, EntityPermission.ALL));
-        grant(new IServiceExecutePermission(BuildingCrudService.class));
+        grant(new IServiceExecutePermission(BuildingCrudServiceOld.class));
         grant(new EntityPermission(AptUnit.class, EntityPermission.ALL));
         grant(new IServiceExecutePermission(UnitCrudService.class));
 
