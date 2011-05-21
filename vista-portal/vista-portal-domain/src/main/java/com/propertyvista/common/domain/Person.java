@@ -17,14 +17,14 @@ import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Person extends IEntity {
 
     @BusinessEqualValue
-    @Owned
+    @EmbeddedEntity
     Name name();
 
     @Editor(type = EditorType.phone)
