@@ -64,7 +64,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
         // find appropriate pet charges
         EntityQueryCriteria<Pets> petCriteria = EntityQueryCriteria.create(Pets.class);
-        petCriteria.add(PropertyCriterion.eq(aptUnitCriteria.proto().application(), charges.application()));
+        petCriteria.add(PropertyCriterion.eq(petCriteria.proto().application(), charges.application()));
         Pets pets = PersistenceServicesFactory.getPersistenceService().retrieve(petCriteria);
 
         updateChargesFromObjects(charges, unitSelection, selectedUnit, tenantList, pets);
