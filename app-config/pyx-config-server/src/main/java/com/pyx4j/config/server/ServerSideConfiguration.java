@@ -20,9 +20,14 @@
  */
 package com.pyx4j.config.server;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
+import java.util.Vector;
 
 import javax.servlet.ServletContext;
+
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.security.server.ThrottleConfig;
@@ -195,6 +200,44 @@ public class ServerSideConfiguration {
         case GAESandbox:
             return "JSESSIONID";
         }
+    }
+
+    public static void logSystemProperties() {
+        StringBuffer sysProperties = new StringBuffer();
+        Properties properties = System.getProperties();
+        // Sort the list
+        List<String> list2sort = new Vector<String>();
+        int max_key = 0;
+        for (Object keyObj : properties.keySet()) {
+            String key = keyObj.toString();
+            list2sort.add(key);
+            int len = key.length();
+            if (len > max_key) {
+                max_key = len;
+            }
+        }
+        Collections.sort(list2sort);
+        if (max_key > 41) {
+            max_key = 41;
+        }
+
+        for (String key : list2sort) {
+            StringBuffer key_p = new StringBuffer(key);
+            while (key_p.length() < max_key) {
+                key_p.append(" ");
+            }
+            String value = (String) properties.get(key);
+            if (value == null) {
+                value = "{null}";
+            }
+            StringBuffer value_p = new StringBuffer(value);
+            value_p.append("]");
+            while (value_p.length() < 60) {
+                value_p.append(" ");
+            }
+            sysProperties.append("         " + key_p.toString() + " = [" + value_p.toString() + "\n");
+        }
+        LoggerFactory.getLogger(ServerSideConfiguration.class).debug("System Properties:\n" + sysProperties.toString());
     }
 
 }
