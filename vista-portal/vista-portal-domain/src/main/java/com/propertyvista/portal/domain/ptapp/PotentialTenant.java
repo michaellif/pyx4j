@@ -21,15 +21,16 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.i18n.shared.Translation;
 
+import com.propertyvista.common.domain.Person;
+
 @AbstractEntity
 @ToStringFormat("{0} {1} {2}")
-public interface PotentialTenant extends IEntity, IPerson, IBoundToApplication {
+public interface PotentialTenant extends Person, IBoundToApplication {
 
     @Translatable
     public enum Relationship implements Serializable {

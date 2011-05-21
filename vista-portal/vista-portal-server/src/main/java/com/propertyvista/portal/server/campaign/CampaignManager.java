@@ -19,20 +19,20 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.callfire.CallFire;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
-import com.propertyvista.server.common.security.DevelopmentSecurity;
-import com.propertyvista.server.domain.CampaignHistory;
-import com.propertyvista.server.domain.CampaignTriger;
-import com.propertyvista.server.domain.PhoneCallCampaign;
-
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
+import com.propertyvista.callfire.CallFire;
+import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.server.common.security.DevelopmentSecurity;
+import com.propertyvista.server.domain.CampaignHistory;
+import com.propertyvista.server.domain.CampaignTriger;
+import com.propertyvista.server.domain.PhoneCallCampaign;
 
 public class CampaignManager {
 
@@ -78,7 +78,7 @@ public class CampaignManager {
 
     private static void execute(PhoneCallCampaign phoneCallCampaign, PotentialTenantInfo tenant) {
         List<String> numbers = new ArrayList<String>();
-        String name = tenant.firstName().getValue() + " " + tenant.lastName().getValue();
+        String name = tenant.name().firstName().getValue() + " " + tenant.name().lastName().getValue();
         String number = tenant.homePhone().getValue();
         if (ApplicationMode.isDevelopment()) {
             String allowedNumber = DevelopmentSecurity.callNumberFilter(number);

@@ -280,7 +280,6 @@ public class BuildingsGenerator {
         unit.info().bathrooms().setValue(bathrooms);
 
         unit.financial().unitRent().setValue(800. + RandomUtil.randomInt(200));
-        unit.financial().netRent().setValue(1200. + RandomUtil.randomInt(200));
         unit.financial().marketRent().setValue(900. + RandomUtil.randomInt(200));
 
         // mandatory utilities

@@ -63,7 +63,7 @@ public class BuildingEditorForm extends CEntityForm<BuildingDTO> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new CrmHeaderDecorator(i18n.tr("BuildingDTO Information")));
+        main.add(new CrmHeaderDecorator(i18n.tr("Information")));
         DecorationData decorData = new DecorationData(14d, 12);
         main.add(new VistaWidgetDecorator(inject(proto().info().name()), decorData));
         main.add(inject(proto().info().address()));
@@ -74,7 +74,7 @@ public class BuildingEditorForm extends CEntityForm<BuildingDTO> {
         main.add(new VistaWidgetDecorator(inject(proto().info().totalStories()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().info().residentialStories()), decorData));
 
-        main.add(new CrmHeaderDecorator(i18n.tr("BuildingDTO Details")));
+        main.add(new CrmHeaderDecorator(i18n.tr("Details")));
         //main.add(new VistaWidgetDecorator(inject(proto().elevators()), decorData));
         //main.add(new VistaWidgetDecorator(inject(proto().boilers()), decorData));
         //main.add(new VistaWidgetDecorator(inject(proto().roof()), decorData));

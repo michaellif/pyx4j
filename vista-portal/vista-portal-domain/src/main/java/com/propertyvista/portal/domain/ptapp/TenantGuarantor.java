@@ -22,7 +22,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-public interface TenantGuarantor extends IEntity, IPerson {
+import com.propertyvista.common.domain.Person;
+
+public interface TenantGuarantor extends IEntity, Person {
 
     @Translatable
     public enum Relationship {

@@ -11,47 +11,32 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ptapp;
+package com.propertyvista.common.domain;
 
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface IPerson {
+public interface Person extends IEntity {
 
-    @Caption(name = "First Name")
-    @ToString(index = 1)
-    @NotNull
     @BusinessEqualValue
-    IPrimitive<String> firstName();
-
-    @Caption(name = "Middle Name")
-    IPrimitive<String> middleName();
-
-    @Caption(name = "Last Name")
-    @ToString(index = 2)
-    @NotNull
-    @BusinessEqualValue
-    IPrimitive<String> lastName();
+    @Owned
+    Name name();
 
     @Editor(type = EditorType.phone)
-    @Caption(name = "Home Phone")
     IPrimitive<String> homePhone();
 
     @Editor(type = EditorType.phone)
-    @Caption(name = "Mobile Phone")
     IPrimitive<String> mobilePhone();
 
     @Editor(type = EditorType.phone)
-    @Caption(name = "Work Phone")
     IPrimitive<String> workPhone();
 
     @Editor(type = EditorType.email)
     @Caption(name = "Email Address")
     IPrimitive<String> email();
-
 }

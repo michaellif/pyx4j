@@ -23,10 +23,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Singleton;
 
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
@@ -36,6 +32,10 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 
 @Singleton
 public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
@@ -93,9 +93,9 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
             private List<EntityFolderColumnDescriptor> columns;
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().firstName(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().middleName(), "6em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().lastName(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name().firstName(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name().middleName(), "6em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name().lastName(), "10em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "8.2em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().email(), "11em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));

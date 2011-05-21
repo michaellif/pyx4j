@@ -16,7 +16,11 @@ package com.propertyvista.portal.domain.ptapp;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface EmergencyContact extends IEntity, IPerson {
+import com.propertyvista.common.domain.Person;
+
+public interface EmergencyContact extends IEntity, Person {
+
+//    Person person();
 
     @Owned
     Address address();

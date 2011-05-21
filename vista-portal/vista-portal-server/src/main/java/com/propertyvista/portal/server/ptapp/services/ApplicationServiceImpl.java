@@ -34,11 +34,11 @@ import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
@@ -351,7 +351,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 
         ApplicationWizardSubstep step = EntityFactory.create(ApplicationWizardSubstep.class);
         step.placeArgument().setValue(tenantNew.getPrimaryKey());
-        step.name().setValue(EntityFromatUtils.nvl_concat(" ", tenantNew.firstName(), tenantNew.middleName(), tenantNew.lastName()));
+        step.name().setValue(EntityFromatUtils.nvl_concat(" ", tenantNew.name().firstName(), tenantNew.name().middleName(), tenantNew.name().lastName()));
         step.status().setValue(ApplicationWizardStep.Status.notVisited);
 
         // find original
@@ -361,8 +361,10 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
                 step.status().set(origStep.status());
 
                 // see if something changed between tenantNew and tenantOrig
-                if ((tenantOrig != null) && (step.status().getValue() == ApplicationWizardStep.Status.complete)
-                        && !EntityGraph.memebersEquals(tenantNew, tenantOrig, tenantNew.firstName(), tenantNew.middleName(), tenantNew.lastName())) {
+                if ((tenantOrig != null)
+                        && (step.status().getValue() == ApplicationWizardStep.Status.complete)
+                        && !EntityGraph.memebersEquals(tenantNew, tenantOrig, tenantNew.name().firstName(), tenantNew.name().middleName(), tenantNew.name()
+                                .lastName())) {
                     step.status().setValue(ApplicationWizardStep.Status.invalid);
                 }
             }

@@ -539,7 +539,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
         }
         for (PotentialTenantInfo pti : getValue().tenantList().tenants()) {
             if (pti.status().getValue() == Status.Applicant) {
-                return isCombinationMatch(signature, pti.firstName(), pti.lastName(), pti.middleName());
+                return isCombinationMatch(signature, pti.name().firstName(), pti.name().lastName(), pti.name().middleName());
             }
         }
         return false;

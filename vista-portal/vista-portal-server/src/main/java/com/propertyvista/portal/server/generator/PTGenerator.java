@@ -44,29 +44,29 @@ import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
+import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.IncomeInfoEmployer;
 import com.propertyvista.portal.domain.ptapp.IncomeSource;
 import com.propertyvista.portal.domain.ptapp.LegalQuestions;
 import com.propertyvista.portal.domain.ptapp.Pet;
+import com.propertyvista.portal.domain.ptapp.Pet.WeightUnit;
 import com.propertyvista.portal.domain.ptapp.Pets;
+import com.propertyvista.portal.domain.ptapp.PotentialTenant.Relationship;
+import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.TenantAsset;
+import com.propertyvista.portal.domain.ptapp.TenantAsset.AssetType;
 import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
 import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.ptapp.Vehicle;
-import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
-import com.propertyvista.portal.domain.ptapp.Pet.WeightUnit;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Relationship;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
-import com.propertyvista.portal.domain.ptapp.TenantAsset.AssetType;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.preloader.PreloadPT;
@@ -134,14 +134,14 @@ public class PTGenerator {
     public EmergencyContact createEmergencyContact() {
         EmergencyContact contact = EntityFactory.create(EmergencyContact.class);
 
-        contact.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
-        contact.middleName().setValue("");
-        contact.lastName().setValue(RandomUtil.random(DemoData.LAST_NAMES));
+        contact.name().firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
+        contact.name().middleName().setValue("");
+        contact.name().lastName().setValue(RandomUtil.random(DemoData.LAST_NAMES));
 
         contact.homePhone().setValue(RandomUtil.randomPhone());
         contact.mobilePhone().setValue(RandomUtil.randomPhone());
 
-        String email = contact.firstName().getStringView().toLowerCase() + "." + contact.lastName().getStringView().toLowerCase() + "@"
+        String email = contact.name().firstName().getStringView().toLowerCase() + "." + contact.name().lastName().getStringView().toLowerCase() + "@"
                 + RandomUtil.random(DemoData.EMAIL_DOMAINS);
         contact.email().setValue(email);
 
@@ -400,8 +400,8 @@ public class PTGenerator {
         if (tenant.relationship().getValue() == Relationship.Son || tenant.relationship().getValue() == Relationship.Daughter) {
             for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
                 TenantGuarantor guarantor = EntityFactory.create(TenantGuarantor.class);
-                guarantor.firstName().setValue(DataGenerator.randomFirstName());
-                guarantor.lastName().setValue(DataGenerator.randomLastName());
+                guarantor.name().firstName().setValue(DataGenerator.randomFirstName());
+                guarantor.name().lastName().setValue(DataGenerator.randomLastName());
                 guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
                 guarantor.birthDate().setValue(RandomUtil.randomSqlDate(1960, 2011 - 18));
                 guarantor.email().setValue(RandomUtil.randomPersonEmail(guarantor));
@@ -430,12 +430,12 @@ public class PTGenerator {
 
     private void populatePotentialTenant(PotentialTenantInfo pt, Relationship relationship, Status status) {
 
-        pt.firstName().setValue(DataGenerator.randomFirstName());
-        pt.lastName().setValue(DataGenerator.randomLastName());
+        pt.name().firstName().setValue(DataGenerator.randomFirstName());
+        pt.name().lastName().setValue(DataGenerator.randomLastName());
         if (status == Status.Applicant) {
-            pt.middleName().setValue("");
+            pt.name().middleName().setValue("");
         } else {
-            pt.middleName().setValue(RandomUtil.randomInt(100) % 7 == 0 ? "M" : "");
+            pt.name().middleName().setValue(RandomUtil.randomInt(100) % 7 == 0 ? "M" : "");
         }
 
         pt.birthDate().setValue(RandomUtil.randomSqlDate(1930, 1980));

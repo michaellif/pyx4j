@@ -7,21 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-19
+ * Created on 2011-05-20
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset.unit;
+package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface AptUnitFinancial extends IEntity {
+import com.propertyvista.domain.tenant.lease.Lease;
+
+public interface Rentable extends IEntity {
+
+    IPrimitive<String> name();
 
     @Format("#0.00")
-    IPrimitive<Double> unitRent();
+    IPrimitive<Double> price();
 
-    @Format("#0.00")
-    IPrimitive<Double> marketRent();
+    Lease lease();
 }

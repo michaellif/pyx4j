@@ -67,7 +67,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             num++;
         }
 
-        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantList.class).tenants(), num, proto(PotentialTenantInfo.class).firstName())));
+        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantList.class).tenants(), num, proto(PotentialTenantInfo.class).name().firstName())));
 
         if (doSave) {
             saveAndContinue();
@@ -75,9 +75,9 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
     }
 
     protected void assertTenantRow(IDebugId formDebugId, PotentialTenantInfo tenant, boolean fullInfo) {
-        assertValueOnForm(formDebugId, tenant.firstName());
-        assertValueOnForm(formDebugId, tenant.lastName());
-        assertValueOnForm(formDebugId, tenant.middleName());
+        assertValueOnForm(formDebugId, tenant.name().firstName());
+        assertValueOnForm(formDebugId, tenant.name().lastName());
+        assertValueOnForm(formDebugId, tenant.name().middleName());
 
         assertValueOnForm(formDebugId, tenant.birthDate());
 
@@ -113,9 +113,9 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
     }
 
     protected void assertInfoPage(PotentialTenantInfo tenant) {
-        assertValueOnForm(tenant.firstName());
-        assertValueOnForm(tenant.lastName());
-        assertValueOnForm(tenant.middleName());
+        assertValueOnForm(tenant.name().firstName());
+        assertValueOnForm(tenant.name().lastName());
+        assertValueOnForm(tenant.name().middleName());
         assertValueOnForm(tenant.email());
         assertValueOnForm(tenant.homePhone());
         assertValueOnForm(tenant.mobilePhone());
@@ -158,7 +158,8 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             assertEmContactsForm(D.id(tenant.emergencyContacts(), row), detach(contact));
             row++;
         }
-        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantInfo.class).emergencyContacts(), row, proto(EmergencyContact.class).firstName())));
+        assertFalse(selenium
+                .isElementPresent(D.id(proto(PotentialTenantInfo.class).emergencyContacts(), row, proto(EmergencyContact.class).name().firstName())));
     }
 
     protected void assertIAddressForm(IDebugId formDebugId, IAddress address) {
@@ -215,9 +216,9 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
     }
 
     protected void assertEmContactsForm(IDebugId formDebugId, EmergencyContact contact) {
-        assertValueOnForm(formDebugId, contact.firstName());
-        assertValueOnForm(formDebugId, contact.middleName());
-        assertValueOnForm(formDebugId, contact.lastName());
+        assertValueOnForm(formDebugId, contact.name().firstName());
+        assertValueOnForm(formDebugId, contact.name().middleName());
+        assertValueOnForm(formDebugId, contact.name().lastName());
         assertValueOnForm(formDebugId, contact.homePhone());
         assertValueOnForm(formDebugId, contact.mobilePhone());
         assertValueOnForm(formDebugId, contact.workPhone());
@@ -275,7 +276,7 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
             verifyGuarantor(debugID, detach(guarantor));
             row++;
         }
-        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantFinancial.class).guarantors(), row, proto(TenantGuarantor.class).firstName())));
+        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantFinancial.class).guarantors(), row, proto(TenantGuarantor.class).name().firstName())));
     }
 
     private void verifyIncome(IDebugId formDebugId, TenantIncome income) {
@@ -351,9 +352,9 @@ abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
     }
 
     private void verifyGuarantor(IDebugId debugID, TenantGuarantor guarantor) {
-        assertValueOnForm(debugID, guarantor.firstName());
-        assertValueOnForm(debugID, guarantor.middleName());
-        assertValueOnForm(debugID, guarantor.lastName());
+        assertValueOnForm(debugID, guarantor.name().firstName());
+        assertValueOnForm(debugID, guarantor.name().middleName());
+        assertValueOnForm(debugID, guarantor.name().lastName());
         assertValueOnForm(debugID, guarantor.homePhone());
         assertValueOnForm(debugID, guarantor.mobilePhone());
         assertValueOnForm(debugID, guarantor.workPhone());

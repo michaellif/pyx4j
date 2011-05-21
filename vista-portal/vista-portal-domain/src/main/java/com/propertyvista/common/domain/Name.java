@@ -11,8 +11,11 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.common.domain;
 
+import com.pyx4j.entity.annotations.BusinessEqualValue;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -20,14 +23,19 @@ public interface Name extends IEntity {
 
     IPrimitive<String> namePrefix();
 
+    @NotNull
+    @ToString(index = 1)
+    @BusinessEqualValue
     IPrimitive<String> firstName();
 
     IPrimitive<String> middleName();
 
+    @NotNull
+    @ToString(index = 2)
+    @BusinessEqualValue
     IPrimitive<String> lastName();
 
     IPrimitive<String> maidenName();
 
     IPrimitive<String> nameSuffix();
-
 }

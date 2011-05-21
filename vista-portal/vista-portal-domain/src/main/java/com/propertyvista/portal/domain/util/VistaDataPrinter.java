@@ -89,13 +89,13 @@ public class VistaDataPrinter {
         sb.append(tenant.status().getStringView());
         sb.append(", ");
 
-        sb.append(tenant.firstName().getStringView());
+        sb.append(tenant.name().firstName().getStringView());
         sb.append(" ");
-        if (tenant.middleName().getStringView().length() > 0) {
-            sb.append(tenant.middleName().getStringView());
+        if (tenant.name().middleName().getStringView().length() > 0) {
+            sb.append(tenant.name().middleName().getStringView());
             sb.append(" ");
         }
-        sb.append(tenant.lastName().getStringView());
+        sb.append(tenant.name().lastName().getStringView());
 
         sb.append("\t\t Born on ");
         sb.append(tenant.birthDate().getValue());
@@ -183,9 +183,9 @@ public class VistaDataPrinter {
             sb.append("\t");
             sb.append(guarantor.relationship().getValue());
             sb.append(", ");
-            sb.append(guarantor.firstName().getStringView());
+            sb.append(guarantor.name().firstName().getStringView());
             sb.append(" ");
-            sb.append(guarantor.lastName().getStringView());
+            sb.append(guarantor.name().lastName().getStringView());
             sb.append("\n");
         }
 
@@ -345,7 +345,7 @@ public class VistaDataPrinter {
         sb.append("\nTenants Payment Split ").append(charges.paymentSplitCharges().total().amount().getStringView()).append("\n");
         for (TenantCharge line : charges.paymentSplitCharges().charges()) {
             sb.append("\t").append(line.tenant().relationship().getStringView());
-            sb.append(" ").append(line.tenant().firstName().getStringView()).append(" ").append(line.tenant().lastName().getStringView());
+            sb.append(" ").append(line.tenant().name().firstName().getStringView()).append(" ").append(line.tenant().name().lastName().getStringView());
             sb.append(" \t").append(line.percentage().getValue()).append("% $");
             sb.append(line.charge().amount().getValue());
             sb.append("\n");

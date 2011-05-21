@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.editors;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -98,6 +99,8 @@ public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel imple
         buttons.setSpacing(10);
         SimplePanel wrap = new SimplePanel();
         wrap.getElement().getStyle().setProperty("borderTop", "1px solid #bbb");
+        buttons.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        buttons.getElement().getStyle().setRight(0, Unit.EM);
         wrap.setWidget(buttons);
         wrap.setWidth("100%");
         return wrap;

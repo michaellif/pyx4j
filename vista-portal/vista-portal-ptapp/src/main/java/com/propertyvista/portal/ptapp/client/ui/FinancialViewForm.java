@@ -29,21 +29,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
-import com.propertyvista.common.client.ui.CMoney;
-import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.domain.financial.Money;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
-import com.propertyvista.portal.domain.ptapp.TenantAsset;
-import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
-import com.propertyvista.portal.domain.ptapp.TenantIncome;
-import com.propertyvista.portal.domain.ptapp.TenantAsset.AssetType;
-import com.propertyvista.portal.domain.util.ValidationUtils;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
-import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -61,6 +46,22 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+
+import com.propertyvista.common.client.ui.CMoney;
+import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
+import com.propertyvista.portal.domain.ptapp.TenantAsset;
+import com.propertyvista.portal.domain.ptapp.TenantAsset.AssetType;
+import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
+import com.propertyvista.portal.domain.ptapp.TenantIncome;
+import com.propertyvista.portal.domain.util.ValidationUtils;
+import com.propertyvista.portal.ptapp.client.resources.PortalImages;
+import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
+import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
+import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
 
 @Singleton
 public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
@@ -256,7 +257,8 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                         }
                     };
                 } else {
-                    return new BoxFolderDecorator<TenantGuarantor>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(), i18n.tr("Add guarantor"));
+                    return new BoxFolderDecorator<TenantGuarantor>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                            i18n.tr("Add guarantor"));
                 }
             }
 
@@ -277,9 +279,9 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                             person.getElement().getStyle().setFontSize(1.1, Unit.EM);
                             main.add(person);
                         } else {
-                            main.add(inject(proto().firstName()), 12);
-                            main.add(inject(proto().middleName()), 12);
-                            main.add(inject(proto().lastName()), 20);
+                            main.add(inject(proto().name().firstName()), 12);
+                            main.add(inject(proto().name().middleName()), 12);
+                            main.add(inject(proto().name().lastName()), 20);
                         }
                         main.add(inject(proto().homePhone()), 15);
                         main.add(inject(proto().mobilePhone()), 15);

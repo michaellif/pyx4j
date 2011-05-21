@@ -19,8 +19,8 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.common.domain.Person;
 import com.propertyvista.domain.Company;
-import com.propertyvista.domain.Person;
 import com.propertyvista.domain.property.asset.building.Building;
 
 //It should be either company or person set at the same time

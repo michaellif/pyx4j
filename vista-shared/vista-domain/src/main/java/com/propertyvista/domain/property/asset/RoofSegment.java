@@ -7,23 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 27, 2011
- * @author Misha
+ * Created on 2011-05-20
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.domain.property.asset;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.ISet;
+public interface RoofSegment extends Rentable {
 
-public interface Person extends IEntity {
-
-    Name name();
-
-    ISet<Address> addressList();
-
-    ISet<Phone> phoneList();
-
-    IList<Email> emailList();
+    Roof roof();
 }

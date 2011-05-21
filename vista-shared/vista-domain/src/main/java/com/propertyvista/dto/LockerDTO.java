@@ -15,9 +15,9 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.property.asset.Locker;
+import com.propertyvista.domain.property.asset.LockerArea;
 
 @Transient
-public interface LockerDTO extends Locker {
+public interface LockerDTO extends LockerArea {
 
 }

@@ -25,22 +25,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-/**
- * For now we just assume 2 types of concessions: - Free Months: certain number of months
- * free
- * 
- * - Percent Discount: certain discount over a number of months
- * 
- * Need to redesign
- * 
- * TODO Agreed, this is probably not the best design, either indicate one class with all
- * types of concessions as members, or have one class with type and a single value that
- * will be determined by concession type
- * 
- * 
- * @author aroytbur
- * 
- */
 @ToStringFormat("{0} {1}")
 public interface Concession extends IEntity {
 

@@ -43,5 +43,4 @@ public interface User extends IEntity {
 
     @Timestamp
     IPrimitive<Date> updated();
-
 }

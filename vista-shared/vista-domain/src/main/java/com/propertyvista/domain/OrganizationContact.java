@@ -15,6 +15,8 @@ package com.propertyvista.domain;
 
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.common.domain.Person;
+
 public interface OrganizationContact extends IEntity {
 
     ContactRole contactRole();

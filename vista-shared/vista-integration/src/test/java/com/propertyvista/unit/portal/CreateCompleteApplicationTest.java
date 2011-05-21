@@ -32,6 +32,7 @@ import com.propertyvista.common.domain.IAddressFull;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Address;
+import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.IEmploymentInfo;
@@ -51,13 +52,12 @@ import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
 import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.Vehicle;
-import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.generator.PTGenerator;
+import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.ptapp.services.ApplicationServiceImpl;
 
 public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
@@ -155,9 +155,9 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
     }
 
     private void enterTenantRow(IDebugId fromDebugId, PotentialTenantInfo tenant, boolean fullInfo) {
-        setValueOnForm(fromDebugId, tenant.firstName());
-        setValueOnForm(fromDebugId, tenant.lastName());
-        setValueOnForm(fromDebugId, tenant.middleName());
+        setValueOnForm(fromDebugId, tenant.name().firstName());
+        setValueOnForm(fromDebugId, tenant.name().lastName());
+        setValueOnForm(fromDebugId, tenant.name().middleName());
         setValueOnForm(fromDebugId, tenant.birthDate());
 
         if (fullInfo) {
@@ -180,11 +180,11 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
     }
 
     private void enterTestInfo(PotentialTenantInfo tenant) {
-        assertValueOnForm(tenant.firstName());
-        assertValueOnForm(tenant.lastName());
-        //setValueOnForm(tenant.firstName());
-        //setValueOnForm(tenant.lastName());
-        setValueOnForm(tenant.middleName());
+        assertValueOnForm(tenant.name().firstName());
+        assertValueOnForm(tenant.name().lastName());
+        //setValueOnForm(tenant.name().firstName());
+        //setValueOnForm(tenant.name().lastName());
+        setValueOnForm(tenant.name().middleName());
 
         setValueOnForm(tenant.email());
         setValueOnForm(tenant.homePhone());
@@ -287,9 +287,9 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
     }
 
     private void enterEmContactsForm(IDebugId fomrDebugId, EmergencyContact contact) {
-        setValueOnForm(fomrDebugId, contact.firstName());
-        setValueOnForm(fomrDebugId, contact.middleName());
-        setValueOnForm(fomrDebugId, contact.lastName());
+        setValueOnForm(fomrDebugId, contact.name().firstName());
+        setValueOnForm(fomrDebugId, contact.name().middleName());
+        setValueOnForm(fomrDebugId, contact.name().lastName());
         setValueOnForm(fomrDebugId, contact.homePhone());
         setValueOnForm(fomrDebugId, contact.mobilePhone());
         setValueOnForm(fomrDebugId, contact.workPhone());
@@ -407,9 +407,9 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
     }
 
     private void enterGuarantorRow(IDebugId fromDebugId, TenantGuarantor guarantor) {
-        setValueOnForm(fromDebugId, guarantor.firstName());
-        setValueOnForm(fromDebugId, guarantor.middleName());
-        setValueOnForm(fromDebugId, guarantor.lastName());
+        setValueOnForm(fromDebugId, guarantor.name().firstName());
+        setValueOnForm(fromDebugId, guarantor.name().middleName());
+        setValueOnForm(fromDebugId, guarantor.name().lastName());
         setValueOnForm(fromDebugId, guarantor.homePhone());
         setValueOnForm(fromDebugId, guarantor.mobilePhone());
         setValueOnForm(fromDebugId, guarantor.workPhone());
@@ -457,7 +457,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
         summary.agree().setValue(Boolean.TRUE);
 
         PotentialTenantInfo mainTenant = summary.tenantList().tenants().get(0);
-        summary.fullName().setValue(EntityFromatUtils.nvl_concat(" ", mainTenant.firstName(), mainTenant.lastName()));
+        summary.fullName().setValue(EntityFromatUtils.nvl_concat(" ", mainTenant.name().firstName(), mainTenant.name().lastName()));
 
         setValueOnForm(summary.agree());
         setValueOnForm(summary.fullName());

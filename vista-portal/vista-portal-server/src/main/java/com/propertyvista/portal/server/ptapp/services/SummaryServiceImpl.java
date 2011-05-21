@@ -109,7 +109,8 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
                 if (fin.id().equals(tenant.id())) {
                     if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
                         SummaryPotentialTenantFinancial sf = summary.tenantFinancials().$();
-                        sf.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", tenant.firstName(), tenant.middleName(), tenant.lastName()));
+                        sf.tenantFullName().setValue(
+                                EntityFromatUtils.nvl_concat(" ", tenant.name().firstName(), tenant.name().middleName(), tenant.name().lastName()));
                         sf.tenantFinancial().set(fin);
                         summary.tenantFinancials().add(sf);
                     }
@@ -131,7 +132,8 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         loopOverTenantCharge: for (TenantCharge charge : summary.charges().paymentSplitCharges().charges()) {
             for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
                 if (tenant.equals(charge.tenant())) {
-                    charge.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", tenant.firstName(), tenant.middleName(), tenant.lastName()));
+                    charge.tenantFullName().setValue(
+                            EntityFromatUtils.nvl_concat(" ", tenant.name().firstName(), tenant.name().middleName(), tenant.name().lastName()));
                     continue loopOverTenantCharge;
                 }
             }

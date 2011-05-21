@@ -66,11 +66,11 @@ import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.domain.ptapp.Address;
+import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
+import com.propertyvista.portal.domain.ptapp.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Vehicle;
-import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
-import com.propertyvista.portal.domain.ptapp.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;
@@ -99,12 +99,12 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         DecorationData decorData = new DecorationData(14d, 12);
         decorData.editable = false;
-        main.add(new VistaWidgetDecorator(inject(proto().firstName()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().middleName()), new DecorationData(14d, 12)));
+        main.add(new VistaWidgetDecorator(inject(proto().name().firstName()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().name().middleName()), new DecorationData(14d, 12)));
 
         decorData = new DecorationData(14d, 20);
         decorData.editable = false;
-        main.add(new VistaWidgetDecorator(inject(proto().lastName()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().name().lastName()), decorData));
         main.add(new VistaWidgetDecorator(inject(proto().homePhone()), new DecorationData(14d, 15)));
         main.add(new VistaWidgetDecorator(inject(proto().mobilePhone()), new DecorationData(14d, 15)));
         main.add(new VistaWidgetDecorator(inject(proto().workPhone()), new DecorationData(14d, 15)));
@@ -475,9 +475,9 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                main.add(inject(proto().firstName()), 12);
-                main.add(inject(proto().middleName()), 12);
-                main.add(inject(proto().lastName()), 20);
+                main.add(inject(proto().name().firstName()), 12);
+                main.add(inject(proto().name().middleName()), 12);
+                main.add(inject(proto().name().lastName()), 20);
                 main.add(inject(proto().homePhone()), 15);
                 main.add(inject(proto().mobilePhone()), 15);
                 main.add(inject(proto().workPhone()), 15);

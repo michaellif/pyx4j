@@ -16,20 +16,34 @@ package com.propertyvista.domain.tenant.lease;
 import java.util.Date;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.domain.marketing.yield.Concession;
+import com.propertyvista.domain.property.asset.Rentable;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.Pets;
 
 public interface Lease extends IEntity {
 
+    IPrimitive<String> leaseID();
+
     AptUnit unit();
+
+    IList<Concession> concessions();
 
     ISet<Tenant> tenants();
 
-    Money currentRent();
+    ISet<Pets> pets();
+
+    IList<Rentable> renableItems();
+
+    Application application();
+
+    IPrimitive<Double> currentRent();
 
     IPrimitive<Date> expectedMoveInDate();
 
@@ -43,23 +57,11 @@ public interface Lease extends IEntity {
 
     IPrimitive<Date> actualMoveOut();
 
-    IPrimitive<Boolean> responsibleForLease();
-
     IPrimitive<Date> leaseSignDate();
 
-    /**
-     * (max 50 char)
-     */
     IPrimitive<String> specialStatus();
 
-    /**
-     * (max 50 char)
-     */
     IPrimitive<String> paymentAccepted();
 
-    /**
-     * (max 50 char)
-     */
     IPrimitive<String> accountNumber();
-
 }
