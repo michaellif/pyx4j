@@ -61,6 +61,7 @@ public class InitializationServletContextListener implements ServletContextListe
                     log.debug("ServerInfo {}", servletContext.getServerInfo());
                     log.debug("Java Servlet API {} {}", servletContext.getMajorVersion(), servletContext.getMinorVersion());
                     log.debug("ServletContext {} {}", servletContext.getContextPath(), servletContext.getServletContextName());
+                    ServerSideConfiguration.logSystemProperties();
 
                 } catch (Throwable e) {
                     Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
