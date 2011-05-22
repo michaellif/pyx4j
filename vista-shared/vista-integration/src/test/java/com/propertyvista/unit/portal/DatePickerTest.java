@@ -13,12 +13,9 @@
  */
 package com.propertyvista.unit.portal;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.User;
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -41,8 +38,6 @@ public class DatePickerTest extends WizardBaseSeleniumTestCase {
     private final IDebugId gridId = new CompositeDebugId(DatePickerIDs.DatePicker, "0");
 
     private final IDebugId backMonth = DatePickerIDs.MonthSelectorButton_BackwardsMonth;
-
-    private final IDebugId forwardMonth = DatePickerIDs.MonthSelectorButton_ForwardMonth;
 
     private final IDebugId backYear = DatePickerIDs.MonthSelectorButton_BackwardsYear;
 
@@ -69,47 +64,55 @@ public class DatePickerTest extends WizardBaseSeleniumTestCase {
         startRentDateTest();
     }
 
-    @SuppressWarnings("deprecation")
     private void startRentDateTest() {
         selenium.click(D.id(D.id(proto(UnitSelection.class).selectionCriteria().availableFrom()), CCompDebugId.trigger));
-        navigateToDate(90, 1);
+        navigateToDate(1990, 1);
         selenium.click(getCellDebugId(1, 1, gridId));
         selenium.click(D.id(D.id(proto(UnitSelection.class).selectionCriteria().availableTo()), CCompDebugId.trigger));
-        navigateToDate(111, 1);
+        navigateToDate(2011, 9);
         selenium.click(getCellDebugId(1, 1, gridId));
+
+        selenium.click(VistaFormsDebugId.Available_Units_Change);
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Apartment.class));
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, proto(AptUnitDTO.class).unitType()));
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, "leaseTerm_12"));
+
+        selenium.click(D.id(D.id(proto(UnitSelection.class).rentStart()), CCompDebugId.trigger));
+        navigateToDate(1995, 1);
+        selenium.click(getCellDebugId(1, 1, gridId));
+
+        saveAndContinue();
     }
 
     private IDebugId getCellDebugId(int row, int column, IDebugId parent) {
         return new StringDebugId(parent.debugId() + "_" + row + "_" + column);
     }
 
-    @SuppressWarnings("deprecation")
     private void navigateToDate(int year, int month) {
-        Date now = Calendar.getInstance().getTime();
-        int difference;
+        selenium.getText(DatePickerIDs.MonthSelectorLabel_Month);
+        int currentYear;
+        String currentMonth;
         IDebugId button;
-        if (now.getYear() < year) {
+
+        button = backMonth;
+        currentMonth = selenium.getText(DatePickerIDs.MonthSelectorLabel_Month);
+        while (!currentMonth.equals(DatePickerIDs.monthName[month])) {
+            selenium.click(button);
+            currentMonth = selenium.getText(DatePickerIDs.MonthSelectorLabel_Month);
+        }
+
+        currentYear = Integer.parseInt(selenium.getText(DatePickerIDs.MonthSelectorLabel_Year));
+        if (currentYear < year) {
             button = forwardYear;
-            difference = 1;
         } else {
             button = backYear;
-            difference = -1;
         }
-        while (now.getYear() != year) {
+
+        while (currentYear != year) {
             selenium.click(button);
-            CalendarUtil.addMonthsToDate(now, difference * 12);
+            currentYear = Integer.parseInt(selenium.getText(DatePickerIDs.MonthSelectorLabel_Year));
         }
-        if (now.getMonth() < month) {
-            button = forwardMonth;
-            difference = 1;
-        } else {
-            button = backMonth;
-            difference = -1;
-        }
-        while (now.getMonth() != month) {
-            selenium.click(button);
-            CalendarUtil.addMonthsToDate(now, difference);
-        }
+
     }
 
 }
