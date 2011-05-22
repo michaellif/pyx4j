@@ -32,6 +32,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
+import com.propertyvista.portal.server.importer.Importer;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -62,8 +63,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 		}
 	}
 
-	@Override
-	public String create() {
+	private String generate() {
 		BuildingsGenerator generator = new BuildingsGenerator(
 				DemoData.BUILDINGS_GENERATION_SEED);
 
@@ -106,10 +106,46 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 			}
 		}
 
-		StringBuilder b = new StringBuilder();
-		b.append("Created ").append(buildings.size()).append(" buildings, ")
+		StringBuilder sb = new StringBuilder();
+		sb.append("Created ").append(buildings.size()).append(" buildings, ")
 				.append(unitCount).append(" units");
-		return b.toString();
+		return sb.toString();
+	}
+
+	public String importData() {
+		try {
+			Importer importer = new Importer();
+			importer.start();
+
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("Imported ")
+					.append(importer.getMapper().getBuildings().size())
+					.append(" buildings, ");
+			sb.append(importer.getMapper().getFloorplans().size()).append(
+					" floorplans");
+			sb.append(importer.getMapper().getUnits().size()).append(" units");
+
+			return sb.toString();
+		} catch (Exception e) {
+			log.error("Failed to import XML data", e);
+			return "Failed to import XML data";
+		}
+	}
+
+	@Override
+	public String create() {
+		String generated = generate();
+		String imported = importData();
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("--------- GENERATED ----------");
+		sb.append(generated);
+		sb.append("--------- IMPORTED -----------");
+		sb.append(imported);
+
+		return sb.toString();
 	}
 
 	@Override

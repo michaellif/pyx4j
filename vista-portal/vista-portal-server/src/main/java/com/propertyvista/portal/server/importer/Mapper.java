@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.server.importer;
+package com.propertyvista.portal.server.importer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -195,10 +195,6 @@ public class Mapper {
 		}
 		log.info("Unknown structure type [" + type + "]");
 		return null;
-	}
-
-	public static Logger getLog() {
-		return log;
 	}
 
 	public List<Building> getBuildings() {
