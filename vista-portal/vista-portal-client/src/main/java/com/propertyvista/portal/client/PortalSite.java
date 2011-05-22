@@ -37,7 +37,8 @@ public class PortalSite extends VistaSite {
     public void onSiteLoad() {
         super.onSiteLoad();
 
-        GoogleAPI.setGoogleAPIKey("ABQIAAAAZuLUizjWCGkAYOfiIpZpgxT2nw7IAgYZCN3UZ-Glm95U7gTjpRTVD1pxXeXBpUR-ZQ5Z0YCQkesTkg");
+        // Key for .birchwoodsoftwaregroup.com
+        GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
 
         ginjector = GWT.create(PortalGinjector.class);
         AppPlace defaultplace = new PortalSiteMap.FindApartment();
