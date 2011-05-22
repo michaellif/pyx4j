@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
@@ -55,7 +56,7 @@ public interface Address extends IEntity, IAddressFull {
         }
     }
 
-    //    IPrimitive<GeoPoint> location(); for now the database complains about this unknown type
+    IPrimitive<GeoPoint> location();
 
     IPrimitive<AddressType> addressType();
 }
