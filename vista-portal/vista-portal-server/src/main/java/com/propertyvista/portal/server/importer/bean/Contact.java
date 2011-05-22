@@ -7,37 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 20, 2011
+ * Created on May 21, 2011
  * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.portal.server.importer.bean;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-
-public class City {
+public class Contact {
 	private String name;
 
-	private List<Property> properties = new ArrayList<Property>();
+	private String tel;
+
+	private String hours;
+
+	private String email;
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(name);
-
-		for (Property property : properties) {
-			sb.append("\n-------- property ------\n");
-			sb.append(property);
-		}
+		sb.append(name).append(" ").append(tel).append(" ").append(hours)
+				.append(" ").append(email);
 
 		return sb.toString();
 	}
 
-	@XmlAttribute
 	public String getName() {
 		return name;
 	}
@@ -46,12 +39,28 @@ public class City {
 		this.name = name;
 	}
 
-	@XmlElement(name = "property")
-	public List<Property> getProperties() {
-		return properties;
+	public String getTel() {
+		return tel;
 	}
 
-	public void setProperties(List<Property> properties) {
-		this.properties = properties;
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
+
+	public String getHours() {
+		return hours;
+	}
+
+	public void setHours(String hours) {
+		this.hours = hours;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 }

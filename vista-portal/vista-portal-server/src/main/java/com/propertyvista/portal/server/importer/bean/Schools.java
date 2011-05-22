@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 20, 2011
+ * Created on May 21, 2011
  * @author dmitry
  * @version $Id$
  */
@@ -16,42 +16,28 @@ package com.propertyvista.portal.server.importer.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
-public class City {
-	private String name;
+public class Schools {
 
-	private List<Property> properties = new ArrayList<Property>();
+	private List<School> schools = new ArrayList<School>();
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(name);
-
-		for (Property property : properties) {
-			sb.append("\n-------- property ------\n");
-			sb.append(property);
+		for (School school : schools) {
+			sb.append("\n").append(school);
 		}
 
 		return sb.toString();
 	}
 
-	@XmlAttribute
-	public String getName() {
-		return name;
+	@XmlElement(name = "school")
+	public List<School> getSchools() {
+		return schools;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@XmlElement(name = "property")
-	public List<Property> getProperties() {
-		return properties;
-	}
-
-	public void setProperties(List<Property> properties) {
-		this.properties = properties;
+	public void setSchools(List<School> schools) {
+		this.schools = schools;
 	}
 }

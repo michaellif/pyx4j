@@ -28,10 +28,13 @@ public class Importer {
 		try {
 			String xml = IOUtils.getTextResource(XmlUtil.resourceFileName(
 					XmlUtil.class, "data.xml"));
-			log.info("Loaded " + xml);
+			log.debug("Loaded " + xml);
 
 			Residential residential = XmlUtil.unmarshallResidential(xml);
 			log.info("Residential\n " + residential + "\n");
+
+			Mapper mapper = new Mapper();
+			mapper.load(residential);
 		} catch (Exception e) {
 			log.error("Problem with generating xml", e);
 		}
