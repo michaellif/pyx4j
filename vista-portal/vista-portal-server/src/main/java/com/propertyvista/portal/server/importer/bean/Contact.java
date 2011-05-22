@@ -16,11 +16,11 @@ package com.propertyvista.portal.server.importer.bean;
 public class Contact {
 	private String name;
 
-	private String tel;
+	private String tel; // building.contacts.phoneList.phone
 
 	private String hours;
 
-	private String email;
+	private String email; // building.contacts.email
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

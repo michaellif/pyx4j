@@ -18,63 +18,73 @@ import com.propertyvista.common.domain.IAddressFull.StreetDirection;
 import com.propertyvista.common.domain.IAddressFull.StreetType;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.domain.Address;
-import com.propertyvista.domain.Email;
-import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.Address.AddressType;
+import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Email.EmailType;
+import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.Phone.PhoneType;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 import com.pyx4j.entity.shared.EntityFactory;
 
 public class CommonsGenerator {
-	
-    public static Email createEmail(String emailAddress) {
-        Email email = EntityFactory.create(Email.class);
 
-        email.emailType().setValue(EmailType.work);
-        email.emailAddress().setValue(emailAddress);
+	public static Email createEmail(String emailAddress) {
+		Email email = EntityFactory.create(Email.class);
 
-        return email;
-    }
+		email.emailType().setValue(EmailType.work);
+		email.emailAddress().setValue(emailAddress);
 
-    public static Phone createPhone() {
-        Phone phone = EntityFactory.create(Phone.class);
+		return email;
+	}
 
-        phone.phoneType().setValue(PhoneType.work);
-        String code = RandomUtil.randomBoolean() ? "416" : "905";
-        int digits = RandomUtil.randomInt(10) * 1000 + RandomUtil.randomInt(10) * 100 + RandomUtil.randomInt(10) * 10 + RandomUtil.randomInt(10);
-        phone.phoneNumber().setValue("(" + code + ") 555-" + digits);
+	public static Phone createPhone() {
+		String code = RandomUtil.randomBoolean() ? "416" : "905";
+		int digits = RandomUtil.randomInt(10) * 1000 + RandomUtil.randomInt(10)
+				* 100 + RandomUtil.randomInt(10) * 10
+				+ RandomUtil.randomInt(10);
+		String phoneNumber = "(" + code + ") 555-" + digits;
+		return createPhone(phoneNumber);
+	}
 
-        return phone;
-    }
-	
-    public static Address createAddress() {
-        Address address = EntityFactory.create(Address.class);
+	public static Phone createPhone(String phoneNumber) {
+		Phone phone = EntityFactory.create(Phone.class);
 
-        address.addressType().setValue(AddressType.property);
+		phone.phoneType().setValue(PhoneType.work);
+		phone.phoneNumber().setValue(phoneNumber);
 
-        address.unitNumber().setValue(Integer.toString(RandomUtil.randomInt(1000)));
-        address.streetNumber().setValue(Integer.toString(RandomUtil.randomInt(10000)));
-        address.streetNumberSuffix().setValue("");
+		return phone;
+	}
 
-        address.streetName().setValue(RandomUtil.random(DemoData.STREETS));
-        address.streetType().setValue(RandomUtil.random(StreetType.values()));
-        address.streetDirection().setValue(RandomUtil.random(StreetDirection.values()));
+	public static Address createAddress() {
+		Address address = EntityFactory.create(Address.class);
 
-        address.city().setValue(RandomUtil.random(DemoData.CITIES));
-        address.county().setValue("");
+		address.addressType().setValue(AddressType.property);
 
-        Province province = RandomUtil.random(SharedData.getProvinces());
-        address.province().set(province);
-        address.country().set(province.country());
+		address.unitNumber().setValue(
+				Integer.toString(RandomUtil.randomInt(1000)));
+		address.streetNumber().setValue(
+				Integer.toString(RandomUtil.randomInt(10000)));
+		address.streetNumberSuffix().setValue("");
 
-        // for now we support only two countries
-        if (address.country().name().getValue().toLowerCase().startsWith("c")) {
-            address.postalCode().setValue(RandomUtil.randomPostalCode());
-        } else {
-            address.postalCode().setValue(RandomUtil.randomZipCode());
-        }
+		address.streetName().setValue(RandomUtil.random(DemoData.STREETS));
+		address.streetType().setValue(RandomUtil.random(StreetType.values()));
+		address.streetDirection().setValue(
+				RandomUtil.random(StreetDirection.values()));
 
-        return address;
-    }
+		address.city().setValue(RandomUtil.random(DemoData.CITIES));
+		address.county().setValue("");
+
+		Province province = RandomUtil.random(SharedData.getProvinces());
+		address.province().set(province);
+		address.country().set(province.country());
+
+		// for now we support only two countries
+		if (address.country().name().getValue().toLowerCase().startsWith("c")) {
+			address.postalCode().setValue(RandomUtil.randomPostalCode());
+		} else {
+			address.postalCode().setValue(RandomUtil.randomZipCode());
+		}
+
+		return address;
+	}
 }

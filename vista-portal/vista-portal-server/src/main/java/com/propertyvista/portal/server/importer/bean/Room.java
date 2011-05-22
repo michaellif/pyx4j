@@ -18,15 +18,15 @@ import javax.xml.bind.annotation.XmlValue;
 
 public class Room {
 
-	private Integer brcount;
+	private Integer brcount; // no value in xml
 
-	private Integer rate;
+	private Integer rate; // no value in xml
 
-	private Integer sqft;
+	private Integer sqft; // no value in xml
 
-	private String display;
+	private String display; // floorplan.description
 
-	private String name;
+	private String name; // floorplan.name
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

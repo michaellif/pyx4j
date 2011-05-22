@@ -26,39 +26,40 @@ public class Property {
 
 	private Integer sqft; // always zero in xml, not using for now
 
-	private Integer floors;
+	private Integer floors; // used in mapper
 
-	private String rentRange;
+	private String rentRange; // TODO not found in Vista
 
-	private Address address;
+	private Address address; // building.info.address
 
-	private String introduction;
+	private String introduction; // TODO not found in Vista
 
-	private Rooms rooms;
+	private Rooms rooms; // floorplan
 
-	private Includes includes;
+	private Includes includes; // unit.utitilities
 
-	private ParkingTypes parkingtypes;
+	private ParkingTypes parkingtypes; // TODO needs to be determined
 
-	private Contact contact;
+	private Contact contact; // building.contacts
 
-	private AdjacentProperty adjacentprop;
+	private AdjacentProperty adjacentprop; // TODO not found
 
-	private Schools schools;
+	private Schools schools; // TODO not found
 
 	private String promotions; // empty in XML
 
 	private String maplink; // empty in XML
 
-	private String otherinfo;
+	private String otherinfo; // not found
 
-	private String youtube;
+	private String youtube; // TODO this probably goes to building.marketing
 
-	private String building;
+	private String building; // TODO building.name is already taken, must be
+								// something else
 
-	private String thirdparty;
+	private String thirdparty; // TODO not found
 
-	private String website;
+	private String website; // building.contacts.website
 
 	private String featured;
 

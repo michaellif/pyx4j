@@ -20,37 +20,46 @@ import com.propertyvista.common.domain.ref.Province;
 
 public class SharedData {
 
-    private static List<Province> provinces;
+	private static List<Province> provinces;
 
-    private static List<Country> countries;
+	private static List<Country> countries;
 
-    public static void init() {
-        provinces = LocationsGenerator.loadProvincesFromFile();
-        countries = LocationsGenerator.createCountries(provinces);
-    }
+	public static void init() {
+		provinces = LocationsGenerator.loadProvincesFromFile();
+		countries = LocationsGenerator.createCountries(provinces);
+	}
 
-    public static void registerProvinces(List<Province> p) {
-        provinces = p;
-    }
+	public static void registerProvinces(List<Province> p) {
+		provinces = p;
+	}
 
-    public static void registerCountries(List<Country> c) {
-        countries = c;
-    }
+	public static void registerCountries(List<Country> c) {
+		countries = c;
+	}
 
-    public static List<Province> getProvinces() {
-        return provinces;
-    }
+	public static List<Province> getProvinces() {
+		return provinces;
+	}
 
-    public static Country findCountryCanada() {
-        return findCountry("Canada");
-    }
+	public static Province findProvinceByCode(String code) {
+		for (Province province : provinces) {
+			if (province.code().getValue().equals(code)) {
+				return province;
+			}
+		}
+		return null;
+	}
 
-    public static Country findCountry(String name) {
-        for (Country country : countries) {
-            if (country.name().getValue().equals(name)) {
-                return country;
-            }
-        }
-        return null;
-    }
+	public static Country findCountryCanada() {
+		return findCountry("Canada");
+	}
+
+	public static Country findCountry(String name) {
+		for (Country country : countries) {
+			if (country.name().getValue().equals(name)) {
+				return country;
+			}
+		}
+		return null;
+	}
 }
