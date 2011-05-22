@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.yardi.ws.operations.GetPropertyConfigurations;
 import com.yardi.ws.operations.GetResidentTransactions_ByChargeDate_Login;
+import com.yardi.ws.operations.GetResidentTransactions_Login;
 import com.yardi.ws.operations.GetResidentsLeaseCharges_Login;
 import com.yardi.ws.operations.GetUnitInformation_Login;
 import com.yardi.ws.operations.Ping;
@@ -78,6 +79,21 @@ public class Example {
 
             c.transactionId = 4L;
             {
+                c.currentActionName = "GetResidentTransactions";
+                GetResidentTransactions_Login l = new GetResidentTransactions_Login();
+                l.setUserName("propertyvistaws");
+                l.setPassword("52673");
+                l.setServerName("aspdb04");
+                l.setDatabase("afqoml_live");
+                l.setPlatform("SQL");
+                l.setYardiPropertyId("prvista1");
+                l.setInterfaceEntity("Property Vista");
+
+                c.getResidentTransactionsService().getResidentTransactions_Login(l);
+            }
+
+            c.transactionId = 5L;
+            {
                 c.currentActionName = "GetResidentTransactions_ByChargeDate";
                 GetResidentTransactions_ByChargeDate_Login l = new GetResidentTransactions_ByChargeDate_Login();
                 l.setUserName("propertyvistaws");
@@ -106,7 +122,7 @@ public class Example {
                 c.getResidentTransactionsService().getResidentTransactions_ByChargeDate_Login(l);
             }
 
-            c.transactionId = 5L;
+            c.transactionId = 6L;
             {
                 c.currentActionName = "GetResidentsLeaseCharges";
                 GetResidentsLeaseCharges_Login l = new GetResidentsLeaseCharges_Login();
