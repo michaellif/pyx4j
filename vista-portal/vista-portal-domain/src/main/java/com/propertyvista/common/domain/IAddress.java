@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.common.domain.ref.Province;
+import com.propertyvista.common.domain.ref.ProvinceReferenceAdapter;
 
 public interface IAddress {
 
@@ -39,6 +40,7 @@ public interface IAddress {
     @Caption(name = "Province/State")
     @NotNull
     @Editor(type = EditorType.combo)
+    @Reference(adapter = ProvinceReferenceAdapter.class)
     Province province();
 
     @Editor(type = EditorType.suggest)

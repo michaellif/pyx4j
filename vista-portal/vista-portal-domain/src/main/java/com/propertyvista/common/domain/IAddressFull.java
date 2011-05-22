@@ -25,6 +25,7 @@ import com.pyx4j.i18n.shared.Translatable;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.common.domain.ref.Province;
+import com.propertyvista.common.domain.ref.ProvinceReferenceAdapter;
 
 public interface IAddressFull {
 
@@ -104,6 +105,7 @@ public interface IAddressFull {
     @NotNull
     @Caption(name = "Province/State")
     @Editor(type = EditorType.combo)
+    @Reference(adapter = ProvinceReferenceAdapter.class)
     Province province();
 
     @NotNull
