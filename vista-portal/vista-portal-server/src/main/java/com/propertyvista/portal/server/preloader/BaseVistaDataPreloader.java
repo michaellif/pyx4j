@@ -14,16 +14,7 @@
 package com.propertyvista.portal.server.preloader;
 
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
-
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.IAddressFull.StreetDirection;
-import com.propertyvista.common.domain.IAddressFull.StreetType;
-import com.propertyvista.common.domain.ref.Province;
-import com.propertyvista.domain.Address;
-import com.propertyvista.domain.Address.AddressType;
-import com.propertyvista.portal.server.generator.SharedData;
 
 abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
 

@@ -16,11 +16,11 @@ package com.propertyvista.portal.server.preloader;
 import java.util.List;
 import java.util.Locale;
 
-import com.propertyvista.server.domain.dev.DevelopmentUser;
-
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
+
+import com.propertyvista.server.domain.dev.DevelopmentUser;
 
 public class DevelopmentSecurityPreload extends AbstractDataPreloader {
 

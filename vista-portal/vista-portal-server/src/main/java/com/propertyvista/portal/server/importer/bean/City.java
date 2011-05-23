@@ -24,6 +24,7 @@ public class City {
 
     private List<Property> properties = new ArrayList<Property>();
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

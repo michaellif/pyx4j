@@ -63,6 +63,7 @@ public class Property {
 
     private String featured;
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

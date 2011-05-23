@@ -22,6 +22,7 @@ public class Contact {
 
     private String email; // building.contacts.email
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

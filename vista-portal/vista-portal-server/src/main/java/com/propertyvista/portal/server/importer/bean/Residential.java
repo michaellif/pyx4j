@@ -24,6 +24,7 @@ public class Residential {
 
     List<Region> regions = new ArrayList<Region>();
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(regions.size()).append(" regions");

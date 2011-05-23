@@ -58,6 +58,6 @@ public class RandomUtil extends DataGenerator {
 
     public static String randomPersonEmail(Person person) {
         return person.name().firstName().getStringView().toLowerCase() + "." + person.name().lastName().getStringView().toLowerCase() + "@"
-                + RandomUtil.random(DemoData.EMAIL_DOMAINS);
+                + DataGenerator.random(DemoData.EMAIL_DOMAINS);
     }
 }

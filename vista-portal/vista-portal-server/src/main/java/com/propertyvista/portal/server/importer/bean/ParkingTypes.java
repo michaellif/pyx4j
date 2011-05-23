@@ -22,6 +22,7 @@ public class ParkingTypes {
 
     private List<Parking> parkings = new ArrayList<Parking>();
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class School {
     private String shortname;
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

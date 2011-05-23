@@ -22,6 +22,7 @@ public class Schools {
 
     private List<School> schools = new ArrayList<School>();
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

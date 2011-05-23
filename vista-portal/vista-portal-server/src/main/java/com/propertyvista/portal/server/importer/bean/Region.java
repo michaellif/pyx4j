@@ -24,6 +24,7 @@ public class Region {
 
     private List<City> cities = new ArrayList<City>();
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

@@ -16,6 +16,12 @@ package com.propertyvista.portal.server.preloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.common.domain.User;
@@ -41,12 +47,6 @@ import com.propertyvista.portal.domain.util.VistaDataPrinter;
 import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.portal.server.ptapp.services.ApplicationDebug;
 import com.propertyvista.server.domain.ApplicationDocumentData;
-
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 public class PreloadPT extends BaseVistaDataPreloader {
 

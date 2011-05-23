@@ -13,9 +13,9 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import com.propertyvista.common.domain.DemoData;
-
 import com.pyx4j.essentials.server.preloader.DataGenerator;
+
+import com.propertyvista.common.domain.DemoData;
 
 public class BusinessDataGenerator {
     public static String createEmail() {

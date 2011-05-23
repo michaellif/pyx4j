@@ -23,6 +23,7 @@ public class Parking {
 
     private Double rate;
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

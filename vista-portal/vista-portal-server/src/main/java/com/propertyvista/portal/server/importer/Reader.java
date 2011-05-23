@@ -25,9 +25,10 @@ import javax.xml.bind.JAXBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.gwt.server.IOUtils;
+
 import com.propertyvista.portal.server.importer.bean.Residential;
 import com.propertyvista.portal.server.importer.csv.AvailableUnit;
-import com.pyx4j.gwt.server.IOUtils;
 
 public class Reader {
 
@@ -37,7 +38,7 @@ public class Reader {
 
     private Residential residential;
 
-    private List<AvailableUnit> units = new ArrayList<AvailableUnit>();
+    private final List<AvailableUnit> units = new ArrayList<AvailableUnit>();
 
     public void readCsv() throws IOException, ParseException {
         String csv = IOUtils.getTextResource(XmlUtil.resourceFileName(XmlUtil.class, "units.csv"));

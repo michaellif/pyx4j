@@ -18,12 +18,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.VistaBehavior;
-import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.domain.UserCredential;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -31,6 +25,12 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
+import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.User;
+import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.server.domain.UserCredential;
 
 public class PreloadUsers extends AbstractDataPreloader {
 

@@ -20,6 +20,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -38,16 +40,15 @@ import com.propertyvista.portal.server.importer.bean.Region;
 import com.propertyvista.portal.server.importer.bean.Residential;
 import com.propertyvista.portal.server.importer.bean.Room;
 import com.propertyvista.portal.server.importer.csv.AvailableUnit;
-import com.pyx4j.entity.shared.EntityFactory;
 
 public class Mapper {
     private static final Logger log = LoggerFactory.getLogger(Mapper.class);
 
-    private List<Building> buildings = new ArrayList<Building>();
+    private final List<Building> buildings = new ArrayList<Building>();
 
-    private List<AptUnit> units = new ArrayList<AptUnit>();
+    private final List<AptUnit> units = new ArrayList<AptUnit>();
 
-    private List<Floorplan> floorplans = new ArrayList<Floorplan>();
+    private final List<Floorplan> floorplans = new ArrayList<Floorplan>();
 
     private List<AvailableUnit> availableUnits = new ArrayList<AvailableUnit>();
 

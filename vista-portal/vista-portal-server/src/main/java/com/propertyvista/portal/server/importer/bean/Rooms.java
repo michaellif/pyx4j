@@ -22,6 +22,7 @@ public class Rooms {
 
     private List<Room> rooms = new ArrayList<Room>();
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

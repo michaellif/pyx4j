@@ -28,6 +28,7 @@ public class Room {
 
     private String name; // floorplan.name
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

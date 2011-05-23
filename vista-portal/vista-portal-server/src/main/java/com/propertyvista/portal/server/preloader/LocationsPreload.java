@@ -15,13 +15,13 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.List;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
+
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.server.generator.LocationsGenerator;
 import com.propertyvista.portal.server.generator.SharedData;
-
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 public class LocationsPreload extends AbstractDataPreloader {
 

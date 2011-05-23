@@ -37,6 +37,7 @@ public class AvailableUnit {
 
     private Date available; // aptUnit.currentOccupancy.dateFrom
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
