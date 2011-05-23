@@ -13,6 +13,9 @@
  */
 package com.propertyvista.domain.property.asset.unit;
 
+import com.propertyvista.domain.Medium;
+import com.propertyvista.domain.marketing.yield.AddOn;
+import com.propertyvista.domain.marketing.yield.Concession;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -23,47 +26,43 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.Medium;
-import com.propertyvista.domain.marketing.yield.AddOn;
-import com.propertyvista.domain.marketing.yield.Concession;
-
 public interface AptUnit extends IEntity {
 
-    @EmbeddedEntity
-    AptUnitInfo info();
+	@EmbeddedEntity
+	AptUnitInfo info();
 
-    /**
-     * Keeps current and future occupancy data
-     */
-    IList<AptUnitOccupancy> currentOccupancies();
+	/**
+	 * Keeps current and future occupancy data
+	 */
+	IList<AptUnitOccupancy> currentOccupancies();
 
-    @Transient
-    IPrimitive<Double> numberOfOccupants();
+	@Transient
+	IPrimitive<Double> numberOfOccupants();
 
-    /**
-     * Denormalizied field used for search, derived from @see AptUnitOccupancy
-     * TODO should be calculated during Entity save
-     * 
-     * @deprecated remove deprecated once it is calulated and filled properly.
-     */
-    @Deprecated
-    @Indexed
-    @Format("MM/dd/yyyy")
-    @Caption(name = "Available")
-    IPrimitive<java.sql.Date> avalableForRent();
+	/**
+	 * Denormalized field used for search, derived from @see AptUnitOccupancy
+	 * TODO should be calculated during Entity save
+	 * 
+	 * @deprecated remove deprecated once it is calculated and filled properly.
+	 */
+	@Deprecated
+	@Indexed
+	@Format("MM/dd/yyyy")
+	@Caption(name = "Available")
+	IPrimitive<java.sql.Date> avalableForRent();
 
-    @EmbeddedEntity
-    AptUnitFinancial financial();
+	@EmbeddedEntity
+	AptUnitFinancial financial();
 
-    @EmbeddedEntity
-    AptUnitMarketing marketing();
+	@EmbeddedEntity
+	AptUnitMarketing marketing();
 
-    IList<AptUnitAmenity> amenities();
+	IList<AptUnitAmenity> amenities();
 
-    IList<Concession> concessions();
+	IList<Concession> concessions();
 
-    IList<AddOn> addOns();
+	IList<AddOn> addOns();
 
-    @Detached
-    IList<Medium> media();
+	@Detached
+	IList<Medium> media();
 }

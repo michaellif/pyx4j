@@ -30,6 +30,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
 import com.propertyvista.portal.server.importer.Importer;
@@ -87,6 +88,9 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 					DemoData.NUM_FLOORS, DemoData.NUM_UNITS_PER_FLOOR);
 			unitCount += units.size();
 			for (AptUnit unit : units) {
+				for (AptUnitOccupancy occupancy : unit.currentOccupancies()) {
+					persist(occupancy);
+				}
 				for (Utility utility : unit.info().utilities()) {
 					persist(utility);
 				}

@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.importer;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import javax.xml.bind.JAXBException;
 
@@ -24,34 +25,29 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.portal.server.importer.bean.Residential;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.gwt.server.IOUtils;
 
 public class Importer {
 	private static final Logger log = LoggerFactory.getLogger(Importer.class);
 
-	private Residential residential;
+	private Reader reader;
 	private Mapper mapper;
 
 	public Importer() {
 	}
 
-	public void read() throws IOException, JAXBException {
-		// read
-		String xml = IOUtils.getTextResource(XmlUtil.resourceFileName(
-				XmlUtil.class, "data.xml"));
-		log.debug("Loaded " + xml);
-
-		residential = XmlUtil.unmarshallResidential(xml);
-		log.debug("Residential\n " + residential + "\n");
+	public void read() throws IOException, JAXBException, ParseException {
+		reader = new Reader();
+		reader.readCsv();
+		reader.readXml();
 	}
 
 	public void map() {
 		// map
 		mapper = new Mapper();
-		mapper.load(residential);
+		mapper.load(reader.getResidential(), reader.getUnits());
 	}
 
 	public void save() {
@@ -65,6 +61,9 @@ public class Importer {
 		}
 
 		for (AptUnit unit : mapper.getUnits()) {
+			for (AptUnitOccupancy occupancy : unit.currentOccupancies()) {
+				persist(occupancy);
+			}
 			for (Utility utility : unit.info().utilities()) {
 				persist(utility);
 			}

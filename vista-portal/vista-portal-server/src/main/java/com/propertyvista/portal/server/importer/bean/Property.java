@@ -28,7 +28,7 @@ public class Property {
 
 	private Integer floors; // used in mapper
 
-	private String rentRange; // TODO not found in Vista
+	private String rentrange; // TODO not found in Vista
 
 	private Address address; // building.info.address
 
@@ -73,7 +73,7 @@ public class Property {
 		sb.append(unitcount).append(" units, ");
 		sb.append(floors).append(" floors, ");
 		sb.append(sqft).append(" sqft, ");
-		sb.append(rentRange);
+		sb.append(rentrange);
 
 		sb.append("\n");
 		sb.append(introduction);
@@ -152,12 +152,12 @@ public class Property {
 		this.floors = floors;
 	}
 
-	public String getRentRange() {
-		return rentRange;
+	public String getRentrange() {
+		return rentrange;
 	}
 
-	public void setRentRange(String rentRange) {
-		this.rentRange = rentRange;
+	public void setRentrange(String rentrange) {
+		this.rentrange = rentrange;
 	}
 
 	public Address getAddress() {
