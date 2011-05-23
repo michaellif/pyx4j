@@ -34,171 +34,164 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class DataPreloaderCollection extends AbstractDataPreloader {
 
-	private final static Logger log = LoggerFactory
-			.getLogger(DataPreloaderCollection.class);
+    private final static Logger log = LoggerFactory.getLogger(DataPreloaderCollection.class);
 
-	protected final List<DataPreloader> childPreloaders = new Vector<DataPreloader>();
+    protected final List<DataPreloader> childPreloaders = new Vector<DataPreloader>();
 
-	public DataPreloaderCollection() {
-		super();
-	}
+    public DataPreloaderCollection() {
+        super();
+    }
 
-	public Vector<DataPreloaderInfo> getDataPreloaderInfo() {
-		Vector<DataPreloaderInfo> dpis = new Vector<DataPreloaderInfo>();
+    public Vector<DataPreloaderInfo> getDataPreloaderInfo() {
+        Vector<DataPreloaderInfo> dpis = new Vector<DataPreloaderInfo>();
 
-		for (DataPreloader preloader : childPreloaders) {
-			DataPreloaderInfo info = new DataPreloaderInfo();
+        for (DataPreloader preloader : childPreloaders) {
+            DataPreloaderInfo info = new DataPreloaderInfo();
 
-			info.setDataPreloaderClassName(preloader.getClass().getName());
+            info.setDataPreloaderClassName(preloader.getClass().getName());
 
-			HashMap<String, Serializable> params = new HashMap<String, Serializable>();
-			for (String param : preloader.getParameters()) {
-				params.put(param, null);
-			}
-			info.setParameters(params);
-			dpis.add(info);
-		}
-		return dpis;
-	}
+            HashMap<String, Serializable> params = new HashMap<String, Serializable>();
+            for (String param : preloader.getParameters()) {
+                params.put(param, null);
+            }
+            info.setParameters(params);
+            dpis.add(info);
+        }
+        return dpis;
+    }
 
-	public void exectutePreloadersPrepare(Vector<DataPreloaderInfo> dpis) {
-		if (dpis == null) {
-			// Prepare all.
-			for (DataPreloader preloader : childPreloaders) {
-				preloader.prepare();
-			}
-		} else {
-			for (DataPreloaderInfo info : dpis) {
-				findPreloader: for (DataPreloader preloader : childPreloaders) {
-					if (preloader.getClass().getName()
-							.equals(info.getDataPreloaderClassName())) {
-						preloader.setParametersValues(info.getParameters());
-						preloader.prepare();
-						break findPreloader;
-					}
-				}
-			}
-		}
-	}
+    public void exectutePreloadersPrepare(Vector<DataPreloaderInfo> dpis) {
+        if (dpis == null) {
+            // Prepare all.
+            for (DataPreloader preloader : childPreloaders) {
+                preloader.prepare();
+            }
+        } else {
+            for (DataPreloaderInfo info : dpis) {
+                findPreloader: for (DataPreloader preloader : childPreloaders) {
+                    if (preloader.getClass().getName().equals(info.getDataPreloaderClassName())) {
+                        preloader.setParametersValues(info.getParameters());
+                        preloader.prepare();
+                        break findPreloader;
+                    }
+                }
+            }
+        }
+    }
 
-	public String exectutePreloadersCreate(Vector<DataPreloaderInfo> dpis) {
-		StringBuilder b = new StringBuilder();
-		for (DataPreloaderInfo info : dpis) {
-			findPreloader: for (DataPreloader preloader : childPreloaders) {
-				if (preloader.getClass().getName()
-						.equals(info.getDataPreloaderClassName())) {
-					preloader.setParametersValues(info.getParameters());
-					String txt = preloader.create();
-					if (txt != null) {
-						b.append(txt).append('\n');
-					}
-					break findPreloader;
-				}
-			}
-		}
-		return b.toString();
-	}
+    public String exectutePreloadersCreate(Vector<DataPreloaderInfo> dpis) {
+        StringBuilder b = new StringBuilder();
+        for (DataPreloaderInfo info : dpis) {
+            findPreloader: for (DataPreloader preloader : childPreloaders) {
+                if (preloader.getClass().getName().equals(info.getDataPreloaderClassName())) {
+                    preloader.setParametersValues(info.getParameters());
+                    String txt = preloader.create();
+                    if (txt != null) {
+                        b.append(txt).append('\n');
+                    }
+                    break findPreloader;
+                }
+            }
+        }
+        return b.toString();
+    }
 
-	public String exectutePreloadersDelete(Vector<DataPreloaderInfo> dpis) {
-		StringBuilder b = new StringBuilder();
-		for (DataPreloaderInfo info : dpis) {
-			findPreloader: for (DataPreloader preloader : childPreloaders) {
-				if (preloader.getClass().getName()
-						.equals(info.getDataPreloaderClassName())) {
-					preloader.setParametersValues(info.getParameters());
-					String txt = preloader.delete();
-					if (txt != null) {
-						b.append(txt).append('\n');
-					}
-					break findPreloader;
-				}
-			}
-		}
-		return b.toString();
-	}
+    public String exectutePreloadersDelete(Vector<DataPreloaderInfo> dpis) {
+        StringBuilder b = new StringBuilder();
+        for (DataPreloaderInfo info : dpis) {
+            findPreloader: for (DataPreloader preloader : childPreloaders) {
+                if (preloader.getClass().getName().equals(info.getDataPreloaderClassName())) {
+                    preloader.setParametersValues(info.getParameters());
+                    String txt = preloader.delete();
+                    if (txt != null) {
+                        b.append(txt).append('\n');
+                    }
+                    break findPreloader;
+                }
+            }
+        }
+        return b.toString();
+    }
 
-	protected void add(DataPreloader preloader) {
-		childPreloaders.add(preloader);
-	}
+    protected void add(DataPreloader preloader) {
+        childPreloaders.add(preloader);
+    }
 
-	public String preloadAll() {
-		return preloadAll(true);
-	}
+    public String preloadAll() {
+        return preloadAll(true);
+    }
 
-	public String preloadAll(boolean print) {
-		StringBuilder b = new StringBuilder();
-		b.append(delete()).append('\n');
-		b.append(create());
-		if (print) {
-			b.append(print());
-		}
-		return b.toString();
-	}
+    public String preloadAll(boolean print) {
+        StringBuilder b = new StringBuilder();
+        b.append(delete()).append('\n');
+        b.append(create());
+        if (print) {
+            b.append(print());
+        }
+        return b.toString();
+    }
 
-	@Override
-	public String create() {
-		StringBuilder b = new StringBuilder();
-		for (DataPreloader preloader : childPreloaders) {
-			preloader.setParametersValues(parameters);
-			log.debug("create preloader {}", preloader.getClass());
-			String txt = preloader.create();
-			if (txt != null) {
-				b.append(txt).append('\n');
-			}
-			log.info("Created " + preloader.getClass().getName() + " data");
-		}
-		return b.toString();
-	}
+    @Override
+    public String create() {
+        StringBuilder b = new StringBuilder();
+        for (DataPreloader preloader : childPreloaders) {
+            preloader.setParametersValues(parameters);
+            log.debug("create preloader {}", preloader.getClass());
+            String txt = preloader.create();
+            if (txt != null) {
+                b.append(txt).append('\n');
+            }
+            log.info("Created " + preloader.getClass().getName() + " data");
+        }
+        return b.toString();
+    }
 
-	@Override
-	public String delete() {
-		StringBuilder b = new StringBuilder();
-		ListIterator<DataPreloader> rit = childPreloaders
-				.listIterator(childPreloaders.size());
-		while (rit.hasPrevious()) {
-			DataPreloader preloader = rit.previous();
-			preloader.setParametersValues(parameters);
-			log.debug("delete preloader {}", preloader.getClass());
-			String txt = preloader.delete();
-			if (txt != null) {
-				b.append(txt).append('\n');
-			}
-			log.info("Deleted " + preloader.getClass().getName() + " data");
-		}
-		return b.toString();
-	}
+    @Override
+    public String delete() {
+        StringBuilder b = new StringBuilder();
+        ListIterator<DataPreloader> rit = childPreloaders.listIterator(childPreloaders.size());
+        while (rit.hasPrevious()) {
+            DataPreloader preloader = rit.previous();
+            preloader.setParametersValues(parameters);
+            log.debug("delete preloader {}", preloader.getClass());
+            String txt = preloader.delete();
+            if (txt != null) {
+                b.append(txt).append('\n');
+            }
+            log.info("Deleted " + preloader.getClass().getName() + " data");
+        }
+        return b.toString();
+    }
 
-	@Override
-	public String print() {
-		StringBuilder b = new StringBuilder();
-		for (DataPreloader preloader : childPreloaders) {
-			preloader.setParametersValues(parameters);
-			log.debug("print preloader {}", preloader.getClass());
-			String txt = preloader.print();
-			if (txt != null) {
-				b.append(txt).append('\n');
-			}
-		}
-		return b.toString();
-	}
+    @Override
+    public String print() {
+        StringBuilder b = new StringBuilder();
+        for (DataPreloader preloader : childPreloaders) {
+            preloader.setParametersValues(parameters);
+            log.debug("print preloader {}", preloader.getClass());
+            String txt = preloader.print();
+            if (txt != null) {
+                b.append(txt).append('\n');
+            }
+        }
+        return b.toString();
+    }
 
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List<Class<? extends IEntity>> getEntityToDelete() {
-		List<Class<? extends IEntity>> deleteList = new Vector();
-		ListIterator<DataPreloader> rit = childPreloaders
-				.listIterator(childPreloaders.size());
-		while (rit.hasPrevious()) {
-			DataPreloader preloader = rit.previous();
-			preloader.setParametersValues(parameters);
-			if (preloader instanceof AbstractDataPreloader) {
-				deleteList.addAll(((AbstractDataPreloader) preloader)
-						.getEntityToDelete());
-			} else {
-				preloader.delete();
-			}
-		}
-		return deleteList;
-	}
+    @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public List<Class<? extends IEntity>> getEntityToDelete() {
+        List<Class<? extends IEntity>> deleteList = new Vector();
+        ListIterator<DataPreloader> rit = childPreloaders.listIterator(childPreloaders.size());
+        while (rit.hasPrevious()) {
+            DataPreloader preloader = rit.previous();
+            preloader.setParametersValues(parameters);
+            if (preloader instanceof AbstractDataPreloader) {
+                deleteList.addAll(((AbstractDataPreloader) preloader).getEntityToDelete());
+            } else {
+                preloader.delete();
+            }
+        }
+        return deleteList;
+    }
 
 }
