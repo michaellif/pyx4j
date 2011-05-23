@@ -65,6 +65,7 @@ public class DatePickerTest extends WizardBaseSeleniumTestCase {
     }
 
     private void startRentDateTest() {
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Apartment.class));
         selenium.click(D.id(D.id(proto(UnitSelection.class).selectionCriteria().availableFrom()), CCompDebugId.trigger));
         navigateToDate(1990, 1);
         selenium.click(getCellDebugId(1, 1, gridId));
@@ -78,8 +79,8 @@ public class DatePickerTest extends WizardBaseSeleniumTestCase {
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, "leaseTerm_12"));
 
         selenium.click(D.id(D.id(proto(UnitSelection.class).rentStart()), CCompDebugId.trigger));
-        navigateToDate(1995, 1);
-        selenium.click(getCellDebugId(1, 1, gridId));
+        navigateToDate(2011, 5);
+        selenium.click(getCellDebugId(4, 1, gridId));
 
         saveAndContinue();
     }
