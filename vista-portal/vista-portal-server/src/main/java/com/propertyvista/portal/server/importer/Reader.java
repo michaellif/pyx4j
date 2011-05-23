@@ -53,16 +53,16 @@ public class Reader {
 
             AvailableUnit unit = new AvailableUnit();
 
-            unit.setPropertyCode(values[0]);
-            unit.setAddress(values[1]);
-            unit.setCity(values[2]);
-            unit.setProvince(values[3]);
-            unit.setUnitNumber(values[4]);
-            unit.setType(values[5]);
-            unit.setArea(Double.valueOf(values[6]));
-            unit.setRent(Double.valueOf(values[7]));
-            unit.setDescription(values[8]);
-            unit.setAvailable(DATE_FORMAT.parse(values[9]));
+            unit.setPropertyCode(values[0].trim());
+            unit.setAddress(values[1].trim());
+            unit.setCity(values[2].trim());
+            unit.setProvince(values[3].trim());
+            unit.setUnitNumber(values[4].trim());
+            unit.setType(values[5].trim());
+            unit.setArea(Double.valueOf(values[6].trim()));
+            unit.setRent(Double.valueOf(values[7].trim()));
+            unit.setDescription(values[8].trim());
+            unit.setAvailable(DATE_FORMAT.parse(values[9].trim()));
 
             units.add(unit);
             log.info("" + unit);

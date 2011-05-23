@@ -25,13 +25,13 @@ public class AvailableUnit {
 
     private String province; // building has it
 
-    private String unitNumber; // aptUnit.info.name
+    private String unitNumber; // aptUnit.info.number
 
     private String type; // aptUnit.info.type
 
     private Double area; // aptUnit.info.area
 
-    private Double rent;
+    private Double rent; // aptUnit.financial.unitRent
 
     private String description; // aptUnit.info.typeDescription
 

@@ -27,6 +27,7 @@ import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.StructureType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
@@ -97,6 +98,7 @@ public class Mapper {
         building.info().propertyCode().setValue(property.getCode());
         building.info().name().setValue(property.getName());
         building.info().structureType().setValue(mapStructureType(property.getType()));
+        building.info().type().setValue(BuildingInfo.Type.residential);
 
         for (Room room : property.getRooms().getRooms()) {
             createFloorplan(room);
@@ -139,11 +141,12 @@ public class Mapper {
         occupancy.status().setValue(AptUnitOccupancy.StatusType.available);
         occupancy.dateFrom().setValue(new Date(availableUnit.getAvailable().getTime()));
         unit.currentOccupancies().add(occupancy);
+        unit.avalableForRent().setValue(occupancy.dateFrom().getValue()); // for consistency
 
         unit.info().building().set(building);
         unit.info().type().setValue(mapUnitType(availableUnit.getType()));
         unit.info().typeDescription().setValue(availableUnit.getDescription());
-        unit.info().name().setValue(availableUnit.getUnitNumber());
+        unit.info().number().setValue(availableUnit.getUnitNumber());
         unit.info().area().setValue(availableUnit.getArea());
         unit.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
         unit.financial().unitRent().setValue(availableUnit.getRent());
@@ -214,13 +217,18 @@ public class Mapper {
     private static Address mapAddress(com.propertyvista.portal.server.importer.bean.Address from) {
         Address to = EntityFactory.create(Address.class);
 
-        // TODO this can be improved by breaking down the street into logical
-        // parts
-        to.streetName().setValue(from.getStreet());
+        String street = from.getStreet();
+        String streetNumber = street.substring(0, street.indexOf(' '));
+        String streetName = street.substring(streetNumber.length() + 1);
+
+        to.streetNumber().setValue(streetNumber);
+        to.streetName().setValue(streetName);
         to.city().setValue(from.getCity());
         to.province().set(SharedData.findProvinceByCode(from.getPrv()));
         to.country().set(to.province().country());
         to.postalCode().setValue(from.getPost());
+
+        to.addressType().setValue(Address.AddressType.property);
 
         return to;
     }
