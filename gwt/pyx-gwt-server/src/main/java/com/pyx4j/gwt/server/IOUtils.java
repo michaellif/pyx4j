@@ -105,4 +105,7 @@ public class IOUtils {
         return sb.toString();
     }
 
+    public static String resourceFileName(String fileName, Class<?> clazz) {
+        return clazz.getPackage().getName().replace('.', '/') + "/" + fileName;
+    }
 }
