@@ -44,6 +44,7 @@ public class Importer {
         reader = new Reader();
         reader.readCsv();
         reader.readXml();
+        reader.readImg();
     }
 
     public void map() {

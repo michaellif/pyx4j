@@ -40,6 +40,10 @@ public class Reader {
 
     private final List<AvailableUnit> units = new ArrayList<AvailableUnit>();
 
+    public void readImg() {
+
+    }
+
     public void readCsv() throws IOException, ParseException {
         String csv = IOUtils.getTextResource(XmlUtil.resourceFileName(XmlUtil.class, "units.csv"));
 
