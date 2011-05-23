@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.rpc;
 
+import java.util.HashMap;
+
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
@@ -22,6 +24,16 @@ public class CrmSiteMap implements SiteMap {
 
     public static String ARG_NAME_ITEM_ID = "ItemID";
 
+    public static AppPlace formItemPlace(AppPlace itemPlace, long itemID) {
+        HashMap<String, String> args = new HashMap<String, String>();
+        args.put(CrmSiteMap.ARG_NAME_ITEM_ID, String.valueOf(itemID));
+        itemPlace.setArgs(args);
+        return itemPlace;
+    }
+
+    //
+    // Paces definition:
+    //
     @PlaceProperties(caption = "Application Form")
     public static class Login extends AppPlace {
     }

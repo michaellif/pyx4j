@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.activity.viewers;
 
-import java.util.HashMap;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -79,10 +77,6 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void edit(AppPlace editPlace) {
-        HashMap<String, String> args = new HashMap<String, String>();
-        args.put(CrmSiteMap.ARG_NAME_ITEM_ID, String.valueOf(entityId));
-        editPlace.setArgs(args);
-
-        AppSite.getPlaceController().goTo(editPlace);
+        AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(editPlace, entityId));
     }
 }
