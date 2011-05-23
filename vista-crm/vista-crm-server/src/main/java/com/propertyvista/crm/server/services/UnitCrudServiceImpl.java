@@ -24,33 +24,32 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 import com.propertyvista.crm.rpc.services.UnitCrudService;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.dto.AptUnitDTO;
 
-//TODO: refactor to use AptUnitDTO!.. 
 public class UnitCrudServiceImpl implements UnitCrudService {
 
     private final static Logger log = LoggerFactory.getLogger(UnitCrudServiceImpl.class);
 
     @Override
-    public void create(AsyncCallback<AptUnit> callback, AptUnit editableEntity) {
+    public void create(AsyncCallback<AptUnitDTO> callback, AptUnitDTO editableEntity) {
         PersistenceServicesFactory.getPersistenceService().persist(editableEntity);
         callback.onSuccess(editableEntity);
     }
 
     @Override
-    public void retrieve(AsyncCallback<AptUnit> callback, long entityId) {
-        AptUnit editableEntity = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, entityId);
+    public void retrieve(AsyncCallback<AptUnitDTO> callback, long entityId) {
+        AptUnitDTO editableEntity = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnitDTO.class, entityId);
         callback.onSuccess(editableEntity);
     }
 
     @Override
-    public void save(AsyncCallback<AptUnit> callback, AptUnit editableEntity) {
+    public void save(AsyncCallback<AptUnitDTO> callback, AptUnitDTO editableEntity) {
         PersistenceServicesFactory.getPersistenceService().merge(editableEntity);
         callback.onSuccess(editableEntity);
     }
 
     @Override
-    public void search(AsyncCallback<EntitySearchResult<AptUnit>> callback, EntitySearchCriteria<AptUnit> criteria) {
+    public void search(AsyncCallback<EntitySearchResult<AptUnitDTO>> callback, EntitySearchCriteria<AptUnitDTO> criteria) {
         callback.onSuccess(EntityServicesImpl.secureSearch(criteria));
     }
 }

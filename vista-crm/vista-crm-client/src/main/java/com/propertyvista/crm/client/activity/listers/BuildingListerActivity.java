@@ -21,7 +21,7 @@ import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingListerActivity extends ListerActivityBase<BuildingDTO, BuildingDTO> {
+public class BuildingListerActivity extends ListerActivityBase<BuildingDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")

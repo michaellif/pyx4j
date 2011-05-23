@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.dto.AptUnitDTO;
 
-public interface UnitCrudService extends AbstractCrudService<AptUnit> {
+public interface UnitCrudService extends AbstractCrudService<AptUnitDTO> {
 }

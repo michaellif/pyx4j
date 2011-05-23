@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.ui.editors;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitEditorViewImpl extends EditorViewImplBase<AptUnit> implements IUnitEditorView {
+public class UnitEditorViewImpl extends EditorViewImplBase<AptUnitDTO> implements IUnitEditorView {
 
     public UnitEditorViewImpl() {
         super(new CrmSiteMap.Editors.Unit());
