@@ -14,53 +14,52 @@
 package com.propertyvista.portal.server.importer.bean;
 
 public class Contact {
-	private String name;
+    private String name;
 
-	private String tel; // building.contacts.phoneList.phone
+    private String tel; // building.contacts.phoneList.phone
 
-	private String hours;
+    private String hours;
 
-	private String email; // building.contacts.email
+    private String email; // building.contacts.email
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		sb.append(name).append(" ").append(tel).append(" ").append(hours)
-				.append(" ").append(email);
+        sb.append(name).append(" ").append(tel).append(" ").append(hours).append(" ").append(email);
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getTel() {
-		return tel;
-	}
+    public String getTel() {
+        return tel;
+    }
 
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
 
-	public String getHours() {
-		return hours;
-	}
+    public String getHours() {
+        return hours;
+    }
 
-	public void setHours(String hours) {
-		this.hours = hours;
-	}
+    public void setHours(String hours) {
+        this.hours = hours;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
 }

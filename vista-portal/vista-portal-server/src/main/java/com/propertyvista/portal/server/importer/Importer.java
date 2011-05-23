@@ -30,70 +30,71 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 public class Importer {
-	private static final Logger log = LoggerFactory.getLogger(Importer.class);
+    private static final Logger log = LoggerFactory.getLogger(Importer.class);
 
-	private Reader reader;
-	private Mapper mapper;
+    private Reader reader;
 
-	public Importer() {
-	}
+    private Mapper mapper;
 
-	public void read() throws IOException, JAXBException, ParseException {
-		reader = new Reader();
-		reader.readCsv();
-		reader.readXml();
-	}
+    public Importer() {
+    }
 
-	public void map() {
-		// map
-		mapper = new Mapper();
-		mapper.load(reader.getResidential(), reader.getUnits());
-	}
+    public void read() throws IOException, JAXBException, ParseException {
+        reader = new Reader();
+        reader.readCsv();
+        reader.readXml();
+    }
 
-	public void save() {
-		// save
-		for (Building building : mapper.getBuildings()) {
-			persist(building);
-		}
+    public void map() {
+        // map
+        mapper = new Mapper();
+        mapper.load(reader.getResidential(), reader.getUnits());
+    }
 
-		for (Floorplan floorplan : mapper.getFloorplans()) {
-			persist(floorplan);
-		}
+    public void save() {
+        // save
+        for (Building building : mapper.getBuildings()) {
+            persist(building);
+        }
 
-		for (AptUnit unit : mapper.getUnits()) {
-			for (AptUnitOccupancy occupancy : unit.currentOccupancies()) {
-				persist(occupancy);
-			}
-			for (Utility utility : unit.info().utilities()) {
-				persist(utility);
-			}
-			// for (AptUnitAmenity amenity : unit.amenities()) {
-			// persist(amenity);
-			// }
-			// for (AptUnitItem detail : unit.info().details()) {
-			// persist(detail);
-			// }
-			// for (AddOn addOn : unit.addOns()) {
-			// persist(addOn);
-			// }
-			// for (Concession concession : unit.concessions()) {
-			// persist(concession);
-			// }
-			persist(unit);
-		}
-	}
+        for (Floorplan floorplan : mapper.getFloorplans()) {
+            persist(floorplan);
+        }
 
-	public void start() throws Exception {
-		read();
-		map();
-		save();
-	}
+        for (AptUnit unit : mapper.getUnits()) {
+            for (AptUnitOccupancy occupancy : unit.currentOccupancies()) {
+                persist(occupancy);
+            }
+            for (Utility utility : unit.info().utilities()) {
+                persist(utility);
+            }
+            // for (AptUnitAmenity amenity : unit.amenities()) {
+            // persist(amenity);
+            // }
+            // for (AptUnitItem detail : unit.info().details()) {
+            // persist(detail);
+            // }
+            // for (AddOn addOn : unit.addOns()) {
+            // persist(addOn);
+            // }
+            // for (Concession concession : unit.concessions()) {
+            // persist(concession);
+            // }
+            persist(unit);
+        }
+    }
 
-	private static void persist(IEntity entity) {
-		PersistenceServicesFactory.getPersistenceService().persist(entity);
-	}
+    public void start() throws Exception {
+        read();
+        map();
+        save();
+    }
 
-	public Mapper getMapper() {
-		return mapper;
-	}
+    private static void persist(IEntity entity) {
+        PersistenceServicesFactory.getPersistenceService().persist(entity);
+    }
+
+    public Mapper getMapper() {
+        return mapper;
+    }
 }

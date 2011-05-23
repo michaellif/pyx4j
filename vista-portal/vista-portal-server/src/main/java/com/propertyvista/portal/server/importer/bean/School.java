@@ -16,22 +16,22 @@ package com.propertyvista.portal.server.importer.bean;
 import javax.xml.bind.annotation.XmlAttribute;
 
 public class School {
-	private String shortname;
+    private String shortname;
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		sb.append(shortname);
+        sb.append(shortname);
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	@XmlAttribute
-	public String getShortname() {
-		return shortname;
-	}
+    @XmlAttribute
+    public String getShortname() {
+        return shortname;
+    }
 
-	public void setShortname(String shortname) {
-		this.shortname = shortname;
-	}
+    public void setShortname(String shortname) {
+        this.shortname = shortname;
+    }
 }

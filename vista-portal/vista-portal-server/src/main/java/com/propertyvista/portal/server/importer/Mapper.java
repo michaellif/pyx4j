@@ -41,225 +41,214 @@ import com.propertyvista.portal.server.importer.csv.AvailableUnit;
 import com.pyx4j.entity.shared.EntityFactory;
 
 public class Mapper {
-	private static final Logger log = LoggerFactory.getLogger(Mapper.class);
+    private static final Logger log = LoggerFactory.getLogger(Mapper.class);
 
-	private List<Building> buildings = new ArrayList<Building>();
+    private List<Building> buildings = new ArrayList<Building>();
 
-	private List<AptUnit> units = new ArrayList<AptUnit>();
+    private List<AptUnit> units = new ArrayList<AptUnit>();
 
-	private List<Floorplan> floorplans = new ArrayList<Floorplan>();
+    private List<Floorplan> floorplans = new ArrayList<Floorplan>();
 
-	private List<AvailableUnit> availableUnits = new ArrayList<AvailableUnit>();
+    private List<AvailableUnit> availableUnits = new ArrayList<AvailableUnit>();
 
-	public void load(Residential residential, List<AvailableUnit> availableUnits) {
-		this.availableUnits = availableUnits;
-		log.info("Mapping residential");
+    public void load(Residential residential, List<AvailableUnit> availableUnits) {
+        this.availableUnits = availableUnits;
+        log.info("Mapping residential");
 
-		for (Region region : residential.getRegions()) {
-			create(region);
-		}
+        for (Region region : residential.getRegions()) {
+            create(region);
+        }
 
-		log.info("-------------\n\n");
-		log.info("" + buildings.get(0));
-		log.info("-------------");
-		log.info("" + units.get(0));
-		log.info("-------------");
-		log.info("" + floorplans.get(0));
-		// for (Building building : buildings) {
-		// log.info("\n" + building);
-		// }
-		//
-		// for (AptUnit unit : units) {
-		// log.info("\n" + unit);
-		// }
+        log.info("-------------\n\n");
+        log.info("" + buildings.get(0));
+        log.info("-------------");
+        log.info("" + units.get(0));
+        log.info("-------------");
+        log.info("" + floorplans.get(0));
+        // for (Building building : buildings) {
+        // log.info("\n" + building);
+        // }
+        //
+        // for (AptUnit unit : units) {
+        // log.info("\n" + unit);
+        // }
 
-		log.info(buildings.size() + " buildings");
-		log.info(units.size() + " units");
-		log.info(floorplans.size() + " floorplans");
-	}
+        log.info(buildings.size() + " buildings");
+        log.info(units.size() + " units");
+        log.info(floorplans.size() + " floorplans");
+    }
 
-	private void create(Region region) {
-		for (City city : region.getCities()) {
-			create(city);
-		}
-	}
+    private void create(Region region) {
+        for (City city : region.getCities()) {
+            create(city);
+        }
+    }
 
-	private void create(City city) {
-		for (Property property : city.getProperties()) {
-			create(property);
-		}
-	}
+    private void create(City city) {
+        for (Property property : city.getProperties()) {
+            create(property);
+        }
+    }
 
-	private void create(Property property) {
-		Building building = EntityFactory.create(Building.class);
+    private void create(Property property) {
+        Building building = EntityFactory.create(Building.class);
 
-		building.info().propertyCode().setValue(property.getCode());
-		building.info().name().setValue(property.getName());
-		building.info().structureType()
-				.setValue(mapStructureType(property.getType()));
+        building.info().propertyCode().setValue(property.getCode());
+        building.info().name().setValue(property.getName());
+        building.info().structureType().setValue(mapStructureType(property.getType()));
 
-		for (Room room : property.getRooms().getRooms()) {
-			createFloorplan(room);
-		}
+        for (Room room : property.getRooms().getRooms()) {
+            createFloorplan(room);
+        }
 
-		building.info().address().set(mapAddress(property.getAddress()));
+        building.info().address().set(mapAddress(property.getAddress()));
 
-		building.contacts()
-				.email()
-				.set(CommonsGenerator.createEmail(property.getContact()
-						.getEmail()));
+        building.contacts().email().set(CommonsGenerator.createEmail(property.getContact().getEmail()));
 
-		building.contacts()
-				.phoneList()
-				.add(CommonsGenerator.createPhone(property.getContact()
-						.getTel()));
+        building.contacts().phoneList().add(CommonsGenerator.createPhone(property.getContact().getTel()));
 
-		building.contacts().website().setValue(property.getWebsite());
+        building.contacts().website().setValue(property.getWebsite());
 
-		buildings.add(building);
+        buildings.add(building);
 
-		// find available units for this building
-		List<AvailableUnit> buildingUnits = new ArrayList<AvailableUnit>();
-		for (AvailableUnit unit : availableUnits) {
-			if (unit.getPropertyCode().equals(property.getCode())) {
-				buildingUnits.add(unit);
-			}
-		}
+        // find available units for this building
+        List<AvailableUnit> buildingUnits = new ArrayList<AvailableUnit>();
+        for (AvailableUnit unit : availableUnits) {
+            if (unit.getPropertyCode().equals(property.getCode())) {
+                buildingUnits.add(unit);
+            }
+        }
 
-		// create vista units for available units
-		for (AvailableUnit availableUnit : buildingUnits) {
-			createUnit(property, availableUnit, building);
-		}
-		// int numFloors = property.getFloors() == null
-		// || property.getFloors() == 0 ? 1 : property.getFloors();
-		// for (int i = 0; i < property.getUnitcount(); i++) {
-		// int floor = i % numFloors;
-		// createUnit(property, floor);
-		// }
-	}
+        // create vista units for available units
+        for (AvailableUnit availableUnit : buildingUnits) {
+            createUnit(property, availableUnit, building);
+        }
+        // int numFloors = property.getFloors() == null
+        // || property.getFloors() == 0 ? 1 : property.getFloors();
+        // for (int i = 0; i < property.getUnitcount(); i++) {
+        // int floor = i % numFloors;
+        // createUnit(property, floor);
+        // }
+    }
 
-	private void createUnit(Property property, AvailableUnit availableUnit,
-			Building building) {
-		AptUnit unit = EntityFactory.create(AptUnit.class);
+    private void createUnit(Property property, AvailableUnit availableUnit, Building building) {
+        AptUnit unit = EntityFactory.create(AptUnit.class);
 
-		AptUnitOccupancy occupancy = EntityFactory
-				.create(AptUnitOccupancy.class);
-		occupancy.status().setValue(AptUnitOccupancy.StatusType.available);
-		occupancy.dateFrom().setValue(
-				new Date(availableUnit.getAvailable().getTime()));
-		unit.currentOccupancies().add(occupancy);
+        AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
+        occupancy.status().setValue(AptUnitOccupancy.StatusType.available);
+        occupancy.dateFrom().setValue(new Date(availableUnit.getAvailable().getTime()));
+        unit.currentOccupancies().add(occupancy);
 
-		unit.info().building().set(building);
-		unit.info().type().setValue(mapUnitType(availableUnit.getType()));
-		unit.info().typeDescription().setValue(availableUnit.getDescription());
-		unit.info().name().setValue(availableUnit.getUnitNumber());
-		unit.info().area().setValue(availableUnit.getArea());
-		unit.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
-		unit.financial().unitRent().setValue(availableUnit.getRent());
+        unit.info().building().set(building);
+        unit.info().type().setValue(mapUnitType(availableUnit.getType()));
+        unit.info().typeDescription().setValue(availableUnit.getDescription());
+        unit.info().name().setValue(availableUnit.getUnitNumber());
+        unit.info().area().setValue(availableUnit.getArea());
+        unit.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
+        unit.financial().unitRent().setValue(availableUnit.getRent());
 
-		// unit.info().floor().setValue(floor);
+        // unit.info().floor().setValue(floor);
 
-		for (Include include : property.getIncludes().getIncludes()) {
-			unit.info().utilities().add(mapUtility(include));
-		}
+        for (Include include : property.getIncludes().getIncludes()) {
+            unit.info().utilities().add(mapUtility(include));
+        }
 
-		units.add(unit);
-	}
+        units.add(unit);
+    }
 
-	private void createFloorplan(Room room) {
-		Floorplan floorplan = EntityFactory.create(Floorplan.class);
+    private void createFloorplan(Room room) {
+        Floorplan floorplan = EntityFactory.create(Floorplan.class);
 
-		floorplan.name().setValue(room.getName());
-		floorplan.description().setValue(room.getDisplay());
+        floorplan.name().setValue(room.getName());
+        floorplan.description().setValue(room.getDisplay());
 
-		floorplans.add(floorplan);
-	}
+        floorplans.add(floorplan);
+    }
 
-	private static AptUnitInfo.Type mapUnitType(String type) {
-		if (type == null || type.trim().isEmpty()) {
-			return null;
-		}
-		// for now map bathrooms to bedrooms
-		if (type.equals("1bdrm")) {
-			return AptUnitInfo.Type.oneBathroom;
-		} else if (type.equals("2bdrm")) {
-			return AptUnitInfo.Type.twoBathroom;
-		} else if (type.equals("3bdrm")) {
-			return AptUnitInfo.Type.threeBathroom;
-		} else if (type.equals("1.den")) {
-			return AptUnitInfo.Type.oneBathroomAndDen;
-		}
-		log.info("Unknown value [" + type + "]");
-		return null;
-	}
+    private static AptUnitInfo.Type mapUnitType(String type) {
+        if (type == null || type.trim().isEmpty()) {
+            return null;
+        }
+        // for now map bathrooms to bedrooms
+        if (type.equals("1bdrm")) {
+            return AptUnitInfo.Type.oneBathroom;
+        } else if (type.equals("2bdrm")) {
+            return AptUnitInfo.Type.twoBathroom;
+        } else if (type.equals("3bdrm")) {
+            return AptUnitInfo.Type.threeBathroom;
+        } else if (type.equals("1.den")) {
+            return AptUnitInfo.Type.oneBathroomAndDen;
+        }
+        log.info("Unknown value [" + type + "]");
+        return null;
+    }
 
-	private static Utility mapUtility(Include include) {
-		Utility utility = EntityFactory.create(Utility.class);
+    private static Utility mapUtility(Include include) {
+        Utility utility = EntityFactory.create(Utility.class);
 
-		String name = include.getValue();
+        String name = include.getValue();
 
-		Utility.Type type = null;
+        Utility.Type type = null;
 
-		if (name.trim().isEmpty()) {
-			type = null;
-		} else if (name.equals("Hot Water")) {
-			type = Utility.Type.hotWater;
-		} else if (name.equals("Heat")) {
-			type = Utility.Type.heat;
-		} else if (name.equals("Electricity")) { // not sure about this one
-			type = Utility.Type.electric;
-		} else if (name.equals("Hydro")) { // not sure about this one
-			type = Utility.Type.water;
-		} else {
-			log.info("Unknown utility [" + name + "]");
-		}
+        if (name.trim().isEmpty()) {
+            type = null;
+        } else if (name.equals("Hot Water")) {
+            type = Utility.Type.hotWater;
+        } else if (name.equals("Heat")) {
+            type = Utility.Type.heat;
+        } else if (name.equals("Electricity")) { // not sure about this one
+            type = Utility.Type.electric;
+        } else if (name.equals("Hydro")) { // not sure about this one
+            type = Utility.Type.water;
+        } else {
+            log.info("Unknown utility [" + name + "]");
+        }
 
-		utility.type().setValue(type);
-		utility.description().setValue(name);
+        utility.type().setValue(type);
+        utility.description().setValue(name);
 
-		return utility;
-	}
+        return utility;
+    }
 
-	private static Address mapAddress(
-			com.propertyvista.portal.server.importer.bean.Address from) {
-		Address to = EntityFactory.create(Address.class);
+    private static Address mapAddress(com.propertyvista.portal.server.importer.bean.Address from) {
+        Address to = EntityFactory.create(Address.class);
 
-		// TODO this can be improved by breaking down the street into logical
-		// parts
-		to.streetName().setValue(from.getStreet());
-		to.city().setValue(from.getCity());
-		to.province().set(SharedData.findProvinceByCode(from.getPrv()));
-		to.country().set(to.province().country());
-		to.postalCode().setValue(from.getPost());
+        // TODO this can be improved by breaking down the street into logical
+        // parts
+        to.streetName().setValue(from.getStreet());
+        to.city().setValue(from.getCity());
+        to.province().set(SharedData.findProvinceByCode(from.getPrv()));
+        to.country().set(to.province().country());
+        to.postalCode().setValue(from.getPost());
 
-		return to;
-	}
+        return to;
+    }
 
-	private static StructureType mapStructureType(String type) {
-		if (type.trim().isEmpty()) {
-			return null;
-		} else if (type.equals("High Rise")) {
-			return StructureType.highRise;
-		} else if (type.equals("Low Rise")) {
-			return StructureType.lowRise;
-		} else if (type.equals("Townhouse")) {
-			return StructureType.townhouse;
-		} else if (type.equals("Walk Up")) {
-			return StructureType.walkUp;
-		}
-		log.info("Unknown structure type [" + type + "]");
-		return null;
-	}
+    private static StructureType mapStructureType(String type) {
+        if (type.trim().isEmpty()) {
+            return null;
+        } else if (type.equals("High Rise")) {
+            return StructureType.highRise;
+        } else if (type.equals("Low Rise")) {
+            return StructureType.lowRise;
+        } else if (type.equals("Townhouse")) {
+            return StructureType.townhouse;
+        } else if (type.equals("Walk Up")) {
+            return StructureType.walkUp;
+        }
+        log.info("Unknown structure type [" + type + "]");
+        return null;
+    }
 
-	public List<Building> getBuildings() {
-		return buildings;
-	}
+    public List<Building> getBuildings() {
+        return buildings;
+    }
 
-	public List<AptUnit> getUnits() {
-		return units;
-	}
+    public List<AptUnit> getUnits() {
+        return units;
+    }
 
-	public List<Floorplan> getFloorplans() {
-		return floorplans;
-	}
+    public List<Floorplan> getFloorplans() {
+        return floorplans;
+    }
 }

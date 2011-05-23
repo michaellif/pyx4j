@@ -20,38 +20,38 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 public class Region {
-	private String code;
+    private String code;
 
-	private List<City> cities = new ArrayList<City>();
+    private List<City> cities = new ArrayList<City>();
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		sb.append(code);
+        sb.append(code);
 
-		for (City city : cities) {
-			sb.append("\n");
-			sb.append(city);
-		}
+        for (City city : cities) {
+            sb.append("\n");
+            sb.append(city);
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	@XmlAttribute
-	public String getCode() {
-		return code;
-	}
+    @XmlAttribute
+    public String getCode() {
+        return code;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	@XmlElement(name = "city")
-	public List<City> getCities() {
-		return cities;
-	}
+    @XmlElement(name = "city")
+    public List<City> getCities() {
+        return cities;
+    }
 
-	public void setCities(List<City> cities) {
-		this.cities = cities;
-	}
+    public void setCities(List<City> cities) {
+        this.cities = cities;
+    }
 }

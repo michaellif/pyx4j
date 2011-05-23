@@ -17,113 +17,113 @@ import java.util.Date;
 
 public class AvailableUnit {
 
-	private String propertyCode; // aptUnit.building - set actual building
+    private String propertyCode; // aptUnit.building - set actual building
 
-	private String address; // building has it
+    private String address; // building has it
 
-	private String city; // building has it
+    private String city; // building has it
 
-	private String province; // building has it
+    private String province; // building has it
 
-	private String unitNumber; // aptUnit.info.name
+    private String unitNumber; // aptUnit.info.name
 
-	private String type; // aptUnit.info.type
+    private String type; // aptUnit.info.type
 
-	private Double area; // aptUnit.info.area
+    private Double area; // aptUnit.info.area
 
-	private Double rent;
+    private Double rent;
 
-	private String description; // aptUnit.info.typeDescription
+    private String description; // aptUnit.info.typeDescription
 
-	private Date available; // aptUnit.currentOccupancy.dateFrom
+    private Date available; // aptUnit.currentOccupancy.dateFrom
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		sb.append(propertyCode).append(" #").append(unitNumber);
-		sb.append(" $").append(rent).append(" ");
-		sb.append(area).append(" sqft, availalbe ").append(available);
+        sb.append(propertyCode).append(" #").append(unitNumber);
+        sb.append(" $").append(rent).append(" ");
+        sb.append(area).append(" sqft, availalbe ").append(available);
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	public String getPropertyCode() {
-		return propertyCode;
-	}
+    public String getPropertyCode() {
+        return propertyCode;
+    }
 
-	public void setPropertyCode(String propertyCode) {
-		this.propertyCode = propertyCode;
-	}
+    public void setPropertyCode(String propertyCode) {
+        this.propertyCode = propertyCode;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public String getCity() {
-		return city;
-	}
+    public String getCity() {
+        return city;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-	public String getProvince() {
-		return province;
-	}
+    public String getProvince() {
+        return province;
+    }
 
-	public void setProvince(String province) {
-		this.province = province;
-	}
+    public void setProvince(String province) {
+        this.province = province;
+    }
 
-	public String getUnitNumber() {
-		return unitNumber;
-	}
+    public String getUnitNumber() {
+        return unitNumber;
+    }
 
-	public void setUnitNumber(String unitNumber) {
-		this.unitNumber = unitNumber;
-	}
+    public void setUnitNumber(String unitNumber) {
+        this.unitNumber = unitNumber;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public Double getArea() {
-		return area;
-	}
+    public Double getArea() {
+        return area;
+    }
 
-	public void setArea(Double area) {
-		this.area = area;
-	}
+    public void setArea(Double area) {
+        this.area = area;
+    }
 
-	public Double getRent() {
-		return rent;
-	}
+    public Double getRent() {
+        return rent;
+    }
 
-	public void setRent(Double rent) {
-		this.rent = rent;
-	}
+    public void setRent(Double rent) {
+        this.rent = rent;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public Date getAvailable() {
-		return available;
-	}
+    public Date getAvailable() {
+        return available;
+    }
 
-	public void setAvailable(Date available) {
-		this.available = available;
-	}
+    public void setAvailable(Date available) {
+        this.available = available;
+    }
 }

@@ -20,25 +20,25 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class Includes {
 
-	private List<Include> includes = new ArrayList<Include>();
+    private List<Include> includes = new ArrayList<Include>();
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		for (Include include : includes) {
-			sb.append("\n");
-			sb.append(include);
-		}
+        for (Include include : includes) {
+            sb.append("\n");
+            sb.append(include);
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	@XmlElement(name = "include")
-	public List<Include> getIncludes() {
-		return includes;
-	}
+    @XmlElement(name = "include")
+    public List<Include> getIncludes() {
+        return includes;
+    }
 
-	public void setIncludes(List<Include> includes) {
-		this.includes = includes;
-	}
+    public void setIncludes(List<Include> includes) {
+        this.includes = includes;
+    }
 }

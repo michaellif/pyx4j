@@ -19,13 +19,13 @@ package com.propertyvista.portal.server.importer.bean;
  */
 public class AdjacentProperty {
 
-	private String propcode;
+    private String propcode;
 
-	public String getPropcode() {
-		return propcode;
-	}
+    public String getPropcode() {
+        return propcode;
+    }
 
-	public void setPropcode(String propcode) {
-		this.propcode = propcode;
-	}
+    public void setPropcode(String propcode) {
+        this.propcode = propcode;
+    }
 }

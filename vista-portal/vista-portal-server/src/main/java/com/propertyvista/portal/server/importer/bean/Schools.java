@@ -20,24 +20,24 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class Schools {
 
-	private List<School> schools = new ArrayList<School>();
+    private List<School> schools = new ArrayList<School>();
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		for (School school : schools) {
-			sb.append("\n").append(school);
-		}
+        for (School school : schools) {
+            sb.append("\n").append(school);
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	@XmlElement(name = "school")
-	public List<School> getSchools() {
-		return schools;
-	}
+    @XmlElement(name = "school")
+    public List<School> getSchools() {
+        return schools;
+    }
 
-	public void setSchools(List<School> schools) {
-		this.schools = schools;
-	}
+    public void setSchools(List<School> schools) {
+        this.schools = schools;
+    }
 }

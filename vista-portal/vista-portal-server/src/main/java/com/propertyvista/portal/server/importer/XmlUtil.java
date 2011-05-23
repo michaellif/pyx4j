@@ -23,19 +23,17 @@ import com.propertyvista.portal.server.importer.bean.Residential;
 
 public class XmlUtil {
 
-	public static String resourceFileName(Class clazz, String filename) {
-		return clazz.getPackage().getName().replace('.', '/') + "/" + filename;
-	}
+    public static String resourceFileName(Class clazz, String filename) {
+        return clazz.getPackage().getName().replace('.', '/') + "/" + filename;
+    }
 
-	/**
-	 * TODO - change this to generics later
-	 */
-	public static Residential unmarshallResidential(String xml)
-			throws JAXBException {
-		JAXBContext context = JAXBContext.newInstance(Residential.class);
-		Unmarshaller um = context.createUnmarshaller();
-		Residential residential = (Residential) um.unmarshal(new StringReader(
-				xml));
-		return residential;
-	}
+    /**
+     * TODO - change this to generics later
+     */
+    public static Residential unmarshallResidential(String xml) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(Residential.class);
+        Unmarshaller um = context.createUnmarshaller();
+        Residential residential = (Residential) um.unmarshal(new StringReader(xml));
+        return residential;
+    }
 }

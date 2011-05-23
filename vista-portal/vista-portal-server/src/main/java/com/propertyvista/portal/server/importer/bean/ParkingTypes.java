@@ -20,25 +20,25 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class ParkingTypes {
 
-	private List<Parking> parkings = new ArrayList<Parking>();
+    private List<Parking> parkings = new ArrayList<Parking>();
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		for (Parking parking : parkings) {
-			sb.append("\n");
-			sb.append(parking);
-		}
+        for (Parking parking : parkings) {
+            sb.append("\n");
+            sb.append(parking);
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	@XmlElement(name = "parking")
-	public List<Parking> getParkings() {
-		return parkings;
-	}
+    @XmlElement(name = "parking")
+    public List<Parking> getParkings() {
+        return parkings;
+    }
 
-	public void setParkings(List<Parking> parkings) {
-		this.parkings = parkings;
-	}
+    public void setParkings(List<Parking> parkings) {
+        this.parkings = parkings;
+    }
 }

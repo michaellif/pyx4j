@@ -20,38 +20,38 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 public class City {
-	private String name;
+    private String name;
 
-	private List<Property> properties = new ArrayList<Property>();
+    private List<Property> properties = new ArrayList<Property>();
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		sb.append(name);
+        sb.append(name);
 
-		for (Property property : properties) {
-			sb.append("\n-------- property ------\n");
-			sb.append(property);
-		}
+        for (Property property : properties) {
+            sb.append("\n-------- property ------\n");
+            sb.append(property);
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	@XmlAttribute
-	public String getName() {
-		return name;
-	}
+    @XmlAttribute
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@XmlElement(name = "property")
-	public List<Property> getProperties() {
-		return properties;
-	}
+    @XmlElement(name = "property")
+    public List<Property> getProperties() {
+        return properties;
+    }
 
-	public void setProperties(List<Property> properties) {
-		this.properties = properties;
-	}
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
+    }
 }

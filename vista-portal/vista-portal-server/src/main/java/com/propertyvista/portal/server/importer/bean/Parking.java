@@ -17,45 +17,44 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;
 
 public class Parking {
-	private String display;
+    private String display;
 
-	private String parkcode;
+    private String parkcode;
 
-	private Double rate;
+    private Double rate;
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		sb.append(display).append(" ").append(parkcode).append(" $")
-				.append(rate);
+        sb.append(display).append(" ").append(parkcode).append(" $").append(rate);
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	@XmlAttribute
-	public String getDisplay() {
-		return display;
-	}
+    @XmlAttribute
+    public String getDisplay() {
+        return display;
+    }
 
-	public void setDisplay(String display) {
-		this.display = display;
-	}
+    public void setDisplay(String display) {
+        this.display = display;
+    }
 
-	@XmlAttribute
-	public String getParkcode() {
-		return parkcode;
-	}
+    @XmlAttribute
+    public String getParkcode() {
+        return parkcode;
+    }
 
-	public void setParkcode(String parkcode) {
-		this.parkcode = parkcode;
-	}
+    public void setParkcode(String parkcode) {
+        this.parkcode = parkcode;
+    }
 
-	@XmlValue
-	public Double getRate() {
-		return rate;
-	}
+    @XmlValue
+    public Double getRate() {
+        return rate;
+    }
 
-	public void setRate(Double rate) {
-		this.rate = rate;
-	}
+    public void setRate(Double rate) {
+        this.rate = rate;
+    }
 }

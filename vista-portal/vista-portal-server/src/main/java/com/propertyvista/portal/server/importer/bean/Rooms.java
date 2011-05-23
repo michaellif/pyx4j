@@ -20,27 +20,27 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class Rooms {
 
-	private List<Room> rooms = new ArrayList<Room>();
+    private List<Room> rooms = new ArrayList<Room>();
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		sb.append(rooms.size()).append(" rooms");
+        sb.append(rooms.size()).append(" rooms");
 
-		for (Room room : rooms) {
-			sb.append("\n");
-			sb.append(room);
-		}
+        for (Room room : rooms) {
+            sb.append("\n");
+            sb.append(room);
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	@XmlElement(name = "room")
-	public List<Room> getRooms() {
-		return rooms;
-	}
+    @XmlElement(name = "room")
+    public List<Room> getRooms() {
+        return rooms;
+    }
 
-	public void setRooms(List<Room> rooms) {
-		this.rooms = rooms;
-	}
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
+    }
 }

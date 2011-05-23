@@ -17,22 +17,22 @@ import javax.xml.bind.annotation.XmlValue;
 
 public class Include {
 
-	private String value;
+    private String value;
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		sb.append(value);
+        sb.append(value);
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	@XmlValue
-	public String getValue() {
-		return value;
-	}
+    @XmlValue
+    public String getValue() {
+        return value;
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

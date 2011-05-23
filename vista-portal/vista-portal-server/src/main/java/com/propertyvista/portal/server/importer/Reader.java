@@ -31,59 +31,57 @@ import com.pyx4j.gwt.server.IOUtils;
 
 public class Reader {
 
-	private static final Logger log = LoggerFactory.getLogger(Reader.class);
+    private static final Logger log = LoggerFactory.getLogger(Reader.class);
 
-	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
-			"yy-MM-dd");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yy-MM-dd");
 
-	private Residential residential;
-	private List<AvailableUnit> units = new ArrayList<AvailableUnit>();
+    private Residential residential;
 
-	public void readCsv() throws IOException, ParseException {
-		String csv = IOUtils.getTextResource(XmlUtil.resourceFileName(
-				XmlUtil.class, "units.csv"));
+    private List<AvailableUnit> units = new ArrayList<AvailableUnit>();
 
-		StringTokenizer lines = new StringTokenizer(csv, "\n");
-		lines.nextToken(); // skip the headings
-		while (lines.hasMoreTokens()) {
-			String line = lines.nextToken();
-			log.debug(line);
+    public void readCsv() throws IOException, ParseException {
+        String csv = IOUtils.getTextResource(XmlUtil.resourceFileName(XmlUtil.class, "units.csv"));
 
-			String[] values = line.split(",");
+        StringTokenizer lines = new StringTokenizer(csv, "\n");
+        lines.nextToken(); // skip the headings
+        while (lines.hasMoreTokens()) {
+            String line = lines.nextToken();
+            log.debug(line);
 
-			AvailableUnit unit = new AvailableUnit();
+            String[] values = line.split(",");
 
-			unit.setPropertyCode(values[0]);
-			unit.setAddress(values[1]);
-			unit.setCity(values[2]);
-			unit.setProvince(values[3]);
-			unit.setUnitNumber(values[4]);
-			unit.setType(values[5]);
-			unit.setArea(Double.valueOf(values[6]));
-			unit.setRent(Double.valueOf(values[7]));
-			unit.setDescription(values[8]);
-			unit.setAvailable(DATE_FORMAT.parse(values[9]));
+            AvailableUnit unit = new AvailableUnit();
 
-			units.add(unit);
-			log.info("" + unit);
-		}
-	}
+            unit.setPropertyCode(values[0]);
+            unit.setAddress(values[1]);
+            unit.setCity(values[2]);
+            unit.setProvince(values[3]);
+            unit.setUnitNumber(values[4]);
+            unit.setType(values[5]);
+            unit.setArea(Double.valueOf(values[6]));
+            unit.setRent(Double.valueOf(values[7]));
+            unit.setDescription(values[8]);
+            unit.setAvailable(DATE_FORMAT.parse(values[9]));
 
-	public void readXml() throws IOException, JAXBException {
-		// read
-		String xml = IOUtils.getTextResource(XmlUtil.resourceFileName(
-				XmlUtil.class, "data.xml"));
-		log.debug("Loaded " + xml);
+            units.add(unit);
+            log.info("" + unit);
+        }
+    }
 
-		residential = XmlUtil.unmarshallResidential(xml);
-		log.debug("Residential\n " + residential + "\n");
-	}
+    public void readXml() throws IOException, JAXBException {
+        // read
+        String xml = IOUtils.getTextResource(XmlUtil.resourceFileName(XmlUtil.class, "data.xml"));
+        log.debug("Loaded " + xml);
 
-	public Residential getResidential() {
-		return residential;
-	}
+        residential = XmlUtil.unmarshallResidential(xml);
+        log.debug("Residential\n " + residential + "\n");
+    }
 
-	public List<AvailableUnit> getUnits() {
-		return units;
-	}
+    public Residential getResidential() {
+        return residential;
+    }
+
+    public List<AvailableUnit> getUnits() {
+        return units;
+    }
 }

@@ -15,74 +15,74 @@ package com.propertyvista.portal.server.importer.bean;
 
 public class Address {
 
-	private String street;
+    private String street;
 
-	private String city;
+    private String city;
 
-	private String post;
+    private String post;
 
-	private String province;
+    private String province;
 
-	private String prv;
+    private String prv;
 
-	private String country;
+    private String country;
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		sb.append(street);
-		sb.append(", ").append(city);
-		sb.append(", ").append(prv);
-		sb.append(", ").append(country);
+        sb.append(street);
+        sb.append(", ").append(city);
+        sb.append(", ").append(prv);
+        sb.append(", ").append(country);
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	public String getStreet() {
-		return street;
-	}
+    public String getStreet() {
+        return street;
+    }
 
-	public void setStreet(String street) {
-		this.street = street;
-	}
+    public void setStreet(String street) {
+        this.street = street;
+    }
 
-	public String getCity() {
-		return city;
-	}
+    public String getCity() {
+        return city;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-	public String getPost() {
-		return post;
-	}
+    public String getPost() {
+        return post;
+    }
 
-	public void setPost(String post) {
-		this.post = post;
-	}
+    public void setPost(String post) {
+        this.post = post;
+    }
 
-	public String getProvince() {
-		return province;
-	}
+    public String getProvince() {
+        return province;
+    }
 
-	public void setProvince(String province) {
-		this.province = province;
-	}
+    public void setProvince(String province) {
+        this.province = province;
+    }
 
-	public String getPrv() {
-		return prv;
-	}
+    public String getPrv() {
+        return prv;
+    }
 
-	public void setPrv(String prv) {
-		this.prv = prv;
-	}
+    public void setPrv(String prv) {
+        this.prv = prv;
+    }
 
-	public String getCountry() {
-		return country;
-	}
+    public String getCountry() {
+        return country;
+    }
 
-	public void setCountry(String country) {
-		this.country = country;
-	}
+    public void setCountry(String country) {
+        this.country = country;
+    }
 }
