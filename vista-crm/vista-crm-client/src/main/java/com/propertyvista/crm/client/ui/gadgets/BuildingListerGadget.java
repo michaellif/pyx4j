@@ -16,28 +16,27 @@ package com.propertyvista.crm.client.ui.gadgets;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
+import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
 
+    @SuppressWarnings("unchecked")
     public BuildingListerGadget(GadgetMetadata gmd) {
-        super(gmd, BuildingDTO.class);
+        super(gmd, (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class), BuildingDTO.class);
     }
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
         gmd.type().setValue(GadgetType.BuildingLister);
-        gmd.name().setValue(i18n.tr("BuildingDTO Lister"));
+        gmd.name().setValue(i18n.tr("Building Lister"));
     }
 
     @Override
@@ -50,26 +49,5 @@ public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.contacts().email().emailAddress()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().province()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
-    }
-
-    @Override
-    public void populateData(final int pageNumber) {
-        BuildingCrudService bcs = GWT.create(BuildingCrudService.class);
-        if (bcs != null) {
-            EntitySearchCriteria<BuildingDTO> criteria = new EntitySearchCriteria<BuildingDTO>(BuildingDTO.class);
-            criteria.setPageSize(getListPanel().getPageSize());
-            criteria.setPageNumber(pageNumber);
-
-            bcs.search(new AsyncCallback<EntitySearchResult<BuildingDTO>>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-
-                @Override
-                public void onSuccess(EntitySearchResult<BuildingDTO> result) {
-                    BuildingListerGadget.this.getListPanel().populateData(result.getData(), pageNumber, result.hasMoreData());
-                }
-            }, criteria);
-        }
     }
 }

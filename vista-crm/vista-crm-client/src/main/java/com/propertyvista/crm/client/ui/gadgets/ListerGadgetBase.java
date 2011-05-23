@@ -22,6 +22,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -34,18 +35,25 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberPrimitiveColumnDescriptor;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.crm.rpc.services.AbstractCrudService;
 
 public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     protected final EntityListPanel<E> listPanel;
+
+    private final AbstractCrudService<E> service;
+
+    private final Class<E> entityClass;
 
     public enum RefreshInterval {
 
@@ -82,10 +90,12 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     protected RefreshInterval refreshInterval = RefreshInterval.Never;
 
-    public ListerGadgetBase(GadgetMetadata gmd, Class<E> clazz) {
+    public ListerGadgetBase(GadgetMetadata gmd, AbstractCrudService<E> service, Class<E> entityClass) {
         super(gmd);
+        this.service = service;
+        this.entityClass = entityClass;
 
-        listPanel = new EntityListPanel<E>(clazz) {
+        listPanel = new EntityListPanel<E>(entityClass) {
             @Override
             public List<ColumnDescriptor<E>> getColumnDescriptors() {
                 ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
@@ -124,10 +134,22 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
      */
     protected abstract void fillDefaultColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
 
-    /*
-     * Implement in derived class to fill table with data.
-     */
-    public abstract void populateData(int pageNumber);
+    protected void populateData(final int pageNumber) {
+        EntitySearchCriteria<E> criteria = new EntitySearchCriteria<E>(entityClass);
+        criteria.setPageSize(getListPanel().getPageSize());
+        criteria.setPageNumber(pageNumber);
+
+        service.search(new AsyncCallback<EntitySearchResult<E>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+
+            @Override
+            public void onSuccess(EntitySearchResult<E> result) {
+                ListerGadgetBase.this.getListPanel().populateData(result.getData(), pageNumber, result.hasMoreData());
+            }
+        }, criteria);
+    }
 
     /*
      * Override in derived class to fill pages with data.
