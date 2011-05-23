@@ -37,16 +37,18 @@ public class BackToSearchViewImpl extends SimplePanel implements BackToSearchVie
         });
         panel.add(backbtn);
 
-        Button searchbtn = new Button("Search");
-        searchbtn.addClickHandler(new ClickHandler() {
-
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.goToSearchApartment();
-            }
-
-        });
-        panel.add(searchbtn);
+/*
+ * Button searchbtn = new Button("Search");
+ * searchbtn.addClickHandler(new ClickHandler() {
+ * 
+ * @Override
+ * public void onClick(ClickEvent event) {
+ * presenter.goToSearchApartment();
+ * }
+ * 
+ * });
+ * panel.add(searchbtn);
+ */
 
         setWidget(panel);
     }

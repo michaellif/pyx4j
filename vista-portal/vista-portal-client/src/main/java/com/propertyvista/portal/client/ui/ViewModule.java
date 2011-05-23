@@ -44,6 +44,8 @@ public class ViewModule extends AbstractGinModule {
         bind(UnitDetailsView.class).to(UnitDetailsViewImpl.class).in(Singleton.class);
         bind(SearchApartmentView.class).to(SearchApartmentViewImpl.class).in(Singleton.class);
         bind(BackToSearchView.class).to(BackToSearchViewImpl.class).in(Singleton.class);
+        bind(AboutUsView.class).to(AboutUsViewImpl.class).in(Singleton.class);
+        bind(HomeView.class).to(HomeViewImpl.class).in(Singleton.class);
 
     }
 

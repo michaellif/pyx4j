@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView {
 
-    public static String DEFAULT_STYLE_PREFIX = "PropertyTable";
+    public static String DEFAULT_STYLE_PREFIX = "PropertyList";
 
     private final PropertiesMapWidget map;
 
@@ -44,22 +44,39 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
     private Presenter presenter;
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Header, Footer, Body, Row, Numerator, Cell, CellSize, CellDetails, MapButton, DetailsButton
+        Search, SearchResult, Header, Footer, TableBody, Row, Numerator, Cell, CellSize, CellDetails,
+
+        MapButton, DetailsButton
     }
 
     private static I18n i18n = I18nFactory.getI18n(PropertyMapViewImpl.class);
+
+    private final RefineApartmentSearchForm searchFrom;
 
     public PropertyMapViewImpl() {
         FlowPanel container = new FlowPanel();
         container.setWidth("100%");
         container.setHeight("100%");
 
+        FlowPanel refineSearch = new FlowPanel();
+        refineSearch.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Search.name());
+        refineSearch.setWidth("20%");
+        searchFrom = new RefineApartmentSearchForm();
+        refineSearch.add(searchFrom.createContent());
+        container.add(refineSearch);
+
+        FlowPanel searchResult = new FlowPanel();
+        searchResult.setWidth("80%");
+        searchResult.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchResult.name());
+
         map = new PropertiesMapWidget();
         map.setDistanceOverlay(new GeoPoint(43.697665, -79.402313), 5);
-        container.add(map);
+        searchResult.add(map);
 
         buildingList = new BuildingList();
-        container.add(buildingList);
+
+        searchResult.add(buildingList);
+        container.add(searchResult);
 
         setWidget(container);
     }
@@ -67,7 +84,7 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
     class BuildingList extends FlexTable {
 
         BuildingList() {
-            addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Body.name());
+            addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.TableBody.name());
             setWidth("100%");
             //header
             setText(0, 0, "");
@@ -182,6 +199,7 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        searchFrom.setPresenter(this.presenter);
     }
 
     @Override

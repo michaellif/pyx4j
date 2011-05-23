@@ -16,10 +16,13 @@ package com.propertyvista.portal.client.themes;
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
+import com.propertyvista.portal.client.ui.ApartmentDetailsViewImpl;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalView;
 import com.propertyvista.portal.client.ui.PropertyMapViewImpl;
+import com.propertyvista.portal.client.ui.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.ResidentsNavigViewImpl;
+import com.propertyvista.portal.client.ui.SearchApartmentForm;
 
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.style.ColorFactory;
@@ -42,7 +45,10 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         initSiteViewStyles();
         initVistaMainNavigViewStyles();
         initSubNavigViewStyles();
-        initPropertyTableStyles();
+        initPropertyListStyles();
+        initSearchPanelStyles();
+        initRefineSearchStyles();
+        initApartmentDetailsStyles();
     }
 
     @Override
@@ -109,6 +115,10 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.Content));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.SubContent));
+        style.addProperty("margin", "5px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.Left));
@@ -262,9 +272,9 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
     }
 
-    private void initPropertyTableStyles() {
+    private void initPropertyListStyles() {
         String prefix = PropertyMapViewImpl.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Body));
+        Style style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.TableBody));
         style.addProperty("table-layout", "fixed");
         style.addProperty("border-spacing", "0px !important");
         addStyle(style);
@@ -282,6 +292,132 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Cell));
+        style.addProperty("border-color", "#999999");
+        style.addProperty("border-top-style", "dotted");
+        style.addProperty("border-top-width", "1px");
+        style.addProperty("vertical-align", "top");
+        style.addProperty("padding-top", "10px");
+        style.addProperty("padding-bottom", "10px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Search));
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.SearchResult));
+        style.addProperty("float", "right");
+        addStyle(style);
+
+    }
+
+    private void initSearchPanelStyles() {
+        String prefix = SearchApartmentForm.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("padding", "10px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SearchApartmentForm.StyleSuffix.Row));
+        style.addProperty("margin-bottom", "15px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SearchApartmentForm.StyleSuffix.RowHeader));
+        style.addProperty("margin-bottom", "5px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SearchApartmentForm.StyleSuffix.Element));
+        style.addProperty("padding-right", "10px");
+        addStyle(style);
+
+    }
+
+    private void initRefineSearchStyles() {
+        String prefix = RefineApartmentSearchForm.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("padding", "5px");
+        style.addProperty("margin", "5px");
+        style.addProperty("border", "1px solid");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.SearchHeader));
+        style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-top", "10px");
+        style.addProperty("padding-bottom", "10px");
+        style.addProperty("border-bottom", "dotted 1px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.RowHeader));
+        style.addProperty("padding-bottom", "5px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Element));
+        style.addProperty("padding", "5px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Element) + " div.gwt-HTML");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.ButtonPanel));
+        style.addProperty("padding-top", "10px");
+        style.addProperty("border-top", "dotted 1px");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+    }
+
+    private void initApartmentDetailsStyles() {
+        String prefix = ApartmentDetailsViewImpl.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Left));
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Center));
+        style.addProperty("float", "right");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.PageHeader));
+        style.addProperty("margin-top", "10px");
+        style.addProperty("margin-bottom", "10px");
+        style.addProperty("font-size", "20px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.DD));
+        style.addProperty("width", "100%");
+        style.addProperty("top", "0");
+        style.addProperty("margin", "0 0 0 165px");
+        style.addProperty("padding", "0 0 0.5em 0");
+
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.DL));
+        style.addProperty("margin-top", "40px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.DT));
+
+        style.addProperty("float", "left");
+        style.addProperty("clear", "left");
+        style.addProperty("width", "150px");
+        style.addProperty("text-align", "right");
+        style.addProperty("font-size", "13px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.TableBody));
+        style.addProperty("table-layout", "fixed");
+        style.addProperty("border-spacing", "0px !important");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.TableHeader));
+        style.addProperty("font-size", "13px");
+        style.addProperty("text-align", "left");
+        style.addProperty("height", "25px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Cell));
         style.addProperty("border-color", "#999999");
         style.addProperty("border-top-style", "dotted");
         style.addProperty("border-top-width", "1px");

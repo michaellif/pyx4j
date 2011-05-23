@@ -18,9 +18,11 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.propertyvista.portal.client.activity.AboutUsActivity;
 import com.propertyvista.portal.client.activity.ApartmentDetailsActivity;
 import com.propertyvista.portal.client.activity.CityMapActivity;
 import com.propertyvista.portal.client.activity.FindApartmentActivity;
+import com.propertyvista.portal.client.activity.HomeActivity;
 import com.propertyvista.portal.client.activity.LoginActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
 import com.propertyvista.portal.client.activity.PaymentActivity;
@@ -52,6 +54,10 @@ public class ContentActivityMapper implements ActivityMapper {
 
     Provider<PaymentActivity> paymentActivity;
 
+    Provider<AboutUsActivity> aboutActivity;
+
+    Provider<HomeActivity> homeActivity;
+
     @Inject
     public ContentActivityMapper(Provider<FindApartmentActivity> findApartmentActivityProvider,
 
@@ -71,7 +77,11 @@ public class ContentActivityMapper implements ActivityMapper {
 
     Provider<MaintenanceAcitvity> maintenanceActivity,
 
-    Provider<PaymentActivity> paymentActivity) {
+    Provider<PaymentActivity> paymentActivity,
+
+    Provider<AboutUsActivity> aboutActivity,
+
+    Provider<HomeActivity> homeActivty) {
         super();
         this.findApartmentActivityProvider = findApartmentActivityProvider;
         this.residentsActivityProvider = residentsActivityProvider;
@@ -82,6 +92,8 @@ public class ContentActivityMapper implements ActivityMapper {
         this.tenantProfileActivity = tenantProfileActivity;
         this.maintenanceActivity = maintenanceActivity;
         this.paymentActivity = paymentActivity;
+        this.aboutActivity = aboutActivity;
+        this.homeActivity = homeActivty;
 
     }
 
@@ -107,6 +119,10 @@ public class ContentActivityMapper implements ActivityMapper {
             return maintenanceActivity.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.Residents.Navigator.Payment) {
             return paymentActivity.get().withPlace(place);
+        } else if (place instanceof PortalSiteMap.AboutUs) {
+            return aboutActivity.get().withPlace(place);
+        } else if (place instanceof PortalSiteMap.Home) {
+            return homeActivity.get().withPlace(place);
         }
         return null;
 

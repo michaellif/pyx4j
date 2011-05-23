@@ -7,27 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
- * @author Dad
+ * Created on May 22, 2011
+ * @author vadims
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class FindApartmentViewImpl extends SimplePanel implements FindApartmentView {
-
-    public FindApartmentViewImpl() {
-
-        FlowPanel panel = new FlowPanel();
-        HTML message = new HTML("Some content pertaining to the apartment search or featured apartments");
-
-        panel.add(message);
-
-        setWidget(panel);
-
-    }
+public interface HomeView extends IsWidget {
 
 }

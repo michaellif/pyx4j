@@ -21,6 +21,12 @@ import com.pyx4j.site.shared.meta.SiteMap;
 public class PortalSiteMap implements SiteMap {
     public static String ARG_NAME_ITEM_ID = "ItemID";
 
+    public static class Home extends AppPlace {
+    }
+
+    public static class AboutUs extends AppPlace {
+    }
+
     @PlaceProperties(caption = "Find an Apartment")
     @NavigationItem(navigLabel = "FindApartment")
     public static class FindApartment extends AppPlace {

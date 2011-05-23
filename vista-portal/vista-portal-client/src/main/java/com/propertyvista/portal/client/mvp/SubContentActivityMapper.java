@@ -61,7 +61,7 @@ public class SubContentActivityMapper implements ActivityMapper {
 
         } else if (place instanceof PortalSiteMap.FindApartment.CityMap ||
 
-        place instanceof PortalSiteMap.FindApartment.PropertyMap ||
+        /* place instanceof PortalSiteMap.FindApartment.PropertyMap || */
 
         place instanceof PortalSiteMap.FindApartment) {
 

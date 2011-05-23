@@ -21,14 +21,14 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.propertyvista.portal.client.ui.PropertyMapView;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.site.client.AppSite;
-
-import com.propertyvista.portal.client.ui.PropertyMapView;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class PropertyMapActivity extends AbstractActivity implements PropertyMapView.Presenter {
     PropertyMapView view;
@@ -66,6 +66,12 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     @Override
     public void goToAppartmentDetails(PropertyDTO property) {
         AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.ApartmentDetails());
+    }
+
+    @Override
+    public void goToPropertyMap(PropertySearchCriteria searchCriteria) {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.PropertyMap());
+
     }
 
 }
