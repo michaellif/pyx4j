@@ -19,13 +19,10 @@ import java.util.GregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.yardi.ws.operations.GetPropertyConfigurations;
 import com.yardi.ws.operations.GetResidentTransactions_ByChargeDate_Login;
 import com.yardi.ws.operations.GetResidentTransactions_Login;
 import com.yardi.ws.operations.GetResidentsLeaseCharges_Login;
 import com.yardi.ws.operations.GetUnitInformation_Login;
-import com.yardi.ws.operations.Ping;
-import com.yardi.ws.operations.PingResponse;
 
 public class Example {
 
@@ -35,31 +32,8 @@ public class Example {
         YardiClient c = new YardiClient();
 
         try {
-            c.transactionId = 1L;
-
-            // The Ping function accepts no parameters, but will return the
-            // assembly name of the function being called. Use it to test
-            // connectivity.
-            c.currentActionName = "ping";
-            Ping ping = new Ping();
-            PingResponse pr = c.getResidentTransactionsService().ping(ping);
-            log.info("result [{}]", pr.getPingResult());
-
-            c.transactionId = 2L;
-            {
-                // Allows export of the Property Configuration with the
-                // Database. The Unique Interface Entity name is needed in order
-                // to return the Property ID's the third-party has access to.
-                c.currentActionName = "GetPropertyConfigurations";
-                GetPropertyConfigurations l = new GetPropertyConfigurations();
-                l.setUserName("propertyvistaws");
-                l.setPassword("52673");
-                l.setServerName("aspdb04");
-                l.setDatabase("afqoml_live");
-                l.setPlatform("SQL");
-                l.setInterfaceEntity("Property Vista");
-                c.getResidentTransactionsService().getPropertyConfigurations(l);
-            }
+            YardiTransactions.ping(c);
+            YardiTransactions.getPropertyConfigurations(c);
 
             c.transactionId = 3L;
             {
