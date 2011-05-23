@@ -94,10 +94,10 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().name().firstName(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().name().middleName(), "6em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().name().lastName(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name().middleName(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name().lastName(), "12em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "8.2em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().email(), "11em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().email(), "15em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().status(), "8.5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "5em"));

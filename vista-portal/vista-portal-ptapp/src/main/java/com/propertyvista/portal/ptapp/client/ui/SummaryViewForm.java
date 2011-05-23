@@ -331,9 +331,9 @@ public class SummaryViewForm extends CEntityForm<Summary> {
 
             tableLayout.put("Name", "29%");
             tableLayout.put("Date of Birht", "15%");
-            tableLayout.put("Email", "26%");
+            tableLayout.put("Email", "30%");
             tableLayout.put("Relationship", "15%");
-            tableLayout.put("Status", "15%");
+            tableLayout.put("Status", "11%");
 
             // fill header:
             for (Entry<String, String> e : tableLayout.entrySet()) {
