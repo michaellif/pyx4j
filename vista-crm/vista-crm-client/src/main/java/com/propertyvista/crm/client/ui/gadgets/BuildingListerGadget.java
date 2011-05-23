@@ -25,23 +25,23 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
-import com.propertyvista.crm.rpc.services.BuildingCrudServiceOld;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingListerGadget extends ListerGadgetBase<Building> {
+public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
 
     public BuildingListerGadget(GadgetMetadata gmd) {
-        super(gmd, Building.class);
+        super(gmd, BuildingDTO.class);
     }
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
         gmd.type().setValue(GadgetType.BuildingLister);
-        gmd.name().setValue(i18n.tr("Building Lister"));
+        gmd.name().setValue(i18n.tr("BuildingDTO Lister"));
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Building>> columnDescriptors, Building proto) {
+    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<BuildingDTO>> columnDescriptors, BuildingDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketing().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().propertyCode()));
@@ -54,19 +54,19 @@ public class BuildingListerGadget extends ListerGadgetBase<Building> {
 
     @Override
     public void populateData(final int pageNumber) {
-        BuildingCrudServiceOld bcs = GWT.create(BuildingCrudServiceOld.class);
+        BuildingCrudService bcs = GWT.create(BuildingCrudService.class);
         if (bcs != null) {
-            EntitySearchCriteria<Building> criteria = new EntitySearchCriteria<Building>(Building.class);
+            EntitySearchCriteria<BuildingDTO> criteria = new EntitySearchCriteria<BuildingDTO>(BuildingDTO.class);
             criteria.setPageSize(getListPanel().getPageSize());
             criteria.setPageNumber(pageNumber);
 
-            bcs.search(new AsyncCallback<EntitySearchResult<Building>>() {
+            bcs.search(new AsyncCallback<EntitySearchResult<BuildingDTO>>() {
                 @Override
                 public void onFailure(Throwable caught) {
                 }
 
                 @Override
-                public void onSuccess(EntitySearchResult<Building> result) {
+                public void onSuccess(EntitySearchResult<BuildingDTO> result) {
                     BuildingListerGadget.this.getListPanel().populateData(result.getData(), pageNumber, result.hasMoreData());
                 }
             }, criteria);
