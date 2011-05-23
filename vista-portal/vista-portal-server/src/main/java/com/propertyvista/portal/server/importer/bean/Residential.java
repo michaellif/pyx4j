@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Residential {
 
-    List<Region> regions = new ArrayList<Region>();
+    private List<Region> regions = new ArrayList<Region>();
 
     @Override
     public String toString() {
@@ -35,6 +35,20 @@ public class Residential {
         }
 
         return sb.toString();
+    }
+
+    public List<Property> collectAllProperties() {
+        List<Property> properties = new ArrayList<Property>();
+
+        for (Region region : regions) {
+            for (City city : region.getCities()) {
+                for (Property property : city.getProperties()) {
+                    properties.add(property);
+                }
+            }
+        }
+
+        return properties;
     }
 
     @XmlElement(name = "region")

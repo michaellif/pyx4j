@@ -16,31 +16,31 @@ package com.propertyvista.server.importer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+
 import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.importer.Importer;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
-import com.pyx4j.config.server.ServerSideConfiguration;
 
 public class ImporterLauncher {
-	private static final Logger log = LoggerFactory
-			.getLogger(ImporterLauncher.class);
+    private static final Logger log = LoggerFactory.getLogger(ImporterLauncher.class);
 
-	/**
-	 * This is optional, use only if you need this
-	 */
-	public static void configureDb() {
-		ServerSideConfiguration.setInstance(new VistaServerSideConfiguration());
-	}
+    /**
+     * This is optional, use only if you need this
+     */
+    public static void configureDb() {
+        ServerSideConfiguration.setInstance(new VistaServerSideConfiguration());
+    }
 
-	public static void main(String[] args) {
-		ImporterLauncher.configureDb();
-		SharedData.init();
-		log.info("Importing new Data...");
-		try {
-			Importer importer = new Importer();
-			importer.start();
-		} catch (Exception e) {
-			log.error("Problem with generating xml", e);
-		}
-	}
+    public static void main(String[] args) {
+        ImporterLauncher.configureDb();
+        SharedData.init();
+        log.info("Importing new Data...");
+        try {
+            Importer importer = new Importer();
+            importer.start();
+        } catch (Exception e) {
+            log.error("Problem with importing XML", e);
+        }
+    }
 }

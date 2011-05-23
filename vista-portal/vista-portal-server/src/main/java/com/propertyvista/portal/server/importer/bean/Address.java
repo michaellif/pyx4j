@@ -39,6 +39,17 @@ public class Address {
         return sb.toString();
     }
 
+    public String toGeoString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(street);
+        sb.append(", ").append(city);
+        sb.append(", ").append(prv);
+        sb.append(", ").append(country);
+
+        return sb.toString();
+    }
+
     public String getStreet() {
         return street;
     }

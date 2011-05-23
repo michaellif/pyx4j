@@ -29,6 +29,8 @@ import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.portal.server.geo.GeoLocator;
+import com.propertyvista.portal.server.geo.GeoLocator.Mode;
 
 public class Importer {
     private static final Logger log = LoggerFactory.getLogger(Importer.class);
@@ -50,6 +52,11 @@ public class Importer {
         // map
         mapper = new Mapper();
         mapper.load(reader.getResidential(), reader.getUnits());
+    }
+
+    public void geo() throws JAXBException, IOException {
+        GeoLocator geoCache = new GeoLocator(Mode.useCache);
+        geoCache.populateGeo(mapper.getBuildings());
     }
 
     public void save() {
@@ -88,7 +95,8 @@ public class Importer {
     public void start() throws Exception {
         read();
         map();
-//        save();
+        geo();
+        save();
     }
 
     private static void persist(IEntity entity) {
