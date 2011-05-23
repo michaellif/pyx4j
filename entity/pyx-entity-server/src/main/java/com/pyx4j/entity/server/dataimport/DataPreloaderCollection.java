@@ -141,7 +141,6 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             if (txt != null) {
                 b.append(txt).append('\n');
             }
-            log.info("Created " + preloader.getClass().getName() + " data");
         }
         return b.toString();
     }
@@ -158,7 +157,6 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             if (txt != null) {
                 b.append(txt).append('\n');
             }
-            log.info("Deleted " + preloader.getClass().getName() + " data");
         }
         return b.toString();
     }
