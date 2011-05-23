@@ -50,6 +50,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PetChargeRule;
 import com.propertyvista.portal.domain.ptapp.PropertyProfile;
+import com.propertyvista.portal.server.importer.PictureUtil;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 
 public class BuildingsGenerator {
@@ -61,10 +62,6 @@ public class BuildingsGenerator {
     public BuildingsGenerator(long seed) {
         DataGenerator.setRandomSeed(seed);
         this.seed = seed;
-    }
-
-    private static String resourceFileName(String fileName) {
-        return BuildingsGenerator.class.getPackage().getName().replace('.', '/') + "/" + fileName;
     }
 
     public List<Building> createBuildings(int numBuildings) {
@@ -188,23 +185,27 @@ public class BuildingsGenerator {
         floorplan.minArea().setValue(1200);
         floorplan.name().setValue(name);
 
-        // for now save just one picture
+        // for now use just one picture
         int imageIndex = RandomUtil.randomInt(3) + 1;
-        String filename = resourceFileName("apartment" + imageIndex + ".jpg");
-        try {
-            byte[] picture = IOUtils.getResource(filename);
-            if (picture == null) {
-                log.warn("Could not find picture [{}] in classpath", filename);
-            } else {
-                // log.info("Picture size is: " + picture.length);
-                Picture blob = EntityFactory.create(Picture.class);
-                blob.content().setValue(picture);
-                floorplan.pictures().add(blob);
-            }
-        } catch (Exception e) {
-            log.error("Failed to read the file [{}]", filename, e);
-            throw new Error("Failed to read the file [" + filename + "]");
-        }
+        String filename = "apartment" + imageIndex + ".jpg";
+        Picture picture = PictureUtil.loadPicture(filename, BuildingsGenerator.class);
+        floorplan.pictures().add(picture);
+
+//        String filename = IOUtils.resourceFileName("apartment" + imageIndex + ".jpg", BuildingsGenerator.class);
+//        try {
+//            byte[] picture = IOUtils.getResource(filename);
+//            if (picture == null) {
+//                log.warn("Could not find picture [{}] in classpath", filename);
+//            } else {
+//                // log.info("Picture size is: " + picture.length);
+//                Picture blob = EntityFactory.create(Picture.class);
+//                blob.content().setValue(picture);
+//                floorplan.pictures().add(blob);
+//            }
+//        } catch (Exception e) {
+//            log.error("Failed to read the file [{}]", filename, e);
+//            throw new Error("Failed to read the file [" + filename + "]");
+//        }
 
         return floorplan;
     }
@@ -419,7 +420,7 @@ public class BuildingsGenerator {
     public LeaseTerms createLeaseTerms() {
         LeaseTerms leaseTerms = EntityFactory.create(LeaseTerms.class);
         try {
-            leaseTerms.text().setValue(IOUtils.getTextResource(resourceFileName("leaseTerms.html")));
+            leaseTerms.text().setValue(IOUtils.getTextResource(IOUtils.resourceFileName("leaseTerms.html", BuildingsGenerator.class)));
         } catch (IOException e) {
             throw new Error(e);
         }

@@ -44,7 +44,6 @@ public class Importer {
         reader = new Reader();
         reader.readCsv();
         reader.readXml();
-        reader.readImg();
     }
 
     public void map() {
@@ -89,7 +88,7 @@ public class Importer {
     public void start() throws Exception {
         read();
         map();
-        save();
+//        save();
     }
 
     private static void persist(IEntity entity) {

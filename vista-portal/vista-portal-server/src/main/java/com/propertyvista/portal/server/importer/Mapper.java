@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.Address;
+import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
@@ -101,7 +102,7 @@ public class Mapper {
         building.info().type().setValue(BuildingInfo.Type.residential);
 
         for (Room room : property.getRooms().getRooms()) {
-            createFloorplan(room);
+            createFloorplan(property, room, building);
         }
 
         building.info().address().set(mapAddress(property.getAddress()));
@@ -160,11 +161,25 @@ public class Mapper {
         units.add(unit);
     }
 
-    private void createFloorplan(Room room) {
+    private void createFloorplan(Property property, Room room, Building building) {
         Floorplan floorplan = EntityFactory.create(Floorplan.class);
 
+        floorplan.building().set(building);
         floorplan.name().setValue(room.getName());
         floorplan.description().setValue(room.getDisplay());
+
+        String filenamePart = "";
+        if (room.getName().equals("1bdrm")) {
+            filenamePart = "0101";
+        } else if (room.getName().equals("2bdrm")) {
+            filenamePart = "0102";
+        }
+        String filename = property.getCode() + "-" + filenamePart + ".jpg";
+        Picture picture = PictureUtil.loadPicture(filename, Mapper.class);
+        if (picture != null) {
+            log.info("Loaded image [" + filename + "]");
+            floorplan.pictures().add(picture);
+        }
 
         floorplans.add(floorplan);
     }

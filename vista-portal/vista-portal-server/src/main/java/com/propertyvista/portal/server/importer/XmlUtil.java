@@ -23,10 +23,6 @@ import com.propertyvista.portal.server.importer.bean.Residential;
 
 public class XmlUtil {
 
-    public static String resourceFileName(Class clazz, String filename) {
-        return clazz.getPackage().getName().replace('.', '/') + "/" + filename;
-    }
-
     /**
      * TODO - change this to generics later
      */

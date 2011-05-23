@@ -40,12 +40,8 @@ public class Reader {
 
     private final List<AvailableUnit> units = new ArrayList<AvailableUnit>();
 
-    public void readImg() {
-
-    }
-
     public void readCsv() throws IOException, ParseException {
-        String csv = IOUtils.getTextResource(XmlUtil.resourceFileName(XmlUtil.class, "units.csv"));
+        String csv = IOUtils.getTextResource(IOUtils.resourceFileName("units.csv", XmlUtil.class));
 
         StringTokenizer lines = new StringTokenizer(csv, "\n");
         lines.nextToken(); // skip the headings
@@ -75,7 +71,7 @@ public class Reader {
 
     public void readXml() throws IOException, JAXBException {
         // read
-        String xml = IOUtils.getTextResource(XmlUtil.resourceFileName(XmlUtil.class, "data.xml"));
+        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("data.xml", XmlUtil.class));
         log.debug("Loaded " + xml);
 
         residential = XmlUtil.unmarshallResidential(xml);
