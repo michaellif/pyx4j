@@ -111,10 +111,16 @@
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
 				<artifactId>maven-jaxb2-plugin</artifactId>
 				<configuration>
-					<generatePackage>com.yardi.xjc.ysi.tran.all</generatePackage>
 					<schemaDirectory>src/main/resources</schemaDirectory>
 					<schemaIncludes>
+						<include>Itf_MITS_CoreData2.0.xsd</include>
+						<include>Itf_MITS_ResidentTransactions2.0.xsd</include>
+						<include>Itf_MITS_ResidentTransactions2.0_SysBatchCharge.xsd</include>
+						<include>Itf_MITS_ResidentTransactions2.0_SysBatchReceipt.xsd</include>
 						<include>YsiTranAll.xsd</include>
+						<!--  not including this one - it is the same as All, has two extra elements
+						<include>YsiTranAll_Payables.xsd</include>
+						 -->
 					</schemaIncludes>
 				</configuration>
 				<executions>

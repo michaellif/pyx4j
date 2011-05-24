@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2007 sp2 (http://www.altova.com) by Chris C. (Yardi Systems) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:MITS="http://my-company.com/namespace" xmlns="http://yardi.com/ResidentTransactions20" targetNamespace="http://yardi.com/ResidentTransactions20" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:MITS="http://my-company.com/namespace" xmlns="http://yardi.com/ResidentTransactions20Charge" targetNamespace="http://yardi.com/ResidentTransactions20Charge" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="http://my-company.com/namespace" schemaLocation="./Itf_MITS_CoreData2.0.xsd"/>
 	<xs:element name="ResidentTransactions">
 		<xs:annotation>
