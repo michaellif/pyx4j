@@ -46,26 +46,26 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
 
     protected FlowPanel rowHolder;
 
-    protected boolean removable;
+    protected boolean buttonVisible;
 
     protected ImageHolder imageHolder;
 
-    public BaseFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
-        this(removeButton, null, title, removable);
+    public BaseFolderItemDecorator(ImageResource button, String title, boolean buttonVisible) {
+        this(button, null, title, buttonVisible);
     }
 
-    public BaseFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
-        this.removable = (removable && removeButton != null);
+    public BaseFolderItemDecorator(ImageResource button, ImageResource buttonHover, String title, boolean buttonVisible) {
+        this.buttonVisible = (buttonVisible && button != null);
 
-        imageResourceRegular = removeButton;
-        imageResourceHover = removeButtonHover;
+        imageResourceRegular = button;
+        imageResourceHover = buttonHover;
 
         rowHolder = new FlowPanel();
         rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         imageHolder = null;
-        if (removeButton != null) {
-            image = new Image(removeButton);
+        if (button != null) {
+            image = new Image(button);
             image.addMouseOverHandler(new MouseOverHandler() {
 
                 @Override
@@ -84,7 +84,7 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
             imageHolder = new ImageHolder(image);
             imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
 
-            if (!removable) {
+            if (!buttonVisible) {
                 imageHolder.setVisible(false);
             }
 
@@ -102,7 +102,6 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
             image.setTitle(title);
             image.getElement().getStyle().setCursor(Cursor.POINTER);
         }
-
     }
 
     @Override

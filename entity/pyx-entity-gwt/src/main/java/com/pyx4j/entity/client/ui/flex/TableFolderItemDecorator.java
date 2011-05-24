@@ -118,14 +118,13 @@ public class TableFolderItemDecorator extends BaseFolderItemDecorator {
     }
 
     public boolean isRemovable() {
-        return removable;
+        return buttonVisible;
     }
 
     public void setRemovable(boolean removable) {
-        this.removable = removable;
+        this.buttonVisible = removable;
         if (imageHolder != null) {
             imageHolder.setVisible(removable);
         }
     }
-
 }
