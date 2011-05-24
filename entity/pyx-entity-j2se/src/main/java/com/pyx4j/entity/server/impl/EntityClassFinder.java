@@ -70,6 +70,13 @@ public class EntityClassFinder extends ClassFinder {
         Class<?> candidate;
         try {
             candidate = Class.forName(className, false, Thread.currentThread().getContextClassLoader());
+        } catch (NoClassDefFoundError e) {
+            if ((e.getMessage() != null) && e.getMessage().startsWith("javax/")) {
+                log.debug("Can't load class {} {}", className, e);
+            } else {
+                log.warn("Can't load class {} {}", className, e);
+            }
+            return false;
         } catch (Throwable e) {
             log.warn("Can't load class {} {}", className, e);
             return false;
