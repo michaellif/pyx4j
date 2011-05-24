@@ -31,8 +31,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.StructureType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.portal.server.generator.CommonsGenerator;
 import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.importer.bean.City;
@@ -184,19 +184,19 @@ public class Mapper {
         floorplans.add(floorplan);
     }
 
-    private static AptUnitInfo.Type mapUnitType(String type) {
+    private static AptUnitType mapUnitType(String type) {
         if (type == null || type.trim().isEmpty()) {
             return null;
         }
         // for now map bathrooms to bedrooms
         if (type.equals("1bdrm")) {
-            return AptUnitInfo.Type.oneBathroom;
+            return AptUnitType.oneBedroom;
         } else if (type.equals("2bdrm")) {
-            return AptUnitInfo.Type.twoBathroom;
+            return AptUnitType.twoBedroom;
         } else if (type.equals("3bdrm")) {
-            return AptUnitInfo.Type.threeBathroom;
+            return AptUnitType.threeBedroom;
         } else if (type.equals("1.den")) {
-            return AptUnitInfo.Type.oneBathroomAndDen;
+            return AptUnitType.oneBedroomAndDen;
         }
         log.info("Unknown value [" + type + "]");
         return null;

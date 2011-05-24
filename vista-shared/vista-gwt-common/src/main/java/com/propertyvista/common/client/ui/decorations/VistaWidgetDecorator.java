@@ -63,8 +63,6 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
     private final Label validationLabel;
 
-    private Tooltip tooltip;
-
     private final DecorationData decorData;
 
     private final SpaceHolder infoImageHolder;
@@ -108,7 +106,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
         if (component.getToolTip() != null && component.getToolTip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
-            tooltip = Tooltip.tooltip(infoImage, component.getToolTip());
+            Tooltip.tooltip(infoImage, component.getToolTip());
             infoImageHolder.setWidget(infoImage);
         }
 

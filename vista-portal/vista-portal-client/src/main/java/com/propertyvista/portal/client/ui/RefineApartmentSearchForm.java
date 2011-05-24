@@ -22,13 +22,14 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteria> {
 
@@ -93,9 +94,9 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
         label = new HTML("<label for=\"minp\">" + i18n.tr("Price Range") + "</label>");
         label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.RowHeader);
         field3.add(label);
-        field3.add(DecorationUtils.inline(inject(proto().minPrice(), minPriceCombo), "45%"));
+        field3.add(DecorationUtils.inline(inject(proto().price(), minPriceCombo), "45%"));
         field3.add(DecorationUtils.inline(new HTML("<span>-</span>"), "10%"));
-        field3.add(DecorationUtils.inline(inject(proto().maxPrice(), maxPriceCombo), "45%"));
+        field3.add(DecorationUtils.inline(inject(proto().price(), maxPriceCombo), "45%"));
         container.add(field3);
 
         FlowPanel field5 = new FlowPanel();

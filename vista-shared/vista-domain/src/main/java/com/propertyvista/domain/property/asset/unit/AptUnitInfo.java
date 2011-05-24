@@ -30,37 +30,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface AptUnitInfo extends IEntity {
 
     @Translatable
-    public enum Type {
-
-        oneBathroom,
-
-        oneBathroomAndDen,
-
-        twoBathroom,
-
-        twoBathroomAndDen,
-
-        threeBathroom,
-
-        threeBathroomAndDen,
-
-        fourBathroom,
-
-        fourBathroomAndDen,
-
-        fiveBathroom,
-
-        fivebathroomAndDen,
-
-        other;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
-    @Translatable
     public enum EcomomicStatus {
 
         residential,
@@ -80,7 +49,7 @@ public interface AptUnitInfo extends IEntity {
     IPrimitive<String> name();
 
     @MemberColumn(name = "unitType")
-    IPrimitive<Type> type();
+    IPrimitive<AptUnitType> type();
 
     IPrimitive<String> typeDescription();
 

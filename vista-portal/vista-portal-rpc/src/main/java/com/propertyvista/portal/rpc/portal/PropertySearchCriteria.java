@@ -16,24 +16,77 @@ package com.propertyvista.portal.rpc.portal;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+
+import com.propertyvista.common.domain.ref.City;
+import com.propertyvista.common.domain.ref.Province;
 
 public interface PropertySearchCriteria extends IEntity {
 
+    enum BedroomType {
+
+        all,
+
+        oneBedroom,
+
+        twoBedroom,
+
+        threeBedroom,
+
+        fourBedroom,
+
+        fiveBedroomAndMore;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    enum BathroomType {
+
+        all,
+
+        oneBath,
+
+        twoBath,
+
+        threeBathAndMore;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    enum PriceRangeType {
+        all,
+
+        under600,
+
+        between600and699,
+
+        between700and799,
+
+        between800and899,
+
+        between900and999,
+
+        over1000;
+    }
+
     @Caption(name = "Province")
-    IPrimitive<String> province();
+    Province province();
 
     @Caption(name = "City")
-    IPrimitive<String> city();
+    City city();
 
     @Caption(name = "Beds")
-    IPrimitive<Integer> numOfBeds();
+    IPrimitive<BedroomType> numOfBeds();
 
     @Caption(name = "Baths")
-    IPrimitive<Integer> numOfBath();
+    IPrimitive<BathroomType> numOfBath();
 
-    @Caption(name = "Min Price")
-    IPrimitive<Double> minPrice();
-
-    @Caption(name = "Max Price")
-    IPrimitive<Double> maxPrice();
+    @Caption(name = "Price")
+    IPrimitive<PriceRangeType> price();
 }
