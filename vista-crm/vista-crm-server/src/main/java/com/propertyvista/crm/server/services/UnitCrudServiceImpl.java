@@ -24,6 +24,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitCrudServiceImpl implements UnitCrudService {
@@ -32,24 +33,29 @@ public class UnitCrudServiceImpl implements UnitCrudService {
 
     @Override
     public void create(AsyncCallback<AptUnitDTO> callback, AptUnitDTO editableEntity) {
-        PersistenceServicesFactory.getPersistenceService().persist(editableEntity);
-        callback.onSuccess(editableEntity);
+        AptUnit building = GenericConverter.down(editableEntity, AptUnit.class);
+        PersistenceServicesFactory.getPersistenceService().persist(building);
+        callback.onSuccess(GenericConverter.up(building, AptUnitDTO.class));
     }
 
     @Override
     public void retrieve(AsyncCallback<AptUnitDTO> callback, long entityId) {
-        AptUnitDTO editableEntity = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnitDTO.class, entityId);
-        callback.onSuccess(editableEntity);
+        AptUnit building = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, entityId);
+        callback.onSuccess(GenericConverter.up(building, AptUnitDTO.class));
     }
 
     @Override
     public void save(AsyncCallback<AptUnitDTO> callback, AptUnitDTO editableEntity) {
-        PersistenceServicesFactory.getPersistenceService().merge(editableEntity);
-        callback.onSuccess(editableEntity);
+        AptUnit building = GenericConverter.down(editableEntity, AptUnit.class);
+        PersistenceServicesFactory.getPersistenceService().merge(building);
+        callback.onSuccess(GenericConverter.up(building, AptUnitDTO.class));
     }
 
     @Override
     public void search(AsyncCallback<EntitySearchResult<AptUnitDTO>> callback, EntitySearchCriteria<AptUnitDTO> criteria) {
-        callback.onSuccess(EntityServicesImpl.secureSearch(criteria));
+        EntitySearchCriteria<AptUnit> c = GenericConverter.down(criteria, AptUnit.class);
+        //TODO add AptUnit specific criteria
+        callback.onSuccess(GenericConverter.up(EntityServicesImpl.secureSearch(c), AptUnitDTO.class));
     }
+
 }
