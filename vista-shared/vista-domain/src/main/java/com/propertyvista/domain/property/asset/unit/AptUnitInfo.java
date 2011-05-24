@@ -14,6 +14,7 @@
 package com.propertyvista.domain.property.asset.unit;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
@@ -92,6 +93,7 @@ public interface AptUnitInfo extends IEntity {
     @MemberColumn(name = "unitNumber")
     IPrimitive<String> number();
 
+    @Detached
     Building building();
 
     // ---- Physical: ----------------
