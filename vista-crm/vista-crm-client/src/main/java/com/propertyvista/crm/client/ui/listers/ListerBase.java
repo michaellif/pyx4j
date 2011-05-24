@@ -48,12 +48,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.client.ui.listers.FilterData.Operands;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public abstract class ListerBase<E extends IEntity> extends VerticalPanel implements IListerView<E> {
@@ -100,7 +99,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         // -------------------------
 
         HorizontalPanel functional = new HorizontalPanel();
-        functional.add(filters = new Filters(listPanel));
+        functional.add(filters = new Filters());
 
         Widget widgetAddApply = createAddApplyPanel();
         functional.add(widgetAddApply);
@@ -114,6 +113,55 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         setWidth("100%");
         getElement().getStyle().setMarginTop(0.5, Unit.EM);
         getElement().getStyle().setMarginBottom(0.5, Unit.EM);
+    }
+
+    private Widget createAddApplyPanel() {
+
+        final Image btnAdd = new Image(CrmImages.INSTANCE.add());
+        btnAdd.getElement().getStyle().setCursor(Cursor.POINTER);
+        btnAdd.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                filters.addFilter();
+                btnApply.setEnabled(filters.getFilterCount() > 0);
+            }
+        });
+        btnAdd.addMouseOverHandler(new MouseOverHandler() {
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                btnAdd.setResource(CrmImages.INSTANCE.addHover());
+            }
+        });
+        btnAdd.addMouseOutHandler(new MouseOutHandler() {
+            @Override
+            public void onMouseOut(MouseOutEvent event) {
+                btnAdd.setResource(CrmImages.INSTANCE.add());
+            }
+        });
+
+        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.applyFiletering(filters.getFiltersData());
+            }
+        });
+        btnApply.setEnabled(false);
+
+        HorizontalPanel addWrap = new HorizontalPanel();
+        addWrap.add(btnAdd);
+        addWrap.setCellVerticalAlignment(btnAdd, HasVerticalAlignment.ALIGN_BOTTOM);
+        HTML lblAdd = new HTML(i18n.tr("Add filter..."));
+        lblAdd.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        addWrap.add(lblAdd);
+        addWrap.setCellVerticalAlignment(lblAdd, HasVerticalAlignment.ALIGN_MIDDLE);
+
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.add(addWrap);
+        panel.add(btnApply);
+        panel.setCellHorizontalAlignment(btnApply, HasHorizontalAlignment.ALIGN_RIGHT);
+        btnApply.getElement().getStyle().setMarginRight(1, Unit.EM);
+        panel.setWidth("100%");
+        return panel;
     }
 
     public ListerBase(Class<E> clazz, final AppPlace link) {
@@ -176,114 +224,33 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         populateData(getListPanel().getDataTable().getDataTableModel().getPageNumber() + 1);
     }
 
-    // -------------------------
-    // Filter Data stuff:
-
-    @Translatable
-    public enum Operands {
-        Is,
-
-        IsNot,
-
-        Contains,
-
-        DoesNotContain,
-
-        BeginsWith,
-
-        EndsWith,
-
-        LessThen,
-
-        GreaterThen;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
-    public static class FilterData {
-        // TODO: formalise filter data here!..
-
-        public FilterData() {
-            // TODO Auto-generated constructor stub
-        }
-    }
-
-    protected Widget createAddApplyPanel() {
-
-        final Image btnAdd = new Image(CrmImages.INSTANCE.add());
-        btnAdd.getElement().getStyle().setCursor(Cursor.POINTER);
-        btnAdd.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                filters.addFilter();
-                btnApply.setEnabled(filters.getFilterCount() > 0);
-            }
-        });
-        btnAdd.addMouseOverHandler(new MouseOverHandler() {
-            @Override
-            public void onMouseOver(MouseOverEvent event) {
-                btnAdd.setResource(CrmImages.INSTANCE.addHover());
-            }
-        });
-        btnAdd.addMouseOutHandler(new MouseOutHandler() {
-            @Override
-            public void onMouseOut(MouseOutEvent event) {
-                btnAdd.setResource(CrmImages.INSTANCE.add());
-            }
-        });
-
-        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                filters.getFiltersData();
-                // TODO : apply filters here!..
-            }
-        });
-        btnApply.setEnabled(false);
-
-        HorizontalPanel addWrap = new HorizontalPanel();
-        addWrap.add(btnAdd);
-        addWrap.setCellVerticalAlignment(btnAdd, HasVerticalAlignment.ALIGN_BOTTOM);
-        HTML lblAdd = new HTML(i18n.tr("Add filter..."));
-        lblAdd.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        addWrap.add(lblAdd);
-        addWrap.setCellVerticalAlignment(lblAdd, HasVerticalAlignment.ALIGN_MIDDLE);
-
-        HorizontalPanel panel = new HorizontalPanel();
-        panel.add(addWrap);
-        panel.add(btnApply);
-        panel.setCellHorizontalAlignment(btnApply, HasHorizontalAlignment.ALIGN_RIGHT);
-        btnApply.getElement().getStyle().setMarginRight(1, Unit.EM);
-        panel.setWidth("100%");
-        return panel;
-    }
-
-    // -------------------------
+    // ------------------------------------------------
 
     class Filters extends FlowPanel {
 
-        protected final EntityListPanel<E> listPanel;
-
-        public Filters(EntityListPanel<E> listPanel) {
-            this.listPanel = listPanel;
-
+        public Filters() {
+            setWidth("100%");
         }
 
         public void addFilter() {
             add(new Filter());
-            setWidth("100%");
         }
 
         public int getFilterCount() {
             return getWidgetCount();
         }
 
+        @SuppressWarnings("unchecked")
         public List<FilterData> getFiltersData() {
-            // TODO: compile filter data here!..
-            return new ArrayList<FilterData>();
+            ArrayList<FilterData> filters = new ArrayList<FilterData>();
+
+            for (Widget w : this) {
+                if (w instanceof ListerBase.Filters.Filter) {
+                    filters.add(((Filter) w).getFilterData());
+                }
+            }
+
+            return filters;
         }
 
         private class Filter extends HorizontalPanel {
@@ -294,10 +261,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
             protected final ListBox valuesList = new ListBox();
 
-            protected final TextBox valuesText = new TextBox();
+            protected final TextBox valueText = new TextBox();
 
             Filter() {
-
                 final Image btnDel = new Image(CrmImages.INSTANCE.del());
                 btnDel.getElement().getStyle().setCursor(Cursor.POINTER);
                 btnDel.setTitle(i18n.tr("Remove filter"));
@@ -328,7 +294,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 add(wrap);
                 formatCell(wrap);
 
-                for (ColumnDescriptor<E> cd : listPanel.getDataTable().getDataTableModel().getColumnDescriptors()) {
+                for (ColumnDescriptor<E> cd : getListPanel().getDataTable().getDataTableModel().getColumnDescriptors()) {
                     fieldsList.addItem(cd.getColumnTitle());
                     fieldsList.setValue(fieldsList.getItemCount() - 1, cd.getColumnName());
                 }
@@ -346,12 +312,18 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 setCellWidth(operandsList, "20%");
                 formatCell(operandsList);
 
-                valuesText.setWidth("100%");
-                add(valuesText);
-                setCellWidth(valuesText, "40%");
-                formatCell(valuesText);
+                valueText.setWidth("100%");
+                add(valueText);
+                setCellWidth(valueText, "40%");
+                formatCell(valueText);
 
                 setWidth("100%");
+            }
+
+            public FilterData getFilterData() {
+                String path = fieldsList.getValue(fieldsList.getSelectedIndex());
+                Operands operand = Operands.valueOf(operandsList.getValue(operandsList.getSelectedIndex()));
+                return new FilterData(path, operand, valueText.getText());
             }
 
             private void formatCell(Widget w) {

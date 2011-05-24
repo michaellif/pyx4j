@@ -23,6 +23,8 @@ public interface IListerView<E extends IEntity> extends IsWidget {
 
     public interface Presenter {
         public void populateData(final int pageNumber);
+
+        public void applyFiletering(List<FilterData> filters);
     }
 
     void setPresenter(Presenter presenter);
