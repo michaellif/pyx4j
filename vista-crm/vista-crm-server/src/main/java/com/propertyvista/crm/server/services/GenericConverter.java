@@ -52,6 +52,9 @@ public class GenericConverter {
     //TODO move to more generic place
     public static <D extends IEntity> EntitySearchCriteria<D> down(EntitySearchCriteria<? extends D> src, Class<D> dstClass) {
         EntitySearchCriteria<D> dst = EntitySearchCriteria.create(dstClass);
+        dst.setPageNumber(src.getPageNumber());
+        dst.setPageSize(src.getPageSize());
+
         //TODO convert search criteria
         return dst;
     }
