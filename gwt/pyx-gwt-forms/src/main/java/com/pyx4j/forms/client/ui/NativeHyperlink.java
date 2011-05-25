@@ -25,7 +25,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Anchor;
 
 import com.pyx4j.widgets.client.style.CSSClass;
@@ -34,13 +33,11 @@ public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
 
     private boolean enabled;
 
-    private Command comand;
-
     private final CAbstractHyperlink<E> cHyperlink;
 
     private final NativeReferenceDelegate<E> delegate;
 
-    public NativeHyperlink(CAbstractHyperlink<E> hyperlink, Command comand) {
+    public NativeHyperlink(CAbstractHyperlink<E> hyperlink) {
         super(hyperlink.getValue() != null ? hyperlink.getValue().toString() : null);
         delegate = new NativeReferenceDelegate<E>(this);
 
@@ -48,13 +45,12 @@ public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
         setStyleName(CSSClass.pyx4j_Hyperlink.name());
 
         setTabIndex(hyperlink.getTabIndex());
-        setCommand(comand);
 
         addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (isEnabled() && NativeHyperlink.this.comand != null) {
-                    NativeHyperlink.this.comand.execute();
+                if (isEnabled() && cHyperlink.getCommand() != null) {
+                    cHyperlink.getCommand().execute();
                 }
             }
 
@@ -63,8 +59,8 @@ public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
         addKeyUpHandler(new KeyUpHandler() {
             @Override
             public void onKeyUp(KeyUpEvent event) {
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER && isEnabled() && NativeHyperlink.this.comand != null) {
-                    NativeHyperlink.this.comand.execute();
+                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER && isEnabled() && cHyperlink.getCommand() != null) {
+                    cHyperlink.getCommand().execute();
                 }
             }
         });
@@ -75,14 +71,6 @@ public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
     @Override
     public CAbstractHyperlink<E> getCComponent() {
         return cHyperlink;
-    }
-
-    public void setCommand(Command comand) {
-        this.comand = comand;
-    }
-
-    public Command getCommand() {
-        return comand;
     }
 
     @Override

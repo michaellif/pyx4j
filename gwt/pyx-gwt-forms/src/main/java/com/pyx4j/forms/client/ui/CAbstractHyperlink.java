@@ -24,7 +24,11 @@ import com.google.gwt.user.client.Command;
 
 public class CAbstractHyperlink<E> extends CReference<E, NativeHyperlink<E>> {
 
-    private final Command command;
+    private Command command;
+
+    public CAbstractHyperlink(String title) {
+        super(title);
+    }
 
     public CAbstractHyperlink(Command command) {
         this(null, command);
@@ -35,11 +39,20 @@ public class CAbstractHyperlink<E> extends CReference<E, NativeHyperlink<E>> {
         this.command = command;
     }
 
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    public Command getCommand() {
+        return command;
+    }
+
     @Override
     protected NativeHyperlink<E> createWidget() {
-        NativeHyperlink<E> widget = new NativeHyperlink<E>(this, command);
+        NativeHyperlink<E> widget = new NativeHyperlink<E>(this);
         widget.setWordWrap(this.isWordWrap());
         widget.setWidth(this.getWidth());
         return widget;
     }
+
 }

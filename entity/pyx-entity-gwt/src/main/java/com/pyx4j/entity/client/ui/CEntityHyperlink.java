@@ -20,26 +20,14 @@
  */
 package com.pyx4j.entity.client.ui;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.Anchor;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.AbstractAccessAdapter;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.forms.client.ui.CAbstractHyperlink;
+import com.pyx4j.forms.client.ui.IFormat;
 
-public class CEntityHyperlink extends CEditableComponent<IEntity, NativeEntityHyperlink> {
-
-    private NativeEntityHyperlink nativeLink;
-
-    private boolean wordWrap = false;
+public class CEntityHyperlink extends CAbstractHyperlink<IEntity> {
 
     private final String uriPrefix;
 
@@ -47,136 +35,33 @@ public class CEntityHyperlink extends CEditableComponent<IEntity, NativeEntityHy
         super(title);
         this.uriPrefix = uriPrefix;
 
-        this.addAccessAdapter(new AbstractAccessAdapter() {
+        setCommand(new Command() {
 
             @Override
-            public boolean isEnabled(CComponent<?> component) {
-                return !isValueEmpty();
+            public void execute() {
+                History.newItem(getEntityHistoryToken(getValue()));
+            }
+        });
+
+        this.setFormat(new IFormat<IEntity>() {
+            @Override
+            public String format(IEntity value) {
+                if (value != null) {
+                    return value.getStringView();
+                } else {
+                    return null;
+                }
             }
 
+            @Override
+            public IEntity parse(String string) {
+                return null;
+            }
         });
-    }
-
-    @Override
-    protected NativeEntityHyperlink createWidget() {
-        return new NativeEntityHyperlink(this);
-    }
-
-    @Override
-    public void setValue(IEntity value) {
-        super.setValue(value);
-        applyAccessibilityRules();
-    }
-
-    @Override
-    public void populate(IEntity value) {
-        super.populate(value);
-        applyAccessibilityRules();
-    }
-
-    @Override
-    public boolean isValueEmpty() {
-        return super.isValueEmpty() || getValue().isNull();
-    }
-
-    public void setWordWrap(boolean wrap) {
-        if (nativeLink != null) {
-            nativeLink.setWordWrap(wrap);
-        }
-        wordWrap = wrap;
-    }
-
-    public boolean isWordWrap() {
-        return wordWrap;
-    }
-
-    public String getItemName(IEntity value) {
-        return ((value == null) ? "" : value.getStringView());
     }
 
     protected String getEntityHistoryToken(IEntity value) {
         return uriPrefix + value.getPrimaryKey();
     }
 
-}
-
-class NativeEntityHyperlink extends Anchor implements INativeEditableComponent<IEntity> {
-
-    private final Command comand;
-
-    private final CEntityHyperlink cHyperlink;
-
-    public NativeEntityHyperlink(final CEntityHyperlink hyperlink) {
-        super("&nbsp;", true);
-        this.cHyperlink = hyperlink;
-        setTabIndex(hyperlink.getTabIndex());
-
-        comand = new Command() {
-
-            @Override
-            public void execute() {
-                History.newItem(hyperlink.getEntityHistoryToken(cHyperlink.getValue()));
-            }
-        };
-
-        addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (isEnabled() && NativeEntityHyperlink.this.comand != null) {
-                    NativeEntityHyperlink.this.comand.execute();
-                }
-            }
-
-        });
-
-        addKeyUpHandler(new KeyUpHandler() {
-            @Override
-            public void onKeyUp(KeyUpEvent event) {
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER && isEnabled() && NativeEntityHyperlink.this.comand != null) {
-                    NativeEntityHyperlink.this.comand.execute();
-                }
-            }
-        });
-
-    }
-
-    @Override
-    public CComponent<?> getCComponent() {
-        return cHyperlink;
-    }
-
-    @Override
-    public void setWordWrap(boolean wrap) {
-        getElement().getStyle().setProperty("whiteSpace", wrap ? "normal" : "nowrap");
-    }
-
-    @Override
-    public boolean isEditable() {
-        return false;
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-    }
-
-    @Override
-    public void setNativeValue(IEntity value) {
-        setHTML("&nbsp;" + cHyperlink.getItemName(value) + "&nbsp;");
-    }
-
-    @Override
-    public void setValid(boolean valid) {
-    }
-
-    @Override
-    public IEntity getNativeValue() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
 }
