@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 
-public class VistaReadOnlyComponentFactory extends EntityFormComponentFactory {
+public class VistaViewersComponentFactory extends EntityFormComponentFactory {
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {

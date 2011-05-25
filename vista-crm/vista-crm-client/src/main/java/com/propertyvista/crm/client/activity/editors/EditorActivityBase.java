@@ -63,7 +63,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void populate() {
-        if (service != null) {
+        if (service != null && !entityId.equals(CrmSiteMap.ARG_VALUE_NEW_ITEM)) {
             service.retrieve(new AsyncCallback<E>() {
 
                 @Override

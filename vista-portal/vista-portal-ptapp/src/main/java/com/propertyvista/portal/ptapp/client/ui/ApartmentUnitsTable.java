@@ -65,7 +65,7 @@ import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.ptapp.client.ui.components.VistaReadOnlyComponentFactory;
+import com.propertyvista.portal.ptapp.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 public class ApartmentUnitsTable extends CEntityFolder<AptUnitDTO> {
@@ -84,7 +84,7 @@ public class ApartmentUnitsTable extends CEntityFolder<AptUnitDTO> {
 
     private final List<EntityFolderColumnDescriptor> columns;
 
-    private final VistaReadOnlyComponentFactory factory = new VistaReadOnlyComponentFactory();
+    private final VistaViewersComponentFactory factory = new VistaViewersComponentFactory();
 
     private final ValueChangeHandler<AptUnitDTO> selectedUnitChangeHandler;
 

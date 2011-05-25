@@ -27,6 +27,7 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
@@ -85,6 +86,17 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
 
     @Override
     protected FolderDecorator<E> createFolderDecorator() {
-        return new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add " + itemName), editable);
+        if (place != null) {
+            CrmTableFolderDecorator<E> decor = new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add new " + itemName), editable);
+            decor.addNewItemClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    AppSite.getPlaceController().goTo(CrmSiteMap.formNewItemPlace(place));
+                }
+            });
+            return decor;
+        } else {
+            return new TableFolderDecorator<E>(columns(), CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add new " + itemName), editable);
+        }
     }
 }

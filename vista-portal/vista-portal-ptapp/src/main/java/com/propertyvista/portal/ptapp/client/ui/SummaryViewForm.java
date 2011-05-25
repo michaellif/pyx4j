@@ -69,7 +69,7 @@ import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
-import com.propertyvista.portal.ptapp.client.ui.components.VistaReadOnlyComponentFactory;
+import com.propertyvista.portal.ptapp.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
@@ -96,7 +96,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
     private TenantsTable tenantsTable;
 
     public SummaryViewForm() {
-        super(Summary.class, new VistaReadOnlyComponentFactory());
+        super(Summary.class, new VistaViewersComponentFactory());
     }
 
     public SummaryViewPresenter getPresenter() {
