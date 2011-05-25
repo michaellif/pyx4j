@@ -29,9 +29,9 @@ import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
@@ -39,10 +39,11 @@ import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.domain.CampaignTriger;
 
 public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements PaymentService {
+
     private final static Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<PaymentInfo> callback, Long tenantId) {
+    public void retrieve(AsyncCallback<PaymentInfo> callback, String tenantId) {
         log.debug("Retrieving PaymentInfo for tenant {}", tenantId);
         EntityQueryCriteria<PaymentInfo> criteria = EntityQueryCriteria.create(PaymentInfo.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));

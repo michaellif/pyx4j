@@ -125,7 +125,7 @@ public class ApartmentUnitsTable extends CEntityFolder<AptUnitDTO> {
         createFloorplanRaw(availableUnits);
     }
 
-    AptUnitDTO setSelectedUnit(Long unitId, Integer selectedLeaseTerm) {
+    AptUnitDTO setSelectedUnit(String unitId, Integer selectedLeaseTerm) {
         AptUnitDTO unitToSelect = null;
         if (unitId != null) {
             AptUnitDTO unit = EntityFactory.create(AptUnitDTO.class);

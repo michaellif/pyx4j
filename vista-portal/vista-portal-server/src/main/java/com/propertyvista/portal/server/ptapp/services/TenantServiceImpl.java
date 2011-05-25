@@ -18,25 +18,26 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
-import com.propertyvista.portal.rpc.ptapp.services.TenantService;
-import com.propertyvista.portal.server.campaign.CampaignManager;
-import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
-import com.propertyvista.server.domain.CampaignTriger;
-
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.portal.domain.ptapp.Charges;
+import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.rpc.ptapp.services.TenantService;
+import com.propertyvista.portal.server.campaign.CampaignManager;
+import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
+import com.propertyvista.server.domain.CampaignTriger;
+
 public class TenantServiceImpl extends ApplicationEntityServiceImpl implements TenantService {
+
     private final static Logger log = LoggerFactory.getLogger(TenantServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<PotentialTenantList> callback, Long tenantId) {
+    public void retrieve(AsyncCallback<PotentialTenantList> callback, String tenantId) {
         log.info("Retrieving tenant list");
 
         PotentialTenantList tenants = findApplicationEntity(PotentialTenantList.class);

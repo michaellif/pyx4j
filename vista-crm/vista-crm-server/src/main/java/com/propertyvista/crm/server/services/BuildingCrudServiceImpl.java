@@ -39,7 +39,7 @@ public class BuildingCrudServiceImpl implements BuildingCrudService {
     }
 
     @Override
-    public void retrieve(AsyncCallback<BuildingDTO> callback, long entityId) {
+    public void retrieve(AsyncCallback<BuildingDTO> callback, String entityId) {
         Building building = PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, entityId);
         callback.onSuccess(GenericConverter.up(building, BuildingDTO.class));
     }

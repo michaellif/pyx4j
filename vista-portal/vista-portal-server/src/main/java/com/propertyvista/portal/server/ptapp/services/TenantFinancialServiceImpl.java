@@ -30,10 +30,11 @@ import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl implements TenantFinancialService {
+
     private final static Logger log = LoggerFactory.getLogger(TenantFinancialServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<PotentialTenantFinancial> callback, Long tenantId) {
+    public void retrieve(AsyncCallback<PotentialTenantFinancial> callback, String tenantId) {
         log.debug("Retrieving summary for tenant {}", tenantId);
         EntityQueryCriteria<PotentialTenantFinancial> criteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenantId));
@@ -55,7 +56,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
         callback.onSuccess(tenantFinancial);
     }
 
-    private PotentialTenantFinancial createFinancial(Long tenantId) {
+    private PotentialTenantFinancial createFinancial(String tenantId) {
         Application application = PtAppContext.getCurrentUserApplication();
 
         EntityQueryCriteria<PotentialTenantInfo> criteria = EntityQueryCriteria.create(PotentialTenantInfo.class);

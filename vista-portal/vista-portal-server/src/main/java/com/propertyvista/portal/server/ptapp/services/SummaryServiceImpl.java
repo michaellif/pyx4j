@@ -51,7 +51,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
     private final static Logger log = LoggerFactory.getLogger(SummaryServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<Summary> callback, Long tenantId) {
+    public void retrieve(AsyncCallback<Summary> callback, String tenantId) {
         log.info("Retrieving summary for tenant {}", tenantId);
         callback.onSuccess(retrieveSummary());
     }

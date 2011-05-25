@@ -17,6 +17,7 @@ import java.sql.Date;
 
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
@@ -126,6 +127,10 @@ public interface AptUnitItem extends IEntity {
             return I18nEnum.tr(this);
         }
     }
+
+    //TODO VladS. use this for join
+    @Owner
+    AptUnit parent();
 
     // ----------- Info --------------------------
 

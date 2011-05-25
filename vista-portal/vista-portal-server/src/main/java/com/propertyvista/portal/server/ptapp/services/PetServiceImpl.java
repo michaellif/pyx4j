@@ -32,10 +32,11 @@ import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class PetServiceImpl extends ApplicationEntityServiceImpl implements PetService {
+
     private final static Logger log = LoggerFactory.getLogger(PetServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<Pets> callback, Long tenantId) {
+    public void retrieve(AsyncCallback<Pets> callback, String tenantId) {
         log.info("Retrieving pets for tenant {}", tenantId);
         EntityQueryCriteria<Pets> criteria = EntityQueryCriteria.create(Pets.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));

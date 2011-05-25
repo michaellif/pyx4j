@@ -61,7 +61,7 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
         return this;
     }
 
-    protected Long getCurrentTenantId() {
+    protected String getCurrentTenantId() {
         return null;
     }
 

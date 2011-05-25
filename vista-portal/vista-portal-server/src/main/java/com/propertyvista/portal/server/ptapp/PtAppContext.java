@@ -17,10 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
-import com.propertyvista.portal.domain.ptapp.Application;
-import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
-import com.propertyvista.server.common.security.VistaContext;
-
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
@@ -28,13 +24,17 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
+import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
+import com.propertyvista.server.common.security.VistaContext;
+
 public class PtAppContext extends VistaContext {
 
     private final static Logger log = LoggerFactory.getLogger(PtAppContext.class);
 
     private static I18n i18n = I18nFactory.getI18n();
 
-    public static Long getCurrentUserApplicationPrimaryKey() {
+    public static String getCurrentUserApplicationPrimaryKey() {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn())) {
             log.trace("no session");

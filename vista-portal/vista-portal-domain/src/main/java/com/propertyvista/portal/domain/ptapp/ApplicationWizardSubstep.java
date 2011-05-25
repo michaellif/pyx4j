@@ -13,16 +13,16 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep.Status;
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep.Status;
 
 public interface ApplicationWizardSubstep extends IEntity {
 
     IPrimitive<String> name();
 
-    IPrimitive<Long> placeArgument();
+    IPrimitive<String> placeArgument();
 
     IPrimitive<Status> status();
 }

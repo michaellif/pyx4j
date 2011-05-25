@@ -27,16 +27,16 @@ import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.server.download.MimeMap;
+
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.server.domain.ApplicationDocumentData;
-
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.server.download.MimeMap;
 
 public class UploadServlet extends UploadAction {
 
@@ -107,7 +107,7 @@ public class UploadServlet extends UploadAction {
                 throw new UploadActionException("Content type resolved by file name extension (" + contentType
                         + ") does not match to one passed with the upload request (" + fileItem.getContentType() + ")");
             }
-            PotentialTenantInfo tenant = PersistenceServicesFactory.getPersistenceService().retrieve(PotentialTenantInfo.class, new Long(tenantId));
+            PotentialTenantInfo tenant = PersistenceServicesFactory.getPersistenceService().retrieve(PotentialTenantInfo.class, tenantId);
             if (tenant == null) {
                 throw new UploadActionException("Unknown tenantId: " + tenantId);
             }

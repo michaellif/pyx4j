@@ -37,7 +37,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
     private final static Logger log = LoggerFactory.getLogger(ChargesServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<Charges> callback, Long tenantId) {
+    public void retrieve(AsyncCallback<Charges> callback, String tenantId) {
         log.debug("Retrieving charges for tenant {}", tenantId);
         EntityQueryCriteria<Charges> criteria = EntityQueryCriteria.create(Charges.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));

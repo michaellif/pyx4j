@@ -44,12 +44,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
-import com.propertyvista.portal.domain.ptapp.ApplicationDocument.DocumentType;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
-import com.propertyvista.portal.rpc.ptapp.ServletMapping;
-
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
@@ -64,13 +58,19 @@ import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 
+import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
+import com.propertyvista.portal.domain.ptapp.ApplicationDocument.DocumentType;
+import com.propertyvista.portal.ptapp.client.resources.PortalImages;
+import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
+import com.propertyvista.portal.rpc.ptapp.ServletMapping;
+
 public class ApplicationDocumentsFolderUploader extends CEntityFolder<ApplicationDocument> {
 
     private static I18n i18n = I18nFactory.getI18n(ApplicationDocumentsFolderUploader.class);
 
     private final DocumentType documentType;
 
-    private Long tenantId;
+    private String tenantId;
 
     public ApplicationDocumentsFolderUploader(DocumentType documentType) {
         super(ApplicationDocument.class);
@@ -120,7 +120,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
         super.removeItem(comp, folderItemDecorator);
     }
 
-    public void setTenantID(Long id) {
+    public void setTenantID(String id) {
         tenantId = id;
     }
 
@@ -207,7 +207,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
                 if (uploader.getStatus() == Status.SUCCESS) {
                     ApplicationDocument newDocument = EntityFactory.create(ApplicationDocument.class);
                     newDocument.type().setValue(documentType);
-                    newDocument.dataId().setValue(Long.parseLong(uploader.getServerInfo().message));
+                    newDocument.dataId().setValue(uploader.getServerInfo().message);
                     newDocument.filename().setValue(uploader.getServerInfo().name);
                     newDocument.fileSize().setValue((long) uploader.getServerInfo().size);
                     // add new document to the folder-list:

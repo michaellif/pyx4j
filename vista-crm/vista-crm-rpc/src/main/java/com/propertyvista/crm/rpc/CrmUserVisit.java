@@ -23,7 +23,7 @@ public class CrmUserVisit extends UserVisit {
 
     }
 
-    public CrmUserVisit(Long principalPrimaryKey, String name) {
+    public CrmUserVisit(String principalPrimaryKey, String name) {
         super(principalPrimaryKey, name);
     }
 

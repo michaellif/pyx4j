@@ -43,7 +43,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
     private final static Logger log = LoggerFactory.getLogger(ApartmentServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<UnitSelection> callback, Long tenantId) {
+    public void retrieve(AsyncCallback<UnitSelection> callback, String tenantId) {
         EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         UnitSelection unitSelection = secureRetrieve(criteria);

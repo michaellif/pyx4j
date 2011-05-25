@@ -39,7 +39,7 @@ public class UnitCrudServiceImpl implements UnitCrudService {
     }
 
     @Override
-    public void retrieve(AsyncCallback<AptUnitDTO> callback, long entityId) {
+    public void retrieve(AsyncCallback<AptUnitDTO> callback, String entityId) {
         AptUnit building = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, entityId);
         callback.onSuccess(GenericConverter.up(building, AptUnitDTO.class));
     }

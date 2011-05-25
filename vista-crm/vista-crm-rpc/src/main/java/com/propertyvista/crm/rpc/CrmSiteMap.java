@@ -24,9 +24,9 @@ public class CrmSiteMap implements SiteMap {
 
     public static String ARG_NAME_ITEM_ID = "ItemID";
 
-    public static AppPlace formItemPlace(AppPlace itemPlace, long itemID) {
+    public static AppPlace formItemPlace(AppPlace itemPlace, String itemID) {
         HashMap<String, String> args = new HashMap<String, String>();
-        args.put(CrmSiteMap.ARG_NAME_ITEM_ID, String.valueOf(itemID));
+        args.put(CrmSiteMap.ARG_NAME_ITEM_ID, itemID);
         itemPlace.setArgs(args);
         return itemPlace;
     }

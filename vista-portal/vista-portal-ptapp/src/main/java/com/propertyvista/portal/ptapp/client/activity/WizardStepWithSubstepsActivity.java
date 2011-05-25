@@ -13,13 +13,13 @@
  */
 package com.propertyvista.portal.ptapp.client.activity;
 
+import com.pyx4j.entity.shared.IEntity;
+
 import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
 import com.propertyvista.portal.ptapp.client.ui.WizardStepPresenter;
 import com.propertyvista.portal.ptapp.client.ui.WizardStepView;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.AbstractWizardService;
-
-import com.pyx4j.entity.shared.IEntity;
 
 abstract class WizardStepWithSubstepsActivity<E extends IEntity & IBoundToApplication, T extends WizardStepPresenter<E>> extends WizardStepActivity<E, T> {
 
@@ -28,15 +28,13 @@ abstract class WizardStepWithSubstepsActivity<E extends IEntity & IBoundToApplic
     }
 
     @Override
-    protected Long getCurrentTenantId() {
+    protected String getCurrentTenantId() {
         // get secondary step argument (should be tenant ID for Info and Financial views):
         if (currentPlace != null) {
-            String stepArg = currentPlace.getArgs().get(PtSiteMap.STEP_ARG_NAME);
-            if (stepArg != null) {
-                return Long.valueOf(stepArg);
-            }
+            return currentPlace.getArgs().get(PtSiteMap.STEP_ARG_NAME);
+        } else {
+            return null;
         }
-        return null;
     }
 
 }

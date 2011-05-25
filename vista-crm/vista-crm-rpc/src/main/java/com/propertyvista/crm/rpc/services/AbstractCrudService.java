@@ -24,7 +24,7 @@ public interface AbstractCrudService<EditableEntity extends IEntity> extends ISe
 
     public void create(AsyncCallback<EditableEntity> callback, EditableEntity editableEntity);
 
-    public void retrieve(AsyncCallback<EditableEntity> callback, long entityId);
+    public void retrieve(AsyncCallback<EditableEntity> callback, String entityId);
 
     public void save(AsyncCallback<EditableEntity> callback, EditableEntity editableEntity);
 

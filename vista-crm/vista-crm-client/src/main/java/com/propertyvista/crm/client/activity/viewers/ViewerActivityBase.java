@@ -34,7 +34,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final AbstractCrudService<E> service;
 
-    private long entityId = -1;
+    private String entityId;
 
     @Inject
     public ViewerActivityBase(IViewerView<E> view, AbstractCrudService<E> service) {
@@ -46,9 +46,8 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     public ViewerActivityBase<E> withPlace(Place place) {
         String stepArg = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
         if (stepArg != null) {
-            entityId = Long.valueOf(stepArg);
+            entityId = stepArg;
         }
-
         return this;
     }
 

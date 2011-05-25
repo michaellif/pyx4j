@@ -31,7 +31,7 @@ public interface UnitSelection extends IEntity, IBoundToApplication {
     @Transient
     AvailableUnitsByFloorplan availableUnits();
 
-    IPrimitive<Long> selectedUnitId();
+    IPrimitive<String> selectedUnitId();
 
     IPrimitive<Integer> selectedLeaseTerm();
 

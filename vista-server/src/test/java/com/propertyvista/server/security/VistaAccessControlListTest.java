@@ -22,6 +22,15 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.security.EntityPermission;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.IServiceExecutePermission;
+import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.unit.server.mock.TestLifecycle;
+
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.portal.domain.ptapp.Application;
@@ -48,15 +57,6 @@ import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-
-import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.IServiceExecutePermission;
-import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.unit.server.mock.TestLifecycle;
 
 public class VistaAccessControlListTest {
 
@@ -158,11 +158,11 @@ public class VistaAccessControlListTest {
 
     @Test
     public void tenantApplicationEntityInstanceAccess() {
-        TestLifecycle.testSession(new PtUserVisit(-101L, "bob"), VistaBehavior.POTENTIAL_TENANT);
+        TestLifecycle.testSession(new PtUserVisit("-101", "bob"), VistaBehavior.POTENTIAL_TENANT);
         TestLifecycle.beginRequest();
 
         Application application = EntityFactory.create(Application.class);
-        application.setPrimaryKey(-251L);
+        application.setPrimaryKey("-251");
         PtAppContext.setCurrentUserApplication(application);
 
         assertEntityPermission(true, ApplicationProgress.class, application);
@@ -177,7 +177,7 @@ public class VistaAccessControlListTest {
         assertEntityPermission(true, PaymentInfo.class, application);
 
         Application application2 = EntityFactory.create(Application.class);
-        application2.setPrimaryKey(-252L);
+        application2.setPrimaryKey("-252");
         assertEntityPermission(false, ApplicationProgress.class, application2);
         assertEntityPermission(false, UnitSelection.class, application2);
         assertEntityPermission(false, ApplicationDocument.class, application2);

@@ -33,7 +33,7 @@ public interface ApplicationDocument extends IEntity, IBoundToApplication {
     @MemberColumn(name = "tp")
     IPrimitive<DocumentType> type();
 
-    IPrimitive<Long> dataId();
+    IPrimitive<String> dataId();
 
     IPrimitive<String> filename();
 

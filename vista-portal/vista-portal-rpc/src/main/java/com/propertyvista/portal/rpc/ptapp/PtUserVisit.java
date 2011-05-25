@@ -17,23 +17,23 @@ import com.pyx4j.security.shared.UserVisit;
 
 public class PtUserVisit extends UserVisit {
 
-    private static final long serialVersionUID = -7071001051604793203L;
+    private static final long serialVersionUID = -7071001051604793204L;
 
-    private Long applicationPrimaryKey;
+    private String applicationPrimaryKey;
 
     protected PtUserVisit() {
 
     }
 
-    public PtUserVisit(Long principalPrimaryKey, String name) {
+    public PtUserVisit(String principalPrimaryKey, String name) {
         super(principalPrimaryKey, name);
     }
 
-    public Long getApplicationPrimaryKey() {
+    public String getApplicationPrimaryKey() {
         return applicationPrimaryKey;
     }
 
-    public void setApplicationPrimaryKey(Long applicationPrimaryKey) {
+    public void setApplicationPrimaryKey(String applicationPrimaryKey) {
         this.applicationPrimaryKey = applicationPrimaryKey;
     }
 
