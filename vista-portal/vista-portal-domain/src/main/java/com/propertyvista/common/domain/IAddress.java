@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.common.domain.ref.Country;
@@ -25,7 +26,7 @@ import com.propertyvista.common.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.common.domain.ref.ProvinceReferenceAdapter;
 
-public interface IAddress {
+public interface IAddress extends IEntity {
 
     @Caption(name = "Address 1")
     @NotNull

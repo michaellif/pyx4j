@@ -69,7 +69,7 @@ public class Converter {
     public static PropertyDTO convert(Building from) {
         PropertyDTO to = EntityFactory.create(PropertyDTO.class);
         to.id().set(from.id());
-        to.address().setValue(from.info().address().getStringView());
+        to.address().street1().set(from.info().address().streetName());
         //to.location().setValue(value);
 
         // List of Floorplans

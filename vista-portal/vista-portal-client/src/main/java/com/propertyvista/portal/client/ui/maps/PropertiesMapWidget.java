@@ -112,7 +112,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
 
     private Marker createMarker(final PropertyDTO property) {
         MarkerOptions markerOptions = MarkerOptions.newInstance();
-        markerOptions.setTitle(property.address().getValue());
+        markerOptions.setTitle(property.address().getStringView());
 
         Icon icon = Icon.newInstance(PortalImages.INSTANCE.mapMarker().getURL());
         //TODO get shadow URL

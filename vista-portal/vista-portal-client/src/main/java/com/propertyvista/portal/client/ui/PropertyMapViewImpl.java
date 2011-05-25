@@ -152,7 +152,7 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
         }
 
         private Widget formatAddressCell(final PropertyDTO property) {
-            String address = property.address().getValue();
+            String address = property.address().getStringView();
             FlowPanel cell = new FlowPanel();
             if (address == null)
                 return cell;

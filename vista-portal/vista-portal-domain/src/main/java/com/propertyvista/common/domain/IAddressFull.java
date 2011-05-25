@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
@@ -27,7 +28,7 @@ import com.propertyvista.common.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.common.domain.ref.ProvinceReferenceAdapter;
 
-public interface IAddressFull {
+public interface IAddressFull extends IEntity {
 
     IPrimitive<String> unitNumber();
 

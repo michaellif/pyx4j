@@ -19,10 +19,12 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.geo.GeoPoint;
 
+import com.propertyvista.common.domain.IAddress;
+
 @Transient
 public interface PropertyDTO extends IEntity {
 
-    IPrimitive<String> address();
+    IAddress address();
 
     IPrimitive<GeoPoint> location();
 

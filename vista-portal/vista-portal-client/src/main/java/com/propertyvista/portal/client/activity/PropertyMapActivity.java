@@ -21,14 +21,15 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ui.PropertyMapView;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.portal.client.ui.PropertyMapView;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class PropertyMapActivity extends AbstractActivity implements PropertyMapView.Presenter {
     PropertyMapView view;
@@ -49,12 +50,12 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
         List<PropertyDTO> properties = new ArrayList<PropertyDTO>();
         {
             PropertyDTO property = EntityFactory.create(PropertyDTO.class);
-            property.address().setValue("<div>320 Avenue Road</div><div>Toronto</div><div>ON M4V 2H3</div>");
+            property.address().street1().setValue("320 Avenue Road");
             property.location().setValue(new GeoPoint(43.697665, -79.402313));
             properties.add(property);
 
             property = EntityFactory.create(PropertyDTO.class);
-            property.address().setValue("<div>1000 Yonge Street</div><div>Toronto</div><div>ON M4W</div>");
+            property.address().street1().setValue("1000 Yonge Street");
             property.location().setValue(new GeoPoint(43.675599, -79.389042));
 
             properties.add(property);
