@@ -96,6 +96,7 @@ public abstract class LogInPanel extends BaseLogInPanel {
                     String devLoginUserPrefix = null;
                     int max = 1;
                     switch (event.getNativeKeyCode()) {
+                    case 'Q':
                     case 'A':
                         devLoginUserPrefix = DemoData.CRM_ADMIN_USER_PREFIX;
                         max = 1;

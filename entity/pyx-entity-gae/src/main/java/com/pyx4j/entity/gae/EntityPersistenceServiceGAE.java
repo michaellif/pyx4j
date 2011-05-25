@@ -673,33 +673,34 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public String getPropertyName(EntityMeta meta, Path path) {
-        StringBuilder propertyName = new StringBuilder();
-        final int pathLength = path.getPathMembers().size();
-        EntityMeta em = meta;
-        MemberMeta mm = null;
-        int count = 0;
-        for (String memberName : path.getPathMembers()) {
-            //TODO ICollection support
-            if (mm != null) {
-                Class<?> valueClass = mm.getValueClass();
-                if (!(IEntity.class.isAssignableFrom(valueClass))) {
-                    throw new RuntimeException("Invalid member in path " + memberName);
-                } else {
-                    em = EntityFactory.getEntityMeta((Class<? extends IEntity>) valueClass);
-                }
-            }
-            mm = em.getMemberMeta(memberName);
-            count++;
-            propertyName.append(memberName);
-            if (pathLength != count) {
-                if (!mm.isEmbedded()) {
-                    log.warn("Path {}; not implemented", path);
-                    throw new RuntimeException("Invalid member in path " + memberName);
-                }
-                propertyName.append("_");
-            }
-        }
-        return propertyName.toString();
+        return path.toString();
+//        StringBuilder propertyName = new StringBuilder();
+//        final int pathLength = path.getPathMembers().size();
+//        EntityMeta em = meta;
+//        MemberMeta mm = null;
+//        int count = 0;
+//        for (String memberName : path.getPathMembers()) {
+//            //TODO ICollection support
+//            if (mm != null) {
+//                Class<?> valueClass = mm.getValueClass();
+//                if (!(IEntity.class.isAssignableFrom(valueClass))) {
+//                    throw new RuntimeException("Invalid member in path " + memberName);
+//                } else {
+//                    em = EntityFactory.getEntityMeta((Class<? extends IEntity>) valueClass);
+//                }
+//            }
+//            mm = em.getMemberMeta(memberName);
+//            count++;
+//            propertyName.append(memberName);
+//            if (pathLength != count) {
+//                if (!mm.isEmbedded()) {
+//                    log.warn("Path {}; not implemented", path);
+//                    throw new RuntimeException("Invalid member in path " + memberName);
+//                }
+//                propertyName.append("_");
+//            }
+//        }
+//        return propertyName.toString();
     }
 
     private String getIEntityKind(IEntity iEntity) {
