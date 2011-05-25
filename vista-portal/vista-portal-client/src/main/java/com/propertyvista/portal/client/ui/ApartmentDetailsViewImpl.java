@@ -23,6 +23,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -34,6 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.geo.GeoPoint;
@@ -83,6 +85,16 @@ public class ApartmentDetailsViewImpl extends SimplePanel implements ApartmentDe
         leftPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Left);
         leftPanel.setWidth("35%");
 
+        //back to search
+        Anchor back = new Anchor("Back to Search");
+        back.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.navigTo(new PortalSiteMap.FindApartment.PropertyMap());
+            }
+        });
+        leftPanel.add(back);
+
         HTML label = new HTML("<span>" + i18n.tr("Apartment Details") + "</span>");
         label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.PageHeader);
         leftPanel.add(label);
@@ -95,6 +107,7 @@ public class ApartmentDetailsViewImpl extends SimplePanel implements ApartmentDe
         FlowPanel centerPanel = new FlowPanel();
         centerPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Center);
         centerPanel.setWidth("65%");
+
         DL dl = new DL();
         dl.setWidth("100%");
         dl.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.DL);
@@ -289,7 +302,7 @@ public class ApartmentDetailsViewImpl extends SimplePanel implements ApartmentDe
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    //   presenter.goToAppartmentDetails(property);
+                    presenter.goToUnitDetails((AptUnitDTO) null);
 
                 }
             });

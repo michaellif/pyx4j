@@ -117,7 +117,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.Content));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.SubContent));
+        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.SecondaryNavig));
         style.addProperty("margin", "5px");
         addStyle(style);
 
@@ -347,18 +347,6 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("border-bottom", "dotted 1px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.RowHeader));
-        style.addProperty("padding-bottom", "5px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Element));
-        style.addProperty("padding", "5px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Element) + " div.gwt-HTML");
-        style.addProperty("text-align", "center");
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.ButtonPanel));
         style.addProperty("padding-top", "10px");
         style.addProperty("border-top", "dotted 1px");
@@ -394,7 +382,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.DL));
-        style.addProperty("margin-top", "40px");
+        style.addProperty("margin-top", "50px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.DT));

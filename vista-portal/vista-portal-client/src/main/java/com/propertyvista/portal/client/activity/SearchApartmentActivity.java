@@ -18,7 +18,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.client.ui.SearchApartmentView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
@@ -39,12 +38,6 @@ public class SearchApartmentActivity extends AbstractActivity implements SearchA
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-
-    }
-
-    @Override
-    public void goToCityMap(Province province) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.CityMap());
 
     }
 

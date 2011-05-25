@@ -27,7 +27,8 @@ import com.propertyvista.portal.client.mvp.BottomActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
 import com.propertyvista.portal.client.mvp.LogoActivityMapper;
 import com.propertyvista.portal.client.mvp.MainNavigActivityMapper;
-import com.propertyvista.portal.client.mvp.SubContentActivityMapper;
+import com.propertyvista.portal.client.mvp.SecondaryNavigActivityMapper;
+import com.propertyvista.portal.client.mvp.StaticContentActivityMapper;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AppSiteView;
@@ -41,7 +42,7 @@ public class PortalView extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "PortalView";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Content, Header, Footer, MainNavig, Center, Main, Left, Right, Display, SubContent
+        Content, Header, Footer, MainNavig, Center, Main, Left, Right, Display, SecondaryNavig, StaticContent
     }
 
     @Inject
@@ -55,7 +56,9 @@ public class PortalView extends FlowPanel {
 
     BottomActivityMapper bottomActivityMapper,
 
-    SubContentActivityMapper subContentActivityMapper,
+    SecondaryNavigActivityMapper secondaryNavigActivityMapper,
+
+    StaticContentActivityMapper staticContentActivityMapper,
 
     Theme theme) {
 
@@ -97,13 +100,17 @@ public class PortalView extends FlowPanel {
         mainWrapper.setStyleName(prefix + StyleSuffix.Main);
         centerWrapper.add(mainWrapper);
 
-        DisplayPanel subContentDisplayPanel = new DisplayPanel();
-        subContentDisplayPanel.setStyleName(prefix + StyleSuffix.SubContent);
-        mainWrapper.add(subContentDisplayPanel);
+        DisplayPanel secondaryNavigDisplayPanel = new DisplayPanel();
+        secondaryNavigDisplayPanel.setStyleName(prefix + StyleSuffix.SecondaryNavig);
+        mainWrapper.add(secondaryNavigDisplayPanel);
 
         DisplayPanel contentDisplayPanel = new DisplayPanel();
         contentDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
         mainWrapper.add(contentDisplayPanel);
+
+        DisplayPanel statictDisplayPanel = new DisplayPanel();
+        statictDisplayPanel.setStyleName(prefix + StyleSuffix.StaticContent);
+        mainWrapper.add(statictDisplayPanel);
 
         //================== Footer ========================
         FlowPanel footerWrapper = new FlowPanel();
@@ -118,8 +125,9 @@ public class PortalView extends FlowPanel {
         bind(actionsActivityMapper, actionsDisplayPanel, eventBus);
         bind(mainNavigActivityMapper, mainNavigDisplayPanel, eventBus);
         bind(contentActivityMapper, contentDisplayPanel, eventBus);
-        bind(subContentActivityMapper, subContentDisplayPanel, eventBus);
+        bind(secondaryNavigActivityMapper, secondaryNavigDisplayPanel, eventBus);
         bind(bottomActivityMapper, bottomDisplayPanel, eventBus);
+        bind(staticContentActivityMapper, statictDisplayPanel, eventBus);
 
     }
 

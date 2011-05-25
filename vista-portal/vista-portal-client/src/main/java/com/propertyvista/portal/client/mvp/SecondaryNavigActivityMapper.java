@@ -18,30 +18,21 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.propertyvista.portal.client.activity.BackToSearchActivity;
 import com.propertyvista.portal.client.activity.ResidentsNavigActivity;
-import com.propertyvista.portal.client.activity.SearchApartmentActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class SubContentActivityMapper implements ActivityMapper {
+public class SecondaryNavigActivityMapper implements ActivityMapper {
 
     Provider<ResidentsNavigActivity> residentsNavigActivity;
 
-    Provider<SearchApartmentActivity> searchApartmentActivity;
-
-    Provider<BackToSearchActivity> backToSearchActivity;
-
     @Inject
-    public SubContentActivityMapper(Provider<ResidentsNavigActivity> residentsNavigActivity,
+    public SecondaryNavigActivityMapper(
 
-    Provider<SearchApartmentActivity> searchApartmentActivity,
+    Provider<ResidentsNavigActivity> residentsNavigActivity
 
-    Provider<BackToSearchActivity> backToSearchActivity) {
+    ) {
 
         this.residentsNavigActivity = residentsNavigActivity;
-        this.searchApartmentActivity = searchApartmentActivity;
-        this.backToSearchActivity = backToSearchActivity;
-
     }
 
     @Override
@@ -59,19 +50,6 @@ public class SubContentActivityMapper implements ActivityMapper {
 
             return residentsNavigActivity.get().withPlace(place);
 
-        } else if (place instanceof PortalSiteMap.FindApartment.CityMap ||
-
-        /* place instanceof PortalSiteMap.FindApartment.PropertyMap || */
-
-        place instanceof PortalSiteMap.FindApartment) {
-
-            return searchApartmentActivity.get().withPlace(place);
-
-        } else if (place instanceof PortalSiteMap.FindApartment.ApartmentDetails ||
-
-        place instanceof PortalSiteMap.FindApartment.UnitDetails) {
-
-            return backToSearchActivity.get().withPlace(place);
         }
 
         return null;

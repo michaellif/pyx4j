@@ -30,10 +30,8 @@ public class ViewModule extends AbstractGinModule {
         bind(FooterView.class).to(FooterViewImpl.class).in(Singleton.class);
         bind(MainNavigView.class).to(MainNavigViewImpl.class).in(Singleton.class);
         bind(TopRightActionsView.class).to(TopRightActionsViewImpl.class).in(Singleton.class);
-        bind(FindApartmentView.class).to(FindApartmentViewImpl.class).in(Singleton.class);
         bind(ResidentsView.class).to(ResidentsViewImpl.class).in(Singleton.class);
         bind(LoginView.class).to(LoginViewImpl.class).in(Singleton.class);
-        bind(CityMapView.class).to(CityMapViewImpl.class).in(Singleton.class);
         bind(PropertyMapView.class).to(PropertyMapViewImpl.class).in(Singleton.class);
         bind(TenantProfileView.class).to(TenantProfileViewImpl.class).in(Singleton.class);
         bind(MaintenanceView.class).to(MaintenanceViewImpl.class).in(Singleton.class);
@@ -43,7 +41,6 @@ public class ViewModule extends AbstractGinModule {
         bind(ApartmentDetailsView.class).to(ApartmentDetailsViewImpl.class).in(Singleton.class);
         bind(UnitDetailsView.class).to(UnitDetailsViewImpl.class).in(Singleton.class);
         bind(SearchApartmentView.class).to(SearchApartmentViewImpl.class).in(Singleton.class);
-        bind(BackToSearchView.class).to(BackToSearchViewImpl.class).in(Singleton.class);
         bind(AboutUsView.class).to(AboutUsViewImpl.class).in(Singleton.class);
         bind(HomeView.class).to(HomeViewImpl.class).in(Singleton.class);
 

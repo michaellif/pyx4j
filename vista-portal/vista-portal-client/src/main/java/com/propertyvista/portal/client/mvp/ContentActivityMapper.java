@@ -18,29 +18,22 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.propertyvista.portal.client.activity.AboutUsActivity;
 import com.propertyvista.portal.client.activity.ApartmentDetailsActivity;
-import com.propertyvista.portal.client.activity.CityMapActivity;
-import com.propertyvista.portal.client.activity.FindApartmentActivity;
-import com.propertyvista.portal.client.activity.HomeActivity;
 import com.propertyvista.portal.client.activity.LoginActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
 import com.propertyvista.portal.client.activity.PaymentActivity;
 import com.propertyvista.portal.client.activity.PropertyMapActivity;
 import com.propertyvista.portal.client.activity.ResidentsActivity;
+import com.propertyvista.portal.client.activity.SearchApartmentActivity;
 import com.propertyvista.portal.client.activity.TenantProfileActivity;
 import com.propertyvista.portal.client.activity.UnitDetailsActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class ContentActivityMapper implements ActivityMapper {
 
-    Provider<FindApartmentActivity> findApartmentActivityProvider;
-
     Provider<ResidentsActivity> residentsActivityProvider;
 
     Provider<LoginActivity> loginActivityProvider;
-
-    Provider<CityMapActivity> cityMapActivity;
 
     Provider<PropertyMapActivity> propertyMapActivity;
 
@@ -54,18 +47,14 @@ public class ContentActivityMapper implements ActivityMapper {
 
     Provider<PaymentActivity> paymentActivity;
 
-    Provider<AboutUsActivity> aboutActivity;
-
-    Provider<HomeActivity> homeActivity;
+    Provider<SearchApartmentActivity> searchApartmentActivity;
 
     @Inject
-    public ContentActivityMapper(Provider<FindApartmentActivity> findApartmentActivityProvider,
+    public ContentActivityMapper(
 
     Provider<ResidentsActivity> residentsActivityProvider,
 
     Provider<LoginActivity> loginActivityProvider,
-
-    Provider<CityMapActivity> cityMapActivity,
 
     Provider<PropertyMapActivity> propertyMapActivity,
 
@@ -79,34 +68,28 @@ public class ContentActivityMapper implements ActivityMapper {
 
     Provider<PaymentActivity> paymentActivity,
 
-    Provider<AboutUsActivity> aboutActivity,
-
-    Provider<HomeActivity> homeActivty) {
+    Provider<SearchApartmentActivity> searchApartmentActivity) {
         super();
-        this.findApartmentActivityProvider = findApartmentActivityProvider;
         this.residentsActivityProvider = residentsActivityProvider;
         this.loginActivityProvider = loginActivityProvider;
-        this.cityMapActivity = cityMapActivity;
         this.propertyMapActivity = propertyMapActivity;
         this.apartmentDetailsActivity = apartmentDetailsActivity;
         this.tenantProfileActivity = tenantProfileActivity;
         this.maintenanceActivity = maintenanceActivity;
         this.paymentActivity = paymentActivity;
-        this.aboutActivity = aboutActivity;
-        this.homeActivity = homeActivty;
+        this.searchApartmentActivity = searchApartmentActivity;
+        this.unitDetailsActivity = unitDetailsActivity;
 
     }
 
     @Override
     public Activity getActivity(Place place) {
         if (place instanceof PortalSiteMap.FindApartment) {
-            return findApartmentActivityProvider.get().withPlace(place);
+            return searchApartmentActivity.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.Residents) {
             return residentsActivityProvider.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.Residents.Login) {
             return loginActivityProvider.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.FindApartment.CityMap) {
-            return cityMapActivity.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.FindApartment.PropertyMap) {
             return propertyMapActivity.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.FindApartment.ApartmentDetails) {
@@ -119,10 +102,8 @@ public class ContentActivityMapper implements ActivityMapper {
             return maintenanceActivity.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.Residents.Navigator.Payment) {
             return paymentActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.AboutUs) {
-            return aboutActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.Home) {
-            return homeActivity.get().withPlace(place);
+        } else if (place instanceof PortalSiteMap.FindApartment.UnitDetails) {
+            return unitDetailsActivity.get().withPlace(place);
         }
         return null;
 

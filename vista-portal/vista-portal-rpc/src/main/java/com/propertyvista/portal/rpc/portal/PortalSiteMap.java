@@ -31,11 +31,6 @@ public class PortalSiteMap implements SiteMap {
     @NavigationItem(navigLabel = "FindApartment")
     public static class FindApartment extends AppPlace {
 
-        @PlaceProperties(caption = "Found Cities")
-        @NavigationItem(navigLabel = "cityMap")
-        public static class CityMap extends AppPlace {
-        }
-
         @PlaceProperties(caption = "Found Properties")
         @NavigationItem(navigLabel = "propertyMap")
         public static class PropertyMap extends AppPlace {

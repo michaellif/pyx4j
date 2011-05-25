@@ -57,4 +57,9 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
         AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.UnitDetails());
     }
 
+    @Override
+    public void navigTo(Place place) {
+        AppSite.getPlaceController().goTo(place);
+    }
+
 }
