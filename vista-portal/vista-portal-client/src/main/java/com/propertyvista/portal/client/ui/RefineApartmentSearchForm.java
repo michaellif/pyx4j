@@ -20,14 +20,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteria> {
 
@@ -41,7 +41,7 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
 
     private PropertyMapView.Presenter presenter;
 
-    private VistaDecoratorsFlowPanel container;
+    private FlowPanel container;
 
     public RefineApartmentSearchForm() {
         super(PropertySearchCriteria.class);
@@ -49,31 +49,17 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
 
     @Override
     public IsWidget createContent() {
-        container = new VistaDecoratorsFlowPanel();
+        container = new FlowPanel();
         container.setStyleName(DEFAULT_STYLE_PREFIX);
 
-        HTML label = new HTML("<label>" + i18n.tr("LOCATION") + "</label>");
+        Label label = new Label(i18n.tr("LOCATION"));
         label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchHeader.name());
         container.add(label);
 
         addField(new CriteriaWidgetDecorator(inject(proto().province())));
-        addBrake();
         addField(new CriteriaWidgetDecorator(inject(proto().city())));
-        addBrake();
 
-        label = new HTML("<label>" + i18n.tr("REFINE SEARCH") + "</label>");
-        label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchHeader.name());
-        container.add(label);
-        addBrake();
-
-        addField(new CriteriaWidgetDecorator(inject(proto().price())));
-        addBrake();
-        addField(new CriteriaWidgetDecorator(inject(proto().numOfBeds())));
-        addBrake();
-        addField(new CriteriaWidgetDecorator(inject(proto().numOfBath())));
-        addBrake();
-
-        FlowPanel search = new FlowPanel();
+        FlowPanel searchPanel = new FlowPanel();
         Button searchBtn = new Button(i18n.tr("Search"));
         searchBtn.addClickHandler(new ClickHandler() {
             @Override
@@ -82,22 +68,37 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
             }
 
         });
-        search.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.ButtonPanel);
-        search.add(searchBtn);
-        container.add(search);
+        searchPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.ButtonPanel);
+        searchPanel.add(searchBtn);
+        container.add(searchPanel);
+
+        label = new Label(i18n.tr("REFINE SEARCH"));
+        label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchHeader.name());
+        container.add(label);
+
+        addField(new CriteriaWidgetDecorator(inject(proto().price())));
+        addField(new CriteriaWidgetDecorator(inject(proto().numOfBeds())));
+        addField(new CriteriaWidgetDecorator(inject(proto().numOfBath())));
+
+        FlowPanel updatePanel = new FlowPanel();
+        Button updateBtn = new Button(i18n.tr("Update"));
+        updateBtn.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.goToPropertyMap((PropertySearchCriteria) null);
+            }
+
+        });
+        updatePanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.ButtonPanel);
+        updatePanel.add(updateBtn);
+
+        container.add(updatePanel);
         return container;
     }
 
     private void addField(Widget widget) {
         widget.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
         container.add(widget);
-    }
-
-    private void addBrake() {
-        HTML lineBrake = new HTML("&nbsp;");
-        lineBrake.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.NONE);
-        lineBrake.getElement().getStyle().setProperty("clear", "both");
-        container.add(lineBrake);
     }
 
     public PropertyMapView.Presenter getPresenter() {

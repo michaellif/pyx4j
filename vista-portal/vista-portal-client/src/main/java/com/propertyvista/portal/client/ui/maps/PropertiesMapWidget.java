@@ -59,8 +59,8 @@ public class PropertiesMapWidget extends SimplePanel {
     private CircleOverlay distanceOverlay;
 
     public PropertiesMapWidget() {
-        setWidth("100%");
-        getElement().getStyle().setMarginTop(10, Unit.PX);
+        setSize("100%", "500px");
+
         getElement().getStyle().setMarginBottom(10, Unit.PX);
         GoogleAPI.ensureInitialized();
         AjaxLoader.loadApi("maps", "2", new Runnable() {
@@ -76,8 +76,9 @@ public class PropertiesMapWidget extends SimplePanel {
         LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
 
         map = new MapWidget(pos, 10);
-        map.setSize("100%", "500px");
         map.setScrollWheelZoomEnabled(true);
+        map.setSize("100%", "500px");
+
         //TODO
         //map.setStyleName();
 

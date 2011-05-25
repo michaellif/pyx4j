@@ -57,15 +57,16 @@ public class CriteriaWidgetDecorator extends VerticalPanel {
     private final SpaceHolder infoImageHolder;
 
     public CriteriaWidgetDecorator(final CComponent<?> component) {
-        this(component, 100, 100);
+        this(component, 160);
     }
 
-    public CriteriaWidgetDecorator(final CComponent<?> component, int labelWidth, int componentWidth) {
+    public CriteriaWidgetDecorator(final CComponent<?> component, int componentWidth) {
         this.component = component;
+        setStyleName(DEFAULT_STYLE_PREFIX);
 
         label = new Label(CommonsStringUtils.nvl(component.getTitle()));
         label.getElement().getStyle().setFloat(Float.LEFT);
-        label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
+        label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
         Cursor.setDefault(label.getElement());
 
         infoImageHolder = new SpaceHolder("16px");
@@ -82,13 +83,12 @@ public class CriteriaWidgetDecorator extends VerticalPanel {
         }
 
         FlowPanel labelLine = new FlowPanel();
-        labelLine.getElement().getStyle().setWidth(labelWidth, Unit.PX);
+        labelLine.getElement().getStyle().setWidth(100, Unit.PCT);
         labelLine.add(label);
         labelLine.add(infoImageHolder);
 
         validationLabel = new Label();
         validationLabel.getElement().getStyle().setFloat(Float.LEFT);
-        validationLabel.getElement().getStyle().setPaddingLeft(labelWidth, Unit.PX);
         validationLabel.getElement().getStyle().setMarginLeft(30, Unit.PX);
         validationLabel.getElement().getStyle().setColor("red");
 
@@ -117,7 +117,7 @@ public class CriteriaWidgetDecorator extends VerticalPanel {
 
         nativeComponentHolder.getElement().getStyle().setWidth(componentWidth, Unit.PX);
 
-        nativeComponentHolder.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
+        nativeComponentHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
         nativeComponentHolder.setWidget(nativeComponent);
 
         // put it together:

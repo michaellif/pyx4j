@@ -31,7 +31,7 @@ import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class SearchApartmentForm extends CEntityForm<PropertySearchCriteria> implements SearchApartmentView {
 
-    public static String DEFAULT_STYLE_PREFIX = "PortalViewSearchForm";
+    public static String DEFAULT_STYLE_PREFIX = "SearchApartment";
 
     private static I18n i18n = I18nFactory.getI18n(SearchApartmentViewImpl.class);
 
@@ -50,7 +50,7 @@ public class SearchApartmentForm extends CEntityForm<PropertySearchCriteria> imp
     @Override
     public IsWidget createContent() {
         container = new FlowPanel();
-        container.setWidth("440px");
+        container.setWidth("600px");
         container.setStyleName(DEFAULT_STYLE_PREFIX);
 
         addField(new CriteriaWidgetDecorator(inject(proto().province())));

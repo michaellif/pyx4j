@@ -13,22 +13,23 @@
  */
 package com.propertyvista.portal.client.themes;
 
+import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.style.ColorFactory;
+import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.widgets.client.style.Style;
+import com.pyx4j.widgets.client.style.ThemeColor;
+
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.portal.client.ui.ApartmentDetailsViewImpl;
+import com.propertyvista.portal.client.ui.CriteriaWidgetDecorator;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalView;
 import com.propertyvista.portal.client.ui.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.ResidentsNavigViewImpl;
 import com.propertyvista.portal.client.ui.SearchApartmentForm;
-
-import com.pyx4j.widgets.client.ListBox;
-import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColor;
 
 public abstract class PortalTheme extends com.propertyvista.common.client.theme.VistaTheme {
 
@@ -49,6 +50,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         initSearchPanelStyles();
         initRefineSearchStyles();
         initApartmentDetailsStyles();
+        initCriteriaWidgetDecoratorStyles();
     }
 
     @Override
@@ -310,6 +312,14 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
     }
 
+    private void initCriteriaWidgetDecoratorStyles() {
+        String prefix = CriteriaWidgetDecorator.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("padding", "10px");
+        addStyle(style);
+    }
+
     private void initSearchPanelStyles() {
         String prefix = SearchApartmentForm.DEFAULT_STYLE_PREFIX;
 
@@ -334,9 +344,8 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
     private void initRefineSearchStyles() {
         String prefix = RefineApartmentSearchForm.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("padding", "5px");
-        style.addProperty("margin", "5px");
-        style.addProperty("border", "1px solid");
+        style.addProperty("margin-right", "5px");
+        style.addProperty("border", "1px solid #ccc");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.SearchHeader));
@@ -344,11 +353,16 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("font-weight", "bold");
         style.addProperty("padding-top", "10px");
         style.addProperty("padding-bottom", "10px");
+        style.addProperty("margin-left", "10px");
+        style.addProperty("margin-right", "10px");
         style.addProperty("border-bottom", "dotted 1px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.ButtonPanel));
         style.addProperty("padding-top", "10px");
+        style.addProperty("padding-bottom", "10px");
+        style.addProperty("margin-left", "10px");
+        style.addProperty("margin-right", "10px");
         style.addProperty("border-top", "dotted 1px");
         style.addProperty("text-align", "center");
         addStyle(style);
