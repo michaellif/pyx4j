@@ -22,10 +22,12 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Button;
 
 import com.pyx4j.entity.client.ui.flex.BaseFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 
 public class CrmFolderItemDecorator extends BaseFolderItemDecorator {
+
     protected static I18n i18n = I18nFactory.getI18n(CrmFolderItemDecorator.class);
 
     protected final Button actionButton;
@@ -36,6 +38,12 @@ public class CrmFolderItemDecorator extends BaseFolderItemDecorator {
         actionButton.getElement().getStyle().setMarginLeft(2, Unit.EM);
         rowHolder.add(actionButton);
         setWidget(rowHolder);
+    }
+
+    @Override
+    public void setFolderItem(CEntityFolderItem<?> folderItem) {
+        folderItem.setEditable(false);
+        super.setFolderItem(folderItem);
     }
 
     @Override

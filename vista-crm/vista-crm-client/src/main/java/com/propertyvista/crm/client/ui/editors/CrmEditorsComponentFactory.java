@@ -27,6 +27,12 @@ import com.propertyvista.common.domain.ref.Country;
 
 public class CrmEditorsComponentFactory extends EntityFormComponentFactory {
 
+    /*
+     * TODO Mere with
+     * 
+     * @see com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory
+     */
+
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(Money.class)) {

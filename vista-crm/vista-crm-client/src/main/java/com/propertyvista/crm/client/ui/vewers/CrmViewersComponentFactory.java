@@ -15,11 +15,6 @@ package com.propertyvista.crm.client.ui.vewers;
 
 import java.util.Date;
 
-import com.propertyvista.common.client.ui.CMoneyLabel;
-import com.propertyvista.common.domain.financial.Money;
-import com.propertyvista.common.domain.ref.Country;
-import com.propertyvista.common.domain.ref.Province;
-
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -32,7 +27,18 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 
+import com.propertyvista.common.client.ui.CMoneyLabel;
+import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.common.domain.ref.Country;
+import com.propertyvista.common.domain.ref.Province;
+
 public class CrmViewersComponentFactory extends EntityFormComponentFactory {
+
+/*
+ * TODO Mere with
+ * 
+ * @see com.propertyvista.portal.ptapp.client.ui.components.VistaViewersComponentFactory
+ */
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
