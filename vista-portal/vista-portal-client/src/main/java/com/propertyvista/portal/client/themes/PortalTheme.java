@@ -325,6 +325,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("padding", "10px");
+        style.addProperty("border", "1px solid #ccc");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SearchApartmentForm.StyleSuffix.Row));

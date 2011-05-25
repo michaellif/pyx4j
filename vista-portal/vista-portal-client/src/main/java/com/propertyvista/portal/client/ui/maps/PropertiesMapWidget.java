@@ -16,11 +16,7 @@ package com.propertyvista.portal.client.ui.maps;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.gwt.ajaxloader.client.AjaxLoader;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.maps.client.InfoWindowContent;
-import com.google.gwt.maps.client.MapWidget;
-import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.geom.Point;
@@ -32,21 +28,15 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.CircleOverlay;
-import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.gwt.geo.MapUtils;
 
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 
-public class PropertiesMapWidget extends SimplePanel {
-
-    private MapWidget map;
-
-    private boolean mapLoadComplete = false;
+public class PropertiesMapWidget extends AbstractMapWidget {
 
     private final HashMap<PropertyDTO, Marker> markers = new HashMap<PropertyDTO, Marker>();
 
@@ -59,34 +49,13 @@ public class PropertiesMapWidget extends SimplePanel {
     private CircleOverlay distanceOverlay;
 
     public PropertiesMapWidget() {
-        setSize("100%", "500px");
-
-        getElement().getStyle().setMarginBottom(10, Unit.PX);
-        GoogleAPI.ensureInitialized();
-        AjaxLoader.loadApi("maps", "2", new Runnable() {
-            @Override
-            public void run() {
-                mapsLoaded();
-            }
-        }, null);
+        super("100%", "500px");
     }
 
-    private void mapsLoaded() {
+    @Override
+    protected void mapsLoaded() {
 
-        LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
-
-        map = new MapWidget(pos, 10);
-        map.setScrollWheelZoomEnabled(true);
-        map.setSize("100%", "500px");
-
-        //TODO
-        //map.setStyleName();
-
-        map.addControl(new LargeMapControl());
-
-        setWidget(map);
-
-        mapLoadComplete = true;
+        super.mapsLoaded();
 
         if (properties != null) {
             populate(properties);
@@ -101,42 +70,42 @@ public class PropertiesMapWidget extends SimplePanel {
     public void populate(List<PropertyDTO> properties) {
         this.properties = properties;
 
-        if (mapLoadComplete) {
+        if (isMapLoadComplete()) {
             for (Marker marker : markers.values()) {
-                map.removeOverlay(marker);
+                getMap().removeOverlay(marker);
             }
             markers.clear();
             for (PropertyDTO property : properties) {
                 Marker marker = createMarker(property);
                 if (marker != null) {
-                    map.addOverlay(marker);
+                    getMap().addOverlay(marker);
                     markers.put(property, marker);
                 }
             }
             //TODO calc base on  markers
-            map.setCenter(LatLng.newInstance(43.7571145, -79.5082499));
-            map.setZoomLevel(10);
+            getMap().setCenter(LatLng.newInstance(43.7571145, -79.5082499));
+            getMap().setZoomLevel(10);
         }
     }
 
     public void setDistanceOverlay(GeoPoint geoPoint, final double distance) {
         this.geoPoint = geoPoint;
         this.distance = distance;
-        if (mapLoadComplete) {
+        if (isMapLoadComplete()) {
             LatLng latLng = MapUtils.newLatLngInstance(geoPoint);
             if (distanceOverlay != null) {
-                map.removeOverlay(distanceOverlay);
+                getMap().removeOverlay(distanceOverlay);
                 distanceOverlay = null;
             }
             if (latLng != null && distance != 0) {
                 distanceOverlay = new CircleOverlay(latLng, distance, "green", 2, 0.4, "green", 0.1);
-                map.addOverlay(distanceOverlay);
+                getMap().addOverlay(distanceOverlay);
             }
             if (latLng != null) {
-                map.setCenter(latLng, 14 - (int) Math.ceil(Math.log(distance) / Math.log(2)));
+                getMap().setCenter(latLng, 14 - (int) Math.ceil(Math.log(distance) / Math.log(2)));
             } else {
                 LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
-                map.setCenter(pos, 10);
+                getMap().setCenter(pos, 10);
             }
         }
     }
@@ -172,7 +141,7 @@ public class PropertiesMapWidget extends SimplePanel {
     }
 
     public void showMarker(PropertyDTO property) {
-        map.getInfoWindow().open(markers.get(property), new InfoWindowContent(new PropertyInfo(property)));
+        getMap().getInfoWindow().open(markers.get(property), new InfoWindowContent(new PropertyInfo(property)));
     }
 
     class PropertyInfo extends DockPanel {

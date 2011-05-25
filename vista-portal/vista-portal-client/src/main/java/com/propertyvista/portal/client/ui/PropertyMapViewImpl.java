@@ -27,11 +27,11 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.widgets.client.style.IStyleSuffix;
+
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
-
-import com.pyx4j.geo.GeoPoint;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView {
 
@@ -70,7 +70,7 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
         searchResult.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchResult.name());
 
         map = new PropertiesMapWidget();
-        map.setDistanceOverlay(new GeoPoint(43.697665, -79.402313), 5);
+        //map.setDistanceOverlay(new GeoPoint(43.697665, -79.402313), 5);
         searchResult.add(map);
 
         buildingList = new BuildingList();

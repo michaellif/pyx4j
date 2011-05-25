@@ -32,14 +32,14 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
+
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.portal.client.ui.maps.PropertyMapWidget;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.geo.GeoPoint;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class ApartmentDetailsViewImpl extends SimplePanel implements ApartmentDetailsView {
 
@@ -99,10 +99,11 @@ public class ApartmentDetailsViewImpl extends SimplePanel implements ApartmentDe
         label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.PageHeader);
         leftPanel.add(label);
 
-        PropertiesMapWidget map = new PropertiesMapWidget();
-        map.setDistanceOverlay(new GeoPoint(43.697665, -79.402313), 1);
+        PropertyMapWidget map = new PropertyMapWidget();
         leftPanel.add(map);
+
         container.add(leftPanel);
+        map.populate(property);
 
         FlowPanel centerPanel = new FlowPanel();
         centerPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Center);
