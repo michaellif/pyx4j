@@ -7,19 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.editors;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
-public class UnitEditorViewImpl extends EditorViewImplBase<AptUnitDTO> implements IUnitEditorView {
+public class UnitItemEditorViewImpl extends EditorViewImplBase<AptUnitItem> implements IUnitItemEditorView {
 
-    public UnitEditorViewImpl() {
-        super(new CrmSiteMap.Editors.Unit());
-        setEditor(new UnitEditorForm());
+    public UnitItemEditorViewImpl() {
+        super(new CrmSiteMap.Editors.UnitItem());
+        setEditor(new UnitItemEditorForm());
     }
 }

@@ -25,24 +25,22 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
+import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Phone;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingEditorForm extends CEntityForm<BuildingDTO> {
+public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(BuildingEditorForm.class);
 
@@ -52,11 +50,6 @@ public class BuildingEditorForm extends CEntityForm<BuildingDTO> {
 
     public BuildingEditorForm(IEditableComponentFactory factory) {
         super(BuildingDTO.class, factory);
-    }
-
-    @Override
-    public boolean isEditable() {
-        return (this.factory instanceof CrmEditorsComponentFactory);
     }
 
     @Override
@@ -138,10 +131,7 @@ public class BuildingEditorForm extends CEntityForm<BuildingDTO> {
     }
 
     private CEntityFolder<Phone> createPhonesListEditor() {
-
-        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Building() : new CrmSiteMap.Viewers.Building());
-        return new CrmEntityFolder<Phone>(Phone.class, "Phone", isEditable(), placeToGo) {
-
+        return new CrmEntityFolder<Phone>(Phone.class, proto().contacts().phoneList().getFieldName(), isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();

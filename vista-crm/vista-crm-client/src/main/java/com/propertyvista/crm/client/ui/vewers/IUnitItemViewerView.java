@@ -7,22 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 17, 2011
- * @author vlads
+ * Created on 2011-05-24
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.crm.client.ui.vewers;
 
-import java.util.Vector;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+public interface IUnitItemViewerView extends IViewerView<AptUnitItem> {
 
-import com.propertyvista.domain.property.asset.building.Building;
-
-@Deprecated
-public interface BuildingCrudServiceOld extends AbstractCrudService<Building> {
-
-    public void getTestBuildingNomberOne(AsyncCallback<Building> callback);
-
-    public void getTestBuildingsList(AsyncCallback<Vector<Building>> callback);
 }

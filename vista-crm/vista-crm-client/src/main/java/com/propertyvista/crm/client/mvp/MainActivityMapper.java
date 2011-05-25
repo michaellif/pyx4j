@@ -30,10 +30,12 @@ import com.propertyvista.crm.client.activity.ResetPasswordActivity;
 import com.propertyvista.crm.client.activity.SettingsActivity;
 import com.propertyvista.crm.client.activity.editors.BuildingEditorActivity;
 import com.propertyvista.crm.client.activity.editors.UnitEditorActivity;
+import com.propertyvista.crm.client.activity.editors.UnitItemEditorActivity;
 import com.propertyvista.crm.client.activity.listers.ArrearsListerActivity;
 import com.propertyvista.crm.client.activity.listers.BuildingListerActivity;
 import com.propertyvista.crm.client.activity.listers.UnitListerActivity;
 import com.propertyvista.crm.client.activity.viewers.BuildingViewerActivity;
+import com.propertyvista.crm.client.activity.viewers.UnitItemViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.UnitViewerActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
@@ -56,6 +58,10 @@ public class MainActivityMapper implements ActivityMapper {
     Provider<UnitViewerActivity> unitViewerActivityProvider;
 
     Provider<UnitEditorActivity> unitEditorActivityProvider;
+
+    Provider<UnitItemViewerActivity> unitItemViewerActivityProvider;
+
+    Provider<UnitItemEditorActivity> unitItemEditorActivityProvider;
 
     Provider<ArrearsListerActivity> arrearsListerActivityProvider;
 
@@ -94,6 +100,10 @@ public class MainActivityMapper implements ActivityMapper {
 
     final Provider<UnitEditorActivity> unitEditorActivityProvider,
 
+    final Provider<UnitItemViewerActivity> unitItemViewerActivityProvider,
+
+    final Provider<UnitItemEditorActivity> unitItemEditorActivityProvider,
+
     final Provider<ArrearsListerActivity> arrearsListerActivityProvider,
 
     final Provider<DashboardActivity> dashboardActivityProvider,
@@ -117,6 +127,8 @@ public class MainActivityMapper implements ActivityMapper {
         this.unitListerActivityProvider = unitListerActivityProvider;
         this.unitViewerActivityProvider = unitViewerActivityProvider;
         this.unitEditorActivityProvider = unitEditorActivityProvider;
+        this.unitItemViewerActivityProvider = unitItemViewerActivityProvider;
+        this.unitItemEditorActivityProvider = unitItemEditorActivityProvider;
         this.arrearsListerActivityProvider = arrearsListerActivityProvider;
         this.dashboardActivityProvider = dashboardActivityProvider;
         this.reportActivityProvider = reportActivityProvider;
@@ -148,11 +160,15 @@ public class MainActivityMapper implements ActivityMapper {
             return buildingViewerActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Viewers.Unit) {
             return unitViewerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Viewers.UnitItem) {
+            return unitItemViewerActivityProvider.get().withPlace(place);
 // Editors:      
         } else if (place instanceof CrmSiteMap.Editors.Building) {
             return buildingEditorActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Editors.Unit) {
             return unitEditorActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Editors.UnitItem) {
+            return unitItemEditorActivityProvider.get().withPlace(place);
 // Others:      
         } else if (place instanceof CrmSiteMap.Dashboard) {
             return dashboardActivityProvider.get().withPlace(place);

@@ -102,6 +102,12 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Unit")
         public static class Unit extends AppPlace {
         }
+
+        @PlaceProperties(caption = "Unit Item")
+        @NavigationItem(navigLabel = "Unit Item")
+        public static class UnitItem extends AppPlace {
+
+        }
     }
 
     public static class Editors extends AppPlace {
@@ -113,6 +119,12 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Unit")
         @NavigationItem(navigLabel = "Unit")
         public static class Unit extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Unit Item")
+        @NavigationItem(navigLabel = "Unit Item")
+        public static class UnitItem extends AppPlace {
+
         }
     }
 

@@ -78,7 +78,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             }
         };
 
-        listPanel.setPageSize(30);
+// TODO just for development - less data to load:         
+        listPanel.setPageSize(10);
+//      listPanel.setPageSize(30);
 
         listPanel.setPrevActionHandler(new ClickHandler() {
             @Override
