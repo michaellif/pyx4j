@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
@@ -47,16 +48,19 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
 
     private final AppPlace place;
 
+    private final CEntityForm<?> parent;
+
     public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable) {
-        this(clazz, itemName, editable, null);
+        this(clazz, itemName, editable, null, null);
     }
 
-    public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable, AppPlace place) {
+    public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable, AppPlace place, CEntityForm<?> parent) {
         super(clazz);
         this.clazz = clazz;
         this.itemName = itemName;
         this.editable = editable;
         this.place = place;
+        this.parent = parent;
     }
 
     protected abstract List<EntityFolderColumnDescriptor> columns();
@@ -86,12 +90,12 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
 
     @Override
     protected FolderDecorator<E> createFolderDecorator() {
-        if (place != null) {
+        if (place != null && parent != null) {
             CrmTableFolderDecorator<E> decor = new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add new " + itemName), editable);
             decor.addNewItemClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    AppSite.getPlaceController().goTo(CrmSiteMap.formNewItemPlace(place));
+                    AppSite.getPlaceController().goTo(CrmSiteMap.formNewItemPlace(place, parent.getValue().getPrimaryKey()));
                 }
             });
             return decor;

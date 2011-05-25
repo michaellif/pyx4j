@@ -22,7 +22,9 @@ import com.pyx4j.site.shared.meta.SiteMap;
 
 public class CrmSiteMap implements SiteMap {
 
-    public static String ARG_NAME_ITEM_ID = "ItemID";
+    public static String ARG_NAME_ITEM_ID = "itemID";
+
+    public static String ARG_NAME_PARENT_ID = "parentID";
 
     public static String ARG_VALUE_NEW_ITEM = "new";
 
@@ -33,9 +35,10 @@ public class CrmSiteMap implements SiteMap {
         return itemPlace;
     }
 
-    public static AppPlace formNewItemPlace(AppPlace itemPlace) {
+    public static AppPlace formNewItemPlace(AppPlace itemPlace, String parentID) {
         HashMap<String, String> args = new HashMap<String, String>();
         args.put(CrmSiteMap.ARG_NAME_ITEM_ID, ARG_VALUE_NEW_ITEM);
+        args.put(CrmSiteMap.ARG_NAME_PARENT_ID, parentID);
         itemPlace.setArgs(args);
         return itemPlace;
     }
