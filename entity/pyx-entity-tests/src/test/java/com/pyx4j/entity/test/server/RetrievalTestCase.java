@@ -229,7 +229,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         srv.persist(address);
 
-        Long primaryKey = address.getPrimaryKey();
+        String primaryKey = address.getPrimaryKey();
         Address address2 = srv.retrieve(Address.class, primaryKey);
         Assert.assertNotNull("retrieve", address2);
 
@@ -257,7 +257,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         srv.persist(address);
 
-        Long primaryKey = address.getPrimaryKey();
+        String primaryKey = address.getPrimaryKey();
         Address address2 = srv.retrieve(Address.class, primaryKey);
         Assert.assertNotNull("retrieve", address2);
 
@@ -336,7 +336,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         srv.persist(emp);
 
-        Long primaryKey = emp.getPrimaryKey();
+        String primaryKey = emp.getPrimaryKey();
         Employee emp2 = srv.retrieve(Employee.class, primaryKey);
         Assert.assertNotNull("retrieve", emp2);
 

@@ -175,7 +175,7 @@ public abstract class QueryTestCase extends DatastoreTestBase {
         Assert.assertEquals("Retr All List size", 1, departments2.size());
         Assert.assertEquals("Retr All department.name", deptName, departments2.get(0).name().getValue());
 
-        List<Long> departmentsIds = srv.queryKeys(criteria);
+        List<String> departmentsIds = srv.queryKeys(criteria);
         Assert.assertEquals("Retr Keys List size", 1, departmentsIds.size());
         Assert.assertEquals("Retr All department.id", department.getPrimaryKey(), departmentsIds.get(0));
 

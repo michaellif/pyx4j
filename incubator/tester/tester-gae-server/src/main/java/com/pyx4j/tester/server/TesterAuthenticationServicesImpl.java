@@ -34,7 +34,7 @@ public class TesterAuthenticationServicesImpl extends AuthenticationServicesImpl
 
         @Override
         public AuthenticationResponse execute(AuthenticationRequest request) {
-            Lifecycle.beginSession(new UserVisit(System.currentTimeMillis(), null), null);
+            Lifecycle.beginSession(new UserVisit("t" + System.currentTimeMillis(), null), null);
             return AuthenticationServicesImpl.createAuthenticationResponse(null);
         }
     }

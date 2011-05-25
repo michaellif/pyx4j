@@ -77,8 +77,8 @@ public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProc
                 entityCount = 0;
             }
             EntityQueryCriteria criteria = EntityQueryCriteria.create(entityClass);
-            ICursorIterator<Long> ci = PersistenceServicesFactory.getPersistenceService().queryKeys(encodedCursorRefference, criteria);
-            List<Long> primaryKeys = new Vector<Long>();
+            ICursorIterator<String> ci = PersistenceServicesFactory.getPersistenceService().queryKeys(encodedCursorRefference, criteria);
+            List<String> primaryKeys = new Vector<String>();
             while (ci.hasNext()) {
                 primaryKeys.add(ci.next());
                 boolean quotaExceeded = System.currentTimeMillis() - start > Consts.SEC2MSEC * 15;

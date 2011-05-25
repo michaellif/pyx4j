@@ -31,7 +31,7 @@ public class UserVisit implements Serializable {
 
     private static final long serialVersionUID = 4747659543319319301L;
 
-    private Long principalPrimaryKey;
+    private String principalPrimaryKey;
 
     private String name;
 
@@ -45,7 +45,7 @@ public class UserVisit implements Serializable {
 
     }
 
-    public UserVisit(Long principalPrimaryKey, String name) {
+    public UserVisit(String principalPrimaryKey, String name) {
         super();
         this.principalPrimaryKey = principalPrimaryKey;
         this.name = name;
@@ -73,11 +73,11 @@ public class UserVisit implements Serializable {
         this.email = email;
     }
 
-    public Long getPrincipalPrimaryKey() {
+    public String getPrincipalPrimaryKey() {
         return principalPrimaryKey;
     }
 
-    public void setPrincipalPrimaryKey(Long principalPrimaryKey) {
+    public void setPrincipalPrimaryKey(String principalPrimaryKey) {
         this.principalPrimaryKey = principalPrimaryKey;
     }
 

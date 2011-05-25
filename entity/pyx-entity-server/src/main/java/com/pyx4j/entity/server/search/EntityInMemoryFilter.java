@@ -28,9 +28,9 @@ import com.pyx4j.entity.shared.Path;
 
 public class EntityInMemoryFilter extends InMemoryFilter {
 
-    final Long searchValue;
+    final String searchValue;
 
-    public EntityInMemoryFilter(Path propertyPath, Long object) {
+    public EntityInMemoryFilter(Path propertyPath, String object) {
         super(propertyPath);
         searchValue = object;
     }

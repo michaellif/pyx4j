@@ -92,7 +92,7 @@ public abstract class ReferenceTestCase extends DatastoreTestBase {
 
         Province prov = EntityFactory.create(Province.class);
         prov.name().setValue("Ontario" + uniqueString());
-        prov.setPrimaryKey(new Long(1234567890));
+        prov.setPrimaryKey("1234567890");
 
         boolean saved = false;
         try {

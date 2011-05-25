@@ -26,9 +26,9 @@ public class EntityCollectionRequest<E extends IEntity> {
 
     private final Class<E> entityClass;
 
-    private final Iterable<Long> primaryKeys;
+    private final Iterable<String> primaryKeys;
 
-    public EntityCollectionRequest(Class<E> entityClass, Iterable<Long> primaryKeys) {
+    public EntityCollectionRequest(Class<E> entityClass, Iterable<String> primaryKeys) {
         this.entityClass = entityClass;
         this.primaryKeys = primaryKeys;
     }
@@ -37,7 +37,7 @@ public class EntityCollectionRequest<E extends IEntity> {
         return entityClass;
     }
 
-    public Iterable<Long> getPrimaryKeys() {
+    public Iterable<String> getPrimaryKeys() {
         return primaryKeys;
     }
 

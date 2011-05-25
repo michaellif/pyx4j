@@ -74,15 +74,15 @@ public class EntityEqualsTest extends InitializerTestCase {
 
         Department department1 = EntityFactory.create(Department.class);
         Employee employee1 = EntityFactory.create(Employee.class);
-        employee1.setPrimaryKey(1L);
+        employee1.setPrimaryKey("1");
         department1.employees().add(employee1);
-        department1.setPrimaryKey(11L);
+        department1.setPrimaryKey("11");
 
         Department department2 = EntityFactory.create(Department.class);
         Employee employee2 = EntityFactory.create(Employee.class);
-        employee2.setPrimaryKey(2L);
+        employee2.setPrimaryKey("2");
         department2.employees().add(employee2);
-        department2.setPrimaryKey(11L);
+        department2.setPrimaryKey("11");
 
         assertEquals("same key", department1, department2);
         assertEquals("same key same hashCode", department1.hashCode(), department2.hashCode());
@@ -90,14 +90,14 @@ public class EntityEqualsTest extends InitializerTestCase {
 
     public void testFullyEqual() {
         Task t1 = EntityFactory.create(Task.class);
-        t1.setPrimaryKey(Long.valueOf(22));
+        t1.setPrimaryKey("22");
         t1.description().setValue("Task1");
         t1.notes().add("Note 1");
         t1.notes().add("Note 2");
         t1.oldStatus().add(Status.SUSPENDED);
 
         Task t2 = EntityFactory.create(Task.class);
-        t2.setPrimaryKey(Long.valueOf(22));
+        t2.setPrimaryKey("22");
         t2.description().setValue("Task1");
         t2.notes().add("Note 1");
         t2.notes().add("Note 2");
@@ -122,7 +122,7 @@ public class EntityEqualsTest extends InitializerTestCase {
 
     public void testBusinessEqual() {
         Task t1 = EntityFactory.create(Task.class);
-        t1.setPrimaryKey(Long.valueOf(22));
+        t1.setPrimaryKey("22");
         t1.description().setValue("Task1");
 
         Task t2 = EntityFactory.create(Task.class);

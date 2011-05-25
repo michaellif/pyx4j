@@ -159,14 +159,13 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
             throw new RuntimeException("Missing args in URL");
         }
 
-        String entityIdStr = args.get(NavigUtils.ENTITY_ID);
+        String entityId = args.get(NavigUtils.ENTITY_ID);
 
-        if ("new".equals(entityIdStr)) {
+        if ("new".equals(entityId)) {
             backFromNewItem = 1;
             populateForm(null);
         } else {
             backFromNewItem = 0;
-            final long entityId = Long.parseLong(entityIdStr);
 
             AsyncCallback<IEntity> callback = new RecoverableAsyncCallback<IEntity>() {
 

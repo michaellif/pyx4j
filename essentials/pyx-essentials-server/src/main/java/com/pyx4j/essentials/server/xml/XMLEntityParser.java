@@ -91,7 +91,7 @@ public class XMLEntityParser {
                 entity.set(exists);
                 return entity;
             }
-            entity.setPrimaryKey(Long.valueOf(id));
+            entity.setPrimaryKey(id);
         }
 
         NodeList nodeList = node.getChildNodes();

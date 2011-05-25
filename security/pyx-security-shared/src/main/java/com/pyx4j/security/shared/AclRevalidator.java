@@ -31,6 +31,6 @@ public interface AclRevalidator {
      * @param aclTimeStamp
      * @return null if no changes are required
      */
-    public Set<Behavior> getCurrentBehaviours(Long principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp);
+    public Set<Behavior> getCurrentBehaviours(String principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp);
 
 }

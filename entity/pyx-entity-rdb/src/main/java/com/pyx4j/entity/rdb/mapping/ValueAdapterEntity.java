@@ -62,17 +62,17 @@ class ValueAdapterEntity implements ValueAdapter {
     @Override
     public int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException {
         IEntity childEntity = (IEntity) member.getMember(entity);
-        Long primaryKey = childEntity.getPrimaryKey();
+        String primaryKey = childEntity.getPrimaryKey();
         if (primaryKey == null) {
             if (!childEntity.isNull()) {
                 log.error("Saving non persisted reference {}", childEntity);
-                throw new Error("Saving non persisted reference " + member.getMemberMeta().getValueClass() + " " + member.getMemberMeta().getCaption() + " of "
-                        + entity.getEntityMeta().getCaption());
+                throw new Error("Saving non persisted reference " + member.getMemberMeta().getValueClass().getName() + " "
+                        + member.getMemberMeta().getCaption() + " of " + entity.getEntityMeta().getCaption());
             } else {
                 stmt.setNull(parameterIndex, sqlType);
             }
         } else {
-            stmt.setLong(parameterIndex, primaryKey);
+            stmt.setLong(parameterIndex, Long.valueOf(primaryKey));
         }
         return 1;
     }
@@ -80,11 +80,11 @@ class ValueAdapterEntity implements ValueAdapter {
     @Override
     public void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException {
         long value = rs.getLong(member.sqlName());
-        Long pk;
+        String pk;
         if (rs.wasNull()) {
             pk = null;
         } else {
-            pk = Long.valueOf(value);
+            pk = String.valueOf(value);
         }
         ((IEntity) member.getMember(entity)).setPrimaryKey(pk);
     }

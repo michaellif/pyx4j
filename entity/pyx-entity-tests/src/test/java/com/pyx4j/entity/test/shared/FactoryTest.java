@@ -86,11 +86,11 @@ public class FactoryTest extends InitializerTestCase {
     public void testEquals() {
         Employee employee1 = EntityFactory.create(Employee.class);
         employee1.firstName().setValue("Firstname1");
-        employee1.setPrimaryKey(123L);
+        employee1.setPrimaryKey("123");
 
         Employee employee2 = EntityFactory.create(Employee.class);
         employee2.firstName().setValue("Firstname2");
-        employee2.setPrimaryKey(123L);
+        employee2.setPrimaryKey("123");
         assertEquals("same key", employee1, employee2);
 
         Set<Employee> regularSet = new HashSet<Employee>();
@@ -106,12 +106,12 @@ public class FactoryTest extends InitializerTestCase {
         Department department = EntityFactory.create(Department.class);
         Employee employee1 = EntityFactory.create(Employee.class);
         employee1.firstName().setValue("Firstname1");
-        employee1.setPrimaryKey(1L);
+        employee1.setPrimaryKey("1");
         department.employees().add(employee1);
 
         Employee employee2 = EntityFactory.create(Employee.class);
         employee2.firstName().setValue("Firstname2");
-        employee2.setPrimaryKey(2L);
+        employee2.setPrimaryKey("2");
         department.employees().add(employee2);
 
         Employee employee3 = EntityFactory.create(Employee.class);
@@ -136,12 +136,12 @@ public class FactoryTest extends InitializerTestCase {
         }
 
         assertFalse("contains(emp3)", department.employees().contains(employee3));
-        employee3.setPrimaryKey(2L);
+        employee3.setPrimaryKey("2");
         assertEquals("same key (emp2 and emp3)", employee2, employee3);
         assertTrue("contains(emp3(emp2))", department.employees().contains(employee3));
 
-        employee2.setPrimaryKey(22L);
-        employee3.setPrimaryKey(22L);
+        employee2.setPrimaryKey("22");
+        employee3.setPrimaryKey("22");
         assertTrue("contains mod Key(emp3(emp2))", department.employees().contains(employee3));
     }
 

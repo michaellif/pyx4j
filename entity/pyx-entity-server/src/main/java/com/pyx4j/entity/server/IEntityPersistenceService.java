@@ -49,7 +49,7 @@ public interface IEntityPersistenceService {
 
     public void merge(IEntity entity);
 
-    public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey);
+    public <T extends IEntity> T retrieve(Class<T> entityClass, String primaryKey);
 
     /**
      * Fill all the information to already existing entity object that has only PK value
@@ -61,7 +61,7 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria);
 
-    public <T extends IEntity> Map<Long, T> retrieve(Class<T> entityClass, Iterable<Long> primaryKeys);
+    public <T extends IEntity> Map<String, T> retrieve(Class<T> entityClass, Iterable<String> primaryKeys);
 
     /**
      * This may be a join with secondary table in RDBMS
@@ -74,9 +74,9 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> ICursorIterator<T> query(String encodedCursorRefference, EntityQueryCriteria<T> criteria);
 
-    public <T extends IEntity> List<Long> queryKeys(EntityQueryCriteria<T> criteria);
+    public <T extends IEntity> List<String> queryKeys(EntityQueryCriteria<T> criteria);
 
-    public <T extends IEntity> ICursorIterator<Long> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria);
+    public <T extends IEntity> ICursorIterator<String> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria);
 
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria);
 
@@ -93,13 +93,13 @@ public interface IEntityPersistenceService {
     /**
      * Only delete one row, does not affect Owned entities e.g. no Cascade delete
      */
-    public <T extends IEntity> void delete(Class<T> entityClass, long primaryKey);
+    public <T extends IEntity> void delete(Class<T> entityClass, String primaryKey);
 
     /**
      * Only delete specified enties row, does not affect Owned entities e.g. no Cascade
      * delete
      */
-    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Long> primaryKeys);
+    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<String> primaryKeys);
 
     public <T extends IEntity> void truncate(Class<T> entityClass);
 

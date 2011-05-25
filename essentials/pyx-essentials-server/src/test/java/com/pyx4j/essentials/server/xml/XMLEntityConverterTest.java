@@ -49,14 +49,14 @@ public class XMLEntityConverterTest extends TestCase {
 
     private static Employee createData() {
         Employee employee = EntityFactory.create(Employee.class);
-        employee.setPrimaryKey(Long.valueOf(22));
+        employee.setPrimaryKey("22");
         employee.firstName().setValue("First Name");
         employee.employmentStatus().setValue(EmploymentStatus.FULL_TIME);
 
         employee.homeAddress().streetName().setValue("Home Street");
 
         Task t1 = EntityFactory.create(Task.class);
-        t1.setPrimaryKey(Long.valueOf(23));
+        t1.setPrimaryKey("23");
         t1.description().setValue("Task1");
         t1.notes().add("Note 1");
         t1.notes().add("Note 2");
@@ -65,7 +65,7 @@ public class XMLEntityConverterTest extends TestCase {
         employee.tasks().add(t1);
 
         Task t2 = EntityFactory.create(Task.class);
-        t2.setPrimaryKey(Long.valueOf(24));
+        t2.setPrimaryKey("24");
         t2.finished().setValue(Boolean.TRUE);
         t2.description().setValue("Task2");
         t2.notes().add("Note 21");
@@ -117,12 +117,12 @@ public class XMLEntityConverterTest extends TestCase {
 
     public void testAbstractMember() throws Exception {
         ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
-        ent1.setPrimaryKey(1L);
+        ent1.setPrimaryKey("1");
         ent1.name1().setValue("1");
         ent1.name().setValue("1.00");
 
         Concrete1Entity ent11 = EntityFactory.create(Concrete1Entity.class);
-        ent11.setPrimaryKey(11L);
+        ent11.setPrimaryKey("11");
         ent11.name1().setValue("1.1");
 
         ent1.refference().set(ent11);
@@ -136,16 +136,16 @@ public class XMLEntityConverterTest extends TestCase {
 
     public void testAbstractSetMember() throws Exception {
         RefferenceEntity rootEntity = EntityFactory.create(RefferenceEntity.class);
-        rootEntity.setPrimaryKey(0L);
+        rootEntity.setPrimaryKey("0");
 
         ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
-        ent1.setPrimaryKey(1L);
+        ent1.setPrimaryKey("1");
         ent1.name1().setValue("1");
         ent1.name().setValue("1.00");
         rootEntity.refferences().add(ent1);
 
         Concrete1Entity ent2 = EntityFactory.create(Concrete1Entity.class);
-        ent2.setPrimaryKey(2L);
+        ent2.setPrimaryKey("2");
         ent2.name1().setValue("2");
         ent2.name11().setValue("2.11");
         rootEntity.refferences().add(ent2);

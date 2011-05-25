@@ -170,7 +170,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
                 throw new RuntimeException("Missing args in URL");
             }
 
-            String entityIdStr = args.get(NavigUtils.PARENT_ID);
+            String entityId = args.get(NavigUtils.PARENT_ID);
 
             AsyncCallback<IEntity> callback = new RecoverableAsyncCallback<IEntity>() {
 
@@ -193,7 +193,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
                 }
             };
 
-            RPCManager.execute(EntityServices.Retrieve.class, EntityCriteriaByPK.create(Customer.class, Long.parseLong(entityIdStr)), callback);
+            RPCManager.execute(EntityServices.Retrieve.class, EntityCriteriaByPK.create(Customer.class, entityId), callback);
         } else {
             getEditorPanel().populateForm(order);
             getEditorPanel().get(getEditorPanel().proto().orderNumber()).setEditable(false);

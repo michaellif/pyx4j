@@ -87,7 +87,7 @@ public class RpcEntityServiceFilter implements IServiceFilter {
         nextValue: for (Map.Entry<String, Object> me : entity.getValue().entrySet()) {
             String memberName = me.getKey();
             if (memberName.equals(IEntity.PRIMARY_KEY)) {
-                if ((me.getValue() != null) && (!(me.getValue() instanceof Long))) {
+                if ((me.getValue() != null) && (!(me.getValue() instanceof String))) {
                     throw new Error("Data type corruption");
                 }
                 continue nextValue;

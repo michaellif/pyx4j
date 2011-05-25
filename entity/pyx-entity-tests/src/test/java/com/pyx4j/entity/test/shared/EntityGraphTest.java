@@ -39,13 +39,13 @@ public class EntityGraphTest extends InitializerTestCase {
 
         {
             Province prov = EntityFactory.create(Province.class);
-            prov.setPrimaryKey(1L);
+            prov.setPrimaryKey("1");
             rootEntity.province().add(prov);
         }
 
         {
             Province prov = EntityFactory.create(Province.class);
-            prov.setPrimaryKey(2L);
+            prov.setPrimaryKey("2");
             rootEntity.province().add(prov);
         }
 
@@ -98,11 +98,11 @@ public class EntityGraphTest extends InitializerTestCase {
     public void testDuplicationGraphIteration() {
         Employee emp = EntityFactory.create(Employee.class);
         Task task1 = EntityFactory.create(Task.class);
-        task1.setPrimaryKey(1L);
+        task1.setPrimaryKey("1");
         emp.tasks().add(task1);
 
         Task task2 = EntityFactory.create(Task.class);
-        task2.setPrimaryKey(1L);
+        task2.setPrimaryKey("1");
         emp.tasksSorted().add(task2);
 
         final Counter counter = EntityFactory.create(Counter.class);

@@ -54,11 +54,11 @@ public class RpcEntityServiceFilterTest extends TestCase {
         rootEntity.rpcTransientName().setValue("secret");
 
         GraphItem child1 = EntityFactory.create(GraphItem.class);
-        child1.setPrimaryKey(1L);
+        child1.setPrimaryKey("1");
         child1.rpcTransientName().setValue("secret");
 
         GraphItem child2 = EntityFactory.create(GraphItem.class);
-        child2.setPrimaryKey(1L);
+        child2.setPrimaryKey("1");
         child2.rpcTransientName().setValue("secret");
 
         rootEntity.child1().set(child1);

@@ -51,11 +51,10 @@ public class DatastoreAdminServicesImpl implements DatastoreAdminServices {
         @Override
         public AuthenticationResponse execute(AuthenticationRequest request) {
             if (Context.getSession() == null) {
-                Lifecycle.beginSession(new UserVisit(System.currentTimeMillis(), null), null);
+                Lifecycle.beginSession(new UserVisit("x" + String.valueOf(System.currentTimeMillis()), null), null);
             }
             return AuthenticationServicesImpl.createAuthenticationResponse(null);
         }
-
     }
 
     public static class RemoveAllDataDeferredImpl implements DatastoreAdminServices.RemoveAllDataDeferred {

@@ -54,7 +54,7 @@ public class BidirectionalRelationshipTest extends InitializerTestCase {
         assertEquals("Owner the same value", m.getValue(), c1.getMemberValue(c1.master().getFieldName()));
         assertTrue("Owner refferes to the same value", c1.getMemberValue(c1.master().getFieldName()) == m.getValue());
 
-        m.setPrimaryKey(76L);
+        m.setPrimaryKey("76");
         assertEquals("Owner ID Update", m.getPrimaryKey(), c1.master().getPrimaryKey());
 
         String c2Name = "c2";
@@ -87,7 +87,7 @@ public class BidirectionalRelationshipTest extends InitializerTestCase {
         assertEquals("set size", 1, org.departments().size());
 
         assertFalse("Owned now", department.organization().isNull());
-        org.setPrimaryKey(77L);
+        org.setPrimaryKey("77");
         assertEquals("Owner ID Update", org.getPrimaryKey(), department.organization().getPrimaryKey());
 
         Department orgDepartment = org.departments().iterator().next();

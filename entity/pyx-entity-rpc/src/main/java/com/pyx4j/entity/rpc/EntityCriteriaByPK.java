@@ -31,7 +31,7 @@ public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E
 
     private static final long serialVersionUID = -3985273227849938461L;
 
-    private long primaryKey;
+    private String primaryKey;
 
     protected EntityCriteriaByPK() {
 
@@ -45,7 +45,7 @@ public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E
         return new EntityCriteriaByPK<T>(entityClass);
     }
 
-    public static <T extends IEntity> EntityCriteriaByPK<T> create(Class<T> entityClass, long primaryKey) {
+    public static <T extends IEntity> EntityCriteriaByPK<T> create(Class<T> entityClass, String primaryKey) {
         EntityCriteriaByPK<T> c = new EntityCriteriaByPK<T>(entityClass);
         c.setPrimaryKey(primaryKey);
         return c;
@@ -66,11 +66,11 @@ public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E
         return c;
     }
 
-    public long getPrimaryKey() {
+    public String getPrimaryKey() {
         return primaryKey;
     }
 
-    public void setPrimaryKey(long primaryKey) {
+    public void setPrimaryKey(String primaryKey) {
         this.primaryKey = primaryKey;
     }
 

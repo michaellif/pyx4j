@@ -482,7 +482,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey) {
+    public <T extends IEntity> T retrieve(Class<T> entityClass, String primaryKey) {
         final T entity = EntityFactory.create(entityClass);
         entity.setPrimaryKey(primaryKey);
         if (retrieve(entity)) {
@@ -553,14 +553,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> Map<Long, T> retrieve(Class<T> entityClass, Iterable<Long> primaryKeys) {
+    public <T extends IEntity> Map<String, T> retrieve(Class<T> entityClass, Iterable<String> primaryKeys) {
         Connection connection = null;
-        Map<Long, T> entities = new HashMap<Long, T>();
+        Map<String, T> entities = new HashMap<String, T>();
         TableModel tm = null;
         try {
             connection = connectionProvider.getConnection();
             int count = 0;
-            for (long pk : primaryKeys) {
+            for (String pk : primaryKeys) {
                 final T entity = EntityFactory.create(entityClass);
                 entity.setPrimaryKey(pk);
                 if (count == 0) {
@@ -671,7 +671,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> List<Long> queryKeys(EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> List<String> queryKeys(EntityQueryCriteria<T> criteria) {
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
@@ -683,7 +683,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> ICursorIterator<Long> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> ICursorIterator<String> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -711,11 +711,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> void delete(Class<T> entityClass, long primaryKey) {
+    public <T extends IEntity> void delete(Class<T> entityClass, String primaryKey) {
         delete(EntityFactory.getEntityMeta(entityClass), primaryKey, null);
     }
 
-    private <T extends IEntity> void delete(EntityMeta entityMeta, long primaryKey, IEntity cascadedeleteDataEntity) {
+    private <T extends IEntity> void delete(EntityMeta entityMeta, String primaryKey, IEntity cascadedeleteDataEntity) {
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
@@ -726,7 +726,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     // cascadedeleteDataEntity is consistent with GAE implementation of delete(IEntity entity).
-    private <T extends IEntity> void cascadeDelete(Connection connection, EntityMeta entityMeta, long primaryKey, IEntity cascadedeleteDataEntity) {
+    private <T extends IEntity> void cascadeDelete(Connection connection, EntityMeta entityMeta, String primaryKey, IEntity cascadedeleteDataEntity) {
         if (trace) {
             log.info(Trace.enter() + "cascadeDelete {} id={}", entityMeta.getPersistenceName(), primaryKey);
         }
@@ -781,7 +781,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
             int count = 0;
             if (entities.size() > 0) {
-                List<Long> primaryKeys = new Vector<Long>();
+                List<String> primaryKeys = new Vector<String>();
                 for (T entity : entities) {
                     primaryKeys.add(entity.getPrimaryKey());
                     // TODO optimize
@@ -825,7 +825,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Long> primaryKeys) {
+    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<String> primaryKeys) {
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();

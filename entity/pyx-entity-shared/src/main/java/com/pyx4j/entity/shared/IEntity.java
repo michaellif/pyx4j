@@ -38,12 +38,12 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public static String CONCRETE_TYPE_DATA_ATTR = "$concrete";
 
-    public Long getPrimaryKey();
+    public String getPrimaryKey();
 
-    public void setPrimaryKey(Long pk);
+    public void setPrimaryKey(String pk);
 
     @Indexed
-    public IPrimitive<Long> id();
+    public IPrimitive<String> id();
 
     /**
      * @return true if only PrimaryKey present and other properties are empty or null

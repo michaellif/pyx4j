@@ -187,7 +187,7 @@ public class EntityMetaTest extends InitializerTestCase {
         ConcreteEntity root = EntityFactory.create(ConcreteEntity.class);
 
         Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
-        ent1.setPrimaryKey(11L);
+        ent1.setPrimaryKey("11");
 
         root.refference().set(ent1);
 

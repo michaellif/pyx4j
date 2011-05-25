@@ -67,7 +67,7 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IEntity> T get(Class<T> entityClass, Long primaryKey) {
+    public <T extends IEntity> T get(Class<T> entityClass, String primaryKey) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         Cached cached = meta.getAnnotation(Cached.class);
         if ((cached == null) || (disabled)) {
@@ -78,22 +78,22 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IEntity> Map<Long, T> get(Class<T> entityClass, Iterable<Long> primaryKeys) {
+    public <T extends IEntity> Map<String, T> get(Class<T> entityClass, Iterable<String> primaryKeys) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         Cached cached = meta.getAnnotation(Cached.class);
         if ((cached == null) || (disabled)) {
             return Collections.emptyMap();
         } else {
             Set<String> keys = new HashSet<String>();
-            for (Long primaryKey : primaryKeys) {
+            for (String primaryKey : primaryKeys) {
                 keys.add(meta.getEntityClass().getName() + primaryKey);
             }
             Map<String, Object> raw = getMemcache().getAll(keys);
             if (raw.isEmpty()) {
                 return Collections.emptyMap();
             }
-            Map<Long, T> ret = new HashMap<Long, T>();
-            for (Long primaryKey : primaryKeys) {
+            Map<String, T> ret = new HashMap<String, T>();
+            for (String primaryKey : primaryKeys) {
                 Object ent = raw.get(meta.getEntityClass().getName() + primaryKey);
                 if (ent != null) {
                     ret.put(primaryKey, (T) ent);
@@ -104,13 +104,13 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     }
 
     @Override
-    public Map<EntityCollectionRequest<IEntity>, Map<Long, IEntity>> get(Iterable<EntityCollectionRequest<IEntity>> requests) {
-        Map<EntityCollectionRequest<IEntity>, Map<Long, IEntity>> ret = new HashMap<EntityCollectionRequest<IEntity>, Map<Long, IEntity>>();
+    public Map<EntityCollectionRequest<IEntity>, Map<String, IEntity>> get(Iterable<EntityCollectionRequest<IEntity>> requests) {
+        Map<EntityCollectionRequest<IEntity>, Map<String, IEntity>> ret = new HashMap<EntityCollectionRequest<IEntity>, Map<String, IEntity>>();
         Set<String> allCacheKeys = new HashSet<String>();
         for (EntityCollectionRequest<IEntity> request : requests) {
             EntityMeta meta = EntityFactory.getEntityMeta(request.getEntityClass());
             if ((meta.getAnnotation(Cached.class) != null) && (!disabled)) {
-                for (Long primaryKey : request.getPrimaryKeys()) {
+                for (String primaryKey : request.getPrimaryKeys()) {
                     allCacheKeys.add(meta.getEntityClass().getName() + primaryKey);
                 }
             }
@@ -128,8 +128,8 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
             if ((cached == null) || (disabled) || (raw.isEmpty())) {
                 ret.put(request, Collections.EMPTY_MAP);
             } else {
-                Map<Long, IEntity> responce = new HashMap<Long, IEntity>();
-                for (Long primaryKey : request.getPrimaryKeys()) {
+                Map<String, IEntity> responce = new HashMap<String, IEntity>();
+                for (String primaryKey : request.getPrimaryKeys()) {
                     Object ent = raw.get(meta.getEntityClass().getName() + primaryKey);
                     if (ent != null) {
                         responce.put(primaryKey, (IEntity) ent);
@@ -190,7 +190,7 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     }
 
     @Override
-    public <T extends IEntity> void remove(Class<T> entityClass, Long primaryKey) {
+    public <T extends IEntity> void remove(Class<T> entityClass, String primaryKey) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         Cached cached = meta.getAnnotation(Cached.class);
         if ((cached != null) && (!disabled)) {
@@ -208,12 +208,12 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     }
 
     @Override
-    public <T extends IEntity> void remove(Class<T> entityClass, Iterable<Long> primaryKeys) {
+    public <T extends IEntity> void remove(Class<T> entityClass, Iterable<String> primaryKeys) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         Cached cached = meta.getAnnotation(Cached.class);
         if ((cached != null) && (!disabled)) {
             List<String> keys = new Vector<String>();
-            for (Long primaryKey : primaryKeys) {
+            for (String primaryKey : primaryKeys) {
                 keys.add(meta.getEntityClass().getName() + primaryKey);
             }
             getMemcache().delete(keys);

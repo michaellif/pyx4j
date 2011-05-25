@@ -149,24 +149,24 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     }
 
     @Override
-    public Long getPrimaryKey() {
+    public String getPrimaryKey() {
         Map<String, Object> v = getValue();
         if (v == null) {
             return null;
         } else {
-            return (Long) v.get(PRIMARY_KEY);
+            return (String) v.get(PRIMARY_KEY);
         }
     }
 
     @Override
-    public void setPrimaryKey(Long pk) {
+    public void setPrimaryKey(String pk) {
         ensureValue().put(PRIMARY_KEY, pk);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public IPrimitive<Long> id() {
-        return (IPrimitive<Long>) getMember(PRIMARY_KEY);
+    public IPrimitive<String> id() {
+        return (IPrimitive<String>) getMember(PRIMARY_KEY);
     }
 
     @SuppressWarnings("unchecked")
