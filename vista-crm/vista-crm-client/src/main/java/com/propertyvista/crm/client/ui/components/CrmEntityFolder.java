@@ -29,6 +29,7 @@ import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.resources.CrmImages;
@@ -69,10 +70,9 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
                 if (place != null) {
                     decor = new CrmFolderItemDecorator(i18n.tr("Remove " + itemName), editable);
                     decor.addItemClickHandler(new ClickHandler() {
-
                         @Override
                         public void onClick(ClickEvent event) {
-                            CrmSiteMap.formItemPlace(place, proto().getPrimaryKey());
+                            AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(place, getValue().getPrimaryKey()));
                         }
                     });
                 } else {

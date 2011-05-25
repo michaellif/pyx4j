@@ -39,7 +39,7 @@ public class CrmFolderItemDecorator extends BaseFolderItemDecorator {
     }
 
     @Override
-    public HandlerRegistration addItemClickHandler(final ClickHandler handler) {
+    public HandlerRegistration addItemClickHandler(ClickHandler handler) {
         return actionButton.addClickHandler(handler);
     }
 
