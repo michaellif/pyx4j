@@ -18,6 +18,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -42,6 +43,8 @@ public class CrmSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
+
+        DefaultErrorHandlerDialog.register();
 
         ginjector = GWT.create(CrmGinjector.class);
         getHistoryHandler().register(getPlaceController(), getEventBus(), new CrmSiteMap.Login());

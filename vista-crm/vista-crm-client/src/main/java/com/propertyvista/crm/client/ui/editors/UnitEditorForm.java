@@ -25,19 +25,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
@@ -126,8 +119,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "12em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().subType(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().subType(), "12em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().rank(), "3em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().rent(), "5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().deposit(), "5em"));
@@ -142,7 +135,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "45em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().description(), "35em"));
                 return columns;
             }
         };
@@ -157,8 +151,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                 List<EntityFolderColumnDescriptor> columns;
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().description(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().conditionNotes(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().conditionNotes(), "15em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().wallColour(), "8em"));
                 return columns;
             }
@@ -166,59 +160,34 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private CEntityFolder<Concession> createConcessionsListEditor() {
-        return new CEntityFolder<Concession>(Concession.class) {
-
-            private List<EntityFolderColumnDescriptor> columns;
-
-            {
+        return new CrmEntityFolder<Concession>(Concession.class, "Concession", isEditable()) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                List<EntityFolderColumnDescriptor> columns;
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "11em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().appliedTo(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().percentage(), "5em"));
-            }
-
-            @Override
-            protected FolderDecorator<Concession> createFolderDecorator() {
-                return new TableFolderDecorator<Concession>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add Concession"));
-            }
-
-            @Override
-            protected CEntityFolderItem<Concession> createItem() {
-                return new CEntityFolderRow<Concession>(Concession.class, columns) {
-
-                    @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove Concession"));
-                    }
-                };
+                columns.add(new EntityFolderColumnDescriptor(proto().status(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().start(), "8.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().end(), "8.2em"));
+                return columns;
             }
         };
     }
 
     private CEntityFolder<AddOn> createAddOnsListEditor() {
-        return new CEntityFolder<AddOn>(AddOn.class) {
-
-            private List<EntityFolderColumnDescriptor> columns;
-
-            {
+        return new CrmEntityFolder<AddOn>(AddOn.class, "Add-on", isEditable()) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                List<EntityFolderColumnDescriptor> columns;
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "40em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().term(), "5em"));
-            }
-
-            @Override
-            protected FolderDecorator<AddOn> createFolderDecorator() {
-                return new TableFolderDecorator<AddOn>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add add-on"));
-            }
-
-            @Override
-            protected CEntityFolderItem<AddOn> createItem() {
-                return new CEntityFolderRow<AddOn>(AddOn.class, columns) {
-
-                    @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove add-on"));
-                    }
-                };
+                columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
+                return columns;
             }
         };
     }

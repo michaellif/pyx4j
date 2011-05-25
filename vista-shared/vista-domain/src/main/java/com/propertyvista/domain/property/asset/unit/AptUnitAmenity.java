@@ -136,5 +136,5 @@ public interface AptUnitAmenity extends Amenity {
     IPrimitive<Type> type();
 
     @ToString(index = 1)
-    IPrimitive<Type> subType();
+    IPrimitive<SubType> subType();
 }

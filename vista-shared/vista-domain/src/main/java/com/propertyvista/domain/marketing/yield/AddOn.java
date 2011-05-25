@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.marketing.yield;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -33,7 +32,6 @@ public interface AddOn extends IEntity {
     IPrimitive<String> term();
 
     @Format("#0.00")
-    @Caption(name = "Estimated Value")
     @MemberColumn(name = "addOnValue")
     IPrimitive<Double> value();
 }
