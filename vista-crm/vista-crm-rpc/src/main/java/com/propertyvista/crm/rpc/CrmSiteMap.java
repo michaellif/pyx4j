@@ -108,6 +108,13 @@ public class CrmSiteMap implements SiteMap {
         public static class UnitItem extends AppPlace {
 
         }
+
+        @PlaceProperties(caption = "Concession")
+        @NavigationItem(navigLabel = "Concession")
+        public static class Concession extends AppPlace {
+
+        }
+
     }
 
     public static class Editors extends AppPlace {
@@ -126,6 +133,13 @@ public class CrmSiteMap implements SiteMap {
         public static class UnitItem extends AppPlace {
 
         }
+
+        @PlaceProperties(caption = "Concession")
+        @NavigationItem(navigLabel = "Concession")
+        public static class Concession extends AppPlace {
+
+        }
+
     }
 
     public static class Marketing extends AppPlace {

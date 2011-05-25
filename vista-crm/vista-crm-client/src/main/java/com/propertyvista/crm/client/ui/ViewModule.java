@@ -24,7 +24,9 @@ import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.crm.client.ui.editors.AccountView;
 import com.propertyvista.crm.client.ui.editors.AccountViewImpl;
 import com.propertyvista.crm.client.ui.editors.BuildingEditorViewImpl;
+import com.propertyvista.crm.client.ui.editors.ConcessionEditorViewImpl;
 import com.propertyvista.crm.client.ui.editors.IBuildingEditorView;
+import com.propertyvista.crm.client.ui.editors.IConcessionEditorView;
 import com.propertyvista.crm.client.ui.editors.IUnitEditorView;
 import com.propertyvista.crm.client.ui.editors.IUnitItemEditorView;
 import com.propertyvista.crm.client.ui.editors.SettingsView;
@@ -46,7 +48,9 @@ import com.propertyvista.crm.client.ui.login.RetrievePasswordViewImpl;
 import com.propertyvista.crm.client.ui.report.ReportView;
 import com.propertyvista.crm.client.ui.report.ReportViewImpl;
 import com.propertyvista.crm.client.ui.vewers.BuildingViewerViewImpl;
+import com.propertyvista.crm.client.ui.vewers.ConcessionViewerViewImpl;
 import com.propertyvista.crm.client.ui.vewers.IBuildingViewerView;
+import com.propertyvista.crm.client.ui.vewers.IConcessionViewerView;
 import com.propertyvista.crm.client.ui.vewers.IUnitItemViewerView;
 import com.propertyvista.crm.client.ui.vewers.IUnitViewerView;
 import com.propertyvista.crm.client.ui.vewers.UnitItemViewerViewImpl;
@@ -75,10 +79,12 @@ public class ViewModule extends AbstractGinModule {
         bind(IBuildingViewerView.class).to(BuildingViewerViewImpl.class).in(Singleton.class);
         bind(IUnitViewerView.class).to(UnitViewerViewImpl.class).in(Singleton.class);
         bind(IUnitItemViewerView.class).to(UnitItemViewerViewImpl.class).in(Singleton.class);
+        bind(IConcessionViewerView.class).to(ConcessionViewerViewImpl.class).in(Singleton.class);
 // Editors:      
         bind(IBuildingEditorView.class).to(BuildingEditorViewImpl.class).in(Singleton.class);
         bind(IUnitEditorView.class).to(UnitEditorViewImpl.class).in(Singleton.class);
         bind(IUnitItemEditorView.class).to(UnitItemEditorViewImpl.class).in(Singleton.class);
+        bind(IConcessionEditorView.class).to(ConcessionEditorViewImpl.class).in(Singleton.class);
 
         bind(ReportView.class).to(ReportViewImpl.class).in(Singleton.class);
         bind(DashboardView.class).to(DashboardViewImpl.class).in(Singleton.class);
