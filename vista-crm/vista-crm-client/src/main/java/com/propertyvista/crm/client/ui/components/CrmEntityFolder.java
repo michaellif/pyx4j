@@ -85,6 +85,6 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
 
     @Override
     protected FolderDecorator<E> createFolderDecorator() {
-        return new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add" + itemName), editable);
+        return new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add " + itemName), editable);
     }
 }
