@@ -82,7 +82,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             List<AptUnit> units = generator.createUnits(building, floorplans, DemoData.NUM_FLOORS, DemoData.NUM_UNITS_PER_FLOOR);
             unitCount += units.size();
             for (AptUnit unit : units) {
-                for (AptUnitOccupancy occupancy : unit.currentOccupancies()) {
+                for (AptUnitOccupancy occupancy : unit.occupancies()) {
                     persist(occupancy);
                 }
                 for (Utility utility : unit.info().utilities()) {

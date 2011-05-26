@@ -70,7 +70,7 @@ public class Importer {
         }
 
         for (AptUnit unit : mapper.getUnits()) {
-            for (AptUnitOccupancy occupancy : unit.currentOccupancies()) {
+            for (AptUnitOccupancy occupancy : unit.occupancies()) {
                 persist(occupancy);
             }
             for (Utility utility : unit.info().utilities()) {

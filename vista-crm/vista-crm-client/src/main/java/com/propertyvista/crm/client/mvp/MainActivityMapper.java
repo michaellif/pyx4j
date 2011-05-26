@@ -32,12 +32,14 @@ import com.propertyvista.crm.client.activity.editors.BuildingEditorActivity;
 import com.propertyvista.crm.client.activity.editors.ConcessionEditorActivity;
 import com.propertyvista.crm.client.activity.editors.UnitEditorActivity;
 import com.propertyvista.crm.client.activity.editors.UnitItemEditorActivity;
+import com.propertyvista.crm.client.activity.editors.UnitOccupancyEditorActivity;
 import com.propertyvista.crm.client.activity.listers.ArrearsListerActivity;
 import com.propertyvista.crm.client.activity.listers.BuildingListerActivity;
 import com.propertyvista.crm.client.activity.listers.UnitListerActivity;
 import com.propertyvista.crm.client.activity.viewers.BuildingViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.ConcessionViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.UnitItemViewerActivity;
+import com.propertyvista.crm.client.activity.viewers.UnitOccupancyViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.UnitViewerActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
@@ -64,6 +66,10 @@ public class MainActivityMapper implements ActivityMapper {
     Provider<UnitItemViewerActivity> unitItemViewerActivityProvider;
 
     Provider<UnitItemEditorActivity> unitItemEditorActivityProvider;
+
+    Provider<UnitOccupancyViewerActivity> unitOccupancyViewerActivityProvider;
+
+    Provider<UnitOccupancyEditorActivity> unitOccupancyEditorActivityProvider;
 
     Provider<ConcessionViewerActivity> concessionViewerActivityProvider;
 
@@ -110,6 +116,10 @@ public class MainActivityMapper implements ActivityMapper {
 
     final Provider<UnitItemEditorActivity> unitItemEditorActivityProvider,
 
+    final Provider<UnitOccupancyViewerActivity> unitOccupancyViewerActivityProvider,
+
+    final Provider<UnitOccupancyEditorActivity> unitOccupancyEditorActivityProvider,
+
     final Provider<ConcessionViewerActivity> concessionViewerActivityProvider,
 
     final Provider<ConcessionEditorActivity> concessionEditorActivityProvider,
@@ -139,6 +149,8 @@ public class MainActivityMapper implements ActivityMapper {
         this.unitEditorActivityProvider = unitEditorActivityProvider;
         this.unitItemViewerActivityProvider = unitItemViewerActivityProvider;
         this.unitItemEditorActivityProvider = unitItemEditorActivityProvider;
+        this.unitOccupancyViewerActivityProvider = unitOccupancyViewerActivityProvider;
+        this.unitOccupancyEditorActivityProvider = unitOccupancyEditorActivityProvider;
         this.concessionViewerActivityProvider = concessionViewerActivityProvider;
         this.concessionEditorActivityProvider = concessionEditorActivityProvider;
         this.arrearsListerActivityProvider = arrearsListerActivityProvider;
@@ -167,22 +179,29 @@ public class MainActivityMapper implements ActivityMapper {
             return unitListerActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Properties.Arrears) {
             return arrearsListerActivityProvider.get().withPlace(place);
-// Viewers:      
+// Viewers/Editors:      
         } else if (place instanceof CrmSiteMap.Viewers.Building) {
             return buildingViewerActivityProvider.get().withPlace(place);
-        } else if (place instanceof CrmSiteMap.Viewers.Unit) {
-            return unitViewerActivityProvider.get().withPlace(place);
-        } else if (place instanceof CrmSiteMap.Viewers.UnitItem) {
-            return unitItemViewerActivityProvider.get().withPlace(place);
-        } else if (place instanceof CrmSiteMap.Viewers.Concession) {
-            return concessionViewerActivityProvider.get().withPlace(place);
-// Editors:      
         } else if (place instanceof CrmSiteMap.Editors.Building) {
             return buildingEditorActivityProvider.get().withPlace(place);
+
+        } else if (place instanceof CrmSiteMap.Viewers.Unit) {
+            return unitViewerActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Editors.Unit) {
             return unitEditorActivityProvider.get().withPlace(place);
+
+        } else if (place instanceof CrmSiteMap.Viewers.UnitItem) {
+            return unitItemViewerActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Editors.UnitItem) {
             return unitItemEditorActivityProvider.get().withPlace(place);
+
+        } else if (place instanceof CrmSiteMap.Viewers.UnitOccupancy) {
+            return unitOccupancyViewerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Editors.UnitOccupancy) {
+            return unitOccupancyEditorActivityProvider.get().withPlace(place);
+
+        } else if (place instanceof CrmSiteMap.Viewers.Concession) {
+            return concessionViewerActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Editors.Concession) {
             return concessionEditorActivityProvider.get().withPlace(place);
 // Others:      

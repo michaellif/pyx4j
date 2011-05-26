@@ -41,6 +41,7 @@ import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
@@ -104,6 +105,9 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.add(new CrmHeaderDecorator(i18n.tr("Info Details")));
         main.add(inject(proto().info().details(), createDetailsListEditor()));
 
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().occupancies().getFieldName())));
+        main.add(inject(proto().occupancies(), createOccupanciesListEditor()));
+
         main.add(new CrmHeaderDecorator(i18n.tr(proto().concessions().getFieldName())));
         main.add(inject(proto().concessions(), createConcessionsListEditor()));
 
@@ -155,6 +159,22 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                 columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().conditionNotes(), "15em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().wallColour(), "8em"));
+                return columns;
+            }
+        };
+    }
+
+    private CEntityFolder<AptUnitOccupancy> createOccupanciesListEditor() {
+        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.UnitOccupancy() : new CrmSiteMap.Viewers.UnitOccupancy());
+        return new CrmEntityFolder<AptUnitOccupancy>(AptUnitOccupancy.class, "Unit Occupancy", isEditable(), placeToGo, this) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                List<EntityFolderColumnDescriptor> columns;
+                columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().dateFrom(), "8.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().dateTo(), "8.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().status(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().offMarket(), "8em"));
                 return columns;
             }
         };

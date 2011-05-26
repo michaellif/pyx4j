@@ -34,7 +34,7 @@ public interface AptUnit extends IEntity {
 	/**
 	 * Keeps current and future occupancy data
 	 */
-	IList<AptUnitOccupancy> currentOccupancies();
+	IList<AptUnitOccupancy> occupancies();
 
 	@Transient
 	IPrimitive<Double> numberOfOccupants();

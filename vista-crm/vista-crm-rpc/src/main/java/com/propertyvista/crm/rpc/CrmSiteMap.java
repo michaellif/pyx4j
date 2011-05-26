@@ -121,6 +121,12 @@ public class CrmSiteMap implements SiteMap {
 
         }
 
+        @PlaceProperties(caption = "Unit Occupancy")
+        @NavigationItem(navigLabel = "Unit Occupancy")
+        public static class UnitOccupancy extends AppPlace {
+
+        }
+
         @PlaceProperties(caption = "Concession")
         @NavigationItem(navigLabel = "Concession")
         public static class Concession extends AppPlace {
@@ -130,6 +136,7 @@ public class CrmSiteMap implements SiteMap {
     }
 
     public static class Editors extends AppPlace {
+
         @PlaceProperties(caption = "Building")
         @NavigationItem(navigLabel = "Building")
         public static class Building extends AppPlace {
@@ -143,6 +150,12 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Unit Item")
         @NavigationItem(navigLabel = "Unit Item")
         public static class UnitItem extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Unit Occupancy")
+        @NavigationItem(navigLabel = "Unit Occupancy")
+        public static class UnitOccupancy extends AppPlace {
 
         }
 

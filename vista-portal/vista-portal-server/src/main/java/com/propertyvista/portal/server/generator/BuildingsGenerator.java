@@ -374,7 +374,7 @@ public class BuildingsGenerator {
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
         occupancy.status().setValue(AptUnitOccupancy.StatusType.available);
         occupancy.dateFrom().setValue(new java.sql.Date(avalable.getTime().getTime()));
-        unit.currentOccupancies().add(occupancy);
+        unit.occupancies().add(occupancy);
 
         unit.marketing().floorplan().set(floorplan);
 

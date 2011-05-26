@@ -141,7 +141,7 @@ public class Mapper {
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
         occupancy.status().setValue(AptUnitOccupancy.StatusType.available);
         occupancy.dateFrom().setValue(new Date(availableUnit.getAvailable().getTime()));
-        unit.currentOccupancies().add(occupancy);
+        unit.occupancies().add(occupancy);
         unit.avalableForRent().setValue(occupancy.dateFrom().getValue()); // for consistency
 
         unit.info().building().set(building);

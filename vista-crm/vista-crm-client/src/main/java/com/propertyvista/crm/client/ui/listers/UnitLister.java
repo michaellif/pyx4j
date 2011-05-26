@@ -40,6 +40,6 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().area()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().bedrooms()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().bathrooms()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.currentOccupancies()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.occupancies()));
     }
 }
