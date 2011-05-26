@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -85,6 +86,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
         label = new Label(CommonsStringUtils.nvl(component.getTitle()));
         label.setHorizontalAlignment(decorData.labelAlignment);
+        label.ensureDebugId(new CompositeDebugId(component.getDebugId(), VistaDecoratorsIds.Label.name()).debugId());
 
         if (decorData.labelStyleName == null) {
             label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
@@ -120,7 +122,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
         validationLabel.getElement().getStyle().setPaddingLeft(decorData.labelWidth, decorData.labelUnit);
         validationLabel.getElement().getStyle().setMarginLeft(30, Unit.PX);
         validationLabel.getElement().getStyle().setColor("red");
-
+        validationLabel.ensureDebugId(new CompositeDebugId(component.getDebugId(), VistaDecoratorsIds.Validation.name()).debugId());
         nativeComponent = component.asWidget();
 
         if (component instanceof CEditableComponent) {

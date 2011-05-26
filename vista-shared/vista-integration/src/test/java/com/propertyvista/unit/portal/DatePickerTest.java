@@ -14,11 +14,8 @@
 package com.propertyvista.unit.portal;
 
 import java.text.Format;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -30,6 +27,7 @@ import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.datepicker.DatePickerIDs;
 
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsIds;
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
@@ -89,6 +87,7 @@ public class DatePickerTest extends WizardBaseSeleniumTestCase {
 
     private void validateValidationMessage() {
         Calendar calendar = Calendar.getInstance();
+        IDebugId validation = new CompositeDebugId(datePickerTextBoxId, VistaDecoratorsIds.Validation.name());
         calendar.set(2000, 1, 21);
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Apartment.class));
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, proto(AptUnitDTO.class).unitType()));
@@ -96,10 +95,14 @@ public class DatePickerTest extends WizardBaseSeleniumTestCase {
 
         navigateToDateAndClick(datePickerId, calendar);
         //TODO Leon
-        //assertVisible(validationwindow)
+        assertVisible(validation.debugId());
 
         //TODO Leon
-        //remove validation message and run test again
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, 1);
+        calendar.add(Calendar.DATE, -2);
+        navigateToDateAndClick(datePickerId, calendar);
+        assertNotVisible(validation.debugId());
     }
 
     private void validateDatePickerNavigation() {
@@ -142,13 +145,6 @@ public class DatePickerTest extends WizardBaseSeleniumTestCase {
 
     private String getMonth(Calendar calendar) {
         return DatePickerIDs.monthName[calendar.get(Calendar.MONTH)];
-    }
-
-    private int getMonth(String name) throws ParseException {
-        Date date = new SimpleDateFormat("MMMMM", Locale.ENGLISH).parse(name);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal.get(Calendar.MONTH);
     }
 
     private void navigateToDateAndClick(IDebugId id, Calendar calendar) {
