@@ -166,7 +166,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
 
         main.add(new ViewHeaderDecorator(proto().emergencyContacts()));
-        main.add(inject(proto().emergencyContacts(), createIncomeFolderEditor()));
+        main.add(inject(proto().emergencyContacts(), createEmergencyContactFolderEditor()));
 
         main.setWidth("800px");
 
@@ -444,7 +444,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
     }
 
-    private CEntityFolder<EmergencyContact> createIncomeFolderEditor() {
+    private CEntityFolder<EmergencyContact> createEmergencyContactFolderEditor() {
 
         return new CEntityFolder<EmergencyContact>(EmergencyContact.class) {
 

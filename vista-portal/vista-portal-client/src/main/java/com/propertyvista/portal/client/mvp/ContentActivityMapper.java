@@ -35,7 +35,7 @@ public class ContentActivityMapper implements ActivityMapper {
 
     Provider<LoginActivity> loginActivityProvider;
 
-    Provider<PropertyMapActivity> propertyMapActivity;
+    Provider<PropertyMapActivity> propertyMapActivityProvider;
 
     Provider<ApartmentDetailsActivity> apartmentDetailsActivity;
 
@@ -72,7 +72,7 @@ public class ContentActivityMapper implements ActivityMapper {
         super();
         this.residentsActivityProvider = residentsActivityProvider;
         this.loginActivityProvider = loginActivityProvider;
-        this.propertyMapActivity = propertyMapActivity;
+        this.propertyMapActivityProvider = propertyMapActivity;
         this.apartmentDetailsActivity = apartmentDetailsActivity;
         this.tenantProfileActivity = tenantProfileActivity;
         this.maintenanceActivity = maintenanceActivity;
@@ -91,7 +91,7 @@ public class ContentActivityMapper implements ActivityMapper {
         } else if (place instanceof PortalSiteMap.Residents.Login) {
             return loginActivityProvider.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.FindApartment.PropertyMap) {
-            return propertyMapActivity.get().withPlace(place);
+            return propertyMapActivityProvider.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.FindApartment.ApartmentDetails) {
             return apartmentDetailsActivity.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.FindApartment.UnitDetails) {

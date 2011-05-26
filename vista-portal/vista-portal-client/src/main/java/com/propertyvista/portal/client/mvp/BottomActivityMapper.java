@@ -22,17 +22,17 @@ import com.propertyvista.portal.client.activity.FooterActivity;
 
 public class BottomActivityMapper implements ActivityMapper {
 
-    Provider<FooterActivity> activityProvider;
+    Provider<FooterActivity> footerActivityProvider;
 
     @Inject
     public BottomActivityMapper(Provider<FooterActivity> activityProvider) {
         super();
-        this.activityProvider = activityProvider;
+        this.footerActivityProvider = activityProvider;
     }
 
     @Override
     public Activity getActivity(Place place) {
-        return activityProvider.get();
+        return footerActivityProvider.get();
     }
 
 }

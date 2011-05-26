@@ -23,7 +23,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class SecondaryNavigActivityMapper implements ActivityMapper {
 
-    Provider<ResidentsNavigActivity> residentsNavigActivity;
+    Provider<ResidentsNavigActivity> secondaryNavigActivity;
 
     @Inject
     public SecondaryNavigActivityMapper(
@@ -32,7 +32,7 @@ public class SecondaryNavigActivityMapper implements ActivityMapper {
 
     ) {
 
-        this.residentsNavigActivity = residentsNavigActivity;
+        this.secondaryNavigActivity = residentsNavigActivity;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class SecondaryNavigActivityMapper implements ActivityMapper {
 
         place instanceof PortalSiteMap.Residents.Navigator.Payment) {
 
-            return residentsNavigActivity.get().withPlace(place);
+            return secondaryNavigActivity.get().withPlace(place);
 
         }
 
