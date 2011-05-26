@@ -26,6 +26,6 @@ public class UnitEditorActivity extends EditorActivityBase<AptUnitDTO> {
     @Inject
     @SuppressWarnings("unchecked")
     public UnitEditorActivity(IUnitEditorView view) {
-        super(view, (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
+        super(view, (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class), AptUnitDTO.class);
     }
 }

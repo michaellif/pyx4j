@@ -35,11 +35,11 @@ import com.propertyvista.crm.rpc.services.AbstractCrudService;
 
 public class ListerActivityBase<E extends IEntity> extends AbstractActivity implements IListerView.Presenter {
 
-    private final Class<E> entityClass;
-
     private final IListerView<E> view;
 
     private final AbstractCrudService<E> service;
+
+    private final Class<E> entityClass;
 
     @Inject
     public ListerActivityBase(IListerView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {

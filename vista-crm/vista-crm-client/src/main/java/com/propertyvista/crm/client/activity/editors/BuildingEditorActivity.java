@@ -26,6 +26,6 @@ public class BuildingEditorActivity extends EditorActivityBase<BuildingDTO> {
     @Inject
     @SuppressWarnings("unchecked")
     public BuildingEditorActivity(IBuildingEditorView view) {
-        super(view, (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
+        super(view, (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class), BuildingDTO.class);
     }
 }

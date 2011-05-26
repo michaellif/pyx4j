@@ -44,10 +44,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     public ViewerActivityBase<E> withPlace(Place place) {
-        String stepArg = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
-        if (stepArg != null) {
-            entityId = stepArg;
-        }
+        entityId = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
         return this;
     }
 
@@ -59,19 +56,16 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void populate() {
-        if (service != null) {
-            service.retrieve(new AsyncCallback<E>() {
+        service.retrieve(new AsyncCallback<E>() {
+            @Override
+            public void onSuccess(E result) {
+                view.populate(result);
+            }
 
-                @Override
-                public void onSuccess(E result) {
-                    view.populate(result);
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-            }, entityId);
-        }
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+        }, entityId);
     }
 
     @Override

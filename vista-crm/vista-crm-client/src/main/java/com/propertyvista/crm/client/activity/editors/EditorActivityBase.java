@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -34,20 +35,20 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final AbstractCrudService<E> service;
 
+    private final Class<E> entityClass;
+
     private String entityId;
 
     @Inject
-    public EditorActivityBase(IEditorView<E> view, AbstractCrudService<E> service) {
+    public EditorActivityBase(IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         this.view = view;
         this.service = service;
+        this.entityClass = entityClass;
         view.setPresenter(this);
     }
 
     public EditorActivityBase<E> withPlace(Place place) {
-        String stepArg = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
-        if (stepArg != null) {
-            entityId = stepArg;
-        }
+        entityId = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
         return this;
     }
 
@@ -63,9 +64,8 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void populate() {
-        if (service != null && !entityId.equals(CrmSiteMap.ARG_VALUE_NEW_ITEM)) {
+        if (!entityId.equals(CrmSiteMap.ARG_VALUE_NEW_ITEM)) {
             service.retrieve(new AsyncCallback<E>() {
-
                 @Override
                 public void onSuccess(E result) {
                     view.populate(result);
@@ -75,24 +75,24 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                 public void onFailure(Throwable caught) {
                 }
             }, entityId);
+        } else {
+            view.populate(EntityFactory.create(entityClass));
         }
     }
 
     @Override
     public void save() {
-        if (service != null) {
-            service.save(new AsyncCallback<E>() {
+        service.save(new AsyncCallback<E>() {
 
-                @Override
-                public void onSuccess(E result) {
-                    History.back();
-                }
+            @Override
+            public void onSuccess(E result) {
+                History.back();
+            }
 
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-            }, view.getValue());
-        }
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+        }, view.getValue());
     }
 
     @Override
