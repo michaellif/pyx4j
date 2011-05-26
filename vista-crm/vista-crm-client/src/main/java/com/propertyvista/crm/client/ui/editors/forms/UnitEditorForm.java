@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.editors;
+package com.propertyvista.crm.client.ui.editors.forms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,7 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.Decor
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.editors.CrmEditorsComponentFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;

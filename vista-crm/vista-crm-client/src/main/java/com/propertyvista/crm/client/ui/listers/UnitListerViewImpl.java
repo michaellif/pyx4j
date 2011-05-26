@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.listers;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitListerViewImpl extends ListerViewImplBase<AptUnitDTO> implements IUnitListerView {
+public class UnitListerViewImpl extends ListerViewImplBase<AptUnitDTO> implements UnitListerView {
 
     public UnitListerViewImpl() {
         super(new CrmSiteMap.Properties.Units());

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.viewers;
 import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
 
-import com.propertyvista.crm.client.ui.vewers.IBuildingViewerView;
+import com.propertyvista.crm.client.ui.vewers.BuildingViewerView;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.dto.BuildingDTO;
@@ -25,7 +25,7 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
-    public BuildingViewerActivity(IBuildingViewerView view) {
+    public BuildingViewerActivity(BuildingViewerView view) {
         super(view, (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
     }
 }

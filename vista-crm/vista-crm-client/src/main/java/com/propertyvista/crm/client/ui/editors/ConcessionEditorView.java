@@ -7,14 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-17
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.vewers;
+package com.propertyvista.crm.client.ui.editors;
 
-import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.domain.marketing.yield.Concession;
 
-public interface IBuildingViewerView extends IViewerView<BuildingDTO> {
+public interface ConcessionEditorView extends IEditorView<Concession> {
 
 }

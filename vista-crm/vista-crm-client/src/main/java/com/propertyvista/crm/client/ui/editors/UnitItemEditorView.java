@@ -7,14 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-17
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.vewers;
+package com.propertyvista.crm.client.ui.editors;
 
-import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
-public interface IUnitViewerView extends IViewerView<AptUnitDTO> {
+public interface UnitItemEditorView extends IEditorView<AptUnitItem> {
 
 }

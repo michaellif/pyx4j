@@ -11,13 +11,14 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.editors;
+package com.propertyvista.crm.client.ui.editors.forms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.editors.CrmEditorsComponentFactory;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
 public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {

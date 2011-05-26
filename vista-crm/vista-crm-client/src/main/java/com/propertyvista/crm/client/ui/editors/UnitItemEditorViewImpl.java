@@ -13,10 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.editors;
 
+import com.propertyvista.crm.client.ui.editors.forms.UnitItemEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
-public class UnitItemEditorViewImpl extends EditorViewImplBase<AptUnitItem> implements IUnitItemEditorView {
+public class UnitItemEditorViewImpl extends EditorViewImplBase<AptUnitItem> implements UnitItemEditorView {
 
     public UnitItemEditorViewImpl() {
         super(new CrmSiteMap.Editors.UnitItem());

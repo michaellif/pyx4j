@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.vewers;
 
-import com.propertyvista.crm.client.ui.editors.BuildingEditorForm;
+import com.propertyvista.crm.client.ui.editors.forms.BuildingEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingViewerViewImpl extends ViewerViewImplBase<BuildingDTO> implements IBuildingViewerView {
+public class BuildingViewerViewImpl extends ViewerViewImplBase<BuildingDTO> implements BuildingViewerView {
 
     public BuildingViewerViewImpl() {
         super(new CrmSiteMap.Viewers.Building(), new CrmSiteMap.Editors.Building());

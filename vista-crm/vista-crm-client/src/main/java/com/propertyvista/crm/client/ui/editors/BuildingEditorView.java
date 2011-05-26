@@ -15,5 +15,5 @@ package com.propertyvista.crm.client.ui.editors;
 
 import com.propertyvista.dto.BuildingDTO;
 
-public interface IBuildingEditorView extends IEditorView<BuildingDTO> {
+public interface BuildingEditorView extends IEditorView<BuildingDTO> {
 }

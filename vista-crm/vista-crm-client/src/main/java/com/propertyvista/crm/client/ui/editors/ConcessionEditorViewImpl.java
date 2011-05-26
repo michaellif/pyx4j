@@ -13,10 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.editors;
 
+import com.propertyvista.crm.client.ui.editors.forms.ConcessionEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.marketing.yield.Concession;
 
-public class ConcessionEditorViewImpl extends EditorViewImplBase<Concession> implements IConcessionEditorView {
+public class ConcessionEditorViewImpl extends EditorViewImplBase<Concession> implements ConcessionEditorView {
 
     public ConcessionEditorViewImpl() {
         super(new CrmSiteMap.Editors.Concession());

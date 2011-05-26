@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.editors;
 import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
 
-import com.propertyvista.crm.client.ui.editors.IConcessionEditorView;
+import com.propertyvista.crm.client.ui.editors.ConcessionEditorView;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
 import com.propertyvista.domain.marketing.yield.Concession;
@@ -25,7 +25,7 @@ public class ConcessionEditorActivity extends EditorActivityBase<Concession> {
 
     @Inject
     @SuppressWarnings("unchecked")
-    public ConcessionEditorActivity(IConcessionEditorView view) {
+    public ConcessionEditorActivity(ConcessionEditorView view) {
         super(view, (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class);
     }
 }

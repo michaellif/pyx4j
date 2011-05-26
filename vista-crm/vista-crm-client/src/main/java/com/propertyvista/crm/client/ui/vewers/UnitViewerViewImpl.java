@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.vewers;
 
-import com.propertyvista.crm.client.ui.editors.UnitEditorForm;
+import com.propertyvista.crm.client.ui.editors.forms.UnitEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitViewerViewImpl extends ViewerViewImplBase<AptUnitDTO> implements IUnitViewerView {
+public class UnitViewerViewImpl extends ViewerViewImplBase<AptUnitDTO> implements UnitViewerView {
 
     public UnitViewerViewImpl() {
         super(new CrmSiteMap.Viewers.Unit(), new CrmSiteMap.Editors.Unit());

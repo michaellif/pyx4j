@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.editors;
 import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
 
-import com.propertyvista.crm.client.ui.editors.IUnitEditorView;
+import com.propertyvista.crm.client.ui.editors.UnitEditorView;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.dto.AptUnitDTO;
@@ -25,7 +25,7 @@ public class UnitEditorActivity extends EditorActivityBase<AptUnitDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
-    public UnitEditorActivity(IUnitEditorView view) {
+    public UnitEditorActivity(UnitEditorView view) {
         super(view, (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class), AptUnitDTO.class);
     }
 }
