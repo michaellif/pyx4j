@@ -7,17 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 19, 2011
- * @author michaellif
+ * Created on 2011-05-24
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.entity.annotations.Transient;
+import com.propertyvista.dto.LockerAreaDTO;
 
-import com.propertyvista.domain.property.asset.LockerArea;
-
-@Transient
-public interface LockerDTO extends LockerArea {
-
+public interface LockerAreaCrudService extends AbstractCrudService<LockerAreaDTO> {
 }

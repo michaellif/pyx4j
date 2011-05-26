@@ -14,24 +14,10 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.property.asset.LockerArea;
 
 @Transient
-public interface BuildingDTO extends Building {
+public interface LockerAreaDTO extends LockerArea {
 
-    @Override
-    IList<BuildingAmenity> amenities();
-
-    IList<ElevatorDTO> elevators();
-
-    IList<BoilerDTO> boilers();
-
-    IList<RoofDTO> roofs();
-
-    IList<ParkingDTO> parkings();
-
-    IList<LockerAreaDTO> lockers();
 }

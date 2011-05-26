@@ -28,16 +28,26 @@ import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.ReportActivity;
 import com.propertyvista.crm.client.activity.ResetPasswordActivity;
 import com.propertyvista.crm.client.activity.SettingsActivity;
+import com.propertyvista.crm.client.activity.editors.BoilerEditorActivity;
 import com.propertyvista.crm.client.activity.editors.BuildingEditorActivity;
 import com.propertyvista.crm.client.activity.editors.ConcessionEditorActivity;
+import com.propertyvista.crm.client.activity.editors.ElevatorEditorActivity;
+import com.propertyvista.crm.client.activity.editors.LockerAreaEditorActivity;
+import com.propertyvista.crm.client.activity.editors.ParkingEditorActivity;
+import com.propertyvista.crm.client.activity.editors.RoofEditorActivity;
 import com.propertyvista.crm.client.activity.editors.UnitEditorActivity;
 import com.propertyvista.crm.client.activity.editors.UnitItemEditorActivity;
 import com.propertyvista.crm.client.activity.editors.UnitOccupancyEditorActivity;
 import com.propertyvista.crm.client.activity.listers.ArrearsListerActivity;
 import com.propertyvista.crm.client.activity.listers.BuildingListerActivity;
 import com.propertyvista.crm.client.activity.listers.UnitListerActivity;
+import com.propertyvista.crm.client.activity.viewers.BoilerViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.BuildingViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.ConcessionViewerActivity;
+import com.propertyvista.crm.client.activity.viewers.ElevatorViewerActivity;
+import com.propertyvista.crm.client.activity.viewers.LockerAreaViewerActivity;
+import com.propertyvista.crm.client.activity.viewers.ParkingViewerActivity;
+import com.propertyvista.crm.client.activity.viewers.RoofViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.UnitItemViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.UnitOccupancyViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.UnitViewerActivity;
@@ -51,12 +61,34 @@ public class MainActivityMapper implements ActivityMapper {
 
     Provider<ResetPasswordActivity> resetPasswordActivityProvider;
 
+// ----- Building-related:
     Provider<BuildingListerActivity> buildingListerActivityProvider;
 
     Provider<BuildingViewerActivity> buildingViewerActivityProvider;
 
     Provider<BuildingEditorActivity> buildingEditorActivityProvider;
 
+    Provider<ElevatorViewerActivity> elevatorViewerActivityProvider;
+
+    Provider<ElevatorEditorActivity> elevatorEditorActivityProvider;
+
+    Provider<BoilerViewerActivity> boilerViewerActivityProvider;
+
+    Provider<BoilerEditorActivity> boilerEditorActivityProvider;
+
+    Provider<RoofViewerActivity> roofViewerActivityProvider;
+
+    Provider<RoofEditorActivity> roofEditorActivityProvider;
+
+    Provider<ParkingViewerActivity> parkingViewerActivityProvider;
+
+    Provider<ParkingEditorActivity> parkingEditorActivityProvider;
+
+    Provider<LockerAreaViewerActivity> lockerAreaViewerActivityProvider;
+
+    Provider<LockerAreaEditorActivity> lockerAreaEditorActivityProvider;
+
+// ----- Unit-related:
     Provider<UnitListerActivity> unitListerActivityProvider;
 
     Provider<UnitViewerActivity> unitViewerActivityProvider;
@@ -75,6 +107,7 @@ public class MainActivityMapper implements ActivityMapper {
 
     Provider<ConcessionEditorActivity> concessionEditorActivityProvider;
 
+// ----- Others:
     Provider<ArrearsListerActivity> arrearsListerActivityProvider;
 
     Provider<DashboardActivity> dashboardActivityProvider;
@@ -105,6 +138,26 @@ public class MainActivityMapper implements ActivityMapper {
     final Provider<BuildingViewerActivity> buildingViewerActivityProvider,
 
     final Provider<BuildingEditorActivity> buildingEditorActivityProvider,
+
+    final Provider<ElevatorViewerActivity> elevatorViewerActivityProvider,
+
+    final Provider<ElevatorEditorActivity> elevatorEditorActivityProvider,
+
+    final Provider<BoilerViewerActivity> boilerViewerActivityProvider,
+
+    final Provider<BoilerEditorActivity> boilerEditorActivityProvider,
+
+    final Provider<RoofViewerActivity> roofViewerActivityProvider,
+
+    final Provider<RoofEditorActivity> roofEditorActivityProvider,
+
+    final Provider<ParkingViewerActivity> parkingViewerActivityProvider,
+
+    final Provider<ParkingEditorActivity> parkingEditorActivityProvider,
+
+    final Provider<LockerAreaViewerActivity> lockerAreaViewerActivityProvider,
+
+    final Provider<LockerAreaEditorActivity> lockerAreaEditorActivityProvider,
 
     final Provider<UnitListerActivity> unitListerActivityProvider,
 
@@ -141,9 +194,21 @@ public class MainActivityMapper implements ActivityMapper {
 //        this.loginActivityProvider = loginActivityProvider;
 //        this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
         this.resetPasswordActivityProvider = resetPasswordActivityProvider;
+
         this.buildingListerActivityProvider = buildingListerActivityProvider;
         this.buildingViewerActivityProvider = buildingViewerActivityProvider;
         this.buildingEditorActivityProvider = buildingEditorActivityProvider;
+        this.elevatorViewerActivityProvider = elevatorViewerActivityProvider;
+        this.elevatorEditorActivityProvider = elevatorEditorActivityProvider;
+        this.boilerViewerActivityProvider = boilerViewerActivityProvider;
+        this.boilerEditorActivityProvider = boilerEditorActivityProvider;
+        this.roofViewerActivityProvider = roofViewerActivityProvider;
+        this.roofEditorActivityProvider = roofEditorActivityProvider;
+        this.parkingViewerActivityProvider = parkingViewerActivityProvider;
+        this.parkingEditorActivityProvider = parkingEditorActivityProvider;
+        this.lockerAreaViewerActivityProvider = lockerAreaViewerActivityProvider;
+        this.lockerAreaEditorActivityProvider = lockerAreaEditorActivityProvider;
+
         this.unitListerActivityProvider = unitListerActivityProvider;
         this.unitViewerActivityProvider = unitViewerActivityProvider;
         this.unitEditorActivityProvider = unitEditorActivityProvider;
@@ -153,6 +218,7 @@ public class MainActivityMapper implements ActivityMapper {
         this.unitOccupancyEditorActivityProvider = unitOccupancyEditorActivityProvider;
         this.concessionViewerActivityProvider = concessionViewerActivityProvider;
         this.concessionEditorActivityProvider = concessionEditorActivityProvider;
+
         this.arrearsListerActivityProvider = arrearsListerActivityProvider;
         this.dashboardActivityProvider = dashboardActivityProvider;
         this.reportActivityProvider = reportActivityProvider;
@@ -184,6 +250,31 @@ public class MainActivityMapper implements ActivityMapper {
             return buildingViewerActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Editors.Building) {
             return buildingEditorActivityProvider.get().withPlace(place);
+
+        } else if (place instanceof CrmSiteMap.Viewers.Elevator) {
+            return elevatorViewerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Editors.Elevator) {
+            return elevatorEditorActivityProvider.get().withPlace(place);
+
+        } else if (place instanceof CrmSiteMap.Viewers.Boiler) {
+            return boilerViewerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Editors.Boiler) {
+            return boilerEditorActivityProvider.get().withPlace(place);
+
+        } else if (place instanceof CrmSiteMap.Viewers.Roof) {
+            return roofViewerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Editors.Roof) {
+            return roofEditorActivityProvider.get().withPlace(place);
+
+        } else if (place instanceof CrmSiteMap.Viewers.Parking) {
+            return parkingViewerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Editors.Parking) {
+            return parkingEditorActivityProvider.get().withPlace(place);
+
+        } else if (place instanceof CrmSiteMap.Viewers.LockerArea) {
+            return lockerAreaViewerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Editors.LockerArea) {
+            return lockerAreaEditorActivityProvider.get().withPlace(place);
 
         } else if (place instanceof CrmSiteMap.Viewers.Unit) {
             return unitViewerActivityProvider.get().withPlace(place);

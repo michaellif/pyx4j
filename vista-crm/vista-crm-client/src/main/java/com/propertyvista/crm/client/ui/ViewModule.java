@@ -23,10 +23,20 @@ import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.crm.client.ui.editors.AccountView;
 import com.propertyvista.crm.client.ui.editors.AccountViewImpl;
+import com.propertyvista.crm.client.ui.editors.BoilerEditorView;
+import com.propertyvista.crm.client.ui.editors.BoilerEditorViewImpl;
 import com.propertyvista.crm.client.ui.editors.BuildingEditorView;
 import com.propertyvista.crm.client.ui.editors.BuildingEditorViewImpl;
 import com.propertyvista.crm.client.ui.editors.ConcessionEditorView;
 import com.propertyvista.crm.client.ui.editors.ConcessionEditorViewImpl;
+import com.propertyvista.crm.client.ui.editors.ElevatorEditorView;
+import com.propertyvista.crm.client.ui.editors.ElevatorEditorViewImpl;
+import com.propertyvista.crm.client.ui.editors.LockerAreaEditorView;
+import com.propertyvista.crm.client.ui.editors.LockerAreaEditorViewImpl;
+import com.propertyvista.crm.client.ui.editors.ParkingEditorView;
+import com.propertyvista.crm.client.ui.editors.ParkingEditorViewImpl;
+import com.propertyvista.crm.client.ui.editors.RoofEditorView;
+import com.propertyvista.crm.client.ui.editors.RoofEditorViewImpl;
 import com.propertyvista.crm.client.ui.editors.SettingsView;
 import com.propertyvista.crm.client.ui.editors.SettingsViewImpl;
 import com.propertyvista.crm.client.ui.editors.UnitEditorView;
@@ -49,10 +59,20 @@ import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
 import com.propertyvista.crm.client.ui.login.RetrievePasswordViewImpl;
 import com.propertyvista.crm.client.ui.report.ReportView;
 import com.propertyvista.crm.client.ui.report.ReportViewImpl;
+import com.propertyvista.crm.client.ui.vewers.BoilerViewerView;
+import com.propertyvista.crm.client.ui.vewers.BoilerViewerViewImpl;
 import com.propertyvista.crm.client.ui.vewers.BuildingViewerView;
 import com.propertyvista.crm.client.ui.vewers.BuildingViewerViewImpl;
 import com.propertyvista.crm.client.ui.vewers.ConcessionViewerView;
 import com.propertyvista.crm.client.ui.vewers.ConcessionViewerViewImpl;
+import com.propertyvista.crm.client.ui.vewers.ElevatorViewerView;
+import com.propertyvista.crm.client.ui.vewers.ElevatorViewerViewImpl;
+import com.propertyvista.crm.client.ui.vewers.LockerAreaViewerView;
+import com.propertyvista.crm.client.ui.vewers.LockerAreaViewerViewImpl;
+import com.propertyvista.crm.client.ui.vewers.ParkingViewerView;
+import com.propertyvista.crm.client.ui.vewers.ParkingViewerViewImpl;
+import com.propertyvista.crm.client.ui.vewers.RoofViewerView;
+import com.propertyvista.crm.client.ui.vewers.RoofViewerViewImpl;
 import com.propertyvista.crm.client.ui.vewers.UnitItemViewerView;
 import com.propertyvista.crm.client.ui.vewers.UnitItemViewerViewImpl;
 import com.propertyvista.crm.client.ui.vewers.UnitOccupancyViewerView;
@@ -75,14 +95,32 @@ public class ViewModule extends AbstractGinModule {
         bind(LoginView.class).to(LoginViewImpl.class).in(Singleton.class);
         bind(RetrievePasswordView.class).to(RetrievePasswordViewImpl.class).in(Singleton.class);
         bind(NewPasswordView.class).to(NewPasswordViewImpl.class).in(Singleton.class);
+
 // Listers:      
         bind(BuildingListerView.class).to(BuildingListerViewImpl.class).in(Singleton.class);
         bind(UnitListerView.class).to(UnitListerViewImpl.class).in(Singleton.class);
         bind(ArrearsListerView.class).to(ArrearsListerViewImpl.class).in(Singleton.class);
+
 // Viewers/Editors:      
+// ----- Building-related:
         bind(BuildingViewerView.class).to(BuildingViewerViewImpl.class).in(Singleton.class);
         bind(BuildingEditorView.class).to(BuildingEditorViewImpl.class).in(Singleton.class);
 
+        bind(ElevatorViewerView.class).to(ElevatorViewerViewImpl.class).in(Singleton.class);
+        bind(ElevatorEditorView.class).to(ElevatorEditorViewImpl.class).in(Singleton.class);
+
+        bind(BoilerViewerView.class).to(BoilerViewerViewImpl.class).in(Singleton.class);
+        bind(BoilerEditorView.class).to(BoilerEditorViewImpl.class).in(Singleton.class);
+
+        bind(RoofViewerView.class).to(RoofViewerViewImpl.class).in(Singleton.class);
+        bind(RoofEditorView.class).to(RoofEditorViewImpl.class).in(Singleton.class);
+
+        bind(ParkingViewerView.class).to(ParkingViewerViewImpl.class).in(Singleton.class);
+        bind(ParkingEditorView.class).to(ParkingEditorViewImpl.class).in(Singleton.class);
+
+        bind(LockerAreaViewerView.class).to(LockerAreaViewerViewImpl.class).in(Singleton.class);
+        bind(LockerAreaEditorView.class).to(LockerAreaEditorViewImpl.class).in(Singleton.class);
+// ----- Unit-related:
         bind(UnitViewerView.class).to(UnitViewerViewImpl.class).in(Singleton.class);
         bind(UnitEditorView.class).to(UnitEditorViewImpl.class).in(Singleton.class);
 
@@ -95,6 +133,7 @@ public class ViewModule extends AbstractGinModule {
         bind(ConcessionViewerView.class).to(ConcessionViewerViewImpl.class).in(Singleton.class);
         bind(ConcessionEditorView.class).to(ConcessionEditorViewImpl.class).in(Singleton.class);
 
+// Others:
         bind(ReportView.class).to(ReportViewImpl.class).in(Singleton.class);
         bind(DashboardView.class).to(DashboardViewImpl.class).in(Singleton.class);
 

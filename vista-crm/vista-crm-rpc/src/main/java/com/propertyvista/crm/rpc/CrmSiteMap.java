@@ -105,6 +105,37 @@ public class CrmSiteMap implements SiteMap {
     }
 
     public static class Viewers extends AppPlace {
+
+        @PlaceProperties(caption = "Elevator")
+        @NavigationItem(navigLabel = "Elevator")
+        public static class Elevator extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Boiler")
+        @NavigationItem(navigLabel = "Boiler")
+        public static class Boiler extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Roof")
+        @NavigationItem(navigLabel = "Roof")
+        public static class Roof extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Parking")
+        @NavigationItem(navigLabel = "Parking")
+        public static class Parking extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "LockerArea")
+        @NavigationItem(navigLabel = "LockerArea")
+        public static class LockerArea extends AppPlace {
+
+        }
+
         @PlaceProperties(caption = "Building")
         @NavigationItem(navigLabel = "Building")
         public static class Building extends AppPlace {
@@ -136,6 +167,36 @@ public class CrmSiteMap implements SiteMap {
     }
 
     public static class Editors extends AppPlace {
+
+        @PlaceProperties(caption = "Elevator")
+        @NavigationItem(navigLabel = "Elevator")
+        public static class Elevator extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Boiler")
+        @NavigationItem(navigLabel = "Boiler")
+        public static class Boiler extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Roof")
+        @NavigationItem(navigLabel = "Roof")
+        public static class Roof extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Parking")
+        @NavigationItem(navigLabel = "Parking")
+        public static class Parking extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "LockerArea")
+        @NavigationItem(navigLabel = "LockerArea")
+        public static class LockerArea extends AppPlace {
+
+        }
 
         @PlaceProperties(caption = "Building")
         @NavigationItem(navigLabel = "Building")
