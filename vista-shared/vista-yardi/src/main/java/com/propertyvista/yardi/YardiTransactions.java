@@ -15,6 +15,8 @@ package com.propertyvista.yardi;
 
 import java.rmi.RemoteException;
 
+import javax.xml.bind.JAXBException;
+
 import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,10 @@ import com.yardi.ws.operations.GetPropertyConfigurations;
 import com.yardi.ws.operations.GetPropertyConfigurationsResponse;
 import com.yardi.ws.operations.Ping;
 import com.yardi.ws.operations.PingResponse;
+
+import com.pyx4j.essentials.j2se.util.MarshallUtil;
+
+import com.propertyvista.yardi.bean.Properties;
 
 public class YardiTransactions {
 
@@ -51,8 +57,9 @@ public class YardiTransactions {
      * 
      * @throws RemoteException
      * @throws AxisFault
+     * @throws JAXBException
      */
-    public static void getPropertyConfigurations(YardiClient c) throws AxisFault, RemoteException {
+    public static Properties getPropertyConfigurations(YardiClient c) throws AxisFault, RemoteException, JAXBException {
         c.transactionId = 2L;
         c.currentActionName = "GetPropertyConfigurations";
         GetPropertyConfigurations l = new GetPropertyConfigurations();
@@ -66,5 +73,8 @@ public class YardiTransactions {
         String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
         log.info("Result: " + xml);
         // TODO need to load this XML into Java code generated from xsd
+        Properties properties = MarshallUtil.unmarshall(Properties.class, xml);
+        log.info("Properties: " + properties);
+        return properties;
     }
 }

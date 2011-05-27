@@ -24,9 +24,9 @@ import com.yardi.ws.operations.GetResidentTransactions_Login;
 import com.yardi.ws.operations.GetResidentsLeaseCharges_Login;
 import com.yardi.ws.operations.GetUnitInformation_Login;
 
-public class Example {
+public class YardiExample {
 
-    private final static Logger log = LoggerFactory.getLogger(Example.class);
+    private final static Logger log = LoggerFactory.getLogger(YardiExample.class);
 
     public static void main(String[] args) {
         YardiClient c = new YardiClient();
