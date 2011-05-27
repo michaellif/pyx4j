@@ -51,7 +51,7 @@ public interface Warranty extends IEntity {
         }
     }
 
-    // ----------- Infromation --------------------------------------------------------------------------
+    // ----------- Infromation -------------
 
     IPrimitive<String> title();
 

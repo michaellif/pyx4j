@@ -16,9 +16,6 @@ package com.propertyvista.crm.client.ui.editors.forms;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -29,8 +26,6 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
@@ -45,8 +40,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
-
-    private static I18n i18n = I18nFactory.getI18n(UnitEditorForm.class);
 
     public UnitEditorForm() {
         super(AptUnitDTO.class, new CrmEditorsComponentFactory());
@@ -64,37 +57,36 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         header.getElement().getStyle().setMarginTop(0, Unit.EM); // remove default for header top margin...
         main.add(header);
 
-        DecorationData decorData = new DecorationData(14d, 12);
-        main.add(new VistaWidgetDecorator(inject(proto().info().name()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().marketing().name()), decorData));
+        main.add(inject(proto().info().name()), 15);
+        main.add(inject(proto().marketing().name()), 15);
 
-        main.add(new VistaWidgetDecorator(inject(proto().info().type()), decorData));
+        main.add(inject(proto().info().type()), 15);
 
-        main.add(new VistaWidgetDecorator(inject(proto().info().economicStatus()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().info().economicStatusDescription()), decorData));
+        main.add(inject(proto().info().economicStatus()), 15);
+        main.add(inject(proto().info().economicStatusDescription()), 15);
 
-        main.add(new VistaWidgetDecorator(inject(proto().info().floor()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().info().number()), decorData));
+        main.add(inject(proto().info().floor()), 15);
+        main.add(inject(proto().info().number()), 15);
 // TODO: arrange available building in drop-down box? 
-//        main.add(new VistaWidgetDecorator(inject(proto().building()), decorData));
+//        main.add(inject(proto().building()), 15);
 
-        main.add(new VistaWidgetDecorator(inject(proto().info().area()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().info().areaUnits()), decorData));
+        main.add(inject(proto().info().area()), 15);
+        main.add(inject(proto().info().areaUnits()), 15);
 
-        main.add(new VistaWidgetDecorator(inject(proto().info().bedrooms()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().info().bathrooms()), decorData));
+        main.add(inject(proto().info().bedrooms()), 15);
+        main.add(inject(proto().info().bathrooms()), 15);
 
 // TODO: complex data editing here: 
-//        main.add(new VistaWidgetDecorator(inject(proto().currentOccupancies()), decorData));
+//        main.add(inject(proto().currentOccupancies()), 15);
 
         main.add(new CrmHeaderDecorator(i18n.tr("Rents")));
-        main.add(new VistaWidgetDecorator(inject(proto().financial().unitRent()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().financial().marketRent()), decorData));
+        main.add(inject(proto().financial().unitRent()), 15);
+        main.add(inject(proto().financial().marketRent()), 15);
 
 // TODO: arrange available Lease Terms in drop-down box? 
-//      main.add(new VistaWidgetDecorator(inject(proto().newLeaseTerms()), decorData));
+//      main.add(inject(proto().newLeaseTerms()), 15);
 // TODO: arrange available floorplans in drop-down box? 
-//      main.add(new VistaWidgetDecorator(inject(proto().floorplan()), decorData));
+//      main.add(inject(proto().floorplan()), 15);
 
         main.add(new CrmHeaderDecorator(i18n.tr(proto().amenities().getFieldName())));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));

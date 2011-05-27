@@ -44,7 +44,7 @@ public interface Floorplan extends IEntity {
         }
     }
 
-    // ----------- Infromation --------------------------------------------------------------------------
+    // ----------- Infromation ----------------------
 
     @MemberColumn(name = "floorplanType")
     IPrimitive<Type> type();
@@ -78,7 +78,7 @@ public interface Floorplan extends IEntity {
     @Detached
     IList<Medium> media();
 
-    // ----------- Old data:--------------------------------------------------------------------------
+    // ----------- Old data:-------------------------
 
     @Detached
     @Deprecated

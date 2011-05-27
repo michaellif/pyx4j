@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -22,7 +23,7 @@ import com.pyx4j.i18n.shared.Translatable;
 public interface Phone extends IEntity {
 
     @Translatable
-    public enum PhoneType {
+    public enum Type {
 
         mobile,
 
@@ -42,12 +43,14 @@ public interface Phone extends IEntity {
         }
     }
 
-    IPrimitive<PhoneType> phoneType();
+    @MemberColumn(name = "phoneType")
+    IPrimitive<Type> type();
 
     /**
      * (max 20 char)
      */
-    IPrimitive<String> phoneNumber();
+    @MemberColumn(name = "phoneNumber")
+    IPrimitive<String> number();
 
     /**
      * (max 20 char)

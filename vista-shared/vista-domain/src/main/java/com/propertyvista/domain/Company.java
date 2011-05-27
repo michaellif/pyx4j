@@ -15,22 +15,22 @@ package com.propertyvista.domain;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 
 public interface Company extends IEntity {
 
     IPrimitive<String> name();
 
-    ISet<Address> addressList();
+    IList<Address> addresses();
 
-    ISet<Phone> phoneList();
+    IList<Phone> phones();
 
     IPrimitive<String> website();
 
-    ISet<Email> emailList();
+    IList<Email> emails();
 
-    ISet<OrganizationContacts> contactList();
+    IList<OrganizationContacts> contacts();
 
     @Detached
     Picture logo();

@@ -167,7 +167,7 @@ public class BuildingsGenerator {
         building.info().address().set(address);
 
         for (Phone phone : phones) {
-            building.contacts().phoneList().add(phone);
+            building.contacts().phones().add(phone);
         }
 
         building.info().name().setValue(RandomUtil.randomLetters(3));

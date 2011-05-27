@@ -13,17 +13,19 @@
  */
 package com.propertyvista.domain;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Email extends IEntity {
 
-    public enum EmailType {
+    public enum Type {
         home, work, other
     }
 
-    IPrimitive<EmailType> emailType();
+    @MemberColumn(name = "emailType")
+    IPrimitive<Type> type();
 
-    IPrimitive<String> emailAddress();
+    IPrimitive<String> address();
 
 }

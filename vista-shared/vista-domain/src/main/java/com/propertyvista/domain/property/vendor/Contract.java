@@ -33,5 +33,4 @@ public interface Contract extends IEntity {
     IPrimitive<Date> expiration();
 
     IPrimitive<Date> renewal();
-
 }

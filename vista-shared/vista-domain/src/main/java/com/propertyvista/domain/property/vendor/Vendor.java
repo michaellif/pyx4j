@@ -44,5 +44,4 @@ public interface Vendor extends Company {
     @ToString(index = 0)
     @MemberColumn(name = "vendorType")
     IPrimitive<Type> type();
-
 }

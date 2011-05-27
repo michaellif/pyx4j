@@ -35,12 +35,6 @@ public interface Lease extends IEntity {
 
     IList<Concession> concessions();
 
-    ISet<Tenant> tenants();
-
-    ISet<Pets> pets();
-
-    IList<Rentable> renableItems();
-
     Application application();
 
     IPrimitive<Double> currentRent();
@@ -64,4 +58,10 @@ public interface Lease extends IEntity {
     IPrimitive<String> paymentAccepted();
 
     IPrimitive<String> accountNumber();
+
+    ISet<Tenant> tenants();
+
+    ISet<Pets> pets();
+
+    IList<Rentable> renableItems();
 }

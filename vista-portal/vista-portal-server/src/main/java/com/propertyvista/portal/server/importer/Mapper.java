@@ -109,7 +109,7 @@ public class Mapper {
 
         building.contacts().email().set(CommonsGenerator.createEmail(property.getContact().getEmail()));
 
-        building.contacts().phoneList().add(CommonsGenerator.createPhone(property.getContact().getTel()));
+        building.contacts().phones().add(CommonsGenerator.createPhone(property.getContact().getTel()));
 
         building.contacts().website().setValue(property.getWebsite());
 

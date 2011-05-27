@@ -32,8 +32,8 @@ public interface BuildingContactInfo extends IEntity {
     Email email(); // email business is not clear at the moment, we need a bit more detail on this
 
     @Owned
-    IList<Phone> phoneList();
+    IList<Phone> phones();
 
 // TODO discuss with Artur which contacts fill here!..    
-    IList<OrganizationContacts> contactsList();
+    IList<OrganizationContacts> contacts();
 }

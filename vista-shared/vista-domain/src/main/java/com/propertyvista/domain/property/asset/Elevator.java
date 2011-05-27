@@ -18,5 +18,4 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface Elevator extends Equipment, BookingSchedule {
 
     IPrimitive<Boolean> isForMoveInOut();
-
 }
