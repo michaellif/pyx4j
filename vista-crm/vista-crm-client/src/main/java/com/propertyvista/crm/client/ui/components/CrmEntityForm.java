@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.components;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
@@ -20,6 +23,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.propertyvista.crm.client.ui.editors.CrmEditorsComponentFactory;
 
 public abstract class CrmEntityForm<E extends IEntity> extends CEntityForm<E> {
+
+    protected static I18n i18n = I18nFactory.getI18n(CrmEntityForm.class);
 
     public CrmEntityForm(Class<E> rootClass) {
         super(rootClass, new CrmEditorsComponentFactory());
