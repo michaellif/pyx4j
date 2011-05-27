@@ -131,5 +131,5 @@ public interface BuildingAmenity extends Amenity {
     @MemberColumn(name = "buildingAmenityType")
     IPrimitive<Type> type();
 
-    IPrimitive<Type> subType();
+    IPrimitive<SubType> subType();
 }

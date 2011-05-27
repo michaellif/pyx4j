@@ -73,7 +73,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
             public FolderItemDecorator createFolderItemDecorator() {
                 FolderItemDecorator decor;
                 if (place != null) {
-                    decor = new CrmFolderItemDecorator(i18n.tr("Remove " + itemName), editable);
+                    decor = new CrmFolderItemDecorator(i18n.tr("Remove ") + itemName, editable);
                     decor.addItemClickHandler(new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent event) {
@@ -81,7 +81,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
                         }
                     });
                 } else {
-                    decor = new TableFolderItemDecorator(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove " + itemName), editable);
+                    decor = new TableFolderItemDecorator(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove ") + itemName, editable);
                 }
                 return decor;
             }
@@ -91,7 +91,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
     @Override
     protected FolderDecorator<E> createFolderDecorator() {
         if (place != null && parent != null) {
-            CrmTableFolderDecorator<E> decor = new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add new " + itemName), editable);
+            CrmTableFolderDecorator<E> decor = new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add new ") + itemName, editable);
             decor.addNewItemClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -100,7 +100,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
             });
             return decor;
         } else {
-            return new TableFolderDecorator<E>(columns(), CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add new " + itemName), editable);
+            return new TableFolderDecorator<E>(columns(), CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add new ") + itemName, editable);
         }
     }
 }

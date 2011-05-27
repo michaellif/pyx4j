@@ -84,7 +84,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
         this.component = component;
         this.decorData = decorData;
 
-        label = new Label(CommonsStringUtils.nvl(component.getTitle()));
+        label = new Label(decorData.componentCaption != null ? decorData.componentCaption : CommonsStringUtils.nvl(component.getTitle()));
         label.setHorizontalAlignment(decorData.labelAlignment);
         label.ensureDebugId(new CompositeDebugId(component.getDebugId(), VistaDecoratorsIds.Label.name()).debugId());
 
@@ -257,6 +257,8 @@ public class VistaWidgetDecorator extends VerticalPanel {
         public HorizontalAlignmentConstant labelAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
 
         public VerticalAlign labelVerticalAlignment = VerticalAlign.BASELINE;
+
+        public String componentCaption = null;
 
         public double componentWidth = 10;
 

@@ -30,6 +30,8 @@ import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.domain.Company;
 import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Phone;
+import com.propertyvista.domain.marketing.AdvertisingBlurb;
+import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.Equipment;
 import com.propertyvista.domain.property.vendor.Contract;
 import com.propertyvista.domain.property.vendor.Licence;
@@ -156,4 +158,21 @@ public class SubtypeInjectors {
 
         main.add(parent.inject(proto.notes()), 25);
     }
+
+    public static void injectMarketing(VistaDecoratorsFlowPanel main, Marketing proto, CEntityEditableComponent<?> parent) {
+
+        main.add(parent.inject(proto.name()), 15);
+        main.add(parent.inject(proto.description()), 25);
+        main.add(parent.inject(proto.addBlurbs(),
+                new CrmEntityFolder<AdvertisingBlurb>(AdvertisingBlurb.class, i18n.tr("Advertising Blurb"), parent.isEditable()) {
+                    @Override
+                    protected List<EntityFolderColumnDescriptor> columns() {
+                        List<EntityFolderColumnDescriptor> columns;
+                        columns = new ArrayList<EntityFolderColumnDescriptor>();
+                        columns.add(new EntityFolderColumnDescriptor(proto().content(), "60em"));
+                        return columns;
+                    }
+                }));
+    }
+
 }

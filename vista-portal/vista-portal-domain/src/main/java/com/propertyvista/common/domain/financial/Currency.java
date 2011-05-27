@@ -23,5 +23,4 @@ public interface Currency extends IEntity {
 
     @ToString
     IPrimitive<String> name();
-
 }

@@ -23,6 +23,8 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
 
     private final boolean readOnlyMode;
 
+    public final double defaultLabelWidth = 15;
+
     public VistaDecoratorsFlowPanel() {
         readOnlyMode = false;
     }
@@ -32,12 +34,17 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
     }
 
     public void add(final CComponent<?> component, double componentWidth) {
-        this.add(component, 14, componentWidth);
+        this.add(component, defaultLabelWidth, componentWidth);
     }
 
     public void add(final CComponent<?> component, double labelWidth, double componentWidth) {
+        this.add(component, labelWidth, componentWidth, null);
+    }
+
+    public void add(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
         VistaWidgetDecorator.DecorationData decorData = new VistaWidgetDecorator.DecorationData();
         decorData.componentWidth = componentWidth;
+        decorData.componentCaption = componentCaption;
         decorData.labelWidth = labelWidth;
         decorData.readOnlyMode = readOnlyMode;
         if (readOnlyMode) {
