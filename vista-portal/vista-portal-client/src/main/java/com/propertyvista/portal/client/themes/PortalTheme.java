@@ -13,12 +13,6 @@
  */
 package com.propertyvista.portal.client.themes;
 
-import com.pyx4j.widgets.client.ListBox;
-import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColor;
-
 import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
@@ -30,6 +24,12 @@ import com.propertyvista.portal.client.ui.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.ResidentsNavigViewImpl;
 import com.propertyvista.portal.client.ui.SearchApartmentForm;
+
+import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.style.ColorFactory;
+import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.widgets.client.style.Style;
+import com.pyx4j.widgets.client.style.ThemeColor;
 
 public abstract class PortalTheme extends com.propertyvista.common.client.theme.VistaTheme {
 
@@ -386,47 +386,6 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("margin-top", "10px");
         style.addProperty("margin-bottom", "10px");
         style.addProperty("font-size", "20px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.DD));
-        style.addProperty("width", "100%");
-        style.addProperty("top", "0");
-        style.addProperty("margin", "0 0 0 165px");
-        style.addProperty("padding", "0 0 0.5em 0");
-
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.DL));
-        style.addProperty("margin-top", "50px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.DT));
-
-        style.addProperty("float", "left");
-        style.addProperty("clear", "left");
-        style.addProperty("width", "150px");
-        style.addProperty("text-align", "right");
-        style.addProperty("font-size", "13px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.TableBody));
-        style.addProperty("table-layout", "fixed");
-        style.addProperty("border-spacing", "0px !important");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.TableHeader));
-        style.addProperty("font-size", "13px");
-        style.addProperty("text-align", "left");
-        style.addProperty("height", "25px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Cell));
-        style.addProperty("border-color", "#999999");
-        style.addProperty("border-top-style", "dotted");
-        style.addProperty("border-top-width", "1px");
-        style.addProperty("vertical-align", "top");
-        style.addProperty("padding-top", "10px");
-        style.addProperty("padding-bottom", "10px");
         addStyle(style);
 
     }

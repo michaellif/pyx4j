@@ -18,15 +18,16 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.geo.GeoPoint;
-import com.pyx4j.site.client.AppSite;
-
 import com.propertyvista.portal.client.ui.ApartmentDetailsView;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.shared.impl.PrimitiveSetHandler;
+import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.site.client.AppSite;
 
 public class ApartmentDetailsActivity extends AbstractActivity implements ApartmentDetailsView.Presenter {
 
@@ -49,7 +50,15 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
 
         PropertyDetailsDTO property = EntityFactory.create(PropertyDetailsDTO.class);
         property.address().street1().setValue("320 Avenue Road");
+        property.address().city().setValue("Toronto");
+        IPrimitiveSet<String> description = new PrimitiveSetHandler<String>(property, "details", String.class);
+        description.add("Nice, clean building");
+        description.add("Close to public transportation");
+        property.details().setValue(description);
         property.location().setValue(new GeoPoint(43.697665, -79.402313));
+        property.price().setValue(1700.00);
+        //    IList<FloorplanDTO> units = new ListHandler<FloorplanDTO>(property,"",);
+
         view.populate(property);
     }
 

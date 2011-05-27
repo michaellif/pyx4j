@@ -13,8 +13,10 @@
  */
 package com.propertyvista.portal.domain.dto;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
 public interface PropertyDetailsDTO extends PropertyDTO {
@@ -22,4 +24,8 @@ public interface PropertyDetailsDTO extends PropertyDTO {
     IList<FloorplanDTO> floorplans();
 
     IList<AmenityDTO> amenities();
+
+    //TODO price range
+    @Owned
+    IPrimitive<Double> price();
 }
