@@ -46,11 +46,14 @@ public class ElevatorEditorForm extends CrmEntityForm<ElevatorDTO> {
         main.add(inject(proto().model()), 15);
         main.add(inject(proto().build()), 15);
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().licence().getFieldName())));
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().licence().getMeta().getCaption())));
         SubtypeInjectors.injectLicence(main, proto().licence(), this);
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().warranty().getFieldName())));
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().warranty().getMeta().getCaption())));
         SubtypeInjectors.injectWarranty(main, proto().warranty(), this);
+
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().maitenance().getMeta().getCaption())));
+        SubtypeInjectors.injectContract(main, proto().maitenance(), this);
 
         main.add(inject(proto().notes()), 15);
 

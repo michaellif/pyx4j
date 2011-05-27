@@ -60,7 +60,8 @@ import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
@@ -72,7 +73,6 @@ import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.ptapp.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
-import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
@@ -111,11 +111,11 @@ public class SummaryViewForm extends CEntityForm<Summary> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Apartment"))));
+        main.add(alignWidth(new VistaHeaderDecorator(i18n.tr("Apartment"))));
 
         main.add(new ApartmentView());
 
-        main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Lease Term"))));
+        main.add(alignWidth(new VistaHeaderDecorator(i18n.tr("Lease Term"))));
         main.add(new LeaseTermView());
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Tenants"), new PtSiteMap.Tenants())));
@@ -131,12 +131,12 @@ public class SummaryViewForm extends CEntityForm<Summary> {
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Pets"), new PtSiteMap.Pets())));
         main.add(inject(proto().pets(), new PetsViewForm(this)));
 
-        main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Lease Terms"))));
+        main.add(alignWidth(new VistaHeaderDecorator(i18n.tr("Lease Terms"))));
         main.add(new LeaseTermsCheck());
 
         main.add(inject(proto().charges(), new ChargesViewForm(this)));
 
-        main.add(alignWidth(new ViewHeaderDecorator(i18n.tr("Digital Signature"))));
+        main.add(alignWidth(new VistaHeaderDecorator(i18n.tr("Digital Signature"))));
         main.add(new SignatureView());
 
         // last step - add building picture on the right:
@@ -202,7 +202,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             }
         });
 
-        return new ViewHeaderDecorator(captionTxt, edit);
+        return new VistaHeaderDecorator(captionTxt, edit);
     }
 
     private Widget alignWidth(Widget e) {
@@ -243,7 +243,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
                 main.add(label);
             }
 
-            Widget sp = new ViewLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+            Widget sp = new VistaLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
             sp.getElement().getStyle().setPaddingRight(2, Unit.EM);
             sp.getElement().getStyle().setPosition(Position.RELATIVE);
@@ -344,7 +344,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
                 main.add(label);
             }
 
-            Widget sp = new ViewLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+            Widget sp = new VistaLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
             sp.getElement().getStyle().setPaddingRight(2, Unit.EM);
             sp.getElement().getStyle().setPosition(Position.RELATIVE);

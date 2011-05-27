@@ -37,7 +37,7 @@ import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
@@ -100,7 +100,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
         subviewPanel.setWidth("100%");
         fullViewPanel.add(subviewPanel);
 
-        Widget sp = new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
+        Widget sp = new VistaLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
         sp.getElement().getStyle().setPadding(0, Unit.EM);
         fullViewPanel.add(sp);
 
@@ -123,7 +123,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
         subviewPanel.setWidth("100%");
         fullViewPanel.add(subviewPanel);
 
-        sp = new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
+        sp = new VistaLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
         sp.getElement().getStyle().setPadding(0, Unit.EM);
         fullViewPanel.add(sp);
 
@@ -135,7 +135,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
         bind(createVehicleFolderEditorColumns(), proto().vehicles());
         fullViewPanel.add(get(proto().vehicles()));
 
-        sp = new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
+        sp = new VistaLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
         sp.getElement().getStyle().setPadding(0, Unit.EM);
         fullViewPanel.add(sp);
 
@@ -161,7 +161,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
         panel.setWidth("100%");
         fullViewPanel.add(panel);
 
-        sp = new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
+        sp = new VistaLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
         sp.getElement().getStyle().setPadding(0, Unit.EM);
         fullViewPanel.add(sp);
 

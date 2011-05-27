@@ -49,6 +49,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.CMoney;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
@@ -61,7 +62,6 @@ import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
-import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
 
 @Singleton
 public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
@@ -113,7 +113,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
             header.getElement().getStyle().setMarginTop(1, Unit.EM);
             return header;
         } else {
-            return new ViewHeaderDecorator(member);
+            return new VistaHeaderDecorator(member);
         }
     }
 

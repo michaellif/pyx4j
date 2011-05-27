@@ -28,7 +28,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
@@ -37,7 +38,6 @@ import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 import com.pyx4j.commons.TimeUtils;
@@ -97,7 +97,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         header.getElement().getStyle().setMarginTop(7, Unit.PX);
         header.getElement().getStyle().setMarginLeft(130, Unit.PX);
 
-        main.add(new ViewHeaderDecorator(i18n.tr("Available Units"), header, "100%"));
+        main.add(new VistaHeaderDecorator(i18n.tr("Available Units"), header, "100%"));
 
         // units table:
         main.add(inject(proto().availableUnits().units(), new ApartmentUnitsTable(new ValueChangeHandler<AptUnitDTO>() {
@@ -123,10 +123,10 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         })));
 
         // start date:
-        main.add(new ViewLineSeparator(0, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
+        main.add(new VistaLineSeparator(0, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
 
         DecorationData captionDecoration = new DecorationData(16d, 8.2);
-        captionDecoration.labelStyleName = ViewHeaderDecorator.DEFAULT_STYLE_PREFIX + ViewHeaderDecorator.StyleSuffix.Caption.name();
+        captionDecoration.labelStyleName = VistaHeaderDecorator.DEFAULT_STYLE_PREFIX + VistaHeaderDecorator.StyleSuffix.Caption.name();
         main.add(new VistaWidgetDecorator(inject(proto().rentStart()), captionDecoration));
 
         // last step - add building picture on the right:

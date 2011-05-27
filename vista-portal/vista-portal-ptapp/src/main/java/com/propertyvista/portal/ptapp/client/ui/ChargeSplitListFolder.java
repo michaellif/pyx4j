@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -124,7 +124,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
             public FolderItemDecorator createFolderItemDecorator() {
                 TableFolderItemDecorator dec = new TableFolderItemDecorator(null);
                 if (!isFirst()) {
-                    Widget sp = new ViewLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
+                    Widget sp = new VistaLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
                     sp.getElement().getStyle().setPadding(0, Unit.EM);
                     ((VerticalPanel) dec.getWidget()).insert(sp, 0);
                 }

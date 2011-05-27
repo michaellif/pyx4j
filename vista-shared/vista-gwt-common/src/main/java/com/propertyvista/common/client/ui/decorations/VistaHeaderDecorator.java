@@ -11,7 +11,7 @@
  * @author VladLL
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.decorations;
+package com.propertyvista.common.client.ui.decorations;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
@@ -21,15 +21,15 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class ViewHeaderDecorator extends HorizontalPanel {
+public class VistaHeaderDecorator extends HorizontalPanel {
 
-    public static String DEFAULT_STYLE_PREFIX = "vista_ViewHeaderDecorator";
+    public static String DEFAULT_STYLE_PREFIX = "vista_HeaderDecorator";
 
     public static enum StyleSuffix implements IStyleSuffix {
         Caption
     }
 
-    public ViewHeaderDecorator(String caption, Widget widget, String width) {
+    public VistaHeaderDecorator(String caption, Widget widget, String width) {
         HTML captionHolder = new HTML(caption);
         setStyleName(DEFAULT_STYLE_PREFIX);
         captionHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Caption.name());
@@ -48,23 +48,23 @@ public class ViewHeaderDecorator extends HorizontalPanel {
             setWidth(width);
     }
 
-    public ViewHeaderDecorator(String caption, Widget widget) {
+    public VistaHeaderDecorator(String caption, Widget widget) {
         this(caption, widget, null);
     }
 
-    public ViewHeaderDecorator(String caption, String width) {
+    public VistaHeaderDecorator(String caption, String width) {
         this(caption, null, width);
     }
 
-    public ViewHeaderDecorator(String caption) {
+    public VistaHeaderDecorator(String caption) {
         this(caption, (String) null);
     }
 
-    public ViewHeaderDecorator(IObject<?> member, String width) {
+    public VistaHeaderDecorator(IObject<?> member, String width) {
         this(member.getMeta().getCaption(), null, width);
     }
 
-    public ViewHeaderDecorator(IObject<?> member) {
+    public VistaHeaderDecorator(IObject<?> member) {
         this(member, null);
     }
 }

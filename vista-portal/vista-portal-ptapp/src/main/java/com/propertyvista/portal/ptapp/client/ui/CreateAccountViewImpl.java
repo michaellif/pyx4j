@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
@@ -124,7 +124,7 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
         startPanel.setWidth("100%");
         rightColumn.add(startPanel);
 
-        rightColumn.add(new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
+        rightColumn.add(new VistaLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
 
         FlowPanel signinPanel = new FlowPanel();
         HTML header = new HTML(HtmlUtils.h2(i18n.tr("Already Registered?")));

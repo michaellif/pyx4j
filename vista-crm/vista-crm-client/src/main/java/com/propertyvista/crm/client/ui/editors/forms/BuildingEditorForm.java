@@ -13,18 +13,27 @@
  */
 package com.propertyvista.crm.client.ui.editors.forms;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.flex.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.client.ui.editors.CrmEditorsComponentFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.Address;
 import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.dto.ElevatorDTO;
 
 public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
@@ -51,7 +60,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(inject(proto().info().residentialStories()), 15);
 
         main.add(new CrmHeaderDecorator(i18n.tr("Details")));
-        //main.add(inject(proto().elevators()), 15);
+        main.add(inject(proto().elevators(), createElevatorsListEditor()));
         //main.add(inject(proto().boilers()), 15);
         //main.add(inject(proto().roof()), 15);
         //main.add(inject(proto().parkings()), 15);
@@ -94,5 +103,19 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     private void injectAddress(final VistaDecoratorsFlowPanel main, final Address address) {
         AddressUtils.injectIAddress(main, address, this);
         main.add(inject(address.addressType()), 12);
+    }
+
+    private CEntityFolder<ElevatorDTO> createElevatorsListEditor() {
+        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Elevator() : new CrmSiteMap.Viewers.Elevator());
+        return new CrmEntityFolder<ElevatorDTO>(ElevatorDTO.class, "Elevator", isEditable(), placeToGo, this) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().isForMoveInOut(), "5em"));
+                return columns;
+            }
+        };
     }
 }

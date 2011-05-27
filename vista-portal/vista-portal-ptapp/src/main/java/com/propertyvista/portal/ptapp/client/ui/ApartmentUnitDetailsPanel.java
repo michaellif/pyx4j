@@ -41,7 +41,7 @@ import com.pyx4j.widgets.client.AnimationCallback;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 
@@ -161,7 +161,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         concessionPanel.setWidth("30%");
         unitDetailPanel.add(concessionPanel);
 
-        Widget sp = new ViewLineSeparator(98, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+        Widget sp = new VistaLineSeparator(98, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
         sp.getElement().getStyle().setPaddingLeft(0, Unit.EM);
         unitDetailPanel.add(sp);
 
@@ -172,7 +172,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         unitDetailPanel.add(addonsPanel);
         addonsPanel.add(new HTML(unit.addOns().getStringView()));
 
-        sp = new ViewLineSeparator(98, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+        sp = new VistaLineSeparator(98, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
         sp.getElement().getStyle().setPaddingLeft(0, Unit.EM);
         unitDetailPanel.add(sp);
 

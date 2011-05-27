@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.client.themes;
 
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.portal.client.ui.ApartmentDetailsViewImpl;
@@ -143,7 +143,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.Display));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(ViewLineSeparator.DEFAULT_STYLE_PREFIX));
+        style = new Style(Selector.valueOf(VistaLineSeparator.DEFAULT_STYLE_PREFIX));
         style.addProperty("border-top-width", "1px");
         style.addProperty("border-top-style", "dotted");
         style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);

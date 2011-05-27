@@ -16,26 +16,26 @@ package com.propertyvista.common.client.ui.decorations;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 
-public class ViewLineSeparator extends HTML {
+public class VistaLineSeparator extends HTML {
 
-    public static String DEFAULT_STYLE_PREFIX = "vista_ViewLineSeparator";
+    public static String DEFAULT_STYLE_PREFIX = "vista_LineSeparator";
 
-    public ViewLineSeparator() {
+    public VistaLineSeparator() {
         setStyleName(DEFAULT_STYLE_PREFIX);
     }
 
-    public ViewLineSeparator(double width, Unit unit) {
+    public VistaLineSeparator(double width, Unit unit) {
         this();
         if (width != 0)
             getElement().getStyle().setWidth(width, unit);
     }
 
-    public ViewLineSeparator(double width, Unit widthUnit, double topMargin, Unit topMarginUnit) {
+    public VistaLineSeparator(double width, Unit widthUnit, double topMargin, Unit topMarginUnit) {
         this(width, widthUnit);
         getElement().getStyle().setMarginTop(topMargin, topMarginUnit);
     }
 
-    public ViewLineSeparator(double width, Unit widthUnit, double topMargin, Unit topMarginUnit, double bottomMargin, Unit bottomMarginUnit) {
+    public VistaLineSeparator(double width, Unit widthUnit, double topMargin, Unit topMarginUnit, double bottomMargin, Unit bottomMarginUnit) {
         this(width, widthUnit, topMargin, topMarginUnit);
         getElement().getStyle().setMarginBottom(bottomMargin, bottomMarginUnit);
     }

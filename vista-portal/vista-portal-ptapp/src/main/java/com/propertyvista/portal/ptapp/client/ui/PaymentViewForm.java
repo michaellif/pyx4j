@@ -49,7 +49,8 @@ import com.pyx4j.widgets.client.style.Selector;
 
 import com.propertyvista.common.client.ui.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
@@ -62,7 +63,6 @@ import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.validators.CreditCardNumberValidator;
 
 public class PaymentViewForm extends CEntityForm<PaymentInfo> {
@@ -91,10 +91,10 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new ViewHeaderDecorator(proto().applicationCharges()));
+        main.add(new VistaHeaderDecorator(proto().applicationCharges()));
         main.add(inject(proto().applicationCharges().charges(), new ChargeLineFolder()));
 
-        ViewLineSeparator sp = new ViewLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+        VistaLineSeparator sp = new VistaLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
         sp.getElement().getStyle().setMarginLeft(1, Unit.EM);
         main.add(sp);
 
@@ -111,7 +111,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         info.getElement().getStyle().setMarginBottom(1, Unit.EM);
         main.add(info);
 
-        main.add(new ViewHeaderDecorator(proto().type()));
+        main.add(new VistaHeaderDecorator(proto().type()));
         CRadioGroupEnum<PaymentType> radioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, CRadioGroup.Layout.VERTICAL);
         radioGroup.setStylePrefix(PAYMENT_BUTTONS_STYLE_PREFIX);
 
@@ -193,7 +193,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
         setPaymentTableVisibility(0);
 
-        main.add(new ViewHeaderDecorator(proto().billingAddress()));
+        main.add(new VistaHeaderDecorator(proto().billingAddress()));
         CCheckBox sameAsCurrent = (CCheckBox) inject(proto().sameAsCurrent());
         main.add(sameAsCurrent, 12);
         sameAsCurrent.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -207,7 +207,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
         main.add(inject(proto().billingAddress().phone()), 12);
 
-        main.add(new ViewHeaderDecorator(i18n.tr("Pre-Authorized Payment")));
+        main.add(new VistaHeaderDecorator(i18n.tr("Pre-Authorized Payment")));
         HorizontalPanel preauthorisedNotes = new HorizontalPanel();
         preauthorisedNotes.add(new HTML(PortalResources.INSTANCE.paymentPreauthorisedNotes().getText()));
         main.add(preauthorisedNotes);

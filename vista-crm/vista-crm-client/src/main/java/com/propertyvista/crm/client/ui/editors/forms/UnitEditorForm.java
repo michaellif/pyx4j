@@ -88,22 +88,22 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 // TODO: arrange available floorplans in drop-down box? 
 //      main.add(inject(proto().floorplan()), 15);
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().amenities().getFieldName())));
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().amenities().getMeta().getCaption())));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().info().utilities().getFieldName())));
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().info().utilities().getMeta().getCaption())));
         main.add(inject(proto().info().utilities(), createUtilitiesListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Info Details")));
         main.add(inject(proto().info().details(), createDetailsListEditor()));
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().occupancies().getFieldName())));
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().occupancies().getMeta().getCaption())));
         main.add(inject(proto().occupancies(), createOccupanciesListEditor()));
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().concessions().getFieldName())));
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().concessions().getMeta().getCaption())));
         main.add(inject(proto().concessions(), createConcessionsListEditor()));
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().addOns().getFieldName())));
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().addOns().getMeta().getCaption())));
         main.add(inject(proto().addOns(), createAddOnsListEditor()));
 
         main.setWidth("100%");

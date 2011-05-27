@@ -57,7 +57,8 @@ import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.AddressUtils;
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
@@ -74,7 +75,6 @@ import com.propertyvista.portal.domain.ptapp.Vehicle;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 
@@ -95,7 +95,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new ViewHeaderDecorator(i18n.tr("Contact Details")));
+        main.add(new VistaHeaderDecorator(i18n.tr("Contact Details")));
 
         DecorationData decorData = new DecorationData(14d, 12);
         decorData.editable = false;
@@ -113,7 +113,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         decorData.editable = false;
         main.add(new VistaWidgetDecorator(inject(proto().email()), decorData));
 
-        main.add(new ViewHeaderDecorator(i18n.tr("Secure Information")));
+        main.add(new VistaHeaderDecorator(i18n.tr("Secure Information")));
         main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), new DecorationData(14d, 20)));
         main.add(new VistaWidgetDecorator(inject(proto().driversLicenseState()), new DecorationData(14d, 17)));
         final CEditableComponent<?, ?> sin = inject(proto().secureIdentifier());
@@ -139,33 +139,33 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             }
         });
 
-        main.add(new ViewHeaderDecorator(proto().currentAddress()));
+        main.add(new VistaHeaderDecorator(proto().currentAddress()));
         main.add(inject(proto().currentAddress()));
 
-        main.add(previousAddressHeader = new ViewHeaderDecorator(proto().previousAddress()));
+        main.add(previousAddressHeader = new VistaHeaderDecorator(proto().previousAddress()));
         main.add(inject(proto().previousAddress()));
 
-        main.add(new ViewHeaderDecorator(proto().vehicles()));
+        main.add(new VistaHeaderDecorator(proto().vehicles()));
         main.add(inject(proto().vehicles(), createVehicleFolderEditorColumns()));
 
-        main.add(new ViewHeaderDecorator(proto().legalQuestions()));
+        main.add(new VistaHeaderDecorator(proto().legalQuestions()));
 
         VistaWidgetDecorator.DecorationData decor = new VistaWidgetDecorator.DecorationData(43d, HasHorizontalAlignment.ALIGN_LEFT, 8);
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForRent()), decor));
-        main.add(new ViewLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForDamages()), decor));
-        main.add(new ViewLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().everEvicted()), decor));
-        main.add(new ViewLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().defaultedOnLease()), decor));
-        main.add(new ViewLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().convictedOfFelony()), decor));
-        main.add(new ViewLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().legalTroubles()), decor));
-        main.add(new ViewLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
 
-        main.add(new ViewHeaderDecorator(proto().emergencyContacts()));
+        main.add(new VistaHeaderDecorator(proto().emergencyContacts()));
         main.add(inject(proto().emergencyContacts(), createEmergencyContactFolderEditor()));
 
         main.setWidth("800px");

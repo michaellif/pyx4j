@@ -24,13 +24,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -74,7 +74,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        main.add(new ViewHeaderDecorator(proto().monthlyCharges(), "700px"));
+        main.add(new VistaHeaderDecorator(proto().monthlyCharges(), "700px"));
         main.add(inject(proto().monthlyCharges().charges()));
         if (!summaryViewMode) {
             main.add(createHeader2(proto().monthlyCharges().upgradeCharges()));
@@ -83,16 +83,16 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
         main.add(createTotal(proto().monthlyCharges().total()));
 
-        main.add(new ViewHeaderDecorator(proto().proRatedCharges(), "700px"));
+        main.add(new VistaHeaderDecorator(proto().proRatedCharges(), "700px"));
         main.add(inject(proto().proRatedCharges().charges()));
         main.add(createTotal(proto().proRatedCharges().total()));
 
-        main.add(new ViewHeaderDecorator(proto().applicationCharges(), "700px"));
+        main.add(new VistaHeaderDecorator(proto().applicationCharges(), "700px"));
         main.add(inject(proto().applicationCharges().charges()));
         main.add(createTotal(proto().applicationCharges().total()));
 
         // could be hided from resulting form:
-        splitCharges.add(new ViewHeaderDecorator(proto().paymentSplitCharges(), "700px"));
+        splitCharges.add(new VistaHeaderDecorator(proto().paymentSplitCharges(), "700px"));
 
         splitCharges.add(inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(summaryViewMode)));
         splitCharges.add(createTotal(proto().paymentSplitCharges().total()));
@@ -129,7 +129,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
     private Widget createTotal(Money member) {
         FlowPanel totalRow = new FlowPanel();
 
-        Widget sp = new ViewLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
+        Widget sp = new VistaLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
         sp.getElement().getStyle().setPadding(0, Unit.EM);
         sp.getElement().getStyle().setProperty("border", "1px dotted black");
         totalRow.add(sp);

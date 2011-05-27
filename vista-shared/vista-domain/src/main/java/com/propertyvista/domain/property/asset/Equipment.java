@@ -43,7 +43,7 @@ public interface Equipment extends IEntity {
 
     Warranty warranty();
 
-    Contract maitenanceContract();
+    Contract maitenance();
 
 // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...
     IPrimitive<String> notes();

@@ -20,7 +20,8 @@ import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
@@ -31,7 +32,6 @@ import com.propertyvista.portal.ptapp.client.ui.PaymentViewForm;
 import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.SiteView;
 import com.propertyvista.portal.ptapp.client.ui.SummaryViewForm;
-import com.propertyvista.portal.ptapp.client.ui.decorations.ViewHeaderDecorator;
 
 public abstract class VistaTheme extends com.propertyvista.common.client.theme.VistaTheme {
 
@@ -164,19 +164,19 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Display));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX));
+        style = new Style(Selector.valueOf(VistaHeaderDecorator.DEFAULT_STYLE_PREFIX));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
         style.addProperty("margin", "0.4em 0 0.4em 0");
         style.addProperty("width", "960px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX, ViewHeaderDecorator.StyleSuffix.Caption));
+        style = new Style(Selector.valueOf(VistaHeaderDecorator.DEFAULT_STYLE_PREFIX, VistaHeaderDecorator.StyleSuffix.Caption));
         style.addProperty("padding", "0.3em 1em 0.4em 1em");
         style.addProperty("font-size", "1.3em");
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(ViewLineSeparator.DEFAULT_STYLE_PREFIX));
+        style = new Style(Selector.valueOf(VistaLineSeparator.DEFAULT_STYLE_PREFIX));
         style.addProperty("border-top-width", "1px");
         style.addProperty("border-top-style", "dotted");
         style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);

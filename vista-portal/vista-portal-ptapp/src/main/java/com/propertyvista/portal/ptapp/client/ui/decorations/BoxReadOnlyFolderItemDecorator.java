@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.common.client.ui.decorations.ViewLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
@@ -35,7 +35,7 @@ public class BoxReadOnlyFolderItemDecorator extends FlowPanel implements FolderI
         content = new SimplePanel();
 
         if (withLineSeparator) {
-            separator = new ViewLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+            separator = new VistaLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             separator.getElement().getStyle().setPadding(0, Unit.EM);
             add(separator);
         }
