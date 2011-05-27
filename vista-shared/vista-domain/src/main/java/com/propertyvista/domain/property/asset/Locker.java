@@ -15,5 +15,5 @@ package com.propertyvista.domain.property.asset;
 
 public interface Locker extends Rentable {
 
-    LockerArea lockerArea();
+    LockerArea belongsTo();
 }

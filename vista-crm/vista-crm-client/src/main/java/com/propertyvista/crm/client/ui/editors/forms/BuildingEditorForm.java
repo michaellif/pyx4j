@@ -23,13 +23,13 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.ui.AddressUtils;
+import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
-import com.propertyvista.crm.client.ui.editors.CrmEditorsComponentFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.Address;
 import com.propertyvista.dto.BuildingDTO;

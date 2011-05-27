@@ -15,5 +15,5 @@ package com.propertyvista.domain.property.asset;
 
 public interface ParkingSpot extends Rentable {
 
-    Parking parking();
+    Parking belongsTo();
 }

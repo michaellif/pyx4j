@@ -11,9 +11,9 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.common.client.ui;
+package com.propertyvista.common.client.ui.components;
 
-import com.propertyvista.common.client.ui.DefaultMoneyFormatter.ShowCurrency;
+import com.propertyvista.common.client.ui.components.DefaultMoneyFormatter.ShowCurrency;
 import com.propertyvista.common.domain.financial.Money;
 
 import com.pyx4j.forms.client.ui.CAbstractLabel;

@@ -7,13 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-20
- * @author Vlad
+ * Created on 2011-02-28
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset;
+package com.propertyvista.crm.client.ui.components;
 
-public interface RoofSegment extends Rentable {
+import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 
-    Roof belongsTo();
+public class CrmViewersComponentFactory extends VistaViewersComponentFactory {
+
 }

@@ -11,14 +11,9 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.components;
+package com.propertyvista.common.client.ui.components;
 
 import java.util.Date;
-
-import com.propertyvista.common.client.ui.CMoneyLabel;
-import com.propertyvista.common.domain.financial.Money;
-import com.propertyvista.common.domain.ref.Country;
-import com.propertyvista.common.domain.ref.Province;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
@@ -31,6 +26,10 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+
+import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.common.domain.ref.Country;
+import com.propertyvista.common.domain.ref.Province;
 
 public class VistaViewersComponentFactory extends EntityFormComponentFactory {
 
@@ -63,8 +62,7 @@ public class VistaViewersComponentFactory extends EntityFormComponentFactory {
             return new CEntityLabel();
         } else if (member.getValueClass().equals(Money.class)) {
             return new CMoneyLabel();
-        } else {
-            return super.create(member);
         }
+        return super.create(member);
     }
 }

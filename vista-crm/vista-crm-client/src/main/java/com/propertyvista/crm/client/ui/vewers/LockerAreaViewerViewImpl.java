@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.vewers;
 
+import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.editors.forms.LockerAreaEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.LockerAreaDTO;

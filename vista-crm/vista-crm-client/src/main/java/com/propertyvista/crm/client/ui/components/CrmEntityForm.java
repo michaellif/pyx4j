@@ -20,7 +20,6 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.crm.client.ui.editors.CrmEditorsComponentFactory;
 
 public abstract class CrmEntityForm<E extends IEntity> extends CEntityForm<E> {
 

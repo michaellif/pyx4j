@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 
+import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -30,7 +31,6 @@ import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
-import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;

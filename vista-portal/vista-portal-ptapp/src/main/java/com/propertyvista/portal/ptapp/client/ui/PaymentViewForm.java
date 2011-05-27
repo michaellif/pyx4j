@@ -47,7 +47,8 @@ import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.Selector;
 
-import com.propertyvista.common.client.ui.AddressUtils;
+import com.propertyvista.common.client.ui.components.AddressUtils;
+import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -62,7 +63,6 @@ import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
-import com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.ptapp.client.ui.validators.CreditCardNumberValidator;
 
 public class PaymentViewForm extends CEntityForm<PaymentInfo> {

@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-10
- * @author Vlad
+ * Created on 2011-03-09
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.editors;
+package com.propertyvista.common.client.ui.components;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.CEntitySuggestBox;
@@ -21,22 +21,15 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.IFormat;
 
-import com.propertyvista.common.client.ui.CMoney;
 import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.common.domain.ref.Country;
 
-public class CrmEditorsComponentFactory extends EntityFormComponentFactory {
-
-    /*
-     * TODO Mere with
-     * 
-     * @see com.propertyvista.portal.ptapp.client.ui.components.VistaEditorsComponentFactory
-     */
+public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(Money.class)) {
-            return new CMoney();
+            return new CMoneyLabel();
         } else if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
             final CEntitySuggestBox<Country> c = new CEntitySuggestBox<Country>(Country.class);
             c.setFormat(new IFormat<Country>() {
@@ -59,8 +52,7 @@ public class CrmEditorsComponentFactory extends EntityFormComponentFactory {
                 }
             });
             return c;
-        } else {
-            return super.create(member);
         }
+        return super.create(member);
     }
 }
