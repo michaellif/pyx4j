@@ -33,6 +33,7 @@ import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.property.asset.Equipment;
 import com.propertyvista.domain.property.vendor.Contract;
 import com.propertyvista.domain.property.vendor.Licence;
+import com.propertyvista.domain.property.vendor.Maintenance;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.domain.property.vendor.Warranty;
 import com.propertyvista.domain.property.vendor.WarrantyItem;
@@ -107,6 +108,13 @@ public class SubtypeInjectors {
         main.add(parent.inject(proto.renewal()), 8.2);
     }
 
+    public static void injectMaintenance(VistaDecoratorsFlowPanel main, Maintenance proto, CEntityEditableComponent<?> parent) {
+
+        injectContract(main, proto, parent);
+        main.add(parent.inject(proto.lastService()), 8.2);
+        main.add(parent.inject(proto.nextService()), 8.2);
+    }
+
     public static void injectWarranty(VistaDecoratorsFlowPanel main, Warranty proto, CEntityEditableComponent<?> parent) {
 
         main.add(parent.inject(proto.title()), 15);
@@ -144,7 +152,7 @@ public class SubtypeInjectors {
         SubtypeInjectors.injectWarranty(main, proto.warranty(), parent);
 
         main.add(new CrmHeaderDecorator(i18n.tr(proto.maitenance().getMeta().getCaption())));
-        SubtypeInjectors.injectContract(main, proto.maitenance(), parent);
+        SubtypeInjectors.injectMaintenance(main, proto.maitenance(), parent);
 
         main.add(parent.inject(proto.notes()), 25);
     }

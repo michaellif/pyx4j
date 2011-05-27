@@ -17,7 +17,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
+import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.client.ui.editors.CrmEditorsComponentFactory;
 import com.propertyvista.dto.BoilerDTO;
 
@@ -33,7 +36,11 @@ public class BoilerEditorForm extends CrmEntityForm<BoilerDTO> {
 
     @Override
     public IsWidget createContent() {
-        // TODO Auto-generated method stub
-        return null;
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+
+        main.add(new CrmHeaderDecorator(i18n.tr("Information")));
+        SubtypeInjectors.injectEquipment(main, proto(), this);
+
+        return main;
     }
 }

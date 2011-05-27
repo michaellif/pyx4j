@@ -15,13 +15,15 @@ package com.propertyvista.domain.property.asset;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.vendor.Contract;
+import com.propertyvista.domain.property.vendor.Maintenance;
+import com.propertyvista.domain.property.vendor.Warranty;
 
 public interface Roof extends IEntity, Notes {
 
@@ -30,15 +32,14 @@ public interface Roof extends IEntity, Notes {
     @MemberColumn(name = "roofType")
     IPrimitive<String> type();
 
-    IPrimitive<String> make();
-
     @MemberColumn(name = "roofYear")
     IPrimitive<Date> year();
 
-    IPrimitive<String> build();
+    Warranty warranty();
 
-    IPrimitive<String> warrantee();
+    @Caption(name = "Maitenance Conrtact")
+    Maintenance maitenance();
 
-    Contract contractor();
-
+    // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...
+    IPrimitive<String> notes();
 }

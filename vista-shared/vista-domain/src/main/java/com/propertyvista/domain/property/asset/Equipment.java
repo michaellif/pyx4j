@@ -21,8 +21,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.vendor.Contract;
 import com.propertyvista.domain.property.vendor.Licence;
+import com.propertyvista.domain.property.vendor.Maintenance;
 import com.propertyvista.domain.property.vendor.Warranty;
 
 public interface Equipment extends IEntity {
@@ -45,7 +45,7 @@ public interface Equipment extends IEntity {
     Warranty warranty();
 
     @Caption(name = "Maitenance Conrtact")
-    Contract maitenance();
+    Maintenance maitenance();
 
 // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...
     IPrimitive<String> notes();

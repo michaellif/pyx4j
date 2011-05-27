@@ -17,7 +17,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
+import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.client.ui.editors.CrmEditorsComponentFactory;
 import com.propertyvista.dto.RoofDTO;
 
@@ -33,7 +36,20 @@ public class RoofEditorForm extends CrmEntityForm<RoofDTO> {
 
     @Override
     public IsWidget createContent() {
-        // TODO Auto-generated method stub
-        return null;
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+
+        main.add(new CrmHeaderDecorator(i18n.tr("Information")));
+        main.add(inject(proto().type()), 15);
+        main.add(inject(proto().year()), 8.2);
+
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().warranty().getMeta().getCaption())));
+        SubtypeInjectors.injectWarranty(main, proto().warranty(), this);
+
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().maitenance().getMeta().getCaption())));
+        SubtypeInjectors.injectMaintenance(main, proto().maitenance(), this);
+
+        main.add(inject(proto().notes()), 25);
+
+        return main;
     }
 }
