@@ -52,7 +52,7 @@ public interface Parking extends IEntity {
     IPrimitive<String> description();
 
     @MemberColumn(name = "parkingType")
-    IPrimitive<Parking.Type> type();
+    IPrimitive<Type> type();
 
     @Format("#0.#")
     IPrimitive<Double> levels();

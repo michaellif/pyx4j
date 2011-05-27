@@ -213,13 +213,13 @@ public interface BuildingInfo extends IEntity {
 
     IPrimitive<FoundationType> foundationType();
 
-    IPrimitive<Boolean> centralAir();
-
-    IPrimitive<Boolean> centralHeat();
-
     IPrimitive<FloorType> floorType();
 
     IPrimitive<String> landArea();
 
     IPrimitive<WaterSupply> waterSupply();
+
+    IPrimitive<Boolean> centralAir();
+
+    IPrimitive<Boolean> centralHeat();
 }

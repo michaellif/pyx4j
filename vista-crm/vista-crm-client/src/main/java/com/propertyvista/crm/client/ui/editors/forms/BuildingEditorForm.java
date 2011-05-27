@@ -32,8 +32,12 @@ import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.Address;
+import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ElevatorDTO;
+import com.propertyvista.dto.LockerAreaDTO;
+import com.propertyvista.dto.ParkingDTO;
+import com.propertyvista.dto.RoofDTO;
 
 public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
@@ -60,7 +64,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(inject(proto().info().residentialStories()), 15);
 
         main.add(new CrmHeaderDecorator(i18n.tr("Details")));
-        main.add(inject(proto().elevators(), createElevatorsListEditor()));
         //main.add(inject(proto().boilers()), 15);
         //main.add(inject(proto().roof()), 15);
         //main.add(inject(proto().parkings()), 15);
@@ -68,11 +71,17 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         //main.add(inject(proto().amenities()), 15);
         main.add(inject(proto().info().constructionType()), 15);
         main.add(inject(proto().info().foundationType()), 15);
-        main.add(inject(proto().info().centralAir()), 15);
-        main.add(inject(proto().info().centralHeat()), 15);
         main.add(inject(proto().info().floorType()), 15);
         main.add(inject(proto().info().landArea()), 15);
         main.add(inject(proto().info().waterSupply()), 15);
+        main.add(inject(proto().info().centralAir()), 15);
+        main.add(inject(proto().info().centralHeat()), 15);
+
+        main.add(inject(proto().elevators(), createElevatorsListEditor()));
+        main.add(inject(proto().elevators(), createBoilersListEditor()));
+        main.add(inject(proto().elevators(), createRoofsListEditor()));
+        main.add(inject(proto().elevators(), createParkingsListEditor()));
+        main.add(inject(proto().elevators(), createLockerAreasListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Marketing")));
         main.add(inject(proto().marketing().name()), 15);
@@ -113,7 +122,63 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().model(), "15em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().isForMoveInOut(), "5em"));
+                return columns;
+            }
+        };
+    }
+
+    private CEntityFolder<BoilerDTO> createBoilersListEditor() {
+        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Boiler() : new CrmSiteMap.Viewers.Boiler());
+        return new CrmEntityFolder<BoilerDTO>(BoilerDTO.class, "Boiler", isEditable(), placeToGo, this) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().model(), "15em"));
+                return columns;
+            }
+        };
+    }
+
+    private CEntityFolder<RoofDTO> createRoofsListEditor() {
+        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Roof() : new CrmSiteMap.Viewers.Roof());
+        return new CrmEntityFolder<RoofDTO>(RoofDTO.class, "Roof", isEditable(), placeToGo, this) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().year(), "8.2em"));
+                return columns;
+            }
+        };
+    }
+
+    private CEntityFolder<ParkingDTO> createParkingsListEditor() {
+        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Parking() : new CrmSiteMap.Viewers.Parking());
+        return new CrmEntityFolder<ParkingDTO>(ParkingDTO.class, "Parking", isEditable(), placeToGo, this) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
+                return columns;
+            }
+        };
+    }
+
+    private CEntityFolder<LockerAreaDTO> createLockerAreasListEditor() {
+        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.LockerArea() : new CrmSiteMap.Viewers.LockerArea());
+        return new CrmEntityFolder<LockerAreaDTO>(LockerAreaDTO.class, "LockerArea", isEditable(), placeToGo, this) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().totalLockers(), "5em"));
                 return columns;
             }
         };

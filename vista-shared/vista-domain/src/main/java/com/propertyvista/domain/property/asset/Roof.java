@@ -35,7 +35,7 @@ public interface Roof extends IEntity, Notes {
     IPrimitive<String> type();
 
     @MemberColumn(name = "roofYear")
-    @Editor(type = EditorType.monthyearpicker)
+    @Editor(type = EditorType.yearpicker)
     IPrimitive<Date> year();
 
     Warranty warranty();
