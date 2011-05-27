@@ -15,6 +15,7 @@ package com.propertyvista.domain.property.asset;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,10 +29,10 @@ public interface Equipment extends IEntity {
 
     Building belongsTo();
 
-    IPrimitive<String> description();
-
     @MemberColumn(name = "equipmentType")
     IPrimitive<String> type();
+
+    IPrimitive<String> description();
 
     IPrimitive<String> make();
 
@@ -43,6 +44,7 @@ public interface Equipment extends IEntity {
 
     Warranty warranty();
 
+    @Caption(name = "Maitenance Conrtact")
     Contract maitenance();
 
 // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...

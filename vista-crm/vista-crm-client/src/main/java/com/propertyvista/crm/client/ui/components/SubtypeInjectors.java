@@ -16,14 +16,21 @@ package com.propertyvista.crm.client.ui.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
+import com.google.gwt.user.client.ui.HTML;
+
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.domain.Company;
 import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Phone;
+import com.propertyvista.domain.property.asset.Equipment;
 import com.propertyvista.domain.property.vendor.Contract;
 import com.propertyvista.domain.property.vendor.Licence;
 import com.propertyvista.domain.property.vendor.Vendor;
@@ -32,9 +39,11 @@ import com.propertyvista.domain.property.vendor.WarrantyItem;
 
 public class SubtypeInjectors {
 
+    protected static I18n i18n = I18nFactory.getI18n(SubtypeInjectors.class);
+
     public static void injectPhones(VistaDecoratorsFlowPanel main, IList<Phone> proto, CEntityEditableComponent<?> parent) {
 
-        main.add(parent.inject(proto, new CrmEntityFolder<Phone>(Phone.class, "Phone", parent.isEditable()) {
+        main.add(parent.inject(proto, new CrmEntityFolder<Phone>(Phone.class, i18n.tr("Phone"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
@@ -45,20 +54,22 @@ public class SubtypeInjectors {
                 return columns;
             }
         }));
+        main.add(new HTML());
     }
 
     public static void injectEmails(VistaDecoratorsFlowPanel main, IList<Email> proto, CEntityEditableComponent<?> parent) {
 
-        main.add(parent.inject(proto, new CrmEntityFolder<Email>(Email.class, "Email", parent.isEditable()) {
+        main.add(parent.inject(proto, new CrmEntityFolder<Email>(Email.class, i18n.tr("Email"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().address(), "20em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().address(), "25em"));
                 return columns;
             }
         }));
+        main.add(new HTML());
     }
 
     public static void injectCompany(VistaDecoratorsFlowPanel main, Company proto, CEntityEditableComponent<?> parent) {
@@ -76,13 +87,13 @@ public class SubtypeInjectors {
 
     public static void injectVendor(VistaDecoratorsFlowPanel main, Vendor proto, CEntityEditableComponent<?> parent) {
 
-        main.add(parent.inject(proto.type()), 10);
+        main.add(parent.inject(proto.type()), 15);
         injectCompany(main, proto, parent);
     }
 
     public static void injectLicence(VistaDecoratorsFlowPanel main, Licence proto, CEntityEditableComponent<?> parent) {
 
-        main.add(parent.inject(proto.number()), 20);
+        main.add(parent.inject(proto.number()), 15);
         main.add(parent.inject(proto.expiration()), 8.2);
         main.add(parent.inject(proto.renewal()), 8.2);
     }
@@ -99,12 +110,12 @@ public class SubtypeInjectors {
     public static void injectWarranty(VistaDecoratorsFlowPanel main, Warranty proto, CEntityEditableComponent<?> parent) {
 
         main.add(parent.inject(proto.title()), 15);
-        main.add(parent.inject(proto.type()), 10);
+        main.add(parent.inject(proto.type()), 15);
         injectCompany(main, proto.providedBy(), parent);
         main.add(parent.inject(proto.start()), 8.2);
         main.add(parent.inject(proto.end()), 8.2);
 
-        main.add(parent.inject(proto.items(), new CrmEntityFolder<WarrantyItem>(WarrantyItem.class, "Warranty Item", parent.isEditable()) {
+        main.add(parent.inject(proto.items(), new CrmEntityFolder<WarrantyItem>(WarrantyItem.class, i18n.tr("Warranty Item"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
@@ -116,5 +127,25 @@ public class SubtypeInjectors {
 
 // TODO : design representation for:
 //        main.add(parent.inject(proto.document()), 45);
+    }
+
+    public static void injectEquipment(VistaDecoratorsFlowPanel main, Equipment proto, CEntityEditableComponent<?> parent) {
+
+        main.add(parent.inject(proto.type()), 15);
+        main.add(parent.inject(proto.description()), 15);
+        main.add(parent.inject(proto.make()), 15);
+        main.add(parent.inject(proto.model()), 15);
+        main.add(parent.inject(proto.build()), 8.2);
+
+        main.add(new CrmHeaderDecorator(i18n.tr(proto.licence().getMeta().getCaption())));
+        SubtypeInjectors.injectLicence(main, proto.licence(), parent);
+
+        main.add(new CrmHeaderDecorator(i18n.tr(proto.warranty().getMeta().getCaption())));
+        SubtypeInjectors.injectWarranty(main, proto.warranty(), parent);
+
+        main.add(new CrmHeaderDecorator(i18n.tr(proto.maitenance().getMeta().getCaption())));
+        SubtypeInjectors.injectContract(main, proto.maitenance(), parent);
+
+        main.add(parent.inject(proto.notes()), 25);
     }
 }
