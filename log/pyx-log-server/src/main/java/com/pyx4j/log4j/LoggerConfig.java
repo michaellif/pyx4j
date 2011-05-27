@@ -53,6 +53,10 @@ public class LoggerConfig {
         return nameVariables.get("contextName");
     }
 
+    public static String getContainerHome() {
+        return nameVariables.get("container.home");
+    }
+
     public static void setVariable(String name, String value) {
         nameVariables.put(name, value);
     }
