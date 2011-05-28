@@ -40,6 +40,7 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.bean2.PhysicalProperty;
 
 public class YardiTransactions {
 
@@ -56,15 +57,19 @@ public class YardiTransactions {
     public static void ping(YardiClient c) throws AxisFault, RemoteException {
         c.transactionId++;
         c.setCurrentAction(Action.ping);
+
         Ping ping = new Ping();
         PingResponse pr = c.getResidentTransactionsService().ping(ping);
-        log.info("result [{}]", pr.getPingResult());
+        log.info("Connection to Yardi works: {}", pr.getPingResult());
     }
 
     /**
      * Allows export of the Property Configuration with the
      * Database. The Unique Interface Entity name is needed in order
      * to return the Property ID's the third-party has access to.
+     * 
+     * This is just a list of properties with not much information in it:
+     * Property has code, address, marketing name, accounts payable and accounts receivable
      * 
      * @throws RemoteException
      * @throws AxisFault
@@ -84,9 +89,9 @@ public class YardiTransactions {
         GetPropertyConfigurationsResponse response = c.getResidentTransactionsService().getPropertyConfigurations(l);
         String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
 
-        log.info("Result: {}", xml);
+        log.debug("Result: {}", xml);
         Properties properties = MarshallUtil.unmarshall(Properties.class, xml);
-        log.info("Properties: {}", properties);
+        log.info("\n--- GetPropertyConfigurations ---\n{}\n", properties);
         return properties;
     }
 
@@ -96,22 +101,27 @@ public class YardiTransactions {
      * @param c
      * @throws RemoteException
      * @throws AxisFault
+     * @throws JAXBException
      */
-    public static void getUnitInformationLogin(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
+    public static void getUnitInformationLogin(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
         c.transactionId++;
         c.setCurrentAction(Action.GetUnitInformation);
 
         GetUnitInformation_Login l = new GetUnitInformation_Login();
         l.setUserName(yp.getUsername());
         l.setPassword(yp.getPassword());
-        l.setServerName("aspdb04");
-        l.setDatabase("afqoml_live");
-        l.setPlatform("SQL");
-        l.setYardiPropertyId("prvista1");
-        l.setInterfaceEntity("Property Vista");
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setYardiPropertyId(yp.getYardiPropertyId());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
+
         GetUnitInformation_LoginResponse response = c.getResidentTransactionsService().getUnitInformation_Login(l);
         String xml = response.getGetUnitInformation_LoginResult().getExtraElement().toString();
         log.info("UnitInformationLogin: {}", xml);
+
+        PhysicalProperty physicalProperty = MarshallUtil.unmarshall(PhysicalProperty.class, xml);
+        log.info("\n--- GetUnitInformation ---\n{}\n", physicalProperty);
     }
 
     public static void getResidentTransactionsLogin(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {

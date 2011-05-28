@@ -32,6 +32,7 @@ public class YardiExample {
         yp.setPlatform(YardiConstants.PLATFORM);
         yp.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
         yp.setYardiPropertyId(YardiConstants.YARDI_PROPERTY_ID);
+//        yp.setYardiPropertyId("anya_2");
 
         // execute different actions
         try {

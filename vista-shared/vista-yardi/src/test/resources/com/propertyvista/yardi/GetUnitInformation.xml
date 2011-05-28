@@ -11,7 +11,8 @@
 						<UnitEconomicStatusDescription>Vacant Rented Not Ready</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -25,7 +26,8 @@
 						<UnitEconomicStatusDescription>Vacant Rented Not Ready</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -39,7 +41,8 @@
 						<UnitEconomicStatusDescription>Occupied No Notice</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -53,7 +56,8 @@
 						<UnitEconomicStatusDescription>Vacant Unrented Not Ready</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -67,7 +71,8 @@
 						<UnitEconomicStatusDescription>Notice Unrented</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -81,7 +86,8 @@
 						<UnitEconomicStatusDescription>Occupied No Notice</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -95,7 +101,8 @@
 						<UnitEconomicStatusDescription>Vacant Unrented Not Ready</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -109,7 +116,8 @@
 						<UnitEconomicStatusDescription>Occupied No Notice</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -123,7 +131,8 @@
 						<UnitEconomicStatusDescription>Occupied No Notice</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -137,7 +146,8 @@
 						<UnitEconomicStatusDescription>Vacant Rented Ready</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -151,7 +161,8 @@
 						<UnitEconomicStatusDescription>Occupied No Notice</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -165,7 +176,8 @@
 						<UnitEconomicStatusDescription>Notice Unrented</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -179,7 +191,8 @@
 						<UnitEconomicStatusDescription>Notice Unrented</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -193,7 +206,8 @@
 						<UnitEconomicStatusDescription>Vacant Unrented Not Ready</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -207,7 +221,8 @@
 						<UnitEconomicStatusDescription>Vacant Unrented Not Ready</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -221,7 +236,8 @@
 						<UnitEconomicStatusDescription>Excluded</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>
@@ -235,7 +251,8 @@
 						<UnitEconomicStatusDescription>Waitlist</UnitEconomicStatusDescription>
 					</MITS:Information>
 					<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
-					<MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
+					<MITS:MarketingName>Property Vista 1 Test Property
+					</MITS:MarketingName>
 				</Unit>
 			</RT_Unit>
 		</RT_Customer>

@@ -28,6 +28,7 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
+import com.propertyvista.yardi.bean2.PhysicalProperty;
 
 public class XmlBeanTest {
 
@@ -35,7 +36,7 @@ public class XmlBeanTest {
 
     @Test
     public void testProperties() throws IOException, JAXBException {
-        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("properties.xml", getClass()));
+        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetPropertyConfigurations.xml", getClass()));
         Properties properties = MarshallUtil.unmarshall(Properties.class, xml);
 
         log.info("Loaded properties: " + properties);
@@ -55,6 +56,14 @@ public class XmlBeanTest {
             Assert.assertNotNull(property.getState());
             Assert.assertNotNull(property.getMarketingName());
         }
+    }
+
+    @Test
+    public void testGetUnitInformation() throws IOException, JAXBException {
+        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetUnitInformation.xml", getClass()));
+        PhysicalProperty property = MarshallUtil.unmarshall(PhysicalProperty.class, xml);
+
+        log.info("Loaded properties {}", property);
     }
 
 //    private void validate(Object o) {

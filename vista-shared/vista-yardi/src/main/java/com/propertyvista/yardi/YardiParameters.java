@@ -28,6 +28,10 @@ public class YardiParameters {
 
     private String yardiPropertyId;
 
+    /**
+     * Valid Voyager username required for access to the target Voyager
+     * database
+     */
     public String getUsername() {
         return username;
     }
@@ -36,6 +40,9 @@ public class YardiParameters {
         this.username = username;
     }
 
+    /**
+     * Password associated with Voyager username
+     */
     public String getPassword() {
         return password;
     }
@@ -44,6 +51,9 @@ public class YardiParameters {
         this.password = password;
     }
 
+    /**
+     * Name of server where target Voyager database resides
+     */
     public String getServerName() {
         return serverName;
     }
@@ -52,6 +62,9 @@ public class YardiParameters {
         this.serverName = serverName;
     }
 
+    /**
+     * Name of Voyager database residing on the server
+     */
     public String getDatabase() {
         return database;
     }
@@ -68,6 +81,9 @@ public class YardiParameters {
         this.platform = platform;
     }
 
+    /**
+     * Name of Billing Agency attempting to pull data as agreed upon by Yardi and the Billing Agency
+     */
     public String getInterfaceEntity() {
         return interfaceEntity;
     }
