@@ -47,8 +47,6 @@ public class YardiClient {
 
     public Long transactionId = 0l;
 
-    private final long timeOutInMinutes = 10;
-
     public YardiClient() {
     }
 
@@ -102,7 +100,7 @@ public class YardiClient {
         if (options == null) {
             options = new Options();
         }
-        options.setTimeOutInMilliSeconds(Consts.MIN2MSEC * timeOutInMinutes);
+        options.setTimeOutInMilliSeconds(Consts.MIN2MSEC * YardiConstants.TIMEOUT);
 
         options.setProperty(HTTPConstants.HTTP_PROTOCOL_VERSION, HTTPConstants.HEADER_PROTOCOL_11);
 

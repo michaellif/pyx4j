@@ -19,6 +19,8 @@ public class YardiConstants {
         ping, GetPropertyConfigurations, GetUnitInformation, GetResidentTransactions, GetResidentTransactions_ByChargeDate, GetResidentsLeaseCharges
     }
 
+    public static final long TIMEOUT = 10; // minutes
+
     public static final String USERNAME = "propertyvistaws";
 
     public static final String PASSWORD = "52673";
