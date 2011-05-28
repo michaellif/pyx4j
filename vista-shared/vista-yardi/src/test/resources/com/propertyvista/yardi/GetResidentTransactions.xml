@@ -1,0 +1,1603 @@
+<?xml version='1.0' encoding='utf-8'?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soap:Body>
+		<GetResidentTransactions_LoginResponse
+			xmlns="http://tempuri.org/YSI.Interfaces.WebServices/ItfResidentTransactions20">
+			<GetResidentTransactions_LoginResult>
+				<ResidentTransactions xmlns="http://yardi.com/ResidentTransactions20"
+					xmlns:MITS="http://my-company.com/namespace"
+					xsi:schemaLocation="http://yardi.com/ResidentTransactions20 .\Itf_MITS_ResidentTransactions2.0.xsd">
+					<Property>
+						<PropertyID>
+							<MITS:Identification Type="other">
+								<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+								<MITS:MarketingName>Property Vista 1 Test Property
+								</MITS:MarketingName>
+							</MITS:Identification>
+							<MITS:Address Type="property">
+								<MITS:Address1>430 S Fairview Avenue</MITS:Address1>
+								<MITS:City>Goleta</MITS:City>
+								<MITS:State>CA</MITS:State>
+								<MITS:PostalCode>93117</MITS:PostalCode>
+							</MITS:Address>
+						</PropertyID>
+						<RT_Customer>
+							<CustomerID>t0005518</CustomerID>
+							<Customers>
+								<MITS:Customer Type="future resident">
+									<MITS:Description>7724</MITS:Description>
+									<MITS:CustomerID>t0005518</MITS:CustomerID>
+									<MITS:Property>
+										<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+										<MITS:MarketingName>Property Vista 1 Test Property
+										</MITS:MarketingName>
+										<MITS:UnitID>141</MITS:UnitID>
+									</MITS:Property>
+									<MITS:Name>
+										<MITS:FirstName>Fedor</MITS:FirstName>
+										<MITS:MiddleName>F</MITS:MiddleName>
+										<MITS:LastName>Three</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="property">
+										<MITS:Description>current</MITS:Description>
+										<MITS:Address1>27 Mama drive</MITS:Address1>
+										<MITS:City>Red Wood Shore</MITS:City>
+										<MITS:State>CA</MITS:State>
+										<MITS:PostalCode>12345</MITS:PostalCode>
+										<MITS:Email>fedor@pyx4j.com</MITS:Email>
+									</MITS:Address>
+									<MITS:Lease>
+										<MITS:CurrentRent>850.00</MITS:CurrentRent>
+										<MITS:ExpectedMoveInDate>2011-06-24</MITS:ExpectedMoveInDate>
+										<MITS:LeaseFromDate>2011-06-24</MITS:LeaseFromDate>
+										<MITS:LeaseToDate>2012-06-30</MITS:LeaseToDate>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+								<MITS:Customer Type="customer">
+									<MITS:CustomerID>r0000852</MITS:CustomerID>
+									<MITS:Name>
+										<MITS:FirstName>Fedor</MITS:FirstName>
+										<MITS:LastName>Four</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="current" />
+									<MITS:Lease>
+										<MITS:ActualMoveIn>0001-01-01</MITS:ActualMoveIn>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+							</Customers>
+							<RT_Unit>
+								<UnitID>141</UnitID>
+								<NumberOccupants Total="2" />
+								<Unit>
+									<MITS:Information>
+										<MITS:UnitID>141</MITS:UnitID>
+										<MITS:UnitType>prv11b1</MITS:UnitType>
+										<MITS:UnitBedrooms>1</MITS:UnitBedrooms>
+										<MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
+										<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+										<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+										<MITS:UnitRent>850.00</MITS:UnitRent>
+										<MITS:MarketRent>850.000000</MITS:MarketRent>
+										<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+										<MITS:UnitOccupancyStatus>vacant</MITS:UnitOccupancyStatus>
+										<MITS:UnitLeasedStatus>leased reserved</MITS:UnitLeasedStatus>
+										<MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
+										<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+									</MITS:Information>
+									<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+									<MITS:MarketingName>Property Vista 1 Test Property
+									</MITS:MarketingName>
+								</Unit>
+							</RT_Unit>
+							<PaymentAccepted>0</PaymentAccepted>
+							<RTServiceTransactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Administration</Description>
+											<TransactionDate>2011-05-24</TransactionDate>
+											<TransactionID>700031079</TransactionID>
+											<ChargeCode>admin</ChargeCode>
+											<GLAccountNumber>53000000</GLAccountNumber>
+											<CustomerID>t0005518</CustomerID>
+											<UnitID>141</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>25.00</BalanceDue>
+											<Amount>25.00</Amount>
+											<Comment>Application Fee</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Administration</Description>
+											<TransactionDate>2011-05-24</TransactionDate>
+											<TransactionID>700031080</TransactionID>
+											<ChargeCode>admin</ChargeCode>
+											<GLAccountNumber>53000000</GLAccountNumber>
+											<CustomerID>t0005518</CustomerID>
+											<UnitID>141</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>25.00</BalanceDue>
+											<Amount>25.00</Amount>
+											<Comment>Credit Check Fee</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+							</RTServiceTransactions>
+						</RT_Customer>
+						<RT_Customer>
+							<CustomerID>t0005344</CustomerID>
+							<Customers>
+								<MITS:Customer Type="applicant">
+									<MITS:Description>7474</MITS:Description>
+									<MITS:CustomerID>t0005344</MITS:CustomerID>
+									<MITS:Property>
+										<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+										<MITS:MarketingName>Property Vista 1 Test Property
+										</MITS:MarketingName>
+										<MITS:UnitID>146</MITS:UnitID>
+									</MITS:Property>
+									<MITS:Name>
+										<MITS:FirstName>Michael</MITS:FirstName>
+										<MITS:MiddleName />
+										<MITS:LastName>Caine</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="property">
+										<MITS:Description>current</MITS:Description>
+										<MITS:Address1>459 Southern Avenue</MITS:Address1>
+										<MITS:City>Santa Barbara</MITS:City>
+										<MITS:State>CA</MITS:State>
+										<MITS:PostalCode>93110</MITS:PostalCode>
+									</MITS:Address>
+									<MITS:Lease>
+										<MITS:CurrentRent>850.00</MITS:CurrentRent>
+										<MITS:ExpectedMoveInDate>2011-04-15</MITS:ExpectedMoveInDate>
+										<MITS:LeaseFromDate>2011-04-15</MITS:LeaseFromDate>
+										<MITS:LeaseToDate>2012-04-30</MITS:LeaseToDate>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+							</Customers>
+							<RT_Unit>
+								<UnitID>146</UnitID>
+								<NumberOccupants Total="1" />
+								<Unit>
+									<MITS:Information>
+										<MITS:UnitID>146</MITS:UnitID>
+										<MITS:UnitType>prv11b1</MITS:UnitType>
+										<MITS:UnitBedrooms>1</MITS:UnitBedrooms>
+										<MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
+										<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+										<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+										<MITS:UnitRent>850.00</MITS:UnitRent>
+										<MITS:MarketRent>850.000000</MITS:MarketRent>
+										<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+										<MITS:UnitOccupancyStatus>vacant</MITS:UnitOccupancyStatus>
+										<MITS:UnitLeasedStatus>available</MITS:UnitLeasedStatus>
+										<MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
+										<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+									</MITS:Information>
+									<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+									<MITS:MarketingName>Property Vista 1 Test Property
+									</MITS:MarketingName>
+								</Unit>
+							</RT_Unit>
+							<PaymentAccepted>0</PaymentAccepted>
+							<RTServiceTransactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Administration</Description>
+											<TransactionDate>2011-03-21</TransactionDate>
+											<TransactionID>700030762</TransactionID>
+											<ChargeCode>admin</ChargeCode>
+											<GLAccountNumber>53000000</GLAccountNumber>
+											<CustomerID>t0005344</CustomerID>
+											<UnitID>146</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>25.00</BalanceDue>
+											<Amount>25.00</Amount>
+											<Comment>Application Fee</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Administration</Description>
+											<TransactionDate>2011-03-21</TransactionDate>
+											<TransactionID>700030763</TransactionID>
+											<ChargeCode>admin</ChargeCode>
+											<GLAccountNumber>53000000</GLAccountNumber>
+											<CustomerID>t0005344</CustomerID>
+											<UnitID>146</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>25.00</BalanceDue>
+											<Amount>25.00</Amount>
+											<Comment>Credit Check Fee</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+							</RTServiceTransactions>
+						</RT_Customer>
+						<RT_Customer>
+							<CustomerID>t0005345</CustomerID>
+							<Customers>
+								<MITS:Customer Type="future resident">
+									<MITS:Description>7475</MITS:Description>
+									<MITS:CustomerID>t0005345</MITS:CustomerID>
+									<MITS:Property>
+										<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+										<MITS:MarketingName>Property Vista 1 Test Property
+										</MITS:MarketingName>
+										<MITS:UnitID>149</MITS:UnitID>
+									</MITS:Property>
+									<MITS:Name>
+										<MITS:FirstName>Earl</MITS:FirstName>
+										<MITS:MiddleName />
+										<MITS:LastName>Cameron</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="property">
+										<MITS:Description>current</MITS:Description>
+										<MITS:Address1>430 S Fairview Avenue</MITS:Address1>
+										<MITS:City>Goleta</MITS:City>
+										<MITS:State>CA</MITS:State>
+										<MITS:PostalCode>93117</MITS:PostalCode>
+									</MITS:Address>
+									<MITS:Lease>
+										<MITS:CurrentRent>850.00</MITS:CurrentRent>
+										<MITS:ExpectedMoveInDate>2011-05-01</MITS:ExpectedMoveInDate>
+										<MITS:LeaseFromDate>2011-05-01</MITS:LeaseFromDate>
+										<MITS:LeaseToDate>2012-04-30</MITS:LeaseToDate>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+							</Customers>
+							<RT_Unit>
+								<UnitID>149</UnitID>
+								<NumberOccupants Total="1" />
+								<Unit>
+									<MITS:Information>
+										<MITS:UnitID>149</MITS:UnitID>
+										<MITS:UnitType>prv11b1</MITS:UnitType>
+										<MITS:UnitBedrooms>1</MITS:UnitBedrooms>
+										<MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
+										<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+										<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+										<MITS:UnitRent>850.00</MITS:UnitRent>
+										<MITS:MarketRent>850.000000</MITS:MarketRent>
+										<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+										<MITS:UnitOccupancyStatus>vacant</MITS:UnitOccupancyStatus>
+										<MITS:UnitLeasedStatus>leased reserved</MITS:UnitLeasedStatus>
+										<MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
+										<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+									</MITS:Information>
+									<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+									<MITS:MarketingName>Property Vista 1 Test Property
+									</MITS:MarketingName>
+								</Unit>
+							</RT_Unit>
+							<PaymentAccepted>0</PaymentAccepted>
+							<RTServiceTransactions>
+								<Services Type="Other">
+									<Detail>
+										<Description>Electric</Description>
+										<Service Type="Electric" />
+										<ChargeCode>elect</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005345</CustomerID>
+										<UnitID>149</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Misc Fees</Description>
+										<Service Type="Fees" />
+										<ChargeCode>fees</ChargeCode>
+										<GLAccountNumber>57000000</GLAccountNumber>
+										<CustomerID>t0005345</CustomerID>
+										<UnitID>149</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Utilities-Gas</Description>
+										<Service Type="Gas" />
+										<ChargeCode>utilgas</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005345</CustomerID>
+										<UnitID>149</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Trash pick-up</Description>
+										<Service Type="Trash" />
+										<ChargeCode>trash</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005345</CustomerID>
+										<UnitID>149</UnitID>
+									</Detail>
+								</Services>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Administration</Description>
+											<TransactionDate>2011-03-21</TransactionDate>
+											<TransactionID>700030764</TransactionID>
+											<ChargeCode>admin</ChargeCode>
+											<GLAccountNumber>53000000</GLAccountNumber>
+											<CustomerID>t0005345</CustomerID>
+											<UnitID>149</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>25.00</BalanceDue>
+											<Amount>25.00</Amount>
+											<Comment>Application Fee</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Administration</Description>
+											<TransactionDate>2011-03-21</TransactionDate>
+											<TransactionID>700030765</TransactionID>
+											<ChargeCode>admin</ChargeCode>
+											<GLAccountNumber>53000000</GLAccountNumber>
+											<CustomerID>t0005345</CustomerID>
+											<UnitID>149</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>25.00</BalanceDue>
+											<Amount>25.00</Amount>
+											<Comment>Credit Check Fee</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+							</RTServiceTransactions>
+						</RT_Customer>
+						<RT_Customer>
+							<CustomerID>t0005517</CustomerID>
+							<Customers>
+								<MITS:Customer Type="other">
+									<MITS:Description>7723</MITS:Description>
+									<MITS:CustomerID>t0005517</MITS:CustomerID>
+									<MITS:Property>
+										<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+										<MITS:MarketingName>Property Vista 1 Test Property
+										</MITS:MarketingName>
+										<MITS:UnitID>411</MITS:UnitID>
+									</MITS:Property>
+									<MITS:Name>
+										<MITS:FirstName>Fedor</MITS:FirstName>
+										<MITS:MiddleName />
+										<MITS:LastName>One</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="property">
+										<MITS:Description>current</MITS:Description>
+										<MITS:Address1>430 S Fairview Avenue</MITS:Address1>
+										<MITS:City>Goleta</MITS:City>
+										<MITS:State>CA</MITS:State>
+										<MITS:PostalCode>93117</MITS:PostalCode>
+									</MITS:Address>
+									<MITS:Lease>
+										<MITS:CurrentRent>850.00</MITS:CurrentRent>
+										<MITS:LeaseFromDate>2011-01-06</MITS:LeaseFromDate>
+										<MITS:LeaseToDate>2012-01-06</MITS:LeaseToDate>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+							</Customers>
+							<RT_Unit>
+								<UnitID>411</UnitID>
+								<NumberOccupants Total="1" />
+								<Unit>
+									<MITS:Information>
+										<MITS:UnitID>411</MITS:UnitID>
+										<MITS:UnitType>prv11b1</MITS:UnitType>
+										<MITS:UnitBedrooms>1</MITS:UnitBedrooms>
+										<MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
+										<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+										<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+										<MITS:UnitRent>850.00</MITS:UnitRent>
+										<MITS:MarketRent>850.000000</MITS:MarketRent>
+										<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+										<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+										<MITS:UnitLeasedStatus>on notice</MITS:UnitLeasedStatus>
+										<MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
+										<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+									</MITS:Information>
+									<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+									<MITS:MarketingName>Property Vista 1 Test Property
+									</MITS:MarketingName>
+								</Unit>
+							</RT_Unit>
+							<PaymentAccepted>0</PaymentAccepted>
+							<RTServiceTransactions />
+						</RT_Customer>
+						<RT_Customer>
+							<CustomerID>t0005337</CustomerID>
+							<Customers>
+								<MITS:Customer Type="current resident">
+									<MITS:Description>7467</MITS:Description>
+									<MITS:CustomerID>t0005337</MITS:CustomerID>
+									<MITS:Property>
+										<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+										<MITS:MarketingName>Property Vista 1 Test Property
+										</MITS:MarketingName>
+										<MITS:UnitID>142</MITS:UnitID>
+									</MITS:Property>
+									<MITS:Name>
+										<MITS:FirstName>Joseph</MITS:FirstName>
+										<MITS:MiddleName />
+										<MITS:LastName>Gordon</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="property">
+										<MITS:Description>current</MITS:Description>
+										<MITS:Address1>430 S Fairview Avenue</MITS:Address1>
+										<MITS:City>Goleta</MITS:City>
+										<MITS:State>CA</MITS:State>
+										<MITS:PostalCode>93117</MITS:PostalCode>
+									</MITS:Address>
+									<MITS:Lease>
+										<MITS:CurrentRent>950.00</MITS:CurrentRent>
+										<MITS:ExpectedMoveInDate>2010-01-01</MITS:ExpectedMoveInDate>
+										<MITS:LeaseFromDate>2010-01-01</MITS:LeaseFromDate>
+										<MITS:LeaseToDate>2010-12-31</MITS:LeaseToDate>
+										<MITS:ActualMoveIn>2010-01-01</MITS:ActualMoveIn>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+							</Customers>
+							<RT_Unit>
+								<UnitID>142</UnitID>
+								<NumberOccupants Total="1" />
+								<Unit>
+									<MITS:Information>
+										<MITS:UnitID>142</MITS:UnitID>
+										<MITS:UnitType>prv11b1</MITS:UnitType>
+										<MITS:UnitBedrooms>1</MITS:UnitBedrooms>
+										<MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
+										<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+										<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+										<MITS:UnitRent>850.00</MITS:UnitRent>
+										<MITS:MarketRent>850.000000</MITS:MarketRent>
+										<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+										<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+										<MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
+										<MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
+										<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+									</MITS:Information>
+									<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+									<MITS:MarketingName>Property Vista 1 Test Property
+									</MITS:MarketingName>
+								</Unit>
+							</RT_Unit>
+							<PaymentAccepted>0</PaymentAccepted>
+							<RTServiceTransactions>
+								<Services Type="Other">
+									<Detail>
+										<Description>Electric</Description>
+										<Service Type="Electric" />
+										<ChargeCode>elect</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005337</CustomerID>
+										<UnitID>142</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Misc Fees</Description>
+										<Service Type="Fees" />
+										<ChargeCode>fees</ChargeCode>
+										<GLAccountNumber>57000000</GLAccountNumber>
+										<CustomerID>t0005337</CustomerID>
+										<UnitID>142</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Utilities-Gas</Description>
+										<Service Type="Gas" />
+										<ChargeCode>utilgas</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005337</CustomerID>
+										<UnitID>142</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Trash pick-up</Description>
+										<Service Type="Trash" />
+										<ChargeCode>trash</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005337</CustomerID>
+										<UnitID>142</UnitID>
+									</Detail>
+								</Services>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-01-01</TransactionDate>
+											<TransactionID>700030743</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005337</CustomerID>
+											<UnitID>142</UnitID>
+											<AmountPaid>300.00</AmountPaid>
+											<BalanceDue>650.00</BalanceDue>
+											<Amount>650.00</Amount>
+											<Comment>Base Rent (01/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-02-01</TransactionDate>
+											<TransactionID>700030749</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005337</CustomerID>
+											<UnitID>142</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>950.00</BalanceDue>
+											<Amount>950.00</Amount>
+											<Comment>Base Rent (02/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-03-01</TransactionDate>
+											<TransactionID>700030755</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005337</CustomerID>
+											<UnitID>142</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>950.00</BalanceDue>
+											<Amount>950.00</Amount>
+											<Comment>Base Rent (03/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+							</RTServiceTransactions>
+						</RT_Customer>
+						<RT_Customer>
+							<CustomerID>t0005338</CustomerID>
+							<Customers>
+								<MITS:Customer Type="current resident">
+									<MITS:Description>7468</MITS:Description>
+									<MITS:CustomerID>t0005338</MITS:CustomerID>
+									<MITS:Property>
+										<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+										<MITS:MarketingName>Property Vista 1 Test Property
+										</MITS:MarketingName>
+										<MITS:UnitID>144</MITS:UnitID>
+									</MITS:Property>
+									<MITS:Name>
+										<MITS:FirstName>Ellen</MITS:FirstName>
+										<MITS:MiddleName />
+										<MITS:LastName>Page</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="property">
+										<MITS:Description>current</MITS:Description>
+										<MITS:Address1>430 S Fairview Avenue</MITS:Address1>
+										<MITS:City>Goleta</MITS:City>
+										<MITS:State>CA</MITS:State>
+										<MITS:PostalCode>93117</MITS:PostalCode>
+									</MITS:Address>
+									<MITS:Lease>
+										<MITS:CurrentRent>975.00</MITS:CurrentRent>
+										<MITS:ExpectedMoveInDate>2010-02-01</MITS:ExpectedMoveInDate>
+										<MITS:ExpectedMoveOutDate>2011-03-31
+										</MITS:ExpectedMoveOutDate>
+										<MITS:LeaseFromDate>2010-02-01</MITS:LeaseFromDate>
+										<MITS:LeaseToDate>2011-01-31</MITS:LeaseToDate>
+										<MITS:ActualMoveIn>2010-02-01</MITS:ActualMoveIn>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+							</Customers>
+							<RT_Unit>
+								<UnitID>144</UnitID>
+								<NumberOccupants Total="1" />
+								<Unit>
+									<MITS:Information>
+										<MITS:UnitID>144</MITS:UnitID>
+										<MITS:UnitType>prv11b1</MITS:UnitType>
+										<MITS:UnitBedrooms>1</MITS:UnitBedrooms>
+										<MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
+										<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+										<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+										<MITS:UnitRent>850.00</MITS:UnitRent>
+										<MITS:MarketRent>850.000000</MITS:MarketRent>
+										<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+										<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+										<MITS:UnitLeasedStatus>on notice</MITS:UnitLeasedStatus>
+										<MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
+										<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+									</MITS:Information>
+									<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+									<MITS:MarketingName>Property Vista 1 Test Property
+									</MITS:MarketingName>
+								</Unit>
+							</RT_Unit>
+							<PaymentAccepted>0</PaymentAccepted>
+							<RTServiceTransactions>
+								<Services Type="Other">
+									<Detail>
+										<Description>Electric</Description>
+										<Service Type="Electric" />
+										<ChargeCode>elect</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005338</CustomerID>
+										<UnitID>144</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Misc Fees</Description>
+										<Service Type="Fees" />
+										<ChargeCode>fees</ChargeCode>
+										<GLAccountNumber>57000000</GLAccountNumber>
+										<CustomerID>t0005338</CustomerID>
+										<UnitID>144</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Utilities-Gas</Description>
+										<Service Type="Gas" />
+										<ChargeCode>utilgas</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005338</CustomerID>
+										<UnitID>144</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Trash pick-up</Description>
+										<Service Type="Trash" />
+										<ChargeCode>trash</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005338</CustomerID>
+										<UnitID>144</UnitID>
+									</Detail>
+								</Services>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-01-01</TransactionDate>
+											<TransactionID>700030744</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005338</CustomerID>
+											<UnitID>144</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>975.00</BalanceDue>
+											<Amount>975.00</Amount>
+											<Comment>Base Rent (01/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-02-01</TransactionDate>
+											<TransactionID>700030750</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005338</CustomerID>
+											<UnitID>144</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>975.00</BalanceDue>
+											<Amount>975.00</Amount>
+											<Comment>Base Rent (02/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-03-01</TransactionDate>
+											<TransactionID>700030756</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005338</CustomerID>
+											<UnitID>144</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>975.00</BalanceDue>
+											<Amount>975.00</Amount>
+											<Comment>Base Rent (03/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Misc Fees</Description>
+											<TransactionDate>2011-03-21</TransactionDate>
+											<TransactionID>700030760</TransactionID>
+											<ChargeCode>fees</ChargeCode>
+											<GLAccountNumber>57000000</GLAccountNumber>
+											<CustomerID>t0005338</CustomerID>
+											<UnitID>144</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>50.00</BalanceDue>
+											<Amount>50.00</Amount>
+											<Comment>Early Termination Fee</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+							</RTServiceTransactions>
+						</RT_Customer>
+						<RT_Customer>
+							<CustomerID>t0005339</CustomerID>
+							<Customers>
+								<MITS:Customer Type="current resident">
+									<MITS:Description>7469</MITS:Description>
+									<MITS:CustomerID>t0005339</MITS:CustomerID>
+									<MITS:Property>
+										<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+										<MITS:MarketingName>Property Vista 1 Test Property
+										</MITS:MarketingName>
+										<MITS:UnitID>145</MITS:UnitID>
+									</MITS:Property>
+									<MITS:Name>
+										<MITS:FirstName>Tom</MITS:FirstName>
+										<MITS:MiddleName />
+										<MITS:LastName>Hardy</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="property">
+										<MITS:Description>current</MITS:Description>
+										<MITS:Address1>430 S Fairview Avenue</MITS:Address1>
+										<MITS:City>Goleta</MITS:City>
+										<MITS:State>CA</MITS:State>
+										<MITS:PostalCode>93117</MITS:PostalCode>
+									</MITS:Address>
+									<MITS:Lease>
+										<MITS:CurrentRent>925.00</MITS:CurrentRent>
+										<MITS:ExpectedMoveInDate>2010-02-05</MITS:ExpectedMoveInDate>
+										<MITS:LeaseFromDate>2010-02-05</MITS:LeaseFromDate>
+										<MITS:LeaseToDate>2011-01-31</MITS:LeaseToDate>
+										<MITS:ActualMoveIn>2010-02-05</MITS:ActualMoveIn>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+								<MITS:Customer Type="customer">
+									<MITS:CustomerID>r0000777</MITS:CustomerID>
+									<MITS:Name>
+										<MITS:FirstName>Scott</MITS:FirstName>
+										<MITS:LastName>Hardy</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="current" />
+									<MITS:Lease>
+										<MITS:ActualMoveIn>0001-01-01</MITS:ActualMoveIn>
+										<MITS:ResponsibleForLease>false</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+								<MITS:Customer Type="customer">
+									<MITS:CustomerID>r0000778</MITS:CustomerID>
+									<MITS:Name>
+										<MITS:FirstName>Marilyn</MITS:FirstName>
+										<MITS:LastName>Hardy</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="current" />
+									<MITS:Lease>
+										<MITS:ActualMoveIn>0001-01-01</MITS:ActualMoveIn>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+								<MITS:Customer Type="customer">
+									<MITS:CustomerID>r0000779</MITS:CustomerID>
+									<MITS:Name>
+										<MITS:FirstName>Alvin</MITS:FirstName>
+										<MITS:LastName>George</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="current" />
+									<MITS:Lease>
+										<MITS:ActualMoveIn>0001-01-01</MITS:ActualMoveIn>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+							</Customers>
+							<RT_Unit>
+								<UnitID>145</UnitID>
+								<NumberOccupants Total="3" />
+								<Unit>
+									<MITS:Information>
+										<MITS:UnitID>145</MITS:UnitID>
+										<MITS:UnitType>prv11b1</MITS:UnitType>
+										<MITS:UnitBedrooms>1</MITS:UnitBedrooms>
+										<MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
+										<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+										<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+										<MITS:UnitRent>850.00</MITS:UnitRent>
+										<MITS:MarketRent>850.000000</MITS:MarketRent>
+										<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+										<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+										<MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
+										<MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
+										<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+									</MITS:Information>
+									<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+									<MITS:MarketingName>Property Vista 1 Test Property
+									</MITS:MarketingName>
+								</Unit>
+							</RT_Unit>
+							<PaymentAccepted>0</PaymentAccepted>
+							<RTServiceTransactions>
+								<Services Type="Other">
+									<Detail>
+										<Description>Electric</Description>
+										<Service Type="Electric" />
+										<ChargeCode>elect</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005339</CustomerID>
+										<UnitID>145</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Misc Fees</Description>
+										<Service Type="Fees" />
+										<ChargeCode>fees</ChargeCode>
+										<GLAccountNumber>57000000</GLAccountNumber>
+										<CustomerID>t0005339</CustomerID>
+										<UnitID>145</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Utilities-Gas</Description>
+										<Service Type="Gas" />
+										<ChargeCode>utilgas</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005339</CustomerID>
+										<UnitID>145</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Trash pick-up</Description>
+										<Service Type="Trash" />
+										<ChargeCode>trash</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005339</CustomerID>
+										<UnitID>145</UnitID>
+									</Detail>
+								</Services>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-01-01</TransactionDate>
+											<TransactionID>700030745</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005339</CustomerID>
+											<UnitID>145</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>925.00</BalanceDue>
+											<Amount>925.00</Amount>
+											<Comment>Base Rent (01/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-02-01</TransactionDate>
+											<TransactionID>700030751</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005339</CustomerID>
+											<UnitID>145</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>925.00</BalanceDue>
+											<Amount>925.00</Amount>
+											<Comment>Base Rent (02/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-03-01</TransactionDate>
+											<TransactionID>700030757</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005339</CustomerID>
+											<UnitID>145</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>925.00</BalanceDue>
+											<Amount>925.00</Amount>
+											<Comment>Base Rent (03/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Security Deposit</Description>
+											<TransactionDate>2011-03-24</TransactionDate>
+											<TransactionID>700030785</TransactionID>
+											<ChargeCode>deposit</ChargeCode>
+											<GLAccountNumber>22500000</GLAccountNumber>
+											<CustomerID>t0005339</CustomerID>
+											<UnitID>145</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>100.00</BalanceDue>
+											<Amount>100.00</Amount>
+											<Comment>Additional deposit</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+							</RTServiceTransactions>
+						</RT_Customer>
+						<RT_Customer>
+							<CustomerID>t0005340</CustomerID>
+							<Customers>
+								<MITS:Customer Type="current resident">
+									<MITS:Description>7470</MITS:Description>
+									<MITS:CustomerID>t0005340</MITS:CustomerID>
+									<MITS:Property>
+										<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+										<MITS:MarketingName>Property Vista 1 Test Property
+										</MITS:MarketingName>
+										<MITS:UnitID>147</MITS:UnitID>
+									</MITS:Property>
+									<MITS:Name>
+										<MITS:FirstName>Ken</MITS:FirstName>
+										<MITS:MiddleName />
+										<MITS:LastName>Watanabe</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="property">
+										<MITS:Description>current</MITS:Description>
+										<MITS:Address1>430 S Fairview Avenue</MITS:Address1>
+										<MITS:City>Goleta</MITS:City>
+										<MITS:State>CA</MITS:State>
+										<MITS:PostalCode>93117</MITS:PostalCode>
+									</MITS:Address>
+									<MITS:Lease>
+										<MITS:CurrentRent>850.00</MITS:CurrentRent>
+										<MITS:ExpectedMoveInDate>2011-03-01</MITS:ExpectedMoveInDate>
+										<MITS:LeaseFromDate>2011-03-01</MITS:LeaseFromDate>
+										<MITS:LeaseToDate>2011-03-01</MITS:LeaseToDate>
+										<MITS:ActualMoveIn>2011-03-01</MITS:ActualMoveIn>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+							</Customers>
+							<RT_Unit>
+								<UnitID>147</UnitID>
+								<NumberOccupants Total="1" />
+								<Unit>
+									<MITS:Information>
+										<MITS:UnitID>147</MITS:UnitID>
+										<MITS:UnitType>prv11b1</MITS:UnitType>
+										<MITS:UnitBedrooms>1</MITS:UnitBedrooms>
+										<MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
+										<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+										<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+										<MITS:UnitRent>850.00</MITS:UnitRent>
+										<MITS:MarketRent>850.000000</MITS:MarketRent>
+										<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+										<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+										<MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
+										<MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
+										<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+									</MITS:Information>
+									<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+									<MITS:MarketingName>Property Vista 1 Test Property
+									</MITS:MarketingName>
+								</Unit>
+							</RT_Unit>
+							<PaymentAccepted>0</PaymentAccepted>
+							<RTServiceTransactions>
+								<Services Type="Other">
+									<Detail>
+										<Description>Electric</Description>
+										<Service Type="Electric" />
+										<ChargeCode>elect</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005340</CustomerID>
+										<UnitID>147</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Misc Fees</Description>
+										<Service Type="Fees" />
+										<ChargeCode>fees</ChargeCode>
+										<GLAccountNumber>57000000</GLAccountNumber>
+										<CustomerID>t0005340</CustomerID>
+										<UnitID>147</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Utilities-Gas</Description>
+										<Service Type="Gas" />
+										<ChargeCode>utilgas</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005340</CustomerID>
+										<UnitID>147</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Trash pick-up</Description>
+										<Service Type="Trash" />
+										<ChargeCode>trash</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005340</CustomerID>
+										<UnitID>147</UnitID>
+									</Detail>
+								</Services>
+							</RTServiceTransactions>
+						</RT_Customer>
+						<RT_Customer>
+							<CustomerID>t0005341</CustomerID>
+							<Customers>
+								<MITS:Customer Type="current resident">
+									<MITS:Description>7471</MITS:Description>
+									<MITS:CustomerID>t0005341</MITS:CustomerID>
+									<MITS:Property>
+										<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+										<MITS:MarketingName>Property Vista 1 Test Property
+										</MITS:MarketingName>
+										<MITS:UnitID>148</MITS:UnitID>
+									</MITS:Property>
+									<MITS:Name>
+										<MITS:FirstName>Dileep</MITS:FirstName>
+										<MITS:MiddleName />
+										<MITS:LastName>Rao</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="property">
+										<MITS:Description>current</MITS:Description>
+										<MITS:Address1>430 S Fairview Avenue</MITS:Address1>
+										<MITS:City>Goleta</MITS:City>
+										<MITS:State>CA</MITS:State>
+										<MITS:PostalCode>93117</MITS:PostalCode>
+									</MITS:Address>
+									<MITS:Lease>
+										<MITS:CurrentRent>850.00</MITS:CurrentRent>
+										<MITS:ExpectedMoveInDate>2011-03-01</MITS:ExpectedMoveInDate>
+										<MITS:LeaseFromDate>2011-03-01</MITS:LeaseFromDate>
+										<MITS:LeaseToDate>2011-03-01</MITS:LeaseToDate>
+										<MITS:ActualMoveIn>2011-03-01</MITS:ActualMoveIn>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+							</Customers>
+							<RT_Unit>
+								<UnitID>148</UnitID>
+								<NumberOccupants Total="1" />
+								<Unit>
+									<MITS:Information>
+										<MITS:UnitID>148</MITS:UnitID>
+										<MITS:UnitType>prv11b1</MITS:UnitType>
+										<MITS:UnitBedrooms>1</MITS:UnitBedrooms>
+										<MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
+										<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+										<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+										<MITS:UnitRent>850.00</MITS:UnitRent>
+										<MITS:MarketRent>850.000000</MITS:MarketRent>
+										<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+										<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+										<MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
+										<MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
+										<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+									</MITS:Information>
+									<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+									<MITS:MarketingName>Property Vista 1 Test Property
+									</MITS:MarketingName>
+								</Unit>
+							</RT_Unit>
+							<PaymentAccepted>0</PaymentAccepted>
+							<RTServiceTransactions>
+								<Services Type="Other">
+									<Detail>
+										<Description>Electric</Description>
+										<Service Type="Electric" />
+										<ChargeCode>elect</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005341</CustomerID>
+										<UnitID>148</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Misc Fees</Description>
+										<Service Type="Fees" />
+										<ChargeCode>fees</ChargeCode>
+										<GLAccountNumber>57000000</GLAccountNumber>
+										<CustomerID>t0005341</CustomerID>
+										<UnitID>148</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Utilities-Gas</Description>
+										<Service Type="Gas" />
+										<ChargeCode>utilgas</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005341</CustomerID>
+										<UnitID>148</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Trash pick-up</Description>
+										<Service Type="Trash" />
+										<ChargeCode>trash</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005341</CustomerID>
+										<UnitID>148</UnitID>
+									</Detail>
+								</Services>
+							</RTServiceTransactions>
+						</RT_Customer>
+						<RT_Customer>
+							<CustomerID>t0005342</CustomerID>
+							<Customers>
+								<MITS:Customer Type="current resident">
+									<MITS:Description>7472</MITS:Description>
+									<MITS:CustomerID>t0005342</MITS:CustomerID>
+									<MITS:Property>
+										<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+										<MITS:MarketingName>Property Vista 1 Test Property
+										</MITS:MarketingName>
+										<MITS:UnitID>150</MITS:UnitID>
+									</MITS:Property>
+									<MITS:Name>
+										<MITS:FirstName>Cillian</MITS:FirstName>
+										<MITS:MiddleName />
+										<MITS:LastName>Murphy</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="property">
+										<MITS:Description>current</MITS:Description>
+										<MITS:Address1>430 S Fairview Avenue</MITS:Address1>
+										<MITS:City>Goleta</MITS:City>
+										<MITS:State>CA</MITS:State>
+										<MITS:PostalCode>93117</MITS:PostalCode>
+									</MITS:Address>
+									<MITS:Lease>
+										<MITS:CurrentRent>900.00</MITS:CurrentRent>
+										<MITS:ExpectedMoveInDate>2010-05-01</MITS:ExpectedMoveInDate>
+										<MITS:LeaseFromDate>2010-05-01</MITS:LeaseFromDate>
+										<MITS:LeaseToDate>2010-05-01</MITS:LeaseToDate>
+										<MITS:ActualMoveIn>2010-05-01</MITS:ActualMoveIn>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+							</Customers>
+							<RT_Unit>
+								<UnitID>150</UnitID>
+								<NumberOccupants Total="1" />
+								<Unit>
+									<MITS:Information>
+										<MITS:UnitID>150</MITS:UnitID>
+										<MITS:UnitType>prv11b1</MITS:UnitType>
+										<MITS:UnitBedrooms>1</MITS:UnitBedrooms>
+										<MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
+										<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+										<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+										<MITS:UnitRent>850.00</MITS:UnitRent>
+										<MITS:MarketRent>850.000000</MITS:MarketRent>
+										<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+										<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+										<MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
+										<MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
+										<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+									</MITS:Information>
+									<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+									<MITS:MarketingName>Property Vista 1 Test Property
+									</MITS:MarketingName>
+								</Unit>
+							</RT_Unit>
+							<PaymentAccepted>0</PaymentAccepted>
+							<RTServiceTransactions>
+								<Services Type="Other">
+									<Detail>
+										<Description>Electric</Description>
+										<Service Type="Electric" />
+										<ChargeCode>elect</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005342</CustomerID>
+										<UnitID>150</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Misc Fees</Description>
+										<Service Type="Fees" />
+										<ChargeCode>fees</ChargeCode>
+										<GLAccountNumber>57000000</GLAccountNumber>
+										<CustomerID>t0005342</CustomerID>
+										<UnitID>150</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Utilities-Gas</Description>
+										<Service Type="Gas" />
+										<ChargeCode>utilgas</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005342</CustomerID>
+										<UnitID>150</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Trash pick-up</Description>
+										<Service Type="Trash" />
+										<ChargeCode>trash</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005342</CustomerID>
+										<UnitID>150</UnitID>
+									</Detail>
+								</Services>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-01-01</TransactionDate>
+											<TransactionID>700030746</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005342</CustomerID>
+											<UnitID>150</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>900.00</BalanceDue>
+											<Amount>900.00</Amount>
+											<Comment>Base Rent (01/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-02-01</TransactionDate>
+											<TransactionID>700030752</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005342</CustomerID>
+											<UnitID>150</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>900.00</BalanceDue>
+											<Amount>900.00</Amount>
+											<Comment>Base Rent (02/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-03-01</TransactionDate>
+											<TransactionID>700030758</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005342</CustomerID>
+											<UnitID>150</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>900.00</BalanceDue>
+											<Amount>900.00</Amount>
+											<Comment>Base Rent (03/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+							</RTServiceTransactions>
+						</RT_Customer>
+						<RT_Customer>
+							<CustomerID>t0005343</CustomerID>
+							<Customers>
+								<MITS:Customer Type="current resident">
+									<MITS:Description>7473</MITS:Description>
+									<MITS:CustomerID>t0005343</MITS:CustomerID>
+									<MITS:Property>
+										<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+										<MITS:MarketingName>Property Vista 1 Test Property
+										</MITS:MarketingName>
+										<MITS:UnitID>411</MITS:UnitID>
+									</MITS:Property>
+									<MITS:Name>
+										<MITS:FirstName>Tom</MITS:FirstName>
+										<MITS:MiddleName />
+										<MITS:LastName>Berenger</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="property">
+										<MITS:Description>current</MITS:Description>
+										<MITS:Address1>430 S Fairview Avenue</MITS:Address1>
+										<MITS:City>Goleta</MITS:City>
+										<MITS:State>CA</MITS:State>
+										<MITS:PostalCode>93117</MITS:PostalCode>
+									</MITS:Address>
+									<MITS:Lease>
+										<MITS:CurrentRent>975.00</MITS:CurrentRent>
+										<MITS:ExpectedMoveInDate>2010-05-01</MITS:ExpectedMoveInDate>
+										<MITS:ExpectedMoveOutDate>2011-03-15
+										</MITS:ExpectedMoveOutDate>
+										<MITS:LeaseFromDate>2010-05-01</MITS:LeaseFromDate>
+										<MITS:LeaseToDate>2010-05-01</MITS:LeaseToDate>
+										<MITS:ActualMoveIn>2010-05-01</MITS:ActualMoveIn>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+							</Customers>
+							<RT_Unit>
+								<UnitID>411</UnitID>
+								<NumberOccupants Total="1" />
+								<Unit>
+									<MITS:Information>
+										<MITS:UnitID>411</MITS:UnitID>
+										<MITS:UnitType>prv11b1</MITS:UnitType>
+										<MITS:UnitBedrooms>1</MITS:UnitBedrooms>
+										<MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
+										<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+										<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+										<MITS:UnitRent>850.00</MITS:UnitRent>
+										<MITS:MarketRent>850.000000</MITS:MarketRent>
+										<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+										<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+										<MITS:UnitLeasedStatus>on notice</MITS:UnitLeasedStatus>
+										<MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
+										<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+									</MITS:Information>
+									<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+									<MITS:MarketingName>Property Vista 1 Test Property
+									</MITS:MarketingName>
+								</Unit>
+							</RT_Unit>
+							<PaymentAccepted>1</PaymentAccepted>
+							<RTServiceTransactions>
+								<Services Type="Other">
+									<Detail>
+										<Description>Electric</Description>
+										<Service Type="Electric" />
+										<ChargeCode>elect</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005343</CustomerID>
+										<UnitID>411</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Misc Fees</Description>
+										<Service Type="Fees" />
+										<ChargeCode>fees</ChargeCode>
+										<GLAccountNumber>57000000</GLAccountNumber>
+										<CustomerID>t0005343</CustomerID>
+										<UnitID>411</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Utilities-Gas</Description>
+										<Service Type="Gas" />
+										<ChargeCode>utilgas</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005343</CustomerID>
+										<UnitID>411</UnitID>
+									</Detail>
+								</Services>
+								<Services Type="Other">
+									<Detail>
+										<Description>Trash pick-up</Description>
+										<Service Type="Trash" />
+										<ChargeCode>trash</ChargeCode>
+										<GLAccountNumber>54700000</GLAccountNumber>
+										<CustomerID>t0005343</CustomerID>
+										<UnitID>411</UnitID>
+									</Detail>
+								</Services>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-01-01</TransactionDate>
+											<TransactionID>700030747</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005343</CustomerID>
+											<UnitID>411</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>975.00</BalanceDue>
+											<Amount>975.00</Amount>
+											<Comment>Base Rent (01/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-02-01</TransactionDate>
+											<TransactionID>700030753</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005343</CustomerID>
+											<UnitID>411</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>975.00</BalanceDue>
+											<Amount>975.00</Amount>
+											<Comment>Base Rent (02/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-03-01</TransactionDate>
+											<TransactionID>700030759</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005343</CustomerID>
+											<UnitID>411</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>975.00</BalanceDue>
+											<Amount>975.00</Amount>
+											<Comment>Base Rent (03/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+							</RTServiceTransactions>
+						</RT_Customer>
+						<RT_Customer>
+							<CustomerID>t0005336</CustomerID>
+							<Customers>
+								<MITS:Customer Type="former resident">
+									<MITS:Description>7466</MITS:Description>
+									<MITS:CustomerID>t0005336</MITS:CustomerID>
+									<MITS:Property>
+										<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+										<MITS:MarketingName>Property Vista 1 Test Property
+										</MITS:MarketingName>
+										<MITS:UnitID>141</MITS:UnitID>
+									</MITS:Property>
+									<MITS:Name>
+										<MITS:FirstName>Leonardo</MITS:FirstName>
+										<MITS:MiddleName />
+										<MITS:LastName>DiCaprio</MITS:LastName>
+									</MITS:Name>
+									<MITS:Address Type="property">
+										<MITS:Description>current</MITS:Description>
+										<MITS:Address1>430 S Fairview Avenue</MITS:Address1>
+										<MITS:City>Goleta</MITS:City>
+										<MITS:State>CA</MITS:State>
+										<MITS:PostalCode>93117</MITS:PostalCode>
+									</MITS:Address>
+									<MITS:Lease>
+										<MITS:CurrentRent>900.00</MITS:CurrentRent>
+										<MITS:ExpectedMoveInDate>2010-01-01</MITS:ExpectedMoveInDate>
+										<MITS:ExpectedMoveOutDate>2011-02-28
+										</MITS:ExpectedMoveOutDate>
+										<MITS:LeaseFromDate>2010-01-01</MITS:LeaseFromDate>
+										<MITS:LeaseToDate>2010-12-31</MITS:LeaseToDate>
+										<MITS:ActualMoveIn>2010-01-01</MITS:ActualMoveIn>
+										<MITS:ActualMoveOut>2011-02-28</MITS:ActualMoveOut>
+										<MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
+									</MITS:Lease>
+								</MITS:Customer>
+							</Customers>
+							<RT_Unit>
+								<UnitID>141</UnitID>
+								<NumberOccupants Total="1" />
+								<Unit>
+									<MITS:Information>
+										<MITS:UnitID>141</MITS:UnitID>
+										<MITS:UnitType>prv11b1</MITS:UnitType>
+										<MITS:UnitBedrooms>1</MITS:UnitBedrooms>
+										<MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
+										<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+										<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+										<MITS:UnitRent>850.00</MITS:UnitRent>
+										<MITS:MarketRent>850.000000</MITS:MarketRent>
+										<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+										<MITS:UnitOccupancyStatus>vacant</MITS:UnitOccupancyStatus>
+										<MITS:UnitLeasedStatus>leased reserved</MITS:UnitLeasedStatus>
+										<MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
+										<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+									</MITS:Information>
+									<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+									<MITS:MarketingName>Property Vista 1 Test Property
+									</MITS:MarketingName>
+								</Unit>
+							</RT_Unit>
+							<PaymentAccepted>0</PaymentAccepted>
+							<RTServiceTransactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-01-01</TransactionDate>
+											<TransactionID>700030742</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005336</CustomerID>
+											<UnitID>141</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>900.00</BalanceDue>
+											<Amount>900.00</Amount>
+											<Comment>Base Rent (01/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-02-01</TransactionDate>
+											<TransactionID>700030748</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005336</CustomerID>
+											<UnitID>141</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>900.00</BalanceDue>
+											<Amount>900.00</Amount>
+											<Comment>Base Rent (02/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-03-01</TransactionDate>
+											<TransactionID>700030754</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005336</CustomerID>
+											<UnitID>141</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>900.00</BalanceDue>
+											<Amount>900.00</Amount>
+											<Comment>Base Rent (03/2011)</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+								<Transactions>
+									<Charge>
+										<Detail>
+											<Description>Base Rent</Description>
+											<TransactionDate>2011-03-01</TransactionDate>
+											<TransactionID>700030761</TransactionID>
+											<ChargeCode>.rent</ChargeCode>
+											<GLAccountNumber>45000000</GLAccountNumber>
+											<CustomerID>t0005336</CustomerID>
+											<UnitID>141</UnitID>
+											<AmountPaid>0</AmountPaid>
+											<BalanceDue>-900.00</BalanceDue>
+											<Amount>-900.00</Amount>
+											<Comment>Base Rent (03/2011) Credit 31 days</Comment>
+										</Detail>
+									</Charge>
+								</Transactions>
+							</RTServiceTransactions>
+						</RT_Customer>
+					</Property>
+				</ResidentTransactions>
+			</GetResidentTransactions_LoginResult>
+		</GetResidentTransactions_LoginResponse>
+	</soap:Body>
+</soap:Envelope>

@@ -32,6 +32,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 import com.propertyvista.config.SystemConfig;
+import com.propertyvista.yardi.YardiConstants.Action;
 
 public class YardiClient {
 
@@ -40,13 +41,16 @@ public class YardiClient {
     /**
      * Use to name transaction log files
      */
-    protected String currentActionName;
+    private Action currentAction;
 
     private int requestCount = 0;
 
-    public Long transactionId;
+    public Long transactionId = 0l;
 
     private final long timeOutInMinutes = 10;
+
+    public YardiClient() {
+    }
 
     private String getServeviceURL() {
         //TODO make it configurable
@@ -65,8 +69,8 @@ public class YardiClient {
 
             private String fileName() {
                 StringBuilder b = new StringBuilder();
-                if (currentActionName != null) {
-                    b.append(currentActionName).append('-');
+                if (currentAction != null) {
+                    b.append(currentAction.name()).append('-');
                 }
                 b.append(requestCount).append('-').append(prefix);
                 return b.toString();
@@ -116,5 +120,13 @@ public class YardiClient {
         }
 
         stub._getServiceClient().setOptions(options);
+    }
+
+    public Action getCurrentAction() {
+        return currentAction;
+    }
+
+    public void setCurrentAction(Action currentAction) {
+        this.currentAction = currentAction;
     }
 }

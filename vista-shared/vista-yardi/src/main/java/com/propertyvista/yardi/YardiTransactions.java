@@ -38,13 +38,12 @@ import com.yardi.ws.operations.PingResponse;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.bean.Properties;
 
 public class YardiTransactions {
 
     private final static Logger log = LoggerFactory.getLogger(YardiTransactions.class);
-
-    public static final String USERNAME = "propertyvistaws";
 
     /**
      * The Ping function accepts no parameters, but will return the
@@ -55,8 +54,8 @@ public class YardiTransactions {
      * @throws AxisFault
      */
     public static void ping(YardiClient c) throws AxisFault, RemoteException {
-        c.transactionId = 1L; // TODO clean up transaction id management
-        c.currentActionName = "ping";
+        c.transactionId++;
+        c.setCurrentAction(Action.ping);
         Ping ping = new Ping();
         PingResponse pr = c.getResidentTransactionsService().ping(ping);
         log.info("result [{}]", pr.getPingResult());
@@ -71,16 +70,17 @@ public class YardiTransactions {
      * @throws AxisFault
      * @throws JAXBException
      */
-    public static Properties getPropertyConfigurations(YardiClient c) throws AxisFault, RemoteException, JAXBException {
-        c.transactionId = 2L;
-        c.currentActionName = "GetPropertyConfigurations";
+    public static Properties getPropertyConfigurations(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
+        c.transactionId++;
+        c.setCurrentAction(Action.GetPropertyConfigurations);
+
         GetPropertyConfigurations l = new GetPropertyConfigurations();
-        l.setUserName(USERNAME);
-        l.setPassword("52673");
-        l.setServerName("aspdb04");
-        l.setDatabase("afqoml_live");
-        l.setPlatform("SQL");
-        l.setInterfaceEntity("Property Vista");
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
         GetPropertyConfigurationsResponse response = c.getResidentTransactionsService().getPropertyConfigurations(l);
         String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
 
@@ -97,13 +97,13 @@ public class YardiTransactions {
      * @throws RemoteException
      * @throws AxisFault
      */
-    public static void getUnitInformationLogin(YardiClient c) throws AxisFault, RemoteException {
-        c.transactionId = 3L;
+    public static void getUnitInformationLogin(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
+        c.transactionId++;
+        c.setCurrentAction(Action.GetUnitInformation);
 
-        c.currentActionName = "GetUnitInformation";
         GetUnitInformation_Login l = new GetUnitInformation_Login();
-        l.setUserName(USERNAME);
-        l.setPassword("52673");
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
         l.setServerName("aspdb04");
         l.setDatabase("afqoml_live");
         l.setPlatform("SQL");
@@ -114,37 +114,38 @@ public class YardiTransactions {
         log.info("UnitInformationLogin: {}", xml);
     }
 
-    public static void getResidentTransactionsLogin(YardiClient c) throws AxisFault, RemoteException {
+    public static void getResidentTransactionsLogin(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
         c.transactionId++;
-        c.currentActionName = "GetResidentTransactions";
+        c.setCurrentAction(Action.GetResidentTransactions);
 
         GetResidentTransactions_Login l = new GetResidentTransactions_Login();
-        l.setUserName(USERNAME);
-        l.setPassword("52673");
-        l.setServerName("aspdb04");
-        l.setDatabase("afqoml_live");
-        l.setPlatform("SQL");
-        l.setYardiPropertyId("prvista1");
-        l.setInterfaceEntity("Property Vista");
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setYardiPropertyId(yp.getYardiPropertyId());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
 
         GetResidentTransactions_LoginResponse response = c.getResidentTransactionsService().getResidentTransactions_Login(l);
         String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
         log.info("ResidentTransactionsLogin: {}", xml);
     }
 
-    public static void getResidentTransactionsByChargeDate(YardiClient c) throws AxisFault, RemoteException {
+    public static void getResidentTransactionsByChargeDate(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
         c.transactionId++;
-        c.currentActionName = "GetResidentTransactions_ByChargeDate";
-        GetResidentTransactions_ByChargeDate_Login l = new GetResidentTransactions_ByChargeDate_Login();
-        l.setUserName(USERNAME);
-        l.setPassword("52673");
-        l.setServerName("aspdb04");
-        l.setDatabase("afqoml_live");
-        l.setPlatform("SQL");
-        l.setYardiPropertyId("prvista1");
-        l.setInterfaceEntity("Property Vista");
+        c.setCurrentAction(Action.GetResidentTransactions_ByChargeDate);
 
-        //Consumer may only query for a date range of 31 days or less
+        GetResidentTransactions_ByChargeDate_Login l = new GetResidentTransactions_ByChargeDate_Login();
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setYardiPropertyId(yp.getYardiPropertyId());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
+
+        // Consumer may only query for a date range of 31 days or less
         Calendar from = GregorianCalendar.getInstance();
         from.set(Calendar.YEAR, 2011);
         from.set(Calendar.MONTH, 2);
@@ -164,18 +165,18 @@ public class YardiTransactions {
         log.info("GetResidentTransactionsByChargeDate: {}", xml);
     }
 
-    public static void getResidentsLeaseCharges(YardiClient c) throws AxisFault, RemoteException {
+    public static void getResidentsLeaseCharges(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
         c.transactionId++;
+        c.setCurrentAction(Action.GetResidentsLeaseCharges);
 
-        c.currentActionName = "GetResidentsLeaseCharges";
         GetResidentsLeaseCharges_Login l = new GetResidentsLeaseCharges_Login();
-        l.setUserName(USERNAME);
-        l.setPassword("52673");
-        l.setServerName("aspdb04");
-        l.setDatabase("afqoml_live");
-        l.setPlatform("SQL");
-        l.setYardiPropertyId("prvista1");
-        l.setInterfaceEntity("Property Vista");
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setYardiPropertyId(yp.getYardiPropertyId());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
 
         Calendar when = GregorianCalendar.getInstance();
         when.set(Calendar.YEAR, 2011);

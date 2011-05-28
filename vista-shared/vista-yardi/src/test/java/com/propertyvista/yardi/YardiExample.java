@@ -23,13 +23,24 @@ public class YardiExample {
     public static void main(String[] args) {
         YardiClient c = new YardiClient();
 
+        // Anya, use this code section to configure the parameters you would like to be sending
+        YardiParameters yp = new YardiParameters();
+        yp.setUsername(YardiConstants.USERNAME);
+        yp.setPassword(YardiConstants.PASSWORD);
+        yp.setServerName(YardiConstants.SERVER_NAME);
+        yp.setDatabase(YardiConstants.DATABASE);
+        yp.setPlatform(YardiConstants.PLATFORM);
+        yp.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        yp.setYardiPropertyId(YardiConstants.YARDI_PROPERTY_ID);
+
+        // execute different actions
         try {
             YardiTransactions.ping(c);
-            YardiTransactions.getPropertyConfigurations(c);
-            YardiTransactions.getUnitInformationLogin(c);
-            YardiTransactions.getResidentTransactionsLogin(c);
-            YardiTransactions.getResidentTransactionsByChargeDate(c);
-            YardiTransactions.getResidentsLeaseCharges(c);
+            YardiTransactions.getPropertyConfigurations(c, yp);
+            YardiTransactions.getUnitInformationLogin(c, yp);
+            YardiTransactions.getResidentTransactionsLogin(c, yp);
+            YardiTransactions.getResidentTransactionsByChargeDate(c, yp);
+            YardiTransactions.getResidentsLeaseCharges(c, yp);
         } catch (Throwable e) {
             log.error("error", e);
         }
