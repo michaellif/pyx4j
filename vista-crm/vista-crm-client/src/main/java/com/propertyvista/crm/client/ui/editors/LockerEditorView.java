@@ -7,14 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-20
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset;
+package com.propertyvista.crm.client.ui.editors;
 
+import com.propertyvista.domain.property.asset.Locker;
 
-public interface Locker extends Rentable {
+public interface LockerEditorView extends IEditorView<Locker> {
 
-    LockerArea belongsTo();
 }

@@ -27,14 +27,6 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.CrmSiteMap.Properties.Arrears;
-import com.propertyvista.crm.rpc.CrmSiteMap.Properties.Budgets;
-import com.propertyvista.crm.rpc.CrmSiteMap.Properties.Buildings;
-import com.propertyvista.crm.rpc.CrmSiteMap.Properties.CityOrders;
-import com.propertyvista.crm.rpc.CrmSiteMap.Properties.PurchaseOrders;
-import com.propertyvista.crm.rpc.CrmSiteMap.Properties.Units;
-import com.propertyvista.crm.rpc.CrmSiteMap.Tenants.AllTenants;
-import com.propertyvista.crm.rpc.CrmSiteMap.Tenants.CurrentTenants;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter {
 
@@ -76,18 +68,19 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
         //Properties
         NavigFolder folder = new NavigFolder("Properties");
-        folder.addNavigItem(new Buildings());
-        folder.addNavigItem(new Units());
-        folder.addNavigItem(new Arrears());
-        folder.addNavigItem(new Budgets());
-        folder.addNavigItem(new PurchaseOrders());
-        folder.addNavigItem(new CityOrders());
+        folder.addNavigItem(new CrmSiteMap.Properties.Buildings());
+        folder.addNavigItem(new CrmSiteMap.Properties.Units());
+        folder.addNavigItem(new CrmSiteMap.Properties.ParkingSpots());
+        folder.addNavigItem(new CrmSiteMap.Properties.Lockers());
         list.add(folder);
 
         //Tenants
         folder = new NavigFolder("Tenants");
-        folder.addNavigItem(new CurrentTenants());
-        folder.addNavigItem(new AllTenants());
+//        folder.addNavigItem(new CrmSiteMap.Tenants.CurrentTenants());
+        folder.addNavigItem(new CrmSiteMap.Tenants.AllTenants());
+        folder.addNavigItem(new CrmSiteMap.Tenants.Leases());
+        folder.addNavigItem(new CrmSiteMap.Tenants.Applications());
+        folder.addNavigItem(new CrmSiteMap.Tenants.Inquiries());
         list.add(folder);
 
         //Marketing

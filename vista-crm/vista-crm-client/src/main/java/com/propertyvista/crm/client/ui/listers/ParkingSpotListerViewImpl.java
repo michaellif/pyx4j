@@ -7,14 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-20
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset;
+package com.propertyvista.crm.client.ui.listers;
 
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.property.asset.ParkingSpot;
 
-public interface Locker extends Rentable {
+public class ParkingSpotListerViewImpl extends ListerViewImplBase<ParkingSpot> implements ParkingSpotListerView {
 
-    LockerArea belongsTo();
+    public ParkingSpotListerViewImpl() {
+        super(new CrmSiteMap.Properties.ParkingSpots());
+        setLister(new ParkingSpotLister());
+    }
 }

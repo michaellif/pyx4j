@@ -33,8 +33,12 @@ import com.propertyvista.crm.client.ui.editors.ElevatorEditorView;
 import com.propertyvista.crm.client.ui.editors.ElevatorEditorViewImpl;
 import com.propertyvista.crm.client.ui.editors.LockerAreaEditorView;
 import com.propertyvista.crm.client.ui.editors.LockerAreaEditorViewImpl;
+import com.propertyvista.crm.client.ui.editors.LockerEditorView;
+import com.propertyvista.crm.client.ui.editors.LockerEditorViewImpl;
 import com.propertyvista.crm.client.ui.editors.ParkingEditorView;
 import com.propertyvista.crm.client.ui.editors.ParkingEditorViewImpl;
+import com.propertyvista.crm.client.ui.editors.ParkingSpotEditorView;
+import com.propertyvista.crm.client.ui.editors.ParkingSpotEditorViewImpl;
 import com.propertyvista.crm.client.ui.editors.RoofEditorView;
 import com.propertyvista.crm.client.ui.editors.RoofEditorViewImpl;
 import com.propertyvista.crm.client.ui.editors.SettingsView;
@@ -49,6 +53,10 @@ import com.propertyvista.crm.client.ui.listers.ArrearsListerView;
 import com.propertyvista.crm.client.ui.listers.ArrearsListerViewImpl;
 import com.propertyvista.crm.client.ui.listers.BuildingListerView;
 import com.propertyvista.crm.client.ui.listers.BuildingListerViewImpl;
+import com.propertyvista.crm.client.ui.listers.LockerListerView;
+import com.propertyvista.crm.client.ui.listers.LockerListerViewImpl;
+import com.propertyvista.crm.client.ui.listers.ParkingSpotListerView;
+import com.propertyvista.crm.client.ui.listers.ParkingSpotListerViewImpl;
 import com.propertyvista.crm.client.ui.listers.UnitListerView;
 import com.propertyvista.crm.client.ui.listers.UnitListerViewImpl;
 import com.propertyvista.crm.client.ui.login.LoginView;
@@ -69,6 +77,10 @@ import com.propertyvista.crm.client.ui.vewers.ElevatorViewerView;
 import com.propertyvista.crm.client.ui.vewers.ElevatorViewerViewImpl;
 import com.propertyvista.crm.client.ui.vewers.LockerAreaViewerView;
 import com.propertyvista.crm.client.ui.vewers.LockerAreaViewerViewImpl;
+import com.propertyvista.crm.client.ui.vewers.LockerViewerView;
+import com.propertyvista.crm.client.ui.vewers.LockerViewerViewImpl;
+import com.propertyvista.crm.client.ui.vewers.ParkingSpotViewerView;
+import com.propertyvista.crm.client.ui.vewers.ParkingSpotViewerViewImpl;
 import com.propertyvista.crm.client.ui.vewers.ParkingViewerView;
 import com.propertyvista.crm.client.ui.vewers.ParkingViewerViewImpl;
 import com.propertyvista.crm.client.ui.vewers.RoofViewerView;
@@ -100,8 +112,11 @@ public class ViewModule extends AbstractGinModule {
         bind(BuildingListerView.class).to(BuildingListerViewImpl.class).in(Singleton.class);
         bind(UnitListerView.class).to(UnitListerViewImpl.class).in(Singleton.class);
         bind(ArrearsListerView.class).to(ArrearsListerViewImpl.class).in(Singleton.class);
+        bind(ParkingSpotListerView.class).to(ParkingSpotListerViewImpl.class).in(Singleton.class);
+        bind(LockerListerView.class).to(LockerListerViewImpl.class).in(Singleton.class);
 
-// Viewers/Editors:      
+// Viewers/Editors:
+
 // ----- Building-related:
         bind(BuildingViewerView.class).to(BuildingViewerViewImpl.class).in(Singleton.class);
         bind(BuildingEditorView.class).to(BuildingEditorViewImpl.class).in(Singleton.class);
@@ -117,9 +132,14 @@ public class ViewModule extends AbstractGinModule {
 
         bind(ParkingViewerView.class).to(ParkingViewerViewImpl.class).in(Singleton.class);
         bind(ParkingEditorView.class).to(ParkingEditorViewImpl.class).in(Singleton.class);
+        bind(ParkingSpotViewerView.class).to(ParkingSpotViewerViewImpl.class).in(Singleton.class);
+        bind(ParkingSpotEditorView.class).to(ParkingSpotEditorViewImpl.class).in(Singleton.class);
 
         bind(LockerAreaViewerView.class).to(LockerAreaViewerViewImpl.class).in(Singleton.class);
         bind(LockerAreaEditorView.class).to(LockerAreaEditorViewImpl.class).in(Singleton.class);
+        bind(LockerViewerView.class).to(LockerViewerViewImpl.class).in(Singleton.class);
+        bind(LockerEditorView.class).to(LockerEditorViewImpl.class).in(Singleton.class);
+
 // ----- Unit-related:
         bind(UnitViewerView.class).to(UnitViewerViewImpl.class).in(Singleton.class);
         bind(UnitEditorView.class).to(UnitEditorViewImpl.class).in(Singleton.class);

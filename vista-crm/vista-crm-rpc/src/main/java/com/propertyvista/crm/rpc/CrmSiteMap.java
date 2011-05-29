@@ -73,6 +73,16 @@ public class CrmSiteMap implements SiteMap {
         public static class Units extends AppPlace {
         }
 
+        @PlaceProperties(caption = "Parking Spots")
+        @NavigationItem(navigLabel = "Parking Spots")
+        public static class ParkingSpots extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Lockers")
+        @NavigationItem(navigLabel = "Lockers")
+        public static class Lockers extends AppPlace {
+        }
+
         @PlaceProperties(caption = "Arrears")
         @NavigationItem(navigLabel = "Arrears")
         public static class Arrears extends AppPlace {
@@ -96,11 +106,28 @@ public class CrmSiteMap implements SiteMap {
 
     public static class Tenants extends AppPlace {
         @PlaceProperties(caption = "Current Tenants")
+        @NavigationItem(navigLabel = "Current Tenants")
         public static class CurrentTenants extends AppPlace {
         }
 
         @PlaceProperties(caption = "All Tenants")
+        @NavigationItem(navigLabel = "All Tenants")
         public static class AllTenants extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Leases")
+        @NavigationItem(navigLabel = "Leases")
+        public static class Leases extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Applications")
+        @NavigationItem(navigLabel = "Applications")
+        public static class Applications extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Inquiries")
+        @NavigationItem(navigLabel = "Inquiries")
+        public static class Inquiries extends AppPlace {
         }
     }
 
@@ -130,9 +157,21 @@ public class CrmSiteMap implements SiteMap {
 
         }
 
-        @PlaceProperties(caption = "LockerArea")
-        @NavigationItem(navigLabel = "LockerArea")
+        @PlaceProperties(caption = "Parking Spot")
+        @NavigationItem(navigLabel = "Parking Spot")
+        public static class ParkingSpot extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Locker Area")
+        @NavigationItem(navigLabel = "Locker Area")
         public static class LockerArea extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Locker")
+        @NavigationItem(navigLabel = "Locker")
+        public static class Locker extends AppPlace {
 
         }
 
@@ -192,9 +231,21 @@ public class CrmSiteMap implements SiteMap {
 
         }
 
-        @PlaceProperties(caption = "LockerArea")
-        @NavigationItem(navigLabel = "LockerArea")
+        @PlaceProperties(caption = "Parking Spot")
+        @NavigationItem(navigLabel = "Parking Spot")
+        public static class ParkingSpot extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Locker Area")
+        @NavigationItem(navigLabel = "Locker Area")
         public static class LockerArea extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Locker")
+        @NavigationItem(navigLabel = "Locker")
+        public static class Locker extends AppPlace {
 
         }
 

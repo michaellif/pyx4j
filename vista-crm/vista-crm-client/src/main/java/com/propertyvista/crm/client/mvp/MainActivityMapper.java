@@ -33,19 +33,25 @@ import com.propertyvista.crm.client.activity.editors.BuildingEditorActivity;
 import com.propertyvista.crm.client.activity.editors.ConcessionEditorActivity;
 import com.propertyvista.crm.client.activity.editors.ElevatorEditorActivity;
 import com.propertyvista.crm.client.activity.editors.LockerAreaEditorActivity;
+import com.propertyvista.crm.client.activity.editors.LockerEditorActivity;
 import com.propertyvista.crm.client.activity.editors.ParkingEditorActivity;
+import com.propertyvista.crm.client.activity.editors.ParkingSpotEditorActivity;
 import com.propertyvista.crm.client.activity.editors.RoofEditorActivity;
 import com.propertyvista.crm.client.activity.editors.UnitEditorActivity;
 import com.propertyvista.crm.client.activity.editors.UnitItemEditorActivity;
 import com.propertyvista.crm.client.activity.editors.UnitOccupancyEditorActivity;
 import com.propertyvista.crm.client.activity.listers.ArrearsListerActivity;
 import com.propertyvista.crm.client.activity.listers.BuildingListerActivity;
+import com.propertyvista.crm.client.activity.listers.LockerListerActivity;
+import com.propertyvista.crm.client.activity.listers.ParkingSpotListerActivity;
 import com.propertyvista.crm.client.activity.listers.UnitListerActivity;
 import com.propertyvista.crm.client.activity.viewers.BoilerViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.BuildingViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.ConcessionViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.ElevatorViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.LockerAreaViewerActivity;
+import com.propertyvista.crm.client.activity.viewers.LockerViewerActivity;
+import com.propertyvista.crm.client.activity.viewers.ParkingSpotViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.ParkingViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.RoofViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.UnitItemViewerActivity;
@@ -87,6 +93,18 @@ public class MainActivityMapper implements ActivityMapper {
     Provider<LockerAreaViewerActivity> lockerAreaViewerActivityProvider;
 
     Provider<LockerAreaEditorActivity> lockerAreaEditorActivityProvider;
+
+    Provider<ParkingSpotListerActivity> parkingSpotListerActivityProvider;
+
+    Provider<ParkingSpotViewerActivity> parkingSpotViewerActivityProvider;
+
+    Provider<ParkingSpotEditorActivity> parkingSpotEditorActivityProvider;
+
+    Provider<LockerListerActivity> lockerListerActivityProvider;
+
+    Provider<LockerViewerActivity> lockerViewerActivityProvider;
+
+    Provider<LockerEditorActivity> lockerEditorActivityProvider;
 
 // ----- Unit-related:
     Provider<UnitListerActivity> unitListerActivityProvider;
@@ -155,9 +173,21 @@ public class MainActivityMapper implements ActivityMapper {
 
     final Provider<ParkingEditorActivity> parkingEditorActivityProvider,
 
+    final Provider<ParkingSpotListerActivity> parkingSpotListerActivityProvider,
+
+    final Provider<ParkingSpotViewerActivity> parkingSpotViewerActivityProvider,
+
+    final Provider<ParkingSpotEditorActivity> parkingSpotEditorActivityProvider,
+
     final Provider<LockerAreaViewerActivity> lockerAreaViewerActivityProvider,
 
     final Provider<LockerAreaEditorActivity> lockerAreaEditorActivityProvider,
+
+    final Provider<LockerListerActivity> lockerListerActivityProvider,
+
+    final Provider<LockerViewerActivity> lockerViewerActivityProvider,
+
+    final Provider<LockerEditorActivity> lockerEditorActivityProvider,
 
     final Provider<UnitListerActivity> unitListerActivityProvider,
 
@@ -206,8 +236,14 @@ public class MainActivityMapper implements ActivityMapper {
         this.roofEditorActivityProvider = roofEditorActivityProvider;
         this.parkingViewerActivityProvider = parkingViewerActivityProvider;
         this.parkingEditorActivityProvider = parkingEditorActivityProvider;
+        this.parkingSpotListerActivityProvider = parkingSpotListerActivityProvider;
+        this.parkingSpotViewerActivityProvider = parkingSpotViewerActivityProvider;
+        this.parkingSpotEditorActivityProvider = parkingSpotEditorActivityProvider;
         this.lockerAreaViewerActivityProvider = lockerAreaViewerActivityProvider;
         this.lockerAreaEditorActivityProvider = lockerAreaEditorActivityProvider;
+        this.lockerListerActivityProvider = lockerListerActivityProvider;
+        this.lockerViewerActivityProvider = lockerViewerActivityProvider;
+        this.lockerEditorActivityProvider = lockerEditorActivityProvider;
 
         this.unitListerActivityProvider = unitListerActivityProvider;
         this.unitViewerActivityProvider = unitViewerActivityProvider;
@@ -245,6 +281,10 @@ public class MainActivityMapper implements ActivityMapper {
             return unitListerActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Properties.Arrears) {
             return arrearsListerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Properties.ParkingSpots) {
+            return parkingSpotListerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Properties.Lockers) {
+            return lockerListerActivityProvider.get().withPlace(place);
 // Viewers/Editors:      
         } else if (place instanceof CrmSiteMap.Viewers.Building) {
             return buildingViewerActivityProvider.get().withPlace(place);
@@ -270,11 +310,19 @@ public class MainActivityMapper implements ActivityMapper {
             return parkingViewerActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Editors.Parking) {
             return parkingEditorActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Viewers.ParkingSpot) {
+            return parkingSpotViewerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Editors.Parking) {
+            return parkingSpotEditorActivityProvider.get().withPlace(place);
 
         } else if (place instanceof CrmSiteMap.Viewers.LockerArea) {
             return lockerAreaViewerActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Editors.LockerArea) {
             return lockerAreaEditorActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Viewers.Locker) {
+            return lockerViewerActivityProvider.get().withPlace(place);
+        } else if (place instanceof CrmSiteMap.Editors.Locker) {
+            return lockerEditorActivityProvider.get().withPlace(place);
 
         } else if (place instanceof CrmSiteMap.Viewers.Unit) {
             return unitViewerActivityProvider.get().withPlace(place);
