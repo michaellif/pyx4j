@@ -19,5 +19,4 @@ import com.propertyvista.domain.property.asset.Elevator;
 
 @Transient
 public interface ElevatorDTO extends Elevator {
-
 }

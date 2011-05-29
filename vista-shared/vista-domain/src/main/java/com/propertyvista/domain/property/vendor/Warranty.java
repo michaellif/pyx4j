@@ -13,20 +13,13 @@
  */
 package com.propertyvista.domain.property.vendor;
 
-import java.sql.Date;
-
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.domain.Company;
-import com.propertyvista.domain.Document;
-
-public interface Warranty extends IEntity {
+public interface Warranty extends Contract {
 
     @Translatable
     public enum Type {
@@ -58,17 +51,5 @@ public interface Warranty extends IEntity {
     @MemberColumn(name = "warrantyType")
     IPrimitive<Type> type();
 
-    Company providedBy();
-
-    @Caption(name = "Start Date")
-    @MemberColumn(name = "warrantyStart")
-    IPrimitive<Date> start();
-
-    @Caption(name = "Expirty Date")
-    @MemberColumn(name = "warrantyEnd")
-    IPrimitive<Date> end();
-
     IList<WarrantyItem> items();
-
-    Document document();
 }

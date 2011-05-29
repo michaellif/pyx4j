@@ -104,10 +104,13 @@ public class SubtypeInjectors {
     public static void injectContract(VistaDecoratorsFlowPanel main, Contract proto, CEntityEditableComponent<?> parent) {
 
         main.add(parent.inject(proto.identification()), 15);
-        injectVendor(main, proto.contractor(), parent);
+//        injectVendor(main, proto.contractor(), parent);
+        main.add(parent.inject(proto.contractor()), 15);
         main.add(parent.inject(proto.cost()), 15);
-        main.add(parent.inject(proto.expiration()), 8.2);
-        main.add(parent.inject(proto.renewal()), 8.2);
+        main.add(parent.inject(proto.start()), 8.2);
+        main.add(parent.inject(proto.end()), 8.2);
+// TODO : design representation for:
+//             main.add(parent.inject(proto.document()), 45);
     }
 
     public static void injectMaintenance(VistaDecoratorsFlowPanel main, Maintenance proto, CEntityEditableComponent<?> parent) {
@@ -121,9 +124,7 @@ public class SubtypeInjectors {
 
         main.add(parent.inject(proto.title()), 15);
         main.add(parent.inject(proto.type()), 15);
-        injectCompany(main, proto.providedBy(), parent);
-        main.add(parent.inject(proto.start()), 8.2);
-        main.add(parent.inject(proto.end()), 8.2);
+        injectContract(main, proto, parent);
 
         main.add(parent.inject(proto.items(), new CrmEntityFolder<WarrantyItem>(WarrantyItem.class, i18n.tr("Warranty Item"), parent.isEditable()) {
             @Override
@@ -134,9 +135,6 @@ public class SubtypeInjectors {
                 return columns;
             }
         }));
-
-// TODO : design representation for:
-//        main.add(parent.inject(proto.document()), 45);
     }
 
     public static void injectEquipment(VistaDecoratorsFlowPanel main, Equipment proto, CEntityEditableComponent<?> parent) {

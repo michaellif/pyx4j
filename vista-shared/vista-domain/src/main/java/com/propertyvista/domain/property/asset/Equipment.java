@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -40,10 +41,13 @@ public interface Equipment extends IEntity {
 
     IPrimitive<Date> build();
 
+    @EmbeddedEntity
     Licence licence();
 
+    @EmbeddedEntity
     Warranty warranty();
 
+    @EmbeddedEntity
     @Caption(name = "Maitenance Conrtact")
     Maintenance maitenance();
 

@@ -15,11 +15,12 @@ package com.propertyvista.domain.property.vendor;
 
 import java.sql.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.domain.Document;
 
 public interface Contract extends IEntity {
 
@@ -28,9 +29,15 @@ public interface Contract extends IEntity {
     Vendor contractor();
 
     @MemberColumn(name = "vendorCost")
-    Money cost();
+    IPrimitive<Double> cost();
 
-    IPrimitive<Date> expiration();
+    @Caption(name = "Start Date")
+    @MemberColumn(name = "contractStart")
+    IPrimitive<Date> start();
 
-    IPrimitive<Date> renewal();
+    @Caption(name = "Expirty Date")
+    @MemberColumn(name = "contractEnd")
+    IPrimitive<Date> end();
+
+    Document document();
 }
