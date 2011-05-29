@@ -39,7 +39,7 @@ public class XmlBeanTest {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetPropertyConfigurations.xml", getClass()));
         Properties properties = MarshallUtil.unmarshall(Properties.class, xml);
 
-        log.info("Loaded properties: " + properties);
+        log.debug("Loaded properties: " + properties);
 
         Assert.assertTrue("Has properties", !properties.getProperties().isEmpty());
 
@@ -63,7 +63,7 @@ public class XmlBeanTest {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetUnitInformation.xml", getClass()));
         PhysicalProperty property = MarshallUtil.unmarshall(PhysicalProperty.class, xml);
 
-        log.info("Loaded properties {}", property);
+        log.debug("Loaded properties {}", property);
     }
 
 //    private void validate(Object o) {
