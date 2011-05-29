@@ -1,138 +1,135 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
-	<!-- @version $Revision$ ($Author$) $Date: 2011-05-12 14:25:23 
-		-0400 (Thu, 12 May 2011) $ -->
-	<modelVersion>4.0.0</modelVersion>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date: 2011-05-12 
+        14:25:23 -0400 (Thu, 12 May 2011) $ -->
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.propertyvista</groupId>
-		<artifactId>vista-shared</artifactId>
-		<version>1.0.0-SNAPSHOT</version><!--vista-version -->
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+    <parent>
+        <groupId>com.propertyvista</groupId>
+        <artifactId>vista-shared</artifactId>
+        <version>1.0.0-SNAPSHOT</version><!--vista-version -->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-	<artifactId>vista-yardi</artifactId>
-	<name>vista-yardi</name>
+    <artifactId>vista-yardi</artifactId>
+    <name>vista-yardi</name>
 
-	<dependencies>
+    <dependencies>
 
-		<dependency>
-			<groupId>com.propertyvista</groupId>
-			<artifactId>vista-server-config</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-server-config</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>com.propertyvista</groupId>
-			<artifactId>vista-domain</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>com.pyx4j</groupId>
-			<artifactId>pyx-essentials-j2se</artifactId>
-			<version>${pyxVersion}</version>
-		</dependency>
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-j2se</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.axis2</groupId>
-			<artifactId>axis2-adb</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-adb</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.axis2</groupId>
-			<artifactId>axis2-transport-http</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-transport-http</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.axis2</groupId>
-			<artifactId>axis2-transport-local</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-transport-local</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<scope>test</scope>
-			<optional>true</optional>
-		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-			<optional>true</optional>
-		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
-	<build>
-		<plugins>
+    <build>
+        <plugins>
 
-			<plugin>
-				<groupId>org.apache.axis2</groupId>
-				<artifactId>axis2-wsdl2code-maven-plugin</artifactId>
-				<configuration>
-					<generateServerSide>true</generateServerSide>
-					<generateServerSideInterface>true</generateServerSideInterface>
-					<generateAllClasses>true</generateAllClasses>
-					<unpackClasses>true</unpackClasses>
-					<syncMode>sync</syncMode>
-					<databindingName>adb</databindingName>
-					<namespaceURIs>
-						<namespaceURI>
-							<uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfResidentTransactions20</uri>
-							<packageName>com.yardi.ws.operations</packageName>
-						</namespaceURI>
-					</namespaceURIs>
-				</configuration>
-				<executions>
-					<execution>
-						<id>wsdl2code-client-yardi</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>wsdl2code</goal>
-						</goals>
-						<configuration>
-							<wsdlFile>${basedir}/src/main/resources/ItfResidentTransactions20.wsdl</wsdlFile>
-							<packageName>com.yardi.ws</packageName>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+                <configuration>
+                    <generateServerSide>true</generateServerSide>
+                    <generateServerSideInterface>true</generateServerSideInterface>
+                    <generateAllClasses>true</generateAllClasses>
+                    <unpackClasses>true</unpackClasses>
+                    <syncMode>sync</syncMode>
+                    <databindingName>adb</databindingName>
+                    <namespaceURIs>
+                        <namespaceURI>
+                            <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfResidentTransactions20</uri>
+                            <packageName>com.yardi.ws.operations</packageName>
+                        </namespaceURI>
+                    </namespaceURIs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>wsdl2code-client-yardi</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFile>${basedir}/src/main/resources/ItfResidentTransactions20.wsdl</wsdlFile>
+                            <packageName>com.yardi.ws</packageName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-			<plugin>
-				<groupId>org.jvnet.jaxb2.maven2</groupId>
-				<artifactId>maven-jaxb2-plugin</artifactId>
-				<configuration>
-					<schemaDirectory>src/main/resources</schemaDirectory>
-					<schemaIncludes>
-						<include>Itf_MITS_CoreData2.0.xsd</include>
-						<include>Itf_MITS_ResidentTransactions2.0.xsd</include>
-						<!--  not including the ones below for now
-						<include>Itf_MITS_ResidentTransactions2.0_SysBatchCharge.xsd</include>
-						<include>Itf_MITS_ResidentTransactions2.0_SysBatchReceipt.xsd</include>
-						<include>YsiTranAll.xsd</include>
-						<include>YsiTranAll_Payables.xsd</include>
-						 -->
-					</schemaIncludes>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+<!-- 
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.7.3</version>
+                <configuration>
+                    <schemaDirectory>src/main/resources</schemaDirectory>
+                    <schemaIncludes>
+                        <include>Itf_MITS_CoreData2.0.xsd</include>
+                        <include>Itf_MITS_ResidentTransactions2.0.xsd</include>
+                    </schemaIncludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+  -->
 
-		</plugins>
-	</build>
+        </plugins>
+    </build>
 
 </project>
