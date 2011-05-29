@@ -33,9 +33,9 @@ public class UnitCrudServiceImpl implements UnitCrudService {
 
     @Override
     public void create(AsyncCallback<AptUnitDTO> callback, AptUnitDTO editableEntity) {
-        AptUnit building = GenericConverter.down(editableEntity, AptUnit.class);
-        PersistenceServicesFactory.getPersistenceService().persist(building);
-        callback.onSuccess(GenericConverter.up(building, AptUnitDTO.class));
+        AptUnit entity = GenericConverter.down(editableEntity, AptUnit.class);
+        PersistenceServicesFactory.getPersistenceService().persist(entity);
+        callback.onSuccess(GenericConverter.up(entity, AptUnitDTO.class));
     }
 
     @Override

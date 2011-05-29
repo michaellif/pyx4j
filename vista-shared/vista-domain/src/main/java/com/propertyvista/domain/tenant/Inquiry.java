@@ -14,7 +14,9 @@
 package com.propertyvista.domain.tenant;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Inquiry extends IEntity {
 
+    IPrimitive<String> test();
 }

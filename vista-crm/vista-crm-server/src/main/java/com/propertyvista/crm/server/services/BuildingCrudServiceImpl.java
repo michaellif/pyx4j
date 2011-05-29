@@ -33,22 +33,22 @@ public class BuildingCrudServiceImpl implements BuildingCrudService {
 
     @Override
     public void create(AsyncCallback<BuildingDTO> callback, BuildingDTO editableEntity) {
-        Building building = GenericConverter.down(editableEntity, Building.class);
-        PersistenceServicesFactory.getPersistenceService().persist(building);
-        callback.onSuccess(GenericConverter.up(building, BuildingDTO.class));
+        Building entity = GenericConverter.down(editableEntity, Building.class);
+        PersistenceServicesFactory.getPersistenceService().persist(entity);
+        callback.onSuccess(GenericConverter.up(entity, BuildingDTO.class));
     }
 
     @Override
     public void retrieve(AsyncCallback<BuildingDTO> callback, String entityId) {
-        Building building = PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, entityId);
-        callback.onSuccess(GenericConverter.up(building, BuildingDTO.class));
+        Building entity = PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, entityId);
+        callback.onSuccess(GenericConverter.up(entity, BuildingDTO.class));
     }
 
     @Override
     public void save(AsyncCallback<BuildingDTO> callback, BuildingDTO editableEntity) {
-        Building building = GenericConverter.down(editableEntity, Building.class);
-        PersistenceServicesFactory.getPersistenceService().merge(building);
-        callback.onSuccess(GenericConverter.up(building, BuildingDTO.class));
+        Building entity = GenericConverter.down(editableEntity, Building.class);
+        PersistenceServicesFactory.getPersistenceService().merge(entity);
+        callback.onSuccess(GenericConverter.up(entity, BuildingDTO.class));
     }
 
     @Override
@@ -57,5 +57,4 @@ public class BuildingCrudServiceImpl implements BuildingCrudService {
         //TODO add building specific criteria
         callback.onSuccess(GenericConverter.up(EntityServicesImpl.secureSearch(c), BuildingDTO.class));
     }
-
 }

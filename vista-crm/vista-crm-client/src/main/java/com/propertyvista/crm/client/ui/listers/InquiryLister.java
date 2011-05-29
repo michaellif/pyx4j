@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.listers;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.Inquiry;
@@ -28,7 +29,6 @@ public class InquiryLister extends ListerBase<Inquiry> {
 
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Inquiry>> columnDescriptors, Inquiry proto) {
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.price()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.test()));
     }
 }
