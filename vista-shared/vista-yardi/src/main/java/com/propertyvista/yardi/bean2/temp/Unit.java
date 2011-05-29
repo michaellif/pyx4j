@@ -23,6 +23,8 @@ public class Unit {
 
     private String marketingName;
 
+    private Information information;
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
@@ -30,6 +32,8 @@ public class Unit {
         sb.append(propertyPrimaryId);
         sb.append(" marketingName=");
         sb.append(marketingName);
+        sb.append(" information=");
+        sb.append(information);
 
         return sb.toString();
     }
@@ -52,4 +56,12 @@ public class Unit {
         this.propertyPrimaryId = propertyPrimaryId;
     }
 
+    @XmlElement(name = "Information", required = true, namespace = "http://my-company.com/namespace")
+    public Information getInformation() {
+        return information;
+    }
+
+    public void setInformation(Information information) {
+        this.information = information;
+    }
 }
