@@ -105,6 +105,7 @@ public class CrmSiteMap implements SiteMap {
     }
 
     public static class Tenants extends AppPlace {
+
         @PlaceProperties(caption = "Current Tenants")
         @NavigationItem(navigLabel = "Current Tenants")
         public static class CurrentTenants extends AppPlace {
@@ -132,6 +133,26 @@ public class CrmSiteMap implements SiteMap {
     }
 
     public static class Viewers extends AppPlace {
+
+        @PlaceProperties(caption = "Tenant")
+        @NavigationItem(navigLabel = "Tenant")
+        public static class Tenant extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Lease")
+        @NavigationItem(navigLabel = "Lease")
+        public static class Lease extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Application")
+        @NavigationItem(navigLabel = "Application")
+        public static class Application extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Inquiry")
+        @NavigationItem(navigLabel = "Inquiry")
+        public static class Inquiry extends AppPlace {
+        }
 
         @PlaceProperties(caption = "Elevator")
         @NavigationItem(navigLabel = "Elevator")
@@ -206,6 +227,26 @@ public class CrmSiteMap implements SiteMap {
     }
 
     public static class Editors extends AppPlace {
+
+        @PlaceProperties(caption = "Tenant")
+        @NavigationItem(navigLabel = "Tenant")
+        public static class Tenant extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Lease")
+        @NavigationItem(navigLabel = "Lease")
+        public static class Lease extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Application")
+        @NavigationItem(navigLabel = "Application")
+        public static class Application extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Inquiry")
+        @NavigationItem(navigLabel = "Inquiry")
+        public static class Inquiry extends AppPlace {
+        }
 
         @PlaceProperties(caption = "Elevator")
         @NavigationItem(navigLabel = "Elevator")
