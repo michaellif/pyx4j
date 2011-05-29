@@ -43,6 +43,10 @@ public class PieChart2D implements IsSvgElement {
 
     private final int radius;
 
+    private int computedWidth;
+
+    private int computedHeight;
+
     private final static int X_SHIFT = 40;
 
     private final static int Y_SHIFT = 10;
@@ -61,13 +65,15 @@ public class PieChart2D implements IsSvgElement {
 
     private final Group container;
 
-    public PieChart2D(SvgFactory factory, DataSource datasource, int radius, ChartTheme theme, boolean showLegend) {
-        this.datasource = datasource;
-        this.radius = radius;
-        this.factory = factory;
-        this.showLegend = showLegend;
-        this.theme = theme;
+    public PieChart2D(PieChartConfigurator configurator) {
+        this.datasource = configurator.getDatasourse();
+        this.radius = configurator.getRadius();
+        this.factory = configurator.getFactory();
+        this.showLegend = configurator.isLegend();
+        this.theme = configurator.getTheme();
         container = this.factory.createGroup();
+        computedWidth = 0;
+        computedHeight = 0;
         drawChart();
     }
 
@@ -112,16 +118,18 @@ public class PieChart2D implements IsSvgElement {
                 }
             }
 
-            drawSeries(series, x, y, SeriesTitle);
+            computedWidth = drawSeries(series, x, y, SeriesTitle);
             y += radius * 2 + PADDING;
             if (SeriesTitle != null && SeriesTitle.length() > 0)
                 y += 2 * PADDING;
         }
+        computedHeight = y + radius + PADDING;
 
     }
 
-    private void drawSeries(Map<Metric, Double> series, final int x, final int y, String seriestitle) {
+    private int drawSeries(Map<Metric, Double> series, final int x, final int y, String seriestitle) {
         double total = 0;
+        int computedwidth = 0;
         int xx;
         int yy;
         for (Entry<Metric, Double> entry : series.entrySet()) {
@@ -129,7 +137,7 @@ public class PieChart2D implements IsSvgElement {
         }
 
         if (total == 0)
-            return;
+            return 0;
         double x2;
         double y2;
         theme.rewind();
@@ -151,6 +159,8 @@ public class PieChart2D implements IsSvgElement {
             x2 = PADDING;
             y2 = y;
         }
+
+        computedwidth = xx + radius + 2 * PADDING;
 
         int legY = 0;
         int legentHeight = 0;
@@ -204,8 +214,10 @@ public class PieChart2D implements IsSvgElement {
                 legG.add(frame);
                 legG.setTransform("translate(" + (xx + radius + X_SHIFT) + "," + (yy - (legY - legentHeight) / 2) + ")");
                 container.add(legG);
+                computedwidth += legendWidth + LEGEND_FRAME_PADDING;
             }
         }
+        return computedwidth;
     }
 
     private LegendItem createLegendItem(String label, int x, int y, String color) {
@@ -218,4 +230,13 @@ public class PieChart2D implements IsSvgElement {
     public SvgElement asSvgElement() {
         return container;
     }
+
+    public int getComputedWidth() {
+        return computedWidth;
+    }
+
+    public int getComputedHeight() {
+        return computedHeight;
+    }
+
 }

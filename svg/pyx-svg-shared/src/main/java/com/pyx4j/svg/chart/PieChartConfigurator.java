@@ -14,12 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 19, 2011
+ * Created on May 29, 2011
  * @author Dad
  * @version $Id$
  */
 package com.pyx4j.svg.chart;
 
-public enum ChartGridType {
-    None, Both, Metric, Value
+import com.pyx4j.svg.basic.SvgFactory;
+
+public class PieChartConfigurator extends BasicChartConfigurator {
+
+    int radius;
+
+    public PieChartConfigurator(SvgFactory factory, DataSource datasource) {
+        super(factory, datasource);
+        radius = 60;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
 }

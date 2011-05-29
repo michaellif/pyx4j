@@ -38,73 +38,87 @@ import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.BarChart;
 import com.pyx4j.svg.chart.BarChartModel;
 import com.pyx4j.svg.chart.BarChartModel.BarChartItem;
-import com.pyx4j.svg.chart.ChartAxis;
-import com.pyx4j.svg.chart.ChartGridType;
 import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.DataSource;
+import com.pyx4j.svg.chart.GridBasedChart;
+import com.pyx4j.svg.chart.GridBasedChartConfigurator;
+import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.LegendIconType;
 import com.pyx4j.svg.chart.LegendItem;
 import com.pyx4j.svg.chart.PieChart;
 import com.pyx4j.svg.chart.PieChart2D;
+import com.pyx4j.svg.chart.PieChartConfigurator;
 import com.pyx4j.svg.chart.PieChartModel;
 import com.pyx4j.svg.chart.PieChartModel.PieChartSegment;
 
 public class SvgTestFactory {
 
-    public static SvgRoot createPieChart2DTest(SvgFactory factory, int x, int y) {
-        SvgRoot svgroot = factory.getSvgRoot();
-        Group g = factory.createGroup();
-        DataSource ds = new DataSource();
+    private static DataSource Data_Source = new DataSource();
+    static {
+
         List<Double> values = new ArrayList<Double>(5);
         values.add(180.0);
         values.add(160.0);
         values.add(10.0);
-        ds.addDataSet(ds.new Metric("Building 1"), values);
+        Data_Source.addDataSet(Data_Source.new Metric("Building 1"), values);
 
         values = new ArrayList<Double>(5);
         values.add(880.0);
         values.add(580.0);
         values.add(250.0);
-        ds.addDataSet(ds.new Metric("Building 2"), values);
+        Data_Source.addDataSet(Data_Source.new Metric("Building 2"), values);
 
         values = new ArrayList<Double>(5);
         values.add(380.0);
         values.add(0.0);
         values.add(380.0);
-        ds.addDataSet(ds.new Metric("Building 3"), values);
+        Data_Source.addDataSet(Data_Source.new Metric("Building 3"), values);
 
         values = new ArrayList<Double>(5);
         values.add(380.0);
         values.add(300.0);
         values.add(300.0);
-        ds.addDataSet(ds.new Metric("Building 4"), values);
+        Data_Source.addDataSet(Data_Source.new Metric("Building 4"), values);
 
         values = new ArrayList<Double>(5);
         values.add(280.0);
         values.add(300.0);
         values.add(100.0);
-        ds.addDataSet(ds.new Metric("Building 5"), values);
+        Data_Source.addDataSet(Data_Source.new Metric("Building 5"), values);
 
         values = new ArrayList<Double>(5);
         values.add(80.0);
         values.add(300.0);
         values.add(100.0);
-        ds.addDataSet(ds.new Metric("Building 6"), values);
+        Data_Source.addDataSet(Data_Source.new Metric("Building 6"), values);
 
         values = new ArrayList<Double>(5);
         values.add(480.0);
         values.add(200.0);
         values.add(101.0);
-        ds.addDataSet(ds.new Metric("Building 7"), values);
+        Data_Source.addDataSet(Data_Source.new Metric("Building 7"), values);
 
         //series descriptors
         List<String> sd = new ArrayList<String>(3);
         sd.add("2008");
         sd.add("2009");
         sd.add("2010");
-        ds.setSeriesDescription(sd);
+        Data_Source.setSeriesDescription(sd);
 
-        PieChart2D pchart = new PieChart2D(factory, ds, 100, ChartTheme.Bright, true);
+    }
+
+    public static SvgRoot createPieChart2DTest(SvgFactory factory, int x, int y) {
+        SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
+
+        PieChartConfigurator config = new PieChartConfigurator(factory, Data_Source);
+        config.setLegend(true);
+        config.setTheme(ChartTheme.Bright);
+        config.setRadius(100);
+
+        PieChart2D pchart = new PieChart2D(config);
+        g.setAttribute("width", String.valueOf(pchart.getComputedWidth()) + "px");
+        g.setAttribute("height", String.valueOf(pchart.getComputedHeight()) + "px");
         g.add(pchart);
         g.setTransform("translate(" + x + "," + y + ")");
         svgroot.add(g);
@@ -115,33 +129,12 @@ public class SvgTestFactory {
         SvgRoot svgroot = factory.getSvgRoot();
         Group g = factory.createGroup();
 
-        DataSource ds = new DataSource();
-        List<Double> values = new ArrayList<Double>(5);
-        values.add(180.0);
-        values.add(160.0);
-        values.add(10.0);
-        ds.addDataSet(ds.new Metric("Building 1"), values);
+        GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, Data_Source, 600, 400);
+        config.setLegend(true);
+        config.setTitle("Sample Chart");
+        config.setGridType(GridType.Both);
 
-        values = new ArrayList<Double>(5);
-        values.add(880.0);
-        values.add(580.0);
-        values.add(250.0);
-        ds.addDataSet(ds.new Metric("Building 2"), values);
-
-        values = new ArrayList<Double>(5);
-        values.add(380.0);
-        values.add(0.0);
-        values.add(380.0);
-        ds.addDataSet(ds.new Metric("Building 3"), values);
-
-        //series descriptors
-        List<String> sd = new ArrayList<String>(3);
-        sd.add("2008");
-        sd.add("2009");
-        sd.add("2010");
-        ds.setSeriesDescription(sd);
-
-        ChartAxis pchart = new ChartAxis(factory, ds, 600, 400, ChartGridType.Both, true);
+        GridBasedChart pchart = new GridBasedChart(config);
         g.add(pchart);
         g.setTransform("translate(" + x + "," + y + ")");
         svgroot.add(g);
