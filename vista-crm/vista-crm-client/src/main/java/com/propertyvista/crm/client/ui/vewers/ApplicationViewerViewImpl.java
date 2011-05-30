@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.vewers;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.editors.forms.ApplicationEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.dto.ApplicationDTO;
 
-public class ApplicationViewerViewImpl extends ViewerViewImplBase<Application> implements ApplicationViewerView {
+public class ApplicationViewerViewImpl extends ViewerViewImplBase<ApplicationDTO> implements ApplicationViewerView {
 
     public ApplicationViewerViewImpl() {
         super(new CrmSiteMap.Viewers.Application(), new CrmSiteMap.Editors.Application());

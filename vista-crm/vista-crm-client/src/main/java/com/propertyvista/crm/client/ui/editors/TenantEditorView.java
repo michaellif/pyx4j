@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.editors;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.dto.TenantDTO;
 
-public interface TenantEditorView extends IEditorView<Tenant> {
+public interface TenantEditorView extends IEditorView<TenantDTO> {
 
 }

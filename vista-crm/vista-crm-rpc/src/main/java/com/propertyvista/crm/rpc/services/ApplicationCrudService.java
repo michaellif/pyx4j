@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.dto.ApplicationDTO;
 
-public interface ApplicationCrudService extends AbstractCrudService<Application> {
+public interface ApplicationCrudService extends AbstractCrudService<ApplicationDTO> {
 }

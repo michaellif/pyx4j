@@ -13,7 +13,12 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.shared.IList;
+
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
 public interface AptUnitDTO extends AptUnit {
+
+    IList<AptUnitItem> details();
 }

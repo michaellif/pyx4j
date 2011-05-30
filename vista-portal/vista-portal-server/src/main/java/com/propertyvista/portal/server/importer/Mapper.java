@@ -144,7 +144,7 @@ public class Mapper {
         unit.occupancies().add(occupancy);
         unit.avalableForRent().setValue(occupancy.dateFrom().getValue()); // for consistency
 
-        unit.info().building().set(building);
+        unit.belongsTo().set(building);
         unit.info().type().setValue(mapUnitType(availableUnit.getType()));
         unit.info().typeDescription().setValue(availableUnit.getDescription());
         unit.info().number().setValue(availableUnit.getUnitNumber());

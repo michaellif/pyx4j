@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.editors;
 
 import com.propertyvista.crm.client.ui.editors.forms.InquiryEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.Inquiry;
+import com.propertyvista.dto.InquiryDTO;
 
-public class InquiryEditorViewImpl extends EditorViewImplBase<Inquiry> implements InquiryEditorView {
+public class InquiryEditorViewImpl extends EditorViewImplBase<InquiryDTO> implements InquiryEditorView {
     public InquiryEditorViewImpl() {
         super(new CrmSiteMap.Editors.Inquiry());
         setEditor(new InquiryEditorForm());

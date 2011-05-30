@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.dto.TenantDTO;
 
-public interface TenantCrudService extends AbstractCrudService<Tenant> {
+public interface TenantCrudService extends AbstractCrudService<TenantDTO> {
 }

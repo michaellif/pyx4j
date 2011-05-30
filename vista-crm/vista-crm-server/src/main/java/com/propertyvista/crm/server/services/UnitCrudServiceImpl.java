@@ -40,15 +40,15 @@ public class UnitCrudServiceImpl implements UnitCrudService {
 
     @Override
     public void retrieve(AsyncCallback<AptUnitDTO> callback, String entityId) {
-        AptUnit building = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, entityId);
-        callback.onSuccess(GenericConverter.up(building, AptUnitDTO.class));
+        AptUnit entity = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, entityId);
+        callback.onSuccess(GenericConverter.up(entity, AptUnitDTO.class));
     }
 
     @Override
     public void save(AsyncCallback<AptUnitDTO> callback, AptUnitDTO editableEntity) {
-        AptUnit building = GenericConverter.down(editableEntity, AptUnit.class);
-        PersistenceServicesFactory.getPersistenceService().merge(building);
-        callback.onSuccess(GenericConverter.up(building, AptUnitDTO.class));
+        AptUnit entity = GenericConverter.down(editableEntity, AptUnit.class);
+        PersistenceServicesFactory.getPersistenceService().merge(entity);
+        callback.onSuccess(GenericConverter.up(entity, AptUnitDTO.class));
     }
 
     @Override

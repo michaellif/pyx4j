@@ -193,7 +193,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
             // get the units
             EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-            criteria.add(new PropertyCriterion(criteria.proto().info().building(), Restriction.EQUAL, building.getPrimaryKey()));
+            criteria.add(new PropertyCriterion(criteria.proto().belongsTo(), Restriction.EQUAL, building.getPrimaryKey()));
             List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
             sb.append("\tBuilding has ").append(units.size()).append(" units\n");
 
@@ -203,7 +203,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 sb.append(" ");
                 sb.append(unit.info().area().getStringView()).append(" sq. ft.");
                 sb.append(" ");
-                sb.append(unit.info().building().info().propertyCode().getStringView());
+                sb.append(unit.belongsTo().info().propertyCode().getStringView());
                 sb.append(" ");
                 sb.append(unit.marketing().floorplan());
                 sb.append(" | ");

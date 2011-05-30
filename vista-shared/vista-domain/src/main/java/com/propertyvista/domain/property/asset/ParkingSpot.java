@@ -13,7 +13,10 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import com.pyx4j.entity.annotations.Detached;
+
 public interface ParkingSpot extends Rentable {
 
+    @Detached
     Parking belongsTo();
 }

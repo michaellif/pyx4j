@@ -109,7 +109,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
         // find units
         log.debug("Found floorplan {}, now can look for Units in building {}", floorplan, building);
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().info().building(), building));
+        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
         criteria.add(PropertyCriterion.eq(criteria.proto().marketing().floorplan(), floorplan));
 
         if (!selectionCriteria.availableFrom().isNull()) {

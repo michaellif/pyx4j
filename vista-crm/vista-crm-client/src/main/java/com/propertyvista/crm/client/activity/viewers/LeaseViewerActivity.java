@@ -19,14 +19,14 @@ import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.vewers.LeaseViewerView;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.LeaseDTO;
 
-public class LeaseViewerActivity extends ViewerActivityBase<Lease> {
+public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
     public LeaseViewerActivity(LeaseViewerView view) {
-        super(view, (AbstractCrudService<Lease>) GWT.create(LeaseCrudService.class));
+        super(view, (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
     }
 
 }

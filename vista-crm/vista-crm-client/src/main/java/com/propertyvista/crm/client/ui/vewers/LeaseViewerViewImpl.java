@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.vewers;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.editors.forms.LeaseEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.LeaseDTO;
 
-public class LeaseViewerViewImpl extends ViewerViewImplBase<Lease> implements LeaseViewerView {
+public class LeaseViewerViewImpl extends ViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
 
     public LeaseViewerViewImpl() {
         super(new CrmSiteMap.Viewers.Lease(), new CrmSiteMap.Editors.Lease());

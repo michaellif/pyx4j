@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.vewers;
 
-import com.propertyvista.domain.tenant.Inquiry;
+import com.propertyvista.dto.InquiryDTO;
 
-public interface InquiryViewerView extends IViewerView<Inquiry> {
+public interface InquiryViewerView extends IViewerView<InquiryDTO> {
 
 }

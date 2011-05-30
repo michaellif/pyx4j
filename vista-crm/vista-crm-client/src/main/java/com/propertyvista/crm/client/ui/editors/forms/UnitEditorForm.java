@@ -95,7 +95,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.add(inject(proto().info().utilities(), createUtilitiesListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Info Details")));
-        main.add(inject(proto().info().details(), createDetailsListEditor()));
+        main.add(inject(proto().details(), createDetailsListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr(proto().occupancies().getMeta().getCaption())));
         main.add(inject(proto().occupancies(), createOccupanciesListEditor()));

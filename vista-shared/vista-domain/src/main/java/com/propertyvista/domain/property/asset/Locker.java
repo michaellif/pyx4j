@@ -13,8 +13,10 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import com.pyx4j.entity.annotations.Detached;
 
 public interface Locker extends Rentable {
 
+    @Detached
     LockerArea belongsTo();
 }

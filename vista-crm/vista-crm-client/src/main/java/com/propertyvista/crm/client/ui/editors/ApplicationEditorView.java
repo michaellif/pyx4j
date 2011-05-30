@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.editors;
 
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.dto.ApplicationDTO;
 
-public interface ApplicationEditorView extends IEditorView<Application> {
+public interface ApplicationEditorView extends IEditorView<ApplicationDTO> {
 
 }

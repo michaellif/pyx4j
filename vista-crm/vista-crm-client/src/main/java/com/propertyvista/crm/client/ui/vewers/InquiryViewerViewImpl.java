@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.vewers;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.editors.forms.InquiryEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.Inquiry;
+import com.propertyvista.dto.InquiryDTO;
 
-public class InquiryViewerViewImpl extends ViewerViewImplBase<Inquiry> implements InquiryViewerView {
+public class InquiryViewerViewImpl extends ViewerViewImplBase<InquiryDTO> implements InquiryViewerView {
 
     public InquiryViewerViewImpl() {
         super(new CrmSiteMap.Viewers.Inquiry(), new CrmSiteMap.Editors.Inquiry());

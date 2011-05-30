@@ -19,14 +19,14 @@ import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.vewers.TenantViewerView;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.TenantCrudService;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.dto.TenantDTO;
 
-public class TenantViewerActivity extends ViewerActivityBase<Tenant> {
+public class TenantViewerActivity extends ViewerActivityBase<TenantDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
     public TenantViewerActivity(TenantViewerView view) {
-        super(view, (AbstractCrudService<Tenant>) GWT.create(TenantCrudService.class));
+        super(view, (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class));
     }
 
 }

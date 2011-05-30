@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
@@ -45,6 +46,7 @@ public interface Parking extends IEntity {
         }
     }
 
+    @Detached
     Building belongsTo();
 
     IPrimitive<String> name();

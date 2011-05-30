@@ -19,13 +19,13 @@ import com.google.inject.Inject;
 import com.propertyvista.crm.client.ui.editors.InquiryEditorView;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.InquiryCrudService;
-import com.propertyvista.domain.tenant.Inquiry;
+import com.propertyvista.dto.InquiryDTO;
 
-public class InquiryEditorActivity extends EditorActivityBase<Inquiry> {
+public class InquiryEditorActivity extends EditorActivityBase<InquiryDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
     public InquiryEditorActivity(InquiryEditorView view) {
-        super(view, (AbstractCrudService<Inquiry>) GWT.create(InquiryCrudService.class), Inquiry.class);
+        super(view, (AbstractCrudService<InquiryDTO>) GWT.create(InquiryCrudService.class), InquiryDTO.class);
     }
 }

@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.vewers;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.editors.forms.TenantEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.dto.TenantDTO;
 
-public class TenantViewerViewImpl extends ViewerViewImplBase<Tenant> implements TenantViewerView {
+public class TenantViewerViewImpl extends ViewerViewImplBase<TenantDTO> implements TenantViewerView {
 
     public TenantViewerViewImpl() {
         super(new CrmSiteMap.Viewers.Tenant(), new CrmSiteMap.Editors.Tenant());

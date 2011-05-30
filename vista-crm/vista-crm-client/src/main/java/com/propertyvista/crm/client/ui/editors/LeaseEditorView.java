@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.editors;
 
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseEditorView extends IEditorView<Lease> {
+public interface LeaseEditorView extends IEditorView<LeaseDTO> {
 
 }

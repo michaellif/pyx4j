@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.vewers;
 
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.dto.ApplicationDTO;
 
-public interface ApplicationViewerView extends IViewerView<Application> {
+public interface ApplicationViewerView extends IViewerView<ApplicationDTO> {
 
 }

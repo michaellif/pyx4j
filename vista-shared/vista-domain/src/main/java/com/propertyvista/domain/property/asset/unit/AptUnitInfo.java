@@ -14,7 +14,6 @@
 package com.propertyvista.domain.property.asset.unit;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
@@ -25,7 +24,6 @@ import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Utility;
-import com.propertyvista.domain.property.asset.building.Building;
 
 public interface AptUnitInfo extends IEntity {
 
@@ -62,9 +60,6 @@ public interface AptUnitInfo extends IEntity {
     @MemberColumn(name = "unitNumber")
     IPrimitive<String> number();
 
-    @Detached
-    Building building();
-
     // ---- Physical: ----------------
 
     IPrimitive<Double> area();
@@ -81,5 +76,7 @@ public interface AptUnitInfo extends IEntity {
 
     IList<Utility> utilities();
 
+    // TODO: remove - it should be stored as different table in DB!.. 
+    @Deprecated
     IList<AptUnitItem> details();
 }

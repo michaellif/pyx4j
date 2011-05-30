@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.editors;
 
 import com.propertyvista.crm.client.ui.editors.forms.ApplicationEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.dto.ApplicationDTO;
 
-public class ApplicationEditorViewImpl extends EditorViewImplBase<Application> implements ApplicationEditorView {
+public class ApplicationEditorViewImpl extends EditorViewImplBase<ApplicationDTO> implements ApplicationEditorView {
     public ApplicationEditorViewImpl() {
         super(new CrmSiteMap.Editors.Application());
         setEditor(new ApplicationEditorForm());

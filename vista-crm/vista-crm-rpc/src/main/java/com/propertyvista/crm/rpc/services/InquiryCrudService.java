@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.domain.tenant.Inquiry;
+import com.propertyvista.dto.InquiryDTO;
 
-public interface InquiryCrudService extends AbstractCrudService<Inquiry> {
+public interface InquiryCrudService extends AbstractCrudService<InquiryDTO> {
 }

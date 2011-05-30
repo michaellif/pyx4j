@@ -20,16 +20,16 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.LeaseDTO;
 
-public class LeaseEditorForm extends CrmEntityForm<Lease> {
+public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     public LeaseEditorForm() {
-        super(Lease.class, new CrmEditorsComponentFactory());
+        super(LeaseDTO.class, new CrmEditorsComponentFactory());
     }
 
     public LeaseEditorForm(IEditableComponentFactory factory) {
-        super(Lease.class, factory);
+        super(LeaseDTO.class, factory);
     }
 
     @Override

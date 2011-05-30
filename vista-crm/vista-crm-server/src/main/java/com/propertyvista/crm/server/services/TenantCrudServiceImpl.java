@@ -25,32 +25,37 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 import com.propertyvista.crm.rpc.services.TenantCrudService;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.dto.TenantDTO;
 
 public class TenantCrudServiceImpl implements TenantCrudService {
 
     private final static Logger log = LoggerFactory.getLogger(TenantCrudServiceImpl.class);
 
     @Override
-    public void create(AsyncCallback<Tenant> callback, Tenant editableEntity) {
-        PersistenceServicesFactory.getPersistenceService().persist(editableEntity);
-        callback.onSuccess(editableEntity);
+    public void create(AsyncCallback<TenantDTO> callback, TenantDTO editableEntity) {
+        Tenant entity = GenericConverter.down(editableEntity, Tenant.class);
+        PersistenceServicesFactory.getPersistenceService().persist(entity);
+        callback.onSuccess(GenericConverter.up(entity, TenantDTO.class));
     }
 
     @Override
-    public void retrieve(AsyncCallback<Tenant> callback, String entityId) {
-        callback.onSuccess(PersistenceServicesFactory.getPersistenceService().retrieve(Tenant.class, entityId));
+    public void retrieve(AsyncCallback<TenantDTO> callback, String entityId) {
+        Tenant entity = PersistenceServicesFactory.getPersistenceService().retrieve(Tenant.class, entityId);
+        callback.onSuccess(GenericConverter.up(entity, TenantDTO.class));
     }
 
     @Override
-    public void save(AsyncCallback<Tenant> callback, Tenant editableEntity) {
-        PersistenceServicesFactory.getPersistenceService().merge(editableEntity);
-        callback.onSuccess(editableEntity);
+    public void save(AsyncCallback<TenantDTO> callback, TenantDTO editableEntity) {
+        Tenant entity = GenericConverter.down(editableEntity, Tenant.class);
+        PersistenceServicesFactory.getPersistenceService().merge(entity);
+        callback.onSuccess(GenericConverter.up(entity, TenantDTO.class));
     }
 
     @Override
-    public void search(AsyncCallback<EntitySearchResult<Tenant>> callback, EntitySearchCriteria<Tenant> criteria) {
+    public void search(AsyncCallback<EntitySearchResult<TenantDTO>> callback, EntitySearchCriteria<TenantDTO> criteria) {
         EntitySearchCriteria<Tenant> c = GenericConverter.down(criteria, Tenant.class);
         //TODO add Tenant specific criteria
-        callback.onSuccess(EntityServicesImpl.secureSearch(c));
+        callback.onSuccess(GenericConverter.up(EntityServicesImpl.secureSearch(c), TenantDTO.class));
     }
+
 }

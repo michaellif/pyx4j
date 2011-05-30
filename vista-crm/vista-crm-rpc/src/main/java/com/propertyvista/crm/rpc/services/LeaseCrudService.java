@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseCrudService extends AbstractCrudService<Lease> {
+public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
 }

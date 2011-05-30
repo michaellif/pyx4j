@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.vewers;
 
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseViewerView extends IViewerView<Lease> {
+public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
 }

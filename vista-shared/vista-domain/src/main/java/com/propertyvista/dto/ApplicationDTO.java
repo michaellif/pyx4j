@@ -7,14 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2011-05-29
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.editors;
+package com.propertyvista.dto;
 
-import com.propertyvista.dto.InquiryDTO;
+import com.pyx4j.entity.annotations.Transient;
 
-public interface InquiryEditorView extends IEditorView<InquiryDTO> {
+import com.propertyvista.portal.domain.ptapp.Application;
+
+@Transient
+public interface ApplicationDTO extends Application {
 
 }

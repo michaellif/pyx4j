@@ -130,7 +130,7 @@ public interface AptUnitItem extends IEntity {
 
     //TODO VladS. use this for join
     @Owner
-    AptUnit parent();
+    AptUnit belongsTo();
 
     // ----------- Info --------------------------
 
