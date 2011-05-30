@@ -82,6 +82,7 @@ public class SchedulerHelper {
             //TODO our configuration here
         }
 
+        quartzProperties.put(StdSchedulerFactory.PROP_SCHED_SKIP_UPDATE_CHECK, Boolean.TRUE.toString());
         quartzProperties.put(StdSchedulerFactory.PROP_JOB_STORE_CLASS, JobStoreTX.class.getName());
 
         String delegateProperty = StdSchedulerFactory.PROP_JOB_STORE_PREFIX + ".driverDelegateClass";
@@ -118,6 +119,9 @@ public class SchedulerHelper {
     }
 
     public static synchronized void init() {
+        if (instance != null) {
+            throw new Error("quartz alredy initialized");
+        }
         try {
             if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                 createQuartzTables();
