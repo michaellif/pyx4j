@@ -277,8 +277,9 @@ public class BuildingsGenerator {
     private AptUnit createUnit(Building building, String suiteNumber, int floor, double area, double bedrooms, double bathrooms, Floorplan floorplan) {
         AptUnit unit = EntityFactory.create(AptUnit.class);
 
+        unit.belongsTo().set(building);
+
         unit.info().number().setValue(suiteNumber);
-        unit.info().set(building);
         unit.info().floor().setValue(floor);
         unit.info().type().setValue(RandomUtil.random(AptUnitType.values()));
         unit.info().area().setValue(area);
