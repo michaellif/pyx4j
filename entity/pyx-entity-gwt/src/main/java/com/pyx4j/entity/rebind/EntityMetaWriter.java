@@ -368,9 +368,20 @@ public class EntityMetaWriter {
             }
             data.rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
             data.detached = (method.getAnnotation(Detached.class) != null);
-            data.embedded = (method.getAnnotation(EmbeddedEntity.class) != null) || (valueClass.getAnnotation(EmbeddedEntity.class) != null);
+
+            Owned aOwned = method.getAnnotation(Owned.class);
+            boolean hasEmbedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
+            if (hasEmbedded) {
+                data.embedded = true;
+            } else if (aOwned != null) {
+                data.embedded = aOwned.embedded();
+            } else {
+                data.embedded = false;
+            }
+            data.ownedRelationships = (aOwned != null) || (data.embedded);
+
             data.owner = (method.getAnnotation(Owner.class) != null);
-            data.ownedRelationships = (method.getAnnotation(Owned.class) != null) || (data.embedded);
+            assert (!(data.owner == true && data.ownedRelationships == true));
 
             Indexed indexedAnnotation = method.getAnnotation(Indexed.class);
             boolean indexed = (indexedAnnotation != null) && (indexedAnnotation.indexPrimaryValue());

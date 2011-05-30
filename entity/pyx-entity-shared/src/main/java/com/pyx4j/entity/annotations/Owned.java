@@ -28,8 +28,9 @@ import java.lang.annotation.Target;
 /**
  * Maps to javax.persistence.OneToOne or javax.persistence.OneToMany with CascadeType.ALL
  */
-@Target( { ElementType.METHOD })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Owned {
 
+    boolean embedded() default false;
 }

@@ -156,9 +156,19 @@ public class MemberMetaImpl implements MemberMeta {
 
         persistenceTransient = (method.getAnnotation(Transient.class) != null);
         rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
-        embedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
-        ownedRelationships = embedded || (method.getAnnotation(Owned.class) != null);
+        Owned aOwned = method.getAnnotation(Owned.class);
+        boolean hasEmbedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
+        if (hasEmbedded) {
+            embedded = true;
+        } else if (aOwned != null) {
+            embedded = aOwned.embedded();
+        } else {
+            embedded = false;
+        }
+        ownedRelationships = embedded || (aOwned != null);
         owner = (method.getAnnotation(Owner.class) != null);
+        assert (!(owner == true && ownedRelationships == true));
+
         detached = (method.getAnnotation(Detached.class) != null);
         Indexed indexedAnnotation = method.getAnnotation(Indexed.class);
         indexed = (indexedAnnotation != null) && (indexedAnnotation.indexPrimaryValue());
