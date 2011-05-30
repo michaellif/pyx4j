@@ -13,13 +13,13 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import com.propertyvista.common.domain.financial.Money;
-
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
+
+import com.propertyvista.common.domain.financial.Money;
 
 public interface Charge extends IEntity {
 
@@ -27,5 +27,4 @@ public interface Charge extends IEntity {
     @Editor(type = EditorType.label)
     @ToString(index = 0)
     Money charge();
-
 }

@@ -20,50 +20,40 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.i18n.shared.Translation;
 
 @ToStringFormat("{0} {1}")
 public interface ChargeLine extends Charge {
 
+    @Translatable
     public enum ChargeType {
 
-        @Translation("Deposit")
         deposit,
 
-        @Translation("Application Fee")
         applicationFee,
 
-        @Translation("Monthly Rent")
-        rent,
+        monthlyRent,
 
-        @Translation("Monthly Rent")
         firstMonthRent,
 
-        @Translation("Parking")
         parking,
 
         @Translation("Second Parking")
         parking2,
 
-        @Translation("Locker")
         locker,
 
-        @Translation("Pet Deposit")
         petDeposit,
 
-        @Translation("Pet Charge")
         petCharge,
 
-        @Translation("Extra Parking")
         extraParking,
 
-        @Translation("Extra Locker")
         extraLocker,
 
-        @Translation("Cable TV")
-        cableTv,
+        cableTV,
 
-        @Translation("Prorated")
         prorated;
 
         @Override

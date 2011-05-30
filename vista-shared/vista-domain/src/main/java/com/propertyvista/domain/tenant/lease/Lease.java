@@ -20,48 +20,63 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
+import com.propertyvista.domain.Document;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Rentable;
+import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.ptapp.Pets;
 
 public interface Lease extends IEntity {
 
-    IPrimitive<String> leaseID();
+    IPrimitive<String> iD();
 
     AptUnit unit();
 
-    IList<Concession> concessions();
-
     Application application();
 
-    IPrimitive<Double> currentRent();
+    // Dates:
+    IPrimitive<Date> leaseFrom();
 
-    IPrimitive<Date> expectedMoveInDate();
+    IPrimitive<Date> leaseTo();
 
-    IPrimitive<Date> expectedMoveOutDate();
+    IPrimitive<Date> expectedMoveIn();
 
-    IPrimitive<Date> leaseFromDate();
-
-    IPrimitive<Date> leaseToDate();
+    IPrimitive<Date> expectedMoveOut();
 
     IPrimitive<Date> actualMoveIn();
 
     IPrimitive<Date> actualMoveOut();
 
-    IPrimitive<Date> leaseSignDate();
+    IPrimitive<Date> signDate();
 
-    IPrimitive<String> specialStatus();
+    // Financial:
+    IPrimitive<String> accountNumber();
+
+    IPrimitive<Double> currentRent();
 
     IPrimitive<String> paymentAccepted();
 
-    IPrimitive<String> accountNumber();
+    IList<ChargeLine> charges();
 
+    IList<Concession> concessions();
+
+    IPrimitive<String> specialStatus();
+
+    // Lists:
     ISet<Tenant> tenants();
 
     ISet<Pets> pets();
 
     IList<Rentable> renableItems();
+
+    // TODO : there are utilities in the Unit already... is it the same? 
+    IList<Utility> utilities();
+
+    IList<Document> douments();
+
+    IList<LeaseEvent> events();
 }

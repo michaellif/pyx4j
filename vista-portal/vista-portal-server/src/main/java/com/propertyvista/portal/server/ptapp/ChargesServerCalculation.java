@@ -82,7 +82,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
         charges.rentStart().setValue(unitSelection.rentStart().getValue());
         charges.monthlyCharges().charges().clear();
-        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.rent, rentAmount));
+        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.monthlyRent, rentAmount));
         charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 25)); // TODO make this dynamic
 
         int carsCount = 0;

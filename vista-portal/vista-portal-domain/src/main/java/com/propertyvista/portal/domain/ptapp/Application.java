@@ -13,13 +13,12 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
+import com.pyx4j.entity.shared.IEntity;
+
 import com.propertyvista.common.domain.IUserEntity;
 import com.propertyvista.common.domain.financial.Money;
-
-import com.pyx4j.entity.shared.IEntity;
 
 public interface Application extends IEntity, IUserEntity {
 
     Money rent();
-
 }

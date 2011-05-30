@@ -29,8 +29,8 @@ public class LeaseLister extends ListerBase<Lease> {
 
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Lease>> columnDescriptors, Lease proto) {
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseID()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseFromDate()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseToDate()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.iD()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseFrom()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseTo()));
     }
 }

@@ -18,5 +18,5 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Inquiry extends IEntity {
 
-    IPrimitive<String> test();
+    IPrimitive<String> test(); // something is necessary for listers! 
 }
