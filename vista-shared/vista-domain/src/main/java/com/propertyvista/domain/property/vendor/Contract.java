@@ -24,7 +24,7 @@ import com.propertyvista.domain.Document;
 
 public interface Contract extends IEntity {
 
-    IPrimitive<String> iD();
+    IPrimitive<String> contractID();
 
     Vendor contractor();
 

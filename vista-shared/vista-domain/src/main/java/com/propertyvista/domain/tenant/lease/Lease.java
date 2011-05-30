@@ -32,7 +32,7 @@ import com.propertyvista.portal.domain.ptapp.Pets;
 
 public interface Lease extends IEntity {
 
-    IPrimitive<String> iD();
+    IPrimitive<String> leaseID();
 
     AptUnit unit();
 

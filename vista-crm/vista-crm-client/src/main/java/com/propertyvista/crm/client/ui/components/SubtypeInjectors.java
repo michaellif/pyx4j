@@ -106,7 +106,7 @@ public class SubtypeInjectors {
 
     public static void injectContract(VistaDecoratorsFlowPanel main, Contract proto, CEntityEditableComponent<?> parent) {
 
-        main.add(parent.inject(proto.iD()), 15);
+        main.add(parent.inject(proto.contractID()), 15);
 //        injectVendor(main, proto.contractor(), parent);
         main.add(parent.inject(proto.contractor()), 15);
         main.add(parent.inject(proto.cost()), 15);
