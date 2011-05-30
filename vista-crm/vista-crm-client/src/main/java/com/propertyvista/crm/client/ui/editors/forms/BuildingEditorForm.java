@@ -108,11 +108,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this);
         main.add(inject(proto().contacts().website()), 25);
         main.add(inject(proto().contacts().email().address()), main.defaultLabelWidth, 25, i18n.tr("Email Address"));
-// TODO - add this complex data processing later! :
+// TODO - add this data processing later! :
 //        main.add(inject(proto().contactsList()), 15);
 
-// TODO - complex name should be selectable in drop-down (?) :
-//        main.add(inject(proto().complex()), 15);
+        main.add(inject(proto().complex()), 15);
+// TODO - add this data processing later! :
 //      main.add(inject(proto().media()), 15);
 
         main.setWidth("100%");

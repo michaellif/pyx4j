@@ -67,8 +67,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         main.add(inject(proto().info().floor()), 15);
         main.add(inject(proto().info().number()), 15);
-// TODO: arrange available building in drop-down box? 
-//        main.add(inject(proto().building()), 15);
+        main.add(inject(proto().belongsTo()), 15);
 
         main.add(inject(proto().info().area()), 15);
         main.add(inject(proto().info().areaUnits()), 15);

@@ -15,6 +15,7 @@ package com.propertyvista.domain.property.asset.building;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
@@ -25,6 +26,7 @@ import com.propertyvista.domain.property.asset.Complex;
 //TODO rename to Property?!
 public interface Building extends IEntity {
 
+    @ToString
     @EmbeddedEntity
     BuildingInfo info();
 
