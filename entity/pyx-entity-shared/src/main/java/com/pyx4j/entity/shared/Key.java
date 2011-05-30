@@ -35,9 +35,9 @@ public class Key implements java.io.Serializable {
 
     }
 
-    public Key(String serialPresntation) {
-        assert (serialPresntation != null);
-        value = serialPresntation;
+    public Key(String serialPresentation) {
+        assert (serialPresentation != null);
+        value = serialPresentation;
     }
 
     public Key(long dbPrimaryKey) {
