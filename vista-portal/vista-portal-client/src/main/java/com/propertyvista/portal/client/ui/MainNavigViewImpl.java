@@ -28,12 +28,13 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.domain.site.NavigItem;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.portal.domain.site.NavigItem;
 
 public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
@@ -49,22 +50,22 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
     private MainNavigPresenter presenter;
 
-    private NavigTabList tabsHolder;
+    private final NavigTabList tabsHolder;
 
     public MainNavigViewImpl() {
         setStyleName(DEFAULT_STYLE_PREFIX);
+        tabsHolder = new NavigTabList();
+        setWidget(tabsHolder);
     }
 
     @Override
     public void setPresenter(MainNavigPresenter presenter) {
         this.presenter = presenter;
 
-        clear();
-        tabsHolder = new NavigTabList();
+        tabsHolder.clear();
         for (NavigItem item : presenter.getMainNavig().items()) {
             tabsHolder.add(new NavigTab(item));
         }
-        setWidget(tabsHolder);
 
     }
 
