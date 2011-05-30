@@ -13,10 +13,10 @@
  */
 package com.propertyvista.domain.property.asset;
 
-import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owner;
 
 public interface RoofSegment extends Rentable {
 
-    @Detached
+    @Owner
     Roof belongsTo();
 }

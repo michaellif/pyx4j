@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.property.asset.unit;
 
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
@@ -21,68 +20,70 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+import com.propertyvista.domain.tenant.lease.Lease;
+
 public interface AptUnitOccupancy extends IEntity {
 
-	@Translatable
-	public enum StatusType {
+    @Translatable
+    public enum StatusType {
 
-		leased,
+        leased,
 
-		available,
+        available,
 
-		reserved,
+        reserved,
 
-		vacant,
+        vacant,
 
-		offMarket;
+        offMarket;
 
-		@Override
-		public String toString() {
-			return I18nEnum.tr(this);
-		}
-	}
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
 
-	@Translatable
-	public enum OffMarketType {
+    @Translatable
+    public enum OffMarketType {
 
-		down,
+        down,
 
-		model,
+        model,
 
-		employee,
+        employee,
 
-		construction,
+        construction,
 
-		office,
+        office,
 
-		other;
+        other;
 
-		@Override
-		public String toString() {
-			return I18nEnum.tr(this);
-		}
-	}
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
 
-	@Detached
-	@Owner
-	AptUnit unit();
+    @Detached
+    @Owner
+    AptUnit unit();
 
-	IPrimitive<java.sql.Date> dateFrom();
+    IPrimitive<java.sql.Date> dateFrom();
 
-	/**
-	 * What if there is no limit to this date, what should it be then?
-	 */
-	IPrimitive<java.sql.Date> dateTo();
+    /**
+     * What if there is no limit to this date, what should it be then?
+     */
+    IPrimitive<java.sql.Date> dateTo();
 
-	IPrimitive<StatusType> status();
+    IPrimitive<StatusType> status();
 
-	IPrimitive<OffMarketType> offMarket();
+    IPrimitive<OffMarketType> offMarket();
 
-	/**
-	 * Would be good to have an example of a description for occupancy in Java
-	 * Doc
-	 */
-	IPrimitive<String> description();
+    /**
+     * Would be good to have an example of a description for occupancy in Java
+     * Doc
+     */
+    IPrimitive<String> description();
 
-	Lease lease();
+    Lease lease();
 }

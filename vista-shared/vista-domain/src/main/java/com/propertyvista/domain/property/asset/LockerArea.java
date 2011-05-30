@@ -13,9 +13,9 @@
  */
 package com.propertyvista.domain.property.asset;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -40,7 +40,7 @@ public interface LockerArea extends IEntity {
         }
     }
 
-    @Detached
+    @Owner
     Building belongsTo();
 
     // ----------- Infromation --------------------------------------------------------------------------

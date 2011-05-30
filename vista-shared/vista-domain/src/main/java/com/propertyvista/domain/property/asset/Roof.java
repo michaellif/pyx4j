@@ -16,10 +16,10 @@ package com.propertyvista.domain.property.asset;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -30,7 +30,7 @@ import com.propertyvista.domain.property.vendor.Warranty;
 
 public interface Roof extends IEntity, Notes {
 
-    @Detached
+    @Owner
     Building belongsTo();
 
     @MemberColumn(name = "roofType")
