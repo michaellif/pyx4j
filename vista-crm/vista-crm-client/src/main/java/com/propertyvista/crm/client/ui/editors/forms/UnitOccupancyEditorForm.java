@@ -47,9 +47,7 @@ public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancy> {
         main.add(inject(proto().dateTo()), 8);
         main.add(inject(proto().offMarket()), 15);
         main.add(inject(proto().description()), 15);
-        //TODO Leon
-        //not sure
-        //main.add(inject(proto().lease()), 7);
+        main.add(inject(proto().lease()), 15);
 
         main.setWidth("100%");
         return main;

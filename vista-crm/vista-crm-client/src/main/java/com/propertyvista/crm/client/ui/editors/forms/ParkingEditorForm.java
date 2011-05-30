@@ -45,7 +45,7 @@ public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
 
         main.add(inject(proto().name()), 15);
         main.add(inject(proto().description()), 15);
-        main.add(inject(proto().type()), 7);
+        main.add(inject(proto().type()), 10);
         main.add(inject(proto().levels()), 7);
         main.add(inject(proto().totalSpaces()), 7);
         main.add(inject(proto().disabledSpaces()), 7);

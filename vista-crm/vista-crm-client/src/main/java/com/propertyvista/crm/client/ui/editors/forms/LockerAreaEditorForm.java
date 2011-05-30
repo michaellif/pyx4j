@@ -57,7 +57,7 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
 
         main.add(inject(proto().largeRent()), 7);
         main.add(inject(proto().regularRent()), 7);
-        main.add(inject(proto().smallRent()), 157);
+        main.add(inject(proto().smallRent()), 7);
 
         main.setWidth("100%");
         return main;
