@@ -31,8 +31,8 @@ public class VistaHeaderDecorator extends HorizontalPanel {
 
     public VistaHeaderDecorator(String caption, Widget widget, String width) {
         HTML captionHolder = new HTML(caption);
-        setStyleName(DEFAULT_STYLE_PREFIX);
-        captionHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Caption.name());
+        setStyleName(getStylePrefix());
+        captionHolder.setStyleName(getStylePrefix() + StyleSuffix.Caption.name());
         add(captionHolder);
         setCellVerticalAlignment(captionHolder, HorizontalPanel.ALIGN_MIDDLE);
         setCellWidth(captionHolder, "200px");
@@ -66,5 +66,9 @@ public class VistaHeaderDecorator extends HorizontalPanel {
 
     public VistaHeaderDecorator(IObject<?> member) {
         this(member, null);
+    }
+
+    protected String getStylePrefix() {
+        return DEFAULT_STYLE_PREFIX;
     }
 }

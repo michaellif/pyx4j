@@ -19,31 +19,32 @@ import com.pyx4j.entity.shared.IObject;
 
 import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
 
-public class CrmHeaderDecorator extends VistaHeaderDecorator {
+public class CrmHeader2Decorator extends VistaHeaderDecorator {
 
-    public static String DEFAULT_STYLE_PREFIX = "vista_CrmHeaderDecorator";
+    public static String DEFAULT_STYLE_PREFIX = "vista_CrmHeader2Decorator";
 
-    public CrmHeaderDecorator(String caption, Widget widget, String width) {
+    public CrmHeader2Decorator(String caption, Widget widget, String width) {
         super(caption, widget, width);
+        setStyleName(DEFAULT_STYLE_PREFIX);
     }
 
-    public CrmHeaderDecorator(String caption, Widget widget) {
+    public CrmHeader2Decorator(String caption, Widget widget) {
         this(caption, widget, null);
     }
 
-    public CrmHeaderDecorator(String caption, String width) {
+    public CrmHeader2Decorator(String caption, String width) {
         this(caption, null, width);
     }
 
-    public CrmHeaderDecorator(String caption) {
+    public CrmHeader2Decorator(String caption) {
         this(caption, (String) null);
     }
 
-    public CrmHeaderDecorator(IObject<?> member, String width) {
+    public CrmHeader2Decorator(IObject<?> member, String width) {
         this(member.getMeta().getCaption(), null, width);
     }
 
-    public CrmHeaderDecorator(IObject<?> member) {
+    public CrmHeader2Decorator(IObject<?> member) {
         this(member, null);
     }
 

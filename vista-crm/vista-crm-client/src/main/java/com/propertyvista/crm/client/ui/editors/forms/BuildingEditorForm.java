@@ -29,6 +29,7 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.Address;
@@ -74,11 +75,22 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(inject(proto().info().centralAir()), 15);
         main.add(inject(proto().info().centralHeat()), 15);
 
+        main.add(new CrmHeader2Decorator(proto().amenities().getMeta().getCaption()));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
+
+        main.add(new CrmHeader2Decorator(proto().elevators().getMeta().getCaption()));
         main.add(inject(proto().elevators(), createElevatorsListEditor()));
+
+        main.add(new CrmHeader2Decorator(proto().boilers().getMeta().getCaption()));
         main.add(inject(proto().boilers(), createBoilersListEditor()));
+
+        main.add(new CrmHeader2Decorator(proto().roofs().getMeta().getCaption()));
         main.add(inject(proto().roofs(), createRoofsListEditor()));
+
+        main.add(new CrmHeader2Decorator(proto().parkings().getMeta().getCaption()));
         main.add(inject(proto().parkings(), createParkingsListEditor()));
+
+        main.add(new CrmHeader2Decorator(proto().lockers().getMeta().getCaption()));
         main.add(inject(proto().lockers(), createLockerAreasListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Financials")));

@@ -26,6 +26,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.domain.Company;
 import com.propertyvista.domain.Email;
@@ -46,6 +47,7 @@ public class SubtypeInjectors {
 
     public static void injectPhones(VistaDecoratorsFlowPanel main, IList<Phone> proto, CEntityEditableComponent<?> parent) {
 
+        main.add(new CrmHeader2Decorator(proto.getMeta().getCaption()));
         main.add(parent.inject(proto, new CrmEntityFolder<Phone>(Phone.class, i18n.tr("Phone"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -62,6 +64,7 @@ public class SubtypeInjectors {
 
     public static void injectEmails(VistaDecoratorsFlowPanel main, IList<Email> proto, CEntityEditableComponent<?> parent) {
 
+        main.add(new CrmHeader2Decorator(proto.getMeta().getCaption()));
         main.add(parent.inject(proto, new CrmEntityFolder<Email>(Email.class, i18n.tr("Email"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -126,6 +129,7 @@ public class SubtypeInjectors {
         main.add(parent.inject(proto.type()), 15);
         injectContract(main, proto, parent);
 
+        main.add(new CrmHeader2Decorator(proto.items().getMeta().getCaption()));
         main.add(parent.inject(proto.items(), new CrmEntityFolder<WarrantyItem>(WarrantyItem.class, i18n.tr("Warranty Item"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -161,6 +165,8 @@ public class SubtypeInjectors {
 
         main.add(parent.inject(proto.name()), 15);
         main.add(parent.inject(proto.description()), 25);
+
+        main.add(new CrmHeader2Decorator(proto.addBlurbs().getMeta().getCaption()));
         main.add(parent.inject(proto.addBlurbs(),
                 new CrmEntityFolder<AdvertisingBlurb>(AdvertisingBlurb.class, i18n.tr("Advertising Blurb"), parent.isEditable()) {
                     @Override

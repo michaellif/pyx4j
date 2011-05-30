@@ -20,15 +20,17 @@ import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.CrmView;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
 import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
-public abstract class VistaCrmTheme extends com.propertyvista.common.client.theme.VistaTheme {
+public abstract class VistaCrmTheme extends VistaTheme {
 
     public VistaCrmTheme() {
         super();
@@ -51,7 +53,6 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
 
         initDashboardReport();
         initEntityDataTableStyles();
-
     }
 
     @Override
@@ -225,7 +226,18 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
         style = new Style(Selector.valueOf(CrmHeaderDecorator.DEFAULT_STYLE_PREFIX, CrmHeaderDecorator.StyleSuffix.Caption));
         style.addProperty("padding", "0.3em 1em 0.4em 1em");
         style.addProperty("font-size", "1.3em");
-//        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(CrmHeader2Decorator.DEFAULT_STYLE_PREFIX));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("margin", "0.2em 0 0.2em 0");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(CrmHeader2Decorator.DEFAULT_STYLE_PREFIX, CrmHeader2Decorator.StyleSuffix.Caption));
+        style.addProperty("padding", "0em 1em 0.1em 2em");
+        style.addProperty("font-size", "1.2em");
         addStyle(style);
 
         //        style = new Style(Selector.valueOf(ViewLineSeparator.DEFAULT_STYLE_PREFIX));
@@ -381,7 +393,6 @@ public abstract class VistaCrmTheme extends com.propertyvista.common.client.them
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "0.3em");
         addStyle(style);
-
     }
 
     protected void initActionStyle() {
