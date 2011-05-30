@@ -13,12 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.editors.forms;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancy> {
@@ -33,7 +37,21 @@ public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancy> {
 
     @Override
     public IsWidget createContent() {
-        // TODO Auto-generated method stub
-        return null;
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+
+        Widget header = new CrmHeaderDecorator(i18n.tr("Information"));
+        header.getElement().getStyle().setMarginTop(0, Unit.EM);
+        main.add(header);
+
+        main.add(inject(proto().dateFrom()), 8);
+        main.add(inject(proto().dateTo()), 8);
+        main.add(inject(proto().offMarket()), 15);
+        main.add(inject(proto().description()), 15);
+        //TODO Leon
+        //not sure
+        //main.add(inject(proto().lease()), 7);
+
+        main.setWidth("100%");
+        return main;
     }
 }

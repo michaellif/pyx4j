@@ -59,19 +59,19 @@ public interface LockerArea extends IEntity {
 
     IPrimitive<Integer> totalLockers();
 
-    IPrimitive<Integer> regularLockers();
-
     IPrimitive<Integer> largeLockers();
+
+    IPrimitive<Integer> regularLockers();
 
     IPrimitive<Integer> smallLockers();
 
     // ------------------ Financials ------------------------------------------------------------------
 
     @Format("#0.00")
-    IPrimitive<Double> regularRent();
+    IPrimitive<Double> largeRent();
 
     @Format("#0.00")
-    IPrimitive<Double> largeRent();
+    IPrimitive<Double> regularRent();
 
     @Format("#0.00")
     IPrimitive<Double> smallRent();
