@@ -25,8 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.server.config.VistaServerSideConfiguration;
-
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
@@ -39,6 +37,8 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.quartz.SchedulerHelper;
 
+import com.propertyvista.server.config.VistaServerSideConfiguration;
+
 @SuppressWarnings("serial")
 public class DBResetServlet extends HttpServlet {
 
@@ -46,47 +46,49 @@ public class DBResetServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
-        long start = System.currentTimeMillis();
-        StringBuilder buf = new StringBuilder();
-        try {
-            VistaServerSideConfiguration conf = (VistaServerSideConfiguration) ServerSideConfiguration.instance();
-            EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) PersistenceServicesFactory.getPersistenceService();
-            List<String> allClasses = EntityClassFinder.findEntityClasses();
-            for (String className : allClasses) {
-                Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
-                EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-                if (meta.isTransient()) {
-                    continue;
+        synchronized (DBResetServlet.class) {
+            long start = System.currentTimeMillis();
+            StringBuilder buf = new StringBuilder();
+            try {
+                VistaServerSideConfiguration conf = (VistaServerSideConfiguration) ServerSideConfiguration.instance();
+                EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) PersistenceServicesFactory.getPersistenceService();
+                List<String> allClasses = EntityClassFinder.findEntityClasses();
+                for (String className : allClasses) {
+                    Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
+                    EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
+                    if (meta.isTransient()) {
+                        continue;
+                    }
+                    if (srv.isTableExists(meta.getEntityClass())) {
+                        log.warn("drop table {}", meta.getEntityClass());
+                        buf.append("drop table " + meta.getEntityClass() + "\n");
+                        srv.dropTable(meta.getEntityClass());
+                    }
                 }
-                if (srv.isTableExists(meta.getEntityClass())) {
-                    log.warn("drop table {}", meta.getEntityClass());
-                    buf.append("drop table " + meta.getEntityClass() + "\n");
-                    srv.dropTable(meta.getEntityClass());
-                }
+
+                SchedulerHelper.shutdown();
+                SchedulerHelper.dbReset();
+                SchedulerHelper.init();
+
+                buf.append(conf.getDataPreloaders().preloadAll());
+                buf.append("\nTotal time: " + TimeUtils.secSince(start));
+
+            } catch (Throwable t) {
+                log.error("DB reset error", t);
+                buf.append("\nError:");
+                buf.append(t.getMessage());
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-
-            SchedulerHelper.shutdown();
-            SchedulerHelper.dbReset();
-            SchedulerHelper.init();
-
-            buf.append(conf.getDataPreloaders().preloadAll());
-            buf.append("\nTotal time: " + TimeUtils.secSince(start));
-
-        } catch (Throwable t) {
-            log.error("DB reset error", t);
-            buf.append("\nError:");
-            buf.append(t.getMessage());
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
-        response.setDateHeader("Expires", System.currentTimeMillis());
-        response.setHeader("Pragma", "no-cache");
-        response.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
-        response.setContentType("text/plain");
-        OutputStream output = response.getOutputStream();
-        try {
-            output.write(buf.toString().getBytes());
-        } finally {
-            IOUtils.closeQuietly(output);
+            response.setDateHeader("Expires", System.currentTimeMillis());
+            response.setHeader("Pragma", "no-cache");
+            response.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
+            response.setContentType("text/plain");
+            OutputStream output = response.getOutputStream();
+            try {
+                output.write(buf.toString().getBytes());
+            } finally {
+                IOUtils.closeQuietly(output);
+            }
         }
     }
 }

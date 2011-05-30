@@ -28,6 +28,11 @@ public class InitializationServletContextListener extends com.pyx4j.entity.serve
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         SchedulerHelper.shutdown();
+        try {
+            // Avoid Tomcat redeploy warnings
+            Thread.sleep(1000);
+        } catch (InterruptedException ignore) {
+        }
         super.contextDestroyed(sce);
     }
 
