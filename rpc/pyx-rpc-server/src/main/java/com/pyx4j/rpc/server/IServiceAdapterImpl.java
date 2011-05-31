@@ -33,8 +33,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.IServiceAdapter;
+import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.IServiceRequest;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
@@ -81,7 +81,11 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
         }
 
-        for (Method method : clazz.getDeclaredMethods()) {
+// TODO VladS - please approve this replacement: 
+// clazz.getDeclaredMethods() doesn't return methods of superclass - so our Generic construction of CrudServices did not work!
+// if this replacement is OK - do you know the places where it worth to replace it also?!.. 
+//        for (Method method : clazz.getDeclaredMethods()) {
+        for (Method method : clazz.getMethods()) {
             if (method.getName().equals(serviceMethodName)) {
                 return runMethod(serviceInstance, method, request.getArgs());
             }
