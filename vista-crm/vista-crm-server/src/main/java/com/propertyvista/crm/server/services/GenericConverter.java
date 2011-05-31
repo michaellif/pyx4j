@@ -20,42 +20,43 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
+/**
+ * Converts Data Base Object (DBO) to Data Transfer Ones (DTO) and vice versa.
+ * Applies to SerachCriteria and it's SearchResult also (one direction)
+ * Note: it's supposed that DTO extends DBO!..
+ */
+
+//TODO move to more generic place?
 public class GenericConverter {
 
-    //TODO move to more generic place
-    public static <S extends IEntity, D extends S> S down(D src, Class<S> dstClass) {
-        S dst = EntityFactory.create(dstClass);
+    public static <DBO extends IEntity, DTO extends DBO> DBO convertDTO2DBO(DTO src, Class<DBO> dstClass) {
+        DBO dst = EntityFactory.create(dstClass);
         dst.set(src);
         return dst;
     }
 
-    //TODO move to more generic place
-    public static <S extends IEntity, D extends S> D up(S src, Class<D> dstClass) {
-        D dst = EntityFactory.create(dstClass);
+    public static <DBO extends IEntity, DTO extends DBO> DTO convertDBO2DTO(DBO src, Class<DTO> dstClass) {
+        DTO dst = EntityFactory.create(dstClass);
         dst.set(src);
         return dst;
     }
 
-    //TODO move to more generic place
-    public static <E extends IEntity, D extends E> EntitySearchResult<D> up(EntitySearchResult<E> resultE, Class<D> dstClass) {
-        EntitySearchResult<D> result = new EntitySearchResult<D>();
+    public static <DTO extends IEntity> EntitySearchCriteria<DTO> convertDTO2DBO(EntitySearchCriteria<? extends DTO> src, Class<DTO> dstClass) {
+        EntitySearchCriteria<DTO> dst = EntitySearchCriteria.create(dstClass);
+        dst.setPageNumber(src.getPageNumber());
+        dst.setPageSize(src.getPageSize());
+        return dst;
+    }
+
+    public static <DBO extends IEntity, DTO extends DBO> EntitySearchResult<DTO> convertDBO2DTO(EntitySearchResult<DBO> resultE, Class<DTO> dstClass) {
+        EntitySearchResult<DTO> result = new EntitySearchResult<DTO>();
         result.setEncodedCursorReference(resultE.getEncodedCursorReference());
         result.hasMoreData(resultE.hasMoreData());
-        Vector<D> data = new Vector<D>();
-        for (E entity : resultE.getData()) {
-            data.add(up(entity, dstClass));
+        Vector<DTO> data = new Vector<DTO>();
+        for (DBO entity : resultE.getData()) {
+            data.add(convertDBO2DTO(entity, dstClass));
         }
         result.setData(data);
         return result;
-    }
-
-    //TODO move to more generic place
-    public static <D extends IEntity> EntitySearchCriteria<D> down(EntitySearchCriteria<? extends D> src, Class<D> dstClass) {
-        EntitySearchCriteria<D> dst = EntitySearchCriteria.create(dstClass);
-        dst.setPageNumber(src.getPageNumber());
-        dst.setPageSize(src.getPageSize());
-
-        //TODO convert search criteria
-        return dst;
     }
 }

@@ -13,45 +13,12 @@
  */
 package com.propertyvista.crm.server.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.EntityServicesImpl;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
-
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
 import com.propertyvista.domain.marketing.yield.Concession;
 
-public class ConcessionCrudServiceImpl implements ConcessionCrudService {
+public class ConcessionCrudServiceImpl extends GenericCrudServiceImpl<Concession> implements ConcessionCrudService {
 
-    private final static Logger log = LoggerFactory.getLogger(ConcessionCrudServiceImpl.class);
-
-    @Override
-    public void create(AsyncCallback<Concession> callback, Concession editableEntity) {
-        PersistenceServicesFactory.getPersistenceService().persist(editableEntity);
-        callback.onSuccess(editableEntity);
-    }
-
-    @Override
-    public void retrieve(AsyncCallback<Concession> callback, Key entityId) {
-        callback.onSuccess(PersistenceServicesFactory.getPersistenceService().retrieve(Concession.class, entityId));
-    }
-
-    @Override
-    public void save(AsyncCallback<Concession> callback, Concession editableEntity) {
-        PersistenceServicesFactory.getPersistenceService().merge(editableEntity);
-        callback.onSuccess(editableEntity);
-    }
-
-    @Override
-    public void search(AsyncCallback<EntitySearchResult<Concession>> callback, EntitySearchCriteria<Concession> criteria) {
-        EntitySearchCriteria<Concession> c = GenericConverter.down(criteria, Concession.class);
-        //TODO add Concession specific criteria
-        callback.onSuccess(EntityServicesImpl.secureSearch(c));
+    public ConcessionCrudServiceImpl() {
+        super(Concession.class);
     }
 }

@@ -13,49 +13,13 @@
  */
 package com.propertyvista.crm.server.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.EntityServicesImpl;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
-
 import com.propertyvista.crm.rpc.services.InquiryCrudService;
 import com.propertyvista.domain.tenant.Inquiry;
 import com.propertyvista.dto.InquiryDTO;
 
-public class InquiryCrudServiceImpl implements InquiryCrudService {
+public class InquiryCrudServiceImpl extends GenericCrudServiceDtoImpl<Inquiry, InquiryDTO> implements InquiryCrudService {
 
-    private final static Logger log = LoggerFactory.getLogger(InquiryCrudServiceImpl.class);
-
-    @Override
-    public void create(AsyncCallback<InquiryDTO> callback, InquiryDTO editableEntity) {
-        Inquiry entity = GenericConverter.down(editableEntity, Inquiry.class);
-        PersistenceServicesFactory.getPersistenceService().persist(entity);
-        callback.onSuccess(GenericConverter.up(entity, InquiryDTO.class));
-    }
-
-    @Override
-    public void retrieve(AsyncCallback<InquiryDTO> callback, Key entityId) {
-        Inquiry entity = PersistenceServicesFactory.getPersistenceService().retrieve(Inquiry.class, entityId);
-        callback.onSuccess(GenericConverter.up(entity, InquiryDTO.class));
-    }
-
-    @Override
-    public void save(AsyncCallback<InquiryDTO> callback, InquiryDTO editableEntity) {
-        Inquiry entity = GenericConverter.down(editableEntity, Inquiry.class);
-        PersistenceServicesFactory.getPersistenceService().merge(entity);
-        callback.onSuccess(GenericConverter.up(entity, InquiryDTO.class));
-    }
-
-    @Override
-    public void search(AsyncCallback<EntitySearchResult<InquiryDTO>> callback, EntitySearchCriteria<InquiryDTO> criteria) {
-        EntitySearchCriteria<Inquiry> c = GenericConverter.down(criteria, Inquiry.class);
-        //TODO add building specific criteria
-        callback.onSuccess(GenericConverter.up(EntityServicesImpl.secureSearch(c), InquiryDTO.class));
+    public InquiryCrudServiceImpl() {
+        super(Inquiry.class, InquiryDTO.class);
     }
 }

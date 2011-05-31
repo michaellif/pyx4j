@@ -13,50 +13,13 @@
  */
 package com.propertyvista.crm.server.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.EntityServicesImpl;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
-
 import com.propertyvista.crm.rpc.services.LockerAreaCrudService;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.dto.LockerAreaDTO;
 
-public class LockerAreaCrudServiceImpl implements LockerAreaCrudService {
+public class LockerAreaCrudServiceImpl extends GenericCrudServiceDtoImpl<LockerArea, LockerAreaDTO> implements LockerAreaCrudService {
 
-    private final static Logger log = LoggerFactory.getLogger(LockerAreaCrudServiceImpl.class);
-
-    @Override
-    public void create(AsyncCallback<LockerAreaDTO> callback, LockerAreaDTO editableEntity) {
-        LockerArea entity = GenericConverter.down(editableEntity, LockerArea.class);
-        PersistenceServicesFactory.getPersistenceService().persist(entity);
-        callback.onSuccess(GenericConverter.up(entity, LockerAreaDTO.class));
+    public LockerAreaCrudServiceImpl() {
+        super(LockerArea.class, LockerAreaDTO.class);
     }
-
-    @Override
-    public void retrieve(AsyncCallback<LockerAreaDTO> callback, Key entityId) {
-        LockerArea entity = PersistenceServicesFactory.getPersistenceService().retrieve(LockerArea.class, entityId);
-        callback.onSuccess(GenericConverter.up(entity, LockerAreaDTO.class));
-    }
-
-    @Override
-    public void save(AsyncCallback<LockerAreaDTO> callback, LockerAreaDTO editableEntity) {
-        LockerArea entity = GenericConverter.down(editableEntity, LockerArea.class);
-        PersistenceServicesFactory.getPersistenceService().merge(entity);
-        callback.onSuccess(GenericConverter.up(entity, LockerAreaDTO.class));
-    }
-
-    @Override
-    public void search(AsyncCallback<EntitySearchResult<LockerAreaDTO>> callback, EntitySearchCriteria<LockerAreaDTO> criteria) {
-        EntitySearchCriteria<LockerArea> c = GenericConverter.down(criteria, LockerArea.class);
-        //TODO add LockerArea specific criteria
-        callback.onSuccess(GenericConverter.up(EntityServicesImpl.secureSearch(c), LockerAreaDTO.class));
-    }
-
 }
