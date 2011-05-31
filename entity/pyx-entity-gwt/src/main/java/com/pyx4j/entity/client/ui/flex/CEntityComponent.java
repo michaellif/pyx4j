@@ -26,7 +26,6 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CButton;
@@ -34,7 +33,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.IAccessAdapter;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
-import com.pyx4j.forms.client.ui.ValidationResults;
 
 public abstract class CEntityComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends
         CEditableComponent<DATA_TYPE, WIDGET_TYPE> implements IEditableComponentFactory, IAccessAdapter {
@@ -42,19 +40,6 @@ public abstract class CEntityComponent<DATA_TYPE, WIDGET_TYPE extends Widget & I
     private static I18n i18n = I18nFactory.getI18n(CEntityComponent.class);
 
     private CEntityComponent<?, ?> bindParent;
-
-    public ValidationResults getContainerValidationResults() {
-        ValidationResults validationResults = new ValidationResults();
-        String message = getValidationMessage();
-        if (message != null) {
-            if (CommonsStringUtils.isStringSet(getTitle())) {
-                validationResults.appendValidationError(i18n.tr("''{0}'' is not valid. {1}", getTitle(), message));
-            } else {
-                validationResults.appendValidationError(message);
-            }
-        }
-        return validationResults;
-    }
 
     @Override
     public boolean isEnabled(CComponent<?> component) {

@@ -27,6 +27,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
@@ -69,6 +70,19 @@ public abstract class CEntityContainer<DATA_TYPE, WIDGET_TYPE extends Widget & I
             }
         }
 
+        return validationResults;
+    }
+
+    public ValidationResults getContainerValidationResults() {
+        ValidationResults validationResults = new ValidationResults();
+        String message = getValidationMessage();
+        if (message != null) {
+            if (CommonsStringUtils.isStringSet(getTitle())) {
+                validationResults.appendValidationError(i18n.tr("''{0}'' is not valid. {1}", getTitle(), message));
+            } else {
+                validationResults.appendValidationError(message);
+            }
+        }
         return validationResults;
     }
 
