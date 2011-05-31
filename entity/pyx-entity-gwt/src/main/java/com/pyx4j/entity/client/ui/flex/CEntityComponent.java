@@ -43,23 +43,6 @@ public abstract class CEntityComponent<DATA_TYPE, WIDGET_TYPE extends Widget & I
 
     private CEntityComponent<?, ?> bindParent;
 
-    @Override
-    public boolean isValid() {
-
-        if (!isEditable() || !isEnabled()) {
-            return true;
-        }
-
-        if (this instanceof IComponentContainer) {
-            for (CEditableComponent<?, ?> ccomponent : ((IComponentContainer) this).getComponents()) {
-                if (!ccomponent.isValid()) {
-                    return false;
-                }
-            }
-        }
-        return super.isValid();
-    }
-
     public ValidationResults getContainerValidationResults() {
         ValidationResults validationResults = new ValidationResults();
         String message = getValidationMessage();
@@ -71,33 +54,6 @@ public abstract class CEntityComponent<DATA_TYPE, WIDGET_TYPE extends Widget & I
             }
         }
         return validationResults;
-    }
-
-    public ValidationResults getAllValidationResults() {
-        ValidationResults validationResults = getContainerValidationResults();
-        if (this instanceof IComponentContainer) {
-            for (CEditableComponent<?, ?> component : ((IComponentContainer) this).getComponents()) {
-                if (component.isValid()) {
-                    continue;
-                }
-                if (component instanceof IComponentContainer) {
-                    validationResults.appendValidationErrors(((IComponentContainer) component).getValidationResults());
-                } else if (component.isVisited()) {
-                    validationResults.appendValidationError(i18n.tr("Field ''{0}'' is not valid. {1}", component.getTitle(), component.getValidationMessage()));
-                }
-            }
-        }
-        return validationResults;
-    }
-
-    @Override
-    public void setVisited(boolean visited) {
-        super.setVisited(visited);
-        if (this instanceof IComponentContainer) {
-            for (CEditableComponent<?, ?> ccomponent : ((IComponentContainer) this).getComponents()) {
-                ((CEditableComponent<?, ?>) ccomponent).setVisited(visited);
-            }
-        }
     }
 
     @Override

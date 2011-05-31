@@ -38,7 +38,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public abstract class CEntityEditor<E extends IEntity> extends CEntityComponent<E, NativeEntityEditor<E>> implements IComponentContainer {
+public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<E, NativeEntityEditor<E>> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityEditor.class);
 
