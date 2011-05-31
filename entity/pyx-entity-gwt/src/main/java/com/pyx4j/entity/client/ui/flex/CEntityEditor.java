@@ -38,7 +38,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<E, NativeEntityEditor<E>> {
+public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<E, NativeEntityPanel<E>> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityEditor.class);
 
@@ -187,8 +187,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    protected NativeEntityEditor<E> createWidget() {
-        return new NativeEntityEditor<E>();
+    protected NativeEntityPanel<E> createWidget() {
+        return new NativeEntityPanel<E>();
     }
 
     public void setWidget(IsWidget widget) {

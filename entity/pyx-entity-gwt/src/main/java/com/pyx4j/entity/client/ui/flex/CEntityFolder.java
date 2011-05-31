@@ -50,7 +50,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<IList<E>, NativeEntityFolder<IList<E>>> {
+public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<IList<E>, NativeEntityPanel<IList<E>>> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
@@ -321,8 +321,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    protected NativeEntityFolder<IList<E>> createWidget() {
-        return new NativeEntityFolder<IList<E>>();
+    protected NativeEntityPanel<IList<E>> createWidget() {
+        return new NativeEntityPanel<IList<E>>();
     }
 
     public FlowPanel getContent() {

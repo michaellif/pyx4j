@@ -28,26 +28,21 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
-public class NativeEntityEditor<E> extends SimplePanel implements INativeEditableComponent<E> {
+public class NativeEntityPanel<E> extends SimplePanel implements INativeEditableComponent<E> {
 
-    public NativeEntityEditor() {
+    public NativeEntityPanel() {
     }
 
     @Override
     public void setTabIndex(int tabIndex) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void setFocus(boolean focused) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void setEnabled(boolean enabled) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -57,13 +52,11 @@ public class NativeEntityEditor<E> extends SimplePanel implements INativeEditabl
 
     @Override
     public CComponent<?> getCComponent() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public void setEditable(boolean editable) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -73,8 +66,6 @@ public class NativeEntityEditor<E> extends SimplePanel implements INativeEditabl
 
     @Override
     public void setNativeValue(E value) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -83,25 +74,20 @@ public class NativeEntityEditor<E> extends SimplePanel implements INativeEditabl
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public E getNativeValue() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
     }
 }
