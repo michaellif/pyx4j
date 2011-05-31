@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
-public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditableComponent<E> {
+public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditor<E> {
 
     private final SimplePanel content;
 

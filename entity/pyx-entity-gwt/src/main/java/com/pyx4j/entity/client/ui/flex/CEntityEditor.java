@@ -38,10 +38,10 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public abstract class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> implements IFlexContentComponent,
+public abstract class CEntityEditor<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> implements IFlexContentComponent,
         IComponentContainer {
 
-    private static final Logger log = LoggerFactory.getLogger(CEntityEditableComponent.class);
+    private static final Logger log = LoggerFactory.getLogger(CEntityEditor.class);
 
     private final EntityBinder<E> binder;
 
@@ -49,11 +49,11 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
 
     private EditableComponentsContainerHelper containerHelper;
 
-    public CEntityEditableComponent(Class<E> clazz) {
+    public CEntityEditor(Class<E> clazz) {
         this(new EntityBinder<E>(clazz));
     }
 
-    public CEntityEditableComponent(EntityBinder<E> binder) {
+    public CEntityEditor(EntityBinder<E> binder) {
         this.binder = binder;
         containerHelper = new EditableComponentsContainerHelper(this);
     }
@@ -126,9 +126,9 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
                         public void execute() {
                             if (PropertyChangeEvent.PropertyName.VALIDITY.equals(event.getPropertyName())) {
                                 log.debug("CEntityEditableComponent.onPropertyChange fired from {}. Changed property is {}.",
-                                        CEntityEditableComponent.this.getTitle(), event.getPropertyName());
+                                        CEntityEditor.this.getTitle(), event.getPropertyName());
                                 revalidate();
-                                PropertyChangeEvent.fire(CEntityEditableComponent.this, PropertyChangeEvent.PropertyName.VALIDITY);
+                                PropertyChangeEvent.fire(CEntityEditor.this, PropertyChangeEvent.PropertyName.VALIDITY);
 
                             }
                             sheduled = false;
@@ -149,9 +149,9 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
                         @Override
                         public void execute() {
                             revalidate();
-                            log.debug("CEntityEditableComponent.onValueChange fired from {}. New value is {}.", CEntityEditableComponent.this.getTitle(),
+                            log.debug("CEntityEditableComponent.onValueChange fired from {}. New value is {}.", CEntityEditor.this.getTitle(),
                                     event.getValue());
-                            ValueChangeEvent.fire(CEntityEditableComponent.this, getValue());
+                            ValueChangeEvent.fire(CEntityEditor.this, getValue());
                             sheduled = false;
                         }
                     });

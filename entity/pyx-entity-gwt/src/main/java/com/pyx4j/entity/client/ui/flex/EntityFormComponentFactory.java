@@ -52,7 +52,7 @@ public class EntityFormComponentFactory extends BaseEditableComponentFactory {
         throw new Error("No MemberFolderEditor for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
     }
 
-    protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
+    protected CEntityEditor<?> createMemberEditor(IObject<?> member) {
         throw new Error("No MemberEditor for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
     }
 }

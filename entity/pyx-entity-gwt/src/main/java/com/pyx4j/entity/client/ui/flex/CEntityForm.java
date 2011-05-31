@@ -32,7 +32,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents root IEntity of the shown object tree
  */
-public abstract class CEntityForm<E extends IEntity> extends CEntityEditableComponent<E> {
+public abstract class CEntityForm<E extends IEntity> extends CEntityEditor<E> {
 
     protected final IEditableComponentFactory factory;
 
