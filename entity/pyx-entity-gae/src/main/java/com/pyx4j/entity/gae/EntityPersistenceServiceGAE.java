@@ -337,6 +337,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     gValue.add(v.name());
                 }
                 return gValue;
+            } else if (com.pyx4j.commons.Key.class.isAssignableFrom(meta.getValueClass())) {
+                Set<Long> gValue = new HashSet<Long>();
+                for (com.pyx4j.commons.Key v : (Set<com.pyx4j.commons.Key>) value) {
+                    gValue.add(v.asLong());
+                }
+                return gValue;
             } else {
                 return value;
             }
@@ -345,6 +351,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 value = new Date(((Date) value).getTime());
             }
             return value;
+        } else if (value instanceof com.pyx4j.commons.Key) {
+            return ((com.pyx4j.commons.Key) value).asLong();
         } else if (value instanceof GeoPoint) {
             GeoPoint geoPoint = (GeoPoint) value;
             return new GeoPt((float) geoPoint.getLat(), (float) geoPoint.getLng());
@@ -536,12 +544,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
                 } else {
                     for (Object el : (List<?>) value) {
-                        Long childKey = (Long) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
+                        com.pyx4j.commons.Key childKey = (com.pyx4j.commons.Key) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
                         if (childKey == null) {
                             throw new Error("Saving non persisted reference " + meta.getCaption());
                         }
                         Key key = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getValueClass()).getPersistenceName(),
-                                childKey);
+                                childKey.asLong());
                         childKeys.add(key);
                         if (childKeysOrder.length() > 0) {
                             childKeysOrder.append(',');
@@ -885,6 +893,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         } else if (value instanceof Long) {
             if (Integer.class.isAssignableFrom(iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass())) {
                 return ((Long) value).intValue();
+            } else if (com.pyx4j.commons.Key.class.isAssignableFrom(iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass())) {
+                return new com.pyx4j.commons.Key(((Long) value).longValue());
             } else {
                 return value;
             }
@@ -1009,6 +1019,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         for (String v : (Collection<String>) value) {
                             Enum eValue = Enum.valueOf(cls, v);
                             ((IPrimitiveSet) member).add(eValue);
+                        }
+                    } else if (com.pyx4j.commons.Key.class.isAssignableFrom(member.getMeta().getValueClass())) {
+                        for (Long v : (Collection<Long>) value) {
+                            ((IPrimitiveSet) member).add(new com.pyx4j.commons.Key(v.longValue()));
                         }
                     } else {
                         ((IPrimitiveSet) member).addAll((Collection) value);
