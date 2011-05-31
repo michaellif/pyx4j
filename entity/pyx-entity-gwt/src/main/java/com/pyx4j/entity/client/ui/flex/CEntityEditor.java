@@ -38,16 +38,11 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public abstract class CEntityEditor<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> implements IFlexContentComponent,
-        IComponentContainer {
+public abstract class CEntityEditor<E extends IEntity> extends CEntityComponent<E, NativeEntityEditor<E>> implements IComponentContainer {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityEditor.class);
 
     private final EntityBinder<E> binder;
-
-    private IFlexContentComponent bindParent;
-
-    private EditableComponentsContainerHelper containerHelper;
 
     public CEntityEditor(Class<E> clazz) {
         this(new EntityBinder<E>(clazz));
@@ -55,7 +50,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEditableComponen
 
     public CEntityEditor(EntityBinder<E> binder) {
         this.binder = binder;
-        containerHelper = new EditableComponentsContainerHelper(this);
     }
 
     public EntityBinder<E> binder() {
@@ -89,26 +83,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEditableComponen
     }
 
     @Override
-    public boolean isValid() {
-        if (!isEditable() || !isEnabled()) {
-            return true;
-        }
-        if (!super.isValid()) {
-            return false;
-        } else {
-            return containerHelper.isValid();
-        }
-    }
-
-    @Override
     public ValidationResults getValidationResults() {
-        return containerHelper.getAllValidationResults();
-    }
-
-    @Override
-    public void setVisited(boolean visited) {
-        super.setVisited(visited);
-        containerHelper.setVisited(visited);
+        return getAllValidationResults();
     }
 
     public final <T> void bind(CEditableComponent<T, ?> component, IObject<?> member) {
@@ -125,8 +101,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEditableComponen
                         @Override
                         public void execute() {
                             if (PropertyChangeEvent.PropertyName.VALIDITY.equals(event.getPropertyName())) {
-                                log.debug("CEntityEditableComponent.onPropertyChange fired from {}. Changed property is {}.",
-                                        CEntityEditor.this.getTitle(), event.getPropertyName());
+                                log.debug("CEntityEditableComponent.onPropertyChange fired from {}. Changed property is {}.", CEntityEditor.this.getTitle(),
+                                        event.getPropertyName());
                                 revalidate();
                                 PropertyChangeEvent.fire(CEntityEditor.this, PropertyChangeEvent.PropertyName.VALIDITY);
 
@@ -149,8 +125,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEditableComponen
                         @Override
                         public void execute() {
                             revalidate();
-                            log.debug("CEntityEditableComponent.onValueChange fired from {}. New value is {}.", CEntityEditor.this.getTitle(),
-                                    event.getValue());
+                            log.debug("CEntityEditableComponent.onValueChange fired from {}. New value is {}.", CEntityEditor.this.getTitle(), event.getValue());
                             ValueChangeEvent.fire(CEntityEditor.this, getValue());
                             sheduled = false;
                         }
@@ -160,9 +135,9 @@ public abstract class CEntityEditor<E extends IEntity> extends CEditableComponen
             }
         });
 
-        component.addAccessAdapter(containerHelper);
-        if (component instanceof IFlexContentComponent) {
-            ((IFlexContentComponent) component).onBound(this);
+        component.addAccessAdapter(this);
+        if (component instanceof CEntityComponent) {
+            ((CEntityComponent<?, ?>) component).onBound(this);
         }
     }
 
@@ -173,9 +148,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEditableComponen
     }
 
     @Override
-    public void onBound(IFlexContentComponent parent) {
-        assert (bindParent == null) : "Flex Component " + this.getClass().getName() + " is already bound to " + bindParent;
-        bindParent = parent;
+    public void onBound(CEntityComponent<?, ?> parent) {
+        super.onBound(parent);
         initContent();
     }
 
@@ -184,19 +158,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEditableComponen
         addValidations();
     }
 
-    @Override
-    public void addValidations() {
-
-    }
-
     public void attachContent() {
         setWidget(createContent());
-    }
-
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        assert (bindParent != null) : "Flex Component " + this.getClass().getName() + "is not bound";
-        return bindParent.create(member);
     }
 
     public final CEditableComponent<?, ?> inject(IObject<?> member) {
@@ -232,8 +195,4 @@ public abstract class CEntityEditor<E extends IEntity> extends CEditableComponen
         asWidget().setWidget(widget);
     }
 
-    @Override
-    public boolean isVisited() {
-        return true;
-    }
 }

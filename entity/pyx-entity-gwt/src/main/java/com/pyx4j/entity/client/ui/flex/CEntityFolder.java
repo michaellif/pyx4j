@@ -40,7 +40,6 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -51,12 +50,9 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolder<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> implements IComponentContainer,
-        IFlexContentComponent {
+public abstract class CEntityFolder<E extends IEntity> extends CEntityComponent<IList<E>, NativeEntityFolder<IList<E>>> implements IComponentContainer {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
-
-    private IFlexContentComponent bindParent;
 
     private FolderDecorator<E> folderDecorator;
 
@@ -66,14 +62,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     private final LinkedHashMap<E, CEntityFolderItem<E>> itemsMap;
 
-    private final EditableComponentsContainerHelper containerHelper;
-
     private final E entityPrototype;
 
     public CEntityFolder(Class<E> rowClass) {
         content = new FlowPanel();
         itemsMap = new LinkedHashMap<E, CEntityFolderItem<E>>();
-        containerHelper = new EditableComponentsContainerHelper(this);
         if (rowClass != null) {
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);
         } else {
@@ -89,20 +82,10 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     }
 
     @Override
-    public void onBound(IFlexContentComponent parent) {
-        bindParent = parent;
+    public void onBound(CEntityComponent<?, ?> parent) {
+        super.onBound(parent);
         setFolderDecorator(createContent());
         addValidations();
-    }
-
-    @Override
-    public void addValidations() {
-
-    }
-
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        return bindParent.create(member);
     }
 
     @Override
@@ -297,7 +280,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         final FolderItemDecorator folderItemDecorator = component.createFolderItemDecorator();
 
         component.setFolderItemDecorator(folderItemDecorator);
-        component.addAccessAdapter(containerHelper);
+        component.addAccessAdapter(this);
         if (content.getWidgetIndex(component) == -1) {
             content.add(component);
         }
@@ -328,6 +311,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         }
     }
 
+    @Override
+    public ValidationResults getValidationResults() {
+        return getAllValidationResults();
+    }
+
     protected CEntityFolderItem<E> getFolderRow(E value) {
         return itemsMap.get(value);
     }
@@ -337,40 +325,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         return new NativeEntityFolder<IList<E>>();
     }
 
-    @Override
-    public boolean isValid() {
-        if (!isEditable() || !isEnabled()) {
-            return true;
-        }
-        if (!super.isValid()) {
-            return false;
-        } else {
-            return containerHelper.isValid();
-        }
-    }
-
-    @Override
-    public ValidationResults getValidationResults() {
-        return containerHelper.getAllValidationResults();
-    }
-
-    public ValidationResults getContainerValidationResults() {
-        return containerHelper.getContainerValidationResults();
-    }
-
-    @Override
-    public void setVisited(boolean visited) {
-        super.setVisited(visited);
-        containerHelper.setVisited(visited);
-    }
-
     public FlowPanel getContent() {
         return content;
-    }
-
-    @Override
-    public boolean isVisited() {
-        return true;
     }
 
     @Override
