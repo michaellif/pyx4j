@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -77,8 +78,8 @@ public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProc
                 entityCount = 0;
             }
             EntityQueryCriteria criteria = EntityQueryCriteria.create(entityClass);
-            ICursorIterator<String> ci = PersistenceServicesFactory.getPersistenceService().queryKeys(encodedCursorRefference, criteria);
-            List<String> primaryKeys = new Vector<String>();
+            ICursorIterator<Key> ci = PersistenceServicesFactory.getPersistenceService().queryKeys(encodedCursorRefference, criteria);
+            List<Key> primaryKeys = new Vector<Key>();
             while (ci.hasNext()) {
                 primaryKeys.add(ci.next());
                 boolean quotaExceeded = System.currentTimeMillis() - start > Consts.SEC2MSEC * 15;

@@ -26,6 +26,7 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Province;
@@ -43,13 +44,13 @@ public abstract class CollectionsBatchTestCase extends DatastoreTestBase {
             ve.add(emp);
         }
         srv.persist(ve); // save employees
-        Vector<String> primaryKeys = new Vector<String>();
+        Vector<Key> primaryKeys = new Vector<Key>();
         for (Employee ee : ve) {
             Assert.assertNotNull("persist verify PK Not Null", ee.getPrimaryKey());
             primaryKeys.add(ee.getPrimaryKey());
         }
 
-        Map<String, Employee> empsRet = srv.retrieve(Employee.class, primaryKeys); //get employees back as a set of new entities
+        Map<Key, Employee> empsRet = srv.retrieve(Employee.class, primaryKeys); //get employees back as a set of new entities
         for (Employee templ : ve) {
             Assert.assertNotNull("verify retrieve", empsRet.get(templ.getPrimaryKey()));
             Assert.assertEquals("PK Value", empsRet.get(templ.getPrimaryKey()).getPrimaryKey(), templ.getPrimaryKey());
@@ -58,7 +59,7 @@ public abstract class CollectionsBatchTestCase extends DatastoreTestBase {
 
         srv.delete(Employee.class, primaryKeys); // Batch Delete
 
-        for (String pk : primaryKeys) {
+        for (Key pk : primaryKeys) {
             Employee empRet2 = srv.retrieve(Employee.class, pk); //try to get employee by PK back as a new entity
             Assert.assertNull("verify retrieve by PK " + pk, empRet2);
         }
@@ -75,7 +76,7 @@ public abstract class CollectionsBatchTestCase extends DatastoreTestBase {
             vp.add(prov);
         }
         srv.persist(vp); // save as a batch insert _ALL_ 
-        Vector<String> primaryKeys = new Vector<String>();
+        Vector<Key> primaryKeys = new Vector<Key>();
 
         for (Province pr : vp) {
             ///// test PKs were assigned 
@@ -122,7 +123,7 @@ public abstract class CollectionsBatchTestCase extends DatastoreTestBase {
         for (Province pr : vp) {
             primaryKeys.add(pr.getPrimaryKey());
         }
-        Map<String, Province> provMap = srv.retrieve(Province.class, primaryKeys); //get employees back as a set of new entities
+        Map<Key, Province> provMap = srv.retrieve(Province.class, primaryKeys); //get employees back as a set of new entities
         for (Province prov : vp) {
             //// test PKs and names match 
             Assert.assertNotNull("verify Batch retrieve", prov);
@@ -145,13 +146,13 @@ public abstract class CollectionsBatchTestCase extends DatastoreTestBase {
             ve.add(emp);
         }
         srv.persist(ve); // save employees
-        Vector<String> primaryKeys = new Vector<String>();
+        Vector<Key> primaryKeys = new Vector<Key>();
         for (Employee ee : ve) {
             Assert.assertNotNull("persist verify PK Not Null", ee.getPrimaryKey());
             primaryKeys.add(ee.getPrimaryKey());
         }
 
-        Map<String, Employee> empsRet = srv.retrieve(Employee.class, primaryKeys); //get employees back as a set of new entities
+        Map<Key, Employee> empsRet = srv.retrieve(Employee.class, primaryKeys); //get employees back as a set of new entities
         Assert.assertTrue("Map size is the same as PK list", primaryKeys.size() == empsRet.size());
         for (Employee templ : ve) {
             Assert.assertNotNull("verify retrieve", empsRet.get(templ.getPrimaryKey()));
@@ -161,7 +162,7 @@ public abstract class CollectionsBatchTestCase extends DatastoreTestBase {
 
         srv.delete(Employee.class, primaryKeys); // Batch Delete
 
-        for (String pk : primaryKeys) {
+        for (Key pk : primaryKeys) {
             Employee empRet2 = srv.retrieve(Employee.class, pk); //try to get employee by PK back as a new entity
             Assert.assertNull("verify retrieve by PK " + pk, empRet2);
         }

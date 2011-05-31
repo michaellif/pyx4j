@@ -67,7 +67,7 @@ class RetrieveRequestsAggregator {
         private final Runnable onResponceReady;
 
         @SuppressWarnings("unchecked")
-        public AsyncRequest(Class<?> entityClass, Iterable<String> primaryKeys, List<Key> keys, Runnable onResponceReady) {
+        public AsyncRequest(Class<?> entityClass, Iterable<com.pyx4j.commons.Key> primaryKeys, List<Key> keys, Runnable onResponceReady) {
             super((Class<IEntity>) entityClass, primaryKeys);
             this.keys = keys;
             this.onResponceReady = onResponceReady;
@@ -103,8 +103,8 @@ class RetrieveRequestsAggregator {
             }
             onResponceReady.run();
         } else {
-            List<String> missingKeys = new Vector<String>();
-            missingKeys.add(String.valueOf(key.getId()));
+            List<com.pyx4j.commons.Key> missingKeys = new Vector<com.pyx4j.commons.Key>();
+            missingKeys.add(new com.pyx4j.commons.Key(key.getId()));
             List<Key> keys = new Vector<Key>();
             keys.add(key);
             if (requests == null) {
@@ -115,10 +115,10 @@ class RetrieveRequestsAggregator {
     }
 
     public void request(EntityMeta entityMeta, List<Key> keys, Runnable onResponceReady) {
-        List<String> missingKeys = new Vector<String>();
+        List<com.pyx4j.commons.Key> missingKeys = new Vector<com.pyx4j.commons.Key>();
         for (Key key : keys) {
             if (!retrievedMap.containsKey(key)) {
-                missingKeys.add(String.valueOf(key.getId()));
+                missingKeys.add(new com.pyx4j.commons.Key(key.getId()));
             } else if (trace) {
                 log.trace("got from request cache {}", key);
             }
@@ -154,9 +154,9 @@ class RetrieveRequestsAggregator {
 
     private void retrieve(List<AsyncRequest> requests) {
         @SuppressWarnings({ "unchecked", "rawtypes" })
-        Map<EntityCollectionRequest<IEntity>, Map<String, IEntity>> cached = srv.cacheService.get((Iterable) requests);
+        Map<EntityCollectionRequest<IEntity>, Map<com.pyx4j.commons.Key, IEntity>> cached = srv.cacheService.get((Iterable) requests);
         List<Key> needToGet = new Vector<Key>();
-        for (Map.Entry<EntityCollectionRequest<IEntity>, Map<String, IEntity>> me : cached.entrySet()) {
+        for (Map.Entry<EntityCollectionRequest<IEntity>, Map<com.pyx4j.commons.Key, IEntity>> me : cached.entrySet()) {
             AsyncRequest request = (AsyncRequest) me.getKey();
             for (Key key : request.keys) {
                 if (!retrievedMap.containsKey(key)) {

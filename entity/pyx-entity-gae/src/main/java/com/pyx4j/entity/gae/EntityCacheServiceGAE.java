@@ -67,7 +67,7 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IEntity> T get(Class<T> entityClass, String primaryKey) {
+    public <T extends IEntity> T get(Class<T> entityClass, com.pyx4j.commons.Key primaryKey) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         Cached cached = meta.getAnnotation(Cached.class);
         if ((cached == null) || (disabled)) {
@@ -78,22 +78,22 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IEntity> Map<String, T> get(Class<T> entityClass, Iterable<String> primaryKeys) {
+    public <T extends IEntity> Map<com.pyx4j.commons.Key, T> get(Class<T> entityClass, Iterable<com.pyx4j.commons.Key> primaryKeys) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         Cached cached = meta.getAnnotation(Cached.class);
         if ((cached == null) || (disabled)) {
             return Collections.emptyMap();
         } else {
             Set<String> keys = new HashSet<String>();
-            for (String primaryKey : primaryKeys) {
+            for (com.pyx4j.commons.Key primaryKey : primaryKeys) {
                 keys.add(meta.getEntityClass().getName() + primaryKey);
             }
             Map<String, Object> raw = getMemcache().getAll(keys);
             if (raw.isEmpty()) {
                 return Collections.emptyMap();
             }
-            Map<String, T> ret = new HashMap<String, T>();
-            for (String primaryKey : primaryKeys) {
+            Map<com.pyx4j.commons.Key, T> ret = new HashMap<com.pyx4j.commons.Key, T>();
+            for (com.pyx4j.commons.Key primaryKey : primaryKeys) {
                 Object ent = raw.get(meta.getEntityClass().getName() + primaryKey);
                 if (ent != null) {
                     ret.put(primaryKey, (T) ent);
@@ -104,13 +104,13 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     }
 
     @Override
-    public Map<EntityCollectionRequest<IEntity>, Map<String, IEntity>> get(Iterable<EntityCollectionRequest<IEntity>> requests) {
-        Map<EntityCollectionRequest<IEntity>, Map<String, IEntity>> ret = new HashMap<EntityCollectionRequest<IEntity>, Map<String, IEntity>>();
+    public Map<EntityCollectionRequest<IEntity>, Map<com.pyx4j.commons.Key, IEntity>> get(Iterable<EntityCollectionRequest<IEntity>> requests) {
+        Map<EntityCollectionRequest<IEntity>, Map<com.pyx4j.commons.Key, IEntity>> ret = new HashMap<EntityCollectionRequest<IEntity>, Map<com.pyx4j.commons.Key, IEntity>>();
         Set<String> allCacheKeys = new HashSet<String>();
         for (EntityCollectionRequest<IEntity> request : requests) {
             EntityMeta meta = EntityFactory.getEntityMeta(request.getEntityClass());
             if ((meta.getAnnotation(Cached.class) != null) && (!disabled)) {
-                for (String primaryKey : request.getPrimaryKeys()) {
+                for (com.pyx4j.commons.Key primaryKey : request.getPrimaryKeys()) {
                     allCacheKeys.add(meta.getEntityClass().getName() + primaryKey);
                 }
             }
@@ -128,8 +128,8 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
             if ((cached == null) || (disabled) || (raw.isEmpty())) {
                 ret.put(request, Collections.EMPTY_MAP);
             } else {
-                Map<String, IEntity> responce = new HashMap<String, IEntity>();
-                for (String primaryKey : request.getPrimaryKeys()) {
+                Map<com.pyx4j.commons.Key, IEntity> responce = new HashMap<com.pyx4j.commons.Key, IEntity>();
+                for (com.pyx4j.commons.Key primaryKey : request.getPrimaryKeys()) {
                     Object ent = raw.get(meta.getEntityClass().getName() + primaryKey);
                     if (ent != null) {
                         responce.put(primaryKey, (IEntity) ent);
@@ -190,7 +190,7 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     }
 
     @Override
-    public <T extends IEntity> void remove(Class<T> entityClass, String primaryKey) {
+    public <T extends IEntity> void remove(Class<T> entityClass, com.pyx4j.commons.Key primaryKey) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         Cached cached = meta.getAnnotation(Cached.class);
         if ((cached != null) && (!disabled)) {
@@ -208,12 +208,12 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     }
 
     @Override
-    public <T extends IEntity> void remove(Class<T> entityClass, Iterable<String> primaryKeys) {
+    public <T extends IEntity> void remove(Class<T> entityClass, Iterable<com.pyx4j.commons.Key> primaryKeys) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         Cached cached = meta.getAnnotation(Cached.class);
         if ((cached != null) && (!disabled)) {
             List<String> keys = new Vector<String>();
-            for (String primaryKey : primaryKeys) {
+            for (com.pyx4j.commons.Key primaryKey : primaryKeys) {
                 keys.add(meta.getEntityClass().getName() + primaryKey);
             }
             getMemcache().delete(keys);

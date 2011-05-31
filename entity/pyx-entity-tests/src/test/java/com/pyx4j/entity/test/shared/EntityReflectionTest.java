@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -90,7 +91,7 @@ public class EntityReflectionTest extends InitializerTestCase {
         Address address = EntityFactory.create(Address.class);
         assertTrue("isNull()", address.isNull());
         assertTrue("isEmpty()", address.isEmpty());
-        address.setPrimaryKey("10");
+        address.setPrimaryKey(new Key(10));
         assertFalse("isNull() with PK", address.isNull());
         assertTrue("isEmpty() with PK", address.isEmpty());
 
@@ -106,11 +107,11 @@ public class EntityReflectionTest extends InitializerTestCase {
 
     public void testEntityToString() {
         Employee emp = EntityFactory.create(Employee.class);
-        emp.setPrimaryKey("0");
+        emp.setPrimaryKey(new Key(7));
         emp.firstName().setValue("Bob");
         emp.reliable().setValue(Boolean.TRUE);
         emp.holidays().setValue(7L);
-        emp.manager().setPrimaryKey("1");
+        emp.manager().setPrimaryKey(new Key(1));
         emp.manager().firstName().setValue("Manager");
 
         {
@@ -121,13 +122,13 @@ public class EntityReflectionTest extends InitializerTestCase {
         }
         {
             Task task = EntityFactory.create(Task.class);
-            task.setPrimaryKey("2");
+            task.setPrimaryKey(new Key(2));
             task.description().setValue("Go");
             emp.tasks().add(task);
         }
         {
             Task task = EntityFactory.create(Task.class);
-            task.setPrimaryKey("3");
+            task.setPrimaryKey(new Key(3));
             task.description().setValue("Try");
             emp.tasks().add(task);
         }
@@ -142,19 +143,19 @@ public class EntityReflectionTest extends InitializerTestCase {
 
         {
             Task task = EntityFactory.create(Task.class);
-            task.setPrimaryKey("1");
+            task.setPrimaryKey(new Key(1));
             task.description().setValue("Do");
             emp.tasksSorted().add(task);
         }
         {
             Task task = EntityFactory.create(Task.class);
-            task.setPrimaryKey("2");
+            task.setPrimaryKey(new Key(2));
             task.description().setValue("Go");
             emp.tasksSorted().add(task);
         }
         {
             Task task = EntityFactory.create(Task.class);
-            task.setPrimaryKey("1");
+            task.setPrimaryKey(new Key(1));
             task.description().setValue("Try");
             emp.tasksSorted().add(task);
         }

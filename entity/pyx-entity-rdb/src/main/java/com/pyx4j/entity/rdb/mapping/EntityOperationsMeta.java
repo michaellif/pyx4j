@@ -27,6 +27,7 @@ import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -190,6 +191,8 @@ public class EntityOperationsMeta {
             return new ValueAdapterFloat(dialect);
         } else if (valueClass.equals(Long.class)) {
             return new ValueAdapterLong(dialect);
+        } else if (valueClass.equals(Key.class)) {
+            return new ValueAdapterKey(dialect);
         } else if (valueClass.equals(Integer.class)) {
             return new ValueAdapterInteger(dialect);
         } else if (valueClass.equals(java.sql.Date.class)) {

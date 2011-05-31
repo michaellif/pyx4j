@@ -20,6 +20,7 @@
  */
 package com.pyx4j.tester.server;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -34,7 +35,7 @@ public class TesterAuthenticationServicesImpl extends AuthenticationServicesImpl
 
         @Override
         public AuthenticationResponse execute(AuthenticationRequest request) {
-            Lifecycle.beginSession(new UserVisit("t" + System.currentTimeMillis(), null), null);
+            Lifecycle.beginSession(new UserVisit(new Key("t" + System.currentTimeMillis()), null), null);
             return AuthenticationServicesImpl.createAuthenticationResponse(null);
         }
     }

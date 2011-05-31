@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rpc;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -31,7 +32,7 @@ public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E
 
     private static final long serialVersionUID = -3985273227849938461L;
 
-    private String primaryKey;
+    private Key primaryKey;
 
     protected EntityCriteriaByPK() {
 
@@ -45,7 +46,7 @@ public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E
         return new EntityCriteriaByPK<T>(entityClass);
     }
 
-    public static <T extends IEntity> EntityCriteriaByPK<T> create(Class<T> entityClass, String primaryKey) {
+    public static <T extends IEntity> EntityCriteriaByPK<T> create(Class<T> entityClass, Key primaryKey) {
         EntityCriteriaByPK<T> c = new EntityCriteriaByPK<T>(entityClass);
         c.setPrimaryKey(primaryKey);
         return c;
@@ -66,11 +67,11 @@ public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E
         return c;
     }
 
-    public String getPrimaryKey() {
+    public Key getPrimaryKey() {
         return primaryKey;
     }
 
-    public void setPrimaryKey(String primaryKey) {
+    public void setPrimaryKey(Key primaryKey) {
         this.primaryKey = primaryKey;
     }
 
@@ -101,7 +102,7 @@ public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E
     public int hashCode() {
         int hashCode = super.hashCode();
         hashCode *= 0x1F;
-        hashCode += Long.valueOf(primaryKey).hashCode();
+        hashCode += primaryKey.hashCode();
         return hashCode;
     }
 }

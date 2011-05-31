@@ -27,6 +27,7 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -229,7 +230,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         srv.persist(address);
 
-        String primaryKey = address.getPrimaryKey();
+        Key primaryKey = address.getPrimaryKey();
         Address address2 = srv.retrieve(Address.class, primaryKey);
         Assert.assertNotNull("retrieve", address2);
 
@@ -257,7 +258,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         srv.persist(address);
 
-        String primaryKey = address.getPrimaryKey();
+        Key primaryKey = address.getPrimaryKey();
         Address address2 = srv.retrieve(Address.class, primaryKey);
         Assert.assertNotNull("retrieve", address2);
 
@@ -336,7 +337,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         srv.persist(emp);
 
-        String primaryKey = emp.getPrimaryKey();
+        Key primaryKey = emp.getPrimaryKey();
         Employee emp2 = srv.retrieve(Employee.class, primaryKey);
         Assert.assertNotNull("retrieve", emp2);
 

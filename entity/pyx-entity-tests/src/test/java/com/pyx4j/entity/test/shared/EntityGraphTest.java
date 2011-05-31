@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -39,13 +40,13 @@ public class EntityGraphTest extends InitializerTestCase {
 
         {
             Province prov = EntityFactory.create(Province.class);
-            prov.setPrimaryKey("1");
+            prov.setPrimaryKey(new Key(1));
             rootEntity.province().add(prov);
         }
 
         {
             Province prov = EntityFactory.create(Province.class);
-            prov.setPrimaryKey("2");
+            prov.setPrimaryKey(new Key(2));
             rootEntity.province().add(prov);
         }
 
@@ -98,11 +99,11 @@ public class EntityGraphTest extends InitializerTestCase {
     public void testDuplicationGraphIteration() {
         Employee emp = EntityFactory.create(Employee.class);
         Task task1 = EntityFactory.create(Task.class);
-        task1.setPrimaryKey("1");
+        task1.setPrimaryKey(new Key(1));
         emp.tasks().add(task1);
 
         Task task2 = EntityFactory.create(Task.class);
-        task2.setPrimaryKey("1");
+        task2.setPrimaryKey(new Key(1));
         emp.tasksSorted().add(task2);
 
         final Counter counter = EntityFactory.create(Counter.class);

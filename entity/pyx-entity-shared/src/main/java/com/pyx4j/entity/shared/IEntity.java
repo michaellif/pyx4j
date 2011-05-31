@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.Printable;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Indexed;
@@ -38,12 +39,12 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public static String CONCRETE_TYPE_DATA_ATTR = "$concrete";
 
-    public String getPrimaryKey();
+    public Key getPrimaryKey();
 
-    public void setPrimaryKey(String pk);
+    public void setPrimaryKey(Key pk);
 
     @Indexed
-    public IPrimitive<String> id();
+    public IPrimitive<Key> id();
 
     /**
      * @return true if only PrimaryKey present and other properties are empty or null

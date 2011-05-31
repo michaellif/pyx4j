@@ -34,6 +34,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.commons.IdentityHashSet;
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LoopCounter;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -149,24 +150,24 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     }
 
     @Override
-    public String getPrimaryKey() {
+    public Key getPrimaryKey() {
         Map<String, Object> v = getValue();
         if (v == null) {
             return null;
         } else {
-            return (String) v.get(PRIMARY_KEY);
+            return (Key) v.get(PRIMARY_KEY);
         }
     }
 
     @Override
-    public void setPrimaryKey(String pk) {
+    public void setPrimaryKey(Key pk) {
         ensureValue().put(PRIMARY_KEY, pk);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public IPrimitive<String> id() {
-        return (IPrimitive<String>) getMember(PRIMARY_KEY);
+    public IPrimitive<Key> id() {
+        return (IPrimitive<Key>) getMember(PRIMARY_KEY);
     }
 
     @SuppressWarnings("unchecked")

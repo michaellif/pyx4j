@@ -24,6 +24,7 @@ import java.util.Date;
 
 import junit.framework.Assert;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.shared.domain.Department;
@@ -74,15 +75,15 @@ public class EntityEqualsTest extends InitializerTestCase {
 
         Department department1 = EntityFactory.create(Department.class);
         Employee employee1 = EntityFactory.create(Employee.class);
-        employee1.setPrimaryKey("1");
+        employee1.setPrimaryKey(new Key(1));
         department1.employees().add(employee1);
-        department1.setPrimaryKey("11");
+        department1.setPrimaryKey(new Key(11));
 
         Department department2 = EntityFactory.create(Department.class);
         Employee employee2 = EntityFactory.create(Employee.class);
-        employee2.setPrimaryKey("2");
+        employee2.setPrimaryKey(new Key(2));
         department2.employees().add(employee2);
-        department2.setPrimaryKey("11");
+        department2.setPrimaryKey(new Key(11));
 
         assertEquals("same key", department1, department2);
         assertEquals("same key same hashCode", department1.hashCode(), department2.hashCode());
@@ -90,14 +91,14 @@ public class EntityEqualsTest extends InitializerTestCase {
 
     public void testFullyEqual() {
         Task t1 = EntityFactory.create(Task.class);
-        t1.setPrimaryKey("22");
+        t1.setPrimaryKey(new Key(22));
         t1.description().setValue("Task1");
         t1.notes().add("Note 1");
         t1.notes().add("Note 2");
         t1.oldStatus().add(Status.SUSPENDED);
 
         Task t2 = EntityFactory.create(Task.class);
-        t2.setPrimaryKey("22");
+        t2.setPrimaryKey(new Key(22));
         t2.description().setValue("Task1");
         t2.notes().add("Note 1");
         t2.notes().add("Note 2");
@@ -122,7 +123,7 @@ public class EntityEqualsTest extends InitializerTestCase {
 
     public void testBusinessEqual() {
         Task t1 = EntityFactory.create(Task.class);
-        t1.setPrimaryKey("22");
+        t1.setPrimaryKey(new Key(22));
         t1.description().setValue("Task1");
 
         Task t2 = EntityFactory.create(Task.class);

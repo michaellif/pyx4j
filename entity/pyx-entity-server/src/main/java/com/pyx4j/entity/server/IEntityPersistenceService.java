@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -49,7 +50,7 @@ public interface IEntityPersistenceService {
 
     public void merge(IEntity entity);
 
-    public <T extends IEntity> T retrieve(Class<T> entityClass, String primaryKey);
+    public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey);
 
     /**
      * Fill all the information to already existing entity object that has only PK value
@@ -61,7 +62,7 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria);
 
-    public <T extends IEntity> Map<String, T> retrieve(Class<T> entityClass, Iterable<String> primaryKeys);
+    public <T extends IEntity> Map<Key, T> retrieve(Class<T> entityClass, Iterable<Key> primaryKeys);
 
     /**
      * This may be a join with secondary table in RDBMS
@@ -74,7 +75,7 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> ICursorIterator<T> query(String encodedCursorRefference, EntityQueryCriteria<T> criteria);
 
-    public <T extends IEntity> List<String> queryKeys(EntityQueryCriteria<T> criteria);
+    public <T extends IEntity> List<Key> queryKeys(EntityQueryCriteria<T> criteria);
 
     public <T extends IEntity> ICursorIterator<String> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria);
 
@@ -93,13 +94,13 @@ public interface IEntityPersistenceService {
     /**
      * Only delete one row, does not affect Owned entities e.g. no Cascade delete
      */
-    public <T extends IEntity> void delete(Class<T> entityClass, String primaryKey);
+    public <T extends IEntity> void delete(Class<T> entityClass, Key primaryKey);
 
     /**
      * Only delete specified enties row, does not affect Owned entities e.g. no Cascade
      * delete
      */
-    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<String> primaryKeys);
+    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Key> primaryKeys);
 
     public <T extends IEntity> void truncate(Class<T> entityClass);
 

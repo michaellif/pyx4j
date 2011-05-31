@@ -280,7 +280,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     continue nextValue;
                 } else {
                     String kind = EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName();
-                    value = KeyFactory.createKey(kind, Long.valueOf((String) ((Map) value).get(IEntity.PRIMARY_KEY)));
+                    value = KeyFactory.createKey(kind, ((com.pyx4j.commons.Key) ((Map) value).get(IEntity.PRIMARY_KEY)).asLong());
                 }
             } else {
                 //TODO Allow to embed other types
@@ -370,7 +370,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         IEntity ent = retrieve(adapter.getMergeCriteria(entity));
         if (ent != null) {
-            return KeyFactory.createKey(ent.getEntityMeta().getPersistenceName(), Long.valueOf(ent.getPrimaryKey()));
+            return KeyFactory.createKey(ent.getEntityMeta().getPersistenceName(), ent.getPrimaryKey().asLong());
         } else {
             entity = adapter.onEntityCreation(entity);
             return persistImpl(entity, false);
@@ -426,10 +426,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         }
                     }
                 } else if (meta.getAnnotation(Reference.class) != null) {
-                    String childKeyId = (String) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
+                    com.pyx4j.commons.Key childKeyId = (com.pyx4j.commons.Key) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
                     if (childKeyId != null) {
                         value = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName(),
-                                Long.valueOf(childKeyId));
+                                childKeyId.asLong());
                     } else {
                         value = mergeReference(meta, (IEntity) iEntity.getMember(me.getKey()));
                     }
@@ -438,13 +438,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     if (childValueMap.size() == 0) {
                         value = null;
                     } else {
-                        String childKeyId = (String) childValueMap.get(IEntity.PRIMARY_KEY);
+                        com.pyx4j.commons.Key childKeyId = (com.pyx4j.commons.Key) childValueMap.get(IEntity.PRIMARY_KEY);
                         if (childKeyId == null) {
                             log.error("Saving non persisted reference {}", iEntity.getMember(me.getKey()));
                             throw new Error("Saving non persisted reference " + iEntity.getValueClass() + "." + propertyName + "." + meta.getCaption());
                         }
                         value = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName(),
-                                Long.valueOf(childKeyId));
+                                childKeyId.asLong());
                     }
                 }
                 Indexed index = meta.getAnnotation(Indexed.class);
@@ -493,12 +493,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
                 } else {
                     for (Object el : (Set<?>) value) {
-                        String childKey = (String) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
+                        com.pyx4j.commons.Key childKey = (com.pyx4j.commons.Key) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
                         if (childKey == null) {
                             throw new Error("Saving non persisted reference " + iEntity.getValueClass() + "." + propertyName + "." + meta.getCaption());
                         }
                         childKeys.add(KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getValueClass()).getPersistenceName(),
-                                Long.valueOf(childKey)));
+                                childKey.asLong()));
                     }
                     value = childKeys;
                 }
@@ -594,11 +594,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             MemberMeta meta = iEntity.getEntityMeta().getMemberMeta(ownerMemberName);
             IEntity ownerEntity = (IEntity) iEntity.getMember(ownerMemberName);
             if (!ownerEntity.isNull()) {
-                String ownerId = ownerEntity.getPrimaryKey();
+                com.pyx4j.commons.Key ownerId = ownerEntity.getPrimaryKey();
                 if (ownerId == null) {
                     throw new Error("Saving non persisted reference " + ownerEntity.getEntityMeta().getCaption());
                 }
-                Key ownerKey = KeyFactory.createKey(EntityFactory.getEntityMeta(ownerEntity.getValueClass()).getPersistenceName(), Long.valueOf(ownerId));
+                Key ownerKey = KeyFactory.createKey(EntityFactory.getEntityMeta(ownerEntity.getValueClass()).getPersistenceName(), ownerId.asLong());
                 entity.setProperty(ownerMemberName, meta.isIndexed(), ownerKey);
             }
         }
@@ -748,7 +748,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             if (isBidirectionalReferenceRequired(iEntity)) {
                 datastoreCallStats.get().readCount++;
                 entity = new Entity(datastore.allocateIds(getIEntityKind(iEntity), 1).getStart());
-                iEntity.setPrimaryKey(String.valueOf(entity.getKey().getId()));
+                iEntity.setPrimaryKey(new com.pyx4j.commons.Key(entity.getKey().getId()));
             } else {
                 entity = new Entity(getIEntityKind(iEntity));
             }
@@ -757,7 +757,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 iEntity.setMemberValue(createdTs, new Date());
             }
         } else {
-            Key key = KeyFactory.createKey(getIEntityKind(iEntity), Long.valueOf(iEntity.getPrimaryKey()));
+            Key key = KeyFactory.createKey(getIEntityKind(iEntity), iEntity.getPrimaryKey().asLong());
             if (merge) {
                 try {
                     datastoreCallStats.get().readCount++;
@@ -810,7 +810,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             datastoreCallStats.get().writeCount++;
             try {
                 Key keyCreated = datastore.put(entity.entity);
-                iEntity.setPrimaryKey(String.valueOf(keyCreated.getId()));
+                iEntity.setPrimaryKey(new com.pyx4j.commons.Key(keyCreated.getId()));
                 cacheService.put(iEntity);
                 return keyCreated;
             } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
@@ -829,7 +829,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     datastoreCallStats.get().writeCount++;
                     List<Key> keys = datastore.put(entityList);
                     for (int i = 0; i < iEntityList.size(); i++) {
-                        iEntityList.get(i).setPrimaryKey(String.valueOf(keys.get(i).getId()));
+                        iEntityList.get(i).setPrimaryKey(new com.pyx4j.commons.Key(keys.get(i).getId()));
                     }
                     cacheService.put(iEntityList);
                     entityList.clear();
@@ -843,7 +843,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 datastoreCallStats.get().writeCount++;
                 List<Key> keys = datastore.put(entityList);
                 for (int i = 0; i < iEntityList.size(); i++) {
-                    iEntityList.get(i).setPrimaryKey(String.valueOf(keys.get(i).getId()));
+                    iEntityList.get(i).setPrimaryKey(new com.pyx4j.commons.Key(keys.get(i).getId()));
                 }
                 cacheService.put(iEntityList);
             }
@@ -858,12 +858,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         } else if (value instanceof Key) {
             IEntity childIEntity = (IEntity) iEntity.getMember(keyName);
             if (childIEntity.getMeta().isDetached()) {
-                childIEntity.setPrimaryKey(String.valueOf(((Key) value).getId()));
+                childIEntity.setPrimaryKey(new com.pyx4j.commons.Key(((Key) value).getId()));
             } else {
                 if ((iEntity.getOwner() != null) && (iEntity.getEntityMeta().getMemberMeta(keyName).isOwner())) {
                     // Do not retrieve Owner
                 } else {
-                    childIEntity.setPrimaryKey(String.valueOf(((Key) value).getId()));
+                    childIEntity.setPrimaryKey(new com.pyx4j.commons.Key(((Key) value).getId()));
                     retrieveEntity(childIEntity, (Key) value, aggregator);
                 }
             }
@@ -924,7 +924,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (member.getMeta().isDetached()) {
             for (Key childKey : keys) {
                 IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMeta().getValueClass());
-                childIEntity.setPrimaryKey(String.valueOf(childKey.getId()));
+                childIEntity.setPrimaryKey(new com.pyx4j.commons.Key(childKey.getId()));
                 member.add(childIEntity);
             }
         } else {
@@ -961,7 +961,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private void updateIEntity(IEntity iEntity, Entity entity, RetrieveRequestsAggregator aggregator) {
-        iEntity.setPrimaryKey(String.valueOf(entity.getKey().getId()));
+        iEntity.setPrimaryKey(new com.pyx4j.commons.Key(entity.getKey().getId()));
         for (Map.Entry<String, Object> me : entity.getProperties().entrySet()) {
             Object value = me.getValue();
             String keyName = me.getKey();
@@ -1077,7 +1077,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> T retrieve(Class<T> entityClass, String primaryKey) {
+    public <T extends IEntity> T retrieve(Class<T> entityClass, com.pyx4j.commons.Key primaryKey) {
         T iEntity = EntityFactory.create(entityClass);
         iEntity.setPrimaryKey(primaryKey);
         if (retrieve(iEntity)) {
@@ -1098,7 +1098,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (iEntity.getEntityMeta().isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
-        final Key key = KeyFactory.createKey(iEntity.getEntityMeta().getPersistenceName(), Long.valueOf(iEntity.getPrimaryKey()));
+        final Key key = KeyFactory.createKey(iEntity.getEntityMeta().getPersistenceName(), iEntity.getPrimaryKey().asLong());
         aggregator.request(iEntity.getEntityMeta(), key, new Runnable() {
             @Override
             public void run() {
@@ -1137,7 +1137,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> Map<String, T> retrieve(final Class<T> entityClass, Iterable<String> primaryKeys) {
+    public <T extends IEntity> Map<com.pyx4j.commons.Key, T> retrieve(final Class<T> entityClass, Iterable<com.pyx4j.commons.Key> primaryKeys) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
 
@@ -1148,10 +1148,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         RetrieveRequestsAggregator globalAggregator = requestAggregator.get();
         final RetrieveRequestsAggregator aggregator = (globalAggregator != null) ? globalAggregator : new RetrieveRequestsAggregator(this);
 
-        final Map<String, T> ret = new HashMap<String, T>();
+        final Map<com.pyx4j.commons.Key, T> ret = new HashMap<com.pyx4j.commons.Key, T>();
         final List<Key> keys = new Vector<Key>();
-        for (String primaryKey : primaryKeys) {
-            keys.add(KeyFactory.createKey(entityMeta.getPersistenceName(), Long.valueOf(primaryKey)));
+        for (com.pyx4j.commons.Key primaryKey : primaryKeys) {
+            keys.add(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey.asLong()));
         }
 
         aggregator.request(entityMeta, keys, new Runnable() {
@@ -1160,14 +1160,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 for (Key key : keys) {
                     IEntity cachedEntity = aggregator.getEntity(key);
                     if (cachedEntity != null) {
-                        ret.put(String.valueOf(key.getId()), (T) cachedEntity);
+                        ret.put(new com.pyx4j.commons.Key(key.getId()), (T) cachedEntity);
                     } else {
                         Entity entity = aggregator.getRaw(key);
                         if (entity != null) {
                             T iEntity = EntityFactory.create(entityClass);
                             aggregator.cache(entity.getKey(), iEntity);
                             updateIEntity(iEntity, entity, aggregator);
-                            ret.put(String.valueOf(key.getId()), iEntity);
+                            ret.put(new com.pyx4j.commons.Key(key.getId()), iEntity);
                         }
                     }
                 }
@@ -1213,19 +1213,19 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (value instanceof Enum<?>) {
             return ((Enum<?>) value).name();
         } else if (value instanceof IEntity) {
-            return KeyFactory.createKey(((IEntity) value).getEntityMeta().getPersistenceName(), Long.valueOf(((IEntity) value).getPrimaryKey()));
-        } else if (value instanceof String) {
+            return KeyFactory.createKey(((IEntity) value).getEntityMeta().getPersistenceName(), (((IEntity) value).getPrimaryKey().asLong()));
+        } else if (value instanceof com.pyx4j.commons.Key) {
             if (propertyName.equals(IEntity.PRIMARY_KEY)) {
-                return KeyFactory.createKey(entityMeta.getPersistenceName(), Long.valueOf((String) value));
+                return KeyFactory.createKey(entityMeta.getPersistenceName(), (((com.pyx4j.commons.Key) value).asLong()));
             } else if (propertyName.endsWith(SECONDARY_PRROPERTY_SUFIX)) {
-                return value;
+                return (((com.pyx4j.commons.Key) value).asLong());
             } else {
                 MemberMeta mm = entityMeta.getMemberMeta(propertyName);
                 if (!mm.isEmbedded() && (mm.isEntity() || (ICollection.class.isAssignableFrom(mm.getObjectClass())))) {
                     return KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) mm.getValueClass()).getPersistenceName(),
-                            Long.valueOf((String) value));
+                            (((com.pyx4j.commons.Key) value).asLong()));
                 } else {
-                    return value;
+                    return (((com.pyx4j.commons.Key) value).asLong());
                 }
             }
         } else if (value instanceof Collection<?>) {
@@ -1434,7 +1434,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> List<String> queryKeys(EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> List<com.pyx4j.commons.Key> queryKeys(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         Class<T> entityClass = criteria.getEntityClass();
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
@@ -1446,9 +1446,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         datastoreCallStats.get().readCount++;
         PreparedQuery pq = datastore.prepare(query);
 
-        List<String> rc = new Vector<String>();
+        List<com.pyx4j.commons.Key> rc = new Vector<com.pyx4j.commons.Key>();
         for (Entity entity : pq.asIterable()) {
-            rc.add(String.valueOf(entity.getKey().getId()));
+            rc.add(new com.pyx4j.commons.Key(entity.getKey().getId()));
         }
         long duration = System.nanoTime() - start;
         if (duration > Consts.SEC2NANO) {
@@ -1558,13 +1558,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             if (value instanceof Map<?, ?>) {
                 IEntity childIEntity = (IEntity) iEntity.getMember(me.getKey());
                 if (!meta.isEmbedded()) {
-                    keys.add(KeyFactory.createKey(getIEntityKind(childIEntity), Long.valueOf(childIEntity.getPrimaryKey())));
+                    keys.add(KeyFactory.createKey(getIEntityKind(childIEntity), childIEntity.getPrimaryKey().asLong()));
                 }
                 getAllKeysForDelete(keys, childIEntity);
             } else if ((ICollection.class.isAssignableFrom(meta.getObjectClass())) && (value instanceof Collection<?>)) {
                 ICollection<IEntity, ?> memberList = (ICollection<IEntity, ?>) iEntity.getMember(me.getKey());
                 for (IEntity childIEntity : memberList) {
-                    keys.add(KeyFactory.createKey(getIEntityKind(childIEntity), Long.valueOf(childIEntity.getPrimaryKey())));
+                    keys.add(KeyFactory.createKey(getIEntityKind(childIEntity), childIEntity.getPrimaryKey().asLong()));
                     getAllKeysForDelete(keys, childIEntity);
                 }
             }
@@ -1577,7 +1577,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             throw new Error("Can't delete Transient Entity");
         }
         List<Key> keys = new Vector<Key>();
-        keys.add(KeyFactory.createKey(getIEntityKind(iEntity), Long.valueOf(iEntity.getPrimaryKey())));
+        keys.add(KeyFactory.createKey(getIEntityKind(iEntity), iEntity.getPrimaryKey().asLong()));
         getAllKeysForDelete(keys, iEntity);
         datastoreCallStats.get().writeCount++;
         datastore.delete(keys);
@@ -1585,14 +1585,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> void delete(Class<T> entityClass, String primaryKey) {
+    public <T extends IEntity> void delete(Class<T> entityClass, com.pyx4j.commons.Key primaryKey) {
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
         datastoreCallStats.get().writeCount++;
         try {
-            datastore.delete(KeyFactory.createKey(entityMeta.getPersistenceName(), Long.valueOf(primaryKey)));
+            datastore.delete(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey.asLong()));
         } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
             throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
         }
@@ -1615,7 +1615,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             int removedCount = 0;
             List<Key> keys = new Vector<Key>();
             for (Entity entity : pq.asIterable()) {
-                cacheService.remove(entityClass, String.valueOf(entity.getKey().getId()));
+                cacheService.remove(entityClass, new com.pyx4j.commons.Key(entity.getKey().getId()));
                 if (keys.size() >= 500) {
                     datastoreCallStats.get().writeCount++;
                     datastore.delete(keys);
@@ -1634,7 +1634,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<String> primaryKeys) {
+    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<com.pyx4j.commons.Key> primaryKeys) {
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't delete Transient Entity");
@@ -1642,13 +1642,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         List<Key> keys = new Vector<Key>();
         try {
             cacheService.remove(entityClass, primaryKeys);
-            for (String primaryKey : primaryKeys) {
+            for (com.pyx4j.commons.Key primaryKey : primaryKeys) {
                 if (keys.size() >= 500) {
                     datastoreCallStats.get().writeCount++;
                     datastore.delete(keys);
                     keys.clear();
                 }
-                keys.add(KeyFactory.createKey(entityMeta.getPersistenceName(), Long.valueOf(primaryKey)));
+                keys.add(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey.asLong()));
             }
             datastoreCallStats.get().writeCount++;
             datastore.delete(keys);

@@ -35,6 +35,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.SQLUtils;
@@ -87,18 +88,18 @@ public class CollectionsTableModel {
                     throw new Error("Saving null item from collection " + member.getMemberName());
                 }
             } else {
-                String childKey = (String) map.get(IEntity.PRIMARY_KEY);
+                Key childKey = (Key) map.get(IEntity.PRIMARY_KEY);
                 if (childKey == null) {
                     throw new Error("Saving non persisted item from collection " + member.getMemberName());
                 }
-                idDataSet.add(Long.valueOf(childKey));
+                idDataSet.add(childKey.asLong());
             }
         }
         return idDataSet;
     }
 
     @SuppressWarnings("unchecked")
-    private static void insert(Connection connection, Dialect dialect, String primaryKey, MemberOperationsMeta member, Collection<Object> dataSet,
+    private static void insert(Connection connection, Dialect dialect, Key primaryKey, MemberOperationsMeta member, Collection<Object> dataSet,
             boolean insertNull) {
         PreparedStatement stmt = null;
         Class<?> valueClass = member.getMemberMeta().getValueClass();
@@ -137,7 +138,7 @@ public class CollectionsTableModel {
             int seq = 0;
             for (Object value : dataSet) {
                 if ((value != null) || insertNull) {
-                    stmt.setLong(1, Long.valueOf(primaryKey));
+                    stmt.setLong(1, primaryKey.asLong());
                     stmt.setObject(2, TableModel.encodeValue(valueClass, value), targetSqlType);
                     if (isList) {
                         stmt.setInt(3, seq);
@@ -185,7 +186,7 @@ public class CollectionsTableModel {
         try {
             sql = "SELECT id, value " + (isList ? ", seq" : "") + " FROM " + member.sqlName() + " WHERE owner = ?";
             stmt = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            stmt.setLong(1, Long.valueOf(entity.getPrimaryKey()));
+            stmt.setLong(1, entity.getPrimaryKey().asLong());
             rs = stmt.executeQuery();
             while (rs.next()) {
                 Object value;
@@ -247,13 +248,13 @@ public class CollectionsTableModel {
         }
     }
 
-    private static Collection<Object> retrieveData(Connection connection, String primaryKey, MemberOperationsMeta member, ObjectClassType type) {
+    private static Collection<Object> retrieveData(Connection connection, Key primaryKey, MemberOperationsMeta member, ObjectClassType type) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         boolean isList = (type == ObjectClassType.EntityList);
         try {
             stmt = connection.prepareStatement("SELECT value FROM " + member.sqlName() + " WHERE owner = ?" + (isList ? " ORDER BY seq" : ""));
-            stmt.setLong(1, Long.valueOf(primaryKey));
+            stmt.setLong(1, primaryKey.asLong());
             rs = stmt.executeQuery();
             Collection<Object> dataSet = isList ? new Vector<Object>() : new HashSet<Object>();
             while (rs.next()) {
@@ -263,7 +264,10 @@ public class CollectionsTableModel {
                     // TODO get type
                     @SuppressWarnings("unchecked")
                     IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMemberMeta().getValueClass());
-                    childIEntity.setPrimaryKey(String.valueOf(TableModel.getLongValue(rs, "value")));
+                    long ck = rs.getLong("value");
+                    if (!rs.wasNull()) {
+                        childIEntity.setPrimaryKey(new Key(ck));
+                    }
                     dataSet.add(childIEntity);
                 }
             }
@@ -277,11 +281,11 @@ public class CollectionsTableModel {
         }
     }
 
-    public static void delete(Connection connection, String primaryKey, MemberOperationsMeta member) {
+    public static void delete(Connection connection, Key primaryKey, MemberOperationsMeta member) {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("DELETE FROM " + member.sqlName() + " WHERE owner = ?");
-            stmt.setLong(1, Long.valueOf(primaryKey));
+            stmt.setLong(1, primaryKey.asLong());
             stmt.executeUpdate();
         } catch (SQLException e) {
             log.error("{} SQL delete error", member.sqlName(), e);
@@ -291,13 +295,13 @@ public class CollectionsTableModel {
         }
     }
 
-    public static void delete(Connection connection, Iterable<String> primaryKeys, MemberOperationsMeta member) {
+    public static void delete(Connection connection, Iterable<Key> primaryKeys, MemberOperationsMeta member) {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("DELETE FROM " + member.sqlName() + " WHERE owner = ?");
             int pkSize = 0;
-            for (String primaryKey : primaryKeys) {
-                stmt.setLong(1, Long.valueOf(primaryKey));
+            for (Key primaryKey : primaryKeys) {
+                stmt.setLong(1, primaryKey.asLong());
                 stmt.addBatch();
                 pkSize++;
             }
@@ -391,7 +395,10 @@ public class CollectionsTableModel {
                     // TODO get type
                     @SuppressWarnings("unchecked")
                     IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMemberMeta().getValueClass());
-                    childIEntity.setPrimaryKey(String.valueOf(TableModel.getLongValue(rs, "value")));
+                    long ck = rs.getLong("value");
+                    if (!rs.wasNull()) {
+                        childIEntity.setPrimaryKey(new Key(ck));
+                    }
                     dataSet.add(childIEntity);
                 }
             }

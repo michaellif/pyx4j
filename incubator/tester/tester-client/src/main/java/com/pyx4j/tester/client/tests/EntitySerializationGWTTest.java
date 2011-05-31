@@ -28,6 +28,7 @@ import junit.framework.TestCase;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -137,13 +138,13 @@ public class EntitySerializationGWTTest extends TestCase {
         GUnitTester.delayTestFinish(this, TIME_OUT);
         final Organization org = EntityFactory.create(Organization.class);
         org.name().setValue("org1");
-        org.setPrimaryKey(String.valueOf(11));
+        org.setPrimaryKey(new Key(11));
         final Department department1 = EntityFactory.create(Department.class);
         department1.name().setValue("dept1");
-        department1.setPrimaryKey(String.valueOf(1));
+        department1.setPrimaryKey(new Key(1));
         final Department department2 = EntityFactory.create(Department.class);
         department2.name().setValue("dept2");
-        department2.setPrimaryKey(String.valueOf(2));
+        department2.setPrimaryKey(new Key(2));
         org.departments().add(department2);
 
         final AsyncCallback<Serializable> callback = new AsyncCallback<Serializable>() {
@@ -169,7 +170,7 @@ public class EntitySerializationGWTTest extends TestCase {
     public void testIPrimitiveSetSerialization() {
         GUnitTester.delayTestFinish(this, TIME_OUT);
         final Task orig = EntityFactory.create(Task.class);
-        orig.setPrimaryKey(String.valueOf(22));
+        orig.setPrimaryKey(new Key(22));
         orig.description().setValue("Task1");
         orig.notes().add("Note 1");
         orig.notes().add("Note 2");

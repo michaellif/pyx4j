@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
@@ -482,7 +483,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> T retrieve(Class<T> entityClass, String primaryKey) {
+    public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey) {
         final T entity = EntityFactory.create(entityClass);
         entity.setPrimaryKey(primaryKey);
         if (retrieve(entity)) {
@@ -553,14 +554,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> Map<String, T> retrieve(Class<T> entityClass, Iterable<String> primaryKeys) {
+    public <T extends IEntity> Map<Key, T> retrieve(Class<T> entityClass, Iterable<Key> primaryKeys) {
         Connection connection = null;
-        Map<String, T> entities = new HashMap<String, T>();
+        Map<Key, T> entities = new HashMap<Key, T>();
         TableModel tm = null;
         try {
             connection = connectionProvider.getConnection();
             int count = 0;
-            for (String pk : primaryKeys) {
+            for (Key pk : primaryKeys) {
                 final T entity = EntityFactory.create(entityClass);
                 entity.setPrimaryKey(pk);
                 if (count == 0) {
@@ -671,7 +672,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> List<String> queryKeys(EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> List<Key> queryKeys(EntityQueryCriteria<T> criteria) {
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
@@ -711,11 +712,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> void delete(Class<T> entityClass, String primaryKey) {
+    public <T extends IEntity> void delete(Class<T> entityClass, Key primaryKey) {
         delete(EntityFactory.getEntityMeta(entityClass), primaryKey, null);
     }
 
-    private <T extends IEntity> void delete(EntityMeta entityMeta, String primaryKey, IEntity cascadedeleteDataEntity) {
+    private <T extends IEntity> void delete(EntityMeta entityMeta, Key primaryKey, IEntity cascadedeleteDataEntity) {
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
@@ -726,7 +727,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     // cascadedeleteDataEntity is consistent with GAE implementation of delete(IEntity entity).
-    private <T extends IEntity> void cascadeDelete(Connection connection, EntityMeta entityMeta, String primaryKey, IEntity cascadedeleteDataEntity) {
+    private <T extends IEntity> void cascadeDelete(Connection connection, EntityMeta entityMeta, Key primaryKey, IEntity cascadedeleteDataEntity) {
         if (trace) {
             log.info(Trace.enter() + "cascadeDelete {} id={}", entityMeta.getPersistenceName(), primaryKey);
         }
@@ -781,7 +782,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
             int count = 0;
             if (entities.size() > 0) {
-                List<String> primaryKeys = new Vector<String>();
+                List<Key> primaryKeys = new Vector<Key>();
                 for (T entity : entities) {
                     primaryKeys.add(entity.getPrimaryKey());
                     // TODO optimize
@@ -825,7 +826,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<String> primaryKeys) {
+    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Key> primaryKeys) {
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();

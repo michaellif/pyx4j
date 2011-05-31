@@ -22,6 +22,7 @@ package com.pyx4j.entity.server;
 
 import junit.framework.TestCase;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.domain.GraphItem;
 import com.pyx4j.entity.server.domain.bidir.Child;
 import com.pyx4j.entity.server.domain.bidir.Master;
@@ -54,11 +55,11 @@ public class RpcEntityServiceFilterTest extends TestCase {
         rootEntity.rpcTransientName().setValue("secret");
 
         GraphItem child1 = EntityFactory.create(GraphItem.class);
-        child1.setPrimaryKey("1");
+        child1.setPrimaryKey(new Key(1));
         child1.rpcTransientName().setValue("secret");
 
         GraphItem child2 = EntityFactory.create(GraphItem.class);
-        child2.setPrimaryKey("1");
+        child2.setPrimaryKey(new Key(1));
         child2.rpcTransientName().setValue("secret");
 
         rootEntity.child1().set(child1);

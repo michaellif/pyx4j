@@ -36,6 +36,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.DomainManager;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntityServices;
@@ -186,7 +187,7 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
                 }
             };
 
-            RPCManager.execute(getRetrieveService(), EntityCriteriaByPK.create(clazz, entityId), callback);
+            RPCManager.execute(getRetrieveService(), EntityCriteriaByPK.create(clazz, new Key(entityId)), callback);
         }
     }
 

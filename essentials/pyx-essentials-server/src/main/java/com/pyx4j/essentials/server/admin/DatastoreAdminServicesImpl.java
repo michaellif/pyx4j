@@ -22,6 +22,7 @@ package com.pyx4j.essentials.server.admin;
 
 import java.util.Vector;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
@@ -51,7 +52,7 @@ public class DatastoreAdminServicesImpl implements DatastoreAdminServices {
         @Override
         public AuthenticationResponse execute(AuthenticationRequest request) {
             if (Context.getSession() == null) {
-                Lifecycle.beginSession(new UserVisit("x" + String.valueOf(System.currentTimeMillis()), null), null);
+                Lifecycle.beginSession(new UserVisit(new Key("x" + String.valueOf(System.currentTimeMillis())), null), null);
             }
             return AuthenticationServicesImpl.createAuthenticationResponse(null);
         }

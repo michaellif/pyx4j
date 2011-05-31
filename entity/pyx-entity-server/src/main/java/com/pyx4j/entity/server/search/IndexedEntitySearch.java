@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
@@ -317,7 +318,7 @@ public class IndexedEntitySearch<E extends IEntity> {
                 }
             } else if (mm.isEntity()) {
                 Indexed index = mm.getAnnotation(Indexed.class);
-                String pk = ((IEntity) me.getValue()).getPrimaryKey();
+                Key pk = ((IEntity) me.getValue()).getPrimaryKey();
                 if ((index != null) && (index.global() != 0)) {
                     inMemoryFilters.add(new EntityInMemoryFilter(path, pk));
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global()) + pk));
@@ -325,7 +326,7 @@ public class IndexedEntitySearch<E extends IEntity> {
                     queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, pk));
                 }
             } else if ((ICollection.class.isAssignableFrom(mm.getObjectClass()))) {
-                String pk = ((IEntity) me.getValue()).getPrimaryKey();
+                Key pk = ((IEntity) me.getValue()).getPrimaryKey();
                 queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, pk));
             } else {
                 log.warn("Search by class {} {} not implemented", mm.getObjectClass(), mm.getValueClass());

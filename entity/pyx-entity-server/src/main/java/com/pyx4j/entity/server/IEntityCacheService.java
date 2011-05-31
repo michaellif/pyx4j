@@ -30,11 +30,11 @@ public interface IEntityCacheService {
 
     public void setDisabled(boolean disabled);
 
-    public <T extends IEntity> T get(Class<T> entityClass, String primaryKey);
+    public <T extends IEntity> T get(Class<T> entityClass, com.pyx4j.commons.Key primaryKey);
 
-    public <T extends IEntity> Map<String, T> get(Class<T> entityClass, Iterable<String> primaryKeys);
+    public <T extends IEntity> Map<com.pyx4j.commons.Key, T> get(Class<T> entityClass, Iterable<com.pyx4j.commons.Key> primaryKeys);
 
-    public Map<EntityCollectionRequest<IEntity>, Map<String, IEntity>> get(Iterable<EntityCollectionRequest<IEntity>> requests);
+    public Map<EntityCollectionRequest<IEntity>, Map<com.pyx4j.commons.Key, IEntity>> get(Iterable<EntityCollectionRequest<IEntity>> requests);
 
     public <T extends IEntity> void put(T entity);
 
@@ -45,7 +45,7 @@ public interface IEntityCacheService {
 
     public <T extends IEntity> void remove(T entity);
 
-    public <T extends IEntity> void remove(Class<T> entityClass, String primaryKey);
+    public <T extends IEntity> void remove(Class<T> entityClass, com.pyx4j.commons.Key primaryKey);
 
-    public <T extends IEntity> void remove(Class<T> entityClass, Iterable<String> primaryKeys);
+    public <T extends IEntity> void remove(Class<T> entityClass, Iterable<com.pyx4j.commons.Key> primaryKeys);
 }

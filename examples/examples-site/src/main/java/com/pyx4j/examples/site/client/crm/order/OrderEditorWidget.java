@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityForm;
 import com.pyx4j.entity.client.ui.CEntityHyperlink;
@@ -193,7 +194,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
                 }
             };
 
-            RPCManager.execute(EntityServices.Retrieve.class, EntityCriteriaByPK.create(Customer.class, entityId), callback);
+            RPCManager.execute(EntityServices.Retrieve.class, EntityCriteriaByPK.create(Customer.class, new Key(entityId)), callback);
         } else {
             getEditorPanel().populateForm(order);
             getEditorPanel().get(getEditorPanel().proto().orderNumber()).setEditable(false);

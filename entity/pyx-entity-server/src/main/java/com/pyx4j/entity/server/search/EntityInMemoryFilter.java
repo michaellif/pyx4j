@@ -23,14 +23,15 @@ package com.pyx4j.entity.server.search;
 import java.util.Map;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 
 public class EntityInMemoryFilter extends InMemoryFilter {
 
-    final String searchValue;
+    final Key searchValue;
 
-    public EntityInMemoryFilter(Path propertyPath, String object) {
+    public EntityInMemoryFilter(Path propertyPath, Key object) {
         super(propertyPath);
         searchValue = object;
     }

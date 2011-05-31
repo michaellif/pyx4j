@@ -26,6 +26,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -175,7 +176,7 @@ public abstract class QueryTestCase extends DatastoreTestBase {
         Assert.assertEquals("Retr All List size", 1, departments2.size());
         Assert.assertEquals("Retr All department.name", deptName, departments2.get(0).name().getValue());
 
-        List<String> departmentsIds = srv.queryKeys(criteria);
+        List<Key> departmentsIds = srv.queryKeys(criteria);
         Assert.assertEquals("Retr Keys List size", 1, departmentsIds.size());
         Assert.assertEquals("Retr All department.id", department.getPrimaryKey(), departmentsIds.get(0));
 

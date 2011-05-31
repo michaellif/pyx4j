@@ -24,6 +24,7 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -81,6 +82,8 @@ public abstract class Dialect {
     public Class<?> getType(Class<?> klass) {
         if (Enum.class.isAssignableFrom(klass)) {
             return String.class;
+        } else if (Key.class.isAssignableFrom(klass)) {
+            return Long.class;
         } else if (IEntity.class.isAssignableFrom(klass)) {
             return Long.class;
         } else {

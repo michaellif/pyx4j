@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
@@ -187,7 +188,7 @@ public class EntityMetaTest extends InitializerTestCase {
         ConcreteEntity root = EntityFactory.create(ConcreteEntity.class);
 
         Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
-        ent1.setPrimaryKey("11");
+        ent1.setPrimaryKey(new Key(11));
 
         root.refference().set(ent1);
 

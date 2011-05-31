@@ -23,6 +23,7 @@ package com.pyx4j.security.shared;
 import java.io.Serializable;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Key;
 
 /**
  * Extendable by application user Information
@@ -31,7 +32,7 @@ public class UserVisit implements Serializable {
 
     private static final long serialVersionUID = 4747659543319319301L;
 
-    private String principalPrimaryKey;
+    private Key principalPrimaryKey;
 
     private String name;
 
@@ -45,7 +46,7 @@ public class UserVisit implements Serializable {
 
     }
 
-    public UserVisit(String principalPrimaryKey, String name) {
+    public UserVisit(Key principalPrimaryKey, String name) {
         super();
         this.principalPrimaryKey = principalPrimaryKey;
         this.name = name;
@@ -73,11 +74,11 @@ public class UserVisit implements Serializable {
         this.email = email;
     }
 
-    public String getPrincipalPrimaryKey() {
+    public Key getPrincipalPrimaryKey() {
         return principalPrimaryKey;
     }
 
-    public void setPrincipalPrimaryKey(String principalPrimaryKey) {
+    public void setPrincipalPrimaryKey(Key principalPrimaryKey) {
         this.principalPrimaryKey = principalPrimaryKey;
     }
 

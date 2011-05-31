@@ -22,6 +22,7 @@ package com.pyx4j.entity.test.shared;
 
 import junit.framework.Assert;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -54,7 +55,7 @@ public class BidirectionalRelationshipTest extends InitializerTestCase {
         assertEquals("Owner the same value", m.getValue(), c1.getMemberValue(c1.master().getFieldName()));
         assertTrue("Owner refferes to the same value", c1.getMemberValue(c1.master().getFieldName()) == m.getValue());
 
-        m.setPrimaryKey("76");
+        m.setPrimaryKey(new Key(76));
         assertEquals("Owner ID Update", m.getPrimaryKey(), c1.master().getPrimaryKey());
 
         String c2Name = "c2";
@@ -87,7 +88,7 @@ public class BidirectionalRelationshipTest extends InitializerTestCase {
         assertEquals("set size", 1, org.departments().size());
 
         assertFalse("Owned now", department.organization().isNull());
-        org.setPrimaryKey("77");
+        org.setPrimaryKey(new Key(77));
         assertEquals("Owner ID Update", org.getPrimaryKey(), department.organization().getPrimaryKey());
 
         Department orgDepartment = org.departments().iterator().next();

@@ -26,9 +26,9 @@ public class EntityCollectionRequest<E extends IEntity> {
 
     private final Class<E> entityClass;
 
-    private final Iterable<String> primaryKeys;
+    private final Iterable<com.pyx4j.commons.Key> primaryKeys;
 
-    public EntityCollectionRequest(Class<E> entityClass, Iterable<String> primaryKeys) {
+    public EntityCollectionRequest(Class<E> entityClass, Iterable<com.pyx4j.commons.Key> primaryKeys) {
         this.entityClass = entityClass;
         this.primaryKeys = primaryKeys;
     }
@@ -37,7 +37,7 @@ public class EntityCollectionRequest<E extends IEntity> {
         return entityClass;
     }
 
-    public Iterable<String> getPrimaryKeys() {
+    public Iterable<com.pyx4j.commons.Key> getPrimaryKeys() {
         return primaryKeys;
     }
 

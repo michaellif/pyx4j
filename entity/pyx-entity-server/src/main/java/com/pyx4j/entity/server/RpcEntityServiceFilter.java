@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.IdentityHashSet;
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -87,7 +88,7 @@ public class RpcEntityServiceFilter implements IServiceFilter {
         nextValue: for (Map.Entry<String, Object> me : entity.getValue().entrySet()) {
             String memberName = me.getKey();
             if (memberName.equals(IEntity.PRIMARY_KEY)) {
-                if ((me.getValue() != null) && (!(me.getValue() instanceof String))) {
+                if ((me.getValue() != null) && (!(me.getValue() instanceof Key))) {
                     throw new Error("Data type corruption");
                 }
                 continue nextValue;

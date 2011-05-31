@@ -22,6 +22,8 @@ package com.pyx4j.security.shared;
 
 import java.util.Set;
 
+import com.pyx4j.commons.Key;
+
 public interface AclRevalidator {
 
     /**
@@ -31,6 +33,6 @@ public interface AclRevalidator {
      * @param aclTimeStamp
      * @return null if no changes are required
      */
-    public Set<Behavior> getCurrentBehaviours(String principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp);
+    public Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp);
 
 }

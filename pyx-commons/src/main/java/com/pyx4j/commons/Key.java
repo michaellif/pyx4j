@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.shared;
+package com.pyx4j.commons;
 
 /**
  * Serializable DB Reference (Primary Key) representation
@@ -43,20 +43,39 @@ public class Key implements java.io.Serializable {
     public Key(long dbPrimaryKey) {
         assert (dbPrimaryKey != 0);
         this.longValue = dbPrimaryKey;
+        value = String.valueOf(longValue);
     }
 
     @Override
     public String toString() {
-        if (value == null) {
-            value = String.valueOf(longValue);
-        }
         return value;
     }
 
-    public long toPk() {
+    /*
+     * Should not be used in GWT app.
+     * 
+     * @exception NumberFormatException if the string representation does not contain a parsable <code>long</code>.
+     */
+    public long asLong() {
         if (longValue == 0) {
             longValue = Long.valueOf(value);
         }
         return longValue;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof Key)) {
+            return false;
+        }
+        return this.toString().equals(other.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
     }
 }

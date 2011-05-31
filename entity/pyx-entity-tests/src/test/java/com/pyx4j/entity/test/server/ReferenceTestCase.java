@@ -22,6 +22,7 @@ package com.pyx4j.entity.test.server;
 
 import junit.framework.Assert;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Province;
@@ -92,7 +93,7 @@ public abstract class ReferenceTestCase extends DatastoreTestBase {
 
         Province prov = EntityFactory.create(Province.class);
         prov.name().setValue("Ontario" + uniqueString());
-        prov.setPrimaryKey("1234567890");
+        prov.setPrimaryKey(new Key(1234567890));
 
         boolean saved = false;
         try {

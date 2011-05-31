@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
@@ -219,7 +220,9 @@ public class QueryBuilder<T extends IEntity> {
         if (value instanceof Enum) {
             return ((Enum<?>) value).name();
         } else if (value instanceof IEntity) {
-            return ((IEntity) value).getPrimaryKey();
+            return ((IEntity) value).getPrimaryKey().asLong();
+        } else if (value instanceof Key) {
+            return ((Key) value).asLong();
         } else if (value instanceof java.util.Date) {
             Calendar c = new GregorianCalendar();
             c.setTime((java.util.Date) value);

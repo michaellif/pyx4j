@@ -30,6 +30,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -91,7 +92,7 @@ public class XMLEntityParser {
                 entity.set(exists);
                 return entity;
             }
-            entity.setPrimaryKey(id);
+            entity.setPrimaryKey(new Key(id));
         }
 
         NodeList nodeList = node.getChildNodes();

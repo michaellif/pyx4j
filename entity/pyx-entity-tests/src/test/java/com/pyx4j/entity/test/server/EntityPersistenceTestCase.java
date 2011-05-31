@@ -24,6 +24,7 @@ import java.util.Iterator;
 
 import junit.framework.Assert;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Country;
@@ -42,7 +43,7 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
 
         srv.persist(country);
 
-        String primaryKey = country.getPrimaryKey();
+        Key primaryKey = country.getPrimaryKey();
 
         Country country2 = srv.retrieve(Country.class, primaryKey);
         Assert.assertNotNull("retrieve", country2);
@@ -56,7 +57,7 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
         emp1.holidays().setValue(Long.valueOf(System.currentTimeMillis()));
 
         srv.persist(emp1);
-        String pk = emp1.getPrimaryKey();
+        Key pk = emp1.getPrimaryKey();
         Employee emp1r = srv.retrieve(Employee.class, pk);
         Assert.assertEquals("holidays saved", emp1.holidays().getValue(), emp1r.holidays().getValue());
 
@@ -80,7 +81,7 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
         address.country().set(country);
         srv.persist(address);
 
-        String primaryKey = address.getPrimaryKey();
+        Key primaryKey = address.getPrimaryKey();
         Address address2 = srv.retrieve(Address.class, primaryKey);
         Assert.assertNotNull("retrieve", address2);
 
@@ -120,7 +121,7 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
         employee.homeAddress().set(address);
 
         srv.persist(employee);
-        String primaryKey = employee.getPrimaryKey();
+        Key primaryKey = employee.getPrimaryKey();
         Employee employee2 = srv.retrieve(Employee.class, primaryKey);
         Assert.assertNotNull("retrieve", employee2);
 

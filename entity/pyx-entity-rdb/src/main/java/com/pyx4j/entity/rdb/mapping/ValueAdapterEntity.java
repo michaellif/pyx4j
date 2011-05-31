@@ -29,6 +29,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -62,7 +63,7 @@ class ValueAdapterEntity implements ValueAdapter {
     @Override
     public int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException {
         IEntity childEntity = (IEntity) member.getMember(entity);
-        String primaryKey = childEntity.getPrimaryKey();
+        Key primaryKey = childEntity.getPrimaryKey();
         if (primaryKey == null) {
             if (!childEntity.isNull()) {
                 log.error("Saving non persisted reference {}", childEntity);
@@ -72,7 +73,7 @@ class ValueAdapterEntity implements ValueAdapter {
                 stmt.setNull(parameterIndex, sqlType);
             }
         } else {
-            stmt.setLong(parameterIndex, Long.valueOf(primaryKey));
+            stmt.setLong(parameterIndex, primaryKey.asLong());
         }
         return 1;
     }
@@ -80,11 +81,11 @@ class ValueAdapterEntity implements ValueAdapter {
     @Override
     public void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException {
         long value = rs.getLong(member.sqlName());
-        String pk;
+        Key pk;
         if (rs.wasNull()) {
             pk = null;
         } else {
-            pk = String.valueOf(value);
+            pk = new Key(value);
         }
         ((IEntity) member.getMember(entity)).setPrimaryKey(pk);
     }
