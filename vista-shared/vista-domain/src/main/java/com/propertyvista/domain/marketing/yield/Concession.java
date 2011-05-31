@@ -62,7 +62,7 @@ public interface Concession extends IEntity {
         }
     }
 
-// --------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------
 
     @ToString(index = 0)
     @MemberColumn(name = "concessionType")
@@ -92,7 +92,7 @@ public interface Concession extends IEntity {
 
     IPrimitive<String> description();
 
-// --------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------
 
     IPrimitive<Status> status();
 

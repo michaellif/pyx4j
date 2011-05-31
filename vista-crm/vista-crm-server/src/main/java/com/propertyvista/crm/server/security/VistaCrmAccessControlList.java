@@ -37,6 +37,7 @@ import com.propertyvista.crm.rpc.services.TenantCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.crm.rpc.services.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
+import com.propertyvista.domain.Company;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -117,6 +118,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(InquiryCrudService.class));
 
 // - Other:
+        grant(new EntityPermission(Company.class, EntityPermission.ALL));
 
 // - Old servies:
         grant(new EntityPermission(Country.class.getPackage().getName() + ".*", EntityPermission.READ));

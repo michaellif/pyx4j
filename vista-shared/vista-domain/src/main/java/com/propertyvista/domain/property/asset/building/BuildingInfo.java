@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -29,6 +30,7 @@ import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.domain.Address;
 
+@ToStringFormat("{0}, {1}")
 public interface BuildingInfo extends IEntity {
 
     @Translatable
@@ -189,12 +191,12 @@ public interface BuildingInfo extends IEntity {
     /**
      * Legal name of the property (max 120 char)
      */
-    @ToString
+    @ToString(index = 0)
     IPrimitive<String> name();
 
     Address address();
 
-    @ToString
+    @ToString(index = 1)
     @MemberColumn(name = "buildingType")
     IPrimitive<Type> type();
 
