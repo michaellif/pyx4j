@@ -14,9 +14,26 @@
 package com.propertyvista.domain.tenant;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.common.domain.Name;
+import com.propertyvista.domain.Email;
+import com.propertyvista.domain.Phone;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public interface Inquiry extends IEntity {
 
-    IPrimitive<String> test(); // something is necessary for listers! 
+    Name name();
+
+    IList<Phone> phones();
+
+    Email email();
+
+    IPrimitive<String> description();
+
+    Building building();
+
+    AptUnit unit();
 }

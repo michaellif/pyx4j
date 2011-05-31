@@ -29,6 +29,9 @@ public class InquiryLister extends ListerBase<Inquiry> {
 
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Inquiry>> columnDescriptors, Inquiry proto) {
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.test()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.email()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.building()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
     }
 }
