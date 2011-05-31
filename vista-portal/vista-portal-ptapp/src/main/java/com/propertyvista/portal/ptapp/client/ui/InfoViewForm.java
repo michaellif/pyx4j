@@ -36,7 +36,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -187,7 +187,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
     @Override
     public void addValidations() {
         @SuppressWarnings("unchecked")
-        CEntityEditableComponent<Address> currentAddressForm = ((CEntityEditableComponent<Address>) getRaw(proto().currentAddress()));
+        CEntityEditor<Address> currentAddressForm = ((CEntityEditor<Address>) getRaw(proto().currentAddress()));
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
 
             @Override
@@ -225,7 +225,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         // ------------------------------------------------------------------------------------------------        
 
         @SuppressWarnings("unchecked")
-        final CEntityEditableComponent<Address> previousAddressForm = ((CEntityEditableComponent<Address>) getRaw(proto().previousAddress()));
+        final CEntityEditor<Address> previousAddressForm = ((CEntityEditor<Address>) getRaw(proto().previousAddress()));
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
 
             @Override
@@ -339,8 +339,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         }
     }
 
-    private CEntityEditableComponent<Address> createAddressEditor() {
-        return new CEntityEditableComponent<Address>(Address.class) {
+    private CEntityEditor<Address> createAddressEditor() {
+        return new CEntityEditor<Address>(Address.class) {
             @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
             public IsWidget createContent() {

@@ -18,7 +18,7 @@ import com.propertyvista.portal.tester.resources.SiteImages;
 
 import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -74,8 +74,8 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
             }
         }
 
-        private CEntityEditableComponent<Employee> createEmployeeEditor() {
-            return new CEntityEditableComponent<Employee>(Employee.class) {
+        private CEntityEditor<Employee> createEmployeeEditor() {
+            return new CEntityEditor<Employee>(Employee.class) {
                 @Override
                 public IsWidget createContent() {
                     FlowPanel main = new FlowPanel();

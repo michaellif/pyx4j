@@ -19,7 +19,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.portal.domain.util.ValidationUtils;
 
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityEditor;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -28,11 +28,11 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
 
     private static I18n i18n = I18nFactory.getI18n(ZipCodeValueValidator.class);
 
-    private final CEntityEditableComponent<?> editor;
+    private final CEntityEditor<?> editor;
 
     private final Path countryPath;
 
-    public ZipCodeValueValidator(CEntityEditableComponent<?> editor, Country countryMemeberProto) {
+    public ZipCodeValueValidator(CEntityEditor<?> editor, Country countryMemeberProto) {
         this.editor = editor;
         this.countryPath = countryMemeberProto.getPath();
     }

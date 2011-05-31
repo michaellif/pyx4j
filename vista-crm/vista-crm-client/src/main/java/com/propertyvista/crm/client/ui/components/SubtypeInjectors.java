@@ -21,7 +21,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IList;
 
@@ -45,7 +45,7 @@ public class SubtypeInjectors {
 
     protected static I18n i18n = I18nFactory.getI18n(SubtypeInjectors.class);
 
-    public static void injectPhones(VistaDecoratorsFlowPanel main, IList<Phone> proto, CEntityEditableComponent<?> parent) {
+    public static void injectPhones(VistaDecoratorsFlowPanel main, IList<Phone> proto, CEntityEditor<?> parent) {
 
         main.add(new CrmHeader2Decorator(proto.getMeta().getCaption()));
         main.add(parent.inject(proto, new CrmEntityFolder<Phone>(Phone.class, i18n.tr("Phone"), parent.isEditable()) {
@@ -62,7 +62,7 @@ public class SubtypeInjectors {
         main.add(new HTML());
     }
 
-    public static void injectEmails(VistaDecoratorsFlowPanel main, IList<Email> proto, CEntityEditableComponent<?> parent) {
+    public static void injectEmails(VistaDecoratorsFlowPanel main, IList<Email> proto, CEntityEditor<?> parent) {
 
         main.add(new CrmHeader2Decorator(proto.getMeta().getCaption()));
         main.add(parent.inject(proto, new CrmEntityFolder<Email>(Email.class, i18n.tr("Email"), parent.isEditable()) {
@@ -78,7 +78,7 @@ public class SubtypeInjectors {
         main.add(new HTML());
     }
 
-    public static void injectCompany(VistaDecoratorsFlowPanel main, Company proto, CEntityEditableComponent<?> parent) {
+    public static void injectCompany(VistaDecoratorsFlowPanel main, Company proto, CEntityEditor<?> parent) {
 
         main.add(parent.inject(proto.name()), 15);
 // TODO : design representation for:
@@ -91,20 +91,20 @@ public class SubtypeInjectors {
 //        main.add(parent.inject(proto.logo()), 15);
     }
 
-    public static void injectVendor(VistaDecoratorsFlowPanel main, Vendor proto, CEntityEditableComponent<?> parent) {
+    public static void injectVendor(VistaDecoratorsFlowPanel main, Vendor proto, CEntityEditor<?> parent) {
 
         main.add(parent.inject(proto.type()), 15);
         injectCompany(main, proto, parent);
     }
 
-    public static void injectLicence(VistaDecoratorsFlowPanel main, Licence proto, CEntityEditableComponent<?> parent) {
+    public static void injectLicence(VistaDecoratorsFlowPanel main, Licence proto, CEntityEditor<?> parent) {
 
         main.add(parent.inject(proto.number()), 15);
         main.add(parent.inject(proto.expiration()), 8.2);
         main.add(parent.inject(proto.renewal()), 8.2);
     }
 
-    public static void injectContract(VistaDecoratorsFlowPanel main, Contract proto, CEntityEditableComponent<?> parent) {
+    public static void injectContract(VistaDecoratorsFlowPanel main, Contract proto, CEntityEditor<?> parent) {
 
         main.add(parent.inject(proto.contractID()), 15);
 //        injectVendor(main, proto.contractor(), parent);
@@ -116,14 +116,14 @@ public class SubtypeInjectors {
 //             main.add(parent.inject(proto.document()), 45);
     }
 
-    public static void injectMaintenance(VistaDecoratorsFlowPanel main, Maintenance proto, CEntityEditableComponent<?> parent) {
+    public static void injectMaintenance(VistaDecoratorsFlowPanel main, Maintenance proto, CEntityEditor<?> parent) {
 
         injectContract(main, proto, parent);
         main.add(parent.inject(proto.lastService()), 8.2);
         main.add(parent.inject(proto.nextService()), 8.2);
     }
 
-    public static void injectWarranty(VistaDecoratorsFlowPanel main, Warranty proto, CEntityEditableComponent<?> parent) {
+    public static void injectWarranty(VistaDecoratorsFlowPanel main, Warranty proto, CEntityEditor<?> parent) {
 
         main.add(parent.inject(proto.title()), 15);
         main.add(parent.inject(proto.type()), 15);
@@ -141,7 +141,7 @@ public class SubtypeInjectors {
         }));
     }
 
-    public static void injectEquipment(VistaDecoratorsFlowPanel main, Equipment proto, CEntityEditableComponent<?> parent) {
+    public static void injectEquipment(VistaDecoratorsFlowPanel main, Equipment proto, CEntityEditor<?> parent) {
 
         main.add(parent.inject(proto.type()), 15);
         main.add(parent.inject(proto.description()), 15);
@@ -161,7 +161,7 @@ public class SubtypeInjectors {
         main.add(parent.inject(proto.notes()), 25);
     }
 
-    public static void injectMarketing(VistaDecoratorsFlowPanel main, Marketing proto, CEntityEditableComponent<?> parent) {
+    public static void injectMarketing(VistaDecoratorsFlowPanel main, Marketing proto, CEntityEditor<?> parent) {
 
         main.add(parent.inject(proto.name()), 15);
         main.add(parent.inject(proto.description()), 25);

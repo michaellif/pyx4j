@@ -24,7 +24,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
@@ -164,14 +164,14 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 break;
             default:
                 @SuppressWarnings("rawtypes")
-                CEntityEditableComponent comp = (CEntityEditableComponent) get(proto().otherIncomeInfo());
+                CEntityEditor comp = (CEntityEditor) get(proto().otherIncomeInfo());
                 comp.setVisible(true);
                 applyOtherLables(incomeSource, comp);
             }
         }
     }
 
-    private void applyOtherLables(IncomeSource incomeSource, CEntityEditableComponent<IncomeInfoOther> comp) {
+    private void applyOtherLables(IncomeSource incomeSource, CEntityEditor<IncomeInfoOther> comp) {
         switch (incomeSource) {
         case pension:
         case retired:
@@ -191,15 +191,15 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         }
     }
 
-    private static void injectIEmploymentInfo(VistaDecoratorsFlowPanel main, IEmploymentInfo proto, CEntityEditableComponent<?> parent) {
+    private static void injectIEmploymentInfo(VistaDecoratorsFlowPanel main, IEmploymentInfo proto, CEntityEditor<?> parent) {
         main.add(parent.inject(proto.supervisorName()), 20);
         main.add(parent.inject(proto.supervisorPhone()), 15);
         main.add(parent.inject(proto.monthlyAmount()), 8);
         main.add(parent.inject(proto.position()), 20);
     }
 
-    private CEntityEditableComponent<IncomeInfoEmployer> createEmployerEditor() {
-        return new CEntityEditableComponent<IncomeInfoEmployer>(IncomeInfoEmployer.class) {
+    private CEntityEditor<IncomeInfoEmployer> createEmployerEditor() {
+        return new CEntityEditor<IncomeInfoEmployer>(IncomeInfoEmployer.class) {
 
             @Override
             public IsWidget createContent() {
@@ -222,8 +222,8 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         };
     }
 
-    private CEntityEditableComponent<IncomeInfoSeasonallyEmployed> createSeasonallyEmployedEditor() {
-        return new CEntityEditableComponent<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
+    private CEntityEditor<IncomeInfoSeasonallyEmployed> createSeasonallyEmployedEditor() {
+        return new CEntityEditor<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
@@ -244,8 +244,8 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         };
     }
 
-    private CEntityEditableComponent<IncomeInfoStudentIncome> createStudentIncomeEditor() {
-        return new CEntityEditableComponent<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
+    private CEntityEditor<IncomeInfoStudentIncome> createStudentIncomeEditor() {
+        return new CEntityEditor<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
@@ -271,8 +271,8 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         };
     }
 
-    private CEntityEditableComponent<IncomeInfoSelfEmployed> createSelfEmployedEditor() {
-        return new CEntityEditableComponent<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
+    private CEntityEditor<IncomeInfoSelfEmployed> createSelfEmployedEditor() {
+        return new CEntityEditor<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
@@ -296,8 +296,8 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         };
     }
 
-    private CEntityEditableComponent<IncomeInfoSocialServices> createSocialServicesEditor() {
-        return new CEntityEditableComponent<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
+    private CEntityEditor<IncomeInfoSocialServices> createSocialServicesEditor() {
+        return new CEntityEditor<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
@@ -318,8 +318,8 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         };
     }
 
-    private CEntityEditableComponent<IncomeInfoOther> createOtherIncomeInfoEditor() {
-        return new CEntityEditableComponent<IncomeInfoOther>(IncomeInfoOther.class) {
+    private CEntityEditor<IncomeInfoOther> createOtherIncomeInfoEditor() {
+        return new CEntityEditor<IncomeInfoOther>(IncomeInfoOther.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
@@ -331,7 +331,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         };
     }
 
-    void validationOfStartStopDates(final CEntityEditableComponent<? extends IIncomeInfo> comp) {
+    void validationOfStartStopDates(final CEntityEditor<? extends IIncomeInfo> comp) {
         comp.get(comp.proto().starts()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {

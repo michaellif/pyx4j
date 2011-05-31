@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.view.client.Range;
 
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -285,8 +285,8 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         setAsCurrentAddress(value.sameAsCurrent().getValue());
     }
 
-    private CEntityEditableComponent<EcheckInfo> createEcheckInfoEditor() {
-        return new CEntityEditableComponent<EcheckInfo>(EcheckInfo.class) {
+    private CEntityEditor<EcheckInfo> createEcheckInfoEditor() {
+        return new CEntityEditor<EcheckInfo>(EcheckInfo.class) {
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
@@ -310,8 +310,8 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
     }
 
-    private CEntityEditableComponent<CreditCardInfo> createCreditCardInfoEditor() {
-        return new CEntityEditableComponent<CreditCardInfo>(CreditCardInfo.class) {
+    private CEntityEditor<CreditCardInfo> createCreditCardInfoEditor() {
+        return new CEntityEditor<CreditCardInfo>(CreditCardInfo.class) {
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
@@ -365,11 +365,11 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
     class CheckPanel extends FlexTable {
 
-        CEntityEditableComponent<EcheckInfo> entityComponent;
+        CEntityEditor<EcheckInfo> entityComponent;
 
         private int index = 0;
 
-        public CheckPanel(CEntityEditableComponent<EcheckInfo> entityComponent) {
+        public CheckPanel(CEntityEditor<EcheckInfo> entityComponent) {
             this.entityComponent = entityComponent;
             setWidget(1, 0, new Image(PortalImages.INSTANCE.chequeGuide()));
             getFlexCellFormatter().setColSpan(1, 0, 3);

@@ -16,13 +16,14 @@ package com.propertyvista.portal.client.ui;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
+
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
-
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 
 public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implements ApartmentDetailsView {
 
@@ -47,7 +48,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
     @Override
     public IsWidget createContent() {
 
-        VistaDecoratorsFlowPanel container = new VistaDecoratorsFlowPanel();
+        FlowPanel container = new FlowPanel();
         DecorationData readOnlyDecor = new DecorationData(14d, 12);
         readOnlyDecor.editable = false;
         container.add(new VistaWidgetDecorator(inject(proto().address().street1()), readOnlyDecor));

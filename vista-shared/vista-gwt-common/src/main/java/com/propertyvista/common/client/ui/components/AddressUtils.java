@@ -15,7 +15,7 @@ package com.propertyvista.common.client.ui.components;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.ui.OptionsFilter;
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityEditor;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -27,7 +27,7 @@ import com.propertyvista.common.domain.ref.Province;
 public class AddressUtils {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static void injectIAddress(VistaDecoratorsFlowPanel main, final IAddress proto, final CEntityEditableComponent<?> parent) {
+    public static void injectIAddress(VistaDecoratorsFlowPanel main, final IAddress proto, final CEntityEditor<?> parent) {
 
         main.add(parent.inject(proto.street1()), 20);
         main.add(parent.inject(proto.street2()), 20);
@@ -61,7 +61,7 @@ public class AddressUtils {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static void injectIAddress(VistaDecoratorsFlowPanel main, final IAddressFull proto, final CEntityEditableComponent<?> parent) {
+    public static void injectIAddress(VistaDecoratorsFlowPanel main, final IAddressFull proto, final CEntityEditor<?> parent) {
 
         main.add(parent.inject(proto.unitNumber()), 5);
         main.add(parent.inject(proto.streetNumber()), 5);
