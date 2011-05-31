@@ -20,6 +20,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.dto.InquiryDTO;
 
 public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
@@ -35,6 +36,15 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
     @Override
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+
+        main.add(inject(proto().name()));
+        SubtypeInjectors.injectPhones(main, proto().phones(), this);
+        main.add(inject(proto().email()));
+
+        main.add(inject(proto().description()));
+
+        main.add(inject(proto().building()));
+        main.add(inject(proto().unit()));
 
         return main;
     }
