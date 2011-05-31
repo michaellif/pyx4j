@@ -51,7 +51,7 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
 
     private static I18n i18n = I18nFactory.getI18n(PropertyMapViewImpl.class);
 
-    private final RefineApartmentSearchForm searchFrom;
+    private final RefineApartmentSearchForm searchForm;
 
     public PropertyMapViewImpl() {
         FlowPanel container = new FlowPanel();
@@ -61,8 +61,8 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
         FlowPanel refineSearch = new FlowPanel();
         refineSearch.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Search.name());
         refineSearch.setWidth("20%");
-        searchFrom = new RefineApartmentSearchForm();
-        refineSearch.add(searchFrom.createContent());
+        searchForm = new RefineApartmentSearchForm();
+        refineSearch.add(searchForm.createContent());
         container.add(refineSearch);
 
         FlowPanel searchResult = new FlowPanel();
@@ -199,7 +199,7 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-        searchFrom.setPresenter(this.presenter);
+        searchForm.setPresenter(this.presenter);
     }
 
     @Override

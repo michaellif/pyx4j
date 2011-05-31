@@ -29,7 +29,6 @@ public class SearchApartmentViewImpl extends SimplePanel implements SearchApartm
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
         sa.setPresenter(presenter);
-
     }
 
 }
