@@ -684,7 +684,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> ICursorIterator<String> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> ICursorIterator<Key> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
         // TODO Auto-generated method stub
         return null;
     }

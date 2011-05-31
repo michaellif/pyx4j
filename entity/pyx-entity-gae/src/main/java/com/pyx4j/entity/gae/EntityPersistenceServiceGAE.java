@@ -1474,7 +1474,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> ICursorIterator<String> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> ICursorIterator<com.pyx4j.commons.Key> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
         final Class<T> entityClass = criteria.getEntityClass();
@@ -1502,7 +1502,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             log.debug("queryKeys iterator {} took {}ms; calls " + callsCount, criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         }
 
-        return new ICursorIterator<String>() {
+        return new ICursorIterator<com.pyx4j.commons.Key>() {
 
             @Override
             public boolean hasNext() {
@@ -1515,9 +1515,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
 
             @Override
-            public String next() {
+            public com.pyx4j.commons.Key next() {
                 Entity entity = iterator.next();
-                return String.valueOf(entity.getKey().getId());
+                return new com.pyx4j.commons.Key(entity.getKey().getId());
             }
 
             @Override
