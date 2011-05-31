@@ -23,8 +23,8 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 public class GenericConverter {
 
     //TODO move to more generic place
-    public static <D extends IEntity> D down(D src, Class<D> dstClass) {
-        D dst = EntityFactory.create(dstClass);
+    public static <S extends IEntity, D extends S> S down(D src, Class<S> dstClass) {
+        S dst = EntityFactory.create(dstClass);
         dst.set(src);
         return dst;
     }

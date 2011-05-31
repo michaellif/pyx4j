@@ -42,11 +42,11 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
+import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PetChargeRule;
 import com.propertyvista.portal.domain.ptapp.PropertyProfile;
@@ -129,8 +129,8 @@ public class BuildingsGenerator {
         return floorplans;
     }
 
-    public List<AptUnit> createUnits(Building building, List<Floorplan> floorplans, int numFloors, int numUnitsPerFloor) {
-        List<AptUnit> units = new ArrayList<AptUnit>();
+    public List<AptUnitDTO> createUnits(Building building, List<Floorplan> floorplans, int numFloors, int numUnitsPerFloor) {
+        List<AptUnitDTO> units = new ArrayList<AptUnitDTO>();
         // now create units for the building
         for (int floor = 1; floor < numFloors + 1; floor++) {
 
@@ -147,7 +147,7 @@ public class BuildingsGenerator {
                 }
 
                 int uarea = floorplan.minArea().getValue() + RandomUtil.randomInt(10);
-                AptUnit unit = createUnit(building, suiteNumber, floor, uarea, bedrooms, bathrooms, floorplan);
+                AptUnitDTO unit = createUnit(building, suiteNumber, floor, uarea, bedrooms, bathrooms, floorplan);
                 units.add(unit);
             }
         }
@@ -274,8 +274,8 @@ public class BuildingsGenerator {
         return addOn;
     }
 
-    private AptUnit createUnit(Building building, String suiteNumber, int floor, double area, double bedrooms, double bathrooms, Floorplan floorplan) {
-        AptUnit unit = EntityFactory.create(AptUnit.class);
+    private AptUnitDTO createUnit(Building building, String suiteNumber, int floor, double area, double bedrooms, double bathrooms, Floorplan floorplan) {
+        AptUnitDTO unit = EntityFactory.create(AptUnitDTO.class);
 
         unit.belongsTo().set(building);
 
@@ -314,21 +314,21 @@ public class BuildingsGenerator {
 
         // info items
         if (RandomUtil.randomBoolean()) {
-            unit.info().details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         } else {
-            unit.info().details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.info().details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.info().details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.info().details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.info().details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
 
         // concessions

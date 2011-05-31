@@ -22,13 +22,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.domain.marketing.yield.AddOn;
+import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.portal.server.geo.GeoLocator;
 import com.propertyvista.portal.server.geo.GeoLocator.Mode;
 
@@ -69,26 +75,33 @@ public class Importer {
             persist(floorplan);
         }
 
-        for (AptUnit unit : mapper.getUnits()) {
-            for (AptUnitOccupancy occupancy : unit.occupancies()) {
-                persist(occupancy);
-            }
-            for (Utility utility : unit.info().utilities()) {
+        for (AptUnitDTO unitDTO : mapper.getUnits()) {
+            AptUnit unit = down(unitDTO, AptUnit.class);
+
+            for (Utility utility : unitDTO.info().utilities()) {
                 persist(utility);
             }
-            // for (AptUnitAmenity amenity : unit.amenities()) {
-            // persist(amenity);
-            // }
-            // for (AptUnitItem detail : unit.info().details()) {
-            // persist(detail);
-            // }
-            // for (AddOn addOn : unit.addOns()) {
-            // persist(addOn);
-            // }
-            // for (Concession concession : unit.concessions()) {
-            // persist(concession);
-            // }
-            persist(unit);
+            for (AptUnitAmenity amenity : unitDTO.amenities()) {
+                persist(amenity);
+            }
+            for (AddOn addOn : unitDTO.addOns()) {
+                persist(addOn);
+            }
+            for (Concession concession : unitDTO.concessions()) {
+                persist(concession);
+            }
+
+            persist(unit); // persist real unit here, not DTO!..
+
+            // persist internal lists and set correct belongness: 
+            for (AptUnitOccupancy occupancy : unitDTO.occupancies()) {
+                occupancy.unit().set(unit);
+                persist(occupancy);
+            }
+            for (AptUnitItem detail : unitDTO.details()) {
+                detail.belongsTo().set(unit);
+                persist(detail);
+            }
         }
     }
 
@@ -105,5 +118,12 @@ public class Importer {
 
     public Mapper getMapper() {
         return mapper;
+    }
+
+    // Genric DTO -> O convertion:
+    public static <S extends IEntity, D extends S> S down(D src, Class<S> dstClass) {
+        S dst = EntityFactory.create(dstClass);
+        dst.set(src);
+        return dst;
     }
 }

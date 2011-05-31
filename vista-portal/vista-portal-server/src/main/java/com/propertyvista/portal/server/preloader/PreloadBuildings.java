@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -38,6 +39,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
 import com.propertyvista.portal.server.importer.Importer;
@@ -79,28 +81,35 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 persist(floorplan);
             }
 
-            List<AptUnit> units = generator.createUnits(building, floorplans, DemoData.NUM_FLOORS, DemoData.NUM_UNITS_PER_FLOOR);
+            List<AptUnitDTO> units = generator.createUnits(building, floorplans, DemoData.NUM_FLOORS, DemoData.NUM_UNITS_PER_FLOOR);
             unitCount += units.size();
-            for (AptUnit unit : units) {
-                for (AptUnitOccupancy occupancy : unit.occupancies()) {
-                    persist(occupancy);
-                }
-                for (Utility utility : unit.info().utilities()) {
+            for (AptUnitDTO unitDTO : units) {
+                AptUnit unit = down(unitDTO, AptUnit.class);
+
+                for (Utility utility : unitDTO.info().utilities()) {
                     persist(utility);
                 }
-                for (AptUnitAmenity amenity : unit.amenities()) {
+                for (AptUnitAmenity amenity : unitDTO.amenities()) {
                     persist(amenity);
                 }
-                for (AptUnitItem detail : unit.info().details()) {
-                    persist(detail);
-                }
-                for (AddOn addOn : unit.addOns()) {
+                for (AddOn addOn : unitDTO.addOns()) {
                     persist(addOn);
                 }
-                for (Concession concession : unit.concessions()) {
+                for (Concession concession : unitDTO.concessions()) {
                     persist(concession);
                 }
-                persist(unit);
+
+                persist(unit); // persist real unit here, not DTO!..
+
+                // persist internal lists and set correct belongness: 
+                for (AptUnitOccupancy occupancy : unitDTO.occupancies()) {
+                    occupancy.unit().set(unit);
+                    persist(occupancy);
+                }
+                for (AptUnitItem detail : unitDTO.details()) {
+                    detail.belongsTo().set(unit);
+                    persist(detail);
+                }
             }
         }
 
@@ -192,12 +201,12 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             sb.append("\n");
 
             // get the units
-            EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+            EntityQueryCriteria<AptUnitDTO> criteria = new EntityQueryCriteria<AptUnitDTO>(AptUnitDTO.class);
             criteria.add(new PropertyCriterion(criteria.proto().belongsTo(), Restriction.EQUAL, building.getPrimaryKey()));
-            List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
+            List<AptUnitDTO> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
             sb.append("\tBuilding has ").append(units.size()).append(" units\n");
 
-            for (AptUnit unit : units) {
+            for (AptUnitDTO unit : units) {
                 sb.append("\t");
                 sb.append(unit.info().floor().getStringView()).append(" floor");
                 sb.append(" ");
@@ -222,5 +231,12 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
     private static void persist(IEntity entity) {
         PersistenceServicesFactory.getPersistenceService().persist(entity);
+    }
+
+    // Genric DTO -> O convertion:
+    public static <S extends IEntity, D extends S> S down(D src, Class<S> dstClass) {
+        S dst = EntityFactory.create(dstClass);
+        dst.set(src);
+        return dst;
     }
 }

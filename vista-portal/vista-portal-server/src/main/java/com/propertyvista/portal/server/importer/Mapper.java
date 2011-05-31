@@ -30,9 +30,9 @@ import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.StructureType;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
+import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.portal.server.generator.CommonsGenerator;
 import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.importer.bean.City;
@@ -48,7 +48,7 @@ public class Mapper {
 
     private final List<Building> buildings = new ArrayList<Building>();
 
-    private final List<AptUnit> units = new ArrayList<AptUnit>();
+    private final List<AptUnitDTO> units = new ArrayList<AptUnitDTO>();
 
     private final List<Floorplan> floorplans = new ArrayList<Floorplan>();
 
@@ -136,7 +136,7 @@ public class Mapper {
     }
 
     private void createUnit(Property property, AvailableUnit availableUnit, Building building) {
-        AptUnit unit = EntityFactory.create(AptUnit.class);
+        AptUnitDTO unit = EntityFactory.create(AptUnitDTO.class);
 
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
         occupancy.status().setValue(AptUnitOccupancy.StatusType.available);
@@ -268,7 +268,7 @@ public class Mapper {
         return buildings;
     }
 
-    public List<AptUnit> getUnits() {
+    public List<AptUnitDTO> getUnits() {
         return units;
     }
 

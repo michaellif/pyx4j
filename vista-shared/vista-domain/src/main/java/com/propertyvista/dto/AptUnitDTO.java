@@ -13,12 +13,20 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 public interface AptUnitDTO extends AptUnit {
 
     IList<AptUnitItem> details();
+
+    IList<AptUnitOccupancy> occupancies();
+
+    @Transient
+    IPrimitive<Double> numberOfOccupants();
 }

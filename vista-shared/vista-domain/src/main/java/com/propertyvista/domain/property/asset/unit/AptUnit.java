@@ -19,7 +19,6 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -35,17 +34,6 @@ public interface AptUnit extends IEntity {
     @Caption(name = "Building")
     Building belongsTo();
 
-    @EmbeddedEntity
-    AptUnitInfo info();
-
-    /**
-     * Keeps current and future occupancy data
-     */
-    IList<AptUnitOccupancy> occupancies();
-
-    @Transient
-    IPrimitive<Double> numberOfOccupants();
-
     /**
      * Denormalized field used for search, derived from @see AptUnitOccupancy
      * TODO should be calculated during Entity save
@@ -57,6 +45,9 @@ public interface AptUnit extends IEntity {
     @Format("MM/dd/yyyy")
     @Caption(name = "Available")
     IPrimitive<java.sql.Date> avalableForRent();
+
+    @EmbeddedEntity
+    AptUnitInfo info();
 
     @EmbeddedEntity
     AptUnitFinancial financial();
