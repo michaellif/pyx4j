@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -31,7 +32,7 @@ public class TenantInfoServiceImpl extends ApplicationEntityServiceImpl implemen
     private final static Logger log = LoggerFactory.getLogger(TenantInfoServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<PotentialTenantInfo> callback, String tenantId) {
+    public void retrieve(AsyncCallback<PotentialTenantInfo> callback, Key tenantId) {
         log.info("Retrieving summary for tenant {}", tenantId);
         EntityQueryCriteria<PotentialTenantInfo> criteria = EntityQueryCriteria.create(PotentialTenantInfo.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));

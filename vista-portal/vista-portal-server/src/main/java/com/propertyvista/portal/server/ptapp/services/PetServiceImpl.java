@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -36,7 +37,7 @@ public class PetServiceImpl extends ApplicationEntityServiceImpl implements PetS
     private final static Logger log = LoggerFactory.getLogger(PetServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<Pets> callback, String tenantId) {
+    public void retrieve(AsyncCallback<Pets> callback, Key tenantId) {
         log.info("Retrieving pets for tenant {}", tenantId);
         EntityQueryCriteria<Pets> criteria = EntityQueryCriteria.create(Pets.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));

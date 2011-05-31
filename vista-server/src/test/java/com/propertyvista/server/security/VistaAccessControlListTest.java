@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -158,11 +159,11 @@ public class VistaAccessControlListTest {
 
     @Test
     public void tenantApplicationEntityInstanceAccess() {
-        TestLifecycle.testSession(new PtUserVisit("-101", "bob"), VistaBehavior.POTENTIAL_TENANT);
+        TestLifecycle.testSession(new PtUserVisit(new Key(-101), "bob"), VistaBehavior.POTENTIAL_TENANT);
         TestLifecycle.beginRequest();
 
         Application application = EntityFactory.create(Application.class);
-        application.setPrimaryKey("-251");
+        application.setPrimaryKey(new Key(-251));
         PtAppContext.setCurrentUserApplication(application);
 
         assertEntityPermission(true, ApplicationProgress.class, application);
@@ -177,7 +178,7 @@ public class VistaAccessControlListTest {
         assertEntityPermission(true, PaymentInfo.class, application);
 
         Application application2 = EntityFactory.create(Application.class);
-        application2.setPrimaryKey("-252");
+        application2.setPrimaryKey(new Key(-252));
         assertEntityPermission(false, ApplicationProgress.class, application2);
         assertEntityPermission(false, UnitSelection.class, application2);
         assertEntityPermission(false, ApplicationDocument.class, application2);

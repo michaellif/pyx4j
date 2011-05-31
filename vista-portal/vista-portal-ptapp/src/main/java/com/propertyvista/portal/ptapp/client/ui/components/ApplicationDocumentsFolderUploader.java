@@ -45,6 +45,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -70,7 +71,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
     private final DocumentType documentType;
 
-    private String tenantId;
+    private Key tenantId;
 
     public ApplicationDocumentsFolderUploader(DocumentType documentType) {
         super(ApplicationDocument.class);
@@ -120,7 +121,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
         super.removeItem(comp, folderItemDecorator);
     }
 
-    public void setTenantID(String id) {
+    public void setTenantID(Key id) {
         tenantId = id;
     }
 
@@ -207,7 +208,8 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
                 if (uploader.getStatus() == Status.SUCCESS) {
                     ApplicationDocument newDocument = EntityFactory.create(ApplicationDocument.class);
                     newDocument.type().setValue(documentType);
-                    newDocument.dataId().setValue(uploader.getServerInfo().message);
+                    //TODO deserialize key
+                    newDocument.dataId().setValue(new Key(uploader.getServerInfo().message));
                     newDocument.filename().setValue(uploader.getServerInfo().name);
                     newDocument.fileSize().setValue((long) uploader.getServerInfo().size);
                     // add new document to the folder-list:

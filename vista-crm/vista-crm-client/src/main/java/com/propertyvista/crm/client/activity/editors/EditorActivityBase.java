@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.rpc.AppPlace;
@@ -37,7 +38,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final Class<E> entityClass;
 
-    private String entityId;
+    private Key entityId;
 
     @Inject
     public EditorActivityBase(IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
@@ -48,7 +49,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     public EditorActivityBase<E> withPlace(Place place) {
-        entityId = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID);
+        entityId = new Key(((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID));
         return this;
     }
 

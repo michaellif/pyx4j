@@ -27,6 +27,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -65,13 +66,14 @@ public class UploadServlet extends UploadAction {
     public String executeAction(HttpServletRequest request, List<FileItem> sessionFiles) throws UploadActionException {
         log.debug("UploadServlet.executeAction(): request={}, sessionFiles={}", request, sessionFiles);
         FileItem fileItem = null;
-        String tenantId = null;
+        Key tenantId = null;
 
         for (FileItem item : sessionFiles) {
             log.debug("UploadServlet.executeAction(): item={}", item);
             if (item.isFormField()) {
                 if (ApplicationDocumentServletParameters.TENANT_ID.equalsIgnoreCase(item.getFieldName())) {
-                    tenantId = item.getString();
+                    // TODO deserialize key
+                    tenantId = new Key(item.getString());
                 }
             } else {
                 fileItem = item;

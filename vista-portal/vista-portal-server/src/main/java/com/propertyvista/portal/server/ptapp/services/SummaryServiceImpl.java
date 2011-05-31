@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -51,7 +52,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
     private final static Logger log = LoggerFactory.getLogger(SummaryServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<Summary> callback, String tenantId) {
+    public void retrieve(AsyncCallback<Summary> callback, Key tenantId) {
         log.info("Retrieving summary for tenant {}", tenantId);
         callback.onSuccess(retrieveSummary());
     }

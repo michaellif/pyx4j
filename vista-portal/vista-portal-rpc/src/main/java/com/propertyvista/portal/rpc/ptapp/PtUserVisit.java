@@ -13,27 +13,28 @@
  */
 package com.propertyvista.portal.rpc.ptapp;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.security.shared.UserVisit;
 
 public class PtUserVisit extends UserVisit {
 
     private static final long serialVersionUID = -7071001051604793204L;
 
-    private String applicationPrimaryKey;
+    private Key applicationPrimaryKey;
 
     protected PtUserVisit() {
 
     }
 
-    public PtUserVisit(String principalPrimaryKey, String name) {
+    public PtUserVisit(Key principalPrimaryKey, String name) {
         super(principalPrimaryKey, name);
     }
 
-    public String getApplicationPrimaryKey() {
+    public Key getApplicationPrimaryKey() {
         return applicationPrimaryKey;
     }
 
-    public void setApplicationPrimaryKey(String applicationPrimaryKey) {
+    public void setApplicationPrimaryKey(Key applicationPrimaryKey) {
         this.applicationPrimaryKey = applicationPrimaryKey;
     }
 

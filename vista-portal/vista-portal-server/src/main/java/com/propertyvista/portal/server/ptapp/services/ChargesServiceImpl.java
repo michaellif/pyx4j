@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -37,7 +38,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
     private final static Logger log = LoggerFactory.getLogger(ChargesServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<Charges> callback, String tenantId) {
+    public void retrieve(AsyncCallback<Charges> callback, Key tenantId) {
         log.debug("Retrieving charges for tenant {}", tenantId);
         EntityQueryCriteria<Charges> criteria = EntityQueryCriteria.create(Charges.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));

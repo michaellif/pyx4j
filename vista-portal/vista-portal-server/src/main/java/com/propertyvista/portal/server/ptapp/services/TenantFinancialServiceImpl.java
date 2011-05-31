@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -34,7 +35,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     private final static Logger log = LoggerFactory.getLogger(TenantFinancialServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<PotentialTenantFinancial> callback, String tenantId) {
+    public void retrieve(AsyncCallback<PotentialTenantFinancial> callback, Key tenantId) {
         log.debug("Retrieving summary for tenant {}", tenantId);
         EntityQueryCriteria<PotentialTenantFinancial> criteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenantId));
@@ -56,7 +57,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
         callback.onSuccess(tenantFinancial);
     }
 
-    private PotentialTenantFinancial createFinancial(String tenantId) {
+    private PotentialTenantFinancial createFinancial(Key tenantId) {
         Application application = PtAppContext.getCurrentUserApplication();
 
         EntityQueryCriteria<PotentialTenantInfo> criteria = EntityQueryCriteria.create(PotentialTenantInfo.class);

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.rpc;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.security.shared.UserVisit;
 
 public class CrmUserVisit extends UserVisit {
@@ -23,7 +24,7 @@ public class CrmUserVisit extends UserVisit {
 
     }
 
-    public CrmUserVisit(String principalPrimaryKey, String name) {
+    public CrmUserVisit(Key principalPrimaryKey, String name) {
         super(principalPrimaryKey, name);
     }
 

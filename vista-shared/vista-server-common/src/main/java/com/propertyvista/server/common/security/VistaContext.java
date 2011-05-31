@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
@@ -31,7 +32,7 @@ public class VistaContext {
 
     private static I18n i18n = I18nFactory.getI18n();
 
-    public static String getCurrentUserPrimaryKey() {
+    public static Key getCurrentUserPrimaryKey() {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
             log.trace("no session");

@@ -350,7 +350,8 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
     private static ApplicationWizardSubstep merge(PotentialTenantInfo tenantNew, PotentialTenantInfo tenantOrig, ApplicationWizardSubstep[] origSubSteps) {
 
         ApplicationWizardSubstep step = EntityFactory.create(ApplicationWizardSubstep.class);
-        step.placeArgument().setValue(tenantNew.getPrimaryKey());
+        //TODO serialize key.
+        step.placeArgument().setValue(tenantNew.getPrimaryKey().toString());
         step.name().setValue(EntityFromatUtils.nvl_concat(" ", tenantNew.name().firstName(), tenantNew.name().middleName(), tenantNew.name().lastName()));
         step.status().setValue(ApplicationWizardStep.Status.notVisited);
 

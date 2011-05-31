@@ -21,6 +21,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -61,7 +62,7 @@ public class WizardStepActivity<E extends IEntity & IBoundToApplication, T exten
         return this;
     }
 
-    protected String getCurrentTenantId() {
+    protected Key getCurrentTenantId() {
         return null;
     }
 

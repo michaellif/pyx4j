@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 
 import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
@@ -50,7 +51,7 @@ public class ApplicationDocumentServlet extends HttpServlet {
             return;
         }
 
-        ApplicationDocumentData adata = PersistenceServicesFactory.getPersistenceService().retrieve(ApplicationDocumentData.class, dataId);
+        ApplicationDocumentData adata = PersistenceServicesFactory.getPersistenceService().retrieve(ApplicationDocumentData.class, new Key(dataId));
         if (adata == null) {
             throw new ServletException("Cannot retrieve binary data: adata is null");
         }

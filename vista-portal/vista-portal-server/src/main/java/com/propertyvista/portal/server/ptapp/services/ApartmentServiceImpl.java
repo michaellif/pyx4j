@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -43,7 +44,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
     private final static Logger log = LoggerFactory.getLogger(ApartmentServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<UnitSelection> callback, String tenantId) {
+    public void retrieve(AsyncCallback<UnitSelection> callback, Key tenantId) {
         EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         UnitSelection unitSelection = secureRetrieve(criteria);

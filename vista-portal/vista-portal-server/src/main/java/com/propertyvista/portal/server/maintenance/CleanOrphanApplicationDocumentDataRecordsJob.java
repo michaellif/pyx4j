@@ -23,6 +23,7 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -51,12 +52,12 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
         log.debug("maxDate={}", maxDate);
         allDataCriteria.add(new PropertyCriterion(allDataCriteria.proto().created(), Restriction.LESS_THAN, maxDate.getTime()));
 
-        List<String> dataKeys = PersistenceServicesFactory.getPersistenceService().queryKeys(allDataCriteria);
+        List<Key> dataKeys = PersistenceServicesFactory.getPersistenceService().queryKeys(allDataCriteria);
         log.debug("Number of data records found within the timeframe: {}", dataKeys.size());
         log.trace("dataKeys={}", dataKeys);
 
         int deleted = 0;
-        for (String dataKey : dataKeys) {
+        for (Key dataKey : dataKeys) {
             EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().dataId(), dataKey));
             ApplicationDocument doc = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);

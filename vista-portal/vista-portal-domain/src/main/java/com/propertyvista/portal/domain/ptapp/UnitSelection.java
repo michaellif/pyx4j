@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.ptapp;
 
 import java.util.Date;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
@@ -31,7 +32,7 @@ public interface UnitSelection extends IEntity, IBoundToApplication {
     @Transient
     AvailableUnitsByFloorplan availableUnits();
 
-    IPrimitive<String> selectedUnitId();
+    IPrimitive<Key> selectedUnitId();
 
     IPrimitive<Integer> selectedLeaseTerm();
 

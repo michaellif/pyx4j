@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -39,7 +40,7 @@ public class BuildingCrudServiceImpl implements BuildingCrudService {
     }
 
     @Override
-    public void retrieve(AsyncCallback<BuildingDTO> callback, String entityId) {
+    public void retrieve(AsyncCallback<BuildingDTO> callback, Key entityId) {
         Building entity = PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, entityId);
         callback.onSuccess(GenericConverter.up(entity, BuildingDTO.class));
     }

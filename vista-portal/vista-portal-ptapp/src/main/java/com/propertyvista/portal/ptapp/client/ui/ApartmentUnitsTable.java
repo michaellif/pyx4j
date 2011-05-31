@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -125,7 +126,7 @@ public class ApartmentUnitsTable extends CEntityFolder<AptUnitDTO> {
         createFloorplanRaw(availableUnits);
     }
 
-    AptUnitDTO setSelectedUnit(String unitId, Integer selectedLeaseTerm) {
+    AptUnitDTO setSelectedUnit(Key unitId, Integer selectedLeaseTerm) {
         AptUnitDTO unitToSelect = null;
         if (unitId != null) {
             AptUnitDTO unit = EntityFactory.create(AptUnitDTO.class);
