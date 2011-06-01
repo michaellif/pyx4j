@@ -18,7 +18,6 @@ import java.util.Date;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.Document;
 import com.propertyvista.domain.marketing.yield.Concession;
@@ -67,16 +66,16 @@ public interface Lease extends IEntity {
     IPrimitive<String> specialStatus();
 
     // Lists:
-    ISet<Tenant> tenants();
+    IList<Tenant> tenants();
 
-    ISet<Pets> pets();
+    IList<Pets> pets();
 
-    IList<Rentable> renableItems();
+    IList<Rentable> rentableItems();
 
     // TODO : there are utilities in the Unit already... is it the same? 
     IList<Utility> utilities();
 
-    IList<Document> douments();
+    IList<Document> documents();
 
     IList<LeaseEvent> events();
 }
