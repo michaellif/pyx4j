@@ -23,6 +23,7 @@ package com.pyx4j.entity.client.ui.crud;
 import java.util.Date;
 import java.util.EnumSet;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -49,7 +50,7 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
         } else if (mm.getValueClass().isEnum()) {
             comp = new CComboBox();
             ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
-        } else if (mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class)) {
+        } else if (mm.getValueClass().equals(LogicalDate.class) || mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class)) {
             comp = new CDatePicker();
         } else if (mm.getValueClass().equals(Integer.class)) {
             comp = new CIntegerField();

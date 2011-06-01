@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -67,7 +68,9 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
                     value = ((IEntity) value).getValue();
                 } else if ((value instanceof Date)) {
                     Class<?> cls = editableEntity.getEntityMeta().getMemberMeta(memberPath).getValueClass();
-                    if (cls.equals(java.sql.Date.class)) {
+                    if (cls.equals(LogicalDate.class)) {
+                        value = new LogicalDate((Date) value);
+                    } else if (cls.equals(java.sql.Date.class)) {
                         value = new java.sql.Date(((Date) value).getTime());
                     }
                 }

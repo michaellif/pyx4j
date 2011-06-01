@@ -24,6 +24,7 @@ import java.sql.Time;
 import java.util.Date;
 import java.util.EnumSet;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -126,7 +127,8 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
                     return new CEntityLabel();
                 } else if (mm.isNumberValueClass()) {
                     return new CNumberLabel();
-                } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
+                } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))
+                        || (mm.getValueClass().equals(LogicalDate.class))) {
                     CDateLabel comp = new CDateLabel();
                     if (mm.getFormat() != null) {
                         (comp).setDateFormat(mm.getFormat());
@@ -154,7 +156,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
             CComboBox comp = new CComboBox();
             comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
             return comp;
-        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
+        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class)) || (mm.getValueClass().equals(LogicalDate.class))) {
             return new CDatePicker();
         } else if (mm.getValueClass().equals(Time.class)) {
             CTimeField comp = new CTimeField();

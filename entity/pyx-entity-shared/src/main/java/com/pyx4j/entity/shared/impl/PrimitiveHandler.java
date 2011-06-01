@@ -133,7 +133,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
         } else if (thisValue instanceof Comparable) {
             return CompareHelper.compareTo((Comparable) thisValue, other.getValue());
         } else {
-            throw new ClassCastException();
+            throw new ClassCastException("Unsupported type " + thisValue.getClass().getName());
         }
     }
 

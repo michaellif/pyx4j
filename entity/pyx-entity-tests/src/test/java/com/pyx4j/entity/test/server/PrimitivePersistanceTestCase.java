@@ -26,6 +26,7 @@ import java.util.GregorianCalendar;
 
 import junit.framework.Assert;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
@@ -106,6 +107,42 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         s.startsOn().setValue(createSqlDate(1962, 03, 29));
         srv.persist(s);
         Assert.assertEquals("Value", s.startsOn().getValue(), srv.retrieve(Schedule.class, s.getPrimaryKey()).startsOn().getValue());
+    }
+
+    public static LogicalDate createLogicalDate(int year, int month, int day) {
+        return new LogicalDate(year - 1900, month - 1, day);
+    }
+
+    public void testLogicalDate() {
+        Schedule s = EntityFactory.create(Schedule.class);
+        Assert.assertNull("Initial value", s.endsOn().getValue());
+        Assert.assertEquals("Class of Value", LogicalDate.class, s.endsOn().getValueClass());
+        // Round to seconds
+        GregorianCalendar c = new GregorianCalendar();
+        Date today = DateUtils.getRoundedNow();
+        c.setTime(today);
+        c.set(Calendar.YEAR, c.get(Calendar.YEAR) - 1);
+        LogicalDate day = new LogicalDate(TimeUtils.dayStart(c.getTime()).getTime());
+        s.endsOn().setValue(day);
+
+        srv.persist(s);
+        Schedule s2 = srv.retrieve(Schedule.class, s.getPrimaryKey());
+        Assert.assertNotNull("retrieve by PK " + s.getPrimaryKey(), s2);
+        Assert.assertEquals("Class of Value", LogicalDate.class, s2.endsOn().getValue().getClass());
+        Assert.assertEquals("Value", day, s2.endsOn().getValue());
+
+        // Test specific to ETD dates.
+        s.endsOn().setValue(createLogicalDate(1999, 04, 04));
+        srv.persist(s);
+        Assert.assertEquals("Value", s.endsOn().getValue(), srv.retrieve(Schedule.class, s.getPrimaryKey()).endsOn().getValue());
+
+        s.endsOn().setValue(createLogicalDate(1962, 03, 12));
+        srv.persist(s);
+        Assert.assertEquals("Value", s.endsOn().getValue(), srv.retrieve(Schedule.class, s.getPrimaryKey()).endsOn().getValue());
+
+        s.endsOn().setValue(createLogicalDate(1962, 03, 29));
+        srv.persist(s);
+        Assert.assertEquals("Value", s.endsOn().getValue(), srv.retrieve(Schedule.class, s.getPrimaryKey()).endsOn().getValue());
     }
 
     public void testSqlTime() {

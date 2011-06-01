@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -46,6 +47,7 @@ public abstract class Dialect {
         addTypeMeta(Double.class, "double");
 
         addTypeMeta(java.sql.Date.class, "date");
+        addTypeMeta(LogicalDate.class, "date");
         addTypeMeta(java.sql.Time.class, "time");
     }
 
@@ -123,6 +125,8 @@ public abstract class Dialect {
         } else if (valueClass.equals(Integer.class)) {
             return Types.INTEGER;
         } else if (valueClass.equals(java.sql.Date.class)) {
+            return Types.DATE;
+        } else if (valueClass.equals(LogicalDate.class)) {
             return Types.DATE;
         } else if (valueClass.equals(java.util.Date.class)) {
             return Types.TIMESTAMP;

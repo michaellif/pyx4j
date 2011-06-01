@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -285,7 +286,7 @@ public class BaseSeleniumTestCase extends TestCase {
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().isEnum()) {
             assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getEnumValue(formDebugId, (IPrimitive<Enum>) member));
-        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
+        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class)) || (mm.getValueClass().equals(LogicalDate.class))) {
             // CDatePicker, CMonthYearPicker
             assertEquals(member.getMeta().getCaption(), member.getValue(), selenium.getDateValue(formDebugId, (IPrimitive<Date>) member));
         } else if (mm.getValueClass().equals(Boolean.class)) {
@@ -325,7 +326,7 @@ public class BaseSeleniumTestCase extends TestCase {
             selenium.setEnumValue(D.id(formDebugId, member), (Enum<?>) member.getValue());
         } else if (mm.getValueClass().equals(Boolean.class)) {
             selenium.setValue(D.id(formDebugId, member), (Boolean) member.getValue());
-        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
+        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class)) || (mm.getValueClass().equals(LogicalDate.class))) {
             selenium.setDateValue(D.id(formDebugId, member), (Date) member.getValue(), mm.getFormat());
         } else {
             selenium.setValue(D.id(formDebugId, member), member.getStringView());

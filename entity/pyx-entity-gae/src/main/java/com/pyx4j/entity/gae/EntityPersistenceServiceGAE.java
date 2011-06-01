@@ -58,6 +58,7 @@ import com.google.appengine.api.datastore.Text;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
 import com.pyx4j.entity.adapters.ReferenceAdapter;
@@ -887,6 +888,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             Class<?> cls = iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass();
             if (cls.equals(java.sql.Date.class)) {
                 return new java.sql.Date(((Date) value).getTime());
+            } else if (cls.equals(LogicalDate.class)) {
+                return new LogicalDate(((Date) value).getTime());
             } else {
                 return value;
             }

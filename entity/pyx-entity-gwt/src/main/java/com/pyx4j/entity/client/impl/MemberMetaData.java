@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.impl;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 
@@ -83,5 +84,7 @@ public class MemberMetaData {
     public static final MemberMetaData defaultDateMember = new MemberMetaData(java.util.Date.class, false);
 
     public static final MemberMetaData defaultSqlDateMember = new MemberMetaData(java.sql.Date.class, false);
+
+    public static final MemberMetaData defaultLogicalDateMember = new MemberMetaData(LogicalDate.class, false);
 
 }

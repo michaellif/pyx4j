@@ -32,6 +32,7 @@ import com.google.gwt.core.ext.typeinfo.JParameterizedType;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.impl.EntityImplNativeHelper;
 import com.pyx4j.entity.client.impl.EntityMemberMapCreator;
 import com.pyx4j.entity.shared.IEntity;
@@ -131,7 +132,7 @@ public class EntityHandlerWriter {
                 if (type.isAssignableTo(contextHelper.iPrimitiveInterfaceType)) {
                     String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
                     if (valueClass.startsWith("java.lang.") || valueClass.equals("java.util.Date") || valueClass.equals("java.sql.Date")
-                            || valueClass.equals("byte[]")) {
+                            || valueClass.equals(LogicalDate.class.getName()) || valueClass.equals("byte[]")) {
 
                         if (valueClass.equals("byte[]")) {
                             valueClass = "byteArray";

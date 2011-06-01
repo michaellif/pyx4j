@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.rpc.IServiceFilter;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -63,6 +64,14 @@ public class RpcEntityServiceFilter implements IServiceFilter {
         } else if (value instanceof IServiceRequest) {
             for (Serializable v : ((IServiceRequest) value).getArgs()) {
                 filterRpcTransient(v, processed, in);
+            }
+        } else if (value instanceof EntitySearchResult<?>) {
+            for (Object v : ((EntitySearchResult<?>) value).getData()) {
+                if (v instanceof Serializable) {
+                    filterRpcTransient((Serializable) v, processed, in);
+                } else {
+                    log.warn("Sending non Serializable collection value [{}]", v);
+                }
             }
         } else if (value instanceof Collection<?>) {
             for (Object v : (Collection<?>) value) {
@@ -128,5 +137,4 @@ public class RpcEntityServiceFilter implements IServiceFilter {
             }
         }
     }
-
 }

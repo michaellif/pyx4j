@@ -265,6 +265,7 @@ public class EntityMetaWriter {
         defaultMembers.put("defaultIntegerMember", MemberMetaData.defaultIntegerMember);
         defaultMembers.put("defaultDateMember", MemberMetaData.defaultDateMember);
         defaultMembers.put("defaultSqlDateMember", MemberMetaData.defaultSqlDateMember);
+        defaultMembers.put("defaultLogicalDateMember", MemberMetaData.defaultLogicalDateMember);
     }
 
     static String selectDefaultData(MemberMetaDataGeneration data) {

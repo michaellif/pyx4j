@@ -20,8 +20,10 @@
  */
 package com.pyx4j.examples.domain.crm;
 
+import java.io.Serializable;
 import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.index.EnumIndexAdapter;
 import com.pyx4j.entity.adapters.index.KeywordsIndexAdapter;
 import com.pyx4j.entity.adapters.index.NumberIndexAdapter;
@@ -38,28 +40,28 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.report.ReportColumn;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translation;
 
 public interface Order extends IEntity {
 
-    public enum OrderStatus {
+    public enum OrderStatus implements Serializable {
 
-        ESTIMATE("Estimate"),
+        @Translation("Estimate")
+        ESTIMATE,
 
-        ACTIVE("Active"),
+        @Translation("Active")
+        ACTIVE,
 
-        COMPLETED("Completed"),
+        @Translation("Completed")
+        COMPLETED,
 
-        SUSPENDED("Suspended");
-
-        private final String descr;
-
-        private OrderStatus(String descr) {
-            this.descr = descr;
-        }
+        @Translation("Suspended")
+        SUSPENDED;
 
         @Override
         public String toString() {
-            return descr;
+            return I18nEnum.tr(this);
         }
     }
 
@@ -102,9 +104,9 @@ public interface Order extends IEntity {
     @Indexed(global = 'd', keywordLength = 3, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
     IPrimitive<String> description();
 
-    IPrimitive<java.sql.Date> completedDate();
+    IPrimitive<LogicalDate> completedDate();
 
-    IPrimitive<java.sql.Date> dueDate();
+    IPrimitive<LogicalDate> dueDate();
 
     @NotNull
     @Indexed(global = 'o', adapters = EnumIndexAdapter.class)

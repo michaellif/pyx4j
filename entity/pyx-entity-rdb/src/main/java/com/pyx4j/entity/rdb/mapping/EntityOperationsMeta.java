@@ -28,6 +28,7 @@ import java.util.Vector;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -197,6 +198,8 @@ public class EntityOperationsMeta {
             return new ValueAdapterInteger(dialect);
         } else if (valueClass.equals(java.sql.Date.class)) {
             return new ValueAdapterDate(dialect);
+        } else if (valueClass.equals(LogicalDate.class)) {
+            return new ValueAdapterLogicalDate(dialect);
         } else if (valueClass.equals(java.util.Date.class)) {
             return new ValueAdapterTimestamp(dialect);
         } else if (valueClass.equals(java.sql.Time.class)) {

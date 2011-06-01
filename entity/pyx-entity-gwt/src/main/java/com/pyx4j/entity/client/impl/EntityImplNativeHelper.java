@@ -22,6 +22,7 @@ package com.pyx4j.entity.client.impl;
 
 import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.impl.PrimitiveHandler;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
@@ -38,6 +39,10 @@ public abstract class EntityImplNativeHelper {
 
     public static IObject<?> createMemberIPrimitive_java_sql_Date(SharedEntityHandler handler, String memberName) {
         return handler.lazyCreateMemberIPrimitive(memberName, java.sql.Date.class);
+    }
+
+    public static IObject<?> createMemberIPrimitive_com_pyx4j_commons_LogicalDate(SharedEntityHandler handler, String memberName) {
+        return handler.lazyCreateMemberIPrimitive(memberName, LogicalDate.class);
     }
 
     public static IObject<?> createMemberIPrimitive_java_lang_Boolean(SharedEntityHandler handler, String memberName) {
