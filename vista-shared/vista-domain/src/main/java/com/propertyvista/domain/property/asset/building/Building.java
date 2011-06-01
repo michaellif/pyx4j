@@ -30,8 +30,6 @@ public interface Building extends IEntity {
     @EmbeddedEntity
     BuildingInfo info();
 
-    IList<BuildingAmenity> amenities();
-
     @EmbeddedEntity
     BuildingFinancial financial();
 

@@ -56,8 +56,6 @@ public interface AptUnit extends IEntity {
     @EmbeddedEntity
     AptUnitMarketing marketing();
 
-    IList<AptUnitAmenity> amenities();
-
     IList<Concession> concessions();
 
     IList<AddOn> addOns();

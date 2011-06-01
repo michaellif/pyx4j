@@ -22,7 +22,6 @@ import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 @Transient
 public interface BuildingDTO extends Building {
 
-    @Override
     IList<BuildingAmenity> amenities();
 
     IList<ElevatorDTO> elevators();

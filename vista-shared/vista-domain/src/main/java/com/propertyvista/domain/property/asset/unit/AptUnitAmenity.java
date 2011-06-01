@@ -13,7 +13,9 @@
  */
 package com.propertyvista.domain.property.asset.unit;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -130,6 +132,10 @@ public interface AptUnitAmenity extends Amenity {
             return I18nEnum.tr(this);
         }
     }
+
+    @Owner
+    @Detached
+    AptUnit belongsTo();
 
     @ToString(index = 0)
     @MemberColumn(name = "unitAmenityType")

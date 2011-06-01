@@ -13,12 +13,17 @@
  */
 package com.propertyvista.portal.server.ptapp.util;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
@@ -41,7 +46,6 @@ public class Converter {
 
         // iEntity
         to.floorplan().set(convert(from.marketing().floorplan()));
-        to.amenities().setValue(from.amenities().getStringView());
         to.concessions().setValue(from.concessions().getStringView());
         to.utilities().setValue(from.info().utilities().getStringView());
         to.addOns().setValue(from.addOns().getStringView());
@@ -49,6 +53,14 @@ public class Converter {
         //TODO is it necessary to pull out all unit details here (IList<AptUnitItem>)?
         // it seems that it should be different details or somehow converted... 
         to.infoDetails().setValue("Unit details here...");
+
+        // List of amenities
+        EntityQueryCriteria<AptUnitAmenity> amenitysCriteria = EntityQueryCriteria.create(AptUnitAmenity.class);
+        amenitysCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(AptUnitAmenity.class).belongsTo().getPath().toString(), Restriction.EQUAL,
+                from));
+        for (AptUnitAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
+            to.amenities().add(amenity.type().getStringView());
+        }
 
         //TODO VS
         //to.status().set(from.status());
@@ -81,8 +93,11 @@ public class Converter {
         to.size().add("Bachelor");
 
         // List of amenities
-        for (BuildingAmenity ba : from.amenities()) {
-            to.details().add(ba.type().getStringView());
+        EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
+        amenitysCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(BuildingAmenity.class).belongsTo().getPath().toString(), Restriction.EQUAL,
+                from));
+        for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
+            to.details().add(amenity.type().getStringView());
         }
 
         return to;

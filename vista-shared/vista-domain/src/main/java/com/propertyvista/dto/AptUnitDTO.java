@@ -18,10 +18,13 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 public interface AptUnitDTO extends AptUnit {
+
+    IList<AptUnitAmenity> amenities();
 
     IList<AptUnitItem> details();
 

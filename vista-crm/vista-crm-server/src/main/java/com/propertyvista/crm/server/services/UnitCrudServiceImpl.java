@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
@@ -33,6 +34,13 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
 
     @Override
     protected void enhanceRetrieveDTO(AptUnit in, AptUnitDTO dto) {
+
+        EntityQueryCriteria<AptUnitAmenity> amenitysCriteria = EntityQueryCriteria.create(AptUnitAmenity.class);
+        amenitysCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(AptUnitAmenity.class).belongsTo().getPath().toString(), Restriction.EQUAL,
+                in));
+        for (AptUnitAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
+            dto.amenities().add(amenity);
+        }
 
         EntityQueryCriteria<AptUnitItem> unitItemCriteria = EntityQueryCriteria.create(AptUnitItem.class);
         unitItemCriteria

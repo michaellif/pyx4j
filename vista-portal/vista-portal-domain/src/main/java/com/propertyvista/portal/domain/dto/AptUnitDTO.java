@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 
@@ -109,7 +110,7 @@ public interface AptUnitDTO extends IEntity {
 
     //IPrimitive<AptUnitStatusType> status();
 
-    IPrimitive<String> amenities();
+    IPrimitiveSet<String> amenities();
 
 //    IList<Amenity> amenities();
 
