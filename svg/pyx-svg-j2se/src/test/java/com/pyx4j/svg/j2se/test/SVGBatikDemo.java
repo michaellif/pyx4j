@@ -40,6 +40,8 @@ import com.pyx4j.svg.j2se.SvgRootImpl;
 import com.pyx4j.svg.test.SvgTestFactory;
 
 public class SVGBatikDemo {
+    private static final int HEIGHT = 3000;
+
     public static void main(String[] args) throws IOException {
         // Create an SVG document.
         SvgFactory factory = new SvgFactoryForBatik();
@@ -48,7 +50,7 @@ public class SVGBatikDemo {
         Document doc = ((SvgRootImpl) svgroot).getDocument();
 
         ((SvgRootImpl) svgroot).setAttributeNS(null, "width", "800");
-        ((SvgRootImpl) svgroot).setAttributeNS(null, "height", "2000");
+        ((SvgRootImpl) svgroot).setAttributeNS(null, "height", String.valueOf(HEIGHT));
 
         SvgTestFactory.createTestRect(factory, 10, 10);
         SvgTestFactory.createTestLine(factory, 10, 110);
@@ -59,15 +61,12 @@ public class SVGBatikDemo {
         SvgTestFactory.createTestPolygon(factory, 10, 610);
         SvgTestFactory.createTestText(factory, 10, 710);
         SvgTestFactory.createTestLegendItem(factory, 10, 810);
-        SvgTestFactory.createBarChart2DTest(factory, 10, 910);
-
-        //    SvgTestFactory.createPieChart2DTest(factory, 10, 910);
-        /*
-         * SvgTestFactory.createTestBarChart(factory, 10, 1100);
-         */
+        SvgTestFactory.createLineChart2DTest(factory, 10, 910);
+        SvgTestFactory.createBarChart2DTest(factory, 10, 1350);
+        SvgTestFactory.createPieChart2DTest(factory, 10, 1800);
 
         SVGGraphics2D g = new SVGGraphics2D(doc);
-        g.setSVGCanvasSize(new Dimension(800, 1400));
+        g.setSVGCanvasSize(new Dimension(800, HEIGHT));
 
         //TODO output into the log
         Writer out = new OutputStreamWriter(System.out, "UTF-8");
@@ -82,7 +81,7 @@ public class SVGBatikDemo {
         JFrame f = new JFrame();
         f.getContentPane().add(view);
         f.pack();
-        f.setSize(700, 900);
+        f.setSize(800, HEIGHT);
         f.setVisible(true);
 
     }

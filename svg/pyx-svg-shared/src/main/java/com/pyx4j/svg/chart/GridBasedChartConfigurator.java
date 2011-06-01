@@ -23,7 +23,7 @@ package com.pyx4j.svg.chart;
 import com.pyx4j.svg.basic.SvgFactory;
 
 public class GridBasedChartConfigurator extends BasicChartConfigurator {
-    private final int widht;
+    private final int width;
 
     private final int height;
 
@@ -31,18 +31,22 @@ public class GridBasedChartConfigurator extends BasicChartConfigurator {
 
     private String title;
 
+    private boolean zeroBased;
+
     public enum GridType {
         None, Both, Metric, Value
     }
 
     public GridBasedChartConfigurator(SvgFactory factory, DataSource datasource, int width, int height) {
         super(factory, datasource);
-        assert width < 1;
-        assert height < 1;
+        //TODO validation
+        //  assert width < 1;
+        //  assert height < 1;
         gridType = GridType.Value;
         title = null;
-        this.widht = width;
+        this.width = width;
         this.height = height;
+        zeroBased = false;
 
     }
 
@@ -62,11 +66,20 @@ public class GridBasedChartConfigurator extends BasicChartConfigurator {
         this.title = title;
     }
 
-    public int getWidht() {
-        return widht;
+    public int getWidth() {
+        return width;
     }
 
     public int getHeight() {
         return height;
     }
+
+    public boolean isZeroBased() {
+        return zeroBased;
+    }
+
+    public void setZeroBased(boolean zeroBased) {
+        this.zeroBased = zeroBased;
+    }
+
 }

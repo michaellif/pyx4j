@@ -36,13 +36,13 @@ import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.DataSource.Metric;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 
-public class GridBasedChart implements IsSvgElement {
+public abstract class GridBasedChart implements IsSvgElement {
 
     public final static int PADDING = 15;
 
-    private static final String AXIS_COLOR = "gray";
+    protected static final String AXIS_COLOR = "gray";
 
-    private static final String GRID_COLOR = "lightgray";
+    protected static final String GRID_COLOR = "lightgray";
 
     private static final int TICK_LENGTH = 5;
 
@@ -64,29 +64,25 @@ public class GridBasedChart implements IsSvgElement {
 
     private final SvgFactory factory;
 
-    private final boolean showLegend;
-
-    private final String chartTitle;
-
     private final Group container;
-
-    private final int width;
-
-    private final int height;
 
     private List<Double> metricPoints;
 
-    private List<Double> valuePoints;
-
-    private double maximumValue;
-
-    private Dimension canvas;
-
-    private final GridType gridtype;
+    private Area canvas;
 
     private MetricPrefix valuePostfix;
 
-    private final ChartTheme theme;
+    private final GridBasedChartConfigurator configurator;
+
+    private double metricSpacing;
+
+    private double valueSpacing;
+
+    private double valueIncrement;
+
+    private int numOfSeries;
+
+    private int numOfMetrics;
 
     public enum MetricPrefix {
         T() {
@@ -159,16 +155,13 @@ public class GridBasedChart implements IsSvgElement {
     }
 
     public GridBasedChart(GridBasedChartConfigurator configurator) {
+        //TODO validation
+        // assert (configurator != null);
+        this.configurator = configurator;
         factory = configurator.getFactory();
         datasource = configurator.getDatasourse();
-        width = configurator.getWidht();
-        height = configurator.getWidht();
-        showLegend = configurator.isLegend();
         container = factory.createGroup();
-        gridtype = configurator.getGridType();
-        chartTitle = configurator.getTitle();
-        theme = configurator.getTheme();
-        drawChart();
+        drawBasics();
     }
 
     @Override
@@ -176,47 +169,82 @@ public class GridBasedChart implements IsSvgElement {
         return container;
     }
 
-    private void drawChart() {
-        int numOfMetrics = datasource.getDataSet().size();
+    protected abstract void drawChart();
+
+    protected MetricPrefix getValuePostfix() {
+        return valuePostfix;
+    }
+
+    protected List<Double> getMetricPoints() {
+        return metricPoints;
+    }
+
+    protected Area getCanvas() {
+        return canvas;
+    }
+
+    protected double getMetricSpacing() {
+        return metricSpacing;
+    }
+
+    protected double getValueSpacing() {
+        return valueSpacing;
+    }
+
+    protected double getValueIncrement() {
+        return valueIncrement;
+    }
+
+    protected Group getContainer() {
+        return container;
+    }
+
+    protected int getNumOfSeries() {
+        return numOfSeries;
+    }
+
+    public int getNumOfMetrics() {
+        return numOfMetrics;
+    }
+
+    private void drawBasics() {
+        numOfMetrics = datasource.getDataSet().size();
         metricPoints = new ArrayList<Double>(20);
-        maximumValue = getMaxValue();
-        valuePoints = new ArrayList<Double>(NUM_OF_VALUE_TICKS + 1);
+        double maxValue = calculateMaxValue();
+        List<Double> valuePoints = new ArrayList<Double>(NUM_OF_VALUE_TICKS + 1);
 
         //adjust width for value labels
-        if (maximumValue % MetricPrefix.T.getFactor() != maximumValue)
+        if (maxValue % MetricPrefix.T.getFactor() != maxValue)
             valuePostfix = MetricPrefix.T;
-        else if (maximumValue % MetricPrefix.G.getFactor() != maximumValue)
+        else if (maxValue % MetricPrefix.G.getFactor() != maxValue)
             valuePostfix = MetricPrefix.G;
-        else if (maximumValue % MetricPrefix.M.getFactor() != maximumValue)
+        else if (maxValue % MetricPrefix.M.getFactor() != maxValue)
             valuePostfix = MetricPrefix.M;
-        else if (maximumValue % MetricPrefix.K.getFactor() != maximumValue)
+        else if (maxValue % MetricPrefix.K.getFactor() != maxValue)
             valuePostfix = MetricPrefix.K;
         else
             valuePostfix = MetricPrefix.NONE;
         //round up the maximum value to avoid lots of decimal places
-        maximumValue = Math.round(maximumValue / valuePostfix.getFactor()) * valuePostfix.getFactor();
+        maxValue = Math.round(maxValue / valuePostfix.getFactor()) * valuePostfix.getFactor();
         Set<Entry<Metric, List<Double>>> dataset = datasource.getDataSet().entrySet();
         //find out number of series
-        int numOfSeries = 0;
+        numOfSeries = 0;
         for (Entry<Metric, List<Double>> entry : dataset) {
             int size = entry.getValue().size();
             if (numOfSeries < size)
                 numOfSeries = size;
         }
 
-        //roundTwoDecimals(maximumValue / valuePostfix.getFactor())
-        int maxValLabelLength = String.valueOf(maximumValue / valuePostfix.getFactor()).length() * DEFAULT_FONT_SIZE + VALUE_LABEL_PADDING;
+        int maxValLabelLength = String.valueOf(maxValue / valuePostfix.getFactor()).length() * DEFAULT_FONT_SIZE + VALUE_LABEL_PADDING;
         int xstart = PADDING + maxValLabelLength;
-        int ystart = height - PADDING - DEFAULT_FONT_SIZE;
+        int ystart = configurator.getHeight() - PADDING - DEFAULT_FONT_SIZE;
 
         int yMetricLabel = ystart + PADDING;
-        ;
-
-        int xend = width - PADDING;
+        int xend = configurator.getWidth() - PADDING;
         int yend = PADDING;
-        if (chartTitle != null && chartTitle.length() > 0) {
+        if (configurator.getTitle() != null && configurator.getTitle().length() > 0) {
             //adjust height to accommodate chart title
-            Text title = factory.createText(chartTitle, width / 2, yend + TITLE_FONT_SIZE);
+            Text title = factory.createText(configurator.getTitle(), configurator.getWidth() / 2, yend + TITLE_FONT_SIZE);
             title.setAttribute("font-size", String.valueOf(TITLE_FONT_SIZE));
             title.setAttribute("text-anchor", "middle");
             container.add(title);
@@ -224,41 +252,32 @@ public class GridBasedChart implements IsSvgElement {
 
         }
 
-        if (showLegend) {
+        if (configurator.isLegend()) {
             Group legend = createLegend(numOfSeries);
-            int legY = (width - Integer.parseInt(legend.getAttribute("height"))) / 2;
+            int legY = ((configurator.getHeight()) - Integer.parseInt(legend.getAttribute("height"))) / 2;
             xend = xend - Integer.parseInt(legend.getAttribute("width")) - PADDING;
             legend.setTransform("translate(" + (xend + LEGEND_SPACING + PADDING) + "," + legY + ")");
             container.add(legend);
         }
 
         //adjust the canvas dimension after the calculations above are done 
-        canvas = new Dimension(xend - xstart, ystart - yend);
-
-        //roundTwoDecimals(canvas.getWidth() / (numOfMetrics + 1));
-        double metricSpacing = canvas.getWidth() / (numOfMetrics + 1);
+        canvas = new Area(xstart, ystart, xend - xstart, ystart - yend);
+        metricSpacing = canvas.getWidth() / (configurator.isZeroBased() ? numOfMetrics - 1 : numOfMetrics + 1);
 
         metricPoints.add((double) xstart);
-        for (int i = 1; i <= numOfMetrics; i++)
+        int times = configurator.isZeroBased() ? numOfMetrics - 1 : numOfMetrics;
+        for (int i = 1; i <= times; i++)
             metricPoints.add(xstart + metricSpacing * i);
 
-        //roundTwoDecimals(canvas.getHeight() / (NUM_OF_VALUE_TICKS + 1));
-        double valueSpacing = canvas.getHeight() / (NUM_OF_VALUE_TICKS + 1);
+        valueSpacing = canvas.getHeight() / NUM_OF_VALUE_TICKS;
         for (int i = 1; i <= NUM_OF_VALUE_TICKS; i++) {
             valuePoints.add(ystart - valueSpacing * i);
         }
-
-        //TODO remove later
-        Rect frame = factory.createRect(0, 0, width, height, 0, 0);
-        frame.setStroke(GRID_COLOR);
-
-        container.add(frame);
-
         //draw metrics axis
         String metricA = "M" + xstart + "," + ystart + "L" + xend + "," + ystart;
         //draw metric ticks 
         int tickEnd = ystart + TICK_LENGTH;
-        boolean firstPass = true;
+        boolean firstPass = !configurator.isZeroBased();
         Iterator<Metric> metriciterator = datasource.getDataSet().keySet().iterator();
         for (Double xx : metricPoints) {
             metricA += "M" + xx + "," + ystart + "L" + xx + "," + tickEnd;
@@ -274,7 +293,7 @@ public class GridBasedChart implements IsSvgElement {
 
         //draw metric grid lines
         String metricGL = "";
-        if (gridtype == GridType.Both || gridtype == GridType.Metric) {
+        if (configurator.getGridType() == GridType.Both || configurator.getGridType() == GridType.Metric) {
             for (Double xx : metricPoints) {
                 if (xx > 0)//skip the first
                     metricGL += "M" + xx + "," + ystart + "L" + xx + "," + yend;
@@ -285,8 +304,7 @@ public class GridBasedChart implements IsSvgElement {
         String valueA = "M" + xstart + "," + ystart + "L" + xstart + "," + yend;
         //draw value ticks
         tickEnd = xstart - TICK_LENGTH;
-        //roundTwoDecimals(maximumValue / NUM_OF_VALUE_TICKS);
-        double valueIncrement = maximumValue / NUM_OF_VALUE_TICKS;
+        valueIncrement = maxValue / NUM_OF_VALUE_TICKS;
         double value = valueIncrement;
 
         int lblxstart = xstart - VALUE_LABEL_PADDING;
@@ -304,7 +322,7 @@ public class GridBasedChart implements IsSvgElement {
         }
         //draw value grid lines
         String valueGL = "";
-        if (gridtype == GridType.Both || gridtype == GridType.Value) {
+        if (configurator.getGridType() == GridType.Both || configurator.getGridType() == GridType.Value) {
             for (Double yy : valuePoints)
                 valueGL += "M" + xstart + "," + yy + "L" + xend + "," + yy;
         }
@@ -332,22 +350,11 @@ public class GridBasedChart implements IsSvgElement {
         metricAsix.setStroke(AXIS_COLOR);
         metricAsix.setStrokeWidth("1");
         container.add(metricAsix);
+        configurator.getTheme().rewind();
 
     }
 
-//TODO does not work for GWT
-/*
- * public double roundTwoDecimals(double d) {
- * DecimalFormat twoDForm = new DecimalFormat("#.##");
- * return Double.valueOf(twoDForm.format(d));
- * }
- */
-
-    public MetricPrefix getValuePostfix() {
-        return valuePostfix;
-    }
-
-    private double getMaxValue() {
+    private double calculateMaxValue() {
         Double max = null;
         for (Entry<Metric, List<Double>> entry : datasource.getDataSet().entrySet()) {
             for (Double d : entry.getValue()) {
@@ -380,7 +387,9 @@ public class GridBasedChart implements IsSvgElement {
         int iconsize = 0;
         int y = 0;
 
-        Set<Metric> metrics = datasource.getDataSet().keySet();
+        ChartTheme theme = configurator.getTheme();
+        theme.rewind();
+
         for (int i = 0; i < numOfSeries; i++) {
             LegendItem li = new LegendItem(factory, seriesDescription.get(i), LegendIconType.Circle, 0, y);
             li.setColor(theme.getNextColor());

@@ -85,14 +85,14 @@ public class PieChart2D implements IsSvgElement {
 
         Set<Entry<Metric, List<Double>>> dataset = datasource.getDataSet().entrySet();
         //find out number of series
-        int numOfSerires = 0;
+        int numOfSeries = 0;
         for (Entry<Metric, List<Double>> entry : dataset) {
             int size = entry.getValue().size();
-            if (numOfSerires < size)
-                numOfSerires = size;
+            if (numOfSeries < size)
+                numOfSeries = size;
         }
 
-        for (int idx = 0; idx < numOfSerires; idx++) {
+        for (int idx = 0; idx < numOfSeries; idx++) {
             Map<Metric, Double> series = new LinkedHashMap<Metric, Double>(10);
             for (Entry<Metric, List<Double>> entry : dataset) {
                 List<Double> values = entry.getValue();

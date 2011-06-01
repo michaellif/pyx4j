@@ -27,7 +27,7 @@ import java.io.Serializable;
  * implementation
  * 
  */
-public class Dimension implements Serializable {
+public class Area implements Serializable {
 
     /**
      *
@@ -38,13 +38,19 @@ public class Dimension implements Serializable {
 
     private int height;
 
-    public Dimension(int width, int height) {
+    private int x;
+
+    private int y;
+
+    public Area(int x, int y, int width, int height) {
         this.width = width;
         this.height = height;
+        this.x = x;
+        this.y = y;
     }
 
-    public Dimension() {
-        this(0, 0);
+    public Area() {
+        this(0, 0, 0, 0);
     }
 
     public int getWidth() {
@@ -61,6 +67,22 @@ public class Dimension implements Serializable {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
 }

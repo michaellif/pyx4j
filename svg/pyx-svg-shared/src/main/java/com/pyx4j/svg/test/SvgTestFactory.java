@@ -36,6 +36,7 @@ import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.BarChart;
+import com.pyx4j.svg.chart.BarChart2D;
 import com.pyx4j.svg.chart.BarChartModel;
 import com.pyx4j.svg.chart.BarChartModel.BarChartItem;
 import com.pyx4j.svg.chart.ChartTheme;
@@ -45,6 +46,7 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.LegendIconType;
 import com.pyx4j.svg.chart.LegendItem;
+import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.chart.PieChart;
 import com.pyx4j.svg.chart.PieChart2D;
 import com.pyx4j.svg.chart.PieChartConfigurator;
@@ -59,31 +61,31 @@ public class SvgTestFactory {
         List<Double> values = new ArrayList<Double>(5);
         values.add(180.0);
         values.add(160.0);
-        values.add(10.0);
+        values.add(100.0);
         Data_Source.addDataSet(Data_Source.new Metric("Building 1"), values);
 
         values = new ArrayList<Double>(5);
         values.add(880.0);
         values.add(580.0);
-        values.add(250.0);
+        values.add(350.0);
         Data_Source.addDataSet(Data_Source.new Metric("Building 2"), values);
 
         values = new ArrayList<Double>(5);
         values.add(380.0);
-        values.add(0.0);
-        values.add(380.0);
+        values.add(540.0);
+        values.add(130.0);
         Data_Source.addDataSet(Data_Source.new Metric("Building 3"), values);
 
         values = new ArrayList<Double>(5);
         values.add(380.0);
         values.add(300.0);
-        values.add(300.0);
+        values.add(410.0);
         Data_Source.addDataSet(Data_Source.new Metric("Building 4"), values);
 
         values = new ArrayList<Double>(5);
         values.add(280.0);
         values.add(300.0);
-        values.add(100.0);
+        values.add(70.0);
         Data_Source.addDataSet(Data_Source.new Metric("Building 5"), values);
 
         values = new ArrayList<Double>(5);
@@ -93,7 +95,7 @@ public class SvgTestFactory {
         Data_Source.addDataSet(Data_Source.new Metric("Building 6"), values);
 
         values = new ArrayList<Double>(5);
-        values.add(480.0);
+        values.add(70.0);
         values.add(200.0);
         values.add(101.0);
         Data_Source.addDataSet(Data_Source.new Metric("Building 7"), values);
@@ -125,17 +127,36 @@ public class SvgTestFactory {
         return svgroot;
     }
 
+    public static SvgRoot createLineChart2DTest(SvgFactory factory, int x, int y) {
+        SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
+
+        GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, Data_Source, 600, 400);
+        config.setLegend(true);
+        config.setTitle("Line Chart");
+        config.setGridType(GridType.Value);
+        config.setZeroBased(true);
+        config.setTheme(ChartTheme.Bright);
+
+        GridBasedChart lchart = new LineChart(config);
+        g.add(lchart);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
+        return svgroot;
+    }
+
     public static SvgRoot createBarChart2DTest(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
         Group g = factory.createGroup();
 
         GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, Data_Source, 600, 400);
         config.setLegend(true);
-        config.setTitle("Sample Chart");
+        config.setTitle("Bar Chart");
         config.setGridType(GridType.Both);
+        config.setTheme(ChartTheme.Bright);
 
-        GridBasedChart pchart = new GridBasedChart(config);
-        g.add(pchart);
+        GridBasedChart bchart = new BarChart2D(config);
+        g.add(bchart);
         g.setTransform("translate(" + x + "," + y + ")");
         svgroot.add(g);
         return svgroot;

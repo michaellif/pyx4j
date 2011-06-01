@@ -40,7 +40,7 @@ public enum ChartTheme {
 
         @Override
         public void rewind() {
-            iterator = 0;
+            iterator = -1;
         }
 
     },
@@ -62,7 +62,7 @@ public enum ChartTheme {
 
         @Override
         public void rewind() {
-            iterator = 0;
+            iterator = -1;
         }
     };
 
