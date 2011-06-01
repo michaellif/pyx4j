@@ -25,6 +25,7 @@ import java.util.Date;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.CompareHelper;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -77,6 +78,8 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
             converted = (TYPE) Integer.valueOf(value);
         } else if (valueClass.equals(java.sql.Date.class)) {
             converted = (TYPE) java.sql.Date.valueOf(value);
+        } else if (valueClass.equals(LogicalDate.class)) {
+            converted = (TYPE) LogicalDate.valueOf(value);
         } else if (valueClass.isEnum()) {
             converted = (TYPE) Enum.valueOf((Class<Enum>) valueClass, value);
         } else if (valueClass.equals(Boolean.class)) {
