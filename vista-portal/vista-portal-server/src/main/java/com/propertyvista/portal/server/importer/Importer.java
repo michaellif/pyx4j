@@ -87,7 +87,7 @@ public class Importer {
             for (AddOn addOn : unitDTO.addOns()) {
                 persist(addOn);
             }
-            for (Concession concession : unitDTO.concessions()) {
+            for (Concession concession : unitDTO.financial().concessions()) {
                 persist(concession);
             }
 

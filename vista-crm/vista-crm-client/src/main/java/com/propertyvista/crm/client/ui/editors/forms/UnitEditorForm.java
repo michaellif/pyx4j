@@ -27,6 +27,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.marketing.yield.AddOn;
@@ -69,35 +70,31 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.add(inject(proto().info().bedrooms()), 15);
         main.add(inject(proto().info().bathrooms()), 15);
 
-// TODO: complex data editing here: 
-//        main.add(inject(proto().currentOccupancies()), 15);
-
-        main.add(new CrmHeaderDecorator(i18n.tr("Rents")));
-        main.add(inject(proto().financial().unitRent()), 15);
-        main.add(inject(proto().financial().marketRent()), 15);
-
-// TODO: arrange available Lease Terms in drop-down box? 
-//      main.add(inject(proto().newLeaseTerms()), 15);
-// TODO: arrange available floorplans in drop-down box? 
-//      main.add(inject(proto().floorplan()), 15);
-
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().amenities().getMeta().getCaption())));
-        main.add(inject(proto().amenities(), createAmenitiesListEditor()));
+        main.add(new CrmHeaderDecorator(i18n.tr("Details")));
+        main.add(inject(proto().details(), createDetailsListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr(proto().info().utilities().getMeta().getCaption())));
         main.add(inject(proto().info().utilities(), createUtilitiesListEditor()));
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Info Details")));
-        main.add(inject(proto().details(), createDetailsListEditor()));
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().addOns().getMeta().getCaption())));
+        main.add(inject(proto().addOns(), createAddOnsListEditor()));
+
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().amenities().getMeta().getCaption())));
+        main.add(inject(proto().amenities(), createAmenitiesListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr(proto().occupancies().getMeta().getCaption())));
         main.add(inject(proto().occupancies(), createOccupanciesListEditor()));
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().concessions().getMeta().getCaption())));
-        main.add(inject(proto().concessions(), createConcessionsListEditor()));
+        main.add(new CrmHeaderDecorator(i18n.tr("Financials")));
+        main.add(inject(proto().financial().unitRent()), 15);
+        main.add(inject(proto().financial().marketRent()), 15);
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().addOns().getMeta().getCaption())));
-        main.add(inject(proto().addOns(), createAddOnsListEditor()));
+        main.add(new CrmHeaderDecorator(i18n.tr(proto().financial().concessions().getMeta().getCaption())));
+        main.add(inject(proto().financial().concessions(), createConcessionsListEditor()));
+
+        main.add(new CrmHeaderDecorator(i18n.tr("Marketing")));
+        main.add(inject(proto().marketing().floorplan()), 15);
+        SubtypeInjectors.injectMarketing(main, proto().marketing(), this);
 
         main.setWidth("100%");
         return main;

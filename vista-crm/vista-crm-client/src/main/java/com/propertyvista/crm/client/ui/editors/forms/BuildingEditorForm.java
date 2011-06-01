@@ -94,11 +94,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(inject(proto().lockers(), createLockerAreasListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Financials")));
-        main.add(inject(proto().financial().dateAquired()), 15);
-        main.add(inject(proto().financial().purchasePrice()), 15);
-        main.add(inject(proto().financial().marketPrice()), 15);
-        main.add(inject(proto().financial().lastAppraisalDate()), 15);
-        main.add(inject(proto().financial().lastAppraisalValue()), 15);
+        main.add(inject(proto().financial().dateAquired()), 8.2);
+        main.add(inject(proto().financial().purchasePrice()), 5);
+        main.add(inject(proto().financial().marketPrice()), 5);
+        main.add(inject(proto().financial().lastAppraisalDate()), 8.2);
+        main.add(inject(proto().financial().lastAppraisalValue()), 5);
         main.add(inject(proto().financial().currency().name()), main.defaultLabelWidth, 10, i18n.tr("Currency Name"));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Marketing")));

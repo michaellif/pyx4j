@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.Medium;
 import com.propertyvista.domain.marketing.yield.AddOn;
-import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface AptUnit extends IEntity {
@@ -55,8 +54,6 @@ public interface AptUnit extends IEntity {
 
     @EmbeddedEntity
     AptUnitMarketing marketing();
-
-    IList<Concession> concessions();
 
     IList<AddOn> addOns();
 

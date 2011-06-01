@@ -7,26 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-19
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset.unit;
+package com.propertyvista.crm.server.services;
 
-import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
-import com.propertyvista.domain.marketing.yield.Concession;
+public class UnitOccupancyCrudServiceImpl extends GenericCrudServiceImpl<AptUnitOccupancy> implements UnitOccupancyCrudService {
 
-public interface AptUnitFinancial extends IEntity {
-
-    @Format("#0.00")
-    IPrimitive<Double> unitRent();
-
-    @Format("#0.00")
-    IPrimitive<Double> marketRent();
-
-    IList<Concession> concessions();
+    public UnitOccupancyCrudServiceImpl() {
+        super(AptUnitOccupancy.class);
+    }
 }

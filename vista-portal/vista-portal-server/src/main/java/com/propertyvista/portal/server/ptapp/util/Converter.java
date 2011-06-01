@@ -46,7 +46,7 @@ public class Converter {
 
         // iEntity
         to.floorplan().set(convert(from.marketing().floorplan()));
-        to.concessions().setValue(from.concessions().getStringView());
+        to.concessions().setValue(from.financial().concessions().getStringView());
         to.utilities().setValue(from.info().utilities().getStringView());
         to.addOns().setValue(from.addOns().getStringView());
 

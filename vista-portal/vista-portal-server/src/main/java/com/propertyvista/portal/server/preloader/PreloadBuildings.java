@@ -109,7 +109,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 for (AddOn addOn : unitDTO.addOns()) {
                     persist(addOn);
                 }
-                for (Concession concession : unitDTO.concessions()) {
+                for (Concession concession : unitDTO.financial().concessions()) {
                     persist(concession);
                 }
 
@@ -248,11 +248,13 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 sb.append(" | ");
                 sb.append(unit.marketing().floorplan().name().getStringView()); // .append(" ").append(unit.floorplan().pictures());
                 sb.append("\n");
+                sb.append("\t\t").append(unit.financial().concessions()).append("\n");
+                sb.append("\n");
                 sb.append("\t\t").append(unit.info().utilities()).append("\n");
                 sb.append("\t\t").append(unit.amenities()).append("\n");
                 sb.append("\t\t").append(unit.details()).append("\n");
-                sb.append("\t\t").append(unit.concessions()).append("\n");
                 sb.append("\t\t").append(unit.addOns()).append("\n");
+                sb.append("\t\t").append(unit.financial().concessions()).append("\n");
             }
         }
         sb.append("\n");

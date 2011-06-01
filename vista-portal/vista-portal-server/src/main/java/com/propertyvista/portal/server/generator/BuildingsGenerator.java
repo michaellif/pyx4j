@@ -401,10 +401,10 @@ public class BuildingsGenerator {
 
         // concessions
         if (RandomUtil.randomBoolean()) {
-            unit.concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(3), 0));
+            unit.financial().concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(3), 0));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(11), 15.8));
+            unit.financial().concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(11), 15.8));
         }
 
         // add-ons

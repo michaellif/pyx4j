@@ -16,6 +16,8 @@ package com.propertyvista.domain.property.asset;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -29,6 +31,7 @@ import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.building.Building;
 
+@ToStringFormat("{0}, {1}")
 public interface Floorplan extends IEntity {
 
     @Translatable
@@ -46,9 +49,11 @@ public interface Floorplan extends IEntity {
 
     // ----------- Infromation ----------------------
 
+    @ToString(index = 1)
     @MemberColumn(name = "floorplanType")
     IPrimitive<Type> type();
 
+    @ToString(index = 0)
     IPrimitive<String> name();
 
     IPrimitive<String> description();
