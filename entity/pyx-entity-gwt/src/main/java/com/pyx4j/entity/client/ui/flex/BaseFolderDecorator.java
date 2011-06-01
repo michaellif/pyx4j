@@ -20,15 +20,10 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -39,16 +34,13 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
+import com.pyx4j.widgets.client.ImageButton;
 
 public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel implements FolderDecorator<E> {
 
     protected SimplePanel content;
 
     protected Image image;
-
-    protected final ImageResource imageResourceRegular;
-
-    protected final ImageResource imageResourceHover;
 
     protected FlowPanel imageHolder;
 
@@ -63,27 +55,9 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     public BaseFolderDecorator(ImageResource addButton, ImageResource addButtonHover, String title, boolean addable) {
         this.addable = addable && (addButton != null);
 
-        imageResourceRegular = addButton;
-        imageResourceHover = addButtonHover;
-
         if (addButton != null) {
-            image = new Image(addButton);
-            image.getElement().getStyle().setCursor(Cursor.POINTER);
+            image = new ImageButton(addButton, addButtonHover);
             image.getElement().getStyle().setFloat(Float.LEFT);
-            image.addMouseOverHandler(new MouseOverHandler() {
-
-                @Override
-                public void onMouseOver(MouseOverEvent event) {
-                    setHoverImage();
-                }
-            });
-            image.addMouseOutHandler(new MouseOutHandler() {
-
-                @Override
-                public void onMouseOut(MouseOutEvent event) {
-                    setRegularImage();
-                }
-            });
 
             imageHolder = new FlowPanel();
             imageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -132,18 +106,6 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
             }
             image.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Add.debugId());
             addButtonLabel.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Add.debugId() + "-label");
-        }
-    }
-
-    protected void setRegularImage() {
-        if (imageResourceRegular != null) {
-            image.setResource(imageResourceRegular);
-        }
-    }
-
-    protected void setHoverImage() {
-        if (imageResourceHover != null) {
-            image.setResource(imageResourceHover);
         }
     }
 }
