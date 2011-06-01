@@ -20,12 +20,21 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.flex.BaseFolderItemViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.BaseFolderViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderItemViewer;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderViewer;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.CEntityViewer;
+import com.pyx4j.entity.client.ui.flex.FolderItemViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.FolderViewerDecorator;
+import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.domain.dto.AmenityDTO;
+import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
 public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implements ApartmentDetailsView {
@@ -62,9 +71,14 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         }), readOnlyDecor));
 
         container.add(new VistaWidgetDecorator(inject(proto().price()), readOnlyDecor));
-        //TODO new decorator is required
-        // container.add(inject(proto().details()));
-        //  container.add(inject(proto().floorplans()));
+        container.add(new VistaWidgetDecorator(inject(proto().amenities(), new CEntityViewer<IList<AmenityDTO>>() {
+            @Override
+            public IsWidget createContent(IList<AmenityDTO> value) {
+                return new HTML(value.toString());
+            }
+        }), readOnlyDecor));
+
+        container.add(inject(proto().floorplans(), createFloorplanFolderViewer()));
 
         return container;
 
@@ -75,18 +89,38 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
     }
 
-/*
- * private CEntityFolderItem<FloorplanDTO> createUnitRowViewer(final
- * List<EntityFolderColumnDescriptor> columns) {
- * return new CEntityFolderRow<FloorplanDTO>(FloorplanDTO.class, columns) {
- * 
- * @Override
- * public FolderItemDecorator createFolderItemDecorator() {
- * return new TableFolderItemDecorator(PortalImages.INSTANCE.delRow(),
- * PortalImages.INSTANCE.delRowHover(), i18n.tr("Details"));
- * }
- * 
- * };
- * }
- */
+    private CEntityFolderViewer<FloorplanDTO> createFloorplanFolderViewer() {
+
+        return new CEntityFolderViewer<FloorplanDTO>(FloorplanDTO.class) {
+
+            @Override
+            protected FolderViewerDecorator<FloorplanDTO> createFolderDecorator() {
+                return new BaseFolderViewerDecorator<FloorplanDTO>();
+            }
+
+            @Override
+            protected CEntityFolderItemViewer<FloorplanDTO> createItem() {
+                return createFloorplanViewer();
+            }
+
+        };
+    }
+
+    private CEntityFolderItemViewer<FloorplanDTO> createFloorplanViewer() {
+
+        return new CEntityFolderItemViewer<FloorplanDTO>() {
+
+            @Override
+            public FolderItemViewerDecorator createFolderItemDecorator() {
+                return new BaseFolderItemViewerDecorator();
+            }
+
+            @Override
+            public IsWidget createContent(FloorplanDTO value) {
+                return new HTML(value.toString());
+            }
+
+        };
+    }
+
 }

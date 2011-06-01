@@ -200,7 +200,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
             if (getWidgetCount() > 1) {
                 remove(1);
             }
-            insert(folder.getContent(), 1);
+            insert(folder.getContainer(), 1);
             folder.addPropertyChangeHandler(new PropertyChangeHandler() {
                 @Override
                 public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {

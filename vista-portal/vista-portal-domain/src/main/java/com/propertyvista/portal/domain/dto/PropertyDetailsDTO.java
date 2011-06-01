@@ -23,8 +23,6 @@ public interface PropertyDetailsDTO extends PropertyDTO {
 
     IList<FloorplanDTO> floorplans();
 
-    IList<AmenityDTO> amenities();
-
     //TODO price range
     @Owned
     IPrimitive<Double> price();

@@ -181,7 +181,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
         @Override
         public void setFolder(CEntityFolder<?> w) {
-            appDocsListHolder.setWidget(w.getContent());
+            appDocsListHolder.setWidget(w.getContainer());
         }
 
         private final IUploader.OnStartUploaderHandler onStartUploaderHandler = new IUploader.OnStartUploaderHandler() {

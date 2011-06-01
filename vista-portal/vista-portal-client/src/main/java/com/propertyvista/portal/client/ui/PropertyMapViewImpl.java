@@ -87,13 +87,13 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
             addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.TableBody.name());
             setWidth("100%");
             //header
-            setText(0, 0, "");
-            setText(0, 1, i18n.tr("Photo"));
-            setText(0, 2, i18n.tr("Address"));
-            setText(0, 3, i18n.tr("Size"));
-            setText(0, 4, i18n.tr("Details"));
-            setText(0, 5, i18n.tr("Availability"));
-            setText(0, 6, i18n.tr("Price"));
+            int col = 0;
+            setText(0, col++, "");
+            setText(0, col++, i18n.tr("Photo"));
+            setText(0, col++, i18n.tr("Address"));
+            setText(0, col++, i18n.tr("Size"));
+            setText(0, col++, i18n.tr("Availability"));
+            setText(0, col++, i18n.tr("Price"));
             getRowFormatter().addStyleName(0, DEFAULT_STYLE_PREFIX + StyleSuffix.Header.name());
         }
 
@@ -113,29 +113,32 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
             if (property == null)
                 return;
             int idx = getRowCount();
-            setText(idx, 0, String.valueOf(idx));
-            getCellFormatter().addStyleName(idx, 0, DEFAULT_STYLE_PREFIX + StyleSuffix.Numerator.name());
-            getCellFormatter().addStyleName(idx, 0, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
+            int col = 0;
 
-            setText(idx, 1, i18n.tr("Photo"));
-            getCellFormatter().addStyleName(idx, 1, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
+            setText(idx, col, String.valueOf(idx));
+            getCellFormatter().addStyleName(idx, col, DEFAULT_STYLE_PREFIX + StyleSuffix.Numerator.name());
+            getCellFormatter().addStyleName(idx, col, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
+            col++;
 
-            setWidget(idx, 2, formatAddressCell(property));
-            getCellFormatter().addStyleName(idx, 2, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
+            setText(idx, col, i18n.tr("Photo"));
+            getCellFormatter().addStyleName(idx, col, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
+            col++;
 
-            setHTML(idx, 3, formatStringSet(property.size().getValue()));
-            getCellFormatter().addStyleName(idx, 3, DEFAULT_STYLE_PREFIX + StyleSuffix.CellSize.name());
-            getCellFormatter().addStyleName(idx, 3, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
+            setWidget(idx, col, formatAddressCell(property));
+            getCellFormatter().addStyleName(idx, col, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
+            col++;
 
-            setText(idx, 4, formatStringSet(property.details().getValue()));
-            getCellFormatter().addStyleName(idx, 4, DEFAULT_STYLE_PREFIX + StyleSuffix.CellDetails.name());
-            getCellFormatter().addStyleName(idx, 4, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
+            setHTML(idx, col, formatStringSet(property.size().getValue()));
+            getCellFormatter().addStyleName(idx, col, DEFAULT_STYLE_PREFIX + StyleSuffix.CellSize.name());
+            getCellFormatter().addStyleName(idx, col, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
+            col++;
 
-            setText(idx, 5, "?");
-            getCellFormatter().addStyleName(idx, 5, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
+            setText(idx, col, "?");
+            getCellFormatter().addStyleName(idx, col, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
+            col++;
 
-            setWidget(idx, 6, formatPriceCell(property, null));
-            getCellFormatter().addStyleName(idx, 6, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
+            setWidget(idx, col, formatPriceCell(property, null));
+            getCellFormatter().addStyleName(idx, col, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
 
             getRowFormatter().addStyleName(idx, DEFAULT_STYLE_PREFIX + StyleSuffix.Row.name());
 

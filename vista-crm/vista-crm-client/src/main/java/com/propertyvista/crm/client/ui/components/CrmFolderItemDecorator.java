@@ -36,8 +36,8 @@ public class CrmFolderItemDecorator extends BaseFolderItemDecorator {
         super(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), title, editable);
         actionButton = new Button(i18n.tr(editable ? "Edit" : "View"));
         actionButton.getElement().getStyle().setMarginLeft(2, Unit.EM);
-        rowHolder.add(actionButton);
-        setWidget(rowHolder);
+        getRowHolder().add(actionButton);
+        setWidget(getRowHolder());
     }
 
     @Override
@@ -53,8 +53,8 @@ public class CrmFolderItemDecorator extends BaseFolderItemDecorator {
 
     @Override
     public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        if (buttonVisible && image != null) {
-            return image.addClickHandler(handler);
+        if (isRemovable() && getRemoveImage() != null) {
+            return getRemoveImage().addClickHandler(handler);
         }
         return null;
     }
