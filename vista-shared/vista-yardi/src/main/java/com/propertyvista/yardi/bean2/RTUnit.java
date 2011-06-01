@@ -15,7 +15,6 @@ package com.propertyvista.yardi.bean2;
 
 import javax.xml.bind.annotation.XmlElement;
 
-import com.propertyvista.yardi.bean2.temp.Unit;
 
 public class RTUnit {
 

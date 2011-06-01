@@ -11,11 +11,10 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean2.temp;
+package com.propertyvista.yardi.bean2;
 
 import javax.xml.bind.annotation.XmlElement;
 
-import com.propertyvista.yardi.bean2.RTUnit;
 
 public class RTCustomer {
     private String customerId;

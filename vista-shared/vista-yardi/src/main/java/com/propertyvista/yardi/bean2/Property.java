@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean2.temp;
+package com.propertyvista.yardi.bean2;
 
 import java.util.ArrayList;
 import java.util.List;
