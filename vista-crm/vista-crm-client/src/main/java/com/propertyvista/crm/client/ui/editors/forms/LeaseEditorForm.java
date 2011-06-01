@@ -16,9 +16,7 @@ package com.propertyvista.crm.client.ui.editors.forms;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -45,10 +43,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     @Override
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-
-        Widget header = new CrmHeaderDecorator(i18n.tr("Lease Information"));
-        header.getElement().getStyle().setMarginTop(0, Unit.EM);
-        main.add(header);
 
         main.add(inject(proto().leaseID()), 15);
         main.add(inject(proto().unit()), 15);

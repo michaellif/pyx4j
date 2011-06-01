@@ -65,7 +65,9 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void populate() {
-        if (!entityId.equals(CrmSiteMap.ARG_VALUE_NEW_ITEM)) {
+        if (entityId.equals(CrmSiteMap.ARG_VALUE_NEW_ITEM)) {
+            view.populate(EntityFactory.create(entityClass));
+        } else {
             service.retrieve(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
@@ -76,8 +78,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                 public void onFailure(Throwable caught) {
                 }
             }, entityId);
-        } else {
-            view.populate(EntityFactory.create(entityClass));
         }
     }
 

@@ -13,16 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.editors.forms;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.domain.marketing.yield.Concession;
 
 public class ConcessionEditorForm extends CrmEntityForm<Concession> {
@@ -38,10 +35,6 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
     @Override
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-
-        Widget header = new CrmHeaderDecorator(i18n.tr("Information"));
-        header.getElement().getStyle().setMarginTop(0, Unit.EM);
-        main.add(header);
 
         main.add(inject(proto().type()), 15);
         main.add(inject(proto().value()), 7);

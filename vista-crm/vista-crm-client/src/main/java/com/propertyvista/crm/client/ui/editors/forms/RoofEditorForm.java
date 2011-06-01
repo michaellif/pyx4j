@@ -38,7 +38,6 @@ public class RoofEditorForm extends CrmEntityForm<RoofDTO> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Information")));
         main.add(inject(proto().type()), 15);
         main.add(inject(proto().year()), 8.2);
 
@@ -50,6 +49,7 @@ public class RoofEditorForm extends CrmEntityForm<RoofDTO> {
 
         main.add(inject(proto().notes()), 25);
 
+        main.setWidth("100%");
         return main;
     }
 }

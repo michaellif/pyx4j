@@ -39,6 +39,7 @@ public class ParkingSpotEditorForm extends CrmEntityForm<ParkingSpot> {
         main.add(inject(proto().name()), 15);
         main.add(inject(proto().price()), 8.2);
 
+        main.setWidth("100%");
         return main;
     }
 }

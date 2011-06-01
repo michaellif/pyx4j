@@ -55,7 +55,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Information")));
         main.add(inject(proto().info().name()), 15);
         injectAddress(main, proto().info().address());
         main.add(inject(proto().info().propertyCode()), 12);
@@ -63,6 +62,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(inject(proto().info().shape()), 7);
         main.add(inject(proto().info().totalStories()), 5);
         main.add(inject(proto().info().residentialStories()), 5);
+        main.add(inject(proto().complex()), 15);
 
         main.add(new CrmHeaderDecorator(i18n.tr("Details")));
         main.add(inject(proto().info().structureType()), 15);
@@ -105,13 +105,12 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         SubtypeInjectors.injectMarketing(main, proto().marketing(), this);
 
         main.add(new CrmHeaderDecorator(i18n.tr("Contact Information")));
-        SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this);
         main.add(inject(proto().contacts().website()), 25);
         main.add(inject(proto().contacts().email().address()), main.defaultLabelWidth, 25, i18n.tr("Email Address"));
+        SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this);
 // TODO - add this data processing later! :
 //        main.add(inject(proto().contactsList()), 15);
 
-        main.add(inject(proto().complex()), 15);
 // TODO - add this data processing later! :
 //      main.add(inject(proto().media()), 15);
 

@@ -36,6 +36,7 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
+        main.setWidth("100%");
         return main;
     }
 }

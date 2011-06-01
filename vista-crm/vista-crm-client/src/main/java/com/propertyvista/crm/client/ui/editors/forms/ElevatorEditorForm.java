@@ -21,7 +21,6 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.dto.ElevatorDTO;
 
 public class ElevatorEditorForm extends CrmEntityForm<ElevatorDTO> {
@@ -38,10 +37,10 @@ public class ElevatorEditorForm extends CrmEntityForm<ElevatorDTO> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Information")));
         SubtypeInjectors.injectEquipment(main, proto(), this);
         main.add(inject(proto().isForMoveInOut()), 15);
 
+        main.setWidth("100%");
         return main;
     }
 }

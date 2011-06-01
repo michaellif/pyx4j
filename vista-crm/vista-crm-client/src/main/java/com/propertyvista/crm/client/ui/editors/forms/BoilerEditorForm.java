@@ -21,7 +21,6 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerEditorForm extends CrmEntityForm<BoilerDTO> {
@@ -38,9 +37,9 @@ public class BoilerEditorForm extends CrmEntityForm<BoilerDTO> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Information")));
         SubtypeInjectors.injectEquipment(main, proto(), this);
 
+        main.setWidth("100%");
         return main;
     }
 }

@@ -46,6 +46,7 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
         main.add(inject(proto().building()));
         main.add(inject(proto().unit()));
 
+        main.setWidth("100%");
         return main;
     }
 }

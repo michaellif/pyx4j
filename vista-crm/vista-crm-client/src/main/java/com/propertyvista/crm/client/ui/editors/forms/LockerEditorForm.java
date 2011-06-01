@@ -39,6 +39,7 @@ public class LockerEditorForm extends CrmEntityForm<Locker> {
         main.add(inject(proto().name()), 15);
         main.add(inject(proto().price()), 8.2);
 
+        main.setWidth("100%");
         return main;
     }
 }

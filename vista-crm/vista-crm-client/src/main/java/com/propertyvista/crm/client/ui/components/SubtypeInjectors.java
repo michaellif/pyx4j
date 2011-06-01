@@ -135,7 +135,7 @@ public class SubtypeInjectors {
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "30em"));
                 return columns;
             }
         }));
