@@ -26,9 +26,14 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.domain.property.asset.Rentable;
+import com.propertyvista.domain.property.asset.Utility;
+import com.propertyvista.domain.tenant.lease.LeaseEvent;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
+import com.propertyvista.portal.domain.ptapp.Pet;
 
 public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
@@ -60,25 +65,81 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.add(inject(proto().accountNumber()), 15);
         main.add(inject(proto().currentRent()), 7);
         main.add(inject(proto().paymentAccepted()), 15);
-        main.add(inject(proto().charges(), createChargesListEditor()));
-        //TODO Leon
-        //Not sure how to reuse code yet
-        //main.add(inject(proto().concessions()), 7);
+        main.add(inject(proto().charges(), createChargesListViewer()));
+        main.add(inject(proto().concessions(), SubtypeInjectors.injectConcessions(isEditable())));
         main.add(inject(proto().specialStatus()), 15);
         //TODO Leon
-        //Not sure what to do with the rest of the domain
+        //Not sure how to do tenant
+        main.add(inject(proto().pets(), createPetListViewer()));
+        main.add(inject(proto().rentableItems(), createRentableListViewer()));
+        main.add(inject(proto().rentableItems(), createUtilityListViewer()));
+        //TODO Leon
+        //What are documents?
+        main.add(inject(proto().events(), createLeaseEventsListViewer()));
 
         main.setWidth("100%");
         return main;
     }
 
-    private CEntityFolder<ChargeLine> createChargesListEditor() {
+    private CEntityFolder<ChargeLine> createChargesListViewer() {
         return new CrmEntityFolder<ChargeLine>(ChargeLine.class, i18n.tr("Charge Line"), isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().label(), "10em"));
+                return columns;
+            }
+        };
+    }
+
+    private CEntityFolder<Pet> createPetListViewer() {
+        return new CrmEntityFolder<Pet>(Pet.class, i18n.tr("Pets"), isEditable()) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().color(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().weight(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().weightUnit(), "7em"));
+                return columns;
+            }
+        };
+    }
+
+    private CEntityFolder<Rentable> createRentableListViewer() {
+        return new CrmEntityFolder<Rentable>(Rentable.class, i18n.tr("Rentable Items"), isEditable()) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().price(), "10em"));
+                return columns;
+            }
+        };
+    }
+
+    private CEntityFolder<Utility> createUtilityListViewer() {
+        return new CrmEntityFolder<Utility>(Utility.class, i18n.tr("Utilities"), isEditable()) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().description(), "15em"));
+                return columns;
+            }
+        };
+    }
+
+    private CEntityFolder<LeaseEvent> createLeaseEventsListViewer() {
+        return new CrmEntityFolder<LeaseEvent>(LeaseEvent.class, i18n.tr("Lease Events"), isEditable()) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().date(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().notes(), "20em"));
                 return columns;
             }
         };

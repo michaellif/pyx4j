@@ -22,8 +22,10 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditor;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
@@ -33,6 +35,7 @@ import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
+import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Equipment;
 import com.propertyvista.domain.property.vendor.Contract;
 import com.propertyvista.domain.property.vendor.Licence;
@@ -179,4 +182,25 @@ public class SubtypeInjectors {
                 }));
     }
 
+    public static CrmEntityFolder<Concession> injectConcessions(boolean isEditable) {
+        return injectConcessions(isEditable, null, null);
+    }
+
+    public static CrmEntityFolder<Concession> injectConcessions(boolean isEditable, AppPlace placeToGo, CEntityForm<?> parent) {
+        return new CrmEntityFolder<Concession>(Concession.class, "Concession", isEditable, placeToGo, parent) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                List<EntityFolderColumnDescriptor> columns;
+                columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().appliedTo(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().percentage(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().status(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().start(), "8.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().end(), "8.2em"));
+                return columns;
+            }
+        };
+    }
 }

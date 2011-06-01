@@ -164,21 +164,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
     private CEntityFolder<Concession> createConcessionsListEditor() {
         AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Concession() : new CrmSiteMap.Viewers.Concession());
-        return new CrmEntityFolder<Concession>(Concession.class, "Concession", isEditable(), placeToGo, this) {
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                List<EntityFolderColumnDescriptor> columns;
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().appliedTo(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().percentage(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().status(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().start(), "8.2em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().end(), "8.2em"));
-                return columns;
-            }
-        };
+        return SubtypeInjectors.injectConcessions(isEditable(), placeToGo, this);
     }
 
     private CEntityFolder<AddOn> createAddOnsListEditor() {
