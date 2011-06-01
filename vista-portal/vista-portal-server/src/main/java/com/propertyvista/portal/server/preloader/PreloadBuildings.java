@@ -220,7 +220,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 sb.append("\n");
                 sb.append("\t\t").append(unit.info().utilities()).append("\n");
                 sb.append("\t\t").append(unit.amenities()).append("\n");
-                sb.append("\t\t").append(unit.info().details()).append("\n");
+                sb.append("\t\t").append(unit.details()).append("\n");
                 sb.append("\t\t").append(unit.concessions()).append("\n");
                 sb.append("\t\t").append(unit.addOns()).append("\n");
             }

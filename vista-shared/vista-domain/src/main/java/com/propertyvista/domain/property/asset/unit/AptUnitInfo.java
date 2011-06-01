@@ -75,8 +75,4 @@ public interface AptUnitInfo extends IEntity {
     IPrimitive<Double> bathrooms();
 
     IList<Utility> utilities();
-
-    // TODO: remove - it should be stored as different table in DB!.. 
-    @Deprecated
-    IList<AptUnitItem> details();
 }

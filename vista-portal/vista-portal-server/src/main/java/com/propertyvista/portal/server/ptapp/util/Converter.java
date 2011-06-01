@@ -41,11 +41,14 @@ public class Converter {
 
         // iEntity
         to.floorplan().set(convert(from.marketing().floorplan()));
-        to.infoDetails().setValue(from.info().details().getStringView());
         to.amenities().setValue(from.amenities().getStringView());
         to.concessions().setValue(from.concessions().getStringView());
         to.utilities().setValue(from.info().utilities().getStringView());
         to.addOns().setValue(from.addOns().getStringView());
+
+        //TODO is it necessary to pull out all unit details here (IList<AptUnitItem>)?
+        // it seems that it should be different details or somehow converted... 
+        to.infoDetails().setValue("Unit details here...");
 
         //TODO VS
         //to.status().set(from.status());
