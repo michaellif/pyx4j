@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -74,7 +73,5 @@ public abstract class CEntityComponent<DATA_TYPE, WIDGET_TYPE extends Widget & I
     public void addValidations() {
 
     }
-
-    public abstract IsWidget createContent();
 
 }

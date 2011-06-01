@@ -314,10 +314,4 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         }
     }
 
-    @Override
-    protected WIDGET_TYPE createWidget() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

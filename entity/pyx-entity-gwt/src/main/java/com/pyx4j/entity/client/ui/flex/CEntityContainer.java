@@ -25,6 +25,7 @@ import java.util.Collection;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -94,4 +95,7 @@ public abstract class CEntityContainer<DATA_TYPE, WIDGET_TYPE extends Widget & I
         }
 
     }
+
+    public abstract IsWidget createContent();
+
 }
