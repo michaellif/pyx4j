@@ -17,12 +17,15 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.CEntityViewer;
 
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
 public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implements ApartmentDetailsView {
@@ -51,8 +54,13 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         FlowPanel container = new FlowPanel();
         DecorationData readOnlyDecor = new DecorationData(14d, 12);
         readOnlyDecor.editable = false;
-        container.add(new VistaWidgetDecorator(inject(proto().address().street1()), readOnlyDecor));
-        container.add(new VistaWidgetDecorator(inject(proto().address().city()), readOnlyDecor));
+        container.add(new VistaWidgetDecorator(inject(proto().address(), new CEntityViewer<IAddress>() {
+            @Override
+            public IsWidget createContent(IAddress value) {
+                return new HTML(value.toString());
+            }
+        }), readOnlyDecor));
+
         container.add(new VistaWidgetDecorator(inject(proto().price()), readOnlyDecor));
         //TODO new decorator is required
         // container.add(inject(proto().details()));
