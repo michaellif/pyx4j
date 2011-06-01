@@ -20,17 +20,12 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -45,11 +40,13 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.ImageButton;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.listers.FilterData.Operands;
@@ -78,9 +75,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             }
         };
 
-// TODO just for development - less data to load:         
-        listPanel.setPageSize(10);
-//      listPanel.setPageSize(30);
+        listPanel.setPageSize(ApplicationMode.isDevelopment() ? 10 : 30);
 
         listPanel.setPrevActionHandler(new ClickHandler() {
             @Override
@@ -119,25 +114,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     private Widget createAddApplyPanel() {
 
-        final Image btnAdd = new Image(CrmImages.INSTANCE.add());
-        btnAdd.getElement().getStyle().setCursor(Cursor.POINTER);
+        final Image btnAdd = new ImageButton(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover());
         btnAdd.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 filters.addFilter();
                 btnApply.setEnabled(filters.getFilterCount() > 0);
-            }
-        });
-        btnAdd.addMouseOverHandler(new MouseOverHandler() {
-            @Override
-            public void onMouseOver(MouseOverEvent event) {
-                btnAdd.setResource(CrmImages.INSTANCE.addHover());
-            }
-        });
-        btnAdd.addMouseOutHandler(new MouseOutHandler() {
-            @Override
-            public void onMouseOut(MouseOutEvent event) {
-                btnAdd.setResource(CrmImages.INSTANCE.add());
             }
         });
 
@@ -174,8 +156,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
                 // put selected item ID in link arguments:
-                int selectedRow = getListPanel().getDataTable().getSelectedRow();
-                E item = getListPanel().getDataTable().getDataTableModel().getData().get(selectedRow).getEntity();
+                int selectedRow = getListPanel().getDataTable().getSelectedRow(); // note, that it's 1-based!?
+                E item = getListPanel().getDataTable().getDataTableModel().getData().get(selectedRow - 1).getEntity();
                 AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(link, item.getPrimaryKey()));
             }
         });
@@ -266,26 +248,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             protected final TextBox valueText = new TextBox();
 
             Filter() {
-                final Image btnDel = new Image(CrmImages.INSTANCE.del());
-                btnDel.getElement().getStyle().setCursor(Cursor.POINTER);
-                btnDel.setTitle(i18n.tr("Remove filter"));
+                final Image btnDel = new ImageButton(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove filter"));
                 btnDel.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
                         Filters.this.remove(Filter.this);
                         btnApply.setEnabled(getFilterCount() > 0);
-                    }
-                });
-                btnDel.addMouseOverHandler(new MouseOverHandler() {
-                    @Override
-                    public void onMouseOver(MouseOverEvent event) {
-                        btnDel.setResource(CrmImages.INSTANCE.delHover());
-                    }
-                });
-                btnDel.addMouseOutHandler(new MouseOutHandler() {
-                    @Override
-                    public void onMouseOut(MouseOutEvent event) {
-                        btnDel.setResource(CrmImages.INSTANCE.del());
                     }
                 });
 
