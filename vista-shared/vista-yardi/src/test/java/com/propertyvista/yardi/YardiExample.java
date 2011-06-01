@@ -36,12 +36,16 @@ public class YardiExample {
 
         // execute different actions
         try {
+            // the order of this call should match the document order
             YardiTransactions.ping(c);
-            YardiTransactions.getPropertyConfigurations(c, yp);
-            YardiTransactions.getUnitInformationLogin(c, yp);
-            YardiTransactions.getResidentTransactionsLogin(c, yp);
+            YardiTransactions.getResidentTransactions(c, yp);
+//            YardiTransactions.getResidentTransaction(c, yp);
             YardiTransactions.getResidentTransactionsByChargeDate(c, yp);
             YardiTransactions.getResidentsLeaseCharges(c, yp);
+//            YardiTransactions.getResidentLeaseCharges(c, yp);
+            YardiTransactions.getUnitInformationLogin(c, yp);
+            YardiTransactions.getVendors(c, yp);
+            YardiTransactions.getPropertyConfigurations(c, yp);
         } catch (Throwable e) {
             log.error("error", e);
         }

@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <Properties>
-	<Property>
-		<Code>prvista1</Code>
-		<MarketingName>Property Vista 1 Test Property</MarketingName>
-		<AddressLine1>430 S Fairview Avenue</AddressLine1>
-		<AddressLine2 />
-		<AddressLine3 />
-		<City>Goleta</City>
-		<State>CA</State>
-		<PostalCode>93117</PostalCode>
-		<AccountsReceivable>01/2011</AccountsReceivable>
-		<AccountsPayable>01/2011</AccountsPayable>
-	</Property>
-	<Property>
-		<Code>prvista2</Code>
-		<MarketingName>Property Vista 2 Test Property</MarketingName>
-		<AddressLine1>5555 Hollister Avenue</AddressLine1>
-		<AddressLine2 />
-		<AddressLine3 />
-		<City>Santa Barbara</City>
-		<State>CA</State>
-		<PostalCode>93110</PostalCode>
-		<AccountsReceivable>01/2011</AccountsReceivable>
-		<AccountsPayable>01/2011</AccountsPayable>
-	</Property>
+    <Property>
+        <Code>prvista1</Code>
+        <MarketingName>Property Vista 1 Test Property</MarketingName>
+        <AddressLine1>430 S Fairview Avenue</AddressLine1>
+        <AddressLine2 />
+        <AddressLine3 />
+        <City>Goleta</City>
+        <State>CA</State>
+        <PostalCode>93117</PostalCode>
+        <AccountsReceivable>01/2011</AccountsReceivable>
+        <AccountsPayable>01/2011</AccountsPayable>
+    </Property>
+    <Property>
+        <Code>prvista2</Code>
+        <MarketingName>Property Vista 2 Test Property</MarketingName>
+        <AddressLine1>5555 Hollister Avenue</AddressLine1>
+        <AddressLine2 />
+        <AddressLine3 />
+        <City>Santa Barbara</City>
+        <State>CA</State>
+        <PostalCode>93110</PostalCode>
+        <AccountsReceivable>01/2011</AccountsReceivable>
+        <AccountsPayable>01/2011</AccountsPayable>
+    </Property>
 </Properties>

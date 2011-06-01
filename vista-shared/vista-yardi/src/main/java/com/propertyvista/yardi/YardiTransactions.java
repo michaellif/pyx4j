@@ -25,6 +25,10 @@ import org.slf4j.LoggerFactory;
 
 import com.yardi.ws.operations.GetPropertyConfigurations;
 import com.yardi.ws.operations.GetPropertyConfigurationsResponse;
+import com.yardi.ws.operations.GetResidentLeaseCharges_Login;
+import com.yardi.ws.operations.GetResidentLeaseCharges_LoginResponse;
+import com.yardi.ws.operations.GetResidentTransaction_Login;
+import com.yardi.ws.operations.GetResidentTransaction_LoginResponse;
 import com.yardi.ws.operations.GetResidentTransactions_ByChargeDate_Login;
 import com.yardi.ws.operations.GetResidentTransactions_ByChargeDate_LoginResponse;
 import com.yardi.ws.operations.GetResidentTransactions_Login;
@@ -33,6 +37,10 @@ import com.yardi.ws.operations.GetResidentsLeaseCharges_Login;
 import com.yardi.ws.operations.GetResidentsLeaseCharges_LoginResponse;
 import com.yardi.ws.operations.GetUnitInformation_Login;
 import com.yardi.ws.operations.GetUnitInformation_LoginResponse;
+import com.yardi.ws.operations.GetVendor_Login;
+import com.yardi.ws.operations.GetVendor_LoginResponse;
+import com.yardi.ws.operations.GetVendors_Login;
+import com.yardi.ws.operations.GetVendors_LoginResponse;
 import com.yardi.ws.operations.Ping;
 import com.yardi.ws.operations.PingResponse;
 
@@ -124,7 +132,10 @@ public class YardiTransactions {
         log.info("\n--- GetUnitInformation ---\n{}\n", physicalProperty);
     }
 
-    public static void getResidentTransactionsLogin(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
+    /**
+     * Allows export of resident/transactional data for a given property/property list.
+     */
+    public static void getResidentTransactions(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
         c.transactionId++;
         c.setCurrentAction(Action.GetResidentTransactions);
 
@@ -139,7 +150,34 @@ public class YardiTransactions {
 
         GetResidentTransactions_LoginResponse response = c.getResidentTransactionsService().getResidentTransactions_Login(l);
         String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
-        log.info("ResidentTransactionsLogin: {}", xml);
+        log.info("GetResidentTransactions: {}", xml);
+    }
+
+    /**
+     * Allows export of resident/transactional data for a given property/property list;
+     * will only return one resident based on the Yardi tenant code supplied.
+     */
+    public static void getResidentTransaction(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
+        c.transactionId++;
+        c.setCurrentAction(Action.GetResidentTransaction);
+
+        GetResidentTransaction_Login l = new GetResidentTransaction_Login();
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setYardiPropertyId(yp.getYardiPropertyId());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
+
+        if (yp.getTenantId() == null) {
+            throw new IllegalArgumentException("Tenant ID must be provided when calling GetResidentTransaction");
+        }
+        l.setTenantId(yp.getTenantId());
+
+        GetResidentTransaction_LoginResponse response = c.getResidentTransactionsService().getResidentTransaction_Login(l);
+        String xml = response.getGetResidentTransaction_LoginResult().getExtraElement().toString();
+        log.info("ResidentTransactionLogin: {}", xml);
     }
 
     public static void getResidentTransactionsByChargeDate(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
@@ -175,6 +213,10 @@ public class YardiTransactions {
         log.info("GetResidentTransactionsByChargeDate: {}", xml);
     }
 
+    /**
+     * Allows export of resident/transactional data for a given property/property list;
+     * will only return one resident based on the Yardi tenant code supplied.
+     */
     public static void getResidentsLeaseCharges(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
         c.transactionId++;
         c.setCurrentAction(Action.GetResidentsLeaseCharges);
@@ -196,6 +238,86 @@ public class YardiTransactions {
 
         GetResidentsLeaseCharges_LoginResponse response = c.getResidentTransactionsService().getResidentsLeaseCharges_Login(l);
         String xml = response.getGetResidentsLeaseCharges_LoginResult().getExtraElement().toString();
-        log.info("ResidentsLeaseCharges: {}", xml);
+        log.info("GetResidentsLeaseCharges: {}", xml);
+    }
+
+    /**
+     * Allows export of resident/transactional data for a given property/property list;
+     * will only return one resident based on the Yardi tenant code supplied.
+     */
+    public static void getResidentLeaseCharges(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
+        c.transactionId++;
+        c.setCurrentAction(Action.GetResidentLeaseCharges);
+
+        GetResidentLeaseCharges_Login l = new GetResidentLeaseCharges_Login();
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setYardiPropertyId(yp.getYardiPropertyId());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
+
+        if (yp.getTenantId() == null) {
+            throw new IllegalArgumentException("Tenant Id must be provided for GetResidentLeaseCharges");
+        }
+        l.setTenantId(yp.getTenantId());
+
+        // post month
+        Calendar when = GregorianCalendar.getInstance();
+        when.set(Calendar.YEAR, 2011);
+        when.set(Calendar.MONTH, 1);
+        l.setPostMonth(when);
+
+        GetResidentLeaseCharges_LoginResponse response = c.getResidentTransactionsService().getResidentLeaseCharges_Login(l);
+        String xml = response.getGetResidentLeaseCharges_LoginResult().getExtraElement().toString();
+        log.info("ResidentLeaseCharges: {}", xml);
+    }
+
+    /**
+     * Allows export of vendor information from a Yardi database
+     */
+    public static void getVendors(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
+        c.transactionId++;
+        c.setCurrentAction(Action.GetVendors);
+
+        GetVendors_Login l = new GetVendors_Login();
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setYardiPropertyId(yp.getYardiPropertyId());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
+
+        GetVendors_LoginResponse response = c.getResidentTransactionsService().getVendors_Login(l);
+        String xml = response.getGetVendors_LoginResult().getExtraElement().toString();
+        log.info("GetVendors: {}", xml);
+    }
+
+    /**
+     * Allows export of vendor information from a Yardi database
+     */
+    public static void getVendor(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
+        c.transactionId++;
+        c.setCurrentAction(Action.GetVendor);
+
+        GetVendor_Login l = new GetVendor_Login();
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setYardiPropertyId(yp.getYardiPropertyId());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
+
+        if (yp.getVendorId() == null) {
+            throw new IllegalArgumentException("Vendor ID must be provided when calling GetVendor");
+        }
+        l.setVendorId(yp.getVendorId());
+
+        GetVendor_LoginResponse response = c.getResidentTransactionsService().getVendor_Login(l);
+        String xml = response.getGetVendor_LoginResult().getExtraElement().toString();
+        log.info("GetVendor: {}", xml);
     }
 }

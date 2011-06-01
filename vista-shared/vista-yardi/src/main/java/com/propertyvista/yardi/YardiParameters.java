@@ -28,6 +28,10 @@ public class YardiParameters {
 
     private String yardiPropertyId;
 
+    private String tenantId;
+
+    private String vendorId;
+
     /**
      * Valid Voyager username required for access to the target Voyager
      * database
@@ -98,5 +102,24 @@ public class YardiParameters {
 
     public void setYardiPropertyId(String yardiPropertyId) {
         this.yardiPropertyId = yardiPropertyId;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    /**
+     * The unique Vendor ID in the Voyager database
+     */
+    public String getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(String vendorId) {
+        this.vendorId = vendorId;
     }
 }
