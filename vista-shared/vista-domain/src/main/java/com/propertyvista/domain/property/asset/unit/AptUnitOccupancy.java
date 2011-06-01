@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.property.asset.unit;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -64,7 +65,7 @@ public interface AptUnitOccupancy extends IEntity {
     }
 
     @Owner
-//    @Detached
+    @Detached
     AptUnit unit();
 
     IPrimitive<java.sql.Date> dateFrom();

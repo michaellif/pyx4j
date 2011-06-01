@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -30,6 +31,7 @@ import com.propertyvista.domain.property.vendor.Warranty;
 public interface Equipment extends IEntity {
 
     @Owner
+    @Detached
     Building belongsTo();
 
     @MemberColumn(name = "equipmentType")

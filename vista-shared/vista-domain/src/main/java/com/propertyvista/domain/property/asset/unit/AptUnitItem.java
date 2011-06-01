@@ -15,6 +15,7 @@ package com.propertyvista.domain.property.asset.unit;
 
 import java.sql.Date;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -130,6 +131,7 @@ public interface AptUnitItem extends IEntity {
 
     //TODO VladS. use this for join
     @Owner
+    @Detached
     AptUnit belongsTo();
 
     // ----------- Info --------------------------

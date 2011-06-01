@@ -13,7 +13,9 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
@@ -127,6 +129,10 @@ public interface BuildingAmenity extends Amenity {
             return I18nEnum.tr(this);
         }
     }
+
+    @Owner
+    @Detached
+    Building belongsTo();
 
     @MemberColumn(name = "buildingAmenityType")
     IPrimitive<Type> type();

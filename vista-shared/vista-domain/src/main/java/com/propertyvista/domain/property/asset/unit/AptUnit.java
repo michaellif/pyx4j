@@ -31,6 +31,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface AptUnit extends IEntity {
 
     @Owner
+    @Detached
     @Caption(name = "Building")
     Building belongsTo();
 
