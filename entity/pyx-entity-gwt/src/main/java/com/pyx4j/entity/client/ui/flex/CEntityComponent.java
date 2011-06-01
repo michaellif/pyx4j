@@ -20,9 +20,6 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -36,8 +33,6 @@ import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
 public abstract class CEntityComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends
         CEditableComponent<DATA_TYPE, WIDGET_TYPE> implements IEditableComponentFactory, IAccessAdapter {
-
-    private static I18n i18n = I18nFactory.getI18n(CEntityComponent.class);
 
     private CEntityComponent<?, ?> bindParent;
 
