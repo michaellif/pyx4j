@@ -39,6 +39,9 @@ import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.Locker;
+import com.propertyvista.domain.property.asset.Parking;
+import com.propertyvista.domain.property.asset.Parking.Type;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -111,6 +114,71 @@ public class BuildingsGenerator {
         // log.info("Created: " + building);
 
         return building;
+    }
+
+    public List<Locker> createLockers(Building building, int numLockers) {
+        List<Locker> lockers = new ArrayList<Locker>();
+
+        for (int i = 0; i < numLockers; i++) {
+            Locker locker = createLocker(building, (i + 1));
+            lockers.add(locker);
+        }
+
+        return lockers;
+    }
+
+    public Locker createLocker(Building building, int index) {
+        Locker locker = EntityFactory.create(Locker.class);
+
+        locker.belongsTo().set(building);
+
+        locker.name().setValue("Locker" + index);
+        locker.price().setValue(10d + RandomUtil.randomInt(30));
+
+        return locker;
+    }
+
+    public List<Parking> createParkings(Building building, int numParkings) {
+        List<Parking> parkings = new ArrayList<Parking>();
+
+        for (int i = 0; i < numParkings; i++) {
+            Parking parking = createParking(building, (i + 1));
+            parkings.add(parking);
+        }
+        return parkings;
+    }
+
+    public Parking createParking(Building building, int index) {
+        Parking parking = EntityFactory.create(Parking.class);
+
+        int levels = 1 + RandomUtil.randomInt(5);
+
+        parking.belongsTo().set(building);
+        parking.name().setValue("Parking" + index);
+        parking.description().setValue(levels + "-level parking" + index + " at " + building.info().name().getValue());
+        parking.type().setValue(RandomUtil.random(Type.values()));
+        parking.levels().setValue((double) levels);
+
+        int totalSpaces = 1 + RandomUtil.randomInt(100);
+        int disabledSpaces = (int) (totalSpaces * 0.05);
+        int doubleSpaces = (int) (totalSpaces * 0.1);
+        int narrowSpaces = (int) (totalSpaces * 0.07);
+        int regularSpaces = totalSpaces - (disabledSpaces + doubleSpaces + narrowSpaces);
+        parking.totalSpaces().setValue(totalSpaces);
+        parking.disabledSpaces().setValue(disabledSpaces);
+        parking.regularSpaces().setValue(regularSpaces);
+        parking.doubleSpaces().setValue(doubleSpaces);
+        parking.narrowSpaces().setValue(narrowSpaces);
+
+        double regularRent = 20d + RandomUtil.randomInt(100);
+        parking.disableRent().setValue(regularRent * 0.8);
+        parking.regularRent().setValue(regularRent);
+        parking.doubleRent().setValue(regularRent * 1.2);
+        parking.narrowRent().setValue(regularRent * 0.9);
+
+        parking.deposit().setValue(50d + RandomUtil.randomInt(100));
+
+        return parking;
     }
 
     public List<Floorplan> createFloorplans(Building building, int numFloorplans) {

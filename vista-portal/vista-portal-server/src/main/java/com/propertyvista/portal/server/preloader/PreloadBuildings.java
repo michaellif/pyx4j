@@ -33,6 +33,8 @@ import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.Locker;
+import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -58,7 +60,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Building.class, AptUnit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, AptUnitItem.class,
-                    Amenity.class, Concession.class, AddOn.class, LeaseTerms.class);
+                    Amenity.class, Concession.class, AddOn.class, LeaseTerms.class, Parking.class, Locker.class);
         } else {
             return "This is production";
         }
@@ -75,6 +77,18 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         for (Building building : buildings) {
             // TODO Need to be saving PropertyProfile, PetCharge
             persist(building);
+
+            // parkings
+            List<Parking> parkings = generator.createParkings(building, DemoData.NUM_PARKINGS);
+            for (Parking parking : parkings) {
+                persist(parking);
+            }
+
+            // lockers
+            List<Locker> lockers = generator.createLockers(building, DemoData.NUM_LOCKERS);
+            for (Locker locker : lockers) {
+                persist(locker);
+            }
 
             List<Floorplan> floorplans = generator.createFloorplans(building, DemoData.NUM_FLOORPLANS);
             for (Floorplan floorplan : floorplans) {
@@ -155,6 +169,22 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
     public String print() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n\n");
+
+        List<Parking> parkings = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Parking>(Parking.class));
+        sb.append(parkings.size()).append(" parkings\n");
+        for (Parking parking : parkings) {
+            sb.append("\t");
+            sb.append(parking);
+            sb.append("\n");
+        }
+
+        List<Locker> lockers = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Locker>(Locker.class));
+        sb.append(lockers.size()).append(" lockers\n");
+        for (Locker locker : lockers) {
+            sb.append("\t");
+            sb.append(locker);
+            sb.append("\n");
+        }
 
         List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Floorplan>(Floorplan.class));
         sb.append(floorplans.size()).append(" floorplans\n");

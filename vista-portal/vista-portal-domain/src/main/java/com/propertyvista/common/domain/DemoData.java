@@ -18,7 +18,7 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenant.Relationship;
 public class DemoData {
 
     public static int PT_GENERATION_SEED = 100;
-    
+
     public static int BUILDINGS_GENERATION_SEED = 100;
 
     public static int MAX_CUSTOMERS = 20;
@@ -42,6 +42,10 @@ public class DemoData {
     public static int NUM_FLOORS = 4;
 
     public static int NUM_FLOORPLANS = 2;
+
+    public static int NUM_PARKINGS = 1;
+
+    public static int NUM_LOCKERS = 2;
 
     public static int NUM_UNITS_PER_FLOOR = 4;
 
