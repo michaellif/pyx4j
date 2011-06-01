@@ -25,73 +25,78 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Image;
 
+/*
+ *  Image widget which acts as push-button.
+ *  Could be supplied with up to three images for various button state.
+ *  Also supports title for tool-tip.   
+ */
 public class ImageButton extends Image {
 
-    private String title = null;
+    private final String title;
 
-    private ImageResource imageRegular = null;
+    private final ImageResource regular;
 
-    private ImageResource imageHover = null;
+    private final ImageResource hover;
 
-    private ImageResource imageDown = null;
+    private final ImageResource pushed;
 
-    public ImageButton(ImageResource imageRegular) {
-        this(imageRegular, null, null, null);
+    public ImageButton(ImageResource regular) {
+        this(regular, null, null, null);
     }
 
-    public ImageButton(ImageResource imageRegular, String title) {
-        this(imageRegular, null, null, title);
+    public ImageButton(ImageResource regular, String title) {
+        this(regular, null, null, title);
     }
 
-    public ImageButton(ImageResource imageRegular, ImageResource imageHover) {
-        this(imageRegular, imageHover, null, null);
+    public ImageButton(ImageResource regular, ImageResource hover) {
+        this(regular, hover, null, null);
     }
 
-    public ImageButton(ImageResource imageRegular, ImageResource imageHover, String title) {
-        this(imageRegular, imageHover, null, title);
+    public ImageButton(ImageResource regular, ImageResource hover, String title) {
+        this(regular, hover, null, title);
     }
 
-    public ImageButton(ImageResource imageRegular, ImageResource imageHover, ImageResource imageDown, String title) {
-        this.imageRegular = imageRegular;
-        this.imageHover = imageHover;
-        this.imageDown = imageDown;
+    public ImageButton(ImageResource regular, ImageResource hover, ImageResource pushed, String title) {
+        this.regular = regular;
+        this.hover = hover;
+        this.pushed = pushed;
         this.title = title;
         create();
     }
 
     public void create() {
 
-        setResource(imageRegular);
+        setResource(regular);
         getElement().getStyle().setCursor(Cursor.POINTER);
         setTitle(title);
 
-        if (imageHover != null) {
+        if (hover != null) {
             addMouseOverHandler(new MouseOverHandler() {
                 @Override
                 public void onMouseOver(MouseOverEvent event) {
-                    setResource(imageHover);
+                    setResource(hover);
                 }
             });
             addMouseOutHandler(new MouseOutHandler() {
                 @Override
                 public void onMouseOut(MouseOutEvent event) {
-                    setResource(imageRegular);
+                    setResource(regular);
                 }
             });
         }
-        if (imageDown != null) {
+        if (pushed != null) {
             addMouseDownHandler(new MouseDownHandler() {
                 @Override
                 public void onMouseDown(MouseDownEvent event) {
-                    setResource(imageDown);
+                    setResource(pushed);
                 }
             });
         }
-        if (imageHover != null || imageDown != null) {
+        if (hover != null || pushed != null) {
             addMouseUpHandler(new MouseUpHandler() {
                 @Override
                 public void onMouseUp(MouseUpEvent event) {
-                    setResource(imageRegular);
+                    setResource(regular);
                 }
             });
         }
