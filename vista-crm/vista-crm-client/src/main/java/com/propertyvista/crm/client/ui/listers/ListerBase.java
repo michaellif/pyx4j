@@ -114,7 +114,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     private Widget createAddApplyPanel() {
 
-        final Image btnAdd = new ImageButton(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover());
+        Image btnAdd = new ImageButton(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover());
         btnAdd.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -248,7 +248,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             protected final TextBox valueText = new TextBox();
 
             Filter() {
-                final Image btnDel = new ImageButton(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove filter"));
+                Image btnDel = new ImageButton(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove filter"));
                 btnDel.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
