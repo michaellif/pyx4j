@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,32 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 1, 2011
- * @author michaellif
+ * Created on Feb 13, 2011
+ * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IEntity;
 
-public abstract class CEntityViewer<E extends IObject<?>> extends CEntityComponent<E, NativeEntityPanel<E>> {
+public abstract class CEntityFolderItemViewer<E extends IEntity> extends CEntityViewer<E> {
 
-    @Override
-    public void populate(E value) {
-        super.populate(value);
-        setContent(createContent(value));
+    private final SimplePanel container;
+
+    public CEntityFolderItemViewer() {
+        container = new SimplePanel();
+    }
+
+    public abstract FolderItemViewerDecorator createFolderItemDecorator();
+
+    public void setFolderItemDecorator(FolderItemViewerDecorator folderItemDecorator) {
+        asWidget().setWidget(folderItemDecorator);
+        folderItemDecorator.setFolderItemContainer(container);
     }
 
     @Override
-    protected NativeEntityPanel<E> createWidget() {
-        return new NativeEntityPanel<E>();
-    }
-
-    public abstract IsWidget createContent(E value);
-
     protected void setContent(IsWidget widget) {
-        asWidget().setWidget(widget);
+        container.setWidget(widget);
     }
 }

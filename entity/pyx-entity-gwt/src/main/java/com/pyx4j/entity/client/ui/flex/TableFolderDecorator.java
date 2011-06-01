@@ -73,8 +73,8 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         header.getElement().getStyle().setMarginBottom(3, Unit.PX);
         setHeaderVisible(false);
         header.setWidth("100%");
-        if (image != null) {
-            header.getElement().getStyle().setPaddingLeft(image.getWidth(), Unit.PX);
+        if (getAddImage() != null) {
+            header.getElement().getStyle().setPaddingLeft(getAddImage().getWidth(), Unit.PX);
         }
 
         for (EntityFolderColumnDescriptor column : columns) {
@@ -109,10 +109,10 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
 
         add(header);
 
-        add(content);
+        add(getContainer());
 
-        if (this.addable) {
-            add(imageHolder);
+        if (isAddable()) {
+            add(getImageHolder());
         }
     }
 

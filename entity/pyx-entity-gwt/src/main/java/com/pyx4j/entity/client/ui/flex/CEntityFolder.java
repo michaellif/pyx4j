@@ -56,7 +56,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private FolderDecorator<E> folderDecorator;
 
-    private final FlowPanel content;
+    private final FlowPanel container;
 
     protected int currentRowDebugId = 0;
 
@@ -65,7 +65,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     private final E entityPrototype;
 
     public CEntityFolder(Class<E> rowClass) {
-        content = new FlowPanel();
+        container = new FlowPanel();
         itemsMap = new LinkedHashMap<E, CEntityFolderItem<E>>();
         if (rowClass != null) {
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);
@@ -194,7 +194,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
             @Override
             public void onSuccess(E result) {
-                comp.setFirst(content.getWidgetCount() == 0);
+                comp.setFirst(container.getWidgetCount() == 0);
                 getValue().add(result);
                 comp.onBound(CEntityFolder.this);
                 comp.populate(result);
@@ -260,17 +260,17 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         }
 
         for (CEntityFolderItem<E> item : oldMap.values()) {
-            content.remove(item);
+            container.remove(item);
         }
 
         if (folderDecorator instanceof TableFolderDecorator) {
-            ((TableFolderDecorator<E>) folderDecorator).setHeaderVisible(content.getWidgetCount() > 0);
+            ((TableFolderDecorator<E>) folderDecorator).setHeaderVisible(container.getWidgetCount() > 0);
         }
 
     }
 
     private void abandonFolderItem(final CEntityFolderItem<E> component) {
-        content.remove(component);
+        container.remove(component);
         itemsMap.remove(component.getValue());
         ValueChangeEvent.fire(this, getValue());
     }
@@ -281,8 +281,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         component.setFolderItemDecorator(folderItemDecorator);
         component.addAccessAdapter(this);
-        if (content.getWidgetIndex(component) == -1) {
-            content.add(component);
+        if (container.getWidgetIndex(component) == -1) {
+            container.add(component);
         }
         itemsMap.put(component.getValue(), component);
 
@@ -325,8 +325,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return new NativeEntityPanel<IList<E>>();
     }
 
-    public FlowPanel getContent() {
-        return content;
+    public FlowPanel getContainer() {
+        return container;
     }
 
     @Override

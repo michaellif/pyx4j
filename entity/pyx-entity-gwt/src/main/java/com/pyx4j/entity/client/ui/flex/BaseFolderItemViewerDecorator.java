@@ -14,32 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 1, 2011
- * @author michaellif
+ * Created on Mar 5, 2011
+ * @author Misha
  * @version $Id$
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.IObject;
+public class BaseFolderItemViewerDecorator extends SimplePanel implements FolderItemViewerDecorator {
 
-public abstract class CEntityViewer<E extends IObject<?>> extends CEntityComponent<E, NativeEntityPanel<E>> {
+    public BaseFolderItemViewerDecorator() {
 
-    @Override
-    public void populate(E value) {
-        super.populate(value);
-        setContent(createContent(value));
     }
 
     @Override
-    protected NativeEntityPanel<E> createWidget() {
-        return new NativeEntityPanel<E>();
+    public void setFolderItemContainer(Widget w) {
+        setWidget(w);
     }
 
-    public abstract IsWidget createContent(E value);
-
-    protected void setContent(IsWidget widget) {
-        asWidget().setWidget(widget);
-    }
 }

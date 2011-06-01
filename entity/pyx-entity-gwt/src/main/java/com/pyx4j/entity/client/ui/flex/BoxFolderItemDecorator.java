@@ -31,14 +31,14 @@ public class BoxFolderItemDecorator extends BaseFolderItemDecorator {
     public BoxFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
         super(removeButton, removeButtonHover, title, removable);
 
-        content.getElement().getStyle().setMarginTop(10, Unit.PX);
-        content.getElement().getStyle().setMarginLeft(10, Unit.PX);
-        content.getElement().getStyle().setPadding(10, Unit.PX);
-        content.getElement().getStyle().setBorderStyle(BorderStyle.DASHED);
-        content.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        content.getElement().getStyle().setBorderColor("#999");
+        getContent().getElement().getStyle().setMarginTop(10, Unit.PX);
+        getContent().getElement().getStyle().setMarginLeft(10, Unit.PX);
+        getContent().getElement().getStyle().setPadding(10, Unit.PX);
+        getContent().getElement().getStyle().setBorderStyle(BorderStyle.DASHED);
+        getContent().getElement().getStyle().setBorderWidth(1, Unit.PX);
+        getContent().getElement().getStyle().setBorderColor("#999");
 
-        setWidget(rowHolder);
+        setWidget(getRowHolder());
 
     }
 
@@ -69,7 +69,7 @@ public class BoxFolderItemDecorator extends BaseFolderItemDecorator {
 
     @Override
     public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        return image.addClickHandler(handler);
+        return getRemoveImage().addClickHandler(handler);
     }
 
     @Override

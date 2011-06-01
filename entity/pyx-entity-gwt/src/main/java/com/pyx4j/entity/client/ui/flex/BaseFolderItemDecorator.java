@@ -22,6 +22,10 @@ package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -29,34 +33,55 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.forms.client.ui.decorators.ImageHolder;
-import com.pyx4j.widgets.client.ImageButton;
 
 public abstract class BaseFolderItemDecorator extends SimplePanel implements FolderItemDecorator {
 
-    protected Image image;
+    private Image removeImage;
 
-    protected SimplePanel content;
+    private final ImageResource imageResourceRegular;
 
-    protected FlowPanel rowHolder;
+    private final ImageResource imageResourceHover;
 
-    protected boolean buttonVisible;
+    private final SimplePanel content;
 
-    protected ImageHolder imageHolder;
+    private final FlowPanel rowHolder;
+
+    private boolean removable;
+
+    private ImageHolder imageHolder;
 
     public BaseFolderItemDecorator(ImageResource button, String title, boolean buttonVisible) {
         this(button, null, title, buttonVisible);
     }
 
     public BaseFolderItemDecorator(ImageResource button, ImageResource buttonHover, String title, boolean buttonVisible) {
-        this.buttonVisible = (buttonVisible && button != null);
+        this.removable = (buttonVisible && button != null);
+
+        imageResourceRegular = button;
+        imageResourceHover = buttonHover;
 
         rowHolder = new FlowPanel();
         rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         imageHolder = null;
         if (button != null) {
-            image = new ImageButton(button, buttonHover, title);
-            imageHolder = new ImageHolder(image);
+            removeImage = new Image(button);
+            removeImage.addMouseOverHandler(new MouseOverHandler() {
+
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    setHoverImage();
+                }
+            });
+            removeImage.addMouseOutHandler(new MouseOutHandler() {
+
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    setRegularImage();
+                }
+            });
+
+            imageHolder = new ImageHolder(removeImage);
             imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
 
             if (!buttonVisible) {
@@ -65,7 +90,7 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
 
             rowHolder.add(imageHolder);
         } else {
-            image = null;
+            removeImage = null;
         }
 
         content = new SimplePanel();
@@ -73,22 +98,58 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
 
         rowHolder.add(content);
 
-        if (image != null) {
-            image.setTitle(title);
-            image.getElement().getStyle().setCursor(Cursor.POINTER);
+        if (removeImage != null) {
+            removeImage.setTitle(title);
+            removeImage.getElement().getStyle().setCursor(Cursor.POINTER);
         }
+    }
+
+    protected SimplePanel getContent() {
+        return content;
+    }
+
+    protected FlowPanel getRowHolder() {
+        return rowHolder;
+    }
+
+    protected Image getRemoveImage() {
+        return removeImage;
+    }
+
+    protected ImageHolder getImageHolder() {
+        return imageHolder;
+    }
+
+    public void setRemovable(boolean removable) {
+        this.removable = removable;
+    }
+
+    protected boolean isRemovable() {
+        return removable;
     }
 
     @Override
     public void setFolderItem(CEntityFolderItem<?> folderItem) {
-        content.setWidget(folderItem.getContent());
+        content.setWidget(folderItem.getContainer());
     }
 
     @Override
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
-        if (image != null) {
-            image.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Remove.debugId());
+        if (removeImage != null) {
+            removeImage.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Remove.debugId());
+        }
+    }
+
+    protected void setRegularImage() {
+        if (imageResourceRegular != null) {
+            removeImage.setResource(imageResourceRegular);
+        }
+    }
+
+    protected void setHoverImage() {
+        if (imageResourceHover != null) {
+            removeImage.setResource(imageResourceHover);
         }
     }
 }

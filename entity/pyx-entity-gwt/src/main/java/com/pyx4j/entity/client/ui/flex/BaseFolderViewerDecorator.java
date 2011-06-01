@@ -20,26 +20,18 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IEntity;
 
-public abstract class CEntityViewer<E extends IObject<?>> extends CEntityComponent<E, NativeEntityPanel<E>> {
+public class BaseFolderViewerDecorator<E extends IEntity> extends SimplePanel implements FolderViewerDecorator<E> {
 
-    @Override
-    public void populate(E value) {
-        super.populate(value);
-        setContent(createContent(value));
+    public BaseFolderViewerDecorator() {
     }
 
     @Override
-    protected NativeEntityPanel<E> createWidget() {
-        return new NativeEntityPanel<E>();
+    public void setFolder(CEntityFolderViewer<?> w) {
+        setWidget(w.getContainer());
     }
 
-    public abstract IsWidget createContent(E value);
-
-    protected void setContent(IsWidget widget) {
-        asWidget().setWidget(widget);
-    }
 }

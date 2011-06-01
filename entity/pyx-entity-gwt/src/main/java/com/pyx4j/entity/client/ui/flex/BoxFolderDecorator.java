@@ -51,9 +51,9 @@ public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E
     public BoxFolderDecorator(ImageResource addButton, ImageResource addButtonHover, String title, boolean addable) {
         super(addButton, addButtonHover, title, addable);
 
-        add(content);
+        add(getContainer());
 
-        add(imageHolder);
+        add(getImageHolder());
     }
 
     @Override

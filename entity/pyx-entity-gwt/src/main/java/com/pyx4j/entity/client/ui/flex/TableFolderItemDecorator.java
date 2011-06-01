@@ -60,7 +60,7 @@ public class TableFolderItemDecorator extends BaseFolderItemDecorator {
         VerticalPanel mainPanel = new VerticalPanel();
         setWidget(mainPanel);
 
-        mainPanel.add(rowHolder);
+        mainPanel.add(getRowHolder());
 
         validationMessageHolder = new HTML();
         validationMessageHolder.getElement().getStyle().setColor("red");
@@ -83,8 +83,8 @@ public class TableFolderItemDecorator extends BaseFolderItemDecorator {
 
     @Override
     public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        if (image != null) {
-            return image.addClickHandler(handler);
+        if (getRemoveImage() != null) {
+            return getRemoveImage().addClickHandler(handler);
         } else {
             return null;
         }
@@ -93,7 +93,7 @@ public class TableFolderItemDecorator extends BaseFolderItemDecorator {
     @Override
     public HandlerRegistration addItemClickHandler(final ClickHandler handler) {
         //TODO add proper handler removal
-        return rowHolder.addDomHandler(new ClickHandler() {
+        return getRowHolder().addDomHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
@@ -117,14 +117,16 @@ public class TableFolderItemDecorator extends BaseFolderItemDecorator {
         return null;
     }
 
+    @Override
     public boolean isRemovable() {
-        return buttonVisible;
+        return isRemovable();
     }
 
+    @Override
     public void setRemovable(boolean removable) {
-        this.buttonVisible = removable;
-        if (imageHolder != null) {
-            imageHolder.setVisible(removable);
+        super.setRemovable(removable);
+        if (getImageHolder() != null) {
+            getImageHolder().setVisible(removable);
         }
     }
 }
