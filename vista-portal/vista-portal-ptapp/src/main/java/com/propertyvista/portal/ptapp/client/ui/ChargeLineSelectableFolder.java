@@ -22,14 +22,14 @@ import com.propertyvista.portal.domain.ptapp.ChargeLineSelectable;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectable> {
+public class ChargeLineSelectableFolder extends CEntityFolderEditor<ChargeLineSelectable> {
 
     private final boolean summaryViewMode;
 
@@ -39,11 +39,11 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
     }
 
     @Override
-    protected FolderDecorator<ChargeLineSelectable> createFolderDecorator() {
+    protected IFolderEditorDecorator<ChargeLineSelectable> createFolderDecorator() {
         return new BoxReadOnlyFolderDecorator<ChargeLineSelectable>() {
 
             @Override
-            public void setFolder(CEntityFolder<?> w) {
+            public void setFolder(CEntityFolderEditor<?> w) {
                 super.setFolder(w);
                 this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             }
@@ -51,12 +51,12 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
     }
 
     @Override
-    protected CEntityFolderItem<ChargeLineSelectable> createItem() {
+    protected CEntityFolderItemEditor<ChargeLineSelectable> createItem() {
 
-        return new CEntityFolderItem<ChargeLineSelectable>(ChargeLineSelectable.class) {
+        return new CEntityFolderItemEditor<ChargeLineSelectable>(ChargeLineSelectable.class) {
 
             @Override
-            public FolderItemDecorator createFolderItemDecorator() {
+            public IFolderItemEditorDecorator createFolderItemDecorator() {
                 return new BoxReadOnlyFolderItemDecorator(!isFirst(), "400px");
             }
 

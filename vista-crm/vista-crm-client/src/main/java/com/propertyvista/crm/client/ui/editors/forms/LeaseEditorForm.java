@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
@@ -81,7 +81,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         return main;
     }
 
-    private CEntityFolder<ChargeLine> createChargesListViewer() {
+    private CEntityFolderEditor<ChargeLine> createChargesListViewer() {
         return new CrmEntityFolder<ChargeLine>(ChargeLine.class, i18n.tr("Charge Line"), isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -93,7 +93,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private CEntityFolder<Pet> createPetListViewer() {
+    private CEntityFolderEditor<Pet> createPetListViewer() {
         return new CrmEntityFolder<Pet>(Pet.class, i18n.tr("Pets"), isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -108,7 +108,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private CEntityFolder<Rentable> createRentableListViewer() {
+    private CEntityFolderEditor<Rentable> createRentableListViewer() {
         return new CrmEntityFolder<Rentable>(Rentable.class, i18n.tr("Rentable Items"), isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -120,7 +120,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private CEntityFolder<Utility> createUtilityListViewer() {
+    private CEntityFolderEditor<Utility> createUtilityListViewer() {
         return new CrmEntityFolder<Utility>(Utility.class, i18n.tr("Utilities"), isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -132,7 +132,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private CEntityFolder<LeaseEvent> createLeaseEventsListViewer() {
+    private CEntityFolderEditor<LeaseEvent> createLeaseEventsListViewer() {
         return new CrmEntityFolder<LeaseEvent>(LeaseEvent.class, i18n.tr("Lease Events"), isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {

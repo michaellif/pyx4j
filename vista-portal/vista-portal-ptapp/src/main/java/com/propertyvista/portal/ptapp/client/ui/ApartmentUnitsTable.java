@@ -41,13 +41,13 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRow;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -69,7 +69,7 @@ import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
-public class ApartmentUnitsTable extends CEntityFolder<AptUnitDTO> {
+public class ApartmentUnitsTable extends CEntityFolderEditor<AptUnitDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentUnitsTable.class);
 
@@ -165,13 +165,13 @@ public class ApartmentUnitsTable extends CEntityFolder<AptUnitDTO> {
     }
 
     @Override
-    protected CEntityFolderItem<AptUnitDTO> createItem() {
+    protected CEntityFolderItemEditor<AptUnitDTO> createItem() {
         return new UnitTableRow(AptUnitDTO.class, columns);
     }
 
     @Override
-    protected FolderDecorator<AptUnitDTO> createFolderDecorator() {
-        TableFolderDecorator<AptUnitDTO> tfd = new TableFolderDecorator<AptUnitDTO>(columns);
+    protected IFolderEditorDecorator<AptUnitDTO> createFolderDecorator() {
+        TableFolderEditorDecorator<AptUnitDTO> tfd = new TableFolderEditorDecorator<AptUnitDTO>(columns);
         tfd.getHeader().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.UnitListHeader);
 
         floorplanRawPanel = new HorizontalPanel();
@@ -255,7 +255,7 @@ public class ApartmentUnitsTable extends CEntityFolder<AptUnitDTO> {
         }
     }
 
-    private class UnitTableRow extends CEntityFolderRow<AptUnitDTO> {
+    private class UnitTableRow extends CEntityFolderRowEditor<AptUnitDTO> {
 
         private ApartmentUnitDetailsPanel unitDetailsPanel;
 
@@ -266,8 +266,8 @@ public class ApartmentUnitsTable extends CEntityFolder<AptUnitDTO> {
         }
 
         @Override
-        public FolderItemDecorator createFolderItemDecorator() {
-            final TableFolderItemDecorator decorator = new TableFolderItemDecorator(null, null, false);
+        public IFolderItemEditorDecorator createFolderItemDecorator() {
+            final TableFolderItemEditorDecorator decorator = new TableFolderItemEditorDecorator(null, null, false);
             decorator.addItemClickHandler(new ClickHandler() {
 
                 @Override

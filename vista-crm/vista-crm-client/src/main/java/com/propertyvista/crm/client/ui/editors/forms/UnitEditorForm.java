@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -100,7 +100,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         return main;
     }
 
-    private CEntityFolder<AptUnitAmenity> createAmenitiesListEditor() {
+    private CEntityFolderEditor<AptUnitAmenity> createAmenitiesListEditor() {
         return new CrmEntityFolder<AptUnitAmenity>(AptUnitAmenity.class, "Amenity", isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -116,7 +116,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         };
     }
 
-    private CEntityFolder<Utility> createUtilitiesListEditor() {
+    private CEntityFolderEditor<Utility> createUtilitiesListEditor() {
         return new CrmEntityFolder<Utility>(Utility.class, "Utility", isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -129,7 +129,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         };
     }
 
-    private CEntityFolder<AptUnitItem> createDetailsListEditor() {
+    private CEntityFolderEditor<AptUnitItem> createDetailsListEditor() {
         AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.UnitItem() : new CrmSiteMap.Viewers.UnitItem());
         return new CrmEntityFolder<AptUnitItem>(AptUnitItem.class, "Unit Item", isEditable(), placeToGo, this) {
 
@@ -146,7 +146,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         };
     }
 
-    private CEntityFolder<AptUnitOccupancy> createOccupanciesListEditor() {
+    private CEntityFolderEditor<AptUnitOccupancy> createOccupanciesListEditor() {
         AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.UnitOccupancy() : new CrmSiteMap.Viewers.UnitOccupancy());
         return new CrmEntityFolder<AptUnitOccupancy>(AptUnitOccupancy.class, "Unit Occupancy", isEditable(), placeToGo, this) {
             @Override
@@ -162,12 +162,12 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         };
     }
 
-    private CEntityFolder<Concession> createConcessionsListEditor() {
+    private CEntityFolderEditor<Concession> createConcessionsListEditor() {
         AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Concession() : new CrmSiteMap.Viewers.Concession());
         return SubtypeInjectors.injectConcessions(isEditable(), placeToGo, this);
     }
 
-    private CEntityFolder<AddOn> createAddOnsListEditor() {
+    private CEntityFolderEditor<AddOn> createAddOnsListEditor() {
         return new CrmEntityFolder<AddOn>(AddOn.class, "Add-on", isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {

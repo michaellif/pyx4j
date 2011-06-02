@@ -24,10 +24,10 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -52,7 +52,7 @@ import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
-public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
+public class FinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncome> {
 
     private static I18n i18n = I18nFactory.getI18n(FinancialViewIncomeForm.class);
 
@@ -101,11 +101,11 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     }
 
     @Override
-    public FolderItemDecorator createFolderItemDecorator() {
+    public IFolderItemEditorDecorator createFolderItemDecorator() {
         if (summaryViewMode) {
             return new BoxReadOnlyFolderItemDecorator(!isFirst());
         } else {
-            return new BoxFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover());
+            return new BoxFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover());
         }
     }
 

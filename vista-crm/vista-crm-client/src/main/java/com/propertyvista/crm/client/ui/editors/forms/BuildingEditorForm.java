@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
@@ -124,7 +124,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(inject(address.addressType()), 12);
     }
 
-    private CEntityFolder<BuildingAmenity> createAmenitiesListEditor() {
+    private CEntityFolderEditor<BuildingAmenity> createAmenitiesListEditor() {
         return new CrmEntityFolder<BuildingAmenity>(BuildingAmenity.class, i18n.tr("Amenity"), isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -140,7 +140,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         };
     }
 
-    private CEntityFolder<ElevatorDTO> createElevatorsListEditor() {
+    private CEntityFolderEditor<ElevatorDTO> createElevatorsListEditor() {
         AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Elevator() : new CrmSiteMap.Viewers.Elevator());
         return new CrmEntityFolder<ElevatorDTO>(ElevatorDTO.class, i18n.tr("Elevator"), isEditable(), placeToGo, this) {
             @Override
@@ -155,7 +155,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         };
     }
 
-    private CEntityFolder<BoilerDTO> createBoilersListEditor() {
+    private CEntityFolderEditor<BoilerDTO> createBoilersListEditor() {
         AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Boiler() : new CrmSiteMap.Viewers.Boiler());
         return new CrmEntityFolder<BoilerDTO>(BoilerDTO.class, i18n.tr("Boiler"), isEditable(), placeToGo, this) {
             @Override
@@ -169,7 +169,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         };
     }
 
-    private CEntityFolder<RoofDTO> createRoofsListEditor() {
+    private CEntityFolderEditor<RoofDTO> createRoofsListEditor() {
         AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Roof() : new CrmSiteMap.Viewers.Roof());
         return new CrmEntityFolder<RoofDTO>(RoofDTO.class, i18n.tr("Roof"), isEditable(), placeToGo, this) {
             @Override
@@ -182,7 +182,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         };
     }
 
-    private CEntityFolder<ParkingDTO> createParkingsListEditor() {
+    private CEntityFolderEditor<ParkingDTO> createParkingsListEditor() {
         AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Parking() : new CrmSiteMap.Viewers.Parking());
         return new CrmEntityFolder<ParkingDTO>(ParkingDTO.class, i18n.tr("Parking"), isEditable(), placeToGo, this) {
             @Override
@@ -196,7 +196,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         };
     }
 
-    private CEntityFolder<LockerAreaDTO> createLockerAreasListEditor() {
+    private CEntityFolderEditor<LockerAreaDTO> createLockerAreasListEditor() {
         AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.LockerArea() : new CrmSiteMap.Viewers.LockerArea());
         return new CrmEntityFolder<LockerAreaDTO>(LockerAreaDTO.class, i18n.tr("Locker Area"), isEditable(), placeToGo, this) {
             @Override

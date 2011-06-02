@@ -34,12 +34,12 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRow;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -51,7 +51,7 @@ import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
+public class ChargeSplitListFolder extends CEntityFolderEditor<TenantCharge> {
 
     private static I18n i18n = I18nFactory.getI18n(ChargeSplitListFolder.class);
 
@@ -112,17 +112,17 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
     }
 
     @Override
-    protected FolderDecorator<TenantCharge> createFolderDecorator() {
+    protected IFolderEditorDecorator<TenantCharge> createFolderDecorator() {
         return new ChargeSplitListFolderDecorator();
     }
 
     @Override
-    protected CEntityFolderItem<TenantCharge> createItem() {
-        return new CEntityFolderRow<TenantCharge>(TenantCharge.class, columns) {
+    protected CEntityFolderItemEditor<TenantCharge> createItem() {
+        return new CEntityFolderRowEditor<TenantCharge>(TenantCharge.class, columns) {
 
             @Override
-            public FolderItemDecorator createFolderItemDecorator() {
-                TableFolderItemDecorator dec = new TableFolderItemDecorator(null);
+            public IFolderItemEditorDecorator createFolderItemDecorator() {
+                TableFolderItemEditorDecorator dec = new TableFolderItemEditorDecorator(null);
                 if (!isFirst()) {
                     Widget sp = new VistaLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
                     sp.getElement().getStyle().setPadding(0, Unit.EM);
@@ -175,7 +175,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
         };
     }
 
-    public class ChargeSplitListFolderDecorator extends VerticalPanel implements FolderDecorator<TenantCharge> {
+    public class ChargeSplitListFolderDecorator extends VerticalPanel implements IFolderEditorDecorator<TenantCharge> {
 
         private final HTML validationMessageHolder;
 
@@ -195,7 +195,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
         }
 
         @Override
-        public void setFolder(final CEntityFolder<?> folder) {
+        public void setFolder(final CEntityFolderEditor<?> folder) {
             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             if (getWidgetCount() > 1) {
                 remove(1);

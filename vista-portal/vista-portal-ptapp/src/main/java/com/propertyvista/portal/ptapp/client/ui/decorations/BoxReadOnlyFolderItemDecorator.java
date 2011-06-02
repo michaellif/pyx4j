@@ -22,10 +22,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 
-public class BoxReadOnlyFolderItemDecorator extends FlowPanel implements FolderItemDecorator {
+public class BoxReadOnlyFolderItemDecorator extends FlowPanel implements IFolderItemEditorDecorator {
 
     private final SimplePanel content;
 
@@ -54,7 +54,7 @@ public class BoxReadOnlyFolderItemDecorator extends FlowPanel implements FolderI
     }
 
     @Override
-    public void setFolderItem(CEntityFolderItem<?> w) {
+    public void setFolderItem(CEntityFolderItemEditor<?> w) {
         content.setWidget(w.getContainer());
     }
 

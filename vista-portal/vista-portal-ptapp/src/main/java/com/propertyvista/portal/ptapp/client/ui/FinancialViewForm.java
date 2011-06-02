@@ -34,15 +34,15 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRow;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -142,36 +142,36 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
         });
     }
 
-    private CEntityFolder<TenantIncome> createIncomeFolderEditor() {
+    private CEntityFolderEditor<TenantIncome> createIncomeFolderEditor() {
 
-        return new CEntityFolder<TenantIncome>(TenantIncome.class) {
+        return new CEntityFolderEditor<TenantIncome>(TenantIncome.class) {
 
             @Override
-            protected FolderDecorator<TenantIncome> createFolderDecorator() {
+            protected IFolderEditorDecorator<TenantIncome> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<TenantIncome>() {
                         @Override
-                        public void setFolder(CEntityFolder<?> w) {
+                        public void setFolder(CEntityFolderEditor<?> w) {
                             super.setFolder(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
                     };
                 } else {
-                    return new BoxFolderDecorator<TenantIncome>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                    return new BoxFolderEditorDecorator<TenantIncome>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                             i18n.tr("Add an income source"));
                 }
             }
 
             @Override
-            protected CEntityFolderItem<TenantIncome> createItem() {
+            protected CEntityFolderItemEditor<TenantIncome> createItem() {
                 return new FinancialViewIncomeForm(summaryViewMode);
             }
 
         };
     }
 
-    private CEntityFolder<TenantAsset> createAssetFolderEditorColumns() {
-        return new CEntityFolder<TenantAsset>(TenantAsset.class) {
+    private CEntityFolderEditor<TenantAsset> createAssetFolderEditorColumns() {
+        return new CEntityFolderEditor<TenantAsset>(TenantAsset.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -182,31 +182,31 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
             }
 
             @Override
-            protected FolderDecorator<TenantAsset> createFolderDecorator() {
+            protected IFolderEditorDecorator<TenantAsset> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<TenantAsset>() {
                         @Override
-                        public void setFolder(CEntityFolder<?> w) {
+                        public void setFolder(CEntityFolderEditor<?> w) {
                             super.setFolder(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
                     };
                 } else {
-                    return new TableFolderDecorator<TenantAsset>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                    return new TableFolderEditorDecorator<TenantAsset>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                             i18n.tr("Add an asset"));
                 }
             }
 
             @Override
-            protected CEntityFolderItem<TenantAsset> createItem() {
-                return new CEntityFolderRow<TenantAsset>(TenantAsset.class, columns) {
+            protected CEntityFolderItemEditor<TenantAsset> createItem() {
+                return new CEntityFolderRowEditor<TenantAsset>(TenantAsset.class, columns) {
 
                     @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
+                    public IFolderItemEditorDecorator createFolderItemDecorator() {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new TableFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove asset"));
+                            return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove asset"));
                         }
                     }
 
@@ -243,32 +243,32 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
 
     }
 
-    private CEntityFolder<TenantGuarantor> createGuarantorFolderEditorColumns() {
-        return new CEntityFolder<TenantGuarantor>(TenantGuarantor.class) {
+    private CEntityFolderEditor<TenantGuarantor> createGuarantorFolderEditorColumns() {
+        return new CEntityFolderEditor<TenantGuarantor>(TenantGuarantor.class) {
 
             @Override
-            protected FolderDecorator<TenantGuarantor> createFolderDecorator() {
+            protected IFolderEditorDecorator<TenantGuarantor> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<TenantGuarantor>() {
                         @Override
-                        public void setFolder(CEntityFolder<?> w) {
+                        public void setFolder(CEntityFolderEditor<?> w) {
                             super.setFolder(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
                     };
                 } else {
-                    return new BoxFolderDecorator<TenantGuarantor>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                    return new BoxFolderEditorDecorator<TenantGuarantor>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                             i18n.tr("Add guarantor"));
                 }
             }
 
             @Override
-            protected CEntityFolderItem<TenantGuarantor> createItem() {
+            protected CEntityFolderItemEditor<TenantGuarantor> createItem() {
                 return createGuarantorRowEditor();
             }
 
-            private CEntityFolderItem<TenantGuarantor> createGuarantorRowEditor() {
-                return new CEntityFolderItem<TenantGuarantor>(TenantGuarantor.class) {
+            private CEntityFolderItemEditor<TenantGuarantor> createGuarantorRowEditor() {
+                return new CEntityFolderItemEditor<TenantGuarantor>(TenantGuarantor.class) {
 
                     @Override
                     public IsWidget createContent() {
@@ -293,11 +293,11 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                     }
 
                     @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
+                    public IFolderItemEditorDecorator createFolderItemDecorator() {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new BoxFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove guarantor"));
+                            return new BoxFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove guarantor"));
                         }
                     }
 

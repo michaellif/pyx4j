@@ -29,13 +29,13 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRow;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -113,9 +113,9 @@ public class PetsViewForm extends CEntityForm<Pets> {
         });
     }
 
-    private CEntityFolder<Pet> createPetsEditorColumns() {
+    private CEntityFolderEditor<Pet> createPetsEditorColumns() {
 
-        return new CEntityFolder<Pet>(Pet.class) {
+        return new CEntityFolderEditor<Pet>(Pet.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -133,17 +133,17 @@ public class PetsViewForm extends CEntityForm<Pets> {
             }
 
             @Override
-            protected FolderDecorator<Pet> createFolderDecorator() {
+            protected IFolderEditorDecorator<Pet> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<Pet>() {
                         @Override
-                        public void setFolder(CEntityFolder<?> w) {
+                        public void setFolder(CEntityFolderEditor<?> w) {
                             super.setFolder(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
                     };
                 } else {
-                    return new TableFolderDecorator<Pet>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(), i18n.tr("Add a pet"));
+                    return new TableFolderEditorDecorator<Pet>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(), i18n.tr("Add a pet"));
                 }
 
             }
@@ -158,15 +158,15 @@ public class PetsViewForm extends CEntityForm<Pets> {
             }
 
             @Override
-            protected CEntityFolderItem<Pet> createItem() {
-                return new CEntityFolderRow<Pet>(Pet.class, columns) {
+            protected CEntityFolderItemEditor<Pet> createItem() {
+                return new CEntityFolderRowEditor<Pet>(Pet.class, columns) {
 
                     @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
+                    public IFolderItemEditorDecorator createFolderItemDecorator() {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new TableFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove pet"));
+                            return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove pet"));
                         }
                     }
 

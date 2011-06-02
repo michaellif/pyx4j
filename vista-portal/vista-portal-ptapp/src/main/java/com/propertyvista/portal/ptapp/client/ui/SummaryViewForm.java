@@ -43,10 +43,10 @@ import com.google.inject.Singleton;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.client.DownloadFrame;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -359,14 +359,14 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             content.add(cellContent);
         }
 
-        public CEntityFolder<PotentialTenantInfo> createTenantTable() {
+        public CEntityFolderEditor<PotentialTenantInfo> createTenantTable() {
 
-            return new CEntityFolder<PotentialTenantInfo>(PotentialTenantInfo.class) {
+            return new CEntityFolderEditor<PotentialTenantInfo>(PotentialTenantInfo.class) {
 
                 @Override
-                protected CEntityFolderItem<PotentialTenantInfo> createItem() {
+                protected CEntityFolderItemEditor<PotentialTenantInfo> createItem() {
 
-                    return new CEntityFolderItem<PotentialTenantInfo>(PotentialTenantInfo.class) {
+                    return new CEntityFolderItemEditor<PotentialTenantInfo>(PotentialTenantInfo.class) {
 
                         @Override
                         public IsWidget createContent() {
@@ -386,14 +386,14 @@ public class SummaryViewForm extends CEntityForm<Summary> {
                         }
 
                         @Override
-                        public FolderItemDecorator createFolderItemDecorator() {
+                        public IFolderItemEditorDecorator createFolderItemDecorator() {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         }
                     };
                 }
 
                 @Override
-                protected FolderDecorator<PotentialTenantInfo> createFolderDecorator() {
+                protected IFolderEditorDecorator<PotentialTenantInfo> createFolderDecorator() {
                     return new BoxReadOnlyFolderDecorator<PotentialTenantInfo>();
                 }
             };
@@ -403,17 +403,17 @@ public class SummaryViewForm extends CEntityForm<Summary> {
     /*
      * Tenants detailed information view implementation
      */
-    public CEntityFolder<PotentialTenantInfo> createTenantView() {
+    public CEntityFolderEditor<PotentialTenantInfo> createTenantView() {
 
-        return new CEntityFolder<PotentialTenantInfo>(PotentialTenantInfo.class) {
+        return new CEntityFolderEditor<PotentialTenantInfo>(PotentialTenantInfo.class) {
 
             @Override
-            protected CEntityFolderItem<PotentialTenantInfo> createItem() {
+            protected CEntityFolderItemEditor<PotentialTenantInfo> createItem() {
                 return new SummaryViewTenantInfo();
             }
 
             @Override
-            protected FolderDecorator<PotentialTenantInfo> createFolderDecorator() {
+            protected IFolderEditorDecorator<PotentialTenantInfo> createFolderDecorator() {
                 return new BoxReadOnlyFolderDecorator<PotentialTenantInfo>();
             }
         };
@@ -422,17 +422,17 @@ public class SummaryViewForm extends CEntityForm<Summary> {
     /*
      * Financial detailed information view implementation
      */
-    public CEntityFolder<SummaryPotentialTenantFinancial> createFinancialView() {
+    public CEntityFolderEditor<SummaryPotentialTenantFinancial> createFinancialView() {
 
-        return new CEntityFolder<SummaryPotentialTenantFinancial>(SummaryPotentialTenantFinancial.class) {
+        return new CEntityFolderEditor<SummaryPotentialTenantFinancial>(SummaryPotentialTenantFinancial.class) {
 
             @Override
-            protected CEntityFolderItem<SummaryPotentialTenantFinancial> createItem() {
+            protected CEntityFolderItemEditor<SummaryPotentialTenantFinancial> createItem() {
                 return new SummaryViewTenantFinancial();
             }
 
             @Override
-            protected FolderDecorator<SummaryPotentialTenantFinancial> createFolderDecorator() {
+            protected IFolderEditorDecorator<SummaryPotentialTenantFinancial> createFolderDecorator() {
                 return new BoxReadOnlyFolderDecorator<SummaryPotentialTenantFinancial>();
             }
         };

@@ -25,9 +25,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRow;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -40,7 +40,7 @@ import com.propertyvista.portal.domain.util.ValidationUtils;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.validators.BirthdayDateValidator;
 
-final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
+final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantInfo> {
 
     TenantsViewFolderRow(List<EntityFolderColumnDescriptor> columns) {
         super(PotentialTenantInfo.class, columns);
@@ -150,8 +150,8 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
     }
 
     @Override
-    public FolderItemDecorator createFolderItemDecorator() {
-        return new TableFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), TenantsViewForm.i18n.tr("Remove person"),
+    public IFolderItemEditorDecorator createFolderItemDecorator() {
+        return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), TenantsViewForm.i18n.tr("Remove person"),
                 !isFirst());
     }
 

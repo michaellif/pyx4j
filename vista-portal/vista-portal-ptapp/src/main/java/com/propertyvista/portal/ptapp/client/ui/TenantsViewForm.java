@@ -25,10 +25,10 @@ import com.google.inject.Singleton;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -86,9 +86,9 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
         });
     }
 
-    private CEntityFolder<PotentialTenantInfo> createTenantsEditorColumns() {
+    private CEntityFolderEditor<PotentialTenantInfo> createTenantsEditorColumns() {
 
-        return new CEntityFolder<PotentialTenantInfo>(PotentialTenantInfo.class) {
+        return new CEntityFolderEditor<PotentialTenantInfo>(PotentialTenantInfo.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -104,13 +104,13 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
             }
 
             @Override
-            protected FolderDecorator<PotentialTenantInfo> createFolderDecorator() {
-                return new TableFolderDecorator<PotentialTenantInfo>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+            protected IFolderEditorDecorator<PotentialTenantInfo> createFolderDecorator() {
+                return new TableFolderEditorDecorator<PotentialTenantInfo>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                         i18n.tr("Add a person"));
             }
 
             @Override
-            protected CEntityFolderItem<PotentialTenantInfo> createItem() {
+            protected CEntityFolderItemEditor<PotentialTenantInfo> createItem() {
                 return new TenantsViewFolderRow(columns);
             }
         };

@@ -37,16 +37,16 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRow;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -381,8 +381,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
     }
 
-    private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {
-        return new CEntityFolder<Vehicle>(Vehicle.class) {
+    private CEntityFolderEditor<Vehicle> createVehicleFolderEditorColumns() {
+        return new CEntityFolderEditor<Vehicle>(Vehicle.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
 
@@ -397,21 +397,21 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             }
 
             @Override
-            protected FolderDecorator<Vehicle> createFolderDecorator() {
-                return new TableFolderDecorator<Vehicle>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(), i18n.tr("Add a vehicle"));
+            protected IFolderEditorDecorator<Vehicle> createFolderDecorator() {
+                return new TableFolderEditorDecorator<Vehicle>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(), i18n.tr("Add a vehicle"));
             }
 
             @Override
-            protected CEntityFolderItem<Vehicle> createItem() {
+            protected CEntityFolderItemEditor<Vehicle> createItem() {
                 return createVehicleRowEditor(columns);
             }
 
-            private CEntityFolderItem<Vehicle> createVehicleRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRow<Vehicle>(Vehicle.class, columns) {
+            private CEntityFolderItemEditor<Vehicle> createVehicleRowEditor(final List<EntityFolderColumnDescriptor> columns) {
+                return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns) {
 
                     @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove vehicle"));
+                    public IFolderItemEditorDecorator createFolderItemDecorator() {
+                        return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove vehicle"));
                     }
 
                     @Override
@@ -445,18 +445,18 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
     }
 
-    private CEntityFolder<EmergencyContact> createEmergencyContactFolderEditor() {
+    private CEntityFolderEditor<EmergencyContact> createEmergencyContactFolderEditor() {
 
-        return new CEntityFolder<EmergencyContact>(EmergencyContact.class) {
+        return new CEntityFolderEditor<EmergencyContact>(EmergencyContact.class) {
 
             @Override
-            protected FolderDecorator<EmergencyContact> createFolderDecorator() {
-                return new BoxFolderDecorator<EmergencyContact>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+            protected IFolderEditorDecorator<EmergencyContact> createFolderDecorator() {
+                return new BoxFolderEditorDecorator<EmergencyContact>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                         i18n.tr("Add one more contact"));
             }
 
             @Override
-            protected CEntityFolderItem<EmergencyContact> createItem() {
+            protected CEntityFolderItemEditor<EmergencyContact> createItem() {
                 return createEmergencyContactItem();
             }
 
@@ -470,9 +470,9 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         };
     }
 
-    private CEntityFolderItem<EmergencyContact> createEmergencyContactItem() {
+    private CEntityFolderItemEditor<EmergencyContact> createEmergencyContactItem() {
 
-        return new CEntityFolderItem<EmergencyContact>(EmergencyContact.class) {
+        return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
@@ -488,8 +488,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             }
 
             @Override
-            public FolderItemDecorator createFolderItemDecorator() {
-                return new BoxFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove contact"), !isFirst());
+            public IFolderItemEditorDecorator createFolderItemDecorator() {
+                return new BoxFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove contact"), !isFirst());
             }
         };
     }

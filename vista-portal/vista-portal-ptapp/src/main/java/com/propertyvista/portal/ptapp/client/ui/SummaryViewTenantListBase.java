@@ -28,15 +28,15 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.widgets.client.ImageButton;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
-public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEntityFolderItem<E> {
+public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEntityFolderItemEditor<E> {
 
     protected final I18n i18n = I18nFactory.getI18n(SummaryViewTenantListBase.class);
 
@@ -74,7 +74,7 @@ public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEnti
     }
 
     @Override
-    public FolderItemDecorator createFolderItemDecorator() {
+    public IFolderItemEditorDecorator createFolderItemDecorator() {
         return new BoxReadOnlyFolderItemDecorator(false);
     }
 

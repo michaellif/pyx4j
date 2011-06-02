@@ -47,12 +47,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRow;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -65,7 +65,7 @@ import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.rpc.ptapp.ServletMapping;
 
-public class ApplicationDocumentsFolderUploader extends CEntityFolder<ApplicationDocument> {
+public class ApplicationDocumentsFolderUploader extends CEntityFolderEditor<ApplicationDocument> {
 
     private static I18n i18n = I18nFactory.getI18n(ApplicationDocumentsFolderUploader.class);
 
@@ -85,13 +85,13 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
     }
 
     @Override
-    protected FolderDecorator<ApplicationDocument> createFolderDecorator() {
+    protected IFolderEditorDecorator<ApplicationDocument> createFolderDecorator() {
         return new UploaderFolderDecorator();
     }
 
     @Override
-    protected CEntityFolderItem<ApplicationDocument> createItem() {
-        return new CEntityFolderRow<ApplicationDocument>(ApplicationDocument.class, columns) {
+    protected CEntityFolderItemEditor<ApplicationDocument> createItem() {
+        return new CEntityFolderRowEditor<ApplicationDocument>(ApplicationDocument.class, columns) {
 
             @Override
             protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
@@ -111,13 +111,13 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             }
 
             @Override
-            public FolderItemDecorator createFolderItemDecorator() {
-                return new TableFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove file"));
+            public IFolderItemEditorDecorator createFolderItemDecorator() {
+                return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove file"));
             }
         };
     }
 
-    protected void callSuperRemoveItem(final CEntityFolderItem<ApplicationDocument> comp, final FolderItemDecorator folderItemDecorator) {
+    protected void callSuperRemoveItem(final CEntityFolderItemEditor<ApplicationDocument> comp, final IFolderItemEditorDecorator folderItemDecorator) {
         super.removeItem(comp, folderItemDecorator);
     }
 
@@ -125,7 +125,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
         tenantId = id;
     }
 
-    private class UploaderFolderDecorator extends HorizontalPanel implements FolderDecorator<ApplicationDocument> {
+    private class UploaderFolderDecorator extends HorizontalPanel implements IFolderEditorDecorator<ApplicationDocument> {
 
         private SimplePanel appDocsListHolder;
 
@@ -180,7 +180,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
         }
 
         @Override
-        public void setFolder(CEntityFolder<?> w) {
+        public void setFolder(CEntityFolderEditor<?> w) {
             appDocsListHolder.setWidget(w.getContainer());
         }
 

@@ -30,11 +30,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRow;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -199,8 +199,8 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
         return addressPanel;
     }
 
-    private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {
-        return new CEntityFolder<Vehicle>(Vehicle.class) {
+    private CEntityFolderEditor<Vehicle> createVehicleFolderEditorColumns() {
+        return new CEntityFolderEditor<Vehicle>(Vehicle.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
 
@@ -214,20 +214,20 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
             }
 
             @Override
-            protected FolderDecorator<Vehicle> createFolderDecorator() {
+            protected IFolderEditorDecorator<Vehicle> createFolderDecorator() {
                 return new BoxReadOnlyFolderDecorator<Vehicle>();
             }
 
             @Override
-            protected CEntityFolderItem<Vehicle> createItem() {
+            protected CEntityFolderItemEditor<Vehicle> createItem() {
                 return createVechileRowEditor(columns);
             }
 
-            private CEntityFolderItem<Vehicle> createVechileRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRow<Vehicle>(Vehicle.class, columns) {
+            private CEntityFolderItemEditor<Vehicle> createVechileRowEditor(final List<EntityFolderColumnDescriptor> columns) {
+                return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns) {
 
                     @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
+                    public IFolderItemEditorDecorator createFolderItemDecorator() {
                         return new BoxReadOnlyFolderItemDecorator(false);
                     }
 
@@ -238,23 +238,23 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
 
     }
 
-    private CEntityFolder<EmergencyContact> createEmergencyContactsFolder() {
+    private CEntityFolderEditor<EmergencyContact> createEmergencyContactsFolder() {
 
-        return new CEntityFolder<EmergencyContact>(EmergencyContact.class) {
+        return new CEntityFolderEditor<EmergencyContact>(EmergencyContact.class) {
 
             @Override
-            protected FolderDecorator<EmergencyContact> createFolderDecorator() {
+            protected IFolderEditorDecorator<EmergencyContact> createFolderDecorator() {
                 return new BoxReadOnlyFolderDecorator<EmergencyContact>();
             }
 
             @Override
-            protected CEntityFolderItem<EmergencyContact> createItem() {
+            protected CEntityFolderItemEditor<EmergencyContact> createItem() {
                 return createEmergencyContactItem();
             }
 
-            private CEntityFolderItem<EmergencyContact> createEmergencyContactItem() {
+            private CEntityFolderItemEditor<EmergencyContact> createEmergencyContactItem() {
 
-                return new CEntityFolderItem<EmergencyContact>(EmergencyContact.class) {
+                return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
                     @Override
                     public IsWidget createContent() {
                         FlowPanel contactPanel = new FlowPanel();
@@ -285,7 +285,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
                     }
 
                     @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
+                    public IFolderItemEditorDecorator createFolderItemDecorator() {
                         return new BoxReadOnlyFolderItemDecorator(!isFirst());
                     }
                 };

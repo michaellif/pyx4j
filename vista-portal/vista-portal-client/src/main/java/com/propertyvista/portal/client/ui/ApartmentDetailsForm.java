@@ -26,8 +26,8 @@ import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityViewer;
-import com.pyx4j.entity.client.ui.flex.viewer.FolderItemViewerDecorator;
-import com.pyx4j.entity.client.ui.flex.viewer.FolderViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
@@ -94,7 +94,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         return new CEntityFolderViewer<FloorplanDTO>(FloorplanDTO.class) {
 
             @Override
-            protected FolderViewerDecorator<FloorplanDTO> createFolderDecorator() {
+            protected IFolderViewerDecorator<FloorplanDTO> createFolderDecorator() {
                 return new BaseFolderViewerDecorator<FloorplanDTO>();
             }
 
@@ -111,7 +111,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         return new CEntityFolderItemViewer<FloorplanDTO>() {
 
             @Override
-            public FolderItemViewerDecorator createFolderItemDecorator() {
+            public IFolderItemViewerDecorator createFolderItemDecorator() {
                 return new BaseFolderItemViewerDecorator();
             }
 

@@ -23,13 +23,13 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRow;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -37,7 +37,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
-public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E> {
+public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEditor<E> {
     protected static I18n i18n = I18nFactory.getI18n(CrmEntityFolder.class);
 
     private final Class<E> clazz;
@@ -66,12 +66,12 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
     protected abstract List<EntityFolderColumnDescriptor> columns();
 
     @Override
-    protected CEntityFolderItem<E> createItem() {
-        return new CEntityFolderRow<E>(clazz, columns()) {
+    protected CEntityFolderItemEditor<E> createItem() {
+        return new CEntityFolderRowEditor<E>(clazz, columns()) {
 
             @Override
-            public FolderItemDecorator createFolderItemDecorator() {
-                FolderItemDecorator decor;
+            public IFolderItemEditorDecorator createFolderItemDecorator() {
+                IFolderItemEditorDecorator decor;
                 if (place != null) {
                     decor = new CrmFolderItemDecorator(i18n.tr("Remove ") + itemName, editable);
                     decor.addItemClickHandler(new ClickHandler() {
@@ -81,7 +81,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
                         }
                     });
                 } else {
-                    decor = new TableFolderItemDecorator(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove ") + itemName, editable);
+                    decor = new TableFolderItemEditorDecorator(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove ") + itemName, editable);
                 }
                 return decor;
             }
@@ -89,7 +89,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
     }
 
     @Override
-    protected FolderDecorator<E> createFolderDecorator() {
+    protected IFolderEditorDecorator<E> createFolderDecorator() {
         if (place != null && parent != null) {
             CrmTableFolderDecorator<E> decor = new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add new ") + itemName, editable);
             decor.addNewItemClickHandler(new ClickHandler() {
@@ -100,7 +100,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
             });
             return decor;
         } else {
-            return new TableFolderDecorator<E>(columns(), CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add new ") + itemName, editable);
+            return new TableFolderEditorDecorator<E>(columns(), CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add new ") + itemName, editable);
         }
     }
 }

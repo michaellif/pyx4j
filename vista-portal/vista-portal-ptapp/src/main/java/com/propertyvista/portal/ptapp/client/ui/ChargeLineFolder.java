@@ -22,23 +22,23 @@ import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 
-public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
+public class ChargeLineFolder extends CEntityFolderEditor<ChargeLine> {
 
     public ChargeLineFolder() {
         super(ChargeLine.class);
     }
 
     @Override
-    protected FolderDecorator<ChargeLine> createFolderDecorator() {
+    protected IFolderEditorDecorator<ChargeLine> createFolderDecorator() {
         return new BoxReadOnlyFolderDecorator<ChargeLine>() {
 
             @Override
-            public void setFolder(CEntityFolder<?> w) {
+            public void setFolder(CEntityFolderEditor<?> w) {
                 super.setFolder(w);
                 this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             }
@@ -46,12 +46,12 @@ public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
     }
 
     @Override
-    protected CEntityFolderItem<ChargeLine> createItem() {
+    protected CEntityFolderItemEditor<ChargeLine> createItem() {
 
-        return new CEntityFolderItem<ChargeLine>(ChargeLine.class) {
+        return new CEntityFolderItemEditor<ChargeLine>(ChargeLine.class) {
 
             @Override
-            public FolderItemDecorator createFolderItemDecorator() {
+            public IFolderItemEditorDecorator createFolderItemDecorator() {
                 return new BoxReadOnlyFolderItemDecorator(!isFirst(), "400px");
             }
 
