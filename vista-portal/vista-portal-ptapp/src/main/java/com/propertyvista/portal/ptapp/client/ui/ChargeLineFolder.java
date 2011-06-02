@@ -22,10 +22,10 @@ import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
-import com.pyx4j.entity.client.ui.flex.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
 
 public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
 

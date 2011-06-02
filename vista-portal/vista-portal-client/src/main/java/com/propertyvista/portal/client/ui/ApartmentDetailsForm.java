@@ -20,14 +20,14 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.BaseFolderItemViewerDecorator;
-import com.pyx4j.entity.client.ui.flex.BaseFolderViewerDecorator;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderItemViewer;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderViewer;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.CEntityViewer;
-import com.pyx4j.entity.client.ui.flex.FolderItemViewerDecorator;
-import com.pyx4j.entity.client.ui.flex.FolderViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
+import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
+import com.pyx4j.entity.client.ui.flex.viewer.CEntityViewer;
+import com.pyx4j.entity.client.ui.flex.viewer.FolderItemViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.viewer.FolderViewerDecorator;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;

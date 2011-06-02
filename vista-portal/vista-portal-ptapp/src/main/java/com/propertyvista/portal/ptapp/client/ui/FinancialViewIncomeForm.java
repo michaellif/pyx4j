@@ -24,10 +24,10 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComboBox;

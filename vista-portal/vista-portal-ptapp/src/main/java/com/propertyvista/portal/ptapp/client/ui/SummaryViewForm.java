@@ -42,11 +42,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.client.ui.flex.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.client.DownloadFrame;
 import com.pyx4j.forms.client.ui.CCheckBox;

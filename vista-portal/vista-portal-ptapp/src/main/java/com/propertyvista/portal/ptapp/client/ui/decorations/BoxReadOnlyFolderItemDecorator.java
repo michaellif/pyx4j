@@ -22,8 +22,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 
-import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.flex.editor.FolderItemDecorator;
 
 public class BoxReadOnlyFolderItemDecorator extends FlowPanel implements FolderItemDecorator {
 

@@ -21,8 +21,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Button;
 
-import com.pyx4j.entity.client.ui.flex.BaseFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.flex.editor.BaseFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItem;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 

@@ -19,7 +19,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.portal.domain.util.ValidationUtils;
 
-import com.pyx4j.entity.client.ui.flex.CEntityEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
