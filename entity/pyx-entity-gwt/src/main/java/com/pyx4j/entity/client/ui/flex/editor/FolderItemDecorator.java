@@ -14,32 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 1, 2011
- * @author michaellif
+ * Created on Feb 12, 2011
+ * @author Misha
  * @version $Id$
  */
-package com.pyx4j.entity.client.ui.flex;
+package com.pyx4j.entity.client.ui.flex.editor;
 
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.IObject;
 
-public abstract class CEntityViewer<E extends IObject<?>> extends CEntityComponent<E, NativeEntityPanel<E>> {
+public interface FolderItemDecorator extends IsWidget {
 
-    @Override
-    public void populate(E value) {
-        super.populate(value);
-        setContent(createContent(value));
-    }
+    HandlerRegistration addItemClickHandler(ClickHandler handler);
 
-    @Override
-    protected NativeEntityPanel<E> createWidget() {
-        return new NativeEntityPanel<E>();
-    }
+    HandlerRegistration addItemRemoveClickHandler(ClickHandler handler);
 
-    public abstract IsWidget createContent(E value);
+    HandlerRegistration addRowUpClickHandler(ClickHandler handler);
 
-    protected void setContent(IsWidget widget) {
-        asWidget().setWidget(widget);
-    }
+    HandlerRegistration addRowDownClickHandler(ClickHandler handler);
+
+    HandlerRegistration addRowCollapseClickHandler(ClickHandler handler);
+
+    void setFolderItem(CEntityFolderItem<?> w);
+
 }

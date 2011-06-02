@@ -18,7 +18,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.entity.client.ui.flex;
+package com.pyx4j.entity.client.ui.flex.editor;
 
 import java.util.List;
 
@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ImageFactory;
@@ -125,7 +126,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         setHeaderVisible(!event.getValue().isNull() && event.getValue().size() > 0);
     }
 
-    void setHeaderVisible(boolean visible) {
+    protected void setHeaderVisible(boolean visible) {
         if (visible) {
             header.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         } else {

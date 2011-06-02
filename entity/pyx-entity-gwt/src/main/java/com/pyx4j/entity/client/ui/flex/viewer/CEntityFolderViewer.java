@@ -18,7 +18,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.entity.client.ui.flex;
+package com.pyx4j.entity.client.ui.flex.viewer;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -30,6 +30,10 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.client.ui.flex.CEntityComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityContainer;
+import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
+import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;

@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.client.ui.flex;
+package com.pyx4j.entity.client.ui.flex.editor;
 
 import java.util.Collection;
 
@@ -31,6 +31,10 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.client.ui.flex.CEntityComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityContainer;
+import com.pyx4j.entity.client.ui.flex.EntityBinder;
+import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -153,7 +157,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         initContent();
     }
 
-    final void initContent() {
+    protected final void initContent() {
         attachContent();
         addValidations();
     }

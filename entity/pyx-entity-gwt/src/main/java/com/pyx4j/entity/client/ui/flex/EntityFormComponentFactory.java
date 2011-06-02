@@ -22,6 +22,8 @@ package com.pyx4j.entity.client.ui.flex;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
