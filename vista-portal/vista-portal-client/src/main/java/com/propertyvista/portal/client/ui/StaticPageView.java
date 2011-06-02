@@ -15,6 +15,11 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface HomeView extends IsWidget {
+public interface StaticPageView extends IsWidget {
 
+    void setContent(String content);
+
+    public interface Presenter {
+
+    }
 }

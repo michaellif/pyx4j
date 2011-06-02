@@ -16,14 +16,15 @@ package com.propertyvista.portal.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.propertyvista.common.client.Message;
-import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.common.client.Message;
+import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class PortalSite extends VistaSite {
     private PortalGinjector ginjector;
@@ -40,7 +41,7 @@ public class PortalSite extends VistaSite {
         GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
 
         ginjector = GWT.create(PortalGinjector.class);
-        AppPlace defaultplace = new PortalSiteMap.Home();
+        AppPlace defaultplace = new PortalSiteMap.Landing();
         getHistoryHandler().register(getPlaceController(), getEventBus(), defaultplace);
 
         RootPanel.get().add(ginjector.getSiteView());

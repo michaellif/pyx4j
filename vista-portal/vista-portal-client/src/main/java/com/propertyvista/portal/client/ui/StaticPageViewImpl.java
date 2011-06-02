@@ -8,7 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on May 22, 2011
- * @author vadims
+ * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui;
@@ -17,13 +17,20 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class HomeViewImpl extends SimplePanel implements HomeView {
+public class StaticPageViewImpl extends SimplePanel implements StaticPageView {
 
-    public HomeViewImpl() {
+    private final HTML label;
+
+    public StaticPageViewImpl() {
         FlowPanel panel = new FlowPanel();
-        HTML label = new HTML("Static content for home page");
+        label = new HTML("Static content");
         panel.add(label);
         setWidget(panel);
+    }
+
+    @Override
+    public void setContent(String content) {
+        label.setHTML(content);
     }
 
 }

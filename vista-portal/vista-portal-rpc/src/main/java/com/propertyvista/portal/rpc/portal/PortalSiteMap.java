@@ -19,12 +19,13 @@ import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 public class PortalSiteMap implements SiteMap {
-    public static String ARG_NAME_ITEM_ID = "ItemID";
 
-    public static class Home extends AppPlace {
+    public static String ARG_PAGE_ID = "item-id";
+
+    public static class Landing extends AppPlace {
     }
 
-    public static class AboutUs extends AppPlace {
+    public static class Page extends AppPlace {
     }
 
     @PlaceProperties(caption = "Find an Apartment")

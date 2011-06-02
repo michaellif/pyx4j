@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ui;
 
+import java.util.HashMap;
+
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -21,6 +23,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
@@ -35,6 +38,7 @@ import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.portal.domain.site.NavigItem;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
@@ -97,7 +101,13 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         NavigTab(NavigItem menuItem) {
             super();
-            this.place = AppSite.getHistoryMapper().getPlace(menuItem.placeId().getValue());
+
+            String placeid = menuItem.placeId().getValue();
+            place = AppSite.getHistoryMapper().getPlace(placeid);
+
+            HashMap<String, String> args = new HashMap<String, String>();
+            args.put(PortalSiteMap.ARG_PAGE_ID, menuItem.pageId().getValue());
+            place.setArgs(args);
 
             setElement(DOM.createElement("li"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
@@ -117,16 +127,9 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             statusHolder.add(label);
 
-            String placeid = AppSite.getPlaceId(place);
-            String current = AppSite.getPlaceId(presenter.getWhere());
-            if (current != null) {
-                String[] path = current.split("/");
-                if (path.length > 0)
-                    current = path[0];
+            Place currentPlace = presenter.getWhere();
 
-            }
-
-            if (placeid != null && placeid.equals(current)) {
+            if (place.equals(currentPlace)) {
                 label.addStyleDependentName(StyleDependent.current.name());
             }
 

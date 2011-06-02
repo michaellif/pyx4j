@@ -18,34 +18,26 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.propertyvista.portal.client.activity.AboutUsActivity;
-import com.propertyvista.portal.client.activity.HomeActivity;
+
+import com.propertyvista.portal.client.activity.StaticPageActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class StaticContentActivityMapper implements ActivityMapper {
 
-    Provider<AboutUsActivity> aboutActivity;
-
-    Provider<HomeActivity> homeActivity;
+    Provider<StaticPageActivity> staticPageActivityProvider;
 
     @Inject
     public StaticContentActivityMapper(
 
-    Provider<AboutUsActivity> aboutActivity,
-
-    Provider<HomeActivity> homeActivty) {
+    Provider<StaticPageActivity> staticPageActivityProvider) {
         super();
-        this.aboutActivity = aboutActivity;
-        this.homeActivity = homeActivty;
-
+        this.staticPageActivityProvider = staticPageActivityProvider;
     }
 
     @Override
     public Activity getActivity(Place place) {
-        if (place instanceof PortalSiteMap.AboutUs) {
-            return aboutActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.Home) {
-            return homeActivity.get().withPlace(place);
+        if (place instanceof PortalSiteMap.Page) {
+            return staticPageActivityProvider.get().withPlace(place);
         }
         return null;
     }

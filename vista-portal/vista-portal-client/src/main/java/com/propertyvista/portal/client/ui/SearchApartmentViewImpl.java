@@ -16,19 +16,17 @@ package com.propertyvista.portal.client.ui;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class SearchApartmentViewImpl extends SimplePanel implements SearchApartmentView {
-    private Presenter presenter;
 
-    SearchApartmentForm sa;
+    SearchApartmentForm form;
 
     public SearchApartmentViewImpl() {
-        sa = new SearchApartmentForm();
-        setWidget(sa.createContent());
+        form = new SearchApartmentForm();
+        setWidget(form.createContent());
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-        sa.setPresenter(presenter);
+        form.setPresenter(presenter);
     }
 
 }

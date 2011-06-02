@@ -18,17 +18,17 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ui.MainNavigView;
-import com.propertyvista.portal.domain.site.MainNavig;
-import com.propertyvista.portal.domain.site.NavigItem;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.AboutUs;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.FindApartment;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Home;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.portal.client.ui.MainNavigView;
+import com.propertyvista.portal.domain.site.MainNavig;
+import com.propertyvista.portal.domain.site.NavigItem;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.FindApartment;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Page;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
 
@@ -69,7 +69,8 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
         MainNavig navig = EntityFactory.create(MainNavig.class);
 
         NavigItem home = EntityFactory.create(NavigItem.class);
-        home.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Home()));
+        home.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Page()));
+        home.pageId().setValue("home");
         home.title().setValue("Home");
         navig.items().add(home);
 
@@ -84,7 +85,8 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
         navig.items().add(residents);
 
         NavigItem about = EntityFactory.create(NavigItem.class);
-        about.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new AboutUs()));
+        about.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Page()));
+        about.pageId().setValue("about-us");
         about.title().setValue("About Us");
         navig.items().add(about);
 
