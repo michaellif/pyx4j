@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.property.vendor;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -51,5 +52,6 @@ public interface Warranty extends Contract {
     @MemberColumn(name = "warrantyType")
     IPrimitive<Type> type();
 
+    @EmbeddedEntity
     IList<WarrantyItem> items();
 }
