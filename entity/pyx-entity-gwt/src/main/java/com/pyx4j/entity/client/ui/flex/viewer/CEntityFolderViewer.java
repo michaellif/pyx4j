@@ -111,6 +111,10 @@ public abstract class CEntityFolderViewer<E extends IEntity> extends CEntityCont
     @Override
     public void populate(IList<E> value) {
         super.populate(value);
+
+        itemsMap.clear();
+        container.clear();
+
         for (E item : value) {
             CEntityFolderItemViewer<E> comp = createItem();
             comp.onBound(this);
