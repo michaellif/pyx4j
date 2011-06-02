@@ -29,13 +29,14 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
 import com.propertyvista.yardi.bean2.PhysicalProperty;
+import com.propertyvista.yardi.bean2.ResidentTransactions;
 
 public class XmlBeanTest {
 
     private final static Logger log = LoggerFactory.getLogger(XmlBeanTest.class);
 
     @Test
-    public void testProperties() throws IOException, JAXBException {
+    public void testGetPropertyConfigurations() throws IOException, JAXBException {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetPropertyConfigurations.xml", getClass()));
         Properties properties = MarshallUtil.unmarshall(Properties.class, xml);
 
@@ -66,6 +67,18 @@ public class XmlBeanTest {
         log.debug("Loaded properties {}", property);
     }
 
+    @Test
+    public void testGetResidentTransactions() throws IOException, JAXBException {
+        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetResidentTransactions.xml", getClass()));
+
+        String token = "xsi:schemaLocation=\"http://yardi.com/ResidentTransactions20 .\\Itf_MITS_ResidentTransactions2.0.xsd\"";
+        xml = xml.replace(token, "");
+
+//        log.info(xml);
+        ResidentTransactions transactions = MarshallUtil.unmarshall(ResidentTransactions.class, xml);
+
+        log.info("Loaded transactions {}", transactions);
+    }
 //    private void validate(Object o) {
 //        Method[] methods = o.getClass().getMethods();
 //        for (Method method : methods) {

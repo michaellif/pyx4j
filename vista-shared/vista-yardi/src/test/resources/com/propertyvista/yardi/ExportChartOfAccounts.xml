@@ -1,0 +1,726 @@
+<Accounts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Account>
+        <Code>17000000</Code>
+        <Description>Buildings</Description>
+    </Account>
+    <Account>
+        <Code>17100000</Code>
+        <Description>-Realty Depreciation</Description>
+    </Account>
+    <Account>
+        <Code>17700000</Code>
+        <Description>Personal Property</Description>
+    </Account>
+    <Account>
+        <Code>17800000</Code>
+        <Description>-Personal Prop. Depreciation</Description>
+    </Account>
+    <Account>
+        <Code>17400000</Code>
+        <Description>Other Improvements</Description>
+    </Account>
+    <Account>
+        <Code>17500000</Code>
+        <Description>-Improvement Depreciation</Description>
+    </Account>
+    <Account>
+        <Code>21100000</Code>
+        <Description>Note 1 Principal</Description>
+    </Account>
+    <Account>
+        <Code>21200000</Code>
+        <Description>Note 2 Principal</Description>
+    </Account>
+    <Account>
+        <Code>21300000</Code>
+        <Description>Note 3 Principal</Description>
+    </Account>
+    <Account>
+        <Code>11300000</Code>
+        <Description>Savings Cash 1</Description>
+    </Account>
+    <Account>
+        <Code>16100000</Code>
+        <Description>Land</Description>
+    </Account>
+    <Account>
+        <Code>11100000</Code>
+        <Description>Operating Cash 1</Description>
+    </Account>
+    <Account>
+        <Code>11150000</Code>
+        <Description>Operating Cash 2</Description>
+    </Account>
+    <Account>
+        <Code>11350000</Code>
+        <Description>Savings Cash 2</Description>
+    </Account>
+    <Account>
+        <Code>11200000</Code>
+        <Description>Escrow Cash 1</Description>
+    </Account>
+    <Account>
+        <Code>11250000</Code>
+        <Description>Escrow Cash 2</Description>
+    </Account>
+    <Account>
+        <Code>13000000</Code>
+        <Description>Accounts Receivable</Description>
+    </Account>
+    <Account>
+        <Code>26200000</Code>
+        <Description>Medical Insurance Premium</Description>
+    </Account>
+    <Account>
+        <Code>26300000</Code>
+        <Description>Employee Credit Union Payable</Description>
+    </Account>
+    <Account>
+        <Code>26400000</Code>
+        <Description>Workers Union Dues Payable</Description>
+    </Account>
+    <Account>
+        <Code>31000000</Code>
+        <Description>Initial Capital</Description>
+    </Account>
+    <Account>
+        <Code>32000000</Code>
+        <Description>Owner Contribution</Description>
+    </Account>
+    <Account>
+        <Code>32100000</Code>
+        <Description>Prior Years Contribution</Description>
+    </Account>
+    <Account>
+        <Code>34000000</Code>
+        <Description>Owner Draw</Description>
+    </Account>
+    <Account>
+        <Code>34100000</Code>
+        <Description>Prior Years Draw</Description>
+    </Account>
+    <Account>
+        <Code>36000000</Code>
+        <Description>PY Apprec./(Deprec.)</Description>
+    </Account>
+    <Account>
+        <Code>38000000</Code>
+        <Description>Retained Earnings</Description>
+    </Account>
+    <Account>
+        <Code>38100000</Code>
+        <Description>Prior Years Retained Earnings</Description>
+    </Account>
+    <Account>
+        <Code>43000000</Code>
+        <Description>Gross Potential Rent</Description>
+    </Account>
+    <Account>
+        <Code>45000000</Code>
+        <Description>Rent</Description>
+    </Account>
+    <Account>
+        <Code>47100000</Code>
+        <Description>Less: Concessions</Description>
+    </Account>
+    <Account>
+        <Code>47200000</Code>
+        <Description>Less: Delinquency</Description>
+    </Account>
+    <Account>
+        <Code>48100000</Code>
+        <Description>Plus: Prepaid Rent</Description>
+    </Account>
+    <Account>
+        <Code>48200000</Code>
+        <Description>Plus: Last Month in Advance</Description>
+    </Account>
+    <Account>
+        <Code>56200000</Code>
+        <Description>Move In Charges</Description>
+    </Account>
+    <Account>
+        <Code>56500000</Code>
+        <Description>Move Out Charges</Description>
+    </Account>
+    <Account>
+        <Code>56600000</Code>
+        <Description>Deposit Forfeit</Description>
+    </Account>
+    <Account>
+        <Code>57000000</Code>
+        <Description>Miscellaneous Income</Description>
+    </Account>
+    <Account>
+        <Code>58000000</Code>
+        <Description>Late Fee</Description>
+    </Account>
+    <Account>
+        <Code>63000000</Code>
+        <Description>Management</Description>
+    </Account>
+    <Account>
+        <Code>67000000</Code>
+        <Description>Sales Tax on Services</Description>
+    </Account>
+    <Account>
+        <Code>62400000</Code>
+        <Description>HVAC (Heat, Ventilation, Air)</Description>
+    </Account>
+    <Account>
+        <Code>62300000</Code>
+        <Description>Painting</Description>
+    </Account>
+    <Account>
+        <Code>62100000</Code>
+        <Description>Repair</Description>
+    </Account>
+    <Account>
+        <Code>64100000</Code>
+        <Description>Electricity</Description>
+    </Account>
+    <Account>
+        <Code>64200000</Code>
+        <Description>Gas</Description>
+    </Account>
+    <Account>
+        <Code>64300000</Code>
+        <Description>Water &amp; Sewer</Description>
+    </Account>
+    <Account>
+        <Code>64500000</Code>
+        <Description>Trash Disposal</Description>
+    </Account>
+    <Account>
+        <Code>63100000</Code>
+        <Description>Security Service</Description>
+    </Account>
+    <Account>
+        <Code>76100000</Code>
+        <Description>Legal &amp; Accounting</Description>
+    </Account>
+    <Account>
+        <Code>76200000</Code>
+        <Description>Taxes &amp; Licenses</Description>
+    </Account>
+    <Account>
+        <Code>77000000</Code>
+        <Description>Miscellaneous Expense</Description>
+    </Account>
+    <Account>
+        <Code>85300000</Code>
+        <Description>3rd Mortgage Interest</Description>
+    </Account>
+    <Account>
+        <Code>62500000</Code>
+        <Description>Elevator Inspection &amp; Repair</Description>
+    </Account>
+    <Account>
+        <Code>54700000</Code>
+        <Description>CAM Recovery</Description>
+    </Account>
+    <Account>
+        <Code>53200000</Code>
+        <Description>Passthru Insurance</Description>
+    </Account>
+    <Account>
+        <Code>74100000</Code>
+        <Description>Office Utilities</Description>
+    </Account>
+    <Account>
+        <Code>52400000</Code>
+        <Description>Passthru HVAC</Description>
+    </Account>
+    <Account>
+        <Code>52300000</Code>
+        <Description>Passthru Painting</Description>
+    </Account>
+    <Account>
+        <Code>52100000</Code>
+        <Description>Passthru Repair</Description>
+    </Account>
+    <Account>
+        <Code>52500000</Code>
+        <Description>Passthru Elevator</Description>
+    </Account>
+    <Account>
+        <Code>54100000</Code>
+        <Description>Passthru Electricity</Description>
+    </Account>
+    <Account>
+        <Code>54200000</Code>
+        <Description>Passthru Gas</Description>
+    </Account>
+    <Account>
+        <Code>54300000</Code>
+        <Description>Passthru Water &amp; Sewer</Description>
+    </Account>
+    <Account>
+        <Code>57100000</Code>
+        <Description>Vending Machine Income</Description>
+    </Account>
+    <Account>
+        <Code>55200000</Code>
+        <Description>Food &amp; Beverage Percentage</Description>
+    </Account>
+    <Account>
+        <Code>55500000</Code>
+        <Description>Other Percentage</Description>
+    </Account>
+    <Account>
+        <Code>62200000</Code>
+        <Description>Janitorial</Description>
+    </Account>
+    <Account>
+        <Code>52200000</Code>
+        <Description>Passthru Janitorial</Description>
+    </Account>
+    <Account>
+        <Code>76300000</Code>
+        <Description>Travel/Mileage Rembursement</Description>
+    </Account>
+    <Account>
+        <Code>51010000</Code>
+        <Description>Porter Wage</Description>
+    </Account>
+    <Account>
+        <Code>51020000</Code>
+        <Description>Electric</Description>
+    </Account>
+    <Account>
+        <Code>51030000</Code>
+        <Description>R/E Tax</Description>
+    </Account>
+    <Account>
+        <Code>51040000</Code>
+        <Description>Sprinkler</Description>
+    </Account>
+    <Account>
+        <Code>51050000</Code>
+        <Description>Water</Description>
+    </Account>
+    <Account>
+        <Code>51060000</Code>
+        <Description>Office Parking - Recovery</Description>
+    </Account>
+    <Account>
+        <Code>51070000</Code>
+        <Description>Retail Parking - Recovery</Description>
+    </Account>
+    <Account>
+        <Code>51080000</Code>
+        <Description>Overhead Charge</Description>
+    </Account>
+    <Account>
+        <Code>51090000</Code>
+        <Description>Operating Expense Recovery</Description>
+    </Account>
+    <Account>
+        <Code>62101000</Code>
+        <Description>Repair - Exterior</Description>
+    </Account>
+    <Account>
+        <Code>62102000</Code>
+        <Description>Repair - Exterior - Adjust</Description>
+    </Account>
+    <Account>
+        <Code>62103000</Code>
+        <Description>Repair - Interior - Adjust</Description>
+    </Account>
+    <Account>
+        <Code>62104000</Code>
+        <Description>R &amp; M - Elevator</Description>
+    </Account>
+    <Account>
+        <Code>74250000</Code>
+        <Description>Office Supplies</Description>
+    </Account>
+    <Account>
+        <Code>22010000</Code>
+        <Description>Default A/P Account</Description>
+    </Account>
+    <Account>
+        <Code>44000000</Code>
+        <Description>Loss/Gain to Lease</Description>
+    </Account>
+    <Account>
+        <Code>47400000</Code>
+        <Description>Loss from Model</Description>
+    </Account>
+    <Account>
+        <Code>47450000</Code>
+        <Description>Loss from Down</Description>
+    </Account>
+    <Account>
+        <Code>47500000</Code>
+        <Description>Loss from Admin</Description>
+    </Account>
+    <Account>
+        <Code>22020000</Code>
+        <Description>Intercompany Due To</Description>
+    </Account>
+    <Account>
+        <Code>71100000</Code>
+        <Description>Travel &amp; Entertainment</Description>
+    </Account>
+    <Account>
+        <Code>51100000</Code>
+        <Description>Passthru Improvements (TI)</Description>
+    </Account>
+    <Account>
+        <Code>52600000</Code>
+        <Description>Passthru Gardening</Description>
+    </Account>
+    <Account>
+        <Code>53500000</Code>
+        <Description>Passthru Property Tax</Description>
+    </Account>
+    <Account>
+        <Code>53000000</Code>
+        <Description>Passthru Management</Description>
+    </Account>
+    <Account>
+        <Code>54000000</Code>
+        <Description>Passthru Utilities</Description>
+    </Account>
+    <Account>
+        <Code>54500000</Code>
+        <Description>Passthru Trash</Description>
+    </Account>
+    <Account>
+        <Code>53100000</Code>
+        <Description>Passthru Security Service</Description>
+    </Account>
+    <Account>
+        <Code>55100000</Code>
+        <Description>Sales Percentage</Description>
+    </Account>
+    <Account>
+        <Code>62050000</Code>
+        <Description>Maintenance-Unrecoverable</Description>
+    </Account>
+    <Account>
+        <Code>62600000</Code>
+        <Description>Gardening</Description>
+    </Account>
+    <Account>
+        <Code>63200000</Code>
+        <Description>Insurance</Description>
+    </Account>
+    <Account>
+        <Code>48250000</Code>
+        <Description>Plus: Prepaid Tenant Rent</Description>
+    </Account>
+    <Account>
+        <Code>48300000</Code>
+        <Description>Plus: Prepaid Hap</Description>
+    </Account>
+    <Account>
+        <Code>48350000</Code>
+        <Description>Plus: Prepaid TBS</Description>
+    </Account>
+    <Account>
+        <Code>64000000</Code>
+        <Description>Utility Reimbursement</Description>
+    </Account>
+    <Account>
+        <Code>18000000</Code>
+        <Description>Tenant Improvements</Description>
+    </Account>
+    <Account>
+        <Code>18100000</Code>
+        <Description>Less: Accum Depr - Tenant Imps</Description>
+    </Account>
+    <Account>
+        <Code>13550000</Code>
+        <Description>Capitalized Lease Commissions</Description>
+    </Account>
+    <Account>
+        <Code>22750000</Code>
+        <Description>Deferred Gain from FAS 13</Description>
+    </Account>
+    <Account>
+        <Code>81850000</Code>
+        <Description>Amortization - Lease Commissions</Description>
+    </Account>
+    <Account>
+        <Code>81810000</Code>
+        <Description>Depreciation - Tenant Improvements</Description>
+    </Account>
+    <Account>
+        <Code>57400000</Code>
+        <Description>Investment Income</Description>
+    </Account>
+    <Account>
+        <Code>59230000</Code>
+        <Description>utilgas</Description>
+    </Account>
+    <Account>
+        <Code>22000000</Code>
+        <Description>Accounts Payable</Description>
+    </Account>
+    <Account>
+        <Code>22500000</Code>
+        <Description>Tenant Deposits</Description>
+    </Account>
+    <Account>
+        <Code>22600000</Code>
+        <Description>Interest on Tenant Deposits</Description>
+    </Account>
+    <Account>
+        <Code>22700000</Code>
+        <Description>Clearing-Tenant Deposits</Description>
+    </Account>
+    <Account>
+        <Code>23100000</Code>
+        <Description>Sales Tax Collected</Description>
+    </Account>
+    <Account>
+        <Code>24100000</Code>
+        <Description>Federal Withholding Payable</Description>
+    </Account>
+    <Account>
+        <Code>24200000</Code>
+        <Description>State Withholding Payable</Description>
+    </Account>
+    <Account>
+        <Code>24300000</Code>
+        <Description>FICA Tax Payable</Description>
+    </Account>
+    <Account>
+        <Code>24400000</Code>
+        <Description>FUTA Tax Payable</Description>
+    </Account>
+    <Account>
+        <Code>24500000</Code>
+        <Description>State Unemployment Tax Payable</Description>
+    </Account>
+    <Account>
+        <Code>26100000</Code>
+        <Description>Workers Compensation Premium</Description>
+    </Account>
+    <Account>
+        <Code>24600000</Code>
+        <Description>State Disability (SDI) Premium</Description>
+    </Account>
+    <Account>
+        <Code>85800000</Code>
+        <Description>Deferred Finance Costs</Description>
+    </Account>
+    <Account>
+        <Code>13200001</Code>
+        <Description>Investments</Description>
+    </Account>
+    <Account>
+        <Code>22200000</Code>
+        <Description>Retention Payable</Description>
+    </Account>
+    <Account>
+        <Code>22400000</Code>
+        <Description>GST Payable</Description>
+    </Account>
+    <Account>
+        <Code>22800000</Code>
+        <Description>GST Holdback</Description>
+    </Account>
+    <Account>
+        <Code>13300000</Code>
+        <Description>Client Retention</Description>
+    </Account>
+    <Account>
+        <Code>78610000</Code>
+        <Description>test</Description>
+    </Account>
+    <Account>
+        <Code>79930000</Code>
+        <Description>test</Description>
+    </Account>
+    <Account>
+        <Code>13500000</Code>
+        <Description>Accrued Property Tax</Description>
+    </Account>
+    <Account>
+        <Code>13400000</Code>
+        <Description>Prepaid Insurance</Description>
+    </Account>
+    <Account>
+        <Code>62105000</Code>
+        <Description>R &amp; M - Plumbing</Description>
+    </Account>
+    <Account>
+        <Code>62106000</Code>
+        <Description>R &amp; M - HVAC</Description>
+    </Account>
+    <Account>
+        <Code>66700000</Code>
+        <Description>Property Tax</Description>
+    </Account>
+    <Account>
+        <Code>66710000</Code>
+        <Description>BID Tax</Description>
+    </Account>
+    <Account>
+        <Code>66500000</Code>
+        <Description>Parking Lot</Description>
+    </Account>
+    <Account>
+        <Code>57300000</Code>
+        <Description>Construction Income</Description>
+    </Account>
+    <Account>
+        <Code>11500000</Code>
+        <Description>Due to</Description>
+    </Account>
+    <Account>
+        <Code>11550000</Code>
+        <Description>Due from</Description>
+    </Account>
+    <Account>
+        <Code>45100000</Code>
+        <Description>HAP</Description>
+    </Account>
+    <Account>
+        <Code>22300000</Code>
+        <Description>Section 236 Excess Income</Description>
+    </Account>
+    <Account>
+        <Code>24310000</Code>
+        <Description>Medicare Tax Payable</Description>
+    </Account>
+    <Account>
+        <Code>48500000</Code>
+        <Description>Gain/Loss from Straight Line Rents</Description>
+    </Account>
+    <Account>
+        <Code>85400000</Code>
+        <Description>Ground Rent</Description>
+    </Account>
+    <Account>
+        <Code>47300000</Code>
+        <Description>Less: Vacancy</Description>
+    </Account>
+    <Account>
+        <Code>68000000</Code>
+        <Description>Less: Discounts</Description>
+    </Account>
+    <Account>
+        <Code>62000000</Code>
+        <Description>Maintenance-Recoverable</Description>
+    </Account>
+    <Account>
+        <Code>61100000</Code>
+        <Description>Tenant Improvements</Description>
+    </Account>
+    <Account>
+        <Code>63500000</Code>
+        <Description>Property Tax</Description>
+    </Account>
+    <Account>
+        <Code>81100000</Code>
+        <Description>Depreciation-Real Property</Description>
+    </Account>
+    <Account>
+        <Code>56100000</Code>
+        <Description>Other Monthly Charges</Description>
+    </Account>
+    <Account>
+        <Code>52000000</Code>
+        <Description>Passthru Maintenance</Description>
+    </Account>
+    <Account>
+        <Code>57200000</Code>
+        <Description>Interest on Bank Accounts</Description>
+    </Account>
+    <Account>
+        <Code>81800000</Code>
+        <Description>Depreciation-Personal Property</Description>
+    </Account>
+    <Account>
+        <Code>81500000</Code>
+        <Description>Depreciation-Improvements</Description>
+    </Account>
+    <Account>
+        <Code>85100000</Code>
+        <Description>1st Mortgage Interest</Description>
+    </Account>
+    <Account>
+        <Code>85200000</Code>
+        <Description>2nd Mortgage Interest</Description>
+    </Account>
+    <Account>
+        <Code>78100000</Code>
+        <Description>Manager Salaries</Description>
+    </Account>
+    <Account>
+        <Code>78200000</Code>
+        <Description>Supervisor Salaries</Description>
+    </Account>
+    <Account>
+        <Code>78300000</Code>
+        <Description>Clerical Salaries</Description>
+    </Account>
+    <Account>
+        <Code>78400000</Code>
+        <Description>Worker Wages</Description>
+    </Account>
+    <Account>
+        <Code>78500000</Code>
+        <Description>Payroll Taxes</Description>
+    </Account>
+    <Account>
+        <Code>78600000</Code>
+        <Description>Medical Plan Contributions</Description>
+    </Account>
+    <Account>
+        <Code>74200000</Code>
+        <Description>Office Supplies</Description>
+    </Account>
+    <Account>
+        <Code>75000000</Code>
+        <Description>Advertising &amp; Promotion</Description>
+    </Account>
+    <Account>
+        <Code>22100000</Code>
+        <Description>Prepaid Rent</Description>
+    </Account>
+    <Account>
+        <Code>86100000</Code>
+        <Description>Appreciation/(Depreciation)</Description>
+    </Account>
+    <Account>
+        <Code>13100000</Code>
+        <Description>Work In Progress</Description>
+    </Account>
+    <Account>
+        <Code>79920000</Code>
+        <Description>Advisor Fees</Description>
+    </Account>
+    <Account>
+        <Code>17900000</Code>
+        <Description>Appreciation/(Depreciation)</Description>
+    </Account>
+    <Account>
+        <Code>21150000</Code>
+        <Description>Note 1 Principal Payment</Description>
+    </Account>
+    <Account>
+        <Code>26500000</Code>
+        <Description>401k Contribution</Description>
+    </Account>
+    <Account>
+        <Code>45200000</Code>
+        <Description>Tenant Based Subsidy</Description>
+    </Account>
+    <Account>
+        <Code>64250000</Code>
+        <Description>Fuel</Description>
+    </Account>
+    <Account>
+        <Code>11060000</Code>
+        <Description>Cash Account (Security Deposits Only)</Description>
+    </Account>
+    <Account>
+        <Code>47350000</Code>
+        <Description>Less: Write-Offs</Description>
+    </Account>
+</Accounts>

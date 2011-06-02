@@ -16,10 +16,12 @@ package com.propertyvista.yardi;
 public class YardiConstants {
 
     public enum Action {
-        ping, GetPropertyConfigurations, GetUnitInformation, GetResidentTransactions, GetResidentTransaction, GetResidentTransactions_ByChargeDate, GetResidentLeaseCharges, GetResidentsLeaseCharges, GetVendors, GetVendor
+        ping, GetPropertyConfigurations, GetUnitInformation, GetResidentTransactions, GetResidentTransaction, GetResidentTransactions_ByChargeDate, GetResidentTransactions_ByApplicationDate, GetResidentLeaseCharges, GetResidentsLeaseCharges, ExportChartOfAccounts, GetVendors, GetVendor
     }
 
     public static final long TIMEOUT = 10; // minutes
+
+    public static final String NAMESPACE = "http://yardi.com/ResidentTransactions20";
 
     public static final String USERNAME = "propertyvistaws";
 

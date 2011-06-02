@@ -23,12 +23,16 @@ import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.ws.operations.ExportChartOfAccounts;
+import com.yardi.ws.operations.ExportChartOfAccountsResponse;
 import com.yardi.ws.operations.GetPropertyConfigurations;
 import com.yardi.ws.operations.GetPropertyConfigurationsResponse;
 import com.yardi.ws.operations.GetResidentLeaseCharges_Login;
 import com.yardi.ws.operations.GetResidentLeaseCharges_LoginResponse;
 import com.yardi.ws.operations.GetResidentTransaction_Login;
 import com.yardi.ws.operations.GetResidentTransaction_LoginResponse;
+import com.yardi.ws.operations.GetResidentTransactions_ByApplicationDate_Login;
+import com.yardi.ws.operations.GetResidentTransactions_ByApplicationDate_LoginResponse;
 import com.yardi.ws.operations.GetResidentTransactions_ByChargeDate_Login;
 import com.yardi.ws.operations.GetResidentTransactions_ByChargeDate_LoginResponse;
 import com.yardi.ws.operations.GetResidentTransactions_Login;
@@ -180,6 +184,11 @@ public class YardiTransactions {
         log.info("ResidentTransactionLogin: {}", xml);
     }
 
+    /**
+     * Allows export of resident/transactional data for a given property/property list;
+     * will only extract tenants with new charges within the specified date range.
+     * Only allows the consumer to pull 7 days worth of information (hours not included).
+     */
     public static void getResidentTransactionsByChargeDate(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
         c.transactionId++;
         c.setCurrentAction(Action.GetResidentTransactions_ByChargeDate);
@@ -211,6 +220,45 @@ public class YardiTransactions {
         GetResidentTransactions_ByChargeDate_LoginResponse response = c.getResidentTransactionsService().getResidentTransactions_ByChargeDate_Login(l);
         String xml = response.getGetResidentTransactions_ByChargeDate_LoginResult().getExtraElement().toString();
         log.info("GetResidentTransactionsByChargeDate: {}", xml);
+    }
+
+    /**
+     * Allows login & export of resident/transactional data for a given property/property list;
+     * will only extract tenants who have submitted an application within the specified date range.
+     * Only allows the consumer to pull 7 days worth of information (hours not included).
+     */
+    public static void getResidentTransactionsByApplicationDate(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
+        c.transactionId++;
+        c.setCurrentAction(Action.GetResidentTransactions_ByApplicationDate);
+
+        GetResidentTransactions_ByApplicationDate_Login l = new GetResidentTransactions_ByApplicationDate_Login();
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setYardiPropertyId(yp.getYardiPropertyId());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
+
+        // Consumer may only query for a date range of 31 days or less
+        Calendar from = GregorianCalendar.getInstance();
+        from.set(Calendar.YEAR, 2011);
+        from.set(Calendar.MONTH, 2);
+        from.set(Calendar.DAY_OF_MONTH, 1);
+
+        l.setFromDate(from);
+
+        Calendar to = GregorianCalendar.getInstance();
+        to.set(Calendar.YEAR, 2011);
+        to.set(Calendar.MONTH, 2);
+        to.set(Calendar.DAY_OF_MONTH, 28);
+
+        l.setToDate(to);
+
+        GetResidentTransactions_ByApplicationDate_LoginResponse response = c.getResidentTransactionsService()
+                .getResidentTransactions_ByApplicationDate_Login(l);
+        String xml = response.getGetResidentTransactions_ByApplicationDate_LoginResult().getExtraElement().toString();
+        log.info("GetResidentTransactionsByApplicationDate: {}", xml);
     }
 
     /**
@@ -320,4 +368,27 @@ public class YardiTransactions {
         String xml = response.getGetVendor_LoginResult().getExtraElement().toString();
         log.info("GetVendor: {}", xml);
     }
+
+    /**
+     * Allows Export of a Chart of Accounts.
+     * Yardi Property ID is needed in the case of multiple charts.
+     */
+    public static void getExportChartOfAccounts(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
+        c.transactionId++;
+        c.setCurrentAction(Action.ExportChartOfAccounts);
+
+        ExportChartOfAccounts l = new ExportChartOfAccounts();
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
+        l.setPropertyId(yp.getYardiPropertyId());
+
+        ExportChartOfAccountsResponse response = c.getResidentTransactionsService().exportChartOfAccounts(l);
+        String xml = response.getExportChartOfAccountsResult().getExtraElement().toString();
+        log.info("ExportChartOfAccounts: {}", xml);
+    }
+
 }

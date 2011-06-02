@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 28, 2011
+ * Created on Jun 1, 2011
  * @author dmitry
  * @version $Id$
  */
@@ -17,40 +17,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class Property {
-
-    private PropertyId propertyId;
-
-    private List<RTCustomer> customers = new ArrayList<RTCustomer>();
+@XmlRootElement(name = "ResidentTransactions")
+public class ResidentTransactions {
+    private List<Property> properties = new ArrayList<Property>();
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("Property ").append(propertyId).append("\n");
-
-        for (RTCustomer customer : customers) {
-            sb.append("\n").append(customer);
+        sb.append(properties.size()).append(" properties");
+        for (Property property : properties) {
+            sb.append("\n").append(property);
         }
 
         return sb.toString();
     }
 
-    @XmlElement(name = "RT_Customer")
-    public List<RTCustomer> getCustomers() {
-        return customers;
+    @XmlElement(name = "Property")
+    public List<Property> getProperties() {
+        return properties;
     }
 
-    public void setCustomers(List<RTCustomer> customers) {
-        this.customers = customers;
-    }
-
-    @XmlElement(name = "PropertyID")
-    public PropertyId getPropertyId() {
-        return propertyId;
-    }
-
-    public void setPropertyId(PropertyId propertyId) {
-        this.propertyId = propertyId;
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
     }
 }

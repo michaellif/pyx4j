@@ -41,10 +41,12 @@ public class YardiExample {
             YardiTransactions.getResidentTransactions(c, yp);
 //            YardiTransactions.getResidentTransaction(c, yp);
             YardiTransactions.getResidentTransactionsByChargeDate(c, yp);
+            YardiTransactions.getResidentTransactionsByApplicationDate(c, yp);
             YardiTransactions.getResidentsLeaseCharges(c, yp);
 //            YardiTransactions.getResidentLeaseCharges(c, yp);
             YardiTransactions.getUnitInformationLogin(c, yp);
             YardiTransactions.getVendors(c, yp);
+            YardiTransactions.getExportChartOfAccounts(c, yp);
             YardiTransactions.getPropertyConfigurations(c, yp);
         } catch (Throwable e) {
             log.error("error", e);
