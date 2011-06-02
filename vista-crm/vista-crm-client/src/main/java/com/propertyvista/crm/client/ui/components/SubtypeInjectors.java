@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.domain.Company;
@@ -100,37 +101,39 @@ public class SubtypeInjectors {
         injectCompany(main, proto, parent);
     }
 
-    public static void injectLicence(VistaDecoratorsFlowPanel main, Licence proto, CEntityEditor<?> parent) {
+    public static void injectLicence(VistaDecoratorsFlowPanel main, VistaDecoratorsSplitFlowPanel split, Licence proto, CEntityEditor<?> parent) {
 
-        main.add(parent.inject(proto.number()), 15);
-        main.add(parent.inject(proto.expiration()), 8.2);
-        main.add(parent.inject(proto.renewal()), 8.2);
+        split.getLeftPanel().add(parent.inject(proto.number()), 15);
+        split.getLeftPanel().add(parent.inject(proto.expiration()), 8.2);
+        split.getRightPanel().add(parent.inject(proto.renewal()), 8.2);
     }
 
-    public static void injectContract(VistaDecoratorsFlowPanel main, Contract proto, CEntityEditor<?> parent) {
+    public static void injectContract(VistaDecoratorsFlowPanel main, VistaDecoratorsSplitFlowPanel split, Contract proto, CEntityEditor<?> parent) {
 
-        main.add(parent.inject(proto.contractID()), 15);
+        split.getLeftPanel().add(parent.inject(proto.contractID()), 15);
 //        injectVendor(main, proto.contractor(), parent);
-        main.add(parent.inject(proto.contractor()), 15);
-        main.add(parent.inject(proto.cost()), 15);
-        main.add(parent.inject(proto.start()), 8.2);
-        main.add(parent.inject(proto.end()), 8.2);
+        split.getLeftPanel().add(parent.inject(proto.contractor()), 15);
+        split.getLeftPanel().add(parent.inject(proto.cost()), 15);
+        split.getRightPanel().add(parent.inject(proto.start()), 8.2);
+        split.getRightPanel().add(parent.inject(proto.end()), 8.2);
 // TODO : design representation for:
 //             main.add(parent.inject(proto.document()), 45);
     }
 
-    public static void injectMaintenance(VistaDecoratorsFlowPanel main, Maintenance proto, CEntityEditor<?> parent) {
+    public static void injectMaintenance(VistaDecoratorsFlowPanel main, VistaDecoratorsSplitFlowPanel split, Maintenance proto, CEntityEditor<?> parent) {
 
-        injectContract(main, proto, parent);
-        main.add(parent.inject(proto.lastService()), 8.2);
-        main.add(parent.inject(proto.nextService()), 8.2);
+        injectContract(main, split, proto, parent);
+        main.add(new CrmHeader2Decorator("Maintenance Schedule"));
+        split.getLeftPanel().add(parent.inject(proto.lastService()), 8.2);
+        split.getRightPanel().add(parent.inject(proto.nextService()), 8.2);
     }
 
-    public static void injectWarranty(VistaDecoratorsFlowPanel main, Warranty proto, CEntityEditor<?> parent) {
+    public static void injectWarranty(VistaDecoratorsFlowPanel main, VistaDecoratorsSplitFlowPanel split, Warranty proto, CEntityEditor<?> parent) {
 
-        main.add(parent.inject(proto.title()), 15);
-        main.add(parent.inject(proto.type()), 15);
-        injectContract(main, proto, parent);
+        split.getLeftPanel().add(parent.inject(proto.title()), 15);
+        split.getRightPanel().add(parent.inject(proto.type()), 15);
+        main.add(new CrmHeader2Decorator("Contract details"));
+        injectContract(main, split, proto, parent);
 
         main.add(new CrmHeader2Decorator(proto.items().getMeta().getCaption()));
         main.add(parent.inject(proto.items(), new CrmEntityFolder<WarrantyItem>(WarrantyItem.class, i18n.tr("Warranty Item"), parent.isEditable()) {
@@ -144,30 +147,33 @@ public class SubtypeInjectors {
         }));
     }
 
-    public static void injectEquipment(VistaDecoratorsFlowPanel main, Equipment proto, CEntityEditor<?> parent) {
+    public static void injectEquipment(VistaDecoratorsFlowPanel main, VistaDecoratorsSplitFlowPanel split, Equipment proto, CEntityEditor<?> parent) {
 
-        main.add(parent.inject(proto.type()), 15);
-        main.add(parent.inject(proto.description()), 15);
-        main.add(parent.inject(proto.make()), 15);
-        main.add(parent.inject(proto.model()), 15);
-        main.add(parent.inject(proto.build()), 8.2);
+        split.getLeftPanel().add(parent.inject(proto.type()), 15);
+        split.getLeftPanel().add(parent.inject(proto.description()), 15);
+        split.getLeftPanel().add(parent.inject(proto.make()), 15);
+        split.getRightPanel().add(parent.inject(proto.model()), 15);
+        split.getRightPanel().add(parent.inject(proto.build()), 8.2);
 
         main.add(new CrmHeaderDecorator(i18n.tr(proto.licence().getMeta().getCaption())));
-        SubtypeInjectors.injectLicence(main, proto.licence(), parent);
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
+        SubtypeInjectors.injectLicence(main, split, proto.licence(), parent);
 
         main.add(new CrmHeaderDecorator(i18n.tr(proto.warranty().getMeta().getCaption())));
-        SubtypeInjectors.injectWarranty(main, proto.warranty(), parent);
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
+        SubtypeInjectors.injectWarranty(main, split, proto.warranty(), parent);
 
         main.add(new CrmHeaderDecorator(i18n.tr(proto.maitenance().getMeta().getCaption())));
-        SubtypeInjectors.injectMaintenance(main, proto.maitenance(), parent);
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
+        SubtypeInjectors.injectMaintenance(main, split, proto.maitenance(), parent);
 
         main.add(parent.inject(proto.notes()), 25);
     }
 
-    public static void injectMarketing(VistaDecoratorsFlowPanel main, Marketing proto, CEntityEditor<?> parent) {
+    public static void injectMarketing(VistaDecoratorsFlowPanel main, VistaDecoratorsSplitFlowPanel split, Marketing proto, CEntityEditor<?> parent) {
 
-        main.add(parent.inject(proto.name()), 15);
-        main.add(parent.inject(proto.description()), 25);
+        split.getLeftPanel().add(parent.inject(proto.name()), 15);
+        split.getRightPanel().add(parent.inject(proto.description()), 25);
 
         main.add(new CrmHeader2Decorator(proto.addBlurbs().getMeta().getCaption()));
         main.add(parent.inject(proto.addBlurbs(),

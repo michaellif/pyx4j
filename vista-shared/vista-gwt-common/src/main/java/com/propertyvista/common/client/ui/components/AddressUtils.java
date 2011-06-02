@@ -19,6 +19,8 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.common.domain.IAddressFull;
 import com.propertyvista.common.domain.ref.Country;
@@ -84,11 +86,44 @@ public class AddressUtils {
         CEditableComponent<String, ?> postalCode;
         main.add(postalCode = (CEditableComponent<String, ?>) parent.inject(proto.postalCode()), 7);
 
+        attachFilters(proto, parent, province, country, postalCode);
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static void injectIAddress(VistaDecoratorsSplitFlowPanel split, final IAddressFull proto, final CEntityEditor<?> parent) {
+
+        split.getLeftPanel().add(parent.inject(proto.unitNumber()), 5);
+        split.getLeftPanel().add(parent.inject(proto.streetNumber()), 5);
+        split.getLeftPanel().add(parent.inject(proto.streetNumberSuffix()), 5);
+        split.getLeftPanel().add(parent.inject(proto.streetName()), 15);
+        split.getLeftPanel().add(parent.inject(proto.streetType()), 10);
+        split.getLeftPanel().add(parent.inject(proto.streetDirection()), 10);
+        split.getRightPanel().add(parent.inject(proto.streetNumber()), 5);
+
+        split.getRightPanel().add(parent.inject(proto.city()), 15);
+        split.getRightPanel().add(parent.inject(proto.county()), 15);
+
+        // Need local variables to avoid extended casting that make the code unreadable
+        CEditableComponent<Province, ?> province;
+        split.getRightPanel().add(province = (CEditableComponent<Province, ?>) parent.inject(proto.province()), 17);
+
+        CEditableComponent<Country, ?> country;
+        split.getRightPanel().add(country = (CEditableComponent<Country, ?>) parent.inject(proto.country()), 15);
+
+        CEditableComponent<String, ?> postalCode;
+        split.getRightPanel().add(postalCode = (CEditableComponent<String, ?>) parent.inject(proto.postalCode()), 7);
+
+        attachFilters(proto, parent, province, country, postalCode);
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private static void attachFilters(final IAddressFull proto, final CEntityEditor<?> parent, CEditableComponent<Province, ?> province,
+            CEditableComponent<Country, ?> country, CEditableComponent<String, ?> postalCode) {
         postalCode.addValueValidator(new com.propertyvista.common.client.ui.validators.ZipCodeValueValidator(parent, proto.country()));
         country.addValueChangeHandler(new com.propertyvista.common.client.ui.validators.RevalidationTrigger(postalCode));
 
         // The filter does not use the CEditableComponent<Country, ?> and use Model directly. So it work fine on populate.
-        com.propertyvista.common.client.ui.validators.ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
+        ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
             @Override
             public boolean acceptOption(Province entity) {
                 if (parent.getValue() == null) {

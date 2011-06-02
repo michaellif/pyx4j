@@ -58,24 +58,25 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
         main.add(split);
         split.getLeftPanel().add(inject(proto().info().name()), 15);
-        injectAddress(split.getLeftPanel(), proto().info().address());
-        split.getRightPanel().add(inject(proto().info().propertyCode()), 12);
-        split.getRightPanel().add(inject(proto().info().type()), 12);
+        split.getLeftPanel().add(inject(proto().info().propertyCode()), 12);
+        split.getLeftPanel().add(inject(proto().info().type()), 12);
         split.getRightPanel().add(inject(proto().info().shape()), 7);
         split.getRightPanel().add(inject(proto().info().totalStories()), 5);
         split.getRightPanel().add(inject(proto().info().residentialStories()), 5);
+        injectAddress(split, proto().info().address());
         split.getRightPanel().add(inject(proto().complex()), 15);
 
         main.add(new CrmHeaderDecorator(i18n.tr("Details")));
-        main.add(inject(proto().info().structureType()), 15);
-        main.add(inject(proto().info().structureBuildYear()), 15);
-        main.add(inject(proto().info().constructionType()), 15);
-        main.add(inject(proto().info().foundationType()), 15);
-        main.add(inject(proto().info().floorType()), 15);
-        main.add(inject(proto().info().landArea()), 15);
-        main.add(inject(proto().info().waterSupply()), 15);
-        main.add(inject(proto().info().centralAir()), 15);
-        main.add(inject(proto().info().centralHeat()), 15);
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
+        split.getLeftPanel().add(inject(proto().info().structureType()), 15);
+        split.getLeftPanel().add(inject(proto().info().structureBuildYear()), 15);
+        split.getLeftPanel().add(inject(proto().info().constructionType()), 15);
+        split.getLeftPanel().add(inject(proto().info().foundationType()), 15);
+        split.getLeftPanel().add(inject(proto().info().floorType()), 15);
+        split.getRightPanel().add(inject(proto().info().landArea()), 15);
+        split.getRightPanel().add(inject(proto().info().waterSupply()), 15);
+        split.getRightPanel().add(inject(proto().info().centralAir()), 15);
+        split.getRightPanel().add(inject(proto().info().centralHeat()), 15);
 
         main.add(new CrmHeader2Decorator(proto().amenities().getMeta().getCaption()));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
@@ -96,19 +97,22 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(inject(proto().lockers(), createLockerAreasListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Financials")));
-        main.add(inject(proto().financial().dateAquired()), 8.2);
-        main.add(inject(proto().financial().purchasePrice()), 5);
-        main.add(inject(proto().financial().marketPrice()), 5);
-        main.add(inject(proto().financial().lastAppraisalDate()), 8.2);
-        main.add(inject(proto().financial().lastAppraisalValue()), 5);
-        main.add(inject(proto().financial().currency().name()), main.defaultLabelWidth, 10, i18n.tr("Currency Name"));
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
+        split.getLeftPanel().add(inject(proto().financial().dateAquired()), 8.2);
+        split.getLeftPanel().add(inject(proto().financial().purchasePrice()), 5);
+        split.getLeftPanel().add(inject(proto().financial().marketPrice()), 5);
+        split.getRightPanel().add(inject(proto().financial().lastAppraisalDate()), 8.2);
+        split.getRightPanel().add(inject(proto().financial().lastAppraisalValue()), 5);
+        split.getRightPanel().add(inject(proto().financial().currency().name()), main.defaultLabelWidth, 10, i18n.tr("Currency Name"));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Marketing")));
-        SubtypeInjectors.injectMarketing(main, proto().marketing(), this);
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
+        SubtypeInjectors.injectMarketing(main, split, proto().marketing(), this);
 
         main.add(new CrmHeaderDecorator(i18n.tr("Contact Information")));
-        main.add(inject(proto().contacts().website()), 25);
-        main.add(inject(proto().contacts().email().address()), main.defaultLabelWidth, 25, i18n.tr("Email Address"));
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
+        split.getLeftPanel().add(inject(proto().contacts().website()), 25);
+        split.getRightPanel().add(inject(proto().contacts().email().address()), main.defaultLabelWidth, 25, i18n.tr("Email Address"));
         SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this);
 
 // TODO - add this data processing later! :
@@ -121,9 +125,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         return main;
     }
 
-    private void injectAddress(final VistaDecoratorsFlowPanel main, final Address address) {
-        AddressUtils.injectIAddress(main, address, this);
-        main.add(inject(address.addressType()), 12);
+    private void injectAddress(final VistaDecoratorsSplitFlowPanel split, final Address address) {
+        AddressUtils.injectIAddress(split, address, this);
+        split.getLeftPanel().add(inject(address.addressType()), 12);
     }
 
     private CEntityFolderEditor<BuildingAmenity> createAmenitiesListEditor() {

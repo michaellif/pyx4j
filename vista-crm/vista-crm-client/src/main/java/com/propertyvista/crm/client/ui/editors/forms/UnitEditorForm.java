@@ -24,6 +24,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
@@ -51,24 +52,26 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     @Override
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
 
-        main.add(inject(proto().info().name()), 15);
-        main.add(inject(proto().marketing().name()), 15);
+        main.add(split);
+        split.getLeftPanel().add(inject(proto().info().name()), 15);
+        split.getLeftPanel().add(inject(proto().marketing().name()), 15);
 
-        main.add(inject(proto().info().type()), 15);
+        split.getLeftPanel().add(inject(proto().info().type()), 15);
 
-        main.add(inject(proto().info().economicStatus()), 15);
-        main.add(inject(proto().info().economicStatusDescription()), 15);
+        split.getLeftPanel().add(inject(proto().info().economicStatus()), 15);
+        split.getLeftPanel().add(inject(proto().info().economicStatusDescription()), 15);
 
-        main.add(inject(proto().info().floor()), 15);
-        main.add(inject(proto().info().number()), 15);
-        main.add(inject(proto().belongsTo()), 15);
+        split.getLeftPanel().add(inject(proto().info().floor()), 15);
+        split.getRightPanel().add(inject(proto().info().number()), 15);
+        split.getRightPanel().add(inject(proto().belongsTo()), 15);
 
-        main.add(inject(proto().info().area()), 15);
-        main.add(inject(proto().info().areaUnits()), 15);
+        split.getRightPanel().add(inject(proto().info().area()), 15);
+        split.getRightPanel().add(inject(proto().info().areaUnits()), 15);
 
-        main.add(inject(proto().info().bedrooms()), 15);
-        main.add(inject(proto().info().bathrooms()), 15);
+        split.getRightPanel().add(inject(proto().info().bedrooms()), 15);
+        split.getRightPanel().add(inject(proto().info().bathrooms()), 15);
 
         main.add(new CrmHeaderDecorator(i18n.tr("Details")));
         main.add(inject(proto().details(), createDetailsListEditor()));
@@ -86,8 +89,9 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.add(inject(proto().occupancies(), createOccupanciesListEditor()));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Financials")));
-        main.add(inject(proto().financial().unitRent()), 15);
-        main.add(inject(proto().financial().marketRent()), 15);
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
+        split.getLeftPanel().add(inject(proto().financial().unitRent()), 15);
+        split.getRightPanel().add(inject(proto().financial().marketRent()), 15);
 
         main.add(new CrmHeaderDecorator(i18n.tr(proto().financial().concessions().getMeta().getCaption())));
         main.add(inject(proto().financial().concessions(), createConcessionsListEditor()));
@@ -95,8 +99,9 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 //        main.add(inject(proto().financial().concessions()), 15);
 
         main.add(new CrmHeaderDecorator(i18n.tr("Marketing")));
-        main.add(inject(proto().marketing().floorplan()), 15);
-        SubtypeInjectors.injectMarketing(main, proto().marketing(), this);
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
+        SubtypeInjectors.injectMarketing(main, split, proto().marketing(), this);
+        split.getLeftPanel().add(inject(proto().marketing().floorplan()), 15);
 
         main.setWidth("100%");
         return main;

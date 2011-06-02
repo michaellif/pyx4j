@@ -40,16 +40,16 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
 
         main.add(split);
         split.getLeftPanel().add(inject(proto().type()), 15);
-        split.getRightPanel().add(inject(proto().value()), 7);
+        split.getLeftPanel().add(inject(proto().value()), 7);
         split.getLeftPanel().add(inject(proto().percentage()), 7);
-        split.getRightPanel().add(inject(proto().appliedTo()), 15);
+        split.getLeftPanel().add(inject(proto().appliedTo()), 15);
         split.getLeftPanel().add(inject(proto().termType()), 15);
-        split.getRightPanel().add(inject(proto().numberOfTerms()), 7);
-        split.getLeftPanel().add(inject(proto().description()), 15);
+        split.getLeftPanel().add(inject(proto().numberOfTerms()), 7);
+        split.getRightPanel().add(inject(proto().description()), 15);
         split.getRightPanel().add(inject(proto().status()), 15);
-        split.getLeftPanel().add(inject(proto().approvedBy()), 15);
+        split.getRightPanel().add(inject(proto().approvedBy()), 15);
         split.getRightPanel().add(inject(proto().start()), 8);
-        split.getLeftPanel().add(inject(proto().end()), 8);
+        split.getRightPanel().add(inject(proto().end()), 8);
 
         main.setWidth("100%");
         return main;
