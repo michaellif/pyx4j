@@ -38,7 +38,9 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final Class<E> entityClass;
 
-    private Key entityId;
+    private Key entityID = null;
+
+    private Key parentID = null;
 
     @Inject
     public EditorActivityBase(IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
@@ -49,7 +51,17 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     public EditorActivityBase<E> withPlace(Place place) {
-        entityId = new Key(((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID));
+        entityID = null;
+        parentID = null;
+
+        String id;
+        if ((id = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID)) != null) {
+            entityID = new Key(id);
+        }
+        if ((id = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_PARENT_ID)) != null) {
+            parentID = new Key(id);
+        }
+
         return this;
     }
 
@@ -59,14 +71,19 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         populate();
     }
 
-    protected AbstractCrudService<E> getService() {
-        return service;
-    }
-
     @Override
     public void populate() {
-        if (entityId.equals(CrmSiteMap.ARG_VALUE_NEW_ITEM)) {
-            view.populate(EntityFactory.create(entityClass));
+        assert (entityID != null);
+
+        if (entityID.toString().equals(CrmSiteMap.ARG_VALUE_NEW_ITEM)) {
+            E entity = EntityFactory.create(entityClass);
+            if (parentID != null) {
+                String ownerName = entity.getEntityMeta().getOwnerMemberName();
+                if (ownerName != null) {
+                    ((IEntity) entity.getMember(ownerName)).setPrimaryKey(parentID);
+                }
+            }
+            view.populate(entity);
         } else {
             service.retrieve(new AsyncCallback<E>() {
                 @Override
@@ -77,27 +94,50 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                 @Override
                 public void onFailure(Throwable caught) {
                 }
-            }, entityId);
+            }, entityID);
         }
     }
 
     @Override
     public void save() {
-        service.save(new AsyncCallback<E>() {
+        assert (entityID != null);
 
-            @Override
-            public void onSuccess(E result) {
-                History.back();
-            }
+        if (entityID.toString().equals(CrmSiteMap.ARG_VALUE_NEW_ITEM)) {
+            service.create(new AsyncCallback<E>() {
+                @Override
+                public void onSuccess(E result) {
+                    onSaveSuccess(result);
+                }
 
-            @Override
-            public void onFailure(Throwable caught) {
-            }
-        }, view.getValue());
+                @Override
+                public void onFailure(Throwable caught) {
+                    onSaveFail();
+                }
+            }, view.getValue());
+        } else {
+            service.save(new AsyncCallback<E>() {
+                @Override
+                public void onSuccess(E result) {
+                    onSaveSuccess(result);
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    onSaveFail();
+                }
+            }, view.getValue());
+        }
     }
 
     @Override
     public void cancel() {
         History.back();
+    }
+
+    protected void onSaveSuccess(E result) {
+        History.back();
+    }
+
+    protected void onSaveFail() {
     }
 }

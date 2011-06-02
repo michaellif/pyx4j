@@ -37,7 +37,7 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
 
     protected Class<DTO> dtoClass;
 
-    protected GenericCrudServiceDtoImpl(Class<DBO> dboClass, Class<DTO> dtoClass) {
+    public GenericCrudServiceDtoImpl(Class<DBO> dboClass, Class<DTO> dtoClass) {
         this.dboClass = dboClass;
         this.dtoClass = dtoClass;
     }

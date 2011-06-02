@@ -19,7 +19,7 @@ import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerCrudServiceImpl extends GenericCrudServiceDtoImpl<Boiler, BoilerDTO> implements BoilerCrudService {
 
-    protected BoilerCrudServiceImpl() {
+    public BoilerCrudServiceImpl() {
         super(Boiler.class, BoilerDTO.class);
     }
 }
