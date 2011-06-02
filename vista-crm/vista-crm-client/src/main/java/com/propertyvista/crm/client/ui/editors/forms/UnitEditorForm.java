@@ -91,6 +91,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         main.add(new CrmHeaderDecorator(i18n.tr(proto().financial().concessions().getMeta().getCaption())));
         main.add(inject(proto().financial().concessions(), createConcessionsListEditor()));
+// just select from predefines ones:        
+//        main.add(inject(proto().financial().concessions()), 15);
 
         main.add(new CrmHeaderDecorator(i18n.tr("Marketing")));
         main.add(inject(proto().marketing().floorplan()), 15);
