@@ -21,7 +21,6 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.common.domain.ref.Country;
-import com.propertyvista.crm.rpc.CrmSiteMap.Editors.LockerArea;
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
@@ -43,6 +42,7 @@ import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.domain.property.asset.Locker;
+import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.domain.property.asset.Roof;

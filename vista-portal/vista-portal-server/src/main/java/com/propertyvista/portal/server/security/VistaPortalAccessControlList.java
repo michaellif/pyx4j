@@ -13,7 +13,17 @@
  */
 package com.propertyvista.portal.server.security;
 
+import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.security.EntityPermission;
+import com.pyx4j.entity.security.InstanceAccess;
+import com.pyx4j.rpc.shared.IServiceExecutePermission;
+import com.pyx4j.rpc.shared.ServiceExecutePermission;
+import com.pyx4j.security.server.ServletContainerAclBuilder;
+import com.pyx4j.security.shared.AllPermissions;
+import com.pyx4j.security.shared.CoreBehavior;
+
 import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.domain.ptapp.Application;
@@ -40,21 +50,18 @@ import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
-import com.pyx4j.entity.rpc.EntityServices;
-import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.security.InstanceAccess;
-import com.pyx4j.rpc.shared.IServiceExecutePermission;
-import com.pyx4j.rpc.shared.ServiceExecutePermission;
-import com.pyx4j.security.server.ServletContainerAclBuilder;
-import com.pyx4j.security.shared.AllPermissions;
-import com.pyx4j.security.shared.CoreBehavior;
-
 public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
     private final static int CRUD = EntityPermission.CREATE | EntityPermission.READ | EntityPermission.UPDATE;
 
     public VistaPortalAccessControlList() {
         grant(new IServiceExecutePermission(ActivationService.class));
+
+        // Old TODO remove
+        grant(new ServiceExecutePermission(EntityServices.Query.class));
+        grant(new EntityPermission(City.class, EntityPermission.READ));
+        grant(new EntityPermission(Country.class, EntityPermission.READ));
+        grant(new EntityPermission(Province.class, EntityPermission.READ));
 
         grant(VistaBehavior.POTENTIAL_TENANT, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaBehavior.POTENTIAL_TENANT, new IServiceExecutePermission(ApartmentService.class));
