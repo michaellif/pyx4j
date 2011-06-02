@@ -25,6 +25,7 @@ public class CrmHeaderDecorator extends VistaHeaderDecorator {
 
     public CrmHeaderDecorator(String caption, Widget widget, String width) {
         super(caption, widget, width);
+        this.getElement().getStyle().setProperty("clear", "both");
     }
 
     public CrmHeaderDecorator(String caption, Widget widget) {

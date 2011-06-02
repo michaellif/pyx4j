@@ -25,6 +25,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
@@ -54,15 +55,16 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     @Override
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-
-        main.add(inject(proto().info().name()), 15);
-        injectAddress(main, proto().info().address());
-        main.add(inject(proto().info().propertyCode()), 12);
-        main.add(inject(proto().info().type()), 12);
-        main.add(inject(proto().info().shape()), 7);
-        main.add(inject(proto().info().totalStories()), 5);
-        main.add(inject(proto().info().residentialStories()), 5);
-        main.add(inject(proto().complex()), 15);
+        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        main.add(split);
+        split.getLeftPanel().add(inject(proto().info().name()), 15);
+        injectAddress(split.getLeftPanel(), proto().info().address());
+        split.getRightPanel().add(inject(proto().info().propertyCode()), 12);
+        split.getRightPanel().add(inject(proto().info().type()), 12);
+        split.getRightPanel().add(inject(proto().info().shape()), 7);
+        split.getRightPanel().add(inject(proto().info().totalStories()), 5);
+        split.getRightPanel().add(inject(proto().info().residentialStories()), 5);
+        split.getRightPanel().add(inject(proto().complex()), 15);
 
         main.add(new CrmHeaderDecorator(i18n.tr("Details")));
         main.add(inject(proto().info().structureType()), 15);
