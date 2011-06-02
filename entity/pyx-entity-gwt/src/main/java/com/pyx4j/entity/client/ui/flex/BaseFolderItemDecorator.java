@@ -22,10 +22,6 @@ package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -33,14 +29,11 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.forms.client.ui.decorators.ImageHolder;
+import com.pyx4j.widgets.client.ImageButton;
 
 public abstract class BaseFolderItemDecorator extends SimplePanel implements FolderItemDecorator {
 
     private Image removeImage;
-
-    private final ImageResource imageResourceRegular;
-
-    private final ImageResource imageResourceHover;
 
     private final SimplePanel content;
 
@@ -57,30 +50,12 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
     public BaseFolderItemDecorator(ImageResource button, ImageResource buttonHover, String title, boolean buttonVisible) {
         this.removable = (buttonVisible && button != null);
 
-        imageResourceRegular = button;
-        imageResourceHover = buttonHover;
-
         rowHolder = new FlowPanel();
         rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         imageHolder = null;
         if (button != null) {
-            removeImage = new Image(button);
-            removeImage.addMouseOverHandler(new MouseOverHandler() {
-
-                @Override
-                public void onMouseOver(MouseOverEvent event) {
-                    setHoverImage();
-                }
-            });
-            removeImage.addMouseOutHandler(new MouseOutHandler() {
-
-                @Override
-                public void onMouseOut(MouseOutEvent event) {
-                    setRegularImage();
-                }
-            });
-
+            removeImage = new ImageButton(button, buttonHover, title);
             imageHolder = new ImageHolder(removeImage);
             imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
 
@@ -138,18 +113,6 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
         super.onEnsureDebugId(baseID);
         if (removeImage != null) {
             removeImage.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Remove.debugId());
-        }
-    }
-
-    protected void setRegularImage() {
-        if (imageResourceRegular != null) {
-            removeImage.setResource(imageResourceRegular);
-        }
-    }
-
-    protected void setHoverImage() {
-        if (imageResourceHover != null) {
-            removeImage.setResource(imageResourceHover);
         }
     }
 }
