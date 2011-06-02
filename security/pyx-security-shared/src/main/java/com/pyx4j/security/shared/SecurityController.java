@@ -24,6 +24,7 @@ import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.security.server.SecurityControllerCreator;
 
 public abstract class SecurityController {
@@ -73,7 +74,11 @@ public abstract class SecurityController {
 
     public static void assertPermission(Permission permission) throws SecurityViolationException {
         if (!checkPermission(permission)) {
-            throw new SecurityViolationException("Permission denied");
+            if (ApplicationMode.isDevelopment()) {
+                throw new SecurityViolationException("Permission denied " + permission);
+            } else {
+                throw new SecurityViolationException("Permission denied");
+            }
         }
     }
 }

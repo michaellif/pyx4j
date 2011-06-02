@@ -30,6 +30,12 @@
             <artifactId>pyx-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+	   <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-config-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
     </dependencies>
 
