@@ -13,11 +13,14 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
+import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.server.generator.LocationsGenerator;
@@ -41,9 +44,20 @@ public class LocationsPreload extends AbstractDataPreloader {
         PersistenceServicesFactory.getPersistenceService().persist(provinces);
         provinceCount += provinces.size();
 
+        Map<String, Province> provincesMap = new HashMap<String, Province>();
+        for (Province province : provinces) {
+            provincesMap.put(province.name().getValue(), province);
+        }
+        List<City> cities = LocationsGenerator.loadCityFromFile();
+        for (City c : cities) {
+            c.province().set(provincesMap.get(c.province().name().getValue()));
+        }
+        PersistenceServicesFactory.getPersistenceService().persist(cities);
+
         StringBuilder b = new StringBuilder();
         b.append("Created " + countriesCount + " Countries").append('\n');
         b.append("Created " + provinceCount + " Provinces");
+        b.append("Created " + cities.size() + " Cities");
         return b.toString();
     }
 

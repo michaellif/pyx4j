@@ -13,10 +13,15 @@
  */
 package com.propertyvista.common.domain.ref;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.geo.GeoPoint;
 
 public interface City extends IEntity {
 
@@ -24,6 +29,11 @@ public interface City extends IEntity {
     @Indexed
     IPrimitive<String> name();
 
-    //TODO coordinates
+    IPrimitive<GeoPoint> location();
+
+    @Caption(name = "Province/State")
+    @Editor(type = EditorType.combo)
+    @Reference(adapter = ProvinceReferenceAdapter.class)
+    Province province();
 
 }
