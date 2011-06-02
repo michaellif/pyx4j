@@ -30,31 +30,31 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
-public class TableFolderItemDecorator extends BaseFolderItemDecorator {
+public class TableFolderItemEditorDecorator extends BaseFolderItemEditorDecorator {
 
     private final HTML validationMessageHolder;
 
-    public TableFolderItemDecorator(ImageResource removeButton) {
+    public TableFolderItemEditorDecorator(ImageResource removeButton) {
         this(removeButton, (ImageResource) null);
     }
 
-    public TableFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover) {
+    public TableFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover) {
         this(removeButton, removeButtonHover, null);
     }
 
-    public TableFolderItemDecorator(ImageResource removeButton, String title) {
+    public TableFolderItemEditorDecorator(ImageResource removeButton, String title) {
         this(removeButton, (ImageResource) null, title);
     }
 
-    public TableFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title) {
+    public TableFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title) {
         this(removeButton, removeButtonHover, title, true);
     }
 
-    public TableFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
+    public TableFolderItemEditorDecorator(ImageResource removeButton, String title, boolean removable) {
         this(removeButton, null, title, removable);
     }
 
-    public TableFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
+    public TableFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
         super(removeButton, removeButtonHover, title, removable);
 
         VerticalPanel mainPanel = new VerticalPanel();
@@ -69,7 +69,7 @@ public class TableFolderItemDecorator extends BaseFolderItemDecorator {
     }
 
     @Override
-    public void setFolderItem(final CEntityFolderItem<?> folderItem) {
+    public void setFolderItem(final CEntityFolderItemEditor<?> folderItem) {
         super.setFolderItem(folderItem);
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override

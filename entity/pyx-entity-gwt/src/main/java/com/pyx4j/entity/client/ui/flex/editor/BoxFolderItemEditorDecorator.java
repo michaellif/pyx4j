@@ -26,9 +26,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 
-public class BoxFolderItemDecorator extends BaseFolderItemDecorator {
+public class BoxFolderItemEditorDecorator extends BaseFolderItemEditorDecorator {
 
-    public BoxFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
+    public BoxFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
         super(removeButton, removeButtonHover, title, removable);
 
         getContent().getElement().getStyle().setMarginTop(10, Unit.PX);
@@ -42,23 +42,23 @@ public class BoxFolderItemDecorator extends BaseFolderItemDecorator {
 
     }
 
-    public BoxFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
+    public BoxFolderItemEditorDecorator(ImageResource removeButton, String title, boolean removable) {
         this(removeButton, null, title, removable);
     }
 
-    public BoxFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title) {
+    public BoxFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title) {
         this(removeButton, removeButtonHover, title, true);
     }
 
-    public BoxFolderItemDecorator(ImageResource removeButton, String title) {
+    public BoxFolderItemEditorDecorator(ImageResource removeButton, String title) {
         this(removeButton, null, title);
     }
 
-    public BoxFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover) {
+    public BoxFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover) {
         this(removeButton, removeButtonHover, null);
     }
 
-    public BoxFolderItemDecorator(ImageResource removeButton) {
+    public BoxFolderItemEditorDecorator(ImageResource removeButton) {
         this(removeButton, (ImageResource) null);
     }
 

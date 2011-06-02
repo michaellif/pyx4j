@@ -53,23 +53,23 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<IList<E>, NativeEntityPanel<IList<E>>> {
+public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityContainer<IList<E>, NativeEntityPanel<IList<E>>> {
 
-    private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
+    private static final Logger log = LoggerFactory.getLogger(CEntityFolderEditor.class);
 
-    private FolderDecorator<E> folderDecorator;
+    private IFolderEditorDecorator<E> folderDecorator;
 
     private final FlowPanel container;
 
     protected int currentRowDebugId = 0;
 
-    private final LinkedHashMap<E, CEntityFolderItem<E>> itemsMap;
+    private final LinkedHashMap<E, CEntityFolderItemEditor<E>> itemsMap;
 
     private final E entityPrototype;
 
-    public CEntityFolder(Class<E> rowClass) {
+    public CEntityFolderEditor(Class<E> rowClass) {
         container = new FlowPanel();
-        itemsMap = new LinkedHashMap<E, CEntityFolderItem<E>>();
+        itemsMap = new LinkedHashMap<E, CEntityFolderItemEditor<E>>();
         if (rowClass != null) {
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);
         } else {
@@ -92,15 +92,15 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public FolderDecorator<E> createContent() {
+    public IFolderEditorDecorator<E> createContent() {
         return createFolderDecorator();
     }
 
-    protected abstract CEntityFolderItem<E> createItem();
+    protected abstract CEntityFolderItemEditor<E> createItem();
 
-    private CEntityFolderItem<E> createItemPrivate() {
+    private CEntityFolderItemEditor<E> createItemPrivate() {
 
-        CEntityFolderItem<E> item = createItem();
+        CEntityFolderItemEditor<E> item = createItem();
 
         item.addValueChangeHandler(new ValueChangeHandler<E>() {
             boolean sheduled = false;
@@ -112,9 +112,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
-                            log.debug("CEntityFolder.onValueChange fired from {}. New value is {}.", CEntityFolder.this.getTitle(), event.getValue());
+                            log.debug("CEntityFolder.onValueChange fired from {}. New value is {}.", CEntityFolderEditor.this.getTitle(), event.getValue());
                             revalidate();
-                            ValueChangeEvent.fire(CEntityFolder.this, getValue());
+                            ValueChangeEvent.fire(CEntityFolderEditor.this, getValue());
                             sheduled = false;
                         }
                     });
@@ -133,10 +133,10 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
-                            log.debug("CEntityFolder.onPropertyChange fired from {}. Changed property is {}.", CEntityFolder.this.getTitle(),
+                            log.debug("CEntityFolder.onPropertyChange fired from {}. Changed property is {}.", CEntityFolderEditor.this.getTitle(),
                                     event.getPropertyName());
                             revalidate();
-                            ValueChangeEvent.fire(CEntityFolder.this, getValue());
+                            ValueChangeEvent.fire(CEntityFolderEditor.this, getValue());
                             sheduled = false;
                         }
                     });
@@ -147,9 +147,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return item;
     }
 
-    protected abstract FolderDecorator<E> createFolderDecorator();
+    protected abstract IFolderEditorDecorator<E> createFolderDecorator();
 
-    public void setFolderDecorator(FolderDecorator<E> folderDecorator) {
+    public void setFolderDecorator(IFolderEditorDecorator<E> folderDecorator) {
         this.folderDecorator = folderDecorator;
 
         addValueChangeHandler(folderDecorator);
@@ -166,11 +166,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         });
         //TODO use components inheritance
         if (this.getDebugId() != null) {
-            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + FolderDecorator.DEBUGID_SUFIX);
+            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderEditorDecorator.DEBUGID_SUFIX);
         }
     }
 
-    public FolderDecorator<E> getFolderDecorator() {
+    public IFolderEditorDecorator<E> getFolderDecorator() {
         return folderDecorator;
     }
 
@@ -178,7 +178,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     public void setDebugId(IDebugId debugId) {
         super.setDebugId(debugId);
         if ((debugId != null) && (folderDecorator != null)) {
-            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + FolderDecorator.DEBUGID_SUFIX);
+            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderEditorDecorator.DEBUGID_SUFIX);
         }
     }
 
@@ -188,7 +188,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             return;
         }
 
-        final CEntityFolderItem<E> comp = createItemPrivate();
+        final CEntityFolderItemEditor<E> comp = createItemPrivate();
 
         @SuppressWarnings("unchecked")
         E newEntity = (E) EntityFactory.create(comp.proto().getValueClass());
@@ -199,21 +199,21 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             public void onSuccess(E result) {
                 comp.setFirst(container.getWidgetCount() == 0);
                 getValue().add(result);
-                comp.onBound(CEntityFolder.this);
+                comp.onBound(CEntityFolderEditor.this);
                 comp.populate(result);
                 adoptFolderItem(comp);
-                ValueChangeEvent.fire(CEntityFolder.this, getValue());
+                ValueChangeEvent.fire(CEntityFolderEditor.this, getValue());
             }
 
         });
 
     }
 
-    protected void removeItem(CEntityFolderItem<E> item, FolderItemDecorator folderItemDecorator) {
+    protected void removeItem(CEntityFolderItemEditor<E> item, IFolderItemEditorDecorator folderItemDecorator) {
         getValue().remove(item.getValue());
         abandonFolderItem(item);
         item.removeAllHandlers();
-        ValueChangeEvent.fire(CEntityFolder.this, getValue());
+        ValueChangeEvent.fire(CEntityFolderEditor.this, getValue());
     }
 
     /**
@@ -240,14 +240,14 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     protected void repopulate(IList<E> value) {
-        HashMap<E, CEntityFolderItem<E>> oldMap = new HashMap<E, CEntityFolderItem<E>>(itemsMap);
+        HashMap<E, CEntityFolderItemEditor<E>> oldMap = new HashMap<E, CEntityFolderItemEditor<E>>(itemsMap);
 
         itemsMap.clear();
         currentRowDebugId = 0;
 
         boolean first = true;
         for (E item : value) {
-            CEntityFolderItem<E> comp = null;
+            CEntityFolderItemEditor<E> comp = null;
             if (oldMap.containsKey(item)) {
                 comp = oldMap.remove(item);
                 comp.setFirst(first);
@@ -262,25 +262,25 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             adoptFolderItem(comp);
         }
 
-        for (CEntityFolderItem<E> item : oldMap.values()) {
+        for (CEntityFolderItemEditor<E> item : oldMap.values()) {
             container.remove(item);
         }
 
-        if (folderDecorator instanceof TableFolderDecorator) {
-            ((TableFolderDecorator<E>) folderDecorator).setHeaderVisible(container.getWidgetCount() > 0);
+        if (folderDecorator instanceof TableFolderEditorDecorator) {
+            ((TableFolderEditorDecorator<E>) folderDecorator).setHeaderVisible(container.getWidgetCount() > 0);
         }
 
     }
 
-    private void abandonFolderItem(final CEntityFolderItem<E> component) {
+    private void abandonFolderItem(final CEntityFolderItemEditor<E> component) {
         container.remove(component);
         itemsMap.remove(component.getValue());
         ValueChangeEvent.fire(this, getValue());
     }
 
-    private void adoptFolderItem(final CEntityFolderItem<E> component) {
+    private void adoptFolderItem(final CEntityFolderItemEditor<E> component) {
 
-        final FolderItemDecorator folderItemDecorator = component.createFolderItemDecorator();
+        final IFolderItemEditorDecorator folderItemDecorator = component.createFolderItemDecorator();
 
         component.setFolderItemDecorator(folderItemDecorator);
         component.addAccessAdapter(this);
@@ -319,7 +319,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return getAllValidationResults();
     }
 
-    protected CEntityFolderItem<E> getFolderRow(E value) {
+    protected CEntityFolderItemEditor<E> getFolderRow(E value) {
         return itemsMap.get(value);
     }
 

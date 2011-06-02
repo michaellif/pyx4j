@@ -23,7 +23,7 @@ package com.pyx4j.entity.client.ui.flex;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -50,7 +50,7 @@ public class EntityFormComponentFactory extends BaseEditableComponentFactory {
         return comp;
     }
 
-    protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
+    protected CEntityFolderEditor<?> createMemberFolderEditor(IObject<?> member) {
         throw new Error("No MemberFolderEditor for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
     }
 

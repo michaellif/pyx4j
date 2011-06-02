@@ -14,20 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 11, 2011
+ * Created on Feb 12, 2011
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.entity.client.ui.flex.viewer;
+package com.pyx4j.entity.client.ui.flex.editor;
 
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.IEntity;
 
-public interface FolderViewerDecorator<E extends IEntity> extends IsWidget {
+public interface IFolderItemEditorDecorator extends IsWidget {
 
-    public static String DEBUGID_SUFIX = "_fd_";
+    HandlerRegistration addItemClickHandler(ClickHandler handler);
 
-    void setFolder(CEntityFolderViewer<?> w);
+    HandlerRegistration addItemRemoveClickHandler(ClickHandler handler);
+
+    HandlerRegistration addRowUpClickHandler(ClickHandler handler);
+
+    HandlerRegistration addRowDownClickHandler(ClickHandler handler);
+
+    HandlerRegistration addRowCollapseClickHandler(ClickHandler handler);
+
+    void setFolderItem(CEntityFolderItemEditor<?> w);
 
 }

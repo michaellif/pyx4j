@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.widgets.client.ImageButton;
 
-public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel implements FolderDecorator<E> {
+public abstract class BaseFolderEditorDecorator<E extends IEntity> extends FlowPanel implements IFolderEditorDecorator<E> {
 
     private SimplePanel container;
 
@@ -48,11 +48,11 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     private boolean addable;
 
-    public BaseFolderDecorator(ImageResource addButton, String title, boolean addable) {
+    public BaseFolderEditorDecorator(ImageResource addButton, String title, boolean addable) {
         this(addButton, null, title, addable);
     }
 
-    public BaseFolderDecorator(ImageResource addButton, ImageResource addButtonHover, String title, boolean addable) {
+    public BaseFolderEditorDecorator(ImageResource addButton, ImageResource addButtonHover, String title, boolean addable) {
         this.addable = addable && (addButton != null);
 
         if (addButton != null) {
@@ -107,7 +107,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     }
 
     @Override
-    public void setFolder(CEntityFolder<?> w) {
+    public void setFolder(CEntityFolderEditor<?> w) {
         container.setWidget(w.getContainer());
     }
 
@@ -117,8 +117,8 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
         //TODO use inheritance of objects
         //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
         if (addable) {
-            if (baseID.endsWith(FolderDecorator.DEBUGID_SUFIX)) {
-                baseID = baseID.substring(0, baseID.length() - FolderDecorator.DEBUGID_SUFIX.length());
+            if (baseID.endsWith(IFolderEditorDecorator.DEBUGID_SUFIX)) {
+                baseID = baseID.substring(0, baseID.length() - IFolderEditorDecorator.DEBUGID_SUFIX.length());
             }
             addImage.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Add.debugId());
             addButtonLabel.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Add.debugId() + "-label");

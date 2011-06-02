@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
-public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditor<E> {
+public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntityEditor<E> {
 
     private final SimplePanel contentainer;
 
@@ -38,15 +38,15 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditor
 
     private final List<HandlerRegistration> handlerRegistrations;
 
-    public CEntityFolderItem(Class<E> clazz) {
+    public CEntityFolderItemEditor(Class<E> clazz) {
         super(clazz);
         contentainer = new SimplePanel();
         handlerRegistrations = new ArrayList<HandlerRegistration>();
     }
 
-    public abstract FolderItemDecorator createFolderItemDecorator();
+    public abstract IFolderItemEditorDecorator createFolderItemDecorator();
 
-    public void setFolderItemDecorator(FolderItemDecorator folderItemDecorator) {
+    public void setFolderItemDecorator(IFolderItemEditorDecorator folderItemDecorator) {
         asWidget().setWidget(folderItemDecorator);
         folderItemDecorator.setFolderItem(this);
     }

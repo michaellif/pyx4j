@@ -33,7 +33,7 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.flex.CEntityComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityContainer;
 import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
-import com.pyx4j.entity.client.ui.flex.editor.FolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -48,7 +48,7 @@ public abstract class CEntityFolderViewer<E extends IEntity> extends CEntityCont
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolderViewer.class);
 
-    private FolderViewerDecorator<E> folderDecorator;
+    private IFolderViewerDecorator<E> folderDecorator;
 
     private final FlowPanel container;
 
@@ -83,15 +83,15 @@ public abstract class CEntityFolderViewer<E extends IEntity> extends CEntityCont
     }
 
     @Override
-    public FolderViewerDecorator<E> createContent() {
+    public IFolderViewerDecorator<E> createContent() {
         return createFolderDecorator();
     }
 
     protected abstract CEntityFolderItemViewer<E> createItem();
 
-    protected abstract FolderViewerDecorator<E> createFolderDecorator();
+    protected abstract IFolderViewerDecorator<E> createFolderDecorator();
 
-    public void setFolderDecorator(FolderViewerDecorator<E> folderDecorator) {
+    public void setFolderDecorator(IFolderViewerDecorator<E> folderDecorator) {
         this.folderDecorator = folderDecorator;
 
         asWidget().setWidget(folderDecorator);
@@ -100,11 +100,11 @@ public abstract class CEntityFolderViewer<E extends IEntity> extends CEntityCont
 
         //TODO use components inheritance
         if (this.getDebugId() != null) {
-            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + FolderDecorator.DEBUGID_SUFIX);
+            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderEditorDecorator.DEBUGID_SUFIX);
         }
     }
 
-    public FolderViewerDecorator<E> getFolderDecorator() {
+    public IFolderViewerDecorator<E> getFolderDecorator() {
         return folderDecorator;
     }
 
@@ -121,7 +121,7 @@ public abstract class CEntityFolderViewer<E extends IEntity> extends CEntityCont
 
     private void adoptFolderItem(final CEntityFolderItemViewer<E> component) {
 
-        final FolderItemViewerDecorator folderItemDecorator = component.createFolderItemDecorator();
+        final IFolderItemViewerDecorator folderItemDecorator = component.createFolderItemDecorator();
 
         component.setFolderItemDecorator(folderItemDecorator);
         component.addAccessAdapter(this);
@@ -143,7 +143,7 @@ public abstract class CEntityFolderViewer<E extends IEntity> extends CEntityCont
     public void setDebugId(IDebugId debugId) {
         super.setDebugId(debugId);
         if ((debugId != null) && (folderDecorator != null)) {
-            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + FolderDecorator.DEBUGID_SUFIX);
+            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderEditorDecorator.DEBUGID_SUFIX);
         }
     }
 

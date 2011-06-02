@@ -33,9 +33,9 @@ public abstract class CEntityFolderItemViewer<E extends IEntity> extends CEntity
         container = new SimplePanel();
     }
 
-    public abstract FolderItemViewerDecorator createFolderItemDecorator();
+    public abstract IFolderItemViewerDecorator createFolderItemDecorator();
 
-    public void setFolderItemDecorator(FolderItemViewerDecorator folderItemDecorator) {
+    public void setFolderItemDecorator(IFolderItemViewerDecorator folderItemDecorator) {
         asWidget().setWidget(folderItemDecorator);
         folderItemDecorator.setFolderItemContainer(container);
     }

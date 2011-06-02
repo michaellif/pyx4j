@@ -38,35 +38,35 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.widgets.client.Tooltip;
 
-public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {
+public class TableFolderEditorDecorator<E extends IEntity> extends BaseFolderEditorDecorator<E> {
 
     private final HorizontalPanel header;
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns) {
+    public TableFolderEditorDecorator(final List<EntityFolderColumnDescriptor> columns) {
         this(columns, null, null, null, false);
     }
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title) {
+    public TableFolderEditorDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title) {
         this(columns, addButton, (ImageResource) null, title);
     }
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, ImageResource addButtonhover, String title) {
+    public TableFolderEditorDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, ImageResource addButtonhover, String title) {
         this(columns, addButton, addButtonhover, title, true);
     }
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton) {
+    public TableFolderEditorDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton) {
         this(columns, addButton, (ImageResource) null);
     }
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, ImageResource addButtonhover) {
+    public TableFolderEditorDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, ImageResource addButtonhover) {
         this(columns, addButton, addButtonhover, null, true);
     }
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title, boolean addable) {
+    public TableFolderEditorDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title, boolean addable) {
         this(columns, addButton, null, title, addable);
     }
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, ImageResource addButtonhover, String title,
+    public TableFolderEditorDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, ImageResource addButtonhover, String title,
             boolean addable) {
         super(addButton, addButtonhover, title, addable);
 

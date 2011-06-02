@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 
-public class BaseFolderItemViewerDecorator extends SimplePanel implements FolderItemViewerDecorator {
+public class BaseFolderItemViewerDecorator extends SimplePanel implements IFolderItemViewerDecorator {
 
     public BaseFolderItemViewerDecorator() {
 

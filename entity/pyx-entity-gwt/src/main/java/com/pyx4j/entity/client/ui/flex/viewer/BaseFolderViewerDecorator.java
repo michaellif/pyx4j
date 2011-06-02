@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class BaseFolderViewerDecorator<E extends IEntity> extends SimplePanel implements FolderViewerDecorator<E> {
+public class BaseFolderViewerDecorator<E extends IEntity> extends SimplePanel implements IFolderViewerDecorator<E> {
 
     public BaseFolderViewerDecorator() {
     }

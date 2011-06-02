@@ -33,11 +33,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 
-public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderItem<E> {
+public abstract class CEntityFolderRowEditor<E extends IEntity> extends CEntityFolderItemEditor<E> {
 
     protected final List<EntityFolderColumnDescriptor> columns;
 
-    public CEntityFolderRow(Class<E> clazz, List<EntityFolderColumnDescriptor> columns) {
+    public CEntityFolderRowEditor(Class<E> clazz, List<EntityFolderColumnDescriptor> columns) {
         super(clazz);
         this.columns = columns;
     }

@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.forms.client.ui.decorators.ImageHolder;
 import com.pyx4j.widgets.client.ImageButton;
 
-public abstract class BaseFolderItemDecorator extends SimplePanel implements FolderItemDecorator {
+public abstract class BaseFolderItemEditorDecorator extends SimplePanel implements IFolderItemEditorDecorator {
 
     private Image removeImage;
 
@@ -43,11 +43,11 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
 
     private ImageHolder imageHolder;
 
-    public BaseFolderItemDecorator(ImageResource button, String title, boolean buttonVisible) {
+    public BaseFolderItemEditorDecorator(ImageResource button, String title, boolean buttonVisible) {
         this(button, null, title, buttonVisible);
     }
 
-    public BaseFolderItemDecorator(ImageResource button, ImageResource buttonHover, String title, boolean buttonVisible) {
+    public BaseFolderItemEditorDecorator(ImageResource button, ImageResource buttonHover, String title, boolean buttonVisible) {
         this.removable = (buttonVisible && button != null);
 
         rowHolder = new FlowPanel();
@@ -104,7 +104,7 @@ public abstract class BaseFolderItemDecorator extends SimplePanel implements Fol
     }
 
     @Override
-    public void setFolderItem(CEntityFolderItem<?> folderItem) {
+    public void setFolderItem(CEntityFolderItemEditor<?> folderItem) {
         content.setWidget(folderItem.getContainer());
     }
 
