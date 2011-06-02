@@ -17,6 +17,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.rpc.shared.IService;
 
@@ -36,8 +37,8 @@ public interface PortalSiteServices extends IService {
 
     public void retrievePropertyList(AsyncCallback<Vector<PropertyDTO>> callback, GeoCriteria geoCriteria);
 
-    public void retrievePropertyDetails(AsyncCallback<PropertyDetailsDTO> callback, long propertyId);
+    public void retrievePropertyDetails(AsyncCallback<PropertyDetailsDTO> callback, Key propertyId);
 
-    public void retrieveFloorplanDetails(AsyncCallback<FloorplanDetailsDTO> callback, long floorplanId);
+    public void retrieveFloorplanDetails(AsyncCallback<FloorplanDetailsDTO> callback, Key floorplanId);
 
 }

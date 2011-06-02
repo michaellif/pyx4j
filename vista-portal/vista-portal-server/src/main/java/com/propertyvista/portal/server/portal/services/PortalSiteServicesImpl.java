@@ -18,12 +18,16 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.common.domain.ref.City;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
@@ -55,18 +59,34 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     @Override
     public void retrievePropertyList(AsyncCallback<Vector<PropertyDTO>> callback, GeoCriteria geoCriteria) {
         // TODO Auto-generated method stub
-
+        retrievePropertyList(callback, (City) null);
     }
 
     @Override
-    public void retrievePropertyDetails(AsyncCallback<PropertyDetailsDTO> callback, long propertyId) {
-        // TODO Auto-generated method stub
+    public void retrievePropertyDetails(AsyncCallback<PropertyDetailsDTO> callback, Key propertyId) {
+        Building building = PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, propertyId);
+        PropertyDetailsDTO dto = EntityFactory.create(PropertyDetailsDTO.class);
+        dto.set(Converter.convert(building));
 
+        // find floor plans
+        EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
+        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
+        List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
+
+        for (Floorplan floorplan : floorplans) {
+            dto.floorplans().add(Converter.convert(floorplan));
+        }
+
+        callback.onSuccess(dto);
     }
 
     @Override
-    public void retrieveFloorplanDetails(AsyncCallback<FloorplanDetailsDTO> callback, long floorplanId) {
-        // TODO Auto-generated method stub
+    public void retrieveFloorplanDetails(AsyncCallback<FloorplanDetailsDTO> callback, Key floorplanId) {
+        Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(Floorplan.class, floorplanId);
+        FloorplanDetailsDTO dto = EntityFactory.create(FloorplanDetailsDTO.class);
+        dto.set(Converter.convert(floorplan));
+        //TODO add Details
+        callback.onSuccess(dto);
 
     }
 

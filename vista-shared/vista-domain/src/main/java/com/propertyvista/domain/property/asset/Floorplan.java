@@ -83,11 +83,11 @@ public interface Floorplan extends IEntity {
     @Detached
     IList<Medium> media();
 
-    // ----------- Old data:-------------------------
-
     @Detached
-    @Deprecated
+    @com.pyx4j.entity.annotations.Owner
     Building building();
+
+    // ----------- Old data:-------------------------
 
     @Owned
     @Deprecated
