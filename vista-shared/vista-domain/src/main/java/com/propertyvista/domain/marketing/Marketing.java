@@ -14,6 +14,7 @@
 package com.propertyvista.domain.marketing;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -25,5 +26,6 @@ public interface Marketing extends IEntity {
 
     IPrimitive<String> description();
 
+    @EmbeddedEntity
     IList<AdvertisingBlurb> addBlurbs();
 }

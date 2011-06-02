@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
@@ -41,9 +42,11 @@ public interface Roof extends IEntity, Notes {
     @Editor(type = EditorType.yearpicker)
     IPrimitive<LogicalDate> year();
 
+    @EmbeddedEntity
     Warranty warranty();
 
     @Caption(name = "Maitenance Conrtact")
+    @EmbeddedEntity
     Maintenance maitenance();
 
     // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...
