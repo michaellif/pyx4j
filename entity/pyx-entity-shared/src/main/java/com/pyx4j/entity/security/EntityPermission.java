@@ -32,19 +32,19 @@ public class EntityPermission extends AbstractCRUDPermission {
 
     private final transient IEntity entityInstance;
 
-    public static EntityPermission permissionCreate(Class<?> entityClass) {
+    public static EntityPermission permissionCreate(Class<? extends IEntity> entityClass) {
         return new EntityPermission(entityClass, CREATE);
     }
 
-    public static EntityPermission permissionRead(Class<?> entityClass) {
+    public static EntityPermission permissionRead(Class<? extends IEntity> entityClass) {
         return new EntityPermission(entityClass, READ);
     }
 
-    public static EntityPermission permissionUpdate(Class<?> entityClass) {
+    public static EntityPermission permissionUpdate(Class<? extends IEntity> entityClass) {
         return new EntityPermission(entityClass, UPDATE);
     }
 
-    public static EntityPermission permissionDelete(Class<?> entityClass) {
+    public static EntityPermission permissionDelete(Class<? extends IEntity> entityClass) {
         return new EntityPermission(entityClass, DELETE);
     }
 
@@ -70,7 +70,7 @@ public class EntityPermission extends AbstractCRUDPermission {
         instanceAccess = null;
     }
 
-    public EntityPermission(Class<?> entityClass, int actions) {
+    public EntityPermission(Class<? extends IEntity> entityClass, int actions) {
         super(entityClass.getName(), actions);
         this.entityInstance = null;
         instanceAccess = null;

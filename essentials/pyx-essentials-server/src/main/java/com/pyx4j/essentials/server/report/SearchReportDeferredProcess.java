@@ -103,7 +103,7 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
                 int currentFetchCount = 0;
                 while (it.hasNext()) {
                     IEntity ent = it.next();
-                    SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
+                    SecurityController.assertPermission(EntityPermission.permissionRead(ent.getValueClass()));
                     reportEntity(ent);
                     fetchCount++;
                     currentFetchCount++;
