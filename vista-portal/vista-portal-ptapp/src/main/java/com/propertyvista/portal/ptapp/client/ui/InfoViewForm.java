@@ -32,6 +32,7 @@ import com.google.gwt.view.client.Range;
 import com.google.inject.Singleton;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;
@@ -58,9 +59,9 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
@@ -188,10 +189,10 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
     public void addValidations() {
         @SuppressWarnings("unchecked")
         CEntityEditor<Address> currentAddressForm = ((CEntityEditor<Address>) getRaw(proto().currentAddress()));
-        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
 
             @Override
-            public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
+            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
                 enablePreviousAddress();
             }
         });
@@ -243,7 +244,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                IPrimitive<java.sql.Date> date = getValue().previousAddress().moveOutDate();
+                IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
                 return (date.isNull() || value.before(date.getValue()));
             }
 
@@ -254,7 +255,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         });
 
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
-                new RevalidationTrigger<java.sql.Date>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
+                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
 
         // ------------------------------------------------------------------------------------------------        
 
@@ -275,7 +276,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                IPrimitive<java.sql.Date> date = getValue().previousAddress().moveInDate();
+                IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
                 return (date.isNull() || value.after(date.getValue()));
             }
 
@@ -286,7 +287,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         });
 
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
-                new RevalidationTrigger<java.sql.Date>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
+                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
 
         // ------------------------------------------------------------------------------------------------
 

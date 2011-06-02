@@ -13,8 +13,7 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
-import java.sql.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -212,7 +211,7 @@ public interface BuildingInfo extends IEntity {
 
     @Format("yyyy")
     @Editor(type = EditorType.yearpicker)
-    IPrimitive<Date> structureBuildYear();
+    IPrimitive<LogicalDate> structureBuildYear();
 
     IPrimitive<ConstructionType> constructionType();
 

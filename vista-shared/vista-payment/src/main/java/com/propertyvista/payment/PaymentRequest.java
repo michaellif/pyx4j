@@ -13,8 +13,7 @@
  */
 package com.propertyvista.payment;
 
-import java.util.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,7 +27,7 @@ public interface PaymentRequest extends IEntity {
     IPrimitive<String> creditCardNumber();
 
     @Deprecated
-    IPrimitive<Date> creditCardExpiryDate();
+    IPrimitive<LogicalDate> creditCardExpiryDate();
 
     IPrimitive<Float> amount();
 

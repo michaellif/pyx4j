@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -39,7 +40,7 @@ public interface Vehicle extends IEntity {
     @Format("yyyy")
     @Editor(type = EditorType.yearpicker)
     @MemberColumn(name = "year_made")
-    IPrimitive<java.sql.Date> year();
+    IPrimitive<LogicalDate> year();
 
     IPrimitive<String> make();
 

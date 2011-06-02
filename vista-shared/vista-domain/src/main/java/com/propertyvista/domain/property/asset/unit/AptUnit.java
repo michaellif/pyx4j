@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.property.asset.unit;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -44,7 +45,7 @@ public interface AptUnit extends IEntity {
     @Indexed
     @Format("MM/dd/yyyy")
     @Caption(name = "Available")
-    IPrimitive<java.sql.Date> avalableForRent();
+    IPrimitive<LogicalDate> avalableForRent();
 
     @EmbeddedEntity
     AptUnitInfo info();

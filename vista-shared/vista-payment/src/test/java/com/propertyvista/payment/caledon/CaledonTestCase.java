@@ -17,10 +17,11 @@ import java.text.SimpleDateFormat;
 
 import junit.framework.TestCase;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.Merchant;
-
-import com.pyx4j.entity.shared.EntityFactory;
 
 public abstract class CaledonTestCase extends TestCase {
 
@@ -35,7 +36,7 @@ public abstract class CaledonTestCase extends TestCase {
         ccInfo.creditCardNumber().setValue(creditCardNumber);
 
         try {
-            ccInfo.creditCardExpiryDate().setValue(new SimpleDateFormat("yyyy-MM").parse(exp));
+            ccInfo.creditCardExpiryDate().setValue(new LogicalDate(new SimpleDateFormat("yyyy-MM").parse(exp)));
         } catch (Throwable e) {
             throw new Error("Invalid data");
         }

@@ -13,8 +13,7 @@
  */
 package com.propertyvista.domain.property.asset;
 
-import java.util.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -40,7 +39,7 @@ public interface Roof extends IEntity, Notes {
 
     @MemberColumn(name = "roofYear")
     @Editor(type = EditorType.yearpicker)
-    IPrimitive<Date> year();
+    IPrimitive<LogicalDate> year();
 
     Warranty warranty();
 

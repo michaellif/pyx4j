@@ -13,8 +13,7 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import java.util.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -32,9 +31,9 @@ public interface UnitSelectionCriteria extends IEntity {
 
     //Criteria
     @Caption(name = "From")
-    IPrimitive<Date> availableFrom();
+    IPrimitive<LogicalDate> availableFrom();
 
     //Criteria
     @Caption(name = "To")
-    IPrimitive<Date> availableTo();
+    IPrimitive<LogicalDate> availableTo();
 }

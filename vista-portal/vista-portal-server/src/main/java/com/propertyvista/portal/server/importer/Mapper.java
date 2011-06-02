@@ -13,13 +13,13 @@
  */
 package com.propertyvista.portal.server.importer;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.Address;
@@ -140,7 +140,7 @@ public class Mapper {
 
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
         occupancy.status().setValue(AptUnitOccupancy.StatusType.available);
-        occupancy.dateFrom().setValue(new Date(availableUnit.getAvailable().getTime()));
+        occupancy.dateFrom().setValue(new LogicalDate(availableUnit.getAvailable().getTime()));
         unit.occupancies().add(occupancy);
         unit.avalableForRent().setValue(occupancy.dateFrom().getValue()); // for consistency
 

@@ -28,6 +28,13 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -39,12 +46,6 @@ import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-
-import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
@@ -107,7 +108,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                 selectedUnit = event.getValue();
                 getValue().selectedUnitId().set(selectedUnit.id());
                 getValue().selectedLeaseTerm().setValue(null);
-                CEditableComponent<Date, ?> rentStart = get(proto().rentStart());
+                CEditableComponent<LogicalDate, ?> rentStart = get(proto().rentStart());
                 if ((rentStart.getValue() == null) || (!rentStart.isVisited())) {
                     rentStart.setValue(selectedUnit.avalableForRent().getValue());
                 } else {

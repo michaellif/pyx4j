@@ -13,8 +13,7 @@
  */
 package com.propertyvista.portal.domain.payment;
 
-import java.util.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
@@ -30,7 +29,7 @@ public interface CreditCardInfo extends IEntity {
 
     @NotNull
     @Editor(type = EditorType.monthyearpicker)
-    IPrimitive<Date> expiry();
+    IPrimitive<LogicalDate> expiry();
 
     IPrimitive<String> verificationDigits();
 

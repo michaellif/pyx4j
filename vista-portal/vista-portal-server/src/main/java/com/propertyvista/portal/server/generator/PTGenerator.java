@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -179,8 +180,8 @@ public class PTGenerator {
         int startYear = 1990 + RandomUtil.randomInt(20);
         int endYear = startYear + 1 + RandomUtil.randomInt(8);
 
-        employer.starts().setValue(new java.sql.Date(DateUtils.createDate(startYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)).getTime()));
-        employer.ends().setValue(new java.sql.Date(DateUtils.createDate(endYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)).getTime()));
+        employer.starts().setValue(new LogicalDate(DateUtils.createDate(startYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)).getTime()));
+        employer.ends().setValue(new LogicalDate(DateUtils.createDate(endYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)).getTime()));
 
         return employer;
     }
@@ -276,7 +277,7 @@ public class PTGenerator {
                 pet.weight().setValue(10 + RandomUtil.randomInt(30));
             }
 
-            pet.birthDate().setValue(RandomUtil.randomSqlDate(1985, 2010));
+            pet.birthDate().setValue(RandomUtil.randomLogicalDate(1985, 2010));
 
             // charge line
             pet.chargeLine().set(DomainUtil.createChargeLine(ChargeType.petCharge, 20d + RandomUtil.randomInt(100)));
@@ -337,8 +338,8 @@ public class PTGenerator {
 
         populateAddress(address);
 
-        address.moveInDate().setValue(RandomUtil.randomSqlDate(2008, 2010));
-        address.moveOutDate().setValue(RandomUtil.randomSqlDate(2010, 2012));
+        address.moveInDate().setValue(RandomUtil.randomLogicalDate(2008, 2010));
+        address.moveOutDate().setValue(RandomUtil.randomLogicalDate(2010, 2012));
 
         address.payment().setValue(1000d + RandomUtil.randomInt(1000));
 
@@ -403,7 +404,7 @@ public class PTGenerator {
                 guarantor.name().firstName().setValue(DataGenerator.randomFirstName());
                 guarantor.name().lastName().setValue(DataGenerator.randomLastName());
                 guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
-                guarantor.birthDate().setValue(RandomUtil.randomSqlDate(1960, 2011 - 18));
+                guarantor.birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
                 guarantor.email().setValue(RandomUtil.randomPersonEmail(guarantor));
                 tenantFinancial.guarantors().add(guarantor);
             }
@@ -438,7 +439,7 @@ public class PTGenerator {
             pt.name().middleName().setValue(RandomUtil.randomInt(100) % 7 == 0 ? "M" : "");
         }
 
-        pt.birthDate().setValue(RandomUtil.randomSqlDate(1930, 1980));
+        pt.birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
         pt.homePhone().setValue(RandomUtil.randomPhone());
         pt.mobilePhone().setValue(RandomUtil.randomPhone());
         pt.workPhone().setValue(RandomUtil.randomPhone());
@@ -490,7 +491,7 @@ public class PTGenerator {
         }
 
         Address currentAddress = createAddress();
-        currentAddress.moveOutDate().setValue(RandomUtil.randomSqlDate(2012, 2013)); // this has to be in the future
+        currentAddress.moveOutDate().setValue(RandomUtil.randomLogicalDate(2012, 2013)); // this has to be in the future
         pti.currentAddress().set(currentAddress);
 
         Address previousAddress = createAddress();
@@ -502,8 +503,8 @@ public class PTGenerator {
         Date moveIn = DateUtils.yearsAdd(moveOut, years);
         log.debug("Moving {} years back", years);
         log.debug("Moving from {} to {}", moveOut, moveIn);
-        previousAddress.moveOutDate().setValue(new java.sql.Date(moveOut.getTime()));
-        previousAddress.moveInDate().setValue(new java.sql.Date(moveIn.getTime()));
+        previousAddress.moveOutDate().setValue(new LogicalDate(moveOut.getTime()));
+        previousAddress.moveInDate().setValue(new LogicalDate(moveIn.getTime()));
         pti.previousAddress().set(previousAddress);
 
         for (int i = 0; i < RandomUtil.randomInt(3); i++) {
@@ -563,14 +564,14 @@ public class PTGenerator {
         // from
         Calendar availableFrom = DateUtils.calRoundedNow();
         DateUtils.dayStart(availableFrom);
-        criteria.availableFrom().setValue(availableFrom.getTime());
+        criteria.availableFrom().setValue(new LogicalDate(availableFrom.getTime()));
 
         // to will be one month in the future
         Calendar avalableTo = new GregorianCalendar();
         avalableTo.setTime(availableFrom.getTime());
         avalableTo.add(Calendar.MONTH, 1);
         DateUtils.dayStart(avalableTo);
-        criteria.availableTo().setValue(avalableTo.getTime());
+        criteria.availableTo().setValue(new LogicalDate(avalableTo.getTime()));
 
         unitSelection.selectionCriteria().set(criteria);
 

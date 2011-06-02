@@ -23,6 +23,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
@@ -283,15 +284,15 @@ public class BuildingsGenerator {
         item.type().setValue(type);
 
         item.flooringType().setValue(RandomUtil.random(AptUnitItem.FlooringType.values()));
-        item.flooringInstallDate().setValue(RandomUtil.randomSqlDate());
+        item.flooringInstallDate().setValue(RandomUtil.randomLogicalDate());
         item.flooringValue().setValue(1800. + RandomUtil.randomInt(200));
 
         item.counterTopType().setValue(RandomUtil.random(AptUnitItem.CounterTopType.values()));
-        item.counterTopInstallDate().setValue(RandomUtil.randomSqlDate());
+        item.counterTopInstallDate().setValue(RandomUtil.randomLogicalDate());
         item.counterTopValue().setValue(800. + RandomUtil.randomInt(200));
 
         item.cabinetsType().setValue(RandomUtil.random(AptUnitItem.CabinetsType.values()));
-        item.cabinetsInstallDate().setValue(RandomUtil.randomSqlDate());
+        item.cabinetsInstallDate().setValue(RandomUtil.randomLogicalDate());
         item.cabinetsValue().setValue(1000. + RandomUtil.randomInt(200));
 
         return item;
@@ -439,10 +440,10 @@ public class BuildingsGenerator {
 
         // TODO populate currentOccupancies and then set avalableForRent using
         // some ServerSideDomainUtils
-        unit.avalableForRent().setValue(new java.sql.Date(avalable.getTime().getTime()));
+        unit.avalableForRent().setValue(new LogicalDate(avalable.getTime().getTime()));
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
         occupancy.status().setValue(AptUnitOccupancy.StatusType.available);
-        occupancy.dateFrom().setValue(new java.sql.Date(avalable.getTime().getTime()));
+        occupancy.dateFrom().setValue(new LogicalDate(avalable.getTime().getTime()));
         unit.occupancies().add(occupancy);
 
         unit.marketing().floorplan().set(floorplan);

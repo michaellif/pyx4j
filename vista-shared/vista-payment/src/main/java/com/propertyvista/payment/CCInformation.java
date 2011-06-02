@@ -13,16 +13,15 @@
  */
 package com.propertyvista.payment;
 
-import java.util.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface CCInformation  extends IEntity, PaymentInstrument  {
+public interface CCInformation extends IEntity, PaymentInstrument {
 
     IPrimitive<String> creditCardNumber();
 
-    IPrimitive<Date> creditCardExpiryDate();
+    IPrimitive<LogicalDate> creditCardExpiryDate();
 }

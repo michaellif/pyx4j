@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -44,10 +45,10 @@ public interface Address extends IEntity, IAddressFull {
 
     @NotNull
     @Format("MM/dd/yyyy")
-    IPrimitive<java.sql.Date> moveInDate();
+    IPrimitive<LogicalDate> moveInDate();
 
     @Format("MM/dd/yyyy")
-    IPrimitive<java.sql.Date> moveOutDate();
+    IPrimitive<LogicalDate> moveOutDate();
 
     @Caption(name = "Monthly Payment")
     @Format("#0.00")

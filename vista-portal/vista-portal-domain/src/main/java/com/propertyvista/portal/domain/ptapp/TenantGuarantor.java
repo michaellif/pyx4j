@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
@@ -44,6 +45,6 @@ public interface TenantGuarantor extends IEntity, Person {
     @Caption(name = "Birth Date")
     @NotNull
     @Format("MM/dd/yyyy")
-    IPrimitive<java.sql.Date> birthDate();
+    IPrimitive<LogicalDate> birthDate();
 
 }

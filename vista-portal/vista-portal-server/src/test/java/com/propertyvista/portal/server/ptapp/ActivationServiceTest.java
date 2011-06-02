@@ -13,12 +13,11 @@
  */
 package com.propertyvista.portal.server.ptapp;
 
-import java.util.Date;
-
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -72,8 +71,8 @@ public class ActivationServiceTest extends VistaDBTestCase {
         UnitSelectionCriteria criteria = EntityFactory.create(UnitSelectionCriteria.class);
         criteria.floorplanName().setValue("DoesNotExist");
         criteria.propertyCode().setValue("DoesNotExistAsWell");
-        criteria.availableFrom().setValue(new Date());
-        criteria.availableTo().setValue(new Date());
+        criteria.availableFrom().setValue(new LogicalDate());
+        criteria.availableTo().setValue(new LogicalDate());
 
         ActivationService service = createService();
         service.unitExists(new UnitTestsAsyncCallback<Boolean>() {

@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.ptapp;
 
 import java.io.Serializable;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
@@ -79,7 +80,7 @@ public interface PotentialTenant extends Person, IBoundToApplication {
     @Caption(name = "Birth Date")
     @NotNull
     @Format("MM/dd/yyyy")
-    IPrimitive<java.sql.Date> birthDate();
+    IPrimitive<LogicalDate> birthDate();
 
     @ToString(index = 0)
     @NotNull

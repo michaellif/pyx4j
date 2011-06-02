@@ -13,8 +13,7 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
-import java.sql.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -23,7 +22,7 @@ import com.propertyvista.common.domain.financial.Currency;
 
 public interface BuildingFinancial extends IEntity {
 
-    IPrimitive<Date> dateAquired();
+    IPrimitive<LogicalDate> dateAquired();
 
     @Format("#0.00")
     IPrimitive<Double> purchasePrice();
@@ -31,7 +30,7 @@ public interface BuildingFinancial extends IEntity {
     @Format("#0.00")
     IPrimitive<Double> marketPrice();
 
-    IPrimitive<Date> lastAppraisalDate();
+    IPrimitive<LogicalDate> lastAppraisalDate();
 
     @Format("#0.00")
     IPrimitive<Double> lastAppraisalValue();

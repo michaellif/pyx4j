@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -54,11 +55,11 @@ public interface IncomeInfoStudentIncome extends IEntity, IAddressFull, IIncomeI
 
     @Override
     @Caption(name = "Program Start")
-    IPrimitive<java.sql.Date> starts();
+    IPrimitive<LogicalDate> starts();
 
     @Override
     @Caption(name = "Program (Planned) to be completed on")
-    IPrimitive<java.sql.Date> ends();
+    IPrimitive<LogicalDate> ends();
 
     @Caption(name = "Program")
     IPrimitive<Program> program();

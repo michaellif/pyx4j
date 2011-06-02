@@ -13,8 +13,7 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import java.util.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
@@ -54,5 +53,5 @@ public interface Charges extends IEntity, IBoundToApplication {
      * We need this here (will be transient in the future) so that calculation libary can
      * figure out pro-rated charges
      */
-    IPrimitive<Date> rentStart();
+    IPrimitive<LogicalDate> rentStart();
 }

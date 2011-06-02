@@ -23,12 +23,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
-import com.propertyvista.portal.domain.util.ValidationUtils;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.ptapp.client.ui.validators.BirthdayDateValidator;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
@@ -38,6 +33,12 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+
+import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.util.ValidationUtils;
+import com.propertyvista.portal.ptapp.client.resources.PortalImages;
+import com.propertyvista.portal.ptapp.client.ui.validators.BirthdayDateValidator;
 
 final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
 
@@ -92,10 +93,10 @@ final class TenantsViewFolderRow extends CEntityFolderRow<PotentialTenantInfo> {
         });
 
         if (!isFirst()) { // all this stuff isn't for primary applicant:  
-            get(proto().birthDate()).addValueChangeHandler(new ValueChangeHandler<java.sql.Date>() {
+            get(proto().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
 
                 @Override
-                public void onValueChange(ValueChangeEvent<java.sql.Date> event) {
+                public void onValueChange(ValueChangeEvent<LogicalDate> event) {
                     Status status = getValue().status().getValue();
                     if ((status == null) || (status == Status.Dependant)) {
                         if (ValidationUtils.isOlderThen18(event.getValue())) {

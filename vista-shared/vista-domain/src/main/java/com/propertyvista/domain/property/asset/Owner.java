@@ -13,8 +13,7 @@
  */
 package com.propertyvista.domain.property.asset;
 
-import java.util.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -44,8 +43,8 @@ public interface Owner extends IEntity {
     @MemberColumn(name = "shr")
     IPrimitive<Double> share();
 
-    IPrimitive<Date> startDate();
+    IPrimitive<LogicalDate> startDate();
 
-    IPrimitive<Date> endDate();
+    IPrimitive<LogicalDate> endDate();
 
 }

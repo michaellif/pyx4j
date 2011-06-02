@@ -13,8 +13,7 @@
  */
 package com.propertyvista.domain.marketing.yield;
 
-import java.util.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -100,9 +99,9 @@ public interface Concession extends IEntity {
 
     @Caption(name = "Available From")
     @MemberColumn(name = "concessionStart")
-    IPrimitive<Date> start();
+    IPrimitive<LogicalDate> start();
 
     @Caption(name = "Available Till")
     @MemberColumn(name = "concessionEnd")
-    IPrimitive<Date> end();
+    IPrimitive<LogicalDate> end();
 }

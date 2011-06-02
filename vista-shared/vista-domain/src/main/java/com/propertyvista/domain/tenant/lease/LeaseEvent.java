@@ -13,8 +13,7 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
-import java.util.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -59,7 +58,7 @@ public interface LeaseEvent extends IEntity {
     IPrimitive<Type> type();
 
     @MemberColumn(name = "eventDate")
-    IPrimitive<Date> date();
+    IPrimitive<LogicalDate> date();
 
     IPrimitive<String> notes();
 }

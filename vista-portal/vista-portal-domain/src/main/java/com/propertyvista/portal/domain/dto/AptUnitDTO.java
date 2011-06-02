@@ -13,8 +13,7 @@
  */
 package com.propertyvista.portal.domain.dto;
 
-import java.sql.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
@@ -83,11 +82,11 @@ public interface AptUnitDTO extends IEntity {
     IPrimitive<Double> requiredDeposit();
 
 //
-//    IPrimitive<Date> moveOut();
+//    IPrimitive<LogicalDate> moveOut();
 //
     @Format("MM/dd/yyyy")
     @Caption(name = "Available")
-    IPrimitive<Date> avalableForRent();
+    IPrimitive<LogicalDate> avalableForRent();
 
     @Detached
     LeaseTerms newLeaseTerms();

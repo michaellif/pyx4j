@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.preloader;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -36,6 +37,14 @@ public class RandomUtil extends DataGenerator {
         return calendar.getTime();
     }
 
+    public static LogicalDate randomLogicalDate() {
+        return randomLogicalDate(1930, 2020);
+    }
+
+    public static LogicalDate randomLogicalDate(int yearFrom, int yearTo) {
+        return new LogicalDate(randomDate(1930, 2020));
+    }
+
     public static java.sql.Date randomSqlDate() {
         return randomSqlDate(1930, 2020);
     }
@@ -48,12 +57,12 @@ public class RandomUtil extends DataGenerator {
         return new java.sql.Date(calendar.getTime().getTime());
     }
 
-    public static java.sql.Date randomYear(int yearFrom, int yearTo) {
+    public static LogicalDate randomYear(int yearFrom, int yearTo) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, yearFrom + randomInt(yearTo - yearFrom));
         calendar.set(Calendar.DAY_OF_YEAR, 1);
         DateUtils.dayStart(calendar);
-        return new java.sql.Date(calendar.getTime().getTime());
+        return new LogicalDate(calendar.getTime().getTime());
     }
 
     public static String randomPersonEmail(Person person) {

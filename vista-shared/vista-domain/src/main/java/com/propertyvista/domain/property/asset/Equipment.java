@@ -13,8 +13,7 @@
  */
 package com.propertyvista.domain.property.asset;
 
-import java.util.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -43,7 +42,7 @@ public interface Equipment extends IEntity {
 
     IPrimitive<String> model();
 
-    IPrimitive<Date> build();
+    IPrimitive<LogicalDate> build();
 
     @EmbeddedEntity
     Licence licence();

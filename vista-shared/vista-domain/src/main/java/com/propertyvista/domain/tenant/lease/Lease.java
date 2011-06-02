@@ -13,8 +13,7 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
-import java.util.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -38,19 +37,19 @@ public interface Lease extends IEntity {
     Application application();
 
     // Dates:
-    IPrimitive<Date> leaseFrom();
+    IPrimitive<LogicalDate> leaseFrom();
 
-    IPrimitive<Date> leaseTo();
+    IPrimitive<LogicalDate> leaseTo();
 
-    IPrimitive<Date> expectedMoveIn();
+    IPrimitive<LogicalDate> expectedMoveIn();
 
-    IPrimitive<Date> expectedMoveOut();
+    IPrimitive<LogicalDate> expectedMoveOut();
 
-    IPrimitive<Date> actualMoveIn();
+    IPrimitive<LogicalDate> actualMoveIn();
 
-    IPrimitive<Date> actualMoveOut();
+    IPrimitive<LogicalDate> actualMoveOut();
 
-    IPrimitive<Date> signDate();
+    IPrimitive<LogicalDate> signDate();
 
     // Financial:
     IPrimitive<String> accountNumber();

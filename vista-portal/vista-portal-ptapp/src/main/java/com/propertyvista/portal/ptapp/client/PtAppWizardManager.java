@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client;
 
-import java.util.Date;
 import java.util.HashMap;
 
 import org.slf4j.Logger;
@@ -28,18 +27,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.VistaBehavior;
-import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep.Status;
-import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
-import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -51,6 +39,18 @@ import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep.Status;
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
+import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 
 public class PtAppWizardManager {
 
@@ -113,8 +113,8 @@ public class PtAppWizardManager {
         unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
         unitSelectionCriteria.propertyCode().setValue(Window.Location.getParameter("b"));
         unitSelectionCriteria.floorplanName().setValue(Window.Location.getParameter("u"));
-        unitSelectionCriteria.availableFrom().setValue(new Date());
-        Date d = new Date();
+        unitSelectionCriteria.availableFrom().setValue(new LogicalDate());
+        LogicalDate d = new LogicalDate();
         // Now + 1 months
         CalendarUtil.addMonthsToDate(d, 1);
         unitSelectionCriteria.availableTo().setValue(d);

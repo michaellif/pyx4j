@@ -38,5 +38,4 @@ public interface PropertyDTO extends IEntity {
     IPrimitiveSet<String> size();
 
     IList<AmenityDTO> amenities();
-
 }

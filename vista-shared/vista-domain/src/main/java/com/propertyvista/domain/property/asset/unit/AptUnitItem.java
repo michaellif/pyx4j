@@ -13,8 +13,7 @@
  */
 package com.propertyvista.domain.property.asset.unit;
 
-import java.sql.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -151,21 +150,21 @@ public interface AptUnitItem extends IEntity {
 
     IPrimitive<FlooringType> flooringType();
 
-    IPrimitive<Date> flooringInstallDate();
+    IPrimitive<LogicalDate> flooringInstallDate();
 
     @Format("#0.00")
     IPrimitive<Double> flooringValue();
 
     IPrimitive<CounterTopType> counterTopType();
 
-    IPrimitive<Date> counterTopInstallDate();
+    IPrimitive<LogicalDate> counterTopInstallDate();
 
     @Format("#0.00")
     IPrimitive<Double> counterTopValue();
 
     IPrimitive<CabinetsType> cabinetsType();
 
-    IPrimitive<Date> cabinetsInstallDate();
+    IPrimitive<LogicalDate> cabinetsInstallDate();
 
     @Format("#0.00")
     IPrimitive<Double> cabinetsValue();

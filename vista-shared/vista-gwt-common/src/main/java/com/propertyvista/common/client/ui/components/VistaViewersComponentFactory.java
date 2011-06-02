@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components;
 
 import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -47,7 +48,7 @@ public class VistaViewersComponentFactory extends EntityFormComponentFactory {
                     (comp).setNumberFormat(mm.getFormat());
                 }
                 return comp;
-            } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
+            } else if (mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class) || mm.getValueClass().equals(LogicalDate.class)) {
                 CDateLabel comp = new CDateLabel();
                 if (mm.getFormat() != null) {
                     (comp).setDateFormat(mm.getFormat());
