@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -22,12 +21,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.portal.domain.dto.AmenityDTO;
-import com.propertyvista.portal.domain.dto.FloorplanDTO;
-import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
@@ -37,6 +30,13 @@ import com.pyx4j.entity.client.ui.flex.viewer.CEntityViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
 import com.pyx4j.entity.shared.IList;
+
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.domain.dto.AmenityDTO;
+import com.propertyvista.portal.domain.dto.FloorplanDTO;
+import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
 public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implements ApartmentDetailsView {
 
@@ -69,7 +69,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
             }
         }), readOnlyDecor));
 
-        container.add(new VistaWidgetDecorator(inject(proto().price()), readOnlyDecor));
+        //container.add(new VistaWidgetDecorator(inject(proto().price()), readOnlyDecor));
         container.add(new VistaWidgetDecorator(inject(proto().amenities(), new CEntityViewer<IList<AmenityDTO>>() {
             @Override
             public IsWidget createContent(IList<AmenityDTO> value) {
@@ -126,16 +126,15 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         SimplePanel container = new SimplePanel();
         container.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
-/*
- * StringBuffer addressString = new StringBuffer();
- * addressString.append(address.street1());
- * if (address.street2() != null && address.street2().getValue().length() > 0)
- * addressString.append(address.street2());
- * addressString.append(address.city());
- * addressString.append(address.province().code());
- */
+        StringBuffer addressString = new StringBuffer();
+        addressString.append(address.street1());
+        if (!address.street2().isNull() && address.street2().getValue().length() > 0) {
+            addressString.append(address.street2());
+        }
+        addressString.append(address.city());
+        addressString.append(address.province().code());
 
-        container.add(new Label("Test Address because of the permission denied "));
+        container.add(new Label(addressString.toString()));
         return container;
 
     }
@@ -154,10 +153,9 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         card.setSize("80%", "100%");
 
         FlowPanel imageHolder = new FlowPanel();
-        Style imageHolderStyle = imageHolder.getElement().getStyle();
         imageHolder.setHeight("100%");
         imageHolder.setWidth("30%");
-        imageHolderStyle.setFloat(Float.LEFT);
+        imageHolder.getElement().getStyle().setFloat(Float.LEFT);
         imageHolder.add(new HTML("Image"));
         card.add(imageHolder);
 
@@ -168,18 +166,18 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         card.add(content);
 
         Label lbl = null;
-        if (value.name() != null) {
+        if (!value.name().isNull()) {
             lbl = new Label(value.name().getValue());
             lbl.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(lbl);
         }
 
-        if (value.area() != null) {
+        if (!value.area().isNull()) {
             lbl = new Label(value.area().getValue().toString());
             content.add(lbl);
         }
 
-        if (value.description() != null) {
+        if (!value.description().isNull()) {
             lbl = new Label(value.description().getValue());
             content.add(lbl);
         }
