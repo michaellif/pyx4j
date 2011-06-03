@@ -20,11 +20,16 @@
  */
 package com.pyx4j.entity.client.ui.flex.viewer;
 
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 public interface IFolderItemViewerDecorator extends IsWidget {
 
-    void setFolderItemContainer(Widget w);
+    public void setFolderItemContainer(Widget w);
+
+    public void addMenuItem(Widget w);
+
+    public void addClickHandler(ClickHandler h);
 
 }
