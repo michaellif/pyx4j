@@ -127,7 +127,7 @@ public class CrmView extends LayoutPanel {
 
         //================ Main application area - splitter with navig menu and content ======= 
 
-        SplitLayoutPanel splitPanel = new SplitLayoutPanel();
+        SplitLayoutPanel splitPanel = new SplitLayoutPanel(5);
         splitPanel.ensureDebugId("splitPanel");
         splitPanel.setSize("100%", "100%");
         centerAreaContent.add(splitPanel);
@@ -163,7 +163,7 @@ public class CrmView extends LayoutPanel {
 
         leftPanel.setCellWidth(left1Display, "100%");
         leftPanel.setCellHeight(left1Display, "35%");
-        leftPanel.setSpacing(3);
+        leftPanel.setSpacing(2);
         leftPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.NavigContainer);
 
         //============ Main ============

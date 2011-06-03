@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.themes;
 
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
-import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.ColorFactory;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
@@ -34,6 +34,10 @@ import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
 public abstract class VistaCrmTheme extends VistaTheme {
 
+    public static enum StyleSuffixEx implements IStyleSuffix {
+        SaveButton, CancelButton;
+    }
+
     public VistaCrmTheme() {
         super();
     }
@@ -43,7 +47,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         super.initStyles();
         initGeneralStyles();
         initBodyStyles();
-        initButtonStyles();
+        initGwtButtonStylesEx();
 
         initSiteViewStyles();
         initDisplayStyle();
@@ -54,6 +58,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         intitShortCutStyles();
         initActionStyle();
 
+        initHeadersStyle();
         initDashboardReport();
         initEntityDataTableStyles();
     }
@@ -91,13 +96,12 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-HDragger");
-//        style.addProperty("background-color", ThemeColor.OBJECT_TONE20);
-        style.addProperty("border-left", "5px double #DBDBDB");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("cursor", "col-resize");
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-VDragger");
-//        style.addProperty("background-color", ThemeColor.OBJECT_TONE20);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("cursor", "row-resize");
         addStyle(style);
 
@@ -161,39 +165,41 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
     }
 
-    @Override
-    protected void initButtonStyles() {
-        Style style = new Style(CSSClass.pyx4j_ButtonContainer);
-        style.addProperty("height", "22px");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_ButtonContent);
-        style.addProperty("padding-left", "2px");
-        style.addProperty("padding-right", "2px");
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "outset");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE5);
+    protected void initGwtButtonStylesEx() {
+        String gwtButtonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.SaveButton);
+        Style style = new Style(gwtButtonEx);
+        style.addProperty("margin", "0");
+        style.addProperty("padding", "3px 5px");
+        style.addProperty("text-decoration", "none");
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
-        style.addProperty("outline", "none");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE75);
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_ButtonImage);
-        style.addProperty("padding-right", "4px");
-        addStyle(style);
-
-        style = new Style("." + CSSClass.pyx4j_Button + "-hover" + " ." + CSSClass.pyx4j_ButtonContent);
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
+        style.addProperty("border", "1px outset #ccc");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Button + "-pushed" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("border-style", "ridge");
+        // The next is added and is not in default GWT code. 
+        style = new Style(gwtButtonEx + ":focus");
+        style.addProperty("border", "1px outset #3090C7");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Button + "-checked" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("background", ThemeColor.OBJECT_TONE70);
-        style.addProperty("border-style", "inset");
+        style = new Style(gwtButtonEx + ":active");
+        style.addProperty("border", "1px inset #ccc");
+        addStyle(style);
+
+        style = new Style(gwtButtonEx + ":hover");
+        style.addProperty("border-color", "#9cf #69e #69e #7af");
+        addStyle(style);
+
+        style = new Style(gwtButtonEx + "[disabled]");
+        style.addProperty("cursor", "default");
+        style.addProperty("color", "#888");
+        style.addProperty("background", "url(images/button-bkg.png) repeat-x 0px -35px");
+        style.addProperty("border", "1px ridged #cccccc");
+        addStyle(style);
+
+        style = new Style(gwtButtonEx + "[disabled]:hover");
+        style.addProperty("border", "2px outset #ccc");
         addStyle(style);
     }
 
@@ -258,44 +264,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
         //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Display));
         //        addStyle(style);
         //
-        style = new Style(Selector.valueOf(CrmHeaderDecorator.DEFAULT_STYLE_PREFIX));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE60);
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        style.addProperty("margin", "0.4em 0 0.4em 0");
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CrmHeaderDecorator.DEFAULT_STYLE_PREFIX, CrmHeaderDecorator.StyleSuffix.Caption));
-        style.addProperty("padding", "0.3em 1em 0.4em 1em");
-        style.addProperty("font-size", "1.3em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CrmHeader1Decorator.DEFAULT_STYLE_PREFIX));
-        style.addProperty("color", "#5E5E5E");
-        style.addProperty("margin", "0.2em 0 1em 0");
-        style.addProperty("width", "100%");
-        style.addProperty("border-top", "1px dotted #727171");
-        style.addProperty("clear", "both");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CrmHeader1Decorator.DEFAULT_STYLE_PREFIX, CrmHeader1Decorator.StyleSuffix.Caption));
-        style.addProperty("padding", "0.6em 1em 0.1em 1em");
-        style.addProperty("font-size", "1.3em");
-        style.addProperty("font-weight", "bold");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CrmHeader2Decorator.DEFAULT_STYLE_PREFIX));
-        style.addProperty("color", "#5E5E5E");
-        style.addProperty("margin", "0.2em 0 1em 0");
-        style.addProperty("width", "100%");
-        style.addProperty("border-top", "1px dotted #D8D8D8");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CrmHeader2Decorator.DEFAULT_STYLE_PREFIX, CrmHeader2Decorator.StyleSuffix.Caption));
-        style.addProperty("padding", "0.5em 1em 0.5em 1.5em");
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("font-weight", "bold");
-        addStyle(style);
 
         //        style = new Style(Selector.valueOf(ViewLineSeparator.DEFAULT_STYLE_PREFIX));
         //        style.addProperty("border-top-width", "1px");
@@ -470,11 +438,56 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
     }
 
+    protected void initHeadersStyle() {
+
+        String prefix = CrmHeaderDecorator.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE60);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("margin", "4px 0 0 2px");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CrmHeaderDecorator.StyleSuffix.Caption));
+        style.addProperty("padding", "0.3em 1em 0.4em 1em");
+        style.addProperty("font-size", "1.3em");
+        addStyle(style);
+
+        prefix = CrmHeader1Decorator.DEFAULT_STYLE_PREFIX;
+        style = new Style(Selector.valueOf(prefix));
+        style.addProperty("color", "#5E5E5E");
+        style.addProperty("margin", "0.2em 0 1em 0");
+        style.addProperty("width", "100%");
+        style.addProperty("border-top", "1px dotted #727171");
+        style.addProperty("clear", "both");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CrmHeader1Decorator.StyleSuffix.Caption));
+        style.addProperty("padding", "0.6em 1em 0.1em 1em");
+        style.addProperty("font-size", "1.3em");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        prefix = CrmHeader2Decorator.DEFAULT_STYLE_PREFIX;
+        style = new Style(Selector.valueOf(prefix));
+        style.addProperty("color", "#5E5E5E");
+        style.addProperty("margin", "0.2em 0 1em 0");
+        style.addProperty("width", "100%");
+        style.addProperty("border-top", "1px dotted #D8D8D8");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CrmHeader2Decorator.StyleSuffix.Caption));
+        style.addProperty("padding", "0.5em 1em 0.5em 1.5em");
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+    }
+
     protected void initDashboardReport() {
         String prefix = CSSNames.BASE_NAME;
 
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("border", "1px solid #aaa");
+//        style.addProperty("border", "1px solid #aaa");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Column));
@@ -540,7 +553,12 @@ public abstract class VistaCrmTheme extends VistaTheme {
         String prefix = DataTable.BASE_NAME;
 
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("margin", "2px 0px 2px 0px");
+        style.addProperty("margin", "2px 0px 2px 1px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
+        style.addProperty("color", "black");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row));
@@ -549,7 +567,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.even));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE20);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.odd));
@@ -566,12 +584,8 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("cursor", "hand");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("color", "black");
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));
+        style.addProperty("margin", "0 0 0 1px");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE30);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.BORDER);

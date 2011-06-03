@@ -58,11 +58,11 @@ public class ReportViewImpl extends SimplePanel implements ReportView {
 
     public ReportViewImpl() {
         VerticalPanel main = new VerticalPanel();
-        main.add(new CrmHeaderDecorator("Report&nbsp;Menu/Tools", new AddWidgetButton()));
+        main.add(new CrmHeaderDecorator(i18n.tr("Report"), new AddWidgetButton()));
 
         scroll = new ScrollPanel();
         scroll.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        scroll.getElement().getStyle().setTop(45, Unit.PX);
+        scroll.getElement().getStyle().setTop(35, Unit.PX);
         scroll.getElement().getStyle().setLeft(0, Unit.PX);
         scroll.getElement().getStyle().setRight(0, Unit.PX);
         scroll.getElement().getStyle().setBottom(0, Unit.PX);
