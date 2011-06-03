@@ -103,7 +103,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getLeftPanel().add(inject(proto().financial().marketPrice()), 5);
         split.getRightPanel().add(inject(proto().financial().lastAppraisalDate()), 8.2);
         split.getRightPanel().add(inject(proto().financial().lastAppraisalValue()), 5);
-        split.getRightPanel().add(inject(proto().financial().currency().name()), main.defaultLabelWidth, 10, i18n.tr("Currency Name"));
+        split.getRightPanel().add(inject(proto().financial().currency().name()), split.getRightPanel().getDefaultLabelWidth(), 10, i18n.tr("Currency Name"));
 
         main.add(new CrmHeaderDecorator(i18n.tr("Marketing")));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
@@ -112,7 +112,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(new CrmHeaderDecorator(i18n.tr("Contact Information")));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         split.getLeftPanel().add(inject(proto().contacts().website()), 25);
-        split.getRightPanel().add(inject(proto().contacts().email().address()), main.defaultLabelWidth, 25, i18n.tr("Email Address"));
+        split.getRightPanel().add(inject(proto().contacts().email().address()), split.getRightPanel().getDefaultLabelWidth(), 25, i18n.tr("Email Address"));
         SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this);
 
 // TODO - add this data processing later! :

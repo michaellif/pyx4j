@@ -21,16 +21,24 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public class VistaDecoratorsFlowPanel extends FlowPanel {
 
-    private final boolean readOnlyMode;
+    private boolean readOnlyMode = false;
 
-    public final double defaultLabelWidth = 15;
+    private double defaultLabelWidth = 15;
 
     public VistaDecoratorsFlowPanel() {
-        readOnlyMode = false;
+    }
+
+    public VistaDecoratorsFlowPanel(double defaultLabelWidth) {
+        this.defaultLabelWidth = defaultLabelWidth;
     }
 
     public VistaDecoratorsFlowPanel(boolean readOnlyMode) {
         this.readOnlyMode = readOnlyMode;
+    }
+
+    public VistaDecoratorsFlowPanel(boolean readOnlyMode, double defaultLabelWidth) {
+        this.readOnlyMode = readOnlyMode;
+        this.defaultLabelWidth = defaultLabelWidth;
     }
 
     public void add(final CComponent<?> component, double componentWidth) {
@@ -54,5 +62,13 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
         if (!readOnlyMode) {
             super.add(new HTML());
         }
+    }
+
+    public double getDefaultLabelWidth() {
+        return defaultLabelWidth;
+    }
+
+    public void setDefaultLabelWidth(double defaultLabelWidth) {
+        this.defaultLabelWidth = defaultLabelWidth;
     }
 }

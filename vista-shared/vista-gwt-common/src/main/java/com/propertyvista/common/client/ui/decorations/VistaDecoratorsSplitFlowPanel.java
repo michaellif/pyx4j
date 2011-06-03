@@ -23,8 +23,8 @@ public class VistaDecoratorsSplitFlowPanel extends FlowPanel {
     private final VistaDecoratorsFlowPanel left;
 
     public VistaDecoratorsSplitFlowPanel() {
-        right = new VistaDecoratorsFlowPanel();
-        left = new VistaDecoratorsFlowPanel();
+        right = new VistaDecoratorsFlowPanel(12);
+        left = new VistaDecoratorsFlowPanel(12);
         left.setWidth("50%");
         this.add(left);
         this.add(right);
