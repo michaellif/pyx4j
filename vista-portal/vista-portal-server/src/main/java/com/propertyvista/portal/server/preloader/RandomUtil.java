@@ -42,7 +42,7 @@ public class RandomUtil extends DataGenerator {
     }
 
     public static LogicalDate randomLogicalDate(int yearFrom, int yearTo) {
-        return new LogicalDate(randomDate(1930, 2020));
+        return new LogicalDate(randomDate(yearFrom, yearTo));
     }
 
     public static java.sql.Date randomSqlDate() {
