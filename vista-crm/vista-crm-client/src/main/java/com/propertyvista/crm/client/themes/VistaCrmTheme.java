@@ -27,6 +27,7 @@ import com.propertyvista.crm.client.ui.NavigViewImpl;
 import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
@@ -228,15 +229,29 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("font-size", "1.3em");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(CrmHeader2Decorator.DEFAULT_STYLE_PREFIX));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style = new Style(Selector.valueOf(CrmHeader1Decorator.DEFAULT_STYLE_PREFIX));
+        style.addProperty("color", "#757575");
         style.addProperty("margin", "0.2em 0 0.2em 0");
         style.addProperty("width", "100%");
+        style.addProperty("border-top", "1px dotted");
+        style.addProperty("clear", "both");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(CrmHeader1Decorator.DEFAULT_STYLE_PREFIX, CrmHeader1Decorator.StyleSuffix.Caption));
+        style.addProperty("padding", "0.6em 1em 0.1em 2em");
+        style.addProperty("font-size", "1.5em");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(CrmHeader2Decorator.DEFAULT_STYLE_PREFIX));
+        style.addProperty("color", "#757575");
+        style.addProperty("margin", "0.2em 0 0.5em 0");
+        style.addProperty("width", "100%");
+        style.addProperty("border-bottom", "1px dotted");
         addStyle(style);
 
         style = new Style(Selector.valueOf(CrmHeader2Decorator.DEFAULT_STYLE_PREFIX, CrmHeader2Decorator.StyleSuffix.Caption));
-        style.addProperty("padding", "0em 1em 0.1em 2em");
+        style.addProperty("padding", "0em 1em 0.5em 2em");
         style.addProperty("font-size", "1.2em");
         addStyle(style);
 

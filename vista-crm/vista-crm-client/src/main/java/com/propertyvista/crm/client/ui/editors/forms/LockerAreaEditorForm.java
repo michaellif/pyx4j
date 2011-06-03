@@ -21,7 +21,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
@@ -50,7 +50,7 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
         split.getRightPanel().add(inject(proto().regularLockers()), 7);
         split.getRightPanel().add(inject(proto().smallLockers()), 7);
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Financials")));
+        main.add(new CrmHeader1Decorator(i18n.tr("Financials")));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
 
         split.getLeftPanel().add(inject(proto().largeRent()), 7);

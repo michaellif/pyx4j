@@ -45,9 +45,9 @@ public interface Roof extends IEntity, Notes {
     @EmbeddedEntity
     Warranty warranty();
 
-    @Caption(name = "Maitenance Conrtact")
+    @Caption(name = "Maintenance Contract")
     @EmbeddedEntity
-    Maintenance maitenance();
+    Maintenance maintenance();
 
     // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...
     IPrimitive<String> notes();

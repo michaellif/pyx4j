@@ -21,7 +21,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
@@ -50,7 +50,7 @@ public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
         split.getRightPanel().add(inject(proto().doubleSpaces()), 7);
         split.getRightPanel().add(inject(proto().narrowSpaces()), 7);
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Financials")));
+        main.add(new CrmHeader1Decorator(i18n.tr("Financials")));
 
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         split.getLeftPanel().add(inject(proto().disableRent()), 7);

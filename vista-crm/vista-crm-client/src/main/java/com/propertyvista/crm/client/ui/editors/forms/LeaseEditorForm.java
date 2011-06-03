@@ -27,7 +27,7 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.domain.property.asset.Rentable;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.tenant.lease.LeaseEvent;
@@ -60,7 +60,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.add(inject(proto().actualMoveOut()), 10);
         main.add(inject(proto().signDate()), 10);
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Financials")));
+        main.add(new CrmHeader1Decorator(i18n.tr("Financials")));
 
         main.add(inject(proto().accountNumber()), 15);
         main.add(inject(proto().currentRent()), 7);

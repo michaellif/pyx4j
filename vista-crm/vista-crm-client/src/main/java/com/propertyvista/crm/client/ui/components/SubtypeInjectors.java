@@ -29,8 +29,8 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.domain.Company;
 import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Phone;
@@ -124,6 +124,7 @@ public class SubtypeInjectors {
 
         injectContract(main, split, proto, parent);
         main.add(new CrmHeader2Decorator("Maintenance Schedule"));
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
         split.getLeftPanel().add(parent.inject(proto.lastService()), 8.2);
         split.getRightPanel().add(parent.inject(proto.nextService()), 8.2);
     }
@@ -133,6 +134,7 @@ public class SubtypeInjectors {
         split.getLeftPanel().add(parent.inject(proto.title()), 15);
         split.getRightPanel().add(parent.inject(proto.type()), 15);
         main.add(new CrmHeader2Decorator("Contract details"));
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
         injectContract(main, split, proto, parent);
 
         main.add(new CrmHeader2Decorator(proto.items().getMeta().getCaption()));
@@ -155,15 +157,15 @@ public class SubtypeInjectors {
         split.getRightPanel().add(parent.inject(proto.model()), 15);
         split.getRightPanel().add(parent.inject(proto.build()), 8.2);
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto.licence().getMeta().getCaption())));
+        main.add(new CrmHeader1Decorator(i18n.tr(proto.licence().getMeta().getCaption())));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         SubtypeInjectors.injectLicence(main, split, proto.licence(), parent);
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto.warranty().getMeta().getCaption())));
+        main.add(new CrmHeader1Decorator(i18n.tr(proto.warranty().getMeta().getCaption())));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         SubtypeInjectors.injectWarranty(main, split, proto.warranty(), parent);
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto.maitenance().getMeta().getCaption())));
+        main.add(new CrmHeader1Decorator(i18n.tr(proto.maitenance().getMeta().getCaption())));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         SubtypeInjectors.injectMaintenance(main, split, proto.maitenance(), parent);
 

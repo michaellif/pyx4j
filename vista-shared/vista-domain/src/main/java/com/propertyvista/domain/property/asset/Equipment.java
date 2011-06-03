@@ -51,7 +51,7 @@ public interface Equipment extends IEntity {
     Warranty warranty();
 
     @EmbeddedEntity
-    @Caption(name = "Maitenance Conrtact")
+    @Caption(name = "Maintenance Contract")
     Maintenance maitenance();
 
 // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...

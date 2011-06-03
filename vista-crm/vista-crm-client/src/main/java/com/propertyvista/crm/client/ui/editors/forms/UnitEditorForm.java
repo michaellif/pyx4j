@@ -29,7 +29,7 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
@@ -73,32 +73,32 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         split.getRightPanel().add(inject(proto().info().bedrooms()), 15);
         split.getRightPanel().add(inject(proto().info().bathrooms()), 15);
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Details")));
+        main.add(new CrmHeader1Decorator(i18n.tr("Details")));
         main.add(inject(proto().details(), createDetailsListEditor()));
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().info().utilities().getMeta().getCaption())));
+        main.add(new CrmHeader1Decorator(i18n.tr(proto().info().utilities().getMeta().getCaption())));
         main.add(inject(proto().info().utilities(), createUtilitiesListEditor()));
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().addOns().getMeta().getCaption())));
+        main.add(new CrmHeader1Decorator(i18n.tr(proto().addOns().getMeta().getCaption())));
         main.add(inject(proto().addOns(), createAddOnsListEditor()));
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().amenities().getMeta().getCaption())));
+        main.add(new CrmHeader1Decorator(i18n.tr(proto().amenities().getMeta().getCaption())));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().occupancies().getMeta().getCaption())));
+        main.add(new CrmHeader1Decorator(i18n.tr(proto().occupancies().getMeta().getCaption())));
         main.add(inject(proto().occupancies(), createOccupanciesListEditor()));
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Financials")));
+        main.add(new CrmHeader1Decorator(i18n.tr("Financials")));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         split.getLeftPanel().add(inject(proto().financial().unitRent()), 15);
         split.getRightPanel().add(inject(proto().financial().marketRent()), 15);
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().financial().concessions().getMeta().getCaption())));
+        main.add(new CrmHeader1Decorator(i18n.tr(proto().financial().concessions().getMeta().getCaption())));
         main.add(inject(proto().financial().concessions(), createConcessionsListEditor()));
 // just select from predefines ones:        
 //        main.add(inject(proto().financial().concessions()), 15);
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Marketing")));
+        main.add(new CrmHeader1Decorator(i18n.tr("Marketing")));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         SubtypeInjectors.injectMarketing(main, split, proto().marketing(), this);
         split.getLeftPanel().add(inject(proto().marketing().floorplan()), 15);

@@ -30,8 +30,8 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -66,7 +66,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         injectAddress(split, proto().info().address());
         split.getRightPanel().add(inject(proto().complex()), 15);
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Details")));
+        main.add(new CrmHeader1Decorator(i18n.tr("Details")));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         split.getLeftPanel().add(inject(proto().info().structureType()), 15);
         split.getLeftPanel().add(inject(proto().info().structureBuildYear()), 15);
@@ -96,7 +96,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(new CrmHeader2Decorator(proto().lockers().getMeta().getCaption()));
         main.add(inject(proto().lockers(), createLockerAreasListEditor()));
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Financials")));
+        main.add(new CrmHeader1Decorator(i18n.tr("Financials")));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         split.getLeftPanel().add(inject(proto().financial().dateAquired()), 8.2);
         split.getLeftPanel().add(inject(proto().financial().purchasePrice()), 5);
@@ -105,11 +105,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().financial().lastAppraisalValue()), 5);
         split.getRightPanel().add(inject(proto().financial().currency().name()), split.getRightPanel().getDefaultLabelWidth(), 10, i18n.tr("Currency Name"));
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Marketing")));
+        main.add(new CrmHeader1Decorator(i18n.tr("Marketing")));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         SubtypeInjectors.injectMarketing(main, split, proto().marketing(), this);
 
-        main.add(new CrmHeaderDecorator(i18n.tr("Contact Information")));
+        main.add(new CrmHeader1Decorator(i18n.tr("Contact Information")));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         split.getLeftPanel().add(inject(proto().contacts().website()), 25);
         split.getRightPanel().add(inject(proto().contacts().email().address()), split.getRightPanel().getDefaultLabelWidth(), 25, i18n.tr("Email Address"));

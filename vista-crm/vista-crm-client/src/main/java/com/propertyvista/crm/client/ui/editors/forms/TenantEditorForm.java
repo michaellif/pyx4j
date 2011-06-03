@@ -23,7 +23,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
@@ -41,7 +41,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
         //Person
-        Widget header = new CrmHeaderDecorator(i18n.tr("Details"));
+        Widget header = new CrmHeader1Decorator(i18n.tr("Details"));
         header.getElement().getStyle().setMarginTop(0, Unit.EM);
         main.add(header);
 
@@ -58,7 +58,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         main.add(inject(proto().person().email()), 7);
 
         //Company
-        main.add(new CrmHeaderDecorator(i18n.tr("Company Details")));
+        main.add(new CrmHeader1Decorator(i18n.tr("Company Details")));
 
         main.add(inject(proto().company().name()), 15);
         //TODO Leon

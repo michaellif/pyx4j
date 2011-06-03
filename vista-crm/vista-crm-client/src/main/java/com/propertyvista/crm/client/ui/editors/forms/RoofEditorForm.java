@@ -22,7 +22,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.dto.RoofDTO;
 
 public class RoofEditorForm extends CrmEntityForm<RoofDTO> {
@@ -44,11 +44,13 @@ public class RoofEditorForm extends CrmEntityForm<RoofDTO> {
         split.getLeftPanel().add(inject(proto().type()), 15);
         split.getRightPanel().add(inject(proto().year()), 8.2);
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().warranty().getMeta().getCaption())));
+        main.add(new CrmHeader1Decorator(i18n.tr(proto().warranty().getMeta().getCaption())));
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
         SubtypeInjectors.injectWarranty(main, split, proto().warranty(), this);
 
-        main.add(new CrmHeaderDecorator(i18n.tr(proto().maitenance().getMeta().getCaption())));
-        SubtypeInjectors.injectMaintenance(main, split, proto().maitenance(), this);
+        main.add(new CrmHeader1Decorator(i18n.tr(proto().maintenance().getMeta().getCaption())));
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
+        SubtypeInjectors.injectMaintenance(main, split, proto().maintenance(), this);
 
         split.getLeftPanel().add(inject(proto().notes()), 25);
 
