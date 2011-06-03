@@ -37,6 +37,7 @@ import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
+import com.propertyvista.portal.domain.dto.RangeDTO;
 
 public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implements ApartmentDetailsView {
 
@@ -69,7 +70,13 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
             }
         }), readOnlyDecor));
 
-        //container.add(new VistaWidgetDecorator(inject(proto().price()), readOnlyDecor));
+        container.add(new VistaWidgetDecorator(inject(proto().price(), new CEntityViewer<RangeDTO>() {
+            @Override
+            public IsWidget createContent(RangeDTO value) {
+                return new HTML(value.getStringView());
+            }
+        }), readOnlyDecor));
+
         container.add(new VistaWidgetDecorator(inject(proto().amenities(), new CEntityViewer<IList<AmenityDTO>>() {
             @Override
             public IsWidget createContent(IList<AmenityDTO> value) {
@@ -127,12 +134,12 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         container.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
         StringBuffer addressString = new StringBuffer();
-        addressString.append(address.street1());
-        if (!address.street2().isNull() && address.street2().getValue().length() > 0) {
-            addressString.append(address.street2());
+        addressString.append(address.street1().getStringView());
+        if (!address.street2().isNull() && address.street2().getValue().trim().length() > 0) {
+            addressString.append(address.street2().getStringView());
         }
-        addressString.append(address.city());
-        addressString.append(address.province().code());
+        addressString.append(address.city().getStringView());
+        addressString.append(address.province().code().getStringView());
 
         container.add(new Label(addressString.toString()));
         return container;
