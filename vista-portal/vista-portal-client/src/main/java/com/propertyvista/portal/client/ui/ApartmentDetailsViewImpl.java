@@ -25,11 +25,12 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import com.pyx4j.widgets.client.style.IStyleSuffix;
+
 import com.propertyvista.portal.client.ui.maps.PropertyMapWidget;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-
-import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class ApartmentDetailsViewImpl extends SimplePanel implements ApartmentDetailsView {
 

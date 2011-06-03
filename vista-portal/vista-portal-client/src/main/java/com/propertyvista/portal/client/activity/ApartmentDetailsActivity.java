@@ -25,6 +25,7 @@ import com.google.inject.Inject;
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.ApartmentDetailsView;
@@ -38,6 +39,8 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
 
     private final ApartmentDetailsView view;
 
+    private String propertyId;
+
     @Inject
     public ApartmentDetailsActivity(ApartmentDetailsView view) {
         this.view = view;
@@ -45,6 +48,7 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
     }
 
     public ApartmentDetailsActivity withPlace(Place place) {
+        propertyId = ((AppPlace) place).getArgs().get(PortalSiteMap.ARG_PROPERTY_ID);
         return this;
     }
 
@@ -58,7 +62,7 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
                 view.populate(property);
             }
 
-        }, new Key(11));
+        }, new Key(propertyId));
 
 //        PropertyDetailsDTO property = EntityFactory.create(PropertyDetailsDTO.class);
 //        property.address().street1().setValue("320 Avenue Road");

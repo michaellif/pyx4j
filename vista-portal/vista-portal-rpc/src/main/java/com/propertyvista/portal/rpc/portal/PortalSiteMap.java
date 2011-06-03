@@ -22,6 +22,8 @@ public class PortalSiteMap implements SiteMap {
 
     public static String ARG_PAGE_ID = "item-id";
 
+    public static String ARG_PROPERTY_ID = "property-id";
+
     public static class Landing extends AppPlace {
     }
 

@@ -27,9 +27,9 @@ public interface PropertyMapView extends IsWidget {
 
     public interface Presenter {
 
-        public void goToAppartmentDetails(PropertyDTO property);
+        public void showPropertyDetails(PropertyDTO property);
 
-        public void goToPropertyMap(PropertySearchCriteria searchCriteria);
+        public void refineSearch(PropertySearchCriteria searchCriteria);
 
     }
 

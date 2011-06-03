@@ -75,7 +75,7 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
         searchBtn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.goToPropertyMap((PropertySearchCriteria) null);
+                presenter.refineSearch((PropertySearchCriteria) null);
             }
 
         });
@@ -96,7 +96,7 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
         updateBtn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.goToPropertyMap((PropertySearchCriteria) null);
+                presenter.refineSearch((PropertySearchCriteria) null);
             }
 
         });

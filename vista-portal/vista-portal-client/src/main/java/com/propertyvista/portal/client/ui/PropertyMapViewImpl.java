@@ -186,7 +186,7 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    presenter.goToAppartmentDetails(property);
+                    presenter.showPropertyDetails(property);
 
                 }
             });

@@ -18,12 +18,13 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ui.SearchApartmentView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.portal.client.ui.SearchApartmentView;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class SearchApartmentActivity extends AbstractActivity implements SearchApartmentView.Presenter {
 
@@ -44,7 +45,6 @@ public class SearchApartmentActivity extends AbstractActivity implements SearchA
     @Override
     public void goToPropertyMap(PropertySearchCriteria city) {
         AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.PropertyMap());
-
     }
 
     @Override
