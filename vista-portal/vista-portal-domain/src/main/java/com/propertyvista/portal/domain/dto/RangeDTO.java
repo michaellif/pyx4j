@@ -7,19 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-16
+ * Created on 2011-06-02
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.domain.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface PropertyDetailsDTO extends PropertyDTO {
+public interface RangeDTO extends IEntity {
 
-    IList<FloorplanDTO> floorplans();
+    IPrimitive<Double> from();
 
-    RangeDTO price();
+    IPrimitive<Double> to();
 }

@@ -76,6 +76,9 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         for (Floorplan floorplan : floorplans) {
             dto.floorplans().add(Converter.convert(floorplan));
         }
+        //TODO calculate from available units
+        dto.price().from().setValue(805d);
+        dto.price().to().setValue(1600d);
 
         callback.onSuccess(dto);
     }

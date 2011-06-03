@@ -86,7 +86,7 @@ public class Converter {
         PropertyDTO to = EntityFactory.create(PropertyDTO.class);
         to.id().set(from.id());
         to.address().street1().set(from.info().address().streetName());
-        //to.location().setValue(value);
+        to.location().setValue(from.info().address().location().getValue());
 
         // List of Floorplans
         //TODO get this from building
