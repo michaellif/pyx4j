@@ -31,7 +31,47 @@ public enum ThemeColor {
     OBJECT_TONE4,
 
     OBJECT_TONE5,
+//
+// new, extended colour set:
+//    
+    OBJECT_TONE10,
 
+    OBJECT_TONE15,
+
+    OBJECT_TONE20,
+
+    OBJECT_TONE25,
+
+    OBJECT_TONE30,
+
+    OBJECT_TONE35,
+
+    OBJECT_TONE40,
+
+    OBJECT_TONE45,
+
+    OBJECT_TONE50,
+
+    OBJECT_TONE55,
+
+    OBJECT_TONE60,
+
+    OBJECT_TONE65,
+
+    OBJECT_TONE70,
+
+    OBJECT_TONE75,
+
+    OBJECT_TONE80,
+
+    OBJECT_TONE85,
+
+    OBJECT_TONE90,
+
+    OBJECT_TONE95,
+//
+// other colours:
+//    
     BORDER,
 
     SELECTION,
