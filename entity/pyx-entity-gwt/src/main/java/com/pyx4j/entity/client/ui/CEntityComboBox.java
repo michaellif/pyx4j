@@ -35,6 +35,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.client.EntityDataSource;
 import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -77,6 +78,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
     private boolean hasAsyncValue = false;
 
+    private EntityDataSource<E> optionsDataSource;
+
     public CEntityComboBox(Class<E> entityClass) {
         this(null, entityClass, (NotInOptionsPolicy) null);
     }
@@ -109,6 +112,10 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     public void setOptionsComparator(Comparator<E> comparator) {
         this.comparator = comparator;
         setOptions(getOptions());
+    }
+
+    public void setOptionsDataSource(EntityDataSource<E> optionsDataSource) {
+        this.optionsDataSource = optionsDataSource;
     }
 
     public boolean isOptionsLoaded() {
@@ -227,16 +234,21 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
                 }
             };
             isLoading = true;
-            if (ReferenceDataManager.isCached(criteria)) {
-                ReferenceDataManager.obtain(criteria, handlingCallback, true);
+            if (optionsDataSource != null) {
+                optionsDataSource.obtain(criteria, handlingCallback, true);
             } else {
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        ReferenceDataManager.obtain(criteria, handlingCallback, true);
-                    }
-                });
+                if (ReferenceDataManager.isCached(criteria)) {
+                    ReferenceDataManager.obtain(criteria, handlingCallback, true);
+                } else {
+                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            ReferenceDataManager.obtain(criteria, handlingCallback, true);
+                        }
+                    });
+                }
             }
+
         }
     }
 
