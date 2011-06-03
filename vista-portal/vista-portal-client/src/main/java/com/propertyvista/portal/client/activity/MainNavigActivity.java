@@ -90,6 +90,12 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
         about.title().setValue("About Us");
         navig.items().add(about);
 
+        NavigItem contact = EntityFactory.create(NavigItem.class);
+        contact.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Page()));
+        contact.pageId().setValue("contact-us");
+        contact.title().setValue("Contact Us");
+        navig.items().add(contact);
+
         return navig;
 
     }

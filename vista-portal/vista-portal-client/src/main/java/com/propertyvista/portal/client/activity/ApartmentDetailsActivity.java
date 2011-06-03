@@ -13,24 +13,28 @@
  */
 package com.propertyvista.portal.client.activity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.ApartmentDetailsView;
-import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class ApartmentDetailsActivity extends AbstractActivity implements ApartmentDetailsView.Presenter {
+
+    private static final Logger log = LoggerFactory.getLogger(ApartmentDetailsActivity.class);
 
     private final ApartmentDetailsView view;
 
@@ -47,31 +51,38 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
-        //TODO get property details passed from the PropertyMap page
+        PortalSite.getPortalSiteServices().retrievePropertyDetails(new DefaultAsyncCallback<PropertyDetailsDTO>() {
 
-        PropertyDetailsDTO property = EntityFactory.create(PropertyDetailsDTO.class);
-        property.address().street1().setValue("320 Avenue Road");
-        property.address().city().setValue("Toronto");
-        property.location().setValue(new GeoPoint(43.697665, -79.402313));
-        property.price().from().setValue(1700.00);
+            @Override
+            public void onSuccess(PropertyDetailsDTO property) {
+                view.populate(property);
+            }
 
-        AmenityDTO amenity = EntityFactory.create(AmenityDTO.class);
-        amenity.name().setValue("Pool");
-        property.amenities().add(amenity);
-        amenity = EntityFactory.create(AmenityDTO.class);
-        amenity.name().setValue("Somthing else");
-        property.amenities().add(amenity);
+        }, new Key(1));
 
-        FloorplanDTO floorplan = EntityFactory.create(FloorplanDTO.class);
-        floorplan.name().setValue("floorplan1");
-        floorplan.area().setValue(22);
-        property.floorplans().add(floorplan);
-        floorplan = EntityFactory.create(FloorplanDTO.class);
-        floorplan.name().setValue("floorplan2");
-        floorplan.area().setValue(33);
-        property.floorplans().add(floorplan);
-
-        view.populate(property);
+//        PropertyDetailsDTO property = EntityFactory.create(PropertyDetailsDTO.class);
+//        property.address().street1().setValue("320 Avenue Road");
+//        property.address().city().setValue("Toronto");
+//        property.location().setValue(new GeoPoint(43.697665, -79.402313));
+//        property.price().setValue(1700.00);
+//
+//        AmenityDTO amenity = EntityFactory.create(AmenityDTO.class);
+//        amenity.name().setValue("Pool");
+//        property.amenities().add(amenity);
+//        amenity = EntityFactory.create(AmenityDTO.class);
+//        amenity.name().setValue("Somthing else");
+//        property.amenities().add(amenity);
+//
+//        FloorplanDTO floorplan = EntityFactory.create(FloorplanDTO.class);
+//        floorplan.name().setValue("floorplan1");
+//        floorplan.area().setValue(22);
+//        property.floorplans().add(floorplan);
+//        floorplan = EntityFactory.create(FloorplanDTO.class);
+//        floorplan.name().setValue("floorplan2");
+//        floorplan.area().setValue(33);
+//        property.floorplans().add(floorplan);
+//
+//        view.populate(property);
     }
 
     @Override

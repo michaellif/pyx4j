@@ -105,9 +105,11 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             String placeid = menuItem.placeId().getValue();
             place = AppSite.getHistoryMapper().getPlace(placeid);
 
-            HashMap<String, String> args = new HashMap<String, String>();
-            args.put(PortalSiteMap.ARG_PAGE_ID, menuItem.pageId().getValue());
-            place.setArgs(args);
+            if (!menuItem.pageId().isNull()) {
+                HashMap<String, String> args = new HashMap<String, String>();
+                args.put(PortalSiteMap.ARG_PAGE_ID, menuItem.pageId().getValue());
+                place.setArgs(args);
+            }
 
             setElement(DOM.createElement("li"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());

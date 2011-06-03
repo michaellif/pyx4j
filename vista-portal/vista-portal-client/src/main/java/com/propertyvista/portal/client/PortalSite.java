@@ -25,9 +25,12 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 
 public class PortalSite extends VistaSite {
     private PortalGinjector ginjector;
+
+    private static PortalSiteServices srv = GWT.create(PortalSiteServices.class);
 
     public PortalSite() {
         super(PortalSiteMap.class);
@@ -59,4 +62,11 @@ public class PortalSite extends VistaSite {
         setMessage(new Message(message, title, buttonText, command));
     }
 
+    public static PortalSite instance() {
+        return (PortalSite) AppSite.instance();
+    }
+
+    public static PortalSiteServices getPortalSiteServices() {
+        return srv;
+    }
 }
