@@ -41,22 +41,31 @@ public class EntityArgsConverter {
 
     public static Map<String, String> convertToArgs(IEntity entity) {
         Map<String, String> map = new HashMap<String, String>();
-        entity.getValue().keySet();
-        for (String memberName : entity.getValue().keySet()) {
+
+        for (String memberName : entity.getEntityMeta().getMemberNames()) {
+            IObject<?> member = entity.getMember(memberName);
             MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
-            if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
-                if (memberMeta.getValueClass().equals(Date.class) || (memberMeta.getValueClass().equals(java.sql.Date.class))
-                        || (memberMeta.getValueClass().equals(LogicalDate.class))) {
-                    map.put(memberName, DATE_FORMAT.format((Date) entity.getMember(memberName).getValue()));
-                } else {
-                    map.put(memberName, entity.getMember(memberName).getValue().toString());
+            if (!member.isNull()) {
+                if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
+                    if (memberMeta.getValueClass().equals(Date.class) || (memberMeta.getValueClass().equals(java.sql.Date.class))
+                            || (memberMeta.getValueClass().equals(LogicalDate.class))) {
+                        map.put(memberName, DATE_FORMAT.format((Date) entity.getMember(memberName).getValue()));
+                    } else {
+                        map.put(memberName, entity.getMember(memberName).getValue().toString());
+                    }
+                } else if (ObjectClassType.Entity.equals(memberMeta.getObjectClassType())) {
+                    IEntity nested = (IEntity) entity.getMember(memberName);
+                    Map<String, String> nestedMap = convertToArgs(nested);
+                    for (String nestedKey : nestedMap.keySet()) {
+                        map.put(memberMeta.getFieldName() + "." + nestedKey, nestedMap.get(nestedKey));
+                    }
                 }
             }
-
         }
         return map;
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <E extends IEntity> E createFromArgs(Class<E> clazz, Map<String, String> args) {
 
         E entity = EntityFactory.create(clazz);
@@ -74,7 +83,6 @@ public class EntityArgsConverter {
                 if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
                     if (memberMeta.getValueClass().equals(Date.class) || (memberMeta.getValueClass().equals(java.sql.Date.class))
                             || (memberMeta.getValueClass().equals(LogicalDate.class))) {
-
                         try {
                             ((IPrimitive<Date>) member).setValue(DATE_FORMAT.parse(args.get(memberName)));
                         } catch (ClassCastException e) {
