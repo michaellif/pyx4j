@@ -44,6 +44,7 @@ import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ClassFinder;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
@@ -61,6 +62,8 @@ public class EntityImplGenerator {
 
     private static boolean implementationsCreated = false;
 
+    private final ClassLoader classLoader;
+
     private ClassPool pool;
 
     private final List<ClassPath> pathToClose = new Vector<ClassPath>();
@@ -75,6 +78,7 @@ public class EntityImplGenerator {
 
     private EntityImplGenerator(boolean webapp) {
         this.webapp = webapp;
+        classLoader = Thread.currentThread().getContextClassLoader();
     }
 
     private synchronized void initClassPool() throws NotFoundException {
@@ -85,6 +89,10 @@ public class EntityImplGenerator {
             ctClassIObject = pool.get(IObject.class.getName());
             ctClassObject = pool.get(Object.class.getName());
         }
+    }
+
+    public ClassLoader getContextClassLoader() {
+        return classLoader;
     }
 
     public static synchronized EntityImplGenerator instance() {
@@ -167,10 +175,9 @@ public class EntityImplGenerator {
      * Required only to work on GAE
      */
     private void appendClassPath(boolean webapp) {
-        ClassLoader cld = Thread.currentThread().getContextClassLoader();
         Enumeration<URL> urls;
         try {
-            urls = cld.getResources(MARKER_RESOURCE_NAME);
+            urls = classLoader.getResources(MARKER_RESOURCE_NAME);
         } catch (IOException e) {
             log.error("Unable to find jar markers", e);
             return;
@@ -221,8 +228,13 @@ public class EntityImplGenerator {
         }
         log.debug("found IEntity {} ", classes);
         EntityImplGenerator gen = createInstance(webapp);
+        boolean first = true;
         for (String c : classes) {
-            gen.generateImplementation(c);
+            Class<?> cl = gen.generateImplementation(c);
+            if (first) {
+                first = false;
+                ClassFinder.debugClassLoader("IEntity Impl", cl);
+            }
         }
         log.info("Created {} IEntity implementations in {} msec", classes.size(), System.currentTimeMillis() - start);
 
@@ -239,7 +251,7 @@ public class EntityImplGenerator {
     public Class<IEntity> generateImplementation(String interfaceName) {
         Class<IEntity> interfaceClass;
         try {
-            interfaceClass = (Class<IEntity>) Class.forName(interfaceName, true, Thread.currentThread().getContextClassLoader());
+            interfaceClass = (Class<IEntity>) Class.forName(interfaceName, true, classLoader);
         } catch (ClassNotFoundException e) {
             throw new Error(interfaceName + " not available");
         }
@@ -260,7 +272,7 @@ public class EntityImplGenerator {
     public CtClass createImplementation(String interfaceName) {
         Class<IEntity> interfaceClass;
         try {
-            interfaceClass = (Class<IEntity>) Class.forName(interfaceName, true, Thread.currentThread().getContextClassLoader());
+            interfaceClass = (Class<IEntity>) Class.forName(interfaceName, true, classLoader);
         } catch (ClassNotFoundException e) {
             throw new Error(interfaceName + " not available");
         }

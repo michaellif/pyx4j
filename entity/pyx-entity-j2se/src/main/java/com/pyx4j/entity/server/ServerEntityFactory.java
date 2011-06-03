@@ -43,19 +43,49 @@ public class ServerEntityFactory implements IEntityFactory {
             throw new Error("Should not use abstract IEntity class");
         }
         String handlerClassName = clazz.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
-        Class<?> handlerClass;
-        try {
-            handlerClass = Class.forName(handlerClassName, true, Thread.currentThread().getContextClassLoader());
-        } catch (ClassNotFoundException e) {
+        Class<?> handlerClass = null;
+        // Try to find class first
+        if (parent != null) {
+            try {
+                handlerClass = Class.forName(handlerClassName, true, parent.getClass().getClassLoader());
+            } catch (ClassNotFoundException ignore1) {
+                if (parent.getClass().getClassLoader() != clazz.getClassLoader()) {
+                    try {
+                        handlerClass = Class.forName(handlerClassName, true, clazz.getClassLoader());
+                    } catch (ClassNotFoundException ignore2) {
+                    }
+                }
+            }
+            if ((handlerClass == null) && (parent.getClass().getClassLoader() != clazz.getClassLoader())) {
+                try {
+                    handlerClass = Class.forName(handlerClassName, true, clazz.getClassLoader());
+                } catch (ClassNotFoundException ignore) {
+                }
+            }
+        } else {
+            try {
+                handlerClass = Class.forName(handlerClassName, true, clazz.getClassLoader());
+            } catch (ClassNotFoundException ignore) {
+            }
+        }
+
+        if ((handlerClass == null) && (EntityImplGenerator.instance().getContextClassLoader() != clazz.getClassLoader())) {
+            try {
+                handlerClass = Class.forName(handlerClassName, true, EntityImplGenerator.instance().getContextClassLoader());
+            } catch (ClassNotFoundException ignore) {
+            }
+        }
+
+        if (handlerClass == null) {
             log.debug("generate impl class {}", clazz.getName());
-            handlerClass = EntityImplGenerator.instance().generateImplementation(clazz.getName());
+            handlerClass = EntityImplGenerator.instance().generateImplementation(clazz);
         }
         try {
             if ((parent == null) && (fieldName == null)) {
                 return (T) handlerClass.newInstance();
             } else {
-                Constructor childConstructor = handlerClass.getConstructor(IObject.class, String.class);
-                return (T) childConstructor.newInstance(parent, fieldName);
+                Constructor<T> childConstructor = (Constructor<T>) handlerClass.getConstructor(IObject.class, String.class);
+                return childConstructor.newInstance(parent, fieldName);
             }
         } catch (Throwable e) {
             log.error(handlerClassName + " instantiation error", e);
@@ -66,9 +96,13 @@ public class ServerEntityFactory implements IEntityFactory {
     @SuppressWarnings("unchecked")
     public static <T extends IEntity> Class<T> entityClass(String domainName) {
         try {
-            return (Class<T>) Class.forName(domainName, true, Thread.currentThread().getContextClassLoader());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("'" + domainName + "' Not an Entity");
+            return (Class<T>) Class.forName(domainName, true, EntityImplGenerator.instance().getContextClassLoader());
+        } catch (ClassNotFoundException e1) {
+            try {
+                return (Class<T>) Class.forName(domainName, true, Thread.currentThread().getContextClassLoader());
+            } catch (ClassNotFoundException e2) {
+                throw new RuntimeException("'" + domainName + "' Not an Entity");
+            }
         }
     }
 

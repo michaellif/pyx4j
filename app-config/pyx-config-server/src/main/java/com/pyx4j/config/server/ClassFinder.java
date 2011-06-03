@@ -203,4 +203,40 @@ public class ClassFinder {
         return className.substring(0, className.lastIndexOf('.'));
     }
 
+    public static void debugClassLoader(String message, Object obj) {
+        if (obj == null) {
+            log.debug(message + " no class, no object");
+            return;
+        }
+        Class<?> klass;
+        StringBuffer buf = new StringBuffer();
+        buf.append(message).append(" ");
+        if (obj instanceof Class<?>) {
+            klass = (Class<?>) obj;
+            buf.append("class ");
+        } else {
+            klass = obj.getClass();
+            buf.append("instance ");
+        }
+        buf.append(klass.getName() + " loaded by ");
+        if (klass.getClassLoader() != null) {
+            buf.append(klass.getClassLoader().getClass().getName());
+            buf.append('@').append(Integer.toHexString(klass.getClassLoader().hashCode()));
+        } else {
+            buf.append("system");
+        }
+        log.debug(buf.toString());
+    }
+
+    public static void debugClassLoader(String message, ClassLoader classLoader) {
+        StringBuffer buf = new StringBuffer();
+        buf.append(message).append(" ClassLoader ");
+        if (classLoader != null) {
+            buf.append(classLoader.getClass().getName());
+            buf.append('@').append(Integer.toHexString(classLoader.hashCode()));
+        } else {
+            buf.append("system");
+        }
+        log.debug(buf.toString());
+    }
 }
