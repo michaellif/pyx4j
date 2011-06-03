@@ -36,4 +36,5 @@ public interface City extends IEntity {
     @Reference(adapter = ProvinceReferenceAdapter.class)
     Province province();
 
+    IPrimitive<Boolean> hasProperties();
 }

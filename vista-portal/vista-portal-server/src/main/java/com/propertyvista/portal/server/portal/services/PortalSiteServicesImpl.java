@@ -40,13 +40,16 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     @Override
     public void retrieveCityList(AsyncCallback<Vector<City>> callback) {
         EntityQueryCriteria<City> criteria = EntityQueryCriteria.create(City.class);
-        //TODO add criteria to see buildings available
+        criteria.add(PropertyCriterion.eq(criteria.proto().hasProperties(), Boolean.TRUE));
         callback.onSuccess(EntityServicesImpl.secureQuery(criteria));
     }
 
     @Override
     public void retrievePropertyList(AsyncCallback<Vector<PropertyDTO>> callback, City city) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        if ((city != null) && (!city.name().isNull())) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().info().address().city(), city.name().getValue()));
+        }
         List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(criteria);
 
         Vector<PropertyDTO> properties = new Vector<PropertyDTO>();

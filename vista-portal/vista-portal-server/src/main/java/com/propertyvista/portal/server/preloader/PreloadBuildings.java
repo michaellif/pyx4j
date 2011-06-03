@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.marketing.yield.AddOn;
@@ -125,6 +126,19 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                     persist(detail);
                 }
             }
+
+            // Create date used on public portal, e.g. optimization
+            EntityQueryCriteria<City> criteriaCity = EntityQueryCriteria.create(City.class);
+            criteriaCity.add(PropertyCriterion.eq(criteriaCity.proto().name(), building.info().address().city().getValue()));
+            //TODO verify Province
+            City city = PersistenceServicesFactory.getPersistenceService().retrieve(criteriaCity);
+            if (city != null) {
+                if (!city.hasProperties().isBooleanTrue()) {
+                    city.hasProperties().setValue(Boolean.TRUE);
+                    PersistenceServicesFactory.getPersistenceService().persist(city);
+                }
+            }
+
         }
 
         StringBuilder sb = new StringBuilder();

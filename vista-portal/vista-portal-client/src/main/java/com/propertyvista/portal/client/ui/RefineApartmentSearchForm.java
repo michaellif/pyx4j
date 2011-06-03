@@ -13,21 +13,32 @@
  */
 package com.propertyvista.portal.client.ui;
 
+import java.util.List;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.EntityDataSource;
+import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
+import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 
 public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteria> {
 
@@ -94,6 +105,23 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
 
         container.add(updatePanel);
         return container;
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        CEditableComponent<?, ?> c = super.create(member);
+        if (member == proto().city()) {
+            ((CEntityComboBox<City>) c).setOptionsDataSource(new EntityDataSource<City>() {
+
+                @Override
+                public void obtain(EntityQueryCriteria<City> criteria, AsyncCallback<List<City>> handlingCallback, boolean background) {
+                    ((PortalSiteServices) GWT.create(PortalSiteServices.class)).retrieveCityList((AsyncCallback) handlingCallback);
+                }
+
+            });
+        }
+        return c;
     }
 
     private void addField(Widget widget) {
