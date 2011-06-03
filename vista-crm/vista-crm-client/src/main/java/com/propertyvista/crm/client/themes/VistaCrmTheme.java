@@ -230,29 +230,30 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(CrmHeader1Decorator.DEFAULT_STYLE_PREFIX));
-        style.addProperty("color", "#757575");
-        style.addProperty("margin", "0.2em 0 0.2em 0");
+        style.addProperty("color", "#5E5E5E");
+        style.addProperty("margin", "0.2em 0 1em 0");
         style.addProperty("width", "100%");
-        style.addProperty("border-top", "1px dotted");
+        style.addProperty("border-top", "1px dotted #727171");
         style.addProperty("clear", "both");
         addStyle(style);
 
         style = new Style(Selector.valueOf(CrmHeader1Decorator.DEFAULT_STYLE_PREFIX, CrmHeader1Decorator.StyleSuffix.Caption));
-        style.addProperty("padding", "0.6em 1em 0.1em 2em");
+        style.addProperty("padding", "0.6em 1em 0.1em 1em");
         style.addProperty("font-size", "1.5em");
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style(Selector.valueOf(CrmHeader2Decorator.DEFAULT_STYLE_PREFIX));
-        style.addProperty("color", "#757575");
-        style.addProperty("margin", "0.2em 0 0.5em 0");
+        style.addProperty("color", "#5E5E5E");
+        style.addProperty("margin", "0.2em 0 1em 0");
         style.addProperty("width", "100%");
-        style.addProperty("border-bottom", "1px dotted");
+        style.addProperty("border-top", "1px dotted #D8D8D8");
         addStyle(style);
 
         style = new Style(Selector.valueOf(CrmHeader2Decorator.DEFAULT_STYLE_PREFIX, CrmHeader2Decorator.StyleSuffix.Caption));
-        style.addProperty("padding", "0em 1em 0.5em 2em");
+        style.addProperty("padding", "0.5em 1em 0.5em 1.5em");
         style.addProperty("font-size", "1.2em");
+        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         //        style = new Style(Selector.valueOf(ViewLineSeparator.DEFAULT_STYLE_PREFIX));
