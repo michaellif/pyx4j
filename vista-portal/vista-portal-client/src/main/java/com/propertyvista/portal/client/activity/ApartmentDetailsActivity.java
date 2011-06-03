@@ -53,7 +53,7 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
         property.address().street1().setValue("320 Avenue Road");
         property.address().city().setValue("Toronto");
         property.location().setValue(new GeoPoint(43.697665, -79.402313));
-        property.price().setValue(1700.00);
+        property.price().from().setValue(1700.00);
 
         AmenityDTO amenity = EntityFactory.create(AmenityDTO.class);
         amenity.name().setValue("Pool");
