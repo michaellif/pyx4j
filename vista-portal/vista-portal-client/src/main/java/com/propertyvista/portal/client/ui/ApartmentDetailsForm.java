@@ -13,15 +13,23 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.domain.dto.AmenityDTO;
+import com.propertyvista.portal.domain.dto.FloorplanDTO;
+import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
@@ -30,18 +38,9 @@ import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.portal.domain.dto.AmenityDTO;
-import com.propertyvista.portal.domain.dto.FloorplanDTO;
-import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
-
 public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implements ApartmentDetailsView {
 
     private ApartmentDetailsView.Presenter presenter;
-
-    private static I18n i18n = I18nFactory.getI18n(ApartmentDetailsForm.class);
 
     public ApartmentDetailsForm() {
         super(PropertyDetailsDTO.class);
@@ -61,12 +60,12 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
     public IsWidget createContent() {
 
         FlowPanel container = new FlowPanel();
-        DecorationData readOnlyDecor = new DecorationData(14d, 12);
+        DecorationData readOnlyDecor = new DecorationData(12d, 25);
         readOnlyDecor.editable = false;
         container.add(new VistaWidgetDecorator(inject(proto().address(), new CEntityViewer<IAddress>() {
             @Override
             public IsWidget createContent(IAddress value) {
-                return new HTML(value.toString());
+                return formatAddress(value);
             }
         }), readOnlyDecor));
 
@@ -74,7 +73,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         container.add(new VistaWidgetDecorator(inject(proto().amenities(), new CEntityViewer<IList<AmenityDTO>>() {
             @Override
             public IsWidget createContent(IList<AmenityDTO> value) {
-                return new HTML(value.toString());
+                return listAmenities(value);
             }
         }), readOnlyDecor));
 
@@ -112,15 +111,79 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
             @Override
             public IFolderItemViewerDecorator createFolderItemDecorator() {
-                return new BaseFolderItemViewerDecorator();
+                return new FloorplanCardDecorator();
             }
 
             @Override
             public IsWidget createContent(FloorplanDTO value) {
-                return new HTML(value.toString());
+                return fillFloorplanCard(value);
             }
 
         };
     }
 
+    private SimplePanel formatAddress(IAddress address) {
+        SimplePanel container = new SimplePanel();
+        container.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+/*
+ * StringBuffer addressString = new StringBuffer();
+ * addressString.append(address.street1());
+ * if (address.street2() != null && address.street2().getValue().length() > 0)
+ * addressString.append(address.street2());
+ * addressString.append(address.city());
+ * addressString.append(address.province().code());
+ */
+
+        container.add(new Label("Test Address because of the permission denied "));
+        return container;
+
+    }
+
+    private VerticalPanel listAmenities(IList<AmenityDTO> amenities) {
+        VerticalPanel container = new VerticalPanel();
+        if (amenities != null)
+            for (AmenityDTO amenity : amenities)
+                container.add(new Label(amenity.name().getValue()));
+        return container;
+
+    }
+
+    private FlowPanel fillFloorplanCard(FloorplanDTO value) {
+        FlowPanel card = new FlowPanel();
+        card.setSize("80%", "100%");
+
+        FlowPanel imageHolder = new FlowPanel();
+        Style imageHolderStyle = imageHolder.getElement().getStyle();
+        imageHolder.setHeight("100%");
+        imageHolder.setWidth("30%");
+        imageHolderStyle.setFloat(Float.LEFT);
+        imageHolder.add(new HTML("Image"));
+        card.add(imageHolder);
+
+        FlowPanel content = new FlowPanel();
+        content.setHeight("100%");
+        content.setWidth("70%");
+        content.getElement().getStyle().setFloat(Float.RIGHT);
+        card.add(content);
+
+        Label lbl = null;
+        if (value.name() != null) {
+            lbl = new Label(value.name().getValue());
+            lbl.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            content.add(lbl);
+        }
+
+        if (value.area() != null) {
+            lbl = new Label(value.area().getValue().toString());
+            content.add(lbl);
+        }
+
+        if (value.description() != null) {
+            lbl = new Label(value.description().getValue());
+            content.add(lbl);
+        }
+        return card;
+
+    }
 }

@@ -37,5 +37,9 @@ public interface FloorplanDTO extends IEntity {
     /**
      * Approximate value of square ft. size of unit
      */
+    @Caption(name = "sqft")
     IPrimitive<Integer> area();
+
+    @Caption(name = "Description")
+    IPrimitive<String> description();
 }

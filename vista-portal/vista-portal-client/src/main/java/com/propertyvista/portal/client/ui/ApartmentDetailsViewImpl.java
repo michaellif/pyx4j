@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ui;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
@@ -95,6 +96,7 @@ public class ApartmentDetailsViewImpl extends SimplePanel implements ApartmentDe
 
             leftPanel = new FlowPanel();
             leftPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Left);
+            leftPanel.getElement().getStyle().setFloat(Float.LEFT);
             leftPanel.setWidth("35%");
             add(leftPanel);
 
@@ -103,7 +105,8 @@ public class ApartmentDetailsViewImpl extends SimplePanel implements ApartmentDe
 
             centerPanel = new FlowPanel();
             centerPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Center);
-            centerPanel.setWidth("65%");
+            centerPanel.getElement().getStyle().setFloat(Float.RIGHT);
+            centerPanel.setWidth("63%");
 
             add(centerPanel);
         }

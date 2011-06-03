@@ -25,6 +25,7 @@ import com.propertyvista.portal.client.ui.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.ResidentsNavigViewImpl;
 import com.propertyvista.portal.client.ui.SearchApartmentForm;
 
+import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
@@ -51,6 +52,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         initRefineSearchStyles();
         initApartmentDetailsStyles();
         initCriteriaWidgetDecoratorStyles();
+        initBaseFolderItemViewerDecoratorStyles();
     }
 
     @Override
@@ -375,17 +377,34 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Left));
-        style.addProperty("float", "left");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Center));
-        style.addProperty("float", "right");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.PageHeader));
         style.addProperty("margin-top", "10px");
         style.addProperty("margin-bottom", "10px");
         style.addProperty("font-size", "20px");
+        addStyle(style);
+
+    }
+
+    private void initBaseFolderItemViewerDecoratorStyles() {
+        String prefix = BaseFolderItemViewerDecorator.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("border", "solid 1px");
+        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-bottom-color", "transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, BaseFolderItemViewerDecorator.StyleSuffix.Menu));
+        addStyle(style);
+
+        //TODO need prefix+dependent Selector.valueOf implementation
+        style = new Style("." + prefix + "-" + BaseFolderItemViewerDecorator.StyleDependent.hover);
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("border", "solid 1px");
         addStyle(style);
 
     }
