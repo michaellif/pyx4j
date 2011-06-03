@@ -28,6 +28,7 @@ import com.propertyvista.crm.client.ui.NavigViewImpl;
 import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
+import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
@@ -175,7 +176,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("cursor", "hand");
         style.addProperty("color", ThemeColor.OBJECT_TONE10);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
-        style.addProperty("border", "1px outset #ccc");
         addStyle(style);
 
         // The next is added and is not in default GWT code. 
@@ -188,7 +188,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(gwtButtonEx + ":hover");
-        style.addProperty("border-color", "#9cf #69e #69e #7af");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE85);
         addStyle(style);
 
         style = new Style(gwtButtonEx + "[disabled]");
@@ -199,7 +199,19 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(gwtButtonEx + "[disabled]:hover");
-        style.addProperty("border", "2px outset #ccc");
+        style.addProperty("border", "1px outset #ccc");
+        addStyle(style);
+
+        //
+        // AnchorButton: 
+        gwtButtonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX);
+        style = new Style(gwtButtonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE95);
+        style.addProperty("font-weight", "bolder");
+        addStyle(style);
+
+        style = new Style(gwtButtonEx + ":hover");
+        style.addProperty("text-decoration", "underline");
         addStyle(style);
     }
 

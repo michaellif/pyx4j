@@ -19,7 +19,6 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.Button;
 
 import com.pyx4j.entity.client.ui.flex.editor.BaseFolderItemEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
@@ -30,11 +29,11 @@ public class CrmFolderItemDecorator extends BaseFolderItemEditorDecorator {
 
     protected static I18n i18n = I18nFactory.getI18n(CrmFolderItemDecorator.class);
 
-    protected final Button actionButton;
+    protected final AnchorButton actionButton;
 
     public CrmFolderItemDecorator(String title, boolean editable) {
         super(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), title, editable);
-        actionButton = new Button(i18n.tr(editable ? "Edit" : "View"));
+        actionButton = new AnchorButton(i18n.tr(editable ? "Edit" : "View"));
         actionButton.getElement().getStyle().setMarginLeft(2, Unit.EM);
         getRowHolder().add(actionButton);
         setWidget(getRowHolder());

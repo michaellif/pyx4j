@@ -470,7 +470,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(gwtButton + "[disabled]:hover");
-        style.addProperty("border", "2px outset #ccc");
+        style.addProperty("border", "1px outset #555");
         addStyle(style);
     }
 

@@ -22,6 +22,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -34,6 +36,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
 public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel implements IEditorView<E> {
@@ -81,7 +84,7 @@ public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     private Widget createButtons() {
         HorizontalPanel buttons = new HorizontalPanel();
 
-        Button btnSave = new Button("Save", new ClickHandler() {
+        Button btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 editor.setVisited(true);
@@ -92,7 +95,9 @@ public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel imple
                 presenter.save();
             }
         });
-        Button btnCancel = new Button("Cancel", new ClickHandler() {
+
+        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"));
+        btnCancel.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.cancel();
@@ -100,13 +105,14 @@ public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel imple
         });
 
         btnSave.setStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
-//        btnCancel.setStyleName(btnCancel.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.CancelButton);
 
         btnSave.setWidth("7em");
-        btnCancel.setWidth("7em");
+        btnCancel.setWidth("5em");
 
         buttons.add(btnSave);
         buttons.add(btnCancel);
+        buttons.setCellHorizontalAlignment(btnCancel, HasHorizontalAlignment.ALIGN_CENTER);
+        buttons.setCellVerticalAlignment(btnCancel, HasVerticalAlignment.ALIGN_MIDDLE);
         buttons.setSpacing(10);
 
         SimplePanel wrap = new SimplePanel();
