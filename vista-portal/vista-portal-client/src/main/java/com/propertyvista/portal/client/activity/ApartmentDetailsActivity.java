@@ -58,7 +58,7 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
                 view.populate(property);
             }
 
-        }, new Key(1));
+        }, new Key(11));
 
 //        PropertyDetailsDTO property = EntityFactory.create(PropertyDetailsDTO.class);
 //        property.address().street1().setValue("320 Avenue Road");
