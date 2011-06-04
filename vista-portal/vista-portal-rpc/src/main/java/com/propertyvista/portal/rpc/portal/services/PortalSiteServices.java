@@ -23,8 +23,8 @@ import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public interface PortalSiteServices extends IService {
@@ -34,11 +34,11 @@ public interface PortalSiteServices extends IService {
      */
     public void retrieveCityList(AsyncCallback<Vector<City>> callback);
 
-    public void retrievePropertyList(AsyncCallback<Vector<PropertyDTO>> callback, City city);
+    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, City city);
 
-    public void retrievePropertyList(AsyncCallback<Vector<PropertyDTO>> callback, PropertySearchCriteria criteria);
+    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, PropertySearchCriteria criteria);
 
-    public void retrievePropertyList(AsyncCallback<Vector<PropertyDTO>> callback, GeoCriteria geoCriteria);
+    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, GeoCriteria geoCriteria);
 
     public void retrievePropertyDetails(AsyncCallback<PropertyDetailsDTO> callback, Key propertyId);
 

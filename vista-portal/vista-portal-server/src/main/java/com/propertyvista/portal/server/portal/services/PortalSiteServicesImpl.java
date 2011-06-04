@@ -30,8 +30,8 @@ import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.server.ptapp.util.Converter;
@@ -46,14 +46,14 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     }
 
     @Override
-    public void retrievePropertyList(AsyncCallback<Vector<PropertyDTO>> callback, City city) {
+    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, City city) {
         PropertySearchCriteria criteria = EntityFactory.create(PropertySearchCriteria.class);
         criteria.city().set(city);
         retrievePropertyList(callback, criteria);
     }
 
     @Override
-    public void retrievePropertyList(AsyncCallback<Vector<PropertyDTO>> callback, PropertySearchCriteria criteria) {
+    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, PropertySearchCriteria criteria) {
         //TODO move this all to special table for starte retrival
 
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
@@ -62,7 +62,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         }
         List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
 
-        Vector<PropertyDTO> properties = new Vector<PropertyDTO>();
+        PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
         for (Building building : buildings) {
 
             //In memory filters
@@ -83,9 +83,9 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
                 }
             }
 
-            properties.add(Converter.convert(building, floorplans));
+            ret.properties().add(Converter.convert(building, floorplans));
         }
-        callback.onSuccess(properties);
+        callback.onSuccess(ret);
     }
 
     private boolean matchCriteria(Floorplan floorplan, PropertySearchCriteria criteria) {
@@ -124,7 +124,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     }
 
     @Override
-    public void retrievePropertyList(AsyncCallback<Vector<PropertyDTO>> callback, GeoCriteria geoCriteria) {
+    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, GeoCriteria geoCriteria) {
         // TODO Auto-generated method stub
         retrievePropertyList(callback, (City) null);
     }
