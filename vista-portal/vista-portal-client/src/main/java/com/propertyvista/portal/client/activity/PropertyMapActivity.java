@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.activity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -25,6 +26,7 @@ import com.google.inject.Inject;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -35,7 +37,10 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class PropertyMapActivity extends AbstractActivity implements PropertyMapView.Presenter {
-    PropertyMapView view;
+
+    private final PropertyMapView view;
+
+    private PropertySearchCriteria criteria;
 
     @Inject
     public PropertyMapActivity(PropertyMapView view) {
@@ -44,6 +49,8 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     }
 
     public PropertyMapActivity withPlace(Place place) {
+        Map<String, String> args = ((AppPlace) place).getArgs();
+        criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, args);
         return this;
     }
 
@@ -65,7 +72,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
             properties.add(property);
 
         }
-        view.populate(properties);
+        view.populate(criteria, properties);
     }
 
     @Override

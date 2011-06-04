@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ui.searchapt;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
+
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
@@ -23,7 +24,7 @@ public interface PropertyMapView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
-    public void populate(List<PropertyDTO> properties);
+    public void populate(PropertySearchCriteria criteria, List<PropertyDTO> properties);
 
     public interface Presenter {
 

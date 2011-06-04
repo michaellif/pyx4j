@@ -32,6 +32,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView {
 
@@ -62,7 +63,10 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
         refineSearch.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Search.name());
         refineSearch.setWidth("20%");
         searchForm = new RefineApartmentSearchForm();
-        refineSearch.add(searchForm.createContent());
+        searchForm.initialize();
+
+        refineSearch.add(searchForm);
+
         container.add(refineSearch);
 
         FlowPanel searchResult = new FlowPanel();
@@ -206,9 +210,10 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
     }
 
     @Override
-    public void populate(List<PropertyDTO> properties) {
+    public void populate(PropertySearchCriteria criteria, List<PropertyDTO> properties) {
         map.populate(properties);
         buildingList.populate(properties);
+        searchForm.populate(criteria);
     }
 
 }
