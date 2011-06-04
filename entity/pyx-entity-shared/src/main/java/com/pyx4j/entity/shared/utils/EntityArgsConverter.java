@@ -22,9 +22,9 @@ package com.pyx4j.entity.shared.utils;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ObjectClassType;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityArgsConverter {
@@ -67,33 +68,45 @@ public class EntityArgsConverter {
         return map;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <E extends IEntity> E createFromArgs(Class<E> clazz, Map<String, String> args) {
 
         E entity = EntityFactory.create(clazz);
 
-        List<String> memberNames = entity.getEntityMeta().getMemberNames();
-
-        if (memberNames == null) {
-            return entity;
-        }
-
         for (String memberName : args.keySet()) {
-            if (memberNames.contains(memberName)) {
-                MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
-                IObject<?> member = entity.getMember(memberName);
+            Path path = convertDotNotationToPath(clazz, memberName);
+            MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(path);
+
+            if (memberMeta != null) {
                 if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
+                    IPrimitive<?> member = (IPrimitive<?>) entity.getMember(path);
                     if (memberMeta.getValueClass().equals(Date.class)) {
-                        ((IPrimitive<Date>) member).setValue(TimeUtils.simpleParse(args.get(memberName), DATE_TIME_FORMAT));
+                        entity.setValue(path, TimeUtils.simpleParse(args.get(memberName), DATE_TIME_FORMAT));
                     } else if (memberMeta.getValueClass().equals(LogicalDate.class)) {
-                        ((IPrimitive<Date>) member).setValue(new LogicalDate(TimeUtils.simpleParse(args.get(memberName), DATE_FORMAT)));
+                        entity.setValue(path, new LogicalDate(TimeUtils.simpleParse(args.get(memberName), DATE_FORMAT)));
                     } else {
-                        ((IPrimitive) member).setValue(((IPrimitive) member).parse(args.get(memberName)));
+                        entity.setValue(path, member.parse(args.get(memberName)));
                     }
                 }
             }
+
         }
 
         return entity;
+    }
+
+    public static String convertPathToDotNotation(Path path) {
+        StringBuilder builder = new StringBuilder();
+        for (String segment : path.getPathMembers()) {
+            builder.append(segment).append('.');
+        }
+        if (builder.length() > 0) {
+            builder.setLength(builder.length() - 1);
+        }
+        return builder.toString();
+    }
+
+    public static Path convertDotNotationToPath(Class<? extends IObject<?>> root, String string) {
+        string = GWTJava5Helper.getSimpleName(root) + Path.PATH_SEPARATOR + string.replace('.', Path.PATH_SEPARATOR);
+        return new Path(string);
     }
 }

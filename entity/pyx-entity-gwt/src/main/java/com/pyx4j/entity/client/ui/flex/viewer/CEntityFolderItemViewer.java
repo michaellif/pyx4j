@@ -29,6 +29,10 @@ public abstract class CEntityFolderItemViewer<E extends IEntity> extends CEntity
 
     private final SimplePanel container;
 
+    private boolean first;
+
+    private boolean last;
+
     public CEntityFolderItemViewer() {
         container = new SimplePanel();
     }
@@ -44,4 +48,21 @@ public abstract class CEntityFolderItemViewer<E extends IEntity> extends CEntity
     protected void setContent(IsWidget widget) {
         container.setWidget(widget);
     }
+
+    public void setFirst(boolean first) {
+        this.first = first;
+    }
+
+    public boolean isFirst() {
+        return first;
+    }
+
+    public void setLast(boolean last) {
+        this.last = last;
+    }
+
+    public boolean isLast() {
+        return last;
+    }
+
 }

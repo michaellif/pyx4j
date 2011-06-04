@@ -21,6 +21,7 @@
 package com.pyx4j.entity.shared;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
@@ -78,23 +79,16 @@ public class Path implements Serializable, IDebugId {
     }
 
     private void parsPath() {
-        List<String> members = new Vector<String>();
         int rootIdx = path.indexOf(PATH_SEPARATOR);
         if (rootIdx < 1) {
             throw new IllegalArgumentException(path);
         }
         rootObjectClassName = path.substring(0, rootIdx);
-        int memberIdx = rootIdx + 1;
-        while (memberIdx > 0) {
-            int memberIdxEnd = path.indexOf(PATH_SEPARATOR, memberIdx);
-            if (memberIdxEnd > 0) {
-                members.add(path.substring(memberIdx, memberIdxEnd));
-                memberIdx = memberIdxEnd + 1;
-            } else {
-                break;
-            }
-        }
-        pathMembers = Collections.unmodifiableList(members);
+
+        String membersString = path.substring(rootIdx + 1);
+        String[] members = membersString.split(String.valueOf(PATH_SEPARATOR));
+
+        pathMembers = Collections.unmodifiableList(Arrays.asList(members));
     }
 
     //This does not work after RPC!

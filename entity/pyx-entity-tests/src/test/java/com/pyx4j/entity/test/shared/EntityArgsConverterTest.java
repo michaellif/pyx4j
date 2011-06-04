@@ -68,7 +68,8 @@ public class EntityArgsConverterTest extends TestCase {
         assertEquals(employee.holidays().getValue().toString(), args.get(employee.holidays().getFieldName()));
         assertEquals(employee.rating().getValue().toString(), args.get(employee.rating().getFieldName()));
         assertEquals(employee.salary().getValue().toString(), args.get(employee.salary().getFieldName()));
-        // assertEquals(employee.department().name().getValue().toString(), args.get(employee.department().name().getPath()));
+        assertEquals(employee.department().name().getValue().toString(),
+                args.get(EntityArgsConverter.convertPathToDotNotation(employee.department().name().getPath())));
 
     }
 
@@ -84,6 +85,7 @@ public class EntityArgsConverterTest extends TestCase {
         args.put(proto.holidays().getFieldName(), "22");
         args.put(proto.rating().getFieldName(), "5");
         args.put(proto.salary().getFieldName(), "22.5");
+        args.put(EntityArgsConverter.convertPathToDotNotation(proto.department().name().getPath()), DEPARTMENT_NAME);
 
         Employee employee = EntityArgsConverter.createFromArgs(Employee.class, args);
 
@@ -95,6 +97,7 @@ public class EntityArgsConverterTest extends TestCase {
         assertEquals((long) employee.holidays().getValue(), 22L);
         assertEquals((int) employee.rating().getValue(), 5);
         assertEquals((double) employee.salary().getValue(), 22.5);
+        assertEquals(employee.department().name().getValue(), DEPARTMENT_NAME);
 
     }
 }
