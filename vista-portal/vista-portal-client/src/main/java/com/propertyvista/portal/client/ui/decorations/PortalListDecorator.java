@@ -13,24 +13,21 @@
  */
 package com.propertyvista.portal.client.ui.decorations;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.propertyvista.common.client.ui.decorations.DecorationData;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-import com.propertyvista.common.client.ui.decorations.DecorationData;
-
 public class PortalListDecorator extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "PortalListDecorator";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Label, List, ListElement
+        List, ListElement
     }
 
     public PortalListDecorator(IList<?> list, String memberName, DecorationData decorator) {
@@ -39,24 +36,8 @@ public class PortalListDecorator extends FlowPanel {
         if (list.isNull() || memberName == null || memberName.isEmpty())
             return;
 
-        String caption = list.getMeta().getCaption();
-        SimplePanel captionHolder = null;
-
-        if (caption != null && !caption.trim().isEmpty()) {
-            captionHolder = new SimplePanel();
-            captionHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
-            Style captionHolderStyle = captionHolder.getElement().getStyle();
-            captionHolder.setHeight("100%");
-            if (decorator.labelWidth != 0) {
-                captionHolderStyle.setWidth(decorator.labelWidth, decorator.labelUnit);
-            }
-            captionHolderStyle.setFloat(Float.LEFT);
-            Label lbl = new Label(caption);
-            lbl.getElement().getStyle().setVerticalAlign(decorator.labelVerticalAlignment);
-            captionHolder.setWidget(lbl);
-        }
-
         VerticalPanel listHolder = new VerticalPanel();
+        listHolder.setWidth("100%");
         listHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.List);
         listHolder.getElement().getStyle().setFloat(Float.RIGHT);
         if (decorator.componentWidth != 0)
@@ -71,8 +52,6 @@ public class PortalListDecorator extends FlowPanel {
                 }
             }
         }
-        if (captionHolder != null)
-            add(captionHolder);
         add(listHolder);
 
     }

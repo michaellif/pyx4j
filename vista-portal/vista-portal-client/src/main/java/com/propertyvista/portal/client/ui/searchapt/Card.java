@@ -51,18 +51,18 @@ public class Card extends FlowPanel {
         header.setSize("100%", "15%");
         header.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Header);
 
+        contentHolder = new FlowPanel();
+        contentHolder.setSize("100%", "85%");
+
         imageHolder = new SimplePanel();
         imageHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Image);
-        imageHolder.setHeight("100%");
-        imageHolder.setWidth("30%");
+        imageHolder.setSize("30%", "100%");
         imageHolder.getElement().getStyle().setFloat(Float.LEFT);
         imageHolder.getElement().getStyle().setProperty("minHeight", "100px");
 
-        contentHolder = new FlowPanel();
-        contentHolder.setSize("100%", "65%");
         content = new SimplePanel();
         content.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content);
-        content.setSize("100%", "70%");
+        content.setSize("70%", "100%");
         content.getElement().getStyle().setFloat(Float.RIGHT);
         contentHolder.add(imageHolder);
         contentHolder.add(content);

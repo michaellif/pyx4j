@@ -23,7 +23,6 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.portal.client.ui.decorations.FloorplanCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.PortalListDecorator;
-import com.propertyvista.portal.client.ui.decorations.PortalMultiLineDecorator;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
@@ -44,9 +43,14 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
     private final DecorationData decor;
 
+    private final DecorationData listDecor;
+
     public ApartmentDetailsForm() {
         super(PropertyDetailsDTO.class);
-        decor = new DecorationData(20, Unit.PCT, 80, Unit.PCT);
+        //    decor = new DecorationData(10, Unit.PCT, 90, Unit.PCT);
+        decor = new DecorationData(10d, 35);
+        decor.editable = false;
+        listDecor = new DecorationData(0, Unit.PCT, 100, Unit.PCT);
     }
 
     @Override
@@ -63,28 +67,27 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
     public IsWidget createContent() {
 
         FlowPanel container = new FlowPanel();
-        DecorationData readOnlyDecor = new DecorationData(12d, 25);
-        readOnlyDecor.editable = false;
+
         container.add(new VistaWidgetDecorator(inject(proto().address(), new CEntityViewer<IAddress>() {
             @Override
             public IsWidget createContent(IAddress value) {
-                return new PortalMultiLineDecorator(value, decor, " ");
+                return formatAddress(value);
             }
-        }), readOnlyDecor));
+        }), decor));
 
         container.add(new VistaWidgetDecorator(inject(proto().price(), new CEntityViewer<RangeDTO>() {
             @Override
             public IsWidget createContent(RangeDTO value) {
-                return new HTML(value.getStringView());
+                return formatPrice(value);
             }
-        }), readOnlyDecor));
+        }), decor));
 
         container.add(new VistaWidgetDecorator(inject(proto().amenities(), new CEntityViewer<IList<AmenityDTO>>() {
             @Override
             public IsWidget createContent(IList<AmenityDTO> value) {
-                return new PortalListDecorator(value, "name", decor);
+                return new PortalListDecorator(value, "name", listDecor);
             }
-        }), readOnlyDecor));
+        }), decor));
 
         container.add(inject(proto().floorplans(), createFloorplanFolderViewer()));
 
@@ -95,6 +98,55 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
     public Presenter getPresenter() {
         return presenter;
 
+    }
+
+    private Label formatPrice(RangeDTO priceRange) {
+        if (priceRange.isNull())
+            return new Label("");
+
+        StringBuffer priceString = new StringBuffer("$");
+        if (!priceRange.from().isNull()) {
+            priceString.append(priceRange.from().getValue());
+        }
+
+        if (!priceRange.to().isNull()) {
+            priceString.append(" - ");
+            priceString.append(priceRange.to().getValue());
+        }
+
+        return new Label(priceString.toString());
+
+    }
+
+    private Label formatAddress(IAddress address) {
+
+        if (address.isNull())
+            return new Label("");
+
+        StringBuffer addrString = new StringBuffer();
+
+        addrString.append(address.street1().getValue());
+        if (!address.street2().isNull()) {
+            addrString.append(" ");
+            addrString.append(address.street2().getValue());
+        }
+
+        if (!address.city().isNull()) {
+            addrString.append(", ");
+            addrString.append(address.city().getValue());
+        }
+
+        if (!address.province().isNull()) {
+            addrString.append(" ");
+            addrString.append(address.province().getValue());
+        }
+
+        if (!address.postalCode().isNull()) {
+            addrString.append(" ");
+            addrString.append(address.postalCode().getValue());
+        }
+
+        return new Label(addrString.toString());
     }
 
     private CEntityFolderViewer<FloorplanDTO> createFloorplanFolderViewer() {

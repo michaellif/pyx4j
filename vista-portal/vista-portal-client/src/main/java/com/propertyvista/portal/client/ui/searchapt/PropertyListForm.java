@@ -13,10 +13,17 @@
  */
 package com.propertyvista.portal.client.ui.searchapt;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.propertyvista.common.client.ui.decorations.DecorationData;
+import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
+import com.propertyvista.portal.domain.dto.AmenityDTO;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
@@ -24,17 +31,18 @@ import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
-
-import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyListDTO;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
     private PropertyMapView.Presenter presenter;
 
+    private final DecorationData decor;
+
     public PropertyListForm() {
         super(PropertyListDTO.class);
+        decor = new DecorationData(10, Unit.PCT, 90, Unit.PCT);
     }
 
     @Override
@@ -93,25 +101,90 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
         Card card = new Card();
         card.setCardImage(new HTML("Image"));
+        card.setCardHeader(new Label(formatAddress(value.address())));
 
-        StringBuffer address = new StringBuffer();
-        address.append(value.address().street1().getValue());
-        if (!value.address().street2().isNull()) {
-            address.append(" ");
-            address.append(value.address().street2().getValue());
-        }
+        FlowPanel content = new FlowPanel();
+        Label lbl = new Label(formatFloorplans(value.floorplanNames()));
+        content.add(lbl);
 
-        address.append(", ");
-        address.append(value.address().city().getValue());
-        address.append(" ");
-        address.append(value.address().province().getValue());
-        address.append(" ");
-        address.append(value.address().postalCode().getValue());
-
-        card.setCardHeader(new Label(address.toString()));
+        lbl = new Label(formatAmenities(value.amenities()));
+        content.add(lbl);
+        card.setCardContent(content);
 
         return card;
 
+    }
+
+    private String formatAddress(IAddress address) {
+        if (address.isNull())
+            return "";
+
+        StringBuffer addrString = new StringBuffer();
+
+        addrString.append(address.street1().getValue());
+        if (!address.street2().isNull()) {
+            addrString.append(" ");
+            addrString.append(address.street2().getValue());
+        }
+
+        if (!address.city().isNull()) {
+            addrString.append(", ");
+            addrString.append(address.city().getValue());
+        }
+
+        if (!address.province().isNull()) {
+            addrString.append(" ");
+            addrString.append(address.province().getValue());
+        }
+
+        if (!address.postalCode().isNull()) {
+            addrString.append(" ");
+            addrString.append(address.postalCode().getValue());
+        }
+
+        return addrString.toString();
+    }
+
+    private String formatFloorplans(IPrimitiveSet<String> floorplans) {
+        final String delimiter = "/ ";
+
+        if (floorplans.isNull())
+            return "";
+
+        StringBuffer planString = new StringBuffer();
+
+        for (String planName : floorplans) {
+            if (planName != null && !planName.isEmpty()) {
+                planString.append(planName);
+                planString.append(delimiter);
+            }
+        }
+        String finalString = planString.toString();
+        if (!finalString.isEmpty()) {
+            finalString = finalString.substring(0, finalString.lastIndexOf(delimiter));
+        }
+        return finalString;
+    }
+
+    private String formatAmenities(IList<AmenityDTO> amenities) {
+        final String delimiter = "/ ";
+
+        if (amenities.isNull())
+            return "";
+
+        StringBuffer planString = new StringBuffer();
+
+        for (AmenityDTO amenity : amenities) {
+            if (!amenity.isNull() && !amenity.isEmpty()) {
+                planString.append(amenity.name().getValue());
+                planString.append(delimiter);
+            }
+        }
+        String finalString = planString.toString();
+        if (!finalString.isEmpty()) {
+            finalString = finalString.substring(0, finalString.lastIndexOf(delimiter));
+        }
+        return finalString;
     }
 
 }
