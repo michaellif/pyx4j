@@ -27,10 +27,11 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
-public class TableFolderItemEditorDecorator extends BaseFolderItemEditorDecorator {
+public class TableFolderItemEditorDecorator<E extends IEntity> extends BaseFolderItemEditorDecorator<E> {
 
     private final HTML validationMessageHolder;
 
@@ -69,7 +70,7 @@ public class TableFolderItemEditorDecorator extends BaseFolderItemEditorDecorato
     }
 
     @Override
-    public void setFolderItem(final CEntityFolderItemEditor<?> folderItem) {
+    public void setFolderItem(final CEntityFolderItemEditor<E> folderItem) {
         super.setFolderItem(folderItem);
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override

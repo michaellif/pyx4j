@@ -26,6 +26,6 @@ import com.pyx4j.entity.shared.IEntity;
 
 public interface IFolderItemViewerDecorator<E extends IEntity> extends IsWidget {
 
-    void setFolderItem(CEntityFolderItemViewer<E> viewer);
+    void setFolderItem(CEntityFolderItemViewer<E> item);
 
 }

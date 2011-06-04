@@ -27,11 +27,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.forms.client.ui.decorators.ImageHolder;
 import com.pyx4j.widgets.client.ImageButton;
 
-public abstract class BaseFolderItemEditorDecorator extends SimplePanel implements IFolderItemEditorDecorator {
+public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends SimplePanel implements IFolderItemEditorDecorator<E> {
 
     private Image removeImage;
 
@@ -104,7 +105,7 @@ public abstract class BaseFolderItemEditorDecorator extends SimplePanel implemen
     }
 
     @Override
-    public void setFolderItem(CEntityFolderItemEditor<?> folderItem) {
+    public void setFolderItem(CEntityFolderItemEditor<E> folderItem) {
         content.setWidget(folderItem.getContainer());
     }
 
