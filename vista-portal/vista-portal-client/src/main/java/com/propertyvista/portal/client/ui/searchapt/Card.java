@@ -16,40 +16,18 @@ package com.propertyvista.portal.client.ui.searchapt;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
-import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class Card extends BaseFolderItemViewerDecorator {
+public class Card extends FlowPanel {
 
-    public static String DEFAULT_STYLE_PREFIX = "pyx4j_BaseFolderItemViewerDecorator";
-
-    private final VerticalPanel container;
-
-    private final SimplePanel content;
-
-    private final FlowPanel menu;
-
-    private final Anchor viewDetailsItem;
-
-    private final FlowPanel menuContainer;
+    public static String DEFAULT_STYLE_PREFIX = "portalCard";
 
     private final SimplePanel header;
 
@@ -57,27 +35,17 @@ public class Card extends BaseFolderItemViewerDecorator {
 
     private final FlowPanel contentHolder;
 
+    private final SimplePanel content;
+
     protected static I18n i18n = I18nFactory.getI18n(BaseFolderItemViewerDecorator.class);
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Menu, MenuItem, Header, Content, Image
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        hover
+        Header, Content, Image
     }
 
     public Card() {
-
         setStyleName(DEFAULT_STYLE_PREFIX);
         setSize("100%", "100%");
-        container = new VerticalPanel();
-        container.setSize("100%", "100%");
-        container.getElement().getStyle().setPadding(5, Unit.PX);
-
-        menuContainer = new FlowPanel();
-        menuContainer.setSize("100%", "20%");
-        menuContainer.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Menu);
 
         header = new SimplePanel();
         header.setSize("100%", "15%");
@@ -90,26 +58,6 @@ public class Card extends BaseFolderItemViewerDecorator {
         imageHolder.getElement().getStyle().setFloat(Float.LEFT);
         imageHolder.getElement().getStyle().setProperty("minHeight", "100px");
 
-        SimplePanel menuPanel = new SimplePanel();
-        menuPanel.setHeight("100%");
-        menuPanel.getElement().getStyle().setFloat(Float.LEFT);
-        menu = new FlowPanel();
-        menuPanel.setWidget(menu);
-        menu.setHeight("100%");
-        menuContainer.getElement().getStyle().setVisibility(Style.Visibility.HIDDEN);
-        menuContainer.add(menuPanel);
-
-        viewDetailsItem = new Anchor(i18n.tr("View Details"));
-        viewDetailsItem.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.MenuItem);
-        viewDetailsItem.getElement().getStyle().setFloat(Float.RIGHT);
-        viewDetailsItem.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-
-        SimplePanel viewDetailsPanel = new SimplePanel();
-        viewDetailsPanel.setSize("10em", "100%");
-        viewDetailsPanel.getElement().getStyle().setFloat(Float.RIGHT);
-        viewDetailsPanel.add(viewDetailsItem);
-        menuContainer.add(viewDetailsPanel);
-
         contentHolder = new FlowPanel();
         contentHolder.setSize("100%", "65%");
         content = new SimplePanel();
@@ -119,33 +67,9 @@ public class Card extends BaseFolderItemViewerDecorator {
         contentHolder.add(imageHolder);
         contentHolder.add(content);
 
-        container.add(header);
-        container.add(contentHolder);
-        container.add(menuContainer);
+        add(header);
+        add(contentHolder);
 
-        addDomHandler(new MouseOverHandler() {
-            @Override
-            public void onMouseOver(MouseOverEvent event) {
-                setStyleDependentName(StyleDependent.hover.name(), true);
-                menuContainer.getElement().getStyle().setVisibility(Style.Visibility.VISIBLE);
-            }
-        }, MouseOverEvent.getType());
-        addDomHandler(new MouseOutHandler() {
-            @Override
-            public void onMouseOut(MouseOutEvent event) {
-                removeStyleDependentName(StyleDependent.hover.name());
-                menuContainer.getElement().getStyle().setVisibility(Style.Visibility.HIDDEN);
-            }
-        }, MouseOutEvent.getType());
-
-        setWidget(container);
-
-    }
-
-    @Override
-    public void setFolderItemContainer(Widget w) {
-        contentHolder.clear();
-        contentHolder.add(w);
     }
 
     public void setCardContent(Widget w) {
@@ -171,15 +95,4 @@ public class Card extends BaseFolderItemViewerDecorator {
     public void setCardHeader(IsWidget w) {
         setCardHeader(w.asWidget());
     }
-
-    public void addMenuItem(Anchor menuItem) {
-        menuItem.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.MenuItem);
-        menu.add(menuItem);
-
-    }
-
-    public HandlerRegistration addViewDetailsClickHandler(ClickHandler h) {
-        return viewDetailsItem.addClickHandler(h);
-    }
-
 }

@@ -13,11 +13,13 @@
  */
 package com.propertyvista.portal.client.ui.searchapt;
 
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
@@ -25,10 +27,6 @@ import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
-
-import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
@@ -91,22 +89,9 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
     }
 
     private FlowPanel fillAppartmentCard(PropertyDTO value) {
-        FlowPanel card = new FlowPanel();
-        card.setSize("80%", "100%");
 
-        FlowPanel imageHolder = new FlowPanel();
-        imageHolder.setHeight("100%");
-        imageHolder.setWidth("30%");
-        imageHolder.getElement().getStyle().setFloat(Float.LEFT);
-        imageHolder.getElement().getStyle().setProperty("minHeight", "100px");
-        imageHolder.add(new HTML("Image"));
-        card.add(imageHolder);
-
-        FlowPanel content = new FlowPanel();
-        content.setHeight("100%");
-        content.setWidth("70%");
-        content.getElement().getStyle().setFloat(Float.RIGHT);
-        card.add(content);
+        Card card = new Card();
+        card.setCardImage(new HTML("Image"));
 
         StringBuffer address = new StringBuffer();
         address.append(value.address().street1().getValue());
@@ -122,9 +107,10 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
         address.append(" ");
         address.append(value.address().postalCode().getValue());
 
-        content.add(new Label(address.toString()));
+        card.setCardHeader(new Label(address.toString()));
 
         return card;
+
     }
 
 }

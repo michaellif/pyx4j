@@ -14,11 +14,10 @@
 package com.propertyvista.portal.client.ui.decorations;
 
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Anchor;
 
-import com.propertyvista.portal.client.ui.searchapt.Card;
-
-public class ApartmentCardDecorator extends Card {
+public class ApartmentCardDecorator extends BasicCardDecorator {
 
     private final Anchor mapIitem;
 
@@ -28,8 +27,8 @@ public class ApartmentCardDecorator extends Card {
         addMenuItem(mapIitem);
     }
 
-    public void addMapClickHandler(ClickHandler h) {
-        mapIitem.addClickHandler(h);
+    public HandlerRegistration addMapClickHandler(ClickHandler h) {
+        return mapIitem.addClickHandler(h);
 
     }
 

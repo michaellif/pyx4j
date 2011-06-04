@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.searchapt;
 
-import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -134,39 +132,21 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
     }
 
     private FlowPanel fillFloorplanCard(FloorplanDTO value) {
-        FlowPanel card = new FlowPanel();
-        card.setSize("80%", "100%");
 
-        FlowPanel imageHolder = new FlowPanel();
-        imageHolder.setHeight("100%");
-        imageHolder.setWidth("30%");
-        imageHolder.getElement().getStyle().setFloat(Float.LEFT);
-        imageHolder.getElement().getStyle().setProperty("minHeight", "100px");
-        imageHolder.add(new HTML("Image"));
-        card.add(imageHolder);
+        Card card = new Card();
+        card.setCardImage(new HTML("Unit Image"));
 
-        FlowPanel content = new FlowPanel();
-        content.setHeight("100%");
-        content.setWidth("70%");
-        content.getElement().getStyle().setFloat(Float.RIGHT);
-        card.add(content);
-
-        Label lbl = null;
+        Label lbl;
         if (!value.name().isNull()) {
             lbl = new Label(value.name().getValue());
-            lbl.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            content.add(lbl);
+            card.setCardHeader(lbl);
         }
 
         if (!value.area().isNull()) {
             lbl = new Label(value.area().getValue().toString());
-            content.add(lbl);
+            card.setCardContent(lbl);
         }
 
-        if (!value.description().isNull()) {
-            lbl = new Label(value.description().getValue());
-            content.add(lbl);
-        }
         return card;
 
     }

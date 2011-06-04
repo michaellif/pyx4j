@@ -19,9 +19,9 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.Style
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalView;
 import com.propertyvista.portal.client.ui.ResidentsNavigViewImpl;
+import com.propertyvista.portal.client.ui.decorations.BasicCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsViewImpl;
-import com.propertyvista.portal.client.ui.searchapt.Card;
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentForm;
@@ -391,30 +391,30 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
     }
 
     private void initBaseFolderItemViewerDecoratorStyles() {
-        String prefix = Card.DEFAULT_STYLE_PREFIX;
+        String prefix = BasicCardDecorator.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("border", "solid 1px");
         style.addProperty("border-color", ThemeColor.BORDER);
         style.addProperty("border-bottom-color", "transparent");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, Card.StyleSuffix.Menu));
+        style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.Menu));
         addStyle(style);
 
         //TODO change colors
-        style = new Style(Selector.valueOf(prefix, Card.StyleSuffix.MenuItem));
+        style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.MenuItem));
         style.addProperty("text-decoration", "none");
         style.addProperty("color", "#7B8388");
         addStyle(style);
 
         //TODO  think of a better way
-        style = new Style(Selector.valueOf(prefix, Card.StyleSuffix.MenuItem) + ":hover");
+        style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.MenuItem) + ":hover");
         style.addProperty("text-decoration", "underline");
         style.addProperty("color", "#7B8388");
         addStyle(style);
 
         //TODO need prefix+dependent Selector.valueOf implementation
-        style = new Style("." + prefix + "-" + Card.StyleDependent.hover);
+        style = new Style("." + prefix + "-" + BasicCardDecorator.StyleDependent.hover);
         style.addProperty("border-color", "#7B8388!important");
         style.addProperty("border", "solid 1px");
         addStyle(style);
