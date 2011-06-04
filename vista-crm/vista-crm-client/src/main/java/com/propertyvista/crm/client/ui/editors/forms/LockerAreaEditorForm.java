@@ -43,7 +43,7 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
         split.getLeftPanel().add(inject(proto().name()), 15);
         split.getLeftPanel().add(inject(proto().description()), 15);
         split.getLeftPanel().add(inject(proto().isPrivate()), 7);
-        split.getLeftPanel().add(inject(proto().size()), 7);
+        split.getLeftPanel().add(inject(proto().lockerSize()), 7);
         split.getLeftPanel().add(inject(proto().levels()), 7);
         split.getRightPanel().add(inject(proto().totalLockers()), 7);
         split.getRightPanel().add(inject(proto().largeLockers()), 7);
