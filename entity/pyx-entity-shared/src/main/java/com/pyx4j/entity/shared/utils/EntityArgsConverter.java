@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -35,7 +36,9 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityArgsConverter {
 
-    // public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmm");
+    public static final String DATE_TIME_FORMAT = "yyyyMMddHHmm";
+
+    public static final String DATE_FORMAT = "yyyyMMdd";
 
     public static Map<String, String> convertToArgs(IEntity entity) {
         Map<String, String> map = new HashMap<String, String>();
@@ -45,10 +48,10 @@ public class EntityArgsConverter {
             MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
             if (!member.isNull()) {
                 if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
-                    if (memberMeta.getValueClass().equals(Date.class) || (memberMeta.getValueClass().equals(java.sql.Date.class))
-                            || (memberMeta.getValueClass().equals(LogicalDate.class))) {
-                        //TODO
-                        //   map.put(memberName, DATE_FORMAT.format((Date) entity.getMember(memberName).getValue()));
+                    if (memberMeta.getValueClass().equals(Date.class)) {
+                        map.put(memberName, TimeUtils.simpleFormat((Date) entity.getMember(memberName).getValue(), DATE_TIME_FORMAT));
+                    } else if (memberMeta.getValueClass().equals(LogicalDate.class)) {
+                        map.put(memberName, TimeUtils.simpleFormat((Date) entity.getMember(memberName).getValue(), DATE_FORMAT));
                     } else {
                         map.put(memberName, entity.getMember(memberName).getValue().toString());
                     }
@@ -80,16 +83,10 @@ public class EntityArgsConverter {
                 MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
                 IObject<?> member = entity.getMember(memberName);
                 if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
-                    if (memberMeta.getValueClass().equals(Date.class) || (memberMeta.getValueClass().equals(java.sql.Date.class))
-                            || (memberMeta.getValueClass().equals(LogicalDate.class))) {
-                        //TODO
-//                        try {
-//                                  ((IPrimitive<Date>) member).setValue(DATE_FORMAT.parse(args.get(memberName)));
-//                        } catch (ClassCastException e) {
-//                            throw new Error(e);
-//                        } catch (ParseException e) {
-//                            throw new Error(e);
-//                        }
+                    if (memberMeta.getValueClass().equals(Date.class)) {
+                        ((IPrimitive<Date>) member).setValue(TimeUtils.simpleParse(args.get(memberName), DATE_TIME_FORMAT));
+                    } else if (memberMeta.getValueClass().equals(LogicalDate.class)) {
+                        ((IPrimitive<Date>) member).setValue(new LogicalDate(TimeUtils.simpleParse(args.get(memberName), DATE_FORMAT)));
                     } else {
                         ((IPrimitive) member).setValue(((IPrimitive) member).parse(args.get(memberName)));
                     }

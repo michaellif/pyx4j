@@ -29,6 +29,7 @@ import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -41,7 +42,8 @@ public class EntityArgsConverterTest extends TestCase {
 
     private static final String DEPARTMENT_NAME = "Department Name";
 
-    private static final Date FROM = new Date();
+    @SuppressWarnings("deprecation")
+    private static final Date FROM = new Date(111, 5, 6, 12, 30);
 
     public void testConvertToArgs() {
 
@@ -59,11 +61,9 @@ public class EntityArgsConverterTest extends TestCase {
 
         log.info(args.toString());
 
-        //TODO
-        //assertEquals(employee.getValue().size(), args.size());
+        assertEquals(employee.getValue().size(), args.size());
         assertEquals(employee.firstName().getValue(), args.get(employee.firstName().getFieldName()));
-        //TODO
-        //  assertEquals(EntityArgsConverter.DATE_FORMAT.format(employee.from().getValue()), args.get(employee.from().getFieldName()));
+        assertEquals(TimeUtils.simpleFormat(employee.from().getValue(), EntityArgsConverter.DATE_TIME_FORMAT), args.get(employee.from().getFieldName()));
         assertEquals(employee.reliable().getValue().toString(), args.get(employee.reliable().getFieldName()));
         assertEquals(employee.holidays().getValue().toString(), args.get(employee.holidays().getFieldName()));
         assertEquals(employee.rating().getValue().toString(), args.get(employee.rating().getFieldName()));
@@ -78,8 +78,7 @@ public class EntityArgsConverterTest extends TestCase {
         Employee proto = EntityFactory.getEntityPrototype(Employee.class);
 
         args.put(proto.firstName().getFieldName(), FIRST_NAME);
-        //TODO
-        //  args.put(proto.from().getFieldName(), EntityArgsConverter.DATE_FORMAT.format(FROM));
+        args.put(proto.from().getFieldName(), TimeUtils.simpleFormat(FROM, EntityArgsConverter.DATE_TIME_FORMAT));
         args.put(proto.reliable().getFieldName(), "true");
         args.put(proto.holidays().getFieldName(), "22");
         args.put(proto.rating().getFieldName(), "5");
@@ -90,8 +89,7 @@ public class EntityArgsConverterTest extends TestCase {
         log.info(employee.toString());
 
         assertEquals(employee.firstName().getValue(), FIRST_NAME);
-        //TODO
-        //   assertEquals(EntityArgsConverter.DATE_FORMAT.format(employee.from().getValue()), EntityArgsConverter.DATE_FORMAT.format(FROM));
+        assertEquals(employee.from().getValue(), FROM);
         assertEquals((boolean) employee.reliable().getValue(), true);
         assertEquals((long) employee.holidays().getValue(), 22L);
         assertEquals((int) employee.rating().getValue(), 5);

@@ -15,4 +15,6 @@
         <when-type-assignable class="com.pyx4j.commons.ClassName.ClassNames"/>
     </generate-with>
     
+    <super-source path="emul"/>
+  
 </module>

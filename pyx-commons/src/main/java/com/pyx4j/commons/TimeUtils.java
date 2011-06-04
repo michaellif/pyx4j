@@ -175,4 +175,18 @@ public class TimeUtils {
     public static void addDays(Date date, int days) {
         date.setDate(date.getDate() + days);
     }
+
+    /**
+     * Date formatter base on java.text.SimpleDateFormat for non time critical functions
+     */
+    public static String simpleFormat(Date date, String pattern) {
+        return SimpleDateFormatImpl.format(date, pattern);
+    }
+
+    /**
+     * Date parser base on java.text.SimpleDateFormat for non time critical functions
+     */
+    public static Date simpleParse(String text, String pattern) throws IllegalArgumentException {
+        return SimpleDateFormatImpl.parse(text, pattern);
+    }
 }
