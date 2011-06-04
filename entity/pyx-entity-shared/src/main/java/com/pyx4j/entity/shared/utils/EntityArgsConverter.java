@@ -20,8 +20,6 @@
  */
 package com.pyx4j.entity.shared.utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +35,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityArgsConverter {
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmm");
+    // public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmm");
 
     public static Map<String, String> convertToArgs(IEntity entity) {
         Map<String, String> map = new HashMap<String, String>();
@@ -49,7 +47,8 @@ public class EntityArgsConverter {
                 if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
                     if (memberMeta.getValueClass().equals(Date.class) || (memberMeta.getValueClass().equals(java.sql.Date.class))
                             || (memberMeta.getValueClass().equals(LogicalDate.class))) {
-                        map.put(memberName, DATE_FORMAT.format((Date) entity.getMember(memberName).getValue()));
+                        //TODO
+                        //   map.put(memberName, DATE_FORMAT.format((Date) entity.getMember(memberName).getValue()));
                     } else {
                         map.put(memberName, entity.getMember(memberName).getValue().toString());
                     }
@@ -83,13 +82,14 @@ public class EntityArgsConverter {
                 if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
                     if (memberMeta.getValueClass().equals(Date.class) || (memberMeta.getValueClass().equals(java.sql.Date.class))
                             || (memberMeta.getValueClass().equals(LogicalDate.class))) {
-                        try {
-                            ((IPrimitive<Date>) member).setValue(DATE_FORMAT.parse(args.get(memberName)));
-                        } catch (ClassCastException e) {
-                            throw new Error(e);
-                        } catch (ParseException e) {
-                            throw new Error(e);
-                        }
+                        //TODO
+//                        try {
+//                                  ((IPrimitive<Date>) member).setValue(DATE_FORMAT.parse(args.get(memberName)));
+//                        } catch (ClassCastException e) {
+//                            throw new Error(e);
+//                        } catch (ParseException e) {
+//                            throw new Error(e);
+//                        }
                     } else {
                         ((IPrimitive) member).setValue(((IPrimitive) member).parse(args.get(memberName)));
                     }
