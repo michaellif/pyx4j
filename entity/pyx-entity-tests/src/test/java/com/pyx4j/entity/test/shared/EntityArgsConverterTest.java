@@ -68,6 +68,7 @@ public class EntityArgsConverterTest extends TestCase {
         assertEquals(employee.holidays().getValue().toString(), args.get(employee.holidays().getFieldName()));
         assertEquals(employee.rating().getValue().toString(), args.get(employee.rating().getFieldName()));
         assertEquals(employee.salary().getValue().toString(), args.get(employee.salary().getFieldName()));
+        // assertEquals(employee.department().name().getValue().toString(), args.get(employee.department().name().getPath()));
 
     }
 
