@@ -13,22 +13,34 @@
  */
 package com.propertyvista.portal.client.ui.searchapt;
 
+import java.util.List;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.EntityDataSource;
+import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
+import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 
 public class SearchApartmentForm extends CEntityForm<PropertySearchCriteria> implements SearchApartmentView {
 
@@ -54,14 +66,13 @@ public class SearchApartmentForm extends CEntityForm<PropertySearchCriteria> imp
         container.setWidth("600px");
         container.setStyleName(DEFAULT_STYLE_PREFIX);
 
-        addField(new CriteriaWidgetDecorator(inject(proto().province())));
         addField(new CriteriaWidgetDecorator(inject(proto().city())));
+        addField(new CriteriaWidgetDecorator(inject(proto().price())));
 
         addBreak();
 
         addField(new CriteriaWidgetDecorator(inject(proto().numOfBeds())));
         addField(new CriteriaWidgetDecorator(inject(proto().numOfBath())));
-        addField(new CriteriaWidgetDecorator(inject(proto().price())));
 
         addBreak();
 
@@ -71,7 +82,7 @@ public class SearchApartmentForm extends CEntityForm<PropertySearchCriteria> imp
         searchBtn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.goToPropertyMap((PropertySearchCriteria) null);
+                presenter.search();
             }
 
         });
@@ -81,6 +92,29 @@ public class SearchApartmentForm extends CEntityForm<PropertySearchCriteria> imp
         container.add(search);
 
         return container;
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        populate(EntityFactory.create(PropertySearchCriteria.class));
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        CEditableComponent<?, ?> c = super.create(member);
+        if (member == proto().city()) {
+            ((CEntityComboBox<City>) c).setOptionsDataSource(new EntityDataSource<City>() {
+
+                @Override
+                public void obtain(EntityQueryCriteria<City> criteria, AsyncCallback<List<City>> handlingCallback, boolean background) {
+                    ((PortalSiteServices) GWT.create(PortalSiteServices.class)).retrieveCityList((AsyncCallback) handlingCallback);
+                }
+
+            });
+        }
+        return c;
     }
 
     private void addField(Widget widget) {
@@ -98,11 +132,11 @@ public class SearchApartmentForm extends CEntityForm<PropertySearchCriteria> imp
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-
     }
 
     public Presenter getPresenter() {
         return presenter;
 
     }
+
 }

@@ -15,18 +15,31 @@ package com.propertyvista.portal.client.ui.searchapt;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+
 public class SearchApartmentViewImpl extends SimplePanel implements SearchApartmentView {
 
     SearchApartmentForm form;
 
     public SearchApartmentViewImpl() {
         form = new SearchApartmentForm();
-        setWidget(form.createContent());
+        form.initialize();
+        setWidget(form);
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         form.setPresenter(presenter);
+    }
+
+    @Override
+    public void populate(PropertySearchCriteria searchCriteria) {
+        form.populate(searchCriteria);
+    }
+
+    @Override
+    public PropertySearchCriteria getValue() {
+        return form.getValue();
     }
 
 }

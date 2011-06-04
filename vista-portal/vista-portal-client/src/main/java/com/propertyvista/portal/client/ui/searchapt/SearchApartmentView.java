@@ -14,19 +14,20 @@
 package com.propertyvista.portal.client.ui.searchapt;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
-import com.pyx4j.entity.rpc.GeoCriteria;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public interface SearchApartmentView extends IsWidget {
 
-    public void setPresenter(Presenter presenter);
+    void setPresenter(Presenter presenter);
+
+    void populate(PropertySearchCriteria searchCriteria);
+
+    PropertySearchCriteria getValue();
 
     public interface Presenter {
 
-        public void goToPropertyMap(PropertySearchCriteria searchCriteria);
-
-        public void goToPropertyMap(GeoCriteria geoCriteria);
+        public void search();
 
     }
 

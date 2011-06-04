@@ -13,14 +13,17 @@
  */
 package com.propertyvista.portal.client.activity;
 
+import java.util.Map;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.pyx4j.entity.rpc.GeoCriteria;
+import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -39,18 +42,15 @@ public class SearchApartmentActivity extends AbstractActivity implements SearchA
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-
     }
 
     @Override
-    public void goToPropertyMap(PropertySearchCriteria city) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.PropertyMap());
-    }
-
-    @Override
-    public void goToPropertyMap(GeoCriteria geoCriteria) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.PropertyMap());
-
+    public void search() {
+        PropertySearchCriteria criteria = view.getValue();
+        Map<String, String> args = EntityArgsConverter.convertToArgs(criteria);
+        AppPlace place = new PortalSiteMap.FindApartment.PropertyMap();
+        place.setArgs(args);
+        AppSite.getPlaceController().goTo(place);
     }
 
     public SearchApartmentActivity withPlace(Place place) {

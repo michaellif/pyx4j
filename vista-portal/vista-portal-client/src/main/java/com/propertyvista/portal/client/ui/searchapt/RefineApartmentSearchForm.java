@@ -68,21 +68,7 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
         label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchHeader.name());
         container.add(label);
 
-        addField(new CriteriaWidgetDecorator(inject(proto().province())));
         addField(new CriteriaWidgetDecorator(inject(proto().city())));
-
-        FlowPanel searchPanel = new FlowPanel();
-        Button searchBtn = new Button(i18n.tr("Search"));
-        searchBtn.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.refineSearch((PropertySearchCriteria) null);
-            }
-
-        });
-        searchPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.ButtonPanel);
-        searchPanel.add(searchBtn);
-        container.add(searchPanel);
 
         label = new Label(i18n.tr("REFINE SEARCH"));
         label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchHeader.name());

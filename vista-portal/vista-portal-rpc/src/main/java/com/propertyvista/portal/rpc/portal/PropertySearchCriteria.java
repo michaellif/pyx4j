@@ -91,4 +91,5 @@ public interface PropertySearchCriteria extends IEntity {
 
     @Caption(name = "Price")
     IPrimitive<PriceRangeType> price();
+
 }
