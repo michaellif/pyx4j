@@ -34,11 +34,11 @@ public interface PortalSiteServices extends IService {
      */
     public void retrieveCityList(AsyncCallback<Vector<City>> callback);
 
-    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, City city);
+    public void retrievePropertyListByCity(AsyncCallback<PropertyListDTO> callback, City city);
 
     public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, PropertySearchCriteria criteria);
 
-    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, GeoCriteria geoCriteria);
+    public void retrievePropertyListByGeo(AsyncCallback<PropertyListDTO> callback, GeoCriteria geoCriteria);
 
     public void retrievePropertyDetails(AsyncCallback<PropertyDetailsDTO> callback, Key propertyId);
 

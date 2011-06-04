@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
+import com.propertyvista.domain.Medium;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -29,6 +30,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
+import com.propertyvista.portal.domain.dto.MediumDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class Converter {
@@ -95,6 +97,10 @@ public class Converter {
             to.floorplanNames().add(fp.getStringView());
         }
 
+        if (!from.media().isEmpty()) {
+            to.mainMedia().setValue(from.media().get(0).getPrimaryKey());
+        }
+
         // List of amenities
         EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
         amenitysCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(BuildingAmenity.class).belongsTo().getPath().toString(), Restriction.EQUAL,
@@ -105,6 +111,13 @@ public class Converter {
             to.amenities().add(amntDTO);
         }
 
+        return to;
+    }
+
+    public static MediumDTO convert(Medium from) {
+        MediumDTO to = EntityFactory.create(MediumDTO.class);
+        to.id().set(from.id());
+        to.caption().setValue(from.file().caption().getValue());
         return to;
     }
 }

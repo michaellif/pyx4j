@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.common.domain.ref.City;
+import com.propertyvista.domain.Medium;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
@@ -46,7 +47,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     }
 
     @Override
-    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, City city) {
+    public void retrievePropertyListByCity(AsyncCallback<PropertyListDTO> callback, City city) {
         PropertySearchCriteria criteria = EntityFactory.create(PropertySearchCriteria.class);
         criteria.city().set(city);
         retrievePropertyList(callback, criteria);
@@ -124,9 +125,9 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     }
 
     @Override
-    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, GeoCriteria geoCriteria) {
+    public void retrievePropertyListByGeo(AsyncCallback<PropertyListDTO> callback, GeoCriteria geoCriteria) {
         // TODO Auto-generated method stub
-        retrievePropertyList(callback, (City) null);
+        retrievePropertyListByCity(callback, (City) null);
     }
 
     @Override
@@ -147,6 +148,13 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         //TODO calculate from available units
         dto.price().from().setValue(805d);
         dto.price().to().setValue(1600d);
+
+        if (!building.media().isEmpty()) {
+            PersistenceServicesFactory.getPersistenceService().retrieve(building.media());
+            for (Medium m : building.media()) {
+                dto.media().add(Converter.convert(m));
+            }
+        }
 
         callback.onSuccess(dto);
     }

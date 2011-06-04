@@ -92,6 +92,7 @@ public class PictureUtil {
                 Medium m = EntityFactory.create(Medium.class);
 
                 m.file().filename().setValue(file.getName());
+                m.file().caption().setValue(FilenameUtils.getBaseName(file.getName()));
                 m.file().contentType().setValue(mime);
 
                 in = new FileInputStream(file);

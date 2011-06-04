@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.dto;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
@@ -35,8 +36,11 @@ public interface PropertyDTO extends IEntity {
     @Caption(name = "Location")
     IPrimitive<GeoPoint> location();
 
+    IPrimitive<Key> mainMedia();
+
     @Caption(name = "Size")
     IPrimitiveSet<String> floorplanNames();
 
     IList<AmenityDTO> amenities();
+
 }
