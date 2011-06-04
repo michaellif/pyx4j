@@ -32,7 +32,6 @@ import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsView;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
@@ -68,15 +67,6 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
                 amenity = EntityFactory.create(AmenityDTO.class);
                 amenity.name().setValue("Somthing else");
                 property.amenities().add(amenity);
-
-                FloorplanDTO floorplan = EntityFactory.create(FloorplanDTO.class);
-                floorplan.name().setValue("floorplan1");
-                floorplan.area().setValue(22);
-                property.floorplans().add(floorplan);
-                floorplan = EntityFactory.create(FloorplanDTO.class);
-                floorplan.name().setValue("floorplan2");
-                floorplan.area().setValue(33);
-                property.floorplans().add(floorplan);
 
                 view.populate(property);
             }

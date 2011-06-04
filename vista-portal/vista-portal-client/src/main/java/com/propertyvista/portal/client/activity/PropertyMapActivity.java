@@ -63,23 +63,6 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
             }
         }, criteria);
 
-//        PropertyListDTO properties = EntityFactory.create(PropertyListDTO.class);
-//
-//        {
-//            PropertyDTO property = EntityFactory.create(PropertyDTO.class);
-//            property.address().street1().setValue("320 Avenue Road");
-//            property.location().setValue(new GeoPoint(43.697665, -79.402313));
-//            property.id().setValue(new Key(11));
-//            properties.properties().add(property);
-//
-//            property = EntityFactory.create(PropertyDTO.class);
-//            property.address().street1().setValue("1000 Yonge Street");
-//            property.location().setValue(new GeoPoint(43.675599, -79.389042));
-//            property.id().setValue(new Key(12));
-//            properties.properties().add(property);
-//            view.populate(criteria, properties);
-//        }
-
     }
 
     @Override
