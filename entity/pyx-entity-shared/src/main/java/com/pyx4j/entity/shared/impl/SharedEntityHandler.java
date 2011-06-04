@@ -623,4 +623,22 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         String domainName = getObjectClass().getName();
         return domainName.substring(domainName.lastIndexOf(".") + 1);
     }
+
+    /**
+     * TODO add this check to GWT compiler
+     * 
+     * @deprecated Forbidden name, Eclipse Search for references bug
+     */
+    @Deprecated
+    protected final void length() {
+        throw new IllegalStateException();
+    }
+
+    /**
+     * @deprecated Forbidden name, Eclipse Search for references bug
+     */
+    @Deprecated
+    protected final void size() {
+        throw new IllegalStateException();
+    }
 }
