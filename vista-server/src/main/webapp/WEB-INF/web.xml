@@ -238,6 +238,17 @@
         <url-pattern>/ptapp/application_document</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>PublicMediaServlet</servlet-name>
+        <servlet-class>com.propertyvista.portal.server.portal.PublicMediaServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>PublicMediaServlet</servlet-name>
+        <url-pattern>/media/*</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>JobScheduler</servlet-name>
         <servlet-class>com.propertyvista.portal.server.scheduler.JobScheduler</servlet-class>

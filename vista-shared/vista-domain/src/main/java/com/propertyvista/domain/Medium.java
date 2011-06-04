@@ -13,8 +13,11 @@
  */
 package com.propertyvista.domain;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 
 public interface Medium extends IEntity {
 
+    @EmbeddedEntity
+    com.propertyvista.domain.File file();
 }

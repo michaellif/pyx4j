@@ -7,29 +7,31 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 28, 2011
- * @author Misha
+ * Created on 2011-06-04
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.server.domain;
 
-import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface File extends IEntity {
+/**
+ * This file would be stored in file system or in database.
+ * 
+ * @deprecated DO Not use directly! @see com.propertyvista.server.common.blob.BlobService
+ * 
+ */
+@RpcTransient
+@Deprecated
+public interface FileBlob extends IEntity {
 
-    IPrimitive<String> caption();
+    IPrimitive<String> name();
 
-    IPrimitive<String> accessKey();
-
-    IPrimitive<Key> blobKey();
-
-    IPrimitive<Integer> cacheVersion();
-
-    IPrimitive<String> filename();
-
-    IPrimitive<Integer> fileSize();
+    @Length(5 * 1024 * 1024)
+    IPrimitive<byte[]> content();
 
     IPrimitive<String> contentType();
 

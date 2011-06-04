@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.importer;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
@@ -25,6 +26,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.domain.Medium;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -37,8 +39,10 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.portal.server.geo.GeoLocator;
 import com.propertyvista.portal.server.geo.GeoLocator.Mode;
+import com.propertyvista.server.common.blob.BlobService;
 
 public class Importer {
+
     private static final Logger log = LoggerFactory.getLogger(Importer.class);
 
     private Reader reader;
@@ -68,6 +72,7 @@ public class Importer {
     public void save() {
         // save
         for (Building building : mapper.getBuildings()) {
+            loadMemdia(building);
             persist(building);
         }
 
@@ -103,6 +108,20 @@ public class Importer {
                 persist(detail);
             }
         }
+    }
+
+    private void loadMemdia(Building building) {
+        if (building.info().propertyCode().isNull()) {
+            return;
+        }
+        Map<Medium, byte[]> data = PictureUtil.loadbuildingMedia(building.info().propertyCode().getValue());
+        for (Map.Entry<Medium, byte[]> me : data.entrySet()) {
+            Medium m = me.getKey();
+            m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentType().getValue()));
+            persist(m);
+            building.media().add(m);
+        }
+
     }
 
     public void start() throws Exception {
