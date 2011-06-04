@@ -77,7 +77,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
 //            property.location().setValue(new GeoPoint(43.675599, -79.389042));
 //            property.id().setValue(new Key(12));
 //            properties.properties().add(property);
-//
+//            view.populate(criteria, properties);
 //        }
 
     }

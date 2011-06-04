@@ -17,9 +17,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
@@ -27,6 +24,10 @@ import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
+
+import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
@@ -76,8 +77,8 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
         return new CEntityFolderItemViewer<PropertyDTO>() {
 
             @Override
-            public IFolderItemViewerDecorator createFolderItemDecorator() {
-                return new ApartmentCardDecorator();
+            public IFolderItemViewerDecorator<PropertyDTO> createFolderItemDecorator() {
+                return new ApartmentCardDecorator(presenter);
             }
 
             @Override

@@ -30,13 +30,15 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
+import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class BasicCardDecorator extends BaseFolderItemViewerDecorator {
+public class BasicCardDecorator<E extends IEntity> extends SimplePanel implements IFolderItemViewerDecorator<E> {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_BaseFolderItemViewerDecorator";
 
@@ -49,6 +51,8 @@ public class BasicCardDecorator extends BaseFolderItemViewerDecorator {
     private final Anchor viewDetailsItem;
 
     private final FlowPanel menuContainer;
+
+    private CEntityFolderItemViewer<E> viewer;
 
     protected static I18n i18n = I18nFactory.getI18n(BaseFolderItemViewerDecorator.class);
 
@@ -120,8 +124,13 @@ public class BasicCardDecorator extends BaseFolderItemViewerDecorator {
     }
 
     @Override
-    public void setFolderItemContainer(Widget w) {
-        content.setWidget(w);
+    public void setFolderItem(CEntityFolderItemViewer<E> viewer) {
+        this.viewer = viewer;
+        content.setWidget(viewer.getContainer());
+    }
+
+    public CEntityFolderItemViewer<E> getFolderItem() {
+        return viewer;
     }
 
     public void addMenuItem(Anchor menuItem) {
