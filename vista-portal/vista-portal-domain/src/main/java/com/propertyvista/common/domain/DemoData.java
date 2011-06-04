@@ -21,6 +21,8 @@ public class DemoData {
 
     public static int BUILDINGS_GENERATION_SEED = 100;
 
+    public static int TENANTS_GENERATION_SEED = 100;
+
     public static int MAX_CUSTOMERS = 20;
 
     public static int MAX_PROPERTY_MANAGER = 10;
@@ -36,6 +38,8 @@ public class DemoData {
     public static String USERS_DOMAIN = "@pyx4j.com";
 
     public static int NUM_RESIDENTIAL_BUILDINGS = 10;
+
+    public static int NUM_TENANTS = 10;
 
     public static int NUM_POTENTIAL_TENANTS = 4;
 
@@ -66,6 +70,10 @@ public class DemoData {
 
     public final static String[] STREETS = { "Yonge St", "Dufferin St", "Bathurst St", "John St", "16th Ave", "Steeles Ave W" };
 
+    public final static String[] NAME_PREFIX = { "Mr", "Mrs", "Ms", "Dr" };
+
+    public final static String[] NAME_SUFFIX = { "Phd", "MSc", "MBA" };
+
     public final static String[] FIRST_NAMES = { "John", "Jim", "Bob", "Alex", "Chris", "Jack", "Jill", "Anna", "Bob", "Mark", "Jeff", "Peter", "Neil",
             "Joseph" };
 
@@ -84,6 +92,10 @@ public class DemoData {
     public final static String[] CAR_MODELS = { "Sienna", "LS300", "Protege", "M5", "M3", "Viper" };
 
     public final static String[] OCCUPATIONS = { "Java Developer", "Tester", "QA", "Manager", "Project Manager", "VP", "Director", "Pilot" };
+
+    public final static String[] COMPANY_ROLES = { "Sales", "Technical", "Help Desk" };
+
+    public final static String[] CONTACT_ROLES = { "Administrator", "Support", "Tech" };
 
     public final static String[] EMPLOYER_NAMES = { "IBM", "Oracle", "Sun", "Dell", "Apple", "Microsoft", "HP", "TD Bank", "CIBC", "BMO", "RBC", "Manulife",
             "Sunlife" };

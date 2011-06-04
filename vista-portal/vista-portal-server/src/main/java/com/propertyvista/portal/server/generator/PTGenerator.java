@@ -135,9 +135,7 @@ public class PTGenerator {
     public EmergencyContact createEmergencyContact() {
         EmergencyContact contact = EntityFactory.create(EmergencyContact.class);
 
-        contact.name().firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
-        contact.name().middleName().setValue("");
-        contact.name().lastName().setValue(RandomUtil.random(DemoData.LAST_NAMES));
+        contact.name().set(CommonsGenerator.createName());
 
         contact.homePhone().setValue(RandomUtil.randomPhone());
         contact.mobilePhone().setValue(RandomUtil.randomPhone());

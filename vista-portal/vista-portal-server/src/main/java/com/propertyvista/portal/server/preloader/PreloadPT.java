@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -209,7 +208,4 @@ public class PreloadPT extends BaseVistaDataPreloader {
         return sb.toString();
     }
 
-    private static void persist(IEntity entity) {
-        PersistenceServicesFactory.getPersistenceService().persist(entity);
-    }
 }

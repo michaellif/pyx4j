@@ -18,6 +18,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.IAddressFull.StreetDirection;
 import com.propertyvista.common.domain.IAddressFull.StreetType;
+import com.propertyvista.common.domain.Name;
+import com.propertyvista.common.domain.Person;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Address.AddressType;
@@ -27,6 +29,43 @@ import com.propertyvista.domain.Phone;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 
 public class CommonsGenerator {
+
+    public static Name createName() {
+        Name name = EntityFactory.create(Name.class);
+
+        if (RandomUtil.randomInt() % 3 == 0) {
+            name.namePrefix().setValue(RandomUtil.random(DemoData.NAME_PREFIX));
+        }
+
+        name.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
+        name.lastName().setValue(RandomUtil.random(DemoData.LAST_NAMES));
+
+        if (RandomUtil.randomInt() % 10 == 0) {
+            name.middleName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
+        }
+
+        if (RandomUtil.randomInt() % 15 == 0) {
+            name.nameSuffix().setValue(RandomUtil.random(DemoData.NAME_SUFFIX));
+        }
+//        IPrimitive<String> maidenName();
+
+        return name;
+    }
+
+    public static Person createPerson() {
+        Person person = EntityFactory.create(Person.class);
+
+        Name name = createName();
+        person.name().set(name);
+        person.homePhone().setValue(createPhone().getStringView());
+        person.mobilePhone().setValue(createPhone().getStringView());
+        person.workPhone().setValue(createPhone().getStringView());
+
+        String email = name.firstName().getStringView() + "." + name.lastName().getStringView() + "@" + RandomUtil.random(DemoData.EMAIL_DOMAINS);
+        person.email().setValue(createEmail(email).getStringView());
+
+        return person;
+    }
 
     public static Email createEmail(String emailAddress) {
         Email email = EntityFactory.create(Email.class);

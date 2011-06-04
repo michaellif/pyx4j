@@ -13,7 +13,9 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
@@ -21,4 +23,9 @@ abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
     protected BaseVistaDataPreloader() {
         DataGenerator.setRandomSeed(100);
     }
+
+    protected static void persist(IEntity entity) {
+        PersistenceServicesFactory.getPersistenceService().persist(entity);
+    }
+
 }

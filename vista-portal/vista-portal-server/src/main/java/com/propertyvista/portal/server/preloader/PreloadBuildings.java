@@ -51,11 +51,6 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(PreloadBuildings.class);
 
-    // private static String resourceFileName(String fileName) {
-    // return PreloadBuildings.class.getPackage().getName().replace('.', '/') +
-    // "/" + fileName;
-    // }
-
     @SuppressWarnings("unchecked")
     @Override
     public String delete() {
@@ -273,10 +268,6 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         }
         sb.append("\n");
         return sb.toString();
-    }
-
-    private static void persist(IEntity entity) {
-        PersistenceServicesFactory.getPersistenceService().persist(entity);
     }
 
     // Genric DTO -> O convertion:
