@@ -37,6 +37,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.common.domain.ref.City;
+import com.propertyvista.portal.client.decorators.CriteriaWidgetDecorator;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 

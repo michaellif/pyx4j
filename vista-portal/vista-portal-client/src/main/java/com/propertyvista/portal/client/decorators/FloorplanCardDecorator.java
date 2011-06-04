@@ -11,17 +11,15 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.decorators;
 
 import com.google.gwt.user.client.ui.Anchor;
 
-import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
-
-public class FloorplanCardDecorator extends BaseFolderItemViewerDecorator {
+public class FloorplanCardDecorator extends BasicCardDecorator {
 
     private final Anchor testIitem;
 
-    FloorplanCardDecorator() {
+    public FloorplanCardDecorator() {
         super();
         testIitem = new Anchor(i18n.tr("Test Item"));
         addMenuItem(testIitem);

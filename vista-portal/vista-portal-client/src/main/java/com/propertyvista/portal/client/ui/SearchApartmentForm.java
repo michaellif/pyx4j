@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
+import com.propertyvista.portal.client.decorators.CriteriaWidgetDecorator;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class SearchApartmentForm extends CEntityForm<PropertySearchCriteria> implements SearchApartmentView {

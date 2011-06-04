@@ -15,12 +15,21 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.client.decorators.FloorplanCardDecorator;
+import com.propertyvista.portal.client.decorators.PortalListDecorator;
+import com.propertyvista.portal.client.decorators.PortalMultiLineDecorator;
+import com.propertyvista.portal.domain.dto.AmenityDTO;
+import com.propertyvista.portal.domain.dto.FloorplanDTO;
+import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
+import com.propertyvista.portal.domain.dto.RangeDTO;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
@@ -31,20 +40,15 @@ import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.portal.domain.dto.AmenityDTO;
-import com.propertyvista.portal.domain.dto.FloorplanDTO;
-import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
-import com.propertyvista.portal.domain.dto.RangeDTO;
-
 public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implements ApartmentDetailsView {
 
     private ApartmentDetailsView.Presenter presenter;
 
+    private final DecorationData decor;
+
     public ApartmentDetailsForm() {
         super(PropertyDetailsDTO.class);
+        decor = new DecorationData(20, Unit.PCT, 80, Unit.PCT);
     }
 
     @Override
@@ -66,7 +70,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         container.add(new VistaWidgetDecorator(inject(proto().address(), new CEntityViewer<IAddress>() {
             @Override
             public IsWidget createContent(IAddress value) {
-                return formatAddress(value);
+                return new PortalMultiLineDecorator(value, decor, " ");
             }
         }), readOnlyDecor));
 
@@ -80,7 +84,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         container.add(new VistaWidgetDecorator(inject(proto().amenities(), new CEntityViewer<IList<AmenityDTO>>() {
             @Override
             public IsWidget createContent(IList<AmenityDTO> value) {
-                return listAmenities(value);
+                return new PortalListDecorator(value, "name", decor);
             }
         }), readOnlyDecor));
 
@@ -129,31 +133,35 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         };
     }
 
-    private SimplePanel formatAddress(IAddress address) {
-        SimplePanel container = new SimplePanel();
-        container.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+/*
+ * private SimplePanel formatAddress(IAddress address) {
+ * SimplePanel container = new SimplePanel();
+ * container.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+ * 
+ * StringBuffer addressString = new StringBuffer();
+ * addressString.append(address.street1().getStringView());
+ * if (!address.street2().isNull() && address.street2().getValue().trim().length() > 0) {
+ * addressString.append(address.street2().getStringView());
+ * }
+ * addressString.append(address.city().getStringView());
+ * addressString.append(address.province().code().getStringView());
+ * 
+ * container.add(new Label(addressString.toString()));
+ * return container;
+ * 
+ * }
+ */
 
-        StringBuffer addressString = new StringBuffer();
-        addressString.append(address.street1().getStringView());
-        if (!address.street2().isNull() && address.street2().getValue().trim().length() > 0) {
-            addressString.append(address.street2().getStringView());
-        }
-        addressString.append(address.city().getStringView());
-        addressString.append(address.province().code().getStringView());
-
-        container.add(new Label(addressString.toString()));
-        return container;
-
-    }
-
-    private VerticalPanel listAmenities(IList<AmenityDTO> amenities) {
-        VerticalPanel container = new VerticalPanel();
-        if (amenities != null)
-            for (AmenityDTO amenity : amenities)
-                container.add(new Label(amenity.name().getValue()));
-        return container;
-
-    }
+/*
+ * private VerticalPanel listAmenities(IList<AmenityDTO> amenities) {
+ * VerticalPanel container = new VerticalPanel();
+ * if (amenities != null)
+ * for (AmenityDTO amenity : amenities)
+ * container.add(new Label(amenity.name().getValue()));
+ * return container;
+ * 
+ * }
+ */
 
     private FlowPanel fillFloorplanCard(FloorplanDTO value) {
         FlowPanel card = new FlowPanel();
@@ -163,6 +171,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         imageHolder.setHeight("100%");
         imageHolder.setWidth("30%");
         imageHolder.getElement().getStyle().setFloat(Float.LEFT);
+        imageHolder.getElement().getStyle().setProperty("minHeight", "100px");
         imageHolder.add(new HTML("Image"));
         card.add(imageHolder);
 
