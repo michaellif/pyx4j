@@ -13,16 +13,22 @@
  */
 package com.propertyvista.portal.client.ui.decorations;
 
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 
 public class ApartmentCardDecorator extends BasicCardDecorator {
 
     private final Anchor mapIitem;
 
-    ApartmentCardDecorator() {
+    public ApartmentCardDecorator() {
         super();
         mapIitem = new Anchor(i18n.tr("Map"));
         addMenuItem(mapIitem);
+    }
+
+    public void addMapClickHandler(ClickHandler h) {
+        mapIitem.addClickHandler(h);
+
     }
 
 }

@@ -25,8 +25,10 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -41,7 +43,7 @@ public class BasicCardDecorator extends BaseFolderItemViewerDecorator {
 
     private final VerticalPanel container;
 
-    private final FlowPanel content;
+    private final SimplePanel content;
 
     private final FlowPanel menu;
 
@@ -49,10 +51,16 @@ public class BasicCardDecorator extends BaseFolderItemViewerDecorator {
 
     private final FlowPanel menuContainer;
 
+    private final SimplePanel header;
+
+    private final SimplePanel imageHolder;
+
+    private final FlowPanel contentHolder;
+
     protected static I18n i18n = I18nFactory.getI18n(BaseFolderItemViewerDecorator.class);
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Menu, MenuItem
+        Menu, MenuItem, Header, Content, Image
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -70,6 +78,17 @@ public class BasicCardDecorator extends BaseFolderItemViewerDecorator {
         menuContainer = new FlowPanel();
         menuContainer.setSize("100%", "20%");
         menuContainer.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Menu);
+
+        header = new SimplePanel();
+        header.setSize("100%", "15%");
+        header.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Header);
+
+        imageHolder = new SimplePanel();
+        imageHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Image);
+        imageHolder.setHeight("100%");
+        imageHolder.setWidth("30%");
+        imageHolder.getElement().getStyle().setFloat(Float.LEFT);
+        imageHolder.getElement().getStyle().setProperty("minHeight", "100px");
 
         SimplePanel menuPanel = new SimplePanel();
         menuPanel.setHeight("100%");
@@ -91,10 +110,17 @@ public class BasicCardDecorator extends BaseFolderItemViewerDecorator {
         viewDetailsPanel.add(viewDetailsItem);
         menuContainer.add(viewDetailsPanel);
 
-        content = new FlowPanel();
-        content.setSize("100%", "80%");
+        contentHolder = new FlowPanel();
+        contentHolder.setSize("100%", "65%");
+        content = new SimplePanel();
+        content.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content);
+        content.setSize("100%", "70%");
+        content.getElement().getStyle().setFloat(Float.RIGHT);
+        contentHolder.add(imageHolder);
+        contentHolder.add(content);
 
-        container.add(content);
+        container.add(header);
+        container.add(contentHolder);
         container.add(menuContainer);
 
         addDomHandler(new MouseOverHandler() {
@@ -118,8 +144,32 @@ public class BasicCardDecorator extends BaseFolderItemViewerDecorator {
 
     @Override
     public void setFolderItemContainer(Widget w) {
-        content.clear();
-        content.add(w);
+        contentHolder.clear();
+        contentHolder.add(w);
+    }
+
+    public void setCardContent(Widget w) {
+        content.setWidget(w);
+    }
+
+    public void setCardContent(IsWidget w) {
+        content.setWidget(w.asWidget());
+    }
+
+    public void setCardImage(Widget w) {
+        imageHolder.setWidget(w);
+    }
+
+    public void setCardImage(IsWidget w) {
+        imageHolder.setWidget(w.asWidget());
+    }
+
+    public void setCardHeader(Widget w) {
+        header.setWidget(w);
+    }
+
+    public void setCardHeader(IsWidget w) {
+        setCardHeader(w.asWidget());
     }
 
     public void addMenuItem(Anchor menuItem) {
@@ -128,9 +178,8 @@ public class BasicCardDecorator extends BaseFolderItemViewerDecorator {
 
     }
 
-    public void addClickHandler(ClickHandler h) {
-        viewDetailsItem.addClickHandler(h);
-
+    public HandlerRegistration addViewDetailsClickHandler(ClickHandler h) {
+        return viewDetailsItem.addClickHandler(h);
     }
 
 }

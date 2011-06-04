@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.domain.IAddress;
@@ -133,36 +132,6 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
         };
     }
-
-/*
- * private SimplePanel formatAddress(IAddress address) {
- * SimplePanel container = new SimplePanel();
- * container.getElement().getStyle().setFontWeight(FontWeight.BOLD);
- * 
- * StringBuffer addressString = new StringBuffer();
- * addressString.append(address.street1().getStringView());
- * if (!address.street2().isNull() && address.street2().getValue().trim().length() > 0) {
- * addressString.append(address.street2().getStringView());
- * }
- * addressString.append(address.city().getStringView());
- * addressString.append(address.province().code().getStringView());
- * 
- * container.add(new Label(addressString.toString()));
- * return container;
- * 
- * }
- */
-
-/*
- * private VerticalPanel listAmenities(IList<AmenityDTO> amenities) {
- * VerticalPanel container = new VerticalPanel();
- * if (amenities != null)
- * for (AmenityDTO amenity : amenities)
- * container.add(new Label(amenity.name().getValue()));
- * return container;
- * 
- * }
- */
 
     private FlowPanel fillFloorplanCard(FloorplanDTO value) {
         FlowPanel card = new FlowPanel();

@@ -13,16 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.decorations;
 
-import com.google.gwt.user.client.ui.Anchor;
 
 public class FloorplanCardDecorator extends BasicCardDecorator {
 
-    private final Anchor testIitem;
-
     public FloorplanCardDecorator() {
         super();
-        testIitem = new Anchor(i18n.tr("Test Item"));
-        addMenuItem(testIitem);
     }
 
 }

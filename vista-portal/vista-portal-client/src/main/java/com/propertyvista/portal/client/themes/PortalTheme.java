@@ -304,11 +304,11 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("padding-bottom", "10px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Search));
+        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Left));
         style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.SearchResult));
+        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Center));
         style.addProperty("float", "right");
         addStyle(style);
 
