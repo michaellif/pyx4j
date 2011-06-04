@@ -33,6 +33,8 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
+import com.pyx4j.entity.test.shared.domain.Status;
 
 public class EntityArgsConverterTest extends TestCase {
 
@@ -55,11 +57,14 @@ public class EntityArgsConverterTest extends TestCase {
         employee.rating().setValue(5);
         employee.salary().setValue(22.5);
 
+        employee.employmentStatus().setValue(EmploymentStatus.PART_TIME);
+        employee.accessStatus().setValue(Status.SUSPENDED);
+
         employee.department().name().setValue(DEPARTMENT_NAME);
 
         Map<String, String> args = EntityArgsConverter.convertToArgs(employee);
 
-        log.info(args.toString());
+        log.debug(args.toString());
 
         assertEquals(employee.getValue().size(), args.size());
         assertEquals(employee.firstName().getValue(), args.get(employee.firstName().getFieldName()));
@@ -68,6 +73,10 @@ public class EntityArgsConverterTest extends TestCase {
         assertEquals(employee.holidays().getValue().toString(), args.get(employee.holidays().getFieldName()));
         assertEquals(employee.rating().getValue().toString(), args.get(employee.rating().getFieldName()));
         assertEquals(employee.salary().getValue().toString(), args.get(employee.salary().getFieldName()));
+
+        assertEquals(employee.employmentStatus().getValue().name(), args.get(employee.employmentStatus().getFieldName()));
+        assertEquals(employee.accessStatus().getValue().name(), args.get(employee.accessStatus().getFieldName()));
+
         assertEquals(employee.department().name().getValue().toString(),
                 args.get(EntityArgsConverter.convertPathToDotNotation(employee.department().name().getPath())));
 
@@ -85,11 +94,15 @@ public class EntityArgsConverterTest extends TestCase {
         args.put(proto.holidays().getFieldName(), "22");
         args.put(proto.rating().getFieldName(), "5");
         args.put(proto.salary().getFieldName(), "22.5");
+
+        args.put(proto.employmentStatus().getFieldName(), EmploymentStatus.PART_TIME.name());
+        args.put(proto.accessStatus().getFieldName(), Status.SUSPENDED.name());
+
         args.put(EntityArgsConverter.convertPathToDotNotation(proto.department().name().getPath()), DEPARTMENT_NAME);
 
         Employee employee = EntityArgsConverter.createFromArgs(Employee.class, args);
 
-        log.info(employee.toString());
+        log.debug(employee.toString());
 
         assertEquals(employee.firstName().getValue(), FIRST_NAME);
         assertEquals(employee.from().getValue(), FROM);
@@ -97,6 +110,10 @@ public class EntityArgsConverterTest extends TestCase {
         assertEquals((long) employee.holidays().getValue(), 22L);
         assertEquals((int) employee.rating().getValue(), 5);
         assertEquals((double) employee.salary().getValue(), 22.5);
+
+        assertEquals(employee.employmentStatus().getValue(), EmploymentStatus.PART_TIME);
+        assertEquals(employee.accessStatus().getValue(), Status.SUSPENDED);
+
         assertEquals(employee.department().name().getValue(), DEPARTMENT_NAME);
 
     }

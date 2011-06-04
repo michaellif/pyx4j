@@ -53,6 +53,8 @@ public class EntityArgsConverter {
                         map.put(memberName, TimeUtils.simpleFormat((Date) entity.getMember(memberName).getValue(), DATE_TIME_FORMAT));
                     } else if (memberMeta.getValueClass().equals(LogicalDate.class)) {
                         map.put(memberName, TimeUtils.simpleFormat((Date) entity.getMember(memberName).getValue(), DATE_FORMAT));
+                    } else if (memberMeta.getValueClass().isEnum()) {
+                        map.put(memberName, ((Enum<?>) entity.getMember(memberName).getValue()).name());
                     } else {
                         map.put(memberName, entity.getMember(memberName).getValue().toString());
                     }
