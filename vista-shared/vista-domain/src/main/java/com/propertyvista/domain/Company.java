@@ -14,12 +14,14 @@
 package com.propertyvista.domain;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Company extends IEntity {
 
+    @ToString
     IPrimitive<String> name();
 
     IList<Address> addresses();

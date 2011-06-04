@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Person extends IEntity {
 
-    @ToString(index = 1)
+    @ToString
     @BusinessEqualValue
     @EmbeddedEntity
     Name name();

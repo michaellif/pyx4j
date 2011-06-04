@@ -456,7 +456,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE60);
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        style.addProperty("margin", "4px 0 0 2px");
+        style.addProperty("margin", "3px 0 0 2px");
         style.addProperty("width", "100%");
         addStyle(style);
 
