@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.common.domain.ref.Province;
@@ -25,6 +26,7 @@ import com.propertyvista.common.domain.ref.Province;
 @Transient
 public interface PropertySearchCriteria extends IEntity {
 
+    @Translatable
     enum BedroomType {
 
         all,
@@ -45,6 +47,7 @@ public interface PropertySearchCriteria extends IEntity {
         }
     }
 
+    @Translatable
     enum BathroomType {
 
         all,
@@ -64,6 +67,7 @@ public interface PropertySearchCriteria extends IEntity {
     // TODO Use real range, the price may be different in different countries
     @Deprecated
     enum PriceRangeType {
+
         all,
 
         under600,
