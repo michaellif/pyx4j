@@ -54,6 +54,8 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
 
     @Override
     public void retrievePropertyList(AsyncCallback<Vector<PropertyDTO>> callback, PropertySearchCriteria criteria) {
+        //TODO move this all to special table for starte retrival
+
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
         if ((criteria.city().name().isNull())) {
             dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), criteria.city().name().getValue()));
@@ -61,10 +63,64 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
 
         Vector<PropertyDTO> properties = new Vector<PropertyDTO>();
-        for (Building b : buildings) {
-            properties.add(Converter.convert(b));
+        for (Building building : buildings) {
+
+            //In memory filters
+            EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
+            floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
+            List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
+
+            if (!criteria.numOfBeds().isNull() || !criteria.numOfBath().isNull() || !criteria.price().isNull()) {
+                boolean match = true;
+                for (Floorplan fp : floorplans) {
+                    if (matchCriteria(fp, criteria)) {
+                        match = true;
+                        break;
+                    }
+                }
+                if (!match) {
+                    continue;
+                }
+            }
+
+            properties.add(Converter.convert(building, floorplans));
         }
         callback.onSuccess(properties);
+    }
+
+    private boolean matchCriteria(Floorplan floorplan, PropertySearchCriteria criteria) {
+        if (!criteria.numOfBeds().isNull()) {
+            switch (criteria.numOfBeds().getValue()) {
+            case all:
+                break;
+            case oneBedroom:
+                return floorplan.bedrooms().getValue() == 1;
+            case twoBedroom:
+                return floorplan.bedrooms().getValue() == 2;
+            case threeBedroom:
+                return floorplan.bedrooms().getValue() == 3;
+            case fourBedroom:
+                return floorplan.bedrooms().getValue() == 4;
+            case fiveBedroomAndMore:
+                return floorplan.bedrooms().getValue() >= 5;
+            }
+        }
+        if (!criteria.numOfBath().isNull()) {
+            switch (criteria.numOfBath().getValue()) {
+            case all:
+                break;
+            case oneBath:
+                return floorplan.bathrooms().getValue() == 1;
+            case twoBath:
+                return floorplan.bathrooms().getValue() == 2;
+            case threeBathAndMore:
+                return floorplan.bathrooms().getValue() >= 3;
+            }
+        }
+        if (!criteria.price().isNull()) {
+
+        }
+        return false;
     }
 
     @Override
@@ -77,12 +133,13 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     public void retrievePropertyDetails(AsyncCallback<PropertyDetailsDTO> callback, Key propertyId) {
         Building building = PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, propertyId);
         PropertyDetailsDTO dto = EntityFactory.create(PropertyDetailsDTO.class);
-        dto.set(Converter.convert(building));
 
         // find floor plans
         EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
         floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
         List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
+
+        dto.set(Converter.convert(building, floorplans));
 
         for (Floorplan floorplan : floorplans) {
             dto.floorplans().add(Converter.convert(floorplan));

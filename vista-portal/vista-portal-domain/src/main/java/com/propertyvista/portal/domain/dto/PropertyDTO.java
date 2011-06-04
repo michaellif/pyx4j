@@ -24,6 +24,7 @@ import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.common.domain.IAddress;
 
+//VladS Notes:  consider having this a table for performance
 @Transient
 public interface PropertyDTO extends IEntity {
 
@@ -34,8 +35,8 @@ public interface PropertyDTO extends IEntity {
     @Caption(name = "Location")
     IPrimitive<GeoPoint> location();
 
-    // List of Floorplans
-    IPrimitiveSet<String> size();
+    @Caption(name = "Size")
+    IPrimitiveSet<String> floorplanNames();
 
     IList<AmenityDTO> amenities();
 }

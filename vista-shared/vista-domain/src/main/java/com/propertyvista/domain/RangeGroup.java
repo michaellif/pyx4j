@@ -13,10 +13,12 @@
  */
 package com.propertyvista.domain;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@EmbeddedEntity
 public interface RangeGroup extends IEntity {
 
     IPrimitive<Double> average();

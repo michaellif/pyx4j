@@ -16,6 +16,9 @@ package com.propertyvista.domain.property.asset.unit;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+/**
+ * @see com.propertyvista.portal.rpc.portal.PropertySearchCriteria.BedroomType
+ */
 @Translatable
 public enum AptUnitType {
 

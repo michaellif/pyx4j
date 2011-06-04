@@ -132,7 +132,7 @@ public class PropertyMapViewImpl extends SimplePanel implements PropertyMapView 
             getCellFormatter().addStyleName(idx, col, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
             col++;
 
-            setHTML(idx, col, formatStringSet(property.size().getValue()));
+            setHTML(idx, col, formatStringSet(property.floorplanNames().getValue()));
             getCellFormatter().addStyleName(idx, col, DEFAULT_STYLE_PREFIX + StyleSuffix.CellSize.name());
             getCellFormatter().addStyleName(idx, col, DEFAULT_STYLE_PREFIX + StyleSuffix.Cell.name());
             col++;

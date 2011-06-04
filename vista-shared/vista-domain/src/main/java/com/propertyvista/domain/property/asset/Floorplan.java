@@ -13,7 +13,9 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
@@ -38,6 +40,9 @@ public interface Floorplan extends IEntity {
     public enum Type {
 
 // TODO: ask Artur which types goes here:
+
+        // VladS: Subset of AptUnitType ?   loft, studio, bachelor, oneBedroom,
+        loft, studio, bachelor, appartement,
 
         other;
 
@@ -70,8 +75,20 @@ public interface Floorplan extends IEntity {
 
     IPrimitive<Integer> floorCount();
 
-    IPrimitive<Integer> totalRoomCount();
+    //V.S. Removed to add bedrooms() and bathrooms()
+    //IPrimitive<Integer> totalRoomCount();
 
+    @Format("#0.#")
+    @Caption(name = "Beds")
+    IPrimitive<Double> bedrooms();
+
+    @Format("#0.#")
+    @Caption(name = "Baths")
+    IPrimitive<Double> bathrooms();
+
+    /**
+     * Min-Max value of square ft. size of unit
+     */
     RangeGroup squareFeet();
 
     RangeGroup marketRent();
@@ -96,12 +113,14 @@ public interface Floorplan extends IEntity {
 
     /**
      * Min value of square ft. size of unit
+     * TODO use RangeGroup squareFeet()
      */
     @Deprecated
     IPrimitive<Integer> minArea();
 
     /**
      * Max value of square ft. size of unit
+     * TODO use RangeGroup squareFeet()
      */
     @Deprecated
     IPrimitive<Integer> maxArea();

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.ptapp.util;
 
+import java.util.List;
+
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -82,16 +84,16 @@ public class Converter {
         return to;
     }
 
-    public static PropertyDTO convert(Building from) {
+    public static PropertyDTO convert(Building from, List<Floorplan> floorplans) {
         PropertyDTO to = EntityFactory.create(PropertyDTO.class);
         to.id().set(from.id());
         to.address().street1().set(from.info().address().streetName());
         to.location().setValue(from.info().address().location().getValue());
 
         // List of Floorplans
-        //TODO get this from building
-        to.size().add("3 Bedroom");
-        to.size().add("Bachelor");
+        for (Floorplan fp : floorplans) {
+            to.floorplanNames().add(fp.getStringView());
+        }
 
         // List of amenities
         EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
@@ -99,7 +101,7 @@ public class Converter {
                 from));
         for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
             AmenityDTO amntDTO = EntityFactory.create(AmenityDTO.class);
-            amntDTO.name().setValue(amenity.toString());
+            amntDTO.name().setValue(amenity.getStringView());
             to.amenities().add(amntDTO);
         }
 

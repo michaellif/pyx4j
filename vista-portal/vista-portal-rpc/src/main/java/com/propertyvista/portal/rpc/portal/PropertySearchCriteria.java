@@ -61,6 +61,8 @@ public interface PropertySearchCriteria extends IEntity {
         }
     }
 
+    // TODO Use real range, the price may be different in different countries
+    @Deprecated
     enum PriceRangeType {
         all,
 
