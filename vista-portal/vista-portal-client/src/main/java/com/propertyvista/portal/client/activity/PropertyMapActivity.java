@@ -13,9 +13,7 @@
  */
 package com.propertyvista.portal.client.activity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -33,6 +31,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapView;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
@@ -57,19 +56,21 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
-        List<PropertyDTO> properties = new ArrayList<PropertyDTO>();
+
+        PropertyListDTO properties = EntityFactory.create(PropertyListDTO.class);
+
         {
             PropertyDTO property = EntityFactory.create(PropertyDTO.class);
             property.address().street1().setValue("320 Avenue Road");
             property.location().setValue(new GeoPoint(43.697665, -79.402313));
             property.id().setValue(new Key(11));
-            properties.add(property);
+            properties.properties().add(property);
 
             property = EntityFactory.create(PropertyDTO.class);
             property.address().street1().setValue("1000 Yonge Street");
             property.location().setValue(new GeoPoint(43.675599, -79.389042));
             property.id().setValue(new Key(12));
-            properties.add(property);
+            properties.properties().add(property);
 
         }
         view.populate(criteria, properties);

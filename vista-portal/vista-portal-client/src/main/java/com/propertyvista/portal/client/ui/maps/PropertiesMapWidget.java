@@ -14,7 +14,6 @@
 package com.propertyvista.portal.client.ui.maps;
 
 import java.util.HashMap;
-import java.util.List;
 
 import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
@@ -35,12 +34,13 @@ import com.pyx4j.gwt.geo.MapUtils;
 
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 public class PropertiesMapWidget extends AbstractMapWidget {
 
     private final HashMap<PropertyDTO, Marker> markers = new HashMap<PropertyDTO, Marker>();
 
-    private List<PropertyDTO> properties;
+    private PropertyListDTO propertyList;
 
     private GeoPoint geoPoint;
 
@@ -57,8 +57,8 @@ public class PropertiesMapWidget extends AbstractMapWidget {
 
         super.mapsLoaded();
 
-        if (properties != null) {
-            populate(properties);
+        if (!propertyList.properties().isNull()) {
+            populate(propertyList);
         }
 
         if (geoPoint != null) {
@@ -67,15 +67,15 @@ public class PropertiesMapWidget extends AbstractMapWidget {
 
     }
 
-    public void populate(List<PropertyDTO> properties) {
-        this.properties = properties;
+    public void populate(PropertyListDTO propertyList) {
+        this.propertyList = propertyList;
 
         if (isMapLoadComplete()) {
             for (Marker marker : markers.values()) {
                 getMap().removeOverlay(marker);
             }
             markers.clear();
-            for (PropertyDTO property : properties) {
+            for (PropertyDTO property : propertyList.properties()) {
                 Marker marker = createMarker(property);
                 if (marker != null) {
                     getMap().addOverlay(marker);
