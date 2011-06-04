@@ -21,10 +21,11 @@
 package com.pyx4j.entity.client.ui.flex.viewer;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
-public interface IFolderItemViewerDecorator extends IsWidget {
+import com.pyx4j.entity.shared.IEntity;
 
-    public void setFolderItemContainer(Widget w);
+public interface IFolderItemViewerDecorator<E extends IEntity> extends IsWidget {
+
+    void setFolderItem(CEntityFolderItemViewer<E> viewer);
 
 }

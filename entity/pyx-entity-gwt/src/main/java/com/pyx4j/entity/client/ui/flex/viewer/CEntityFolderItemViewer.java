@@ -41,12 +41,16 @@ public abstract class CEntityFolderItemViewer<E extends IEntity> extends CEntity
 
     public void setFolderItemDecorator(IFolderItemViewerDecorator folderItemDecorator) {
         asWidget().setWidget(folderItemDecorator);
-        folderItemDecorator.setFolderItemContainer(container);
+        folderItemDecorator.setFolderItem(this);
     }
 
     @Override
     protected void setContent(IsWidget widget) {
         container.setWidget(widget);
+    }
+
+    public SimplePanel getContainer() {
+        return container;
     }
 
     public void setFirst(boolean first) {

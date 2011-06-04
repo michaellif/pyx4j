@@ -21,11 +21,16 @@
 package com.pyx4j.entity.client.ui.flex.viewer;
 
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
-public class BaseFolderItemViewerDecorator extends SimplePanel implements IFolderItemViewerDecorator {
+import com.pyx4j.entity.shared.IEntity;
 
-    public void setFolderItemContainer(Widget w) {
-        setWidget(w);
+public class BaseFolderItemViewerDecorator<E extends IEntity> extends SimplePanel implements IFolderItemViewerDecorator<E> {
+
+    private CEntityFolderItemViewer<E> viewer;
+
+    @Override
+    public void setFolderItem(CEntityFolderItemViewer<E> viewer) {
+        this.viewer = viewer;
+        setWidget(viewer.getContainer());
     }
 }
