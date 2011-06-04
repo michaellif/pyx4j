@@ -22,13 +22,12 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
-import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapView;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
@@ -57,30 +56,30 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
 
-//        PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyDetailsDTO>() {
-//            @Override
-//            public void onSuccess(PropertyDetailsDTO property) {
-//                
-//            }
-//        }, criteria);
+        PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
+            @Override
+            public void onSuccess(PropertyListDTO properties) {
+                view.populate(criteria, properties);
+            }
+        }, criteria);
 
-        PropertyListDTO properties = EntityFactory.create(PropertyListDTO.class);
+//        PropertyListDTO properties = EntityFactory.create(PropertyListDTO.class);
+//
+//        {
+//            PropertyDTO property = EntityFactory.create(PropertyDTO.class);
+//            property.address().street1().setValue("320 Avenue Road");
+//            property.location().setValue(new GeoPoint(43.697665, -79.402313));
+//            property.id().setValue(new Key(11));
+//            properties.properties().add(property);
+//
+//            property = EntityFactory.create(PropertyDTO.class);
+//            property.address().street1().setValue("1000 Yonge Street");
+//            property.location().setValue(new GeoPoint(43.675599, -79.389042));
+//            property.id().setValue(new Key(12));
+//            properties.properties().add(property);
+//
+//        }
 
-        {
-            PropertyDTO property = EntityFactory.create(PropertyDTO.class);
-            property.address().street1().setValue("320 Avenue Road");
-            property.location().setValue(new GeoPoint(43.697665, -79.402313));
-            property.id().setValue(new Key(11));
-            properties.properties().add(property);
-
-            property = EntityFactory.create(PropertyDTO.class);
-            property.address().street1().setValue("1000 Yonge Street");
-            property.location().setValue(new GeoPoint(43.675599, -79.389042));
-            property.id().setValue(new Key(12));
-            properties.properties().add(property);
-
-        }
-        view.populate(criteria, properties);
     }
 
     @Override
