@@ -62,6 +62,8 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria);
 
+    public <T extends IEntity> void retrieve(Iterable<T> entityIterable);
+
     public <T extends IEntity> Map<Key, T> retrieve(Class<T> entityClass, Iterable<Key> primaryKeys);
 
     /**

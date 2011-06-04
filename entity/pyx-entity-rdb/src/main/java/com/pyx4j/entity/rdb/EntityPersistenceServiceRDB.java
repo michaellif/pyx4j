@@ -554,6 +554,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
+    public <T extends IEntity> void retrieve(Iterable<T> entityIterable) {
+        //TODO proper impl
+        for (T e : entityIterable) {
+            retrieve(e);
+        }
+    }
+
+    @Override
     public <T extends IEntity> Map<Key, T> retrieve(Class<T> entityClass, Iterable<Key> primaryKeys) {
         Connection connection = null;
         Map<Key, T> entities = new HashMap<Key, T>();

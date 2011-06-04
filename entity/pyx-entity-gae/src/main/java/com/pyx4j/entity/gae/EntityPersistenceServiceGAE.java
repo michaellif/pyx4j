@@ -1154,6 +1154,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
+    public <T extends IEntity> void retrieve(Iterable<T> entityIterable) {
+        //TODO implement this
+        throw new Error("implement this");
+    }
+
+    @Override
     public <T extends IEntity> Map<com.pyx4j.commons.Key, T> retrieve(final Class<T> entityClass, Iterable<com.pyx4j.commons.Key> primaryKeys) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
