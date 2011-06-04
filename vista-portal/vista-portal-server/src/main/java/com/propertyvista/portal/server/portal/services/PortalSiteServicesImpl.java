@@ -32,6 +32,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.server.ptapp.util.Converter;
 
@@ -46,11 +47,18 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
 
     @Override
     public void retrievePropertyList(AsyncCallback<Vector<PropertyDTO>> callback, City city) {
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        if ((city != null) && (!city.name().isNull())) {
-            criteria.add(PropertyCriterion.eq(criteria.proto().info().address().city(), city.name().getValue()));
+        PropertySearchCriteria criteria = EntityFactory.create(PropertySearchCriteria.class);
+        criteria.city().set(city);
+        retrievePropertyList(callback, criteria);
+    }
+
+    @Override
+    public void retrievePropertyList(AsyncCallback<Vector<PropertyDTO>> callback, PropertySearchCriteria criteria) {
+        EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
+        if ((criteria.city().name().isNull())) {
+            dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), criteria.city().name().getValue()));
         }
-        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(criteria);
+        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
 
         Vector<PropertyDTO> properties = new Vector<PropertyDTO>();
         for (Building b : buildings) {
