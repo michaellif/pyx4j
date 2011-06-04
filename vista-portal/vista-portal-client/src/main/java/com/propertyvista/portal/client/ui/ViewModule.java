@@ -19,6 +19,14 @@ import com.google.inject.Singleton;
 import com.pyx4j.widgets.client.style.Theme;
 
 import com.propertyvista.portal.client.themes.GainsboroTheme;
+import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsView;
+import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsViewImpl;
+import com.propertyvista.portal.client.ui.searchapt.PropertyMapView;
+import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
+import com.propertyvista.portal.client.ui.searchapt.SearchApartmentView;
+import com.propertyvista.portal.client.ui.searchapt.SearchApartmentViewImpl;
+import com.propertyvista.portal.client.ui.searchapt.UnitDetailsView;
+import com.propertyvista.portal.client.ui.searchapt.UnitDetailsViewImpl;
 
 public class ViewModule extends AbstractGinModule {
 

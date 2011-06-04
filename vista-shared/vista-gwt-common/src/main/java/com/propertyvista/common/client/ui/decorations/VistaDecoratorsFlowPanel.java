@@ -50,7 +50,7 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
     }
 
     public void add(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
-        VistaWidgetDecorator.DecorationData decorData = new VistaWidgetDecorator.DecorationData();
+        DecorationData decorData = new DecorationData();
         decorData.componentWidth = componentWidth;
         decorData.componentCaption = componentCaption;
         decorData.labelWidth = labelWidth;

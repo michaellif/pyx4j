@@ -7,26 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 19, 2011
+ * Created on May 14, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.ui.searchapt;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class SearchApartmentViewImpl extends SimplePanel implements SearchApartmentView {
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
 
-    SearchApartmentForm form;
+public interface UnitDetailsView extends IsWidget {
 
-    public SearchApartmentViewImpl() {
-        form = new SearchApartmentForm();
-        setWidget(form.createContent());
+    public void setPresenter(Presenter presenter);
+
+    void populate(AptUnitDTO unit);
+
+    public interface Presenter {
+
+        public void apply();
+
+        public void inquiry();
+
     }
-
-    @Override
-    public void setPresenter(Presenter presenter) {
-        form.setPresenter(presenter);
-    }
-
 }

@@ -7,27 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 19, 2011
+ * Created on May 14, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.ui.searchapt;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.domain.dto.AptUnitDTO;
+import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
-import com.pyx4j.entity.rpc.GeoCriteria;
+public interface ApartmentDetailsView extends IsWidget {
 
-public interface SearchApartmentView extends IsWidget {
+    void setPresenter(Presenter presenter);
 
-    public void setPresenter(Presenter presenter);
+    void populate(PropertyDetailsDTO property);
 
-    public interface Presenter {
+    interface Presenter {
 
-        public void goToPropertyMap(PropertySearchCriteria searchCriteria);
+        public void goToUnitDetails(AptUnitDTO unit);
 
-        public void goToPropertyMap(GeoCriteria geoCriteria);
+        public void navigTo(Place place);
 
     }
-
 }

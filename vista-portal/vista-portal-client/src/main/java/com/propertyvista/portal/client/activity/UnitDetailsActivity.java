@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.propertyvista.portal.client.ui.UnitDetailsView;
+import com.propertyvista.portal.client.ui.searchapt.UnitDetailsView;
 
 public class UnitDetailsActivity extends AbstractActivity implements UnitDetailsView.Presenter {
 

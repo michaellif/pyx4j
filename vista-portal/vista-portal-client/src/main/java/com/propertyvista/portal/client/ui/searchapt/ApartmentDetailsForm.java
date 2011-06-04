@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.ui.searchapt;
 
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -20,12 +20,13 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+
+import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.portal.client.decorators.FloorplanCardDecorator;
-import com.propertyvista.portal.client.decorators.PortalListDecorator;
-import com.propertyvista.portal.client.decorators.PortalMultiLineDecorator;
+import com.propertyvista.portal.client.ui.decorations.FloorplanCardDecorator;
+import com.propertyvista.portal.client.ui.decorations.PortalListDecorator;
+import com.propertyvista.portal.client.ui.decorations.PortalMultiLineDecorator;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;

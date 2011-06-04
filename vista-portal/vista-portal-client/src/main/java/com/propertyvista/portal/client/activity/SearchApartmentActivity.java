@@ -22,7 +22,7 @@ import com.google.inject.Inject;
 import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.client.ui.SearchApartmentView;
+import com.propertyvista.portal.client.ui.searchapt.SearchApartmentView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 

@@ -59,11 +59,11 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.common.domain.ref.Country;
@@ -151,7 +151,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         main.add(new VistaHeaderDecorator(proto().legalQuestions()));
 
-        VistaWidgetDecorator.DecorationData decor = new VistaWidgetDecorator.DecorationData(43d, HasHorizontalAlignment.ALIGN_LEFT, 8);
+        DecorationData decor = new DecorationData(43d, HasHorizontalAlignment.ALIGN_LEFT, 8);
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForRent()), decor));
         main.add(new VistaLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForDamages()), decor));

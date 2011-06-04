@@ -23,13 +23,16 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.PortalSite;
-import com.propertyvista.portal.client.ui.ApartmentDetailsView;
+import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsView;
+import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
+import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
@@ -59,34 +62,27 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
 
             @Override
             public void onSuccess(PropertyDetailsDTO property) {
+                AmenityDTO amenity = EntityFactory.create(AmenityDTO.class);
+                amenity.name().setValue("Pool");
+                property.amenities().add(amenity);
+                amenity = EntityFactory.create(AmenityDTO.class);
+                amenity.name().setValue("Somthing else");
+                property.amenities().add(amenity);
+
+                FloorplanDTO floorplan = EntityFactory.create(FloorplanDTO.class);
+                floorplan.name().setValue("floorplan1");
+                floorplan.area().setValue(22);
+                property.floorplans().add(floorplan);
+                floorplan = EntityFactory.create(FloorplanDTO.class);
+                floorplan.name().setValue("floorplan2");
+                floorplan.area().setValue(33);
+                property.floorplans().add(floorplan);
+
                 view.populate(property);
             }
 
         }, new Key(propertyId));
 
-//        PropertyDetailsDTO property = EntityFactory.create(PropertyDetailsDTO.class);
-//        property.address().street1().setValue("320 Avenue Road");
-//        property.address().city().setValue("Toronto");
-//        property.location().setValue(new GeoPoint(43.697665, -79.402313));
-//        property.price().setValue(1700.00);
-//
-//        AmenityDTO amenity = EntityFactory.create(AmenityDTO.class);
-//        amenity.name().setValue("Pool");
-//        property.amenities().add(amenity);
-//        amenity = EntityFactory.create(AmenityDTO.class);
-//        amenity.name().setValue("Somthing else");
-//        property.amenities().add(amenity);
-//
-//        FloorplanDTO floorplan = EntityFactory.create(FloorplanDTO.class);
-//        floorplan.name().setValue("floorplan1");
-//        floorplan.area().setValue(22);
-//        property.floorplans().add(floorplan);
-//        floorplan = EntityFactory.create(FloorplanDTO.class);
-//        floorplan.name().setValue("floorplan2");
-//        floorplan.area().setValue(33);
-//        property.floorplans().add(floorplan);
-//
-//        view.populate(property);
     }
 
     @Override

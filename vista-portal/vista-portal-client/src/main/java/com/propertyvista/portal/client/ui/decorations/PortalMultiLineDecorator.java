@@ -11,14 +11,15 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.decorators;
+package com.propertyvista.portal.client.ui.decorations;
 
 import java.util.Collection;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
+
+import com.propertyvista.common.client.ui.decorations.DecorationData;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.widgets.client.style.IStyleSuffix;

@@ -29,7 +29,7 @@ import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.client.ui.PropertyMapView;
+import com.propertyvista.portal.client.ui.searchapt.PropertyMapView;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;

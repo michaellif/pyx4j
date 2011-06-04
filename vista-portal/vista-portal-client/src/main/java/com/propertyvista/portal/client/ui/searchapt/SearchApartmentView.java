@@ -7,22 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 3, 2011
+ * Created on May 19, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.decorators;
+package com.propertyvista.portal.client.ui.searchapt;
 
-import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
-public class ApartmentCardDecorator extends BasicCardDecorator {
+import com.pyx4j.entity.rpc.GeoCriteria;
 
-    private final Anchor mapIitem;
+public interface SearchApartmentView extends IsWidget {
 
-    ApartmentCardDecorator() {
-        super();
-        mapIitem = new Anchor(i18n.tr("Map"));
-        addMenuItem(mapIitem);
+    public void setPresenter(Presenter presenter);
+
+    public interface Presenter {
+
+        public void goToPropertyMap(PropertySearchCriteria searchCriteria);
+
+        public void goToPropertyMap(GeoCriteria geoCriteria);
+
     }
 
 }

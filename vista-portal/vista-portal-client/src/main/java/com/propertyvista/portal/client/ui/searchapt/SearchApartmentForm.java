@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.ui.searchapt;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-import com.propertyvista.portal.client.decorators.CriteriaWidgetDecorator;
+import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class SearchApartmentForm extends CEntityForm<PropertySearchCriteria> implements SearchApartmentView {

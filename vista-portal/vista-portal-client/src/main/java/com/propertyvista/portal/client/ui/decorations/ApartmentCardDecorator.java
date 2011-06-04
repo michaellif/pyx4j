@@ -7,27 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
+ * Created on Jun 3, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.ui.decorations;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Anchor;
 
-import com.propertyvista.portal.domain.dto.AptUnitDTO;
+public class ApartmentCardDecorator extends BasicCardDecorator {
 
-public interface UnitDetailsView extends IsWidget {
+    private final Anchor mapIitem;
 
-    public void setPresenter(Presenter presenter);
-
-    void populate(AptUnitDTO unit);
-
-    public interface Presenter {
-
-        public void apply();
-
-        public void inquiry();
-
+    ApartmentCardDecorator() {
+        super();
+        mapIitem = new Anchor(i18n.tr("Map"));
+        addMenuItem(mapIitem);
     }
+
 }

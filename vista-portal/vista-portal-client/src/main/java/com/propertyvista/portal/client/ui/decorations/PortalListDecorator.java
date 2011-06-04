@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.decorators;
+package com.propertyvista.portal.client.ui.decorations;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Float;
@@ -19,11 +19,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.DecorationData;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.common.client.ui.decorations.DecorationData;
 
 public class PortalListDecorator extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "PortalListDecorator";
@@ -41,13 +42,14 @@ public class PortalListDecorator extends FlowPanel {
         String caption = list.getMeta().getCaption();
         SimplePanel captionHolder = null;
 
-        if (caption != null && !caption.isEmpty()) {
+        if (caption != null && !caption.trim().isEmpty()) {
             captionHolder = new SimplePanel();
             captionHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
             Style captionHolderStyle = captionHolder.getElement().getStyle();
             captionHolder.setHeight("100%");
-            if (decorator.labelWidth != 0)
+            if (decorator.labelWidth != 0) {
                 captionHolderStyle.setWidth(decorator.labelWidth, decorator.labelUnit);
+            }
             captionHolderStyle.setFloat(Float.LEFT);
             Label lbl = new Label(caption);
             lbl.getElement().getStyle().setVerticalAlign(decorator.labelVerticalAlignment);

@@ -7,22 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 3, 2011
+ * Created on May 19, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.decorators;
+package com.propertyvista.portal.client.ui.searchapt;
 
-import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public class FloorplanCardDecorator extends BasicCardDecorator {
+public class SearchApartmentViewImpl extends SimplePanel implements SearchApartmentView {
 
-    private final Anchor testIitem;
+    SearchApartmentForm form;
 
-    public FloorplanCardDecorator() {
-        super();
-        testIitem = new Anchor(i18n.tr("Test Item"));
-        addMenuItem(testIitem);
+    public SearchApartmentViewImpl() {
+        form = new SearchApartmentForm();
+        setWidget(form.createContent());
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        form.setPresenter(presenter);
     }
 
 }
