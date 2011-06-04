@@ -11,7 +11,7 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.decorations;
+package com.propertyvista.portal.client.ui.searchapt;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
@@ -37,7 +37,7 @@ import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class BasicCardDecorator extends BaseFolderItemViewerDecorator {
+public class Card extends BaseFolderItemViewerDecorator {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_BaseFolderItemViewerDecorator";
 
@@ -67,7 +67,7 @@ public class BasicCardDecorator extends BaseFolderItemViewerDecorator {
         hover
     }
 
-    public BasicCardDecorator() {
+    public Card() {
 
         setStyleName(DEFAULT_STYLE_PREFIX);
         setSize("100%", "100%");

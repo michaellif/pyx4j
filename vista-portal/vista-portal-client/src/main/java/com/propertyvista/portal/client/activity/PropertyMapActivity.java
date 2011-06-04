@@ -57,6 +57,13 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
 
+//        PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyDetailsDTO>() {
+//            @Override
+//            public void onSuccess(PropertyDetailsDTO property) {
+//                
+//            }
+//        }, criteria);
+
         PropertyListDTO properties = EntityFactory.create(PropertyListDTO.class);
 
         {

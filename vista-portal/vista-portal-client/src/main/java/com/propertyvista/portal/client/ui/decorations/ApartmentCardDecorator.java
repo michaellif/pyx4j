@@ -16,7 +16,9 @@ package com.propertyvista.portal.client.ui.decorations;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 
-public class ApartmentCardDecorator extends BasicCardDecorator {
+import com.propertyvista.portal.client.ui.searchapt.Card;
+
+public class ApartmentCardDecorator extends Card {
 
     private final Anchor mapIitem;
 

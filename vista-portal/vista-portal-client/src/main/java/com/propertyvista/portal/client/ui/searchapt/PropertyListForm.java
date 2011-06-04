@@ -26,7 +26,7 @@ import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
 
-import com.propertyvista.portal.client.ui.decorations.FloorplanCardDecorator;
+import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
@@ -79,7 +79,7 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
             @Override
             public IFolderItemViewerDecorator createFolderItemDecorator() {
-                return new FloorplanCardDecorator();
+                return new ApartmentCardDecorator();
             }
 
             @Override

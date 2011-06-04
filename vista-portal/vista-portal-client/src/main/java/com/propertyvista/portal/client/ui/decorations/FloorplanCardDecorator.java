@@ -13,8 +13,9 @@
  */
 package com.propertyvista.portal.client.ui.decorations;
 
+import com.propertyvista.portal.client.ui.searchapt.Card;
 
-public class FloorplanCardDecorator extends BasicCardDecorator {
+public class FloorplanCardDecorator extends Card {
 
     public FloorplanCardDecorator() {
         super();
