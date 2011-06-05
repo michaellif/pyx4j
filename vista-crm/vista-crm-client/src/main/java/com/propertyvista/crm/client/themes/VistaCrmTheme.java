@@ -382,14 +382,11 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("font-size", "1.3em");
         style.addProperty("font-weight", "bold");
         style.addProperty("padding-left", "1em");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("border-top", "solid 1px");
-        style.addProperty("border-bottom", "solid 1px");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE50);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
-        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+//        style.addProperty("cursor", "pointer");
+        style.addProperty("color", ThemeColor.OBJECT_TONE90);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE20);
         //NOTE: must correspond with the header size defined by stackpanel
-        style.addProperty("line-height", "2em");
+        style.addProperty("line-height", "2.2em");
         addStyle(style);
 
         //stack content
@@ -404,7 +401,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         //Search line style
         style = new Style(prefix + ShortCutsViewImpl.StyleSuffix.SearchBar);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE20);
         addStyle(style);
     }
 
@@ -456,7 +453,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE60);
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        style.addProperty("margin", "3px 0 0 2px");
+        style.addProperty("margin", "1px 0 0 0");
         style.addProperty("width", "100%");
         addStyle(style);
 
@@ -536,7 +533,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderHeading));
         style.addProperty("padding-top", "2px");
-        style.addProperty("padding-left", "1em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderMenu));
@@ -565,7 +561,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         String prefix = DataTable.BASE_NAME;
 
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("margin", "2px 0px 2px 1px");
+        style.addProperty("margin", "2px 0 2px 0");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));
@@ -597,7 +593,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));
-        style.addProperty("margin", "0 0 0 1px");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE30);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.BORDER);

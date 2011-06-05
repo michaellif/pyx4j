@@ -163,7 +163,6 @@ public class CrmView extends LayoutPanel {
 
         leftPanel.setCellWidth(left1Display, "100%");
         leftPanel.setCellHeight(left1Display, "35%");
-        leftPanel.setSpacing(2);
         leftPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.NavigContainer);
 
         //============ Main ============

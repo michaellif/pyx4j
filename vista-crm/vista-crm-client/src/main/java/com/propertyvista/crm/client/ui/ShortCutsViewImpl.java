@@ -23,10 +23,11 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
-import com.propertyvista.crm.client.activity.NavigFolder;
 
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.crm.client.activity.NavigFolder;
 
 public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView {
 
@@ -44,6 +45,7 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
         super(Unit.EM);
         setStyleName(DEFAULT_STYLE_PREFIX);
         setHeight("100%");
+
         search = new SearchBox();
         search.setWidth("90%");
         search.getElement().getStyle().setMarginLeft(0.33, Unit.EM);
@@ -68,7 +70,7 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
             searchcontainer.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchBar);
             searchcontainer.setHeight("2em");
             searchcontainer.setWidth("100%");
-            searchcontainer.getElement().getStyle().setPaddingTop(0.4, Unit.EM);
+//            searchcontainer.getElement().getStyle().setPaddingTop(0.4, Unit.EM);
             //   searchcontainer.getElement().getStyle().setPaddingLeft(0.4, Unit.EM);
             searchcontainer.add(search);
 
@@ -91,8 +93,7 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
             }
 
             scroll.setWidget(list);
-            this.add(scroll, navigFolder.getTitle(), 3);
-
+            add(scroll, navigFolder.getTitle(), 3);
         }
     }
 }

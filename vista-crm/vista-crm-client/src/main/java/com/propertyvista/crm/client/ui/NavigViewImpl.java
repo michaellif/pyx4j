@@ -58,13 +58,12 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
     private MainNavigPresenter presenter;
 
-    private List<NavigFolderWidget> lastKnownPlaces;
+    private List<NavigFolderWidget> lastKnownPlaces = null;
 
     public NavigViewImpl() {
         super(Unit.EM);
         setStyleName(DEFAULT_STYLE_PREFIX);
         setHeight("100%");
-        lastKnownPlaces = null;
 
         addSelectionHandler(new SelectionHandler<Integer>() {
             @Override
