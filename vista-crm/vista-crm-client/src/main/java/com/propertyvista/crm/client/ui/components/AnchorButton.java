@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.components;
 
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 
 public class AnchorButton extends Anchor {
@@ -22,5 +23,10 @@ public class AnchorButton extends Anchor {
     public AnchorButton(String caption) {
         super(caption);
         setStyleName(DEFAULT_STYLE_PREFIX);
+    }
+
+    public AnchorButton(String caption, ClickHandler handler) {
+        this(caption);
+        addClickHandler(handler);
     }
 }

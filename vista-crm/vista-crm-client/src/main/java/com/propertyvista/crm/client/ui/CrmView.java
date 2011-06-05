@@ -82,13 +82,10 @@ public class CrmView extends LayoutPanel {
 
         StyleManger.installTheme(theme);
 
-        String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
-
-        setStyleName(prefix);
+        setStyleName(AppSiteView.DEFAULT_STYLE_PREFIX);
 
         DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
         contentPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content);
-
         add(contentPanel);
 
         //============ Header Panel ============
@@ -108,11 +105,6 @@ public class CrmView extends LayoutPanel {
         actionsDisplay.setSize("70%", "100%");
         actionsDisplay.getElement().getStyle().setFloat(Style.Float.RIGHT);
         headerPanel.add(actionsDisplay);
-
-        //============ Footer Panel ============
-
-        DisplayPanel footerDisplay = new DisplayPanel();
-        contentPanel.addSouth(footerDisplay, 3.2);
 
         /**
          * Main area of the app has to comprise two containers:
@@ -142,46 +134,46 @@ public class CrmView extends LayoutPanel {
         leftPanel.setSize("100%", "100%");
 
         splitPanel.addWest(leftPanel, 250);
+        splitPanel.setWidgetMinSize(leftPanel, 150);
 
         DisplayPanel navigDisplay = new DisplayPanel();
         leftPanel.add(navigDisplay);
         navigDisplay.setSize("100%", "100%");
 
-        DisplayPanel left1Display = new DisplayPanel();
-        left1Display.setSize("100%", "100%");
-        leftPanel.add(left1Display);
-        /**
-         * VS negatevly affects layout. Uncomment and implement when needed
-         */
-/*
- * DisplayPanel left2Display = new DisplayPanel();
- * leftPanel.add(left2Display);
- */
+        DisplayPanel shortcutsDisplay = new DisplayPanel();
+        shortcutsDisplay.setSize("100%", "100%");
+        leftPanel.add(shortcutsDisplay);
 
+        // here goes truncated Footer Panel:
+        DisplayPanel footerDisplay = new DisplayPanel();
+        leftPanel.add(footerDisplay);
+        footerDisplay.setSize("100%", "100%");
+
+        // layout:
         leftPanel.setCellWidth(navigDisplay, "100%");
         leftPanel.setCellHeight(navigDisplay, "65%");
 
-        leftPanel.setCellWidth(left1Display, "100%");
-        leftPanel.setCellHeight(left1Display, "35%");
+        leftPanel.setCellWidth(shortcutsDisplay, "100%");
+        leftPanel.setCellHeight(shortcutsDisplay, "35%");
+
+        leftPanel.setCellWidth(footerDisplay, "100%");
+        leftPanel.setCellHeight(footerDisplay, "40px");
+
         leftPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.NavigContainer);
 
-        //============ Main ============
+        //============ Main Panel ============
 
         DisplayPanel mainDisplay = new DisplayPanel();
         splitPanel.add(mainDisplay);
 
+        // Activity <-> Display bindings:
         bind(logoActivityMapper, logoDisplay, eventBus);
         bind(actionsActivityMapper, actionsDisplay, eventBus);
         bind(footerActivityMapper, footerDisplay, eventBus);
         bind(navigActivityMapper, navigDisplay, eventBus);
-        bind(shortcutsActivityMapper, left1Display, eventBus);
-/*
- * bind(left1ActivityMapper, left1Display, eventBus);
- * bind(left2ActivityMapper, left2Display, eventBus);
- */
+        bind(shortcutsActivityMapper, shortcutsDisplay, eventBus);
         bind(mainActivityMapper, mainDisplay, eventBus);
         bind(utilityActivityMapper, utilityDisplay, eventBus);
-
     }
 
     private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
@@ -232,5 +224,4 @@ public class CrmView extends LayoutPanel {
         }
 
     }
-
 }

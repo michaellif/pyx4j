@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.themes;
 
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
-import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
@@ -36,7 +35,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 public abstract class VistaCrmTheme extends VistaTheme {
 
     public static enum StyleSuffixEx implements IStyleSuffix {
-        SaveButton, CancelButton;
+        SaveButton, CancelButton, EditButton;
     }
 
     public VistaCrmTheme() {
@@ -57,27 +56,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
         initHeadersStyle();
         initDashboardReport();
         initEntityDataTableStyles();
-    }
-
-    @Override
-    protected void initThemeColors() {
-        float hue = (float) 213 / 360;
-        float saturation = (float) 0.9;
-        float brightness = (float) 0.7;
-        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.08));
-        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
-        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
-        putThemeColor(ThemeColor.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
-        putThemeColor(ThemeColor.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
-        putThemeColor(ThemeColor.BORDER, 0xf0f0f0);
-        putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
-        putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
-        putThemeColor(ThemeColor.TEXT, 0x000000);
-        putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
-        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xe5e5e5);
-        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
-        putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
     }
 
     @Override
@@ -166,38 +144,36 @@ public abstract class VistaCrmTheme extends VistaTheme {
     protected void initSiteViewStyles() {
         String prefix = CrmView.DEFAULT_STYLE_PREFIX;
 
-        Style style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Content));
+        // All viewable area:
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("color", "#757575");//TODO define constant for the font in accordance with the spec
+        addStyle(style);
+
+        // DockLayoutPanel:
+        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Content));
         style.addProperty("min-width", "700px");
         style.addProperty("min-height", "500px");
         addStyle(style);
 
-        // HeaderStyle:
+        // Header:
         style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Header));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE95);
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "0.3em");
         addStyle(style);
 
-        // FooterStyle:
+        // Footer:
         style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Footer));
-        style.addProperty("padding-top", "0.5em");
         style.addProperty("background", "url('" + CrmImages.INSTANCE.logo().getURL() + "') no-repeat scroll left center transparent");
-
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
-        style.addProperty("text-align", "center");
+        style.addProperty("background-color", "#ccc");
         addStyle(style);
 
-        // DisplayStyle:
-        style = new Style(Selector.valueOf(prefix));
-        style.addProperty("color", "#757575");//TODO define constant for the font in accordance with the spec
-        addStyle(style);
-
-        // LeftMenuContainer:
+        // NavigationContainer (Accordion menu):
         style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.NavigContainer));
-        //style.addProperty("min-height", "400px");
+        style.addProperty("min-width", "100px");
         addStyle(style);
 
-        // ActionStyle:
+        // Action (Header right side hyperlinks):
         style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Action));
         //style.addProperty("min-width", "700px");
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
@@ -293,7 +269,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
 //        style.addProperty("cursor", "pointer");
         style.addProperty("color", ThemeColor.OBJECT_TONE90);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
-        //NOTE: must correspond with the header size defined by stackpanel
+        // NOTE: must correspond with the header size defined by stackpanel
         style.addProperty("line-height", "2.2em");
         addStyle(style);
 
@@ -325,15 +301,25 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         //
-        // AnchorButton: 
+        // default AnchorButton: 
         gwtButtonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX);
         style = new Style(gwtButtonEx);
         style.addProperty("color", ThemeColor.OBJECT_TONE95);
+        style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
         addStyle(style);
 
         style = new Style(gwtButtonEx + ":hover");
         style.addProperty("text-decoration", "underline");
+        addStyle(style);
+
+        //
+        // Edit AnchorButton: 
+        gwtButtonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.EditButton);
+        style = new Style(gwtButtonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE15);
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("font-weight", "bolder");
         addStyle(style);
     }
 
@@ -418,6 +404,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption) + ":hover");
+//        style.addProperty("cursor", "move");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderHeading));
@@ -460,7 +447,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row));
         style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.even));
@@ -478,7 +464,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.selected));
         style.addProperty("background-color", ThemeColor.SELECTION);
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        style.addProperty("cursor", "hand");
+        style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));

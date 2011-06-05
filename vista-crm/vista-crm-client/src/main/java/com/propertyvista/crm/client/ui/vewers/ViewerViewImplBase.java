@@ -19,7 +19,6 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -30,6 +29,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
 public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel implements IViewerView<E> {
@@ -73,12 +74,14 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
 
     private Widget createActionsPanel() {
         HorizontalPanel buttons = new HorizontalPanel();
-        buttons.add(new Button("Edit", new ClickHandler() {
+        AnchorButton btnEdit = new AnchorButton("Edit", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.edit(editPlace);
             }
-        }));
+        });
+        btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.EditButton);
+        buttons.add(btnEdit);
         return buttons;
     }
 }
