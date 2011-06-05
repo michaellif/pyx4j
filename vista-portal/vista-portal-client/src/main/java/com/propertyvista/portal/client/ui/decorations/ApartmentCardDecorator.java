@@ -18,6 +18,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Anchor;
 
+import com.propertyvista.portal.client.ui.maps.MapDialog;
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapView;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 
@@ -29,6 +30,16 @@ public class ApartmentCardDecorator extends BasicCardDecorator<PropertyDTO> {
         super();
         mapIitem = new Anchor(i18n.tr("Map"));
         addMenuItem(mapIitem);
+
+        mapIitem.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                MapDialog dialog = new MapDialog(getFolderItem().getValue());
+                dialog.show();
+            }
+        });
+
         addViewDetailsClickHandler(new ClickHandler() {
 
             @Override
