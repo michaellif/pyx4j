@@ -96,8 +96,7 @@ public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel imple
             }
         });
 
-        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"));
-        btnCancel.addClickHandler(new ClickHandler() {
+        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.cancel();

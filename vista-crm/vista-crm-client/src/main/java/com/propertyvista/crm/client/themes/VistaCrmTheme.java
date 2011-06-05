@@ -409,7 +409,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption) + ":hover");
-//        style.addProperty("cursor", "move");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderHeading));
@@ -434,7 +433,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         // overriding gwt-dnd styles:
         style = new Style(".dragdrop-handle");
-//        style.addProperty("cursor", "default");
+        style.addProperty("cursor", "pointer");
         addStyle(style);
     }
 

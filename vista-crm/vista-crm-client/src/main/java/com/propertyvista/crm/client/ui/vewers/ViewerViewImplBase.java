@@ -74,7 +74,7 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
 
     private Widget createActionsPanel() {
         HorizontalPanel buttons = new HorizontalPanel();
-        AnchorButton btnEdit = new AnchorButton("Edit", new ClickHandler() {
+        AnchorButton btnEdit = new AnchorButton(i18n.tr("Edit"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.edit(editPlace);

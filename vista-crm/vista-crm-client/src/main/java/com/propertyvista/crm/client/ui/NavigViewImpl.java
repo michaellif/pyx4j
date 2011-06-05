@@ -356,16 +356,12 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
         @Override
         public boolean equals(Object obj) {
-            if (place == null)
-                return false;
-            return place.equals(obj);
+            return (place != null ? place.equals(obj) : false);
         }
 
         @Override
         public int hashCode() {
-            if (place == null)
-                return 0;
-            return place.hashCode();
+            return (place != null ? place.hashCode() : 0);
         }
     }
 }
