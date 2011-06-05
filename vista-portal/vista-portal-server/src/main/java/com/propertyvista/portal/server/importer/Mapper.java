@@ -170,10 +170,16 @@ public class Mapper {
 
         String filenamePart = "";
         if (room.getName().equals("1bdrm")) {
+            floorplan.bedrooms().setValue(1d);
             filenamePart = "0101";
         } else if (room.getName().equals("2bdrm")) {
+            floorplan.bedrooms().setValue(2d);
             filenamePart = "0102";
+        } else {
+            floorplan.bedrooms().setValue(3d);
         }
+        floorplan.bathrooms().setValue(1d);
+
         String filename = property.getCode() + "-" + filenamePart + ".jpg";
         Picture picture = PictureUtil.loadPicture(filename, Mapper.class);
         if (picture != null) {
