@@ -331,24 +331,24 @@ public abstract class VistaCrmTheme extends VistaTheme {
         //stack header
         style = new Style(prefix + " .gwt-StackLayoutPanelHeader");
         style.addProperty("font-size", "1.3em");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("padding-left", "1em");
+        style.addProperty("padding-top", "0.2em");
+        style.addProperty("padding-left", "0.5em");
         style.addProperty("cursor", "pointer");
-        style.addProperty("margin-bottom", "0.1em");
-        style.addProperty("border-top", "solid 1px");
-        style.addProperty("border-bottom", "solid 1px");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE50);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
+        style.addProperty("color", "DimGray");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
+        addStyle(style);
+
+        style = new Style(prefix + " .gwt-StackLayoutPanelHeader" + "-" + NavigViewImpl.StyleDependent.selected);
+        style.addProperty("font-weight", "bold");
         style.addProperty("color", ThemeColor.OBJECT_TONE10);
-        //Vertical alignment. NOTE: must correspond with the header size defined by stackpanel
-        style.addProperty("line-height", "2em");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
         addStyle(style);
 
         //stack content
         style = new Style(prefix + " .gwt-StackLayoutPanelContent");
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "1em");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE30);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
         addStyle(style);
 
         //Item style defines anchor specific styling

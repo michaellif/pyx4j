@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -45,12 +46,14 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
     public static String DEFAULT_STYLE_PREFIX = "vistaCrm_Navig";
 
+    private final static double headerSize = 3;
+
     public static enum StyleSuffix implements IStyleSuffix {
         Item, NoBottomMargin
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        hover
+        hover, selected
     }
 
     private MainNavigPresenter presenter;
@@ -158,7 +161,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                 }
                 if (!folderFound) {
                     nw = new NavigFolderWidget(navigFolder);
-                    add(nw, nw.getStackHeaderWidget(), 3);
+                    add(nw, nw.getStackHeaderWidget(), headerSize);
                     lastKnownPlaces.add(nw);
                 }
 
@@ -185,7 +188,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
             NavigFolderWidget nw = null;
             for (NavigFolder navigFolder : folders) {
                 nw = new NavigFolderWidget(navigFolder);
-                add(nw, nw.getStackHeaderWidget(), 3);
+                add(nw, nw.getStackHeaderWidget(), headerSize);
                 lastKnownPlaces.add(nw);
             }
             if (nw != null) {
@@ -285,6 +288,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
             private boolean selected = false;
 
             private StackHeaderWidget() {
+
                 if (folder.getImageNormal() != null) {
                     image = new Image(folder.getImageNormal());
 
@@ -305,17 +309,27 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                         }
                     }, MouseOutEvent.getType());
 
-                    image.getElement().getStyle().setMarginRight(1, Unit.EM);
+                    image.getElement().getStyle().setMarginTop(0.2, Unit.EM);
+                    image.getElement().getStyle().setMarginRight(0.5, Unit.EM);
                     add(image);
                 }
 
                 Label label = new Label(folder.getTitle());
                 label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                label.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+                label.getElement().getStyle().setProperty("lineHeight", "2em");
+
                 add(label);
             }
 
             private void setSelected(boolean selected) {
                 this.selected = selected;
+
+                if (selected) {
+                    addStyleDependentName(StyleDependent.selected.name());
+                } else {
+                    removeStyleDependentName(StyleDependent.selected.name());
+                }
 
                 if (image != null) {
                     image.setResource(selected ? folder.getImageActive() : folder.getImageNormal());
