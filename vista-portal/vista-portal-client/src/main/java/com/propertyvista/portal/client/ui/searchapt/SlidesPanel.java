@@ -34,7 +34,7 @@ public class SlidesPanel extends SimplePanel {
         VerticalPanel contentPanel = new VerticalPanel();
         setWidget(contentPanel);
 
-        banner = new Slideshow(300, 234, -1, false);
+        banner = new Slideshow(300, 200, -1, false);
         banner.setSlideChangeSpeed(15000);
 
         contentPanel.add(banner);

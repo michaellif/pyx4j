@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.common.domain.ref.City;
-import com.propertyvista.domain.Medium;
+import com.propertyvista.domain.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
@@ -151,7 +151,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
 
         if (!building.media().isEmpty()) {
             PersistenceServicesFactory.getPersistenceService().retrieve(building.media());
-            for (Medium m : building.media()) {
+            for (Media m : building.media()) {
                 dto.media().add(Converter.convert(m));
             }
         }

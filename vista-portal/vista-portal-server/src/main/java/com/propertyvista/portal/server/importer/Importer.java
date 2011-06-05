@@ -26,7 +26,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.Medium;
+import com.propertyvista.domain.Media;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -74,7 +74,7 @@ public class Importer {
     public void save() {
         // save
         for (Building building : mapper.getBuildings()) {
-            loadMemdia(building);
+            loadMedia(building);
             persist(building);
         }
 
@@ -112,13 +112,13 @@ public class Importer {
         }
     }
 
-    private void loadMemdia(Building building) {
+    private void loadMedia(Building building) {
         if (building.info().propertyCode().isNull()) {
             return;
         }
-        Map<Medium, byte[]> data = PictureUtil.loadbuildingMedia(building.info().propertyCode().getValue());
-        for (Map.Entry<Medium, byte[]> me : data.entrySet()) {
-            Medium m = me.getKey();
+        Map<Media, byte[]> data = PictureUtil.loadbuildingMedia(building.info().propertyCode().getValue());
+        for (Map.Entry<Media, byte[]> me : data.entrySet()) {
+            Media m = me.getKey();
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentType().getValue()));
 
             ThumbnailService.persist(m.file().blobKey().getValue(), me.getValue(), ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDUM,

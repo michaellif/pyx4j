@@ -28,7 +28,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 
-import com.propertyvista.domain.Medium;
+import com.propertyvista.domain.Media;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
@@ -56,7 +56,7 @@ public class PublicMediaServlet extends HttpServlet {
         }
 
         //TODO deserialize key
-        Medium medium = PersistenceServicesFactory.getPersistenceService().retrieve(Medium.class, new Key(id));
+        Media medium = PersistenceServicesFactory.getPersistenceService().retrieve(Media.class, new Key(id));
         if ((medium == null) || (medium.file().blobKey().isNull())) {
             log.trace("no image");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);

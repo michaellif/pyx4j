@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.domain.Medium;
+import com.propertyvista.domain.Media;
 import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.marketing.yield.Concession;
@@ -98,7 +98,7 @@ public interface Floorplan extends IEntity {
     IList<Concession> concessions();
 
     @Detached
-    IList<Medium> media();
+    IList<Media> media();
 
     @Detached
     @com.pyx4j.entity.annotations.Owner

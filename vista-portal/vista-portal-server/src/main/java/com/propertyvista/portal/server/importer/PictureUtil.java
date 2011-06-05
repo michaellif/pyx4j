@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.Medium;
+import com.propertyvista.domain.Media;
 import com.propertyvista.domain.Picture;
 
 /**
@@ -60,12 +60,12 @@ public class PictureUtil {
         return null;
     }
 
-    public static Map<Medium, byte[]> loadbuildingMedia(String code) {
+    public static Map<Media, byte[]> loadbuildingMedia(String code) {
         File dir = new File(new File("data", "buildings"), code);
         if (!dir.isDirectory()) {
             return Collections.emptyMap();
         }
-        Map<Medium, byte[]> data = new HashMap<Medium, byte[]>();
+        Map<Media, byte[]> data = new HashMap<Media, byte[]>();
 
         loadFiles(new File(dir, "buildings"), data);
         loadFiles(new File(dir, "res_album"), data);
@@ -73,7 +73,7 @@ public class PictureUtil {
         return data;
     }
 
-    private static void loadFiles(File dir, Map<Medium, byte[]> data) {
+    private static void loadFiles(File dir, Map<Media, byte[]> data) {
         if (!dir.isDirectory()) {
             return;
         }
@@ -89,7 +89,7 @@ public class PictureUtil {
             ByteArrayOutputStream b = new ByteArrayOutputStream();
             InputStream in = null;
             try {
-                Medium m = EntityFactory.create(Medium.class);
+                Media m = EntityFactory.create(Media.class);
 
                 m.file().filename().setValue(file.getName());
                 m.file().caption().setValue(FilenameUtils.getBaseName(file.getName()));

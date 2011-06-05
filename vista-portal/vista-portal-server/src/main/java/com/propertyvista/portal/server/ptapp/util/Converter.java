@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
-import com.propertyvista.domain.Medium;
+import com.propertyvista.domain.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -114,7 +114,7 @@ public class Converter {
         return to;
     }
 
-    public static MediumDTO convert(Medium from) {
+    public static MediumDTO convert(Media from) {
         MediumDTO to = EntityFactory.create(MediumDTO.class);
         to.id().set(from.id());
         to.caption().setValue(from.file().caption().getValue());
