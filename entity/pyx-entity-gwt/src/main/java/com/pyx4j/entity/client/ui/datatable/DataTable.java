@@ -86,16 +86,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             @Override
             public void onClick(ClickEvent event) {
                 Cell cell = getCellForEvent(event);
-                if (cell == null) {
-                    return;
+                if (cell == null || cell.getRowIndex() == 0) {
+                    return; // do not process empty and header clicks!...
                 }
-                if (selectedRow >= 0) {
-                    Element previous = getRowFormatter().getElement(selectedRow);
-                    UIObject.setStyleName(previous, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), false);
-                }
-                selectedRow = cell.getRowIndex();
-                Element current = getRowFormatter().getElement(selectedRow);
-                UIObject.setStyleName(current, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), true);
+                setSelectedRow(cell.getRowIndex() - 1); // actual table row index - without the header!...
             }
         });
         setStyleName(BASE_NAME);
@@ -152,8 +146,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     public void clearTableData() {
-        selectionCheckBoxes.clear();
         setSelectedRow(-1);
+        selectionCheckBoxes.clear();
         for (int row = getRowCount() - 1; row > 0; row--) {
             removeRow(row);
         }
@@ -225,8 +219,19 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         return selectedRow;
     }
 
-    public void setSelectedRow(int selectedRow) {
-        this.selectedRow = selectedRow;
+    protected void setSelectedRow(int selectedRow) {
+
+        if (this.selectedRow >= 0) {
+            Element previous = getRowFormatter().getElement(this.selectedRow + 1); // raw table row index - including the header!...
+            UIObject.setStyleName(previous, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), false);
+        }
+
+        this.selectedRow = selectedRow; // actual table row index
+
+        if (this.selectedRow >= 0) {
+            Element current = getRowFormatter().getElement(this.selectedRow + 1); // raw table row index - including the header!...
+            UIObject.setStyleName(current, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), true);
+        }
     }
 
     public boolean isCheckboxColumnShown() {
