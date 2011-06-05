@@ -16,13 +16,14 @@ package com.propertyvista.crm.client.themes;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
-public class BlueColdCrmTheme extends VistaCrmTheme {
+public class BownWarmTheme extends VistaCrmTheme {
 
     @Override
     protected void initThemeColors() {
-        float hue = (float) 218 / 360;
+        float hue = (float) 30 / 360;
         float saturation = (float) 0.5;
         float brightness = (float) 0.5;
+
         putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.02));
         putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
         putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));

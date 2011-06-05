@@ -17,16 +17,17 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Inject;
-import com.propertyvista.crm.client.resources.CrmImages;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.crm.client.resources.CrmImages;
+
 public class TopRightActionsViewImpl extends FlowPanel implements TopRightActionsView {
 
     public enum Theme {
-        Gainsboro, VillageGreen
+        Gainsboro, VillageGreen, BlueCold, BrownWarm
     }
 
     private static I18n i18n = I18nFactory.getI18n(TopRightActionsViewImpl.class);
@@ -51,7 +52,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final SearchBox search;
 
-    private Theme otherTheme = Theme.VillageGreen;
+    private Theme otherTheme = Theme.BrownWarm;
 
     @Inject
     public TopRightActionsViewImpl() {
@@ -117,7 +118,18 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
             @Override
             public void execute() {
                 presenter.setTheme(otherTheme);
-                otherTheme = (otherTheme == Theme.VillageGreen ? Theme.Gainsboro : Theme.VillageGreen);
+
+                for (Theme theme : Theme.values()) {
+                    if (otherTheme.equals(theme)) {
+                        if (theme.ordinal() + 1 < Theme.values().length) {
+                            otherTheme = Theme.values()[theme.ordinal() + 1];
+                        } else {
+                            otherTheme = Theme.values()[0];
+                        }
+                        break;
+                    }
+                }
+
                 themes.setValue(otherTheme.name());
             }
         });
@@ -186,6 +198,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         rightcontainer.add(settings);
         rightcontainer.add(login);
         rightcontainer.add(logout);
+        rightcontainer.add(themes);
         rightcontainer.add(searchwr);
         rightcontainer.add(messagewr);
         rightcontainer.add(alertwr);

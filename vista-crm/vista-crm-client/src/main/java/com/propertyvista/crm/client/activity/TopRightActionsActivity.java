@@ -18,15 +18,21 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.crm.client.ui.TopRightActionsView;
-import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.style.StyleManger;
+
+import com.propertyvista.crm.client.themes.BlueColdTheme;
+import com.propertyvista.crm.client.themes.BownWarmTheme;
+import com.propertyvista.crm.client.themes.GainsboroTheme;
+import com.propertyvista.crm.client.themes.VillageGreenTheme;
+import com.propertyvista.crm.client.ui.TopRightActionsView;
+import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 
@@ -75,8 +81,20 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void setTheme(Theme theme) {
-        // TODO Auto-generated method stub
-
+        switch (theme) {
+        case Gainsboro:
+            StyleManger.installTheme(new GainsboroTheme());
+            break;
+        case VillageGreen:
+            StyleManger.installTheme(new VillageGreenTheme());
+            break;
+        case BlueCold:
+            StyleManger.installTheme(new BlueColdTheme());
+            break;
+        case BrownWarm:
+            StyleManger.installTheme(new BownWarmTheme());
+            break;
+        }
     }
 
     public TopRightActionsActivity withPlace(AppPlace place) {

@@ -18,7 +18,7 @@ import com.google.inject.Singleton;
 
 import com.pyx4j.widgets.client.style.Theme;
 
-import com.propertyvista.crm.client.themes.BlueColdCrmTheme;
+import com.propertyvista.crm.client.themes.BlueColdTheme;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.crm.client.ui.editors.AccountView;
@@ -199,8 +199,8 @@ public class ViewModule extends AbstractGinModule {
 
 // - Themes:
 //        bind(Theme.class).to(GainsboroTheme.class).in(Singleton.class);
-        bind(Theme.class).to(BlueColdCrmTheme.class).in(Singleton.class);
-//        bind(Theme.class).to(BownWarmCrmTheme.class).in(Singleton.class);
+        bind(Theme.class).to(BlueColdTheme.class).in(Singleton.class);
+//        bind(Theme.class).to(BownWarmTheme.class).in(Singleton.class);
 
         bind(ShortCutsView.class).to(ShortCutsViewImpl.class).in(Singleton.class);
 

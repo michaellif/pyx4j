@@ -7,21 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on 2011-06-02
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.themes;
 
 import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
-public class VillageGreenTheme extends VistaCrmTheme {
+public class BlueColdTheme extends VistaCrmTheme {
 
     @Override
     protected void initThemeColors() {
-        float hue = (float) 88 / 360;
+        float hue = (float) 218 / 360;
         float saturation = (float) 0.5;
         float brightness = (float) 0.5;
 
@@ -60,13 +59,4 @@ public class VillageGreenTheme extends VistaCrmTheme {
         putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
         putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
     }
-
-    @Override
-    protected void initBodyStyles() {
-        super.initBodyStyles();
-        Style style = new Style("body");
-        style.addProperty("font", "80%/180% Comic Sans");
-        addStyle(style);
-    }
-
 }
