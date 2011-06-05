@@ -17,13 +17,12 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.FlowPanel;
-
-import com.pyx4j.widgets.client.style.IStyleSuffix;
-
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class PropertyMapViewImpl extends FlowPanel implements PropertyMapView {
 
@@ -91,6 +90,11 @@ public class PropertyMapViewImpl extends FlowPanel implements PropertyMapView {
 
     void setMarker(PropertyDTO property) {
         map.showMarker(property);
+    }
+
+    @Override
+    public PropertySearchCriteria getValue() {
+        return searchForm.getValue();
     }
 
 }

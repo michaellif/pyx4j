@@ -15,11 +15,12 @@ package com.propertyvista.portal.client.ui.searchapt;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
@@ -100,7 +101,12 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
     private FlowPanel fillAppartmentCard(PropertyDTO value) {
 
         CardPanel card = new CardPanel();
-        card.setCardImage(new HTML("Image"));
+        if (value.id().isNull()) {
+            card.setCardImage(new Image(PortalImages.INSTANCE.noImage()));
+        } else {
+            card.setCardImage(new Image("media/" + value.id().getValue().toString() + "/medium.jpg"));
+        }
+
         card.setCardHeader(new Label(formatAddress(value.address())));
 
         FlowPanel content = new FlowPanel();

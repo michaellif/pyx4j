@@ -17,21 +17,21 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
-import com.pyx4j.widgets.client.style.IStyleSuffix;
-
 import com.propertyvista.portal.client.ui.maps.PropertyMapWidget;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
+
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class ApartmentDetailsViewImpl extends FlowPanel implements ApartmentDetailsView {
 
     public static String DEFAULT_STYLE_PREFIX = "AppartmentDetails";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Left, Center, PageHeader, DetailsButton
+        Left, Center, PageHeader, Button
     }
 
     private Presenter presenter;
@@ -73,6 +73,12 @@ public class ApartmentDetailsViewImpl extends FlowPanel implements ApartmentDeta
 
         map = new PropertyMapWidget();
         leftPanel.add(map);
+
+        Button inquire = new Button(i18n.tr("Inquire"));
+        inquire.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Button);
+        inquire.setWidth("100%");
+        inquire.setHeight("40px");
+        leftPanel.add(inquire);
 
         centerPanel = new FlowPanel();
         centerPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Center);

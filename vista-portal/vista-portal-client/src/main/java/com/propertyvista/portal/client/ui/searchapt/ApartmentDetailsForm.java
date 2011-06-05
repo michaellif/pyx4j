@@ -46,30 +46,12 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
     private final DecorationData listDecor;
 
-    //TODO remove all this when real unit images are available
-    Image image1;
-
-    Image image2;
-
-    Image image3;
-
-    Image image4;
-
-    int idx;
-
     public ApartmentDetailsForm() {
         super(PropertyDetailsDTO.class);
         //    decor = new DecorationData(10, Unit.PCT, 90, Unit.PCT);
         decor = new DecorationData(7d, 40);
         decor.editable = false;
         listDecor = new DecorationData(0, Unit.PCT, 100, Unit.PCT);
-        //TODO remove
-        image1 = new Image(PortalImages.INSTANCE.unit1());
-        image2 = new Image(PortalImages.INSTANCE.unit2());
-        image3 = new Image(PortalImages.INSTANCE.unit3());
-        image4 = new Image(PortalImages.INSTANCE.unit4());
-        idx = 0;
-
     }
 
     @Override
@@ -205,29 +187,12 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
     private FlowPanel fillFloorplanCard(FloorplanDTO value) {
 
         CardPanel card = new CardPanel();
-        //TODO remove image crap when the real images come
-        Image currentImage;
-        switch (idx) {
-        case 0:
-            currentImage = image1;
-            break;
-        case 1:
-            currentImage = image2;
-            break;
-        case 2:
-            currentImage = image3;
-            break;
-        default:
-            currentImage = image4;
-            break;
+        if (!value.id().isNull()) {
+            card.setCardImage(new Image("media/" + value.id().getValue().toString() + "/medium.jpg"));
+        } else {
+            card.setCardImage(new Image(PortalImages.INSTANCE.noImage()));
         }
 
-        if (idx > 3)
-            idx = 0;
-        else
-            ++idx;
-
-        card.setCardImage(currentImage);
         FlowPanel content = new FlowPanel();
 
         Label lbl;

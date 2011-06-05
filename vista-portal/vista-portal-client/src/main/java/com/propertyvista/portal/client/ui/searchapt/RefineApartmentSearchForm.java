@@ -27,6 +27,10 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.common.domain.ref.City;
+import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 
 import com.pyx4j.entity.client.EntityDataSource;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
@@ -35,11 +39,6 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
-
-import com.propertyvista.common.domain.ref.City;
-import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
-import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 
 public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteria> {
 
@@ -83,7 +82,7 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
         updateBtn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.refineSearch((PropertySearchCriteria) null);
+                presenter.refineSearch();
             }
 
         });

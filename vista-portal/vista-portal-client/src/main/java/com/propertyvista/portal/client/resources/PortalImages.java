@@ -43,4 +43,8 @@ public interface PortalImages extends ClientBundle {
     @Source("unit4.jpg")
     ImageResource unit4();
 
+    @ImageOptions(repeatStyle = RepeatStyle.None)
+    @Source("noImage.jpg")
+    ImageResource noImage();
+
 }

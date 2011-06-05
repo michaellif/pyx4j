@@ -17,6 +17,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -46,6 +47,7 @@ public class CardPanel extends FlowPanel {
     public CardPanel() {
         setStyleName(DEFAULT_STYLE_PREFIX);
         setSize("100%", "100%");
+        getElement().getStyle().setProperty("minHeight", "130px");
 
         header = new SimplePanel();
         header.setSize("100%", "15%");
@@ -54,21 +56,30 @@ public class CardPanel extends FlowPanel {
         contentHolder = new FlowPanel();
         contentHolder.setSize("100%", "85%");
 
-        SimplePanel envelope = new SimplePanel();
-        envelope.setSize("28%", "100%");
-        envelope.getElement().getStyle().setFloat(Float.LEFT);
+        SimplePanel imgEnvelope = new SimplePanel();
+        //   envelope.setSize("28%", "100%");
+        // envelope.setSize("150px", "100px");
+        imgEnvelope.getElement().getStyle().setHeight(100, Unit.PX);
+        imgEnvelope.getElement().getStyle().setWidth(150, Unit.PX);
+        imgEnvelope.getElement().getStyle().setFloat(Float.LEFT);
         imageHolder = new SimplePanel();
         imageHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Image);
         imageHolder.setSize("100%", "100%");
         imageHolder.getElement().getStyle().setProperty("minHeight", "100px");
-        envelope.add(imageHolder);
+        imgEnvelope.setWidget(imageHolder);
 
+        SimplePanel cEnvelope = new SimplePanel();
+        cEnvelope.getElement().getStyle().setHeight(100, Unit.PCT);
+        cEnvelope.getElement().getStyle().setFloat(Float.LEFT);
         content = new SimplePanel();
         content.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content);
-        content.setSize("70%", "100%");
-        content.getElement().getStyle().setFloat(Float.RIGHT);
-        contentHolder.add(envelope);
-        contentHolder.add(content);
+        content.setHeight("100%");
+        content.getElement().getStyle().setMarginLeft(20, Unit.PX);
+        cEnvelope.setWidget(content);
+        //content.setSize("70%", "100%");
+        //content.getElement().getStyle().setFloat(Float.LEFT);
+        contentHolder.add(imgEnvelope);
+        contentHolder.add(cEnvelope);
 
         add(header);
         add(contentHolder);

@@ -384,6 +384,10 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Center));
         addStyle(style);
 
+        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Button));
+        style.addProperty("font-size", "20px");
+        addStyle(style);
+
         style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.PageHeader));
         style.addProperty("margin-top", "10px");
         style.addProperty("margin-bottom", "10px");

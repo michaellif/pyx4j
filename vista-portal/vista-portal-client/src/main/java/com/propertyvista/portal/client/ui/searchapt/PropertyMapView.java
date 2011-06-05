@@ -14,7 +14,6 @@
 package com.propertyvista.portal.client.ui.searchapt;
 
 import com.google.gwt.user.client.ui.IsWidget;
-
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
@@ -25,11 +24,13 @@ public interface PropertyMapView extends IsWidget {
 
     public void populate(PropertySearchCriteria criteria, PropertyListDTO propertyList);
 
+    PropertySearchCriteria getValue();
+
     public interface Presenter {
 
         public void showPropertyDetails(PropertyDTO property);
 
-        public void refineSearch(PropertySearchCriteria searchCriteria);
+        public void refineSearch();
 
     }
 

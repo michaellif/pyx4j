@@ -59,7 +59,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
             @Override
             public void onSuccess(PropertyListDTO properties) {
                 view.populate(criteria, properties);
-                System.out.println(properties);
+                //System.out.println(properties);
             }
         }, criteria);
 
@@ -75,8 +75,12 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     }
 
     @Override
-    public void refineSearch(PropertySearchCriteria searchCriteria) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.FindApartment.PropertyMap());
+    public void refineSearch() {
+        PropertySearchCriteria criteria = view.getValue();
+        Map<String, String> args = EntityArgsConverter.convertToArgs(criteria);
+        AppPlace place = new PortalSiteMap.FindApartment.PropertyMap();
+        place.setArgs(args);
+        AppSite.getPlaceController().goTo(place);
     }
 
 }
