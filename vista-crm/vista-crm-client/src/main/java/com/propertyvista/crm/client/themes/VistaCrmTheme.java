@@ -48,17 +48,12 @@ public abstract class VistaCrmTheme extends VistaTheme {
         super.initStyles();
         initGeneralStyles();
         initBodyStyles();
-        initGwtButtonStylesEx();
 
         initSiteViewStyles();
-        initDisplayStyle();
-        initHeaderStyle();
-        initFooterStyle();
-        initLeftMenuContainer();
         intitNavigationStyles();
         intitShortCutStyles();
-        initActionStyle();
 
+        initGwtButtonStylesEx();
         initHeadersStyle();
         initDashboardReport();
         initEntityDataTableStyles();
@@ -97,12 +92,13 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-HDragger");
-        style.addProperty("border-right", "ridge  #444");
+        style.addProperty("border-left", "ridge  #444");
 //        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("cursor", "col-resize");
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-VDragger");
+        style.addProperty("border-top", "ridge  #444");
 //        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("cursor", "row-resize");
         addStyle(style);
@@ -112,7 +108,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
          * TODO finish it up and move to appropriate module
          * 
          */
-        style = new Style("." + SearchBox.DEFAULT_STYLE_NAME);
+        style = new Style(Selector.valueOf(SearchBox.DEFAULT_STYLE_NAME));
         style.addProperty("background", "#ffffff");
         style.addProperty("overflow", "hidden");
         style.addProperty("border", "none");
@@ -123,7 +119,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("padding-left", "0.7em !important");
         addStyle(style);
         //textbox
-        style = new Style("." + SearchBox.DEFAULT_STYLE_NAME + StyleSuffix.Text);
+        style = new Style(Selector.valueOf(SearchBox.DEFAULT_STYLE_NAME, StyleSuffix.Text));
         style.addProperty("border-radius", "15px");
         style.addProperty("-moz-border-radius", "15px");
         style.addProperty("border", "none");
@@ -131,7 +127,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         addStyle(style);
         //trigger
-        style = new Style("." + SearchBox.DEFAULT_STYLE_NAME + StyleSuffix.Trigger);
+        style = new Style(Selector.valueOf(SearchBox.DEFAULT_STYLE_NAME, StyleSuffix.Trigger));
 /*
  * style.addProperty("background", "url(" + CrmImages.INSTANCE.search().getURL() +
  * ") no-repeat");
@@ -144,7 +140,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("margin-right", "0.2em !important");
         addStyle(style);
 
-        style = new Style("." + NavigViewImpl.DEFAULT_STYLE_PREFIX + NavigViewImpl.StyleSuffix.NoBottomMargin);
+        style = new Style(Selector.valueOf(NavigViewImpl.DEFAULT_STYLE_PREFIX, NavigViewImpl.StyleSuffix.NoBottomMargin));
         style.addProperty("margin-bottom", "0 !important");
         addStyle(style);
 
@@ -167,40 +163,165 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
     }
 
-    protected void initGwtButtonStylesEx() {
-        String gwtButtonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.SaveButton);
-        Style style = new Style(gwtButtonEx);
-        style.addProperty("margin", "0");
-        style.addProperty("padding", "3px 5px");
+    protected void initSiteViewStyles() {
+        String prefix = CrmView.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Content));
+        style.addProperty("min-width", "700px");
+        style.addProperty("min-height", "500px");
+        addStyle(style);
+
+        // HeaderStyle:
+        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Header));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE95);
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("padding-left", "0.3em");
+        addStyle(style);
+
+        // FooterStyle:
+        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Footer));
+        style.addProperty("padding-top", "0.5em");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.logo().getURL() + "') no-repeat scroll left center transparent");
+
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        // DisplayStyle:
+        style = new Style(Selector.valueOf(prefix));
+        style.addProperty("color", "#757575");//TODO define constant for the font in accordance with the spec
+        addStyle(style);
+
+        // LeftMenuContainer:
+        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.NavigContainer));
+        //style.addProperty("min-height", "400px");
+        addStyle(style);
+
+        // ActionStyle:
+        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Action));
+        //style.addProperty("min-width", "700px");
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("font-size", "1em");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Action) + " td");
+        style.addProperty("vertical-align", "middle !important");
+        style.addProperty("white-space", "nowrap");
+        addStyle(style);
+
+        // anchors within the ActionBar:
+        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Action) + " a:link, a:visited, a:active");
         style.addProperty("text-decoration", "none");
+        style.addProperty("color", ThemeColor.OBJECT_TONE20);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Action) + " a:hover");
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+    }
+
+    protected void intitNavigationStyles() {
+        String prefix = NavigViewImpl.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(prefix);
+        //anchors within the class
+        style = new Style(Selector.valueOf(prefix + " a:link, a:visited, a:active"));
+        style.addProperty("text-decoration", "none");
+        style.addProperty("color", ThemeColor.TEXT);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix + " a:hover"));
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+        /**
+         * components within the class
+         */
+        //stack header
+        style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader"));
+        style.addProperty("font-size", "1.3em");
+        style.addProperty("padding-top", "0.2em");
+        style.addProperty("padding-left", "0.5em");
         style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
+        style.addProperty("color", "DimGray");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader", null, NavigViewImpl.StyleDependent.selected));
+        style.addProperty("font-weight", "bold");
         style.addProperty("color", ThemeColor.OBJECT_TONE10);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
         addStyle(style);
 
-        // The next is added and is not in default GWT code. 
-        style = new Style(gwtButtonEx + ":focus");
-        style.addProperty("border", "1px outset #3090C7");
+        //stack content
+        style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelContent"));
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("padding-left", "1em");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE25);
         addStyle(style);
 
-        style = new Style(gwtButtonEx + ":active");
-        style.addProperty("border", "1px inset #ccc");
+        //Item style defines anchor specific styling
+        style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Item));
+        style.addProperty("margin-bottom", "0.3em");
+        addStyle(style);
+    }
+
+    /**
+     * TODO When the layout is finalized it might make sense to combine
+     * Navigation and ShortCuts styling due to their similarity
+     */
+    protected void intitShortCutStyles() {
+        String prefix = ShortCutsViewImpl.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        //anchors within the class
+        style = new Style(prefix + " a:link, a:visited, a:active");
+        style.addProperty("text-decoration", "none");
+        style.addProperty("color", ThemeColor.TEXT);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix + " a:hover"));
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+        /**
+         * components within the class
+         */
+        //stack header
+        style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader"));
+        style.addProperty("font-size", "1.3em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-left", "1em");
+//        style.addProperty("cursor", "pointer");
+        style.addProperty("color", ThemeColor.OBJECT_TONE90);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
+        //NOTE: must correspond with the header size defined by stackpanel
+        style.addProperty("line-height", "2.2em");
+        addStyle(style);
+
+        //stack content
+        style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelContent"));
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
+        addStyle(style);
+
+        //Item style defines anchor specific styling
+        style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Item));
+        style.addProperty("margin-bottom", "0.3em");
+        addStyle(style);
+
+        //Search line style
+        style = new Style(Selector.valueOf(prefix, ShortCutsViewImpl.StyleSuffix.SearchBar));
+        addStyle(style);
+    }
+
+    protected void initGwtButtonStylesEx() {
+        String gwtButtonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.SaveButton);
+        Style style = new Style(gwtButtonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
         addStyle(style);
 
         style = new Style(gwtButtonEx + ":hover");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE85);
-        addStyle(style);
-
-        style = new Style(gwtButtonEx + "[disabled]");
-        style.addProperty("cursor", "default");
-        style.addProperty("color", "#888");
-        style.addProperty("background", "url(images/button-bkg.png) repeat-x 0px -35px");
-        style.addProperty("border", "1px ridged #cccccc");
-        addStyle(style);
-
-        style = new Style(gwtButtonEx + "[disabled]:hover");
-        style.addProperty("border", "1px outset #ccc");
         addStyle(style);
 
         //
@@ -213,234 +334,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         style = new Style(gwtButtonEx + ":hover");
         style.addProperty("text-decoration", "underline");
-        addStyle(style);
-    }
-
-    protected void initSiteViewStyles() {
-        String prefix = CrmView.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Content));
-        style.addProperty("min-width", "700px");
-        style.addProperty("min-height", "500px");
-        addStyle(style);
-
-        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Header));
-        //        style.addProperty("height", "115px");
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.MainNavig));
-        //        style.addProperty("width", "100%");
-        //        style.addProperty("float", "left");
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Center));
-        //        style.addProperty("width", "100%");
-        //        style.addProperty("float", "left");
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Main));
-        //        style.addProperty("height", "100%");
-        //        style.addProperty("margin", "0 " + rightColumnWidth + "px 0 " + leftColumnWidth + "px");
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Caption));
-        //        style.addProperty("width", "30%");
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.SecondaryNavig));
-        //        style.addProperty("width", "70%");
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Message));
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Content));
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Left));
-        //        style.addProperty("float", "left");
-        //        style.addProperty("width", leftColumnWidth + "px");
-        //        style.addProperty("margin-left", "-100%");
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Right));
-        //        style.addProperty("float", "left");
-        //        style.addProperty("width", rightColumnWidth + "px");
-        //        style.addProperty("margin-left", "-" + rightColumnWidth + "px");
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Footer));
-        //        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
-        //        style.addProperty("clear", "left");
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Display));
-        //        addStyle(style);
-        //
-
-        //        style = new Style(Selector.valueOf(ViewLineSeparator.DEFAULT_STYLE_PREFIX));
-        //        style.addProperty("border-top-width", "1px");
-        //        style.addProperty("border-top-style", "dotted");
-        //        style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);
-        //        style.addProperty("margin-bottom", "0.3em");
-        //        style.addProperty("width", "100%%");
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf(VistaWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));
-        //        style.addProperty("padding-top", "2px");
-        //        addStyle(style);
-        //
-        //        style = new Style(Selector.valueOf("logo"));
-        //        style.addProperty("font-size", "30px");
-        //        style.addProperty("line-height", "1.2em");
-        //        style.addProperty("text-align", "center");
-        //        style.addProperty("vertical-align", "middle");
-        //        style.addProperty("display", "block");
-        //        style.addProperty("color", ThemeColor.OBJECT_TONE5);
-        //        addStyle(style);
-
-    }
-
-    protected void initLeftMenuContainer() {
-        String containerprefix = "." + CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.NavigContainer;
-        //navigation panels container style
-        Style style = new Style(containerprefix);
-        //style.addProperty("min-height", "400px");
-        addStyle(style);
-    }
-
-    protected void intitNavigationStyles() {
-        String prefix = "." + NavigViewImpl.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(prefix);
-        //anchors within the class
-        style = new Style(prefix + " a:link, a:visited, a:active");
-        style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColor.TEXT);
-        addStyle(style);
-
-        style = new Style(prefix + " a:hover");
-        style.addProperty("text-decoration", "underline");
-        addStyle(style);
-        /**
-         * components within the class
-         */
-        //stack header
-        style = new Style(prefix + " .gwt-StackLayoutPanelHeader");
-        style.addProperty("font-size", "1.3em");
-        style.addProperty("padding-top", "0.2em");
-        style.addProperty("padding-left", "0.5em");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("color", "DimGray");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
-        addStyle(style);
-
-        style = new Style(prefix + " .gwt-StackLayoutPanelHeader" + "-" + NavigViewImpl.StyleDependent.selected);
-        style.addProperty("font-weight", "bold");
-        style.addProperty("color", ThemeColor.OBJECT_TONE10);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
-        addStyle(style);
-
-        //stack content
-        style = new Style(prefix + " .gwt-StackLayoutPanelContent");
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("padding-left", "1em");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE25);
-        addStyle(style);
-
-        //Item style defines anchor specific styling
-        style = new Style(prefix + NavigViewImpl.StyleSuffix.Item);
-        style.addProperty("margin-bottom", "0.3em");
-        addStyle(style);
-    }
-
-    /**
-     * TODO When the layout is finalized it might make sense to combine
-     * Navigation and ShortCuts styling due to their similarity
-     */
-    protected void intitShortCutStyles() {
-        String prefix = "." + ShortCutsViewImpl.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(prefix);
-        //anchors within the class
-        style = new Style(prefix + " a:link, a:visited, a:active");
-        style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColor.TEXT);
-        addStyle(style);
-
-        style = new Style(prefix + " a:hover");
-        style.addProperty("text-decoration", "underline");
-        addStyle(style);
-        /**
-         * components within the class
-         */
-        //stack header
-        style = new Style(prefix + " .gwt-StackLayoutPanelHeader");
-        style.addProperty("font-size", "1.3em");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("padding-left", "1em");
-//        style.addProperty("cursor", "pointer");
-        style.addProperty("color", ThemeColor.OBJECT_TONE90);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
-        //NOTE: must correspond with the header size defined by stackpanel
-        style.addProperty("line-height", "2.2em");
-        addStyle(style);
-
-        //stack content
-        style = new Style(prefix + " .gwt-StackLayoutPanelContent");
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
-        addStyle(style);
-
-        //Item style defines anchor specific styling
-        style = new Style(prefix + NavigViewImpl.StyleSuffix.Item);
-        style.addProperty("margin-bottom", "0.3em");
-        addStyle(style);
-
-        //Search line style
-        style = new Style(prefix + ShortCutsViewImpl.StyleSuffix.SearchBar);
-        addStyle(style);
-    }
-
-    protected void initFooterStyle() {
-        String prefix = "." + CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Footer;
-        Style style = new Style(prefix);
-        style.addProperty("padding-top", "0.5em");
-        style.addProperty("background", "url('" + CrmImages.INSTANCE.logo().getURL() + "') no-repeat scroll left center transparent");
-
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
-        style.addProperty("text-align", "center");
-        addStyle(style);
-    }
-
-    protected void initDisplayStyle() {
-        String prefix = "." + CrmView.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(prefix);
-        style.addProperty("color", "#757575");//TODO define constant for the font in accordance with the spec
-        addStyle(style);
-    }
-
-    protected void initHeaderStyle() {
-        String prefix = "." + CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Header;
-        Style style = new Style(prefix);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE95);
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("padding-left", "0.3em");
-        addStyle(style);
-    }
-
-    protected void initActionStyle() {
-        String prefix = "." + CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Action;
-        Style style = new Style(prefix);
-        //style.addProperty("min-width", "700px");
-        // style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
-        style.addProperty("color", ThemeColor.TEXT_BACKGROUND);
-        style.addProperty("font-size", "1em");
-        addStyle(style);
-
-        style = new Style(prefix + " td");
-        style.addProperty("vertical-align", "middle !important");
-        style.addProperty("white-space", "nowrap");
         addStyle(style);
     }
 

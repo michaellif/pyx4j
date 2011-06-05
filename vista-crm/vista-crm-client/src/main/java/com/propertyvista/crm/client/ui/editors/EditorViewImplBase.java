@@ -104,7 +104,7 @@ public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel imple
             }
         });
 
-        btnSave.setStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
+        btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
 
         btnSave.setWidth("7em");
         btnCancel.setWidth("5em");
