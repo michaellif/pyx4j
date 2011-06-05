@@ -71,20 +71,17 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         style = new Style(".gwt-SplitLayoutPanel-HDragger");
         style.addProperty("border-left", "ridge  #444");
-//        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("cursor", "col-resize");
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-VDragger");
         style.addProperty("border-top", "ridge  #444");
-//        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("cursor", "row-resize");
         addStyle(style);
 
-        /**
+        /*
          * SearchBox style
          * TODO finish it up and move to appropriate module
-         * 
          */
         style = new Style(Selector.valueOf(SearchBox.DEFAULT_STYLE_NAME));
         style.addProperty("background", "#ffffff");
@@ -96,7 +93,8 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("white-space", "normal !important");
         style.addProperty("padding-left", "0.7em !important");
         addStyle(style);
-        //textbox
+
+        // TextBox
         style = new Style(Selector.valueOf(SearchBox.DEFAULT_STYLE_NAME, StyleSuffix.Text));
         style.addProperty("border-radius", "15px");
         style.addProperty("-moz-border-radius", "15px");
@@ -129,7 +127,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
         addStyle(style);
-
     }
 
     @Override
@@ -200,7 +197,10 @@ public abstract class VistaCrmTheme extends VistaTheme {
         String prefix = NavigViewImpl.DEFAULT_STYLE_PREFIX;
 
         Style style = new Style(prefix);
-        //anchors within the class
+
+        /*
+         * anchors within the class:
+         */
         style = new Style(Selector.valueOf(prefix + " a:link, a:visited, a:active"));
         style.addProperty("text-decoration", "none");
         style.addProperty("color", ThemeColor.TEXT);
@@ -209,10 +209,11 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix + " a:hover"));
         style.addProperty("text-decoration", "underline");
         addStyle(style);
-        /**
-         * components within the class
+
+        /*
+         * components within the class:
          */
-        //stack header
+        // stack header
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader"));
         style.addProperty("font-size", "1.3em");
         style.addProperty("padding-top", "0.2em");
@@ -228,20 +229,20 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
         addStyle(style);
 
-        //stack content
+        // stack content
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelContent"));
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "1em");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE25);
         addStyle(style);
 
-        //Item style defines anchor specific styling
+        // Item style defines anchor specific styling
         style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Item));
         style.addProperty("margin-bottom", "0.3em");
         addStyle(style);
     }
 
-    /**
+    /*
      * TODO When the layout is finalized it might make sense to combine
      * Navigation and ShortCuts styling due to their similarity
      */
@@ -249,7 +250,10 @@ public abstract class VistaCrmTheme extends VistaTheme {
         String prefix = ShortCutsViewImpl.DEFAULT_STYLE_PREFIX;
 
         Style style = new Style(Selector.valueOf(prefix));
-        //anchors within the class
+
+        /*
+         * anchors within the class:
+         */
         style = new Style(prefix + " a:link, a:visited, a:active");
         style.addProperty("text-decoration", "none");
         style.addProperty("color", ThemeColor.TEXT);
@@ -258,8 +262,9 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix + " a:hover"));
         style.addProperty("text-decoration", "underline");
         addStyle(style);
-        /**
-         * components within the class
+
+        /*
+         * components within the class:
          */
         //stack header
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader"));
@@ -273,18 +278,18 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("line-height", "2.2em");
         addStyle(style);
 
-        //stack content
+        // stack content
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelContent"));
         style.addProperty("font-size", "1.1em");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
         addStyle(style);
 
-        //Item style defines anchor specific styling
+        // Item style defines anchor specific styling
         style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Item));
         style.addProperty("margin-bottom", "0.3em");
         addStyle(style);
 
-        //Search line style
+        // Search line style
         style = new Style(Selector.valueOf(prefix, ShortCutsViewImpl.StyleSuffix.SearchBar));
         addStyle(style);
     }

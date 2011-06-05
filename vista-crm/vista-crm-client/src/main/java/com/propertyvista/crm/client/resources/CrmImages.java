@@ -143,7 +143,7 @@ public interface CrmImages extends ClientBundle {
     @Source("Marketing_normal.png")
     ImageResource marketingNormal();
 
-    @Source("Messages-Normal.png")
+    @Source("Messages_normal.png")
     ImageResource messagesNormal();
 
     @Source("Messages_hover.png")
