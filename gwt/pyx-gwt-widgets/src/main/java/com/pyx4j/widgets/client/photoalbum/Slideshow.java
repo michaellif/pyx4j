@@ -86,6 +86,13 @@ public class Slideshow extends AbsolutePanel {
         widget.setVisible(false);
     }
 
+    public void removeAllItems() {
+        for (Widget item : items) {
+            super.remove(item);
+        }
+        items.clear();
+    }
+
     public Iterable<Widget> items() {
         return items;
     }
@@ -117,20 +124,21 @@ public class Slideshow extends AbsolutePanel {
         controlPanel.play(false);
     }
 
-    protected void init() {
+    public void init() {
         //keep control panel on top and counter updated
         if (controlPanel != null) {
             remove(controlPanel);
         }
         controlPanel = new ControlPanel();
         add(controlPanel, 0, 0);
-        show(initPosition);
-        if (runOnInit) {
-            controlPanel.play(true);
-        } else {
-            controlPanel.play(false);
+        if (initPosition == -1) {
+            show(initPosition);
+            if (runOnInit) {
+                controlPanel.play(true);
+            } else {
+                controlPanel.play(false);
+            }
         }
-
     }
 
     protected void hide() {
