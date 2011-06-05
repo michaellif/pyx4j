@@ -21,6 +21,7 @@ import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
 import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.CrmView;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
@@ -52,6 +53,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         intitNavigationStyles();
         intitShortCutStyles();
 
+        initSearchBoxStyles();
         initGwtButtonStylesEx();
         initHeadersStyle();
         initDashboardReport();
@@ -80,52 +82,16 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         /*
-         * SearchBox style
-         * TODO finish it up and move to appropriate module
-         */
-        style = new Style(Selector.valueOf(SearchBox.DEFAULT_STYLE_NAME));
-        style.addProperty("background", "#ffffff");
-        style.addProperty("overflow", "hidden");
-        style.addProperty("border", "none");
-        style.addProperty("border-radius", "15px");
-        style.addProperty("-moz-border-radius", "15px");
-        style.addProperty("min-width", "8em !important");
-        style.addProperty("white-space", "normal !important");
-        style.addProperty("padding-left", "0.7em !important");
-        addStyle(style);
-
-        // TextBox
-        style = new Style(Selector.valueOf(SearchBox.DEFAULT_STYLE_NAME, StyleSuffix.Text));
-        style.addProperty("border-radius", "15px");
-        style.addProperty("-moz-border-radius", "15px");
-        style.addProperty("border", "none");
-        //  style.addProperty("min-width", "4em !important");
-
-        addStyle(style);
-        //trigger
-        style = new Style(Selector.valueOf(SearchBox.DEFAULT_STYLE_NAME, StyleSuffix.Trigger));
-/*
- * style.addProperty("background", "url(" + CrmImages.INSTANCE.search().getURL() +
- * ") no-repeat");
- * style.addProperty("background-position", "center");
- */
-        style.addProperty("width", "16px");
-        style.addProperty("heigh", "16px");
-        style.addProperty("float", "right !important");
-        style.addProperty("border", "none");
-        style.addProperty("margin-right", "0.2em !important");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(NavigViewImpl.DEFAULT_STYLE_PREFIX, NavigViewImpl.StyleSuffix.NoBottomMargin));
-        style.addProperty("margin-bottom", "0 !important");
-        addStyle(style);
-
-        /**
          * horizontal alignment for blocks
          */
         style = new Style(".pyx4j-horizontal-align-center");
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
+        addStyle(style);
+
+        // editor forms:
+        style = new Style(Selector.valueOf(VistaDecoratorsFlowPanel.DEFAULT_STYLE_NAME));
+        style.addProperty("color", ThemeColor.TEXT);
         addStyle(style);
     }
 
@@ -135,7 +101,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
         Style style = new Style(".body-navig");
         style.addProperty("background", "url('" + CrmImages.INSTANCE.bodyBackground().getURL() + "') repeat-x 0 0 #F7F7F7");
         addStyle(style);
-
     }
 
     protected void initSiteViewStyles() {
@@ -143,7 +108,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         // All viewable area:
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("color", "#757575"); //TODO define constant for the font in accordance with the spec
+        style.addProperty("color", ThemeColor.TEXT);
         addStyle(style);
 
         // DockLayoutPanel:
@@ -204,7 +169,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
          */
         style = new Style(Selector.valueOf(prefix + " a:link, a:visited, a:active"));
         style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColor.OBJECT_TONE90);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix + " a:hover"));
@@ -241,6 +205,11 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Item));
         style.addProperty("margin-bottom", "0.3em");
         addStyle(style);
+
+        // ???
+        style = new Style(Selector.valueOf(NavigViewImpl.DEFAULT_STYLE_PREFIX, NavigViewImpl.StyleSuffix.NoBottomMargin));
+        style.addProperty("margin-bottom", "0 !important");
+        addStyle(style);
     }
 
     /*
@@ -257,7 +226,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
          */
         style = new Style(prefix + " a:link, a:visited, a:active");
         style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColor.OBJECT_TONE90);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix + " a:hover"));
@@ -292,6 +260,43 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         // Search line style
         style = new Style(Selector.valueOf(prefix, ShortCutsViewImpl.StyleSuffix.SearchBar));
+        addStyle(style);
+    }
+
+    protected void initSearchBoxStyles() {
+        String prefix = SearchBox.DEFAULT_STYLE_NAME;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("background", "#ffffff");
+        style.addProperty("overflow", "hidden");
+        style.addProperty("border", "none");
+        style.addProperty("border-radius", "15px");
+        style.addProperty("-moz-border-radius", "15px");
+        style.addProperty("min-width", "8em !important");
+        style.addProperty("white-space", "normal !important");
+        style.addProperty("padding-left", "0.7em !important");
+        addStyle(style);
+
+        // SearchBox
+        style = new Style(Selector.valueOf(prefix, StyleSuffix.Text));
+        style.addProperty("border-radius", "15px");
+        style.addProperty("-moz-border-radius", "15px");
+        style.addProperty("border", "none");
+        //  style.addProperty("min-width", "4em !important");
+        addStyle(style);
+
+        //trigger
+        style = new Style(Selector.valueOf(prefix, StyleSuffix.Trigger));
+/*
+ * style.addProperty("background", "url(" + CrmImages.INSTANCE.search().getURL() +
+ * ") no-repeat");
+ * style.addProperty("background-position", "center");
+ */
+        style.addProperty("width", "16px");
+        style.addProperty("heigh", "16px");
+        style.addProperty("float", "right !important");
+        style.addProperty("border", "none");
+        style.addProperty("margin-right", "0.2em !important");
         addStyle(style);
     }
 
@@ -464,13 +469,11 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.nodetails));
-        style.addProperty("cursor", "default");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.selected));
         style.addProperty("background-color", ThemeColor.SELECTION);
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));

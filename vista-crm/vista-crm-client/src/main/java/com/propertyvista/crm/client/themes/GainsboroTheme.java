@@ -20,6 +20,8 @@ public class GainsboroTheme extends VistaCrmTheme {
 
     @Override
     protected void initThemeColors() {
+        super.initThemeColors();
+
         float hue = (float) 0 / 360;
         float saturation = 0;
         float brightness = (float) 0.5;
@@ -49,15 +51,7 @@ public class GainsboroTheme extends VistaCrmTheme {
         putThemeColor(ThemeColor.OBJECT_TONE90, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.90));
         putThemeColor(ThemeColor.OBJECT_TONE95, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.95));
 
-        putThemeColor(ThemeColor.BORDER, 0xe7e7e7);
         putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
-        putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
-        putThemeColor(ThemeColor.TEXT, 0x333333);
-        putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
-        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xe5e5e5);
-        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
-        putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
     }
 
 }

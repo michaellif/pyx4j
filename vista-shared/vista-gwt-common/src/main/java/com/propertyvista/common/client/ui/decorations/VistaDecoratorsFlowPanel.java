@@ -21,6 +21,8 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public class VistaDecoratorsFlowPanel extends FlowPanel {
 
+    public static final String DEFAULT_STYLE_NAME = "vista_DecoratorsFlowPanel";
+
     private boolean readOnlyMode = false;
 
     private double defaultLabelWidth = 15;
@@ -30,15 +32,18 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
 
     public VistaDecoratorsFlowPanel(double defaultLabelWidth) {
         this.defaultLabelWidth = defaultLabelWidth;
+        setStyleName(DEFAULT_STYLE_NAME);
     }
 
     public VistaDecoratorsFlowPanel(boolean readOnlyMode) {
         this.readOnlyMode = readOnlyMode;
+        setStyleName(DEFAULT_STYLE_NAME);
     }
 
     public VistaDecoratorsFlowPanel(boolean readOnlyMode, double defaultLabelWidth) {
         this.readOnlyMode = readOnlyMode;
         this.defaultLabelWidth = defaultLabelWidth;
+        setStyleName(DEFAULT_STYLE_NAME);
     }
 
     public void add(final CComponent<?> component, double componentWidth) {

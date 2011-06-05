@@ -28,7 +28,7 @@ public class VistaDecoratorsSplitFlowPanel extends FlowPanel {
         left.setWidth("50%");
         this.add(left);
         this.add(right);
-        this.getElement().getStyle().setProperty("minWidth", "1000px");
+        this.getElement().getStyle().setProperty("minWidth", "900px");
         right.setWidth("50%");
         right.getElement().getStyle().setFloat(Style.Float.LEFT);
         left.setWidth("50%");
