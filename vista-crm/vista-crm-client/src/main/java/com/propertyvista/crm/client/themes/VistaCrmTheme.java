@@ -97,12 +97,13 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-HDragger");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("border-right", "ridge  #444");
+//        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("cursor", "col-resize");
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-VDragger");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+//        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("cursor", "row-resize");
         addStyle(style);
 
@@ -306,10 +307,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
         Style style = new Style(containerprefix);
         //style.addProperty("min-height", "400px");
         addStyle(style);
-        style = new Style(containerprefix + " td");
-        style.addProperty("border", "solid 1px " + getThemeColorString(ThemeColor.OBJECT_TONE4));
-        addStyle(style);
-
     }
 
     protected void intitNavigationStyles() {
@@ -348,7 +345,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style = new Style(prefix + " .gwt-StackLayoutPanelContent");
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "1em");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE25);
         addStyle(style);
 
         //Item style defines anchor specific styling
@@ -384,7 +381,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("padding-left", "1em");
 //        style.addProperty("cursor", "pointer");
         style.addProperty("color", ThemeColor.OBJECT_TONE90);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE20);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
         //NOTE: must correspond with the header size defined by stackpanel
         style.addProperty("line-height", "2.2em");
         addStyle(style);
@@ -392,6 +389,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         //stack content
         style = new Style(prefix + " .gwt-StackLayoutPanelContent");
         style.addProperty("font-size", "1.1em");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
         addStyle(style);
 
         //Item style defines anchor specific styling
@@ -401,7 +399,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         //Search line style
         style = new Style(prefix + ShortCutsViewImpl.StyleSuffix.SearchBar);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE20);
         addStyle(style);
     }
 
@@ -453,7 +450,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE60);
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        style.addProperty("margin", "1px 0 0 0");
         style.addProperty("width", "100%");
         addStyle(style);
 
