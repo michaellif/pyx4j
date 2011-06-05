@@ -63,7 +63,8 @@ public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     protected void setEditor(CEntityForm<E> editor) {
         editor.initialize();
         scroll.setWidget(this.editor = editor);
-        this.editor.asWidget().getElement().getStyle().setMarginLeft(3, Unit.PX);
+        this.editor.asWidget().getElement().getStyle().setMarginLeft(0.3, Unit.EM);
+        this.editor.asWidget().getElement().getStyle().setMarginTop(0.3, Unit.EM);
     }
 
     @Override

@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.site.client.AppSite;
@@ -156,9 +157,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
                 // put selected item ID in link arguments:
-                int selectedRow = getListPanel().getDataTable().getSelectedRow(); // note, that it's 1-based!?
-                E item = getListPanel().getDataTable().getDataTableModel().getData().get(selectedRow - 1).getEntity();
-                AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(link, item.getPrimaryKey()));
+                DataTable<E> dt = getListPanel().getDataTable();
+                int selectedRow = dt.getSelectedRow();
+                if (selectedRow >= 0 && selectedRow < dt.getDataTableModel().getData().size()) {
+                    E item = dt.getDataTableModel().getData().get(selectedRow).getEntity();
+                    AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(link, item.getPrimaryKey()));
+                }
             }
         });
     }
