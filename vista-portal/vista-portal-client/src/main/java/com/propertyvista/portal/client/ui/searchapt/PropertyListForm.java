@@ -153,7 +153,7 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
         StringBuffer planString = new StringBuffer();
 
-        for (String planName : floorplans) {
+        for (String planName : floorplans.getValue()) {
             if (planName != null && !planName.isEmpty()) {
                 planString.append(planName);
                 planString.append(delimiter);
