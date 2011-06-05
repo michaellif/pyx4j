@@ -17,8 +17,10 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.widgets.client.photoalbum.Slideshow;
 
+import com.propertyvista.portal.domain.dto.MediaDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
 public class SlidesPanel extends SimplePanel {
@@ -35,7 +37,7 @@ public class SlidesPanel extends SimplePanel {
         setWidget(contentPanel);
 
         banner = new Slideshow(300, 200, -1, false);
-        banner.setSlideChangeSpeed(15000);
+        banner.setSlideChangeSpeed(3000);
 
         contentPanel.add(banner);
 
@@ -45,30 +47,10 @@ public class SlidesPanel extends SimplePanel {
 
         banner.removeAllItems();
 
-        {
+        IList<MediaDTO> mediaList = property.media();
+        for (MediaDTO photo : mediaList) {
             AbsolutePanel infoBunner = new AbsolutePanel();
-            Image infoBunnerImage = new Image("media/1/large.jpg");
-            infoBunner.add(infoBunnerImage, 0, 0);
-            banner.addItem(infoBunner);
-        }
-
-        {
-            AbsolutePanel infoBunner = new AbsolutePanel();
-            Image infoBunnerImage = new Image("media/2/large.jpg");
-            infoBunner.add(infoBunnerImage, 0, 0);
-            banner.addItem(infoBunner);
-        }
-
-        {
-            AbsolutePanel infoBunner = new AbsolutePanel();
-            Image infoBunnerImage = new Image("media/3/large.jpg");
-            infoBunner.add(infoBunnerImage, 0, 0);
-            banner.addItem(infoBunner);
-        }
-
-        {
-            AbsolutePanel infoBunner = new AbsolutePanel();
-            Image infoBunnerImage = new Image("media/4/large.jpg");
+            Image infoBunnerImage = new Image("media/" + photo.id().getValue().toString() + "/large.jpg");
             infoBunner.add(infoBunnerImage, 0, 0);
             banner.addItem(infoBunner);
         }

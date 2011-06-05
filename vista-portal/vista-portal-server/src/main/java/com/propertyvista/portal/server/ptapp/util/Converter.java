@@ -30,7 +30,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
-import com.propertyvista.portal.domain.dto.MediumDTO;
+import com.propertyvista.portal.domain.dto.MediaDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class Converter {
@@ -114,8 +114,8 @@ public class Converter {
         return to;
     }
 
-    public static MediumDTO convert(Media from) {
-        MediumDTO to = EntityFactory.create(MediumDTO.class);
+    public static MediaDTO convert(Media from) {
+        MediaDTO to = EntityFactory.create(MediaDTO.class);
         to.id().set(from.id());
         to.caption().setValue(from.file().caption().getValue());
         return to;

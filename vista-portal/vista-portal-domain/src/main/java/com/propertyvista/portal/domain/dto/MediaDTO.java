@@ -16,7 +16,7 @@ package com.propertyvista.portal.domain.dto;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface MediumDTO extends IEntity {
+public interface MediaDTO extends IEntity {
 
     IPrimitive<String> caption();
 

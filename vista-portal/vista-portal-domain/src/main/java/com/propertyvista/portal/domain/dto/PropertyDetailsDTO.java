@@ -25,5 +25,5 @@ public interface PropertyDetailsDTO extends PropertyDTO {
     @EmbeddedEntity
     RangeDTO price();
 
-    IList<MediumDTO> media();
+    IList<MediaDTO> media();
 }
