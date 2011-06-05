@@ -15,6 +15,14 @@ package com.propertyvista.portal.client.ui.maps;
 
 import java.util.HashMap;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
+import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
@@ -23,18 +31,22 @@ import com.google.gwt.maps.client.geom.Size;
 import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-
-import com.pyx4j.geo.GeoPoint;
-import com.pyx4j.gwt.geo.CircleOverlay;
-import com.pyx4j.gwt.geo.MapUtils;
-
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
+
+import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
+import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.gwt.geo.CircleOverlay;
+import com.pyx4j.gwt.geo.MapUtils;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class PropertiesMapWidget extends AbstractMapWidget {
 
@@ -47,6 +59,14 @@ public class PropertiesMapWidget extends AbstractMapWidget {
     private double distance;
 
     private CircleOverlay distanceOverlay;
+
+    public static String PROPERTY_CARD_STYLE_PREFIX = "PropertyCard";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        CardHeader, CardContent, CardImage, CardMenu, CardMenuItem
+    }
+
+    private static I18n i18n = I18nFactory.getI18n(BaseFolderItemViewerDecorator.class);
 
     public PropertiesMapWidget() {
         super("100%", "500px");
@@ -141,19 +161,140 @@ public class PropertiesMapWidget extends AbstractMapWidget {
     }
 
     public void showMarker(PropertyDTO property) {
-        getMap().getInfoWindow().open(markers.get(property), new InfoWindowContent(new PropertyInfo(property)));
+        getMap().getInfoWindow().open(markers.get(property), new InfoWindowContent(new PropertyCard(property)/*
+                                                                                                              * new
+                                                                                                              * PropertyInfo
+                                                                                                              * (
+                                                                                                              * property
+                                                                                                              * )
+                                                                                                              */));
     }
 
-    class PropertyInfo extends DockPanel {
+/*
+ * class PropertyInfo extends DockPanel {
+ * 
+ * PropertyInfo(PropertyDTO property) {
+ * super();
+ * add(new Label("[Image]"), DockPanel.WEST);
+ * 
+ * add(new Button("Details"), DockPanel.SOUTH);
+ * 
+ * add(new HTML("[Property Descr]"), DockPanel.CENTER);
+ * }
+ * 
+ * }
+ */
 
-        PropertyInfo(PropertyDTO property) {
-            super();
-            add(new Label("[Image]"), DockPanel.WEST);
+    public class PropertyCard extends FlowPanel {
 
-            add(new Button("Details"), DockPanel.SOUTH);
+        private final Anchor viewDetailsItem;
 
-            add(new HTML("[Property Descr]"), DockPanel.CENTER);
+        public PropertyCard(PropertyDTO property) {
+            setStyleName(PROPERTY_CARD_STYLE_PREFIX);
+            setSize("100%", "100%");
+            getElement().getStyle().setProperty("minHeight", "100px");
+            SimplePanel header = new SimplePanel();
+            header.setSize("100%", "15%");
+            header.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardHeader);
+            header.setWidget(new Label(formatAddress(property.address())));
+
+            FlowPanel contentHolder = new FlowPanel();
+            contentHolder.setSize("100%", "70%");
+
+            SimplePanel imgEnvelope = new SimplePanel();
+            imgEnvelope.getElement().getStyle().setHeight(50, Unit.PX);
+            imgEnvelope.getElement().getStyle().setWidth(70, Unit.PX);
+            imgEnvelope.getElement().getStyle().setFloat(Float.LEFT);
+            SimplePanel imageHolder = new SimplePanel();
+            imageHolder.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardImage);
+            imageHolder.setSize("100%", "100%");
+            imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
+            if (!property.id().isNull()) {
+                imageHolder.setWidget(new Image("media/" + property.id().getValue().toString() + "/small.jpg"));
+            }
+            imgEnvelope.setWidget(imageHolder);
+
+            SimplePanel cEnvelope = new SimplePanel();
+            cEnvelope.getElement().getStyle().setHeight(100, Unit.PCT);
+            cEnvelope.getElement().getStyle().setFloat(Float.LEFT);
+            SimplePanel content = new SimplePanel();
+            content.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContent);
+            content.setHeight("100%");
+            content.getElement().getStyle().setMarginLeft(15, Unit.PX);
+            content.setWidget(new Label(formatFloorplans(property.floorplanNames())));
+            cEnvelope.setWidget(content);
+            contentHolder.add(imgEnvelope);
+            contentHolder.add(cEnvelope);
+
+            SimplePanel footer = new SimplePanel();
+            footer.setSize("100%", "15%");
+            footer.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardMenu);
+            viewDetailsItem = new Anchor(i18n.tr("View Details"));
+            viewDetailsItem.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardMenuItem);
+            viewDetailsItem.getElement().getStyle().setFloat(Float.LEFT);
+            viewDetailsItem.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+            footer.setWidget(viewDetailsItem);
+
+            add(header);
+            add(contentHolder);
+            add(footer);
+
         }
 
+        public HandlerRegistration addViewDetailsClickHandler(ClickHandler h) {
+            return viewDetailsItem.addClickHandler(h);
+        }
+
+        private String formatAddress(IAddress address) {
+            if (address.isNull())
+                return "";
+
+            StringBuffer addrString = new StringBuffer();
+
+            addrString.append(address.street1().getValue());
+            if (!address.street2().isNull()) {
+                addrString.append(" ");
+                addrString.append(address.street2().getValue());
+            }
+
+            if (!address.city().isNull()) {
+                addrString.append(", ");
+                addrString.append(address.city().getValue());
+            }
+
+            if (!address.province().isNull()) {
+                addrString.append(" ");
+                addrString.append(address.province().getValue());
+            }
+
+            if (!address.postalCode().isNull()) {
+                addrString.append(" ");
+                addrString.append(address.postalCode().getValue());
+            }
+
+            return addrString.toString();
+        }
+
+        private String formatFloorplans(IPrimitiveSet<String> floorplans) {
+            final String delimiter = "/ ";
+
+            if (floorplans.isNull())
+                return "";
+
+            StringBuffer planString = new StringBuffer();
+
+            for (String planName : floorplans.getValue()) {
+                if (planName != null && !planName.isEmpty()) {
+                    planString.append(planName);
+                    planString.append(delimiter);
+                }
+            }
+            String finalString = planString.toString();
+            if (!finalString.isEmpty()) {
+                finalString = finalString.substring(0, finalString.lastIndexOf(delimiter));
+            }
+            return finalString;
+        }
     }
 }

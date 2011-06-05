@@ -76,7 +76,7 @@ public class ApartmentDetailsViewImpl extends FlowPanel implements ApartmentDeta
 
         Button inquire = new Button(i18n.tr("Inquire"));
         inquire.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Button);
-        inquire.setWidth("100%");
+        inquire.setWidth("300px");
         inquire.setHeight("40px");
         leftPanel.add(inquire);
 

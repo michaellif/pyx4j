@@ -21,6 +21,7 @@ import com.propertyvista.portal.client.ui.PortalView;
 import com.propertyvista.portal.client.ui.ResidentsNavigViewImpl;
 import com.propertyvista.portal.client.ui.decorations.BasicCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
+import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.CardPanel;
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
@@ -55,6 +56,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         initCriteriaWidgetDecoratorStyles();
         initBaseFolderItemViewerDecoratorStyles();
         initCardPanelDecoratorStyle();
+        initPropertiesMapWidgetStyle();
     }
 
     @Override
@@ -444,6 +446,8 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("width", "100%!important");
         style.addProperty("height", "100%!important");
         style.addProperty("-moz-background-size", "100% 100%!important");
+        style.addProperty("-webkit-background-size", "100% 100%!important");
+        style.addProperty("-khtml-background-size", "100% 100%!important");
         style.addProperty("background-size", "100% 100%!importan");
         addStyle(style);
 
@@ -456,6 +460,51 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
         style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Content));
         style.addProperty("font-size", "14px");
+        addStyle(style);
+
+    }
+
+    private void initPropertiesMapWidgetStyle() {
+        String prefix = PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX;
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardImage));
+        style.addProperty("border-color", "#7B8388!important");
+        style.addProperty("border", "solid 1px");
+        style.addProperty("padding", "2px");
+
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardImage) + " img");
+        style.addProperty("max-width", "100%!important");
+        style.addProperty("width", "100%!important");
+        style.addProperty("height", "100%!important");
+        style.addProperty("-moz-background-size", "100% 100%!important");
+        style.addProperty("-webkit-background-size", "100% 100%!important");
+        style.addProperty("-khtml-background-size", "100% 100%!important");
+        style.addProperty("background-size", "100% 100%!importan");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardHeader));
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-bottom", "5px");
+        style.addProperty("font-size", "12px");
+        style.addProperty("margin-left", "10px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardContent));
+        style.addProperty("font-size", "12px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardMenuItem));
+        style.addProperty("text-decoration", "none");
+        style.addProperty("color", "#7B8388");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardMenuItem) + ":hover");
+        style.addProperty("text-decoration", "underline");
+        style.addProperty("color", "#7B8388");
         addStyle(style);
 
     }
