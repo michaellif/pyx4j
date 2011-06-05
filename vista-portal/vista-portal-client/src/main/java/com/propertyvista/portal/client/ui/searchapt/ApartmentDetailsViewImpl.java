@@ -42,6 +42,8 @@ public class ApartmentDetailsViewImpl extends FlowPanel implements ApartmentDeta
 
     private final FlowPanel centerPanel;
 
+    private final SlidesPanel slidesPanel;
+
     private final ApartmentDetailsForm apartmentForm;
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentDetailsViewImpl.class);
@@ -66,7 +68,8 @@ public class ApartmentDetailsViewImpl extends FlowPanel implements ApartmentDeta
         leftPanel.setWidth("35%");
         add(leftPanel);
 
-        leftPanel.add(new SlidesPanel());
+        slidesPanel = new SlidesPanel();
+        leftPanel.add(slidesPanel);
 
         map = new PropertyMapWidget();
         leftPanel.add(map);
@@ -91,6 +94,7 @@ public class ApartmentDetailsViewImpl extends FlowPanel implements ApartmentDeta
     public void populate(PropertyDetailsDTO property) {
         apartmentForm.populate(property);
         map.populate(property);
+        slidesPanel.populate(property);
     }
 
 }

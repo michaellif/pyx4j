@@ -57,7 +57,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
 
         super.mapsLoaded();
 
-        if (!propertyList.properties().isNull()) {
+        if (propertyList != null && !propertyList.properties().isNull()) {
             populate(propertyList);
         }
 

@@ -19,6 +19,7 @@ import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.MapUtils;
 
 import com.propertyvista.portal.client.resources.PortalImages;
@@ -58,7 +59,10 @@ public class PropertyMapWidget extends AbstractMapWidget {
                 getMap().addOverlay(marker);
             }
             //TODO calc base on  markers
-            getMap().setCenter(MapUtils.newLatLngInstance(property.location().getValue()));
+            GeoPoint point = property.location().getValue();
+            if (point != null) {
+                getMap().setCenter(MapUtils.newLatLngInstance(point));
+            }
             getMap().setZoomLevel(15);
         }
     }

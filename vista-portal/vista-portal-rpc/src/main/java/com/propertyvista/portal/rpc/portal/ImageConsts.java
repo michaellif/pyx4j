@@ -26,6 +26,6 @@ public interface ImageConsts {
 
     public static final Dimension BUILDING_MEDUM = new Dimension(142, 95);
 
-    public static final Dimension BUILDING_LARGE = new Dimension(250, 166);
+    public static final Dimension BUILDING_LARGE = new Dimension(300, 200);
 
 }

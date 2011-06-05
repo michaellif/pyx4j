@@ -27,22 +27,6 @@ public interface PortalImages extends ClientBundle {
     @Source("map_marker.png")
     ImageResource mapMarker();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("building2.jpg")
-    ImageResource building2();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("building3.jpg")
-    ImageResource building3();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("building4.jpg")
-    ImageResource building4();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("building5.jpg")
-    ImageResource building5();
-
     @ImageOptions(repeatStyle = RepeatStyle.None)
     @Source("unit1.jpg")
     ImageResource unit1();
