@@ -99,7 +99,7 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
     private FlowPanel fillAppartmentCard(PropertyDTO value) {
 
-        Card card = new Card();
+        CardPanel card = new CardPanel();
         card.setCardImage(new HTML("Image"));
         card.setCardHeader(new Label(formatAddress(value.address())));
 

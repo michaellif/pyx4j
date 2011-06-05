@@ -31,7 +31,7 @@ public class PropertyMapWidget extends AbstractMapWidget {
     private PropertyDTO property;
 
     public PropertyMapWidget() {
-        super("100%", "300px");
+        super("300px", "300px");
     }
 
     @Override

@@ -17,22 +17,16 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.portal.client.ui.maps.PropertyMapWidget;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class ApartmentDetailsViewImpl extends SimplePanel implements ApartmentDetailsView {
+public class ApartmentDetailsViewImpl extends FlowPanel implements ApartmentDetailsView {
 
     public static String DEFAULT_STYLE_PREFIX = "AppartmentDetails";
 
@@ -42,18 +36,49 @@ public class ApartmentDetailsViewImpl extends SimplePanel implements ApartmentDe
 
     private Presenter presenter;
 
-    private final PageLayout container;
+    private final FlowPanel leftPanel;
+
+    private final PropertyMapWidget map;
+
+    private final FlowPanel centerPanel;
 
     private final ApartmentDetailsForm apartmentForm;
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentDetailsViewImpl.class);
 
     public ApartmentDetailsViewImpl() {
-        container = new PageLayout();
         apartmentForm = new ApartmentDetailsForm();
         apartmentForm.initialize();
-        container.addToCenterPanel(apartmentForm);
-        setWidget(container);
+
+        setSize("100%", "100%");
+        setStyleName(DEFAULT_STYLE_PREFIX);
+        VerticalPanel header = new VerticalPanel();
+        header.setWidth("100%");
+
+        HTML pagetitle = new HTML(i18n.tr("Apartment Details"));
+        pagetitle.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.PageHeader);
+        header.add(pagetitle);
+        add(header);
+
+        leftPanel = new FlowPanel();
+        leftPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Left);
+        leftPanel.getElement().getStyle().setFloat(Float.LEFT);
+        leftPanel.setWidth("35%");
+        add(leftPanel);
+
+        leftPanel.add(new SlidesPanel());
+
+        map = new PropertyMapWidget();
+        leftPanel.add(map);
+
+        centerPanel = new FlowPanel();
+        centerPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Center);
+        centerPanel.getElement().getStyle().setFloat(Float.RIGHT);
+        centerPanel.setWidth("63%");
+
+        add(centerPanel);
+
+        centerPanel.add(apartmentForm);
     }
 
     @Override
@@ -65,68 +90,7 @@ public class ApartmentDetailsViewImpl extends SimplePanel implements ApartmentDe
     @Override
     public void populate(PropertyDetailsDTO property) {
         apartmentForm.populate(property);
-        container.setMap(property);
-    }
-
-    private class PageLayout extends FlowPanel {
-        private final FlowPanel leftPanel;
-
-        private final PropertyMapWidget map;
-
-        private final FlowPanel centerPanel;
-
-        public PageLayout() {
-            super();
-            setSize("100%", "100%");
-            setStyleName(DEFAULT_STYLE_PREFIX);
-            VerticalPanel header = new VerticalPanel();
-            header.setWidth("100%");
-            Anchor back = new Anchor("Back to Search");
-            back.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    presenter.navigTo(new PortalSiteMap.FindApartment.PropertyMap());
-                }
-            });
-            header.add(back);
-
-            HTML pagetitle = new HTML("<span>" + i18n.tr("Apartment Details") + "</span>");
-            pagetitle.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.PageHeader);
-            header.add(pagetitle);
-            add(header);
-
-            leftPanel = new FlowPanel();
-            leftPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Left);
-            leftPanel.getElement().getStyle().setFloat(Float.LEFT);
-            leftPanel.setWidth("35%");
-            add(leftPanel);
-
-            map = new PropertyMapWidget();
-            leftPanel.add(map);
-
-            centerPanel = new FlowPanel();
-            centerPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Center);
-            centerPanel.getElement().getStyle().setFloat(Float.RIGHT);
-            centerPanel.setWidth("63%");
-
-            add(centerPanel);
-        }
-
-        public void addToLeftPanel(IsWidget child) {
-            leftPanel.add(child);
-        }
-
-        public void addToCenterPanel(IsWidget child) {
-            centerPanel.add(child);
-        }
-
-        public void clearCenterPanel() {
-            centerPanel.clear();
-        }
-
-        public void setMap(PropertyDetailsDTO property) {
-            map.populate(property);
-        }
+        map.populate(property);
     }
 
 }

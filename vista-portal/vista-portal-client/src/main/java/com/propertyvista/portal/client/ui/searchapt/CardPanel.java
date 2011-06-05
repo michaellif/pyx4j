@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class Card extends FlowPanel {
+public class CardPanel extends FlowPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "portalCard";
 
@@ -43,7 +43,7 @@ public class Card extends FlowPanel {
         Header, Content, Image
     }
 
-    public Card() {
+    public CardPanel() {
         setStyleName(DEFAULT_STYLE_PREFIX);
         setSize("100%", "100%");
 

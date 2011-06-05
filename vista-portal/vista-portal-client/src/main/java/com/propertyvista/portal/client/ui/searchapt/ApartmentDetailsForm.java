@@ -185,7 +185,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
     private FlowPanel fillFloorplanCard(FloorplanDTO value) {
 
-        Card card = new Card();
+        CardPanel card = new CardPanel();
         card.setCardImage(new HTML("Unit Image"));
 
         Label lbl;
