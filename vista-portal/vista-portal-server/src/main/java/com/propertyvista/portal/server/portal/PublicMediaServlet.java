@@ -29,8 +29,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 
 import com.propertyvista.domain.Medium;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.server.common.blob.BlobService;
+import com.propertyvista.server.common.blob.ThumbnailService;
 
+/**
+ * This service does extra read from DB to read BlobKey, We may decide in future not to do this.
+ */
 @SuppressWarnings("serial")
 public class PublicMediaServlet extends HttpServlet {
 
@@ -44,6 +49,11 @@ public class PublicMediaServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
+        ThumbnailSize thumbnailSize = null;
+        try {
+            thumbnailSize = ThumbnailSize.valueOf(FilenameUtils.getBaseName(filename));
+        } catch (IllegalArgumentException notThumbnail) {
+        }
 
         //TODO deserialize key
         Medium medium = PersistenceServicesFactory.getPersistenceService().retrieve(Medium.class, new Key(id));
@@ -52,10 +62,14 @@ public class PublicMediaServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         } else {
-            if (!medium.file().contentType().isNull()) {
-                response.setContentType(medium.file().contentType().getValue());
+            if (thumbnailSize == null) {
+                if (!medium.file().contentType().isNull()) {
+                    response.setContentType(medium.file().contentType().getValue());
+                }
+                BlobService.serve(medium.file().blobKey().getValue(), response);
+            } else {
+                ThumbnailService.serve(medium.file().blobKey().getValue(), thumbnailSize, response);
             }
-            BlobService.serve(medium.file().blobKey().getValue(), response);
         }
     }
 }

@@ -37,9 +37,11 @@ import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.server.geo.GeoLocator;
 import com.propertyvista.portal.server.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.blob.BlobService;
+import com.propertyvista.server.common.blob.ThumbnailService;
 
 public class Importer {
 
@@ -118,6 +120,10 @@ public class Importer {
         for (Map.Entry<Medium, byte[]> me : data.entrySet()) {
             Medium m = me.getKey();
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentType().getValue()));
+
+            ThumbnailService.persist(m.file().blobKey().getValue(), me.getValue(), ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDUM,
+                    ImageConsts.BUILDING_LARGE);
+
             persist(m);
             building.media().add(m);
         }

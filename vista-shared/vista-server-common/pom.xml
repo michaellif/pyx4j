@@ -44,6 +44,12 @@
         
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-site-shared</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-j2se</artifactId>
             <version>${pyxVersion}</version>
         </dependency>
@@ -52,6 +58,12 @@
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-mail-server</artifactId>
             <version>${pyxVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mortennobel</groupId>
+            <artifactId>java-image-scaling</artifactId>
+            <version>0.8.5</version>
         </dependency>
 
         <dependency>
