@@ -16,9 +16,7 @@ package com.propertyvista.crm.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -29,6 +27,8 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -280,7 +280,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
             stackHeaderWidget.setSelected(selected);
         }
 
-        private class StackHeaderWidget extends FlowPanel {
+        private class StackHeaderWidget extends HorizontalPanel {
 
             private Image image = null;
 
@@ -311,14 +311,15 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                     image.getElement().getStyle().setMarginTop(0.2, Unit.EM);
                     image.getElement().getStyle().setMarginRight(0.5, Unit.EM);
                     add(image);
+                    setCellVerticalAlignment(image, HasVerticalAlignment.ALIGN_MIDDLE);
                 }
 
                 Label label = new Label(folder.getTitle());
-                label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-                label.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-                label.getElement().getStyle().setProperty("lineHeight", "2em");
-
                 add(label);
+                setCellVerticalAlignment(label, HasVerticalAlignment.ALIGN_MIDDLE);
+                setCellWidth(label, "100%");
+
+                setWidth("100%");
             }
 
             private void setSelected(boolean selected) {

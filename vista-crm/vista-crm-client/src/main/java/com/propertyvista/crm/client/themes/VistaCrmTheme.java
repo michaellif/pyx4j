@@ -70,12 +70,12 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-HDragger");
-        style.addProperty("border-left", "ridge  #444");
+        style.addProperty("background", "#ccc");
         style.addProperty("cursor", "col-resize");
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-VDragger");
-        style.addProperty("border-top", "ridge  #444");
+        style.addProperty("background", "#ccc");
         style.addProperty("cursor", "row-resize");
         addStyle(style);
 
@@ -143,7 +143,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         // All viewable area:
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("color", "#757575");//TODO define constant for the font in accordance with the spec
+        style.addProperty("color", "#757575"); //TODO define constant for the font in accordance with the spec
         addStyle(style);
 
         // DockLayoutPanel:
@@ -155,6 +155,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         // Header:
         style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Header));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE95);
+        style.addProperty("color", "white");
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "0.3em");
         addStyle(style);
@@ -203,7 +204,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
          */
         style = new Style(Selector.valueOf(prefix + " a:link, a:visited, a:active"));
         style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColor.TEXT);
+        style.addProperty("color", ThemeColor.OBJECT_TONE90);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix + " a:hover"));
@@ -216,7 +217,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         // stack header
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader"));
         style.addProperty("font-size", "1.3em");
-        style.addProperty("padding-top", "0.2em");
+//        style.addProperty("padding-top", "0.2em");
         style.addProperty("padding-left", "0.5em");
         style.addProperty("cursor", "pointer");
         style.addProperty("color", "DimGray");
@@ -256,7 +257,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
          */
         style = new Style(prefix + " a:link, a:visited, a:active");
         style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColor.TEXT);
+        style.addProperty("color", ThemeColor.OBJECT_TONE90);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix + " a:hover"));
@@ -402,10 +403,11 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("color", ThemeColor.OBJECT_TONE95);
         style.addProperty("font", "caption");
         style.addProperty("font-weight", "bold");
-        style.addProperty("color", "#444");
         style.addProperty("height", "20px");
+        style.addProperty("padding-left", "1em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption) + ":hover");
@@ -446,7 +448,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
-        style.addProperty("color", "black");
+        style.addProperty("color", ThemeColor.OBJECT_TONE95);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row));

@@ -62,7 +62,7 @@ public class ReportViewImpl extends SimplePanel implements ReportView {
 
         scroll = new ScrollPanel();
         scroll.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        scroll.getElement().getStyle().setTop(30, Unit.PX);
+        scroll.getElement().getStyle().setTop(2.5, Unit.EM);
         scroll.getElement().getStyle().setLeft(0, Unit.PX);
         scroll.getElement().getStyle().setRight(0, Unit.PX);
         scroll.getElement().getStyle().setBottom(0, Unit.PX);
