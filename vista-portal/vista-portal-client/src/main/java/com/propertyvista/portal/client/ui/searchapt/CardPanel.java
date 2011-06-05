@@ -27,7 +27,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class CardPanel extends FlowPanel {
 
-    public static String DEFAULT_STYLE_PREFIX = "portalCard";
+    public static String DEFAULT_STYLE_PREFIX = "cardPanel";
 
     private final SimplePanel header;
 
@@ -54,17 +54,20 @@ public class CardPanel extends FlowPanel {
         contentHolder = new FlowPanel();
         contentHolder.setSize("100%", "85%");
 
+        SimplePanel envelope = new SimplePanel();
+        envelope.setSize("28%", "100%");
+        envelope.getElement().getStyle().setFloat(Float.LEFT);
         imageHolder = new SimplePanel();
         imageHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Image);
-        imageHolder.setSize("30%", "100%");
-        imageHolder.getElement().getStyle().setFloat(Float.LEFT);
+        imageHolder.setSize("100%", "100%");
         imageHolder.getElement().getStyle().setProperty("minHeight", "100px");
+        envelope.add(imageHolder);
 
         content = new SimplePanel();
         content.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content);
         content.setSize("70%", "100%");
         content.getElement().getStyle().setFloat(Float.RIGHT);
-        contentHolder.add(imageHolder);
+        contentHolder.add(envelope);
         contentHolder.add(content);
 
         add(header);

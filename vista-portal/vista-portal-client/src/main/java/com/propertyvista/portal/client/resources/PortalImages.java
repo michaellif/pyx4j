@@ -43,4 +43,20 @@ public interface PortalImages extends ClientBundle {
     @Source("building5.jpg")
     ImageResource building5();
 
+    @ImageOptions(repeatStyle = RepeatStyle.None)
+    @Source("unit1.jpg")
+    ImageResource unit1();
+
+    @ImageOptions(repeatStyle = RepeatStyle.None)
+    @Source("unit2.jpg")
+    ImageResource unit2();
+
+    @ImageOptions(repeatStyle = RepeatStyle.None)
+    @Source("unit3.jpg")
+    ImageResource unit3();
+
+    @ImageOptions(repeatStyle = RepeatStyle.None)
+    @Source("unit4.jpg")
+    ImageResource unit4();
+
 }

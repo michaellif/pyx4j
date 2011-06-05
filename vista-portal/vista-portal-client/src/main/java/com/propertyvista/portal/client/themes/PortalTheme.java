@@ -22,6 +22,7 @@ import com.propertyvista.portal.client.ui.ResidentsNavigViewImpl;
 import com.propertyvista.portal.client.ui.decorations.BasicCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsViewImpl;
+import com.propertyvista.portal.client.ui.searchapt.CardPanel;
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentForm;
@@ -53,6 +54,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         initApartmentDetailsStyles();
         initCriteriaWidgetDecoratorStyles();
         initBaseFolderItemViewerDecoratorStyles();
+        initCardPanelDecoratorStyle();
     }
 
     @Override
@@ -417,6 +419,39 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style = new Style("." + prefix + "-" + BasicCardDecorator.StyleDependent.hover);
         style.addProperty("border-color", "#7B8388!important");
         style.addProperty("border", "solid 1px");
+        addStyle(style);
+
+    }
+
+    private void initCardPanelDecoratorStyle() {
+        String prefix = CardPanel.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Image));
+        style.addProperty("border-color", "#7B8388!important");
+        style.addProperty("border", "solid 1px");
+        style.addProperty("padding", "2px");
+
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Image) + " img");
+        style.addProperty("max-width", "100%!important");
+        style.addProperty("width", "100%!important");
+        style.addProperty("height", "100%!important");
+        style.addProperty("-moz-background-size", "100% 100%!important");
+        style.addProperty("background-size", "100% 100%!importan");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Header));
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-bottom", "5px");
+        style.addProperty("font-size", "16px");
+        style.addProperty("margin-left", "30px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Content));
+        style.addProperty("font-size", "14px");
         addStyle(style);
 
     }

@@ -15,12 +15,13 @@ package com.propertyvista.portal.client.ui.searchapt;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.decorations.FloorplanCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.PortalListDecorator;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
@@ -45,12 +46,30 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
     private final DecorationData listDecor;
 
+    //TODO remove all this when real unit images are available
+    Image image1;
+
+    Image image2;
+
+    Image image3;
+
+    Image image4;
+
+    int idx;
+
     public ApartmentDetailsForm() {
         super(PropertyDetailsDTO.class);
         //    decor = new DecorationData(10, Unit.PCT, 90, Unit.PCT);
-        decor = new DecorationData(10d, 35);
+        decor = new DecorationData(7d, 40);
         decor.editable = false;
         listDecor = new DecorationData(0, Unit.PCT, 100, Unit.PCT);
+        //TODO remove
+        image1 = new Image(PortalImages.INSTANCE.unit1());
+        image2 = new Image(PortalImages.INSTANCE.unit2());
+        image3 = new Image(PortalImages.INSTANCE.unit3());
+        image4 = new Image(PortalImages.INSTANCE.unit4());
+        idx = 0;
+
     }
 
     @Override
@@ -186,7 +205,30 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
     private FlowPanel fillFloorplanCard(FloorplanDTO value) {
 
         CardPanel card = new CardPanel();
-        card.setCardImage(new HTML("Unit Image"));
+        //TODO remove image crap when the real images come
+        Image currentImage;
+        switch (idx) {
+        case 0:
+            currentImage = image1;
+            break;
+        case 1:
+            currentImage = image2;
+            break;
+        case 2:
+            currentImage = image3;
+            break;
+        default:
+            currentImage = image4;
+            break;
+        }
+
+        if (idx > 3)
+            idx = 0;
+        else
+            ++idx;
+
+        card.setCardImage(currentImage);
+        FlowPanel content = new FlowPanel();
 
         Label lbl;
         if (!value.name().isNull()) {
@@ -195,9 +237,20 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         }
 
         if (!value.area().isNull()) {
-            lbl = new Label(value.area().getValue().toString());
-            card.setCardContent(lbl);
+            StringBuffer area = new StringBuffer();
+            area.append(value.area().getValue().toString());
+            area.append(" ");
+            area.append(value.area().getMeta().getCaption());
+            lbl = new Label(area.toString());
+            content.add(lbl);
+
         }
+
+        if (!value.description().isNull()) {
+            lbl = new Label(value.description().getValue().toString());
+            content.add(lbl);
+        }
+        card.setCardContent(content);
 
         return card;
 
