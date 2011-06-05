@@ -16,16 +16,32 @@ package com.propertyvista.crm.client.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.resources.client.ImageResource;
+
 import com.pyx4j.site.rpc.AppPlace;
 
 public class NavigFolder {
 
     private final String title;
 
+    private final ImageResource normal;
+
+    private final ImageResource hover;
+
+    private final ImageResource active;
+
     private final List<AppPlace> navigItems;
 
     public NavigFolder(String title) {
+        this(title, null, null, null);
+    }
+
+    public NavigFolder(String title, ImageResource normal, ImageResource hover, ImageResource active) {
         this.title = title;
+        this.normal = normal;
+        this.hover = hover;
+        this.active = active;
+
         navigItems = new ArrayList<AppPlace>();
     }
 
@@ -37,8 +53,22 @@ public class NavigFolder {
         navigItems.add(item);
     }
 
+    // resources:
+
     public String getTitle() {
         return title;
+    }
+
+    public ImageResource getImageNormal() {
+        return normal;
+    }
+
+    public ImageResource getImageHover() {
+        return hover;
+    }
+
+    public ImageResource getImageActive() {
+        return active;
     }
 
 }

@@ -93,96 +93,96 @@ public interface CrmImages extends ClientBundle {
     //---New Images
 
     @Source("Bookmark_active.png")
-    ImageResource Bookmark_active();
+    ImageResource bookmarkactive();
 
     @Source("Bookmark_hover.png")
-    ImageResource Bookmark_hover();
+    ImageResource bookmarkHover();
 
     @Source("Bookmark_normal.png")
-    ImageResource Bookmark_normal();
+    ImageResource bookmarkNormal();
 
     @Source("Dashboards_active.png")
-    ImageResource Dashboards_active();
+    ImageResource dashboardsActive();
 
     @Source("Dashboards_hover.png")
-    ImageResource Dashboards_hover();
+    ImageResource dashboardsHover();
 
     @Source("Dashboards_normal.png")
-    ImageResource Dashboards_normal();
+    ImageResource dashboardsNormal();
 
     @Source("Feedback_hover.png")
-    ImageResource Feedback_hover();
+    ImageResource feedbackHover();
 
     @Source("Feedback_normal.png")
-    ImageResource Feedback_normal();
+    ImageResource feedbackNormal();
 
     @Source("Finance_active.png")
-    ImageResource Finance_active();
+    ImageResource financeActive();
 
     @Source("Finance_hover.png")
-    ImageResource Finance_hover();
+    ImageResource financeHover();
 
     @Source("Finance_normal.png")
-    ImageResource Finance_normal();
+    ImageResource financeNormal();
 
     @Source("Legal_active.png")
-    ImageResource Legal_active();
+    ImageResource legalActive();
 
     @Source("Legal_hover.png")
-    ImageResource Legal_hover();
+    ImageResource legalHover();
 
     @Source("Legal_normal.png")
-    ImageResource Legal_normal();
+    ImageResource legalNormal();
 
     @Source("Marketing_active.png")
-    ImageResource Marketing_active();
+    ImageResource marketingActive();
 
     @Source("Marketing_hover.png")
-    ImageResource Marketing_hover();
+    ImageResource marketingHover();
 
     @Source("Marketing_normal.png")
-    ImageResource Marketing_normal();
+    ImageResource marketingNormal();
 
     @Source("Messages-Normal.png")
-    ImageResource Messages_Normal();
+    ImageResource messagesNormal();
 
     @Source("Messages_hover.png")
-    ImageResource Messages_hover();
+    ImageResource messagesHover();
 
     @Source("Notifications_hover.png")
-    ImageResource Notifications_hover();
+    ImageResource notificationsHover();
 
     @Source("Notifications_normal.png")
-    ImageResource Notifications_normal();
+    ImageResource notificationsNormal();
 
     @Source("Options_hover.png")
-    ImageResource Options_hover();
+    ImageResource optionsHover();
 
     @Source("Options_normal.png")
-    ImageResource Options_normal();
+    ImageResource optionsNormal();
 
     @Source("Optoins2-hover.png")
-    ImageResource Optoins2_hover();
+    ImageResource optoins2Hover();
 
     @Source("Optoins2-normal.png")
-    ImageResource Optoins2_normal();
+    ImageResource optoins2Normal();
 
     @Source("Properties_active.png")
-    ImageResource Properties_active();
+    ImageResource propertiesActive();
 
     @Source("Properties_hover.png")
-    ImageResource Properties_hover();
+    ImageResource propertiesHover();
 
     @Source("Properties_normal.png")
-    ImageResource Properties_normal();
+    ImageResource propertiesNormal();
 
     @Source("Reports_active.png")
-    ImageResource Reports_active();
+    ImageResource reportsActive();
 
     @Source("Reports_hover.png")
-    ImageResource Reports_hover();
+    ImageResource reportsHover();
 
     @Source("Reports_normal.png")
-    ImageResource Reports_normal();
+    ImageResource reportsNormal();
 
 }

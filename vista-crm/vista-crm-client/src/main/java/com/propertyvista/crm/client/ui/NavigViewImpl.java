@@ -16,20 +16,30 @@ package com.propertyvista.crm.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.crm.client.activity.NavigFolder;
 
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.crm.client.activity.NavigFolder;
 
 public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
@@ -52,6 +62,13 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
         setStyleName(DEFAULT_STYLE_PREFIX);
         setHeight("100%");
         lastKnownPlaces = null;
+
+        addSelectionHandler(new SelectionHandler<Integer>() {
+            @Override
+            public void onSelection(SelectionEvent<Integer> event) {
+                onSelected(event.getSelectedItem());
+            }
+        });
     }
 
     @Override
@@ -140,11 +157,8 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                     }
                 }
                 if (!folderFound) {
-                    nw = new NavigFolderWidget(navigFolder.getTitle());
-                    for (final AppPlace place : navigFolder.getNavigItems()) {
-                        nw.addItem(new NavigItemAnchor(place));
-                        add(nw, nw.getStackTitle(), 3);
-                    }
+                    nw = new NavigFolderWidget(navigFolder);
+                    add(nw, nw.getStackHeaderWidget(), 3);
                     lastKnownPlaces.add(nw);
                 }
 
@@ -170,11 +184,8 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
             lastKnownPlaces = new ArrayList<NavigFolderWidget>(10);
             NavigFolderWidget nw = null;
             for (NavigFolder navigFolder : folders) {
-                nw = new NavigFolderWidget(navigFolder.getTitle());
-                for (final AppPlace place : navigFolder.getNavigItems()) {
-                    nw.addItem(new NavigItemAnchor(place));
-                    add(nw, nw.getStackTitle(), 3);
-                }
+                nw = new NavigFolderWidget(navigFolder);
+                add(nw, nw.getStackHeaderWidget(), 3);
                 lastKnownPlaces.add(nw);
             }
             if (nw != null) {
@@ -184,21 +195,41 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                 }
             }
         }
-
     }
 
-    class NavigFolderWidget extends ScrollPanel {
-        private final List<NavigItemAnchor> items;
+    private void onSelected(int index) {
+        for (int i = 0; i < getWidgetCount(); ++i) {
+            Widget w = getWidget(i);
+            if (w instanceof NavigFolderWidget) {
+                ((NavigFolderWidget) w).setSelected(index == i);
+            }
+        }
+    }
 
-        private final String stackTitle;
+    //
+    //  Folder/Item classes:
+    //
+
+    class NavigFolderWidget extends ScrollPanel {
+
+        private final NavigFolder folder;
+
+        private final List<NavigItemAnchor> items;
 
         private final FlowPanel list;
 
-        public NavigFolderWidget(String title) {
-            this.stackTitle = title;
-            list = new FlowPanel();
-            add(list);
+        private final StackHeaderWidget stackHeaderWidget;
+
+        public NavigFolderWidget(NavigFolder folder) {
+            this.folder = folder;
+
+            add(list = new FlowPanel());
             items = new ArrayList<NavigItemAnchor>(10);
+            for (AppPlace place : folder.getNavigItems()) {
+                addItem(new NavigItemAnchor(place));
+            }
+
+            stackHeaderWidget = new StackHeaderWidget();
         }
 
         public void addItem(NavigItemAnchor item) {
@@ -210,36 +241,87 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
         }
 
         public void removeItem(NavigItemAnchor item) {
-            if (item == null)
-                return;
-            for (NavigItemAnchor a : items) {
-                if (a.equals(item)) {
-                    items.remove(item);
-                    list.remove(item);
-                    break;
+            if (item != null) {
+                for (NavigItemAnchor a : items) {
+                    if (a.equals(item)) {
+                        items.remove(item);
+                        list.remove(item);
+                        break;
+                    }
                 }
             }
-
-        }
-
-        public String getStackTitle() {
-            return stackTitle;
         }
 
         public List<NavigItemAnchor> getItems() {
             return items;
         }
 
-        /**
-         * TODO implement better algorithm when NavigFolder is finalized
-         */
+        // TODO implement better algorithm when NavigFolder is finalized
         @Override
         public boolean equals(Object obj) {
-            if (stackTitle == null)
-                return false;
-            return stackTitle.equals(obj);
+            return (getStackTitle() != null ? getStackTitle().equals(obj) : false);
         }
 
+        //
+        //  UI stuff:
+        //
+
+        public String getStackTitle() {
+            return folder.getTitle();
+        }
+
+        public Widget getStackHeaderWidget() {
+            return stackHeaderWidget;
+        }
+
+        public void setSelected(boolean selected) {
+            stackHeaderWidget.setSelected(selected);
+        }
+
+        private class StackHeaderWidget extends FlowPanel {
+
+            private Image image = null;
+
+            private boolean selected = false;
+
+            private StackHeaderWidget() {
+                if (folder.getImageNormal() != null) {
+                    image = new Image(folder.getImageNormal());
+
+                    addHandler(new MouseOverHandler() {
+                        @Override
+                        public void onMouseOver(MouseOverEvent event) {
+                            if (!selected) {
+                                image.setResource(folder.getImageHover());
+                            }
+                        }
+                    }, MouseOverEvent.getType());
+                    addHandler(new MouseOutHandler() {
+                        @Override
+                        public void onMouseOut(MouseOutEvent event) {
+                            if (!selected) {
+                                image.setResource(folder.getImageNormal());
+                            }
+                        }
+                    }, MouseOutEvent.getType());
+
+                    image.getElement().getStyle().setMarginRight(1, Unit.EM);
+                    add(image);
+                }
+
+                Label label = new Label(folder.getTitle());
+                label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                add(label);
+            }
+
+            private void setSelected(boolean selected) {
+                this.selected = selected;
+
+                if (image != null) {
+                    image.setResource(selected ? folder.getImageActive() : folder.getImageNormal());
+                }
+            }
+        }
     }
 
     class NavigItemAnchor extends SimplePanel {
