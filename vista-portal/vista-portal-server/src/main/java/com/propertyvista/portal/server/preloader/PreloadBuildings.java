@@ -148,9 +148,9 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
             StringBuilder sb = new StringBuilder();
 
-            sb.append("Imported ").append(importer.getMapper().getBuildings().size()).append(" buildings, ");
-            sb.append(importer.getMapper().getFloorplans().size()).append(" floorplans");
-            sb.append(importer.getMapper().getUnits().size()).append(" units");
+            sb.append("Imported ").append(importer.getModel().getBuildings().size()).append(" buildings, ");
+            sb.append(importer.getModel().getFloorplans().size()).append(" floorplans");
+            sb.append(importer.getModel().getUnits().size()).append(" units");
 
             return sb.toString();
         } catch (Exception e) {

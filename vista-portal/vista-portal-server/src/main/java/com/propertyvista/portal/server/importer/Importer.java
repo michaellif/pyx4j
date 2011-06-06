@@ -32,6 +32,7 @@ import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
@@ -51,6 +52,10 @@ public class Importer {
 
     private Mapper mapper;
 
+    private Generator generator;
+
+    private Model model = new Model();
+
     public Importer() {
     }
 
@@ -62,27 +67,40 @@ public class Importer {
 
     public void map() {
         // map
-        mapper = new Mapper();
+        mapper = new Mapper(model);
         mapper.load(reader.getResidential(), reader.getUnits());
     }
 
     public void geo() throws JAXBException, IOException {
         GeoLocator geoCache = new GeoLocator(Mode.useCache);
-        geoCache.populateGeo(mapper.getBuildings());
+        geoCache.populateGeo(model.getBuildings());
+    }
+
+    /**
+     * Generate any missing data to conform
+     */
+    public void generate() {
+        generator = new Generator(model);
+        generator.generateMissingData();
     }
 
     public void save() {
         // save
-        for (Building building : mapper.getBuildings()) {
+
+        for (Building building : model.getBuildings()) {
             loadMedia(building);
             persist(building);
         }
 
-        for (Floorplan floorplan : mapper.getFloorplans()) {
+        for (BuildingAmenity amenity : model.getBuildingAmenities()) {
+            persist(amenity);
+        }
+
+        for (Floorplan floorplan : model.getFloorplans()) {
             persist(floorplan);
         }
 
-        for (AptUnitDTO unitDTO : mapper.getUnits()) {
+        for (AptUnitDTO unitDTO : model.getUnits()) {
             AptUnit unit = down(unitDTO, AptUnit.class);
 
             for (Utility utility : unitDTO.info().utilities()) {
@@ -134,6 +152,7 @@ public class Importer {
         read();
         map();
         geo();
+        generate();
         save();
     }
 
@@ -141,8 +160,8 @@ public class Importer {
         PersistenceServicesFactory.getPersistenceService().persist(entity);
     }
 
-    public Mapper getMapper() {
-        return mapper;
+    public Model getModel() {
+        return model;
     }
 
     // Genric DTO -> O convertion:

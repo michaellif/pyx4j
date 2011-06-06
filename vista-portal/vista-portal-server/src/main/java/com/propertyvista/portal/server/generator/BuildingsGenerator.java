@@ -45,6 +45,7 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.Parking.Type;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
@@ -485,6 +486,16 @@ public class BuildingsGenerator {
         }
 
         return complex;
+    }
+
+    public BuildingAmenity createBuildingAmenity(Building building) {
+        BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
+
+        amenity.belongsTo().set(building);
+        amenity.type().setValue(RandomUtil.random(BuildingAmenity.Type.values()));
+        amenity.subType().setValue(RandomUtil.random(BuildingAmenity.SubType.values()));
+
+        return amenity;
     }
 
     public LeaseTerms createLeaseTerms() {

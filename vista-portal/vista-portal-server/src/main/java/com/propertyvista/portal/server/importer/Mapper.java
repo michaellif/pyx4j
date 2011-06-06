@@ -46,13 +46,13 @@ import com.propertyvista.portal.server.importer.csv.AvailableUnit;
 public class Mapper {
     private static final Logger log = LoggerFactory.getLogger(Mapper.class);
 
-    private final List<Building> buildings = new ArrayList<Building>();
-
-    private final List<AptUnitDTO> units = new ArrayList<AptUnitDTO>();
-
-    private final List<Floorplan> floorplans = new ArrayList<Floorplan>();
-
     private List<AvailableUnit> availableUnits = new ArrayList<AvailableUnit>();
+
+    private Model model;
+
+    public Mapper(Model model) {
+        this.model = model;
+    }
 
     public void load(Residential residential, List<AvailableUnit> availableUnits) {
         this.availableUnits = availableUnits;
@@ -63,11 +63,11 @@ public class Mapper {
         }
 
         log.info("-------------\n\n");
-        log.info("" + buildings.get(0));
+        log.info("" + model.getBuildings().get(0));
         log.info("-------------");
-        log.info("" + units.get(0));
+        log.info("" + model.getUnits().get(0));
         log.info("-------------");
-        log.info("" + floorplans.get(0));
+        log.info("" + model.getFloorplans().get(0));
         // for (Building building : buildings) {
         // log.info("\n" + building);
         // }
@@ -76,9 +76,9 @@ public class Mapper {
         // log.info("\n" + unit);
         // }
 
-        log.info(buildings.size() + " buildings");
-        log.info(units.size() + " units");
-        log.info(floorplans.size() + " floorplans");
+        log.info(model.getBuildings().size() + " buildings");
+        log.info(model.getUnits().size() + " units");
+        log.info(model.getFloorplans().size() + " floorplans");
     }
 
     private void create(Region region) {
@@ -113,7 +113,7 @@ public class Mapper {
 
         building.contacts().website().setValue(property.getWebsite());
 
-        buildings.add(building);
+        model.getBuildings().add(building);
 
         // find available units for this building
         List<AvailableUnit> buildingUnits = new ArrayList<AvailableUnit>();
@@ -158,7 +158,7 @@ public class Mapper {
             unit.info().utilities().add(mapUtility(include));
         }
 
-        units.add(unit);
+        model.getUnits().add(unit);
     }
 
     private void createFloorplan(Property property, Room room, Building building) {
@@ -187,7 +187,7 @@ public class Mapper {
             floorplan.pictures().add(picture);
         }
 
-        floorplans.add(floorplan);
+        model.getFloorplans().add(floorplan);
     }
 
     private static AptUnitType mapUnitType(String type) {
@@ -268,17 +268,5 @@ public class Mapper {
         }
         log.info("Unknown structure type [" + type + "]");
         return null;
-    }
-
-    public List<Building> getBuildings() {
-        return buildings;
-    }
-
-    public List<AptUnitDTO> getUnits() {
-        return units;
-    }
-
-    public List<Floorplan> getFloorplans() {
-        return floorplans;
     }
 }
