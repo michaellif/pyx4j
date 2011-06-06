@@ -32,6 +32,8 @@ import com.propertyvista.domain.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
@@ -182,13 +184,28 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
             callback.onSuccess(null);
             return;
         }
+
+        EntityQueryCriteria<FloorplanAmenity> floorplanAmenityCriteria = EntityQueryCriteria.create(FloorplanAmenity.class);
+        floorplanAmenityCriteria.add(PropertyCriterion.eq(floorplanAmenityCriteria.proto().belongsTo(), floorplan));
+        floorplan.amenities().addAll(PersistenceServicesFactory.getPersistenceService().query(floorplanAmenityCriteria));
+
         FloorplanDetailsDTO dto = EntityFactory.create(FloorplanDetailsDTO.class);
         dto.set(Converter.convert(floorplan));
+
         if (!floorplan.media().isEmpty()) {
             PersistenceServicesFactory.getPersistenceService().retrieve(floorplan.media());
             for (Media m : floorplan.media()) {
                 dto.media().add(Converter.convert(m));
             }
+        }
+
+        // List of building amenities 
+        EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
+        amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), floorplan.building()));
+        for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
+            AmenityDTO amntDTO = EntityFactory.create(AmenityDTO.class);
+            amntDTO.name().setValue(amenity.getStringView());
+            dto.buildingAmenities().add(amntDTO);
         }
 
         //TODO add Details
