@@ -18,6 +18,16 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
+import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
+import com.pyx4j.entity.client.ui.flex.viewer.CEntityViewer;
+import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
+import com.pyx4j.entity.shared.IList;
+
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.domain.IAddress;
@@ -28,15 +38,7 @@ import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.domain.dto.RangeDTO;
-
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
-import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
-import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
-import com.pyx4j.entity.client.ui.flex.viewer.CEntityViewer;
-import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
-import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
-import com.pyx4j.entity.shared.IList;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implements ApartmentDetailsView {
 
@@ -187,8 +189,8 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
     private FlowPanel fillFloorplanCard(FloorplanDTO value) {
 
         CardPanel card = new CardPanel();
-        if (!value.id().isNull()) {
-            card.setCardImage(new Image("media/" + value.id().getValue().toString() + "/medium.jpg"));
+        if (!value.mainMedia().isNull()) {
+            card.setCardImage(new Image("media/" + value.mainMedia().getValue().toString() + "/" + ThumbnailSize.medium.name() + ".jpg"));
         } else {
             card.setCardImage(new Image(PortalImages.INSTANCE.noImage()));
         }

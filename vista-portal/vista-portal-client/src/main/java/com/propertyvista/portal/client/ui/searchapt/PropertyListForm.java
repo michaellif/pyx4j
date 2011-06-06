@@ -35,6 +35,7 @@ import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
@@ -105,7 +106,7 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
         if (value.mainMedia().isNull()) {
             card.setCardImage(new Image(PortalImages.INSTANCE.noImage()));
         } else {
-            card.setCardImage(new Image("media/" + value.mainMedia().getValue().toString() + "/medium.jpg"));
+            card.setCardImage(new Image("media/" + value.mainMedia().getValue().toString() + "/" + ThumbnailSize.medium.name() + ".jpg"));
         }
 
         card.setCardHeader(new Label(formatAddress(value.address())));

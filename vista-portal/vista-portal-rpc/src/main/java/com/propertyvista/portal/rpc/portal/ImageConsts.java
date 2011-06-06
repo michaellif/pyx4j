@@ -22,7 +22,7 @@ public interface ImageConsts {
         small, medium, large
     }
 
-    public static final Dimension BUILDING_SMALL = new Dimension(70, 70);
+    public static final Dimension BUILDING_SMALL = new Dimension(70, 50);
 
     public static final Dimension BUILDING_MEDIUM = new Dimension(150, 100);
 

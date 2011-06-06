@@ -36,10 +36,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
 import com.pyx4j.entity.shared.IPrimitiveSet;
@@ -47,6 +43,12 @@ import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.CircleOverlay;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.client.resources.PortalImages;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class PropertiesMapWidget extends AbstractMapWidget {
 
@@ -209,8 +211,8 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             imageHolder.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardImage);
             imageHolder.setSize("100%", "100%");
             imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
-            if (!property.id().isNull()) {
-                imageHolder.setWidget(new Image("media/" + property.id().getValue().toString() + "/small.jpg"));
+            if (!property.mainMedia().isNull()) {
+                imageHolder.setWidget(new Image("media/" + property.mainMedia().getValue().toString() + "/" + ThumbnailSize.small.name() + ".jpg"));
             }
             imgEnvelope.setWidget(imageHolder);
 

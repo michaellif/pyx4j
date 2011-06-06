@@ -31,7 +31,7 @@ import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.building.Building;
 
-@ToStringFormat("{0}, {1}")
+@ToStringFormat("{0}")
 public interface Floorplan extends IEntity {
 
     @Translatable
