@@ -18,7 +18,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -26,15 +26,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class CardPanel extends FlowPanel {
+public class CardPanel extends DockPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "cardPanel";
 
     private final SimplePanel header;
 
     private final SimplePanel imageHolder;
-
-    private final FlowPanel contentHolder;
 
     private final SimplePanel content;
 
@@ -50,20 +48,13 @@ public class CardPanel extends FlowPanel {
         getElement().getStyle().setProperty("minHeight", "130px");
 
         header = new SimplePanel();
-        header.setSize("100%", "15%");
         header.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Header);
 
-        contentHolder = new FlowPanel();
-        contentHolder.setSize("100%", "85%");
-
         SimplePanel imgEnvelope = new SimplePanel();
-        //   envelope.setSize("28%", "100%");
-        // envelope.setSize("150px", "100px");
+        imgEnvelope.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Image);
         imgEnvelope.getElement().getStyle().setHeight(100, Unit.PX);
         imgEnvelope.getElement().getStyle().setWidth(150, Unit.PX);
-        imgEnvelope.getElement().getStyle().setFloat(Float.LEFT);
         imageHolder = new SimplePanel();
-        imageHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Image);
         imageHolder.setSize("100%", "100%");
         imageHolder.getElement().getStyle().setProperty("minHeight", "100px");
         imgEnvelope.setWidget(imageHolder);
@@ -76,13 +67,10 @@ public class CardPanel extends FlowPanel {
         content.setHeight("100%");
         content.getElement().getStyle().setMarginLeft(20, Unit.PX);
         cEnvelope.setWidget(content);
-        //content.setSize("70%", "100%");
-        //content.getElement().getStyle().setFloat(Float.LEFT);
-        contentHolder.add(imgEnvelope);
-        contentHolder.add(cEnvelope);
 
-        add(header);
-        add(contentHolder);
+        add(header, DockPanel.NORTH);
+        add(imgEnvelope, DockPanel.WEST);
+        add(cEnvelope, DockPanel.CENTER);
 
     }
 

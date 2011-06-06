@@ -94,13 +94,13 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
             @Override
             public IsWidget createContent(PropertyDTO value) {
-                return fillAppartmentCard(value);
+                return createAppartmentCard(value);
             }
 
         };
     }
 
-    private FlowPanel fillAppartmentCard(PropertyDTO value) {
+    private CardPanel createAppartmentCard(PropertyDTO value) {
 
         CardPanel card = new CardPanel();
         if (value.mainMedia().isNull()) {
@@ -117,8 +117,11 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
         lbl = new Label(formatAmenities(value.amenities()));
         content.add(lbl);
-        card.setCardContent(content);
 
+        lbl = new Label(value.description().getStringView());
+        content.add(lbl);
+
+        card.setCardContent(content);
         return card;
 
     }

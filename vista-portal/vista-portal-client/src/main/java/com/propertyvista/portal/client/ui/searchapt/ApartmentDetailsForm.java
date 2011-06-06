@@ -180,13 +180,13 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
             @Override
             public IsWidget createContent(FloorplanDTO value) {
-                return fillFloorplanCard(value);
+                return createFloorplanCard(value);
             }
 
         };
     }
 
-    private FlowPanel fillFloorplanCard(FloorplanDTO value) {
+    private CardPanel createFloorplanCard(FloorplanDTO value) {
 
         CardPanel card = new CardPanel();
         if (!value.mainMedia().isNull()) {
