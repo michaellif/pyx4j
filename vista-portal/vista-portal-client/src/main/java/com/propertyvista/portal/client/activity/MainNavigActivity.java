@@ -19,16 +19,13 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.MainNavigView;
-import com.propertyvista.portal.domain.site.MainNavig;
-import com.propertyvista.portal.domain.site.NavigItem;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.FindApartment;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Page;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
+import com.propertyvista.portal.domain.site.MainNavigDTO;
 
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
 
@@ -47,6 +44,12 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        PortalSite.getPortalSiteServices().retrieveMainNavig(new DefaultAsyncCallback<MainNavigDTO>() {
+            @Override
+            public void onSuccess(MainNavigDTO navig) {
+                view.setMainNavig(navig);
+            }
+        });
     }
 
     @Override
@@ -62,42 +65,6 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     @Override
     public Place getWhere() {
         return AppSite.getPlaceController().getWhere();
-    }
-
-    @Override
-    public MainNavig getMainNavig() {
-        MainNavig navig = EntityFactory.create(MainNavig.class);
-
-        NavigItem home = EntityFactory.create(NavigItem.class);
-        home.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Page()));
-        home.pageId().setValue("home");
-        home.title().setValue("Home");
-        navig.items().add(home);
-
-        NavigItem findApt = EntityFactory.create(NavigItem.class);
-        findApt.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new FindApartment()));
-        findApt.title().setValue("Find Apartment");
-        navig.items().add(findApt);
-
-        NavigItem residents = EntityFactory.create(NavigItem.class);
-        residents.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents()));
-        residents.title().setValue("Residents");
-        navig.items().add(residents);
-
-        NavigItem about = EntityFactory.create(NavigItem.class);
-        about.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Page()));
-        about.pageId().setValue("about-us");
-        about.title().setValue("About Us");
-        navig.items().add(about);
-
-        NavigItem contact = EntityFactory.create(NavigItem.class);
-        contact.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Page()));
-        contact.pageId().setValue("contact-us");
-        contact.title().setValue("Contact Us");
-        navig.items().add(contact);
-
-        return navig;
-
     }
 
     @Override

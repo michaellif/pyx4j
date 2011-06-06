@@ -20,8 +20,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ui.ResidentsNavigView;
 import com.propertyvista.portal.client.ui.ResidentsNavigView.ResidentsNavigPresenter;
-import com.propertyvista.portal.domain.site.MainNavig;
-import com.propertyvista.portal.domain.site.NavigItem;
+import com.propertyvista.portal.domain.site.MainNavigDTO;
+import com.propertyvista.portal.domain.site.NavigItemDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -64,25 +64,25 @@ public class ResidentsNavigActivity extends AbstractActivity implements Resident
     }
 
     @Override
-    public MainNavig getResidentsNavig() {
-        MainNavig navig = EntityFactory.create(MainNavig.class);
+    public MainNavigDTO getResidentsNavig() {
+        MainNavigDTO navig = EntityFactory.create(MainNavigDTO.class);
 
-        NavigItem navitem1 = EntityFactory.create(NavigItem.class);
+        NavigItemDTO navitem1 = EntityFactory.create(NavigItemDTO.class);
         navitem1.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents.Navigator.TenantProfile()));
         navitem1.title().setValue("Tenant Profile");
         navig.items().add(navitem1);
 
-        NavigItem navitem2 = EntityFactory.create(NavigItem.class);
+        NavigItemDTO navitem2 = EntityFactory.create(NavigItemDTO.class);
         navitem2.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents.Navigator.Maintenance()));
         navitem2.title().setValue("Maintenance");
         navig.items().add(navitem2);
 
-        NavigItem navitem3 = EntityFactory.create(NavigItem.class);
+        NavigItemDTO navitem3 = EntityFactory.create(NavigItemDTO.class);
         navitem3.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents.Navigator.Payment()));
         navitem3.title().setValue("Payment");
         navig.items().add(navitem3);
 
-        NavigItem navitem4 = EntityFactory.create(NavigItem.class);
+        NavigItemDTO navitem4 = EntityFactory.create(NavigItemDTO.class);
         navitem4.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents.Navigator.LeaseApplication()));
         navitem4.title().setValue("Lease Application");
         navig.items().add(navitem4);

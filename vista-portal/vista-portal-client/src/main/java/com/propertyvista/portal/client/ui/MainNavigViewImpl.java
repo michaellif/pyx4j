@@ -37,7 +37,8 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-import com.propertyvista.portal.domain.site.NavigItem;
+import com.propertyvista.portal.domain.site.MainNavigDTO;
+import com.propertyvista.portal.domain.site.NavigItemDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
@@ -65,12 +66,13 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
     @Override
     public void setPresenter(MainNavigPresenter presenter) {
         this.presenter = presenter;
-
         tabsHolder.clear();
-        for (NavigItem item : presenter.getMainNavig().items()) {
+    }
+
+    public void setMainNavig(MainNavigDTO mainNavig) {
+        for (NavigItemDTO item : mainNavig.items()) {
             tabsHolder.add(new NavigTab(item));
         }
-
     }
 
     class NavigTabList extends ComplexPanel {
@@ -99,7 +101,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             return place;
         }
 
-        NavigTab(NavigItem menuItem) {
+        NavigTab(NavigItemDTO menuItem) {
             super();
 
             String placeid = menuItem.placeId().getValue();

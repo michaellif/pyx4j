@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.domain.site.NavigItem;
+import com.propertyvista.portal.domain.site.NavigItemDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 import com.pyx4j.site.client.AppSite;
@@ -64,7 +64,7 @@ public class ResidentsNavigViewImpl extends SimplePanel implements ResidentsNavi
 
         clear();
         tabsHolder = new NavigTabList();
-        for (NavigItem item : presenter.getResidentsNavig().items()) {
+        for (NavigItemDTO item : presenter.getResidentsNavig().items()) {
             tabsHolder.add(new NavigTab(item));
         }
         setWidget(tabsHolder);
@@ -102,7 +102,7 @@ public class ResidentsNavigViewImpl extends SimplePanel implements ResidentsNavi
             return place;
         }
 
-        NavigTab(NavigItem menuItem) {
+        NavigTab(NavigItemDTO menuItem) {
             super();
             this.place = AppSite.getHistoryMapper().getPlace(menuItem.placeId().getValue());
 

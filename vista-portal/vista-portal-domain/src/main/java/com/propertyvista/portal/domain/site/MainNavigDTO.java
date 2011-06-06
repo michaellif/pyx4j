@@ -17,9 +17,9 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-public interface MainNavig extends IEntity {
+public interface MainNavigDTO extends IEntity {
 
     @Owned
-    IList<NavigItem> items();
+    IList<NavigItemDTO> items();
 
 }

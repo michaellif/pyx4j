@@ -19,9 +19,12 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.StaticPageView;
+import com.propertyvista.portal.domain.site.StaticContentDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class StaticPageActivity extends AbstractActivity implements StaticPageView.Presenter {
@@ -38,7 +41,14 @@ public class StaticPageActivity extends AbstractActivity implements StaticPageVi
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        view.setContent("Content " + pageId);
+
+        panel.setWidget(view);
+        PortalSite.getPortalSiteServices().retrieveStaticContent(new DefaultAsyncCallback<StaticContentDTO>() {
+            @Override
+            public void onSuccess(StaticContentDTO navig) {
+                view.setContent(navig.content().getStringView());
+            }
+        }, pageId);
     }
 
     public StaticPageActivity withPlace(Place place) {

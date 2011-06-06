@@ -15,18 +15,11 @@ package com.propertyvista.portal.domain.site;
 
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface NavigItem extends IEntity {
-
-    IPrimitive<String> placeId();
-
-    IPrimitive<String> pageId();
-
-    IPrimitive<String> title();
+public interface StaticContentDTO extends IEntity {
 
     @Owned
-    IList<NavigItem> subitems();
+    IPrimitive<String> content();
 
 }

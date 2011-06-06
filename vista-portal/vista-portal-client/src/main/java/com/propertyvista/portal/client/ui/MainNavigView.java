@@ -18,11 +18,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.domain.site.MainNavig;
+import com.propertyvista.portal.domain.site.MainNavigDTO;
 
 public interface MainNavigView extends IsWidget {
 
     public void setPresenter(MainNavigPresenter presenter);
+
+    public void setMainNavig(MainNavigDTO mainNavig);
 
     public interface MainNavigPresenter {
         public void navigTo(Place place);
@@ -32,8 +34,6 @@ public interface MainNavigView extends IsWidget {
         public String getCaption(AppPlace place);
 
         public Place getWhere();
-
-        public MainNavig getMainNavig();
 
     }
 }

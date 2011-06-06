@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.domain.site.MainNavig;
+import com.propertyvista.portal.domain.site.MainNavigDTO;
 
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -32,7 +32,7 @@ public interface ResidentsNavigView extends IsWidget {
 
         public Place getWhere();
 
-        public MainNavig getResidentsNavig();
+        public MainNavigDTO getResidentsNavig();
 
     }
 

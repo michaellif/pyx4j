@@ -25,6 +25,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.domain.Media;
@@ -33,6 +34,12 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
+import com.propertyvista.portal.domain.site.MainNavigDTO;
+import com.propertyvista.portal.domain.site.NavigItemDTO;
+import com.propertyvista.portal.domain.site.StaticContentDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.FindApartment;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Page;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.server.ptapp.util.Converter;
@@ -183,6 +190,51 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         //TODO add Details
         callback.onSuccess(dto);
 
+    }
+
+    @Override
+    public void retrieveMainNavig(AsyncCallback<MainNavigDTO> callback) {
+        MainNavigDTO navig = EntityFactory.create(MainNavigDTO.class);
+
+        //TODO get from DB
+
+        NavigItemDTO home = EntityFactory.create(NavigItemDTO.class);
+        home.placeId().setValue(AppPlaceInfo.getPlaceId(Page.class));
+        home.pageId().setValue("home");
+        home.title().setValue("Home");
+        navig.items().add(home);
+
+        NavigItemDTO findApt = EntityFactory.create(NavigItemDTO.class);
+        findApt.placeId().setValue(AppPlaceInfo.getPlaceId(FindApartment.class));
+        findApt.title().setValue("Find Apartment");
+        navig.items().add(findApt);
+
+        NavigItemDTO residents = EntityFactory.create(NavigItemDTO.class);
+        residents.placeId().setValue(AppPlaceInfo.getPlaceId(Residents.class));
+        residents.title().setValue("Residents");
+        navig.items().add(residents);
+
+        NavigItemDTO about = EntityFactory.create(NavigItemDTO.class);
+        about.placeId().setValue(AppPlaceInfo.getPlaceId(Page.class));
+        about.pageId().setValue("about-us");
+        about.title().setValue("About Us");
+        navig.items().add(about);
+
+        NavigItemDTO contact = EntityFactory.create(NavigItemDTO.class);
+        contact.placeId().setValue(AppPlaceInfo.getPlaceId(Page.class));
+        contact.pageId().setValue("contact-us");
+        contact.title().setValue("Contact Us");
+        navig.items().add(contact);
+
+        callback.onSuccess(navig);
+    }
+
+    @Override
+    public void retrieveStaticContent(AsyncCallback<StaticContentDTO> callback, String pageId) {
+        StaticContentDTO content = EntityFactory.create(StaticContentDTO.class);
+        content.content().setValue(pageId + " from server");
+
+        callback.onSuccess(content);
     }
 
 }
