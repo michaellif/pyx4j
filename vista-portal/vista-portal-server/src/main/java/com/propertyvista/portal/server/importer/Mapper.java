@@ -164,8 +164,8 @@ public class Mapper {
         Floorplan floorplan = EntityFactory.create(Floorplan.class);
 
         floorplan.building().set(building);
-        floorplan.name().setValue(room.getName());
-        floorplan.description().setValue(room.getDisplay());
+        //floorplan.name().setValue(room.getName());
+        floorplan.name().setValue(room.getDisplay());
 
         String filenamePart = "";
         if (room.getName().equals("1bdrm")) {
