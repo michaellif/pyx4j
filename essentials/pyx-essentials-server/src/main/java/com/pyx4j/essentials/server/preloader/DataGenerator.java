@@ -197,6 +197,10 @@ public class DataGenerator {
         return random().nextInt(n);
     }
 
+    public static double randomDouble(double max) {
+        return max * random().nextDouble();
+    }
+
     public static boolean randomBoolean() {
         return random().nextBoolean();
     }
