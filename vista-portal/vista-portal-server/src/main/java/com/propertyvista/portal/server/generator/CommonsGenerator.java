@@ -14,12 +14,15 @@
 package com.propertyvista.portal.server.generator;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.csv.CSVLoad;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.IAddressFull.StreetDirection;
 import com.propertyvista.common.domain.IAddressFull.StreetType;
 import com.propertyvista.common.domain.Name;
 import com.propertyvista.common.domain.Person;
+import com.propertyvista.common.domain.RangeGroup;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Address.AddressType;
@@ -29,6 +32,19 @@ import com.propertyvista.domain.Phone;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 
 public class CommonsGenerator {
+
+    static String[] lipsum;
+
+    private static String resourceFileName(String fileName) {
+        return CommonsGenerator.class.getPackage().getName().replace('.', '/') + "/" + fileName;
+    }
+
+    public static String lipsum() {
+        if (lipsum == null) {
+            lipsum = CSVLoad.loadFile(resourceFileName("lipsum.csv"), "description");
+        }
+        return lipsum[DataGenerator.nextInt(lipsum.length, "lipsum", 4)];
+    }
 
     public static Name createName() {
         Name name = EntityFactory.create(Name.class);
@@ -120,5 +136,18 @@ public class CommonsGenerator {
         }
 
         return address;
+    }
+
+    public static RangeGroup createRange(double min, double max) {
+        RangeGroup r = EntityFactory.create(RangeGroup.class);
+
+        r.min().setValue(min + RandomUtil.randomDouble(max));
+        r.max().setValue(r.min().getValue() + RandomUtil.randomDouble(max - r.min().getValue()));
+
+        return r;
+    }
+
+    public static double randomFromRange(RangeGroup r) {
+        return r.min().getValue() + RandomUtil.randomDouble(r.min().getValue() - r.min().getValue());
     }
 }

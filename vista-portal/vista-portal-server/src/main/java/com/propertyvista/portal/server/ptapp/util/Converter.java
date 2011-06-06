@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
+import com.propertyvista.common.domain.RangeGroup;
 import com.propertyvista.domain.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -39,7 +40,8 @@ public class Converter {
         FloorplanDTO to = EntityFactory.create(FloorplanDTO.class);
 
         to.name().setValue(from.name().getValue());
-        to.areaX().setValue(from.minArea().getValue());
+        to.area().set(from.area());
+        to.marketRent().set(from.marketRent());
         to.description().setValue(from.description().getValue());
 
         if (!from.media().isEmpty()) {
@@ -91,6 +93,15 @@ public class Converter {
         return to;
     }
 
+    public static void minMax(RangeGroup src, RangeGroup dst) {
+        if (dst.max().isNull() || dst.max().getValue() < src.max().getValue()) {
+            dst.max().setValue(src.max().getValue());
+        }
+        if (dst.min().isNull() || dst.min().getValue() > src.min().getValue()) {
+            dst.min().setValue(src.min().getValue());
+        }
+    }
+
     public static PropertyDTO convert(Building from, List<Floorplan> floorplans) {
         PropertyDTO to = EntityFactory.create(PropertyDTO.class);
         to.id().set(from.id());
@@ -102,11 +113,14 @@ public class Converter {
         to.address().country().set(from.info().address().country());
         to.address().postalCode().set(from.info().address().postalCode());
 
+        to.description().setValue(from.marketing().description().getValue());
+
         to.location().setValue(from.info().address().location().getValue());
 
         // List of Floorplans
         for (Floorplan fp : floorplans) {
             to.floorplanNames().add(fp.getStringView());
+            minMax(fp.marketRent(), to.price());
         }
 
         if (!from.media().isEmpty()) {

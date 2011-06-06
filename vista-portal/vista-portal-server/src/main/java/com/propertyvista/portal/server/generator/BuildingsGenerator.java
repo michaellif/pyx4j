@@ -39,6 +39,7 @@ import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Locker;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.Parking.Type;
@@ -214,7 +215,7 @@ public class BuildingsGenerator {
                     throw new IllegalStateException("No floorplan");
                 }
 
-                int uarea = floorplan.minArea().getValue() + RandomUtil.randomInt(10);
+                double uarea = CommonsGenerator.randomFromRange(floorplan.area());
                 AptUnitDTO unit = createUnit(building, suiteNumber, floor, uarea, bedrooms, bathrooms, floorplan);
                 units.add(unit);
             }
@@ -239,6 +240,9 @@ public class BuildingsGenerator {
         }
 
         building.info().name().setValue(RandomUtil.randomLetters(3));
+
+        building.marketing().description().setValue(CommonsGenerator.lipsum());
+
         building.marketing().name().setValue(RandomUtil.randomLetters(4) + " " + RandomUtil.randomLetters(6));
 
         building.contacts().email().set(email); // not sure yet what to do about
@@ -250,13 +254,26 @@ public class BuildingsGenerator {
     private Floorplan createFloorplan(String name) {
         Floorplan floorplan = EntityFactory.create(Floorplan.class);
 
-        floorplan.minArea().setValue(1200);
         floorplan.name().setValue(name);
+        floorplan.description().setValue(CommonsGenerator.lipsum());
 
-        floorplan.bathrooms().setValue(1d + RandomUtil.randomInt(2));
-        floorplan.bedrooms().setValue(1d + RandomUtil.randomInt(2));
+        floorplan.bedrooms().setValue(1 + (double) DataGenerator.randomInt(6));
+        floorplan.bathrooms().setValue(1 + (double) DataGenerator.randomInt(3));
+
+        floorplan.area().set(CommonsGenerator.createRange(1200d, 2600d));
+        floorplan.marketRent().set(CommonsGenerator.createRange(600d, 1600d));
+
+        for (int i = 0; i < DataGenerator.randomInt(6); i++) {
+            floorplan.amenities().add(createFloorplanAmenity());
+        }
 
         return floorplan;
+    }
+
+    public static FloorplanAmenity createFloorplanAmenity() {
+        FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
+        amenity.type().setValue(RandomUtil.random(AptUnitAmenity.Type.values()));
+        return amenity;
     }
 
     public static AptUnitItem createUnitDetailItem(AptUnitItem.Type type) {

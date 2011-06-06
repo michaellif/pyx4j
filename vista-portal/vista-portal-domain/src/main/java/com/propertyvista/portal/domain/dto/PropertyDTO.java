@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.common.domain.RangeGroup;
 
 //VladS Notes:  consider having this a table for performance
 @Transient
@@ -43,7 +44,9 @@ public interface PropertyDTO extends IEntity {
     IPrimitiveSet<String> floorplanNames();
 
     @EmbeddedEntity
-    RangeDTO price();
+    RangeGroup price();
+
+    IPrimitive<String> description();
 
     IList<AmenityDTO> amenities();
 

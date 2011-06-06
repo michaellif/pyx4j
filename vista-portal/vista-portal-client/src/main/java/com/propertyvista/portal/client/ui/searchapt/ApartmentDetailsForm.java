@@ -31,13 +31,13 @@ import com.pyx4j.entity.shared.IList;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.common.domain.RangeGroup;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.decorations.FloorplanCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.PortalListDecorator;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
-import com.propertyvista.portal.domain.dto.RangeDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implements ApartmentDetailsView {
@@ -78,9 +78,9 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
             }
         }), decor));
 
-        container.add(new VistaWidgetDecorator(inject(proto().price(), new CEntityViewer<RangeDTO>() {
+        container.add(new VistaWidgetDecorator(inject(proto().price(), new CEntityViewer<RangeGroup>() {
             @Override
-            public IsWidget createContent(RangeDTO value) {
+            public IsWidget createContent(RangeGroup value) {
                 return formatPrice(value);
             }
         }), decor));
@@ -103,18 +103,18 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
     }
 
-    private Label formatPrice(RangeDTO priceRange) {
+    private Label formatPrice(RangeGroup priceRange) {
         if (priceRange.isNull())
             return new Label("");
 
         StringBuffer priceString = new StringBuffer("$");
-        if (!priceRange.from().isNull()) {
-            priceString.append(priceRange.from().getValue());
+        if (!priceRange.min().isNull()) {
+            priceString.append(priceRange.min().getValue());
         }
 
-        if (!priceRange.to().isNull()) {
+        if (!priceRange.max().isNull()) {
             priceString.append(" - ");
-            priceString.append(priceRange.to().getValue());
+            priceString.append(priceRange.max().getValue());
         }
 
         return new Label(priceString.toString());
