@@ -40,6 +40,7 @@ public class Converter {
 
         to.name().setValue(from.name().getValue());
         to.area().setValue(from.minArea().getValue());
+        to.description().setValue(from.description().getValue());
 
         if (!from.media().isEmpty()) {
             to.mainMedia().setValue(from.media().get(0).getPrimaryKey());
