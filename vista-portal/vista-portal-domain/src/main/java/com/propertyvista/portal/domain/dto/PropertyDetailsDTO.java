@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.domain.dto;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
@@ -21,9 +20,6 @@ import com.pyx4j.entity.shared.IList;
 public interface PropertyDetailsDTO extends PropertyDTO {
 
     IList<FloorplanDTO> floorplans();
-
-    @EmbeddedEntity
-    RangeDTO price();
 
     IList<MediaDTO> media();
 }

@@ -26,8 +26,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+import com.propertyvista.common.domain.RangeGroup;
 import com.propertyvista.domain.Media;
-import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -87,7 +87,7 @@ public interface Floorplan extends IEntity {
     /**
      * Min-Max value of square ft. size of unit
      */
-    RangeGroup squareFeet();
+    RangeGroup area();
 
     RangeGroup marketRent();
 

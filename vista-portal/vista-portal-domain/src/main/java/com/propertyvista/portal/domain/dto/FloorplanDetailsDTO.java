@@ -19,7 +19,8 @@ import com.pyx4j.entity.shared.IList;
 @Transient
 public interface FloorplanDetailsDTO extends FloorplanDTO {
 
-    // TODO sync with ptapp
-
     IList<MediaDTO> media();
+
+    IList<AmenityDTO> buildingAmenities();
+
 }

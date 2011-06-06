@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.dto;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -40,6 +41,9 @@ public interface PropertyDTO extends IEntity {
 
     @Caption(name = "Size")
     IPrimitiveSet<String> floorplanNames();
+
+    @EmbeddedEntity
+    RangeDTO price();
 
     IList<AmenityDTO> amenities();
 

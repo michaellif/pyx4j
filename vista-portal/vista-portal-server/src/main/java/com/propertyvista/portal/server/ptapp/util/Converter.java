@@ -39,7 +39,7 @@ public class Converter {
         FloorplanDTO to = EntityFactory.create(FloorplanDTO.class);
 
         to.name().setValue(from.name().getValue());
-        to.area().setValue(from.minArea().getValue());
+        to.areaX().setValue(from.minArea().getValue());
         to.description().setValue(from.description().getValue());
 
         if (!from.media().isEmpty()) {

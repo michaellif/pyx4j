@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.common.domain;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -23,9 +23,9 @@ public interface RangeGroup extends IEntity {
 
     IPrimitive<Double> average();
 
-    @MemberColumn(name = "rangeGroupMin")
+    @MemberColumn(name = "rangeMin")
     IPrimitive<Double> min();
 
-    @MemberColumn(name = "rangeGroupMax")
+    @MemberColumn(name = "rangeMax")
     IPrimitive<Double> max();
 }

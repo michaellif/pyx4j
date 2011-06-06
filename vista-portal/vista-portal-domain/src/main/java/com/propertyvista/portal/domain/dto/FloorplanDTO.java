@@ -17,32 +17,33 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.common.domain.RangeGroup;
 
 @Transient
 public interface FloorplanDTO extends IEntity {
 
-//    @Detached
-//    Building building();
-//
     @Caption(name = "Plan")
     IPrimitive<String> name();
 
-//
-//    /**
-//     * Contains the pictures of the floorplan / model unit
-//     */
-//    @Owned
-//    IList<Picture> pictures();
-//
     /**
      * Approximate value of square ft. size of unit
      */
     @Caption(name = "sqft")
-    IPrimitive<Integer> area();
+    @Deprecated
+    IPrimitive<Integer> areaX();
+
+    RangeGroup area();
+
+    RangeGroup marketRent();
 
     @Caption(name = "Description")
     IPrimitive<String> description();
 
+    IList<AmenityDTO> amenities();
+
     IPrimitive<Key> mainMedia();
+
 }

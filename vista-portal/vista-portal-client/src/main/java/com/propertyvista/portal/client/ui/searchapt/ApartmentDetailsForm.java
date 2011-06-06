@@ -203,11 +203,11 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
             card.setCardHeader(lbl);
         }
 
-        if (!value.area().isNull()) {
+        if (!value.areaX().isNull()) {
             StringBuffer area = new StringBuffer();
-            area.append(value.area().getValue().toString());
+            area.append(value.areaX().getValue().toString());
             area.append(" ");
-            area.append(value.area().getMeta().getCaption());
+            area.append(value.areaX().getMeta().getCaption());
             lbl = new Label(area.toString());
             content.add(lbl);
 

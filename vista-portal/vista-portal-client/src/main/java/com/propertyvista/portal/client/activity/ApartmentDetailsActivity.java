@@ -72,7 +72,7 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
                 property.amenities().add(amenity);
 
                 FloorplanDTO fp = EntityFactory.create(FloorplanDTO.class);
-                fp.area().setValue(700);
+                fp.areaX().setValue(700);
                 fp.description().setValue("Nice, clean, south side. Freshly painted");
                 fp.name().setValue("one bedroom");
                 property.floorplans().add(fp);
