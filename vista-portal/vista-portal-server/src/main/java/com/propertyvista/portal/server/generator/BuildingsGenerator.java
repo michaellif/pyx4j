@@ -185,7 +185,7 @@ public class BuildingsGenerator {
         List<Floorplan> floorplans = new ArrayList<Floorplan>();
         // create floorplans
         for (int i = 0; i < numFloorplans; i++) {
-            String floorplanName = building.info().propertyCode() + "-" + i;
+            String floorplanName = building.info().propertyCode().getStringView() + "-" + i;
             if (i == 1) {
                 floorplanName = DemoData.REGISTRATION_DEFAULT_FLOORPLAN;
             }
