@@ -253,6 +253,9 @@ public class BuildingsGenerator {
         floorplan.minArea().setValue(1200);
         floorplan.name().setValue(name);
 
+        floorplan.bathrooms().setValue(1d + RandomUtil.randomInt(2));
+        floorplan.bedrooms().setValue(1d + RandomUtil.randomInt(2));
+
         return floorplan;
     }
 
