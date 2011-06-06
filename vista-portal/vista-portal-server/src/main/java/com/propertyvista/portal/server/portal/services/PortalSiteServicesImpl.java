@@ -58,13 +58,17 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         //TODO move this all to special table for starte retrival
 
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
-        if ((criteria.city().name().isNull())) {
+        if ((!criteria.city().name().isNull())) {
             dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), criteria.city().name().getValue()));
         }
         List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
 
         PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
         for (Building building : buildings) {
+
+            if (building.info().address().location().isNull() || building.info().address().location().getValue().getLat() == 0) {
+                continue;
+            }
 
             //In memory filters
             EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);

@@ -123,7 +123,10 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 }
             }
 
-            PublicDataUpdater.updateIndexData(building);
+            //Do not publish until data is clean-up
+            if (false) {
+                PublicDataUpdater.updateIndexData(building);
+            }
 
         }
 

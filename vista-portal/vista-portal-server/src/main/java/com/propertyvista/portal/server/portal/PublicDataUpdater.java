@@ -26,6 +26,9 @@ public class PublicDataUpdater {
      * Create data used on public portal, e.g. optimization
      */
     public static void updateIndexData(Building building) {
+        if (building.info().address().location().isNull() || building.info().address().location().getValue().getLat() == 0) {
+            return;
+        }
         EntityQueryCriteria<City> criteriaCity = EntityQueryCriteria.create(City.class);
         criteriaCity.add(PropertyCriterion.eq(criteriaCity.proto().name(), building.info().address().city().getValue()));
         //TODO verify Province
