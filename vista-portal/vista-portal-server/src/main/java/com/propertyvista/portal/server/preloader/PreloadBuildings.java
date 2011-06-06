@@ -34,6 +34,7 @@ import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Locker;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.Utility;
@@ -94,6 +95,9 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             for (Floorplan floorplan : floorplans) {
                 MeidaGenerator.attachGeneratedFloorplanMedia(floorplan);
                 persist(floorplan);
+                for (FloorplanAmenity amenity : floorplan.amenities()) {
+                    persist(amenity);
+                }
             }
 
             List<AptUnitDTO> units = generator.createUnits(building, floorplans, DemoData.NUM_FLOORS, DemoData.NUM_UNITS_PER_FLOOR);

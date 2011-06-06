@@ -30,6 +30,7 @@ import com.propertyvista.domain.Media;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -102,6 +103,10 @@ public class Importer {
         for (Floorplan floorplan : model.getFloorplans()) {
             loadFloorplanMedia(floorplan);
             persist(floorplan);
+
+            for (FloorplanAmenity amenity : floorplan.amenities()) {
+                persist(amenity);
+            }
         }
 
         for (AptUnitDTO unitDTO : model.getUnits()) {

@@ -13,15 +13,19 @@
  */
 package com.propertyvista.portal.server.importer;
 
+import com.pyx4j.essentials.server.preloader.DataGenerator;
+
 import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
+import com.propertyvista.portal.server.generator.CommonsGenerator;
 
 public class Generator {
-    private Model model;
+    private final Model model;
 
-    private BuildingsGenerator generator = new BuildingsGenerator(DemoData.BUILDINGS_GENERATION_SEED);
+    private final BuildingsGenerator generator = new BuildingsGenerator(DemoData.BUILDINGS_GENERATION_SEED);
 
     public Generator(Model model) {
         this.model = model;
@@ -32,6 +36,15 @@ public class Generator {
             for (int i = 0; i < 3; i++) {
                 BuildingAmenity amenity = generator.createBuildingAmenity(building);
                 model.getBuildingAmenities().add(amenity);
+            }
+            if (building.marketing().description().isNull()) {
+                building.marketing().description().setValue(CommonsGenerator.lipsum());
+            }
+        }
+
+        for (Floorplan floorplan : model.getFloorplans()) {
+            for (int i = 0; i < DataGenerator.randomInt(6); i++) {
+                floorplan.amenities().add(BuildingsGenerator.createFloorplanAmenity());
             }
         }
     }

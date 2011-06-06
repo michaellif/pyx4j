@@ -106,9 +106,6 @@ public class Mapper {
 
         building.info().address().set(mapAddress(property.getAddress()));
 
-        //TODO MOVE generated to enhancements code
-        building.marketing().description().setValue(CommonsGenerator.lipsum());
-
         building.contacts().email().set(CommonsGenerator.createEmail(property.getContact().getEmail()));
 
         building.contacts().phones().add(CommonsGenerator.createPhone(property.getContact().getTel()));

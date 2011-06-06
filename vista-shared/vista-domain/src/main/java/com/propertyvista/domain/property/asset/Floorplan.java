@@ -95,6 +95,9 @@ public interface Floorplan extends IEntity {
 
     IList<Concession> concessions();
 
+    @Transient
+    IList<FloorplanAmenity> amenities();
+
     @Detached
     IList<Media> media();
 
@@ -102,19 +105,4 @@ public interface Floorplan extends IEntity {
     @com.pyx4j.entity.annotations.Owner
     Building building();
 
-    // ----------- Old data:-------------------------
-
-    /**
-     * Min value of square ft. size of unit
-     * TODO use RangeGroup squareFeet()
-     */
-    @Deprecated
-    IPrimitive<Integer> minArea();
-
-    /**
-     * Max value of square ft. size of unit
-     * TODO use RangeGroup squareFeet()
-     */
-    @Deprecated
-    IPrimitive<Integer> maxArea();
 }
