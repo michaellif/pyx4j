@@ -26,6 +26,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.maps.client.geom.Point;
 import com.google.gwt.maps.client.geom.Size;
 import com.google.gwt.maps.client.overlay.Icon;
@@ -96,17 +97,23 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             for (Marker marker : markers.values()) {
                 getMap().removeOverlay(marker);
             }
+            LatLngBounds bounds = LatLngBounds.newInstance();
             markers.clear();
             for (PropertyDTO property : propertyList.properties()) {
                 Marker marker = createMarker(property);
                 if (marker != null) {
                     getMap().addOverlay(marker);
                     markers.put(property, marker);
+                    bounds.extend(marker.getLatLng());
                 }
             }
             //TODO calc base on  markers
-            getMap().setCenter(LatLng.newInstance(43.7571145, -79.5082499));
-            getMap().setZoomLevel(10);
+            getMap().setCenter(bounds.getCenter());
+            int zoomLevel = getMap().getBoundsZoomLevel(bounds) - 1;
+            if (zoomLevel > 10) {
+                zoomLevel = 10;
+            }
+            getMap().setZoomLevel(zoomLevel);
         }
     }
 
@@ -163,29 +170,8 @@ public class PropertiesMapWidget extends AbstractMapWidget {
     }
 
     public void showMarker(PropertyDTO property) {
-        getMap().getInfoWindow().open(markers.get(property), new InfoWindowContent(new PropertyCard(property)/*
-                                                                                                              * new
-                                                                                                              * PropertyInfo
-                                                                                                              * (
-                                                                                                              * property
-                                                                                                              * )
-                                                                                                              */));
+        getMap().getInfoWindow().open(markers.get(property), new InfoWindowContent(new PropertyCard(property)));
     }
-
-/*
- * class PropertyInfo extends DockPanel {
- * 
- * PropertyInfo(PropertyDTO property) {
- * super();
- * add(new Label("[Image]"), DockPanel.WEST);
- * 
- * add(new Button("Details"), DockPanel.SOUTH);
- * 
- * add(new HTML("[Property Descr]"), DockPanel.CENTER);
- * }
- * 
- * }
- */
 
     public class PropertyCard extends FlowPanel {
 
