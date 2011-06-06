@@ -71,26 +71,36 @@ public class ThumbnailService {
         int y;
         int width;
         int height;
-        double p = 1.0 * image.getWidth() / dimension.width;
-        if (p * dimension.height < image.getHeight()) {
-            x = 0;
-            width = image.getWidth();
+
+        int clipBorders = 2;
+        int imageWidth = image.getWidth() - clipBorders * 2;
+        int imageHeight = image.getHeight() - clipBorders * 2;
+
+        double p = 1.0 * imageWidth / dimension.width;
+        if (p * dimension.height < imageHeight) {
+            x = clipBorders;
+            width = imageWidth;
 
             height = Double.valueOf(Math.ceil(p * dimension.height)).intValue();
-            y = (image.getHeight() - height) / 2;
+            y = (imageHeight - height) / 2;
         } else {
-            y = 0;
-            height = image.getHeight();
+            y = clipBorders;
+            height = imageHeight;
 
-            width = Double.valueOf(Math.ceil((1.0 * image.getHeight() / dimension.height) * dimension.width)).intValue();
-            x = (image.getWidth() - width) / 2;
+            width = Double.valueOf(Math.ceil((1.0 * imageHeight / dimension.height) * dimension.width)).intValue();
+            x = (imageWidth - width) / 2;
         }
         image = image.getSubimage(x, y, width, height);
 
+        int clipThumpnailBorders = 1;
         //Resize
-        ThumpnailRescaleOp resampleOp = new ThumpnailRescaleOp(dimension.width, dimension.height);
+        ThumpnailRescaleOp resampleOp = new ThumpnailRescaleOp(dimension.width + 2 * clipThumpnailBorders, dimension.height + 2 * clipThumpnailBorders);
         resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.Normal);
         BufferedImage rescaled = resampleOp.filter(image, null);
+        if (clipThumpnailBorders != 0) {
+            rescaled = rescaled.getSubimage(clipThumpnailBorders, clipThumpnailBorders, rescaled.getWidth() - clipThumpnailBorders, rescaled.getHeight()
+                    - clipThumpnailBorders);
+        }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
@@ -116,7 +126,7 @@ public class ThumbnailService {
             case small:
                 data = blob.small().getValue();
                 break;
-            case medum:
+            case medium:
                 data = blob.medum().getValue();
                 break;
             case large:

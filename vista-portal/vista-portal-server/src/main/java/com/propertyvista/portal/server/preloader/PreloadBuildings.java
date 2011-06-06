@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.domain.Email;
+import com.propertyvista.domain.Media;
 import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Amenity;
@@ -46,6 +47,8 @@ import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
 import com.propertyvista.portal.server.importer.Importer;
 import com.propertyvista.portal.server.portal.PublicDataUpdater;
+import com.propertyvista.server.domain.FileBlob;
+import com.propertyvista.server.domain.ThumbnailBlob;
 
 public class PreloadBuildings extends BaseVistaDataPreloader {
 
@@ -56,7 +59,8 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Building.class, AptUnit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, AptUnitItem.class,
-                    Amenity.class, Concession.class, AddOn.class, LeaseTerms.class, Parking.class, Locker.class);
+                    Amenity.class, Concession.class, AddOn.class, LeaseTerms.class, Parking.class, Locker.class, Media.class, ThumbnailBlob.class,
+                    FileBlob.class);
         } else {
             return "This is production";
         }
@@ -149,7 +153,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             return sb.toString();
         } catch (Exception e) {
             log.error("Failed to import XML data", e);
-            return "Failed to import XML data";
+            throw new Error("Failed to import XML data");
         }
     }
 

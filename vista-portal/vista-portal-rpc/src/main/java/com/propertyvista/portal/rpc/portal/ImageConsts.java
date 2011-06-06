@@ -19,12 +19,12 @@ import com.pyx4j.site.shared.Dimension;
 public interface ImageConsts {
 
     public static enum ThumbnailSize {
-        small, medum, large
+        small, medium, large
     }
 
     public static final Dimension BUILDING_SMALL = new Dimension(70, 70);
 
-    public static final Dimension BUILDING_MEDUM = new Dimension(150, 100);
+    public static final Dimension BUILDING_MEDIUM = new Dimension(150, 100);
 
     public static final Dimension BUILDING_LARGE = new Dimension(300, 200);
 

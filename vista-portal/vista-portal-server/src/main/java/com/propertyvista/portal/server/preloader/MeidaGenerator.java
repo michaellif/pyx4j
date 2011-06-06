@@ -60,7 +60,7 @@ public class MeidaGenerator {
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentType().getValue()));
 
             //TODO what sizes to use for Floorplan images?
-            ThumbnailService.persist(m.file().blobKey().getValue(), me.getValue(), ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDUM,
+            ThumbnailService.persist(m.file().blobKey().getValue(), me.getValue(), ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM,
                     ImageConsts.BUILDING_LARGE);
         }
         return data;
