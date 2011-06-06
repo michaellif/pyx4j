@@ -133,6 +133,10 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     @Override
     public void retrievePropertyDetails(AsyncCallback<PropertyDetailsDTO> callback, Key propertyId) {
         Building building = PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, propertyId);
+        if (building == null) {
+            callback.onSuccess(null);
+            return;
+        }
         PropertyDetailsDTO dto = EntityFactory.create(PropertyDetailsDTO.class);
 
         // find floor plans
@@ -162,6 +166,10 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     @Override
     public void retrieveFloorplanDetails(AsyncCallback<FloorplanDetailsDTO> callback, Key floorplanId) {
         Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(Floorplan.class, floorplanId);
+        if (floorplan == null) {
+            callback.onSuccess(null);
+            return;
+        }
         FloorplanDetailsDTO dto = EntityFactory.create(FloorplanDetailsDTO.class);
         dto.set(Converter.convert(floorplan));
         //TODO add Details
