@@ -203,20 +203,19 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
             card.setCardHeader(lbl);
         }
 
-        if (!value.areaX().isNull()) {
-            StringBuffer area = new StringBuffer();
-            area.append(value.areaX().getValue().toString());
-            area.append(" ");
-            area.append(value.areaX().getMeta().getCaption());
-            lbl = new Label(area.toString());
-            content.add(lbl);
-
-        }
-
         if (!value.description().isNull()) {
-            lbl = new Label(value.description().getValue().toString());
+            lbl = new Label(value.description().getStringView());
             content.add(lbl);
         }
+
+        if (!value.amenities().isNull()) {
+            for (AmenityDTO amenity : value.amenities()) {
+                lbl = new Label(amenity.name().getStringView());
+                content.add(lbl);
+            }
+
+        }
+
         card.setCardContent(content);
 
         return card;

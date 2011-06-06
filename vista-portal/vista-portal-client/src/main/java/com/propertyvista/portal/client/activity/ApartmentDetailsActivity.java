@@ -21,6 +21,13 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
+
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsView;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
@@ -28,12 +35,6 @@ import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
 public class ApartmentDetailsActivity extends AbstractActivity implements ApartmentDetailsView.Presenter {
 
@@ -72,7 +73,6 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
                 property.amenities().add(amenity);
 
                 FloorplanDTO fp = EntityFactory.create(FloorplanDTO.class);
-                fp.areaX().setValue(700);
                 fp.description().setValue("Nice, clean, south side. Freshly painted");
                 fp.name().setValue("one bedroom");
                 property.floorplans().add(fp);

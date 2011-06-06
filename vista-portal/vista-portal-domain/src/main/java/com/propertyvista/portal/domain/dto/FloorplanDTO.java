@@ -28,13 +28,6 @@ public interface FloorplanDTO extends IEntity {
     @Caption(name = "Plan")
     IPrimitive<String> name();
 
-    /**
-     * Approximate value of square ft. size of unit
-     */
-    @Caption(name = "sqft")
-    @Deprecated
-    IPrimitive<Integer> areaX();
-
     RangeGroup area();
 
     RangeGroup marketRent();
