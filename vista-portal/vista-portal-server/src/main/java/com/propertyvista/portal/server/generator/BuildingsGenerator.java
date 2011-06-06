@@ -34,7 +34,6 @@ import com.propertyvista.common.domain.financial.ChargeType;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Phone;
-import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
@@ -55,7 +54,6 @@ import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PetChargeRule;
 import com.propertyvista.portal.domain.ptapp.PropertyProfile;
-import com.propertyvista.portal.server.importer.PictureUtil;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 
 public class BuildingsGenerator {
@@ -254,28 +252,6 @@ public class BuildingsGenerator {
 
         floorplan.minArea().setValue(1200);
         floorplan.name().setValue(name);
-
-        // for now use just one picture
-        int imageIndex = RandomUtil.randomInt(3) + 1;
-        String filename = "apartment" + imageIndex + ".jpg";
-        Picture picture = PictureUtil.loadPicture(filename, BuildingsGenerator.class);
-        floorplan.pictures().add(picture);
-
-//        String filename = IOUtils.resourceFileName("apartment" + imageIndex + ".jpg", BuildingsGenerator.class);
-//        try {
-//            byte[] picture = IOUtils.getResource(filename);
-//            if (picture == null) {
-//                log.warn("Could not find picture [{}] in classpath", filename);
-//            } else {
-//                // log.info("Picture size is: " + picture.length);
-//                Picture blob = EntityFactory.create(Picture.class);
-//                blob.content().setValue(picture);
-//                floorplan.pictures().add(blob);
-//            }
-//        } catch (Exception e) {
-//            log.error("Failed to read the file [{}]", filename, e);
-//            throw new Error("Failed to read the file [" + filename + "]");
-//        }
 
         return floorplan;
     }

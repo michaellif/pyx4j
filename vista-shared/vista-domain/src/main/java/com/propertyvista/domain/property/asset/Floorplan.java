@@ -17,7 +17,6 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
@@ -28,7 +27,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.Media;
-import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -105,11 +103,6 @@ public interface Floorplan extends IEntity {
     Building building();
 
     // ----------- Old data:-------------------------
-
-    @Owned
-    @Deprecated
-    //TODO VladS to clean it up
-    IList<Picture> pictures();
 
     /**
      * Min value of square ft. size of unit

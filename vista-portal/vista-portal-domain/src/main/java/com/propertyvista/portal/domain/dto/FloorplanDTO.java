@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.dto;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -42,4 +43,6 @@ public interface FloorplanDTO extends IEntity {
 
     @Caption(name = "Description")
     IPrimitive<String> description();
+
+    IPrimitive<Key> mainMedia();
 }

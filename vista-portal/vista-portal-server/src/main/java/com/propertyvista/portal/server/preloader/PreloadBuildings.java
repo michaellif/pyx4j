@@ -12,7 +12,9 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.domain.Email;
+import com.propertyvista.domain.Media;
 import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Amenity;
@@ -44,8 +47,12 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
+import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
 import com.propertyvista.portal.server.importer.Importer;
+import com.propertyvista.portal.server.importer.PictureUtil;
+import com.propertyvista.server.common.blob.BlobService;
+import com.propertyvista.server.common.blob.ThumbnailService;
 
 public class PreloadBuildings extends BaseVistaDataPreloader {
 
@@ -88,6 +95,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
             List<Floorplan> floorplans = generator.createFloorplans(building, DemoData.NUM_FLOORPLANS);
             for (Floorplan floorplan : floorplans) {
+                generateFloorplanMedia(floorplan);
                 persist(floorplan);
             }
 
@@ -139,6 +147,45 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         StringBuilder sb = new StringBuilder();
         sb.append("Created ").append(buildings.size()).append(" buildings, ").append(unitCount).append(" units");
         return sb.toString();
+    }
+
+    // Mimize PreloadData Size and speed, Share common images staticaly.  (25 sec instead of 2 min on fast computer) 
+    static final boolean blob_mimize_Preload_Data_Size = true;
+
+    private static Map<String, Map<Media, byte[]>> blob_Shared_GenerateMedia = new HashMap<String, Map<Media, byte[]>>();
+
+    public static void generateFloorplanMedia(Floorplan floorplan) {
+        int imageIndex = RandomUtil.randomInt(5) + 1;
+        String filename = "apartment" + imageIndex;
+        Map<Media, byte[]> data = blob_Shared_GenerateMedia.get(filename);
+        if (data == null) {
+            data = loadMedia(filename);
+            if (blob_mimize_Preload_Data_Size) {
+                blob_Shared_GenerateMedia.put(filename, data);
+            }
+        }
+        for (Map.Entry<Media, byte[]> me : data.entrySet()) {
+            Media m = me.getKey();
+            if (blob_mimize_Preload_Data_Size) {
+                m = (Media) m.cloneEntity();
+                m.setPrimaryKey(null);
+            }
+            PersistenceServicesFactory.getPersistenceService().persist(m);
+            floorplan.media().add(m);
+        }
+    }
+
+    private static Map<Media, byte[]> loadMedia(String filename) {
+        Map<Media, byte[]> data = PictureUtil.loadResourceMedia(filename, PreloadBuildings.class);
+        for (Map.Entry<Media, byte[]> me : data.entrySet()) {
+            Media m = me.getKey();
+            m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentType().getValue()));
+
+            //TODO what sizes to use for Floorplan images?
+            ThumbnailService.persist(m.file().blobKey().getValue(), me.getValue(), ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDUM,
+                    ImageConsts.BUILDING_LARGE);
+        }
+        return data;
     }
 
     public String importData() {

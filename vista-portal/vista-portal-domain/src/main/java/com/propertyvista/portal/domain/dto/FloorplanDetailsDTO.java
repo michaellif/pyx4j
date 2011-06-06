@@ -14,9 +14,12 @@
 package com.propertyvista.portal.domain.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
 
 @Transient
 public interface FloorplanDetailsDTO extends FloorplanDTO {
 
     // TODO sync with ptapp
+
+    IList<MediaDTO> media();
 }

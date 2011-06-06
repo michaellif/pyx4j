@@ -13,7 +13,7 @@
  */
 package com.propertyvista.domain;
 
-import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -34,6 +34,6 @@ public interface Company extends IEntity {
 
     IList<OrganizationContacts> contacts();
 
-    @Detached
-    Picture logo();
+    @EmbeddedEntity
+    Media logo();
 }

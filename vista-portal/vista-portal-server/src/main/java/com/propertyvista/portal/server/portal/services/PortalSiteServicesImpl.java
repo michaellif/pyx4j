@@ -172,6 +172,13 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         }
         FloorplanDetailsDTO dto = EntityFactory.create(FloorplanDetailsDTO.class);
         dto.set(Converter.convert(floorplan));
+        if (!floorplan.media().isEmpty()) {
+            PersistenceServicesFactory.getPersistenceService().retrieve(floorplan.media());
+            for (Media m : floorplan.media()) {
+                dto.media().add(Converter.convert(m));
+            }
+        }
+
         //TODO add Details
         callback.onSuccess(dto);
 

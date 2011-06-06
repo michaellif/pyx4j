@@ -41,6 +41,7 @@ import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.server.geo.GeoLocator;
 import com.propertyvista.portal.server.geo.GeoLocator.Mode;
+import com.propertyvista.portal.server.preloader.PreloadBuildings;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 
@@ -54,7 +55,7 @@ public class Importer {
 
     private Generator generator;
 
-    private Model model = new Model();
+    private final Model model = new Model();
 
     public Importer() {
     }
@@ -88,7 +89,7 @@ public class Importer {
         // save
 
         for (Building building : model.getBuildings()) {
-            loadMedia(building);
+            loadBuildingMedia(building);
             persist(building);
         }
 
@@ -97,6 +98,7 @@ public class Importer {
         }
 
         for (Floorplan floorplan : model.getFloorplans()) {
+            loadFloorplanMedia(floorplan);
             persist(floorplan);
         }
 
@@ -130,7 +132,7 @@ public class Importer {
         }
     }
 
-    private void loadMedia(Building building) {
+    private void loadBuildingMedia(Building building) {
         if (building.info().propertyCode().isNull()) {
             return;
         }
@@ -145,7 +147,10 @@ public class Importer {
             persist(m);
             building.media().add(m);
         }
+    }
 
+    private void loadFloorplanMedia(Floorplan floorplan) {
+        PreloadBuildings.generateFloorplanMedia(floorplan);
     }
 
     public void start() throws Exception {

@@ -15,7 +15,6 @@ package com.propertyvista.portal.server.ptapp.services;
 
 import java.util.List;
 
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +26,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -148,9 +146,6 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
             AptUnit firstUnit = units.get(0);
             Floorplan floorplan = firstUnit.marketing().floorplan();
 
-            for (Picture picture : floorplan.pictures()) {
-                prepareImage(picture);
-            }
             availableUnits.floorplan().set(Converter.convert(floorplan));
 
             for (AptUnit unit : units) {
@@ -160,10 +155,4 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
         return availableUnits;
     }
 
-    //TODO If IE6 ?
-    private static void prepareImage(Picture picture) {
-        if (!picture.content().isNull()) {
-            picture.contentBase64().setValue(new Base64().encodeToString(picture.content().getValue()));
-        }
-    }
 }

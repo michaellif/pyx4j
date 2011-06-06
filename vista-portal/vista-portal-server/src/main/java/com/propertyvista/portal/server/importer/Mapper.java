@@ -23,7 +23,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.Address;
-import com.propertyvista.domain.Picture;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
@@ -48,7 +47,7 @@ public class Mapper {
 
     private List<AvailableUnit> availableUnits = new ArrayList<AvailableUnit>();
 
-    private Model model;
+    private final Model model;
 
     public Mapper(Model model) {
         this.model = model;
@@ -180,12 +179,13 @@ public class Mapper {
         }
         floorplan.bathrooms().setValue(1d);
 
-        String filename = property.getCode() + "-" + filenamePart + ".jpg";
-        Picture picture = PictureUtil.loadPicture(filename, Mapper.class);
-        if (picture != null) {
-            log.info("Loaded image [" + filename + "]");
-            floorplan.pictures().add(picture);
-        }
+        // Removed, now we use only generated images for preloader
+//        String filename = property.getCode() + "-" + filenamePart + ".jpg";
+//        Picture picture = PictureUtil.loadPicture(filename, Mapper.class);
+//        if (picture != null) {
+//            log.info("Loaded image [" + filename + "]");
+//            floorplan.pictures().add(picture);
+//        }
 
         model.getFloorplans().add(floorplan);
     }

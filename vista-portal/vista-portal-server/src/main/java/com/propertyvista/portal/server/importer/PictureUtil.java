@@ -31,7 +31,6 @@ import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.Media;
-import com.propertyvista.domain.Picture;
 
 /**
  * This is just a placeholder, this can be moved to another util method
@@ -40,24 +39,36 @@ public class PictureUtil {
 
     private final static Logger log = LoggerFactory.getLogger(PictureUtil.class);
 
-    public static Picture loadPicture(String filename, Class<?> clazz) {
-        String fullFilename = IOUtils.resourceFileName(filename, clazz);
+    public static Map<Media, byte[]> loadResourceMedia(String filenamePrefix, Class<?> clazz) {
+        Map<Media, byte[]> data = new HashMap<Media, byte[]>();
+        loadResourcePicture(filenamePrefix + ".jpg", clazz, data);
+        loadResourcePicture(filenamePrefix + "-1.jpg", clazz, data);
+        loadResourcePicture(filenamePrefix + "-2.jpg", clazz, data);
+        loadResourcePicture(filenamePrefix + "-3.jpg", clazz, data);
+        return data;
+    }
+
+    private static void loadResourcePicture(String filename, Class<?> clazz, Map<Media, byte[]> data) {
         try {
-            byte[] bytes = IOUtils.getResource(fullFilename);
-            if (bytes == null) {
+            byte raw[] = IOUtils.getResource(IOUtils.resourceFileName(filename, clazz));
+            if (raw == null) {
                 // this is on debug, since it is for the caller to make sure that the value is not null
                 log.debug("Could not find picture [{}] in classpath", filename);
-            } else {
-                // log.info("Picture size is: " + picture.length);
-                Picture picture = EntityFactory.create(Picture.class);
-                picture.content().setValue(bytes);
-                return picture;
+                return;
             }
-        } catch (Exception e) {
+            Media m = EntityFactory.create(Media.class);
+            m.file().filename().setValue(filename);
+            m.file().caption().setValue(FilenameUtils.getBaseName(filename));
+            String mime = MimeMap.getContentType(FilenameUtils.getExtension(filename));
+            m.file().contentType().setValue(mime);
+
+            m.file().fileSize().setValue(raw.length);
+
+            data.put(m, raw);
+        } catch (IOException e) {
             log.error("Failed to read the file [{}]", filename, e);
             throw new Error("Failed to read the file [" + filename + "]");
         }
-        return null;
     }
 
     public static Map<Media, byte[]> loadbuildingMedia(String code) {
