@@ -90,6 +90,13 @@ public class Converter {
         PropertyDTO to = EntityFactory.create(PropertyDTO.class);
         to.id().set(from.id());
         to.address().street1().set(from.info().address().streetName());
+        to.address().street2().set(from.info().address().streetNumber());
+
+        to.address().city().set(from.info().address().city());
+        to.address().province().set(from.info().address().province());
+        to.address().country().set(from.info().address().country());
+        to.address().postalCode().set(from.info().address().postalCode());
+
         to.location().setValue(from.info().address().location().getValue());
 
         // List of Floorplans
