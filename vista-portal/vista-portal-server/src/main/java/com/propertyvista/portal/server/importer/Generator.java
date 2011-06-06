@@ -44,6 +44,11 @@ public class Generator {
         }
 
         for (Floorplan floorplan : model.getFloorplans()) {
+            floorplan.area().set(CommonsGenerator.createRange(1200d, 2600d));
+            floorplan.marketRent().set(CommonsGenerator.createRange(600d, 1600d));
+            if (floorplan.description().isNull()) {
+                floorplan.description().setValue(CommonsGenerator.lipsum());
+            }
             for (int i = 0; i < DataGenerator.randomInt(6); i++) {
                 FloorplanAmenity amenity = BuildingsGenerator.createFloorplanAmenity();
                 amenity.belongsTo().set(floorplan);
