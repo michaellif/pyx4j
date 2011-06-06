@@ -141,13 +141,13 @@ public class CommonsGenerator {
     public static RangeGroup createRange(double min, double max) {
         RangeGroup r = EntityFactory.create(RangeGroup.class);
 
-        r.min().setValue(min + RandomUtil.randomDouble(max));
-        r.max().setValue(r.min().getValue() + RandomUtil.randomDouble(max - r.min().getValue()));
+        r.min().setValue(Math.ceil(min + RandomUtil.randomDouble(max)));
+        r.max().setValue(Math.ceil(r.min().getValue() + RandomUtil.randomDouble(max - r.min().getValue())));
 
         return r;
     }
 
     public static double randomFromRange(RangeGroup r) {
-        return r.min().getValue() + RandomUtil.randomDouble(r.min().getValue() - r.min().getValue());
+        return r.min().getValue() + Math.ceil(RandomUtil.randomDouble(r.min().getValue() - r.min().getValue()));
     }
 }
