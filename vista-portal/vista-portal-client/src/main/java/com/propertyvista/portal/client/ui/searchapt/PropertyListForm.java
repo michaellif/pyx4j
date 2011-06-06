@@ -18,13 +18,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
-import com.propertyvista.portal.domain.dto.AmenityDTO;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
@@ -34,6 +27,14 @@ import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitiveSet;
+
+import com.propertyvista.common.client.ui.decorations.DecorationData;
+import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.client.resources.PortalImages;
+import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
+import com.propertyvista.portal.domain.dto.AmenityDTO;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
@@ -101,10 +102,10 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
     private FlowPanel fillAppartmentCard(PropertyDTO value) {
 
         CardPanel card = new CardPanel();
-        if (value.id().isNull()) {
+        if (value.mainMedia().isNull()) {
             card.setCardImage(new Image(PortalImages.INSTANCE.noImage()));
         } else {
-            card.setCardImage(new Image("media/" + value.id().getValue().toString() + "/medium.jpg"));
+            card.setCardImage(new Image("media/" + value.mainMedia().getValue().toString() + "/medium.jpg"));
         }
 
         card.setCardHeader(new Label(formatAddress(value.address())));
@@ -127,25 +128,25 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
         StringBuffer addrString = new StringBuffer();
 
-        addrString.append(address.street1().getValue());
+        addrString.append(address.street1().getStringView());
         if (!address.street2().isNull()) {
             addrString.append(" ");
-            addrString.append(address.street2().getValue());
+            addrString.append(address.street2().getStringView());
         }
 
         if (!address.city().isNull()) {
             addrString.append(", ");
-            addrString.append(address.city().getValue());
+            addrString.append(address.city().getStringView());
         }
 
         if (!address.province().isNull()) {
             addrString.append(" ");
-            addrString.append(address.province().getValue());
+            addrString.append(address.province().getStringView());
         }
 
         if (!address.postalCode().isNull()) {
             addrString.append(" ");
-            addrString.append(address.postalCode().getValue());
+            addrString.append(address.postalCode().getStringView());
         }
 
         return addrString.toString();
