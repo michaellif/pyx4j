@@ -52,7 +52,7 @@ public class ThumbnailService {
         try {
             BufferedImage inputImage = ImageIO.read(new ByteArrayInputStream(originalContent));
             blob.small().setValue(resample(inputImage, small));
-            blob.medum().setValue(resample(inputImage, medum));
+            blob.medium().setValue(resample(inputImage, medum));
             blob.large().setValue(resample(inputImage, large));
         } catch (IOException e) {
             log.error("Error", e);
@@ -127,7 +127,7 @@ public class ThumbnailService {
                 data = blob.small().getValue();
                 break;
             case medium:
-                data = blob.medum().getValue();
+                data = blob.medium().getValue();
                 break;
             case large:
                 data = blob.large().getValue();

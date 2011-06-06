@@ -34,7 +34,7 @@ public interface ThumbnailBlob extends IEntity {
     IPrimitive<byte[]> small();
 
     @Length(64 * 1024)
-    IPrimitive<byte[]> medum();
+    IPrimitive<byte[]> medium();
 
     @Length(128 * 1024)
     IPrimitive<byte[]> large();
