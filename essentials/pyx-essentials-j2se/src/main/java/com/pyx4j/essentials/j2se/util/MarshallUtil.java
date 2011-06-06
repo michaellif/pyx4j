@@ -21,6 +21,7 @@
 package com.pyx4j.essentials.j2se.util;
 
 import java.io.StringReader;
+import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -43,4 +44,14 @@ public class MarshallUtil {
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         m.marshal(data, System.out);
     }
+
+    public static <T> String marshalls(T data) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(data.getClass());
+        Marshaller m = context.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        StringWriter sw = new StringWriter();
+        m.marshal(data, sw);
+        return sw.toString();
+    }
+
 }
