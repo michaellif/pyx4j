@@ -263,7 +263,7 @@ public class BuildingsGenerator {
         floorplan.area().set(CommonsGenerator.createRange(1200d, 2600d));
         floorplan.marketRent().set(CommonsGenerator.createRange(600d, 1600d));
 
-        for (int i = 2; i < DataGenerator.randomInt(6); i++) {
+        for (int i = 0; i < 2 + DataGenerator.randomInt(6); i++) {
             FloorplanAmenity amenity = BuildingsGenerator.createFloorplanAmenity();
             amenity.belongsTo().set(floorplan);
             floorplan.amenities().add(amenity);
