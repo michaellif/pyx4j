@@ -90,10 +90,10 @@ public interface CrmImages extends ClientBundle {
     @Source("DashboardAddGadgetHover.png")
     ImageResource dashboardAddGadgetHover();
 
-    //---New Images
+    // Accordion Menu Folder Images:
 
     @Source("Bookmark_active.png")
-    ImageResource bookmarkactive();
+    ImageResource bookmarkActive();
 
     @Source("Bookmark_hover.png")
     ImageResource bookmarkHover();
@@ -185,4 +185,12 @@ public interface CrmImages extends ClientBundle {
     @Source("Reports_normal.png")
     ImageResource reportsNormal();
 
+    @Source("Tenants_active.png")
+    ImageResource tenantsActive();
+
+    @Source("Tenants_hover.png")
+    ImageResource tenantsHover();
+
+    @Source("Tenants_normal.png")
+    ImageResource tenantsNormal();
 }
