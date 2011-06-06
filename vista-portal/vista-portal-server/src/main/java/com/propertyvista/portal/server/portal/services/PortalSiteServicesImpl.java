@@ -30,6 +30,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.domain.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
@@ -158,6 +159,9 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         dto.set(Converter.convert(building, floorplans));
 
         for (Floorplan floorplan : floorplans) {
+            EntityQueryCriteria<FloorplanAmenity> floorplanAmenityCriteria = EntityQueryCriteria.create(FloorplanAmenity.class);
+            floorplanAmenityCriteria.add(PropertyCriterion.eq(floorplanAmenityCriteria.proto().belongsTo(), floorplan));
+            floorplan.amenities().addAll(PersistenceServicesFactory.getPersistenceService().query(floorplanAmenityCriteria));
             dto.floorplans().add(Converter.convert(floorplan));
         }
 

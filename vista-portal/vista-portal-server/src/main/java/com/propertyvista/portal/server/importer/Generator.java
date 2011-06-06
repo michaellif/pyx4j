@@ -17,6 +17,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
@@ -44,7 +45,9 @@ public class Generator {
 
         for (Floorplan floorplan : model.getFloorplans()) {
             for (int i = 0; i < DataGenerator.randomInt(6); i++) {
-                floorplan.amenities().add(BuildingsGenerator.createFloorplanAmenity());
+                FloorplanAmenity amenity = BuildingsGenerator.createFloorplanAmenity();
+                amenity.belongsTo().set(floorplan);
+                floorplan.amenities().add(amenity);
             }
         }
     }

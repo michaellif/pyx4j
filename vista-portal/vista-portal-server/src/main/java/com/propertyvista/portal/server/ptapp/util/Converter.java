@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.propertyvista.common.domain.RangeGroup;
 import com.propertyvista.domain.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -46,6 +47,12 @@ public class Converter {
 
         if (!from.media().isEmpty()) {
             to.mainMedia().setValue(from.media().get(0).getPrimaryKey());
+        }
+
+        for (FloorplanAmenity amenity : from.amenities()) {
+            AmenityDTO amntDTO = EntityFactory.create(AmenityDTO.class);
+            amntDTO.name().setValue(amenity.getStringView());
+            to.amenities().add(amntDTO);
         }
 
         return to;
