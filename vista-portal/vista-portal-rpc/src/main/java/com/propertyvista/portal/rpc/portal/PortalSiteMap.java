@@ -44,7 +44,7 @@ public class PortalSiteMap implements SiteMap {
         public static class ApartmentDetails extends AppPlace {
         }
 
-        public static class UnitDetails extends AppPlace {
+        public static class FloorplanDetails extends AppPlace {
         }
     }
 

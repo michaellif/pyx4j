@@ -26,7 +26,7 @@ public interface ApartmentDetailsView extends IsWidget {
 
     interface Presenter {
 
-        public void showUnit(FloorplanDTO unit);
+        public void showFloorplan(FloorplanDTO unit);
 
         public void navigTo(Place place);
 

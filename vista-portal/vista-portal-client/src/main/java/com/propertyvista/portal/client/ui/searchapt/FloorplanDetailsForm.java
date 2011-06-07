@@ -28,15 +28,15 @@ import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityViewer;
 import com.pyx4j.entity.shared.IList;
 
-public class UnitDetailsForm extends CEntityForm<FloorplanDetailsDTO> implements UnitDetailsView {
+public class FloorplanDetailsForm extends CEntityForm<FloorplanDetailsDTO> implements FloorplanDetailsView {
 
     private final DecorationData decor;
 
-    private UnitDetailsView.Presenter presenter;
+    private FloorplanDetailsView.Presenter presenter;
 
     private final DecorationData listDecor;
 
-    public UnitDetailsForm() {
+    public FloorplanDetailsForm() {
         super(FloorplanDetailsDTO.class);
         decor = new DecorationData(7d, 40);
         decor.editable = false;

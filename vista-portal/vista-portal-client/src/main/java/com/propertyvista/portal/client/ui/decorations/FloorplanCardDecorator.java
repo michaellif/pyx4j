@@ -26,7 +26,7 @@ public class FloorplanCardDecorator extends BasicCardDecorator<FloorplanDTO> {
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.showUnit(getFolderItem().getValue());
+                presenter.showFloorplan(getFolderItem().getValue());
             }
         });
     }

@@ -25,8 +25,8 @@ import com.propertyvista.portal.client.ui.searchapt.PropertyMapView;
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentView;
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentViewImpl;
-import com.propertyvista.portal.client.ui.searchapt.UnitDetailsView;
-import com.propertyvista.portal.client.ui.searchapt.UnitDetailsViewImpl;
+import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsView;
+import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsViewImpl;
 
 public class ViewModule extends AbstractGinModule {
 
@@ -48,7 +48,7 @@ public class ViewModule extends AbstractGinModule {
         bind(ResidentsNavigView.class).to(ResidentsNavigViewImpl.class).in(Singleton.class);
 
         bind(ApartmentDetailsView.class).to(ApartmentDetailsViewImpl.class).in(Singleton.class);
-        bind(UnitDetailsView.class).to(UnitDetailsViewImpl.class).in(Singleton.class);
+        bind(FloorplanDetailsView.class).to(FloorplanDetailsViewImpl.class).in(Singleton.class);
         bind(SearchApartmentView.class).to(SearchApartmentViewImpl.class).in(Singleton.class);
         bind(StaticPageView.class).to(StaticPageViewImpl.class).in(Singleton.class);
 

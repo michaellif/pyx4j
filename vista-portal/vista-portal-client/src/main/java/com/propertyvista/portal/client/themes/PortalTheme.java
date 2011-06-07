@@ -27,7 +27,7 @@ import com.propertyvista.portal.client.ui.searchapt.CardPanel;
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentForm;
-import com.propertyvista.portal.client.ui.searchapt.UnitDetailsViewImpl;
+import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsViewImpl;
 
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.style.ColorFactory;
@@ -58,7 +58,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         initBaseFolderItemViewerDecoratorStyles();
         initCardPanelDecoratorStyle();
         initPropertiesMapWidgetStyle();
-        initUnitDetailsStyles();
+        initFloorplanDetailsStyles();
     }
 
     @Override
@@ -401,23 +401,23 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
     }
 
-    private void initUnitDetailsStyles() {
-        String prefix = UnitDetailsViewImpl.DEFAULT_STYLE_PREFIX;
+    private void initFloorplanDetailsStyles() {
+        String prefix = FloorplanDetailsViewImpl.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, UnitDetailsViewImpl.StyleSuffix.Left));
+        style = new Style(Selector.valueOf(prefix, FloorplanDetailsViewImpl.StyleSuffix.Left));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, UnitDetailsViewImpl.StyleSuffix.Center));
+        style = new Style(Selector.valueOf(prefix, FloorplanDetailsViewImpl.StyleSuffix.Center));
         style.addProperty("font-size", "14px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, UnitDetailsViewImpl.StyleSuffix.Button));
+        style = new Style(Selector.valueOf(prefix, FloorplanDetailsViewImpl.StyleSuffix.Button));
         style.addProperty("font-size", "20px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, UnitDetailsViewImpl.StyleSuffix.PageHeader));
+        style = new Style(Selector.valueOf(prefix, FloorplanDetailsViewImpl.StyleSuffix.PageHeader));
         style.addProperty("margin-top", "10px");
         style.addProperty("margin-bottom", "10px");
         style.addProperty("font-size", "20px");

@@ -20,18 +20,21 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.StaticPageView;
 import com.propertyvista.portal.domain.site.PageContent;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Landing;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Page;
 
 public class StaticPageActivity extends AbstractActivity implements StaticPageView.Presenter {
 
     private final StaticPageView view;
 
-    private String pageId;
+    private String path;
 
     @Inject
     public StaticPageActivity(StaticPageView view) {
@@ -48,11 +51,17 @@ public class StaticPageActivity extends AbstractActivity implements StaticPageVi
             public void onSuccess(PageContent content) {
                 view.setContent(content.content().getStringView());
             }
-        }, pageId);
+        }, path);
     }
 
     public StaticPageActivity withPlace(Place place) {
-        pageId = ((AppPlace) place).getArgs().get(PortalSiteMap.ARG_PAGE_ID);
+        if (place instanceof Page) {
+            path = PageContent.PATH_SEPARATOR + ((AppPlace) place).getArgs().get(PortalSiteMap.ARG_PAGE_ID);
+        } else if (place instanceof Landing) {
+            path = PageContent.PATH_SEPARATOR;
+        } else {
+            path = AppSite.getHistoryMapper().getPlaceId(place);
+        }
         return this;
     }
 

@@ -21,15 +21,16 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class UnitDetailsViewImpl extends DockPanel implements UnitDetailsView {
+import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
+
+public class FloorplanDetailsViewImpl extends DockPanel implements FloorplanDetailsView {
 
     private Presenter presenter;
 
-    private final UnitDetailsForm unitForm;
+    private final FloorplanDetailsForm floorplanForm;
 
     private final SlidesPanel slidesPanel;
 
@@ -37,18 +38,18 @@ public class UnitDetailsViewImpl extends DockPanel implements UnitDetailsView {
 
     private final FlowPanel centerPanel;
 
-    public static String DEFAULT_STYLE_PREFIX = "UnitDetailsViewImpl";
+    public static String DEFAULT_STYLE_PREFIX = "FloorplanDetailsViewImpl";
 
     public static enum StyleSuffix implements IStyleSuffix {
         Left, Center, PageHeader, Button
     }
 
-    private static I18n i18n = I18nFactory.getI18n(UnitDetailsViewImpl.class);
+    private static I18n i18n = I18nFactory.getI18n(FloorplanDetailsViewImpl.class);
 
-    public UnitDetailsViewImpl() {
+    public FloorplanDetailsViewImpl() {
 
-        unitForm = new UnitDetailsForm();
-        unitForm.initialize();
+        floorplanForm = new FloorplanDetailsForm();
+        floorplanForm.initialize();
         setStyleName(DEFAULT_STYLE_PREFIX);
         setSize("100%", "100%");
         slidesPanel = new SlidesPanel();
@@ -76,19 +77,19 @@ public class UnitDetailsViewImpl extends DockPanel implements UnitDetailsView {
         centerPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Center);
         add(centerPanel, DockPanel.CENTER);
 
-        centerPanel.add(unitForm);
+        centerPanel.add(floorplanForm);
 
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-        unitForm.setPresenter(presenter);
+        floorplanForm.setPresenter(presenter);
     }
 
     @Override
-    public void populate(FloorplanDetailsDTO unit) {
-        unitForm.populate(unit);
-        slidesPanel.populate(unit);
+    public void populate(FloorplanDetailsDTO floorplan) {
+        floorplanForm.populate(floorplan);
+        slidesPanel.populate(floorplan);
     }
 }

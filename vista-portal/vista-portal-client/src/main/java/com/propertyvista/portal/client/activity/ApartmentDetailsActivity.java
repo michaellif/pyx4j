@@ -23,16 +23,17 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.PortalSite;
-import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsView;
-import com.propertyvista.portal.domain.dto.FloorplanDTO;
-import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.portal.client.PortalSite;
+import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsView;
+import com.propertyvista.portal.domain.dto.FloorplanDTO;
+import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class ApartmentDetailsActivity extends AbstractActivity implements ApartmentDetailsView.Presenter {
 
@@ -68,11 +69,11 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
     }
 
     @Override
-    public void showUnit(FloorplanDTO unit) {
-        AppPlace place = new PortalSiteMap.FindApartment.UnitDetails();
+    public void showFloorplan(FloorplanDTO floorplan) {
+        AppPlace place = new PortalSiteMap.FindApartment.FloorplanDetails();
         HashMap<String, String> args = new HashMap<String, String>();
-        //TODO unit id is null. fix this
-        args.put(PortalSiteMap.ARG_FLOORPLAN_ID, unit.id().getValue().toString());
+        //TODO floorplan id is null. fix this
+        args.put(PortalSiteMap.ARG_FLOORPLAN_ID, floorplan.id().getValue().toString());
         place.setArgs(args);
         AppSite.getPlaceController().goTo(place);
     }

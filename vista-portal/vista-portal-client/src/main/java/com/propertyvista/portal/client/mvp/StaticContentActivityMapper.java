@@ -36,7 +36,7 @@ public class StaticContentActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (place instanceof PortalSiteMap.Page) {
+        if (place instanceof PortalSiteMap.Page || place instanceof PortalSiteMap.Landing) {
             return staticPageActivityProvider.get().withPlace(place);
         }
         return null;

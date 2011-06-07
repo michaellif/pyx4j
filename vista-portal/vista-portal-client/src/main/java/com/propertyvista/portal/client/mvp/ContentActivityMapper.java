@@ -26,7 +26,7 @@ import com.propertyvista.portal.client.activity.PropertyMapActivity;
 import com.propertyvista.portal.client.activity.ResidentsActivity;
 import com.propertyvista.portal.client.activity.SearchApartmentActivity;
 import com.propertyvista.portal.client.activity.TenantProfileActivity;
-import com.propertyvista.portal.client.activity.UnitDetailsActivity;
+import com.propertyvista.portal.client.activity.FloorplanDetailsActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class ContentActivityMapper implements ActivityMapper {
@@ -39,7 +39,7 @@ public class ContentActivityMapper implements ActivityMapper {
 
     Provider<ApartmentDetailsActivity> apartmentDetailsActivity;
 
-    Provider<UnitDetailsActivity> unitDetailsActivity;
+    Provider<FloorplanDetailsActivity> floorplanDetailsActivity;
 
     Provider<TenantProfileActivity> tenantProfileActivity;
 
@@ -60,7 +60,7 @@ public class ContentActivityMapper implements ActivityMapper {
 
     Provider<ApartmentDetailsActivity> apartmentDetailsActivity,
 
-    Provider<UnitDetailsActivity> unitDetailsActivity,
+    Provider<FloorplanDetailsActivity> floorplanDetailsActivity,
 
     Provider<TenantProfileActivity> tenantProfileActivity,
 
@@ -78,7 +78,7 @@ public class ContentActivityMapper implements ActivityMapper {
         this.maintenanceActivity = maintenanceActivity;
         this.paymentActivity = paymentActivity;
         this.searchApartmentActivity = searchApartmentActivity;
-        this.unitDetailsActivity = unitDetailsActivity;
+        this.floorplanDetailsActivity = floorplanDetailsActivity;
 
     }
 
@@ -94,16 +94,16 @@ public class ContentActivityMapper implements ActivityMapper {
             return propertyMapActivityProvider.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.FindApartment.ApartmentDetails) {
             return apartmentDetailsActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.FindApartment.UnitDetails) {
-            return unitDetailsActivity.get().withPlace(place);
+        } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {
+            return floorplanDetailsActivity.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.Residents.Navigator.TenantProfile) {
             return tenantProfileActivity.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.Residents.Navigator.Maintenance) {
             return maintenanceActivity.get().withPlace(place);
         } else if (place instanceof PortalSiteMap.Residents.Navigator.Payment) {
             return paymentActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.FindApartment.UnitDetails) {
-            return unitDetailsActivity.get().withPlace(place);
+        } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {
+            return floorplanDetailsActivity.get().withPlace(place);
         }
         return null;
 
