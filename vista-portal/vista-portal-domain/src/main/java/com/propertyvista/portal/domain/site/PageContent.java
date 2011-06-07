@@ -19,9 +19,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PageContent extends IEntity {
 
-    @Owned
+    @Deprecated
     PageDescriptor descriptor();
 
     @Owned
     IPrimitive<String> content();
+
 }

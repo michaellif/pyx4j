@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.site;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
@@ -50,4 +51,8 @@ public interface PageDescriptor extends IEntity {
 
     @Owned
     IList<PageDescriptor> childPages();
+
+    @Owned
+    @Detached
+    PageContent content();
 }
