@@ -28,6 +28,7 @@ import com.propertyvista.crm.client.ui.NavigViewImpl;
 import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
+import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
@@ -54,7 +55,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         intitShortCutStyles();
 
         initSearchBoxStyles();
-        initGwtButtonStylesEx();
+        initButtonStylesEx();
         initHeadersStyle();
         initDashboardReport();
         initEntityDataTableStyles();
@@ -300,37 +301,50 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
     }
 
-    protected void initGwtButtonStylesEx() {
-        String gwtButtonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.SaveButton);
-        Style style = new Style(gwtButtonEx);
+    protected void initButtonStylesEx() {
+        String buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.SaveButton);
+        Style style = new Style(buttonEx);
         style.addProperty("color", ThemeColor.OBJECT_TONE10);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
         addStyle(style);
 
-        style = new Style(gwtButtonEx + ":hover");
+        style = new Style(buttonEx + ":hover");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE85);
         addStyle(style);
 
         //
         // default AnchorButton: 
-        gwtButtonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX);
-        style = new Style(gwtButtonEx);
+        buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX);
+        style = new Style(buttonEx);
         style.addProperty("color", ThemeColor.OBJECT_TONE95);
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
         addStyle(style);
 
-        style = new Style(gwtButtonEx + ":hover");
+        style = new Style(buttonEx + ":hover");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
 
         //
         // Edit AnchorButton: 
-        gwtButtonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.EditButton);
-        style = new Style(gwtButtonEx);
+        buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.EditButton);
+        style = new Style(buttonEx);
         style.addProperty("color", ThemeColor.OBJECT_TONE15);
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
+        addStyle(style);
+
+        //
+        // Back2CRM link:
+        buttonEx = Selector.valueOf(TopRightActionsViewImpl.BACK_TO_CRM);
+        style = new Style(buttonEx);
+        style.addProperty("color", "red");
+        style.addProperty("background-color", "red");
+        style.addProperty("border", "1px solid yellow");
+        style.addProperty("font-weight", "bolder");
+        style.addProperty("text-shadow", "2px -1px 0 #333");
+//        style.addProperty("text-transform", "uppercase");
+        style.addProperty("padding", "0.3em");
         addStyle(style);
     }
 

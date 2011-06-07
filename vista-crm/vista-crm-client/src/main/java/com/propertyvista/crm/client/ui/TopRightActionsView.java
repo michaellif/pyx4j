@@ -2,6 +2,7 @@ package com.propertyvista.crm.client.ui;
 
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.IsWidget;
+
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;
 
 public interface TopRightActionsView extends IsWidget {
@@ -22,10 +23,11 @@ public interface TopRightActionsView extends IsWidget {
 
         public void showAlerts();
 
-        public void showSettings();
-
         public void showMessages();
 
+        public void showSettings();
+
+        public void back2CrmView();
     }
 
     public void onLogedOut();

@@ -27,7 +27,6 @@ import com.propertyvista.crm.client.activity.DashboardActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.ReportActivity;
 import com.propertyvista.crm.client.activity.ResetPasswordActivity;
-import com.propertyvista.crm.client.activity.SettingsActivity;
 import com.propertyvista.crm.client.activity.editors.ApplicationEditorActivity;
 import com.propertyvista.crm.client.activity.editors.BoilerEditorActivity;
 import com.propertyvista.crm.client.activity.editors.BuildingEditorActivity;
@@ -53,6 +52,7 @@ import com.propertyvista.crm.client.activity.listers.LockerListerActivity;
 import com.propertyvista.crm.client.activity.listers.ParkingSpotListerActivity;
 import com.propertyvista.crm.client.activity.listers.TenantListerActivity;
 import com.propertyvista.crm.client.activity.listers.UnitListerActivity;
+import com.propertyvista.crm.client.activity.settings.ContentActivity;
 import com.propertyvista.crm.client.activity.viewers.ApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.BoilerViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.BuildingViewerActivity;
@@ -175,7 +175,7 @@ public class MainActivityMapper implements ActivityMapper {
 
     Provider<MessageActivity> messageActivityProvider;
 
-    Provider<SettingsActivity> settingsActivityProvider;
+    Provider<ContentActivity> contentActivityProvider;
 
     @Inject
     public MainActivityMapper(
@@ -287,8 +287,10 @@ public class MainActivityMapper implements ActivityMapper {
     final Provider<AlertActivity> alertActivityProvider,
 
     final Provider<MessageActivity> messageActivityProvider,
-
-    final Provider<SettingsActivity> settingsActivityProvider) {
+/*
+ * ----- Other:
+ */
+    final Provider<ContentActivity> contentActivityProvider) {
         super();
 
 //        this.loginActivityProvider = loginActivityProvider;
@@ -345,7 +347,8 @@ public class MainActivityMapper implements ActivityMapper {
         this.accountActivityProvider = accountActivityProvider;
         this.alertActivityProvider = alertActivityProvider;
         this.messageActivityProvider = messageActivityProvider;
-        this.settingsActivityProvider = settingsActivityProvider;
+// ---- settings:
+        this.contentActivityProvider = contentActivityProvider;
     }
 
     @Override
@@ -467,8 +470,9 @@ public class MainActivityMapper implements ActivityMapper {
             return alertActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Message) {
             return messageActivityProvider.get().withPlace(place);
-        } else if (place instanceof CrmSiteMap.Settings) {
-            return settingsActivityProvider.get().withPlace(place);
+// - Settings:
+        } else if (place instanceof CrmSiteMap.Settings.Content) {
+            return contentActivityProvider.get().withPlace(place);
         }
         //TODO what to do on other place
         return null;

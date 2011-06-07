@@ -41,8 +41,6 @@ import com.pyx4j.widgets.client.style.Theme;
 import com.propertyvista.crm.client.mvp.ActionsActivityMapper;
 import com.propertyvista.crm.client.mvp.EntryPointActivityMapper;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
-import com.propertyvista.crm.client.mvp.Left1ActivityMapper;
-import com.propertyvista.crm.client.mvp.Left2ActivityMapper;
 import com.propertyvista.crm.client.mvp.LogoActivityMapper;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.mvp.NavigActivityMapper;
@@ -65,10 +63,6 @@ public class CrmView extends LayoutPanel {
     NavigActivityMapper navigActivityMapper,
 
     MainActivityMapper mainActivityMapper,
-
-    Left1ActivityMapper left1ActivityMapper,
-
-    Left2ActivityMapper left2ActivityMapper,
 
     EntryPointActivityMapper utilityActivityMapper,
 
@@ -179,7 +173,6 @@ public class CrmView extends LayoutPanel {
     private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
         ActivityManager activityManager = new ActivityManager(mapper, eventBus);
         activityManager.setDisplay(widget);
-
     }
 
     class DisplayPanel extends SimplePanel implements RequiresResize, ProvidesResize {

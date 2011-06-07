@@ -75,6 +75,13 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
     @Override
     public void setPresenter(final MainNavigPresenter presenter) {
+
+        if (this.presenter != null) {
+            if (presenter.getClass() != this.presenter.getClass()) {
+                clearState(); // CRM <-> Settings navigation switch!.. 
+            }
+        }
+
         this.presenter = presenter;
 
         /**
@@ -181,7 +188,6 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
  * }
  * }
  */
-
         } else {
             lastKnownPlaces = new ArrayList<NavigFolderWidget>(10);
             NavigFolderWidget nw = null;
@@ -206,6 +212,11 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                 ((NavigFolderWidget) w).setSelected(index == i);
             }
         }
+    }
+
+    private void clearState() {
+        this.clear();
+        lastKnownPlaces = null;
     }
 
     //

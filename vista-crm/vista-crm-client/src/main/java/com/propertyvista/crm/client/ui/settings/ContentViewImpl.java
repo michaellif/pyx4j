@@ -11,17 +11,16 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.editors;
+package com.propertyvista.crm.client.ui.settings;
 
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
 
-public class SettingsViewImpl extends SimplePanel implements SettingsView {
+public class ContentViewImpl extends FlowPanel implements ContentView {
 
-    public SettingsViewImpl() {
+    public ContentViewImpl() {
         setSize("100%", "100%");
-        HTML label = new HTML("User Settings");
-        setWidget(label);
+        HTML label = new HTML("CMS palce!...");
+        add(label);
     }
-
 }

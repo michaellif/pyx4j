@@ -30,6 +30,8 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         Gainsboro, VillageGreen, BlueCold, BrownWarm
     }
 
+    public static String BACK_TO_CRM = "vista_Back2CRM";
+
     private static I18n i18n = I18nFactory.getI18n(TopRightActionsViewImpl.class);
 
     private Presenter presenter;
@@ -104,14 +106,24 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         account.setValue(i18n.tr("Account"));
         account.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
+        final String caption1 = i18n.tr("Administration");
+        final String caption2 = i18n.tr("Back to CRM");
         settings = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
-                presenter.showSettings();
+                if (settings.getValue() == caption1) {
+                    presenter.showSettings();
+                    settings.setValue(caption2);
+                    settings.asWidget().addStyleName(BACK_TO_CRM);
+                } else {
+                    presenter.back2CrmView();
+                    settings.setValue(caption1);
+                    settings.asWidget().removeStyleName(BACK_TO_CRM);
+                }
             }
         });
         settings.setDebugId(new StringDebugId("settings"));
-        settings.setValue(i18n.tr("Settings"));
+        settings.setValue(i18n.tr("Administration"));
         settings.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
         themes = new CHyperlink(null, new Command() {

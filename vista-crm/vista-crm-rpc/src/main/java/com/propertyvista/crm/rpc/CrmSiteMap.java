@@ -318,7 +318,6 @@ public class CrmSiteMap implements SiteMap {
         public static class Concession extends AppPlace {
 
         }
-
     }
 
     public static class Marketing extends AppPlace {
@@ -342,8 +341,28 @@ public class CrmSiteMap implements SiteMap {
     public static class Account extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "User Settings")
+    @NavigationItem(navigLabel = "Administration")
     public static class Settings extends AppPlace {
+
+        @NavigationItem(navigLabel = "Policy Management")
+        public static class Policy extends AppPlace {
+
+        }
+
+        @NavigationItem(navigLabel = "User Role")
+        public static class UserRole extends AppPlace {
+
+        }
+
+        @NavigationItem(navigLabel = "General")
+        public static class General extends AppPlace {
+
+        }
+
+        @NavigationItem(navigLabel = "Content")
+        public static class Content extends AppPlace {
+
+        }
     }
 
     @NavigationItem(navigLabel = "Alerts")

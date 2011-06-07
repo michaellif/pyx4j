@@ -47,8 +47,6 @@ import com.propertyvista.crm.client.ui.editors.ParkingSpotEditorView;
 import com.propertyvista.crm.client.ui.editors.ParkingSpotEditorViewImpl;
 import com.propertyvista.crm.client.ui.editors.RoofEditorView;
 import com.propertyvista.crm.client.ui.editors.RoofEditorViewImpl;
-import com.propertyvista.crm.client.ui.editors.SettingsView;
-import com.propertyvista.crm.client.ui.editors.SettingsViewImpl;
 import com.propertyvista.crm.client.ui.editors.TenantEditorView;
 import com.propertyvista.crm.client.ui.editors.TenantEditorViewImpl;
 import com.propertyvista.crm.client.ui.editors.UnitEditorView;
@@ -83,6 +81,8 @@ import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
 import com.propertyvista.crm.client.ui.login.RetrievePasswordViewImpl;
 import com.propertyvista.crm.client.ui.report.ReportView;
 import com.propertyvista.crm.client.ui.report.ReportViewImpl;
+import com.propertyvista.crm.client.ui.settings.ContentView;
+import com.propertyvista.crm.client.ui.settings.ContentViewImpl;
 import com.propertyvista.crm.client.ui.vewers.ApplicationViewerView;
 import com.propertyvista.crm.client.ui.vewers.ApplicationViewerViewImpl;
 import com.propertyvista.crm.client.ui.vewers.BoilerViewerView;
@@ -198,15 +198,17 @@ public class ViewModule extends AbstractGinModule {
         bind(DashboardView.class).to(DashboardViewImpl.class).in(Singleton.class);
 
 // - Themes:
-//        bind(Theme.class).to(GainsboroTheme.class).in(Singleton.class);
+        //        bind(Theme.class).to(GainsboroTheme.class).in(Singleton.class);
         bind(Theme.class).to(BlueColdTheme.class).in(Singleton.class);
-//        bind(Theme.class).to(BownWarmTheme.class).in(Singleton.class);
+        //        bind(Theme.class).to(BownWarmTheme.class).in(Singleton.class);
 
         bind(ShortCutsView.class).to(ShortCutsViewImpl.class).in(Singleton.class);
 
         bind(AccountView.class).to(AccountViewImpl.class).in(Singleton.class);
         bind(AlertView.class).to(AlertViewImpl.class).in(Singleton.class);
         bind(MessageView.class).to(MessageViewImpl.class).in(Singleton.class);
-        bind(SettingsView.class).to(SettingsViewImpl.class).in(Singleton.class);
+
+// - Settings:
+        bind(ContentView.class).to(ContentViewImpl.class).in(Singleton.class);
     }
 }

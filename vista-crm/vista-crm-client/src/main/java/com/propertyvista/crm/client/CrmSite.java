@@ -69,7 +69,7 @@ public class CrmSite extends VistaSite {
         obtainAuthenticationData();
     }
 
-    private void loadCrm() {
+    public void loadCrm() {
 
         if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
             AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard());

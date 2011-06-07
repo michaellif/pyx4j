@@ -11,21 +11,22 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity;
+package com.propertyvista.crm.client.activity.settings;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.crm.client.ui.editors.SettingsView;
 
-public class SettingsActivity extends AbstractActivity {
+import com.propertyvista.crm.client.ui.settings.ContentView;
 
-    private final SettingsView view;
+public class ContentActivity extends AbstractActivity {
+
+    private final ContentView view;
 
     @Inject
-    public SettingsActivity(SettingsView view) {
+    public ContentActivity(ContentView view) {
         this.view = view;
     }
 
@@ -34,8 +35,7 @@ public class SettingsActivity extends AbstractActivity {
         container.setWidget(view);
     }
 
-    public SettingsActivity withPlace(Place place) {
+    public ContentActivity withPlace(Place place) {
         return this;
     }
-
 }

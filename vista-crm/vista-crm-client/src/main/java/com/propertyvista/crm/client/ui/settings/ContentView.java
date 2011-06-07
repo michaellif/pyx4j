@@ -7,22 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on May 9, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.client.mvp;
+package com.propertyvista.crm.client.ui.settings;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class Left1ActivityMapper implements ActivityMapper {
-
-    @Override
-    public Activity getActivity(Place place) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+public interface ContentView extends IsWidget {
 
 }
