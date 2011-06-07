@@ -7,25 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2011
- * @author michaellif
+ * Created on May 9, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.domain.site;
+package com.propertyvista.crm.client.ui.settings;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.propertyvista.crm.client.ui.editors.EditorViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.portal.domain.site.NavigItemDTO;
 
-public interface NavigItemDTO extends IEntity {
-
-    IPrimitive<String> placeId();
-
-    IPrimitive<String> pageId();
-
-    IPrimitive<String> title();
-
-    @Owned
-    IList<NavigItemDTO> subitems();
+public class ContentEditorImpl extends EditorViewImplBase<NavigItemDTO> implements ContentEditor {
+    public ContentEditorImpl() {
+        super(new CrmSiteMap.Settings.Content());
+        setEditor(new ContentEditorForm());
+    }
 }

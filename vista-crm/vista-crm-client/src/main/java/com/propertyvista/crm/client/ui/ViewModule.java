@@ -21,8 +21,6 @@ import com.pyx4j.widgets.client.style.Theme;
 import com.propertyvista.crm.client.themes.BlueColdTheme;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
-import com.propertyvista.crm.client.ui.editors.AccountView;
-import com.propertyvista.crm.client.ui.editors.AccountViewImpl;
 import com.propertyvista.crm.client.ui.editors.ApplicationEditorView;
 import com.propertyvista.crm.client.ui.editors.ApplicationEditorViewImpl;
 import com.propertyvista.crm.client.ui.editors.BoilerEditorView;
@@ -81,8 +79,8 @@ import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
 import com.propertyvista.crm.client.ui.login.RetrievePasswordViewImpl;
 import com.propertyvista.crm.client.ui.report.ReportView;
 import com.propertyvista.crm.client.ui.report.ReportViewImpl;
-import com.propertyvista.crm.client.ui.settings.ContentView;
-import com.propertyvista.crm.client.ui.settings.ContentViewImpl;
+import com.propertyvista.crm.client.ui.settings.ContentEditor;
+import com.propertyvista.crm.client.ui.settings.ContentEditorImpl;
 import com.propertyvista.crm.client.ui.vewers.ApplicationViewerView;
 import com.propertyvista.crm.client.ui.vewers.ApplicationViewerViewImpl;
 import com.propertyvista.crm.client.ui.vewers.BoilerViewerView;
@@ -209,6 +207,6 @@ public class ViewModule extends AbstractGinModule {
         bind(MessageView.class).to(MessageViewImpl.class).in(Singleton.class);
 
 // - Settings:
-        bind(ContentView.class).to(ContentViewImpl.class).in(Singleton.class);
+        bind(ContentEditor.class).to(ContentEditorImpl.class).in(Singleton.class);
     }
 }

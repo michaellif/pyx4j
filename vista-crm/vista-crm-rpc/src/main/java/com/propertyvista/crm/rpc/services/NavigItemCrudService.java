@@ -7,14 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 9, 2011
- * @author vadims
+ * Created on 2011-06-06
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.editors;
+package com.propertyvista.crm.rpc.services;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.domain.site.NavigItemDTO;
 
-public interface AccountView extends IsWidget {
+public interface NavigItemCrudService extends AbstractCrudService<NavigItemDTO> {
 
 }

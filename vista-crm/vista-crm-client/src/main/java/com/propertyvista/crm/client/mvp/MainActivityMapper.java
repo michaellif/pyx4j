@@ -53,6 +53,7 @@ import com.propertyvista.crm.client.activity.listers.ParkingSpotListerActivity;
 import com.propertyvista.crm.client.activity.listers.TenantListerActivity;
 import com.propertyvista.crm.client.activity.listers.UnitListerActivity;
 import com.propertyvista.crm.client.activity.settings.ContentActivity;
+import com.propertyvista.crm.client.activity.settings.ContentEditorActivity;
 import com.propertyvista.crm.client.activity.viewers.ApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.BoilerViewerActivity;
 import com.propertyvista.crm.client.activity.viewers.BuildingViewerActivity;
@@ -175,7 +176,10 @@ public class MainActivityMapper implements ActivityMapper {
 
     Provider<MessageActivity> messageActivityProvider;
 
+// ----- Settings:
     Provider<ContentActivity> contentActivityProvider;
+
+    Provider<ContentEditorActivity> contentEditorActivityProvider;
 
     @Inject
     public MainActivityMapper(
@@ -288,9 +292,11 @@ public class MainActivityMapper implements ActivityMapper {
 
     final Provider<MessageActivity> messageActivityProvider,
 /*
- * ----- Other:
+ * ----- Settings:
  */
-    final Provider<ContentActivity> contentActivityProvider) {
+    final Provider<ContentActivity> contentActivityProvider,
+
+    final Provider<ContentEditorActivity> contentEditorActivityProvider) {
         super();
 
 //        this.loginActivityProvider = loginActivityProvider;
@@ -349,6 +355,7 @@ public class MainActivityMapper implements ActivityMapper {
         this.messageActivityProvider = messageActivityProvider;
 // ---- settings:
         this.contentActivityProvider = contentActivityProvider;
+        this.contentEditorActivityProvider = contentEditorActivityProvider;
     }
 
     @Override
@@ -472,7 +479,11 @@ public class MainActivityMapper implements ActivityMapper {
             return messageActivityProvider.get().withPlace(place);
 // - Settings:
         } else if (place instanceof CrmSiteMap.Settings.Content) {
-            return contentActivityProvider.get().withPlace(place);
+            if (((AppPlace) place).getArgs().isEmpty()) {
+                return contentActivityProvider.get().withPlace(place);
+            } else {
+                return contentEditorActivityProvider.get().withPlace(place);
+            }
         }
         //TODO what to do on other place
         return null;

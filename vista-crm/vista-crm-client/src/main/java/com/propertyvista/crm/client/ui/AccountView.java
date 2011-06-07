@@ -11,16 +11,10 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.settings;
+package com.propertyvista.crm.client.ui;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class ContentViewImpl extends FlowPanel implements ContentView {
+public interface AccountView extends IsWidget {
 
-    public ContentViewImpl() {
-        setSize("100%", "100%");
-        HTML label = new HTML("CMS palce!...");
-        add(label);
-    }
 }

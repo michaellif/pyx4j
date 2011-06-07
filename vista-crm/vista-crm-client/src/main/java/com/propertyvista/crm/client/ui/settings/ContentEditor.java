@@ -13,8 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.settings;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.crm.client.ui.editors.IEditorView;
+import com.propertyvista.portal.domain.site.NavigItemDTO;
 
-public interface ContentView extends IsWidget {
+public interface ContentEditor extends IEditorView<NavigItemDTO> {
 
 }

@@ -14,28 +14,30 @@
 package com.propertyvista.crm.client.activity.settings;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.propertyvista.crm.client.ui.settings.ContentView;
+import com.pyx4j.commons.Key;
+import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class ContentActivity extends AbstractActivity {
 
-    private final ContentView view;
-
     @Inject
-    public ContentActivity(ContentView view) {
-        this.view = view;
+    public ContentActivity() {
     }
 
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
-        container.setWidget(view);
+        // TODO: VladL, go to main content page here:        
+        AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(new CrmSiteMap.Settings.Content(), new Key("")));
     }
 
-    public ContentActivity withPlace(Place place) {
+    public Activity withPlace(Place place) {
         return this;
     }
 }
