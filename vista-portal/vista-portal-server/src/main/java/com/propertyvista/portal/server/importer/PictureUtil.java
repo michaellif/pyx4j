@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
@@ -40,7 +41,7 @@ public class PictureUtil {
     private final static Logger log = LoggerFactory.getLogger(PictureUtil.class);
 
     public static Map<Media, byte[]> loadResourceMedia(String filenamePrefix, Class<?> clazz) {
-        Map<Media, byte[]> data = new HashMap<Media, byte[]>();
+        Map<Media, byte[]> data = new LinkedHashMap<Media, byte[]>();
         loadResourcePicture(filenamePrefix + ".jpg", clazz, data);
         loadResourcePicture(filenamePrefix + "-1.jpg", clazz, data);
         loadResourcePicture(filenamePrefix + "-2.jpg", clazz, data);

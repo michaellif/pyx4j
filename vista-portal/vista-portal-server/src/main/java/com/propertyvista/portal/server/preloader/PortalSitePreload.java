@@ -29,6 +29,7 @@ public class PortalSitePreload extends AbstractDataPreloader {
         PageDescriptor landingPage = EntityFactory.create(PageDescriptor.class);
         landingPage.type().setValue(PageDescriptor.Type.landing);
         landingPage.content().content().setValue(CommonsGenerator.lipsum());
+        landingPage.content().path().setValue(PageContent.PATH_SEPARATOR);
 
         {
             PageDescriptor page = EntityFactory.create(PageDescriptor.class);
@@ -93,6 +94,16 @@ public class PortalSitePreload extends AbstractDataPreloader {
         PersistenceServicesFactory.getPersistenceService().persist(page);
         int pagesCount = 1;
         for (PageDescriptor c : page.childPages()) {
+            String path = page.content().path().getValue();
+            if (!path.endsWith(PageContent.PATH_SEPARATOR)) {
+                path += PageContent.PATH_SEPARATOR;
+            }
+            if (c.caption().isNull()) {
+                path += c.type().getStringView();
+            } else {
+                path += c.caption().getStringView();
+            }
+            c.content().path().setValue(path);
             c.parent().set(page);
             pagesCount += saveCascade(c);
             pagesCount++;
