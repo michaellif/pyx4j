@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.settings;
 
 import com.propertyvista.crm.client.ui.editors.EditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.portal.domain.site.PageContent;
+import com.propertyvista.portal.domain.site.PageDescriptor;
 
-public class ContentEditorImpl extends EditorViewImplBase<PageContent> implements ContentEditor {
+public class ContentEditorImpl extends EditorViewImplBase<PageDescriptor> implements ContentEditor {
     public ContentEditorImpl() {
         super(new CrmSiteMap.Settings.Content());
         setEditor(new ContentEditorForm());

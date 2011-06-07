@@ -14,8 +14,8 @@
 package com.propertyvista.crm.client.ui.settings;
 
 import com.propertyvista.crm.client.ui.editors.IEditorView;
-import com.propertyvista.portal.domain.site.PageContent;
+import com.propertyvista.portal.domain.site.PageDescriptor;
 
-public interface ContentEditor extends IEditorView<PageContent> {
+public interface ContentEditor extends IEditorView<PageDescriptor> {
 
 }

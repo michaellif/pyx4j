@@ -7,18 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-06-06
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.crm.rpc.services.PageContentCrudService;
-import com.propertyvista.portal.domain.site.PageContent;
+import com.propertyvista.portal.domain.site.PageDescriptor;
 
-public class PageContentCrudServiceImpl extends GenericCrudServiceImpl<PageContent> implements PageContentCrudService {
+public interface PageDescriptorCrudService extends AbstractCrudService<PageDescriptor> {
 
-    public PageContentCrudServiceImpl() {
-        super(PageContent.class);
-    }
 }
