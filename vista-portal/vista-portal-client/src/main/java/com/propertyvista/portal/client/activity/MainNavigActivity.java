@@ -52,7 +52,11 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
             public void onSuccess(PageDescriptor navig) {
                 List<NavigItem> items = new ArrayList<NavigItem>();
                 for (PageDescriptor descriptor : navig.childPages()) {
-                    items.add(new NavigItem(descriptor.caption().getStringView(), descriptor.caption().getStringView()));
+                    if (PageDescriptor.Type.staticContent.equals(descriptor.type())) {
+                        items.add(new NavigItem(descriptor.caption().getStringView(), descriptor.caption().getStringView()));
+                    } else {
+                        items.add(new NavigItem(NavigItem.convertTypeToPlace(descriptor.type().getValue()), descriptor.caption().getStringView()));
+                    }
                 }
                 view.setMainNavig(items);
             }
