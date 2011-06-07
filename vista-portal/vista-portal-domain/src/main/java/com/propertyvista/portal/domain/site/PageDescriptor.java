@@ -31,7 +31,9 @@ public interface PageDescriptor extends IEntity {
 
         findApartment,
 
-        residence;
+        residence,
+
+        landing;
 
         @Override
         public String toString() {
