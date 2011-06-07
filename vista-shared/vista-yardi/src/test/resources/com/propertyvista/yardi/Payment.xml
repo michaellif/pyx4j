@@ -5,19 +5,18 @@
         <RT_Customer>
             <RTServiceTransactions>
                 <Transactions>
-                    <Charge>
+                    <Payment Type="Other">
                         <Detail>
-                            <Description>test pay</Description>
+                            <!-- BatchID>VISA</BatchID> <DocumentNumber>1900</DocumentNumber -->
                             <TransactionDate>2011-06-06</TransactionDate>
-                            <ChargeCode>.rent</ChargeCode>
+                            <!-- GLAccountNumber>4500-0000</GLAccountNumber -->
                             <CustomerID>t0005529</CustomerID>
-                            <UnitID>413</UnitID>
-                            <AmountPaid>0</AmountPaid>
-                            <Amount>838.36</Amount>
-                            <Comment>Application Fee</Comment>
+                            <PaidBy>Tenant</PaidBy>
+                            <Amount>2626.17</Amount>
+                            <Comment>test pay2</Comment>
                             <PropertyPrimaryID>prvista1</PropertyPrimaryID>
                         </Detail>
-                    </Charge>
+                    </Payment>
                 </Transactions>
             </RTServiceTransactions>
         </RT_Customer>

@@ -49,11 +49,16 @@ public class YardiExample {
         // execute different actions
         try {
             // the order of this call should match the document order
-            YardiTransactions.ping(c);
+            //YardiTransactions.ping(c);
+            //YardiTransactions.getResidentTransactions(c, yp);
 
             // ANYA, use the first line if you want to send stuff, second to retrieve
-            send(c, yp);
+            //send(c, yp);
 //            retrieve(c, yp);
+
+            //YardiTransactions.getResidentTransactions(c, yp);
+            //YardiTransactions.getResidentsLeaseCharges(c, yp);
+
         } catch (Throwable e) {
             log.error("error", e);
         }
@@ -80,7 +85,7 @@ public class YardiExample {
 
 //        String xml = MarshallUtil.marshalls(charge);
 
-        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("Charge.xml", XmlBeanTest.class));
+        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("Payment.xml", XmlBeanTest.class));
 
         log.info("Sending\n{}\n", xml);
         yp.setTransactionXml(xml);

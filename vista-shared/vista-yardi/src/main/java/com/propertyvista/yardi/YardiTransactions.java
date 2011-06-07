@@ -286,7 +286,7 @@ public class YardiTransactions {
 
         Calendar when = GregorianCalendar.getInstance();
         when.set(Calendar.YEAR, 2011);
-        when.set(Calendar.MONTH, 1);
+        when.set(Calendar.MONTH, 6);
 
         l.setPostMonth(when);
 
