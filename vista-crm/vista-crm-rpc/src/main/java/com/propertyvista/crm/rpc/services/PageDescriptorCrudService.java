@@ -13,8 +13,14 @@
  */
 package com.propertyvista.crm.rpc.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+
 import com.propertyvista.portal.domain.site.PageDescriptor;
 
 public interface PageDescriptorCrudService extends AbstractCrudService<PageDescriptor> {
+
+    public void retrieveLandingPage(AsyncCallback<Key> callback);
 
 }

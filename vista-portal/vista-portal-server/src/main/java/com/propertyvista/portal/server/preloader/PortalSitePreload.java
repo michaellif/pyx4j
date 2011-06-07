@@ -25,12 +25,10 @@ public class PortalSitePreload extends AbstractDataPreloader {
 
     @Override
     public String create() {
-        int pagesCount = 0;
 
         PageDescriptor landingPage = EntityFactory.create(PageDescriptor.class);
         landingPage.type().setValue(PageDescriptor.Type.landing);
         landingPage.content().content().setValue(CommonsGenerator.lipsum());
-        pagesCount++;
 
         {
             PageDescriptor page = EntityFactory.create(PageDescriptor.class);
@@ -38,7 +36,6 @@ public class PortalSitePreload extends AbstractDataPreloader {
             page.caption().setValue("Home");
             page.content().content().setValue(CommonsGenerator.lipsum());
             landingPage.childPages().add(page);
-            pagesCount++;
         }
 
         {
@@ -47,14 +44,12 @@ public class PortalSitePreload extends AbstractDataPreloader {
             page.type().setValue(PageDescriptor.Type.findApartment);
             page.content().content().setValue(CommonsGenerator.lipsum());
             landingPage.childPages().add(page);
-            pagesCount++;
         }
 
         {
             PageDescriptor page = EntityFactory.create(PageDescriptor.class);
             page.type().setValue(PageDescriptor.Type.residence);
             landingPage.childPages().add(page);
-            pagesCount++;
         }
 
         {
@@ -62,14 +57,12 @@ public class PortalSitePreload extends AbstractDataPreloader {
             page.type().setValue(PageDescriptor.Type.staticContent);
             page.caption().setValue("About Us");
             page.content().content().setValue(CommonsGenerator.lipsum());
-            pagesCount++;
             {
                 PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
                 page2.type().setValue(PageDescriptor.Type.staticContent);
                 page2.caption().setValue("Overview");
                 page2.content().content().setValue(CommonsGenerator.lipsum());
                 page.childPages().add(page2);
-                pagesCount++;
             }
             {
                 PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
@@ -77,7 +70,6 @@ public class PortalSitePreload extends AbstractDataPreloader {
                 page2.caption().setValue("Team");
                 page2.content().content().setValue(CommonsGenerator.lipsum());
                 page.childPages().add(page2);
-                pagesCount++;
             }
             landingPage.childPages().add(page);
         }
@@ -88,21 +80,23 @@ public class PortalSitePreload extends AbstractDataPreloader {
             page.caption().setValue("Contact Us");
             page.content().content().setValue(CommonsGenerator.lipsum());
             landingPage.childPages().add(page);
-            pagesCount++;
         }
 
-        saveCascade(landingPage);
+        int pagesCount = saveCascade(landingPage);
 
         StringBuilder b = new StringBuilder();
         b.append("Created " + pagesCount + " Pages");
         return b.toString();
     }
 
-    private void saveCascade(PageDescriptor page) {
+    private int saveCascade(PageDescriptor page) {
         PersistenceServicesFactory.getPersistenceService().persist(page);
+        int pagesCount = 1;
         for (PageDescriptor c : page.childPages()) {
-            saveCascade(c);
+            pagesCount += saveCascade(c);
+            pagesCount++;
         }
+        return pagesCount;
     }
 
     @SuppressWarnings("unchecked")

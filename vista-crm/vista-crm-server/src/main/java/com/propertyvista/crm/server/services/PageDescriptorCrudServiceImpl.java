@@ -13,6 +13,15 @@
  */
 package com.propertyvista.crm.server.services;
 
+import java.util.List;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.portal.domain.site.PageDescriptor;
 
@@ -20,5 +29,18 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
 
     public PageDescriptorCrudServiceImpl() {
         super(PageDescriptor.class);
+    }
+
+    @Override
+    public void retrieveLandingPage(AsyncCallback<Key> callback) {
+
+        EntityQueryCriteria<PageDescriptor> criteria = EntityQueryCriteria.create(PageDescriptor.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().type(), PageDescriptor.Type.landing));
+        List<Key> list = PersistenceServicesFactory.getPersistenceService().queryKeys(criteria);
+        if (list.isEmpty()) {
+            throw new Error("Landing page not found");
+        } else {
+            callback.onSuccess(list.get(0));
+        }
     }
 }
