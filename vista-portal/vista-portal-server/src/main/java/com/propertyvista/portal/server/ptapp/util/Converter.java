@@ -40,6 +40,7 @@ public class Converter {
     public static FloorplanDTO convert(Floorplan from) {
         FloorplanDTO to = EntityFactory.create(FloorplanDTO.class);
 
+        to.id().set(from.id());
         to.name().setValue(from.name().getValue());
         to.area().set(from.area());
         to.marketRent().set(from.marketRent());
