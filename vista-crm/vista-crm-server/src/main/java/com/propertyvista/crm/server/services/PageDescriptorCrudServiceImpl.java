@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.server.services;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -33,7 +35,6 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
 
     @Override
     public void retrieveLandingPage(AsyncCallback<Key> callback) {
-
         EntityQueryCriteria<PageDescriptor> criteria = EntityQueryCriteria.create(PageDescriptor.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().type(), PageDescriptor.Type.landing));
         List<Key> list = PersistenceServicesFactory.getPersistenceService().queryKeys(criteria);
@@ -47,11 +48,36 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
     @Override
     public void retrieve(AsyncCallback<PageDescriptor> callback, Key entityId) {
         PageDescriptor page = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
-
+        PersistenceServicesFactory.getPersistenceService().retrieve(page.content());
         EntityQueryCriteria<PageDescriptor> childPagesCriteria = EntityQueryCriteria.create(PageDescriptor.class);
         childPagesCriteria.add(PropertyCriterion.eq(childPagesCriteria.proto().parent(), page));
         page.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(childPagesCriteria));
-
         callback.onSuccess(page);
+    }
+
+    @Override
+    public void save(AsyncCallback<PageDescriptor> callback, PageDescriptor entity) {
+        PersistenceServicesFactory.getPersistenceService().merge(entity);
+
+        List<String> parents = new Vector<String>();
+        parents.add(entity.caption().getStringView());
+        PageDescriptor c = (PageDescriptor) entity.cloneEntity();
+        while (!c.parent().isNull()) {
+            parents.add(c.caption().getStringView());
+            PersistenceServicesFactory.getPersistenceService().retrieve(c.parent());
+            c = c.parent();
+        }
+        Collections.reverse(parents);
+
+        StringBuilder path = new StringBuilder();
+        for (String pe : parents) {
+            if (path.length() > 0) {
+                path.append("/");
+            }
+            path.append(pe);
+        }
+        entity.content().path().setValue(path.toString());
+
+        callback.onSuccess(entity);
     }
 }
