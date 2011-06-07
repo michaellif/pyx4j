@@ -23,17 +23,17 @@ import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
-import com.propertyvista.portal.domain.dto.MainNavigDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.domain.site.PageContent;
+import com.propertyvista.portal.domain.site.PageDescriptor;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public interface PortalSiteServices extends IService {
 
-    public void retrieveMainNavig(AsyncCallback<MainNavigDTO> callback);
+    public void retrieveMainNavig(AsyncCallback<PageDescriptor> callback);
 
-    public void retrieveStaticContent(AsyncCallback<PageContent> callback, String pageId);
+    public void retrieveStaticContent(AsyncCallback<PageContent> callback, String path);
 
     /**
      * get List<City> with available units.

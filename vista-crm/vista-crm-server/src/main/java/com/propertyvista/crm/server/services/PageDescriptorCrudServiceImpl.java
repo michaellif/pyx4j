@@ -43,4 +43,15 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
             callback.onSuccess(list.get(0));
         }
     }
+
+    @Override
+    public void retrieve(AsyncCallback<PageDescriptor> callback, Key entityId) {
+        PageDescriptor page = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
+
+        EntityQueryCriteria<PageDescriptor> childPagesCriteria = EntityQueryCriteria.create(PageDescriptor.class);
+        childPagesCriteria.add(PropertyCriterion.eq(childPagesCriteria.proto().parent(), page));
+        page.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(childPagesCriteria));
+
+        callback.onSuccess(page);
+    }
 }

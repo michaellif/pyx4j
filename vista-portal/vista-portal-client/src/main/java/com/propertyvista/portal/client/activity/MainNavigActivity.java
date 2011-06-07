@@ -28,7 +28,6 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.MainNavigView;
-import com.propertyvista.portal.domain.dto.MainNavigDTO;
 import com.propertyvista.portal.domain.site.PageDescriptor;
 
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
@@ -48,11 +47,11 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        PortalSite.getPortalSiteServices().retrieveMainNavig(new DefaultAsyncCallback<MainNavigDTO>() {
+        PortalSite.getPortalSiteServices().retrieveMainNavig(new DefaultAsyncCallback<PageDescriptor>() {
             @Override
-            public void onSuccess(MainNavigDTO navig) {
+            public void onSuccess(PageDescriptor navig) {
                 List<NavigItem> items = new ArrayList<NavigItem>();
-                for (PageDescriptor descriptor : navig.items()) {
+                for (PageDescriptor descriptor : navig.childPages()) {
                     items.add(new NavigItem(descriptor.caption().getStringView(), descriptor.caption().getStringView()));
                 }
                 view.setMainNavig(items);

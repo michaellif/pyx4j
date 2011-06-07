@@ -34,7 +34,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
-import com.propertyvista.portal.domain.dto.MainNavigDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.domain.site.PageContent;
@@ -210,37 +209,21 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     }
 
     @Override
-    public void retrieveMainNavig(AsyncCallback<MainNavigDTO> callback) {
-        MainNavigDTO navig = EntityFactory.create(MainNavigDTO.class);
+    public void retrieveMainNavig(AsyncCallback<PageDescriptor> callback) {
+        EntityQueryCriteria<PageDescriptor> criteria = EntityQueryCriteria.create(PageDescriptor.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().type(), PageDescriptor.Type.landing));
+        List<PageDescriptor> list = PersistenceServicesFactory.getPersistenceService().query(criteria);
+        if (list.isEmpty()) {
+            throw new Error("Landing page not found");
+        }
 
-        //TODO get from DB
+        PageDescriptor landing = list.get(0);
 
-        PageDescriptor home = EntityFactory.create(PageDescriptor.class);
-        home.type().setValue(PageDescriptor.Type.staticContent);
-        home.caption().setValue("Home");
-        navig.items().add(home);
+        EntityQueryCriteria<PageDescriptor> childPagesCriteria = EntityQueryCriteria.create(PageDescriptor.class);
+        childPagesCriteria.add(PropertyCriterion.eq(childPagesCriteria.proto().parent(), landing));
+        landing.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(childPagesCriteria));
 
-        PageDescriptor findApt = EntityFactory.create(PageDescriptor.class);
-        findApt.type().setValue(PageDescriptor.Type.findApartment);
-        findApt.caption().setValue("Find Apartment");
-        navig.items().add(findApt);
-
-        PageDescriptor residents = EntityFactory.create(PageDescriptor.class);
-        residents.type().setValue(PageDescriptor.Type.residence);
-        residents.caption().setValue("Residents");
-        navig.items().add(residents);
-
-        PageDescriptor about = EntityFactory.create(PageDescriptor.class);
-        about.type().setValue(PageDescriptor.Type.staticContent);
-        about.caption().setValue("About Us");
-        navig.items().add(about);
-
-        PageDescriptor contact = EntityFactory.create(PageDescriptor.class);
-        contact.type().setValue(PageDescriptor.Type.staticContent);
-        contact.caption().setValue("Contact Us");
-        navig.items().add(contact);
-
-        callback.onSuccess(navig);
+        callback.onSuccess(landing);
     }
 
     @Override
