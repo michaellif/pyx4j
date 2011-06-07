@@ -19,6 +19,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface StaticContentDTO extends IEntity {
 
+    IPrimitive<String> pageId();
+
     @Owned
     IPrimitive<String> content();
 
