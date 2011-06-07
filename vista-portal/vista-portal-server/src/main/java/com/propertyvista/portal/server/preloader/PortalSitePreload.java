@@ -91,11 +91,18 @@ public class PortalSitePreload extends AbstractDataPreloader {
             pagesCount++;
         }
 
-        PersistenceServicesFactory.getPersistenceService().persist(landingPage);
+        saveCascade(landingPage);
 
         StringBuilder b = new StringBuilder();
         b.append("Created " + pagesCount + " Pages");
         return b.toString();
+    }
+
+    private void saveCascade(PageDescriptor page) {
+        PersistenceServicesFactory.getPersistenceService().persist(page);
+        for (PageDescriptor c : page.childPages()) {
+            saveCascade(c);
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.site;
 
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -21,6 +22,9 @@ public interface PageContent extends IEntity {
 
     @Deprecated
     PageDescriptor descriptor();
+
+    @Indexed
+    IPrimitive<String> path();
 
     @Owned
     IPrimitive<String> content();
