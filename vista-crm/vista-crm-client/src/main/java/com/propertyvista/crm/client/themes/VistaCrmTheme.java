@@ -214,7 +214,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
     }
 
     /*
-     * TODO When the layout is finalized it might make sense to combine
+     * TODO When the layout is finalised it might make sense to combine
      * Navigation and ShortCuts styling due to their similarity
      */
     protected void intitShortCutStyles() {

@@ -17,12 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.RichTextArea;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
-import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
@@ -48,9 +47,8 @@ public class ContentEditorForm extends CrmEntityForm<PageContent> {
 
         main.add(inject(proto().descriptor().caption()), 15);
 
-        RichTextArea textArea = new RichTextArea();
-        textArea.setWidth("700px");
-        main.add(new RichTextEditorDecorator(textArea));
+        main.add(new CrmHeader2Decorator(proto().content().getMeta().getCaption()));
+        main.add(inject(proto().content(), new CRichTextArea()));
 
         main.add(new CrmHeader2Decorator(proto().descriptor().childPages().getMeta().getCaption()));
         main.add(inject(proto().descriptor().childPages(), createChildPagesList()));
