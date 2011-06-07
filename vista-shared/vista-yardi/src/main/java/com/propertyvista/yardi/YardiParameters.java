@@ -32,6 +32,8 @@ public class YardiParameters {
 
     private String vendorId;
 
+    private String transactionXml;
+
     /**
      * Valid Voyager username required for access to the target Voyager
      * database
@@ -121,5 +123,17 @@ public class YardiParameters {
 
     public void setVendorId(String vendorId) {
         this.vendorId = vendorId;
+    }
+
+    /**
+     * XML document containing transaction data properly formatted in
+     * accordance with Itf_MITS_ResidentTransactions2.0.xsd.
+     */
+    public String getTransactionXml() {
+        return transactionXml;
+    }
+
+    public void setTransactionXml(String transactionXml) {
+        this.transactionXml = transactionXml;
     }
 }

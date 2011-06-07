@@ -18,7 +18,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.stream.XMLStreamException;
 
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +48,11 @@ import com.yardi.ws.operations.GetVendor_Login;
 import com.yardi.ws.operations.GetVendor_LoginResponse;
 import com.yardi.ws.operations.GetVendors_Login;
 import com.yardi.ws.operations.GetVendors_LoginResponse;
+import com.yardi.ws.operations.ImportResidentTransactions_Login;
+import com.yardi.ws.operations.ImportResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.Ping;
 import com.yardi.ws.operations.PingResponse;
+import com.yardi.ws.operations.TransactionXml_type1;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
@@ -391,4 +397,27 @@ public class YardiTransactions {
         log.info("ExportChartOfAccounts: {}", xml);
     }
 
+    public static void importResidentTransactions(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException, XMLStreamException {
+        c.transactionId++;
+        c.setCurrentAction(Action.ImportResidentTransactions);
+
+        ImportResidentTransactions_Login l = new ImportResidentTransactions_Login();
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
+
+        TransactionXml_type1 transactionXml = new TransactionXml_type1();
+        OMElement element = AXIOMUtil.stringToOM(yp.getTransactionXml());
+        transactionXml.setExtraElement(element);
+        l.setTransactionXml(transactionXml);
+        ImportResidentTransactions_LoginResponse response = c.getResidentTransactionsService().importResidentTransactions_Login(l);
+        String xml = response.getImportResidentTransactions_LoginResult().getExtraElement().toString();
+
+        log.info("Result: {}", xml);
+//        Properties properties = MarshallUtil.unmarshall(Properties.class, xml);
+//        log.info("\n--- ImportResidentTransactions ---\n{}\n", properties);
+    }
 }

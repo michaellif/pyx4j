@@ -13,8 +13,20 @@
  */
 package com.propertyvista.yardi;
 
+import java.io.IOException;
+import java.rmi.RemoteException;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.stream.XMLStreamException;
+
+import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.pyx4j.gwt.server.IOUtils;
+
+import com.propertyvista.yardi.bean.out.Charge;
+import com.propertyvista.yardi.bean.out.Detail;
 
 public class YardiExample {
 
@@ -38,18 +50,55 @@ public class YardiExample {
         try {
             // the order of this call should match the document order
             YardiTransactions.ping(c);
-            YardiTransactions.getResidentTransactions(c, yp);
-//            YardiTransactions.getResidentTransaction(c, yp);
-            YardiTransactions.getResidentTransactionsByChargeDate(c, yp);
-            YardiTransactions.getResidentTransactionsByApplicationDate(c, yp);
-            YardiTransactions.getResidentsLeaseCharges(c, yp);
-//            YardiTransactions.getResidentLeaseCharges(c, yp);
-            YardiTransactions.getUnitInformationLogin(c, yp);
-            YardiTransactions.getVendors(c, yp);
-            YardiTransactions.getExportChartOfAccounts(c, yp);
-            YardiTransactions.getPropertyConfigurations(c, yp);
+
+            // ANYA, use the first line if you want to send stuff, second to retrieve
+            send(c, yp);
+//            retrieve(c, yp);
         } catch (Throwable e) {
             log.error("error", e);
         }
+    }
+
+    private static void send(YardiClient c, YardiParameters yp) throws JAXBException, XMLStreamException, IOException {
+
+        Charge charge = new Charge();
+        Detail detail = new Detail();
+        charge.setDetail(detail);
+
+        // TODO - the code below does not do anything yet, just use the Charge.xml file
+        detail.setBatchId("05/2010 Vista Charges");
+        detail.setDescription("Application Fee");
+        detail.setTransactionDate("2011-06-05");
+        detail.setChargeCode("appfee");
+        detail.setGlAccountNumber("58200000");
+        detail.setCustomerId("t0000188");
+        detail.setUnitId("104");
+        detail.setAmountPaid("0");
+        detail.setAmount("20.00");
+        detail.setComment("Application Fee");
+        detail.setPropertyPrimaryId(yp.getYardiPropertyId());
+
+//        String xml = MarshallUtil.marshalls(charge);
+
+        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("Charge.xml", XmlBeanTest.class));
+
+        log.info("Sending\n{}\n", xml);
+        yp.setTransactionXml(xml);
+
+        YardiTransactions.importResidentTransactions(c, yp);
+
+    }
+
+    private static void retrieve(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
+        YardiTransactions.getResidentTransactions(c, yp);
+//    YardiTransactions.getResidentTransaction(c, yp);
+        YardiTransactions.getResidentTransactionsByChargeDate(c, yp);
+        YardiTransactions.getResidentTransactionsByApplicationDate(c, yp);
+        YardiTransactions.getResidentsLeaseCharges(c, yp);
+//    YardiTransactions.getResidentLeaseCharges(c, yp);
+        YardiTransactions.getUnitInformationLogin(c, yp);
+        YardiTransactions.getVendors(c, yp);
+        YardiTransactions.getExportChartOfAccounts(c, yp);
+        YardiTransactions.getPropertyConfigurations(c, yp);
     }
 }

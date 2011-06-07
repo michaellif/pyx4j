@@ -28,12 +28,22 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
+import com.propertyvista.yardi.bean.out.Charge;
 import com.propertyvista.yardi.bean2.PhysicalProperty;
 import com.propertyvista.yardi.bean2.ResidentTransactions;
 
 public class XmlBeanTest {
 
     private final static Logger log = LoggerFactory.getLogger(XmlBeanTest.class);
+
+    @Test
+    public void testImportResidentTransactions() throws IOException, JAXBException {
+        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("Charge.xml", getClass()));
+        Charge charge = MarshallUtil.unmarshall(Charge.class, xml);
+        log.info("Loaded charge: {}", charge);
+        String xml2 = MarshallUtil.marshalls(charge);
+        log.info("Produced xml: {}", xml2);
+    }
 
     @Test
     public void testGetPropertyConfigurations() throws IOException, JAXBException {

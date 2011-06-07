@@ -1,0 +1,27 @@
+<ResidentTransactions xmlns="http://yardi.com/ResidentTransactions20"
+    xmlns:MITS="http://my-company.com/namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://yardi.com/ResidentTransactions20 .\Itf_MITS_ResidentTransactions2.0.xsd">
+    <Property>
+        <RT_Customer>
+            <RTServiceTransactions>
+                <Transactions>
+                    <Charge>
+                        <Detail>
+                            <BatchID>Temporary Batch</BatchID>
+                            <Description>Application Fee</Description>
+                            <TransactionDate>2011-06-05</TransactionDate>
+                            <ChargeCode>admin</ChargeCode>
+                            <GLAccountNumber>58200000</GLAccountNumber>
+                            <CustomerID>t0005529</CustomerID>
+                            <UnitID>104</UnitID>
+                            <AmountPaid>0</AmountPaid>
+                            <Amount>20.00</Amount>
+                            <Comment>Application Fee</Comment>
+                            <PropertyPrimaryID>prvista1</PropertyPrimaryID>
+                        </Detail>
+                    </Charge>
+                </Transactions>
+            </RTServiceTransactions>
+        </RT_Customer>
+    </Property>
+</ResidentTransactions>
