@@ -223,6 +223,13 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         childPagesCriteria.add(PropertyCriterion.eq(childPagesCriteria.proto().parent(), landing));
         landing.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(childPagesCriteria));
 
+        // Return level 2 children
+        for (PageDescriptor c : landing.childPages()) {
+            EntityQueryCriteria<PageDescriptor> c2 = EntityQueryCriteria.create(PageDescriptor.class);
+            c2.add(PropertyCriterion.eq(c2.proto().parent(), c));
+            c.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(c2));
+        }
+
         callback.onSuccess(landing);
     }
 
