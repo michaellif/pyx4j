@@ -20,6 +20,8 @@ import com.pyx4j.site.shared.meta.SiteMap;
 
 public class PtSiteMap implements SiteMap {
 
+    public static String ARG_FLOORPLAN_ID = "fp-id";
+
     public final static String STEP_ARG_NAME = "substep";
 
     @PlaceProperties(caption = "Application Form")
