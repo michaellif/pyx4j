@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.settings;
 
 import com.propertyvista.crm.client.ui.editors.EditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.portal.domain.site.NavigItemDTO;
+import com.propertyvista.portal.domain.dto.NavigItemDTO;
 
 public class ContentEditorImpl extends EditorViewImplBase<NavigItemDTO> implements ContentEditor {
     public ContentEditorImpl() {

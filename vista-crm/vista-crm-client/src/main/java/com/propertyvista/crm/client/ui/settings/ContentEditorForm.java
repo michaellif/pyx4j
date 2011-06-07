@@ -29,7 +29,7 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
-import com.propertyvista.portal.domain.site.NavigItemDTO;
+import com.propertyvista.portal.domain.dto.NavigItemDTO;
 
 public class ContentEditorForm extends CrmEntityForm<NavigItemDTO> {
 

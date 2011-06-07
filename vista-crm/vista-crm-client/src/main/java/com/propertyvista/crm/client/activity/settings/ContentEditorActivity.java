@@ -20,7 +20,7 @@ import com.propertyvista.crm.client.activity.editors.EditorActivityBase;
 import com.propertyvista.crm.client.ui.settings.ContentEditor;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.NavigItemCrudService;
-import com.propertyvista.portal.domain.site.NavigItemDTO;
+import com.propertyvista.portal.domain.dto.NavigItemDTO;
 
 public class ContentEditorActivity extends EditorActivityBase<NavigItemDTO> {
 

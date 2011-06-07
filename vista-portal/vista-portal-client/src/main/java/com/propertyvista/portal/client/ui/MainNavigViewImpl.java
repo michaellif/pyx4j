@@ -37,8 +37,8 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-import com.propertyvista.portal.domain.site.MainNavigDTO;
-import com.propertyvista.portal.domain.site.NavigItemDTO;
+import com.propertyvista.portal.domain.dto.MainNavigDTO;
+import com.propertyvista.portal.domain.dto.NavigItemDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class MainNavigViewImpl extends SimplePanel implements MainNavigView {

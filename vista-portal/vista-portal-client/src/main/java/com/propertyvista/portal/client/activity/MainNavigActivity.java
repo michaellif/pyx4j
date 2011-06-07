@@ -25,7 +25,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.MainNavigView;
-import com.propertyvista.portal.domain.site.MainNavigDTO;
+import com.propertyvista.portal.domain.dto.MainNavigDTO;
 
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
 

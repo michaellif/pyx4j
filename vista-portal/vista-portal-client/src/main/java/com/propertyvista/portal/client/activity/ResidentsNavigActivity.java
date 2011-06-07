@@ -20,8 +20,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ui.ResidentsNavigView;
 import com.propertyvista.portal.client.ui.ResidentsNavigView.ResidentsNavigPresenter;
-import com.propertyvista.portal.domain.site.MainNavigDTO;
-import com.propertyvista.portal.domain.site.NavigItemDTO;
+import com.propertyvista.portal.domain.dto.MainNavigDTO;
+import com.propertyvista.portal.domain.dto.NavigItemDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 import com.pyx4j.entity.shared.EntityFactory;

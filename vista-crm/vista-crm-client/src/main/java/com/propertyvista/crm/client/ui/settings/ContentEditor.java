@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.settings;
 
 import com.propertyvista.crm.client.ui.editors.IEditorView;
-import com.propertyvista.portal.domain.site.NavigItemDTO;
+import com.propertyvista.portal.domain.dto.NavigItemDTO;
 
 public interface ContentEditor extends IEditorView<NavigItemDTO> {
 

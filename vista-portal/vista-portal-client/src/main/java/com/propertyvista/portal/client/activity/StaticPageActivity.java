@@ -24,7 +24,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.StaticPageView;
-import com.propertyvista.portal.domain.site.StaticContentDTO;
+import com.propertyvista.portal.domain.dto.StaticContentDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class StaticPageActivity extends AbstractActivity implements StaticPageView.Presenter {

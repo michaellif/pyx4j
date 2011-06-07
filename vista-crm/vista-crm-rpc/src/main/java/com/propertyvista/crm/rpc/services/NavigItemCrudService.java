@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.portal.domain.site.NavigItemDTO;
+import com.propertyvista.portal.domain.dto.NavigItemDTO;
 
 public interface NavigItemCrudService extends AbstractCrudService<NavigItemDTO> {
 

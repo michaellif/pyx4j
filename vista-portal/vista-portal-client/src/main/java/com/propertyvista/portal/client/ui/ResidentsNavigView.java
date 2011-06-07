@@ -15,7 +15,8 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.domain.site.MainNavigDTO;
+
+import com.propertyvista.portal.domain.dto.MainNavigDTO;
 
 import com.pyx4j.site.rpc.AppPlace;
 

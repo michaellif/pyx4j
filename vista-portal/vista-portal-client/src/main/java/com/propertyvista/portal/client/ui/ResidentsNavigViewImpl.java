@@ -28,7 +28,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.domain.site.NavigItemDTO;
+
+import com.propertyvista.portal.domain.dto.NavigItemDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 import com.pyx4j.site.client.AppSite;

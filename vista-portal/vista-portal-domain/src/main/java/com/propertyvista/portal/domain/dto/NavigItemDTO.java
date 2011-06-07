@@ -11,15 +11,21 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.domain.site;
+package com.propertyvista.portal.domain.dto;
 
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface MainNavigDTO extends IEntity {
+public interface NavigItemDTO extends IEntity {
+
+    IPrimitive<String> placeId();
+
+    IPrimitive<String> pageId();
+
+    IPrimitive<String> title();
 
     @Owned
-    IList<NavigItemDTO> items();
-
+    IList<NavigItemDTO> subitems();
 }

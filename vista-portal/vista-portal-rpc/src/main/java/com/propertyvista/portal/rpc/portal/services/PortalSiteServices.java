@@ -23,10 +23,10 @@ import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
+import com.propertyvista.portal.domain.dto.MainNavigDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
-import com.propertyvista.portal.domain.site.MainNavigDTO;
-import com.propertyvista.portal.domain.site.StaticContentDTO;
+import com.propertyvista.portal.domain.dto.StaticContentDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public interface PortalSiteServices extends IService {
