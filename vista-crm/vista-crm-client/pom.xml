@@ -47,6 +47,12 @@
             <version>${pyxVersion}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-svg-gwt</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
+
     </dependencies>
 
     <properties>
