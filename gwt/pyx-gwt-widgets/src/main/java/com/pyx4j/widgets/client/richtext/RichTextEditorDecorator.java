@@ -27,12 +27,7 @@ public class RichTextEditorDecorator extends VerticalPanel {
 
     public RichTextEditorDecorator(RichTextArea textArea) {
 
-        textArea.setWidth("100%");
-
-        RichTextToolbar toolbar = new RichTextToolbar(textArea);
-        toolbar.setWidth("100%");
-
-        add(toolbar);
+        add(new RichTextToolbar(textArea));
         add(textArea);
     }
 
