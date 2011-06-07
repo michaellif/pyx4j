@@ -34,7 +34,7 @@ public class ContentActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         // TODO: VladL, go to main content page here:        
-        AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(new CrmSiteMap.Settings.Content(), new Key("")));
+        AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(new CrmSiteMap.Settings.Content(), new Key("1")));
     }
 
     public Activity withPlace(Place place) {
