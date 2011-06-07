@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
-import com.pyx4j.forms.client.ui.CRichTextArea;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
@@ -48,7 +47,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
         main.add(inject(proto().caption()), 15);
 
         main.add(new CrmHeader2Decorator(proto().content().getMeta().getCaption()));
-        main.add(inject(proto().content().content(), new CRichTextArea()));
+        main.add(inject(proto().content().content()), 35);
 
         main.add(new CrmHeader2Decorator(proto().childPages().getMeta().getCaption()));
         main.add(inject(proto().childPages(), createChildPagesList()));
