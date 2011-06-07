@@ -14,10 +14,8 @@
 package com.propertyvista.crm.server.services;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.domain.property.asset.Boiler;
@@ -44,39 +42,37 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
     protected void enhanceRetrieveDTO(Building in, BuildingDTO dto) {
 
         EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
-        amenitysCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(BuildingAmenity.class).belongsTo().getPath().toString(), Restriction.EQUAL,
-                in));
+        amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));
         for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
             dto.amenities().add(amenity);
         }
 
         EntityQueryCriteria<Elevator> elevatorsCriteria = EntityQueryCriteria.create(Elevator.class);
-        elevatorsCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(Elevator.class).belongsTo().getPath().toString(), Restriction.EQUAL, in));
+        elevatorsCriteria.add(PropertyCriterion.eq(elevatorsCriteria.proto().belongsTo(), in));
         for (Elevator elevator : PersistenceServicesFactory.getPersistenceService().query(elevatorsCriteria)) {
             dto.elevators().add(GenericConverter.convertDBO2DTO(elevator, ElevatorDTO.class));
         }
 
         EntityQueryCriteria<Boiler> boilersCriteria = EntityQueryCriteria.create(Boiler.class);
-        boilersCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(Boiler.class).belongsTo().getPath().toString(), Restriction.EQUAL, in));
+        boilersCriteria.add(PropertyCriterion.eq(boilersCriteria.proto().belongsTo(), in));
         for (Boiler boiler : PersistenceServicesFactory.getPersistenceService().query(boilersCriteria)) {
             dto.boilers().add(GenericConverter.convertDBO2DTO(boiler, BoilerDTO.class));
         }
 
         EntityQueryCriteria<Roof> roofsCriteria = EntityQueryCriteria.create(Roof.class);
-        roofsCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(Roof.class).belongsTo().getPath().toString(), Restriction.EQUAL, in));
+        roofsCriteria.add(PropertyCriterion.eq(roofsCriteria.proto().belongsTo(), in));
         for (Roof roof : PersistenceServicesFactory.getPersistenceService().query(roofsCriteria)) {
             dto.roofs().add(GenericConverter.convertDBO2DTO(roof, RoofDTO.class));
         }
 
         EntityQueryCriteria<Parking> parkingsCriteria = EntityQueryCriteria.create(Parking.class);
-        parkingsCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(Parking.class).belongsTo().getPath().toString(), Restriction.EQUAL, in));
+        parkingsCriteria.add(PropertyCriterion.eq(parkingsCriteria.proto().belongsTo(), in));
         for (Parking parking : PersistenceServicesFactory.getPersistenceService().query(parkingsCriteria)) {
             dto.parkings().add(GenericConverter.convertDBO2DTO(parking, ParkingDTO.class));
         }
 
         EntityQueryCriteria<LockerArea> lockerAreasCriteria = EntityQueryCriteria.create(LockerArea.class);
-        lockerAreasCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(LockerArea.class).belongsTo().getPath().toString(), Restriction.EQUAL,
-                in));
+        lockerAreasCriteria.add(PropertyCriterion.eq(lockerAreasCriteria.proto().belongsTo(), in));
         for (LockerArea lockerArea : PersistenceServicesFactory.getPersistenceService().query(lockerAreasCriteria)) {
             dto.lockers().add(GenericConverter.convertDBO2DTO(lockerArea, LockerAreaDTO.class));
         }

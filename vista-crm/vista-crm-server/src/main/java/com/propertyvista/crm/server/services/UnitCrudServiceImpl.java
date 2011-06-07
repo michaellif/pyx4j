@@ -14,10 +14,8 @@
 package com.propertyvista.crm.server.services;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -36,22 +34,19 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
     protected void enhanceRetrieveDTO(AptUnit in, AptUnitDTO dto) {
 
         EntityQueryCriteria<AptUnitAmenity> amenitysCriteria = EntityQueryCriteria.create(AptUnitAmenity.class);
-        amenitysCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(AptUnitAmenity.class).belongsTo().getPath().toString(), Restriction.EQUAL,
-                in));
+        amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));
         for (AptUnitAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
             dto.amenities().add(amenity);
         }
 
         EntityQueryCriteria<AptUnitItem> unitItemCriteria = EntityQueryCriteria.create(AptUnitItem.class);
-        unitItemCriteria
-                .add(new PropertyCriterion(EntityFactory.getEntityPrototype(AptUnitItem.class).belongsTo().getPath().toString(), Restriction.EQUAL, in));
+        unitItemCriteria.add(PropertyCriterion.eq(unitItemCriteria.proto().belongsTo(), in));
         for (AptUnitItem unitItem : PersistenceServicesFactory.getPersistenceService().query(unitItemCriteria)) {
             dto.details().add(unitItem);
         }
 
         EntityQueryCriteria<AptUnitOccupancy> occupancyCriteria = EntityQueryCriteria.create(AptUnitOccupancy.class);
-        occupancyCriteria
-                .add(new PropertyCriterion(EntityFactory.getEntityPrototype(AptUnitOccupancy.class).unit().getPath().toString(), Restriction.EQUAL, in));
+        occupancyCriteria.add(PropertyCriterion.eq(occupancyCriteria.proto().unit().getPath().toString(), in));
         for (AptUnitOccupancy occupancy : PersistenceServicesFactory.getPersistenceService().query(occupancyCriteria)) {
             dto.occupancies().add(occupancy);
         }
