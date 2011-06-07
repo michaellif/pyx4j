@@ -93,6 +93,7 @@ public class PortalSitePreload extends AbstractDataPreloader {
         PersistenceServicesFactory.getPersistenceService().persist(page);
         int pagesCount = 1;
         for (PageDescriptor c : page.childPages()) {
+            c.parent().set(page);
             pagesCount += saveCascade(c);
             pagesCount++;
         }
