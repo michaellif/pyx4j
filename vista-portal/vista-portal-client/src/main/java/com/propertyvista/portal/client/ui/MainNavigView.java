@@ -13,18 +13,20 @@
  */
 package com.propertyvista.portal.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.domain.dto.MainNavigDTO;
+import com.propertyvista.portal.client.activity.NavigItem;
 
 public interface MainNavigView extends IsWidget {
 
     public void setPresenter(MainNavigPresenter presenter);
 
-    public void setMainNavig(MainNavigDTO mainNavig);
+    public void setMainNavig(List<NavigItem> items);
 
     public interface MainNavigPresenter {
         public void navigTo(Place place);

@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.client.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -26,6 +29,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.MainNavigView;
 import com.propertyvista.portal.domain.dto.MainNavigDTO;
+import com.propertyvista.portal.domain.site.PageDescriptor;
 
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
 
@@ -47,7 +51,11 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
         PortalSite.getPortalSiteServices().retrieveMainNavig(new DefaultAsyncCallback<MainNavigDTO>() {
             @Override
             public void onSuccess(MainNavigDTO navig) {
-                view.setMainNavig(navig);
+                List<NavigItem> items = new ArrayList<NavigItem>();
+                for (PageDescriptor descriptor : navig.items()) {
+                    items.add(new NavigItem(descriptor.caption().getStringView(), descriptor.caption().getStringView()));
+                }
+                view.setMainNavig(items);
             }
         });
     }

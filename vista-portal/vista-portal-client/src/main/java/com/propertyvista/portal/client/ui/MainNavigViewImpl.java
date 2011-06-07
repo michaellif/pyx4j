@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import java.util.HashMap;
+import java.util.List;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -32,14 +32,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-import com.propertyvista.portal.domain.dto.MainNavigDTO;
-import com.propertyvista.portal.domain.site.PageDescriptor;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.client.activity.NavigItem;
 
 public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
@@ -70,8 +67,8 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
     }
 
     @Override
-    public void setMainNavig(MainNavigDTO mainNavig) {
-        for (PageDescriptor item : mainNavig.items()) {
+    public void setMainNavig(List<NavigItem> items) {
+        for (NavigItem item : items) {
             tabsHolder.add(new NavigTab(item));
         }
     }
@@ -90,29 +87,17 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
     class NavigTab extends ComplexPanel {
 
-        private final AppPlace place;
-
         private final FlowPanel labelHolder;
 
         private final SimplePanel statusHolder;
 
         private final Label label;
 
-        public AppPlace getPlace() {
-            return place;
-        }
-
-        NavigTab(PageDescriptor menuItem) {
+        NavigTab(NavigItem menuItem) {
             super();
 
-            String placeId = menuItem.caption().getValue();
-            place = AppSite.getHistoryMapper().getPlace(placeId);
-
-            if (!menuItem.caption().isNull()) {
-                HashMap<String, String> args = new HashMap<String, String>();
-                args.put(PortalSiteMap.ARG_PAGE_ID, menuItem.caption().getValue());
-                place.setArgs(args);
-            }
+            String caption = menuItem.getCaption();
+            final AppPlace place = menuItem.getPlace();
 
             setElement(DOM.createElement("li"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
@@ -128,7 +113,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
-            label = new Label(menuItem.caption().getValue());
+            label = new Label(caption);
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             statusHolder.add(label);
 
