@@ -13,6 +13,12 @@
  */
 package com.propertyvista.portal.client.themes;
 
+import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.style.ColorFactory;
+import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.widgets.client.style.Style;
+import com.pyx4j.widgets.client.style.ThemeColor;
+
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
@@ -27,12 +33,6 @@ import com.propertyvista.portal.client.ui.searchapt.CardPanel;
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentForm;
-
-import com.pyx4j.widgets.client.ListBox;
-import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColor;
 
 public abstract class PortalTheme extends com.propertyvista.common.client.theme.VistaTheme {
 
@@ -448,7 +448,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("-moz-background-size", "100% 100%!important");
         style.addProperty("-webkit-background-size", "100% 100%!important");
         style.addProperty("-khtml-background-size", "100% 100%!important");
-        style.addProperty("background-size", "100% 100%!importan");
+        style.addProperty("background-size", "100% 100%!important");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Header));
@@ -483,7 +483,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("-moz-background-size", "100% 100%!important");
         style.addProperty("-webkit-background-size", "100% 100%!important");
         style.addProperty("-khtml-background-size", "100% 100%!important");
-        style.addProperty("background-size", "100% 100%!importan");
+        style.addProperty("background-size", "100% 100%!important");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardHeader));
