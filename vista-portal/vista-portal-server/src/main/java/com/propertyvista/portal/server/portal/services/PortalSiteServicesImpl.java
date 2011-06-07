@@ -212,12 +212,11 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     public void retrieveMainNavig(AsyncCallback<PageDescriptor> callback) {
         EntityQueryCriteria<PageDescriptor> criteria = EntityQueryCriteria.create(PageDescriptor.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().type(), PageDescriptor.Type.landing));
-        List<PageDescriptor> list = PersistenceServicesFactory.getPersistenceService().query(criteria);
-        if (list.isEmpty()) {
+
+        PageDescriptor landing = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        if ((landing == null) || (landing.isNull())) {
             throw new Error("Landing page not found");
         }
-
-        PageDescriptor landing = list.get(0);
 
         EntityQueryCriteria<PageDescriptor> childPagesCriteria = EntityQueryCriteria.create(PageDescriptor.class);
         childPagesCriteria.add(PropertyCriterion.eq(childPagesCriteria.proto().parent(), landing));
@@ -234,10 +233,11 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     }
 
     @Override
-    public void retrieveStaticContent(AsyncCallback<PageContent> callback, String pageId) {
-        PageContent content = EntityFactory.create(PageContent.class);
-        content.content().setValue(pageId + " from server");
-        callback.onSuccess(content);
+    public void retrieveStaticContent(AsyncCallback<PageContent> callback, String path) {
+        EntityQueryCriteria<PageContent> criteria = EntityQueryCriteria.create(PageContent.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().path(), path));
+        PageContent c = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        callback.onSuccess(c);
     }
 
 }

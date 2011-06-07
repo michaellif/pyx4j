@@ -22,9 +22,6 @@ public interface PageContent extends IEntity {
 
     public static final String PATH_SEPARATOR = "/";
 
-    @Deprecated
-    PageDescriptor descriptor();
-
     @Indexed
     IPrimitive<String> path();
 
