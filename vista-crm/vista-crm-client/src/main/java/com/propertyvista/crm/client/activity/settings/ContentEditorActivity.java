@@ -19,14 +19,14 @@ import com.google.inject.Inject;
 import com.propertyvista.crm.client.activity.editors.EditorActivityBase;
 import com.propertyvista.crm.client.ui.settings.ContentEditor;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
-import com.propertyvista.crm.rpc.services.NavigItemCrudService;
-import com.propertyvista.portal.domain.dto.NavigItemDTO;
+import com.propertyvista.crm.rpc.services.PageContentCrudService;
+import com.propertyvista.portal.domain.site.PageContent;
 
-public class ContentEditorActivity extends EditorActivityBase<NavigItemDTO> {
+public class ContentEditorActivity extends EditorActivityBase<PageContent> {
 
     @Inject
     @SuppressWarnings("unchecked")
     public ContentEditorActivity(ContentEditor view) {
-        super(view, (AbstractCrudService<NavigItemDTO>) GWT.create(NavigItemCrudService.class), NavigItemDTO.class);
+        super(view, (AbstractCrudService<PageContent>) GWT.create(PageContentCrudService.class), PageContent.class);
     }
 }

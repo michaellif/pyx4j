@@ -17,9 +17,11 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.portal.domain.site.PageDescriptor;
+
 public interface MainNavigDTO extends IEntity {
 
     @Owned
-    IList<NavigItemDTO> items();
+    IList<PageDescriptor> items();
 
 }

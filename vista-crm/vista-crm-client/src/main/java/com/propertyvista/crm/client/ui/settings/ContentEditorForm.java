@@ -29,43 +29,42 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
-import com.propertyvista.portal.domain.dto.NavigItemDTO;
+import com.propertyvista.portal.domain.site.PageContent;
+import com.propertyvista.portal.domain.site.PageDescriptor;
 
-public class ContentEditorForm extends CrmEntityForm<NavigItemDTO> {
+public class ContentEditorForm extends CrmEntityForm<PageContent> {
 
     public ContentEditorForm() {
-        super(NavigItemDTO.class, new CrmEditorsComponentFactory());
+        super(PageContent.class, new CrmEditorsComponentFactory());
     }
 
     public ContentEditorForm(IEditableComponentFactory factory) {
-        super(NavigItemDTO.class, factory);
+        super(PageContent.class, factory);
     }
 
     @Override
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(inject(proto().pageId()), 15);
-        main.add(inject(proto().title()), 15);
+        main.add(inject(proto().descriptor().caption()), 15);
 
         RichTextArea textArea = new RichTextArea();
         textArea.setWidth("700px");
         main.add(new RichTextEditorDecorator(textArea));
 
-        main.add(new CrmHeader2Decorator(proto().subitems().getMeta().getCaption()));
-        main.add(inject(proto().subitems(), createSubitemsList()));
+        main.add(new CrmHeader2Decorator(proto().descriptor().childPages().getMeta().getCaption()));
+        main.add(inject(proto().descriptor().childPages(), createChildPagesList()));
 
         main.setWidth("100%");
         return main;
     }
 
-    private CEntityFolderEditor<NavigItemDTO> createSubitemsList() {
-        return new CrmEntityFolder<NavigItemDTO>(NavigItemDTO.class, i18n.tr("Item"), isEditable()) {
+    private CEntityFolderEditor<PageDescriptor> createChildPagesList() {
+        return new CrmEntityFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Item"), isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().pageId(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().title(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().caption(), "15em"));
                 return columns;
             }
         };

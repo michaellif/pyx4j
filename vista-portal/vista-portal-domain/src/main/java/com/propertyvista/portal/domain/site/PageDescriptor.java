@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.Translatable;
 public interface PageDescriptor extends IEntity {
 
     @Translatable
-    enum Type {
+    public enum Type {
 
         staticContent,
 

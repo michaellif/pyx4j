@@ -18,15 +18,14 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ui.ResidentsNavigView;
-import com.propertyvista.portal.client.ui.ResidentsNavigView.ResidentsNavigPresenter;
-import com.propertyvista.portal.domain.dto.MainNavigDTO;
-import com.propertyvista.portal.domain.dto.NavigItemDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.portal.client.ui.ResidentsNavigView;
+import com.propertyvista.portal.client.ui.ResidentsNavigView.ResidentsNavigPresenter;
+import com.propertyvista.portal.domain.dto.MainNavigDTO;
 
 public class ResidentsNavigActivity extends AbstractActivity implements ResidentsNavigPresenter {
 
@@ -66,26 +65,26 @@ public class ResidentsNavigActivity extends AbstractActivity implements Resident
     @Override
     public MainNavigDTO getResidentsNavig() {
         MainNavigDTO navig = EntityFactory.create(MainNavigDTO.class);
-
-        NavigItemDTO navitem1 = EntityFactory.create(NavigItemDTO.class);
-        navitem1.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents.Navigator.TenantProfile()));
-        navitem1.title().setValue("Tenant Profile");
-        navig.items().add(navitem1);
-
-        NavigItemDTO navitem2 = EntityFactory.create(NavigItemDTO.class);
-        navitem2.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents.Navigator.Maintenance()));
-        navitem2.title().setValue("Maintenance");
-        navig.items().add(navitem2);
-
-        NavigItemDTO navitem3 = EntityFactory.create(NavigItemDTO.class);
-        navitem3.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents.Navigator.Payment()));
-        navitem3.title().setValue("Payment");
-        navig.items().add(navitem3);
-
-        NavigItemDTO navitem4 = EntityFactory.create(NavigItemDTO.class);
-        navitem4.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents.Navigator.LeaseApplication()));
-        navitem4.title().setValue("Lease Application");
-        navig.items().add(navitem4);
+//TODO
+//        PageDescriptor navitem1 = EntityFactory.create(PageDescriptor.class);
+//        navitem1.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents.Navigator.TenantProfile()));
+//        navitem1.caption().setValue("Tenant Profile");
+//        navig.items().add(navitem1);
+//
+//        PageDescriptor navitem2 = EntityFactory.create(PageDescriptor.class);
+//        navitem2.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents.Navigator.Maintenance()));
+//        navitem2.title().setValue("Maintenance");
+//        navig.items().add(navitem2);
+//
+//        PageDescriptor navitem3 = EntityFactory.create(PageDescriptor.class);
+//        navitem3.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents.Navigator.Payment()));
+//        navitem3.title().setValue("Payment");
+//        navig.items().add(navitem3);
+//
+//        PageDescriptor navitem4 = EntityFactory.create(PageDescriptor.class);
+//        navitem4.placeId().setValue(AppSite.getHistoryMapper().getPlaceId(new Residents.Navigator.LeaseApplication()));
+//        navitem4.title().setValue("Lease Application");
+//        navig.items().add(navitem4);
 
         return navig;
     }

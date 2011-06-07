@@ -38,7 +38,7 @@ import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.portal.domain.dto.MainNavigDTO;
-import com.propertyvista.portal.domain.dto.NavigItemDTO;
+import com.propertyvista.portal.domain.site.PageDescriptor;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
@@ -69,8 +69,9 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
         tabsHolder.clear();
     }
 
+    @Override
     public void setMainNavig(MainNavigDTO mainNavig) {
-        for (NavigItemDTO item : mainNavig.items()) {
+        for (PageDescriptor item : mainNavig.items()) {
             tabsHolder.add(new NavigTab(item));
         }
     }
@@ -101,15 +102,15 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             return place;
         }
 
-        NavigTab(NavigItemDTO menuItem) {
+        NavigTab(PageDescriptor menuItem) {
             super();
 
-            String placeid = menuItem.placeId().getValue();
-            place = AppSite.getHistoryMapper().getPlace(placeid);
+            String placeId = menuItem.caption().getValue();
+            place = AppSite.getHistoryMapper().getPlace(placeId);
 
-            if (!menuItem.pageId().isNull()) {
+            if (!menuItem.caption().isNull()) {
                 HashMap<String, String> args = new HashMap<String, String>();
-                args.put(PortalSiteMap.ARG_PAGE_ID, menuItem.pageId().getValue());
+                args.put(PortalSiteMap.ARG_PAGE_ID, menuItem.caption().getValue());
                 place.setArgs(args);
             }
 
@@ -127,7 +128,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
-            label = new Label(menuItem.title().getValue());
+            label = new Label(menuItem.caption().getValue());
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             statusHolder.add(label);
 

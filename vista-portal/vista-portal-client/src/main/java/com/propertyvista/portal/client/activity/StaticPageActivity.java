@@ -24,7 +24,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.StaticPageView;
-import com.propertyvista.portal.domain.dto.StaticContentDTO;
+import com.propertyvista.portal.domain.site.PageContent;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class StaticPageActivity extends AbstractActivity implements StaticPageView.Presenter {
@@ -43,10 +43,10 @@ public class StaticPageActivity extends AbstractActivity implements StaticPageVi
         panel.setWidget(view);
 
         panel.setWidget(view);
-        PortalSite.getPortalSiteServices().retrieveStaticContent(new DefaultAsyncCallback<StaticContentDTO>() {
+        PortalSite.getPortalSiteServices().retrieveStaticContent(new DefaultAsyncCallback<PageContent>() {
             @Override
-            public void onSuccess(StaticContentDTO navig) {
-                view.setContent(navig.content().getStringView());
+            public void onSuccess(PageContent content) {
+                view.setContent(content.content().getStringView());
             }
         }, pageId);
     }

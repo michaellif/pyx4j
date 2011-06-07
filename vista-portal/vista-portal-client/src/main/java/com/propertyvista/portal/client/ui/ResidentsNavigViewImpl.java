@@ -29,13 +29,13 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.portal.domain.dto.NavigItemDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.portal.domain.site.PageDescriptor;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class ResidentsNavigViewImpl extends SimplePanel implements ResidentsNavigView {
     public static String DEFAULT_STYLE_PREFIX = "ResidentsMenu";
@@ -65,7 +65,7 @@ public class ResidentsNavigViewImpl extends SimplePanel implements ResidentsNavi
 
         clear();
         tabsHolder = new NavigTabList();
-        for (NavigItemDTO item : presenter.getResidentsNavig().items()) {
+        for (PageDescriptor item : presenter.getResidentsNavig().items()) {
             tabsHolder.add(new NavigTab(item));
         }
         setWidget(tabsHolder);
@@ -103,9 +103,9 @@ public class ResidentsNavigViewImpl extends SimplePanel implements ResidentsNavi
             return place;
         }
 
-        NavigTab(NavigItemDTO menuItem) {
+        NavigTab(PageDescriptor menuItem) {
             super();
-            this.place = AppSite.getHistoryMapper().getPlace(menuItem.placeId().getValue());
+            this.place = AppSite.getHistoryMapper().getPlace(menuItem.caption().getValue());
 
             setElement(DOM.createElement("li"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
@@ -121,7 +121,7 @@ public class ResidentsNavigViewImpl extends SimplePanel implements ResidentsNavi
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
-            label = new Label(menuItem.title().getValue());
+            label = new Label(menuItem.caption().getValue());
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             statusHolder.add(label);
 

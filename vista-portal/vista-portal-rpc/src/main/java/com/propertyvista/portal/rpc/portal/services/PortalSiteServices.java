@@ -26,14 +26,14 @@ import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.MainNavigDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
-import com.propertyvista.portal.domain.dto.StaticContentDTO;
+import com.propertyvista.portal.domain.site.PageContent;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public interface PortalSiteServices extends IService {
 
     public void retrieveMainNavig(AsyncCallback<MainNavigDTO> callback);
 
-    public void retrieveStaticContent(AsyncCallback<StaticContentDTO> callback, String pageId);
+    public void retrieveStaticContent(AsyncCallback<PageContent> callback, String pageId);
 
     /**
      * get List<City> with available units.
