@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
+import com.propertyvista.portal.domain.site.PageContent;
 import com.propertyvista.portal.domain.site.PageDescriptor;
 
 public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDescriptor> implements PageDescriptorCrudService {
@@ -55,29 +56,35 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
         callback.onSuccess(page);
     }
 
-    @Override
-    public void save(AsyncCallback<PageDescriptor> callback, PageDescriptor entity) {
-        PersistenceServicesFactory.getPersistenceService().merge(entity);
-
+    private void buildPath(PageDescriptor page) {
         List<String> parents = new Vector<String>();
-        parents.add(entity.caption().getStringView());
-        PageDescriptor c = (PageDescriptor) entity.cloneEntity();
-        while (!c.parent().isNull()) {
+        PageDescriptor c = (PageDescriptor) page.cloneEntity();
+        do {
             parents.add(c.caption().getStringView());
             PersistenceServicesFactory.getPersistenceService().retrieve(c.parent());
             c = c.parent();
-        }
-        Collections.reverse(parents);
+        } while (!c.parent().isNull());
 
+        Collections.reverse(parents);
         StringBuilder path = new StringBuilder();
         for (String pe : parents) {
-            if (path.length() > 0) {
-                path.append("/");
-            }
+            path.append(PageContent.PATH_SEPARATOR);
             path.append(pe);
         }
-        entity.content().path().setValue(path.toString());
+        page.content().path().setValue(path.toString());
+    }
 
+    @Override
+    public void create(AsyncCallback<PageDescriptor> callback, PageDescriptor entity) {
+        buildPath(entity);
+        PersistenceServicesFactory.getPersistenceService().persist(entity);
+        callback.onSuccess(entity);
+    }
+
+    @Override
+    public void save(AsyncCallback<PageDescriptor> callback, PageDescriptor entity) {
+        buildPath(entity);
+        PersistenceServicesFactory.getPersistenceService().merge(entity);
         callback.onSuccess(entity);
     }
 }
