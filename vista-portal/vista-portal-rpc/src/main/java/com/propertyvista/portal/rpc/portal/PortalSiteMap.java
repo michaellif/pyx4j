@@ -24,6 +24,8 @@ public class PortalSiteMap implements SiteMap {
 
     public static String ARG_PROPERTY_ID = "property-id";
 
+    public static String ARG_FLOORPLAN_ID = "florplan-id";
+
     public static class Landing extends AppPlace {
     }
 

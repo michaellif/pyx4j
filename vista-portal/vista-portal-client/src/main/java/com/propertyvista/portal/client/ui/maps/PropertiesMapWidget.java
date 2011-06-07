@@ -21,6 +21,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.maps.client.InfoWindowContent;
@@ -33,23 +34,26 @@ import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.client.resources.PortalImages;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.CircleOverlay;
 import com.pyx4j.gwt.geo.MapUtils;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
-
-import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyListDTO;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class PropertiesMapWidget extends AbstractMapWidget {
 
@@ -173,11 +177,11 @@ public class PropertiesMapWidget extends AbstractMapWidget {
         getMap().getInfoWindow().open(markers.get(property), new InfoWindowContent(new PropertyCard(property)));
     }
 
-    public class PropertyCard extends FlowPanel {
+    public class PropertyCard extends DockPanel {
 
         private final Anchor viewDetailsItem;
 
-        public PropertyCard(PropertyDTO property) {
+        public PropertyCard(final PropertyDTO property) {
             setStyleName(PROPERTY_CARD_STYLE_PREFIX);
             setSize("100%", "100%");
             getElement().getStyle().setProperty("minHeight", "100px");
@@ -197,7 +201,9 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             imageHolder.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardImage);
             imageHolder.setSize("100%", "100%");
             imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
-            if (!property.mainMedia().isNull()) {
+            if (property.mainMedia().isNull()) {
+                imageHolder.setWidget(new Image(PortalImages.INSTANCE.noImage()));
+            } else {
                 imageHolder.setWidget(new Image("media/" + property.mainMedia().getValue().toString() + "/" + ThumbnailSize.small.name() + ".jpg"));
             }
             imgEnvelope.setWidget(imageHolder);
@@ -222,11 +228,24 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             viewDetailsItem.getElement().getStyle().setFloat(Float.LEFT);
             viewDetailsItem.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
+            viewDetailsItem.addClickHandler(new ClickHandler() {
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    //TODO navigation done bypassing activities. Not sure if this is correct
+                    AppPlace place = new PortalSiteMap.FindApartment.ApartmentDetails();
+                    HashMap<String, String> args = new HashMap<String, String>();
+                    args.put(PortalSiteMap.ARG_PROPERTY_ID, property.id().getValue().toString());
+                    place.setArgs(args);
+                    AppSite.getPlaceController().goTo(place);
+                }
+            });
+
             footer.setWidget(viewDetailsItem);
 
-            add(header);
-            add(contentHolder);
-            add(footer);
+            add(header, DockPanel.NORTH);
+            add(contentHolder, DockPanel.CENTER);
+            add(footer, DockPanel.SOUTH);
 
         }
 
@@ -240,25 +259,25 @@ public class PropertiesMapWidget extends AbstractMapWidget {
 
             StringBuffer addrString = new StringBuffer();
 
-            addrString.append(address.street1().getValue());
+            addrString.append(address.street1().getStringView());
             if (!address.street2().isNull()) {
                 addrString.append(" ");
-                addrString.append(address.street2().getValue());
+                addrString.append(address.street2().getStringView());
             }
 
             if (!address.city().isNull()) {
                 addrString.append(", ");
-                addrString.append(address.city().getValue());
+                addrString.append(address.city().getStringView());
             }
 
             if (!address.province().isNull()) {
                 addrString.append(" ");
-                addrString.append(address.province().getValue());
+                addrString.append(address.province().getStringView());
             }
 
             if (!address.postalCode().isNull()) {
                 addrString.append(" ");
-                addrString.append(address.postalCode().getValue());
+                addrString.append(address.postalCode().getStringView());
             }
 
             return addrString.toString();

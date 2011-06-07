@@ -18,16 +18,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
-import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
-import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
-import com.pyx4j.entity.client.ui.flex.viewer.CEntityViewer;
-import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
-import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
-import com.pyx4j.entity.shared.IList;
-
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.domain.IAddress;
@@ -39,6 +29,15 @@ import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
+
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
+import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
+import com.pyx4j.entity.client.ui.flex.viewer.CEntityViewer;
+import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
+import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
+import com.pyx4j.entity.shared.IList;
 
 public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implements ApartmentDetailsView {
 
@@ -107,14 +106,15 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         if (priceRange.isNull())
             return new Label("");
 
+        //TODO remove $ for production
         StringBuffer priceString = new StringBuffer("$");
         if (!priceRange.min().isNull()) {
-            priceString.append(priceRange.min().getValue());
+            priceString.append(priceRange.min().getStringView());
         }
 
         if (!priceRange.max().isNull()) {
             priceString.append(" - ");
-            priceString.append(priceRange.max().getValue());
+            priceString.append(priceRange.max().getStringView());
         }
 
         return new Label(priceString.toString());
@@ -128,25 +128,25 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
         StringBuffer addrString = new StringBuffer();
 
-        addrString.append(address.street1().getValue());
+        addrString.append(address.street1().getStringView());
         if (!address.street2().isNull()) {
             addrString.append(" ");
-            addrString.append(address.street2().getValue());
+            addrString.append(address.street2().getStringView());
         }
 
         if (!address.city().isNull()) {
             addrString.append(", ");
-            addrString.append(address.city().getValue());
+            addrString.append(address.city().getStringView());
         }
 
         if (!address.province().isNull()) {
             addrString.append(" ");
-            addrString.append(address.province().getValue());
+            addrString.append(address.province().getStringView());
         }
 
         if (!address.postalCode().isNull()) {
             addrString.append(" ");
-            addrString.append(address.postalCode().getValue());
+            addrString.append(address.postalCode().getStringView());
         }
 
         return new Label(addrString.toString());
@@ -175,7 +175,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
             @Override
             public IFolderItemViewerDecorator createFolderItemDecorator() {
-                return new FloorplanCardDecorator();
+                return new FloorplanCardDecorator(presenter);
             }
 
             @Override
@@ -199,7 +199,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
         Label lbl;
         if (!value.name().isNull()) {
-            lbl = new Label(value.name().getValue());
+            lbl = new Label(value.name().getStringView());
             card.setCardHeader(lbl);
         }
 

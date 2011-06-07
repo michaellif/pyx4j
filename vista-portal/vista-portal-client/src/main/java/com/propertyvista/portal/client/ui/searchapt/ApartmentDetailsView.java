@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.searchapt;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.domain.dto.AptUnitDTO;
+import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
 public interface ApartmentDetailsView extends IsWidget {
@@ -26,7 +26,7 @@ public interface ApartmentDetailsView extends IsWidget {
 
     interface Presenter {
 
-        public void goToUnitDetails(AptUnitDTO unit);
+        public void showUnit(FloorplanDTO unit);
 
         public void navigTo(Place place);
 

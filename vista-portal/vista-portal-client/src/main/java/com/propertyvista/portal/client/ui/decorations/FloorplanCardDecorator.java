@@ -13,11 +13,21 @@
  */
 package com.propertyvista.portal.client.ui.decorations;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsView;
+import com.propertyvista.portal.domain.dto.FloorplanDTO;
 
-public class FloorplanCardDecorator extends BasicCardDecorator {
+public class FloorplanCardDecorator extends BasicCardDecorator<FloorplanDTO> {
 
-    public FloorplanCardDecorator() {
+    public FloorplanCardDecorator(final ApartmentDetailsView.Presenter presenter) {
         super();
-    }
+        addViewDetailsClickHandler(new ClickHandler() {
 
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.showUnit(getFolderItem().getValue());
+            }
+        });
+    }
 }

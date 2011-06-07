@@ -18,6 +18,14 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.propertyvista.common.client.ui.decorations.DecorationData;
+import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.client.resources.PortalImages;
+import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
+import com.propertyvista.portal.domain.dto.AmenityDTO;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderViewerDecorator;
@@ -27,15 +35,6 @@ import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitiveSet;
-
-import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
-import com.propertyvista.portal.domain.dto.AmenityDTO;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyListDTO;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
@@ -187,7 +186,7 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
         for (AmenityDTO amenity : amenities) {
             if (!amenity.isNull() && !amenity.isEmpty()) {
-                planString.append(amenity.name().getValue());
+                planString.append(amenity.name().getStringView());
                 planString.append(delimiter);
             }
         }
