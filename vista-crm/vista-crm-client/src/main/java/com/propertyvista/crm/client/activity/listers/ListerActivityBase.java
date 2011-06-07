@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
 import com.propertyvista.crm.client.ui.listers.FilterData;
 import com.propertyvista.crm.client.ui.listers.IListerView;
@@ -68,6 +69,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         service.search(new AsyncCallback<EntitySearchResult<E>>() {
             @Override
             public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
             }
 
             @Override

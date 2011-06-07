@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -46,7 +47,7 @@ public class ContentActivity extends AbstractActivity {
 
             @Override
             public void onFailure(Throwable caught) {
-                // TODO Auto-generated method stub
+                throw new UnrecoverableClientError(caught);
             }
         });
     }

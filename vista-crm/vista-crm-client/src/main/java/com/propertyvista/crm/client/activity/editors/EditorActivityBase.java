@@ -24,6 +24,7 @@ import com.google.inject.Inject;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.editors.IEditorView;
@@ -93,6 +94,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
                 @Override
                 public void onFailure(Throwable caught) {
+                    throw new UnrecoverableClientError(caught);
                 }
             }, entityID);
         }
@@ -111,7 +113,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
                 @Override
                 public void onFailure(Throwable caught) {
-                    onSaveFail();
+                    onSaveFail(caught);
                 }
             }, view.getValue());
         } else {
@@ -123,7 +125,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
                 @Override
                 public void onFailure(Throwable caught) {
-                    onSaveFail();
+                    onSaveFail(caught);
                 }
             }, view.getValue());
         }
@@ -138,6 +140,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         History.back();
     }
 
-    protected void onSaveFail() {
+    protected void onSaveFail(Throwable caught) {
+        throw new UnrecoverableClientError(caught);
     }
 }

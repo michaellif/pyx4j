@@ -41,6 +41,7 @@ import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translation;
 
@@ -142,6 +143,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         service.search(new AsyncCallback<EntitySearchResult<E>>() {
             @Override
             public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
             }
 
             @Override
