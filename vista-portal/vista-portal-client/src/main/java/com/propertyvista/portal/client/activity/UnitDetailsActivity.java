@@ -18,12 +18,20 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.searchapt.UnitDetailsView;
+import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class UnitDetailsActivity extends AbstractActivity implements UnitDetailsView.Presenter {
 
     private final UnitDetailsView view;
+
+    private String unitId;
 
     @Inject
     public UnitDetailsActivity(UnitDetailsView view) {
@@ -32,12 +40,21 @@ public class UnitDetailsActivity extends AbstractActivity implements UnitDetails
     }
 
     public UnitDetailsActivity withPlace(Place place) {
+        unitId = ((AppPlace) place).getArgs().get(PortalSiteMap.ARG_FLOORPLAN_ID);
         return this;
     }
 
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
+        PortalSite.getPortalSiteServices().retrieveFloorplanDetails(new DefaultAsyncCallback<FloorplanDetailsDTO>() {
+
+            @Override
+            public void onSuccess(FloorplanDetailsDTO unit) {
+                view.populate(unit);
+            }
+
+        }, new Key(unitId));
     }
 
     @Override

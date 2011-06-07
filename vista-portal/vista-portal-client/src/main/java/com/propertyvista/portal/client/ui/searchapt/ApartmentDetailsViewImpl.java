@@ -28,7 +28,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class ApartmentDetailsViewImpl extends FlowPanel implements ApartmentDetailsView {
 
-    public static String DEFAULT_STYLE_PREFIX = "AppartmentDetails";
+    public static String DEFAULT_STYLE_PREFIX = "ApartmentDetails";
 
     public static enum StyleSuffix implements IStyleSuffix {
         Left, Center, PageHeader, Button

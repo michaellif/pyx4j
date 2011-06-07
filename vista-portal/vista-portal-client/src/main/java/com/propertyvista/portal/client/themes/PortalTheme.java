@@ -13,12 +13,6 @@
  */
 package com.propertyvista.portal.client.themes;
 
-import com.pyx4j.widgets.client.ListBox;
-import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColor;
-
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
@@ -33,6 +27,13 @@ import com.propertyvista.portal.client.ui.searchapt.CardPanel;
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentForm;
+import com.propertyvista.portal.client.ui.searchapt.UnitDetailsViewImpl;
+
+import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.style.ColorFactory;
+import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.widgets.client.style.Style;
+import com.pyx4j.widgets.client.style.ThemeColor;
 
 public abstract class PortalTheme extends com.propertyvista.common.client.theme.VistaTheme {
 
@@ -57,6 +58,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         initBaseFolderItemViewerDecoratorStyles();
         initCardPanelDecoratorStyle();
         initPropertiesMapWidgetStyle();
+        initUnitDetailsStyles();
     }
 
     @Override
@@ -384,6 +386,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Center));
+        style.addProperty("font-size", "12px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Button));
@@ -391,6 +394,30 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.PageHeader));
+        style.addProperty("margin-top", "10px");
+        style.addProperty("margin-bottom", "10px");
+        style.addProperty("font-size", "20px");
+        addStyle(style);
+
+    }
+
+    private void initUnitDetailsStyles() {
+        String prefix = UnitDetailsViewImpl.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, UnitDetailsViewImpl.StyleSuffix.Left));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, UnitDetailsViewImpl.StyleSuffix.Center));
+        style.addProperty("font-size", "14px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, UnitDetailsViewImpl.StyleSuffix.Button));
+        style.addProperty("font-size", "20px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, UnitDetailsViewImpl.StyleSuffix.PageHeader));
         style.addProperty("margin-top", "10px");
         style.addProperty("margin-bottom", "10px");
         style.addProperty("font-size", "20px");

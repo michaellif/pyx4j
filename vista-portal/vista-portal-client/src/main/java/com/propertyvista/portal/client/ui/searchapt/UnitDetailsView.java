@@ -14,14 +14,13 @@
 package com.propertyvista.portal.client.ui.searchapt;
 
 import com.google.gwt.user.client.ui.IsWidget;
-
-import com.propertyvista.portal.domain.dto.AptUnitDTO;
+import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 
 public interface UnitDetailsView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
-    void populate(AptUnitDTO unit);
+    void populate(FloorplanDetailsDTO unit);
 
     public interface Presenter {
 
