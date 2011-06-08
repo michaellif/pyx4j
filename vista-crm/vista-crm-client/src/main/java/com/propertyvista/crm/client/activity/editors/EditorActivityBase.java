@@ -77,14 +77,28 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         assert (entityID != null);
 
         if (entityID.toString().equals(CrmSiteMap.ARG_VALUE_NEW_ITEM)) {
-            E entity = EntityFactory.create(entityClass);
-            if (parentID != null) {
-                String ownerName = entity.getEntityMeta().getOwnerMemberName();
-                if (ownerName != null) {
-                    ((IEntity) entity.getMember(ownerName)).setPrimaryKey(parentID);
+            createNewEntity(new AsyncCallback<E>() {
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new UnrecoverableClientError(caught);
                 }
-            }
-            view.populate(entity);
+
+                @Override
+                public void onSuccess(E entity) {
+                    if (parentID != null) {
+                        String ownerName = entity.getEntityMeta().getOwnerMemberName();
+                        if (ownerName != null) {
+                            ((IEntity) entity.getMember(ownerName)).setPrimaryKey(parentID);
+                        }
+                    }
+                    view.populate(entity);
+                }
+
+            });
+            
+            
+            
         } else {
             service.retrieve(new AsyncCallback<E>() {
                 @Override
@@ -100,6 +114,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         }
     }
 
+    protected void createNewEntity(AsyncCallback<E> callback) {
+        callback.onSuccess(EntityFactory.create(entityClass));
+    }
+    
     @Override
     public void save() {
         assert (entityID != null);
