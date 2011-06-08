@@ -50,7 +50,7 @@ import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
-import com.pyx4j.forms.client.ui.CRichTextAreaPopup;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -72,7 +72,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
             case textarea:
                 return new CTextArea();
             case richtextarea:
-                return new CRichTextAreaPopup();
+                return new CRichTextArea();
             case combo:
                 if (mm.isEntity()) {
                     CEntityComboBox comp = new CEntityComboBox(mm.getObjectClass());

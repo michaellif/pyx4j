@@ -198,14 +198,12 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        // TODO Auto-generated method stub
-        return null;
+        return richTextArea.addFocusHandler(focusHandler);
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        // TODO Auto-generated method stub
-        return null;
+        return richTextArea.addBlurHandler(blurHandler);
     }
 
     @Override
