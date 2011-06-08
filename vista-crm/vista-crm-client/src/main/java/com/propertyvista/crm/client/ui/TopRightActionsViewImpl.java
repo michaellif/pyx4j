@@ -20,7 +20,6 @@ import com.google.inject.Inject;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -62,14 +61,9 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         setStyleName(CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Action);
         setSize("100%", "100%");
 
-        HorizontalPanel leftcontainer = new HorizontalPanel();
-        leftcontainer.getElement().getStyle().setFloat(Style.Float.LEFT);
-        leftcontainer.setSize("85%", "100%");
-        //   leftcontainer.setHeight("100%");    
-
-        HorizontalPanel rightcontainer = new HorizontalPanel();
-        rightcontainer.getElement().getStyle().setFloat(Style.Float.RIGHT);
-        rightcontainer.setSize("30%", "100%");
+        HorizontalPanel container = new HorizontalPanel();
+        container.getElement().getStyle().setFloat(Style.Float.RIGHT);
+        container.setSize("30%", "100%");
 
         greetings = new HTML("");
         greetings.getElement().getStyle().setDisplay(Display.INLINE);
@@ -163,23 +157,6 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
         search = new SearchBox();
 
-/*
- * FlowPanel fp1 = new FlowPanel();
- * fp1.add(greetings);
- * fp1.add(account);
- * fp1.add(settings);
- * fp1.add(login);
- * fp1.add(logout);
- * fp1.add(search);
- * leftcontainer.add(fp1);
- */
-
-/*
- * FlowPanel fp2 = new FlowPanel();
- * fp2.add(message);
- * fp2.add(alert);
- * rightcontainer.add(fp2);
- */
         /**
          * the following set of wrappers keep login/logout group relatively steady when
          * the elements right of it disappear
@@ -196,18 +173,17 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         alertwr.getElement().setAttribute("style", "min-width:3em");
         alertwr.add(alert);
 
-        rightcontainer.add(greetings);
-        rightcontainer.add(account);
-        rightcontainer.add(settings);
-        rightcontainer.add(login);
-        rightcontainer.add(logout);
-        rightcontainer.add(themes);
-        rightcontainer.add(searchwr);
-        rightcontainer.add(messagewr);
-        rightcontainer.add(alertwr);
+        container.add(greetings);
+        container.add(account);
+        container.add(settings);
+        container.add(login);
+        container.add(logout);
+        container.add(themes);
+        container.add(searchwr);
+        container.add(messagewr);
+        container.add(alertwr);
 
-        add(rightcontainer);
-        // add(leftcontainer);
+        add(container);
     }
 
     @Override
@@ -222,21 +198,6 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
             settings.setValue(i18n.tr("Administration"));
             settings.asWidget().removeStyleName(BACK_TO_CRM);
         }
-    }
-
-    private class NavigLink extends CHyperlink {
-
-        public NavigLink(String name, final AppPlace place) {
-            super(null, new Command() {
-                @Override
-                public void execute() {
-                    presenter.getPlaceController().goTo(place);
-                }
-            });
-            setDebugId(new StringDebugId(name));
-            setValue(i18n.tr(name));
-        }
-
     }
 
     @Override
