@@ -20,7 +20,12 @@
  */
 package com.pyx4j.config.server;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class PropertiesConfiguration {
 
@@ -62,5 +67,27 @@ public class PropertiesConfiguration {
         } else {
             return Boolean.valueOf(value).booleanValue();
         }
+    }
+
+    public static Map<String, String> loadProperties(File file) {
+        Properties p = new Properties();
+        FileReader reader = null;
+        try {
+            p.load(reader = new FileReader(file));
+        } catch (IOException e) {
+            throw new Error(e);
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (Throwable e) {
+            }
+        }
+        Map<String, String> m = new HashMap<String, String>();
+        for (String key : p.stringPropertyNames()) {
+            m.put(key, p.getProperty(key));
+        }
+        return m;
     }
 }
