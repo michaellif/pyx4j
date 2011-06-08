@@ -16,6 +16,8 @@ package com.propertyvista.portal.client.ui.searchapt;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -72,6 +74,12 @@ public class FloorplanDetailsViewImpl extends DockPanel implements FloorplanDeta
         inquire.setWidth("300px");
         inquire.setHeight("40px");
         leftPanel.add(inquire);
+        inquire.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.apply();
+            }
+        });
 
         centerPanel = new FlowPanel();
         centerPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Center);

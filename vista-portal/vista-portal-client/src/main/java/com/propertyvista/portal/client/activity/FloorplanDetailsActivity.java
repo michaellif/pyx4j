@@ -65,7 +65,6 @@ public class FloorplanDetailsActivity extends AbstractActivity implements Floorp
     public void apply() {
         String url = Window.Location.getPath() + "/" + DeploymentConsts.PTAPP_URL + "?" + PtSiteMap.ARG_FLOORPLAN_ID + "=" + floorplanId;
         Window.Location.replace(url);
-
     }
 
     @Override
