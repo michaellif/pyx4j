@@ -20,13 +20,16 @@
  */
 package com.pyx4j.server.mail;
 
+import java.util.Map;
+
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
+import com.pyx4j.config.server.PropertiesConfiguration;
 
 public class SMTPMailServiceConfig implements IMailServiceConfigConfiguration {
 
     protected String host;
 
-    protected int port;
+    protected int port = 465;
 
     protected String user;
 
@@ -77,4 +80,14 @@ public class SMTPMailServiceConfig implements IMailServiceConfigConfiguration {
         return allowSendToEmailSufix;
     }
 
+    public void readProperties(String prefix, Map<String, String> properties) {
+        PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
+        this.host = c.getValue("host", this.host);
+        this.port = c.getIntegerValue("port", this.port);
+        this.starttls = c.getBooleanValue("starttls", this.starttls);
+        this.allowSendToEmailSufix = c.getValue("allowSendToEmailSufix", this.allowSendToEmailSufix);
+
+        this.user = c.getValue("user", this.user);
+        this.password = c.getValue("password", this.password);
+    }
 }
