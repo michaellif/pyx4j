@@ -70,10 +70,10 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
         return new CEntityFolderRowEditor<E>(clazz, columns()) {
 
             @Override
-            public IFolderItemEditorDecorator createFolderItemDecorator() {
-                IFolderItemEditorDecorator decor;
+            public IFolderItemEditorDecorator<E> createFolderItemDecorator() {
+                IFolderItemEditorDecorator<E> decor;
                 if (place != null) {
-                    decor = new CrmFolderItemDecorator(i18n.tr("Remove ") + itemName, editable);
+                    decor = new CrmFolderItemDecorator<E>(i18n.tr("Remove ") + itemName, editable);
                     decor.addItemClickHandler(new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent event) {
@@ -81,7 +81,8 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
                         }
                     });
                 } else {
-                    decor = new TableFolderItemEditorDecorator(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove ") + itemName, editable);
+                    decor = new TableFolderItemEditorDecorator<E>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove ") + itemName,
+                            editable);
                 }
                 return decor;
             }
@@ -100,7 +101,8 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
             });
             return decor;
         } else {
-            return new TableFolderEditorDecorator<E>(columns(), CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add new ") + itemName, editable);
+            return new TableFolderEditorDecorator<E>(columns(), CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add new ") + itemName,
+                    editable);
         }
     }
 }
