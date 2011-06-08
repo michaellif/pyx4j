@@ -45,16 +45,16 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
 
         richTextArea = new RichTextArea();
         richTextArea.setWidth("100%");
+        richTextArea.setHeight("100%");
 
         textArea.setWidth("100%");
 
-        toolbar = new BasikRichTextToolbar(richTextArea, false);
+        toolbar = new BasikRichTextToolbar(richTextArea, true);
         toolbar.getElement().getStyle().setMarginLeft(2, Unit.PX);
-        toolbar.setHeight("100%");
 
-        add(toolbar, EAST);
-        setCellHeight(toolbar, "100%");
+        add(toolbar, NORTH);
         add(richTextArea, CENTER);
+        setCellHeight(richTextArea, "100%");
         setCellWidth(richTextArea, "100%");
 
         getElement().getStyle().setProperty("resize", "none");

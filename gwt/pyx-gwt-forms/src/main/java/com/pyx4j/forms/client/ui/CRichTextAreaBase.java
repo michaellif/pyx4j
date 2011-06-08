@@ -27,13 +27,14 @@ import com.pyx4j.commons.HtmlUtils;
 //TODO add support to NativeRichTextArea
 public abstract class CRichTextAreaBase<WIDGET_TYPE extends Widget & INativeRichTextComponent<String>> extends CTextComponent<String, WIDGET_TYPE> {
 
-    private final int rows = 4;
+    private final int rows = 10;
 
     private IRichTextTidy tidy;
 
     public CRichTextAreaBase() {
         super();
         setWidth("100%");
+        setHeight("20em");
     }
 
     public CRichTextAreaBase(String title) {
