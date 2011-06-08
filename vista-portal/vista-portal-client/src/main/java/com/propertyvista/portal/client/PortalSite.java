@@ -19,6 +19,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.geo.GoogleAPI;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -28,6 +30,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 
 public class PortalSite extends VistaSite {
+
     private PortalGinjector ginjector;
 
     private static PortalSiteServices srv = GWT.create(PortalSiteServices.class);
@@ -44,7 +47,7 @@ public class PortalSite extends VistaSite {
         GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
 
         ginjector = GWT.create(PortalGinjector.class);
-        AppPlace defaultplace = new PortalSiteMap.Landing();
+        final AppPlace defaultplace = new PortalSiteMap.Landing();
         getHistoryHandler().register(getPlaceController(), getEventBus(), defaultplace);
 
         RootPanel.get().add(ginjector.getSiteView());
@@ -53,7 +56,20 @@ public class PortalSite extends VistaSite {
 
         SessionInactiveDialog.register();
 
-        AppSite.getPlaceController().goTo(defaultplace);
+        ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+                AppSite.getPlaceController().goTo(defaultplace);
+            }
+
+            //TODO remove this when initial application message is implemented
+            @Override
+            public void onFailure(Throwable caught) {
+                AppSite.getPlaceController().goTo(defaultplace);
+                super.onFailure(caught);
+            }
+        });
 
     }
 
