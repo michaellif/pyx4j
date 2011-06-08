@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
-import com.pyx4j.widgets.client.dashboard.IGadget;
-
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
+
+import com.pyx4j.widgets.client.dashboard.IGadget;
 
 public class GadgetsFactory {
 
@@ -26,10 +26,12 @@ public class GadgetsFactory {
             return new DemoGadget(metaData);
         case BuildingLister:
             return new BuildingListerGadget(metaData);
+        case LineChartDisplay:
+            return new LineChartGadget(metaData);
         case BarChartDisplay:
-            return new BarChartDisplayGadget(metaData);
+            return new BarChart2DGadget(metaData); //new BarChartDisplayGadget(metaData);
         case PieChartDisplay:
-            return new PieChartDisplayGadget(metaData);
+            return new PieChart2DGadget(metaData); //PieChartDisplayGadget(metaData);
         }
         return null;
     }
@@ -46,6 +48,8 @@ public class GadgetsFactory {
             return "Gadget intended to demonstrate Bar Chart display functionality...";
         case PieChartDisplay:
             return "Gadget intended to demonstrate Pie Chart display functionality...";
+        case LineChartDisplay:
+            return "Gadget intended to demonstrate Line Chart display functionality...";
         }
         return "";
     }

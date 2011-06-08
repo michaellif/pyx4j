@@ -71,6 +71,12 @@ public class DashboardActivity extends AbstractActivity {
         dmd.gadgets().add(gmd);
 
         gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.type().setValue(GadgetType.LineChartDisplay);
+        gmd.name().setValue("Line Chart Demo");
+        gmd.column().setValue(0);
+        dmd.gadgets().add(gmd);
+
+        gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.PieChartDisplay);
         gmd.name().setValue("Pie Chart Demo");
         gmd.column().setValue(1);
