@@ -18,6 +18,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Anchor;
 
+import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.maps.MapDialog;
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapView;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
@@ -29,7 +30,7 @@ public class ApartmentCardDecorator extends BasicCardDecorator<PropertyDTO> {
     public ApartmentCardDecorator(final PropertyMapView.Presenter presenter) {
         super();
         mapIitem = new Anchor(i18n.tr("Map"));
-        addMenuItem(mapIitem);
+        addMenuItem(mapIitem, PortalImages.INSTANCE.map());
 
         mapIitem.addClickHandler(new ClickHandler() {
 

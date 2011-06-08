@@ -26,8 +26,11 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -82,6 +85,7 @@ public class BasicCardDecorator<E extends IEntity> extends SimplePanel implement
         menu = new FlowPanel();
         menuPanel.setWidget(menu);
         menu.setHeight("100%");
+        menu.getElement().getStyle().setPaddingTop(5, Unit.PX);
         menuContainer.getElement().getStyle().setVisibility(Style.Visibility.HIDDEN);
         menuContainer.add(menuPanel);
 
@@ -133,9 +137,15 @@ public class BasicCardDecorator<E extends IEntity> extends SimplePanel implement
         return viewer;
     }
 
-    public void addMenuItem(Anchor menuItem) {
-        menuItem.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.MenuItem);
-        menu.add(menuItem);
+    public void addMenuItem(Anchor anchor, ImageResource imageResource) {
+        anchor.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.MenuItem);
+        anchor.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+        HorizontalPanel item = new HorizontalPanel();
+        Image image = new Image(imageResource);
+        item.add(image);
+        item.add(anchor);
+        menu.add(item);
 
     }
 
