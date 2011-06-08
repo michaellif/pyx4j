@@ -59,7 +59,7 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     protected void setViewer(CEntityForm<E> viewer) {
         viewer.initialize();
         scroll.setWidget(this.viewer = viewer);
-        this.viewer.asWidget().getElement().getStyle().setMargin(0.3, Unit.EM);
+        this.viewer.asWidget().getElement().getStyle().setMargin(0.75, Unit.EM);
     }
 
     @Override

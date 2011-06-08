@@ -25,7 +25,7 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
 
     private boolean readOnlyMode = false;
 
-    private double defaultLabelWidth = 15;
+    private double defaultLabelWidth = 12;
 
     public VistaDecoratorsFlowPanel() {
     }

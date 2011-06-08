@@ -1,5 +1,6 @@
 package com.propertyvista.crm.client.ui;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -12,6 +13,8 @@ public interface TopRightActionsView extends IsWidget {
     public interface Presenter {
 
         public PlaceController getPlaceController();
+
+        public Place getWhere();
 
         public void setTheme(Theme theme);
 
@@ -28,10 +31,11 @@ public interface TopRightActionsView extends IsWidget {
         public void showSettings();
 
         public void back2CrmView();
+
+        public void SwitchCrmAndSettings();
     }
 
     public void onLogedOut();
 
     public void onLogedIn(String userName);
-
 }

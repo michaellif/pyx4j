@@ -88,7 +88,7 @@ public class SubtypeInjectors {
 // TODO : design representation for:
 //        main.add(parent.inject(proto.addresses()), 15);
         injectPhones(main, proto.phones(), parent);
-        main.add(parent.inject(proto.website()), 25);
+        main.add(parent.inject(proto.website()), 23);
         injectEmails(main, proto.emails(), parent);
 // TODO : design representation for:
 //        main.add(parent.inject(proto.contacts()), 15);
@@ -169,13 +169,13 @@ public class SubtypeInjectors {
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         SubtypeInjectors.injectMaintenance(main, split, proto.maitenance(), parent);
 
-        main.add(parent.inject(proto.notes()), 25);
+        main.add(parent.inject(proto.notes()), 23);
     }
 
     public static void injectMarketing(VistaDecoratorsFlowPanel main, VistaDecoratorsSplitFlowPanel split, Marketing proto, CEntityEditor<?> parent) {
 
         split.getLeftPanel().add(parent.inject(proto.name()), 15);
-        split.getRightPanel().add(parent.inject(proto.description()), 25);
+        split.getRightPanel().add(parent.inject(proto.description()), 23);
 
         main.add(new CrmHeader2Decorator(proto.addBlurbs().getMeta().getCaption()));
         main.add(parent.inject(proto.addBlurbs(),

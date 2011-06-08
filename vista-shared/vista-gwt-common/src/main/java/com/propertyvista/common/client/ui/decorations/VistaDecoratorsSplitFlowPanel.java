@@ -13,26 +13,20 @@
  */
 package com.propertyvista.common.client.ui.decorations;
 
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
-public class VistaDecoratorsSplitFlowPanel extends FlowPanel {
+public class VistaDecoratorsSplitFlowPanel extends HorizontalPanel {
 
     private final VistaDecoratorsFlowPanel right;
 
     private final VistaDecoratorsFlowPanel left;
 
     public VistaDecoratorsSplitFlowPanel() {
-        right = new VistaDecoratorsFlowPanel(12);
-        left = new VistaDecoratorsFlowPanel(12);
-        left.setWidth("50%");
-        this.add(left);
-        this.add(right);
-        this.getElement().getStyle().setProperty("minWidth", "900px");
-        right.setWidth("50%");
-        right.getElement().getStyle().setFloat(Style.Float.LEFT);
-        left.setWidth("50%");
-        left.getElement().getStyle().setFloat(Style.Float.LEFT);
+        this.add(left = new VistaDecoratorsFlowPanel(12));
+        this.add(right = new VistaDecoratorsFlowPanel(12));
+
+        left.setWidth("35em");
+        right.setWidth("35em");
     }
 
     public VistaDecoratorsFlowPanel getRightPanel() {

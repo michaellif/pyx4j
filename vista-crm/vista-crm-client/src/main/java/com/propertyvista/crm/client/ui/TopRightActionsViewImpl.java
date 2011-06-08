@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class TopRightActionsViewImpl extends FlowPanel implements TopRightActionsView {
 
@@ -106,20 +107,10 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         account.setValue(i18n.tr("Account"));
         account.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        final String caption1 = i18n.tr("Administration");
-        final String caption2 = i18n.tr("Back to CRM");
         settings = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
-                if (settings.getValue() == caption1) {
-                    presenter.showSettings();
-                    settings.setValue(caption2);
-                    settings.asWidget().addStyleName(BACK_TO_CRM);
-                } else {
-                    presenter.back2CrmView();
-                    settings.setValue(caption1);
-                    settings.asWidget().removeStyleName(BACK_TO_CRM);
-                }
+                presenter.SwitchCrmAndSettings();
             }
         });
         settings.setDebugId(new StringDebugId("settings"));
@@ -222,6 +213,15 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     @Override
     public void setPresenter(final Presenter presenter) {
         this.presenter = presenter;
+
+        // style settings link:
+        if (presenter.getWhere().getClass().getName().contains(CrmSiteMap.Settings.class.getName())) {
+            settings.setValue(i18n.tr("Back to CRM"));
+            settings.asWidget().addStyleName(BACK_TO_CRM);
+        } else {
+            settings.setValue(i18n.tr("Administration"));
+            settings.asWidget().removeStyleName(BACK_TO_CRM);
+        }
     }
 
     private class NavigLink extends CHyperlink {

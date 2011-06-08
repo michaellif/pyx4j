@@ -62,7 +62,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         //TODO Leon
         //Is a new sub page necessary for addresses?
         SubtypeInjectors.injectPhones(company, proto().company().phones(), this);
-        company.add(inject(proto().company().website()), 25);
+        company.add(inject(proto().company().website()), 23);
         SubtypeInjectors.injectEmails(company, proto().company().emails(), this);
         //TODO Leon
         //Is a new sub page necessary for OrganizationContacts?

@@ -111,8 +111,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         main.add(new CrmHeader1Decorator(i18n.tr("Contact Information")));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
-        split.getLeftPanel().add(inject(proto().contacts().website()), 25);
-        split.getRightPanel().add(inject(proto().contacts().email().address()), split.getRightPanel().getDefaultLabelWidth(), 25, i18n.tr("Email Address"));
+        split.getLeftPanel().add(inject(proto().contacts().website()), 23);
+        split.getRightPanel().add(inject(proto().contacts().email().address()), split.getRightPanel().getDefaultLabelWidth(), 23, i18n.tr("Email Address"));
         SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this);
 
 // TODO - add this data processing later! :

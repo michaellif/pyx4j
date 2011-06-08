@@ -52,7 +52,7 @@ public class RoofEditorForm extends CrmEntityForm<RoofDTO> {
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         SubtypeInjectors.injectMaintenance(main, split, proto().maintenance(), this);
 
-        split.getLeftPanel().add(inject(proto().notes()), 25);
+        split.getLeftPanel().add(inject(proto().notes()), 23);
 
         main.setWidth("100%");
         return main;
