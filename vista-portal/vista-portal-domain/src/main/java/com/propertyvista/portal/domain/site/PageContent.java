@@ -14,6 +14,7 @@
 package com.propertyvista.portal.domain.site;
 
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,6 +27,8 @@ public interface PageContent extends IEntity {
     IPrimitive<String> path();
 
     @Owned
+    @Length(20845)
+    //TODO Blob
     IPrimitive<String> content();
 
 }

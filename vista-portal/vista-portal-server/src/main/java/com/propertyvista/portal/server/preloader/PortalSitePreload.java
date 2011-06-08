@@ -13,9 +13,12 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.io.IOException;
+
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.portal.domain.site.PageContent;
 import com.propertyvista.portal.domain.site.PageDescriptor;
@@ -25,62 +28,66 @@ public class PortalSitePreload extends AbstractDataPreloader {
 
     @Override
     public String create() {
-
         PageDescriptor landingPage = EntityFactory.create(PageDescriptor.class);
-        landingPage.type().setValue(PageDescriptor.Type.landing);
-        landingPage.content().content().setValue(CommonsGenerator.lipsum());
-        landingPage.content().path().setValue(PageContent.PATH_SEPARATOR);
+        try {
+            landingPage.type().setValue(PageDescriptor.Type.landing);
+            landingPage.content().content().setValue(IOUtils.getTextResource("site-landing.html", this.getClass()));
+            landingPage.content().path().setValue(PageContent.PATH_SEPARATOR);
 
-        {
-            PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-            page.type().setValue(PageDescriptor.Type.staticContent);
-            page.caption().setValue("Home");
-            page.content().content().setValue(CommonsGenerator.lipsum());
-            landingPage.childPages().add(page);
-        }
-
-        {
-
-            PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-            page.type().setValue(PageDescriptor.Type.findApartment);
-            page.content().content().setValue(CommonsGenerator.lipsum());
-            landingPage.childPages().add(page);
-        }
-
-        {
-            PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-            page.type().setValue(PageDescriptor.Type.residence);
-            landingPage.childPages().add(page);
-        }
-
-        {
-            PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-            page.type().setValue(PageDescriptor.Type.staticContent);
-            page.caption().setValue("About Us");
-            page.content().content().setValue(CommonsGenerator.lipsum());
             {
-                PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
-                page2.type().setValue(PageDescriptor.Type.staticContent);
-                page2.caption().setValue("Overview");
-                page2.content().content().setValue(CommonsGenerator.lipsum());
-                page.childPages().add(page2);
+                PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                page.type().setValue(PageDescriptor.Type.staticContent);
+                page.caption().setValue("Home");
+                page.content().content().setValue(IOUtils.getTextResource("site-home.html", this.getClass()));
+                landingPage.childPages().add(page);
             }
-            {
-                PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
-                page2.type().setValue(PageDescriptor.Type.staticContent);
-                page2.caption().setValue("Team");
-                page2.content().content().setValue(CommonsGenerator.lipsum());
-                page.childPages().add(page2);
-            }
-            landingPage.childPages().add(page);
-        }
 
-        {
-            PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-            page.type().setValue(PageDescriptor.Type.staticContent);
-            page.caption().setValue("Contact Us");
-            page.content().content().setValue(CommonsGenerator.lipsum());
-            landingPage.childPages().add(page);
+            {
+
+                PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                page.type().setValue(PageDescriptor.Type.findApartment);
+                page.content().content().setValue(CommonsGenerator.lipsum());
+                landingPage.childPages().add(page);
+            }
+
+            {
+                PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                page.type().setValue(PageDescriptor.Type.residence);
+                landingPage.childPages().add(page);
+            }
+
+            {
+                PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                page.type().setValue(PageDescriptor.Type.staticContent);
+                page.caption().setValue("About Us");
+                page.content().content().setValue(IOUtils.getTextResource("site-about.html", this.getClass()));
+                {
+                    PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
+                    page2.type().setValue(PageDescriptor.Type.staticContent);
+                    page2.caption().setValue("Overview");
+                    page2.content().content().setValue(IOUtils.getTextResource("site-overview.html", this.getClass()));
+                    page.childPages().add(page2);
+                }
+                {
+                    PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
+                    page2.type().setValue(PageDescriptor.Type.staticContent);
+                    page2.caption().setValue("Team");
+                    page2.content().content().setValue(IOUtils.getTextResource("site-team.html", this.getClass()));
+                    page.childPages().add(page2);
+                }
+                landingPage.childPages().add(page);
+            }
+
+            {
+                PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                page.type().setValue(PageDescriptor.Type.staticContent);
+                page.caption().setValue("Contact Us");
+                page.content().content().setValue(IOUtils.getTextResource("site-contact.html", this.getClass()));
+                landingPage.childPages().add(page);
+            }
+
+        } catch (IOException e) {
+            throw new Error(e);
         }
 
         int pagesCount = saveCascade(landingPage);
