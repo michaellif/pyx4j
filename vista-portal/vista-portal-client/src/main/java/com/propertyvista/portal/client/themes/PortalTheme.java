@@ -487,7 +487,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Content));
-        style.addProperty("font-size", "14px");
+        style.addProperty("font-size", "12px");
         addStyle(style);
 
     }
