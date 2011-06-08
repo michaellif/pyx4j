@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.generator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.IAddressFull.StreetDirection;
@@ -35,13 +36,9 @@ public class CommonsGenerator {
 
     static String[] lipsum;
 
-    private static String resourceFileName(String fileName) {
-        return CommonsGenerator.class.getPackage().getName().replace('.', '/') + "/" + fileName;
-    }
-
     public static String lipsum() {
         if (lipsum == null) {
-            lipsum = CSVLoad.loadFile(resourceFileName("lipsum.csv"), "description");
+            lipsum = CSVLoad.loadFile(IOUtils.resourceFileName("lipsum.csv", CommonsGenerator.class), "description");
         }
         return lipsum[DataGenerator.nextInt(lipsum.length, "lipsum", 4)];
     }

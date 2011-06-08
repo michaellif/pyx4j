@@ -19,17 +19,17 @@ import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.portal.server.preloader.LocationsPreload;
-import com.propertyvista.portal.server.ptapp.util.PreloadUtil;
 
 public class LocationsGenerator {
 
     public static List<Province> loadProvincesFromFile() {
-        List<Province> provinces = EntityCSVReciver.create(Province.class).loadFile(PreloadUtil.resourceFileName(LocationsPreload.class, "Province.csv"));
+        List<Province> provinces = EntityCSVReciver.create(Province.class).loadFile(IOUtils.resourceFileName("Province.csv", LocationsPreload.class));
         return provinces;
     }
 
@@ -69,8 +69,8 @@ public class LocationsGenerator {
 
     public static List<City> loadCityFromFile() {
         List<City> all = new Vector<City>();
-        all.addAll(merjeProvinces(EntityCSVReciver.create(City.class).loadFile(PreloadUtil.resourceFileName(LocationsPreload.class, "City-Canada-city.csv"))));
-        all.addAll(merjeProvinces(EntityCSVReciver.create(City.class).loadFile(PreloadUtil.resourceFileName(LocationsPreload.class, "City-Canada-town.csv"))));
+        all.addAll(merjeProvinces(EntityCSVReciver.create(City.class).loadFile(IOUtils.resourceFileName("City-Canada-city.csv", LocationsPreload.class))));
+        all.addAll(merjeProvinces(EntityCSVReciver.create(City.class).loadFile(IOUtils.resourceFileName("City-Canada-town.csv", LocationsPreload.class))));
         return all;
     }
 }

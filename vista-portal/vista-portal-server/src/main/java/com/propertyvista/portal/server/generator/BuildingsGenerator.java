@@ -499,7 +499,7 @@ public class BuildingsGenerator {
     public LeaseTerms createLeaseTerms() {
         LeaseTerms leaseTerms = EntityFactory.create(LeaseTerms.class);
         try {
-            leaseTerms.text().setValue(IOUtils.getTextResource(IOUtils.resourceFileName("leaseTerms.html", BuildingsGenerator.class)));
+            leaseTerms.text().setValue(IOUtils.getTextResource("leaseTerms.html", BuildingsGenerator.class));
         } catch (IOException e) {
             throw new Error(e);
         }

@@ -30,14 +30,15 @@ import com.propertyvista.portal.server.geo.bean.GeoPairs;
 import com.propertyvista.portal.server.importer.XmlUtil;
 
 public class GeoCache {
+
     private static final Logger log = LoggerFactory.getLogger(GeoCache.class);
 
     public static final String FILENAME = "geoCache.xml";
 
-    private Map<String, GeoPoint> map = new HashMap<String, GeoPoint>();
+    private final Map<String, GeoPoint> map = new HashMap<String, GeoPoint>();
 
     public void load() throws JAXBException, IOException {
-        String xml = IOUtils.getTextResource(IOUtils.resourceFileName(FILENAME, getClass()));
+        String xml = IOUtils.getTextResource(FILENAME, getClass());
         log.info("Loading {}", xml);
         GeoPairs pairs = XmlUtil.unmarshallGeoPairs(xml);
 
