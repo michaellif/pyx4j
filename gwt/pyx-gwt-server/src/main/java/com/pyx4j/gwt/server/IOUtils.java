@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 public class IOUtils {
 
@@ -86,12 +87,16 @@ public class IOUtils {
     }
 
     public static String getTextResource(String name) throws IOException {
+        return getTextResource(name, (Charset) null);
+    }
+
+    public static String getTextResource(String name, Charset charset) throws IOException {
         InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
         if (in == null) {
             return null;
         }
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        BufferedReader br = new BufferedReader((charset == null) ? new InputStreamReader(in) : new InputStreamReader(in, charset));
         StringBuffer sb = new StringBuffer();
         String line;
         try {
@@ -107,6 +112,10 @@ public class IOUtils {
 
     public static String getTextResource(String fileName, Class<?> clazz) throws IOException {
         return getTextResource(resourceFileName(fileName, clazz));
+    }
+
+    public static String getUTF8TextResource(String fileName, Class<?> clazz) throws IOException {
+        return getTextResource(resourceFileName(fileName, clazz), Charset.forName("UTF-8"));
     }
 
     public static String resourceFileName(String fileName, Class<?> clazz) {
