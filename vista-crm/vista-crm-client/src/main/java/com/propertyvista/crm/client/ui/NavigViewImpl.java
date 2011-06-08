@@ -35,12 +35,11 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.crm.client.activity.NavigFolder;
 
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
-
-import com.propertyvista.crm.client.activity.NavigFolder;
 
 public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
@@ -322,7 +321,8 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                 setCellWidth(label, "100%");
 
                 setWidth("100%");
-                setHeight(HEADER_SIZE + "em");
+                setHeight("100%");//VS to align header content in the middle
+                //  setHeight(HEADER_SIZE + "em");
             }
 
             private void setSelected(boolean selected) {

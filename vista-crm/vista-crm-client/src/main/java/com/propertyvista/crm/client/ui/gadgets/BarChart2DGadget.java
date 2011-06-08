@@ -70,6 +70,12 @@ public class BarChart2DGadget extends GadgetBase {
         values.add(7d);
         ds.addDataSet(ds.new Metric("Building 5"), values);
 
+        values = new ArrayList<Double>(6);
+        values.add(18d);
+        values.add(60d);
+        values.add(17d);
+        ds.addDataSet(ds.new Metric("Building 6"), values);
+
         List<String> sd = new ArrayList<String>(3);
         sd.add("2008");
         sd.add("2009");
@@ -78,7 +84,7 @@ public class BarChart2DGadget extends GadgetBase {
 
         SvgFactory factory = new SvgFactoryForGwt();
 
-        GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, 500, 150);
+        GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, 700, 200);
         config.setLegend(true);
         config.setGridType(GridType.Both);
         config.setTheme(ChartTheme.Bright);
@@ -87,7 +93,7 @@ public class BarChart2DGadget extends GadgetBase {
         svgroot.add(new BarChart2D(config));
 
         svgpanel.add((Widget) svgroot);
-        svgpanel.setSize("500px", "150px");
+        svgpanel.setSize("700px", "200px");
 
     }
 
