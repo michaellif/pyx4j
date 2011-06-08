@@ -31,6 +31,7 @@ import org.jasypt.properties.PropertyValueEncryptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
@@ -71,7 +72,10 @@ public class J2SEServiceConnector extends J2SEService {
             IOUtils.closeQuietly(reader);
         }
         Credentials c = new Credentials();
-        c.email = p.getProperty("email");
+        c.email = p.getProperty("user");
+        if (CommonsStringUtils.isEmpty(c.email)) {
+            c.email = p.getProperty("email");
+        }
         c.password = p.getProperty("password");
         String encrypt = p.getProperty("encrypt");
         if ("false".equalsIgnoreCase(encrypt)) {
