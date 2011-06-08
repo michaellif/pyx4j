@@ -40,6 +40,8 @@ import com.pyx4j.forms.client.ui.decorators.SpaceHolder;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
+import com.propertyvista.common.client.ui.decorations.DecorationData.ShowMandatory;
+
 /**
  * Widget decorator helpful for representation of Label : [ edit field ] widgets pair in
  * various view forms with uniform project style.
@@ -173,7 +175,10 @@ public class VistaWidgetDecorator extends VerticalPanel {
         FlowPanel firstLine = new FlowPanel();
         firstLine.add(leftSide);
         firstLine.add(nativeComponentHolder);
-        firstLine.add(mandatoryLabel);
+
+        if (!ShowMandatory.None.equals(decorData.showMandatory)) {
+            firstLine.add(mandatoryLabel);
+        }
 
         add(firstLine);
 

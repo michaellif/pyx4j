@@ -43,6 +43,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
     @Override
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        main.setShowMandatory(false);
 
         main.add(inject(proto().caption()), 15);
         main.add(inject(proto().content().content()), 60);

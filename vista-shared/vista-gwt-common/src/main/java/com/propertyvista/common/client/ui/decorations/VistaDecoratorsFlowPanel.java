@@ -19,6 +19,8 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import com.pyx4j.forms.client.ui.CComponent;
 
+import com.propertyvista.common.client.ui.decorations.DecorationData.ShowMandatory;
+
 public class VistaDecoratorsFlowPanel extends FlowPanel {
 
     public static final String DEFAULT_STYLE_NAME = "vista_DecoratorsFlowPanel";
@@ -26,6 +28,8 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
     private boolean readOnlyMode = false;
 
     private double defaultLabelWidth = 12;
+
+    private boolean showMandatory = true;
 
     public VistaDecoratorsFlowPanel() {
     }
@@ -60,6 +64,9 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
         decorData.componentCaption = componentCaption;
         decorData.labelWidth = labelWidth;
         decorData.readOnlyMode = readOnlyMode;
+        if (!showMandatory) {
+            decorData.showMandatory = ShowMandatory.None;
+        }
         if (readOnlyMode) {
             decorData.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
         }
@@ -75,5 +82,13 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
 
     public void setDefaultLabelWidth(double defaultLabelWidth) {
         this.defaultLabelWidth = defaultLabelWidth;
+    }
+
+    public boolean isShowMandatory() {
+        return showMandatory;
+    }
+
+    public void setShowMandatory(boolean showMandatory) {
+        this.showMandatory = showMandatory;
     }
 }
