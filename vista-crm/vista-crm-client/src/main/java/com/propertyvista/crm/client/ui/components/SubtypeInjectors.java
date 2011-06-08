@@ -194,7 +194,7 @@ public class SubtypeInjectors {
         return injectConcessions(isEditable, null, null);
     }
 
-    public static CrmEntityFolder<Concession> injectConcessions(boolean isEditable, AppPlace placeToGo, CEntityForm<?> parent) {
+    public static CrmEntityFolder<Concession> injectConcessions(boolean isEditable, Class<? extends AppPlace> placeToGo, CEntityForm<?> parent) {
         return new CrmEntityFolder<Concession>(Concession.class, "Concession", isEditable, placeToGo, parent) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {

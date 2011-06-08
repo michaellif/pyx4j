@@ -137,7 +137,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private CEntityFolderEditor<AptUnitItem> createDetailsListEditor() {
-        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.UnitItem() : new CrmSiteMap.Viewers.UnitItem());
+        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.UnitItem.class : CrmSiteMap.Viewers.UnitItem.class);
         return new CrmEntityFolder<AptUnitItem>(AptUnitItem.class, "Unit Item", isEditable(), placeToGo, this) {
 
             @Override
@@ -154,7 +154,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private CEntityFolderEditor<AptUnitOccupancy> createOccupanciesListEditor() {
-        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.UnitOccupancy() : new CrmSiteMap.Viewers.UnitOccupancy());
+        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.UnitOccupancy.class : CrmSiteMap.Viewers.UnitOccupancy.class);
         return new CrmEntityFolder<AptUnitOccupancy>(AptUnitOccupancy.class, "Unit Occupancy", isEditable(), placeToGo, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -170,7 +170,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private CEntityFolderEditor<Concession> createConcessionsListEditor() {
-        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Concession() : new CrmSiteMap.Viewers.Concession());
+        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.Concession.class : CrmSiteMap.Viewers.Concession.class);
         return SubtypeInjectors.injectConcessions(isEditable(), placeToGo, this);
     }
 

@@ -46,7 +46,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
 
     private final boolean editable;
 
-    private final AppPlace place;
+    private final Class<? extends AppPlace> placeClass;
 
     private final CEntityForm<?> parent;
 
@@ -54,12 +54,12 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
         this(clazz, itemName, editable, null, null);
     }
 
-    public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable, AppPlace place, CEntityForm<?> parent) {
+    public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable, Class<? extends AppPlace> placeClass, CEntityForm<?> parent) {
         super(clazz);
         this.clazz = clazz;
         this.itemName = itemName;
         this.editable = editable;
-        this.place = place;
+        this.placeClass = placeClass;
         this.parent = parent;
     }
 
@@ -72,12 +72,13 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
             @Override
             public IFolderItemEditorDecorator<E> createFolderItemDecorator() {
                 IFolderItemEditorDecorator<E> decor;
-                if (place != null) {
+                if (placeClass != null) {
                     decor = new CrmFolderItemDecorator<E>(i18n.tr("Remove ") + itemName, editable);
                     decor.addItemClickHandler(new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent event) {
-                            AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(place, getValue().getPrimaryKey()));
+                            AppSite.getPlaceController().goTo(
+                                    CrmSiteMap.formItemPlace(AppSite.getHistoryMapper().createPlace(placeClass), getValue().getPrimaryKey()));
                         }
                     });
                 } else {
@@ -91,12 +92,15 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
 
     @Override
     protected IFolderEditorDecorator<E> createFolderDecorator() {
-        if (place != null && parent != null) {
+        if (placeClass != null && parent != null) {
             CrmTableFolderDecorator<E> decor = new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add new ") + itemName, editable);
             decor.addNewItemClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    AppSite.getPlaceController().goTo(CrmSiteMap.formNewItemPlace(place, parent.getValue().getPrimaryKey()));
+                    if (parent.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
+                        AppSite.getPlaceController().goTo(
+                                CrmSiteMap.formNewItemPlace(AppSite.getHistoryMapper().createPlace(placeClass), parent.getValue().getPrimaryKey()));
+                    }
                 }
             });
             return decor;

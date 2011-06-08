@@ -56,7 +56,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
     }
 
     private CEntityFolderEditor<PageDescriptor> createChildPagesList() {
-        return new CrmEntityFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Item"), isEditable(), new CrmSiteMap.Settings.Content(), this) {
+        return new CrmEntityFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Item"), isEditable(), CrmSiteMap.Settings.Content.class, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();

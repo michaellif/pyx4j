@@ -147,7 +147,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolderEditor<ElevatorDTO> createElevatorsListEditor() {
-        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Elevator() : new CrmSiteMap.Viewers.Elevator());
+        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.Elevator.class : CrmSiteMap.Viewers.Elevator.class);
         return new CrmEntityFolder<ElevatorDTO>(ElevatorDTO.class, i18n.tr("Elevator"), isEditable(), placeToGo, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -162,7 +162,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolderEditor<BoilerDTO> createBoilersListEditor() {
-        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Boiler() : new CrmSiteMap.Viewers.Boiler());
+        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.Boiler.class : CrmSiteMap.Viewers.Boiler.class);
         return new CrmEntityFolder<BoilerDTO>(BoilerDTO.class, i18n.tr("Boiler"), isEditable(), placeToGo, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -176,7 +176,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolderEditor<RoofDTO> createRoofsListEditor() {
-        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Roof() : new CrmSiteMap.Viewers.Roof());
+        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.Roof.class : CrmSiteMap.Viewers.Roof.class);
         return new CrmEntityFolder<RoofDTO>(RoofDTO.class, i18n.tr("Roof"), isEditable(), placeToGo, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -189,7 +189,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolderEditor<ParkingDTO> createParkingsListEditor() {
-        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.Parking() : new CrmSiteMap.Viewers.Parking());
+        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.Parking.class : CrmSiteMap.Viewers.Parking.class);
         return new CrmEntityFolder<ParkingDTO>(ParkingDTO.class, i18n.tr("Parking"), isEditable(), placeToGo, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -203,7 +203,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolderEditor<LockerAreaDTO> createLockerAreasListEditor() {
-        AppPlace placeToGo = (isEditable() ? new CrmSiteMap.Editors.LockerArea() : new CrmSiteMap.Viewers.LockerArea());
+        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.LockerArea.class : CrmSiteMap.Viewers.LockerArea.class);
         return new CrmEntityFolder<LockerAreaDTO>(LockerAreaDTO.class, i18n.tr("Locker Area"), isEditable(), placeToGo, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
