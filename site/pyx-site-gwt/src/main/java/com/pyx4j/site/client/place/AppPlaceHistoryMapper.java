@@ -68,6 +68,10 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
         return null;
     }
 
+    public AppPlace createPlace(Class<AppPlace> placeClass) {
+        return getPlace(AppPlaceInfo.getPlaceId(placeClass));
+    }
+
     public AppPlaceInfo getPlaceInfo(AppPlace place) {
         return listing.getPlaceInfo(place);
     }
