@@ -45,7 +45,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
         main.add(inject(proto().caption()), 15);
-        main.add(inject(proto().content().content()), 70);
+        main.add(inject(proto().content().content()), 60);
 
         main.add(new CrmHeader2Decorator(proto().childPages().getMeta().getCaption()));
         main.add(inject(proto().childPages(), createChildPagesList()));
