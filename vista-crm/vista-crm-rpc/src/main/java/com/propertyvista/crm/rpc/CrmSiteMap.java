@@ -344,21 +344,25 @@ public class CrmSiteMap implements SiteMap {
     @NavigationItem(navigLabel = "Administration")
     public static class Settings extends AppPlace {
 
+        @PlaceProperties(caption = "Policy Management")
         @NavigationItem(navigLabel = "Policy Management")
         public static class Policy extends AppPlace {
 
         }
 
+        @PlaceProperties(caption = "User Role")
         @NavigationItem(navigLabel = "User Role")
         public static class UserRole extends AppPlace {
 
         }
 
+        @PlaceProperties(caption = "General")
         @NavigationItem(navigLabel = "General")
         public static class General extends AppPlace {
 
         }
 
+        @PlaceProperties(caption = "Content")
         @NavigationItem(navigLabel = "Content")
         public static class Content extends AppPlace {
 
