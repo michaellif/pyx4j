@@ -105,6 +105,10 @@ public class IOUtils {
         return sb.toString();
     }
 
+    public static String getTextResource(String fileName, Class<?> clazz) throws IOException {
+        return getTextResource(resourceFileName(fileName, clazz));
+    }
+
     public static String resourceFileName(String fileName, Class<?> clazz) {
         return clazz.getPackage().getName().replace('.', '/') + "/" + fileName;
     }
