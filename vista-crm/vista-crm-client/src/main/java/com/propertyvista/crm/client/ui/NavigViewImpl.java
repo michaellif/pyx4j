@@ -46,7 +46,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
     public static String DEFAULT_STYLE_PREFIX = "vistaCrm_Navig";
 
-    private final static double headerSize = 3;
+    private final static double HEADER_SIZE = 3;
 
     public static enum StyleSuffix implements IStyleSuffix {
         Item, NoBottomMargin
@@ -167,7 +167,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                 }
                 if (!folderFound) {
                     nw = new NavigFolderWidget(navigFolder);
-                    add(nw, nw.getStackHeaderWidget(), headerSize);
+                    add(nw, nw.getStackHeaderWidget(), HEADER_SIZE);
                     lastKnownPlaces.add(nw);
                 }
 
@@ -178,22 +178,12 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                     lastheader.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.NoBottomMargin);
                 }
             }
-
-            //test
-/*
- * for (NavigFolderWidget w : lastKnownPlaces) {
- * System.out.println(w.getStackTitle());
- * for (NavigItemAnchor a : w.getItems()) {
- * System.out.println("     " + a.getElement().toString());
- * }
- * }
- */
         } else {
             lastKnownPlaces = new ArrayList<NavigFolderWidget>(10);
             NavigFolderWidget nw = null;
             for (NavigFolder navigFolder : folders) {
                 nw = new NavigFolderWidget(navigFolder);
-                add(nw, nw.getStackHeaderWidget(), headerSize);
+                add(nw, nw.getStackHeaderWidget(), HEADER_SIZE);
                 lastKnownPlaces.add(nw);
             }
             if (nw != null) {
@@ -243,6 +233,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
             }
 
             stackHeaderWidget = new StackHeaderWidget();
+
         }
 
         public void addItem(NavigItemAnchor item) {
@@ -331,6 +322,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                 setCellWidth(label, "100%");
 
                 setWidth("100%");
+                setHeight(HEADER_SIZE + "em");
             }
 
             private void setSelected(boolean selected) {
