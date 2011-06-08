@@ -39,12 +39,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyListDTO;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
 import com.pyx4j.entity.shared.IPrimitiveSet;
@@ -54,6 +48,13 @@ import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.client.resources.PortalImages;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class PropertiesMapWidget extends AbstractMapWidget {
 
@@ -185,6 +186,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             setStyleName(PROPERTY_CARD_STYLE_PREFIX);
             setSize("100%", "100%");
             getElement().getStyle().setProperty("minHeight", "100px");
+            getElement().getStyle().setPadding(10, Unit.PX);
             SimplePanel header = new SimplePanel();
             header.setSize("100%", "15%");
             header.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardHeader);
@@ -197,8 +199,9 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             imgEnvelope.getElement().getStyle().setHeight(50, Unit.PX);
             imgEnvelope.getElement().getStyle().setWidth(70, Unit.PX);
             imgEnvelope.getElement().getStyle().setFloat(Float.LEFT);
+            imgEnvelope.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardImage);
+
             SimplePanel imageHolder = new SimplePanel();
-            imageHolder.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardImage);
             imageHolder.setSize("100%", "100%");
             imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
             if (property.mainMedia().isNull()) {

@@ -60,13 +60,13 @@ public class PortalSite extends VistaSite {
 
             @Override
             public void onSuccess(Boolean result) {
-                AppSite.getPlaceController().goTo(defaultplace);
+                getHistoryHandler().handleCurrentHistory();
             }
 
             //TODO remove this when initial application message is implemented
             @Override
             public void onFailure(Throwable caught) {
-                AppSite.getPlaceController().goTo(defaultplace);
+                getHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
             }
         });
