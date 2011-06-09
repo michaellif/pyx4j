@@ -69,6 +69,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
         // Form first table header: 
         HorizontalPanel header = new HorizontalPanel();
+        header.setSpacing(4);
 
         DecorationData decorData = new DecorationData(0, 8.1);
         decorData.hideInfoHolder = true;
