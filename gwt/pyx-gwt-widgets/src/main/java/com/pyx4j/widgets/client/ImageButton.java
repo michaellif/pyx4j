@@ -77,12 +77,6 @@ public class ImageButton extends Image {
                     setResource(hover);
                 }
             });
-            addMouseOutHandler(new MouseOutHandler() {
-                @Override
-                public void onMouseOut(MouseOutEvent event) {
-                    setResource(regular);
-                }
-            });
         }
         if (pushed != null) {
             addMouseDownHandler(new MouseDownHandler() {
@@ -96,6 +90,12 @@ public class ImageButton extends Image {
             addMouseUpHandler(new MouseUpHandler() {
                 @Override
                 public void onMouseUp(MouseUpEvent event) {
+                    setResource(regular);
+                }
+            });
+            addMouseOutHandler(new MouseOutHandler() {
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
                     setResource(regular);
                 }
             });
