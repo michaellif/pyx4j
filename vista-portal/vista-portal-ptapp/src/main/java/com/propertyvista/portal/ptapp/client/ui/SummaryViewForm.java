@@ -386,8 +386,8 @@ public class SummaryViewForm extends CEntityForm<Summary> {
                         }
 
                         @Override
-                        public IFolderItemEditorDecorator createFolderItemDecorator() {
-                            return new BoxReadOnlyFolderItemDecorator(false);
+                        public IFolderItemEditorDecorator<PotentialTenantInfo> createFolderItemDecorator() {
+                            return new BoxReadOnlyFolderItemDecorator<PotentialTenantInfo>(false);
                         }
                     };
                 }

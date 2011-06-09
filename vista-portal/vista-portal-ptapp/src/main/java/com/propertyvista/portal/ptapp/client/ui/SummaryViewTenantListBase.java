@@ -17,6 +17,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
@@ -31,7 +32,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.widgets.client.ImageButton;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
@@ -74,8 +74,8 @@ public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEnti
     }
 
     @Override
-    public IFolderItemEditorDecorator createFolderItemDecorator() {
-        return new BoxReadOnlyFolderItemDecorator(false);
+    public IFolderItemEditorDecorator<E> createFolderItemDecorator() {
+        return new BoxReadOnlyFolderItemDecorator<E>(false);
     }
 
     public IsWidget bindCompactView() {
@@ -104,14 +104,17 @@ public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEnti
 
     protected IsWidget addViewSwitcher() {
 
-        final Image switcher = new ImageButton(PortalImages.INSTANCE.pointerCollapsed(), PortalImages.INSTANCE.pointerExpanded());
+        final Image switcher = new Image(PortalImages.INSTANCE.pointerCollapsed());
+        switcher.getElement().getStyle().setCursor(Cursor.POINTER);
         switcher.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 if (fullView.asWidget().isVisible()) {
                     fullView.asWidget().setVisible(false);
+                    switcher.setResource(PortalImages.INSTANCE.pointerCollapsed());
                 } else {
                     fullView.asWidget().setVisible(true);
+                    switcher.setResource(PortalImages.INSTANCE.pointerExpanded());
                 }
             }
         });

@@ -227,8 +227,8 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
                 return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns) {
 
                     @Override
-                    public IFolderItemEditorDecorator createFolderItemDecorator() {
-                        return new BoxReadOnlyFolderItemDecorator(false);
+                    public IFolderItemEditorDecorator<Vehicle> createFolderItemDecorator() {
+                        return new BoxReadOnlyFolderItemDecorator<Vehicle>(false);
                     }
 
                 };
@@ -285,8 +285,8 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator createFolderItemDecorator() {
-                        return new BoxReadOnlyFolderItemDecorator(!isFirst());
+                    public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
+                        return new BoxReadOnlyFolderItemDecorator<EmergencyContact>(!isFirst());
                     }
                 };
             }
