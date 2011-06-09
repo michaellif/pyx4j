@@ -31,7 +31,7 @@ import com.propertyvista.domain.Media;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.building.Building;
 
-@ToStringFormat("{0}")
+@ToStringFormat("{0} {1}")
 public interface Floorplan extends IEntity {
 
     @Translatable

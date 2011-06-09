@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.common.domain.Person;
@@ -20,6 +21,7 @@ import com.propertyvista.domain.Company;
 
 public interface Tenant extends IEntity {
 
+    @ToString
     Person person();
 
     Company company();

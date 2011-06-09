@@ -49,10 +49,15 @@ public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel imple
 
     protected Presenter presenter;
 
+    protected final CrmHeaderDecorator header;
+
+    protected final String defaultCaption;
+
     public EditorViewImplBase(AppPlace place) {
         super(Unit.EM);
         setSize("100%", "100%");
-        addNorth(new CrmHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(place).getCaption()), 3);
+        defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(place).getCaption();
+        addNorth(header = new CrmHeaderDecorator(defaultCaption), 3);
         addSouth(createButtons(), 4);
         add(scroll);
     }
@@ -75,6 +80,7 @@ public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     public void populate(E value) {
         assert (editor != null);
         editor.populate(value);
+        header.setCaption(defaultCaption + " " + value.getStringView());
     }
 
     @Override

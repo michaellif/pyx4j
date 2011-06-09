@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -48,6 +49,7 @@ public interface AptUnit extends IEntity {
     @Caption(name = "Available")
     IPrimitive<LogicalDate> avalableForRent();
 
+    @ToString
     @EmbeddedEntity
     AptUnitInfo info();
 

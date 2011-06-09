@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.domain.Address;
 
-@ToStringFormat("{0}, {1}")
+@ToStringFormat("{0} {1}")
 public interface BuildingInfo extends IEntity {
 
     @Translatable

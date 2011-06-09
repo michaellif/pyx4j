@@ -17,12 +17,14 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
 @AbstractEntity
 public interface IUserEntity extends IEntity {
 
+    @ToString(index = 0)
     @ReadOnly
     @Detached
     @NotNull

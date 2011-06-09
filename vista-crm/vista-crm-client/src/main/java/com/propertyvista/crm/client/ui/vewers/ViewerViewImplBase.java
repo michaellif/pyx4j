@@ -45,11 +45,16 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
 
     protected final AppPlace editPlace;
 
+    protected final CrmHeaderDecorator header;
+
+    protected final String defaultCaption;
+
     public ViewerViewImplBase(AppPlace viewPlace, AppPlace editPlace) {
         super(Unit.EM);
         this.editPlace = editPlace;
         setSize("100%", "100%");
-        addNorth(new CrmHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(viewPlace).getCaption(), createActionsPanel()), 3);
+        defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(viewPlace).getCaption();
+        addNorth(header = new CrmHeaderDecorator(defaultCaption, createActionsPanel()), 3);
         add(scroll);
     }
 
@@ -71,6 +76,7 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     public void populate(E value) {
         assert (viewer != null);
         viewer.populate(value);
+        header.setCaption(defaultCaption + " " + value.getStringView());
     }
 
     private Widget createActionsPanel() {

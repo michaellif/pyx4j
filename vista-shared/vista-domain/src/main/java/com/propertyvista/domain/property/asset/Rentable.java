@@ -14,15 +14,20 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@ToStringFormat("{0} {1}")
 public interface Rentable extends IEntity {
 
+    @ToString(index = 0)
     IPrimitive<String> name();
 
+    @ToString(index = 1)
     @Format("#0.00")
     IPrimitive<Double> price();
 

@@ -50,6 +50,6 @@ public class CrmHeaderDecorator extends VistaHeaderDecorator {
 
     @Override
     protected String getStylePrefix() {
-        return this.DEFAULT_STYLE_PREFIX;
+        return DEFAULT_STYLE_PREFIX;
     }
 }

@@ -17,6 +17,8 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,6 +28,7 @@ import com.pyx4j.i18n.shared.Translatable;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Utility;
 
+@ToStringFormat("{0} {1} {2}")
 public interface AptUnitInfo extends IEntity {
 
     @Translatable
@@ -45,8 +48,10 @@ public interface AptUnitInfo extends IEntity {
         }
     }
 
+    @ToString(index = 2)
     IPrimitive<String> name();
 
+    @ToString(index = 1)
     @MemberColumn(name = "unitType")
     IPrimitive<AptUnitType> type();
 
@@ -58,6 +63,7 @@ public interface AptUnitInfo extends IEntity {
 
     IPrimitive<Integer> floor();
 
+    @ToString(index = 0)
     @MemberColumn(name = "unitNumber")
     IPrimitive<String> number();
 

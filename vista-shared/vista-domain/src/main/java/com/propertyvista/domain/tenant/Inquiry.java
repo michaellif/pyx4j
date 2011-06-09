@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -25,6 +26,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public interface Inquiry extends IEntity {
 
+    @ToString(index = 0)
     Name name();
 
     IList<Phone> phones();

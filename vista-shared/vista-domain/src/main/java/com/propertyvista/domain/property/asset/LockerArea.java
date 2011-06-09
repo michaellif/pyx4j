@@ -17,6 +17,8 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -24,6 +26,7 @@ import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
+@ToStringFormat("{0} {1}")
 public interface LockerArea extends IEntity {
 
     @Translatable
@@ -47,12 +50,14 @@ public interface LockerArea extends IEntity {
 
     // ----------- Infromation --------------------------------------------------------------------------
 
+    @ToString(index = 0)
     IPrimitive<String> name();
 
     IPrimitive<String> description();
 
     IPrimitive<Boolean> isPrivate();
 
+    @ToString(index = 1)
     @Caption(name = "Size")
     IPrimitive<Size> lockerSize();
 

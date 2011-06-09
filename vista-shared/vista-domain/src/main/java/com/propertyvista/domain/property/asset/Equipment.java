@@ -19,6 +19,8 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -27,12 +29,14 @@ import com.propertyvista.domain.property.vendor.Licence;
 import com.propertyvista.domain.property.vendor.Maintenance;
 import com.propertyvista.domain.property.vendor.Warranty;
 
+@ToStringFormat("{0} {1}")
 public interface Equipment extends IEntity {
 
     @Owner
     @Detached
     Building belongsTo();
 
+    @ToString(index = 0)
     @MemberColumn(name = "equipmentType")
     IPrimitive<String> type();
 
@@ -40,6 +44,7 @@ public interface Equipment extends IEntity {
 
     IPrimitive<String> make();
 
+    @ToString(index = 1)
     IPrimitive<String> model();
 
     IPrimitive<LogicalDate> build();

@@ -14,6 +14,7 @@
 package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -30,6 +31,7 @@ import com.propertyvista.portal.domain.ptapp.Pets;
 
 public interface Lease extends IEntity {
 
+    @ToString(index = 0)
     IPrimitive<String> leaseID();
 
     AptUnit unit();

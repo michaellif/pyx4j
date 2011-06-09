@@ -94,9 +94,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             }
         });
         header.add(changeBtn);
-
         header.getElement().getStyle().setMarginTop(7, Unit.PX);
-        header.getElement().getStyle().setMarginLeft(130, Unit.PX);
 
         main.add(new VistaHeaderDecorator(i18n.tr("Available Units"), header, "100%"));
 

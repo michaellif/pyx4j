@@ -29,15 +29,18 @@ public class VistaHeaderDecorator extends HorizontalPanel {
         Caption
     }
 
+    private final HTML captionHolder;
+
     public VistaHeaderDecorator(String caption, Widget widget, String width) {
-        HTML captionHolder = new HTML(caption);
+        captionHolder = new HTML(caption);
         setStyleName(getStylePrefix());
         captionHolder.setStyleName(getStylePrefix() + StyleSuffix.Caption.name());
         add(captionHolder);
         setCellVerticalAlignment(captionHolder, HorizontalPanel.ALIGN_MIDDLE);
-        setCellWidth(captionHolder, "200px");
 
         if (widget != null) {
+            setCellWidth(captionHolder, "50%");
+
             add(widget);
             widget.getElement().getStyle().setMarginRight(1, Unit.EM);
             setCellVerticalAlignment(widget, HorizontalPanel.ALIGN_MIDDLE);
@@ -70,5 +73,9 @@ public class VistaHeaderDecorator extends HorizontalPanel {
 
     protected String getStylePrefix() {
         return DEFAULT_STYLE_PREFIX;
+    }
+
+    public void setCaption(String caption) {
+        captionHolder.setText(caption);
     }
 }
