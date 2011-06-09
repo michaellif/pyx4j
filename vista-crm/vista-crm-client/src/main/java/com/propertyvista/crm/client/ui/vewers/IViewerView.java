@@ -24,7 +24,7 @@ public interface IViewerView<E extends IEntity> extends IsWidget {
 
         public void populate();
 
-        public void edit(AppPlace editPlace);
+        public void edit(Class<? extends AppPlace> editPlaceClass);
     }
 
     void setPresenter(Presenter presenter);

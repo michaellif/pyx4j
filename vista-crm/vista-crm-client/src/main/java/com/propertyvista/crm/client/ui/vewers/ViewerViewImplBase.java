@@ -43,15 +43,15 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
 
     protected Presenter presenter;
 
-    protected final AppPlace editPlace;
+    protected final Class<? extends AppPlace> editPlaceClass;
 
     protected final CrmHeaderDecorator header;
 
     protected final String defaultCaption;
 
-    public ViewerViewImplBase(AppPlace viewPlace, AppPlace editPlace) {
+    public ViewerViewImplBase(AppPlace viewPlace, Class<? extends AppPlace> editPlaceClass) {
         super(Unit.EM);
-        this.editPlace = editPlace;
+        this.editPlaceClass = editPlaceClass;
         setSize("100%", "100%");
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(viewPlace).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption, createActionsPanel()), 3);
@@ -84,7 +84,7 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
         AnchorButton btnEdit = new AnchorButton(i18n.tr("Edit"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.edit(editPlace);
+                presenter.edit(editPlaceClass);
             }
         });
         btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.EditButton);

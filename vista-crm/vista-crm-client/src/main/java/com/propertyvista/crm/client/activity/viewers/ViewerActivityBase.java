@@ -72,7 +72,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void edit(AppPlace editPlace) {
-        AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(editPlace, entityId));
+    public void edit(Class<? extends AppPlace> editPlaceClass) {
+        AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(AppSite.getHistoryMapper().createPlace(editPlaceClass), entityId));
     }
 }
