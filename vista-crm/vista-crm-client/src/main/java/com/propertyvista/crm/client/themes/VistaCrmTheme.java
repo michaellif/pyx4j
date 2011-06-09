@@ -408,7 +408,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Holder));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
-        style.addProperty("border", "1px solid #aaa");
+        style.addProperty("border", "1px solid #ccc");
         style.addProperty("margin", "5px");
         addStyle(style);
 
