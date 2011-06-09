@@ -39,8 +39,6 @@ public class VistaHeaderDecorator extends HorizontalPanel {
         setCellVerticalAlignment(captionHolder, HorizontalPanel.ALIGN_MIDDLE);
 
         if (widget != null) {
-            setCellWidth(captionHolder, "50%");
-
             add(widget);
             widget.getElement().getStyle().setMarginRight(1, Unit.EM);
             setCellVerticalAlignment(widget, HorizontalPanel.ALIGN_MIDDLE);
