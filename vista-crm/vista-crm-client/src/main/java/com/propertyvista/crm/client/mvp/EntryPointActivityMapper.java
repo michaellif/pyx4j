@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.login.LoginActivity;
 import com.propertyvista.crm.client.activity.login.RetrievePasswordActivity;
@@ -24,7 +23,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class EntryPointActivityMapper implements ActivityMapper {
 
-    @Inject
     public EntryPointActivityMapper() {
         super();
     }

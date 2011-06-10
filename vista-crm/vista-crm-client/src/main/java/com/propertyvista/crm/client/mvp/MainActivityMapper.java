@@ -75,7 +75,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class MainActivityMapper implements AppActivityMapper {
 
-    @Inject
     public MainActivityMapper() {
         super();
     }

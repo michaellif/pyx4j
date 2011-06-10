@@ -38,15 +38,11 @@ import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.Theme;
 
-import com.propertyvista.crm.client.mvp.ActionsActivityMapper;
 import com.propertyvista.crm.client.mvp.EntryPointActivityMapper;
-import com.propertyvista.crm.client.mvp.FooterActivityMapper;
-import com.propertyvista.crm.client.mvp.LogoActivityMapper;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.mvp.NavigActivityMapper;
-import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
+import com.propertyvista.crm.client.themes.BlueColdTheme;
 
 @Singleton
 public class CrmView extends LayoutPanel {
@@ -58,25 +54,11 @@ public class CrmView extends LayoutPanel {
     }
 
     @Inject
-    public CrmView(LogoActivityMapper logoActivityMapper,
-
-    ActionsActivityMapper actionsActivityMapper,
-
-    NavigActivityMapper navigActivityMapper,
-
-    MainActivityMapper mainActivityMapper,
-
-    EntryPointActivityMapper utilityActivityMapper,
-
-    FooterActivityMapper footerActivityMapper,
-
-    ShortCutsActivityMapper shortcutsActivityMapper,
-
-    Theme theme) {
+    public CrmView() {
 
         EventBus eventBus = AppSite.getEventBus();
 
-        StyleManger.installTheme(theme);
+        StyleManger.installTheme(new BlueColdTheme());
 
         setStyleName(AppSiteView.DEFAULT_STYLE_PREFIX);
 
@@ -163,13 +145,13 @@ public class CrmView extends LayoutPanel {
         splitPanel.add(mainDisplay);
 
         // Activity <-> Display bindings:
-        bind(logoActivityMapper, logoDisplay, eventBus);
-        bind(actionsActivityMapper, actionsDisplay, eventBus);
-        bind(footerActivityMapper, footerDisplay, eventBus);
-        bind(navigActivityMapper, navigDisplay, eventBus);
-        bind(shortcutsActivityMapper, shortcutsDisplay, eventBus);
-        bind(mainActivityMapper, mainDisplay, eventBus);
-        bind(utilityActivityMapper, utilityDisplay, eventBus);
+//        bind(new LogoActivityMapper(), logoDisplay, eventBus);
+//        bind(new ActionsActivityMapper(), actionsDisplay, eventBus);
+//        bind(new FooterActivityMapper(), footerDisplay, eventBus); 
+        bind(new NavigActivityMapper(), navigDisplay, eventBus);
+//        bind(new ShortCutsActivityMapper(), shortcutsDisplay, eventBus);
+        bind(new MainActivityMapper(), mainDisplay, eventBus);
+        bind(new EntryPointActivityMapper(), utilityDisplay, eventBus);
     }
 
     private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {

@@ -14,13 +14,10 @@
 package com.propertyvista.crm.client;
 
 import com.google.gwt.inject.client.GinModules;
-import com.propertyvista.crm.client.ui.CrmView;
 
 import com.pyx4j.site.client.AppSiteGinjector;
 
 @GinModules(CrmGinModule.class)
 public interface CrmGinjector extends AppSiteGinjector {
-
-    CrmView getSiteView();
 
 }

@@ -18,11 +18,16 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+
 import com.propertyvista.crm.client.activity.FooterActivity;
 
 public class FooterActivityMapper implements ActivityMapper {
 
     Provider<FooterActivity> activityProvider;
+
+    public FooterActivityMapper() {
+        super();
+    }
 
     @Inject
     public FooterActivityMapper(Provider<FooterActivity> activityProvider) {

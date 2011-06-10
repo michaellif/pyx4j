@@ -16,9 +16,6 @@ package com.propertyvista.crm.client.ui;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
 
-import com.pyx4j.widgets.client.style.Theme;
-
-import com.propertyvista.crm.client.themes.BlueColdTheme;
 import com.propertyvista.crm.client.ui.login.NewPasswordView;
 import com.propertyvista.crm.client.ui.login.NewPasswordViewImpl;
 
@@ -33,11 +30,6 @@ public class ViewModule extends AbstractGinModule {
         bind(TopRightActionsView.class).to(TopRightActionsViewImpl.class).in(Singleton.class);
 
         bind(NewPasswordView.class).to(NewPasswordViewImpl.class).in(Singleton.class);
-
-// - Themes:
-        //        bind(Theme.class).to(GainsboroTheme.class).in(Singleton.class);
-        bind(Theme.class).to(BlueColdTheme.class).in(Singleton.class);
-        //        bind(Theme.class).to(BownWarmTheme.class).in(Singleton.class);
 
         bind(ShortCutsView.class).to(ShortCutsViewImpl.class).in(Singleton.class);
     }

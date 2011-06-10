@@ -13,11 +13,10 @@
  */
 package com.propertyvista.crm.client;
 
-import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
-import com.propertyvista.crm.client.mvp.MvpModule;
-import com.propertyvista.crm.client.ui.ViewModule;
-
 import com.pyx4j.site.client.AppSiteGinModule;
+
+import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
+import com.propertyvista.crm.client.ui.ViewModule;
 
 public class CrmGinModule extends AppSiteGinModule {
 
@@ -26,8 +25,6 @@ public class CrmGinModule extends AppSiteGinModule {
         super.configure();
 
         bind(VistaUnrecoverableErrorHandler.class).asEagerSingleton();
-
-        install(new MvpModule());
 
         install(new ViewModule());
     }
