@@ -76,82 +76,9 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class MainActivityMapper implements AppActivityMapper {
 
-    //  Provider<LoginActivity> loginActivityProvider;
-
-    //  Provider<RetrievePasswordActivity> retrievePasswordActivityProvider;
-
     Provider<ResetPasswordActivity> resetPasswordActivityProvider;
 
-// ----- Building-related:
-    Provider<BuildingListerActivity> buildingListerActivityProvider;
-
-    Provider<BuildingViewerActivity> buildingViewerActivityProvider;
-
-    Provider<BuildingEditorActivity> buildingEditorActivityProvider;
-
-    Provider<ElevatorViewerActivity> elevatorViewerActivityProvider;
-
-    Provider<ElevatorEditorActivity> elevatorEditorActivityProvider;
-
-    Provider<BoilerViewerActivity> boilerViewerActivityProvider;
-
-    Provider<BoilerEditorActivity> boilerEditorActivityProvider;
-
-    Provider<RoofViewerActivity> roofViewerActivityProvider;
-
-    Provider<RoofEditorActivity> roofEditorActivityProvider;
-
-    Provider<ParkingViewerActivity> parkingViewerActivityProvider;
-
-    Provider<ParkingEditorActivity> parkingEditorActivityProvider;
-
-    Provider<ParkingSpotListerActivity> parkingSpotListerActivityProvider;
-
-    Provider<ParkingSpotViewerActivity> parkingSpotViewerActivityProvider;
-
-    Provider<ParkingSpotEditorActivity> parkingSpotEditorActivityProvider;
-
-    Provider<LockerAreaViewerActivity> lockerAreaViewerActivityProvider;
-
-    Provider<LockerAreaEditorActivity> lockerAreaEditorActivityProvider;
-
-    Provider<LockerListerActivity> lockerListerActivityProvider;
-
-    Provider<LockerViewerActivity> lockerViewerActivityProvider;
-
-    Provider<LockerEditorActivity> lockerEditorActivityProvider;
-
-// ----- Unit-related:
-    Provider<ConcessionViewerActivity> concessionViewerActivityProvider;
-
-    Provider<ConcessionEditorActivity> concessionEditorActivityProvider;
-
-// ----- Tenant-related:
-    Provider<TenantListerActivity> tenantListerActivityProvider;
-
-    Provider<TenantViewerActivity> tenantViewerActivityProvider;
-
-    Provider<TenantEditorActivity> tenantEditorActivityProvider;
-
-    Provider<LeaseListerActivity> leaseListerActivityProvider;
-
-    Provider<LeaseViewerActivity> leaseViewerActivityProvider;
-
-    Provider<LeaseEditorActivity> leaseEditorActivityProvider;
-
-    Provider<ApplicationListerActivity> applicationListerActivityProvider;
-
-    Provider<ApplicationViewerActivity> applicationViewerActivityProvider;
-
-    Provider<ApplicationEditorActivity> applicationEditorActivityProvider;
-
-    Provider<InquiryListerActivity> inquiryListerActivityProvider;
-
-    Provider<InquiryViewerActivity> inquiryViewerActivityProvider;
-
-    Provider<InquiryEditorActivity> inquiryEditorActivityProvider;
-
-// ----- Other:
+    // ----- Other:
     Provider<DashboardActivity> dashboardActivityProvider;
 
     Provider<ReportActivity> reportActivityProvider;
@@ -160,93 +87,10 @@ public class MainActivityMapper implements AppActivityMapper {
 
     Provider<AlertActivity> alertActivityProvider;
 
-// ----- Settings:
-    Provider<ContentActivity> contentActivityProvider;
-
-    Provider<ContentEditorActivity> contentEditorActivityProvider;
-
     @Inject
     public MainActivityMapper(
 
-/*
- * final Provider<LoginActivity> loginActivityProvider,
- * 
- * final Provider<RetrievePasswordActivity> retrievePasswordActivityProvider,
- */
-
     final Provider<ResetPasswordActivity> resetPasswordActivityProvider,
-/*
- * ----- Building-related:
- */
-    final Provider<BuildingListerActivity> buildingListerActivityProvider,
-
-    final Provider<BuildingViewerActivity> buildingViewerActivityProvider,
-
-    final Provider<BuildingEditorActivity> buildingEditorActivityProvider,
-
-    final Provider<ElevatorViewerActivity> elevatorViewerActivityProvider,
-
-    final Provider<ElevatorEditorActivity> elevatorEditorActivityProvider,
-
-    final Provider<BoilerViewerActivity> boilerViewerActivityProvider,
-
-    final Provider<BoilerEditorActivity> boilerEditorActivityProvider,
-
-    final Provider<RoofViewerActivity> roofViewerActivityProvider,
-
-    final Provider<RoofEditorActivity> roofEditorActivityProvider,
-
-    final Provider<ParkingViewerActivity> parkingViewerActivityProvider,
-
-    final Provider<ParkingEditorActivity> parkingEditorActivityProvider,
-
-    final Provider<ParkingSpotListerActivity> parkingSpotListerActivityProvider,
-
-    final Provider<ParkingSpotViewerActivity> parkingSpotViewerActivityProvider,
-
-    final Provider<ParkingSpotEditorActivity> parkingSpotEditorActivityProvider,
-
-    final Provider<LockerAreaViewerActivity> lockerAreaViewerActivityProvider,
-
-    final Provider<LockerAreaEditorActivity> lockerAreaEditorActivityProvider,
-
-    final Provider<LockerListerActivity> lockerListerActivityProvider,
-
-    final Provider<LockerViewerActivity> lockerViewerActivityProvider,
-
-    final Provider<LockerEditorActivity> lockerEditorActivityProvider,
-/*
- * ----- Unit-related:
- */
-    final Provider<ConcessionViewerActivity> concessionViewerActivityProvider,
-
-    final Provider<ConcessionEditorActivity> concessionEditorActivityProvider,
-/*
- * ----- Tenant-related:
- */
-    final Provider<TenantListerActivity> tenantListerActivityProvider,
-
-    final Provider<TenantViewerActivity> tenantViewerActivityProvider,
-
-    final Provider<TenantEditorActivity> tenantEditorActivityProvider,
-
-    final Provider<LeaseListerActivity> leaseListerActivityProvider,
-
-    final Provider<LeaseViewerActivity> leaseViewerActivityProvider,
-
-    final Provider<LeaseEditorActivity> leaseEditorActivityProvider,
-
-    final Provider<ApplicationListerActivity> applicationListerActivityProvider,
-
-    final Provider<ApplicationViewerActivity> applicationViewerActivityProvider,
-
-    final Provider<ApplicationEditorActivity> applicationEditorActivityProvider,
-
-    final Provider<InquiryListerActivity> inquiryListerActivityProvider,
-
-    final Provider<InquiryViewerActivity> inquiryViewerActivityProvider,
-
-    final Provider<InquiryEditorActivity> inquiryEditorActivityProvider,
 /*
  * ----- Other:
  */
@@ -263,42 +107,7 @@ public class MainActivityMapper implements AppActivityMapper {
 //        this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
 
         this.resetPasswordActivityProvider = resetPasswordActivityProvider;
-// ---- Building-related:
-        this.buildingListerActivityProvider = buildingListerActivityProvider;
-        this.buildingViewerActivityProvider = buildingViewerActivityProvider;
-        this.buildingEditorActivityProvider = buildingEditorActivityProvider;
-        this.elevatorViewerActivityProvider = elevatorViewerActivityProvider;
-        this.elevatorEditorActivityProvider = elevatorEditorActivityProvider;
-        this.boilerViewerActivityProvider = boilerViewerActivityProvider;
-        this.boilerEditorActivityProvider = boilerEditorActivityProvider;
-        this.roofViewerActivityProvider = roofViewerActivityProvider;
-        this.roofEditorActivityProvider = roofEditorActivityProvider;
-        this.parkingViewerActivityProvider = parkingViewerActivityProvider;
-        this.parkingEditorActivityProvider = parkingEditorActivityProvider;
-        this.parkingSpotListerActivityProvider = parkingSpotListerActivityProvider;
-        this.parkingSpotViewerActivityProvider = parkingSpotViewerActivityProvider;
-        this.parkingSpotEditorActivityProvider = parkingSpotEditorActivityProvider;
-        this.lockerAreaViewerActivityProvider = lockerAreaViewerActivityProvider;
-        this.lockerAreaEditorActivityProvider = lockerAreaEditorActivityProvider;
-        this.lockerListerActivityProvider = lockerListerActivityProvider;
-        this.lockerViewerActivityProvider = lockerViewerActivityProvider;
-        this.lockerEditorActivityProvider = lockerEditorActivityProvider;
-// ---- Unit-related:
-        this.concessionViewerActivityProvider = concessionViewerActivityProvider;
-        this.concessionEditorActivityProvider = concessionEditorActivityProvider;
-// ---- Tenant-related:
-        this.tenantListerActivityProvider = tenantListerActivityProvider;
-        this.tenantViewerActivityProvider = tenantViewerActivityProvider;
-        this.tenantEditorActivityProvider = tenantEditorActivityProvider;
-        this.leaseListerActivityProvider = leaseListerActivityProvider;
-        this.leaseViewerActivityProvider = leaseViewerActivityProvider;
-        this.leaseEditorActivityProvider = leaseEditorActivityProvider;
-        this.applicationListerActivityProvider = applicationListerActivityProvider;
-        this.applicationViewerActivityProvider = applicationViewerActivityProvider;
-        this.applicationEditorActivityProvider = applicationEditorActivityProvider;
-        this.inquiryListerActivityProvider = inquiryListerActivityProvider;
-        this.inquiryViewerActivityProvider = inquiryViewerActivityProvider;
-        this.inquiryEditorActivityProvider = inquiryEditorActivityProvider;
+
 // ---- Other:
         this.dashboardActivityProvider = dashboardActivityProvider;
         this.reportActivityProvider = reportActivityProvider;
@@ -315,52 +124,54 @@ public class MainActivityMapper implements AppActivityMapper {
                 Activity activity = null;
                 if (place instanceof CrmSiteMap.ResetPassword) {
                     activity = resetPasswordActivityProvider.get().withPlace((AppPlace) place);
+
                     // - Building-related:
                 } else if (place instanceof CrmSiteMap.Properties.Buildings) {
-                    activity = buildingListerActivityProvider.get().withPlace(place);
+                    activity = new BuildingListerActivity(place);
                 } else if (place instanceof CrmSiteMap.Viewers.Building) {
-                    activity = buildingViewerActivityProvider.get().withPlace(place);
+                    activity = new BuildingViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Building) {
-                    activity = buildingEditorActivityProvider.get().withPlace(place);
+                    activity = new BuildingEditorActivity(place);
 
                 } else if (place instanceof CrmSiteMap.Viewers.Elevator) {
-                    activity = elevatorViewerActivityProvider.get().withPlace(place);
+                    activity = new ElevatorViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Elevator) {
-                    activity = elevatorEditorActivityProvider.get().withPlace(place);
+                    activity = new ElevatorEditorActivity(place);
 
                 } else if (place instanceof CrmSiteMap.Viewers.Boiler) {
-                    activity = boilerViewerActivityProvider.get().withPlace(place);
+                    activity = new BoilerViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Boiler) {
-                    activity = boilerEditorActivityProvider.get().withPlace(place);
+                    activity = new BoilerEditorActivity(place);
 
                 } else if (place instanceof CrmSiteMap.Viewers.Roof) {
-                    activity = roofViewerActivityProvider.get().withPlace(place);
+                    activity = new RoofViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Roof) {
-                    activity = roofEditorActivityProvider.get().withPlace(place);
+                    activity = new RoofEditorActivity(place);
 
                 } else if (place instanceof CrmSiteMap.Viewers.Parking) {
-                    activity = parkingViewerActivityProvider.get().withPlace(place);
+                    activity = new ParkingViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Parking) {
-                    activity = parkingEditorActivityProvider.get().withPlace(place);
+                    activity = new ParkingEditorActivity(place);
 
                 } else if (place instanceof CrmSiteMap.Properties.ParkingSpots) {
-                    activity = parkingSpotListerActivityProvider.get().withPlace(place);
+                    activity = new ParkingSpotListerActivity(place);
                 } else if (place instanceof CrmSiteMap.Viewers.ParkingSpot) {
-                    activity = parkingSpotViewerActivityProvider.get().withPlace(place);
+                    activity = new ParkingSpotViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Parking) {
-                    activity = parkingSpotEditorActivityProvider.get().withPlace(place);
+                    activity = new ParkingSpotEditorActivity(place);
 
                 } else if (place instanceof CrmSiteMap.Viewers.LockerArea) {
-                    activity = lockerAreaViewerActivityProvider.get().withPlace(place);
+                    activity = new LockerAreaViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.LockerArea) {
-                    activity = lockerAreaEditorActivityProvider.get().withPlace(place);
+                    activity = new LockerAreaEditorActivity(place);
 
                 } else if (place instanceof CrmSiteMap.Properties.Lockers) {
-                    activity = lockerListerActivityProvider.get().withPlace(place);
+                    activity = new LockerListerActivity(place);
                 } else if (place instanceof CrmSiteMap.Viewers.Locker) {
-                    activity = lockerViewerActivityProvider.get().withPlace(place);
+                    activity = new LockerViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Locker) {
-                    activity = lockerEditorActivityProvider.get().withPlace(place);
+                    activity = new LockerEditorActivity(place);
+
                     // - Unit-related:
                 } else if (place instanceof CrmSiteMap.Properties.Units) {
                     activity = new UnitListerActivity(place);
@@ -380,37 +191,39 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new UnitOccupancyEditorActivity(place);
 
                 } else if (place instanceof CrmSiteMap.Viewers.Concession) {
-                    activity = concessionViewerActivityProvider.get().withPlace(place);
+                    activity = new ConcessionViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Concession) {
-                    activity = concessionEditorActivityProvider.get().withPlace(place);
+                    activity = new ConcessionEditorActivity(place);
+
                     // - Tenant-related:
                 } else if (place instanceof CrmSiteMap.Tenants.AllTenants) {
-                    activity = tenantListerActivityProvider.get().withPlace(place);
+                    activity = new TenantListerActivity(place);
                 } else if (place instanceof CrmSiteMap.Viewers.Tenant) {
-                    activity = tenantViewerActivityProvider.get().withPlace(place);
+                    activity = new TenantViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Tenant) {
-                    activity = tenantEditorActivityProvider.get().withPlace(place);
+                    activity = new TenantEditorActivity(place);
 
                 } else if (place instanceof CrmSiteMap.Tenants.Leases) {
-                    activity = leaseListerActivityProvider.get().withPlace(place);
+                    activity = new LeaseListerActivity(place);
                 } else if (place instanceof CrmSiteMap.Viewers.Lease) {
-                    activity = leaseViewerActivityProvider.get().withPlace(place);
+                    activity = new LeaseViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Lease) {
-                    activity = leaseEditorActivityProvider.get().withPlace(place);
+                    activity = new LeaseEditorActivity(place);
 
                 } else if (place instanceof CrmSiteMap.Tenants.Applications) {
-                    activity = applicationListerActivityProvider.get().withPlace(place);
+                    activity = new ApplicationListerActivity(place);
                 } else if (place instanceof CrmSiteMap.Viewers.Application) {
-                    activity = applicationViewerActivityProvider.get().withPlace(place);
+                    activity = new ApplicationViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Application) {
-                    activity = applicationEditorActivityProvider.get().withPlace(place);
+                    activity = new ApplicationEditorActivity(place);
 
                 } else if (place instanceof CrmSiteMap.Tenants.Inquiries) {
-                    activity = inquiryListerActivityProvider.get().withPlace(place);
+                    activity = new InquiryListerActivity(place);
                 } else if (place instanceof CrmSiteMap.Viewers.Inquiry) {
-                    activity = inquiryViewerActivityProvider.get().withPlace(place);
+                    activity = new InquiryViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Inquiry) {
-                    activity = inquiryEditorActivityProvider.get().withPlace(place);
+                    activity = new InquiryEditorActivity(place);
+
                     // - Other:
                 } else if (place instanceof CrmSiteMap.Dashboard) {
                     activity = dashboardActivityProvider.get().withPlace(place);
@@ -422,6 +235,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = alertActivityProvider.get().withPlace(place);
                 } else if (place instanceof CrmSiteMap.Message) {
                     activity = new MessageActivity(place);
+
                     // - Settings:
                 } else if (place instanceof CrmSiteMap.Settings.Content) {
                     if (((AppPlace) place).getArgs().isEmpty()) {
