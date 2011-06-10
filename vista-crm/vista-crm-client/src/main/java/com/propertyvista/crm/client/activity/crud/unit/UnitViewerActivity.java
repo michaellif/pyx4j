@@ -14,10 +14,12 @@
 package com.propertyvista.crm.client.activity.crud.unit;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.ViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView;
+import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.dto.AptUnitDTO;
@@ -26,8 +28,8 @@ public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
-    public UnitViewerActivity(UnitViewerView view) {
-        super(view, (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
+    public UnitViewerActivity(Place place) {
+        super((UnitViewerView) UnitViewFactory.instance(UnitViewerView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
+        withPlace(place);
     }
-
 }

@@ -14,10 +14,12 @@
 package com.propertyvista.crm.client.activity.crud.unit;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.unit.UnitOccupancyEditorView;
+import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
@@ -26,7 +28,9 @@ public class UnitOccupancyEditorActivity extends EditorActivityBase<AptUnitOccup
 
     @Inject
     @SuppressWarnings("unchecked")
-    public UnitOccupancyEditorActivity(UnitOccupancyEditorView view) {
-        super(view, (AbstractCrudService<AptUnitOccupancy>) GWT.create(UnitOccupancyCrudService.class), AptUnitOccupancy.class);
+    public UnitOccupancyEditorActivity(Place place) {
+        super((UnitOccupancyEditorView) UnitViewFactory.instance(UnitOccupancyEditorView.class), (AbstractCrudService<AptUnitOccupancy>) GWT
+                .create(UnitOccupancyCrudService.class), AptUnitOccupancy.class);
+        withPlace(place);
     }
 }

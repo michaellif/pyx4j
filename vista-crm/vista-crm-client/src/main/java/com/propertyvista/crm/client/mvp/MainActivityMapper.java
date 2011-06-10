@@ -121,18 +121,6 @@ public class MainActivityMapper implements ActivityMapper {
 // ----- Unit-related:
     Provider<UnitListerActivity> unitListerActivityProvider;
 
-    Provider<UnitViewerActivity> unitViewerActivityProvider;
-
-    Provider<UnitEditorActivity> unitEditorActivityProvider;
-
-    Provider<UnitItemViewerActivity> unitItemViewerActivityProvider;
-
-    Provider<UnitItemEditorActivity> unitItemEditorActivityProvider;
-
-    Provider<UnitOccupancyViewerActivity> unitOccupancyViewerActivityProvider;
-
-    Provider<UnitOccupancyEditorActivity> unitOccupancyEditorActivityProvider;
-
     Provider<ConcessionViewerActivity> concessionViewerActivityProvider;
 
     Provider<ConcessionEditorActivity> concessionEditorActivityProvider;
@@ -233,18 +221,6 @@ public class MainActivityMapper implements ActivityMapper {
  */
     final Provider<UnitListerActivity> unitListerActivityProvider,
 
-    final Provider<UnitViewerActivity> unitViewerActivityProvider,
-
-    final Provider<UnitEditorActivity> unitEditorActivityProvider,
-
-    final Provider<UnitItemViewerActivity> unitItemViewerActivityProvider,
-
-    final Provider<UnitItemEditorActivity> unitItemEditorActivityProvider,
-
-    final Provider<UnitOccupancyViewerActivity> unitOccupancyViewerActivityProvider,
-
-    final Provider<UnitOccupancyEditorActivity> unitOccupancyEditorActivityProvider,
-
     final Provider<ConcessionViewerActivity> concessionViewerActivityProvider,
 
     final Provider<ConcessionEditorActivity> concessionEditorActivityProvider,
@@ -318,12 +294,6 @@ public class MainActivityMapper implements ActivityMapper {
         this.lockerEditorActivityProvider = lockerEditorActivityProvider;
 // ---- Unit-related:
         this.unitListerActivityProvider = unitListerActivityProvider;
-        this.unitViewerActivityProvider = unitViewerActivityProvider;
-        this.unitEditorActivityProvider = unitEditorActivityProvider;
-        this.unitItemViewerActivityProvider = unitItemViewerActivityProvider;
-        this.unitItemEditorActivityProvider = unitItemEditorActivityProvider;
-        this.unitOccupancyViewerActivityProvider = unitOccupancyViewerActivityProvider;
-        this.unitOccupancyEditorActivityProvider = unitOccupancyEditorActivityProvider;
         this.concessionViewerActivityProvider = concessionViewerActivityProvider;
         this.concessionEditorActivityProvider = concessionEditorActivityProvider;
 // ---- Tenant-related:
@@ -403,19 +373,19 @@ public class MainActivityMapper implements ActivityMapper {
         } else if (place instanceof CrmSiteMap.Properties.Units) {
             return unitListerActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Viewers.Unit) {
-            return unitViewerActivityProvider.get().withPlace(place);
+            return new UnitViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Unit) {
-            return unitEditorActivityProvider.get().withPlace(place);
+            return new UnitEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Viewers.UnitItem) {
-            return unitItemViewerActivityProvider.get().withPlace(place);
+            return new UnitItemViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.UnitItem) {
-            return unitItemEditorActivityProvider.get().withPlace(place);
+            return new UnitItemEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Viewers.UnitOccupancy) {
-            return unitOccupancyViewerActivityProvider.get().withPlace(place);
+            return new UnitOccupancyViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.UnitOccupancy) {
-            return unitOccupancyEditorActivityProvider.get().withPlace(place);
+            return new UnitOccupancyEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Viewers.Concession) {
             return concessionViewerActivityProvider.get().withPlace(place);
