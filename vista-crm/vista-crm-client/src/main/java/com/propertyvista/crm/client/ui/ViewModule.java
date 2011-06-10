@@ -57,10 +57,6 @@ import com.propertyvista.crm.client.ui.crud.building.RoofEditorView;
 import com.propertyvista.crm.client.ui.crud.building.RoofEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.building.RoofViewerView;
 import com.propertyvista.crm.client.ui.crud.building.RoofViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorView;
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerView;
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.ApplicationEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.ApplicationEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.ApplicationListerView;
@@ -139,10 +135,6 @@ public class ViewModule extends AbstractGinModule {
         bind(LockerListerView.class).to(LockerListerViewImpl.class).in(Singleton.class);
         bind(LockerViewerView.class).to(LockerViewerViewImpl.class).in(Singleton.class);
         bind(LockerEditorView.class).to(LockerEditorViewImpl.class).in(Singleton.class);
-
-// - Unit-related:
-        bind(ConcessionViewerView.class).to(ConcessionViewerViewImpl.class).in(Singleton.class);
-        bind(ConcessionEditorView.class).to(ConcessionEditorViewImpl.class).in(Singleton.class);
 
 // - Tenant-related:
         bind(TenantListerView.class).to(TenantListerViewImpl.class).in(Singleton.class);

@@ -16,15 +16,19 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.crm.client.ui.crud.IView;
-import com.propertyvista.crm.client.ui.crud.settings.ContentEditor;
-import com.propertyvista.crm.client.ui.crud.settings.ContentEditorImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorView;
+import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerView;
+import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerViewImpl;
 
-public class SettingsViewFactory extends ViewFactoryBase {
+public class MarketingViewFactory extends ViewFactoryBase {
 
     public static IView<? extends IEntity> instance(Class<? extends IView<? extends IEntity>> type) {
         if (!map.containsKey(type)) {
-            if (ContentEditor.class.equals(type)) {
-                map.put(type, new ContentEditorImpl());
+            if (ConcessionViewerView.class.equals(type)) {
+                map.put(type, new ConcessionViewerViewImpl());
+            } else if (ConcessionEditorView.class.equals(type)) {
+                map.put(type, new ConcessionEditorViewImpl());
             }
         }
         return map.get(type);

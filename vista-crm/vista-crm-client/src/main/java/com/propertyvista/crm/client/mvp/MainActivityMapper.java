@@ -69,7 +69,6 @@ import com.propertyvista.crm.client.activity.crud.unit.UnitListerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyViewerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitViewerActivity;
-import com.propertyvista.crm.client.ui.crud.unit.UnitListerViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class MainActivityMapper implements ActivityMapper {
@@ -118,11 +117,6 @@ public class MainActivityMapper implements ActivityMapper {
     Provider<LockerViewerActivity> lockerViewerActivityProvider;
 
     Provider<LockerEditorActivity> lockerEditorActivityProvider;
-
-// ----- Unit-related:
-    Provider<ConcessionViewerActivity> concessionViewerActivityProvider;
-
-    Provider<ConcessionEditorActivity> concessionEditorActivityProvider;
 
 // ----- Tenant-related:
     Provider<TenantListerActivity> tenantListerActivityProvider;
@@ -216,12 +210,6 @@ public class MainActivityMapper implements ActivityMapper {
 
     final Provider<LockerEditorActivity> lockerEditorActivityProvider,
 /*
- * ----- Unit-related:
- */
-    final Provider<ConcessionViewerActivity> concessionViewerActivityProvider,
-
-    final Provider<ConcessionEditorActivity> concessionEditorActivityProvider,
-/*
  * ----- Tenant-related:
  */
     final Provider<TenantListerActivity> tenantListerActivityProvider,
@@ -289,9 +277,6 @@ public class MainActivityMapper implements ActivityMapper {
         this.lockerListerActivityProvider = lockerListerActivityProvider;
         this.lockerViewerActivityProvider = lockerViewerActivityProvider;
         this.lockerEditorActivityProvider = lockerEditorActivityProvider;
-// ---- Unit-related:
-        this.concessionViewerActivityProvider = concessionViewerActivityProvider;
-        this.concessionEditorActivityProvider = concessionEditorActivityProvider;
 // ---- Tenant-related:
         this.tenantListerActivityProvider = tenantListerActivityProvider;
         this.tenantViewerActivityProvider = tenantViewerActivityProvider;
@@ -384,9 +369,9 @@ public class MainActivityMapper implements ActivityMapper {
             return new UnitOccupancyEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Viewers.Concession) {
-            return concessionViewerActivityProvider.get().withPlace(place);
+            return new ConcessionViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Concession) {
-            return concessionEditorActivityProvider.get().withPlace(place);
+            return new ConcessionEditorActivity(place);
 // - Tenant-related:
         } else if (place instanceof CrmSiteMap.Tenants.AllTenants) {
             return tenantListerActivityProvider.get().withPlace(place);

@@ -14,10 +14,12 @@
 package com.propertyvista.crm.client.activity.crud.marketing;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.ViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerView;
+import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
 import com.propertyvista.domain.marketing.yield.Concession;
@@ -26,8 +28,10 @@ public class ConcessionViewerActivity extends ViewerActivityBase<Concession> {
 
     @Inject
     @SuppressWarnings("unchecked")
-    public ConcessionViewerActivity(ConcessionViewerView view) {
-        super(view, (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class));
+    public ConcessionViewerActivity(Place place) {
+        super((ConcessionViewerView) MarketingViewFactory.instance(ConcessionViewerView.class), (AbstractCrudService<Concession>) GWT
+                .create(ConcessionCrudService.class));
+        withPlace(place);
     }
 
 }
