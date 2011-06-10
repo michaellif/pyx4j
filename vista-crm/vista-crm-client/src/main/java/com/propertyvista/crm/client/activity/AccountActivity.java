@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.ui.AccountView;
-import com.propertyvista.crm.client.ui.viewfactories.MiscVeiwFactory;
+import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
 public class AccountActivity extends AbstractActivity {
 
@@ -28,7 +28,7 @@ public class AccountActivity extends AbstractActivity {
 
     @Inject
     public AccountActivity(Place place) {
-        this.view = (AccountView) MiscVeiwFactory.instance(AccountView.class);
+        this.view = (AccountView) CrmVeiwFactory.instance(AccountView.class);
         withPlace(place);
     }
 

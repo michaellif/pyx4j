@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.ui.AlertView;
-import com.propertyvista.crm.client.ui.viewfactories.MiscVeiwFactory;
+import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
 public class AlertActivity extends AbstractActivity {
 
@@ -28,7 +28,7 @@ public class AlertActivity extends AbstractActivity {
 
     @Inject
     public AlertActivity(Place place) {
-        this.view = (AlertView) MiscVeiwFactory.instance(AlertView.class);
+        this.view = (AlertView) CrmVeiwFactory.instance(AlertView.class);
         withPlace(place);
     }
 
