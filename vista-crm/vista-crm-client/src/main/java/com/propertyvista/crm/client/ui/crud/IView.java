@@ -18,7 +18,4 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IEntity;
 
 public interface IView<E extends IEntity> extends IsWidget {
-
-    public void populate(E value);
-
 }

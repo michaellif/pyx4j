@@ -85,8 +85,6 @@ import com.propertyvista.crm.client.ui.crud.tenant.TenantListerView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.unit.UnitListerView;
-import com.propertyvista.crm.client.ui.crud.unit.UnitListerViewImpl;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.crm.client.ui.login.LoginView;
@@ -143,7 +141,6 @@ public class ViewModule extends AbstractGinModule {
         bind(LockerEditorView.class).to(LockerEditorViewImpl.class).in(Singleton.class);
 
 // - Unit-related:
-        bind(UnitListerView.class).to(UnitListerViewImpl.class).in(Singleton.class);
         bind(ConcessionViewerView.class).to(ConcessionViewerViewImpl.class).in(Singleton.class);
         bind(ConcessionEditorView.class).to(ConcessionEditorViewImpl.class).in(Singleton.class);
 

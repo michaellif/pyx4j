@@ -15,11 +15,9 @@ package com.propertyvista.crm.client.ui.crud;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IListerView<E extends IEntity> extends IsWidget {
+public interface IListerView<E extends IEntity> extends IView<E> {
 
     public interface Presenter {
         public void populateData(final int pageNumber);

@@ -69,6 +69,7 @@ import com.propertyvista.crm.client.activity.crud.unit.UnitListerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyViewerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitViewerActivity;
+import com.propertyvista.crm.client.ui.crud.unit.UnitListerViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class MainActivityMapper implements ActivityMapper {
@@ -119,8 +120,6 @@ public class MainActivityMapper implements ActivityMapper {
     Provider<LockerEditorActivity> lockerEditorActivityProvider;
 
 // ----- Unit-related:
-    Provider<UnitListerActivity> unitListerActivityProvider;
-
     Provider<ConcessionViewerActivity> concessionViewerActivityProvider;
 
     Provider<ConcessionEditorActivity> concessionEditorActivityProvider;
@@ -219,8 +218,6 @@ public class MainActivityMapper implements ActivityMapper {
 /*
  * ----- Unit-related:
  */
-    final Provider<UnitListerActivity> unitListerActivityProvider,
-
     final Provider<ConcessionViewerActivity> concessionViewerActivityProvider,
 
     final Provider<ConcessionEditorActivity> concessionEditorActivityProvider,
@@ -293,7 +290,6 @@ public class MainActivityMapper implements ActivityMapper {
         this.lockerViewerActivityProvider = lockerViewerActivityProvider;
         this.lockerEditorActivityProvider = lockerEditorActivityProvider;
 // ---- Unit-related:
-        this.unitListerActivityProvider = unitListerActivityProvider;
         this.concessionViewerActivityProvider = concessionViewerActivityProvider;
         this.concessionEditorActivityProvider = concessionEditorActivityProvider;
 // ---- Tenant-related:
@@ -371,7 +367,7 @@ public class MainActivityMapper implements ActivityMapper {
             return lockerEditorActivityProvider.get().withPlace(place);
 // - Unit-related:
         } else if (place instanceof CrmSiteMap.Properties.Units) {
-            return unitListerActivityProvider.get().withPlace(place);
+            return new UnitListerActivity(place);
         } else if (place instanceof CrmSiteMap.Viewers.Unit) {
             return new UnitViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Unit) {

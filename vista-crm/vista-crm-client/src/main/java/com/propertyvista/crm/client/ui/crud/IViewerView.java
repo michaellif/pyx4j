@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.rpc.AppPlace;
 
-
 public interface IViewerView<E extends IEntity> extends IView<E> {
 
     public interface Presenter {
@@ -27,4 +26,6 @@ public interface IViewerView<E extends IEntity> extends IView<E> {
     }
 
     void setPresenter(Presenter presenter);
+
+    public void populate(E value);
 }

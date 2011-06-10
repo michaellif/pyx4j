@@ -24,6 +24,8 @@ import com.propertyvista.crm.client.ui.crud.unit.UnitItemEditorView;
 import com.propertyvista.crm.client.ui.crud.unit.UnitItemEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.unit.UnitItemViewerView;
 import com.propertyvista.crm.client.ui.crud.unit.UnitItemViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.unit.UnitListerView;
+import com.propertyvista.crm.client.ui.crud.unit.UnitListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.unit.UnitOccupancyEditorView;
 import com.propertyvista.crm.client.ui.crud.unit.UnitOccupancyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.unit.UnitOccupancyViewerView;
@@ -37,7 +39,9 @@ public class UnitViewFactory {
 
     public static IView<? extends IEntity> instance(Class<? extends IView<? extends IEntity>> type) {
         if (!map.containsKey(type)) {
-            if (UnitEditorView.class.equals(type)) {
+            if (UnitListerView.class.equals(type)) {
+                map.put(type, new UnitListerViewImpl());
+            } else if (UnitEditorView.class.equals(type)) {
                 map.put(type, new UnitEditorViewImpl());
             } else if (UnitViewerView.class.equals(type)) {
                 map.put(type, new UnitViewerViewImpl());
