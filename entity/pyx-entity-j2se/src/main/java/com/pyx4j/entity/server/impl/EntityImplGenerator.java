@@ -25,7 +25,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -180,11 +182,18 @@ public class EntityImplGenerator {
             urls = classLoader.getResources(MARKER_RESOURCE_NAME);
         } catch (IOException e) {
             log.error("Unable to find jar markers", e);
+            ClassFinder.debugClassLoader("Resources ", classLoader);
             return;
         }
         int jarCount = 0;
         while (urls.hasMoreElements()) {
-            String u = urls.nextElement().toExternalForm();
+            String u;
+            try {
+                u = URLDecoder.decode(urls.nextElement().toExternalForm(), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                log.error("invalid encoding", e);
+                continue;
+            }
             String pathname = u.substring(0, u.lastIndexOf(MARKER_RESOURCE_NAME) - 2);
             //log.debug("path {}", pathname);
             String prefix = "jar:file:";
@@ -204,10 +213,11 @@ public class EntityImplGenerator {
                 pathToClose.add(pool.appendClassPath(pathname));
                 jarCount++;
             } catch (NotFoundException e) {
-                log.error("Can't append path", e);
+                log.debug("Can't append path {}", pathname, e);
             }
         }
         if (jarCount == 0) {
+            ClassFinder.debugClassLoader("Context ", classLoader);
             log.debug("No jars found in ContextClassLoader webapp={}", webapp);
             // Allow to work as eclipse plugin.
             pathToClose.add(pool.appendClassPath(new ClassClassPath(IEntity.class)));
