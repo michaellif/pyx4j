@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -35,8 +34,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class CrmSite extends VistaSite {
 
-    private CrmGinjector ginjector;
-
     public CrmSite() {
         super(CrmSiteMap.class);
     }
@@ -47,7 +44,6 @@ public class CrmSite extends VistaSite {
 
         DefaultErrorHandlerDialog.register();
 
-        ginjector = GWT.create(CrmGinjector.class);
         getHistoryHandler().register(getPlaceController(), getEventBus(), new CrmSiteMap.Login());
 
         RootPanel.get().add(RootLayoutPanel.get());
@@ -64,7 +60,6 @@ public class CrmSite extends VistaSite {
             public void onSecurityContextChange(SecurityControllerEvent event) {
                 loadCrm();
             }
-
         });
 
         obtainAuthenticationData();
