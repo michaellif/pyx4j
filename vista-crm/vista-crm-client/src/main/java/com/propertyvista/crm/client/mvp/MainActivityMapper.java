@@ -27,49 +27,48 @@ import com.propertyvista.crm.client.activity.DashboardActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.ReportActivity;
 import com.propertyvista.crm.client.activity.ResetPasswordActivity;
-import com.propertyvista.crm.client.activity.editors.ApplicationEditorActivity;
-import com.propertyvista.crm.client.activity.editors.BoilerEditorActivity;
-import com.propertyvista.crm.client.activity.editors.BuildingEditorActivity;
-import com.propertyvista.crm.client.activity.editors.ConcessionEditorActivity;
-import com.propertyvista.crm.client.activity.editors.ElevatorEditorActivity;
-import com.propertyvista.crm.client.activity.editors.InquiryEditorActivity;
-import com.propertyvista.crm.client.activity.editors.LeaseEditorActivity;
-import com.propertyvista.crm.client.activity.editors.LockerAreaEditorActivity;
-import com.propertyvista.crm.client.activity.editors.LockerEditorActivity;
-import com.propertyvista.crm.client.activity.editors.ParkingEditorActivity;
-import com.propertyvista.crm.client.activity.editors.ParkingSpotEditorActivity;
-import com.propertyvista.crm.client.activity.editors.RoofEditorActivity;
-import com.propertyvista.crm.client.activity.editors.TenantEditorActivity;
-import com.propertyvista.crm.client.activity.editors.UnitEditorActivity;
-import com.propertyvista.crm.client.activity.editors.UnitItemEditorActivity;
-import com.propertyvista.crm.client.activity.editors.UnitOccupancyEditorActivity;
-import com.propertyvista.crm.client.activity.listers.ApplicationListerActivity;
-import com.propertyvista.crm.client.activity.listers.ArrearsListerActivity;
-import com.propertyvista.crm.client.activity.listers.BuildingListerActivity;
-import com.propertyvista.crm.client.activity.listers.InquiryListerActivity;
-import com.propertyvista.crm.client.activity.listers.LeaseListerActivity;
-import com.propertyvista.crm.client.activity.listers.LockerListerActivity;
-import com.propertyvista.crm.client.activity.listers.ParkingSpotListerActivity;
-import com.propertyvista.crm.client.activity.listers.TenantListerActivity;
-import com.propertyvista.crm.client.activity.listers.UnitListerActivity;
-import com.propertyvista.crm.client.activity.settings.ContentActivity;
-import com.propertyvista.crm.client.activity.settings.ContentEditorActivity;
-import com.propertyvista.crm.client.activity.viewers.ApplicationViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.BoilerViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.BuildingViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.ConcessionViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.ElevatorViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.InquiryViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.LeaseViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.LockerAreaViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.LockerViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.ParkingSpotViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.ParkingViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.RoofViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.TenantViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.UnitItemViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.UnitOccupancyViewerActivity;
-import com.propertyvista.crm.client.activity.viewers.UnitViewerActivity;
+import com.propertyvista.crm.client.activity.crud.building.BoilerEditorActivity;
+import com.propertyvista.crm.client.activity.crud.building.BoilerViewerActivity;
+import com.propertyvista.crm.client.activity.crud.building.BuildingEditorActivity;
+import com.propertyvista.crm.client.activity.crud.building.BuildingListerActivity;
+import com.propertyvista.crm.client.activity.crud.building.BuildingViewerActivity;
+import com.propertyvista.crm.client.activity.crud.building.ElevatorEditorActivity;
+import com.propertyvista.crm.client.activity.crud.building.ElevatorViewerActivity;
+import com.propertyvista.crm.client.activity.crud.building.LockerAreaEditorActivity;
+import com.propertyvista.crm.client.activity.crud.building.LockerAreaViewerActivity;
+import com.propertyvista.crm.client.activity.crud.building.LockerEditorActivity;
+import com.propertyvista.crm.client.activity.crud.building.LockerListerActivity;
+import com.propertyvista.crm.client.activity.crud.building.LockerViewerActivity;
+import com.propertyvista.crm.client.activity.crud.building.ParkingEditorActivity;
+import com.propertyvista.crm.client.activity.crud.building.ParkingSpotEditorActivity;
+import com.propertyvista.crm.client.activity.crud.building.ParkingSpotListerActivity;
+import com.propertyvista.crm.client.activity.crud.building.ParkingSpotViewerActivity;
+import com.propertyvista.crm.client.activity.crud.building.ParkingViewerActivity;
+import com.propertyvista.crm.client.activity.crud.building.RoofEditorActivity;
+import com.propertyvista.crm.client.activity.crud.building.RoofViewerActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.ConcessionEditorActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.ConcessionViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.ContentActivity;
+import com.propertyvista.crm.client.activity.crud.settings.ContentEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.ApplicationEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.ApplicationListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.ApplicationViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.InquiryEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.InquiryListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.InquiryViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.LeaseEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.LeaseListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.LeaseViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.TenantEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.TenantViewerActivity;
+import com.propertyvista.crm.client.activity.crud.unit.UnitEditorActivity;
+import com.propertyvista.crm.client.activity.crud.unit.UnitItemEditorActivity;
+import com.propertyvista.crm.client.activity.crud.unit.UnitItemViewerActivity;
+import com.propertyvista.crm.client.activity.crud.unit.UnitListerActivity;
+import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyEditorActivity;
+import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyViewerActivity;
+import com.propertyvista.crm.client.activity.crud.unit.UnitViewerActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class MainActivityMapper implements ActivityMapper {
@@ -164,8 +163,6 @@ public class MainActivityMapper implements ActivityMapper {
     Provider<InquiryEditorActivity> inquiryEditorActivityProvider;
 
 // ----- Other:
-    Provider<ArrearsListerActivity> arrearsListerActivityProvider;
-
     Provider<DashboardActivity> dashboardActivityProvider;
 
     Provider<ReportActivity> reportActivityProvider;
@@ -280,8 +277,6 @@ public class MainActivityMapper implements ActivityMapper {
 /*
  * ----- Other:
  */
-    final Provider<ArrearsListerActivity> arrearsListerActivityProvider,
-
     final Provider<DashboardActivity> dashboardActivityProvider,
 
     final Provider<ReportActivity> reportActivityProvider,
@@ -345,7 +340,6 @@ public class MainActivityMapper implements ActivityMapper {
         this.inquiryViewerActivityProvider = inquiryViewerActivityProvider;
         this.inquiryEditorActivityProvider = inquiryEditorActivityProvider;
 // ---- Other:
-        this.arrearsListerActivityProvider = arrearsListerActivityProvider;
         this.dashboardActivityProvider = dashboardActivityProvider;
         this.reportActivityProvider = reportActivityProvider;
         this.accountActivityProvider = accountActivityProvider;
@@ -456,8 +450,6 @@ public class MainActivityMapper implements ActivityMapper {
         } else if (place instanceof CrmSiteMap.Editors.Inquiry) {
             return inquiryEditorActivityProvider.get().withPlace(place);
 // - Other:
-        } else if (place instanceof CrmSiteMap.Properties.Arrears) {
-            return arrearsListerActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Dashboard) {
             return dashboardActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Report) {
