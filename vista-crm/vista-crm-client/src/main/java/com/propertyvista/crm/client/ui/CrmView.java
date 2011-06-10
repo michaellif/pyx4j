@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import com.pyx4j.site.client.AppSite;
@@ -53,7 +52,6 @@ public class CrmView extends LayoutPanel {
         Content, Action, Header, Navigation, Footer, Display, NavigContainer;
     }
 
-    @Inject
     public CrmView() {
 
         EventBus eventBus = AppSite.getEventBus();
