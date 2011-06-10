@@ -33,6 +33,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.activity.AppActivityManager;
+import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.StyleManger;
@@ -172,6 +174,11 @@ public class CrmView extends LayoutPanel {
 
     private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
         ActivityManager activityManager = new ActivityManager(mapper, eventBus);
+        activityManager.setDisplay(widget);
+    }
+
+    private static void bind(AppActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
+        AppActivityManager activityManager = new AppActivityManager(mapper, eventBus);
         activityManager.setDisplay(widget);
     }
 

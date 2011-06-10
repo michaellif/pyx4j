@@ -59,6 +59,5 @@ public class ViewModule extends AbstractGinModule {
 
         bind(AccountView.class).to(AccountViewImpl.class).in(Singleton.class);
         bind(AlertView.class).to(AlertViewImpl.class).in(Singleton.class);
-        bind(MessageView.class).to(MessageViewImpl.class).in(Singleton.class);
     }
 }
