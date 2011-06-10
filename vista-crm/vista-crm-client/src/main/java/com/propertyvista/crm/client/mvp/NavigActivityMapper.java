@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 import com.pyx4j.security.client.ClientContext;
 
@@ -27,23 +25,16 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class NavigActivityMapper implements ActivityMapper {
 
-    Provider<NavigActivity> navigActivityProvider;
-
-    Provider<NavigSettingsActivity> navigSettingsActivityProvider;
-
-    @Inject
-    public NavigActivityMapper(final Provider<NavigActivity> navigActivityProvider, final Provider<NavigSettingsActivity> navigSettingsActivityProvider) {
-        this.navigActivityProvider = navigActivityProvider;
-        this.navigSettingsActivityProvider = navigSettingsActivityProvider;
+    public NavigActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
         if (ClientContext.isAuthenticated()) {
             if (place.getClass().getName().contains(CrmSiteMap.Settings.class.getName())) {
-                return navigSettingsActivityProvider.get().withPlace(place);
+                return new NavigSettingsActivity(place);
             } else {
-                return navigActivityProvider.get().withPlace(place);
+                return new NavigActivity(place);
             }
         } else {
             return null;

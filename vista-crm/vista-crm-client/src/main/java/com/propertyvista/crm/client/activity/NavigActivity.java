@@ -20,23 +20,23 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.NavigView;
+import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter {
 
     private final NavigView view;
 
-    @Inject
-    public NavigActivity(NavigView view) {
-        this.view = view;
+    public NavigActivity(Place place) {
+        this.view = (NavigView) CrmVeiwFactory.instance(NavigView.class);
         view.setPresenter(this);
+        withPlace(place);
     }
 
     public NavigActivity withPlace(Place place) {
