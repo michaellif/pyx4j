@@ -46,9 +46,13 @@ public class ColumnDescriptorFactory {
     }
 
     public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, String width) {
+        return createColumnDescriptor(meta, member, width, false);
+    }
+
+    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, String width, boolean wordWrap) {
         ColumnDescriptor<E> cd = ColumnDescriptorFactory.createColumnDescriptor(meta, member);
         cd.setWidth(width);
-        cd.setWordWrap(false);
+        cd.setWordWrap(wordWrap);
         return cd;
     }
 }
