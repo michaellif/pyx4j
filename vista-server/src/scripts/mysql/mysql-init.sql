@@ -1,7 +1,7 @@
 -- @version $Revision$ ($Author$) $Date$
 
 ---- Server Fine tuning
----- my.ini
+---- my.ini  [mysqld] section
 ---- # this adds 35% speed increase
 ---- innodb_flush_log_at_trx_commit=2
 ---- # To store big blobs
