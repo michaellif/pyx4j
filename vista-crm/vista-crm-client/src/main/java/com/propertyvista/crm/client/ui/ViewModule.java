@@ -57,30 +57,6 @@ import com.propertyvista.crm.client.ui.crud.building.RoofEditorView;
 import com.propertyvista.crm.client.ui.crud.building.RoofEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.building.RoofViewerView;
 import com.propertyvista.crm.client.ui.crud.building.RoofViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationEditorView;
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.InquiryEditorView;
-import com.propertyvista.crm.client.ui.crud.tenant.InquiryEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.InquiryListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.InquiryListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.InquiryViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.InquiryViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.LeaseEditorView;
-import com.propertyvista.crm.client.ui.crud.tenant.LeaseEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.LeaseListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.LeaseListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.LeaseViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.LeaseViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorView;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerViewImpl;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.crm.client.ui.login.LoginView;
@@ -135,23 +111,6 @@ public class ViewModule extends AbstractGinModule {
         bind(LockerListerView.class).to(LockerListerViewImpl.class).in(Singleton.class);
         bind(LockerViewerView.class).to(LockerViewerViewImpl.class).in(Singleton.class);
         bind(LockerEditorView.class).to(LockerEditorViewImpl.class).in(Singleton.class);
-
-// - Tenant-related:
-        bind(TenantListerView.class).to(TenantListerViewImpl.class).in(Singleton.class);
-        bind(TenantViewerView.class).to(TenantViewerViewImpl.class).in(Singleton.class);
-        bind(TenantEditorView.class).to(TenantEditorViewImpl.class).in(Singleton.class);
-
-        bind(LeaseListerView.class).to(LeaseListerViewImpl.class).in(Singleton.class);
-        bind(LeaseViewerView.class).to(LeaseViewerViewImpl.class).in(Singleton.class);
-        bind(LeaseEditorView.class).to(LeaseEditorViewImpl.class).in(Singleton.class);
-
-        bind(ApplicationListerView.class).to(ApplicationListerViewImpl.class).in(Singleton.class);
-        bind(ApplicationViewerView.class).to(ApplicationViewerViewImpl.class).in(Singleton.class);
-        bind(ApplicationEditorView.class).to(ApplicationEditorViewImpl.class).in(Singleton.class);
-
-        bind(InquiryListerView.class).to(InquiryListerViewImpl.class).in(Singleton.class);
-        bind(InquiryViewerView.class).to(InquiryViewerViewImpl.class).in(Singleton.class);
-        bind(InquiryEditorView.class).to(InquiryEditorViewImpl.class).in(Singleton.class);
 
 // - Other:
         bind(ReportView.class).to(ReportViewImpl.class).in(Singleton.class);

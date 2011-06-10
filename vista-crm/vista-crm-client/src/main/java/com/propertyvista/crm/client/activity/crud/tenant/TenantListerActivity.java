@@ -14,10 +14,12 @@
 package com.propertyvista.crm.client.activity.crud.tenant;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.ListerActivityBase;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantListerView;
+import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.TenantCrudService;
 import com.propertyvista.domain.tenant.Tenant;
@@ -26,8 +28,10 @@ public class TenantListerActivity extends ListerActivityBase<Tenant> {
 
     @Inject
     @SuppressWarnings("unchecked")
-    public TenantListerActivity(TenantListerView view) {
-        super(view, (AbstractCrudService<Tenant>) GWT.create(TenantCrudService.class), Tenant.class);
+    public TenantListerActivity(Place place) {
+        super((TenantListerView) TenantViewFactory.instance(TenantListerView.class), (AbstractCrudService<Tenant>) GWT.create(TenantCrudService.class),
+                Tenant.class);
+        withPlace(place);
     }
 
 }

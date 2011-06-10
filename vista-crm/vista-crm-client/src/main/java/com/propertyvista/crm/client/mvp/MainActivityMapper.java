@@ -118,31 +118,6 @@ public class MainActivityMapper implements ActivityMapper {
 
     Provider<LockerEditorActivity> lockerEditorActivityProvider;
 
-// ----- Tenant-related:
-    Provider<TenantListerActivity> tenantListerActivityProvider;
-
-    Provider<TenantViewerActivity> tenantViewerActivityProvider;
-
-    Provider<TenantEditorActivity> tenantEditorActivityProvider;
-
-    Provider<LeaseListerActivity> leaseListerActivityProvider;
-
-    Provider<LeaseViewerActivity> leaseViewerActivityProvider;
-
-    Provider<LeaseEditorActivity> leaseEditorActivityProvider;
-
-    Provider<ApplicationListerActivity> applicationListerActivityProvider;
-
-    Provider<ApplicationViewerActivity> applicationViewerActivityProvider;
-
-    Provider<ApplicationEditorActivity> applicationEditorActivityProvider;
-
-    Provider<InquiryListerActivity> inquiryListerActivityProvider;
-
-    Provider<InquiryViewerActivity> inquiryViewerActivityProvider;
-
-    Provider<InquiryEditorActivity> inquiryEditorActivityProvider;
-
 // ----- Other:
     Provider<DashboardActivity> dashboardActivityProvider;
 
@@ -210,32 +185,6 @@ public class MainActivityMapper implements ActivityMapper {
 
     final Provider<LockerEditorActivity> lockerEditorActivityProvider,
 /*
- * ----- Tenant-related:
- */
-    final Provider<TenantListerActivity> tenantListerActivityProvider,
-
-    final Provider<TenantViewerActivity> tenantViewerActivityProvider,
-
-    final Provider<TenantEditorActivity> tenantEditorActivityProvider,
-
-    final Provider<LeaseListerActivity> leaseListerActivityProvider,
-
-    final Provider<LeaseViewerActivity> leaseViewerActivityProvider,
-
-    final Provider<LeaseEditorActivity> leaseEditorActivityProvider,
-
-    final Provider<ApplicationListerActivity> applicationListerActivityProvider,
-
-    final Provider<ApplicationViewerActivity> applicationViewerActivityProvider,
-
-    final Provider<ApplicationEditorActivity> applicationEditorActivityProvider,
-
-    final Provider<InquiryListerActivity> inquiryListerActivityProvider,
-
-    final Provider<InquiryViewerActivity> inquiryViewerActivityProvider,
-
-    final Provider<InquiryEditorActivity> inquiryEditorActivityProvider,
-/*
  * ----- Other:
  */
     final Provider<DashboardActivity> dashboardActivityProvider,
@@ -277,19 +226,6 @@ public class MainActivityMapper implements ActivityMapper {
         this.lockerListerActivityProvider = lockerListerActivityProvider;
         this.lockerViewerActivityProvider = lockerViewerActivityProvider;
         this.lockerEditorActivityProvider = lockerEditorActivityProvider;
-// ---- Tenant-related:
-        this.tenantListerActivityProvider = tenantListerActivityProvider;
-        this.tenantViewerActivityProvider = tenantViewerActivityProvider;
-        this.tenantEditorActivityProvider = tenantEditorActivityProvider;
-        this.leaseListerActivityProvider = leaseListerActivityProvider;
-        this.leaseViewerActivityProvider = leaseViewerActivityProvider;
-        this.leaseEditorActivityProvider = leaseEditorActivityProvider;
-        this.applicationListerActivityProvider = applicationListerActivityProvider;
-        this.applicationViewerActivityProvider = applicationViewerActivityProvider;
-        this.applicationEditorActivityProvider = applicationEditorActivityProvider;
-        this.inquiryListerActivityProvider = inquiryListerActivityProvider;
-        this.inquiryViewerActivityProvider = inquiryViewerActivityProvider;
-        this.inquiryEditorActivityProvider = inquiryEditorActivityProvider;
 // ---- Other:
         this.dashboardActivityProvider = dashboardActivityProvider;
         this.reportActivityProvider = reportActivityProvider;
@@ -374,32 +310,32 @@ public class MainActivityMapper implements ActivityMapper {
             return new ConcessionEditorActivity(place);
 // - Tenant-related:
         } else if (place instanceof CrmSiteMap.Tenants.AllTenants) {
-            return tenantListerActivityProvider.get().withPlace(place);
+            return new TenantListerActivity(place);
         } else if (place instanceof CrmSiteMap.Viewers.Tenant) {
-            return tenantViewerActivityProvider.get().withPlace(place);
+            return new TenantViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Tenant) {
-            return tenantEditorActivityProvider.get().withPlace(place);
+            return new TenantEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Tenants.Leases) {
-            return leaseListerActivityProvider.get().withPlace(place);
+            return new LeaseListerActivity(place);
         } else if (place instanceof CrmSiteMap.Viewers.Lease) {
-            return leaseViewerActivityProvider.get().withPlace(place);
+            return new LeaseViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Lease) {
-            return leaseEditorActivityProvider.get().withPlace(place);
+            return new LeaseEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Tenants.Applications) {
-            return applicationListerActivityProvider.get().withPlace(place);
+            return new ApplicationListerActivity(place);
         } else if (place instanceof CrmSiteMap.Viewers.Application) {
-            return applicationViewerActivityProvider.get().withPlace(place);
+            return new ApplicationViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Application) {
-            return applicationEditorActivityProvider.get().withPlace(place);
+            return new ApplicationEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Tenants.Inquiries) {
-            return inquiryListerActivityProvider.get().withPlace(place);
+            return new InquiryListerActivity(place);
         } else if (place instanceof CrmSiteMap.Viewers.Inquiry) {
-            return inquiryViewerActivityProvider.get().withPlace(place);
+            return new InquiryViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Inquiry) {
-            return inquiryEditorActivityProvider.get().withPlace(place);
+            return new InquiryEditorActivity(place);
 // - Other:
         } else if (place instanceof CrmSiteMap.Dashboard) {
             return dashboardActivityProvider.get().withPlace(place);

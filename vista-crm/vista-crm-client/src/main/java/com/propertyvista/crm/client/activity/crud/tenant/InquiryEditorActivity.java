@@ -14,10 +14,12 @@
 package com.propertyvista.crm.client.activity.crud.tenant;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.tenant.InquiryEditorView;
+import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.InquiryCrudService;
 import com.propertyvista.dto.InquiryDTO;
@@ -26,7 +28,9 @@ public class InquiryEditorActivity extends EditorActivityBase<InquiryDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
-    public InquiryEditorActivity(InquiryEditorView view) {
-        super(view, (AbstractCrudService<InquiryDTO>) GWT.create(InquiryCrudService.class), InquiryDTO.class);
+    public InquiryEditorActivity(Place place) {
+        super((InquiryEditorView) TenantViewFactory.instance(InquiryEditorView.class), (AbstractCrudService<InquiryDTO>) GWT.create(InquiryCrudService.class),
+                InquiryDTO.class);
+        withPlace(place);
     }
 }
