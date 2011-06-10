@@ -19,7 +19,6 @@ import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.AppPlace;
@@ -29,7 +28,6 @@ import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.DashboardActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.ReportActivity;
-import com.propertyvista.crm.client.activity.ResetPasswordActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.BuildingEditorActivity;
@@ -72,47 +70,14 @@ import com.propertyvista.crm.client.activity.crud.unit.UnitListerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyViewerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitViewerActivity;
+import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class MainActivityMapper implements AppActivityMapper {
 
-    Provider<ResetPasswordActivity> resetPasswordActivityProvider;
-
-    // ----- Other:
-    Provider<DashboardActivity> dashboardActivityProvider;
-
-    Provider<ReportActivity> reportActivityProvider;
-
-    Provider<AccountActivity> accountActivityProvider;
-
-    Provider<AlertActivity> alertActivityProvider;
-
     @Inject
-    public MainActivityMapper(
-
-    final Provider<ResetPasswordActivity> resetPasswordActivityProvider,
-/*
- * ----- Other:
- */
-    final Provider<DashboardActivity> dashboardActivityProvider,
-
-    final Provider<ReportActivity> reportActivityProvider,
-
-    final Provider<AccountActivity> accountActivityProvider,
-
-    final Provider<AlertActivity> alertActivityProvider) {
+    public MainActivityMapper() {
         super();
-
-//        this.loginActivityProvider = loginActivityProvider;
-//        this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
-
-        this.resetPasswordActivityProvider = resetPasswordActivityProvider;
-
-// ---- Other:
-        this.dashboardActivityProvider = dashboardActivityProvider;
-        this.reportActivityProvider = reportActivityProvider;
-        this.accountActivityProvider = accountActivityProvider;
-        this.alertActivityProvider = alertActivityProvider;
     }
 
     @Override
@@ -123,7 +88,7 @@ public class MainActivityMapper implements AppActivityMapper {
             public void onSuccess() {
                 Activity activity = null;
                 if (place instanceof CrmSiteMap.ResetPassword) {
-                    activity = resetPasswordActivityProvider.get().withPlace((AppPlace) place);
+                    activity = new ResetPasswordActivity(place);
 
                     // - Building-related:
                 } else if (place instanceof CrmSiteMap.Properties.Buildings) {
@@ -226,13 +191,13 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     // - Other:
                 } else if (place instanceof CrmSiteMap.Dashboard) {
-                    activity = dashboardActivityProvider.get().withPlace(place);
+                    activity = new DashboardActivity(place);
                 } else if (place instanceof CrmSiteMap.Report) {
-                    activity = reportActivityProvider.get().withPlace(place);
+                    activity = new ReportActivity(place);
                 } else if (place instanceof CrmSiteMap.Account) {
-                    activity = accountActivityProvider.get().withPlace(place);
+                    activity = new AccountActivity(place);
                 } else if (place instanceof CrmSiteMap.Alert) {
-                    activity = alertActivityProvider.get().withPlace(place);
+                    activity = new AlertActivity(place);
                 } else if (place instanceof CrmSiteMap.Message) {
                     activity = new MessageActivity(place);
 

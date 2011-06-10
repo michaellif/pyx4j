@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.client.ui.report.ReportView;
+import com.propertyvista.crm.client.ui.viewfactories.DashboardVeiwFactory;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
@@ -32,8 +33,9 @@ public class ReportActivity extends AbstractActivity {
     private final ReportView view;
 
     @Inject
-    public ReportActivity(ReportView view) {
-        this.view = view;
+    public ReportActivity(Place place) {
+        this.view = (ReportView) DashboardVeiwFactory.instance(ReportView.class);
+        withPlace(place);
     }
 
     public ReportActivity withPlace(Place place) {

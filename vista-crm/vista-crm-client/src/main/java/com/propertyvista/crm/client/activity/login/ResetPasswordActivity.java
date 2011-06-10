@@ -11,24 +11,19 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity;
+package com.propertyvista.crm.client.activity.login;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.login.NewPasswordView;
-import com.propertyvista.crm.client.ui.login.NewPasswordView.ConversationType;
-import com.propertyvista.crm.rpc.ActivationServices;
-import com.propertyvista.crm.rpc.PasswordChangeRequest;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -36,7 +31,14 @@ import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.ui.login.NewPasswordView;
+import com.propertyvista.crm.client.ui.login.NewPasswordView.ConversationType;
+import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
+import com.propertyvista.crm.rpc.ActivationServices;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.PasswordChangeRequest;
 
 public class ResetPasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
 
@@ -47,13 +49,14 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
     private String token;
 
     @Inject
-    public ResetPasswordActivity(NewPasswordView view) {
-        this.view = view;
+    public ResetPasswordActivity(Place place) {
+        this.view = (NewPasswordView) LoginVeiwFactory.instance(NewPasswordView.class);
         view.setConversationType(ConversationType.RESET);
         view.setPresenter(this);
+        withPlace(place);
     }
 
-    public ResetPasswordActivity withPlace(AppPlace place) {
+    public ResetPasswordActivity withPlace(Place place) {
         return this;
     }
 

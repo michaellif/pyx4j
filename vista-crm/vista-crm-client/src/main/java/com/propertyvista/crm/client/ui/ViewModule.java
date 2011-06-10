@@ -19,16 +19,8 @@ import com.google.inject.Singleton;
 import com.pyx4j.widgets.client.style.Theme;
 
 import com.propertyvista.crm.client.themes.BlueColdTheme;
-import com.propertyvista.crm.client.ui.dashboard.DashboardView;
-import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
-import com.propertyvista.crm.client.ui.login.LoginView;
-import com.propertyvista.crm.client.ui.login.LoginViewImpl;
 import com.propertyvista.crm.client.ui.login.NewPasswordView;
 import com.propertyvista.crm.client.ui.login.NewPasswordViewImpl;
-import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
-import com.propertyvista.crm.client.ui.login.RetrievePasswordViewImpl;
-import com.propertyvista.crm.client.ui.report.ReportView;
-import com.propertyvista.crm.client.ui.report.ReportViewImpl;
 
 public class ViewModule extends AbstractGinModule {
 
@@ -42,13 +34,7 @@ public class ViewModule extends AbstractGinModule {
 
         bind(TopRightActionsView.class).to(TopRightActionsViewImpl.class).in(Singleton.class);
 
-        bind(LoginView.class).to(LoginViewImpl.class).in(Singleton.class);
-        bind(RetrievePasswordView.class).to(RetrievePasswordViewImpl.class).in(Singleton.class);
         bind(NewPasswordView.class).to(NewPasswordViewImpl.class).in(Singleton.class);
-
-// - Other:
-        bind(ReportView.class).to(ReportViewImpl.class).in(Singleton.class);
-        bind(DashboardView.class).to(DashboardViewImpl.class).in(Singleton.class);
 
 // - Themes:
         //        bind(Theme.class).to(GainsboroTheme.class).in(Singleton.class);
@@ -56,8 +42,5 @@ public class ViewModule extends AbstractGinModule {
         //        bind(Theme.class).to(BownWarmTheme.class).in(Singleton.class);
 
         bind(ShortCutsView.class).to(ShortCutsViewImpl.class).in(Singleton.class);
-
-        bind(AccountView.class).to(AccountViewImpl.class).in(Singleton.class);
-        bind(AlertView.class).to(AlertViewImpl.class).in(Singleton.class);
     }
 }

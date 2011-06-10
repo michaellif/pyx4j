@@ -17,39 +17,25 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.propertyvista.crm.client.activity.LoginActivity;
-import com.propertyvista.crm.client.activity.RetrievePasswordActivity;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 
-import com.pyx4j.site.rpc.AppPlace;
+import com.propertyvista.crm.client.activity.login.LoginActivity;
+import com.propertyvista.crm.client.activity.login.RetrievePasswordActivity;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class EntryPointActivityMapper implements ActivityMapper {
 
-    Provider<LoginActivity> loginActivityProvider;
-
-    Provider<RetrievePasswordActivity> retrievePasswordActivityProvider;
-
     @Inject
-    public EntryPointActivityMapper(
-
-    final Provider<LoginActivity> loginActivityProvider,
-
-    final Provider<RetrievePasswordActivity> retrievePasswordActivityProvider) {
+    public EntryPointActivityMapper() {
         super();
-        this.loginActivityProvider = loginActivityProvider;
-        this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
-
     }
 
     @Override
     public Activity getActivity(Place place) {
         if (place instanceof CrmSiteMap.Login) {
-            return loginActivityProvider.get().withPlace((AppPlace) place);
+            return new LoginActivity(place);
         } else if (place instanceof CrmSiteMap.RetrievePassword) {
-            return retrievePasswordActivityProvider.get().withPlace((AppPlace) place);
+            return new RetrievePasswordActivity(place);
         }
         return null;
     }
-
 }

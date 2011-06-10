@@ -20,14 +20,16 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.ui.AccountView;
+import com.propertyvista.crm.client.ui.viewfactories.MiscVeiwFactory;
 
 public class AccountActivity extends AbstractActivity {
 
     private final AccountView view;
 
     @Inject
-    public AccountActivity(AccountView view) {
-        this.view = view;
+    public AccountActivity(Place place) {
+        this.view = (AccountView) MiscVeiwFactory.instance(AccountView.class);
+        withPlace(place);
     }
 
     @Override

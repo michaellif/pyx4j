@@ -18,15 +18,18 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+
 import com.propertyvista.crm.client.ui.AlertView;
+import com.propertyvista.crm.client.ui.viewfactories.MiscVeiwFactory;
 
 public class AlertActivity extends AbstractActivity {
 
     private final AlertView view;
 
     @Inject
-    public AlertActivity(AlertView view) {
-        this.view = view;
+    public AlertActivity(Place place) {
+        this.view = (AlertView) MiscVeiwFactory.instance(AlertView.class);
+        withPlace(place);
     }
 
     @Override

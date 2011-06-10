@@ -17,22 +17,23 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
+
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.client.ui.viewfactories.DashboardVeiwFactory;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
-import com.pyx4j.entity.shared.EntityFactory;
-
 public class DashboardActivity extends AbstractActivity {
 
     private final DashboardView view;
 
-    @Inject
-    public DashboardActivity(DashboardView view) {
-        this.view = view;
+    public DashboardActivity(Place place) {
+        this.view = (DashboardView) DashboardVeiwFactory.instance(DashboardView.class);
+        withPlace(place);
     }
 
     public DashboardActivity withPlace(Place place) {

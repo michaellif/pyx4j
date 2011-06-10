@@ -11,34 +11,37 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity;
+package com.propertyvista.crm.client.activity.login;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
-import com.propertyvista.crm.rpc.ActivationServices;
-import com.propertyvista.crm.rpc.PasswordRetrievalRequest;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
+import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
+import com.propertyvista.crm.rpc.ActivationServices;
+import com.propertyvista.crm.rpc.PasswordRetrievalRequest;
 
 public class RetrievePasswordActivity extends AbstractActivity implements RetrievePasswordView.Presenter {
 
     private final RetrievePasswordView view;
 
     @Inject
-    public RetrievePasswordActivity(RetrievePasswordView view) {
-        this.view = view;
+    public RetrievePasswordActivity(Place place) {
+        this.view = (RetrievePasswordView) LoginVeiwFactory.instance(RetrievePasswordView.class);
         view.setPresenter(this);
+        withPlace(place);
     }
 
-    public RetrievePasswordActivity withPlace(AppPlace place) {
+    public RetrievePasswordActivity withPlace(Place place) {
         return this;
     }
 
