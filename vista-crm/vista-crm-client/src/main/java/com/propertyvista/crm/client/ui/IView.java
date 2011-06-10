@@ -7,19 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 9, 2011
- * @author vadims
+ * Created on 2011-06-09
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.settings;
+package com.propertyvista.crm.client.ui;
 
-import com.propertyvista.crm.client.ui.editors.EditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.portal.domain.site.PageDescriptor;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class ContentEditorImpl extends EditorViewImplBase<PageDescriptor> implements ContentEditor {
-    public ContentEditorImpl() {
-        super(new CrmSiteMap.Settings.Content());
-        setEditor(new ContentEditorForm());
-    }
+import com.pyx4j.entity.shared.IEntity;
+
+public interface IView<E extends IEntity> extends IsWidget {
+
+    public void populate(E value);
+
 }

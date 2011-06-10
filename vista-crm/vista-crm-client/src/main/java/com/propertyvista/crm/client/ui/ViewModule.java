@@ -79,8 +79,6 @@ import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
 import com.propertyvista.crm.client.ui.login.RetrievePasswordViewImpl;
 import com.propertyvista.crm.client.ui.report.ReportView;
 import com.propertyvista.crm.client.ui.report.ReportViewImpl;
-import com.propertyvista.crm.client.ui.settings.ContentEditor;
-import com.propertyvista.crm.client.ui.settings.ContentEditorImpl;
 import com.propertyvista.crm.client.ui.vewers.ApplicationViewerView;
 import com.propertyvista.crm.client.ui.vewers.ApplicationViewerViewImpl;
 import com.propertyvista.crm.client.ui.vewers.BoilerViewerView;
@@ -205,8 +203,5 @@ public class ViewModule extends AbstractGinModule {
         bind(AccountView.class).to(AccountViewImpl.class).in(Singleton.class);
         bind(AlertView.class).to(AlertViewImpl.class).in(Singleton.class);
         bind(MessageView.class).to(MessageViewImpl.class).in(Singleton.class);
-
-// - Settings:
-        bind(ContentEditor.class).to(ContentEditorImpl.class).in(Singleton.class);
     }
 }

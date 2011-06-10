@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.editors;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IEditorView<E extends IEntity> extends IsWidget {
+import com.propertyvista.crm.client.ui.IView;
+
+public interface IEditorView<E extends IEntity> extends IView<E> {
 
     public interface Presenter {
 
@@ -29,8 +29,6 @@ public interface IEditorView<E extends IEntity> extends IsWidget {
     }
 
     void setPresenter(Presenter presenter);
-
-    public void populate(E value);
 
     public E getValue();
 }

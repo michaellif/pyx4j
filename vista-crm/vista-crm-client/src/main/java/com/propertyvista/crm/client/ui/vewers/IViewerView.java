@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.vewers;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.rpc.AppPlace;
 
-public interface IViewerView<E extends IEntity> extends IsWidget {
+import com.propertyvista.crm.client.ui.IView;
+
+public interface IViewerView<E extends IEntity> extends IView<E> {
 
     public interface Presenter {
 
@@ -28,6 +28,4 @@ public interface IViewerView<E extends IEntity> extends IsWidget {
     }
 
     void setPresenter(Presenter presenter);
-
-    public void populate(E value);
 }

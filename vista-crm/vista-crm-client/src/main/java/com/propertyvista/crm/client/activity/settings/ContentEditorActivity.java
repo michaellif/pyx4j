@@ -14,13 +14,14 @@
 package com.propertyvista.crm.client.activity.settings;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.inject.Inject;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.client.activity.editors.EditorActivityBase;
 import com.propertyvista.crm.client.ui.settings.ContentEditor;
+import com.propertyvista.crm.client.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.portal.domain.site.PageDescriptor;
@@ -28,10 +29,11 @@ import com.propertyvista.portal.domain.site.PageDescriptor.Type;
 
 public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> {
 
-    @Inject
     @SuppressWarnings("unchecked")
-    public ContentEditorActivity(ContentEditor view) {
-        super(view, (AbstractCrudService<PageDescriptor>) GWT.create(PageDescriptorCrudService.class), PageDescriptor.class);
+    public ContentEditorActivity(Place place) {
+        super((ContentEditor) SettingsViewFactory.instance(ContentEditor.class), (AbstractCrudService<PageDescriptor>) GWT
+                .create(PageDescriptorCrudService.class), PageDescriptor.class);
+        withPlace(place);
     }
 
     @Override
@@ -40,5 +42,4 @@ public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> {
         descriptor.type().setValue(Type.staticContent);
         callback.onSuccess(descriptor);
     }
-
 }

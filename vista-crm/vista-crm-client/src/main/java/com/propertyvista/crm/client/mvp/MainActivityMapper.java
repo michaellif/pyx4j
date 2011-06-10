@@ -294,9 +294,7 @@ public class MainActivityMapper implements ActivityMapper {
 /*
  * ----- Settings:
  */
-    final Provider<ContentActivity> contentActivityProvider,
-
-    final Provider<ContentEditorActivity> contentEditorActivityProvider) {
+    final Provider<ContentActivity> contentActivityProvider) {
         super();
 
 //        this.loginActivityProvider = loginActivityProvider;
@@ -355,18 +353,11 @@ public class MainActivityMapper implements ActivityMapper {
         this.messageActivityProvider = messageActivityProvider;
 // ---- settings:
         this.contentActivityProvider = contentActivityProvider;
-        this.contentEditorActivityProvider = contentEditorActivityProvider;
     }
 
     @Override
     public Activity getActivity(Place place) {
-/*
- * if (place instanceof CrmSiteMap.Login) {
- * return loginActivityProvider.get().withPlace((AppPlace) place);
- * } else if (place instanceof CrmSiteMap.RetrievePassword) {
- * return retrievePasswordActivityProvider.get().withPlace((AppPlace) place);
- * } else
- */     if (place instanceof CrmSiteMap.ResetPassword) {
+        if (place instanceof CrmSiteMap.ResetPassword) {
             return resetPasswordActivityProvider.get().withPlace((AppPlace) place);
 // - Building-related:
         } else if (place instanceof CrmSiteMap.Properties.Buildings) {
@@ -482,7 +473,7 @@ public class MainActivityMapper implements ActivityMapper {
             if (((AppPlace) place).getArgs().isEmpty()) {
                 return contentActivityProvider.get().withPlace(place);
             } else {
-                return contentEditorActivityProvider.get().withPlace(place);
+                return new ContentEditorActivity(place);
             }
         }
         //TODO what to do on other place
