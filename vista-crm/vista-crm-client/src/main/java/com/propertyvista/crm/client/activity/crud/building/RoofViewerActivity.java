@@ -14,10 +14,12 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.ViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.building.RoofViewerView;
+import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.RoofCrudService;
 import com.propertyvista.dto.RoofDTO;
@@ -26,8 +28,8 @@ public class RoofViewerActivity extends ViewerActivityBase<RoofDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
-    public RoofViewerActivity(RoofViewerView view) {
-        super(view, (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class));
+    public RoofViewerActivity(Place place) {
+        super((RoofViewerView) BuildingViewFactory.instance(RoofViewerView.class), (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class));
+        withPlace(place);
     }
-
 }

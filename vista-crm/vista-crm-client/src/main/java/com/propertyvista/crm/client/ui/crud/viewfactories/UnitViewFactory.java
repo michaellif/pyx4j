@@ -41,10 +41,12 @@ public class UnitViewFactory extends ViewFactoryBase {
                 map.put(type, new UnitEditorViewImpl());
             } else if (UnitViewerView.class.equals(type)) {
                 map.put(type, new UnitViewerViewImpl());
+
             } else if (UnitItemEditorView.class.equals(type)) {
                 map.put(type, new UnitItemEditorViewImpl());
             } else if (UnitItemViewerView.class.equals(type)) {
                 map.put(type, new UnitItemViewerViewImpl());
+
             } else if (UnitOccupancyEditorView.class.equals(type)) {
                 map.put(type, new UnitOccupancyEditorViewImpl());
             } else if (UnitOccupancyViewerView.class.equals(type)) {

@@ -14,10 +14,12 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.ViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.building.ElevatorViewerView;
+import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.ElevatorCrudService;
 import com.propertyvista.dto.ElevatorDTO;
@@ -26,8 +28,9 @@ public class ElevatorViewerActivity extends ViewerActivityBase<ElevatorDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
-    public ElevatorViewerActivity(ElevatorViewerView view) {
-        super(view, (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class));
+    public ElevatorViewerActivity(Place place) {
+        super((ElevatorViewerView) BuildingViewFactory.instance(ElevatorViewerView.class), (AbstractCrudService<ElevatorDTO>) GWT
+                .create(ElevatorCrudService.class));
+        withPlace(place);
     }
-
 }

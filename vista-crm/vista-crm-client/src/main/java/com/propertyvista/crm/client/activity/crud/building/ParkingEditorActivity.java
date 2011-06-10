@@ -14,10 +14,12 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.building.ParkingEditorView;
+import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.ParkingCrudService;
 import com.propertyvista.dto.ParkingDTO;
@@ -26,7 +28,9 @@ public class ParkingEditorActivity extends EditorActivityBase<ParkingDTO> {
 
     @Inject
     @SuppressWarnings("unchecked")
-    public ParkingEditorActivity(ParkingEditorView view) {
-        super(view, (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class), ParkingDTO.class);
+    public ParkingEditorActivity(Place place) {
+        super((ParkingEditorView) BuildingViewFactory.instance(ParkingEditorView.class),
+                (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class), ParkingDTO.class);
+        withPlace(place);
     }
 }

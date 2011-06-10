@@ -14,10 +14,12 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.ViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.building.LockerViewerView;
+import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.LockerCrudService;
 import com.propertyvista.domain.property.asset.Locker;
@@ -26,8 +28,8 @@ public class LockerViewerActivity extends ViewerActivityBase<Locker> {
 
     @Inject
     @SuppressWarnings("unchecked")
-    public LockerViewerActivity(LockerViewerView view) {
-        super(view, (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class));
+    public LockerViewerActivity(Place place) {
+        super((LockerViewerView) BuildingViewFactory.instance(LockerViewerView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class));
+        withPlace(place);
     }
-
 }

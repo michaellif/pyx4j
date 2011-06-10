@@ -20,7 +20,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -31,8 +30,8 @@ import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 
 public class ContentActivity extends AbstractActivity {
 
-    @Inject
-    public ContentActivity() {
+    public ContentActivity(Place place) {
+        withPlace(place);
     }
 
     @Override

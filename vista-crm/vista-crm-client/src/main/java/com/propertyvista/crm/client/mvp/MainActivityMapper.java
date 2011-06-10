@@ -79,45 +79,6 @@ public class MainActivityMapper implements ActivityMapper {
 
     Provider<ResetPasswordActivity> resetPasswordActivityProvider;
 
-// ----- Building-related:
-    Provider<BuildingListerActivity> buildingListerActivityProvider;
-
-    Provider<BuildingViewerActivity> buildingViewerActivityProvider;
-
-    Provider<BuildingEditorActivity> buildingEditorActivityProvider;
-
-    Provider<ElevatorViewerActivity> elevatorViewerActivityProvider;
-
-    Provider<ElevatorEditorActivity> elevatorEditorActivityProvider;
-
-    Provider<BoilerViewerActivity> boilerViewerActivityProvider;
-
-    Provider<BoilerEditorActivity> boilerEditorActivityProvider;
-
-    Provider<RoofViewerActivity> roofViewerActivityProvider;
-
-    Provider<RoofEditorActivity> roofEditorActivityProvider;
-
-    Provider<ParkingViewerActivity> parkingViewerActivityProvider;
-
-    Provider<ParkingEditorActivity> parkingEditorActivityProvider;
-
-    Provider<ParkingSpotListerActivity> parkingSpotListerActivityProvider;
-
-    Provider<ParkingSpotViewerActivity> parkingSpotViewerActivityProvider;
-
-    Provider<ParkingSpotEditorActivity> parkingSpotEditorActivityProvider;
-
-    Provider<LockerAreaViewerActivity> lockerAreaViewerActivityProvider;
-
-    Provider<LockerAreaEditorActivity> lockerAreaEditorActivityProvider;
-
-    Provider<LockerListerActivity> lockerListerActivityProvider;
-
-    Provider<LockerViewerActivity> lockerViewerActivityProvider;
-
-    Provider<LockerEditorActivity> lockerEditorActivityProvider;
-
 // ----- Other:
     Provider<DashboardActivity> dashboardActivityProvider;
 
@@ -129,61 +90,10 @@ public class MainActivityMapper implements ActivityMapper {
 
     Provider<MessageActivity> messageActivityProvider;
 
-// ----- Settings:
-    Provider<ContentActivity> contentActivityProvider;
-
-    Provider<ContentEditorActivity> contentEditorActivityProvider;
-
     @Inject
     public MainActivityMapper(
 
-/*
- * final Provider<LoginActivity> loginActivityProvider,
- * 
- * final Provider<RetrievePasswordActivity> retrievePasswordActivityProvider,
- */
-
     final Provider<ResetPasswordActivity> resetPasswordActivityProvider,
-/*
- * ----- Building-related:
- */
-    final Provider<BuildingListerActivity> buildingListerActivityProvider,
-
-    final Provider<BuildingViewerActivity> buildingViewerActivityProvider,
-
-    final Provider<BuildingEditorActivity> buildingEditorActivityProvider,
-
-    final Provider<ElevatorViewerActivity> elevatorViewerActivityProvider,
-
-    final Provider<ElevatorEditorActivity> elevatorEditorActivityProvider,
-
-    final Provider<BoilerViewerActivity> boilerViewerActivityProvider,
-
-    final Provider<BoilerEditorActivity> boilerEditorActivityProvider,
-
-    final Provider<RoofViewerActivity> roofViewerActivityProvider,
-
-    final Provider<RoofEditorActivity> roofEditorActivityProvider,
-
-    final Provider<ParkingViewerActivity> parkingViewerActivityProvider,
-
-    final Provider<ParkingEditorActivity> parkingEditorActivityProvider,
-
-    final Provider<ParkingSpotListerActivity> parkingSpotListerActivityProvider,
-
-    final Provider<ParkingSpotViewerActivity> parkingSpotViewerActivityProvider,
-
-    final Provider<ParkingSpotEditorActivity> parkingSpotEditorActivityProvider,
-
-    final Provider<LockerAreaViewerActivity> lockerAreaViewerActivityProvider,
-
-    final Provider<LockerAreaEditorActivity> lockerAreaEditorActivityProvider,
-
-    final Provider<LockerListerActivity> lockerListerActivityProvider,
-
-    final Provider<LockerViewerActivity> lockerViewerActivityProvider,
-
-    final Provider<LockerEditorActivity> lockerEditorActivityProvider,
 /*
  * ----- Other:
  */
@@ -195,97 +105,70 @@ public class MainActivityMapper implements ActivityMapper {
 
     final Provider<AlertActivity> alertActivityProvider,
 
-    final Provider<MessageActivity> messageActivityProvider,
-/*
- * ----- Settings:
- */
-    final Provider<ContentActivity> contentActivityProvider) {
+    final Provider<MessageActivity> messageActivityProvider) {
         super();
 
-//        this.loginActivityProvider = loginActivityProvider;
-//        this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
-
         this.resetPasswordActivityProvider = resetPasswordActivityProvider;
-// ---- Building-related:
-        this.buildingListerActivityProvider = buildingListerActivityProvider;
-        this.buildingViewerActivityProvider = buildingViewerActivityProvider;
-        this.buildingEditorActivityProvider = buildingEditorActivityProvider;
-        this.elevatorViewerActivityProvider = elevatorViewerActivityProvider;
-        this.elevatorEditorActivityProvider = elevatorEditorActivityProvider;
-        this.boilerViewerActivityProvider = boilerViewerActivityProvider;
-        this.boilerEditorActivityProvider = boilerEditorActivityProvider;
-        this.roofViewerActivityProvider = roofViewerActivityProvider;
-        this.roofEditorActivityProvider = roofEditorActivityProvider;
-        this.parkingViewerActivityProvider = parkingViewerActivityProvider;
-        this.parkingEditorActivityProvider = parkingEditorActivityProvider;
-        this.parkingSpotListerActivityProvider = parkingSpotListerActivityProvider;
-        this.parkingSpotViewerActivityProvider = parkingSpotViewerActivityProvider;
-        this.parkingSpotEditorActivityProvider = parkingSpotEditorActivityProvider;
-        this.lockerAreaViewerActivityProvider = lockerAreaViewerActivityProvider;
-        this.lockerAreaEditorActivityProvider = lockerAreaEditorActivityProvider;
-        this.lockerListerActivityProvider = lockerListerActivityProvider;
-        this.lockerViewerActivityProvider = lockerViewerActivityProvider;
-        this.lockerEditorActivityProvider = lockerEditorActivityProvider;
 // ---- Other:
         this.dashboardActivityProvider = dashboardActivityProvider;
         this.reportActivityProvider = reportActivityProvider;
         this.accountActivityProvider = accountActivityProvider;
         this.alertActivityProvider = alertActivityProvider;
         this.messageActivityProvider = messageActivityProvider;
-// ---- settings:
-        this.contentActivityProvider = contentActivityProvider;
     }
 
     @Override
     public Activity getActivity(Place place) {
         if (place instanceof CrmSiteMap.ResetPassword) {
             return resetPasswordActivityProvider.get().withPlace((AppPlace) place);
+
 // - Building-related:
         } else if (place instanceof CrmSiteMap.Properties.Buildings) {
-            return buildingListerActivityProvider.get().withPlace(place);
+            return new BuildingListerActivity(place);
         } else if (place instanceof CrmSiteMap.Viewers.Building) {
-            return buildingViewerActivityProvider.get().withPlace(place);
+            return new BuildingViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Building) {
-            return buildingEditorActivityProvider.get().withPlace(place);
+            return new BuildingEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Viewers.Elevator) {
-            return elevatorViewerActivityProvider.get().withPlace(place);
+            return new ElevatorViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Elevator) {
-            return elevatorEditorActivityProvider.get().withPlace(place);
+            return new ElevatorEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Viewers.Boiler) {
-            return boilerViewerActivityProvider.get().withPlace(place);
+            return new BoilerViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Boiler) {
-            return boilerEditorActivityProvider.get().withPlace(place);
+            return new BoilerEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Viewers.Roof) {
-            return roofViewerActivityProvider.get().withPlace(place);
+            return new RoofViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Roof) {
-            return roofEditorActivityProvider.get().withPlace(place);
+            return new RoofEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Viewers.Parking) {
-            return parkingViewerActivityProvider.get().withPlace(place);
+            return new ParkingViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Parking) {
-            return parkingEditorActivityProvider.get().withPlace(place);
+            return new ParkingEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Properties.ParkingSpots) {
-            return parkingSpotListerActivityProvider.get().withPlace(place);
+            return new ParkingSpotListerActivity(place);
         } else if (place instanceof CrmSiteMap.Viewers.ParkingSpot) {
-            return parkingSpotViewerActivityProvider.get().withPlace(place);
+            return new ParkingSpotViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Parking) {
-            return parkingSpotEditorActivityProvider.get().withPlace(place);
+            return new ParkingSpotEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Viewers.LockerArea) {
-            return lockerAreaViewerActivityProvider.get().withPlace(place);
+            return new LockerAreaViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.LockerArea) {
-            return lockerAreaEditorActivityProvider.get().withPlace(place);
+            return new LockerAreaEditorActivity(place);
 
         } else if (place instanceof CrmSiteMap.Properties.Lockers) {
-            return lockerListerActivityProvider.get().withPlace(place);
+            return new LockerListerActivity(place);
         } else if (place instanceof CrmSiteMap.Viewers.Locker) {
-            return lockerViewerActivityProvider.get().withPlace(place);
+            return new LockerViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Locker) {
-            return lockerEditorActivityProvider.get().withPlace(place);
+            return new LockerEditorActivity(place);
+
 // - Unit-related:
         } else if (place instanceof CrmSiteMap.Properties.Units) {
             return new UnitListerActivity(place);
@@ -308,6 +191,7 @@ public class MainActivityMapper implements ActivityMapper {
             return new ConcessionViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Concession) {
             return new ConcessionEditorActivity(place);
+
 // - Tenant-related:
         } else if (place instanceof CrmSiteMap.Tenants.AllTenants) {
             return new TenantListerActivity(place);
@@ -336,6 +220,7 @@ public class MainActivityMapper implements ActivityMapper {
             return new InquiryViewerActivity(place);
         } else if (place instanceof CrmSiteMap.Editors.Inquiry) {
             return new InquiryEditorActivity(place);
+
 // - Other:
         } else if (place instanceof CrmSiteMap.Dashboard) {
             return dashboardActivityProvider.get().withPlace(place);
@@ -347,10 +232,11 @@ public class MainActivityMapper implements ActivityMapper {
             return alertActivityProvider.get().withPlace(place);
         } else if (place instanceof CrmSiteMap.Message) {
             return messageActivityProvider.get().withPlace(place);
+
 // - Settings:
         } else if (place instanceof CrmSiteMap.Settings.Content) {
             if (((AppPlace) place).getArgs().isEmpty()) {
-                return contentActivityProvider.get().withPlace(place);
+                return new ContentActivity(place);
             } else {
                 return new ContentEditorActivity(place);
             }

@@ -51,18 +51,21 @@ public class TenantViewFactory extends ViewFactoryBase {
                 map.put(type, new TenantViewerViewImpl());
             } else if (TenantEditorView.class.equals(type)) {
                 map.put(type, new TenantEditorViewImpl());
+
             } else if (LeaseListerView.class.equals(type)) {
                 map.put(type, new LeaseListerViewImpl());
             } else if (LeaseViewerView.class.equals(type)) {
                 map.put(type, new LeaseViewerViewImpl());
             } else if (LeaseEditorView.class.equals(type)) {
                 map.put(type, new LeaseEditorViewImpl());
+
             } else if (ApplicationListerView.class.equals(type)) {
                 map.put(type, new ApplicationListerViewImpl());
             } else if (ApplicationViewerView.class.equals(type)) {
                 map.put(type, new ApplicationViewerViewImpl());
             } else if (ApplicationEditorView.class.equals(type)) {
                 map.put(type, new ApplicationEditorViewImpl());
+
             } else if (InquiryListerView.class.equals(type)) {
                 map.put(type, new InquiryListerViewImpl());
             } else if (InquiryViewerView.class.equals(type)) {
