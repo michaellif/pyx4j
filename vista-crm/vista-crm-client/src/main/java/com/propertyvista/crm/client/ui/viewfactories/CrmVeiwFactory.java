@@ -17,8 +17,18 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.crm.client.ui.AlertView;
 import com.propertyvista.crm.client.ui.AlertViewImpl;
+import com.propertyvista.crm.client.ui.FooterView;
+import com.propertyvista.crm.client.ui.FooterViewImpl;
+import com.propertyvista.crm.client.ui.LogoView;
+import com.propertyvista.crm.client.ui.LogoViewImpl;
+import com.propertyvista.crm.client.ui.MessageView;
+import com.propertyvista.crm.client.ui.MessageViewImpl;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
+import com.propertyvista.crm.client.ui.ShortCutsView;
+import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
+import com.propertyvista.crm.client.ui.TopRightActionsView;
+import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 
 public class CrmVeiwFactory extends ViewFactoryBase {
 
@@ -26,8 +36,20 @@ public class CrmVeiwFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (NavigView.class.equals(type)) {
                 map.put(type, new NavigViewImpl());
+            } else if (ShortCutsView.class.equals(type)) {
+                map.put(type, new ShortCutsViewImpl());
+            } else if (TopRightActionsView.class.equals(type)) {
+                map.put(type, new TopRightActionsViewImpl());
+
+            } else if (LogoView.class.equals(type)) {
+                map.put(type, new LogoViewImpl());
+            } else if (FooterView.class.equals(type)) {
+                map.put(type, new FooterViewImpl());
+
             } else if (AlertView.class.equals(type)) {
                 map.put(type, new AlertViewImpl());
+            } else if (MessageView.class.equals(type)) {
+                map.put(type, new MessageViewImpl());
             }
         }
         return map.get(type);

@@ -24,7 +24,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.StyleManger;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -34,6 +33,7 @@ import com.propertyvista.crm.client.themes.GainsboroTheme;
 import com.propertyvista.crm.client.themes.VillageGreenTheme;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;
+import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
@@ -41,9 +41,10 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     private final TopRightActionsView view;
 
     @Inject
-    public TopRightActionsActivity(TopRightActionsView view) {
-        this.view = view;
+    public TopRightActionsActivity(Place place) {
+        this.view = (TopRightActionsView) CrmVeiwFactory.instance(TopRightActionsView.class);
         view.setPresenter(this);
+        withPlace(place);
     }
 
     @Override
@@ -104,7 +105,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
         }
     }
 
-    public TopRightActionsActivity withPlace(AppPlace place) {
+    public TopRightActionsActivity withPlace(Place place) {
         return this;
     }
 

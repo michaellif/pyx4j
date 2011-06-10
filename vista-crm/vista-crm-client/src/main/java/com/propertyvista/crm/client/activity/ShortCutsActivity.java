@@ -21,20 +21,23 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.crm.client.ui.ShortCutsView;
-import com.propertyvista.crm.client.ui.ShortCutsView.ShortCutsPresenter;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.crm.client.ui.ShortCutsView;
+import com.propertyvista.crm.client.ui.ShortCutsView.ShortCutsPresenter;
+import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
 public class ShortCutsActivity extends AbstractActivity implements ShortCutsPresenter {
 
     private final ShortCutsView view;
 
     @Inject
-    public ShortCutsActivity(ShortCutsView view) {
-        this.view = view;
+    public ShortCutsActivity(Place place) {
+        this.view = (ShortCutsView) CrmVeiwFactory.instance(ShortCutsView.class);
         view.setPresenter(this);
+        withPlace(place);
     }
 
     public ShortCutsActivity withPlace(Place place) {

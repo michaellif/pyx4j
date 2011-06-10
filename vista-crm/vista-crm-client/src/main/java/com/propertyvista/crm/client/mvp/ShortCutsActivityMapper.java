@@ -16,29 +16,21 @@ package com.propertyvista.crm.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Provider;
 
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.activity.ShortCutsActivity;
 
 public class ShortCutsActivityMapper implements ActivityMapper {
-    Provider<ShortCutsActivity> shortcutsActivityProvider;
 
     public ShortCutsActivityMapper() {
-        super();
-    }
-
-    public ShortCutsActivityMapper(final Provider<ShortCutsActivity> shortcutsActivityProvider) {
-        super();
-        this.shortcutsActivityProvider = shortcutsActivityProvider;
     }
 
     @Override
     public Activity getActivity(Place place) {
 
         if (ClientContext.isAuthenticated()) {
-            return shortcutsActivityProvider.get().withPlace(place);
+            return new ShortCutsActivity(place);
         } else {
             return null;
         }

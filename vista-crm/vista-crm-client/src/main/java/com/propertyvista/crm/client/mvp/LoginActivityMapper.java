@@ -21,10 +21,9 @@ import com.propertyvista.crm.client.activity.login.LoginActivity;
 import com.propertyvista.crm.client.activity.login.RetrievePasswordActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
-public class EntryPointActivityMapper implements ActivityMapper {
+public class LoginActivityMapper implements ActivityMapper {
 
-    public EntryPointActivityMapper() {
-        super();
+    public LoginActivityMapper() {
     }
 
     @Override

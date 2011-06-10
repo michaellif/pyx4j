@@ -14,23 +14,11 @@
 package com.propertyvista.crm.client.ui;
 
 import com.google.gwt.inject.client.AbstractGinModule;
-import com.google.inject.Singleton;
-
-import com.propertyvista.crm.client.ui.login.NewPasswordView;
-import com.propertyvista.crm.client.ui.login.NewPasswordViewImpl;
 
 public class ViewModule extends AbstractGinModule {
 
     @Override
     protected void configure() {
         bind(CrmView.class);
-
-        bind(LogoView.class).to(LogoViewImpl.class).in(Singleton.class);
-        bind(FooterView.class).to(FooterViewImpl.class).in(Singleton.class);
-        bind(TopRightActionsView.class).to(TopRightActionsViewImpl.class).in(Singleton.class);
-
-        bind(NewPasswordView.class).to(NewPasswordViewImpl.class).in(Singleton.class);
-
-        bind(ShortCutsView.class).to(ShortCutsViewImpl.class).in(Singleton.class);
     }
 }

@@ -38,9 +38,13 @@ import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.StyleManger;
 
-import com.propertyvista.crm.client.mvp.EntryPointActivityMapper;
+import com.propertyvista.crm.client.mvp.FooterActivityMapper;
+import com.propertyvista.crm.client.mvp.LoginActivityMapper;
+import com.propertyvista.crm.client.mvp.LogoActivityMapper;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.mvp.NavigActivityMapper;
+import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
+import com.propertyvista.crm.client.mvp.TopRightActionsActivityMapper;
 import com.propertyvista.crm.client.themes.BlueColdTheme;
 
 @Singleton
@@ -143,13 +147,13 @@ public class CrmView extends LayoutPanel {
         splitPanel.add(mainDisplay);
 
         // Activity <-> Display bindings:
-//        bind(new LogoActivityMapper(), logoDisplay, eventBus);
-//        bind(new ActionsActivityMapper(), actionsDisplay, eventBus);
-//        bind(new FooterActivityMapper(), footerDisplay, eventBus); 
+        bind(new LoginActivityMapper(), utilityDisplay, eventBus);
+        bind(new LogoActivityMapper(), logoDisplay, eventBus);
+        bind(new TopRightActionsActivityMapper(), actionsDisplay, eventBus);
+        bind(new FooterActivityMapper(), footerDisplay, eventBus);
         bind(new NavigActivityMapper(), navigDisplay, eventBus);
-//        bind(new ShortCutsActivityMapper(), shortcutsDisplay, eventBus);
+        bind(new ShortCutsActivityMapper(), shortcutsDisplay, eventBus);
         bind(new MainActivityMapper(), mainDisplay, eventBus);
-        bind(new EntryPointActivityMapper(), utilityDisplay, eventBus);
     }
 
     private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {

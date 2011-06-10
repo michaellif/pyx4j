@@ -18,7 +18,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.inject.Inject;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.AppPlace;
@@ -76,7 +75,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 public class MainActivityMapper implements AppActivityMapper {
 
     public MainActivityMapper() {
-        super();
     }
 
     @Override
