@@ -21,6 +21,7 @@
 package com.pyx4j.svg.gwt;
 
 import com.pyx4j.svg.basic.Path;
+import com.pyx4j.svg.common.Animator;
 
 public class PathImpl extends ShapeImpl implements Path {
 
@@ -28,6 +29,11 @@ public class PathImpl extends ShapeImpl implements Path {
         super(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "path"));
         getElement().setAttribute("d", d);
 
+    }
+
+    public PathImpl(String d, Animator animator) {
+        super(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "path"), animator);
+        getElement().setAttribute("d", d);
     }
 
 }

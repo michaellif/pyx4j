@@ -35,6 +35,7 @@ import com.pyx4j.svg.basic.SvgElement;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.DataSource.Metric;
+import com.pyx4j.svg.util.Utils;
 
 public class PieChart2D implements IsSvgElement {
     private final DataSource datasource;
@@ -142,9 +143,9 @@ public class PieChart2D implements IsSvgElement {
         double y2;
         theme.rewind();
         if (seriestitle != null && seriestitle.length() > 0) {
-            xx = x; //+ TITLE_FONT_SIZE;
+            xx = x;
             yy = y + PADDING;
-            x2 = PADDING; //+ TITLE_FONT_SIZE;
+            x2 = PADDING;
             Text title = factory.createText(seriestitle, radius + PADDING, yy - radius);
             title.setAttribute("font-size", String.valueOf(TITLE_FONT_SIZE));
             title.setAttribute("text-anchor", "middle");
@@ -184,14 +185,15 @@ public class PieChart2D implements IsSvgElement {
                 valueSum += value;
                 String arc = value > Math.PI ? "1,1 " : "0,1 ";
                 String path = "M" + xx + "," + yy + "L" + x2 + "," + y2 + "A" + radius + "," + radius + " 0 " + arc;
-                x2 = xx - radius * Math.cos(valueSum);
-                y2 = yy - radius * Math.sin(valueSum);
+                x2 = Utils.round(xx - radius * Math.cos(valueSum), 2);
+                y2 = Utils.round(yy - radius * Math.sin(valueSum), 2);
 
                 path += x2 + "," + y2 + "Z";
                 Path p = factory.createPath(path);
                 String color = theme.getNextColor();
                 p.setFill(color);
                 p.setStrokeWidth("0");
+                p.setStroke(color);
                 if (showLegend) {
                     LegendItem li = createLegendItem(entry.getKey().getCaption(), 0, legY, color);
                     legentHeight = li.getHeight() + Y_SHIFT;

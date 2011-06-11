@@ -21,17 +21,30 @@
 package com.pyx4j.svg.gwt;
 
 import com.pyx4j.svg.basic.Rect;
+import com.pyx4j.svg.common.Animator;
 
 public class RectImpl extends ShapeImpl implements Rect {
 
     public RectImpl(int x, int y, int width, int height, int rx, int ry) {
         super(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "rect"));
+        initRect(x, y, width, height, rx, ry);
+
+    }
+
+    public RectImpl(int x, int y, int width, int height, int rx, int ry, Animator animator) {
+        super(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "rect"), animator);
+        initRect(x, y, width, height, rx, ry);
+
+    }
+
+    private void initRect(int x, int y, int width, int height, int rx, int ry) {
         getElement().setAttribute("x", String.valueOf(x));
         getElement().setAttribute("y", String.valueOf(y));
         getElement().setAttribute("width", String.valueOf(width));
         getElement().setAttribute("height", String.valueOf(height));
         getElement().setAttribute("rx", String.valueOf(rx));
         getElement().setAttribute("ry", String.valueOf(ry));
+
     }
 
 }

@@ -106,13 +106,9 @@ public class LegendItem implements IsSvgElement {
         return group;
     }
 
-    /**
-     * TODO need to calculate font width;
-     * 
-     * @return
-     */
     public int getWidth() {
         int textlen = text.getTextValue() == null ? 0 : text.getTextValue().length();
+        //TODO need to find out how to calculate the text length
         int width = length + X_SHIFT + (int) (textlen * Text.DEFAULT_FONT_SIZE * .65);
         if (iconType == LegendIconType.Circle)
             width += length;

@@ -14,29 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 4, 2011
+ * Created on Jun 11, 2011
  * @author vadims
  * @version $Id$
  */
-package com.pyx4j.svg.j2se;
+package com.pyx4j.svg.util;
 
-import org.w3c.dom.Document;
+public class Utils {
 
-import com.pyx4j.svg.basic.Path;
-import com.pyx4j.svg.common.Animator;
-
-public class PathImpl extends ShapeImpl implements Path {
-
-    public PathImpl(Document document, String d) {
-        super(document.createElementNS(SvgRootImpl.SVG_NAMESPACE, "path"));
-        getElement().setAttribute("d", d);
-
-    }
-
-    public PathImpl(Document document, String d, Animator animator) {
-        super(document.createElementNS(SvgRootImpl.SVG_NAMESPACE, "path"), animator);
-        getElement().setAttribute("d", d);
-
+    public static double round(double value, int factor) {
+        double p = Math.pow(10, factor);
+        value = value * p;
+        float tmp = Math.round(value);
+        return tmp / p;
     }
 
 }

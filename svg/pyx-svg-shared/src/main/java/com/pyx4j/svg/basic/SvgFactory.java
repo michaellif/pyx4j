@@ -20,6 +20,8 @@
  */
 package com.pyx4j.svg.basic;
 
+import com.pyx4j.svg.common.Animator;
+
 public interface SvgFactory {
 
     SvgRoot getSvgRoot();
@@ -28,7 +30,11 @@ public interface SvgFactory {
 
     Path createPath(String d);
 
+    Path createPath(String d, Animator animator);
+
     Rect createRect(int x, int y, int width, int height, int rx, int ry);
+
+    public Rect createRect(int x, int y, int width, int height, int rx, int ry, Animator animator);
 
     Circle createCircle(int cx, int cy, int r);
 

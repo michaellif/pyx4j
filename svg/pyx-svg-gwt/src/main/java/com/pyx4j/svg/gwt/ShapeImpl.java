@@ -20,10 +20,13 @@
  */
 package com.pyx4j.svg.gwt;
 
+import java.util.Map.Entry;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 
 import com.pyx4j.svg.basic.Shape;
+import com.pyx4j.svg.common.Animator;
 
 public class ShapeImpl extends GraphicsElementImpl implements Shape {
 
@@ -36,6 +39,17 @@ public class ShapeImpl extends GraphicsElementImpl implements Shape {
         setStrokeWidth(String.valueOf(1));
         setStroke("black");
         setFill("transparent");
+    }
+
+    public ShapeImpl(Element elem, Animator animator) {
+        this(elem);
+        if (animator == null)
+            return;
+        Element el = elem.appendChild(SvgDOM.createElement(animator.getTagName()));
+        for (Entry<String, String> attribute : animator.getAttributes().entrySet()) {
+            SvgDOM.setAttributeNS(el, attribute.getKey(), attribute.getValue());
+        }
+
     }
 
     @Override

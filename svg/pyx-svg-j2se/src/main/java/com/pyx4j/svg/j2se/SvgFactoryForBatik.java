@@ -33,6 +33,7 @@ import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.basic.Text;
+import com.pyx4j.svg.common.Animator;
 
 public class SvgFactoryForBatik implements SvgFactory {
 
@@ -58,8 +59,18 @@ public class SvgFactoryForBatik implements SvgFactory {
     }
 
     @Override
+    public Path createPath(String d, Animator animator) {
+        return new PathImpl(rootSVG.getDocument(), d, animator);
+    }
+
+    @Override
     public Rect createRect(int x, int y, int width, int height, int rx, int ry) {
         return new RectImpl(rootSVG.getDocument(), x, y, width, height, rx, ry);
+    }
+
+    @Override
+    public Rect createRect(int x, int y, int width, int height, int rx, int ry, Animator animator) {
+        return new RectImpl(rootSVG.getDocument(), x, y, width, height, rx, ry, animator);
     }
 
     @Override

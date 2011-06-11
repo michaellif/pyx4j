@@ -36,7 +36,6 @@ public class TextImpl extends ShapeImpl implements Text {
         getElement().setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
         getElement().setAttribute("fill", "black");
         getElement().setAttribute("font-family", "Arial");
-        getElement().setAttribute("dominant-baseline", "mathematical");
     }
 
     public void setFont(String font) {

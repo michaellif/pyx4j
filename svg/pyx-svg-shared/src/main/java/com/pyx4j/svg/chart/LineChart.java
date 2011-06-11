@@ -29,6 +29,7 @@ import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.Path;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.chart.DataSource.Metric;
+import com.pyx4j.svg.util.Utils;
 
 public class LineChart extends GridBasedChart {
 
@@ -75,8 +76,8 @@ public class LineChart extends GridBasedChart {
                     }
                 }
                 //draw series data
-                double x = metricPoints.get(metricIdx);
-                double y = ystart - value / valueIncrement * valueSpacing;
+                double x = Utils.round(metricPoints.get(metricIdx), 2);
+                double y = Utils.round((ystart - value / valueIncrement * valueSpacing), 2);
 
                 Circle dot = factory.createCircle((int) x, (int) y, DOT_RADIUS);
                 dot.setFill(color);

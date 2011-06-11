@@ -28,6 +28,7 @@ import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.chart.DataSource.Metric;
+import com.pyx4j.svg.util.Utils;
 
 public class BarChart2D extends GridBasedChart {
 
@@ -55,7 +56,7 @@ public class BarChart2D extends GridBasedChart {
 
         ChartTheme theme = configurator.getTheme();
         Set<Entry<Metric, List<Double>>> dataset = configurator.getDatasourse().getDataSet().entrySet();
-        double hShift = numOfSeries / 2d;
+        double hShift = Utils.round(numOfSeries / 2d, 2);
         for (int idx = 0; idx < numOfSeries; idx++) {
 
             int metricIdx = configurator.isZeroBased() ? 0 : 1;
@@ -73,10 +74,20 @@ public class BarChart2D extends GridBasedChart {
                     }
                 }
                 //draw series data
-                double x = metricPoints.get(metricIdx) - (numOfSeries - idx - hShift) * barWidth;
-                double height = value / valueIncrement * valueSpacing;
+                double x = Utils.round(metricPoints.get(metricIdx) - (numOfSeries - idx - hShift) * barWidth, 2);
+                double height = Utils.round(value / valueIncrement * valueSpacing, 2);
                 double y = ystart - height;
-                Rect bar = factory.createRect((int) x, (int) y, barWidth, (int) height, 0, 0);
+                //TODO does not work as inline html element
+/*
+ * Animator anim = new Animator(Type.set);
+ * anim.setAttribute("attributeName", "fill");
+ * anim.setAttribute("attributeType", "CSS");
+ * anim.setAttribute("to", "red");
+ * anim.setAttribute("begin", "click");
+ * anim.setAttribute("end", "click+0.1s");
+ * anim.setAttribute("fill", "restore");
+ */
+                Rect bar = factory.createRect((int) x, (int) y, barWidth, (int) height, 0, 0); //, anim
                 bar.setFill(color);
                 bar.setStroke(color);
                 container.add(bar);

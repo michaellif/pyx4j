@@ -20,9 +20,12 @@
  */
 package com.pyx4j.svg.j2se;
 
+import java.util.Map.Entry;
+
 import org.w3c.dom.Element;
 
 import com.pyx4j.svg.basic.Shape;
+import com.pyx4j.svg.common.Animator;
 
 public class ShapeImpl extends GraphicsElementImpl implements Shape {
 
@@ -30,8 +33,20 @@ public class ShapeImpl extends GraphicsElementImpl implements Shape {
         super(elem);
         setStrokeWidth(String.valueOf(1));
         setStroke("black");
-        //TODO transparent is not valid. Finish later
         setFill("none");
+    }
+
+    public ShapeImpl(Element elem, Animator animator) {
+        this(elem);
+        if (animator == null) {
+            return;
+        }
+        Element animEl = elem.getOwnerDocument().createElement(animator.getTagName());
+        elem.appendChild(animEl);
+        for (Entry<String, String> attribute : animator.getAttributes().entrySet()) {
+            animEl.setAttribute(attribute.getKey(), attribute.getValue());
+        }
+
     }
 
     @Override
