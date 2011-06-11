@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.building.LockerEditorView;
@@ -26,7 +25,6 @@ import com.propertyvista.domain.property.asset.Locker;
 
 public class LockerEditorActivity extends EditorActivityBase<Locker> {
 
-    @Inject
     @SuppressWarnings("unchecked")
     public LockerEditorActivity(Place place) {
         super((LockerEditorView) BuildingViewFactory.instance(LockerEditorView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class),

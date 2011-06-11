@@ -17,7 +17,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.ui.FooterView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
@@ -26,7 +25,6 @@ public class FooterActivity extends AbstractActivity {
 
     private final FooterView view;
 
-    @Inject
     public FooterActivity(Place place) {
         this.view = (FooterView) CrmVeiwFactory.instance(FooterView.class);
         withPlace(place);

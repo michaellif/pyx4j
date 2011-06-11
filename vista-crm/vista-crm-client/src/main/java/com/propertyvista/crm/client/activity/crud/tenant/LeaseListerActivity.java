@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.tenant;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.ListerActivityBase;
 import com.propertyvista.crm.client.ui.crud.tenant.LeaseListerView;
@@ -26,7 +25,6 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeaseListerActivity extends ListerActivityBase<Lease> {
 
-    @Inject
     @SuppressWarnings("unchecked")
     public LeaseListerActivity(Place place) {
         super((LeaseListerView) TenantViewFactory.instance(LeaseListerView.class), (AbstractCrudService<Lease>) GWT.create(LeaseCrudService.class), Lease.class);

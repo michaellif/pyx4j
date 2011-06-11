@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.ListerActivityBase;
 import com.propertyvista.crm.client.ui.crud.building.LockerListerView;
@@ -26,7 +25,6 @@ import com.propertyvista.domain.property.asset.Locker;
 
 public class LockerListerActivity extends ListerActivityBase<Locker> {
 
-    @Inject
     @SuppressWarnings("unchecked")
     public LockerListerActivity(Place place) {
         super((LockerListerView) BuildingViewFactory.instance(LockerListerView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class),

@@ -17,7 +17,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.ui.AlertView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
@@ -26,7 +25,6 @@ public class AlertActivity extends AbstractActivity {
 
     private final AlertView view;
 
-    @Inject
     public AlertActivity(Place place) {
         this.view = (AlertView) CrmVeiwFactory.instance(AlertView.class);
         withPlace(place);

@@ -18,7 +18,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
@@ -38,7 +37,6 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private Key entityId;
 
-    @Inject
     public ViewerActivityBase(IViewerView<E> view, AbstractCrudService<E> service) {
         this.view = view;
         this.service = service;

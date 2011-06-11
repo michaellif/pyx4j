@@ -19,7 +19,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -43,7 +42,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private Key parentID = null;
 
-    @Inject
     public EditorActivityBase(IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         this.view = view;
         this.service = service;

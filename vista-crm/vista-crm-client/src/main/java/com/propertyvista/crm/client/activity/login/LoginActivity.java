@@ -18,7 +18,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -38,7 +37,6 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
 
     private final LoginView view;
 
-    @Inject
     public LoginActivity(Place place) {
         this.view = (LoginView) LoginVeiwFactory.instance(LoginView.class);
         view.setPresenter(this);

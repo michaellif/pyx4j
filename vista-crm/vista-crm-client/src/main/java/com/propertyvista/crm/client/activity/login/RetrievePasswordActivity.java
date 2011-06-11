@@ -18,7 +18,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
@@ -34,7 +33,6 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
 
     private final RetrievePasswordView view;
 
-    @Inject
     public RetrievePasswordActivity(Place place) {
         this.view = (RetrievePasswordView) LoginVeiwFactory.instance(RetrievePasswordView.class);
         view.setPresenter(this);

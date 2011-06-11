@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.unit;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.unit.UnitItemEditorView;
@@ -26,7 +25,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
 public class UnitItemEditorActivity extends EditorActivityBase<AptUnitItem> {
 
-    @Inject
     @SuppressWarnings("unchecked")
     public UnitItemEditorActivity(Place place) {
         super((UnitItemEditorView) UnitViewFactory.instance(UnitItemEditorView.class),

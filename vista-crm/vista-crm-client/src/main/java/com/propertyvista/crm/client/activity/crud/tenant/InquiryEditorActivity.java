@@ -26,7 +26,6 @@ import com.propertyvista.dto.InquiryDTO;
 
 public class InquiryEditorActivity extends EditorActivityBase<InquiryDTO> {
 
-    @Inject
     @SuppressWarnings("unchecked")
     public InquiryEditorActivity(Place place) {
         super((InquiryEditorView) TenantViewFactory.instance(InquiryEditorView.class), (AbstractCrudService<InquiryDTO>) GWT.create(InquiryCrudService.class),

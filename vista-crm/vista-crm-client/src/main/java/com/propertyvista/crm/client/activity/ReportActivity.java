@@ -18,7 +18,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -32,7 +31,6 @@ public class ReportActivity extends AbstractActivity {
 
     private final ReportView view;
 
-    @Inject
     public ReportActivity(Place place) {
         this.view = (ReportView) DashboardVeiwFactory.instance(ReportView.class);
         withPlace(place);

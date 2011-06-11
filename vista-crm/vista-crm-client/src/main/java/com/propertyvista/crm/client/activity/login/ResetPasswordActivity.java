@@ -23,7 +23,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -48,7 +47,6 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
 
     private String token;
 
-    @Inject
     public ResetPasswordActivity(Place place) {
         this.view = (NewPasswordView) LoginVeiwFactory.instance(NewPasswordView.class);
         view.setConversationType(ConversationType.RESET);

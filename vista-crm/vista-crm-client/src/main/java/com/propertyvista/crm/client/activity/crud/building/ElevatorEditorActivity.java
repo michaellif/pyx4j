@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.building.ElevatorEditorView;
@@ -26,7 +25,6 @@ import com.propertyvista.dto.ElevatorDTO;
 
 public class ElevatorEditorActivity extends EditorActivityBase<ElevatorDTO> {
 
-    @Inject
     @SuppressWarnings("unchecked")
     public ElevatorEditorActivity(Place place) {
         super((ElevatorEditorView) BuildingViewFactory.instance(ElevatorEditorView.class), (AbstractCrudService<ElevatorDTO>) GWT

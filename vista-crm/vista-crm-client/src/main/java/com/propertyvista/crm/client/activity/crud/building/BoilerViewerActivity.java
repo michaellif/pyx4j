@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.ViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.building.BoilerViewerView;
@@ -26,7 +25,6 @@ import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerViewerActivity extends ViewerActivityBase<BoilerDTO> {
 
-    @Inject
     @SuppressWarnings("unchecked")
     public BoilerViewerActivity(Place place) {
         super((BoilerViewerView) BuildingViewFactory.instance(BoilerViewerView.class), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class));

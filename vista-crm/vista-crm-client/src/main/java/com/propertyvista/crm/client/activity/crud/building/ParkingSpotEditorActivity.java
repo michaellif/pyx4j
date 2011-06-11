@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.building.ParkingSpotEditorView;
@@ -26,7 +25,6 @@ import com.propertyvista.domain.property.asset.ParkingSpot;
 
 public class ParkingSpotEditorActivity extends EditorActivityBase<ParkingSpot> {
 
-    @Inject
     @SuppressWarnings("unchecked")
     public ParkingSpotEditorActivity(Place place) {
         super((ParkingSpotEditorView) BuildingViewFactory.instance(ParkingSpotEditorView.class), (AbstractCrudService<ParkingSpot>) GWT

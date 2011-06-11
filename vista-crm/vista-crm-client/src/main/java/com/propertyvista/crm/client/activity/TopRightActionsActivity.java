@@ -18,7 +18,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
@@ -40,7 +39,6 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     private final TopRightActionsView view;
 
-    @Inject
     public TopRightActionsActivity(Place place) {
         this.view = (TopRightActionsView) CrmVeiwFactory.instance(TopRightActionsView.class);
         view.setPresenter(this);

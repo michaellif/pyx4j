@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.inject.Inject;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
@@ -56,7 +55,6 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private Theme otherTheme = Theme.BrownWarm;
 
-    @Inject
     public TopRightActionsViewImpl() {
         setStyleName(CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Action);
         setSize("100%", "100%");

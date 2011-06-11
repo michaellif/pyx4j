@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
 
 import com.propertyvista.crm.client.activity.crud.ListerActivityBase;
 import com.propertyvista.crm.client.ui.crud.building.ParkingSpotListerView;
@@ -26,7 +25,6 @@ import com.propertyvista.domain.property.asset.ParkingSpot;
 
 public class ParkingSpotListerActivity extends ListerActivityBase<ParkingSpot> {
 
-    @Inject
     @SuppressWarnings("unchecked")
     public ParkingSpotListerActivity(Place place) {
         super((ParkingSpotListerView) BuildingViewFactory.instance(ParkingSpotListerView.class), (AbstractCrudService<ParkingSpot>) GWT
