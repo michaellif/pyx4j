@@ -21,7 +21,7 @@ import com.propertyvista.domain.property.asset.Locker;
 public class LockerViewerViewImpl extends ViewerViewImplBase<Locker> implements LockerViewerView {
 
     public LockerViewerViewImpl() {
-        super(new CrmSiteMap.Viewers.Locker(), CrmSiteMap.Editors.Locker.class);
+        super(CrmSiteMap.Editors.Locker.class);
         setViewer(new LockerEditorForm(new CrmViewersComponentFactory()));
     }
 }

@@ -71,6 +71,7 @@ import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyViewerActivi
 import com.propertyvista.crm.client.activity.crud.unit.UnitViewerActivity;
 import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrudAppPlace;
 
 public class MainActivityMapper implements AppActivityMapper {
 
@@ -86,15 +87,19 @@ public class MainActivityMapper implements AppActivityMapper {
                 Activity activity = null;
                 if (place instanceof CrmSiteMap.ResetPassword) {
                     activity = new ResetPasswordActivity(place);
-
                     // - Building-related:
                 } else if (place instanceof CrmSiteMap.Properties.Buildings) {
-                    activity = new BuildingListerActivity(place);
-                } else if (place instanceof CrmSiteMap.Viewers.Building) {
-                    activity = new BuildingViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Building) {
-                    activity = new BuildingEditorActivity(place);
-
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new BuildingEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new BuildingViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new BuildingListerActivity(place);
+                        break;
+                    }
                 } else if (place instanceof CrmSiteMap.Viewers.Elevator) {
                     activity = new ElevatorViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.Elevator) {
@@ -136,12 +141,17 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     // - Unit-related:
                 } else if (place instanceof CrmSiteMap.Properties.Units) {
-                    activity = new UnitListerActivity(place);
-                } else if (place instanceof CrmSiteMap.Viewers.Unit) {
-                    activity = new UnitViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Unit) {
-                    activity = new UnitEditorActivity(place);
-
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new UnitEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new UnitViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new UnitListerActivity(place);
+                        break;
+                    }
                 } else if (place instanceof CrmSiteMap.Viewers.UnitItem) {
                     activity = new UnitItemViewerActivity(place);
                 } else if (place instanceof CrmSiteMap.Editors.UnitItem) {

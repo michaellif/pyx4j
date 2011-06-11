@@ -19,7 +19,7 @@ import com.propertyvista.dto.ElevatorDTO;
 
 public class ElevatorEditorViewImpl extends EditorViewImplBase<ElevatorDTO> implements ElevatorEditorView {
     public ElevatorEditorViewImpl() {
-        super(new CrmSiteMap.Editors.Elevator());
+        super(CrmSiteMap.Editors.Elevator.class);
         setEditor(new ElevatorEditorForm());
     }
 

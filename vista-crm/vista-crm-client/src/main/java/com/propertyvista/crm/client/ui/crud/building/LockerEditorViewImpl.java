@@ -19,7 +19,7 @@ import com.propertyvista.domain.property.asset.Locker;
 
 public class LockerEditorViewImpl extends EditorViewImplBase<Locker> implements LockerEditorView {
     public LockerEditorViewImpl() {
-        super(new CrmSiteMap.Editors.Locker());
+        super(CrmSiteMap.Editors.Locker.class);
         setEditor(new LockerEditorForm());
     }
 

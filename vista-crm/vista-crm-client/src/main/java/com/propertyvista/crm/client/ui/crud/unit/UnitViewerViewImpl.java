@@ -21,7 +21,7 @@ import com.propertyvista.dto.AptUnitDTO;
 public class UnitViewerViewImpl extends ViewerViewImplBase<AptUnitDTO> implements UnitViewerView {
 
     public UnitViewerViewImpl() {
-        super(new CrmSiteMap.Viewers.Unit(), CrmSiteMap.Editors.Unit.class);
+        super(CrmSiteMap.Properties.Units.class);
         setViewer(new UnitEditorForm(new CrmViewersComponentFactory()));
     }
 }

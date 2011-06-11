@@ -25,7 +25,7 @@ import com.propertyvista.domain.property.asset.Locker;
 public class LockerLister extends ListerBase<Locker> {
 
     public LockerLister() {
-        super(Locker.class, new CrmSiteMap.Viewers.Locker());
+        super(Locker.class, CrmSiteMap.Editors.Locker.class);
     }
 
     @Override

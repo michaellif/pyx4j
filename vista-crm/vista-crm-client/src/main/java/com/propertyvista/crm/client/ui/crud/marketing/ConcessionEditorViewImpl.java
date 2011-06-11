@@ -20,7 +20,7 @@ import com.propertyvista.domain.marketing.yield.Concession;
 public class ConcessionEditorViewImpl extends EditorViewImplBase<Concession> implements ConcessionEditorView {
 
     public ConcessionEditorViewImpl() {
-        super(new CrmSiteMap.Editors.Concession());
+        super(CrmSiteMap.Editors.Concession.class);
         setEditor(new ConcessionEditorForm());
     }
 }

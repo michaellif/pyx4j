@@ -25,7 +25,7 @@ import com.propertyvista.dto.BuildingDTO;
 public class BuildingLister extends ListerBase<BuildingDTO> {
 
     public BuildingLister() {
-        super(BuildingDTO.class, new CrmSiteMap.Viewers.Building());
+        super(BuildingDTO.class, CrmSiteMap.Properties.Buildings.class);
     }
 
     @Override

@@ -46,12 +46,11 @@ import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.ImageButton;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.crud.FilterData.Operands;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrudAppPlace;
 
 public abstract class ListerBase<E extends IEntity> extends VerticalPanel implements IListerView<E> {
 
@@ -113,6 +112,24 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         getElement().getStyle().setMarginBottom(0.5, Unit.EM);
     }
 
+    public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> link) {
+        this(clazz);
+
+        // add editing on double-click: 
+        getListPanel().getDataTable().addDoubleClickHandler(new DoubleClickHandler() {
+            @Override
+            public void onDoubleClick(DoubleClickEvent event) {
+                // put selected item ID in link arguments:
+                DataTable<E> dt = getListPanel().getDataTable();
+                int selectedRow = dt.getSelectedRow();
+                if (selectedRow >= 0 && selectedRow < dt.getDataTableModel().getData().size()) {
+                    E item = dt.getDataTableModel().getData().get(selectedRow).getEntity();
+                    AppSite.getPlaceController().goTo(CrudAppPlace.formViewerPlace(AppSite.getHistoryMapper().createPlace(link), item.getPrimaryKey()));
+                }
+            }
+        });
+    }
+
     private Widget createAddApplyPanel() {
 
         Image btnAdd = new ImageButton(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover());
@@ -147,24 +164,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         btnApply.getElement().getStyle().setMarginRight(1, Unit.EM);
         panel.setWidth("100%");
         return panel;
-    }
-
-    public ListerBase(Class<E> clazz, final AppPlace link) {
-        this(clazz);
-
-        // add editing on double-click: 
-        getListPanel().getDataTable().addDoubleClickHandler(new DoubleClickHandler() {
-            @Override
-            public void onDoubleClick(DoubleClickEvent event) {
-                // put selected item ID in link arguments:
-                DataTable<E> dt = getListPanel().getDataTable();
-                int selectedRow = dt.getSelectedRow();
-                if (selectedRow >= 0 && selectedRow < dt.getDataTableModel().getData().size()) {
-                    E item = dt.getDataTableModel().getData().get(selectedRow).getEntity();
-                    AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(link, item.getPrimaryKey()));
-                }
-            }
-        });
     }
 
     // EntityListPanel access:

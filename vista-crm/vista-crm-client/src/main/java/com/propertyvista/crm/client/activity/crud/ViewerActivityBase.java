@@ -27,6 +27,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.crud.IViewerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrudAppPlace;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 
 public class ViewerActivityBase<E extends IEntity> extends AbstractActivity implements IViewerView.Presenter {
@@ -70,7 +71,8 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void edit(Class<? extends AppPlace> editPlaceClass) {
-        AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(AppSite.getHistoryMapper().createPlace(editPlaceClass), entityId));
+    public void edit(Class<? extends CrudAppPlace> editPlaceClass) {
+        CrudAppPlace place = CrudAppPlace.formEditorPlace(AppSite.getHistoryMapper().createPlace(editPlaceClass), entityId);
+        AppSite.getPlaceController().goTo(place);
     }
 }

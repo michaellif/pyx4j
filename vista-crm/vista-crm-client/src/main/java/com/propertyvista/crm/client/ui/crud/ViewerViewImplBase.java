@@ -26,12 +26,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.rpc.CrudAppPlace;
 
 public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel implements IViewerView<E> {
 
@@ -43,17 +42,17 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
 
     protected Presenter presenter;
 
-    protected final Class<? extends AppPlace> editPlaceClass;
+    protected final Class<? extends CrudAppPlace> placeClass;
 
     protected final CrmHeaderDecorator header;
 
     protected final String defaultCaption;
 
-    public ViewerViewImplBase(AppPlace viewPlace, Class<? extends AppPlace> editPlaceClass) {
+    public ViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super(Unit.EM);
-        this.editPlaceClass = editPlaceClass;
+        this.placeClass = placeClass;
         setSize("100%", "100%");
-        defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(viewPlace).getCaption();
+        defaultCaption = placeClass.getName();
         addNorth(header = new CrmHeaderDecorator(defaultCaption, createActionsPanel()), 3);
         add(scroll);
     }
@@ -84,7 +83,7 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
         AnchorButton btnEdit = new AnchorButton(i18n.tr("Edit"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.edit(editPlaceClass);
+                presenter.edit(placeClass);
             }
         });
         btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.EditButton);

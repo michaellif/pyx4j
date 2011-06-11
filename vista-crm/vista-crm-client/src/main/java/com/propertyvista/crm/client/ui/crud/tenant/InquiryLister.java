@@ -25,7 +25,7 @@ import com.propertyvista.domain.tenant.Inquiry;
 public class InquiryLister extends ListerBase<Inquiry> {
 
     public InquiryLister() {
-        super(Inquiry.class, new CrmSiteMap.Viewers.Inquiry());
+        super(Inquiry.class, CrmSiteMap.Editors.Inquiry.class);
     }
 
     @Override

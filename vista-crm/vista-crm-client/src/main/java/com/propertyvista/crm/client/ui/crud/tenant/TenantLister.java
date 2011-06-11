@@ -25,7 +25,7 @@ import com.propertyvista.domain.tenant.Tenant;
 public class TenantLister extends ListerBase<Tenant> {
 
     public TenantLister() {
-        super(Tenant.class, new CrmSiteMap.Viewers.Tenant());
+        super(Tenant.class, CrmSiteMap.Editors.Tenant.class);
     }
 
     @Override

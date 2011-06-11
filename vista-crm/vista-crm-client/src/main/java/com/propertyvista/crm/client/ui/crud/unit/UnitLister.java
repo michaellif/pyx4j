@@ -25,7 +25,7 @@ import com.propertyvista.dto.AptUnitDTO;
 public class UnitLister extends ListerBase<AptUnitDTO> {
 
     public UnitLister() {
-        super(AptUnitDTO.class, new CrmSiteMap.Viewers.Unit());
+        super(AptUnitDTO.class, CrmSiteMap.Properties.Units.class);
     }
 
     @Override

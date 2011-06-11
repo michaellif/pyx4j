@@ -20,7 +20,7 @@ import com.propertyvista.dto.BuildingDTO;
 public class BuildingEditorViewImpl extends EditorViewImplBase<BuildingDTO> implements BuildingEditorView {
 
     public BuildingEditorViewImpl() {
-        super(new CrmSiteMap.Editors.Building());
+        super(CrmSiteMap.Properties.Buildings.class);
         setEditor(new BuildingEditorForm());
     }
 }

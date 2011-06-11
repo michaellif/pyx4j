@@ -21,7 +21,7 @@ import com.propertyvista.dto.LockerAreaDTO;
 public class LockerAreaViewerViewImpl extends ViewerViewImplBase<LockerAreaDTO> implements LockerAreaViewerView {
 
     public LockerAreaViewerViewImpl() {
-        super(new CrmSiteMap.Viewers.LockerArea(), CrmSiteMap.Editors.LockerArea.class);
+        super(CrmSiteMap.Editors.LockerArea.class);
         setViewer(new LockerAreaEditorForm(new CrmViewersComponentFactory()));
     }
 }
