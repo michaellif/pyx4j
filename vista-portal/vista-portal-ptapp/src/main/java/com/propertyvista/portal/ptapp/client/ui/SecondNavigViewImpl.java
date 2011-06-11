@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import java.util.HashMap;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -28,17 +27,17 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView {
 
@@ -114,9 +113,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
 
             this.place = AppSite.getHistoryMapper().getPlace(token);
 
-            HashMap<String, String> args = new HashMap<String, String>();
-            args.put(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
-            place.setArgs(args);
+            place.putArg(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
 
             label = new Label(substep.name().getValue());
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
@@ -137,8 +134,8 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
                 break;
             }
 
-            if (substep.placeArgument().getValue() != null && presenter.getWhere().getArgs() != null
-                    && substep.placeArgument().getValue().toString().equals(presenter.getWhere().getArgs().get(PtSiteMap.STEP_ARG_NAME))) {
+            if (substep.placeArgument().getValue() != null
+                    && substep.placeArgument().getValue().toString().equals(presenter.getWhere().getArg(PtSiteMap.STEP_ARG_NAME))) {
                 addStyleDependentName(StyleDependent.current.name());
                 label.addStyleDependentName(StyleDependent.current.name());
             }

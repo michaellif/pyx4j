@@ -237,9 +237,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
                 public void onClick(ClickEvent event) {
                     //TODO navigation done bypassing activities. Not sure if this is correct
                     AppPlace place = new PortalSiteMap.FindApartment.ApartmentDetails();
-                    HashMap<String, String> args = new HashMap<String, String>();
-                    args.put(PortalSiteMap.ARG_PROPERTY_ID, property.id().getValue().toString());
-                    place.setArgs(args);
+                    place.putArg(PortalSiteMap.ARG_PROPERTY_ID, property.id().getValue().toString());
                     AppSite.getPlaceController().goTo(place);
                 }
             });

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import java.util.HashMap;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -32,17 +30,17 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
+import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
@@ -125,9 +123,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             this.place = AppSite.getHistoryMapper().getPlace(step.placeId().getValue());
             if (step.substeps().size() > 0) {
                 ApplicationWizardSubstep substep = step.substeps().get(0);
-                HashMap<String, String> args = new HashMap<String, String>();
-                args.put(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
-                place.setArgs(args);
+                place.putArg(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
             }
             label = new Label(presenter.getNavigLabel(place));
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());

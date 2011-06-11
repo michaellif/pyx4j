@@ -44,7 +44,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     public ViewerActivityBase<E> withPlace(Place place) {
-        entityId = new Key(((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID));
+        entityId = new Key(((AppPlace) place).getArg(CrmSiteMap.ARG_NAME_ITEM_ID));
         return this;
     }
 

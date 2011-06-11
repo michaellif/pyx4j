@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client;
 
-import java.util.HashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
@@ -172,7 +170,7 @@ public class PtAppWizardManager {
         if ((place == null) || (currentStep == null)) {
             return null;
         }
-        String stepArg = place.getArgs().get(PtSiteMap.STEP_ARG_NAME);
+        String stepArg = place.getArg(PtSiteMap.STEP_ARG_NAME);
         // Find current Substep
         if (stepArg == null) {
             return null;
@@ -210,9 +208,7 @@ public class PtAppWizardManager {
                 if (step.substeps().size() > 0) {
                     loopOversubsteps: for (ApplicationWizardSubstep substep : step.substeps()) {
                         if (shouldSelect(substep.status())) {
-                            HashMap<String, String> args = new HashMap<String, String>();
-                            args.put(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
-                            place.setArgs(args);
+                            place.putArg(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
                             break loopOversubsteps;
                         }
                     }

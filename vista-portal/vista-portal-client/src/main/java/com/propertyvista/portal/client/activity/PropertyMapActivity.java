@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.activity;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -69,9 +68,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     @Override
     public void showPropertyDetails(PropertyDTO property) {
         AppPlace place = new PortalSiteMap.FindApartment.ApartmentDetails();
-        HashMap<String, String> args = new HashMap<String, String>();
-        args.put(PortalSiteMap.ARG_PROPERTY_ID, property.id().getValue().toString());
-        place.setArgs(args);
+        place.putArg(PortalSiteMap.ARG_PROPERTY_ID, property.id().getValue().toString());
         AppSite.getPlaceController().goTo(place);
     }
 
@@ -80,7 +77,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
         PropertySearchCriteria criteria = view.getValue();
         Map<String, String> args = EntityArgsConverter.convertToArgs(criteria);
         AppPlace place = new PortalSiteMap.FindApartment.PropertyMap();
-        place.setArgs(args);
+        place.putAllArgs(args);
         AppSite.getPlaceController().goTo(place);
     }
 

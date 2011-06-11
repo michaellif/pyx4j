@@ -56,7 +56,7 @@ public class StaticPageActivity extends AbstractActivity implements StaticPageVi
 
     public StaticPageActivity withPlace(Place place) {
         if (place instanceof Page) {
-            path = PageContent.PATH_SEPARATOR + ((AppPlace) place).getArgs().get(PortalSiteMap.ARG_PAGE_ID);
+            path = PageContent.PATH_SEPARATOR + ((AppPlace) place).getArg(PortalSiteMap.ARG_PAGE_ID);
         } else if (place instanceof Landing) {
             path = PageContent.PATH_SEPARATOR;
         } else {

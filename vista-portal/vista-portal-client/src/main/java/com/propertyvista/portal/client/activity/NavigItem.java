@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.activity;
 
-import java.util.HashMap;
-
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.domain.site.PageDescriptor;
@@ -34,10 +32,7 @@ public class NavigItem {
     public NavigItem(String path, String caption) {
         this.place = new PortalSiteMap.Page();
         this.caption = caption;
-
-        HashMap<String, String> args = new HashMap<String, String>();
-        args.put(PortalSiteMap.ARG_PAGE_ID, path);
-        place.setArgs(args);
+        place.putArg(PortalSiteMap.ARG_PAGE_ID, path);
     }
 
     public AppPlace getPlace() {

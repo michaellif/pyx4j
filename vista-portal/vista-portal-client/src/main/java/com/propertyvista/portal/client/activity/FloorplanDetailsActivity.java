@@ -44,7 +44,7 @@ public class FloorplanDetailsActivity extends AbstractActivity implements Floorp
     }
 
     public FloorplanDetailsActivity withPlace(Place place) {
-        floorplanId = ((AppPlace) place).getArgs().get(PortalSiteMap.ARG_FLOORPLAN_ID);
+        floorplanId = ((AppPlace) place).getArg(PortalSiteMap.ARG_FLOORPLAN_ID);
         return this;
     }
 

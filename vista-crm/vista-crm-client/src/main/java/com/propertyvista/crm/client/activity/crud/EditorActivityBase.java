@@ -54,10 +54,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         parentID = null;
 
         String id;
-        if ((id = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_ITEM_ID)) != null) {
+        if ((id = ((AppPlace) place).getArg(CrmSiteMap.ARG_NAME_ITEM_ID)) != null) {
             entityID = new Key(id);
         }
-        if ((id = ((AppPlace) place).getArgs().get(CrmSiteMap.ARG_NAME_PARENT_ID)) != null) {
+        if ((id = ((AppPlace) place).getArg(CrmSiteMap.ARG_NAME_PARENT_ID)) != null) {
             parentID = new Key(id);
         }
 

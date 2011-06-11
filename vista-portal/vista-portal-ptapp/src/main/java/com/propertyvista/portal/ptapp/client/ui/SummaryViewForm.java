@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -192,9 +191,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             public void onClick(ClickEvent event) {
                 if (link.getClass().equals(PtSiteMap.Info.class) || link.getClass().equals(PtSiteMap.Financial.class)) {
                     if (!getValue().tenantList().tenants().isEmpty()) {
-                        HashMap<String, String> args = new HashMap<String, String>();
-                        args.put(PtSiteMap.STEP_ARG_NAME, getValue().tenantList().tenants().get(0).getPrimaryKey().toString());
-                        link.setArgs(args);
+                        link.putArg(PtSiteMap.STEP_ARG_NAME, getValue().tenantList().tenants().get(0).getPrimaryKey().toString());
                     }
                 }
 

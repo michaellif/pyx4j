@@ -13,11 +13,6 @@
  */
 package com.propertyvista.portal.client.activity;
 
-import java.util.HashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -37,8 +32,6 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class ApartmentDetailsActivity extends AbstractActivity implements ApartmentDetailsView.Presenter {
 
-    private static final Logger log = LoggerFactory.getLogger(ApartmentDetailsActivity.class);
-
     private final ApartmentDetailsView view;
 
     private String propertyId;
@@ -50,7 +43,7 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
     }
 
     public ApartmentDetailsActivity withPlace(Place place) {
-        propertyId = ((AppPlace) place).getArgs().get(PortalSiteMap.ARG_PROPERTY_ID);
+        propertyId = ((AppPlace) place).getArg(PortalSiteMap.ARG_PROPERTY_ID);
         return this;
     }
 
@@ -71,10 +64,8 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
     @Override
     public void showFloorplan(FloorplanDTO floorplan) {
         AppPlace place = new PortalSiteMap.FindApartment.FloorplanDetails();
-        HashMap<String, String> args = new HashMap<String, String>();
         //TODO floorplan id is null. fix this
-        args.put(PortalSiteMap.ARG_FLOORPLAN_ID, floorplan.id().getValue().toString());
-        place.setArgs(args);
+        place.putArg(PortalSiteMap.ARG_FLOORPLAN_ID, floorplan.id().getValue().toString());
         AppSite.getPlaceController().goTo(place);
     }
 

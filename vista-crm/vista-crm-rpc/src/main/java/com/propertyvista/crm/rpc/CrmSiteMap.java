@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.rpc;
 
-import java.util.HashMap;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
@@ -30,17 +28,13 @@ public class CrmSiteMap implements SiteMap {
     public static String ARG_VALUE_NEW_ITEM = "new";
 
     public static AppPlace formItemPlace(AppPlace itemPlace, Key itemID) {
-        HashMap<String, String> args = new HashMap<String, String>();
-        args.put(CrmSiteMap.ARG_NAME_ITEM_ID, itemID.toString());
-        itemPlace.setArgs(args);
+        itemPlace.putArg(CrmSiteMap.ARG_NAME_ITEM_ID, itemID.toString());
         return itemPlace;
     }
 
     public static AppPlace formNewItemPlace(AppPlace itemPlace, Key parentID) {
-        HashMap<String, String> args = new HashMap<String, String>();
-        args.put(CrmSiteMap.ARG_NAME_ITEM_ID, ARG_VALUE_NEW_ITEM);
-        args.put(CrmSiteMap.ARG_NAME_PARENT_ID, parentID.toString());
-        itemPlace.setArgs(args);
+        itemPlace.putArg(CrmSiteMap.ARG_NAME_ITEM_ID, ARG_VALUE_NEW_ITEM);
+        itemPlace.putArg(CrmSiteMap.ARG_NAME_PARENT_ID, parentID.toString());
         return itemPlace;
     }
 
