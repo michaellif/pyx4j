@@ -57,8 +57,9 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
         return null;
     }
 
-    public AppPlace createPlace(Class<? extends AppPlace> placeClass) {
-        return getPlace(AppPlaceInfo.getPlaceId(placeClass));
+    @SuppressWarnings("unchecked")
+    public <E extends AppPlace> E createPlace(Class<E> placeClass) {
+        return (E) getPlace(AppPlaceInfo.getPlaceId(placeClass));
     }
 
     public AppPlaceInfo getPlaceInfo(AppPlace place) {

@@ -106,13 +106,15 @@ public class AppPlaceListingGenerator extends Generator {
         writer.indent();
 
         for (JClassType jClassType : placeClasses) {
-            String type = jClassType.getQualifiedSourceName();
-            writer.println("if (\"" + type + "\".contains(siteMapClass.getName()) && ");
-            writer.println("    token.equals(AppPlaceInfo.getPlaceId(" + type + ".class))) {");
-            writer.indent();
-            writer.println("return new " + type + "();");
-            writer.outdent();
-            writer.println("}");
+            if (!jClassType.isAbstract()) {
+                String type = jClassType.getQualifiedSourceName();
+                writer.println("if (\"" + type + "\".contains(siteMapClass.getName()) && ");
+                writer.println("    token.equals(AppPlaceInfo.getPlaceId(" + type + ".class))) {");
+                writer.indent();
+                writer.println("return new " + type + "();");
+                writer.outdent();
+                writer.println("}");
+            }
         }
 
         writer.println("return null;");
@@ -127,16 +129,18 @@ public class AppPlaceListingGenerator extends Generator {
         writer.indent();
 
         for (JClassType jClassType : placeClasses) {
-            writer.println("if (place.getClass() == " + jClassType.getQualifiedSourceName() + ".class) {");
-            writer.indent();
-            NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
-            PlaceProperties placeProperties = jClassType.getAnnotation(PlaceProperties.class);
-            String navigLabel = navigationItem == null ? "" : navigationItem.navigLabel();
-            String caption = placeProperties == null ? "" : placeProperties.caption();
-            String staticContent = placeProperties == null ? null : placeProperties.staticContent();
-            writer.println("return new AppPlaceInfo(\"" + navigLabel + "\", \"" + caption + "\", \"" + staticContent + "\");");
-            writer.outdent();
-            writer.println("}");
+            if (!jClassType.isAbstract()) {
+                writer.println("if (place.getClass() == " + jClassType.getQualifiedSourceName() + ".class) {");
+                writer.indent();
+                NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
+                PlaceProperties placeProperties = jClassType.getAnnotation(PlaceProperties.class);
+                String navigLabel = navigationItem == null ? "" : navigationItem.navigLabel();
+                String caption = placeProperties == null ? "" : placeProperties.caption();
+                String staticContent = placeProperties == null ? null : placeProperties.staticContent();
+                writer.println("return new AppPlaceInfo(\"" + navigLabel + "\", \"" + caption + "\", \"" + staticContent + "\");");
+                writer.outdent();
+                writer.println("}");
+            }
         }
 
         writer.println("return null;");
@@ -154,7 +158,8 @@ public class AppPlaceListingGenerator extends Generator {
         for (JClassType jClassType : placeClasses) {
             String type = jClassType.getQualifiedSourceName();
             NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
-            if (!jClassType.getEnclosingType().isAssignableFrom(placeType) && navigationItem != null) {
+
+            if (!jClassType.isAbstract() && !jClassType.getEnclosingType().isAssignableFrom(placeType) && navigationItem != null) {
                 writer.println("places.add(new " + type + "());");
             }
         }
