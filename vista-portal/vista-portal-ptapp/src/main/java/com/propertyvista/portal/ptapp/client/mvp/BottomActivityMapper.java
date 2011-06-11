@@ -16,24 +16,14 @@ package com.propertyvista.portal.ptapp.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 import com.propertyvista.portal.ptapp.client.activity.FooterActivity;
 
 public class BottomActivityMapper implements ActivityMapper {
 
-    Provider<FooterActivity> activityProvider;
-
-    @Inject
-    public BottomActivityMapper(Provider<FooterActivity> activityProvider) {
-        super();
-        this.activityProvider = activityProvider;
-    }
-
     @Override
     public Activity getActivity(Place place) {
-        return activityProvider.get();
+        return new FooterActivity(place);
     }
 
 }

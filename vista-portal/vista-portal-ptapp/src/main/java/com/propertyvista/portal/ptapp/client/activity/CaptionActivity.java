@@ -16,21 +16,21 @@ package com.propertyvista.portal.ptapp.client.activity;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
-
-import com.propertyvista.portal.ptapp.client.ui.CaptionView;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.portal.ptapp.client.ui.CaptionView;
+import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
+
 public class CaptionActivity extends AbstractActivity {
 
     private final CaptionView view;
 
-    @Inject
-    public CaptionActivity(CaptionView view) {
-        this.view = view;
+    public CaptionActivity(AppPlace place) {
+        this.view = (CaptionView) PtAppViewFactory.instance(CaptionView.class);
+        withPlace(place);
     }
 
     public CaptionActivity withPlace(AppPlace place) {

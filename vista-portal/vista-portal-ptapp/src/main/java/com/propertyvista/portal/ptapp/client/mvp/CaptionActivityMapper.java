@@ -16,26 +16,16 @@ package com.propertyvista.portal.ptapp.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
-import com.propertyvista.portal.ptapp.client.activity.CaptionActivity;
 
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.ptapp.client.activity.CaptionActivity;
+
 public class CaptionActivityMapper implements ActivityMapper {
-
-    Provider<CaptionActivity> captionActivityProvider;
-
-    @Inject
-    public CaptionActivityMapper(final Provider<CaptionActivity> captionActivityProvider) {
-        super();
-        this.captionActivityProvider = captionActivityProvider;
-    }
 
     @Override
     public Activity getActivity(Place place) {
-        return captionActivityProvider.get().withPlace((AppPlace) place);
+        return new CaptionActivity((AppPlace) place);
     }
 
 }

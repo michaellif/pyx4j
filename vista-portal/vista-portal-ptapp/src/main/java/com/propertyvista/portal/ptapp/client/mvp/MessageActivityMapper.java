@@ -16,27 +16,13 @@ package com.propertyvista.portal.ptapp.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 import com.propertyvista.portal.ptapp.client.activity.UserMessageActivity;
 
-import com.pyx4j.site.rpc.AppPlace;
-
 public class MessageActivityMapper implements ActivityMapper {
-
-    Provider<UserMessageActivity> userMessageActivityProvider;
-
-    @Inject
-    public MessageActivityMapper(final Provider<UserMessageActivity> userMessageActivityProvider) {
-
-        super();
-        this.userMessageActivityProvider = userMessageActivityProvider;
-
-    }
 
     @Override
     public Activity getActivity(Place place) {
-        return userMessageActivityProvider.get().withPlace((AppPlace) place);
+        return new UserMessageActivity(place);
     }
 }

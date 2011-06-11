@@ -16,26 +16,14 @@ package com.propertyvista.portal.ptapp.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 import com.propertyvista.portal.ptapp.client.activity.TopRightActionsActivity;
 
-import com.pyx4j.site.rpc.AppPlace;
-
 public class ActionsActivityMapper implements ActivityMapper {
-
-    Provider<TopRightActionsActivity> topRightActionActivityProvider;
-
-    @Inject
-    public ActionsActivityMapper(Provider<TopRightActionsActivity> topRightActionActivityProvider) {
-        super();
-        this.topRightActionActivityProvider = topRightActionActivityProvider;
-    }
 
     @Override
     public Activity getActivity(Place place) {
-        return topRightActionActivityProvider.get().withPlace((AppPlace) place);
+        return new TopRightActionsActivity(place);
     }
 
 }

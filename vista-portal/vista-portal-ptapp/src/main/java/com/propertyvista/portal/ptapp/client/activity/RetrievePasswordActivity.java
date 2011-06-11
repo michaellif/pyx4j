@@ -16,30 +16,30 @@ package com.propertyvista.portal.ptapp.client.activity;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
-
-import com.propertyvista.portal.ptapp.client.PtAppSite;
-import com.propertyvista.portal.ptapp.client.ui.RetrievePasswordView;
-import com.propertyvista.portal.rpc.ptapp.PasswordRetrievalRequest;
-import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.portal.ptapp.client.PtAppSite;
+import com.propertyvista.portal.ptapp.client.ui.RetrievePasswordView;
+import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
+import com.propertyvista.portal.rpc.ptapp.PasswordRetrievalRequest;
+import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 public class RetrievePasswordActivity extends AbstractActivity implements RetrievePasswordView.Presenter {
 
     private final RetrievePasswordView view;
 
-    @Inject
-    public RetrievePasswordActivity(RetrievePasswordView view) {
-        this.view = view;
+    public RetrievePasswordActivity(Place place) {
+        this.view = (RetrievePasswordView) PtAppViewFactory.instance(RetrievePasswordView.class);
         view.setPresenter(this);
+        withPlace(place);
     }
 
-    public RetrievePasswordActivity withPlace(AppPlace place) {
+    public RetrievePasswordActivity withPlace(Place place) {
         return this;
     }
 

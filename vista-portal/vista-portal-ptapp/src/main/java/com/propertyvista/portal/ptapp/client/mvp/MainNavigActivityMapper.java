@@ -17,29 +17,19 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.portal.ptapp.client.activity.MainNavigActivity;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
-import com.pyx4j.security.client.ClientContext;
-
 public class MainNavigActivityMapper implements ActivityMapper {
-
-    Provider<MainNavigActivity> mainNavigActivityProvider;
-
-    @Inject
-    public MainNavigActivityMapper(final Provider<MainNavigActivity> mainNavigActivityProvider) {
-        super();
-        this.mainNavigActivityProvider = mainNavigActivityProvider;
-    }
 
     @Override
     public Activity getActivity(Place place) {
         if (ClientContext.isAuthenticated() && !(place instanceof PtSiteMap.Completion)) {
             RootPanel.getBodyElement().setClassName("body-nonavig");
-            return mainNavigActivityProvider.get().withPlace(place);
+            return new MainNavigActivity(place);
         } else {
             RootPanel.getBodyElement().setClassName("body-navig");
             return null;

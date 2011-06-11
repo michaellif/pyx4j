@@ -19,25 +19,25 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
-
-import com.propertyvista.portal.ptapp.client.PtAppSite;
-import com.propertyvista.portal.ptapp.client.ui.NewPasswordView;
-import com.propertyvista.portal.ptapp.client.ui.NewPasswordView.ConversationType;
-import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.portal.ptapp.client.PtAppSite;
+import com.propertyvista.portal.ptapp.client.ui.NewPasswordView;
+import com.propertyvista.portal.ptapp.client.ui.NewPasswordView.ConversationType;
+import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
+import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 public class ResetPasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
 
@@ -47,14 +47,14 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
 
     private String token;
 
-    @Inject
-    public ResetPasswordActivity(NewPasswordView view) {
-        this.view = view;
+    public ResetPasswordActivity(Place place) {
+        this.view = (NewPasswordView) PtAppViewFactory.instance(NewPasswordView.class);
         view.setConversationType(ConversationType.RESET);
         view.setPresenter(this);
+        withPlace(place);
     }
 
-    public ResetPasswordActivity withPlace(AppPlace place) {
+    public ResetPasswordActivity withPlace(Place place) {
         return this;
     }
 

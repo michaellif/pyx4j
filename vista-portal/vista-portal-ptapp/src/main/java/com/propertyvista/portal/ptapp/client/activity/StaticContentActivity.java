@@ -21,14 +21,14 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.resources.client.ResourcePrototype;
 import com.google.gwt.resources.client.TextResource;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
-
-import com.propertyvista.portal.ptapp.client.resources.PortalResources;
-import com.propertyvista.portal.ptapp.client.ui.StaticContentView;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
+
+import com.propertyvista.portal.ptapp.client.resources.PortalResources;
+import com.propertyvista.portal.ptapp.client.ui.StaticContentView;
+import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 
 public class StaticContentActivity extends AbstractActivity implements StaticContentView.Presenter {
 
@@ -38,10 +38,10 @@ public class StaticContentActivity extends AbstractActivity implements StaticCon
 
     private String content;
 
-    @Inject
-    public StaticContentActivity(StaticContentView view) {
-        this.view = view;
+    public StaticContentActivity(AppPlace place) {
+        this.view = (StaticContentView) PtAppViewFactory.instance(StaticContentView.class);
         view.setPresenter(this);
+        withPlace(place);
     }
 
     public StaticContentActivity withPlace(AppPlace place) {

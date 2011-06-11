@@ -19,18 +19,18 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
-
-import com.propertyvista.portal.ptapp.client.ui.NewPasswordView;
-import com.propertyvista.portal.ptapp.client.ui.NewPasswordView.ConversationType;
-import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
-import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.portal.ptapp.client.ui.NewPasswordView;
+import com.propertyvista.portal.ptapp.client.ui.NewPasswordView.ConversationType;
+import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
+import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
+import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 public class ChangePasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
 
@@ -40,14 +40,14 @@ public class ChangePasswordActivity extends AbstractActivity implements NewPassw
 
     private String token;
 
-    @Inject
-    public ChangePasswordActivity(NewPasswordView view) {
-        this.view = view;
+    public ChangePasswordActivity(Place place) {
+        this.view = (NewPasswordView) PtAppViewFactory.instance(NewPasswordView.class);
         view.setConversationType(ConversationType.CHANGE);
         view.setPresenter(this);
+        withPlace(place);
     }
 
-    public ChangePasswordActivity withPlace(AppPlace place) {
+    public ChangePasswordActivity withPlace(Place place) {
         return this;
     }
 

@@ -25,13 +25,13 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.ptapp.client.ui.ApartmentUnitsTable;
 import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.MainNavigViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.PaymentViewForm;
 import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.SiteView;
-import com.propertyvista.portal.ptapp.client.ui.SummaryViewForm;
+import com.propertyvista.portal.ptapp.client.ui.PtAppSiteView;
+import com.propertyvista.portal.ptapp.client.ui.steps.ApartmentUnitsTable;
+import com.propertyvista.portal.ptapp.client.ui.steps.PaymentViewForm;
+import com.propertyvista.portal.ptapp.client.ui.steps.SummaryViewForm;
 
 public abstract class VistaTheme extends com.propertyvista.common.client.theme.VistaTheme {
 
@@ -96,7 +96,7 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
     }
 
     protected void initSiteViewStyles() {
-        String prefix = SiteView.DEFAULT_STYLE_PREFIX;
+        String prefix = PtAppSiteView.DEFAULT_STYLE_PREFIX;
 
         int minWidth = 960;
         int maxWidth = 960;
@@ -110,57 +110,57 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         style.addProperty("margin", "0 auto");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Header));
+        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Header));
         style.addProperty("height", "115px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.MainNavig));
+        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.MainNavig));
         style.addProperty("width", "100%");
         style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Center));
+        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Center));
         style.addProperty("width", "100%");
         style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Main));
+        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Main));
         style.addProperty("height", "100%");
         style.addProperty("margin", "0 " + rightColumnWidth + "px 0 " + leftColumnWidth + "px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Caption));
+        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Caption));
         style.addProperty("width", "30%");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.SecondaryNavig));
+        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.SecondaryNavig));
         style.addProperty("width", "70%");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Message));
+        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Message));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Content));
+        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Content));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Left));
+        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Left));
         style.addProperty("float", "left");
         style.addProperty("width", leftColumnWidth + "px");
         style.addProperty("margin-left", "-100%");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Right));
+        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Right));
         style.addProperty("float", "left");
         style.addProperty("width", rightColumnWidth + "px");
         style.addProperty("margin-left", "-" + rightColumnWidth + "px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Footer));
+        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Footer));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("clear", "left");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Display));
+        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Display));
         addStyle(style);
 
         style = new Style(Selector.valueOf(VistaHeaderDecorator.DEFAULT_STYLE_PREFIX));

@@ -18,7 +18,7 @@ import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
-import com.propertyvista.portal.ptapp.client.ui.ApartmentUnitsTable;
+import com.propertyvista.portal.ptapp.client.ui.steps.ApartmentUnitsTable;
 
 public class VillageGreenTheme extends VistaTheme {
 

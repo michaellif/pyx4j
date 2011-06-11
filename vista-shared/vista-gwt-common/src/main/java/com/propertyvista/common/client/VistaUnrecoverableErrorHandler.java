@@ -20,8 +20,6 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.inject.Inject;
-import com.propertyvista.common.client.events.UserMessageEvent;
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -31,10 +29,14 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.util.BrowserType;
 
+import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {
 
     private static I18n i18n = I18nFactory.getI18n(VistaUnrecoverableErrorHandler.class);
 
+    // TODO  - remove ginjection from here also!?.
     @Inject
     public VistaUnrecoverableErrorHandler() {
         UncaughtHandler.setUnrecoverableErrorHandler(this);

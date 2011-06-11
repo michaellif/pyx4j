@@ -17,17 +17,17 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.propertyvista.portal.ptapp.client.ui.FooterView;
+import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 
 public class FooterActivity extends AbstractActivity {
 
     private final FooterView view;
 
-    @Inject
-    public FooterActivity(FooterView view) {
-        this.view = view;
+    public FooterActivity(Place place) {
+        this.view = (FooterView) PtAppViewFactory.instance(FooterView.class);
+        withPlace(place);
     }
 
     public FooterActivity withPlace(Place place) {

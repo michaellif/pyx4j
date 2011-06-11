@@ -8,13 +8,12 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.inject.Inject;
-
-import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 public class TopRightActionsViewImpl extends VerticalPanel implements TopRightActionsView {
 
@@ -40,7 +39,6 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
     private Theme otherTheme = Theme.VillageGreen;
 
-    @Inject
     public TopRightActionsViewImpl() {
         getElement().getStyle().setFontSize(0.9, Unit.EM);
 
