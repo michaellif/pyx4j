@@ -25,7 +25,7 @@ import com.propertyvista.portal.domain.ptapp.Application;
 public class ApplicationLister extends ListerBase<Application> {
 
     public ApplicationLister() {
-        super(Application.class, CrmSiteMap.Editors.Application.class);
+        super(Application.class, CrmSiteMap.Tenants.Application.class);
     }
 
     @Override

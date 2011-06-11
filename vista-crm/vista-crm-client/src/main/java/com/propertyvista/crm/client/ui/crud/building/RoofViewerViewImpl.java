@@ -21,7 +21,7 @@ import com.propertyvista.dto.RoofDTO;
 public class RoofViewerViewImpl extends ViewerViewImplBase<RoofDTO> implements RoofViewerView {
 
     public RoofViewerViewImpl() {
-        super(CrmSiteMap.Editors.Roof.class);
+        super(CrmSiteMap.Properties.Roof.class);
         setViewer(new RoofEditorForm(new CrmViewersComponentFactory()));
     }
 }

@@ -25,7 +25,7 @@ import com.propertyvista.domain.property.asset.ParkingSpot;
 public class ParkingSpotLister extends ListerBase<ParkingSpot> {
 
     public ParkingSpotLister() {
-        super(ParkingSpot.class, CrmSiteMap.Editors.ParkingSpot.class);
+        super(ParkingSpot.class, CrmSiteMap.Properties.ParkingSpot.class);
     }
 
     @Override

@@ -21,7 +21,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 public class UnitOccupancyViewerViewImpl extends ViewerViewImplBase<AptUnitOccupancy> implements UnitOccupancyViewerView {
 
     public UnitOccupancyViewerViewImpl() {
-        super(CrmSiteMap.Editors.UnitOccupancy.class);
+        super(CrmSiteMap.Properties.UnitOccupancy.class);
         setViewer(new UnitOccupancyEditorForm(new CrmViewersComponentFactory()));
     }
 }

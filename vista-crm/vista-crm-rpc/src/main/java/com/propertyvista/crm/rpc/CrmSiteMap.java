@@ -99,141 +99,8 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "City Orders")
         public static class CityOrders extends CrudAppPlace {
         }
-    }
 
-    public static class Tenants extends AppPlace {
-
-        @PlaceProperties(caption = "Current Tenants")
-        @NavigationItem(navigLabel = "Current Tenants")
-        public static class CurrentTenants extends AppPlace {
-        }
-
-        @PlaceProperties(caption = "All Tenants")
-        @NavigationItem(navigLabel = "All Tenants")
-        public static class AllTenants extends AppPlace {
-        }
-
-        @PlaceProperties(caption = "Leases")
-        @NavigationItem(navigLabel = "Leases")
-        public static class Leases extends AppPlace {
-        }
-
-        @PlaceProperties(caption = "Applications")
-        @NavigationItem(navigLabel = "Applications")
-        public static class Applications extends AppPlace {
-        }
-
-        @PlaceProperties(caption = "Inquiries")
-        @NavigationItem(navigLabel = "Inquiries")
-        public static class Inquiries extends AppPlace {
-        }
-    }
-
-    public static class Viewers extends AppPlace {
-
-        @PlaceProperties(caption = "Tenant")
-        @NavigationItem(navigLabel = "Tenant")
-        public static class Tenant extends AppPlace {
-        }
-
-        @PlaceProperties(caption = "Lease")
-        @NavigationItem(navigLabel = "Lease")
-        public static class Lease extends AppPlace {
-        }
-
-        @PlaceProperties(caption = "Application")
-        @NavigationItem(navigLabel = "Application")
-        public static class Application extends AppPlace {
-        }
-
-        @PlaceProperties(caption = "Inquiry")
-        @NavigationItem(navigLabel = "Inquiry")
-        public static class Inquiry extends AppPlace {
-        }
-
-        @PlaceProperties(caption = "Elevator")
-        @NavigationItem(navigLabel = "Elevator")
-        public static class Elevator extends AppPlace {
-
-        }
-
-        @PlaceProperties(caption = "Boiler")
-        @NavigationItem(navigLabel = "Boiler")
-        public static class Boiler extends AppPlace {
-
-        }
-
-        @PlaceProperties(caption = "Roof")
-        @NavigationItem(navigLabel = "Roof")
-        public static class Roof extends AppPlace {
-
-        }
-
-        @PlaceProperties(caption = "Parking")
-        @NavigationItem(navigLabel = "Parking")
-        public static class Parking extends AppPlace {
-
-        }
-
-        @PlaceProperties(caption = "Parking Spot")
-        @NavigationItem(navigLabel = "Parking Spot")
-        public static class ParkingSpot extends AppPlace {
-
-        }
-
-        @PlaceProperties(caption = "Locker Area")
-        @NavigationItem(navigLabel = "Locker Area")
-        public static class LockerArea extends AppPlace {
-
-        }
-
-        @PlaceProperties(caption = "Locker")
-        @NavigationItem(navigLabel = "Locker")
-        public static class Locker extends AppPlace {
-
-        }
-
-        @PlaceProperties(caption = "Unit Item")
-        @NavigationItem(navigLabel = "Unit Item")
-        public static class UnitItem extends AppPlace {
-
-        }
-
-        @PlaceProperties(caption = "Unit Occupancy")
-        @NavigationItem(navigLabel = "Unit Occupancy")
-        public static class UnitOccupancy extends AppPlace {
-
-        }
-
-        @PlaceProperties(caption = "Concession")
-        @NavigationItem(navigLabel = "Concession")
-        public static class Concession extends AppPlace {
-
-        }
-
-    }
-
-    public static class Editors extends AppPlace {
-
-        @PlaceProperties(caption = "Tenant")
-        @NavigationItem(navigLabel = "Tenant")
-        public static class Tenant extends CrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Lease")
-        @NavigationItem(navigLabel = "Lease")
-        public static class Lease extends CrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Application")
-        @NavigationItem(navigLabel = "Application")
-        public static class Application extends CrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Inquiry")
-        @NavigationItem(navigLabel = "Inquiry")
-        public static class Inquiry extends CrudAppPlace {
-        }
+        //////////////////////////////////////
 
         @PlaceProperties(caption = "Elevator")
         @NavigationItem(navigLabel = "Elevator")
@@ -294,6 +161,31 @@ public class CrmSiteMap implements SiteMap {
         public static class Concession extends CrudAppPlace {
 
         }
+
+    }
+
+    public static class Tenants extends AppPlace {
+
+        @PlaceProperties(caption = "Tenants")
+        @NavigationItem(navigLabel = "Tenants")
+        public static class Tenant extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Leases")
+        @NavigationItem(navigLabel = "Leases")
+        public static class Lease extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Applications")
+        @NavigationItem(navigLabel = "Applications")
+        public static class Application extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Inquiry")
+        @NavigationItem(navigLabel = "Inquiry")
+        public static class Inquiry extends CrudAppPlace {
+        }
+
     }
 
     public static class Marketing extends AppPlace {

@@ -20,7 +20,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class LeaseListerViewImpl extends ListerViewImplBase<Lease> implements LeaseListerView {
 
     public LeaseListerViewImpl() {
-        super(new CrmSiteMap.Tenants.Leases());
+        super(new CrmSiteMap.Tenants.Lease());
         setLister(new LeaseLister());
     }
 }

@@ -20,7 +20,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 public class UnitItemEditorViewImpl extends EditorViewImplBase<AptUnitItem> implements UnitItemEditorView {
 
     public UnitItemEditorViewImpl() {
-        super(CrmSiteMap.Editors.UnitItem.class);
+        super(CrmSiteMap.Properties.UnitItem.class);
         setEditor(new UnitItemEditorForm());
     }
 }

@@ -21,7 +21,7 @@ import com.propertyvista.dto.InquiryDTO;
 public class InquiryViewerViewImpl extends ViewerViewImplBase<InquiryDTO> implements InquiryViewerView {
 
     public InquiryViewerViewImpl() {
-        super(CrmSiteMap.Editors.Inquiry.class);
+        super(CrmSiteMap.Tenants.Inquiry.class);
         setViewer(new InquiryEditorForm(new CrmViewersComponentFactory()));
     }
 }

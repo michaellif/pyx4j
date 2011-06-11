@@ -21,7 +21,7 @@ import com.propertyvista.domain.marketing.yield.Concession;
 public class ConcessionViewerViewImpl extends ViewerViewImplBase<Concession> implements ConcessionViewerView {
 
     public ConcessionViewerViewImpl() {
-        super(CrmSiteMap.Editors.Concession.class);
+        super(CrmSiteMap.Properties.Concession.class);
         setViewer(new ConcessionEditorForm(new CrmViewersComponentFactory()));
     }
 }

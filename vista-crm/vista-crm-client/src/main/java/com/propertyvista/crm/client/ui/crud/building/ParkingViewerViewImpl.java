@@ -21,7 +21,7 @@ import com.propertyvista.dto.ParkingDTO;
 public class ParkingViewerViewImpl extends ViewerViewImplBase<ParkingDTO> implements ParkingViewerView {
 
     public ParkingViewerViewImpl() {
-        super(CrmSiteMap.Editors.Parking.class);
+        super(CrmSiteMap.Properties.Parking.class);
         setViewer(new ParkingEditorForm(new CrmViewersComponentFactory()));
     }
 }

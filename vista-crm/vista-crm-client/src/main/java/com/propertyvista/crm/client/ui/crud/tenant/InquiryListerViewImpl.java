@@ -20,7 +20,7 @@ import com.propertyvista.domain.tenant.Inquiry;
 public class InquiryListerViewImpl extends ListerViewImplBase<Inquiry> implements InquiryListerView {
 
     public InquiryListerViewImpl() {
-        super(new CrmSiteMap.Tenants.Inquiries());
+        super(new CrmSiteMap.Tenants.Inquiry());
         setLister(new InquiryLister());
     }
 }

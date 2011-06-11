@@ -32,10 +32,9 @@ import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrudAppPlace;
 
 public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEditor<E> {
     protected static I18n i18n = I18nFactory.getI18n(CrmEntityFolder.class);
@@ -46,7 +45,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
 
     private final boolean editable;
 
-    private final Class<? extends AppPlace> placeClass;
+    private final Class<? extends CrudAppPlace> placeClass;
 
     private final CEntityForm<?> parent;
 
@@ -54,7 +53,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
         this(clazz, itemName, editable, null, null);
     }
 
-    public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable, Class<? extends AppPlace> placeClass, CEntityForm<?> parent) {
+    public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable, Class<? extends CrudAppPlace> placeClass, CEntityForm<?> parent) {
         super(clazz);
         this.clazz = clazz;
         this.itemName = itemName;
@@ -77,8 +76,14 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
                     decor.addItemClickHandler(new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent event) {
-                            AppSite.getPlaceController().goTo(
-                                    CrmSiteMap.formItemPlace(AppSite.getHistoryMapper().createPlace(placeClass), getValue().getPrimaryKey()));
+                            CrudAppPlace place = null;
+                            if (editable) {
+                                place = CrudAppPlace.formEditorPlace(AppSite.getHistoryMapper().createPlace(placeClass), getValue().getPrimaryKey());
+                            } else {
+                                place = CrudAppPlace.formViewerPlace(AppSite.getHistoryMapper().createPlace(placeClass), getValue().getPrimaryKey());
+                            }
+
+                            AppSite.getPlaceController().goTo(place);
                         }
                     });
                 } else {
@@ -99,7 +104,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
                 public void onClick(ClickEvent event) {
                     if (parent.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
                         AppSite.getPlaceController().goTo(
-                                CrmSiteMap.formNewItemPlace(AppSite.getHistoryMapper().createPlace(placeClass), parent.getValue().getPrimaryKey()));
+                                CrudAppPlace.formEditorPlace(AppSite.getHistoryMapper().createPlace(placeClass), parent.getValue().getPrimaryKey()));
                     }
                 }
             });

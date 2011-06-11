@@ -25,12 +25,12 @@ import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.rpc.CrudAppPlace;
 import com.propertyvista.domain.Company;
 import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Phone;
@@ -194,7 +194,7 @@ public class SubtypeInjectors {
         return injectConcessions(isEditable, null, null);
     }
 
-    public static CrmEntityFolder<Concession> injectConcessions(boolean isEditable, Class<? extends AppPlace> placeToGo, CEntityForm<?> parent) {
+    public static CrmEntityFolder<Concession> injectConcessions(boolean isEditable, Class<? extends CrudAppPlace> placeToGo, CEntityForm<?> parent) {
         return new CrmEntityFolder<Concession>(Concession.class, "Concession", isEditable, placeToGo, parent) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {

@@ -20,7 +20,7 @@ import com.propertyvista.portal.domain.ptapp.Application;
 public class ApplicationListerViewImpl extends ListerViewImplBase<Application> implements ApplicationListerView {
 
     public ApplicationListerViewImpl() {
-        super(new CrmSiteMap.Tenants.Applications());
+        super(new CrmSiteMap.Tenants.Application());
         setLister(new ApplicationLister());
     }
 }

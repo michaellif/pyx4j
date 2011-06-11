@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -147,8 +146,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolderEditor<ElevatorDTO> createElevatorsListEditor() {
-        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.Elevator.class : CrmSiteMap.Viewers.Elevator.class);
-        return new CrmEntityFolder<ElevatorDTO>(ElevatorDTO.class, i18n.tr("Elevator"), isEditable(), placeToGo, this) {
+        return new CrmEntityFolder<ElevatorDTO>(ElevatorDTO.class, i18n.tr("Elevator"), isEditable(), CrmSiteMap.Properties.Elevator.class, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
@@ -162,8 +160,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolderEditor<BoilerDTO> createBoilersListEditor() {
-        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.Boiler.class : CrmSiteMap.Viewers.Boiler.class);
-        return new CrmEntityFolder<BoilerDTO>(BoilerDTO.class, i18n.tr("Boiler"), isEditable(), placeToGo, this) {
+        return new CrmEntityFolder<BoilerDTO>(BoilerDTO.class, i18n.tr("Boiler"), isEditable(), CrmSiteMap.Properties.Boiler.class, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
@@ -176,8 +173,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolderEditor<RoofDTO> createRoofsListEditor() {
-        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.Roof.class : CrmSiteMap.Viewers.Roof.class);
-        return new CrmEntityFolder<RoofDTO>(RoofDTO.class, i18n.tr("Roof"), isEditable(), placeToGo, this) {
+        return new CrmEntityFolder<RoofDTO>(RoofDTO.class, i18n.tr("Roof"), isEditable(), CrmSiteMap.Properties.Roof.class, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
@@ -189,8 +185,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolderEditor<ParkingDTO> createParkingsListEditor() {
-        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.Parking.class : CrmSiteMap.Viewers.Parking.class);
-        return new CrmEntityFolder<ParkingDTO>(ParkingDTO.class, i18n.tr("Parking"), isEditable(), placeToGo, this) {
+        return new CrmEntityFolder<ParkingDTO>(ParkingDTO.class, i18n.tr("Parking"), isEditable(), CrmSiteMap.Properties.Parking.class, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
@@ -203,8 +198,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolderEditor<LockerAreaDTO> createLockerAreasListEditor() {
-        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.LockerArea.class : CrmSiteMap.Viewers.LockerArea.class);
-        return new CrmEntityFolder<LockerAreaDTO>(LockerAreaDTO.class, i18n.tr("Locker Area"), isEditable(), placeToGo, this) {
+        return new CrmEntityFolder<LockerAreaDTO>(LockerAreaDTO.class, i18n.tr("Locker Area"), isEditable(), CrmSiteMap.Properties.LockerArea.class, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();

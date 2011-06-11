@@ -21,7 +21,7 @@ import com.propertyvista.dto.BoilerDTO;
 public class BoilerViewerViewImpl extends ViewerViewImplBase<BoilerDTO> implements BoilerViewerView {
 
     public BoilerViewerViewImpl() {
-        super(CrmSiteMap.Editors.Boiler.class);
+        super(CrmSiteMap.Properties.Boiler.class);
         setViewer(new BoilerEditorForm(new CrmViewersComponentFactory()));
     }
 }

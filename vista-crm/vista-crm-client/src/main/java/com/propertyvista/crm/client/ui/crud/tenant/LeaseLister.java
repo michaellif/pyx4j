@@ -25,7 +25,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class LeaseLister extends ListerBase<Lease> {
 
     public LeaseLister() {
-        super(Lease.class, CrmSiteMap.Editors.Lease.class);
+        super(Lease.class, CrmSiteMap.Tenants.Lease.class);
     }
 
     @Override

@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
@@ -137,8 +136,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private CEntityFolderEditor<AptUnitItem> createDetailsListEditor() {
-        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.UnitItem.class : CrmSiteMap.Viewers.UnitItem.class);
-        return new CrmEntityFolder<AptUnitItem>(AptUnitItem.class, "Unit Item", isEditable(), placeToGo, this) {
+        return new CrmEntityFolder<AptUnitItem>(AptUnitItem.class, "Unit Item", isEditable(), CrmSiteMap.Properties.UnitItem.class, this) {
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -154,8 +152,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private CEntityFolderEditor<AptUnitOccupancy> createOccupanciesListEditor() {
-        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.UnitOccupancy.class : CrmSiteMap.Viewers.UnitOccupancy.class);
-        return new CrmEntityFolder<AptUnitOccupancy>(AptUnitOccupancy.class, "Unit Occupancy", isEditable(), placeToGo, this) {
+        return new CrmEntityFolder<AptUnitOccupancy>(AptUnitOccupancy.class, "Unit Occupancy", isEditable(), CrmSiteMap.Properties.UnitOccupancy.class, this) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
@@ -170,8 +167,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private CEntityFolderEditor<Concession> createConcessionsListEditor() {
-        Class<? extends AppPlace> placeToGo = (isEditable() ? CrmSiteMap.Editors.Concession.class : CrmSiteMap.Viewers.Concession.class);
-        return SubtypeInjectors.injectConcessions(isEditable(), placeToGo, this);
+        return SubtypeInjectors.injectConcessions(isEditable(), CrmSiteMap.Properties.Concession.class, this);
     }
 
     private CEntityFolderEditor<AddOn> createAddOnsListEditor() {

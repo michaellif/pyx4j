@@ -100,44 +100,82 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new BuildingListerActivity(place);
                         break;
                     }
-                } else if (place instanceof CrmSiteMap.Viewers.Elevator) {
-                    activity = new ElevatorViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Elevator) {
-                    activity = new ElevatorEditorActivity(place);
 
-                } else if (place instanceof CrmSiteMap.Viewers.Boiler) {
-                    activity = new BoilerViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Boiler) {
-                    activity = new BoilerEditorActivity(place);
+                } else if (place instanceof CrmSiteMap.Properties.Elevator) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ElevatorEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ElevatorViewerActivity(place);
+                        break;
+                    }
 
-                } else if (place instanceof CrmSiteMap.Viewers.Roof) {
-                    activity = new RoofViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Roof) {
-                    activity = new RoofEditorActivity(place);
+                } else if (place instanceof CrmSiteMap.Properties.Boiler) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new BoilerEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new BoilerViewerActivity(place);
+                        break;
+                    }
 
-                } else if (place instanceof CrmSiteMap.Viewers.Parking) {
-                    activity = new ParkingViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Parking) {
-                    activity = new ParkingEditorActivity(place);
+                } else if (place instanceof CrmSiteMap.Properties.Roof) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new RoofEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new RoofViewerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof CrmSiteMap.Properties.Parking) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ParkingEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ParkingViewerActivity(place);
+                        break;
+                    }
 
                 } else if (place instanceof CrmSiteMap.Properties.ParkingSpots) {
-                    activity = new ParkingSpotListerActivity(place);
-                } else if (place instanceof CrmSiteMap.Viewers.ParkingSpot) {
-                    activity = new ParkingSpotViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Parking) {
-                    activity = new ParkingSpotEditorActivity(place);
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ParkingSpotEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ParkingSpotViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new ParkingSpotListerActivity(place);
+                        break;
+                    }
 
-                } else if (place instanceof CrmSiteMap.Viewers.LockerArea) {
-                    activity = new LockerAreaViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.LockerArea) {
-                    activity = new LockerAreaEditorActivity(place);
+                } else if (place instanceof CrmSiteMap.Properties.LockerArea) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new LockerAreaEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new LockerAreaViewerActivity(place);
+                        break;
+                    }
 
                 } else if (place instanceof CrmSiteMap.Properties.Lockers) {
-                    activity = new LockerListerActivity(place);
-                } else if (place instanceof CrmSiteMap.Viewers.Locker) {
-                    activity = new LockerViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Locker) {
-                    activity = new LockerEditorActivity(place);
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new LockerEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new LockerViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new LockerListerActivity(place);
+                        break;
+                    }
 
                     // - Unit-related:
                 } else if (place instanceof CrmSiteMap.Properties.Units) {
@@ -152,49 +190,89 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new UnitListerActivity(place);
                         break;
                     }
-                } else if (place instanceof CrmSiteMap.Viewers.UnitItem) {
-                    activity = new UnitItemViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.UnitItem) {
-                    activity = new UnitItemEditorActivity(place);
 
-                } else if (place instanceof CrmSiteMap.Viewers.UnitOccupancy) {
-                    activity = new UnitOccupancyViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.UnitOccupancy) {
-                    activity = new UnitOccupancyEditorActivity(place);
+                } else if (place instanceof CrmSiteMap.Properties.UnitItem) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new UnitItemEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new UnitItemViewerActivity(place);
+                        break;
+                    }
 
-                } else if (place instanceof CrmSiteMap.Viewers.Concession) {
-                    activity = new ConcessionViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Concession) {
-                    activity = new ConcessionEditorActivity(place);
+                } else if (place instanceof CrmSiteMap.Properties.UnitOccupancy) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new UnitOccupancyEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new UnitOccupancyViewerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof CrmSiteMap.Properties.Concession) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ConcessionEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ConcessionViewerActivity(place);
+                        break;
+                    }
 
                     // - Tenant-related:
-                } else if (place instanceof CrmSiteMap.Tenants.AllTenants) {
-                    activity = new TenantListerActivity(place);
-                } else if (place instanceof CrmSiteMap.Viewers.Tenant) {
-                    activity = new TenantViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Tenant) {
-                    activity = new TenantEditorActivity(place);
+                } else if (place instanceof CrmSiteMap.Tenants.Tenant) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new TenantEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new TenantViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new TenantListerActivity(place);
+                        break;
+                    }
 
-                } else if (place instanceof CrmSiteMap.Tenants.Leases) {
-                    activity = new LeaseListerActivity(place);
-                } else if (place instanceof CrmSiteMap.Viewers.Lease) {
-                    activity = new LeaseViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Lease) {
-                    activity = new LeaseEditorActivity(place);
+                } else if (place instanceof CrmSiteMap.Tenants.Lease) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new LeaseEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new LeaseViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new LeaseListerActivity(place);
+                        break;
+                    }
 
-                } else if (place instanceof CrmSiteMap.Tenants.Applications) {
-                    activity = new ApplicationListerActivity(place);
-                } else if (place instanceof CrmSiteMap.Viewers.Application) {
-                    activity = new ApplicationViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Application) {
-                    activity = new ApplicationEditorActivity(place);
+                } else if (place instanceof CrmSiteMap.Tenants.Application) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ApplicationEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ApplicationViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new ApplicationListerActivity(place);
+                        break;
+                    }
 
-                } else if (place instanceof CrmSiteMap.Tenants.Inquiries) {
-                    activity = new InquiryListerActivity(place);
-                } else if (place instanceof CrmSiteMap.Viewers.Inquiry) {
-                    activity = new InquiryViewerActivity(place);
-                } else if (place instanceof CrmSiteMap.Editors.Inquiry) {
-                    activity = new InquiryEditorActivity(place);
+                } else if (place instanceof CrmSiteMap.Tenants.Inquiry) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new InquiryEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new InquiryViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new InquiryListerActivity(place);
+                        break;
+                    }
 
                     // - Other:
                 } else if (place instanceof CrmSiteMap.Dashboard) {
