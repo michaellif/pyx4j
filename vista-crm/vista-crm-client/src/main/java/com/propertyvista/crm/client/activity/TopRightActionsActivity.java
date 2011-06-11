@@ -34,6 +34,7 @@ import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrudAppPlace;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 
@@ -124,7 +125,8 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void showSettings() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Settings.Content());
+        CrudAppPlace place = new CrmSiteMap.Settings.Content();
+        AppSite.getPlaceController().goTo(place);
     }
 
     @Override

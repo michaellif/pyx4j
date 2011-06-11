@@ -26,6 +26,7 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrudAppPlace;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 
 public class ContentActivity extends AbstractActivity {
@@ -41,7 +42,9 @@ public class ContentActivity extends AbstractActivity {
         pds.retrieveLandingPage(new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                AppSite.getPlaceController().goTo(CrmSiteMap.formItemPlace(new CrmSiteMap.Settings.Content(), result));
+                CrudAppPlace place = new CrmSiteMap.Settings.Content();
+                place.formEditorPlace(result);
+                AppSite.getPlaceController().goTo(place);
             }
 
             @Override

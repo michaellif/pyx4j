@@ -24,10 +24,9 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.crud.IEditorView;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrudAppPlace;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 
 public class EditorActivityBase<E extends IEntity> extends AbstractActivity implements IEditorView.Presenter {
@@ -54,10 +53,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         parentID = null;
 
         String id;
-        if ((id = ((AppPlace) place).getArg(CrmSiteMap.ARG_NAME_ITEM_ID)) != null) {
+        if ((id = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
             entityID = new Key(id);
         }
-        if ((id = ((AppPlace) place).getArg(CrmSiteMap.ARG_NAME_PARENT_ID)) != null) {
+        if ((id = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
             parentID = new Key(id);
         }
 
@@ -74,7 +73,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     public void populate() {
         assert (entityID != null);
 
-        if (entityID.toString().equals(CrmSiteMap.ARG_VALUE_NEW_ITEM)) {
+        if (entityID.toString().equals(CrudAppPlace.ARG_VALUE_NEW_ITEM)) {
             createNewEntity(new AsyncCallback<E>() {
 
                 @Override
@@ -118,7 +117,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     public void save() {
         assert (entityID != null);
 
-        if (entityID.toString().equals(CrmSiteMap.ARG_VALUE_NEW_ITEM)) {
+        if (entityID.toString().equals(CrudAppPlace.ARG_VALUE_NEW_ITEM)) {
             service.create(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {

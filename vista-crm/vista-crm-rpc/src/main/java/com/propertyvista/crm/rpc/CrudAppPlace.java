@@ -30,22 +30,19 @@ public abstract class CrudAppPlace extends AppPlace {
         editor, viewer, lister
     }
 
-    public static CrudAppPlace formViewerPlace(CrudAppPlace itemPlace, Key itemID) {
-        itemPlace.setType(Type.viewer);
-        itemPlace.putArg(CrmSiteMap.ARG_NAME_ITEM_ID, itemID.toString());
-        return itemPlace;
+    public void formViewerPlace(Key itemID) {
+        setType(Type.viewer);
+        putArg(ARG_NAME_ITEM_ID, itemID.toString());
     }
 
-    public static CrudAppPlace formEditorPlace(CrudAppPlace itemPlace, Key itemID) {
-        itemPlace.setType(Type.editor);
-        itemPlace.putArg(CrmSiteMap.ARG_NAME_ITEM_ID, itemID.toString());
-        return itemPlace;
+    public void formEditorPlace(Key itemID) {
+        setType(Type.editor);
+        putArg(ARG_NAME_ITEM_ID, itemID.toString());
     }
 
-    public static AppPlace formNewItemPlace(AppPlace itemPlace, Key parentID) {
-        itemPlace.putArg(CrmSiteMap.ARG_NAME_ITEM_ID, ARG_VALUE_NEW_ITEM);
-        itemPlace.putArg(CrmSiteMap.ARG_NAME_PARENT_ID, parentID.toString());
-        return itemPlace;
+    public void formNewItemPlace(Key parentID) {
+        putArg(ARG_NAME_ITEM_ID, ARG_VALUE_NEW_ITEM);
+        putArg(ARG_NAME_PARENT_ID, parentID.toString());
     }
 
     public CrudAppPlace() {

@@ -26,7 +26,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.crud.IViewerView;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrudAppPlace;
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
 
@@ -45,7 +44,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     public ViewerActivityBase<E> withPlace(Place place) {
-        entityId = new Key(((AppPlace) place).getArg(CrmSiteMap.ARG_NAME_ITEM_ID));
+        entityId = new Key(((AppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID));
         return this;
     }
 
@@ -72,7 +71,8 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void edit(Class<? extends CrudAppPlace> editPlaceClass) {
-        CrudAppPlace place = CrudAppPlace.formEditorPlace(AppSite.getHistoryMapper().createPlace(editPlaceClass), entityId);
+        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(editPlaceClass);
+        place.formEditorPlace(entityId);
         AppSite.getPlaceController().goTo(place);
     }
 }

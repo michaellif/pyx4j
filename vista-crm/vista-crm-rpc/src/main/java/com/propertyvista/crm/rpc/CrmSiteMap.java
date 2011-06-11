@@ -13,32 +13,12 @@
  */
 package com.propertyvista.crm.rpc;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 public class CrmSiteMap implements SiteMap {
-
-    public static String ARG_NAME_ITEM_ID = "itemID";
-
-    public static String ARG_NAME_PARENT_ID = "parentID";
-
-    public static String ARG_VALUE_NEW_ITEM = "new";
-
-    @Deprecated
-    public static AppPlace formItemPlace(AppPlace itemPlace, Key itemID) {
-        itemPlace.putArg(CrmSiteMap.ARG_NAME_ITEM_ID, itemID.toString());
-        return itemPlace;
-    }
-
-    @Deprecated
-    public static AppPlace formNewItemPlace(AppPlace itemPlace, Key parentID) {
-        itemPlace.putArg(CrmSiteMap.ARG_NAME_ITEM_ID, ARG_VALUE_NEW_ITEM);
-        itemPlace.putArg(CrmSiteMap.ARG_NAME_PARENT_ID, parentID.toString());
-        return itemPlace;
-    }
 
     //
     // Paces definition:

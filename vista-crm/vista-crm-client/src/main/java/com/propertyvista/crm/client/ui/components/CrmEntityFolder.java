@@ -76,11 +76,12 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
                     decor.addItemClickHandler(new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent event) {
-                            CrudAppPlace place = null;
+                            CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
+
                             if (editable) {
-                                place = CrudAppPlace.formEditorPlace(AppSite.getHistoryMapper().createPlace(placeClass), getValue().getPrimaryKey());
+                                place.formEditorPlace(parent.getValue().getPrimaryKey());
                             } else {
-                                place = CrudAppPlace.formViewerPlace(AppSite.getHistoryMapper().createPlace(placeClass), getValue().getPrimaryKey());
+                                place.formViewerPlace(parent.getValue().getPrimaryKey());
                             }
 
                             AppSite.getPlaceController().goTo(place);
@@ -103,8 +104,9 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
                 @Override
                 public void onClick(ClickEvent event) {
                     if (parent.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
-                        AppSite.getPlaceController().goTo(
-                                CrudAppPlace.formEditorPlace(AppSite.getHistoryMapper().createPlace(placeClass), parent.getValue().getPrimaryKey()));
+                        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
+                        place.formEditorPlace(parent.getValue().getPrimaryKey());
+                        AppSite.getPlaceController().goTo(place);
                     }
                 }
             });

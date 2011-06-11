@@ -288,7 +288,7 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     // - Settings:
                 } else if (place instanceof CrmSiteMap.Settings.Content) {
-                    if (((AppPlace) place).getArgs().isEmpty()) {
+                    if (((AppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID) == null) {
                         activity = new ContentActivity(place);
                     } else {
                         activity = new ContentEditorActivity(place);

@@ -124,7 +124,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 int selectedRow = dt.getSelectedRow();
                 if (selectedRow >= 0 && selectedRow < dt.getDataTableModel().getData().size()) {
                     E item = dt.getDataTableModel().getData().get(selectedRow).getEntity();
-                    AppSite.getPlaceController().goTo(CrudAppPlace.formViewerPlace(AppSite.getHistoryMapper().createPlace(link), item.getPrimaryKey()));
+
+                    CrudAppPlace place = AppSite.getHistoryMapper().createPlace(link);
+                    place.formViewerPlace(item.getPrimaryKey());
+                    AppSite.getPlaceController().goTo(place);
                 }
             }
         });
