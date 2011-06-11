@@ -40,104 +40,92 @@ public class CrmSiteMap implements SiteMap {
     }
 
     public static class Properties extends AppPlace {
-        @PlaceProperties(caption = "Buildings")
+        @PlaceProperties(caption = "Building")
         @NavigationItem(navigLabel = "Buildings")
-        public static class Buildings extends CrudAppPlace {
+        public static class Building extends CrudAppPlace {
         }
 
         @PlaceProperties(caption = "Units")
         @NavigationItem(navigLabel = "Units")
-        public static class Units extends CrudAppPlace {
+        public static class Unit extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Parking Spots")
-        @NavigationItem(navigLabel = "Parking Spots")
-        public static class ParkingSpots extends CrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Lockers")
-        @NavigationItem(navigLabel = "Lockers")
-        public static class Lockers extends CrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Arrears")
+        @PlaceProperties(caption = "Arrear")
         @NavigationItem(navigLabel = "Arrears")
-        public static class Arrears extends CrudAppPlace {
+        public static class Arrear extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Budgets")
+        @PlaceProperties(caption = "Budget")
         @NavigationItem(navigLabel = "Budgets")
-        public static class Budgets extends CrudAppPlace {
+        public static class Budget extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Purchase Orders")
+        @PlaceProperties(caption = "Purchase Order")
         @NavigationItem(navigLabel = "Purchase Orders")
-        public static class PurchaseOrders extends CrudAppPlace {
+        public static class PurchaseOrder extends CrudAppPlace {
         }
 
         @PlaceProperties(caption = "City Orders")
         @NavigationItem(navigLabel = "City Orders")
-        public static class CityOrders extends CrudAppPlace {
+        public static class CityOrder extends CrudAppPlace {
         }
 
-        //////////////////////////////////////
-
         @PlaceProperties(caption = "Elevator")
-        @NavigationItem(navigLabel = "Elevator")
+        @NavigationItem(navigLabel = "Elevators")
         public static class Elevator extends CrudAppPlace {
 
         }
 
         @PlaceProperties(caption = "Boiler")
-        @NavigationItem(navigLabel = "Boiler")
+        @NavigationItem(navigLabel = "Boilers")
         public static class Boiler extends CrudAppPlace {
 
         }
 
         @PlaceProperties(caption = "Roof")
-        @NavigationItem(navigLabel = "Roof")
+        @NavigationItem(navigLabel = "Roofs")
         public static class Roof extends CrudAppPlace {
 
         }
 
         @PlaceProperties(caption = "Parking")
-        @NavigationItem(navigLabel = "Parking")
+        @NavigationItem(navigLabel = "Parkings")
         public static class Parking extends CrudAppPlace {
 
         }
 
-        @PlaceProperties(caption = "Parking Spot")
-        @NavigationItem(navigLabel = "Parking Spot")
+        @PlaceProperties(caption = "Parking Spots")
+        @NavigationItem(navigLabel = "Parking Spots")
         public static class ParkingSpot extends CrudAppPlace {
 
         }
 
         @PlaceProperties(caption = "Locker Area")
-        @NavigationItem(navigLabel = "Locker Area")
+        @NavigationItem(navigLabel = "Locker Areas")
         public static class LockerArea extends CrudAppPlace {
 
         }
 
-        @PlaceProperties(caption = "Locker")
-        @NavigationItem(navigLabel = "Locker")
+        @PlaceProperties(caption = "Lockers")
+        @NavigationItem(navigLabel = "Lockers")
         public static class Locker extends CrudAppPlace {
 
         }
 
         @PlaceProperties(caption = "Unit Item")
-        @NavigationItem(navigLabel = "Unit Item")
+        @NavigationItem(navigLabel = "Unit Items")
         public static class UnitItem extends CrudAppPlace {
 
         }
 
         @PlaceProperties(caption = "Unit Occupancy")
-        @NavigationItem(navigLabel = "Unit Occupancy")
+        @NavigationItem(navigLabel = "Unit Occupancies")
         public static class UnitOccupancy extends CrudAppPlace {
 
         }
 
         @PlaceProperties(caption = "Concession")
-        @NavigationItem(navigLabel = "Concession")
+        @NavigationItem(navigLabel = "Concessions")
         public static class Concession extends CrudAppPlace {
 
         }
@@ -146,23 +134,23 @@ public class CrmSiteMap implements SiteMap {
 
     public static class Tenants extends AppPlace {
 
-        @PlaceProperties(caption = "Tenants")
+        @PlaceProperties(caption = "Tenant")
         @NavigationItem(navigLabel = "Tenants")
         public static class Tenant extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Leases")
+        @PlaceProperties(caption = "Lease")
         @NavigationItem(navigLabel = "Leases")
         public static class Lease extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Applications")
+        @PlaceProperties(caption = "Application")
         @NavigationItem(navigLabel = "Applications")
         public static class Application extends CrudAppPlace {
         }
 
         @PlaceProperties(caption = "Inquiry")
-        @NavigationItem(navigLabel = "Inquiry")
+        @NavigationItem(navigLabel = "Inquies")
         public static class Inquiry extends CrudAppPlace {
         }
 

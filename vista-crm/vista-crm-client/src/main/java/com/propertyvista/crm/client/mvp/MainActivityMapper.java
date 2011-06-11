@@ -88,7 +88,7 @@ public class MainActivityMapper implements AppActivityMapper {
                 if (place instanceof CrmSiteMap.ResetPassword) {
                     activity = new ResetPasswordActivity(place);
                     // - Building-related:
-                } else if (place instanceof CrmSiteMap.Properties.Buildings) {
+                } else if (place instanceof CrmSiteMap.Properties.Building) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new BuildingEditorActivity(place);
@@ -141,7 +141,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof CrmSiteMap.Properties.ParkingSpots) {
+                } else if (place instanceof CrmSiteMap.Properties.ParkingSpot) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new ParkingSpotEditorActivity(place);
@@ -164,7 +164,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof CrmSiteMap.Properties.Lockers) {
+                } else if (place instanceof CrmSiteMap.Properties.Locker) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new LockerEditorActivity(place);
@@ -178,7 +178,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     }
 
                     // - Unit-related:
-                } else if (place instanceof CrmSiteMap.Properties.Units) {
+                } else if (place instanceof CrmSiteMap.Properties.Unit) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new UnitEditorActivity(place);

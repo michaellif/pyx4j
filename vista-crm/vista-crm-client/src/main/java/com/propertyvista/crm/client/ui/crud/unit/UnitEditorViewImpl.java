@@ -20,7 +20,7 @@ import com.propertyvista.dto.AptUnitDTO;
 public class UnitEditorViewImpl extends EditorViewImplBase<AptUnitDTO> implements UnitEditorView {
 
     public UnitEditorViewImpl() {
-        super(CrmSiteMap.Properties.Units.class);
+        super(CrmSiteMap.Properties.Unit.class);
         setEditor(new UnitEditorForm());
     }
 }

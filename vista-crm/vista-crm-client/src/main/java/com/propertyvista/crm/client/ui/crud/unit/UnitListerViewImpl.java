@@ -20,7 +20,7 @@ import com.propertyvista.dto.AptUnitDTO;
 public class UnitListerViewImpl extends ListerViewImplBase<AptUnitDTO> implements UnitListerView {
 
     public UnitListerViewImpl() {
-        super(new CrmSiteMap.Properties.Units());
+        super(new CrmSiteMap.Properties.Unit());
         setLister(new UnitLister());
     }
 }
