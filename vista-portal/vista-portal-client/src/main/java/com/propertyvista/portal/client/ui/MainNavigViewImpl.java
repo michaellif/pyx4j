@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Cursor;
@@ -23,6 +24,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -31,12 +33,11 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.client.activity.NavigItem;
 
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
-
-import com.propertyvista.portal.client.activity.NavigItem;
 
 public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
@@ -74,13 +75,31 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
     }
 
     class NavigTabList extends ComplexPanel {
+        private final List<NavigTab> tabs;
+
         public NavigTabList() {
             setElement(DOM.createElement("ul"));
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Holder.name());
+            tabs = new LinkedList<MainNavigViewImpl.NavigTab>();
         }
 
         @Override
         public void add(Widget w) {
+            NavigTab tab = (NavigTab) w;
+            tab.addTabSelectedHandler(new TabSelectedHandler() {
+
+                @Override
+                public void onTabSelect(TabSelectedEvent event) {
+                    for (NavigTab tab : tabs) {
+                        if (tab.isSelected()) {
+                            tab.deselect();
+                            break;
+                        }
+                    }
+                    event.getTab().select();
+                }
+            });
+            tabs.add(tab);
             super.add(w, getElement());
         }
     }
@@ -93,8 +112,16 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         private final Label label;
 
+        private boolean selected;
+
+        final private HandlerManager handlerManager = new HandlerManager(this);
+
+        final private NavigTab self;
+
         NavigTab(NavigItem menuItem) {
             super();
+
+            self = this;
 
             String caption = menuItem.getCaption();
             final AppPlace place = menuItem.getPlace();
@@ -120,7 +147,9 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             Place currentPlace = presenter.getWhere();
 
             if (place.equals(currentPlace)) {
-                label.addStyleDependentName(StyleDependent.current.name());
+                select();
+            } else {
+                selected = false;
             }
 
             getElement().getStyle().setFontWeight(FontWeight.BOLD);
@@ -130,6 +159,9 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                 @Override
                 public void onClick(ClickEvent event) {
                     presenter.navigTo(place);
+                    event.stopPropagation();
+                    handlerManager.fireEvent(new TabSelectedEvent(self));
+
                 }
             }, ClickEvent.getType());
             addDomHandler(new MouseOverHandler() {
@@ -148,15 +180,27 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         }
 
-        public void addStyleDependentName(StyleDependent style) {
-            super.addStyleDependentName(style.name());
-            labelHolder.addStyleDependentName(style.name());
-            statusHolder.addStyleDependentName(style.name());
+        public void deselect() {
+            selected = false;
+            label.removeStyleDependentName(StyleDependent.current.name());
+        }
+
+        public void select() {
+            label.addStyleDependentName(StyleDependent.current.name());
+            selected = true;
+        }
+
+        public void addTabSelectedHandler(TabSelectedHandler handler) {
+            handlerManager.addHandler(TabSelectedEvent.TYPE, handler);
         }
 
         @Override
         public void add(Widget w) {
             super.add(w, getElement());
+        }
+
+        public boolean isSelected() {
+            return selected;
         }
     }
 }
