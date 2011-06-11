@@ -65,7 +65,11 @@ public class AppPlace extends Place {
     }
 
     public Map<String, String> getArgs() {
-        return Collections.unmodifiableMap(args);
+        if (args != null) {
+            return Collections.unmodifiableMap(args);
+        } else {
+            return null;
+        }
     }
 
     public String getArg(String key) {
