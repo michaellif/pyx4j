@@ -90,7 +90,7 @@ public class ImageButton extends Image {
             addMouseUpHandler(new MouseUpHandler() {
                 @Override
                 public void onMouseUp(MouseUpEvent event) {
-                    setResource(regular);
+                    setResource(hover);
                 }
             });
             addMouseOutHandler(new MouseOutHandler() {
