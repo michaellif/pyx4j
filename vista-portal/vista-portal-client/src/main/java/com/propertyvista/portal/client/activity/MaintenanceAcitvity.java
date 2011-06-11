@@ -17,6 +17,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
 import com.propertyvista.portal.client.ui.MaintenanceView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 

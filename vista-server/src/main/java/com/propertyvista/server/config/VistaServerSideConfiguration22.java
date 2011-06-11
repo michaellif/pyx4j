@@ -13,9 +13,9 @@
  */
 package com.propertyvista.server.config;
 
-import com.propertyvista.config.VistaSMTPMailServiceConfig;
-
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
+
+import com.propertyvista.config.VistaSMTPMailServiceConfig;
 
 public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration {
 

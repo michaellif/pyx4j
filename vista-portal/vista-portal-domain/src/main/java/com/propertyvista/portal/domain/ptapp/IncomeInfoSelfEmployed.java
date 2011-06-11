@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import com.propertyvista.common.domain.financial.Money;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.common.domain.financial.Money;
 
 public interface IncomeInfoSelfEmployed extends IEntity, IEmploymentInfo {
 

@@ -15,12 +15,13 @@ package com.propertyvista.portal.admin.client;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.portal.admin.client.app.VistaAdminAppSiteMap;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.shared.meta.NavigUtils;
+
+import com.propertyvista.portal.admin.client.app.VistaAdminAppSiteMap;
 
 public class SignInCommand implements Command {
 

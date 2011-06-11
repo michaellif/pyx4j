@@ -35,11 +35,12 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.crm.client.activity.NavigFolder;
 
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.crm.client.activity.NavigFolder;
 
 public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 

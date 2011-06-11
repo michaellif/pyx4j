@@ -13,13 +13,13 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import com.propertyvista.common.domain.financial.Money;
-
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+
+import com.propertyvista.common.domain.financial.Money;
 
 public interface ChargeLineList extends IEntity {
 

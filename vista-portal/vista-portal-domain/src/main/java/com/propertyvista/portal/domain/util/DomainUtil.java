@@ -13,16 +13,16 @@
  */
 package com.propertyvista.portal.domain.util;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPrimitive;
+
 import com.propertyvista.common.domain.financial.Currency;
 import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
-import com.propertyvista.portal.domain.ptapp.ChargeLineSelectable;
-import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
+import com.propertyvista.portal.domain.ptapp.ChargeLineSelectable;
 import com.propertyvista.portal.domain.ptapp.Pet.WeightUnit;
-
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class DomainUtil {
 

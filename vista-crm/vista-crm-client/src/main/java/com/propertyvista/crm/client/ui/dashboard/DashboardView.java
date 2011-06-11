@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.dashboard;
 
 import com.google.gwt.user.client.ui.IsWidget;
+
 import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 
 public interface DashboardView extends IsWidget {

@@ -27,13 +27,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.server.common.security.DevelopmentSecurity;
-
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
+
+import com.propertyvista.server.common.security.DevelopmentSecurity;
 
 @SuppressWarnings("serial")
 public class OpenIdServlet extends HttpServlet {

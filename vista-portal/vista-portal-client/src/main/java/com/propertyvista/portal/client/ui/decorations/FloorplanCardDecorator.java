@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ui.decorations;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+
 import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsView;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 

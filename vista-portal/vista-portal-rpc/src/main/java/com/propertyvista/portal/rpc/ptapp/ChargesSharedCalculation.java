@@ -15,8 +15,13 @@ package com.propertyvista.portal.rpc.ptapp;
 
 import java.util.Date;
 
+import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
+
 import com.propertyvista.portal.domain.ptapp.Charge;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
+import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.ptapp.ChargeLineList;
 import com.propertyvista.portal.domain.ptapp.ChargeLineSelectable;
 import com.propertyvista.portal.domain.ptapp.Charges;
@@ -24,12 +29,7 @@ import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.PetChargeRule;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
-import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.util.DomainUtil;
-
-import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
 
 public class ChargesSharedCalculation {
 

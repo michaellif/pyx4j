@@ -15,14 +15,15 @@ package com.propertyvista.portal.rpc.ptapp.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
 import com.propertyvista.portal.rpc.ptapp.PasswordRetrievalRequest;
-
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.rpc.AuthenticationResponse;
 
 public interface ActivationService extends IService {
 

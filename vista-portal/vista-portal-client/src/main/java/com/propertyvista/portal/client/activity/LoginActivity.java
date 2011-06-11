@@ -17,11 +17,12 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
+import com.pyx4j.site.client.AppSite;
+
 import com.propertyvista.portal.client.ui.LoginView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-
-import com.pyx4j.site.client.AppSite;
 
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
     LoginView view;

@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ui.searchapt;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
+
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 

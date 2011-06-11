@@ -16,12 +16,13 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
-import com.propertyvista.portal.domain.dto.MediaDTO;
-import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.widgets.client.photoalbum.Slideshow;
+
+import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
+import com.propertyvista.portal.domain.dto.MediaDTO;
+import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
 public class SlidesPanel extends SimplePanel {
 

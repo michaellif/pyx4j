@@ -11,16 +11,16 @@
  */
 package com.propertyvista.portal.admin.client.app.user;
 
-import com.propertyvista.portal.admin.client.app.VistaAdminAppSiteMap;
-import com.propertyvista.portal.admin.rpc.EditableUser;
-import com.propertyvista.portal.admin.rpc.VistaAdminServices;
-
 import com.pyx4j.entity.client.ui.CEntityForm;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.EntityEditorPanel;
 import com.pyx4j.essentials.client.crud.EntityEditorWidget;
+
+import com.propertyvista.portal.admin.client.app.VistaAdminAppSiteMap;
+import com.propertyvista.portal.admin.rpc.EditableUser;
+import com.propertyvista.portal.admin.rpc.VistaAdminServices;
 
 public class UserEditorWidget extends EntityEditorWidget<EditableUser> {
 

@@ -17,9 +17,10 @@ import java.util.List;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.crm.client.activity.NavigFolder;
 
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.crm.client.activity.NavigFolder;
 
 public interface ShortCutsView extends IsWidget {
     public void setPresenter(ShortCutsPresenter presenter);

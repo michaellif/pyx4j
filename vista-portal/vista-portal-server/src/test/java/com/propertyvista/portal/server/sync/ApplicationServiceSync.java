@@ -15,12 +15,12 @@ package com.propertyvista.portal.server.sync;
 
 import org.junit.Assert;
 
+import com.pyx4j.unit.server.TestServiceFactory;
+import com.pyx4j.unit.server.UnitTestsAsyncCallback;
+
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
-
-import com.pyx4j.unit.server.TestServiceFactory;
-import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 
 public class ApplicationServiceSync {
     private CurrentApplication currentApplication;

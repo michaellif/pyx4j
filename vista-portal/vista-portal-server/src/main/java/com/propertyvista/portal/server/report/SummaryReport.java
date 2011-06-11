@@ -17,9 +17,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.propertyvista.portal.domain.ptapp.Summary;
-
 import com.pyx4j.entity.report.JasperReportModel;
+
+import com.propertyvista.portal.domain.ptapp.Summary;
 
 public class SummaryReport {
 

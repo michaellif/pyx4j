@@ -14,7 +14,6 @@
 package com.propertyvista.portal.admin.client;
 
 import com.google.gwt.user.client.Command;
-import com.propertyvista.portal.admin.client.site.VistaAdminPublicSiteMap;
 
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.CommandLink;
@@ -22,6 +21,8 @@ import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.client.SkinFactory;
 import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.widgets.client.style.Theme;
+
+import com.propertyvista.portal.admin.client.site.VistaAdminPublicSiteMap;
 
 public abstract class VistaAdminBaseSitePanel extends SitePanel {
 

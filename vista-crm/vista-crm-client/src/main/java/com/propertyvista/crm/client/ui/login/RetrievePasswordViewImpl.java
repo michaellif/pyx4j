@@ -21,11 +21,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.propertyvista.crm.rpc.PasswordRetrievalRequest;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+
+import com.propertyvista.crm.rpc.PasswordRetrievalRequest;
 
 public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePasswordView {
 

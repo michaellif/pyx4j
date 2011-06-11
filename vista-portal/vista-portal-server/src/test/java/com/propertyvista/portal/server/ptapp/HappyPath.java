@@ -15,6 +15,9 @@ package com.propertyvista.portal.server.ptapp;
 
 import org.junit.Assert;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
@@ -28,9 +31,6 @@ import com.propertyvista.portal.server.sync.ActivationServiceSync;
 import com.propertyvista.portal.server.sync.ApartmentServiceSync;
 import com.propertyvista.portal.server.sync.ApplicationServiceSync;
 import com.propertyvista.portal.server.sync.TenantServiceSync;
-
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.security.rpc.AuthenticationResponse;
 
 /**
  * This class includes service utilities that are common between all of the tests. When

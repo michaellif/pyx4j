@@ -16,11 +16,6 @@ package com.propertyvista.portal.admin.client.app;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.portal.admin.client.VistaAdminBaseSitePanel;
-import com.propertyvista.portal.admin.client.app.dashboard.DashboardWidget;
-import com.propertyvista.portal.admin.client.app.user.UserEditorWidget;
-import com.propertyvista.portal.admin.client.app.user.UserListWidget;
-import com.propertyvista.portal.admin.client.site.VistaAdminPublicResources;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.security.client.ClientContext;
@@ -31,6 +26,12 @@ import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
+
+import com.propertyvista.portal.admin.client.VistaAdminBaseSitePanel;
+import com.propertyvista.portal.admin.client.app.dashboard.DashboardWidget;
+import com.propertyvista.portal.admin.client.app.user.UserEditorWidget;
+import com.propertyvista.portal.admin.client.app.user.UserListWidget;
+import com.propertyvista.portal.admin.client.site.VistaAdminPublicResources;
 
 public class VistaAdminAppSitePanel extends VistaAdminBaseSitePanel implements InlineWidgetFactory {
 

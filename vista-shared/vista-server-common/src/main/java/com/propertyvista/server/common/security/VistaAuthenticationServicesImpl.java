@@ -22,12 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.VistaBehavior;
-import com.propertyvista.crm.rpc.CrmUserVisit;
-import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
-import com.propertyvista.server.domain.UserCredential;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.EntityServicesImpl;
@@ -46,6 +40,12 @@ import com.pyx4j.security.server.AppengineHelper;
 import com.pyx4j.security.server.AuthenticationServicesImpl;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
+
+import com.propertyvista.common.domain.User;
+import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.crm.rpc.CrmUserVisit;
+import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
+import com.propertyvista.server.domain.UserCredential;
 
 public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl {
 

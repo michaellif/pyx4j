@@ -13,11 +13,11 @@
  */
 package com.propertyvista.server.common.security;
 
-import com.propertyvista.common.domain.IUserEntity;
-
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.entity.shared.IEntity;
+
+import com.propertyvista.common.domain.IUserEntity;
 
 public class UserEntityInstanceAccess implements InstanceAccess {
 

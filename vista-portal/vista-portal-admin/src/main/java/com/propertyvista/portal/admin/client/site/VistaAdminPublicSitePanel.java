@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.admin.client.site;
 
-import com.propertyvista.portal.admin.client.VistaAdminBaseSitePanel;
-
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.InlineWidgetFactory;
 import com.pyx4j.site.shared.domain.Site;
+
+import com.propertyvista.portal.admin.client.VistaAdminBaseSitePanel;
 
 public class VistaAdminPublicSitePanel extends VistaAdminBaseSitePanel implements InlineWidgetFactory {
 

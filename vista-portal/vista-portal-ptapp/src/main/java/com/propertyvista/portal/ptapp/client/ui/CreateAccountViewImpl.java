@@ -32,19 +32,19 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.ptapp.client.resources.PortalResources;
-import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
-import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
+import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.portal.ptapp.client.resources.PortalImages;
+import com.propertyvista.portal.ptapp.client.resources.PortalResources;
+import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
+import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 public class CreateAccountViewImpl extends FlowPanel implements CreateAccountView {
 

@@ -20,10 +20,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.propertyvista.portal.admin.client.SignInCommand;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.site.client.InlineWidget;
+
+import com.propertyvista.portal.admin.client.SignInCommand;
 
 public class AcceptDeclineWidget extends HorizontalPanel implements InlineWidget {
 

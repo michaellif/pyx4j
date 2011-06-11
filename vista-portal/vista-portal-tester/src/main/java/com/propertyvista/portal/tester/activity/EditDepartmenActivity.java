@@ -21,12 +21,13 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.tester.domain.Department;
-import com.propertyvista.portal.tester.domain.Employee;
-import com.propertyvista.portal.tester.ui.EditDepartmentView;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.portal.tester.domain.Department;
+import com.propertyvista.portal.tester.domain.Employee;
+import com.propertyvista.portal.tester.ui.EditDepartmentView;
 
 public class EditDepartmenActivity extends AbstractActivity implements EditDepartmentView.Presenter {
 

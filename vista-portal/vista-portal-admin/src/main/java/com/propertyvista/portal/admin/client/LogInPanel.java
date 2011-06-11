@@ -24,8 +24,6 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TextBox;
 
-import com.propertyvista.common.domain.DemoData;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.client.BaseLogInPanel;
@@ -33,6 +31,8 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.util.BrowserType;
+
+import com.propertyvista.common.domain.DemoData;
 
 public abstract class LogInPanel extends BaseLogInPanel {
 

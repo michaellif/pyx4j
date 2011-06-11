@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ui.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
+
 import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsView;
 import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsView;

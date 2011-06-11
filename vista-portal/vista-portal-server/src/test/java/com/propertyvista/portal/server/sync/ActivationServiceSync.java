@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.server.sync;
 
-import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
-import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
-
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
+
+import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
+import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 public class ActivationServiceSync {
 

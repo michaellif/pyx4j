@@ -13,9 +13,9 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.portal.domain.ptapp.Summary;
-
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.portal.domain.ptapp.Summary;
 
 public interface SummaryViewPresenter extends WizardStepPresenter<Summary> {
 

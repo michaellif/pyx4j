@@ -14,10 +14,6 @@ package com.propertyvista.portal.admin.client.app.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.propertyvista.common.domain.User;
-import com.propertyvista.portal.admin.client.app.VistaAdminAppSiteMap;
-import com.propertyvista.portal.admin.rpc.VistaAdminServices;
-
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.rpc.EntityServices;
@@ -25,6 +21,10 @@ import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.essentials.client.crud.EntityListWithCriteriaWidget;
 import com.pyx4j.essentials.client.crud.EntitySearchCriteriaPanel;
 import com.pyx4j.forms.client.ui.CComponent;
+
+import com.propertyvista.common.domain.User;
+import com.propertyvista.portal.admin.client.app.VistaAdminAppSiteMap;
+import com.propertyvista.portal.admin.rpc.VistaAdminServices;
 
 public class UserListWidget extends EntityListWithCriteriaWidget<User> {
 

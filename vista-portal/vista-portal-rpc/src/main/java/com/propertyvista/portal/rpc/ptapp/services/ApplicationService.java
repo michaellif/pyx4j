@@ -15,14 +15,14 @@ package com.propertyvista.portal.rpc.ptapp.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.UserRuntimeException;
+
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
-
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 /**
  * This is secure services, user need to lodged in to use application.

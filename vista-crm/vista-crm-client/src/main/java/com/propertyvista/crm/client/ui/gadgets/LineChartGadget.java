@@ -18,8 +18,6 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
@@ -30,6 +28,9 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 import com.pyx4j.widgets.client.svg.SvgPanel;
+
+import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
 public class LineChartGadget extends GadgetBase {
 

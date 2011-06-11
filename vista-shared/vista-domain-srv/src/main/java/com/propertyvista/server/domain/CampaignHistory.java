@@ -15,12 +15,12 @@ package com.propertyvista.server.domain;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
 public interface CampaignHistory extends IEntity {
 

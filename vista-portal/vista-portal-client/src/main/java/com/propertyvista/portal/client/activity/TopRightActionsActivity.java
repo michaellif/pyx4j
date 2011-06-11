@@ -18,10 +18,11 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.propertyvista.portal.client.ui.TopRightActionsView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 
 import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.portal.client.ui.TopRightActionsView;
+import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 

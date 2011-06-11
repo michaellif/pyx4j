@@ -18,10 +18,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.portal.client.activity.ResidentsNavigActivity;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
+
+import com.propertyvista.portal.client.activity.ResidentsNavigActivity;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class SecondaryNavigActivityMapper implements AppActivityMapper {
 

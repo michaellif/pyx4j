@@ -19,10 +19,10 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
-import com.propertyvista.common.client.ui.decorations.DecorationData;
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.common.client.ui.decorations.DecorationData;
 
 public class PortalMultiLineDecorator extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "PortalMultiLineDecorator";

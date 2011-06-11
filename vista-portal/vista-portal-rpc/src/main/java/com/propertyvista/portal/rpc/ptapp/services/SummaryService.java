@@ -15,9 +15,9 @@ package com.propertyvista.portal.rpc.ptapp.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.portal.domain.ptapp.Summary;
-
 import com.pyx4j.rpc.shared.VoidSerializable;
+
+import com.propertyvista.portal.domain.ptapp.Summary;
 
 public interface SummaryService extends AbstractWizardService<Summary> {
 

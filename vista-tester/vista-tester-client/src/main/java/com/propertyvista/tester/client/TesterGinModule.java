@@ -13,11 +13,11 @@
  */
 package com.propertyvista.tester.client;
 
+import com.pyx4j.site.client.AppSiteGinModule;
+
 import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.tester.client.mvp.TesterMvpModule;
 import com.propertyvista.tester.client.ui.TesterViewModule;
-
-import com.pyx4j.site.client.AppSiteGinModule;
 
 public class TesterGinModule extends AppSiteGinModule {
 

@@ -15,12 +15,12 @@ package com.propertyvista.portal.ptapp.client.ui.validators;
 
 import org.xnap.commons.i18n.I18n;
 
-import com.propertyvista.portal.domain.util.ValidationUtils;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18nFactory;
+
+import com.propertyvista.portal.domain.util.ValidationUtils;
 
 public class CanadianSinValidator implements EditableValueValidator<String> {
 

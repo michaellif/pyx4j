@@ -13,8 +13,7 @@
  */
 package com.propertyvista.server.domain;
 
-import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Length;
@@ -22,7 +21,9 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import java.util.Date;
+
+import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
 @RpcTransient
 public interface ApplicationDocumentData extends IEntity, IBoundToApplication {

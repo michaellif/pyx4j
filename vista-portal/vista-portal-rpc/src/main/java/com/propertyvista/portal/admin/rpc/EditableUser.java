@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.admin.rpc;
 
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.VistaBehavior;
-
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.common.domain.User;
+import com.propertyvista.common.domain.VistaBehavior;
 
 @Transient
 public interface EditableUser extends IEntity {

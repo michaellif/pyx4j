@@ -13,11 +13,11 @@
  */
 package com.propertyvista.server.config;
 
-import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
-
 import com.pyx4j.essentials.server.EssentialsRPCServiceFactory;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.security.rpc.AuthenticationServices;
+
+import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 
 public class VistaRPCServiceFactory extends EssentialsRPCServiceFactory {
 

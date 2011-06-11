@@ -15,9 +15,6 @@ package com.propertyvista.server.domain;
 
 import java.util.Date;
 
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.VistaBehavior;
-
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.RpcBlacklist;
@@ -26,6 +23,9 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.common.domain.User;
+import com.propertyvista.common.domain.VistaBehavior;
 
 @RpcBlacklist
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = User.class)

@@ -13,14 +13,14 @@
  */
 package com.propertyvista.payment.caledon;
 
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.IPaymentProcessor;
 import com.propertyvista.payment.Merchant;
 import com.propertyvista.payment.PaymentProcessingException;
 import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
-
-import com.pyx4j.entity.shared.EntityFactory;
 
 public class CaledonRealTimeTest extends CaledonTestCase {
 

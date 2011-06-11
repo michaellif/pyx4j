@@ -14,9 +14,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TextBox;
-import com.propertyvista.crm.client.resources.CrmImages;
 
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.crm.client.resources.CrmImages;
 
 /**
  * 

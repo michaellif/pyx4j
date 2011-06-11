@@ -16,10 +16,11 @@ package com.propertyvista.server.tests;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.TimeUtils;
+
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
-import com.pyx4j.commons.TimeUtils;
 
 public class VistaDBPreloadTest extends VistaDBTestCase {
 

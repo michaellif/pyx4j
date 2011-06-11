@@ -20,14 +20,15 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.propertyvista.portal.client.PortalSite;
-import com.propertyvista.portal.client.ui.MainNavigView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.site.PageDescriptor;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.portal.client.PortalSite;
+import com.propertyvista.portal.client.ui.MainNavigView;
+import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.domain.site.PageDescriptor;
 
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
 

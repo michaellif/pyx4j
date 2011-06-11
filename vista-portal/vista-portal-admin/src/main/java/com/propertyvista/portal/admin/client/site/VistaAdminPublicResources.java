@@ -14,8 +14,8 @@
 package com.propertyvista.portal.admin.client.site;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.resources.client.TextResource;
+
 import com.propertyvista.portal.admin.client.VistaAdminResources;
 
 public interface VistaAdminPublicResources extends VistaAdminResources {

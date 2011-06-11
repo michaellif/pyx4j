@@ -13,9 +13,9 @@
  */
 package com.propertyvista.unit;
 
-import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-
 import com.pyx4j.selenium.BaseSeleniumTestCase;
+
+import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 public abstract class VistaBaseSeleniumTestCase extends BaseSeleniumTestCase {
 

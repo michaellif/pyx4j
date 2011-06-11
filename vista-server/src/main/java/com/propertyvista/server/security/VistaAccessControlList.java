@@ -13,13 +13,6 @@
  */
 package com.propertyvista.server.security;
 
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.VistaBehavior;
-import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
-import com.propertyvista.portal.admin.rpc.VistaAdminServices;
-import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
-import com.propertyvista.server.domain.UserCredential;
-
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.essentials.rpc.admin.AdminServices;
@@ -33,6 +26,13 @@ import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 import com.pyx4j.security.shared.CoreBehavior;
+
+import com.propertyvista.common.domain.User;
+import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
+import com.propertyvista.portal.admin.rpc.VistaAdminServices;
+import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
+import com.propertyvista.server.domain.UserCredential;
 
 public class VistaAccessControlList extends ServletContainerAclBuilder {
 

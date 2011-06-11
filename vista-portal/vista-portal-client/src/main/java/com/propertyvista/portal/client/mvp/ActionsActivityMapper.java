@@ -16,9 +16,10 @@ package com.propertyvista.portal.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.portal.client.activity.TopRightActionsActivity;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
+
+import com.propertyvista.portal.client.activity.TopRightActionsActivity;
 
 public class ActionsActivityMapper implements AppActivityMapper {
 

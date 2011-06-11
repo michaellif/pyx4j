@@ -1,6 +1,7 @@
 package com.propertyvista.portal.tester.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
+
 import com.propertyvista.portal.tester.domain.Department;
 
 public interface EditDepartmentView extends IsWidget {

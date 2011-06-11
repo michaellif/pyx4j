@@ -14,9 +14,10 @@
 package com.propertyvista.tester.client;
 
 import com.google.gwt.inject.client.GinModules;
-import com.propertyvista.tester.client.ui.TesterView;
 
 import com.pyx4j.site.client.AppSiteGinjector;
+
+import com.propertyvista.tester.client.ui.TesterView;
 
 @GinModules(TesterGinModule.class)
 public interface TesterGinjector extends AppSiteGinjector {

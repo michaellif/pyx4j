@@ -23,10 +23,10 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.security.rpc.AuthenticationRequest;
+
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 
 public class LoginViewForm extends CEntityForm<AuthenticationRequest> {
 

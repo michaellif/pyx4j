@@ -17,6 +17,10 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.unit.server.TestServiceFactory;
+import com.pyx4j.unit.server.UnitTestsAsyncCallback;
+import com.pyx4j.unit.server.mock.TestLifecycle;
+
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.config.tests.VistaDBTestCase;
 import com.propertyvista.portal.domain.ptapp.Application;
@@ -30,10 +34,6 @@ import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
-
-import com.pyx4j.unit.server.TestServiceFactory;
-import com.pyx4j.unit.server.UnitTestsAsyncCallback;
-import com.pyx4j.unit.server.mock.TestLifecycle;
 
 public class PortalServicesTest extends VistaDBTestCase {
 

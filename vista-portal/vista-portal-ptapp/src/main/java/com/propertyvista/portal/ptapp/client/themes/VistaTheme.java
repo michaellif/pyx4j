@@ -27,8 +27,8 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.Style
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.MainNavigViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.PtAppSiteView;
+import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.ApartmentUnitsTable;
 import com.propertyvista.portal.ptapp.client.ui.steps.PaymentViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.SummaryViewForm;

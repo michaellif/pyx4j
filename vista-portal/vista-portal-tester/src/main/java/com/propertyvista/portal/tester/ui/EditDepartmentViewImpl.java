@@ -12,9 +12,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.propertyvista.portal.tester.domain.Department;
-import com.propertyvista.portal.tester.domain.Employee;
-import com.propertyvista.portal.tester.resources.SiteImages;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
@@ -33,6 +30,10 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
+
+import com.propertyvista.portal.tester.domain.Department;
+import com.propertyvista.portal.tester.domain.Employee;
+import com.propertyvista.portal.tester.resources.SiteImages;
 
 public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentView {
 

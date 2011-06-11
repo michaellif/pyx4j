@@ -13,15 +13,15 @@
  */
 package com.propertyvista.unit.components;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.selenium.BaseSeleniumTestCase;
+import com.pyx4j.selenium.ISeleniumTestConfiguration;
+
 import com.propertyvista.portal.tester.TesterDebugId;
 import com.propertyvista.unit.TestUtils;
 import com.propertyvista.unit.VistaDevLogin;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
-
-import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.selenium.BaseSeleniumTestCase;
-import com.pyx4j.selenium.ISeleniumTestConfiguration;
 
 public class DeferredCommandsTest extends BaseSeleniumTestCase {
 

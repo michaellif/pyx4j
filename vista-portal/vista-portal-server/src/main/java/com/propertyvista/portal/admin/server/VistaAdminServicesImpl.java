@@ -18,11 +18,6 @@ import java.util.Locale;
 
 import org.xnap.commons.i18n.I18n;
 
-import com.propertyvista.common.domain.User;
-import com.propertyvista.portal.admin.rpc.EditableUser;
-import com.propertyvista.portal.admin.rpc.VistaAdminServices;
-import com.propertyvista.server.domain.UserCredential;
-
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -32,6 +27,11 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18nFactory;
+
+import com.propertyvista.common.domain.User;
+import com.propertyvista.portal.admin.rpc.EditableUser;
+import com.propertyvista.portal.admin.rpc.VistaAdminServices;
+import com.propertyvista.server.domain.UserCredential;
 
 public class VistaAdminServicesImpl implements VistaAdminServices {
 

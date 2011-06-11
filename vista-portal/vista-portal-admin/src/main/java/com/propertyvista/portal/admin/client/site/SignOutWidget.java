@@ -17,13 +17,14 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
-import com.propertyvista.portal.admin.client.app.VistaAdminAppSiteMap;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.shared.meta.NavigUtils;
+
+import com.propertyvista.portal.admin.client.app.VistaAdminAppSiteMap;
 
 public class SignOutWidget extends HTML implements InlineWidget {
 

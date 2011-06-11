@@ -31,10 +31,10 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
+
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.payment.PaymentProcessingException;
-
-import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 class CaledonHttpClient {
 

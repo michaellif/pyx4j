@@ -15,9 +15,10 @@ package com.propertyvista.tester.client.ui;
 
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
-import com.propertyvista.common.client.theme.VistaTheme;
 
 import com.pyx4j.widgets.client.style.Theme;
+
+import com.propertyvista.common.client.theme.VistaTheme;
 
 public class TesterViewModule extends AbstractGinModule {
 

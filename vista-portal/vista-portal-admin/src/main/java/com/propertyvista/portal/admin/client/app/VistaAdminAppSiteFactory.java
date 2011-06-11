@@ -13,13 +13,13 @@
  */
 package com.propertyvista.portal.admin.client.app;
 
-import com.propertyvista.common.domain.VistaBehavior;
-import com.propertyvista.portal.admin.client.site.VistaAdminPublicResources;
-
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.site.shared.domain.SiteImpl;
 import com.pyx4j.site.shared.meta.NavigUtils;
+
+import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.portal.admin.client.site.VistaAdminPublicResources;
 
 public class VistaAdminAppSiteFactory extends com.pyx4j.site.shared.meta.SiteFactory {
 

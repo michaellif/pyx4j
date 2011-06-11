@@ -18,6 +18,7 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+
 import com.propertyvista.tester.client.activity.NavigationActivity;
 
 public class NavigationActivityMapper implements ActivityMapper {

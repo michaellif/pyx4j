@@ -23,7 +23,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 import com.propertyvista.crm.rpc.services.AbstractCrudService;
-import com.propertyvista.domain.marketing.yield.Concession;
 
 /**
  * DBO - Data Base Object

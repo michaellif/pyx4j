@@ -20,6 +20,14 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.activity.AppActivityManager;
+import com.pyx4j.site.client.activity.AppActivityMapper;
+import com.pyx4j.site.client.ui.AppSiteView;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.StyleManger;
+
 import com.propertyvista.portal.client.mvp.ActionsActivityMapper;
 import com.propertyvista.portal.client.mvp.BottomActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
@@ -28,13 +36,6 @@ import com.propertyvista.portal.client.mvp.MainNavigActivityMapper;
 import com.propertyvista.portal.client.mvp.SecondaryNavigActivityMapper;
 import com.propertyvista.portal.client.mvp.StaticContentActivityMapper;
 import com.propertyvista.portal.client.themes.GainsboroTheme;
-
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.AppActivityManager;
-import com.pyx4j.site.client.activity.AppActivityMapper;
-import com.pyx4j.site.client.ui.AppSiteView;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
-import com.pyx4j.widgets.client.style.StyleManger;
 
 @Singleton
 public class PortalView extends FlowPanel {

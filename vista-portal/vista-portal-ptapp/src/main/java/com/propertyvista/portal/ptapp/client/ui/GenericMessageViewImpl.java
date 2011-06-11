@@ -22,9 +22,10 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.propertyvista.common.client.Message;
 
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+
+import com.propertyvista.common.client.Message;
 
 public class GenericMessageViewImpl extends FlowPanel implements GenericMessageView {
 

@@ -21,10 +21,11 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.propertyvista.portal.client.ui.maps.PropertyMapWidget;
-import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.portal.client.ui.maps.PropertyMapWidget;
+import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
 public class ApartmentDetailsViewImpl extends FlowPanel implements ApartmentDetailsView {
 

@@ -18,6 +18,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.site.client.activity.AppActivityMapper;
+
 import com.propertyvista.portal.client.activity.ApartmentDetailsActivity;
 import com.propertyvista.portal.client.activity.FloorplanDetailsActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
@@ -27,8 +30,6 @@ import com.propertyvista.portal.client.activity.ResidentsActivity;
 import com.propertyvista.portal.client.activity.SearchApartmentActivity;
 import com.propertyvista.portal.client.activity.TenantProfileActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-
-import com.pyx4j.site.client.activity.AppActivityMapper;
 
 public class ContentActivityMapper implements AppActivityMapper {
 

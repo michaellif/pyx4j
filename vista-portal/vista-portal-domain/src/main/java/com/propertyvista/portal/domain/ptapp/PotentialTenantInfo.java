@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import com.propertyvista.common.domain.ref.Province;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -22,6 +20,8 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.common.domain.ref.Province;
 
 public interface PotentialTenantInfo extends PotentialTenant {
 

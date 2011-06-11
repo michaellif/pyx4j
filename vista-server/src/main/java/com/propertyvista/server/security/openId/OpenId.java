@@ -37,14 +37,14 @@ import org.openid4java.util.ProxyProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.config.SystemConfig;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
+
+import com.propertyvista.config.SystemConfig;
 
 public class OpenId {
 

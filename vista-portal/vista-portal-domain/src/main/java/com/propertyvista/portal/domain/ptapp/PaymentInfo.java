@@ -13,12 +13,6 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import com.propertyvista.portal.domain.payment.BillingAddress;
-import com.propertyvista.portal.domain.payment.CreditCardInfo;
-import com.propertyvista.portal.domain.payment.EcheckInfo;
-import com.propertyvista.portal.domain.payment.InteracInfo;
-import com.propertyvista.portal.domain.payment.PaymentType;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -27,6 +21,12 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.portal.domain.payment.BillingAddress;
+import com.propertyvista.portal.domain.payment.CreditCardInfo;
+import com.propertyvista.portal.domain.payment.EcheckInfo;
+import com.propertyvista.portal.domain.payment.InteracInfo;
+import com.propertyvista.portal.domain.payment.PaymentType;
 
 public interface PaymentInfo extends IEntity, IBoundToApplication {
 

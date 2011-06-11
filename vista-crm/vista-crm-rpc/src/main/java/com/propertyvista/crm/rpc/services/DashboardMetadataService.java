@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.crm.rpc.domain.DashboardMetadata;
-
 import com.pyx4j.rpc.shared.IService;
+
+import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 
 public interface DashboardMetadataService extends IService {
 

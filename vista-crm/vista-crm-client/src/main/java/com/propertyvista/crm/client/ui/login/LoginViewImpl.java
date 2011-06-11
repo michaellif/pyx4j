@@ -30,8 +30,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.propertyvista.common.domain.DemoData;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
@@ -39,6 +37,8 @@ import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationRequest;
+
+import com.propertyvista.common.domain.DemoData;
 
 public class LoginViewImpl extends FlowPanel implements LoginView {
 

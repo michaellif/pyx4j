@@ -37,11 +37,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.portal.tester.TestComponentDebugId;
-import com.propertyvista.portal.tester.TesterDebugId;
-
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -59,6 +54,11 @@ import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.CTextField;
+
+import com.propertyvista.common.client.ui.decorations.DecorationData;
+import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.portal.tester.TestComponentDebugId;
+import com.propertyvista.portal.tester.TesterDebugId;
 
 /**
  * 

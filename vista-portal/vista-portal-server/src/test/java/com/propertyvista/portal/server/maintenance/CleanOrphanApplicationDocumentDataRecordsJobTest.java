@@ -13,19 +13,10 @@
  */
 package com.propertyvista.portal.server.maintenance;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.config.tests.VistaDBTestCase;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
-import com.propertyvista.server.domain.ApplicationDocumentData;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.quartz.SchedulerHelper;
-import com.pyx4j.unit.server.mock.TestLifecycle;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+
 import junit.framework.Assert;
 
 import org.quartz.DateBuilder;
@@ -39,6 +30,18 @@ import org.quartz.SimpleTrigger;
 import org.quartz.TriggerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.quartz.SchedulerHelper;
+import com.pyx4j.unit.server.mock.TestLifecycle;
+
+import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.config.tests.VistaDBTestCase;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
+import com.propertyvista.server.domain.ApplicationDocumentData;
 
 public class CleanOrphanApplicationDocumentDataRecordsJobTest extends VistaDBTestCase {
     private final static Logger log = LoggerFactory.getLogger(CleanOrphanApplicationDocumentDataRecordsJobTest.class);

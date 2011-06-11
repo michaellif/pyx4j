@@ -17,16 +17,17 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.viewer.CEntityViewer;
+import com.pyx4j.entity.shared.IList;
+
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.domain.RangeGroup;
 import com.propertyvista.portal.client.ui.decorations.PortalListDecorator;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
-
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.viewer.CEntityViewer;
-import com.pyx4j.entity.shared.IList;
 
 public class FloorplanDetailsForm extends CEntityForm<FloorplanDetailsDTO> implements FloorplanDetailsView {
 

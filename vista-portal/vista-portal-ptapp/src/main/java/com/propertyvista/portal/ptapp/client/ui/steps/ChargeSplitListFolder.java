@@ -29,10 +29,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.portal.domain.ptapp.TenantCharge;
-
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
@@ -50,6 +46,10 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+
+import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
+import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class ChargeSplitListFolder extends CEntityFolderEditor<TenantCharge> {
 

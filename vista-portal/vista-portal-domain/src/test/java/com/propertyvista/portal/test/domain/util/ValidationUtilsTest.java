@@ -15,9 +15,9 @@ package com.propertyvista.portal.test.domain.util;
 
 import junit.framework.TestCase;
 
-import com.propertyvista.portal.domain.util.ValidationUtils;
-
 import com.pyx4j.commons.TimeUtils;
+
+import com.propertyvista.portal.domain.util.ValidationUtils;
 
 public class ValidationUtilsTest extends TestCase {
 

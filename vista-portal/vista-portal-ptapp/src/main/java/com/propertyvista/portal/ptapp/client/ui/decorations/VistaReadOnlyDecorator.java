@@ -18,10 +18,10 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.common.client.ui.decorations.DecorationData;
-
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.common.client.ui.decorations.DecorationData;
 
 public class VistaReadOnlyDecorator extends FlowPanel {
 

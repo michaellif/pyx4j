@@ -13,9 +13,10 @@
  */
 package com.propertyvista.portal.rpc.ptapp;
 
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import java.util.Arrays;
 import java.util.EnumSet;
+
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 
 public interface ApplicationDocumentServletParameters {
 

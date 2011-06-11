@@ -17,15 +17,15 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.portal.domain.ptapp.ChargeLine;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
-
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+
+import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.portal.domain.ptapp.ChargeLine;
+import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
+import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
 public class ChargeLineFolder extends CEntityFolderEditor<ChargeLine> {
 
