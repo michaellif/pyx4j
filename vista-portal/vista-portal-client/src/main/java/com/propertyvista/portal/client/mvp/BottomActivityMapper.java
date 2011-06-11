@@ -14,25 +14,22 @@
 package com.propertyvista.portal.client.mvp;
 
 import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.client.activity.FooterActivity;
 
-public class BottomActivityMapper implements ActivityMapper {
+import com.pyx4j.site.client.activity.AppActivityMapper;
 
-    Provider<FooterActivity> footerActivityProvider;
+public class BottomActivityMapper implements AppActivityMapper {
 
-    @Inject
-    public BottomActivityMapper(Provider<FooterActivity> activityProvider) {
-        super();
-        this.footerActivityProvider = activityProvider;
+    public BottomActivityMapper() {
+
     }
 
     @Override
-    public Activity getActivity(Place place) {
-        return footerActivityProvider.get();
+    public void obtainActivity(Place place, AsyncCallback<Activity> callback) {
+        callback.onSuccess(new FooterActivity(place));
+
     }
 
 }

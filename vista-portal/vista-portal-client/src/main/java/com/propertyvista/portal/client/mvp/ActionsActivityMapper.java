@@ -14,27 +14,21 @@
 package com.propertyvista.portal.client.mvp;
 
 import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.client.activity.TopRightActionsActivity;
 
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.client.activity.AppActivityMapper;
 
-public class ActionsActivityMapper implements ActivityMapper {
+public class ActionsActivityMapper implements AppActivityMapper {
 
-    Provider<TopRightActionsActivity> topRightActionActivityProvider;
+    public ActionsActivityMapper() {
 
-    @Inject
-    public ActionsActivityMapper(Provider<TopRightActionsActivity> topRightActionActivityProvider) {
-        super();
-        this.topRightActionActivityProvider = topRightActionActivityProvider;
     }
 
     @Override
-    public Activity getActivity(Place place) {
-        return topRightActionActivityProvider.get().withPlace((AppPlace) place);
-    }
+    public void obtainActivity(Place place, AsyncCallback<Activity> callback) {
+        callback.onSuccess(new TopRightActionsActivity(place));
 
+    }
 }

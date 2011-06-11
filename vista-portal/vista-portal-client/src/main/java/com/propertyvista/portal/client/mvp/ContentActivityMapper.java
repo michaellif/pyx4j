@@ -14,98 +14,63 @@
 package com.propertyvista.portal.client.mvp;
 
 import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.client.activity.ApartmentDetailsActivity;
-import com.propertyvista.portal.client.activity.LoginActivity;
+import com.propertyvista.portal.client.activity.FloorplanDetailsActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
 import com.propertyvista.portal.client.activity.PaymentActivity;
 import com.propertyvista.portal.client.activity.PropertyMapActivity;
 import com.propertyvista.portal.client.activity.ResidentsActivity;
 import com.propertyvista.portal.client.activity.SearchApartmentActivity;
 import com.propertyvista.portal.client.activity.TenantProfileActivity;
-import com.propertyvista.portal.client.activity.FloorplanDetailsActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class ContentActivityMapper implements ActivityMapper {
+import com.pyx4j.site.client.activity.AppActivityMapper;
 
-    Provider<ResidentsActivity> residentsActivityProvider;
+public class ContentActivityMapper implements AppActivityMapper {
 
-    Provider<LoginActivity> loginActivityProvider;
-
-    Provider<PropertyMapActivity> propertyMapActivityProvider;
-
-    Provider<ApartmentDetailsActivity> apartmentDetailsActivity;
-
-    Provider<FloorplanDetailsActivity> floorplanDetailsActivity;
-
-    Provider<TenantProfileActivity> tenantProfileActivity;
-
-    Provider<MaintenanceAcitvity> maintenanceActivity;
-
-    Provider<PaymentActivity> paymentActivity;
-
-    Provider<SearchApartmentActivity> searchApartmentActivity;
-
-    @Inject
-    public ContentActivityMapper(
-
-    Provider<ResidentsActivity> residentsActivityProvider,
-
-    Provider<LoginActivity> loginActivityProvider,
-
-    Provider<PropertyMapActivity> propertyMapActivity,
-
-    Provider<ApartmentDetailsActivity> apartmentDetailsActivity,
-
-    Provider<FloorplanDetailsActivity> floorplanDetailsActivity,
-
-    Provider<TenantProfileActivity> tenantProfileActivity,
-
-    Provider<MaintenanceAcitvity> maintenanceActivity,
-
-    Provider<PaymentActivity> paymentActivity,
-
-    Provider<SearchApartmentActivity> searchApartmentActivity) {
-        super();
-        this.residentsActivityProvider = residentsActivityProvider;
-        this.loginActivityProvider = loginActivityProvider;
-        this.propertyMapActivityProvider = propertyMapActivity;
-        this.apartmentDetailsActivity = apartmentDetailsActivity;
-        this.tenantProfileActivity = tenantProfileActivity;
-        this.maintenanceActivity = maintenanceActivity;
-        this.paymentActivity = paymentActivity;
-        this.searchApartmentActivity = searchApartmentActivity;
-        this.floorplanDetailsActivity = floorplanDetailsActivity;
+    public ContentActivityMapper() {
 
     }
 
     @Override
-    public Activity getActivity(Place place) {
-        if (place instanceof PortalSiteMap.FindApartment) {
-            return searchApartmentActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.Residents) {
-            return residentsActivityProvider.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.Residents.Login) {
-            return loginActivityProvider.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.FindApartment.PropertyMap) {
-            return propertyMapActivityProvider.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.FindApartment.ApartmentDetails) {
-            return apartmentDetailsActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {
-            return floorplanDetailsActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.Residents.Navigator.TenantProfile) {
-            return tenantProfileActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.Residents.Navigator.Maintenance) {
-            return maintenanceActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.Residents.Navigator.Payment) {
-            return paymentActivity.get().withPlace(place);
-        } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {
-            return floorplanDetailsActivity.get().withPlace(place);
-        }
-        return null;
+    public void obtainActivity(final Place place, final AsyncCallback<Activity> callback) {
+        GWT.runAsync(new RunAsyncCallback() {
+
+            @Override
+            public void onSuccess() {
+                Activity activity = null;
+                if (place instanceof PortalSiteMap.FindApartment) {
+                    activity = new SearchApartmentActivity(place);
+                } else if (place instanceof PortalSiteMap.Residents) {
+                    activity = new ResidentsActivity(place);
+                } else if (place instanceof PortalSiteMap.FindApartment.PropertyMap) {
+                    activity = new PropertyMapActivity(place);
+                } else if (place instanceof PortalSiteMap.FindApartment.ApartmentDetails) {
+                    activity = new ApartmentDetailsActivity(place);
+                } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {
+                    activity = new FloorplanDetailsActivity(place);
+                } else if (place instanceof PortalSiteMap.Residents.Navigator.TenantProfile) {
+                    activity = new TenantProfileActivity(place);
+                } else if (place instanceof PortalSiteMap.Residents.Navigator.Maintenance) {
+                    activity = new MaintenanceAcitvity(place);
+                } else if (place instanceof PortalSiteMap.Residents.Navigator.Payment) {
+                    activity = new PaymentActivity(place);
+                } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {
+                    activity = new FloorplanDetailsActivity(place);
+                }
+
+                callback.onSuccess(activity);
+            }
+
+            @Override
+            public void onFailure(Throwable reason) {
+                callback.onFailure(reason);
+            }
+        });
 
     }
 }

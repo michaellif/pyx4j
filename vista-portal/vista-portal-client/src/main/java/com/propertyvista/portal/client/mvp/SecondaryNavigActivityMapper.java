@@ -14,45 +14,42 @@
 package com.propertyvista.portal.client.mvp;
 
 import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.client.activity.ResidentsNavigActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class SecondaryNavigActivityMapper implements ActivityMapper {
+import com.pyx4j.site.client.activity.AppActivityMapper;
 
-    Provider<ResidentsNavigActivity> secondaryNavigActivity;
+public class SecondaryNavigActivityMapper implements AppActivityMapper {
 
-    @Inject
-    public SecondaryNavigActivityMapper(
+    public SecondaryNavigActivityMapper() {
 
-    Provider<ResidentsNavigActivity> residentsNavigActivity
-
-    ) {
-
-        this.secondaryNavigActivity = residentsNavigActivity;
     }
 
     @Override
-    public Activity getActivity(Place place) {
+    public void obtainActivity(final Place place, final AsyncCallback<Activity> callback) {
+        GWT.runAsync(new RunAsyncCallback() {
 
-        if (place instanceof PortalSiteMap.Residents.Navigator ||
+            @Override
+            public void onSuccess() {
+                Activity activity = null;
+                if (place instanceof PortalSiteMap.Residents.Navigator || place instanceof PortalSiteMap.Residents.Navigator.TenantProfile
+                        || place instanceof PortalSiteMap.Residents.Navigator.LeaseApplication
+                        || place instanceof PortalSiteMap.Residents.Navigator.Maintenance || place instanceof PortalSiteMap.Residents.Navigator.Payment) {
+                    activity = new ResidentsNavigActivity(place);
+                }
 
-        place instanceof PortalSiteMap.Residents.Navigator.TenantProfile ||
+                callback.onSuccess(activity);
+            }
 
-        place instanceof PortalSiteMap.Residents.Navigator.LeaseApplication ||
-
-        place instanceof PortalSiteMap.Residents.Navigator.Maintenance ||
-
-        place instanceof PortalSiteMap.Residents.Navigator.Payment) {
-
-            return secondaryNavigActivity.get().withPlace(place);
-
-        }
-
-        return null;
+            @Override
+            public void onFailure(Throwable reason) {
+                callback.onFailure(reason);
+            }
+        });
 
     }
 }

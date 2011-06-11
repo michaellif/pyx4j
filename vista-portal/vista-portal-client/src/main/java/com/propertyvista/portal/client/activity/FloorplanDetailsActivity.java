@@ -18,18 +18,17 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.rpc.AppPlace;
-
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsView;
+import com.propertyvista.portal.client.ui.viewfactories.PropertySearchViewFactory;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class FloorplanDetailsActivity extends AbstractActivity implements FloorplanDetailsView.Presenter {
 
@@ -37,10 +36,10 @@ public class FloorplanDetailsActivity extends AbstractActivity implements Floorp
 
     private String floorplanId;
 
-    @Inject
-    public FloorplanDetailsActivity(FloorplanDetailsView view) {
-        this.view = view;
+    public FloorplanDetailsActivity(Place place) {
+        this.view = (FloorplanDetailsView) PropertySearchViewFactory.instance(FloorplanDetailsView.class);
         this.view.setPresenter(this);
+        withPlace(place);
     }
 
     public FloorplanDetailsActivity withPlace(Place place) {

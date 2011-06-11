@@ -17,15 +17,15 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 import com.propertyvista.portal.client.ui.PaymentView;
+import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 
 public class PaymentActivity extends AbstractActivity {
     private final PaymentView view;
 
-    @Inject
-    public PaymentActivity(PaymentView view) {
-        this.view = view;
+    public PaymentActivity(Place place) {
+        this.view = (PaymentView) PortalViewFactory.instance(PaymentView.class);
+        withPlace(place);
     }
 
     public PaymentActivity withPlace(Place place) {

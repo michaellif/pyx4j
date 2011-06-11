@@ -17,16 +17,16 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 import com.propertyvista.portal.client.ui.TenantProfileView;
+import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 
 public class TenantProfileActivity extends AbstractActivity {
 
     private final TenantProfileView view;
 
-    @Inject
-    public TenantProfileActivity(TenantProfileView view) {
-        this.view = view;
+    public TenantProfileActivity(Place place) {
+        this.view = (TenantProfileView) PortalViewFactory.instance(TenantProfileView.class);
+        withPlace(place);
     }
 
     public TenantProfileActivity withPlace(Place place) {

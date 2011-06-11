@@ -17,17 +17,17 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 import com.propertyvista.portal.client.ui.LogoView;
+import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 
 public class LogoActivity extends AbstractActivity implements LogoView.Presenter {
 
     private final LogoView view;
 
-    @Inject
-    public LogoActivity(LogoView view) {
-        this.view = view;
+    public LogoActivity(Place place) {
+        this.view = (LogoView) PortalViewFactory.instance(LogoView.class);
         view.setPresenter(this);
+        withPlace(place);
     }
 
     public LogoActivity withPlace(Place place) {

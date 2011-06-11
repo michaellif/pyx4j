@@ -14,28 +14,21 @@
 package com.propertyvista.portal.client.mvp;
 
 import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.client.activity.MainNavigActivity;
 
-public class MainNavigActivityMapper implements ActivityMapper {
+import com.pyx4j.site.client.activity.AppActivityMapper;
 
-    Provider<MainNavigActivity> mainNavigActivityProvider;
+public class MainNavigActivityMapper implements AppActivityMapper {
 
-    @Inject
-    public MainNavigActivityMapper(final Provider<MainNavigActivity> mainNavigActivityProvider) {
-        super();
-        this.mainNavigActivityProvider = mainNavigActivityProvider;
+    public MainNavigActivityMapper() {
+
     }
 
     @Override
-    public Activity getActivity(Place place) {
-        RootPanel.getBodyElement().setClassName("body-nonavig");
-        return mainNavigActivityProvider.get().withPlace(place);
+    public void obtainActivity(Place place, AsyncCallback<Activity> callback) {
+        callback.onSuccess(new MainNavigActivity(place));
 
     }
-
 }

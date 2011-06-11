@@ -16,6 +16,11 @@ package com.propertyvista.portal.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.propertyvista.common.client.Message;
+import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.portal.client.ui.PortalView;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.geo.GoogleAPI;
@@ -24,14 +29,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.Message;
-import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
-
 public class PortalSite extends VistaSite {
-
-    private PortalGinjector ginjector;
 
     private static PortalSiteServices srv = GWT.create(PortalSiteServices.class);
 
@@ -46,11 +44,10 @@ public class PortalSite extends VistaSite {
         // Key for .birchwoodsoftwaregroup.com
         GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
 
-        ginjector = GWT.create(PortalGinjector.class);
         final AppPlace defaultplace = new PortalSiteMap.Landing();
         getHistoryHandler().register(getPlaceController(), getEventBus(), defaultplace);
 
-        RootPanel.get().add(ginjector.getSiteView());
+        RootPanel.get().add(new PortalView());
 
         hideLoadingIndicator();
 

@@ -17,8 +17,8 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 import com.propertyvista.portal.client.ui.LoginView;
+import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 import com.pyx4j.site.client.AppSite;
@@ -26,10 +26,10 @@ import com.pyx4j.site.client.AppSite;
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
     LoginView view;
 
-    @Inject
-    public LoginActivity(LoginView view) {
-        this.view = view;
+    public LoginActivity(Place place) {
+        this.view = (LoginView) PortalViewFactory.instance(LoginView.class);
         this.view.setPresenter(this);
+        withPlace(place);
     }
 
     public LoginActivity withPlace(Place place) {

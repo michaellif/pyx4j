@@ -14,32 +14,24 @@
 package com.propertyvista.portal.client.mvp;
 
 import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.client.activity.StaticPageActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class StaticContentActivityMapper implements ActivityMapper {
+import com.pyx4j.site.client.activity.AppActivityMapper;
 
-    Provider<StaticPageActivity> staticPageActivityProvider;
+public class StaticContentActivityMapper implements AppActivityMapper {
 
-    @Inject
-    public StaticContentActivityMapper(
+    public StaticContentActivityMapper() {
 
-    Provider<StaticPageActivity> staticPageActivityProvider) {
-        super();
-        this.staticPageActivityProvider = staticPageActivityProvider;
     }
 
     @Override
-    public Activity getActivity(Place place) {
+    public void obtainActivity(Place place, AsyncCallback<Activity> callback) {
         if (place instanceof PortalSiteMap.Page || place instanceof PortalSiteMap.Landing) {
-            return staticPageActivityProvider.get().withPlace(place);
+            callback.onSuccess(new StaticPageActivity(place));
         }
-        return null;
     }
 
 }

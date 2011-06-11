@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.activity.shared.ActivityManager;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -29,12 +27,14 @@ import com.propertyvista.portal.client.mvp.LogoActivityMapper;
 import com.propertyvista.portal.client.mvp.MainNavigActivityMapper;
 import com.propertyvista.portal.client.mvp.SecondaryNavigActivityMapper;
 import com.propertyvista.portal.client.mvp.StaticContentActivityMapper;
+import com.propertyvista.portal.client.themes.GainsboroTheme;
 
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.activity.AppActivityManager;
+import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.Theme;
 
 @Singleton
 public class PortalView extends FlowPanel {
@@ -46,25 +46,11 @@ public class PortalView extends FlowPanel {
     }
 
     @Inject
-    public PortalView(LogoActivityMapper logoActivityMapper,
-
-    ActionsActivityMapper actionsActivityMapper,
-
-    MainNavigActivityMapper mainNavigActivityMapper,
-
-    ContentActivityMapper contentActivityMapper,
-
-    BottomActivityMapper bottomActivityMapper,
-
-    SecondaryNavigActivityMapper secondaryNavigActivityMapper,
-
-    StaticContentActivityMapper staticContentActivityMapper,
-
-    Theme theme) {
+    public PortalView() {
 
         EventBus eventBus = AppSite.getEventBus();
 
-        StyleManger.installTheme(theme);
+        StyleManger.installTheme(new GainsboroTheme());
 
         String prefix = DEFAULT_STYLE_PREFIX;
 
@@ -121,20 +107,28 @@ public class PortalView extends FlowPanel {
         DisplayPanel bottomDisplayPanel = new DisplayPanel();
         footerWrapper.add(bottomDisplayPanel);
 
-        bind(logoActivityMapper, logoDisplayPanel, eventBus);
-        bind(actionsActivityMapper, actionsDisplayPanel, eventBus);
-        bind(mainNavigActivityMapper, mainNavigDisplayPanel, eventBus);
-        bind(contentActivityMapper, contentDisplayPanel, eventBus);
-        bind(secondaryNavigActivityMapper, secondaryNavigDisplayPanel, eventBus);
-        bind(bottomActivityMapper, bottomDisplayPanel, eventBus);
-        bind(staticContentActivityMapper, statictDisplayPanel, eventBus);
+        bind(new LogoActivityMapper(), logoDisplayPanel, eventBus);
+        bind(new ActionsActivityMapper(), actionsDisplayPanel, eventBus);
+        bind(new MainNavigActivityMapper(), mainNavigDisplayPanel, eventBus);
+        bind(new ContentActivityMapper(), contentDisplayPanel, eventBus);
+        bind(new SecondaryNavigActivityMapper(), secondaryNavigDisplayPanel, eventBus);
+        bind(new BottomActivityMapper(), bottomDisplayPanel, eventBus);
+        bind(new StaticContentActivityMapper(), statictDisplayPanel, eventBus);
 
     }
 
-    private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
-        ActivityManager activityManager = new ActivityManager(mapper, eventBus);
-        activityManager.setDisplay(widget);
+/*
+ * private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus
+ * eventBus) {
+ * ActivityManager activityManager = new ActivityManager(mapper, eventBus);
+ * activityManager.setDisplay(widget);
+ * 
+ * }
+ */
 
+    private static void bind(AppActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
+        AppActivityManager activityManager = new AppActivityManager(mapper, eventBus);
+        activityManager.setDisplay(widget);
     }
 
     class DisplayPanel extends SimplePanel {

@@ -14,25 +14,22 @@
 package com.propertyvista.portal.client.mvp;
 
 import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.portal.client.activity.LogoActivity;
 
-public class LogoActivityMapper implements ActivityMapper {
+import com.pyx4j.site.client.activity.AppActivityMapper;
 
-    Provider<LogoActivity> logoActivityProvider;
+public class LogoActivityMapper implements AppActivityMapper {
 
-    @Inject
-    public LogoActivityMapper(Provider<LogoActivity> logoActivityProvider) {
-        super();
-        this.logoActivityProvider = logoActivityProvider;
+    public LogoActivityMapper() {
+
     }
 
     @Override
-    public Activity getActivity(Place place) {
-        return logoActivityProvider.get();
+    public void obtainActivity(Place place, AsyncCallback<Activity> callback) {
+        callback.onSuccess(new LogoActivity(place));
+
     }
 
 }

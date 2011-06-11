@@ -17,15 +17,15 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 import com.propertyvista.portal.client.ui.MaintenanceView;
+import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 
 public class MaintenanceAcitvity extends AbstractActivity {
     private final MaintenanceView view;
 
-    @Inject
-    public MaintenanceAcitvity(MaintenanceView view) {
-        this.view = view;
+    public MaintenanceAcitvity(Place place) {
+        this.view = (MaintenanceView) PortalViewFactory.instance(MaintenanceView.class);
+        withPlace(place);
     }
 
     public MaintenanceAcitvity withPlace(Place place) {

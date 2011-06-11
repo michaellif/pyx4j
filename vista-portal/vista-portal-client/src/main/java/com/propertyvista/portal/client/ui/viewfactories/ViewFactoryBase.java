@@ -7,20 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
- * @author vadims
+ * Created on Jun 11, 2011
+ * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client;
+package com.propertyvista.portal.client.ui.viewfactories;
 
-import com.google.gwt.inject.client.GinModules;
-import com.propertyvista.portal.client.ui.PortalView;
+import java.util.HashMap;
 
-import com.pyx4j.site.client.AppSiteGinjector;
+import com.google.gwt.user.client.ui.IsWidget;
 
-@GinModules(PortalGinModule.class)
-public interface PortalGinjector extends AppSiteGinjector {
+public class ViewFactoryBase {
+    protected static HashMap<Class<?>, IsWidget> map = new HashMap<Class<?>, IsWidget>();
 
-    PortalView getSiteView();
-
+    public static IsWidget instance(Class<?> type) {
+        return map.get(type);
+    }
 }
