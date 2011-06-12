@@ -110,6 +110,7 @@ public class Lifecycle {
             }
         } finally {
             Context.remove();
+            NamespaceManager.remove();
         }
     }
 

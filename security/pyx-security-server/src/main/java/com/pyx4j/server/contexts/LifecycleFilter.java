@@ -77,6 +77,7 @@ public class LifecycleFilter implements Filter {
                 if (!allowRequest(httprequest, httpresponse)) {
                     return;
                 }
+                NamespaceManager.setNamespace(ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httprequest));
                 // TODO MDC
                 Lifecycle.beginRequest(httprequest, httpresponse);
                 try {

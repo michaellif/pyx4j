@@ -32,6 +32,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-security-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>c3p0</groupId>
             <artifactId>c3p0</artifactId>
         </dependency>

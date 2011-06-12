@@ -124,6 +124,10 @@ public class ServerSideConfiguration {
         return null;
     }
 
+    public NamespaceResolver getNamespaceResolver() {
+        return new EmptyNamespaceResolver();
+    }
+
     public ThrottleConfig getThrottleConfig() {
         return new ThrottleConfig();
     }
