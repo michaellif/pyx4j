@@ -18,6 +18,7 @@ import javax.servlet.ServletContext;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
@@ -64,6 +65,11 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
     @Override
     public AclCreator getAclCreator() {
         return new VistaAccessControlList();
+    }
+
+    @Override
+    public NamespaceResolver getNamespaceResolver() {
+        return new VistaNamespaceResolver();
     }
 
     @Override
