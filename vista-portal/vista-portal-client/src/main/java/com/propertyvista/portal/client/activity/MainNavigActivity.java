@@ -16,6 +16,9 @@ package com.propertyvista.portal.client.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -29,14 +32,22 @@ import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.MainNavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.site.PageDescriptor;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
 
+    private static boolean started = false;
+
     private final MainNavigView view;
+
+    private final Place place;
+
+    private static I18n i18n = I18nFactory.getI18n(MainNavigActivity.class);
 
     public MainNavigActivity(Place place) {
         this.view = (MainNavigView) PortalViewFactory.instance(MainNavigView.class);
         view.setPresenter(this);
+        this.place = place;
         withPlace(place);
     }
 
@@ -46,6 +57,11 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        if (started) {
+            view.changePlace(place);
+            panel.setWidget(view);
+            return;
+        }
         panel.setWidget(view);
         PortalSite.getPortalSiteServices().retrieveMainNavig(new DefaultAsyncCallback<PageDescriptor>() {
             @Override
@@ -53,15 +69,37 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
                 List<NavigItem> items = new ArrayList<NavigItem>();
                 for (PageDescriptor descriptor : navig.childPages()) {
                     if (PageDescriptor.Type.staticContent.equals(descriptor.type().getValue())) {
-                        items.add(new NavigItem(descriptor.caption().getStringView(), descriptor.caption().getStringView()));
+                        NavigItem mainNavig = new NavigItem(descriptor.caption().getStringView(), descriptor.caption().getStringView());
+
+                        if (!descriptor.childPages().isNull() && !descriptor.childPages().isEmpty()) {
+                            for (PageDescriptor secondaryPage : descriptor.childPages()) {
+                                NavigItem secondaryNavig = new NavigItem(secondaryPage.caption().getStringView(), secondaryPage.caption().getStringView());
+                                mainNavig.addSecondaryNavigItem(secondaryNavig);
+                            }
+                        }
+                        items.add(mainNavig);
+
                     } else {
                         AppPlace place = NavigItem.convertTypeToPlace(descriptor.type().getValue());
-                        items.add(new NavigItem(place, AppSite.getHistoryMapper().getPlaceInfo(place).getCaption()));
+                        NavigItem mainNavig = new NavigItem(place, AppSite.getHistoryMapper().getPlaceInfo(place).getCaption());
+                        if (PageDescriptor.Type.residence.equals(descriptor.type().getValue())) {
+                            //populate secondary navigation for the Residents
+                            NavigItem secondaryNavig = new NavigItem(new PortalSiteMap.Residents.Navigator.LeaseApplication(), i18n.tr("Lease Application"));
+                            mainNavig.addSecondaryNavigItem(secondaryNavig);
+                            secondaryNavig = new NavigItem(new PortalSiteMap.Residents.Navigator.Maintenance(), i18n.tr("Maintenance"));
+                            mainNavig.addSecondaryNavigItem(secondaryNavig);
+                            secondaryNavig = new NavigItem(new PortalSiteMap.Residents.Navigator.Payment(), i18n.tr("Payment"));
+                            mainNavig.addSecondaryNavigItem(secondaryNavig);
+                            secondaryNavig = new NavigItem(new PortalSiteMap.Residents.Navigator.TenantProfile(), i18n.tr("Tenant Profile"));
+                            mainNavig.addSecondaryNavigItem(secondaryNavig);
+                        }
+                        items.add(mainNavig);
                     }
                 }
                 view.setMainNavig(items);
             }
         });
+        started = true;
     }
 
     @Override

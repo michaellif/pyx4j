@@ -23,17 +23,12 @@ import com.propertyvista.portal.client.activity.MainNavigActivity;
 
 public class MainNavigActivityMapper implements AppActivityMapper {
 
-    private MainNavigActivity mainActivity;
-
     public MainNavigActivityMapper() {
-        mainActivity = null;
     }
 
     @Override
     public void obtainActivity(Place place, AsyncCallback<Activity> callback) {
-        if (mainActivity == null)
-            mainActivity = new MainNavigActivity(place);
-        callback.onSuccess(mainActivity);
+        callback.onSuccess(new MainNavigActivity(place));
 
     }
 }

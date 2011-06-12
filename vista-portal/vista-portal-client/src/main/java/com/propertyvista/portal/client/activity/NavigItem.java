@@ -13,10 +13,13 @@
  */
 package com.propertyvista.portal.client.activity;
 
-import com.pyx4j.site.rpc.AppPlace;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.propertyvista.portal.domain.site.PageDescriptor;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+
+import com.pyx4j.site.rpc.AppPlace;
 
 public class NavigItem {
 
@@ -24,15 +27,19 @@ public class NavigItem {
 
     private final String caption;
 
+    private final List<NavigItem> secondaryNavigation;
+
     public NavigItem(AppPlace place, String caption) {
         this.place = place;
         this.caption = caption;
+        secondaryNavigation = new LinkedList<NavigItem>();
     }
 
     public NavigItem(String path, String caption) {
         this.place = new PortalSiteMap.Page();
         this.caption = caption;
         place.putArg(PortalSiteMap.ARG_PAGE_ID, path);
+        secondaryNavigation = new LinkedList<NavigItem>();
     }
 
     public AppPlace getPlace() {
@@ -57,4 +64,15 @@ public class NavigItem {
             return new PortalSiteMap.Landing();
         }
     }
+
+    public List<NavigItem> getSecondaryNavigation() {
+        return secondaryNavigation;
+    }
+
+    public void addSecondaryNavigItem(NavigItem item) {
+        if (item != null) {
+            secondaryNavigation.add(item);
+        }
+    }
+
 }

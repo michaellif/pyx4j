@@ -28,6 +28,8 @@ public interface MainNavigView extends IsWidget {
 
     public void setMainNavig(List<NavigItem> items);
 
+    public void changePlace(Place place);
+
     public interface MainNavigPresenter {
         public void navigTo(Place place);
 

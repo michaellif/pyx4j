@@ -24,7 +24,6 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -32,16 +31,20 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.client.activity.NavigItem;
 
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
+import com.propertyvista.portal.client.activity.NavigItem;
+
 public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
     public static String DEFAULT_STYLE_PREFIX = "MainMenu";
+
+    public static String SECONDARY_STYLE_PREFIX = "SecondaryMenu";
 
     public static enum StyleSuffix implements IStyleSuffix {
         Holder, Tab, LabelHolder, StatusHolder, Label
@@ -51,57 +54,147 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
         hover, current
     }
 
+    private static enum MenuType {
+        Main, Secondary
+    }
+
     private MainNavigPresenter presenter;
 
     private final NavigTabList tabsHolder;
 
+    private final VerticalPanel menuContainer;
+
     public MainNavigViewImpl() {
         setStyleName(DEFAULT_STYLE_PREFIX);
-        tabsHolder = new NavigTabList();
-        setWidget(tabsHolder);
+        setSize("100%", "100%");
+        menuContainer = new VerticalPanel();
+        menuContainer.setSize("100%", "100%");
+        tabsHolder = new NavigTabList(MenuType.Main);
+        menuContainer.add(tabsHolder);
+        setWidget(menuContainer);
     }
 
     @Override
     public void setPresenter(MainNavigPresenter presenter) {
         this.presenter = presenter;
-        tabsHolder.clear();
+        // tabsHolder.clear();
     }
 
     @Override
     public void setMainNavig(List<NavigItem> items) {
+        Place secondarySelected = null;
         for (NavigItem item : items) {
-            tabsHolder.add(new NavigTab(item));
+            List<NavigItem> secondaryNavig = item.getSecondaryNavigation();
+            NavigTab mainNavigTab = new NavigTab(item, DEFAULT_STYLE_PREFIX);
+            tabsHolder.add(mainNavigTab);
+
+            Place currentPlace = presenter.getWhere();
+            if (item.getPlace().equals(currentPlace)) {
+                mainNavigTab.select();
+            } else if (secondaryNavig != null) {
+                for (NavigItem secondary : secondaryNavig) {
+                    if (secondary.getPlace().equals(currentPlace)) {
+                        mainNavigTab.select();
+                        secondarySelected = secondary.getPlace();
+                        break;
+                    }
+                }
+            }
+
+            if (secondaryNavig.size() > 0) {
+                NavigTabList secondaryTabsHolder = new NavigTabList(MenuType.Secondary);
+                mainNavigTab.setSecondaryNavig(secondaryTabsHolder);
+                secondaryTabsHolder.setActive(mainNavigTab.isSelected());
+
+                for (NavigItem secondaryItem : secondaryNavig) {
+                    NavigTab navigtab = new NavigTab(secondaryItem, SECONDARY_STYLE_PREFIX);
+                    Place p = secondaryItem.getPlace();
+                    if (p != null && secondarySelected != null && p.equals(secondarySelected)) {
+                        navigtab.select();
+                    }
+                    secondaryTabsHolder.add(navigtab);
+                }
+
+                menuContainer.add(secondaryTabsHolder);
+            }
+
         }
     }
 
     class NavigTabList extends ComplexPanel {
         private final List<NavigTab> tabs;
 
-        public NavigTabList() {
+        private final MenuType menuType;
+
+        private boolean active;
+
+        private final String id;
+
+        public NavigTabList(MenuType menuType) {
+            this.menuType = menuType;
             setElement(DOM.createElement("ul"));
-            setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Holder.name());
             tabs = new LinkedList<MainNavigViewImpl.NavigTab>();
+            id = DOM.createUniqueId();
+            this.getElement().setAttribute("id", id);
+            if (menuType == MenuType.Secondary) {
+                setStyleName(SECONDARY_STYLE_PREFIX + StyleSuffix.Holder.name());
+                setActive(false);
+            } else {
+                setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Holder.name());
+                setActive(true);
+            }
         }
 
         @Override
         public void add(Widget w) {
             NavigTab tab = (NavigTab) w;
-            tab.addTabSelectedHandler(new TabSelectedHandler() {
-
-                @Override
-                public void onTabSelect(TabSelectedEvent event) {
-                    for (NavigTab tab : tabs) {
-                        if (tab.isSelected()) {
-                            tab.deselect();
-                            break;
-                        }
-                    }
-                    event.getTab().select();
-                }
-            });
             tabs.add(tab);
             super.add(w, getElement());
         }
+
+        public void setActive(boolean active) {
+            this.setVisible(active);
+            this.active = active;
+        }
+
+        public MenuType getMenuType() {
+            return menuType;
+        }
+
+        public boolean isActive() {
+            return active;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public List<NavigTab> getTabs() {
+            return tabs;
+        }
+
+        public NavigTab getTabByPlace(Place place) {
+            if (tabs == null || place == null)
+                return null;
+            for (NavigTab tab : tabs) {
+                if (tab.getNavigItem().getPlace().equals(place)) {
+                    return tab;
+                }
+            }
+            return null;
+        }
+
+        public NavigTab getSelectedTab() {
+            if (tabs == null)
+                return null;
+            for (NavigTab tab : tabs) {
+                if (tab.isSelected()) {
+                    return tab;
+                }
+            }
+            return null;
+        }
+
     }
 
     class NavigTab extends ComplexPanel {
@@ -114,44 +207,40 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         private boolean selected;
 
-        final private HandlerManager handlerManager = new HandlerManager(this);
+        private NavigTabList secondaryNavig;
 
-        final private NavigTab self;
+        private final NavigItem navigItem;
 
-        NavigTab(NavigItem menuItem) {
+        NavigTab(NavigItem menuItem, String styleName) {
             super();
+            if (styleName == null) {
+                styleName = DEFAULT_STYLE_PREFIX;
+            }
 
-            self = this;
+            this.navigItem = menuItem;
+            secondaryNavig = null;
+            selected = false;
 
             String caption = menuItem.getCaption();
             final AppPlace place = menuItem.getPlace();
 
             setElement(DOM.createElement("li"));
-            setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
+            setStyleName(styleName + StyleSuffix.Tab.name());
 
             getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
             sinkEvents(Event.ONCLICK);
 
             labelHolder = new FlowPanel();
-            labelHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.LabelHolder.name());
+            labelHolder.setStyleName(styleName + StyleSuffix.LabelHolder.name());
             add(labelHolder);
 
             statusHolder = new SimplePanel();
-            statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
+            statusHolder.setStyleName(styleName + StyleSuffix.StatusHolder.name());
             labelHolder.add(statusHolder);
 
             label = new Label(caption);
-            label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
+            label.setStyleName(styleName + StyleSuffix.Label.name());
             statusHolder.add(label);
-
-            Place currentPlace = presenter.getWhere();
-
-            if (place.equals(currentPlace)) {
-                select();
-            } else {
-                selected = false;
-            }
-
             getElement().getStyle().setFontWeight(FontWeight.BOLD);
             getElement().getStyle().setCursor(Cursor.DEFAULT);
 
@@ -159,9 +248,6 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                 @Override
                 public void onClick(ClickEvent event) {
                     presenter.navigTo(place);
-                    event.stopPropagation();
-                    handlerManager.fireEvent(new TabSelectedEvent(self));
-
                 }
             }, ClickEvent.getType());
             addDomHandler(new MouseOverHandler() {
@@ -190,10 +276,6 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             selected = true;
         }
 
-        public void addTabSelectedHandler(TabSelectedHandler handler) {
-            handlerManager.addHandler(TabSelectedEvent.TYPE, handler);
-        }
-
         @Override
         public void add(Widget w) {
             super.add(w, getElement());
@@ -201,6 +283,51 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         public boolean isSelected() {
             return selected;
+        }
+
+        public NavigItem getNavigItem() {
+            return navigItem;
+        }
+
+        public NavigTabList getSecondaryNavig() {
+            return secondaryNavig;
+        }
+
+        public void setSecondaryNavig(NavigTabList secondaryNavig) {
+            this.secondaryNavig = secondaryNavig;
+        }
+
+    }
+
+    @Override
+    public void changePlace(Place place) {
+        NavigTab mainTag = tabsHolder.getTabByPlace(place);
+        NavigTab selectedTab = tabsHolder.getSelectedTab();
+
+        if (mainTag != null) {//main navig tab
+            if (selectedTab != null) {
+                selectedTab.deselect();
+                if (selectedTab.getSecondaryNavig() != null) {
+                    selectedTab.getSecondaryNavig().setActive(false);
+                }
+            }
+            mainTag.select();
+            if (mainTag.getSecondaryNavig() != null) {
+                mainTag.getSecondaryNavig().setActive(true);
+            }
+        } else {//secondary navig tab
+            if (selectedTab != null) {
+                NavigTabList secondaryNavig = selectedTab.getSecondaryNavig();
+                if (secondaryNavig != null) {
+                    NavigTab secondaryTab = secondaryNavig.getTabByPlace(place);
+                    NavigTab secondarySelectedTab = secondaryNavig.getSelectedTab();
+                    if (secondarySelectedTab != null) {
+                        secondarySelectedTab.deselect();
+                    }
+                    secondaryTab.select();
+                }
+
+            }
         }
     }
 }

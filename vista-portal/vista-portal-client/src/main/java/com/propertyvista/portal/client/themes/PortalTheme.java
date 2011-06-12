@@ -13,12 +13,6 @@
  */
 package com.propertyvista.portal.client.themes;
 
-import com.pyx4j.widgets.client.ListBox;
-import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColor;
-
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
@@ -34,6 +28,12 @@ import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentForm;
+
+import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.style.ColorFactory;
+import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.widgets.client.style.Style;
+import com.pyx4j.widgets.client.style.ThemeColor;
 
 public abstract class PortalTheme extends com.propertyvista.common.client.theme.VistaTheme {
 
@@ -111,6 +111,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
         style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.MainNavig));
         style.addProperty("width", "100%");
+        style.addProperty("height", "7em");
         style.addProperty("float", "left");
         addStyle(style);
 
@@ -176,16 +177,30 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
     private void initVistaMainNavigViewStyles() {
         String prefix = MainNavigViewImpl.DEFAULT_STYLE_PREFIX;
+        String secondPrefix = MainNavigViewImpl.SECONDARY_STYLE_PREFIX;
 
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("width", "100%");
-        style.addProperty("height", "40px");
+        //  style.addProperty("height", "40px");
         style.addProperty("overflow", "hidden");
         style.addProperty("padding-bottom", "20px");
         addStyle(style);
 
+        style = new Style(Selector.valueOf(secondPrefix));
+        style.addProperty("width", "100%");
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Holder));
-        style.addProperty("height", "40px");
+        //  style.addProperty("height", "40px");
+        style.addProperty("margin", "0");
+        style.addProperty("padding", "0");
+        style.addProperty("list-style", "none");
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.Holder));
+        // style.addProperty("height", "30px");
         style.addProperty("margin", "0");
         style.addProperty("padding", "0");
         style.addProperty("list-style", "none");
@@ -196,10 +211,21 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("background", "#c8c8c8");
         style.addProperty("margin-left", "2px");
         style.addProperty("margin-right", "2px");
-        style.addProperty("height", "40px");
+        //     style.addProperty("height", "40px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.Tab));
+        style.addProperty("background", "#fff");
+        style.addProperty("margin-left", "2px");
+        style.addProperty("margin-right", "2px");
+        //       style.addProperty("height", "30px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder));
+        style.addProperty("position", "relative");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.LabelHolder));
         style.addProperty("position", "relative");
         addStyle(style);
 
@@ -207,10 +233,18 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("background", "transparent");
         addStyle(style);
 
+        style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.StatusHolder));
+        style.addProperty("background", "transparent");
+        addStyle(style);
+
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
         //  style.addProperty("background", "url('" + PortalImages.INSTANCE.pointer().getURL() + "') no-repeat scroll 50% 100% transparent");
         style.addProperty("color", "white !important");
         style.addProperty("background-color", "#7B8388");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
+        style.addProperty("text-decoration", "underline !important");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label));
@@ -224,8 +258,14 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("padding-right", "29px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
-        //style.addProperty("background", "#654");
+        style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.Label));
+        style.addProperty("height", "30px");
+        style.addProperty("line-height", "30px");
+        style.addProperty("color", "#7B8388");
+        style.addProperty("font-size", "14px");
+        style.addProperty("font-style", "normal");
+        style.addProperty("padding-left", "29px");
+        style.addProperty("padding-right", "29px");
         addStyle(style);
 
     }
