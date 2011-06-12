@@ -57,13 +57,17 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
         return null;
     }
 
+    public AppPlaceInfo getPlaceInfo(AppPlace place) {
+        return listing.getPlaceInfo(place);
+    }
+
+    public <E extends AppPlace> AppPlaceInfo getPlaceInfo(Class<E> placeClass) {
+        return getPlaceInfo(createPlace(placeClass));
+    }
+
     @SuppressWarnings("unchecked")
     public <E extends AppPlace> E createPlace(Class<E> placeClass) {
         return (E) getPlace(AppPlaceInfo.getPlaceId(placeClass));
-    }
-
-    public AppPlaceInfo getPlaceInfo(AppPlace place) {
-        return listing.getPlaceInfo(place);
     }
 
 }
