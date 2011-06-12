@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.inject.Singleton;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
@@ -47,7 +46,6 @@ import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
 import com.propertyvista.crm.client.mvp.TopRightActionsActivityMapper;
 import com.propertyvista.crm.client.themes.BlueColdTheme;
 
-@Singleton
 public class CrmView extends LayoutPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "SiteView";

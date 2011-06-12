@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
-import com.google.inject.Singleton;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
@@ -79,7 +78,6 @@ import com.propertyvista.portal.ptapp.client.ui.components.ApplicationDocumentsF
 import com.propertyvista.portal.ptapp.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 
-@Singleton
 public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
     private static I18n i18n = I18nFactory.getI18n(SummaryViewForm.class);
@@ -398,7 +396,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             protected IFolderEditorDecorator<Vehicle> createFolderDecorator() {
-                return new TableFolderEditorDecorator<Vehicle>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(), i18n.tr("Add a vehicle"));
+                return new TableFolderEditorDecorator<Vehicle>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                        i18n.tr("Add a vehicle"));
             }
 
             @Override
@@ -411,7 +410,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
                     @Override
                     public IFolderItemEditorDecorator createFolderItemDecorator() {
-                        return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove vehicle"));
+                        return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                                i18n.tr("Remove vehicle"));
                     }
 
                     @Override
@@ -489,7 +489,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             public IFolderItemEditorDecorator createFolderItemDecorator() {
-                return new BoxFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove contact"), !isFirst());
+                return new BoxFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove contact"),
+                        !isFirst());
             }
         };
     }

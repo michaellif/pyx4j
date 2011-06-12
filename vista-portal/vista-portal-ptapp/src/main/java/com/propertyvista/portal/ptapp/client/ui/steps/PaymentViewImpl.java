@@ -16,12 +16,9 @@ package com.propertyvista.portal.ptapp.client.ui.steps;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.inject.Singleton;
-
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.ptapp.client.ui.steps.PaymentView.PaymentPresenter;
 
-@Singleton
 public class PaymentViewImpl extends WizardStepViewImpl<PaymentInfo, PaymentPresenter> implements PaymentView {
 
     private static I18n i18n = I18nFactory.getI18n(PaymentViewImpl.class);

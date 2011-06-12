@@ -36,7 +36,6 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.inject.Singleton;
 
 import com.pyx4j.widgets.client.dashboard.Dashboard;
 import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
@@ -50,7 +49,6 @@ import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
-@Singleton
 public class DashboardViewImpl extends SimplePanel implements DashboardView {
 
     private static I18n i18n = I18nFactory.getI18n(DashboardViewImpl.class);

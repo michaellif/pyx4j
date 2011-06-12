@@ -13,11 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.google.inject.Singleton;
-
 import com.propertyvista.portal.domain.ptapp.Charges;
 
-@Singleton
 public class ChargesViewImpl extends WizardStepViewImpl<Charges, ChargesViewPresenter> implements ChargesView {
 
     public ChargesViewImpl() {

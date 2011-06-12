@@ -14,9 +14,7 @@
 package com.propertyvista.crm.client.ui;
 
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.inject.Singleton;
 
-@Singleton
 public class FooterViewImpl extends SimplePanel implements FooterView {
 
     public FooterViewImpl() {

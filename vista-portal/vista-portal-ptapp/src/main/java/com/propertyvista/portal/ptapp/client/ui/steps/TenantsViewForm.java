@@ -21,7 +21,6 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.inject.Singleton;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
@@ -37,7 +36,6 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 
-@Singleton
 public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
     static I18n i18n = I18nFactory.getI18n(TenantsViewForm.class);

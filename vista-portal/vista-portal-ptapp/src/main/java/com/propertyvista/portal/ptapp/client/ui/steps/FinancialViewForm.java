@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.inject.Singleton;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -63,7 +62,6 @@ import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
-@Singleton
 public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
 
     private static I18n i18n = I18nFactory.getI18n(FinancialViewForm.class);
@@ -206,7 +204,8 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove asset"));
+                            return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                                    i18n.tr("Remove asset"));
                         }
                     }
 
@@ -297,7 +296,8 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new BoxFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove guarantor"));
+                            return new BoxFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                                    i18n.tr("Remove guarantor"));
                         }
                     }
 

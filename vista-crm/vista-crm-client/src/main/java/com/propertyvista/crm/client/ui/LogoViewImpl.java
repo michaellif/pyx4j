@@ -18,9 +18,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.inject.Singleton;
 
-@Singleton
 public class LogoViewImpl extends SimplePanel implements LogoView {
 
     private Presenter presenter;

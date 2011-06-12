@@ -18,8 +18,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
@@ -37,7 +35,6 @@ import com.propertyvista.portal.client.mvp.SecondaryNavigActivityMapper;
 import com.propertyvista.portal.client.mvp.StaticContentActivityMapper;
 import com.propertyvista.portal.client.themes.GainsboroTheme;
 
-@Singleton
 public class PortalView extends FlowPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "PortalView";
@@ -46,7 +43,6 @@ public class PortalView extends FlowPanel {
         Content, Header, Footer, MainNavig, Center, Main, Left, Right, Display, SecondaryNavig, StaticContent
     }
 
-    @Inject
     public PortalView() {
 
         EventBus eventBus = AppSite.getEventBus();

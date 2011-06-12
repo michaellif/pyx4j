@@ -13,11 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.google.inject.Singleton;
-
 import com.propertyvista.portal.domain.ptapp.Summary;
 
-@Singleton
 public class SummaryViewImpl extends WizardStepViewImpl<Summary, SummaryViewPresenter> implements SummaryView {
 
     public SummaryViewImpl() {

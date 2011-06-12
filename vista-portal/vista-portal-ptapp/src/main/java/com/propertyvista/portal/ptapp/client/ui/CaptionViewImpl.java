@@ -15,11 +15,9 @@ package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.inject.Singleton;
 
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-@Singleton
 public class CaptionViewImpl extends SimplePanel implements CaptionView {
 
     public static String DEFAULT_STYLE_PREFIX = "vista_CaptionView";

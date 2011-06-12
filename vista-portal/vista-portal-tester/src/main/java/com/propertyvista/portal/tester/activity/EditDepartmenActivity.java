@@ -20,7 +20,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.AppPlace;
@@ -37,7 +36,6 @@ public class EditDepartmenActivity extends AbstractActivity implements EditDepar
 
     private final PlaceController placeController;
 
-    @Inject
     public EditDepartmenActivity(EditDepartmentView view, PlaceController placeController) {
         this.view = view;
         this.placeController = placeController;

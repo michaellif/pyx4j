@@ -7,7 +7,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.inject.Inject;
 
 public class TopRightActionsViewImpl extends VerticalPanel implements TopRightActionsView {
 
@@ -21,7 +20,6 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
     private final HTML greetings;
 
-    @Inject
     public TopRightActionsViewImpl() {
         getElement().getStyle().setFontSize(0.9, Unit.EM);
 

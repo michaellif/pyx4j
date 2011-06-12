@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.inject.Singleton;
 
 import com.pyx4j.commons.CompositeDebugId;
 
@@ -31,7 +30,6 @@ import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
-@Singleton
 public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
 
     private final Map<UserMessageType, Holder> holders;

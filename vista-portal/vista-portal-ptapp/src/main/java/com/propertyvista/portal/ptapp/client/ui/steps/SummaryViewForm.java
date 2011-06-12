@@ -38,7 +38,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.inject.Singleton;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
@@ -75,7 +74,6 @@ import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderIte
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
-@Singleton
 public class SummaryViewForm extends CEntityForm<Summary> {
 
     private static I18n i18n = I18nFactory.getI18n(SummaryViewForm.class);

@@ -20,7 +20,6 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.inject.Singleton;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AppSiteView;
@@ -37,7 +36,6 @@ import com.propertyvista.portal.ptapp.client.mvp.MessageActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.SecondNavigActivityMapper;
 import com.propertyvista.portal.ptapp.client.themes.GainsboroTheme;
 
-@Singleton
 public class PtAppSiteView extends FlowPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "SiteView";

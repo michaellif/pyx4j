@@ -23,7 +23,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.inject.Singleton;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -53,7 +52,6 @@ import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderIte
 import com.propertyvista.portal.ptapp.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
-@Singleton
 public class PetsViewForm extends CEntityForm<Pets> {
 
     private static I18n i18n = I18nFactory.getI18n(PetsViewForm.class);
@@ -143,7 +141,8 @@ public class PetsViewForm extends CEntityForm<Pets> {
                         }
                     };
                 } else {
-                    return new TableFolderEditorDecorator<Pet>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(), i18n.tr("Add a pet"));
+                    return new TableFolderEditorDecorator<Pet>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                            i18n.tr("Add a pet"));
                 }
 
             }
@@ -166,7 +165,8 @@ public class PetsViewForm extends CEntityForm<Pets> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove pet"));
+                            return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                                    i18n.tr("Remove pet"));
                         }
                     }
 

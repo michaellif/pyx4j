@@ -13,11 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.google.inject.Singleton;
-
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 
-@Singleton
 public class TenantsViewImpl extends WizardStepViewImpl<PotentialTenantList, TenantsViewPresenter> implements TenantsView {
 
     public TenantsViewImpl() {

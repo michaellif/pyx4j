@@ -34,7 +34,6 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.inject.Singleton;
 
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.Report;
@@ -47,7 +46,6 @@ import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
-@Singleton
 public class ReportViewImpl extends SimplePanel implements ReportView {
 
     private static I18n i18n = I18nFactory.getI18n(ReportViewImpl.class);
