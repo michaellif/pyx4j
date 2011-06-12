@@ -173,6 +173,11 @@
 
     <servlet-mapping>
         <servlet-name>RemoteServiceServlet</servlet-name>
+        <url-pattern>/corp/srv/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RemoteServiceServlet</servlet-name>
         <url-pattern>/portal/srv/*</url-pattern>
     </servlet-mapping>
 
@@ -180,7 +185,7 @@
         <servlet-name>RemoteServiceServlet</servlet-name>
         <url-pattern>/ptapp/srv/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
         <servlet-name>RemoteServiceServlet</servlet-name>
         <url-pattern>/tester/srv/*</url-pattern>
@@ -195,7 +200,7 @@
         <servlet-name>RemoteServiceServlet</servlet-name>
         <url-pattern>/crm/srv/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>RemoteJ2SEServiceServlet</servlet-name>
         <servlet-class>com.pyx4j.rpc.server.RemoteJ2SEServiceServlet</servlet-class>
@@ -231,7 +236,7 @@
         <servlet-name>ApplicationDocumentServlet</servlet-name>
         <servlet-class>com.propertyvista.portal.server.upload.ApplicationDocumentServlet</servlet-class>
     </servlet>
-    
+
     <!-- See ServletMapping class when moving to Servlet v3 -->
     <servlet-mapping>
         <servlet-name>ApplicationDocumentServlet</servlet-name>
@@ -243,18 +248,18 @@
         <servlet-name>PublicMediaServlet</servlet-name>
         <servlet-class>com.propertyvista.portal.server.portal.PublicMediaServlet</servlet-class>
     </servlet>
-    
+
     <servlet-mapping>
         <servlet-name>PublicMediaServlet</servlet-name>
         <url-pattern>/media/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>JobScheduler</servlet-name>
         <servlet-class>com.propertyvista.portal.server.scheduler.JobScheduler</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    
+
     <servlet>
         <servlet-name>ServletContainerLoginServlet</servlet-name>
         <servlet-class>com.pyx4j.security.server.ServletContainerLoginServlet</servlet-class>
