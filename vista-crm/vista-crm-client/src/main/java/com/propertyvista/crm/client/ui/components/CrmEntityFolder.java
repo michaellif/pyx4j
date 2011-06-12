@@ -79,9 +79,9 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
                             CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
 
                             if (editable) {
-                                place.formEditorPlace(parent.getValue().getPrimaryKey());
+                                place.formEditorPlace(getValue().getPrimaryKey());
                             } else {
-                                place.formViewerPlace(parent.getValue().getPrimaryKey());
+                                place.formViewerPlace(getValue().getPrimaryKey());
                             }
 
                             AppSite.getPlaceController().goTo(place);
@@ -105,7 +105,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
                 public void onClick(ClickEvent event) {
                     if (parent.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
                         CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-                        place.formEditorPlace(parent.getValue().getPrimaryKey());
+                        place.formNewItemPlace(parent.getValue().getPrimaryKey());
                         AppSite.getPlaceController().goTo(place);
                     }
                 }

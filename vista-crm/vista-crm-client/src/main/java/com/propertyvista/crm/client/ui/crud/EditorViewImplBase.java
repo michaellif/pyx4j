@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
@@ -55,7 +56,7 @@ public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     public EditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super(Unit.EM);
         setSize("100%", "100%");
-        defaultCaption = placeClass.getName();
+        defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption), 3);
         addSouth(createButtons(), 4);
         add(scroll);

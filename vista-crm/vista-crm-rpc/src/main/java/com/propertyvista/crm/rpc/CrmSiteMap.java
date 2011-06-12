@@ -45,7 +45,7 @@ public class CrmSiteMap implements SiteMap {
         public static class Building extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Units")
+        @PlaceProperties(caption = "Unit")
         @NavigationItem(navigLabel = "Units")
         public static class Unit extends CrudAppPlace {
         }
@@ -65,7 +65,7 @@ public class CrmSiteMap implements SiteMap {
         public static class PurchaseOrder extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "City Orders")
+        @PlaceProperties(caption = "City Order")
         @NavigationItem(navigLabel = "City Orders")
         public static class CityOrder extends CrudAppPlace {
         }
@@ -94,7 +94,7 @@ public class CrmSiteMap implements SiteMap {
 
         }
 
-        @PlaceProperties(caption = "Parking Spots")
+        @PlaceProperties(caption = "Parking Spot")
         @NavigationItem(navigLabel = "Parking Spots")
         public static class ParkingSpot extends CrudAppPlace {
 
@@ -106,7 +106,7 @@ public class CrmSiteMap implements SiteMap {
 
         }
 
-        @PlaceProperties(caption = "Lockers")
+        @PlaceProperties(caption = "Locker")
         @NavigationItem(navigLabel = "Lockers")
         public static class Locker extends CrudAppPlace {
 

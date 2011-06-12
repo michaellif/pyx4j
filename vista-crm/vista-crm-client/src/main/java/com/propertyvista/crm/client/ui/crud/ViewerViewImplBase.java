@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
@@ -52,7 +53,7 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
         super(Unit.EM);
         this.placeClass = placeClass;
         setSize("100%", "100%");
-        defaultCaption = placeClass.getName();
+        defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption, createActionsPanel()), 3);
         add(scroll);
     }

@@ -30,6 +30,18 @@ public abstract class CrudAppPlace extends AppPlace {
         editor, viewer, lister
     }
 
+    public CrudAppPlace() {
+        setType(Type.lister);
+    }
+
+    public void setType(Type type) {
+        putArg(ARG_NAME_CRUD_TYPE, type.name());
+    }
+
+    public Type getType() {
+        return Type.valueOf(getArg(ARG_NAME_CRUD_TYPE));
+    }
+
     public void formViewerPlace(Key itemID) {
         setType(Type.viewer);
         putArg(ARG_NAME_ITEM_ID, itemID.toString());
@@ -41,21 +53,8 @@ public abstract class CrudAppPlace extends AppPlace {
     }
 
     public void formNewItemPlace(Key parentID) {
+        setType(Type.editor);
         putArg(ARG_NAME_ITEM_ID, ARG_VALUE_NEW_ITEM);
         putArg(ARG_NAME_PARENT_ID, parentID.toString());
     }
-
-    public CrudAppPlace() {
-        setType(Type.lister);
-    }
-
-    public CrudAppPlace setType(Type type) {
-        putArg(ARG_NAME_CRUD_TYPE, type.name());
-        return this;
-    }
-
-    public Type getType() {
-        return Type.valueOf(getArg(ARG_NAME_CRUD_TYPE));
-    }
-
 }
