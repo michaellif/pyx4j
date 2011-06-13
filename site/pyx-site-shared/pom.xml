@@ -21,14 +21,14 @@
 			<artifactId>gwt-user</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
-		<!-- 
+
+		<!--
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-rpc-shared</artifactId>
@@ -54,7 +54,12 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
 
-        
+
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-entity-rpc</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
     <properties>
