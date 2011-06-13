@@ -81,16 +81,20 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
         }
 
-// TODO VladS - please approve this replacement: 
-// clazz.getDeclaredMethods() doesn't return methods of superclass - so our Generic construction of CrudServices did not work!
-// if this replacement is OK - do you know the places where it worth to replace it also?!.. 
-//        for (Method method : clazz.getDeclaredMethods()) {
         for (Method method : clazz.getMethods()) {
-            if (method.getName().equals(serviceMethodName)) {
+            if (method.getName().equals(serviceMethodName) && (request.getServiceMethodSignature() == getMethodSignature(method))) {
                 return runMethod(serviceInstance, method, request.getArgs());
             }
         }
         throw new UnRecoverableRuntimeException("Fatal system error");
+    }
+
+    public static int getMethodSignature(Method method) {
+        int s = 0;
+        for (Class<?> paramClass : method.getParameterTypes()) {
+            s += paramClass.getSimpleName().hashCode();
+        }
+        return s;
     }
 
     private static class ServerAsyncCallback implements AsyncCallback<Serializable> {

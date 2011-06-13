@@ -68,7 +68,8 @@ class IServiceMockProxy implements java.lang.reflect.InvocationHandler {
         } catch (Throwable e) {
             callback.onFailure(new UnRecoverableRuntimeException(e.getMessage(), ServerSideConfiguration.isStartedUnderEclipse() ? e : null));
         }
-        IServiceRequest request = new IServiceRequest(serviceInterfaceClass.getName(), method.getName(), serviceArgs, ++rpcCallCount);
+        IServiceRequest request = new IServiceRequest(serviceInterfaceClass.getName(), method.getName(), IServiceAdapterImpl.getMethodSignature(method),
+                serviceArgs, ++rpcCallCount);
 
         TestLifecycle.beginRequest();
 

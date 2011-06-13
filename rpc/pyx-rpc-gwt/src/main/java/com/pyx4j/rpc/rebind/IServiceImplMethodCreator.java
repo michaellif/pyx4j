@@ -50,7 +50,9 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
         print(currentCreator.getTarget().getQualifiedSourceName());
         print("\", \"");
         print(targetMethod.getName());
-        print("\"");
+        print("\", ");
+        print(String.valueOf(getMethodSignature(targetMethod)));
+
         if (targetMethod.getParameters().length == 0) {
             logger.log(Type.ERROR, "Should have at least one argument");
             throw new UnableToCompleteException();
@@ -71,6 +73,14 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
         }
 
         println(");");
+    }
+
+    private static int getMethodSignature(JMethod targetMethod) {
+        int s = 0;
+        for (int i = 0; i < targetMethod.getParameters().length; i++) {
+            s += targetMethod.getParameters()[i].getType().getSimpleSourceName().hashCode();
+        }
+        return s;
     }
 
 }
