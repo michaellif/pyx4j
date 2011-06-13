@@ -40,7 +40,7 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.server.AuthenticationServicesImpl;
+import com.pyx4j.security.server.AuthenticationServiceImpl;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
@@ -147,10 +147,8 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         //            audit.event().setValue("registered");
         //            PersistenceServicesFactory.getPersistenceService().persist(audit);
 
-        VistaAuthenticationServicesImpl.beginSession(user, credential);
+        callback.onSuccess(AuthenticationServiceImpl.createAuthenticationResponse(VistaAuthenticationServicesImpl.beginSession(user, credential)));
 
-        AuthenticationResponse authenticationResponse = AuthenticationServicesImpl.createAuthenticationResponse(null);
-        callback.onSuccess(authenticationResponse);
     }
 
     /**
@@ -240,9 +238,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         cr.accessKey().setValue(null);
         PersistenceServicesFactory.getPersistenceService().persist(cr);
 
-        VistaAuthenticationServicesImpl.beginSession(user, cr);
+        callback.onSuccess(AuthenticationServiceImpl.createAuthenticationResponse(VistaAuthenticationServicesImpl.beginSession(user, cr)));
 
-        AuthenticationResponse response = AuthenticationServicesImpl.createAuthenticationResponse(null);
-        callback.onSuccess(response);
     }
 }

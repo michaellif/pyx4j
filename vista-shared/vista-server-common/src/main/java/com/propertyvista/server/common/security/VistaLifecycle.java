@@ -25,7 +25,7 @@ import com.pyx4j.server.contexts.Lifecycle;
 
 public class VistaLifecycle {
 
-    public static void beginSession(UserVisit userVisit, Set<Behavior> behaviours) {
+    public static String beginSession(UserVisit userVisit, Set<Behavior> behaviours) {
 
         //OpenId
         if (SecurityController.checkBehavior(CoreBehavior.USER)) {
@@ -37,11 +37,12 @@ public class VistaLifecycle {
             hasOpenIdEmail = (String) Context.getVisit().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE);
         }
 
-        Lifecycle.beginSession(userVisit, behaviours);
+        String sessionToken = Lifecycle.beginSession(userVisit, behaviours);
 
         if (hasOpenIdEmail != null) {
             Context.getVisit().setAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE, hasOpenIdEmail);
         }
+        return sessionToken;
     }
 
     public static void endSession() {

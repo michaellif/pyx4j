@@ -38,7 +38,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.server.AppengineHelper;
-import com.pyx4j.security.server.AuthenticationServicesImpl;
+import com.pyx4j.security.server.AuthenticationServiceImpl;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 
@@ -97,12 +97,11 @@ public class VistaAuthenticationServicesImpl extends com.pyx4j.security.server.A
         }
 
         // Begin Session
-        beginSession(user, cr);
-        callback.onSuccess(AuthenticationServicesImpl.createAuthenticationResponse(request.logoutApplicationUrl().getValue()));
+        callback.onSuccess(AuthenticationServiceImpl.createAuthenticationResponse(beginSession(user, cr)));
 
     }
 
-    public static void beginSession(User user, UserCredential userCredential) {
+    public static String beginSession(User user, UserCredential userCredential) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.add(userCredential.behavior().getValue());
         final UserVisit visit;
@@ -115,7 +114,7 @@ public class VistaAuthenticationServicesImpl extends com.pyx4j.security.server.A
         }
         visit.setEmail(user.email().getValue());
 
-        VistaLifecycle.beginSession(visit, behaviors);
+        return VistaLifecycle.beginSession(visit, behaviors);
     }
 
     @Override
