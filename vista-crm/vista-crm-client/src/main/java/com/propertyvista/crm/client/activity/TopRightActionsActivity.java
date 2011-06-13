@@ -26,7 +26,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.style.StyleManger;
 
-import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.themes.BlueColdTheme;
 import com.propertyvista.crm.client.themes.BownWarmTheme;
 import com.propertyvista.crm.client.themes.GainsboroTheme;
@@ -131,7 +130,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void back2CrmView() {
-        ((CrmSite) CrmSite.instance()).loadCrm();
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard());
     }
 
     @Override

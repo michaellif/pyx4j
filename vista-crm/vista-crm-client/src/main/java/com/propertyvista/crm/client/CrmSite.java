@@ -44,7 +44,7 @@ public class CrmSite extends VistaSite {
 
         DefaultErrorHandlerDialog.register();
 
-        getHistoryHandler().register(getPlaceController(), getEventBus(), new CrmSiteMap.Login());
+        getHistoryHandler().register(getPlaceController(), getEventBus(), new CrmSiteMap.Dashboard());
 
         RootPanel.get().add(RootLayoutPanel.get());
 
@@ -58,20 +58,20 @@ public class CrmSite extends VistaSite {
 
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
-                loadCrm();
+                if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
+                    if (CrmSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
+                        AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard());
+                    } else {
+                        CrmSite.getHistoryHandler().handleCurrentHistory();
+                    }
+                } else {
+                    AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
+                }
             }
+
         });
 
         obtainAuthenticationData();
-    }
-
-    public void loadCrm() {
-
-        if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
-            AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard());
-        } else {
-            AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
-        }
     }
 
     @Override
@@ -85,11 +85,12 @@ public class CrmSite extends VistaSite {
 
             @Override
             public void onSuccess(Boolean result) {
-                CrmSite.getHistoryHandler().handleCurrentHistory();
+                //do nothing
             }
 
             @Override
             public void onFailure(Throwable caught) {
+                //TODO handle it properly
                 CrmSite.getHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
             }
