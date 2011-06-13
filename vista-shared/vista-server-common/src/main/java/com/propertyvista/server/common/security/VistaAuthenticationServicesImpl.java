@@ -38,7 +38,6 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.server.AppengineHelper;
-import com.pyx4j.security.server.AuthenticationServiceImpl;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 
@@ -49,7 +48,7 @@ import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.server.domain.UserCredential;
 
 @IgnoreSessionToken
-public class VistaAuthenticationServicesImpl extends com.pyx4j.security.server.AuthenticationServiceImpl {
+public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security.server.AuthenticationServiceImpl {
 
     private final static Logger log = LoggerFactory.getLogger(VistaAuthenticationServicesImpl.class);
 
@@ -97,7 +96,7 @@ public class VistaAuthenticationServicesImpl extends com.pyx4j.security.server.A
         }
 
         // Begin Session
-        callback.onSuccess(AuthenticationServiceImpl.createAuthenticationResponse(beginSession(user, cr)));
+        callback.onSuccess(createAuthenticationResponse(beginSession(user, cr)));
 
     }
 

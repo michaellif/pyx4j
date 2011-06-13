@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface CorpAccountCreationRequest extends IEntity {
+public interface PmcAccountCreationRequest extends IEntity {
 
     @Editor(type = EditorType.email)
     @NotNull

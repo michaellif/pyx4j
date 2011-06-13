@@ -7,21 +7,12 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-12
+ * Created on 2011-06-13
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.corp.services;
+package com.propertyvista.admin.rpc.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.security.rpc.AuthenticationResponse;
-
-import com.propertyvista.portal.rpc.corp.CorpAccountCreationRequest;
-
-public interface CorpActivationService extends IService {
-
-    public void createAccount(AsyncCallback<AuthenticationResponse> callback, CorpAccountCreationRequest request);
+public interface AuthenticationService extends com.pyx4j.security.rpc.AuthenticationService {
 
 }
