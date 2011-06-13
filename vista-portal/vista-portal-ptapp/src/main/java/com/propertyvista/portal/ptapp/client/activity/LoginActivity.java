@@ -14,6 +14,7 @@
 package com.propertyvista.portal.ptapp.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -21,16 +22,15 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.ptapp.client.ui.LoginView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
+import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
@@ -70,7 +70,8 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
             }
 
         };
-        RPCManager.execute(AuthenticationServices.Authenticate.class, request, callback);
+
+        ((AuthenticationService) GWT.create(AuthenticationService.class)).authenticate(callback, request);
 
     }
 

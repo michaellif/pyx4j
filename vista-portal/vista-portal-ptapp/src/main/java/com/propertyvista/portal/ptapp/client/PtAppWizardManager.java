@@ -45,6 +45,7 @@ import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep.Status;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
@@ -91,20 +92,21 @@ public class PtAppWizardManager {
     }
 
     private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
+        ClientContext.obtainAuthenticationData((com.pyx4j.security.rpc.AuthenticationService) GWT.create(AuthenticationService.class),
+                new DefaultAsyncCallback<Boolean>() {
 
-            @Override
-            public void onSuccess(Boolean result) {
-                obtainUnitSelection();
-            }
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        obtainUnitSelection();
+                    }
 
-            //TODO remove this when initial application message is implemented
-            @Override
-            public void onFailure(Throwable caught) {
-                PtAppSite.getHistoryHandler().handleCurrentHistory();
-                super.onFailure(caught);
-            }
-        });
+                    //TODO remove this when initial application message is implemented
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        PtAppSite.getHistoryHandler().handleCurrentHistory();
+                        super.onFailure(caught);
+                    }
+                });
     }
 
     private void obtainUnitSelection() {

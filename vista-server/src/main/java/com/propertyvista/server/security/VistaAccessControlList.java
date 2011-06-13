@@ -30,7 +30,6 @@ import com.pyx4j.security.shared.CoreBehavior;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
-import com.propertyvista.portal.admin.rpc.VistaAdminServices;
 import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
 import com.propertyvista.server.domain.UserCredential;
 
@@ -63,7 +62,6 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(DeferredProcessServices.class, "*"));
 
         grant(VistaBehavior.ADMIN, VistaBehavior.PROPERTY_MANAGER);
-        grant(VistaBehavior.ADMIN, new ServiceExecutePermission(VistaAdminServices.class, "*"));
         grant(VistaBehavior.ADMIN, new EntityPermission(User.class, EntityPermission.ALL));
         grant(VistaBehavior.ADMIN, new EntityPermission(UserCredential.class, EntityPermission.ALL));
 

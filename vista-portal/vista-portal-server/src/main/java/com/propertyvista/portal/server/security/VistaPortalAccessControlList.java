@@ -37,6 +37,7 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
@@ -57,6 +58,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
     public VistaPortalAccessControlList() {
         grant(new IServiceExecutePermission(ActivationService.class));
+        grant(new IServiceExecutePermission(AuthenticationService.class));
 
         // Old TODO remove
         grant(new ServiceExecutePermission(EntityServices.Query.class));

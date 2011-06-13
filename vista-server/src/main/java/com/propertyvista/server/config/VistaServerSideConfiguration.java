@@ -20,7 +20,6 @@ import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
@@ -75,11 +74,6 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
         return new VistaConfigurationMySQL();
-    }
-
-    @Override
-    public IServiceFactory getRPCServiceFactory() {
-        return new VistaRPCServiceFactory();
     }
 
     @Override
