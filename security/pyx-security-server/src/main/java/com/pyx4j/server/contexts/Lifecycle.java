@@ -124,7 +124,7 @@ public class Lifecycle {
     }
 
     @SuppressWarnings("unchecked")
-    public static void beginSession(UserVisit userVisit, Set<Behavior> behaviours) {
+    public static String beginSession(UserVisit userVisit, Set<Behavior> behaviours) {
         Visit currentVisit = Context.getVisit();
         if ((currentVisit != null) && (userVisit != null) && (currentVisit.isUserLoggedIn())
                 && EqualsHelper.equals(userVisit.getPrincipalPrimaryKey(), currentVisit.getUserVisit().getPrincipalPrimaryKey())) {
@@ -154,9 +154,10 @@ public class Lifecycle {
             beginSession(newSession);
         }
         Context.getVisit().beginSession(userVisit, SecurityController.instance().authenticate(behaviours));
+        return Context.getVisit().getSessionToken();
     }
 
-    public static void beginSession(HttpSession session) {
+    public static String beginSession(HttpSession session) {
         Context.setSession(session);
 
         String sessionToken;
@@ -167,6 +168,8 @@ public class Lifecycle {
         Visit visit = new Visit(sessionToken);
         session.setAttribute(Context.SESSION_VISIT, visit);
         Context.setVisit(visit);
+
+        return sessionToken;
     }
 
     public static void endSession() {
