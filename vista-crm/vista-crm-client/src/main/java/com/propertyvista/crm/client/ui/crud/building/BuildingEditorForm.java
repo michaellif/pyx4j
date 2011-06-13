@@ -16,11 +16,17 @@ package com.propertyvista.crm.client.ui.crud.building;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.site.client.ui.crud.ITabbedForm;
+import com.pyx4j.widgets.client.TabLayoutPanel;
+import com.pyx4j.widgets.client.tabpanel.TabBar;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -41,7 +47,9 @@ import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
 
-public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
+public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> implements ITabbedForm {
+
+    private TabLayoutPanel tabPanel;
 
     public BuildingEditorForm() {
         super(BuildingDTO.class, new CrmEditorsComponentFactory());
@@ -53,7 +61,12 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
     @Override
     public IsWidget createContent() {
+
+        tabPanel = new TabLayoutPanel(2, Unit.EM);
+        tabPanel.setHeight("100%");
+
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
         main.add(split);
         split.getLeftPanel().add(inject(proto().info().name()), 15);
@@ -120,8 +133,15 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 // TODO - add this data processing later! :
 //      main.add(inject(proto().media()), 15);
 
-        main.setWidth("100%");
-        return main;
+        tabPanel.add(new ScrollPanel(main), "_General_");
+        HTML tab2 = new HTML("Tab2asdfasdfasdfasdfasdfasdf");
+        tabPanel.add(tab2, "_Other_");
+        return tabPanel;
+    }
+
+    @Override
+    public TabBar getTabBar() {
+        return null;
     }
 
     private void injectAddress(final VistaDecoratorsSplitFlowPanel split, final Address address) {
@@ -209,4 +229,5 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
         };
     }
+
 }
