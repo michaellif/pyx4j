@@ -20,7 +20,7 @@ import com.propertyvista.domain.property.asset.ParkingSpot;
 public class ParkingSpotEditorViewImpl extends CrmEditorViewImplBase<ParkingSpot> implements ParkingSpotEditorView {
     public ParkingSpotEditorViewImpl() {
         super(CrmSiteMap.Properties.ParkingSpot.class);
-        setEditor(new ParkingSpotEditorForm());
+        setForm(new ParkingSpotEditorForm());
     }
 
 }

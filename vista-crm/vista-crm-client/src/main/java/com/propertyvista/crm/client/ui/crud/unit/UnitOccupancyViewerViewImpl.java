@@ -22,6 +22,6 @@ public class UnitOccupancyViewerViewImpl extends CrmViewerViewImplBase<AptUnitOc
 
     public UnitOccupancyViewerViewImpl() {
         super(CrmSiteMap.Properties.UnitOccupancy.class);
-        setViewer(new UnitOccupancyEditorForm(new CrmViewersComponentFactory()));
+        setForm(new UnitOccupancyEditorForm(new CrmViewersComponentFactory()));
     }
 }

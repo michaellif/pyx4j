@@ -22,6 +22,6 @@ public class BoilerViewerViewImpl extends CrmViewerViewImplBase<BoilerDTO> imple
 
     public BoilerViewerViewImpl() {
         super(CrmSiteMap.Properties.Boiler.class);
-        setViewer(new BoilerEditorForm(new CrmViewersComponentFactory()));
+        setForm(new BoilerEditorForm(new CrmViewersComponentFactory()));
     }
 }

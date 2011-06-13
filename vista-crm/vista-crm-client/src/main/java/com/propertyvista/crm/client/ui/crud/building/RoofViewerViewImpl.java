@@ -22,6 +22,6 @@ public class RoofViewerViewImpl extends CrmViewerViewImplBase<RoofDTO> implement
 
     public RoofViewerViewImpl() {
         super(CrmSiteMap.Properties.Roof.class);
-        setViewer(new RoofEditorForm(new CrmViewersComponentFactory()));
+        setForm(new RoofEditorForm(new CrmViewersComponentFactory()));
     }
 }

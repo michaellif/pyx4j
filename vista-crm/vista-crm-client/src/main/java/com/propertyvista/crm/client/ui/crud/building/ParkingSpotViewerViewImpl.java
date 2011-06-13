@@ -22,6 +22,6 @@ public class ParkingSpotViewerViewImpl extends CrmViewerViewImplBase<ParkingSpot
 
     public ParkingSpotViewerViewImpl() {
         super(CrmSiteMap.Properties.ParkingSpot.class);
-        setViewer(new ParkingSpotEditorForm(new CrmViewersComponentFactory()));
+        setForm(new ParkingSpotEditorForm(new CrmViewersComponentFactory()));
     }
 }

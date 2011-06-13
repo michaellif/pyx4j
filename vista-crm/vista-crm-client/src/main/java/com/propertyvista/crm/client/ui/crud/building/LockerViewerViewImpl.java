@@ -22,6 +22,6 @@ public class LockerViewerViewImpl extends CrmViewerViewImplBase<Locker> implemen
 
     public LockerViewerViewImpl() {
         super(CrmSiteMap.Properties.Locker.class);
-        setViewer(new LockerEditorForm(new CrmViewersComponentFactory()));
+        setForm(new LockerEditorForm(new CrmViewersComponentFactory()));
     }
 }

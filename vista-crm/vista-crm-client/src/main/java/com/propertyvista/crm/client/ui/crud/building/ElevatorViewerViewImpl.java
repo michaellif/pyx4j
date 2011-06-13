@@ -22,6 +22,6 @@ public class ElevatorViewerViewImpl extends CrmViewerViewImplBase<ElevatorDTO> i
 
     public ElevatorViewerViewImpl() {
         super(CrmSiteMap.Properties.Elevator.class);
-        setViewer(new ElevatorEditorForm(new CrmViewersComponentFactory()));
+        setForm(new ElevatorEditorForm(new CrmViewersComponentFactory()));
     }
 }

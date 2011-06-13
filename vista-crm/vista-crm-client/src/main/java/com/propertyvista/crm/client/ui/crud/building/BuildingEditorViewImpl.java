@@ -21,6 +21,6 @@ public class BuildingEditorViewImpl extends CrmEditorViewImplBase<BuildingDTO> i
 
     public BuildingEditorViewImpl() {
         super(CrmSiteMap.Properties.Building.class);
-        setEditor(new BuildingEditorForm());
+        setForm(new BuildingEditorForm());
     }
 }

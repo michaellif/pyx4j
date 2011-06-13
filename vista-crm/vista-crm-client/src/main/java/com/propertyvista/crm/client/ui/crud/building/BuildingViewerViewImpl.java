@@ -22,6 +22,6 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     public BuildingViewerViewImpl() {
         super(CrmSiteMap.Properties.Building.class);
-        setViewer(new BuildingEditorForm(new CrmViewersComponentFactory()));
+        setForm(new BuildingEditorForm(new CrmViewersComponentFactory()));
     }
 }

@@ -64,9 +64,9 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         Button btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                editor.setVisited(true);
-                if (!editor.isValid()) {
-                    throw new UserRuntimeException(editor.getValidationResults().getMessagesText(true));
+                form.setVisited(true);
+                if (!form.isValid()) {
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
 
                 presenter.save();

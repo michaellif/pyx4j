@@ -21,6 +21,6 @@ public class UnitEditorViewImpl extends CrmEditorViewImplBase<AptUnitDTO> implem
 
     public UnitEditorViewImpl() {
         super(CrmSiteMap.Properties.Unit.class);
-        setEditor(new UnitEditorForm());
+        setForm(new UnitEditorForm());
     }
 }

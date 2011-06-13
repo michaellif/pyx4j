@@ -21,6 +21,6 @@ public class UnitItemEditorViewImpl extends CrmEditorViewImplBase<AptUnitItem> i
 
     public UnitItemEditorViewImpl() {
         super(CrmSiteMap.Properties.UnitItem.class);
-        setEditor(new UnitItemEditorForm());
+        setForm(new UnitItemEditorForm());
     }
 }

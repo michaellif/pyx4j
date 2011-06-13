@@ -20,6 +20,6 @@ import com.propertyvista.dto.RoofDTO;
 public class RoofEditorViewImpl extends CrmEditorViewImplBase<RoofDTO> implements RoofEditorView {
     public RoofEditorViewImpl() {
         super(CrmSiteMap.Properties.Roof.class);
-        setEditor(new RoofEditorForm());
+        setForm(new RoofEditorForm());
     }
 }

@@ -22,6 +22,6 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     public UnitViewerViewImpl() {
         super(CrmSiteMap.Properties.Unit.class);
-        setViewer(new UnitEditorForm(new CrmViewersComponentFactory()));
+        setForm(new UnitEditorForm(new CrmViewersComponentFactory()));
     }
 }

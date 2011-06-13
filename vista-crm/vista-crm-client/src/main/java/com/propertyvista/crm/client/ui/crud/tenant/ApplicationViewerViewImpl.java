@@ -22,6 +22,6 @@ public class ApplicationViewerViewImpl extends CrmViewerViewImplBase<Application
 
     public ApplicationViewerViewImpl() {
         super(CrmSiteMap.Tenants.Application.class);
-        setViewer(new ApplicationEditorForm(new CrmViewersComponentFactory()));
+        setForm(new ApplicationEditorForm(new CrmViewersComponentFactory()));
     }
 }

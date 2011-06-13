@@ -20,7 +20,7 @@ import com.propertyvista.dto.ApplicationDTO;
 public class ApplicationEditorViewImpl extends CrmEditorViewImplBase<ApplicationDTO> implements ApplicationEditorView {
     public ApplicationEditorViewImpl() {
         super(CrmSiteMap.Tenants.Application.class);
-        setEditor(new ApplicationEditorForm());
+        setForm(new ApplicationEditorForm());
     }
 
 }

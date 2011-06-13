@@ -22,6 +22,6 @@ public class InquiryViewerViewImpl extends CrmViewerViewImplBase<InquiryDTO> imp
 
     public InquiryViewerViewImpl() {
         super(CrmSiteMap.Tenants.Inquiry.class);
-        setViewer(new InquiryEditorForm(new CrmViewersComponentFactory()));
+        setForm(new InquiryEditorForm(new CrmViewersComponentFactory()));
     }
 }

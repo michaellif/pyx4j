@@ -20,6 +20,6 @@ import com.propertyvista.portal.domain.site.PageDescriptor;
 public class ContentEditorImpl extends CrmEditorViewImplBase<PageDescriptor> implements ContentEditor {
     public ContentEditorImpl() {
         super(CrmSiteMap.Settings.Content.class);
-        setEditor(new ContentEditorForm());
+        setForm(new ContentEditorForm());
     }
 }

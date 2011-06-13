@@ -22,6 +22,6 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
     public TenantViewerViewImpl() {
         super(CrmSiteMap.Tenants.Tenant.class);
-        setViewer(new TenantEditorForm(new CrmViewersComponentFactory()));
+        setForm(new TenantEditorForm(new CrmViewersComponentFactory()));
     }
 }

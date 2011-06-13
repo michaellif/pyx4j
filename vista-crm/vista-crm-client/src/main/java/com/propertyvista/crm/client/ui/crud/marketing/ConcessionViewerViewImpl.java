@@ -22,6 +22,6 @@ public class ConcessionViewerViewImpl extends CrmViewerViewImplBase<Concession> 
 
     public ConcessionViewerViewImpl() {
         super(CrmSiteMap.Properties.Concession.class);
-        setViewer(new ConcessionEditorForm(new CrmViewersComponentFactory()));
+        setForm(new ConcessionEditorForm(new CrmViewersComponentFactory()));
     }
 }
