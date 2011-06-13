@@ -58,15 +58,7 @@ public class CrmSite extends VistaSite {
 
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
-                if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
-                    if (CrmSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
-                        AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard());
-                    } else {
-                        CrmSite.getHistoryHandler().handleCurrentHistory();
-                    }
-                } else {
-                    AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
-                }
+                init();
             }
 
         });
@@ -80,12 +72,24 @@ public class CrmSite extends VistaSite {
         //TODO getPlaceController().goTo(new CrmSiteMap.GenericMessage());
     }
 
+    private void init() {
+        if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
+            if (CrmSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard());
+            } else {
+                CrmSite.getHistoryHandler().handleCurrentHistory();
+            }
+        } else {
+            AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
+        }
+    }
+
     private void obtainAuthenticationData() {
         ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {
-                //do nothing
+                init();
             }
 
             @Override
