@@ -45,14 +45,20 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
     }
 
     protected void finalizeUi() {
-        add(scroll);
-        setSize("100%", "100%");
+
     }
 
     protected void setForm(CEntityForm<E> form) {
+        this.form = form;
         form.initialize();
-        scroll.setWidget(this.form = form);
-        form.asWidget().getElement().getStyle().setMargin(0.75, Unit.EM);
+
+        if (form instanceof ITabbedForm) {
+            add(form);
+        } else {
+            add(new ScrollPanel(form.asWidget()));
+        }
+
+        setSize("100%", "100%");
     }
 
     public void populate(E value) {

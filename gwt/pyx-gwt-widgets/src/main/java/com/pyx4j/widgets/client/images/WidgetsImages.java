@@ -63,4 +63,20 @@ public interface WidgetsImages extends ClientBundle {
 
     public ImageResource slideshowPause();
 
+    @ImageOptions(flipRtl = true)
+    @Source("slideshowLeft.png")
+    ImageResource nextTab();
+
+    @ImageOptions(flipRtl = true)
+    @Source("slideshowLeft.png")
+    ImageResource nextTabDisabled();
+
+    @ImageOptions(flipRtl = true)
+    @Source("slideshowRight.png")
+    ImageResource previousTab();
+
+    @ImageOptions(flipRtl = true)
+    @Source("slideshowRight.png")
+    ImageResource previousTabDisabled();
+
 }
