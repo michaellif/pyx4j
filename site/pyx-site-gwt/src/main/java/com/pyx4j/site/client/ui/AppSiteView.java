@@ -49,7 +49,7 @@ public class AppSiteView extends FlowPanel {
 
         StyleManger.installTheme(theme);
 
-        EventBus eventBus = AppSite.instance().getEventBus();
+        EventBus eventBus = AppSite.getEventBus();
 
         String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
 
