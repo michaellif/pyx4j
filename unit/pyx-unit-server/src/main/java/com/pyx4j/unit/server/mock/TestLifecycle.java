@@ -24,13 +24,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.Visit;
 
 public class TestLifecycle {
 
@@ -59,7 +60,7 @@ public class TestLifecycle {
     }
 
     public static void beginRequest() {
-        HttpServletRequest httprequest = new MockHttpServletRequest();
+        MockHttpServletRequest httprequest = new MockHttpServletRequest();
         HttpServletResponse httpresponse = new MockHttpServletResponse();
         Lifecycle.beginRequest(httprequest, httpresponse);
 
@@ -67,6 +68,11 @@ public class TestLifecycle {
         TestContext testContext = threadLocalContext.get();
         if ((testContext.session == null) && ((testContext.userVisit != null) || (testContext.behaviours != null))) {
             Lifecycle.beginSession(testContext.userVisit, testContext.behaviours);
+        }
+        //TODO create Client side Context
+        Visit visit = Context.getVisit();
+        if (visit != null) {
+            httprequest.setHeader(RemoteService.SESSION_TOKEN_HEADER, visit.getSessionToken());
         }
     }
 

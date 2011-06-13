@@ -37,6 +37,8 @@ import javax.servlet.http.HttpSession;
 
 public class MockHttpServletRequest implements HttpServletRequest {
 
+    protected Hashtable<String, String> headers = new Hashtable<String, String>();
+
     protected Hashtable<String, Object> attributes = new Hashtable<String, Object>();
 
     public MockHttpServletRequest() {
@@ -210,7 +212,11 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public String getHeader(String name) {
-        return null;
+        return headers.get(name);
+    }
+
+    public void setHeader(String name, String value) {
+        headers.put(name, value);
     }
 
     @SuppressWarnings("rawtypes")
