@@ -16,46 +16,22 @@ package com.pyx4j.site.client.ui.crud;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 
-public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel implements IViewerView<E> {
+public class ViewerViewImplBase<E extends IEntity> extends ViewImplBase<E> implements IViewerView<E> {
 
     private static I18n i18n = I18nFactory.getI18n(ViewerViewImplBase.class);
-
-    private final ScrollPanel scroll = new ScrollPanel();
-
-    protected CEntityForm<E> viewer = null;
 
     protected Presenter presenter;
 
     public ViewerViewImplBase() {
-        super(Unit.EM);
+        super();
     }
 
     public ViewerViewImplBase(Widget header, double size) {
-        super(Unit.EM);
-        addNorth(header, size);
-        finalizeUi();
-    }
-
-    protected void finalizeUi() {
-        add(scroll);
-        setSize("100%", "100%");
-    }
-
-    /*
-     * Should be called by descendant upon initialisation.
-     */
-    protected void setViewer(CEntityForm<E> viewer) {
-        viewer.initialize();
-        scroll.setWidget(this.viewer = viewer);
-        this.viewer.asWidget().getElement().getStyle().setMargin(0.75, Unit.EM);
+        super(header, size);
     }
 
     @Override
@@ -63,9 +39,4 @@ public class ViewerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
         this.presenter = presenter;
     }
 
-    @Override
-    public void populate(E value) {
-        assert (viewer != null);
-        viewer.populate(value);
-    }
 }
