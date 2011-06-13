@@ -7,26 +7,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.propertyvista</groupId>
+         <groupId>com.propertyvista</groupId>
         <artifactId>vista</artifactId>
         <version>1.0.0-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-portal</artifactId>
-    <name>vista-portal</name>
+    <artifactId>vista-admin</artifactId>
+    <name>vista-admin</name>
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-portal-domain</module>
-        <module>vista-portal-rpc</module>
-        <module>vista-portal-client</module>
-        <module>vista-portal-ptapp</module>
-        <!-- for Alpha -->
-        <!--module>vista-portal-corp</module-->
-        <module>vista-portal-tester</module>
-        <module>vista-portal-admin</module>
-        <module>vista-portal-server</module>
+        <module>vista-admin-rpc</module>
+        <module>vista-admin-client</module>
+        <module>vista-admin-server</module>
     </modules>
 
 </project>

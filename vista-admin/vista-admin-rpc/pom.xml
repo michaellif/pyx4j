@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+         <groupId>com.propertyvista</groupId>
+        <artifactId>vista-admin</artifactId>
+        <version>1.0.0-SNAPSHOT</version><!--vista-version-->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>vista-admin-rpc</artifactId>
+    <name>vista-admin-rpc</name>
+
+    <dependencies>
+
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-rpc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-shared</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-site-shared</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <properties>
+        <project.jar-source-4gwt>true</project.jar-source-4gwt>
+    </properties>
+
+</project>

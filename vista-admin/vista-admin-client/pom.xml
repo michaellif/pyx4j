@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.propertyvista</groupId>
+        <artifactId>vista-admin</artifactId>
+        <version>1.0.0-SNAPSHOT</version><!--vista-version-->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>vista-admin-client</artifactId>
+    <name>vista-admin-client</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-rpc-shared</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-admin-rpc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-gwt-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-dashboard</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-svg-gwt</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
+
+    </dependencies>
+
+    <properties>
+        <gwtModule>admin</gwtModule>
+        <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
+    </properties>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>clean.app-gwt-generated</id>
+                        <phase>clean</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration>
+                            <target>
+                                <delete quiet="true" includeemptydirs="true">
+                                    <fileset dir="${basedir}/../../vista-server/src/main/webapp/${gwtModule}"/>
+                                </delete>
+                                <delete quiet="true" includeemptydirs="true">
+                                    <fileset dir="${basedir}/../../vista-server/src/main/webapp/WEB-INF/deploy/${gwtModule}" />
+                                </delete>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>gwtc</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.pyx4j</groupId>
+                        <artifactId>maven-gwt-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>compile-java2script</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <module>${gwtModuleCompile}</module>
+                            <logLevel>INFO</logLevel>
+                            <style>${gwtCompilerOutputStyle}</style>
+                            <webappDirectory>${basedir}/../../vista-server/src/main/webapp</webappDirectory>
+                            <generated>${project.build.directory}/gwt-generated</generated>
+                            <extra>${project.build.directory}/gwt-extra</extra>
+                            <localWorkers>${gwtLocalWorkers}</localWorkers>
+                            <draftCompile>${gwtDraftCompile}</draftCompile>
+                            <compileReport>${gwtCompileReport}</compileReport>
+                            <!-- disableCastChecking>true</disableCastChecking -->
+                            <!-- disableClassMetadata>true</disableClassMetadata -->
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>build-env</id>
+            <build>
+
+                <plugins>
+
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+
+                            <!-- TMP hacks for gettext-commons problems -->
+                            <execution>
+                                <id>package.copy-this-source-4i18n</id>
+                                <phase>package</phase>
+                                <goals><goal>run</goal></goals>
+                                <configuration>
+                                    <target>
+                                        <!-- TMP hack for  http://code.google.com/p/gettext-commons/issues/detail?id=45 -->
+                                        <copy todir="${project.build.directory}/source-4i18n">
+                                            <fileset dir="${project.build.sourceDirectory}">
+                                                <include name="**/*.java"/>
+                                            </fileset>
+                                        </copy>
+                                        <copy todir="${project.build.directory}/source-4i18n" failonerror="false">
+                                            <fileset dir="${project.build.directory}/gwt-generated">
+                                                <include name="**/*.java"/>
+                                            </fileset>
+                                        </copy>
+                                        <!-- TMP fix for http://code.google.com/p/gettext-commons/issues/detail?id=47 -->
+                                        <mkdir dir="${project.build.outputDirectory}"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+
+                        </executions>
+                    </plugin>
+
+                    <!-- I18N -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>generate-resources.source-4i18n</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>unpack-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/source-4i18n</outputDirectory>
+                                    <excludeArtifactIds>gwt-user,gwt-incubator,pyx-unit-gwt,pyx-slf4j-api-gwt</excludeArtifactIds>
+                                    <includes>**/*.java,</includes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- I18N -->
+                    <plugin>
+                        <groupId>org.xnap.commons</groupId>
+                        <artifactId>maven-gettext-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>package.gettext</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>gettext</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <targetBundle>Messages</targetBundle>
+                            <poDirectory>${basedir}/src/main/po</poDirectory>
+                            <sourceDirectory>${project.build.directory}/source-4i18n</sourceDirectory>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+
+            </build>
+        </profile>
+
+    </profiles>
+
+</project>
