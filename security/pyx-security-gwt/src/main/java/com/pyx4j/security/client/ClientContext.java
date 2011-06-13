@@ -43,15 +43,19 @@ import com.pyx4j.rpc.client.RecoverableBlockingAsyncCallback;
 import com.pyx4j.rpc.client.SystemNotificationEvent;
 import com.pyx4j.rpc.client.SystemNotificationHandler;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.webstorage.client.HTML5Storage;
 
 public class ClientContext {
 
     public static String USER_VISIT_ATTRIBUTE = "UserVisit";
+
+    public static String TOKEN_STORAGE_ATTRIBUTE = "stk";
 
     private static Logger log = LoggerFactory.getLogger(ClientContext.class);
 
@@ -80,6 +84,8 @@ public class ClientContext {
 
     private static ServerSession serverSession;
 
+    private static AuthenticationService service;
+
     private static boolean authenticationObtained = false;
 
     private static List<AsyncCallback<Boolean>> onAuthenticationAvalableQueue = null;
@@ -102,7 +108,7 @@ public class ClientContext {
                         ClientContext.terminateSession();
                     } else {
                         log.debug("Authorization Changed");
-                        ClientContext.obtainAuthenticationData(null, true, false);
+                        ClientContext.obtainAuthenticationData(null, null, true, false);
                     }
                 } else if (event.getSystemNotification() instanceof UserVisitChangedSystemNotification) {
                     userVisit = ((UserVisitChangedSystemNotification) event.getSystemNotification()).getUserVisit();
@@ -198,6 +204,9 @@ public class ClientContext {
             serverSession = null;
         }
         String sessionToken = authenticationResponse.getSessionToken();
+        if (HTML5Storage.isSupported()) {
+            HTML5Storage.getSessionStorage().setItem(TOKEN_STORAGE_ATTRIBUTE, sessionToken);
+        }
         if (sessionToken != null) {
             if (sessionToken.equals("")) {
                 ClientContext.sessionToken = null;
@@ -335,10 +344,18 @@ public class ClientContext {
     }
 
     public static void obtainAuthenticationData(final AsyncCallback<Boolean> onAuthenticationAvalable) {
-        obtainAuthenticationData(onAuthenticationAvalable, false, true);
+        obtainAuthenticationData(null, onAuthenticationAvalable, false, true);
     }
 
-    public static void obtainAuthenticationData(final AsyncCallback<Boolean> onAuthenticationAvalable, boolean force, boolean executeBackground) {
+    public static void obtainAuthenticationData(AuthenticationService authenticationService, final AsyncCallback<Boolean> onAuthenticationAvalable) {
+        obtainAuthenticationData(authenticationService, onAuthenticationAvalable, false, true);
+    }
+
+    public static void obtainAuthenticationData(AuthenticationService authenticationService, final AsyncCallback<Boolean> onAuthenticationAvalable,
+            boolean force, boolean executeBackground) {
+        if (authenticationService != null) {
+            service = authenticationService;
+        }
         if (!force && authenticationObtained) {
             if (onAuthenticationAvalable != null) {
                 onAuthenticationAvalable.onSuccess(isAuthenticated());
@@ -384,10 +401,19 @@ public class ClientContext {
                     }
                 }
             };
-            if (executeBackground) {
-                RPCManager.executeBackground(AuthenticationServices.GetStatus.class, null, callback);
+
+            if (service != null) {
+                String sessionToken = null;
+                if (HTML5Storage.isSupported()) {
+                    sessionToken = HTML5Storage.getSessionStorage().getItem(TOKEN_STORAGE_ATTRIBUTE);
+                }
+                service.authenticate(callback, sessionToken);
             } else {
-                RPCManager.execute(AuthenticationServices.GetStatus.class, null, callback);
+                if (executeBackground) {
+                    RPCManager.executeBackground(AuthenticationServices.GetStatus.class, null, callback);
+                } else {
+                    RPCManager.execute(AuthenticationServices.GetStatus.class, null, callback);
+                }
             }
         }
     }

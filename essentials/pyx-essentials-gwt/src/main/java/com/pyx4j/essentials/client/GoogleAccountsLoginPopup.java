@@ -54,7 +54,7 @@ public class GoogleAccountsLoginPopup {
             public void onSelection(SelectionEvent<String> event) {
                 if ("loginCompleated".equals(event.getSelectedItem())) {
                     log.debug("Login Compleated");
-                    ClientContext.obtainAuthenticationData(null, true, false);
+                    ClientContext.obtainAuthenticationData(null, null, true, false);
                 } else if ("logoutCompleated".equals(event.getSelectedItem())) {
                     log.debug("logout compleated");
                     ClientContext.terminateSession();

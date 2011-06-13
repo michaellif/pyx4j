@@ -30,14 +30,20 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.IServiceRequest;
+import com.pyx4j.rpc.shared.IgnoreSessionToken;
+import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.security.shared.SecurityViolationException;
+import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.Visit;
 
 public class IServiceAdapterImpl implements IServiceAdapter {
 
@@ -83,10 +89,26 @@ public class IServiceAdapterImpl implements IServiceAdapter {
 
         for (Method method : clazz.getMethods()) {
             if (method.getName().equals(serviceMethodName) && (request.getServiceMethodSignature() == getMethodSignature(method))) {
+                assertToken(clazz, method);
                 return runMethod(serviceInstance, method, request.getArgs());
             }
         }
         throw new UnRecoverableRuntimeException("Fatal system error");
+    }
+
+    private void assertToken(Class<? extends IService> clazz, Method method) {
+        Visit visit = Context.getVisit();
+        if (visit == null) {
+            return;
+        }
+        if ((clazz.getAnnotation(IgnoreSessionToken.class) != null) || (method.getAnnotation(IgnoreSessionToken.class) != null)) {
+            return;
+        }
+        if (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken())) {
+            log.error("X-XSRF error, {} user {}", Context.getSessionId(), visit);
+            log.error("X-XSRF tokens: session: {}, request: {}", visit.getSessionToken(), Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER));
+            throw new SecurityViolationException("Request requires authentication.");
+        }
     }
 
     public static int getMethodSignature(Method method) {

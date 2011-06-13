@@ -32,6 +32,7 @@ import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.rpc.shared.IsWarningException;
 import com.pyx4j.rpc.shared.RemoteService;
@@ -88,7 +89,7 @@ public class RemoteServiceImpl implements RemoteService {
                 throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
             }
             Visit visit = Context.getVisit();
-            if (!(serviceInstance instanceof IsIgnoreSessionTokenService)) {
+            if ((!(serviceInstance instanceof IsIgnoreSessionTokenService)) && (!((Service) serviceInstance instanceof IServiceAdapter))) {
                 if ((visit != null) && (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken()))) {
                     logOnce = false;
                     log.error("X-XSRF error, {} user {}", Context.getSessionId(), visit);

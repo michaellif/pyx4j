@@ -220,7 +220,7 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
         String newHashCode = HTML5Storage.getLocalStorage().getItem(SESSION_ID_KEY);
         if (!CommonsStringUtils.equals(sessionCookieValueHashCode, newHashCode)) {
             log.debug("Session change {} -> {}", newHashCode, sessionCookieValueHashCode);
-            ClientContext.obtainAuthenticationData(null, true, false);
+            ClientContext.obtainAuthenticationData(null, null, true, false);
         }
 
     }
