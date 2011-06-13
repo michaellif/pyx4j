@@ -77,7 +77,19 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
     @Override
     public void setPresenter(MainNavigPresenter presenter) {
         this.presenter = presenter;
-        // tabsHolder.clear();
+        //reset secondary menu
+        if (tabsHolder != null) {
+            for (NavigTab tab : tabsHolder.getTabs()) {
+                NavigTabList secondaryNavig = tab.getSecondaryNavig();
+                if (secondaryNavig != null) {
+                    NavigTab secondSelected = secondaryNavig.getSelectedTab();
+                    if (secondSelected != null) {
+                        secondSelected.deselect();
+                    }
+                }
+            }
+        }
+
     }
 
     @Override
