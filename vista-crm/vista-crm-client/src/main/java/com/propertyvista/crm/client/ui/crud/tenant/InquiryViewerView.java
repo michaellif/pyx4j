@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
-import com.propertyvista.crm.client.ui.crud.IViewerView;
+import com.pyx4j.site.client.ui.crud.IViewerView;
+
 import com.propertyvista.dto.InquiryDTO;
 
 public interface InquiryViewerView extends IViewerView<InquiryDTO> {

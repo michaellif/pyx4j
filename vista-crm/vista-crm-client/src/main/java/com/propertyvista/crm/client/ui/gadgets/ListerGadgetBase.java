@@ -44,9 +44,9 @@ import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translation;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
-import com.propertyvista.crm.rpc.services.AbstractCrudService;
 
 public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 

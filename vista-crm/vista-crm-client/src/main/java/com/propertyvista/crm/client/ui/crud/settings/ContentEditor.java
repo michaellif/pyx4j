@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings;
 
-import com.propertyvista.crm.client.ui.crud.IEditorView;
+import com.pyx4j.site.client.ui.crud.IEditorView;
+
 import com.propertyvista.portal.domain.site.PageDescriptor;
 
 public interface ContentEditor extends IEditorView<PageDescriptor> {

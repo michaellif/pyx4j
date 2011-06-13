@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services;
 
+import com.pyx4j.site.rpc.services.AbstractCrudService;
+
 import com.propertyvista.dto.ApplicationDTO;
 
 public interface ApplicationCrudService extends AbstractCrudService<ApplicationDTO> {

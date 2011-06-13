@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
-import com.propertyvista.crm.client.ui.crud.EditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 
-public class ParkingSpotEditorViewImpl extends EditorViewImplBase<ParkingSpot> implements ParkingSpotEditorView {
+public class ParkingSpotEditorViewImpl extends CrmEditorViewImplBase<ParkingSpot> implements ParkingSpotEditorView {
     public ParkingSpotEditorViewImpl() {
         super(CrmSiteMap.Properties.ParkingSpot.class);
         setEditor(new ParkingSpotEditorForm());

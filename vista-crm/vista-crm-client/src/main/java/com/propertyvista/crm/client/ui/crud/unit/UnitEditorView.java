@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import com.propertyvista.crm.client.ui.crud.IEditorView;
+import com.pyx4j.site.client.ui.crud.IEditorView;
+
 import com.propertyvista.dto.AptUnitDTO;
 
 public interface UnitEditorView extends IEditorView<AptUnitDTO> {

@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
-import com.propertyvista.crm.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.IListerView;
+
 import com.propertyvista.portal.domain.ptapp.Application;
 
 public interface ApplicationListerView extends IListerView<Application> {

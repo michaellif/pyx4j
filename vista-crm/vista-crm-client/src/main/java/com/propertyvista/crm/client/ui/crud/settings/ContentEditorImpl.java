@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings;
 
-import com.propertyvista.crm.client.ui.crud.EditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.portal.domain.site.PageDescriptor;
 
-public class ContentEditorImpl extends EditorViewImplBase<PageDescriptor> implements ContentEditor {
+public class ContentEditorImpl extends CrmEditorViewImplBase<PageDescriptor> implements ContentEditor {
     public ContentEditorImpl() {
         super(CrmSiteMap.Settings.Content.class);
         setEditor(new ContentEditorForm());

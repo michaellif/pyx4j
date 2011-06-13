@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
-import com.propertyvista.crm.client.ui.crud.IViewerView;
+import com.pyx4j.site.client.ui.crud.IViewerView;
+
 import com.propertyvista.domain.property.asset.Locker;
 
 public interface LockerViewerView extends IViewerView<Locker> {

@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
-import com.propertyvista.crm.client.ui.crud.EditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.ElevatorDTO;
 
-public class ElevatorEditorViewImpl extends EditorViewImplBase<ElevatorDTO> implements ElevatorEditorView {
+public class ElevatorEditorViewImpl extends CrmEditorViewImplBase<ElevatorDTO> implements ElevatorEditorView {
     public ElevatorEditorViewImpl() {
         super(CrmSiteMap.Properties.Elevator.class);
         setEditor(new ElevatorEditorForm());

@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
-import com.propertyvista.crm.client.ui.crud.ListerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.Inquiry;
 
-public class InquiryListerViewImpl extends ListerViewImplBase<Inquiry> implements InquiryListerView {
+public class InquiryListerViewImpl extends CrmListerViewImplBase<Inquiry> implements InquiryListerView {
 
     public InquiryListerViewImpl() {
         super(new CrmSiteMap.Tenants.Inquiry());

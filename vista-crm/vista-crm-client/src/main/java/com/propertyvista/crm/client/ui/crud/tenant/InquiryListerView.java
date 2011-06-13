@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
-import com.propertyvista.crm.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.IListerView;
+
 import com.propertyvista.domain.tenant.Inquiry;
 
 public interface InquiryListerView extends IListerView<Inquiry> {

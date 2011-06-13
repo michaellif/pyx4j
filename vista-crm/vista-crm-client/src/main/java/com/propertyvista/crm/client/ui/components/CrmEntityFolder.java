@@ -32,9 +32,9 @@ import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.crm.rpc.CrudAppPlace;
 
 public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEditor<E> {
     protected static I18n i18n = I18nFactory.getI18n(CrmEntityFolder.class);

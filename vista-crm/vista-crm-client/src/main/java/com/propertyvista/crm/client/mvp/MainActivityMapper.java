@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.AccountActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
@@ -71,7 +72,6 @@ import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyViewerActivi
 import com.propertyvista.crm.client.activity.crud.unit.UnitViewerActivity;
 import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.CrudAppPlace;
 
 public class MainActivityMapper implements AppActivityMapper {
 

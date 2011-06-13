@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing;
 
-import com.propertyvista.crm.client.ui.crud.IEditorView;
+import com.pyx4j.site.client.ui.crud.IEditorView;
+
 import com.propertyvista.domain.marketing.yield.Concession;
 
 public interface ConcessionEditorView extends IEditorView<Concession> {

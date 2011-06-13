@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.building;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.ViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.Locker;
 
-public class LockerViewerViewImpl extends ViewerViewImplBase<Locker> implements LockerViewerView {
+public class LockerViewerViewImpl extends CrmViewerViewImplBase<Locker> implements LockerViewerView {
 
     public LockerViewerViewImpl() {
         super(CrmSiteMap.Properties.Locker.class);

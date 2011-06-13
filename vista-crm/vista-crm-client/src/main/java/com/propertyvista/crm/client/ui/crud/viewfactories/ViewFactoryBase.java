@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import java.util.HashMap;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.IView;
 
 public abstract class ViewFactoryBase {
 

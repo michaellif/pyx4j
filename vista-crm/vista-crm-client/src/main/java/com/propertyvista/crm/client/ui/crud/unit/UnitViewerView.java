@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import com.propertyvista.crm.client.ui.crud.IViewerView;
+import com.pyx4j.site.client.ui.crud.IViewerView;
+
 import com.propertyvista.dto.AptUnitDTO;
 
 public interface UnitViewerView extends IViewerView<AptUnitDTO> {

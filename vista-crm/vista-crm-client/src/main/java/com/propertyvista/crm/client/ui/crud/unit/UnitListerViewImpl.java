@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import com.propertyvista.crm.client.ui.crud.ListerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitListerViewImpl extends ListerViewImplBase<AptUnitDTO> implements UnitListerView {
+public class UnitListerViewImpl extends CrmListerViewImplBase<AptUnitDTO> implements UnitListerView {
 
     public UnitListerViewImpl() {
         super(new CrmSiteMap.Properties.Unit());

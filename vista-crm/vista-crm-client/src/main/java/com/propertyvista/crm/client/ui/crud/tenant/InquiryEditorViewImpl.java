@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
-import com.propertyvista.crm.client.ui.crud.EditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.InquiryDTO;
 
-public class InquiryEditorViewImpl extends EditorViewImplBase<InquiryDTO> implements InquiryEditorView {
+public class InquiryEditorViewImpl extends CrmEditorViewImplBase<InquiryDTO> implements InquiryEditorView {
     public InquiryEditorViewImpl() {
         super(CrmSiteMap.Tenants.Inquiry.class);
         setEditor(new InquiryEditorForm());

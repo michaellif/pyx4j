@@ -14,8 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.viewfactories;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.IView;
 import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorView;
 import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerView;

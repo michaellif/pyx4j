@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
-import com.propertyvista.crm.client.ui.crud.ListerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 
-public class ParkingSpotListerViewImpl extends ListerViewImplBase<ParkingSpot> implements ParkingSpotListerView {
+public class ParkingSpotListerViewImpl extends CrmListerViewImplBase<ParkingSpot> implements ParkingSpotListerView {
 
     public ParkingSpotListerViewImpl() {
         super(new CrmSiteMap.Properties.ParkingSpot());

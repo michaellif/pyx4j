@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.marketing;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.ViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.marketing.yield.Concession;
 
-public class ConcessionViewerViewImpl extends ViewerViewImplBase<Concession> implements ConcessionViewerView {
+public class ConcessionViewerViewImpl extends CrmViewerViewImplBase<Concession> implements ConcessionViewerView {
 
     public ConcessionViewerViewImpl() {
         super(CrmSiteMap.Properties.Concession.class);

@@ -14,8 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.viewfactories;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.IView;
 import com.propertyvista.crm.client.ui.crud.tenant.ApplicationEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.ApplicationEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.ApplicationListerView;

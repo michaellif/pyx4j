@@ -14,8 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.viewfactories;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.IView;
 import com.propertyvista.crm.client.ui.crud.building.BoilerEditorView;
 import com.propertyvista.crm.client.ui.crud.building.BoilerEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.building.BoilerViewerView;

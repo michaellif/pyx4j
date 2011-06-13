@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.building;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.ViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 
-public class ParkingSpotViewerViewImpl extends ViewerViewImplBase<ParkingSpot> implements ParkingSpotViewerView {
+public class ParkingSpotViewerViewImpl extends CrmViewerViewImplBase<ParkingSpot> implements ParkingSpotViewerView {
 
     public ParkingSpotViewerViewImpl() {
         super(CrmSiteMap.Properties.ParkingSpot.class);

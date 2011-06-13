@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.ViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
-public class UnitItemViewerViewImpl extends ViewerViewImplBase<AptUnitItem> implements UnitItemViewerView {
+public class UnitItemViewerViewImpl extends CrmViewerViewImplBase<AptUnitItem> implements UnitItemViewerView {
 
     public UnitItemViewerViewImpl() {
         super(CrmSiteMap.Properties.UnitItem.class);

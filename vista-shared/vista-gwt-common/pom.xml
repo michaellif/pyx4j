@@ -23,10 +23,11 @@
             <artifactId>gwt-user</artifactId>
             <scope>compile</scope>
         </dependency>
-
+        
         <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-essentials-gwt</artifactId>
+        	<groupId>com.pyx4j</groupId>
+        	<artifactId>pyx-site-gwt</artifactId>
+        	<version>${pyxVersion}</version>
         </dependency>
 
         <dependency>
@@ -34,7 +35,6 @@
             <artifactId>vista-portal-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
     </dependencies>
 
     <properties>

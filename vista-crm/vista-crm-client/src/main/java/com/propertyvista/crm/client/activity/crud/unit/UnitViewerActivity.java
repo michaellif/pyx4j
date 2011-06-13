@@ -16,10 +16,11 @@ package com.propertyvista.crm.client.activity.crud.unit;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.crm.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
+
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
-import com.propertyvista.crm.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.dto.AptUnitDTO;
 

@@ -21,71 +21,41 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.crud.EditorViewImplBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
-import com.propertyvista.crm.rpc.CrudAppPlace;
 
-public class EditorViewImplBase<E extends IEntity> extends DockLayoutPanel implements IEditorView<E> {
+public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
 
-    private static I18n i18n = I18nFactory.getI18n(EditorViewImplBase.class);
-
-    private final ScrollPanel scroll = new ScrollPanel();
-
-    protected CEntityForm<E> editor = null;
-
-    protected Presenter presenter;
+    private static I18n i18n = I18nFactory.getI18n(CrmEditorViewImplBase.class);
 
     protected final CrmHeaderDecorator header;
 
     protected final String defaultCaption;
 
-    public EditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        super(Unit.EM);
-        setSize("100%", "100%");
+    public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption), 3);
         addSouth(createButtons(), 4);
-        add(scroll);
-    }
-
-    /*
-     * Should be called by descendant upon initialisation.
-     */
-    protected void setEditor(CEntityForm<E> editor) {
-        editor.initialize();
-        scroll.setWidget(this.editor = editor);
-        this.editor.asWidget().getElement().getStyle().setMargin(0.75, Unit.EM);
-    }
-
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
+        finalizeUi();
     }
 
     @Override
     public void populate(E value) {
-        assert (editor != null);
-        editor.populate(value);
+        super.populate(value);
         header.setCaption(defaultCaption + " " + value.getStringView());
-    }
-
-    @Override
-    public E getValue() {
-        return editor.getValue();
     }
 
     private Widget createButtons() {

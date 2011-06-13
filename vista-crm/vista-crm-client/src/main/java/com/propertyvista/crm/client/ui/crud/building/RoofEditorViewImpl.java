@@ -13,14 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
-import com.propertyvista.crm.client.ui.crud.EditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.RoofDTO;
 
-public class RoofEditorViewImpl extends EditorViewImplBase<RoofDTO> implements RoofEditorView {
+public class RoofEditorViewImpl extends CrmEditorViewImplBase<RoofDTO> implements RoofEditorView {
     public RoofEditorViewImpl() {
         super(CrmSiteMap.Properties.Roof.class);
         setEditor(new RoofEditorForm());
     }
-
 }

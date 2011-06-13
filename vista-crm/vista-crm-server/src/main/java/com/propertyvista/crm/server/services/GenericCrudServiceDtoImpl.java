@@ -21,8 +21,8 @@ import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.rpc.services.AbstractCrudService;
 
 /**
  * Generic parameters:

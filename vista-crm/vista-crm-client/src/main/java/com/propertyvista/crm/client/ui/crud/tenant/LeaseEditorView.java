@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
-import com.propertyvista.crm.client.ui.crud.IEditorView;
+import com.pyx4j.site.client.ui.crud.IEditorView;
+
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseEditorView extends IEditorView<LeaseDTO> {

@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.tenant;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.ViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.InquiryDTO;
 
-public class InquiryViewerViewImpl extends ViewerViewImplBase<InquiryDTO> implements InquiryViewerView {
+public class InquiryViewerViewImpl extends CrmViewerViewImplBase<InquiryDTO> implements InquiryViewerView {
 
     public InquiryViewerViewImpl() {
         super(CrmSiteMap.Tenants.Inquiry.class);

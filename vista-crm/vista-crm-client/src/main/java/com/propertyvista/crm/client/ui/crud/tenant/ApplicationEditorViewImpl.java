@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
-import com.propertyvista.crm.client.ui.crud.EditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.ApplicationDTO;
 
-public class ApplicationEditorViewImpl extends EditorViewImplBase<ApplicationDTO> implements ApplicationEditorView {
+public class ApplicationEditorViewImpl extends CrmEditorViewImplBase<ApplicationDTO> implements ApplicationEditorView {
     public ApplicationEditorViewImpl() {
         super(CrmSiteMap.Tenants.Application.class);
         setEditor(new ApplicationEditorForm());

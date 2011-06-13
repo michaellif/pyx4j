@@ -24,9 +24,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.CrudAppPlace;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 
 public class ContentActivity extends AbstractActivity {
