@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -31,6 +32,7 @@ import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.crm.client.ui.CrmView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.AuthenticationService;
 
 public class CrmSite extends VistaSite {
 
@@ -85,7 +87,7 @@ public class CrmSite extends VistaSite {
     }
 
     private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
+        ClientContext.obtainAuthenticationData(((AuthenticationService) GWT.create(AuthenticationService.class)), new DefaultAsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {
