@@ -14,6 +14,8 @@
     <inherits name='com.pyx4j.essentials.EssentialsSwf' />
     <inherits name='com.pyx4j.essentials.EssentialsGeo'/>
     
+     <inherits name='com.pyx4j.site.Site' />
+    
     <replace-with class="com.pyx4j.examples.site.client.ExamplesInlineWidgetFactory">
 		<when-type-is class="com.pyx4j.site.client.InlineWidgetFactoryGlobal"/>
 	</replace-with>
