@@ -70,11 +70,17 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
             ar.setBehaviors(behaviors);
 
             Visit visit = Context.getVisit();
-            if ((visit != null) && (EqualsHelper.equals(sessionToken, visit.getSessionToken()))) {
-                ar.setUserVisit(visit.getUserVisit());
-                ar.setSessionToken(visit.getSessionToken());
-                ar.setAclTimeStamp(String.valueOf(visit.getAclTimeStamp()));
+            if (visit != null) {
+                if (EqualsHelper.equals(sessionToken, visit.getSessionToken())) {
+                    ar.setUserVisit(visit.getUserVisit());
+                    ar.setSessionToken(visit.getSessionToken());
+                    ar.setAclTimeStamp(String.valueOf(visit.getAclTimeStamp()));
+                } else {
+                    log.warn("Invalid request sessionToken {}", sessionToken);
+                    ar.setBehaviors(null);
+                }
             }
+
         }
 
         if (ServerSideConfiguration.instance().useAppengineGoogleAccounts()) {
