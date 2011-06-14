@@ -31,8 +31,6 @@ import com.pyx4j.widgets.client.TabLayoutPanel;
 
 public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
 
-    private final ScrollPanel scroll = new ScrollPanel();
-
     protected CEntityForm<E> form = null;
 
     public ViewImplBase() {
