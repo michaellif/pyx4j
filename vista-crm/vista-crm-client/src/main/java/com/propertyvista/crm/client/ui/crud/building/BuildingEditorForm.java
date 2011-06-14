@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -132,7 +131,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 //      main.add(inject(proto().media()), 15);
 
         tabPanel.add(new ScrollPanel(main), "_General_");
-        HTML tab2 = new HTML("Tab2asdfasdfasdfasdfasdfasdf");
         tabPanel.add(new ScrollPanel(details), "_Details_");
         return tabPanel;
     }
