@@ -20,16 +20,16 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.LeaseDTO;
 
-public class LeaseLister extends ListerBase<Lease> {
+public class LeaseLister extends ListerBase<LeaseDTO> {
 
     public LeaseLister() {
-        super(Lease.class, CrmSiteMap.Tenants.Lease.class);
+        super(LeaseDTO.class, CrmSiteMap.Tenants.Lease.class);
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Lease>> columnDescriptors, Lease proto) {
+    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<LeaseDTO>> columnDescriptors, LeaseDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseID()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseFrom()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseTo()));
