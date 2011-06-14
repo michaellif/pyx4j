@@ -105,6 +105,7 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             return;
         }
         if (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken())) {
+            log.error("X-XSRF error, Srv {}.{}", clazz.getName(), method.getName());
             log.error("X-XSRF error, {} user {}", Context.getSessionId(), visit);
             log.error("X-XSRF tokens: session: {}, request: {}", visit.getSessionToken(), Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER));
             throw new SecurityViolationException("Request requires authentication.");
