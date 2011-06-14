@@ -298,7 +298,7 @@ public class VistaTheme extends Theme {
         style = new Style(".gwt-TabLayoutPanelTabs");
         style.addProperty("padding-top", "0.5em");
         style.addProperty("padding-left", "0.5em");
-        style.addProperty("border-bottom", "1px solid {}", ThemeColor.SELECTION);
+        style.addProperty("border-bottom", "4px solid {}", ThemeColor.OBJECT_TONE35);
         addStyle(style);
 
         style = new Style(".gwt-TabLayoutPanelTab");
@@ -316,6 +316,8 @@ public class VistaTheme extends Theme {
         style.addProperty("border-top", "1px solid {}", ThemeColor.SELECTION);
         style.addProperty("background", ThemeColor.SELECTION);
         style.addProperty("color", "white");
+        style.addProperty("display", "inline-block");
+        style.addProperty("position", "relative");
         addStyle(style);
 
         style = new Style(".gwt-TabLayoutPanelTab-selected");

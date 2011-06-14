@@ -59,7 +59,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel = new TabLayoutPanel(2.5, Unit.EM);
+        tabPanel = new TabLayoutPanel(2.7, Unit.EM);
         tabPanel.setHeight("100%");
 
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
