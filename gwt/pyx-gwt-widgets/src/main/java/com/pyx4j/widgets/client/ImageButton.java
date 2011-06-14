@@ -65,10 +65,11 @@ public class ImageButton extends Image {
     }
 
     public void create() {
+        assert (regular != null);
 
         setResource(regular);
-        getElement().getStyle().setCursor(Cursor.POINTER);
         setTitle(title);
+        getElement().getStyle().setCursor(Cursor.POINTER);
 
         if (hover != null) {
             addMouseOverHandler(new MouseOverHandler() {
@@ -100,5 +101,11 @@ public class ImageButton extends Image {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        setResource(regular);
     }
 }
