@@ -40,7 +40,8 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     private final TopRightActionsView view;
 
     public TopRightActionsActivity(Place place) {
-        this.view = (TopRightActionsView) CrmVeiwFactory.instance(TopRightActionsView.class);
+        view = (TopRightActionsView) CrmVeiwFactory.instance(TopRightActionsView.class);
+        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }

@@ -32,7 +32,8 @@ public class ReportActivity extends AbstractActivity {
     private final ReportView view;
 
     public ReportActivity(Place place) {
-        this.view = (ReportView) DashboardVeiwFactory.instance(ReportView.class);
+        view = (ReportView) DashboardVeiwFactory.instance(ReportView.class);
+        assert (view != null);
         withPlace(place);
     }
 

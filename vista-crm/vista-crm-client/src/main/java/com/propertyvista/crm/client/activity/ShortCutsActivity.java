@@ -33,7 +33,8 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
     private final ShortCutsView view;
 
     public ShortCutsActivity(Place place) {
-        this.view = (ShortCutsView) CrmVeiwFactory.instance(ShortCutsView.class);
+        view = (ShortCutsView) CrmVeiwFactory.instance(ShortCutsView.class);
+        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }

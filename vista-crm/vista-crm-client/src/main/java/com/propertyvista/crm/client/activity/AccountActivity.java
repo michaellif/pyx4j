@@ -26,7 +26,8 @@ public class AccountActivity extends AbstractActivity {
     private final AccountView view;
 
     public AccountActivity(Place place) {
-        this.view = (AccountView) CrmVeiwFactory.instance(AccountView.class);
+        view = (AccountView) CrmVeiwFactory.instance(AccountView.class);
+        assert (view != null);
         withPlace(place);
     }
 

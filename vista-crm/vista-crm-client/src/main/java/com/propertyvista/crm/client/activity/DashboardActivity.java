@@ -32,7 +32,8 @@ public class DashboardActivity extends AbstractActivity {
     private final DashboardView view;
 
     public DashboardActivity(Place place) {
-        this.view = (DashboardView) DashboardVeiwFactory.instance(DashboardView.class);
+        view = (DashboardView) DashboardVeiwFactory.instance(DashboardView.class);
+        assert (view != null);
         withPlace(place);
     }
 

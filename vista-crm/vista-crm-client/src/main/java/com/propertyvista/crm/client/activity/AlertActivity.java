@@ -26,7 +26,8 @@ public class AlertActivity extends AbstractActivity {
     private final AlertView view;
 
     public AlertActivity(Place place) {
-        this.view = (AlertView) CrmVeiwFactory.instance(AlertView.class);
+        view = (AlertView) CrmVeiwFactory.instance(AlertView.class);
+        assert (view != null);
         withPlace(place);
     }
 

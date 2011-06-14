@@ -26,7 +26,8 @@ public class FooterActivity extends AbstractActivity {
     private final FooterView view;
 
     public FooterActivity(Place place) {
-        this.view = (FooterView) CrmVeiwFactory.instance(FooterView.class);
+        view = (FooterView) CrmVeiwFactory.instance(FooterView.class);
+        assert (view != null);
         withPlace(place);
     }
 
