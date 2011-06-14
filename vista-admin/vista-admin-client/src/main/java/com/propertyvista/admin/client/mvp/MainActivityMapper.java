@@ -20,6 +20,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.activity.AccountActivity;
 import com.propertyvista.admin.client.activity.AlertActivity;
@@ -27,6 +28,9 @@ import com.propertyvista.admin.client.activity.DashboardActivity;
 import com.propertyvista.admin.client.activity.MessageActivity;
 import com.propertyvista.admin.client.activity.ReportActivity;
 import com.propertyvista.admin.client.activity.SettingsActivity;
+import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
+import com.propertyvista.admin.client.activity.crud.pmc.PmcListerActivity;
+import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
 public class MainActivityMapper implements AppActivityMapper {
@@ -42,17 +46,17 @@ public class MainActivityMapper implements AppActivityMapper {
             public void onSuccess() {
                 Activity activity = null;
                 if (place instanceof AdminSiteMap.Properties.PMC) {
-//                    switch (((CrudAppPlace) place).getType()) {
-//                    case editor:
-//                        activity = new PomEditorActivity(place);
-//                        break;
-//                    case viewer:
-//                        activity = new PomViewerActivity(place);
-//                        break;
-//                    case lister:
-//                        activity = new PomListerActivity(place);
-//                        break;
-//                    }
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new PmcEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new PmcViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new PmcListerActivity(place);
+                        break;
+                    }
 
                     // - Other:
                 } else if (place instanceof AdminSiteMap.Dashboard) {
