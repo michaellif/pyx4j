@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.widgets.client.TabLayoutPanel;
 
 public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
 
@@ -52,7 +53,7 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
         this.form = form;
         form.initialize();
 
-        if (form instanceof ITabbedForm) {
+        if (form.asWidget().getWidget() instanceof TabLayoutPanel) {
             add(form);
         } else {
             add(new ScrollPanel(form.asWidget()));
