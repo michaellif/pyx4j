@@ -47,7 +47,6 @@ import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.server.domain.UserCredential;
 
-@IgnoreSessionToken
 public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security.server.AuthenticationServiceImpl {
 
     private final static Logger log = LoggerFactory.getLogger(VistaAuthenticationServicesImpl.class);
@@ -55,6 +54,7 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
     private static I18n i18n = I18nFactory.getI18n();
 
     @Override
+    @IgnoreSessionToken
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, AuthenticationRequest request) {
 
         if (ServerSideConfiguration.instance().datastoreReadOnly() || AppengineHelper.isDBReadOnly()) {
@@ -117,6 +117,7 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
     }
 
     @Override
+    @IgnoreSessionToken
     public void logout(AsyncCallback<AuthenticationResponse> callback) {
         VistaLifecycle.endSession();
         callback.onSuccess(createAuthenticationResponse(null));
