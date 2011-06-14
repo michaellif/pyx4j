@@ -763,7 +763,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
 
                 // remove join table data
-                CollectionsTableModel.delete(connection, primaryKey, member);
+                CollectionsTableModel.delete(connection, connectionProvider.getDialect(), primaryKey, member);
             }
 
             if (!tm.delete(connection, primaryKey)) {
@@ -815,7 +815,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                             }
                         }
 
-                        CollectionsTableModel.delete(connection, primaryKeys, member);
+                        CollectionsTableModel.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
                     }
 
                     count = tm.delete(connection, primaryKeys);
@@ -841,7 +841,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
             TableModel tm = tableModel(entityMeta);
             for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                CollectionsTableModel.delete(connection, primaryKeys, member);
+                CollectionsTableModel.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
             }
             tm.delete(connection, primaryKeys);
         } finally {

@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,36 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 12, 2010
+ * Created on 2011-06-14
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.hsql;
+package com.pyx4j.entity.rdb.mysql;
 
-public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.ConfigurationHSQL {
+import com.pyx4j.entity.rdb.MultitenantTestCase;
+import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
+import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-    @Override
-    public String dbName() {
-        return "tst_entity";
-    }
-
-    @Override
-    public String dbHost() {
-        return null;
-    }
+public class MultitenantTest extends MultitenantTestCase {
 
     @Override
-    public int minPoolSize() {
-        return 1;
+    protected PersistenceEnvironment getPersistenceEnvironment() {
+        return PersistenceEnvironmentFactory.getMySQLPersistenceEnvironment();
     }
 
-    @Override
-    public int maxPoolSize() {
-        return 1;
-    }
-
-    @Override
-    public boolean isMultitenant() {
-        return true;
-    }
 }

@@ -44,12 +44,15 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 public class QueryBuilder<T extends IEntity> {
 
     private static final Logger log = LoggerFactory.getLogger(QueryBuilder.class);
 
     private final StringBuilder sql = new StringBuilder();
+
+    private final boolean multitenant;
 
     private final List<Object> bindParams = new Vector<Object>();
 
@@ -62,8 +65,15 @@ public class QueryBuilder<T extends IEntity> {
     public QueryBuilder(Dialect dialect, String alias, EntityMeta entityMeta, EntityOperationsMeta operationsMeta, EntityQueryCriteria<T> criteria) {
         this.mainTableSqlAlias = alias;
         this.operationsMeta = operationsMeta;
+        this.multitenant = dialect.isMultitenant();
         if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
             boolean firstCriteria = true;
+
+            if (multitenant) {
+                sql.append("ns = ?");
+                firstCriteria = false;
+            }
+
             for (Criterion cr : criteria.getFilters()) {
                 if (firstCriteria) {
                     firstCriteria = false;
@@ -236,6 +246,10 @@ public class QueryBuilder<T extends IEntity> {
 
     void bindParameters(PreparedStatement stmt) throws SQLException {
         int parameterIndex = 1;
+        if (multitenant) {
+            stmt.setString(parameterIndex, NamespaceManager.getNamespace());
+            parameterIndex++;
+        }
         for (Object param : bindParams) {
             stmt.setObject(parameterIndex, encodeValue(param));
             parameterIndex++;

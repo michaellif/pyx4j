@@ -52,4 +52,9 @@ public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurati
         return 1;
     }
 
+    @Override
+    public boolean isMultitenant() {
+        return true;
+    }
+
 }

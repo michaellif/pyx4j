@@ -24,8 +24,8 @@ import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 
 public class MySQLDialect extends Dialect {
 
-    public MySQLDialect(NamingConvention namingConvention) {
-        super(DatabaseType.MySQL, namingConvention);
+    public MySQLDialect(NamingConvention namingConvention, boolean multitenant) {
+        super(DatabaseType.MySQL, namingConvention, multitenant);
         addTypeMeta(Integer.class, "int");
         addTypeMeta(Short.class, "smallint");
         addTypeMeta(Long.class, "bigint");

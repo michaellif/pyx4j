@@ -55,6 +55,11 @@ public abstract class ConfigurationHSQL implements Configuration {
     }
 
     @Override
+    public boolean isMultitenant() {
+        return false;
+    }
+
+    @Override
     public String connectionValidationQuery() {
         return null;
     }

@@ -37,9 +37,12 @@ public abstract class Dialect {
 
     private final DatabaseType databaseType;
 
-    protected Dialect(DatabaseType databaseType, NamingConvention namingConvention) {
+    private final boolean multitenant;
+
+    protected Dialect(DatabaseType databaseType, NamingConvention namingConvention, boolean multitenant) {
         this.databaseType = databaseType;
         this.namingConvention = namingConvention;
+        this.multitenant = multitenant;
         addTypeMeta(Integer.class, "integer");
         addTypeMeta(Character.class, "char");
         addTypeMeta(String.class, "varchar");
@@ -59,6 +62,10 @@ public abstract class Dialect {
 
     public NamingConvention getNamingConvention() {
         return namingConvention;
+    }
+
+    public boolean isMultitenant() {
+        return multitenant;
     }
 
     protected void addTypeMeta(TypeMeta typeMeta) {

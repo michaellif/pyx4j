@@ -44,6 +44,11 @@ public abstract class ConfigurationMySQL implements Configuration {
     }
 
     @Override
+    public boolean isMultitenant() {
+        return false;
+    }
+
+    @Override
     public String connectionValidationQuery() {
         return "SELECT 1";
     }

@@ -45,6 +45,11 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
+    public boolean isMultitenant() {
+        return false;
+    }
+
+    @Override
     public String connectionValidationQuery() {
         return "SELECT 1 FROM DUAL";
     }

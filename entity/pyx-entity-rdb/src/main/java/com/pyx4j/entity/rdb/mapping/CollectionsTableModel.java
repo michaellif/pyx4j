@@ -44,6 +44,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 public class CollectionsTableModel {
 
@@ -119,6 +120,9 @@ public class CollectionsTableModel {
             if (isList) {
                 sql.append(", seq");
             }
+            if (dialect.isMultitenant()) {
+                sql.append(", ns");
+            }
             if (dialect.isSequencesBaseIdentity()) {
                 sql.append(", id");
             }
@@ -126,6 +130,9 @@ public class CollectionsTableModel {
             sql.append(" ) VALUES (?, ?");
 
             if (isList) {
+                sql.append(", ?");
+            }
+            if (dialect.isMultitenant()) {
                 sql.append(", ?");
             }
             if (dialect.isSequencesBaseIdentity()) {
@@ -138,10 +145,18 @@ public class CollectionsTableModel {
             int seq = 0;
             for (Object value : dataSet) {
                 if ((value != null) || insertNull) {
-                    stmt.setLong(1, primaryKey.asLong());
-                    stmt.setObject(2, TableModel.encodeValue(valueClass, value), targetSqlType);
+                    int parameterIndex = 1;
+                    stmt.setLong(parameterIndex, primaryKey.asLong());
+                    parameterIndex++;
+                    stmt.setObject(parameterIndex, TableModel.encodeValue(valueClass, value), targetSqlType);
+                    parameterIndex++;
                     if (isList) {
-                        stmt.setInt(3, seq);
+                        stmt.setInt(parameterIndex, seq);
+                        parameterIndex++;
+                    }
+                    if (dialect.isMultitenant()) {
+                        stmt.setString(parameterIndex, NamespaceManager.getNamespace());
+                        parameterIndex++;
                     }
                     if (EntityPersistenceServiceRDB.trace) {
                         log.info(Trace.id() + "insert {} (" + primaryKey + ", " + value + ", " + seq + ")", member.sqlName());
@@ -182,13 +197,30 @@ public class CollectionsTableModel {
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        String sql = null;
+        StringBuilder sql = new StringBuilder();
         try {
-            sql = "SELECT id, value " + (isList ? ", seq" : "") + " FROM " + member.sqlName() + " WHERE owner = ?";
-            stmt = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            sql.append("SELECT id, value ");
+            if (isList) {
+                sql.append(", seq");
+            }
+            if (dialect.isMultitenant()) {
+                sql.append(", ns");
+            }
+            sql.append(" FROM ").append(member.sqlName()).append(" WHERE owner = ?");
+            if (dialect.isMultitenant()) {
+                sql.append(" AND ns = ?");
+            }
+
+            stmt = connection.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.setLong(1, entity.getPrimaryKey().asLong());
+            if (dialect.isMultitenant()) {
+                stmt.setString(2, NamespaceManager.getNamespace());
+            }
             rs = stmt.executeQuery();
             while (rs.next()) {
+                if ((dialect.isMultitenant()) && !rs.getString("ns").equals(NamespaceManager.getNamespace())) {
+                    throw new RuntimeException("namespace acess error");
+                }
                 Object value;
                 if (isPrimitive) {
                     value = TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta());
@@ -234,9 +266,9 @@ public class CollectionsTableModel {
         }
     }
 
-    static void retrieve(Connection connection, IEntity entity, MemberOperationsMeta member) {
+    static void retrieve(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member) {
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
-        Collection<Object> dataSet = retrieveData(connection, entity.getPrimaryKey(), member, type);
+        Collection<Object> dataSet = retrieveData(connection, dialect, entity.getPrimaryKey(), member, type);
         if (type == ObjectClassType.PrimitiveSet) {
             member.setMemberValue(entity, dataSet);
         } else {
@@ -248,13 +280,24 @@ public class CollectionsTableModel {
         }
     }
 
-    private static Collection<Object> retrieveData(Connection connection, Key primaryKey, MemberOperationsMeta member, ObjectClassType type) {
+    private static Collection<Object> retrieveData(Connection connection, Dialect dialect, Key primaryKey, MemberOperationsMeta member, ObjectClassType type) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         boolean isList = (type == ObjectClassType.EntityList);
+        StringBuilder sql = new StringBuilder();
         try {
-            stmt = connection.prepareStatement("SELECT value FROM " + member.sqlName() + " WHERE owner = ?" + (isList ? " ORDER BY seq" : ""));
+            sql.append("SELECT value FROM ").append(member.sqlName()).append(" WHERE owner = ?");
+            if (dialect.isMultitenant()) {
+                sql.append(" AND ns = ?");
+            }
+            if (isList) {
+                sql.append(" ORDER BY seq");
+            }
+            stmt = connection.prepareStatement(sql.toString());
             stmt.setLong(1, primaryKey.asLong());
+            if (dialect.isMultitenant()) {
+                stmt.setString(2, NamespaceManager.getNamespace());
+            }
             rs = stmt.executeQuery();
             Collection<Object> dataSet = isList ? new Vector<Object>() : new HashSet<Object>();
             while (rs.next()) {
@@ -273,6 +316,7 @@ public class CollectionsTableModel {
             }
             return dataSet;
         } catch (SQLException e) {
+            log.error("{} SQL {}", member.sqlName(), sql);
             log.error("{} SQL select error", member.sqlName(), e);
             throw new RuntimeException(e);
         } finally {
@@ -281,13 +325,22 @@ public class CollectionsTableModel {
         }
     }
 
-    public static void delete(Connection connection, Key primaryKey, MemberOperationsMeta member) {
+    public static void delete(Connection connection, Dialect dialect, Key primaryKey, MemberOperationsMeta member) {
         PreparedStatement stmt = null;
+        StringBuilder sql = new StringBuilder();
         try {
-            stmt = connection.prepareStatement("DELETE FROM " + member.sqlName() + " WHERE owner = ?");
+            sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE owner = ?");
+            if (dialect.isMultitenant()) {
+                sql.append(" AND ns = ?");
+            }
+            stmt = connection.prepareStatement(sql.toString());
             stmt.setLong(1, primaryKey.asLong());
+            if (dialect.isMultitenant()) {
+                stmt.setString(2, NamespaceManager.getNamespace());
+            }
             stmt.executeUpdate();
         } catch (SQLException e) {
+            log.error("{} SQL {}", member.sqlName(), sql);
             log.error("{} SQL delete error", member.sqlName(), e);
             throw new RuntimeException(e);
         } finally {
@@ -295,13 +348,21 @@ public class CollectionsTableModel {
         }
     }
 
-    public static void delete(Connection connection, Iterable<Key> primaryKeys, MemberOperationsMeta member) {
+    public static void delete(Connection connection, Dialect dialect, Iterable<Key> primaryKeys, MemberOperationsMeta member) {
         PreparedStatement stmt = null;
+        StringBuilder sql = new StringBuilder();
         try {
-            stmt = connection.prepareStatement("DELETE FROM " + member.sqlName() + " WHERE owner = ?");
+            sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE owner = ?");
+            if (dialect.isMultitenant()) {
+                sql.append(" AND ns = ?");
+            }
+            stmt = connection.prepareStatement(sql.toString());
             int pkSize = 0;
             for (Key primaryKey : primaryKeys) {
                 stmt.setLong(1, primaryKey.asLong());
+                if (dialect.isMultitenant()) {
+                    stmt.setString(2, NamespaceManager.getNamespace());
+                }
                 stmt.addBatch();
                 pkSize++;
             }

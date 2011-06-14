@@ -24,8 +24,8 @@ import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 
 public class HSQLDialect extends Dialect {
 
-    public HSQLDialect(NamingConvention namingConvention) {
-        super(DatabaseType.HSQLDB, namingConvention);
+    public HSQLDialect(NamingConvention namingConvention, boolean multitenant) {
+        super(DatabaseType.HSQLDB, namingConvention, multitenant);
         addTypeMeta(Short.class, "smallint");
         addTypeMeta(Long.class, "bigint");
         addTypeMeta(Double.class, "double");

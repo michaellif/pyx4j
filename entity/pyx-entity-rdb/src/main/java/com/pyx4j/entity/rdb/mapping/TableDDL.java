@@ -44,6 +44,10 @@ class TableDDL {
         if (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
             sql.append(" ").append(dialect.getGeneratedIdColumnString());
         }
+        if (dialect.isMultitenant()) {
+            sql.append(", ");
+            sql.append(" ns ").append(dialect.getSqlType(String.class)).append('(').append(200).append(')');
+        }
 
         for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
             for (String sqlName : member.getValueAdapter().getColumnNames(member)) {
@@ -154,6 +158,9 @@ class TableDDL {
         sql.append(" (");
 
         sql.append(" id ").append(dialect.getSqlType(Long.class)).append(" ").append(dialect.getGeneratedIdColumnString()).append(", ");
+        if (dialect.isMultitenant()) {
+            sql.append(" ns ").append(dialect.getSqlType(String.class)).append('(').append(200).append("), ");
+        }
         sql.append(" owner ").append(dialect.getSqlType(Long.class)).append(", ");
         sql.append(" value ").append(sqlType(dialect, member.getMemberMeta()));
 

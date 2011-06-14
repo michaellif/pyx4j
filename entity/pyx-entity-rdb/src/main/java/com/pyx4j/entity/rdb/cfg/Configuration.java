@@ -47,6 +47,8 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public String password();
 
+    public boolean isMultitenant();
+
     public String connectionValidationQuery();
 
     public boolean readOnly();

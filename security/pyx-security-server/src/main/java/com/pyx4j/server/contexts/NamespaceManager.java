@@ -37,7 +37,7 @@ public class NamespaceManager {
         requestLocal.set(newNamespace);
     }
 
-    static void remove() {
+    public static void remove() {
         requestLocal.remove();
     }
 }

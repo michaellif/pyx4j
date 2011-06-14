@@ -26,8 +26,8 @@ import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 
 public class OracleDialect extends Dialect {
 
-    public OracleDialect(NamingConvention namingConvention) {
-        super(DatabaseType.Oracle, namingConvention);
+    public OracleDialect(NamingConvention namingConvention, boolean multitenant) {
+        super(DatabaseType.Oracle, namingConvention, multitenant);
         addTypeMeta(Integer.class, "number", 10, 0);
         addTypeMeta(Short.class, "number", 5, 0);
         addTypeMeta(Long.class, "number", 19, 0);
