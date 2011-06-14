@@ -31,7 +31,6 @@ import com.propertyvista.portal.client.mvp.BottomActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
 import com.propertyvista.portal.client.mvp.LogoActivityMapper;
 import com.propertyvista.portal.client.mvp.MainNavigActivityMapper;
-import com.propertyvista.portal.client.mvp.SecondaryNavigActivityMapper;
 import com.propertyvista.portal.client.mvp.StaticContentActivityMapper;
 import com.propertyvista.portal.client.themes.GainsboroTheme;
 
@@ -83,10 +82,6 @@ public class PortalView extends FlowPanel {
         mainWrapper.setStyleName(prefix + StyleSuffix.Main);
         centerWrapper.add(mainWrapper);
 
-        DisplayPanel secondaryNavigDisplayPanel = new DisplayPanel();
-        secondaryNavigDisplayPanel.setStyleName(prefix + StyleSuffix.SecondaryNavig);
-        mainWrapper.add(secondaryNavigDisplayPanel);
-
         DisplayPanel contentDisplayPanel = new DisplayPanel();
         contentDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
         mainWrapper.add(contentDisplayPanel);
@@ -108,20 +103,10 @@ public class PortalView extends FlowPanel {
         bind(new ActionsActivityMapper(), actionsDisplayPanel, eventBus);
         bind(new MainNavigActivityMapper(), mainNavigDisplayPanel, eventBus);
         bind(new ContentActivityMapper(), contentDisplayPanel, eventBus);
-        bind(new SecondaryNavigActivityMapper(), secondaryNavigDisplayPanel, eventBus);
         bind(new BottomActivityMapper(), bottomDisplayPanel, eventBus);
         bind(new StaticContentActivityMapper(), statictDisplayPanel, eventBus);
 
     }
-
-/*
- * private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus
- * eventBus) {
- * ActivityManager activityManager = new ActivityManager(mapper, eventBus);
- * activityManager.setDisplay(widget);
- * 
- * }
- */
 
     private static void bind(AppActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
         AppActivityManager activityManager = new AppActivityManager(mapper, eventBus);

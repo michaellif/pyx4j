@@ -13,12 +13,17 @@
  */
 package com.propertyvista.portal.client.themes;
 
+import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.style.ColorFactory;
+import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.widgets.client.style.Style;
+import com.pyx4j.widgets.client.style.ThemeColor;
+
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalView;
-import com.propertyvista.portal.client.ui.ResidentsNavigViewImpl;
 import com.propertyvista.portal.client.ui.decorations.BasicCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
@@ -28,12 +33,6 @@ import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentForm;
-
-import com.pyx4j.widgets.client.ListBox;
-import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColor;
 
 public abstract class PortalTheme extends com.propertyvista.common.client.theme.VistaTheme {
 
@@ -49,7 +48,6 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
         initSiteViewStyles();
         initVistaMainNavigViewStyles();
-        initSubNavigViewStyles();
         initPropertyListStyles();
         initSearchPanelStyles();
         initRefineSearchStyles();
@@ -266,59 +264,6 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("font-style", "normal");
         style.addProperty("padding-left", "29px");
         style.addProperty("padding-right", "29px");
-        addStyle(style);
-
-    }
-
-    private void initSubNavigViewStyles() {
-        String prefix = ResidentsNavigViewImpl.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("width", "100%");
-        style.addProperty("height", "40px");
-        style.addProperty("overflow", "hidden");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.Holder));
-        style.addProperty("height", "40px");
-        style.addProperty("margin", "0");
-        style.addProperty("padding", "0");
-        style.addProperty("list-style", "none");
-        style.addProperty("overflow", "hidden");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.Tab));
-        //     style.addProperty("background", "url('" + PortalImages.INSTANCE.step().getURL() + "') no-repeat scroll 0 0 transparent");
-        style.addProperty("height", "40px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.LabelHolder));
-        // style.addProperty("background", "url('" + PortalImages.INSTANCE.stepPointer().getURL() + "') no-repeat scroll 100% 0 transparent");
-        style.addProperty("margin-right", "-14px");
-        style.addProperty("position", "relative");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.StatusHolder));
-        style.addProperty("background", "transparent");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.Label, ResidentsNavigViewImpl.StyleDependent.current));
-        //  style.addProperty("background", "url('" + PortalImages.INSTANCE.pointer().getURL() + "') no-repeat scroll 50% 100% transparent");
-        style.addProperty("text-decoration", "underline !important");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.Label));
-        style.addProperty("height", "40px");
-        style.addProperty("line-height", "54px");
-        style.addProperty("color", "#7B8388");
-        style.addProperty("font-size", "15px");
-        style.addProperty("font-style", "normal");
-        style.addProperty("padding-left", "29px");
-        style.addProperty("padding-right", "29px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ResidentsNavigViewImpl.StyleSuffix.Label, ResidentsNavigViewImpl.StyleDependent.current));
-        //style.addProperty("background", "#654");
         addStyle(style);
 
     }
