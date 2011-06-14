@@ -49,7 +49,6 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption), 3);
         addSouth(createButtons(), 4);
-        finalizeUi();
     }
 
     @Override

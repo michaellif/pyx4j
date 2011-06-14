@@ -44,7 +44,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         this.placeClass = placeClass;
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption, createActionsPanel()), 3);
-        finalizeUi();
     }
 
     @Override
