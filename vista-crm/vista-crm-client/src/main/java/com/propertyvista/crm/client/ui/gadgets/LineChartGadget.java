@@ -60,21 +60,21 @@ public class LineChartGadget extends GadgetBase {
         ds.addDataSet(ds.new Metric("Building 3"), values);
 
         values = new ArrayList<Double>(5);
-        values.add(38d);
+        values.add(58d);
         values.add(30d);
         values.add(41d);
         ds.addDataSet(ds.new Metric("Building 4"), values);
 
         values = new ArrayList<Double>(5);
         values.add(28d);
-        values.add(30d);
+        values.add(70d);
         values.add(7d);
         ds.addDataSet(ds.new Metric("Building 5"), values);
 
         values = new ArrayList<Double>(6);
         values.add(18d);
         values.add(60d);
-        values.add(17d);
+        values.add(37d);
         ds.addDataSet(ds.new Metric("Building 6"), values);
 
         List<String> sd = new ArrayList<String>(3);
@@ -90,6 +90,7 @@ public class LineChartGadget extends GadgetBase {
         config.setZeroBased(true);
         config.setGridType(GridType.Value);
         config.setTheme(ChartTheme.Bright);
+        config.setShowValueLabels(true);
 
         SvgRoot svgroot = factory.getSvgRoot();
         svgroot.add(new LineChart(config));
