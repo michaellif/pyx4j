@@ -24,9 +24,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
-import com.pyx4j.site.client.ui.crud.ITabbedForm;
 import com.pyx4j.widgets.client.TabLayoutPanel;
-import com.pyx4j.widgets.client.tabpanel.TabBar;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -47,7 +45,7 @@ import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
 
-public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> implements ITabbedForm {
+public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
     private TabLayoutPanel tabPanel;
 
@@ -78,8 +76,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> implements IT
         injectAddress(split, proto().info().address());
         split.getRightPanel().add(inject(proto().complex()), 15);
 
-        main.add(new CrmHeader1Decorator(i18n.tr("Details")));
-        main.add(split = new VistaDecoratorsSplitFlowPanel());
+        VistaDecoratorsFlowPanel details = new VistaDecoratorsFlowPanel();
+        details.add(split = new VistaDecoratorsSplitFlowPanel());
         split.getLeftPanel().add(inject(proto().info().structureType()), 15);
         split.getLeftPanel().add(inject(proto().info().structureBuildYear()), 15);
         split.getLeftPanel().add(inject(proto().info().constructionType()), 15);
@@ -135,13 +133,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> implements IT
 
         tabPanel.add(new ScrollPanel(main), "_General_");
         HTML tab2 = new HTML("Tab2asdfasdfasdfasdfasdfasdf");
-        tabPanel.add(tab2, "_Other_");
+        tabPanel.add(new ScrollPanel(details), "_Details_");
         return tabPanel;
-    }
-
-    @Override
-    public TabBar getTabBar() {
-        return null;
     }
 
     private void injectAddress(final VistaDecoratorsSplitFlowPanel split, final Address address) {
