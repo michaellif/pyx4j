@@ -5,8 +5,11 @@
     
     <inherits name='com.google.gwt.user.User'/>
 
+    <inherits name='com.pyx4j.site.GwtSite' />
     <inherits name='com.pyx4j.dashboard.Dashboard'/>
     
+    <inherits name='com.propertyvista.crm.Rpc' />
+    <inherits name='com.propertyvista.portal.Rpc' />
     <inherits name='com.propertyvista.admin.Rpc' />
     <inherits name='com.propertyvista.Domain' />
     <inherits name='com.pyx4j.SVG' />
