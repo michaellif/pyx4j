@@ -18,15 +18,15 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.crm.client.ui.GeneralViewFactory;
 import com.propertyvista.crm.client.ui.MessageView;
+import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
 public class MessageActivity extends AbstractActivity {
 
     private final MessageView view;
 
     public MessageActivity(Place place) {
-        this.view = GeneralViewFactory.instance(MessageView.class);
+        this.view = (MessageView) CrmVeiwFactory.instance(MessageView.class);
     }
 
     @Override

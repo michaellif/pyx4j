@@ -21,22 +21,19 @@ import com.pyx4j.site.shared.meta.SiteMap;
 
 public class CrmSiteMap implements SiteMap {
 
-    //
-    // Paces definition:
-    //
-    @PlaceProperties(caption = "Application Form")
+    @PlaceProperties(caption = "Login")
     public static class Login extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Application Form")
+    @PlaceProperties(caption = "Retrieve Password")
     public static class RetrievePassword extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Application Form")
+    @PlaceProperties(caption = "Reset Password")
     public static class ResetPassword extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Application Form")
+    @PlaceProperties(caption = "Change Password")
     public static class ChangePassword extends AppPlace {
     }
 
