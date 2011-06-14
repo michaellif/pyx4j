@@ -15,7 +15,6 @@ package com.propertyvista.admin.client.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.admin.client.activity.ShortCutsActivity;
 import com.propertyvista.admin.client.ui.AccountView;
 import com.propertyvista.admin.client.ui.AccountViewImpl;
 import com.propertyvista.admin.client.ui.AlertView;
@@ -28,6 +27,7 @@ import com.propertyvista.admin.client.ui.MessageView;
 import com.propertyvista.admin.client.ui.MessageViewImpl;
 import com.propertyvista.admin.client.ui.SettingsView;
 import com.propertyvista.admin.client.ui.SettingsViewImpl;
+import com.propertyvista.admin.client.ui.ShortCutsView;
 import com.propertyvista.admin.client.ui.ShortCutsViewImpl;
 import com.propertyvista.admin.client.ui.TopRightActionsView;
 import com.propertyvista.admin.client.ui.TopRightActionsViewImpl;
@@ -39,7 +39,7 @@ public class AdminVeiwFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (com.propertyvista.admin.client.ui.NavigView.class.equals(type)) {
                 map.put(type, new com.propertyvista.admin.client.ui.NavigViewImpl());
-            } else if (ShortCutsActivity.class.equals(type)) {
+            } else if (ShortCutsView.class.equals(type)) {
                 map.put(type, new ShortCutsViewImpl());
             } else if (TopRightActionsView.class.equals(type)) {
                 map.put(type, new TopRightActionsViewImpl());
