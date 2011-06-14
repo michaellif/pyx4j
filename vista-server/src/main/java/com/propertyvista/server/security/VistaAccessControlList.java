@@ -27,6 +27,7 @@ import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 import com.pyx4j.security.shared.CoreBehavior;
 
+import com.propertyvista.admin.server.security.VistaAdminAccessControlList;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
@@ -56,6 +57,7 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
 
         merge(new VistaPortalAccessControlList());
         merge(new VistaCrmAccessControlList());
+        merge(new VistaAdminAccessControlList());
 
         grant(VistaBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(EntityServices.Query.class));
         grant(VistaBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(ReportServices.class, "*"));
