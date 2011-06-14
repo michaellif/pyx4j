@@ -24,7 +24,6 @@ import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
 import com.pyx4j.widgets.client.style.ThemeColor;
-import com.pyx4j.widgets.client.tabpanel.TabPanel;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class VistaTheme extends Theme {
@@ -293,64 +292,36 @@ public class VistaTheme extends Theme {
     }
 
     protected void initTabPanelStyles() {
-        String prefix = TabPanel.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("margin-top", "2px");
-        style.addProperty("margin-left", "6px");
+        Style style = new Style(".gwt-TabLayoutPanel");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
-        style.addProperty("padding", "2px");
-        style.addProperty("margin", "0px");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style = new Style(".gwt-TabLayoutPanelTabs");
+        style.addProperty("padding-top", "0.5em");
+        style.addProperty("padding-left", "0.5em");
+        style.addProperty("border-bottom", "1px solid {}", ThemeColor.SELECTION);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem));
+        style = new Style(".gwt-TabLayoutPanelTab");
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("height", "2em");
+        style.addProperty("line-height", "2em");
         style.addProperty("text-align", "center");
         style.addProperty("margin-right", "1px");
         style.addProperty("margin-left", "1px");
+        style.addProperty("padding-right", "10px");
+        style.addProperty("padding-left", "10px");
         style.addProperty("border-right", "1px solid {}", ThemeColor.SELECTION);
         style.addProperty("border-left", "1px solid {}", ThemeColor.SELECTION);
         style.addProperty("border-top", "1px solid {}", ThemeColor.SELECTION);
-        style.addGradientBackground(ThemeColor.OBJECT_TONE3);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected));
-        style.addProperty("cursor", "default");
         style.addProperty("background", ThemeColor.SELECTION);
         style.addProperty("color", "white");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.hover));
-        style.addProperty("background", ThemeColor.OBJECT_TONE3);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected), Selector.valueOf(prefix,
-                TabPanel.StyleSuffix.BarItemLabel));
-        //style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItemLabel));
-        style.addProperty("margin", "3px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.List));
-        style.addProperty("background-color", "white");
-        style.addProperty("border", "1px solid {}", ThemeColor.SELECTION);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.ListItem));
-        style.addProperty("color", "black");
-        style.addProperty("padding", "4px 14px 4px 1px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.ListItem, TabPanel.StyleDependent.hover));
-        style.addProperty("background", ThemeColor.SELECTION);
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style = new Style(".gwt-TabLayoutPanelTab-selected");
+        style.addProperty("cursor", "default");
+        style.addGradientBackground(ThemeColor.OBJECT_TONE3);
+        style.addProperty("color", "#333");
         addStyle(style);
 
     }

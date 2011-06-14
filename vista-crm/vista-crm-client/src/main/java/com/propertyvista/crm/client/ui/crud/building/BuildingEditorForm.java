@@ -59,7 +59,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel = new TabLayoutPanel(2, Unit.EM);
+        tabPanel = new TabLayoutPanel(2.5, Unit.EM);
         tabPanel.setHeight("100%");
 
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
@@ -130,8 +130,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 // TODO - add this data processing later! :
 //      main.add(inject(proto().media()), 15);
 
-        tabPanel.add(new ScrollPanel(main), "_General_");
-        tabPanel.add(new ScrollPanel(details), "_Details_");
+        tabPanel.add(new ScrollPanel(main), "General");
+        tabPanel.add(new ScrollPanel(details), "Details");
         return tabPanel;
     }
 
