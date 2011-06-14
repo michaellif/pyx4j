@@ -40,11 +40,6 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
     public ViewImplBase(Widget header, double size) {
         super(Unit.EM);
         addNorth(header, size);
-        finalizeUi();
-    }
-
-    protected void finalizeUi() {
-
     }
 
     protected void setForm(CEntityForm<E> form) {
