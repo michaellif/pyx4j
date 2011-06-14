@@ -38,9 +38,11 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 
 public abstract class GridBasedChart implements IsSvgElement {
 
-    public final static int PADDING = 15;
+    protected final static int PADDING = 15;
 
     protected static final String AXIS_COLOR = "gray";
+
+    protected static int CHART_LABEL_PADDING = 4;
 
     protected static final String GRID_COLOR = "lightgray";
 
@@ -83,6 +85,8 @@ public abstract class GridBasedChart implements IsSvgElement {
     private int numOfSeries;
 
     private int numOfMetrics;
+
+    private double maxValue;
 
     public enum MetricPrefix {
         T() {
@@ -207,10 +211,14 @@ public abstract class GridBasedChart implements IsSvgElement {
         return numOfMetrics;
     }
 
+    public double getMaxValue() {
+        return maxValue;
+    }
+
     private void drawBasics() {
         numOfMetrics = datasource.getDataSet().size();
         metricPoints = new ArrayList<Double>(20);
-        double maxValue = calculateMaxValue();
+        maxValue = calculateMaxValue();
         List<Double> valuePoints = new ArrayList<Double>(NUM_OF_VALUE_TICKS + 1);
 
         //adjust width for value labels

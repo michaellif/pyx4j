@@ -31,6 +31,8 @@ public abstract class BasicChartConfigurator {
 
     private boolean legend;
 
+    private boolean showValueLabels;
+
     public BasicChartConfigurator(SvgFactory factory, DataSource datasource) {
         assert factory != null;
         assert datasource != null;
@@ -38,6 +40,7 @@ public abstract class BasicChartConfigurator {
         this.datasourse = datasource;
         theme = ChartTheme.Monochrome;
         legend = false;
+        showValueLabels = false;
     }
 
     public ChartTheme getTheme() {
@@ -62,6 +65,14 @@ public abstract class BasicChartConfigurator {
 
     public SvgFactory getFactory() {
         return factory;
+    }
+
+    public boolean isShowValueLabels() {
+        return showValueLabels;
+    }
+
+    public void setShowValueLabels(boolean showValueLabels) {
+        this.showValueLabels = showValueLabels;
     }
 
 }

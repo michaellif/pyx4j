@@ -21,6 +21,7 @@
 package com.pyx4j.svg.chart;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -60,18 +61,15 @@ public class PieChart2D implements IsSvgElement {
 
     private final static int TITLE_PADDING = 10;
 
-    private final boolean showLegend;
-
-    private final ChartTheme theme;
-
     private final Group container;
 
+    private final PieChartConfigurator configurator;
+
     public PieChart2D(PieChartConfigurator configurator) {
+        this.configurator = configurator;
         this.datasource = configurator.getDatasourse();
         this.radius = configurator.getRadius();
         this.factory = configurator.getFactory();
-        this.showLegend = configurator.isLegend();
-        this.theme = configurator.getTheme();
         container = this.factory.createGroup();
         computedWidth = 0;
         computedHeight = 0;
@@ -129,6 +127,7 @@ public class PieChart2D implements IsSvgElement {
     }
 
     private int drawSeries(Map<Metric, Double> series, final int x, final int y, String seriestitle) {
+        List<Text> labels = new LinkedList<Text>();
         double total = 0;
         int computedwidth = 0;
         int xx;
@@ -141,7 +140,7 @@ public class PieChart2D implements IsSvgElement {
             return 0;
         double x2;
         double y2;
-        theme.rewind();
+        configurator.getTheme().rewind();
         if (seriestitle != null && seriestitle.length() > 0) {
             xx = x;
             yy = y + PADDING;
@@ -169,12 +168,12 @@ public class PieChart2D implements IsSvgElement {
         int iconsize = 0;
 
         Group legG = null;
-        if (showLegend)
+        if (configurator.isLegend())
             legG = factory.createGroup();
 
         if (series.entrySet().size() == 1) { // 100%
             Circle c = factory.createCircle(xx, yy, radius);
-            c.setFill(theme.getNextColor());
+            c.setFill(configurator.getTheme().getNextColor());
             c.setStrokeWidth("0");
             container.add(c);
 
@@ -190,11 +189,11 @@ public class PieChart2D implements IsSvgElement {
 
                 path += x2 + "," + y2 + "Z";
                 Path p = factory.createPath(path);
-                String color = theme.getNextColor();
+                String color = configurator.getTheme().getNextColor();
                 p.setFill(color);
                 p.setStrokeWidth("0");
                 p.setStroke(color);
-                if (showLegend) {
+                if (configurator.isLegend()) {
                     LegendItem li = createLegendItem(entry.getKey().getCaption(), 0, legY, color);
                     legentHeight = li.getHeight() + Y_SHIFT;
                     legY += legentHeight;
@@ -205,12 +204,16 @@ public class PieChart2D implements IsSvgElement {
                     if (iconsize == 0)
                         iconsize = li.getIconSize();
                 }
-                //TODO implement labels String sv = entry.getValue().toString();
-                //  Text t = factory.createText(sv, (int) x2, (int) y2);
+                if (configurator.isShowValueLabels()) {
+                    //TODO finish
+                    Text label = factory.createText(String.valueOf(value), xx, yy);
+                    // labels.add(label);
+
+                }
                 container.add(p);
-                //  container.add(t);
+
             }
-            if (showLegend) {
+            if (configurator.isLegend()) {
                 Rect frame = factory.createRect(-iconsize - LEGEND_FRAME_PADDING, -iconsize * 2 - LEGEND_FRAME_PADDING, legendWidth + LEGEND_FRAME_PADDING,
                         legY + LEGEND_FRAME_PADDING, 0, 0);
                 legG.add(frame);
@@ -218,6 +221,11 @@ public class PieChart2D implements IsSvgElement {
                 container.add(legG);
                 computedwidth += legendWidth + LEGEND_FRAME_PADDING;
             }
+
+            for (Text label : labels) {
+                container.add(label);
+            }
+
         }
         return computedwidth;
     }

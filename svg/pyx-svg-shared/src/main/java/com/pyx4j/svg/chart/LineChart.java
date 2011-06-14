@@ -20,6 +20,7 @@
  */
 package com.pyx4j.svg.chart;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -28,6 +29,7 @@ import com.pyx4j.svg.basic.Circle;
 import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.Path;
 import com.pyx4j.svg.basic.SvgFactory;
+import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.DataSource.Metric;
 import com.pyx4j.svg.util.Utils;
 
@@ -56,6 +58,8 @@ public class LineChart extends GridBasedChart {
         int ystart = getCanvas().getY();
         int numOfMetrics = getNumOfMetrics();
 
+        List<Text> labels = new LinkedList<Text>();
+
         ChartTheme theme = configurator.getTheme();
         Set<Entry<Metric, List<Double>>> dataset = configurator.getDatasourse().getDataSet().entrySet();
 
@@ -83,6 +87,12 @@ public class LineChart extends GridBasedChart {
                 dot.setFill(color);
                 dot.setStroke(color);
                 container.add(dot);
+                if (configurator.isShowValueLabels()) {
+                    Text label = factory.createText(String.valueOf(value), (int) x, (int) (y - DOT_RADIUS - CHART_LABEL_PADDING));
+                    label.setAttribute("text-anchor", "middle");
+                    label.setFill(color);
+                    labels.add(label);
+                }
                 path += x + "," + y;
                 if (metricIdx == numOfMetrics - 1) {
                     ;
@@ -97,7 +107,10 @@ public class LineChart extends GridBasedChart {
             line.setStroke(color);
             line.setStrokeWidth(LINE_WIDTH);
             container.add(line);
+        }
 
+        for (Text label : labels) {
+            container.add(label);
         }
 
     }

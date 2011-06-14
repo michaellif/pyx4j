@@ -20,6 +20,7 @@
  */
 package com.pyx4j.svg.chart;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -27,6 +28,7 @@ import java.util.Set;
 import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.SvgFactory;
+import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.DataSource.Metric;
 import com.pyx4j.svg.util.Utils;
 
@@ -54,6 +56,11 @@ public class BarChart2D extends GridBasedChart {
         int ystart = getCanvas().getY();
         int barWidth = (int) (getMetricSpacing() - MIN_GROUP_GAP) / numOfSeries;
 
+        List<Text> labels = new LinkedList<Text>();
+
+        double labelWidth = String.valueOf(getMaxValue()).length() * Text.DEFAULT_FONT_SIZE * 0.65;
+        boolean labelVertical = (labelWidth > barWidth) ? true : false;
+
         ChartTheme theme = configurator.getTheme();
         Set<Entry<Metric, List<Double>>> dataset = configurator.getDatasourse().getDataSet().entrySet();
         double hShift = Utils.round(numOfSeries / 2d, 2);
@@ -77,7 +84,7 @@ public class BarChart2D extends GridBasedChart {
                 double x = Utils.round(metricPoints.get(metricIdx) - (numOfSeries - idx - hShift) * barWidth, 2);
                 double height = Utils.round(value / valueIncrement * valueSpacing, 2);
                 double y = ystart - height;
-                //TODO does not work as inline html element
+                //TODO does not work as inline html element 
 /*
  * Animator anim = new Animator(Type.set);
  * anim.setAttribute("attributeName", "fill");
@@ -92,12 +99,34 @@ public class BarChart2D extends GridBasedChart {
                 bar.setStroke(color);
                 container.add(bar);
 
+                if (configurator.isShowValueLabels()) {
+                    Text label;
+                    if (labelVertical) {
+                        int tx = (int) (x + barWidth / 2 + Text.DEFAULT_FONT_SIZE / 2);
+                        int ty = (int) (y + labelWidth);
+                        if (ty >= ystart) {
+                            ty = ystart - CHART_LABEL_PADDING;
+                        }
+                        label = factory.createText(String.valueOf(value), tx, ty);
+                        label.setTransform("rotate(-90," + tx + "," + String.valueOf(ty) + ")");
+
+                    } else {
+                        int tx = (int) (x + barWidth / 2);
+                        int ty = (int) (y - CHART_LABEL_PADDING);
+                        label = factory.createText(String.valueOf(value), tx, ty);
+                        label.setAttribute("text-anchor", "middle");
+                    }
+                    labels.add(label);
+                }
                 ++metricIdx;
 
             }
 
         }
 
-    }
+        for (Text label : labels) {
+            container.add(label);
+        }
 
+    }
 }
