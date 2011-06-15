@@ -392,13 +392,12 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
-        // Listerfileters:
+        // Lister filters:
         prefix = ListerBase.DEFAULT_STYLE_PREFIX;
         style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filetersPanel));
         style.addProperty("padding-top", "0.5em");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
         addStyle(style);
-
     }
 
     protected void initDashboardReport() {

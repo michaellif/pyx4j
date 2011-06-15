@@ -44,7 +44,7 @@ import com.propertyvista.admin.client.mvp.MainActivityMapper;
 import com.propertyvista.admin.client.mvp.NavigActivityMapper;
 import com.propertyvista.admin.client.mvp.ShortCutsActivityMapper;
 import com.propertyvista.admin.client.mvp.TopRightActionsActivityMapper;
-import com.propertyvista.admin.client.themes.BlueColdTheme;
+import com.propertyvista.admin.client.themes.GainsboroTheme;
 
 public class AdminView extends LayoutPanel {
 
@@ -58,7 +58,7 @@ public class AdminView extends LayoutPanel {
 
         EventBus eventBus = AppSite.getEventBus();
 
-        StyleManger.installTheme(new BlueColdTheme());
+        StyleManger.installTheme(new GainsboroTheme());
 
         setStyleName(AppSiteView.DEFAULT_STYLE_PREFIX);
 

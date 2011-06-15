@@ -14,6 +14,7 @@
 package com.propertyvista.admin.client.themes;
 
 import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.site.client.ui.crud.ListerBase;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.Selector;
@@ -352,6 +353,13 @@ public abstract class VistaAdminTheme extends VistaTheme {
         style.addProperty("padding", "0.5em 1em 0.5em 1.5em");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        // Lister filters:
+        prefix = ListerBase.DEFAULT_STYLE_PREFIX;
+        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filetersPanel));
+        style.addProperty("padding-top", "0.5em");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
         addStyle(style);
     }
 

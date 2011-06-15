@@ -16,7 +16,6 @@ package com.propertyvista.admin.client.activity;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -48,30 +47,11 @@ public class ReportActivity extends AbstractActivity {
         // just create a demo Report: 
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
         dmd.name().setValue("Test Report");
-        for (int i = 0; i < 3; ++i) {
-            GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
-            gmd.type().setValue(GadgetType.Demo);
-            gmd.name().setValue("Gadget #" + i);
-            gmd.column().setValue(Random.nextInt(2));
-            dmd.gadgets().add(gmd);
-        }
 
         GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.BuildingLister);
         gmd.name().setValue("PMC lister");
         gmd.column().setValue(-1);
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.BarChartDisplay);
-        gmd.name().setValue("Bar Chart Demo");
-        gmd.column().setValue(-1);
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.PieChartDisplay);
-        gmd.name().setValue("Pie Chart Demo");
-        gmd.column().setValue(0);
         dmd.gadgets().add(gmd);
 
         view.fillDashboard(dmd);
