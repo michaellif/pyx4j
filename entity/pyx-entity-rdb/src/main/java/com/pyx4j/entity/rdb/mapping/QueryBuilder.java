@@ -68,7 +68,7 @@ public class QueryBuilder<T extends IEntity> {
         this.multitenant = dialect.isMultitenant();
         boolean firstCriteria = true;
         if (multitenant) {
-            sql.append("ns = ?");
+            sql.append(alias).append(".ns = ?");
             firstCriteria = false;
         }
 
