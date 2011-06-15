@@ -14,6 +14,7 @@
 package com.propertyvista.domain.settings;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -34,6 +35,7 @@ public interface YardiConnection extends IEntity {
 
     IPrimitive<String> serverName();
 
+    @MemberColumn(name = "db")
     IPrimitive<String> database();
 
     IPrimitive<Platform> platform();
