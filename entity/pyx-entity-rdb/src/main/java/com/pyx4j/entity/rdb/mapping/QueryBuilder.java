@@ -66,13 +66,13 @@ public class QueryBuilder<T extends IEntity> {
         this.mainTableSqlAlias = alias;
         this.operationsMeta = operationsMeta;
         this.multitenant = dialect.isMultitenant();
-        if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
-            boolean firstCriteria = true;
+        boolean firstCriteria = true;
+        if (multitenant) {
+            sql.append("ns = ?");
+            firstCriteria = false;
+        }
 
-            if (multitenant) {
-                sql.append("ns = ?");
-                firstCriteria = false;
-            }
+        if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
 
             for (Criterion cr : criteria.getFilters()) {
                 if (firstCriteria) {
