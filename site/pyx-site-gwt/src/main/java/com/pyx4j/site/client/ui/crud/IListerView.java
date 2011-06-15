@@ -27,6 +27,8 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         public void applyFiletering(List<FilterData> filters);
 
+        public void edit(Class<? extends CrudAppPlace> editPlaceClass, Key itemID);
+
         public void editNew(Class<? extends CrudAppPlace> editPlaceClass, Key parentID);
     }
 

@@ -45,13 +45,19 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.crud.FilterData.Operands;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.ImageButton;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public abstract class ListerBase<E extends IEntity> extends VerticalPanel implements IListerView<E> {
+
+    public static String DEFAULT_STYLE_PREFIX = "vista_Lister";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        filetersPanel
+    }
 
     private static I18n i18n = I18nFactory.getI18n(ListerBase.class);
 
@@ -62,6 +68,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     protected final EntityListPanel<E> listPanel;
 
     protected Presenter presenter;
+
+    protected Button btnNewItem;
 
     public ListerBase(Class<E> clazz) {
 
@@ -93,25 +101,34 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         DOM.setStyleAttribute(listPanel.getDataTable().getElement(), "tableLayout", "auto");
 
         // -------------------------
+        HorizontalPanel newItem = new HorizontalPanel();
+        newItem.add(btnNewItem = new Button(i18n.tr("Add new lister item...")));
+        newItem.setCellHorizontalAlignment(btnNewItem, HasHorizontalAlignment.ALIGN_RIGHT);
+        btnNewItem.getElement().getStyle().setMarginRight(1, Unit.EM);
+        btnNewItem.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
+        btnNewItem.setVisible(false);
+        newItem.setWidth("100%");
 
-        HorizontalPanel functional = new HorizontalPanel();
-        functional.add(filters = new Filters());
+        HorizontalPanel filtersPanel = new HorizontalPanel();
+        filtersPanel.add(filters = new Filters());
 
         Widget widgetAddApply = createAddApplyPanel();
-        functional.add(widgetAddApply);
-        functional.setCellWidth(widgetAddApply, "25%");
-        functional.setCellVerticalAlignment(widgetAddApply, HasVerticalAlignment.ALIGN_BOTTOM);
-        functional.setWidth("100%");
+        filtersPanel.add(widgetAddApply);
+        filtersPanel.setCellWidth(widgetAddApply, "25%");
+        filtersPanel.setCellVerticalAlignment(widgetAddApply, HasVerticalAlignment.ALIGN_BOTTOM);
+        filtersPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.filetersPanel);
+        filtersPanel.setWidth("100%");
 
         // put UI bricks together:
-        add(functional);
+        add(newItem);
+        add(filtersPanel);
         add(listPanel);
         setWidth("100%");
         getElement().getStyle().setMarginTop(0.5, Unit.EM);
         getElement().getStyle().setMarginBottom(0.5, Unit.EM);
     }
 
-    public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> link) {
+    public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> editPlaceClass) {
         this(clazz);
 
         // add editing on double-click: 
@@ -123,18 +140,23 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 int selectedRow = dt.getSelectedRow();
                 if (selectedRow >= 0 && selectedRow < dt.getDataTableModel().getData().size()) {
                     E item = dt.getDataTableModel().getData().get(selectedRow).getEntity();
-
-                    CrudAppPlace place = AppSite.getHistoryMapper().createPlace(link);
-                    place.formViewerPlace(item.getPrimaryKey());
-                    AppSite.getPlaceController().goTo(place);
+                    presenter.edit(editPlaceClass, item.getPrimaryKey());
                 }
+            }
+        });
+
+        btnNewItem.setVisible(true);
+        btnNewItem.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.editNew(editPlaceClass, null);
             }
         });
     }
 
     private Widget createAddApplyPanel() {
 
-        Image btnAdd = new ImageButton(SiteImages.INSTANCE.add(), SiteImages.INSTANCE.addHover());
+        ImageButton btnAdd = new ImageButton(SiteImages.INSTANCE.add(), SiteImages.INSTANCE.addHover());
         btnAdd.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -153,7 +175,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
         HorizontalPanel addWrap = new HorizontalPanel();
         addWrap.add(btnAdd);
-        addWrap.setCellVerticalAlignment(btnAdd, HasVerticalAlignment.ALIGN_BOTTOM);
+        btnAdd.getElement().getStyle().setMarginTop(0.3, Unit.EM);
+        addWrap.setCellVerticalAlignment(btnAdd, HasVerticalAlignment.ALIGN_MIDDLE);
         HTML lblAdd = new HTML(i18n.tr("Add filter..."));
         lblAdd.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         addWrap.add(lblAdd);
@@ -164,6 +187,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         panel.add(btnApply);
         panel.setCellHorizontalAlignment(btnApply, HasHorizontalAlignment.ALIGN_RIGHT);
         btnApply.getElement().getStyle().setMarginRight(1, Unit.EM);
+        btnApply.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
         panel.setWidth("100%");
         return panel;
     }
