@@ -13,6 +13,8 @@
  */
 package com.propertyvista.server.config;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.pyx4j.config.server.NamespaceResolver;
@@ -38,11 +40,11 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         String[] parts = host.split("\\.");
         if (ApplicationMode.isDevelopment()) {
             if (parts.length >= 4) {
-                return parts[parts.length - 4];
+                return parts[parts.length - 4].toLowerCase(Locale.ENGLISH);
             }
         } else {
             if (parts.length >= 3) {
-                return parts[parts.length - 3];
+                return parts[parts.length - 3].toLowerCase(Locale.ENGLISH);
             }
         }
         return demoNamespace;

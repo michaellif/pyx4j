@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.server.services;
 
+import java.util.Locale;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public class PmcCrudServiceImpl implements PmcCrudService {
         Pmc dst = EntityFactory.create(Pmc.class);
         dst.setPrimaryKey(src.getPrimaryKey());
         dst.name().setValue(src.name().getValue());
-        dst.dnsName().setValue(src.dnsName().getValue());
+        dst.dnsName().setValue(src.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         return dst;
     }
 
