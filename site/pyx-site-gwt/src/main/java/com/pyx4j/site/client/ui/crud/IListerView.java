@@ -34,9 +34,11 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         public void applyFiletering(List<FilterData> filters);
 
-        public void edit(Class<? extends CrudAppPlace> editPlaceClass, Key itemID);
+        public void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
 
-        public void editNew(Class<? extends CrudAppPlace> editPlaceClass, Key parentID);
+        public void edit(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
+
+        public void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID);
     }
 
     void setPresenter(Presenter presenter);

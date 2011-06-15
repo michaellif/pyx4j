@@ -68,6 +68,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     private static I18n i18n = I18nFactory.getI18n(ListerBase.class);
 
+    protected Button btnNewItem;
+
     protected final Filters filters;
 
     protected Button btnApply;
@@ -75,8 +77,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     protected final EntityListPanel<E> listPanel;
 
     protected Presenter presenter;
-
-    protected Button btnNewItem;
 
     public ListerBase(Class<E> clazz) {
 
@@ -135,7 +135,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         getElement().getStyle().setMarginBottom(0.5, Unit.EM);
     }
 
-    public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> editPlaceClass) {
+    public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> itemOpenPlaceClass) {
+        this(clazz, itemOpenPlaceClass, false, true);
+    }
+
+    public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> itemOpenPlaceClass, final boolean openEditor, boolean allowAddNew) {
         this(clazz);
 
         // add editing on double-click: 
@@ -147,18 +151,24 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 int selectedRow = dt.getSelectedRow();
                 if (selectedRow >= 0 && selectedRow < dt.getDataTableModel().getData().size()) {
                     E item = dt.getDataTableModel().getData().get(selectedRow).getEntity();
-                    presenter.edit(editPlaceClass, item.getPrimaryKey());
+                    if (openEditor) {
+                        presenter.edit(itemOpenPlaceClass, item.getPrimaryKey());
+                    } else {
+                        presenter.view(itemOpenPlaceClass, item.getPrimaryKey());
+                    }
                 }
             }
         });
 
-        btnNewItem.setVisible(true);
-        btnNewItem.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.editNew(editPlaceClass, null);
-            }
-        });
+        if (allowAddNew) {
+            btnNewItem.setVisible(true);
+            btnNewItem.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    presenter.editNew(itemOpenPlaceClass, null);
+                }
+            });
+        }
     }
 
     private Widget createAddApplyPanel() {
