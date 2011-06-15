@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
@@ -62,6 +63,18 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel = new TabLayoutPanel(2.7, Unit.EM);
         tabPanel.setHeight("100%");
 
+// TODO - add this data processing later! :
+//        main.add(inject(proto().contactsList()), 15);
+
+// TODO - add this data processing later! :
+//      main.add(inject(proto().media()), 15);
+
+        tabPanel.add(new ScrollPanel(createGeneralTab()), "General");
+        tabPanel.add(new ScrollPanel(createDetailsTab()), "Details");
+        return tabPanel;
+    }
+
+    private Widget createGeneralTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
@@ -74,18 +87,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().info().residentialStories()), 5);
         injectAddress(split, proto().info().address());
         split.getRightPanel().add(inject(proto().complex()), 15);
-
-        VistaDecoratorsFlowPanel details = new VistaDecoratorsFlowPanel();
-        details.add(split = new VistaDecoratorsSplitFlowPanel());
-        split.getLeftPanel().add(inject(proto().info().structureType()), 15);
-        split.getLeftPanel().add(inject(proto().info().structureBuildYear()), 15);
-        split.getLeftPanel().add(inject(proto().info().constructionType()), 15);
-        split.getLeftPanel().add(inject(proto().info().foundationType()), 15);
-        split.getLeftPanel().add(inject(proto().info().floorType()), 15);
-        split.getRightPanel().add(inject(proto().info().landArea()), 15);
-        split.getRightPanel().add(inject(proto().info().waterSupply()), 15);
-        split.getRightPanel().add(inject(proto().info().centralAir()), 15);
-        split.getRightPanel().add(inject(proto().info().centralHeat()), 15);
 
         main.add(new CrmHeader2Decorator(proto().amenities().getMeta().getCaption()));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
@@ -123,16 +124,23 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getLeftPanel().add(inject(proto().contacts().website()), 23);
         split.getRightPanel().add(inject(proto().contacts().email().address()), split.getRightPanel().getDefaultLabelWidth(), 23, i18n.tr("Email Address"));
         SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this);
+        return main;
+    }
 
-// TODO - add this data processing later! :
-//        main.add(inject(proto().contactsList()), 15);
-
-// TODO - add this data processing later! :
-//      main.add(inject(proto().media()), 15);
-
-        tabPanel.add(new ScrollPanel(main), "General");
-        tabPanel.add(new ScrollPanel(details), "Details");
-        return tabPanel;
+    private Widget createDetailsTab() {
+        VistaDecoratorsFlowPanel details = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        details.add(split);
+        split.getLeftPanel().add(inject(proto().info().structureType()), 15);
+        split.getLeftPanel().add(inject(proto().info().structureBuildYear()), 15);
+        split.getLeftPanel().add(inject(proto().info().constructionType()), 15);
+        split.getLeftPanel().add(inject(proto().info().foundationType()), 15);
+        split.getLeftPanel().add(inject(proto().info().floorType()), 15);
+        split.getRightPanel().add(inject(proto().info().landArea()), 15);
+        split.getRightPanel().add(inject(proto().info().waterSupply()), 15);
+        split.getRightPanel().add(inject(proto().info().centralAir()), 15);
+        split.getRightPanel().add(inject(proto().info().centralHeat()), 15);
+        return details;
     }
 
     private void injectAddress(final VistaDecoratorsSplitFlowPanel split, final Address address) {
