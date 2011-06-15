@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.Anchor;
 
 public class AnchorButton extends Anchor {
 
-    public static String DEFAULT_STYLE_PREFIX = "vistaCrm_AnchorButton";
+    public static String DEFAULT_STYLE_PREFIX = "vistaAdmin_AnchorButton";
 
     public AnchorButton(String caption) {
         super(caption);
