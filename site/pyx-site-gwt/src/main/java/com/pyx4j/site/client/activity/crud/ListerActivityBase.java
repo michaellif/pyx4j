@@ -21,6 +21,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -28,10 +29,11 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.FilterData;
 import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
-
 
 public class ListerActivityBase<E extends IEntity> extends AbstractActivity implements IListerView.Presenter {
 
@@ -101,5 +103,12 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         }
 
         // TODO (VladS/L) - search using formed criteria - not implemented in service still...
+    }
+
+    @Override
+    public void editNew(Class<? extends CrudAppPlace> editPlaceClass, Key parentID) {
+        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(editPlaceClass);
+        place.formNewItemPlace(parentID);
+        AppSite.getPlaceController().goTo(place);
     }
 }

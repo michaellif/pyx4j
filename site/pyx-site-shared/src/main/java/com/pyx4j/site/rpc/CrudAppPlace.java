@@ -54,6 +54,8 @@ public abstract class CrudAppPlace extends AppPlace {
     public void formNewItemPlace(Key parentID) {
         setType(Type.editor);
         putArg(ARG_NAME_ITEM_ID, ARG_VALUE_NEW_ITEM);
-        putArg(ARG_NAME_PARENT_ID, parentID.toString());
+        if (parentID != null) {
+            putArg(ARG_NAME_PARENT_ID, parentID.toString());
+        }
     }
 }
