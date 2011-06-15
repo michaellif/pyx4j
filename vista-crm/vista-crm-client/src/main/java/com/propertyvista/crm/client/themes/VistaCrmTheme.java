@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.themes;
 
 import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.site.client.ui.crud.ListerBase;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.Selector;
@@ -390,6 +391,14 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bold");
         addStyle(style);
+
+        // Listerfileters:
+        prefix = ListerBase.DEFAULT_STYLE_PREFIX;
+        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filetersPanel));
+        style.addProperty("padding-top", "0.5em");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
+        addStyle(style);
+
     }
 
     protected void initDashboardReport() {
