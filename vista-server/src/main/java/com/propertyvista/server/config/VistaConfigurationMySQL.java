@@ -50,6 +50,11 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
     }
 
     @Override
+    public boolean isMultitenant() {
+        return true;
+    }
+
+    @Override
     public int minPoolSize() {
         return 3;
     }

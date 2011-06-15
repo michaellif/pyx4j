@@ -41,6 +41,11 @@ public class PreloadUsers extends AbstractDataPreloader {
     private int custCount;
 
     private User createUser(String email, VistaBehavior behavior) {
+        userCount++;
+        return createUser(email, email, behavior);
+    }
+
+    public static User createUser(String email, String password, VistaBehavior behavior) {
         if (!ApplicationMode.isDevelopment()) {
             EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -67,7 +72,6 @@ public class PreloadUsers extends AbstractDataPreloader {
 
         PersistenceServicesFactory.getPersistenceService().persist(credential);
 
-        userCount++;
         return user;
     }
 

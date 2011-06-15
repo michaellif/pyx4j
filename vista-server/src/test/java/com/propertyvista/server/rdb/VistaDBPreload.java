@@ -18,7 +18,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 public class VistaDBPreload {
@@ -30,6 +32,7 @@ public class VistaDBPreload {
         long start = System.currentTimeMillis();
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
+        NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
         log.info(conf.getDataPreloaders().preloadAll());
         log.info("Total time: " + TimeUtils.secSince(start));
     }

@@ -38,7 +38,7 @@ public class LoginViewForm extends CEntityForm<AuthenticationRequest> {
 
     @Override
     public IsWidget createContent() {
-        HTML header = new HTML(h2(i18n.tr("Login to Your Account")));
+        HTML header = new HTML(h2(i18n.tr("Login to Vista Administration")));
         header.getElement().getStyle().setMarginBottom(1, Unit.EM);
 
         FlowPanel main = new FlowPanel();

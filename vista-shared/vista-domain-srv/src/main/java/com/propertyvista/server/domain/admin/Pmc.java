@@ -11,18 +11,22 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain;
+package com.propertyvista.server.domain.admin;
 
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Pmc extends IEntity {
 
+    public static final String adminNamespace = "-vista\u0010-";
+
     @NotNull
     IPrimitive<String> name();
 
     @NotNull
+    @ReadOnly
     IPrimitive<String> dnsName();
 
 }

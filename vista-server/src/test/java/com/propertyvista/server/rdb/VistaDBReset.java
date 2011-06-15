@@ -28,7 +28,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.quartz.SchedulerHelper;
+import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 public class VistaDBReset {
@@ -38,6 +40,7 @@ public class VistaDBReset {
     public static void main(String[] args) {
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
+        NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) PersistenceServicesFactory.getPersistenceService();
         List<String> allClasses = EntityClassFinder.findEntityClasses();
         for (String className : allClasses) {

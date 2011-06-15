@@ -128,7 +128,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
             devLoginUserPrefix = DemoData.CRM_ADMIN_USER_PREFIX;
             break;
         case 'Q':
-            devLoginUserPrefix = DemoData.CRM_PROPERTY_MANAGER_USER_PREFIX;
+            devLoginUserPrefix = DemoData.CRM_ADMIN_USER_PREFIX;
             break;
         }
         if (devLoginUserPrefix != null) {

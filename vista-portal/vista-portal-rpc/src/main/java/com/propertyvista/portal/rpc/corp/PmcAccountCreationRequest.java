@@ -34,6 +34,11 @@ public interface PmcAccountCreationRequest extends IEntity {
     IPrimitive<String> password();
 
     @NotNull
+    @Caption(name = "Company name")
+    IPrimitive<String> name();
+
+    @NotNull
+    @Caption(name = "DNS name")
     IPrimitive<String> dnsName();
 
     /**
