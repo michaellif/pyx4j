@@ -21,7 +21,12 @@ public class VistaServerSideConfigurationDevTomcat extends VistaServerSideConfig
     }
 
     @Override
-    public String getMainApplicationURL() {
+    public String getApplicationURLDefault() {
         return "http://localhost:9000/vista/";
+    }
+
+    @Override
+    public String getApplicationURLNamespace() {
+        return ".dev.birchwoodsoftwaregroup.com:9000/vista/";
     }
 }

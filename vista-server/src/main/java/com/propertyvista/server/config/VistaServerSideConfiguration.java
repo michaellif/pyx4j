@@ -25,6 +25,7 @@ import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.VistaSMTPMailServiceConfig;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
@@ -53,7 +54,15 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
 
     @Override
     public String getMainApplicationURL() {
+        return "http://" + NamespaceManager.getNamespace() + getApplicationURLNamespace();
+    }
+
+    public String getApplicationURLDefault() {
         return "http://www.birchwoodsoftwaregroup.com/";
+    }
+
+    public String getApplicationURLNamespace() {
+        return ".22.birchwoodsoftwaregroup.com/";
     }
 
     @Override

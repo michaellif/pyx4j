@@ -74,8 +74,13 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     }
 
     @Override
-    public String getMainApplicationURL() {
+    public String getApplicationURLDefault() {
         return "http://localhost:8888/vista/";
+    }
+
+    @Override
+    public String getApplicationURLNamespace() {
+        return ".dev.birchwoodsoftwaregroup.com:8888/vista/";
     }
 
 }

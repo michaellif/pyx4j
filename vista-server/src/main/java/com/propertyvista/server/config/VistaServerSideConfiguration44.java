@@ -41,8 +41,13 @@ public class VistaServerSideConfiguration44 extends VistaServerSideConfiguration
     }
 
     @Override
-    public String getMainApplicationURL() {
+    public String getApplicationURLDefault() {
         return "http://www44.birchwoodsoftwaregroup.com/";
+    }
+
+    @Override
+    public String getApplicationURLNamespace() {
+        return ".44.birchwoodsoftwaregroup.com/";
     }
 
     @Override

@@ -20,8 +20,13 @@ import com.propertyvista.config.VistaSMTPMailServiceConfig;
 public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration {
 
     @Override
-    public String getMainApplicationURL() {
+    public String getApplicationURLDefault() {
         return "http://www22.birchwoodsoftwaregroup.com/";
+    }
+
+    @Override
+    public String getApplicationURLNamespace() {
+        return ".22.birchwoodsoftwaregroup.com/";
     }
 
     @Override
