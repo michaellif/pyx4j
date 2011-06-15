@@ -36,7 +36,7 @@
             <artifactId>vista-admin-server</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-crm-server</artifactId>
@@ -361,7 +361,8 @@
                                         <artifactId>${project.artifactId}</artifactId>
                                         <type>war</type>
                                         <pingURL>${vista-app-ping-url}/o/status</pingURL>
-                                        <pingTimeout>180000</pingTimeout>
+                                        <!-- 5 min -->
+                                        <pingTimeout>300000</pingTimeout>
                                         <properties>
                                             <context>${deployContext}</context>
                                         </properties>
