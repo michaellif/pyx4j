@@ -38,15 +38,15 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 public class EditorActivityBase<E extends IEntity> extends AbstractActivity implements IEditorView.Presenter {
 
-    private final IEditorView<E> view;
+    protected final IEditorView<E> view;
 
-    private final AbstractCrudService<E> service;
+    protected final AbstractCrudService<E> service;
 
-    private final Class<E> entityClass;
+    protected final Class<E> entityClass;
 
-    private Key entityID = null;
+    protected Key entityID = null;
 
-    private Key parentID = null;
+    protected Key parentID = null;
 
     public EditorActivityBase(IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         this.view = view;

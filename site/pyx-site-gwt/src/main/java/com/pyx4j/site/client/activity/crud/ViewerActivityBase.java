@@ -37,11 +37,11 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 public class ViewerActivityBase<E extends IEntity> extends AbstractActivity implements IViewerView.Presenter {
 
-    private final IViewerView<E> view;
+    protected final IViewerView<E> view;
 
-    private final AbstractCrudService<E> service;
+    protected final AbstractCrudService<E> service;
 
-    private Key entityId;
+    protected Key entityId;
 
     public ViewerActivityBase(IViewerView<E> view, AbstractCrudService<E> service) {
         this.view = view;

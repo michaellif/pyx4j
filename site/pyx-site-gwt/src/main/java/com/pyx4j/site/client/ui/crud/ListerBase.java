@@ -70,6 +70,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     protected Button btnNewItem;
 
+    protected final HorizontalPanel filtersPanel;
+
     protected final Filters filters;
 
     protected Button btnApply;
@@ -116,7 +118,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         btnNewItem.setVisible(false);
         newItem.setWidth("100%");
 
-        HorizontalPanel filtersPanel = new HorizontalPanel();
+        filtersPanel = new HorizontalPanel();
         filtersPanel.add(filters = new Filters());
 
         Widget widgetAddApply = createAddApplyPanel();
@@ -137,6 +139,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> itemOpenPlaceClass) {
         this(clazz, itemOpenPlaceClass, false, true);
+    }
+
+    public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> itemOpenPlaceClass, boolean readOnly) {
+        this(clazz, itemOpenPlaceClass, !readOnly, !readOnly);
     }
 
     public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> itemOpenPlaceClass, final boolean openEditor, boolean allowAddNew) {
@@ -169,6 +175,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 }
             });
         }
+    }
+
+    public void setFiltersVisible(boolean visible) {
+        filtersPanel.setVisible(visible);
     }
 
     private Widget createAddApplyPanel() {
