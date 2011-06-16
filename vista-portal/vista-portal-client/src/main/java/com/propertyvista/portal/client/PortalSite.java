@@ -28,6 +28,7 @@ import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.portal.client.ui.PortalView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 
 public class PortalSite extends VistaSite {
@@ -54,20 +55,21 @@ public class PortalSite extends VistaSite {
 
         SessionInactiveDialog.register();
 
-        ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
+        ClientContext.obtainAuthenticationData((com.pyx4j.security.rpc.AuthenticationService) GWT.create(AuthenticationService.class),
+                new DefaultAsyncCallback<Boolean>() {
 
-            @Override
-            public void onSuccess(Boolean result) {
-                getHistoryHandler().handleCurrentHistory();
-            }
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        getHistoryHandler().handleCurrentHistory();
+                    }
 
-            //TODO remove this when initial application message is implemented
-            @Override
-            public void onFailure(Throwable caught) {
-                getHistoryHandler().handleCurrentHistory();
-                super.onFailure(caught);
-            }
-        });
+                    //TODO remove this when initial application message is implemented
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        getHistoryHandler().handleCurrentHistory();
+                        super.onFailure(caught);
+                    }
+                });
 
     }
 
