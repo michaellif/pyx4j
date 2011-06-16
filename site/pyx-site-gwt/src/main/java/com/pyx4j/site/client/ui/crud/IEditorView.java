@@ -35,6 +35,12 @@ public interface IEditorView<E extends IEntity> extends IView<E> {
 
     void setPresenter(Presenter presenter);
 
+    enum EditMode {
+        existingItem, newItem
+    }
+
+    void setEditMode(EditMode mode);
+
     public void populate(E value);
 
     public E getValue();

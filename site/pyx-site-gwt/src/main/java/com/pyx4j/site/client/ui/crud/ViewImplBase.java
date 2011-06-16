@@ -23,6 +23,7 @@ package com.pyx4j.site.client.ui.crud;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
@@ -37,22 +38,45 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
         super(Unit.EM);
     }
 
+    public ViewImplBase(CEntityForm<E> form) {
+        this();
+        form.initialize();
+        setForm(form);
+    }
+
     public ViewImplBase(Widget header, double size) {
-        super(Unit.EM);
+        this();
         addNorth(header, size);
     }
 
-    protected void setForm(CEntityForm<E> form) {
-        this.form = form;
+    public ViewImplBase(Widget header, double size, CEntityForm<E> form) {
+        this(header, size);
         form.initialize();
+        setForm(form);
+    }
 
-        if (form.asWidget().getWidget() instanceof TabLayoutPanel) {
-            add(form);
-        } else {
-            add(new ScrollPanel(form.asWidget()));
+    /*
+     * Should be called by descendant upon initialisation.
+     */
+    protected void setForm(CEntityForm<E> form) {
+
+        if (getCenter() == null) { // finalise UI here:
+            add(new SimplePanel());
+            setSize("100%", "100%");
         }
 
-        setSize("100%", "100%");
+        if (this.form == form) {
+            return; // already!?.
+        }
+
+        this.form = form;
+
+        SimplePanel center = (SimplePanel) getCenter();
+        if (form.asWidget().getWidget() instanceof TabLayoutPanel) {
+            center.setWidget(this.form);
+        } else {
+            center.setWidget(new ScrollPanel(this.form.asWidget()));
+        }
     }
 
     public void populate(E value) {

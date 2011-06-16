@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.ui.crud.IEditorView;
+import com.pyx4j.site.client.ui.crud.IEditorView.EditMode;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
@@ -71,15 +72,15 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        view.setEditMode(isNewItem() ? EditMode.newItem : EditMode.existingItem);
         panel.setWidget(view);
         populate();
     }
 
     @Override
     public void populate() {
-        assert (entityID != null);
 
-        if (entityID.toString().equals(CrudAppPlace.ARG_VALUE_NEW_ITEM)) {
+        if (isNewItem()) {
             createNewEntity(new AsyncCallback<E>() {
 
                 @Override
@@ -121,9 +122,8 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void save() {
-        assert (entityID != null);
 
-        if (entityID.toString().equals(CrudAppPlace.ARG_VALUE_NEW_ITEM)) {
+        if (isNewItem()) {
             service.create(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
@@ -161,5 +161,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected void onSaveFail(Throwable caught) {
         throw new UnrecoverableClientError(caught);
+    }
+
+    protected boolean isNewItem() {
+        assert (entityID != null);
+        return (entityID.toString().equals(CrudAppPlace.ARG_VALUE_NEW_ITEM));
     }
 }

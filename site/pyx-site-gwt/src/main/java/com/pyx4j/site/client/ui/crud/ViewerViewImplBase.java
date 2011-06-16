@@ -25,6 +25,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 
 public class ViewerViewImplBase<E extends IEntity> extends ViewImplBase<E> implements IViewerView<E> {
@@ -37,13 +38,20 @@ public class ViewerViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
         super();
     }
 
+    public ViewerViewImplBase(CEntityForm<E> form) {
+        super(form);
+    }
+
     public ViewerViewImplBase(Widget header, double size) {
         super(header, size);
+    }
+
+    public ViewerViewImplBase(Widget header, double size, CEntityForm<E> form) {
+        super(header, size, form);
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
     }
-
 }

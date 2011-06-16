@@ -47,19 +47,22 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     public ListerViewImplBase(Widget header, double size) {
         super(Unit.EM);
         addNorth(header, size);
-        finalizeUi();
-    }
-
-    protected void finalizeUi() {
-        add(scroll);
-        setSize("100%", "100%");
     }
 
     /*
      * Should be called by descendant upon initialisation.
      */
     protected void setLister(ListerBase<E> lister) {
-        scroll.setWidget(this.lister = lister);
+        if (getCenter() == null) { // finalise UI here:
+            add(new ScrollPanel());
+            setSize("100%", "100%");
+        }
+
+        if (this.lister == lister) {
+            return; // already!?.
+        }
+
+        ((ScrollPanel) getCenter()).setWidget(this.lister = lister);
     }
 
     protected ListerBase<E> getLister() {
