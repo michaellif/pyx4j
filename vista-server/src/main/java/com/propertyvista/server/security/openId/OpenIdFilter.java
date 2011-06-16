@@ -69,7 +69,7 @@ public class OpenIdFilter implements Filter {
                 ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             } else {
                 String receivingURL = ServletUtils.getActualRequestURL(httprequest, true);
-                if (!receivingURL.equals(ServerSideConfiguration.instance().getMainApplicationURL())) {
+                if (!receivingURL.startsWith(ServerSideConfiguration.instance().getMainApplicationURL())) {
                     StringBuffer properUrl = new StringBuffer(ServerSideConfiguration.instance().getMainApplicationURL());
                     properUrl.append(httprequest.getServletPath().substring(1));
                     if (CommonsStringUtils.isStringSet(httprequest.getQueryString())) {
