@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.security.shared.CoreBehavior;
@@ -69,7 +70,12 @@ public class OpenIdFilter implements Filter {
             } else {
                 String receivingURL = ServletUtils.getActualRequestURL(httprequest, true);
                 if (!receivingURL.equals(ServerSideConfiguration.instance().getMainApplicationURL())) {
-                    ((HttpServletResponse) response).sendRedirect(ServerSideConfiguration.instance().getMainApplicationURL() + httprequest.getServletPath());
+                    StringBuffer properUrl = new StringBuffer(ServerSideConfiguration.instance().getMainApplicationURL());
+                    properUrl.append(httprequest.getServletPath().substring(1));
+                    if (CommonsStringUtils.isStringSet(httprequest.getQueryString())) {
+                        properUrl.append("?").append(httprequest.getQueryString());
+                    }
+                    ((HttpServletResponse) response).sendRedirect(properUrl.toString());
                 } else {
                     log.debug("authentication required for ServletPath [{}] [{}]", httprequest.getServletPath(), receivingURL);
                     OpenIdServlet.createResponsePage((HttpServletResponse) response, true, "Login via Google Apps",
