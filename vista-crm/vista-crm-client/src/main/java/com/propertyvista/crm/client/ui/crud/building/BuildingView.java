@@ -7,18 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-17
+ * Created on 2011-05-04
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
-import com.pyx4j.site.client.ui.crud.IViewerView;
+import com.pyx4j.site.client.ui.crud.IListerView;
 
-import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.dto.AptUnitDTO;
 
-public interface BuildingViewerView extends IViewerView<BuildingDTO>, BuildingView {
+public interface BuildingView {
 
-    interface Presenter extends IViewerView.Presenter, BuildingView.Presenter {
+    interface Presenter {
+        IListerView.Presenter getUnitPresenter();
     }
+
+    IListerView<AptUnitDTO> getUnitListerView();
 }

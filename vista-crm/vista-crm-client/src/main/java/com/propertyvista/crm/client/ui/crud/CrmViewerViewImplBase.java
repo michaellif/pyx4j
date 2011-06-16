@@ -21,7 +21,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.ViewerViewImplBase;
@@ -29,6 +28,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
+import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
 public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
@@ -41,10 +41,14 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     protected final String defaultCaption;
 
-    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CEntityForm<E> form) {
+    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         this.placeClass = placeClass;
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption, createActionsPanel()), 3);
+    }
+
+    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
+        this(placeClass);
         form.initialize();
         setForm(form);
     }
@@ -66,5 +70,9 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.EditButton);
         buttons.add(btnEdit);
         return buttons;
+    }
+
+    protected CrmEntityForm<E> getForm() {
+        return (CrmEntityForm<E>) form;
     }
 }

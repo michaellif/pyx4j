@@ -28,6 +28,10 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
         super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class);
     }
 
+    public UnitLister(boolean readOnly) {
+        super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, readOnly);
+    }
+
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<AptUnitDTO>> columnDescriptors, AptUnitDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));

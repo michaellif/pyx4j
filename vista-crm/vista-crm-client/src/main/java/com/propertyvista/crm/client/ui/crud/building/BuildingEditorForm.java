@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.site.client.ui.crud.IView;
 import com.pyx4j.widgets.client.TabLayoutPanel;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
@@ -47,12 +48,13 @@ import com.propertyvista.dto.RoofDTO;
 
 public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
-    public BuildingEditorForm() {
-        super(BuildingDTO.class, new CrmEditorsComponentFactory());
+    public BuildingEditorForm(IView<BuildingDTO> parentView) {
+        this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public BuildingEditorForm(IEditableComponentFactory factory) {
+    public BuildingEditorForm(IEditableComponentFactory factory, IView<BuildingDTO> parentView) {
         super(BuildingDTO.class, factory);
+        setParentView(parentView);
     }
 
     @Override
@@ -74,6 +76,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.add(new ScrollPanel(createLockersTab()), "Lockers");
         tabPanel.add(new ScrollPanel(createFinancialTab()), "Financials & Marketing");
         tabPanel.add(new ScrollPanel(createContactTab()), "Contact Information");
+
+        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), "Units");
 
         asWidget().setSize("100%", "100%");
         tabPanel.setSize("100%", "100%");

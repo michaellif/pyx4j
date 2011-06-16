@@ -19,11 +19,13 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
-
+import com.pyx4j.site.client.ui.crud.IView;
 
 public abstract class CrmEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     protected static I18n i18n = I18nFactory.getI18n(CrmEntityForm.class);
+
+    private IView<E> parentView;
 
     public CrmEntityForm(Class<E> rootClass) {
         super(rootClass, new CrmEditorsComponentFactory());
@@ -36,5 +38,13 @@ public abstract class CrmEntityForm<E extends IEntity> extends CEntityForm<E> {
     @Override
     public boolean isEditable() {
         return (this.factory instanceof CrmEditorsComponentFactory);
+    }
+
+    public void setParentView(IView<E> parentView) {
+        this.parentView = parentView;
+    }
+
+    protected IView<E> getParentView() {
+        return parentView;
     }
 }

@@ -16,20 +16,43 @@ package com.propertyvista.crm.client.activity.crud.building;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> {
+public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> implements BuildingViewerView.Presenter {
+
+    private final Presenter unitLister;
 
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(Place place) {
         super((BuildingViewerView) BuildingViewFactory.instance(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT
                 .create(BuildingCrudService.class));
         withPlace(place);
+
+        // internal lister activities:  
+        unitLister = new ListerActivityBase<AptUnitDTO>(((BuildingViewerView) view).getUnitListerView(),
+                (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class), AptUnitDTO.class);
+    }
+
+    @Override
+    public Presenter getUnitPresenter() {
+        return unitLister;
+    }
+
+    @Override
+    public void populate() {
+        super.populate();
+
+        // internal lister activities:  
+        unitLister.populateData(0);
     }
 }

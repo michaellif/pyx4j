@@ -46,10 +46,14 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
     protected final String defaultCaption;
 
-    public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CEntityForm<E> form) {
+    public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption), 3);
         addSouth(createButtons(), 4);
+    }
+
+    public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CEntityForm<E> form) {
+        this(placeClass);
         form.initialize();
         setForm(form);
     }
