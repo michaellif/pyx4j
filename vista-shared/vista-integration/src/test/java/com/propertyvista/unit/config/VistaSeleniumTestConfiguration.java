@@ -78,10 +78,10 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
             url.append(":9000/vista/");
             break;
         case www22:
-            url.append("www22.birchwoodsoftwaregroup.com/");
+            url.append("vista.22.birchwoodsoftwaregroup.com/");
             break;
         case www33:
-            url.append("www33.birchwoodsoftwaregroup.com/");
+            url.append("vista.33.birchwoodsoftwaregroup.com/");
             break;
         }
 
