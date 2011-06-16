@@ -25,6 +25,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
 import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.domain.Media;
@@ -42,6 +43,7 @@ import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.server.ptapp.util.Converter;
 
+@IgnoreSessionToken
 public class PortalSiteServicesImpl implements PortalSiteServices {
 
     @Override
