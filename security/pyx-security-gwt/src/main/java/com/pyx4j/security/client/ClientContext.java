@@ -205,7 +205,7 @@ public class ClientContext {
         }
         String sessionToken = authenticationResponse.getSessionToken();
         if (HTML5Storage.isSupported()) {
-            HTML5Storage.getSessionStorage().setItem(TOKEN_STORAGE_ATTRIBUTE, sessionToken);
+            HTML5Storage.getLocalStorage().setItem(TOKEN_STORAGE_ATTRIBUTE, sessionToken);
         }
         if (sessionToken != null) {
             if (sessionToken.equals("")) {
@@ -405,8 +405,9 @@ public class ClientContext {
             if (service != null) {
                 String sessionToken = null;
                 if (HTML5Storage.isSupported()) {
-                    sessionToken = HTML5Storage.getSessionStorage().getItem(TOKEN_STORAGE_ATTRIBUTE);
+                    sessionToken = HTML5Storage.getLocalStorage().getItem(TOKEN_STORAGE_ATTRIBUTE);
                 }
+                log.debug("authenticate {}", sessionToken);
                 service.authenticate(callback, sessionToken);
             } else {
                 if (executeBackground) {
