@@ -29,7 +29,8 @@ public class CaptionActivity extends AbstractActivity {
     private final CaptionView view;
 
     public CaptionActivity(AppPlace place) {
-        this.view = (CaptionView) PtAppViewFactory.instance(CaptionView.class);
+        view = (CaptionView) PtAppViewFactory.instance(CaptionView.class);
+        assert (view != null);
         withPlace(place);
     }
 

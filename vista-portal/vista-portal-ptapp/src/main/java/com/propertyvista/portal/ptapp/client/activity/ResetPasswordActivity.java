@@ -48,7 +48,8 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
     private String token;
 
     public ResetPasswordActivity(Place place) {
-        this.view = (NewPasswordView) PtAppViewFactory.instance(NewPasswordView.class);
+        view = (NewPasswordView) PtAppViewFactory.instance(NewPasswordView.class);
+        assert (view != null);
         view.setConversationType(ConversationType.RESET);
         view.setPresenter(this);
         withPlace(place);

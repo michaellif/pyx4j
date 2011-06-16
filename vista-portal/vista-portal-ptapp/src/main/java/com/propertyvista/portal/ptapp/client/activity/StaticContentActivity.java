@@ -39,7 +39,8 @@ public class StaticContentActivity extends AbstractActivity implements StaticCon
     private String content;
 
     public StaticContentActivity(AppPlace place) {
-        this.view = (StaticContentView) PtAppViewFactory.instance(StaticContentView.class);
+        view = (StaticContentView) PtAppViewFactory.instance(StaticContentView.class);
+        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }

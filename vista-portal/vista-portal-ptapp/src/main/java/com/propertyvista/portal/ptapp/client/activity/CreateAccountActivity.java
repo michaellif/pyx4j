@@ -41,7 +41,8 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
     private final CreateAccountView view;
 
     public CreateAccountActivity(Place place) {
-        this.view = (CreateAccountView) PtAppViewFactory.instance(CreateAccountView.class);
+        view = (CreateAccountView) PtAppViewFactory.instance(CreateAccountView.class);
+        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }

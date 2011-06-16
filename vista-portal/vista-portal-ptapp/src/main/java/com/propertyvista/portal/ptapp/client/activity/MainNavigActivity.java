@@ -33,7 +33,8 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     private final MainNavigView view;
 
     public MainNavigActivity(Place place) {
-        this.view = (MainNavigView) PtAppViewFactory.instance(MainNavigView.class);
+        view = (MainNavigView) PtAppViewFactory.instance(MainNavigView.class);
+        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }

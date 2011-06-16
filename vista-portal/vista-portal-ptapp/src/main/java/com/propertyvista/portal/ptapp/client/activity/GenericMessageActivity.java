@@ -39,7 +39,8 @@ public class GenericMessageActivity extends AbstractActivity implements GenericM
     private Message message;
 
     public GenericMessageActivity(Place place) {
-        this.view = (GenericMessageView) PtAppViewFactory.instance(GenericMessageView.class);
+        view = (GenericMessageView) PtAppViewFactory.instance(GenericMessageView.class);
+        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }

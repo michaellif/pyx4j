@@ -38,7 +38,8 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
     private final LoginView view;
 
     public LoginActivity(Place place) {
-        this.view = (LoginView) PtAppViewFactory.instance(LoginView.class);
+        view = (LoginView) PtAppViewFactory.instance(LoginView.class);
+        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }

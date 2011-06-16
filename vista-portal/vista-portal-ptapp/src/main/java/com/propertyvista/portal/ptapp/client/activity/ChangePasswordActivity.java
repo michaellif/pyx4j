@@ -41,7 +41,8 @@ public class ChangePasswordActivity extends AbstractActivity implements NewPassw
     private String token;
 
     public ChangePasswordActivity(Place place) {
-        this.view = (NewPasswordView) PtAppViewFactory.instance(NewPasswordView.class);
+        view = (NewPasswordView) PtAppViewFactory.instance(NewPasswordView.class);
+        assert (view != null);
         view.setConversationType(ConversationType.CHANGE);
         view.setPresenter(this);
         withPlace(place);

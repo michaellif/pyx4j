@@ -137,6 +137,8 @@ public class PtAppSiteView extends FlowPanel {
         DisplayPanel bottomDisplayPanel = new DisplayPanel();
         footerWrapper.add(bottomDisplayPanel);
 
+        // Activities<->Displays mapping:
+
         bind(new LogoActivityMapper(), logoDisplayPanel, eventBus);
         bind(new ActionsActivityMapper(), actionsDisplayPanel, eventBus);
         bind(new MainNavigActivityMapper(), mainNavigDisplayPanel, eventBus);
@@ -157,7 +159,6 @@ public class PtAppSiteView extends FlowPanel {
     class DisplayPanel extends SimplePanel {
         DisplayPanel() {
             String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
-
             setStyleName(prefix + StyleSuffix.Display);
         }
     }

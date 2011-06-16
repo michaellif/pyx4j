@@ -37,7 +37,8 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     private final TopRightActionsView view;
 
     public TopRightActionsActivity(Place place) {
-        this.view = (TopRightActionsView) PtAppViewFactory.instance(TopRightActionsView.class);
+        view = (TopRightActionsView) PtAppViewFactory.instance(TopRightActionsView.class);
+        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }

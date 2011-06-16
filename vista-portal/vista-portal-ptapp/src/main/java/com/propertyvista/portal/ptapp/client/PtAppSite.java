@@ -16,11 +16,12 @@ package com.propertyvista.portal.ptapp.client;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
+import com.pyx4j.gwt.commons.UncaughtHandler;
 
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.portal.ptapp.client.ui.PtAppSiteView;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
@@ -34,7 +35,7 @@ public class PtAppSite extends VistaSite {
     public void onSiteLoad() {
         super.onSiteLoad();
 
-        DefaultErrorHandlerDialog.register();
+        UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), new PtSiteMap.CreateAccount());
 

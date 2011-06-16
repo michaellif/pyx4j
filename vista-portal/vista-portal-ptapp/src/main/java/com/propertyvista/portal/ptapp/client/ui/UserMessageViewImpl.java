@@ -35,16 +35,13 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
     private final Map<UserMessageType, Holder> holders;
 
     public UserMessageViewImpl() {
-
         holders = new HashMap<UserMessageType, Holder>();
-
         for (UserMessageType type : UserMessageType.values()) {
 
             Holder holder = new Holder(type);
             holders.put(type, holder);
             add(holder);
         }
-
     }
 
     @Override

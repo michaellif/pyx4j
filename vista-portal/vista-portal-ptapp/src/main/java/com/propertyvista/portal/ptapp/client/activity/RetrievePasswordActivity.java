@@ -34,7 +34,8 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
     private final RetrievePasswordView view;
 
     public RetrievePasswordActivity(Place place) {
-        this.view = (RetrievePasswordView) PtAppViewFactory.instance(RetrievePasswordView.class);
+        view = (RetrievePasswordView) PtAppViewFactory.instance(RetrievePasswordView.class);
+        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }

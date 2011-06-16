@@ -31,7 +31,8 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
     private final SecondNavigView view;
 
     public SecondNavigActivity(Place place) {
-        this.view = (SecondNavigView) PtAppViewFactory.instance(SecondNavigView.class);
+        view = (SecondNavigView) PtAppViewFactory.instance(SecondNavigView.class);
+        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }
