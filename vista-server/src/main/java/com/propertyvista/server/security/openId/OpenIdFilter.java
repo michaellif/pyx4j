@@ -61,16 +61,22 @@ public class OpenIdFilter implements Filter {
             }
         } else {
             HttpServletRequest httprequest = (HttpServletRequest) request;
-            if ((!((VistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdrequired()) || httprequest.getServletPath().startsWith("/o/")) {
+            if ((!((VistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdrequired()) || httprequest.getServletPath().startsWith("/o/")
+                    || httprequest.getServletPath().equals("/favicon.ico")) {
                 chain.doFilter(request, response);
             } else if (httprequest.getRequestURI().endsWith(".js") || httprequest.getRequestURI().contains("/srv/")) {
                 ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             } else {
                 String receivingURL = ServletUtils.getActualRequestURL(httprequest, true);
-                log.debug("authentication required for ServletPath [{}] [{}]", httprequest.getServletPath(), receivingURL);
-                OpenIdServlet.createResponsePage((HttpServletResponse) response, true, "Login via Google Apps", OpenId.getDestinationUrl(OpenIdServlet.DOMAIN));
-                if ((Context.getVisit().getAttribute(REQUESTED_URL_ATTRIBUTE) == null) && (receivingURL != null) && (!receivingURL.endsWith("favicon.ico"))) {
-                    Context.getVisit().setAttribute(REQUESTED_URL_ATTRIBUTE, receivingURL);
+                if (!receivingURL.equals(ServerSideConfiguration.instance().getMainApplicationURL())) {
+                    ((HttpServletResponse) response).sendRedirect(ServerSideConfiguration.instance().getMainApplicationURL() + httprequest.getServletPath());
+                } else {
+                    log.debug("authentication required for ServletPath [{}] [{}]", httprequest.getServletPath(), receivingURL);
+                    OpenIdServlet.createResponsePage((HttpServletResponse) response, true, "Login via Google Apps",
+                            OpenId.getDestinationUrl(OpenIdServlet.DOMAIN));
+                    if ((Context.getVisit().getAttribute(REQUESTED_URL_ATTRIBUTE) == null) && (receivingURL != null) && (!receivingURL.endsWith("favicon.ico"))) {
+                        Context.getVisit().setAttribute(REQUESTED_URL_ATTRIBUTE, receivingURL);
+                    }
                 }
             }
         }
