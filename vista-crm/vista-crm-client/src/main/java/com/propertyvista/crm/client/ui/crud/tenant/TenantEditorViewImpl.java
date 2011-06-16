@@ -19,8 +19,6 @@ import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> implements TenantEditorView {
     public TenantEditorViewImpl() {
-        super(CrmSiteMap.Tenants.Tenant.class);
-        setForm(new TenantEditorForm());
+        super(CrmSiteMap.Tenants.Tenant.class, new TenantEditorForm());
     }
-
 }

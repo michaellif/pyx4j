@@ -47,8 +47,6 @@ import com.propertyvista.dto.RoofDTO;
 
 public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
-    private TabLayoutPanel tabPanel;
-
     public BuildingEditorForm() {
         super(BuildingDTO.class, new CrmEditorsComponentFactory());
     }
@@ -60,17 +58,18 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel = new TabLayoutPanel(2.7, Unit.EM);
-        tabPanel.setHeight("100%");
+        // TODO - add this data processing later! :
+        //  main.add(inject(proto().contactsList()), 15);
+        // TODO - add this data processing later! :
+        //  main.add(inject(proto().media()), 15);
 
-// TODO - add this data processing later! :
-//        main.add(inject(proto().contactsList()), 15);
-
-// TODO - add this data processing later! :
-//      main.add(inject(proto().media()), 15);
+        TabLayoutPanel tabPanel = new TabLayoutPanel(2.7, Unit.EM);
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), "General");
         tabPanel.add(new ScrollPanel(createDetailsTab()), "Details");
+
+        asWidget().setSize("100%", "100%");
+        tabPanel.setSize("100%", "100%");
         return tabPanel;
     }
 

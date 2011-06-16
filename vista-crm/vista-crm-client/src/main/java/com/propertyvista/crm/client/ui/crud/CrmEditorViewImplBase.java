@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.client.AppSite;
@@ -45,10 +46,12 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
     protected final String defaultCaption;
 
-    public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
+    public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CEntityForm<E> form) {
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption), 3);
         addSouth(createButtons(), 4);
+        form.initialize();
+        setForm(form);
     }
 
     @Override

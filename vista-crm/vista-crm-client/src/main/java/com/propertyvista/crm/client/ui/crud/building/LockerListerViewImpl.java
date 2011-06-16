@@ -20,7 +20,7 @@ import com.propertyvista.domain.property.asset.Locker;
 public class LockerListerViewImpl extends CrmListerViewImplBase<Locker> implements LockerListerView {
 
     public LockerListerViewImpl() {
-        super(new CrmSiteMap.Properties.Locker());
+        super(CrmSiteMap.Properties.Locker.class);
         setLister(new LockerLister());
     }
 }

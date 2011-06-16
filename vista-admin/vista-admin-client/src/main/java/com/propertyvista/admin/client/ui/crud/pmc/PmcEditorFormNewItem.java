@@ -16,20 +16,19 @@ package com.propertyvista.admin.client.ui.crud.pmc;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.CLabel;
 
 import com.propertyvista.admin.client.ui.components.AdminEditorsComponentFactory;
 import com.propertyvista.admin.client.ui.components.AdminEntityForm;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 
-public class PmcEditorForm extends AdminEntityForm<PmcDTO> {
+public class PmcEditorFormNewItem extends AdminEntityForm<PmcDTO> {
 
-    public PmcEditorForm() {
+    public PmcEditorFormNewItem() {
         super(PmcDTO.class, new AdminEditorsComponentFactory());
     }
 
-    public PmcEditorForm(IEditableComponentFactory factory) {
+    public PmcEditorFormNewItem(IEditableComponentFactory factory) {
         super(PmcDTO.class, factory);
     }
 
@@ -38,7 +37,9 @@ public class PmcEditorForm extends AdminEntityForm<PmcDTO> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
         main.add(inject(proto().name()), 15);
-        main.add(inject(proto().dnsName(), new CLabel()), 15);
+        main.add(inject(proto().dnsName()), 15);
+        main.add(inject(proto().email()), 15);
+        main.add(inject(proto().password()), 15);
 
         main.setWidth("100%");
         return main;

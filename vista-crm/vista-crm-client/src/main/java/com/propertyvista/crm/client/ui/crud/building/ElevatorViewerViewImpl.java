@@ -21,7 +21,6 @@ import com.propertyvista.dto.ElevatorDTO;
 public class ElevatorViewerViewImpl extends CrmViewerViewImplBase<ElevatorDTO> implements ElevatorViewerView {
 
     public ElevatorViewerViewImpl() {
-        super(CrmSiteMap.Properties.Elevator.class);
-        setForm(new ElevatorEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Properties.Elevator.class, new ElevatorEditorForm(new CrmViewersComponentFactory()));
     }
 }

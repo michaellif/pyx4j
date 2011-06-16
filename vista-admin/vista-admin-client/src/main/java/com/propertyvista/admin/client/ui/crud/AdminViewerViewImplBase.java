@@ -21,6 +21,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.ViewerViewImplBase;
@@ -40,10 +41,12 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
 
     protected final String defaultCaption;
 
-    public AdminViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
+    public AdminViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CEntityForm<E> form) {
         this.placeClass = placeClass;
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new AdminHeaderDecorator(defaultCaption, createActionsPanel()), 3);
+        form.initialize();
+        setForm(form);
     }
 
     @Override

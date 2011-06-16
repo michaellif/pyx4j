@@ -20,7 +20,7 @@ import com.propertyvista.dto.BuildingDTO;
 public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> implements BuildingListerView {
 
     public BuildingListerViewImpl() {
-        super(new CrmSiteMap.Properties.Building());
+        super(CrmSiteMap.Properties.Building.class);
         setLister(new BuildingLister());
     }
 }

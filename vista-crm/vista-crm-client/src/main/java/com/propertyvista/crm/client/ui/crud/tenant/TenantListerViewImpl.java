@@ -20,7 +20,7 @@ import com.propertyvista.domain.tenant.Tenant;
 public class TenantListerViewImpl extends CrmListerViewImplBase<Tenant> implements TenantListerView {
 
     public TenantListerViewImpl() {
-        super(new CrmSiteMap.Tenants.Tenant());
+        super(CrmSiteMap.Tenants.Tenant.class);
         setLister(new TenantLister());
     }
 }

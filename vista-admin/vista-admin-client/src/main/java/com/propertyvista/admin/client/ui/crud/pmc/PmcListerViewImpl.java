@@ -20,7 +20,7 @@ import com.propertyvista.admin.rpc.PmcDTO;
 public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implements PmcListerView {
 
     public PmcListerViewImpl() {
-        super(new AdminSiteMap.Properties.PMC());
+        super(AdminSiteMap.Properties.PMC.class);
         setLister(new PmcLister());
     }
 }

@@ -19,7 +19,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.ListerViewImplBase;
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
 
@@ -27,7 +27,7 @@ public class AdminListerViewImplBase<E extends IEntity> extends ListerViewImplBa
 
     private static I18n i18n = I18nFactory.getI18n(AdminListerViewImplBase.class);
 
-    public AdminListerViewImplBase(AppPlace place) {
-        super(new AdminHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(place).getCaption()), 3);
+    public AdminListerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
+        super(new AdminHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption()), 3);
     }
 }

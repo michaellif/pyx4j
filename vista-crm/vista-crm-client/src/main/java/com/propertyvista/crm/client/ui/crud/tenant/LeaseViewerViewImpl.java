@@ -21,7 +21,6 @@ import com.propertyvista.dto.LeaseDTO;
 public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
 
     public LeaseViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Lease.class);
-        setForm(new LeaseEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Tenants.Lease.class, new LeaseEditorForm(new CrmViewersComponentFactory()));
     }
 }

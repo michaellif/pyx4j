@@ -21,7 +21,6 @@ import com.propertyvista.dto.BuildingDTO;
 public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> implements BuildingViewerView {
 
     public BuildingViewerViewImpl() {
-        super(CrmSiteMap.Properties.Building.class);
-        setForm(new BuildingEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Properties.Building.class, new BuildingEditorForm(new CrmViewersComponentFactory()));
     }
 }

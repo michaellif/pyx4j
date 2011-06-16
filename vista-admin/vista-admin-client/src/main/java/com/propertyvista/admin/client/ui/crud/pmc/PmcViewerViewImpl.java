@@ -21,7 +21,6 @@ import com.propertyvista.admin.rpc.PmcDTO;
 public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implements PmcViewerView {
 
     public PmcViewerViewImpl() {
-        super(AdminSiteMap.Properties.PMC.class);
-        setForm(new PmcEditorForm(new AdminViewersComponentFactory()));
+        super(AdminSiteMap.Properties.PMC.class, new PmcEditorForm(new AdminViewersComponentFactory()));
     }
 }

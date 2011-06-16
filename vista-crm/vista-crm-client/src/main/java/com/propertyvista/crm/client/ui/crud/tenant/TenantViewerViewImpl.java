@@ -21,7 +21,6 @@ import com.propertyvista.dto.TenantDTO;
 public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> implements TenantViewerView {
 
     public TenantViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Tenant.class);
-        setForm(new TenantEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Tenants.Tenant.class, new TenantEditorForm(new CrmViewersComponentFactory()));
     }
 }
