@@ -67,6 +67,13 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), "General");
         tabPanel.add(new ScrollPanel(createDetailsTab()), "Details");
+        tabPanel.add(new ScrollPanel(createElevatorsTab()), "Elevators");
+        tabPanel.add(new ScrollPanel(createBoilersTab()), "Boilers");
+        tabPanel.add(new ScrollPanel(createRoofsTab()), "Roofs");
+        tabPanel.add(new ScrollPanel(createParkingsTab()), "Parkings");
+        tabPanel.add(new ScrollPanel(createLockersTab()), "Lockers");
+        tabPanel.add(new ScrollPanel(createFinancialTab()), "Financials & Marketing");
+        tabPanel.add(new ScrollPanel(createContactTab()), "Contact Information");
 
         asWidget().setSize("100%", "100%");
         tabPanel.setSize("100%", "100%");
@@ -90,23 +97,24 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(new CrmHeader2Decorator(proto().amenities().getMeta().getCaption()));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
 
-        main.add(new CrmHeader2Decorator(proto().elevators().getMeta().getCaption()));
-        main.add(inject(proto().elevators(), createElevatorsListEditor()));
+        return main;
+    }
 
-        main.add(new CrmHeader2Decorator(proto().boilers().getMeta().getCaption()));
-        main.add(inject(proto().boilers(), createBoilersListEditor()));
+    private Widget createContactTab() {
+        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        panel.add(split);
+        split.getLeftPanel().add(inject(proto().contacts().website()), 23);
+        split.getRightPanel().add(inject(proto().contacts().email().address()), split.getRightPanel().getDefaultLabelWidth(), 23, i18n.tr("Email Address"));
+        SubtypeInjectors.injectPhones(panel, proto().contacts().phones(), this);
+        return panel;
+    }
 
-        main.add(new CrmHeader2Decorator(proto().roofs().getMeta().getCaption()));
-        main.add(inject(proto().roofs(), createRoofsListEditor()));
+    private Widget createFinancialTab() {
+        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        panel.add(split);
 
-        main.add(new CrmHeader2Decorator(proto().parkings().getMeta().getCaption()));
-        main.add(inject(proto().parkings(), createParkingsListEditor()));
-
-        main.add(new CrmHeader2Decorator(proto().lockers().getMeta().getCaption()));
-        main.add(inject(proto().lockers(), createLockerAreasListEditor()));
-
-        main.add(new CrmHeader1Decorator(i18n.tr("Financials")));
-        main.add(split = new VistaDecoratorsSplitFlowPanel());
         split.getLeftPanel().add(inject(proto().financial().dateAquired()), 8.2);
         split.getLeftPanel().add(inject(proto().financial().purchasePrice()), 5);
         split.getLeftPanel().add(inject(proto().financial().marketPrice()), 5);
@@ -114,16 +122,40 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().financial().lastAppraisalValue()), 5);
         split.getRightPanel().add(inject(proto().financial().currency().name()), split.getRightPanel().getDefaultLabelWidth(), 10, i18n.tr("Currency Name"));
 
-        main.add(new CrmHeader1Decorator(i18n.tr("Marketing")));
-        main.add(split = new VistaDecoratorsSplitFlowPanel());
-        SubtypeInjectors.injectMarketing(main, split, proto().marketing(), this);
+        panel.add(new CrmHeader1Decorator(i18n.tr("Marketing")));
+        panel.add(split = new VistaDecoratorsSplitFlowPanel());
+        SubtypeInjectors.injectMarketing(panel, split, proto().marketing(), this);
+        return panel;
+    }
 
-        main.add(new CrmHeader1Decorator(i18n.tr("Contact Information")));
-        main.add(split = new VistaDecoratorsSplitFlowPanel());
-        split.getLeftPanel().add(inject(proto().contacts().website()), 23);
-        split.getRightPanel().add(inject(proto().contacts().email().address()), split.getRightPanel().getDefaultLabelWidth(), 23, i18n.tr("Email Address"));
-        SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this);
-        return main;
+    private Widget createLockersTab() {
+        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
+        panel.add(inject(proto().lockers(), createLockerAreasListEditor()));
+        return panel;
+    }
+
+    private Widget createParkingsTab() {
+        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
+        panel.add(inject(proto().parkings(), createParkingsListEditor()));
+        return panel;
+    }
+
+    private Widget createRoofsTab() {
+        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
+        panel.add(inject(proto().roofs(), createRoofsListEditor()));
+        return panel;
+    }
+
+    private Widget createBoilersTab() {
+        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
+        panel.add(inject(proto().boilers(), createBoilersListEditor()));
+        return panel;
+    }
+
+    private Widget createElevatorsTab() {
+        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
+        panel.add(inject(proto().elevators(), createElevatorsListEditor()));
+        return panel;
     }
 
     private Widget createDetailsTab() {
