@@ -19,55 +19,22 @@ import java.util.Calendar;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.commons.StringDebugId;
-import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CCompDebugId;
-import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.selenium.D;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.datepicker.DatePickerIDs;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsIds;
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.User;
-import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.generator.PTGenerator;
-import com.propertyvista.portal.server.generator.SharedData;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 
-public class DatePickerTest extends WizardBaseSeleniumTestCase {
+public class DatePickerTest extends DatePickerBaseTest {
 
-    private final IDebugId gridId = new CompositeDebugId(DatePickerIDs.DatePicker, "0");
-
-    private final IDebugId backMonth = DatePickerIDs.MonthSelectorButton_BackwardsMonth;
-
-    private final IDebugId backYear = DatePickerIDs.MonthSelectorButton_BackwardsYear;
-
-    private final IDebugId forwardYear = DatePickerIDs.MonthSelectorButton_ForwardYear;
-
-    private final IDebugId datePickerTextBoxId = D.id(proto(UnitSelection.class).rentStart());
+    private final IDebugId datePickerTextBoxId = D.id(D.id(proto(PotentialTenantList.class).tenants(), 0), D.id(proto(PotentialTenantInfo.class).birthDate()));
 
     private final IDebugId datePickerId = D.id(datePickerTextBoxId, CCompDebugId.trigger);
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        SharedData.init();
-        selenium.setFocusOnGetValue(true);
-    }
-
     public void testDatePicker() throws Exception {
-        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED);
-        User user = generator.createUser(1);
-
-        selenium.click(VistaFormsDebugId.Auth_Login);
-        selenium.type(D.id(proto(AuthenticationRequest.class).email()), user.email().getValue());
-        selenium.type(D.id(proto(AuthenticationRequest.class).password()), user.email().getValue());
-        selenium.click(CrudDebugId.Criteria_Submit);
-        assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Apartment.class)));
-
+        login();
         validateTextBoxPropagation();
         validateValidationMessage();
         validateDatePickerNavigation();
@@ -88,19 +55,12 @@ public class DatePickerTest extends WizardBaseSeleniumTestCase {
     private void validateValidationMessage() {
         Calendar calendar = Calendar.getInstance();
         IDebugId validation = new CompositeDebugId(datePickerTextBoxId, VistaDecoratorsIds.Validation.name());
-        calendar.set(2000, 1, 21);
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Apartment.class));
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, proto(AptUnitDTO.class).unitType()));
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, "leaseTerm_12"));
-
         navigateToDateAndClick(datePickerId, calendar);
         //TODO Leon
-        assertVisible(validation.debugId());
-
-        //TODO Leon
+        //not sure how to do it yet
+        //assertVisible(validation.debugId());
         calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, 1);
-        calendar.add(Calendar.DATE, -2);
+        calendar.add(Calendar.YEAR, -20);
         navigateToDateAndClick(datePickerId, calendar);
         assertNotVisible(validation.debugId());
     }
@@ -135,61 +95,6 @@ public class DatePickerTest extends WizardBaseSeleniumTestCase {
         testDate.get(Calendar.DATE);
         navigateToDateAndClick(datePickerId, testDate);
         assertEquals(formatter.format(testDate.getTime()), selenium.getValue(datePickerTextBoxId));
-    }
-
-    //---------------Helper methods------------------
-
-    private String getYear(Calendar calendar) {
-        return Integer.toString(calendar.get(Calendar.YEAR));
-    }
-
-    private String getMonth(Calendar calendar) {
-        return DatePickerIDs.monthName[calendar.get(Calendar.MONTH)];
-    }
-
-    private void navigateToDateAndClick(IDebugId id, Calendar calendar) {
-        navigateToDate(id, calendar);
-        selenium.click(getCellDebugId(calendar));
-    }
-
-    private void navigateToDate(IDebugId id, Calendar calendar) {
-        selenium.click(id);
-        navigateToDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH));
-    }
-
-    private IDebugId getCellDebugId(Calendar calendar) {
-        return new StringDebugId(gridId.debugId() + "_" + Integer.toString(calendar.get(Calendar.WEEK_OF_MONTH)) + "_"
-                + Integer.toString(calendar.get(Calendar.DAY_OF_WEEK) - 1));
-    }
-
-    private void navigateToDate(int year, int month) {
-        selenium.getText(DatePickerIDs.MonthSelectorLabel_Month);
-        int currentYear;
-        String currentMonth;
-        IDebugId button;
-
-        button = backMonth;
-        currentMonth = selenium.getText(DatePickerIDs.MonthSelectorLabel_Month);
-        while (!currentMonth.equals(DatePickerIDs.monthName[month])) {
-            selenium.click(button);
-            currentMonth = selenium.getText(DatePickerIDs.MonthSelectorLabel_Month);
-        }
-
-        if (year < 1000) {
-            year += 1900;
-        }
-        currentYear = Integer.parseInt(selenium.getText(DatePickerIDs.MonthSelectorLabel_Year));
-        if (currentYear < year) {
-            button = forwardYear;
-        } else {
-            button = backYear;
-        }
-
-        while (currentYear != year) {
-            selenium.click(button);
-            currentYear = Integer.parseInt(selenium.getText(DatePickerIDs.MonthSelectorLabel_Year));
-        }
-
     }
 
 }
