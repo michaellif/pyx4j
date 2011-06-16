@@ -37,6 +37,7 @@ import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.rpc.impl.Serializer;
 
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent.When;
@@ -163,7 +164,7 @@ public class RPCManager {
                     caught = wrapper.getOriginal();
                 }
                 if (caught instanceof IncompatibleRemoteServiceException) {
-                    UncaughtHandler.onUnrecoverableError(caught, "RPC." + GWTJava5Helper.getSimpleName(serviceInterface));
+                    UncaughtHandler.onUnrecoverableError(caught, "RPC." + serviceName(request, serviceInterface));
                 } else if (!(caught instanceof RuntimeExceptionSerializable) && (callback instanceof RecoverableCall)
                         && (RECOVERABLE_CALL_RETRY_MAX >= retryAttempt)) {
                     log.error("Try to recover {} from service invocation error {}", serviceInterface, caught);
@@ -174,7 +175,7 @@ public class RPCManager {
                     log.error("Server error", caught);
                 }
             } catch (Throwable e) {
-                UncaughtHandler.onUnrecoverableError(e, "UIonF." + GWTJava5Helper.getSimpleName(serviceInterface));
+                UncaughtHandler.onUnrecoverableError(e, "UIonF." + serviceName(request, serviceInterface));
             } finally {
                 callback = null;
                 request = null;
@@ -199,13 +200,21 @@ public class RPCManager {
                     this.callback.onSuccess(result);
                 }
             } catch (Throwable e) {
-                UncaughtHandler.onUnrecoverableError(e, "UIonS." + GWTJava5Helper.getSimpleName(serviceInterface));
+                UncaughtHandler.onUnrecoverableError(e, "UIonS." + serviceName(request, serviceInterface));
             } finally {
                 callback = null;
                 request = null;
                 fireStatusChangeEvent(When.SUCCESS, executeBackground, serviceInterface, callback, System.currentTimeMillis() - requestStartTime);
             }
         }
+    }
+
+    private static String serviceName(Serializable request, Class<? extends Service<?, ?>> serviceInterface) {
+        String name = GWTJava5Helper.getSimpleName(serviceInterface);
+        if (request instanceof IHaveServiceCallMarker) {
+            name += "." + ((IHaveServiceCallMarker) request).getServiceCallMarker();
+        }
+        return name;
     }
 
     private static void fireStatusChangeEvent(When when, boolean executeBackground, Class<? extends Service<?, ?>> serviceDescriptorClass,
