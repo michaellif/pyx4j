@@ -14,15 +14,24 @@
 package com.propertyvista.portal.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.ui.LoginView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
     LoginView view;
@@ -44,8 +53,38 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
     }
 
     @Override
-    public void gotoResidentsNavig() {
+    public void gotoResidents() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Navigator());
+
+    }
+
+    @Override
+    public void login(AuthenticationRequest request) {
+        AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
+
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                ClientContext.authenticated(result);
+                gotoResidents();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof ChallengeVerificationRequired) {
+                    view.challengeVerificationRequired();
+                }
+                throw new UnrecoverableClientError(caught);
+            }
+
+        };
+
+        ((AuthenticationService) GWT.create(AuthenticationService.class)).authenticate(callback, request);
+
+    }
+
+    @Override
+    public void gotoRetrievePassword() {
+        // TODO Auto-generated method stub. Finish
 
     }
 }

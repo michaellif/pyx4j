@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface ResidentsView extends IsWidget {
+public interface LoginInvitationView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 

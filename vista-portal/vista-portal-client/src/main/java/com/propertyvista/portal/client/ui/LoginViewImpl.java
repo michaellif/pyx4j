@@ -13,31 +13,93 @@
  */
 package com.propertyvista.portal.client.ui;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.security.rpc.AuthenticationRequest;
+
+import com.propertyvista.common.domain.DemoData;
+
 public class LoginViewImpl extends SimplePanel implements LoginView {
     private Presenter presenter;
 
+    private static I18n i18n = I18nFactory.getI18n(LoginViewImpl.class);
+
+    private final CEntityForm<AuthenticationRequest> form;
+
+    private HandlerRegistration handlerRegistration;
+
+    private int devCount = 1;
+
+    private int devKey = 0;
+
     public LoginViewImpl() {
+
         FlowPanel panel = new FlowPanel();
         HTML label = new HTML("This form should allow submitting authentification request via https<br>");
         panel.add(label);
 
-        Button btn = new Button("Sign In");
-        btn.addClickHandler(new ClickHandler() {
+        form = new LoginViewForm();
+        form.initialize();
+        form.get(form.proto().captcha()).setVisible(false);
+        form.populate(null);
+        panel.add(form);
+
+        Button loginButton = new Button("Sign In");
+        loginButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        loginButton.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.gotoResidentsNavig();
+                submit();
             }
 
         });
-        panel.add(btn);
+
+        loginButton.getElement().getStyle().setMarginLeft(90, Unit.PX);
+        loginButton.getElement().getStyle().setMarginRight(1, Unit.EM);
+        loginButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
+        panel.add(loginButton);
+
+        CHyperlink forgotPassword = new CHyperlink(null, new Command() {
+
+            @Override
+            public void execute() {
+                presenter.gotoRetrievePassword();
+            }
+        });
+
+        forgotPassword.setValue(i18n.tr("Retrieve password"));
+        panel.add(forgotPassword);
+
+        if (ApplicationMode.isDevelopment()) {
+            panel.add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
+            panel.add(new HTML("Press <i>Ctrl+Q</i> to login"));
+        }
+
+        getElement().getStyle().setMarginTop(1, Unit.EM);
+        getElement().getStyle().setMarginBottom(1, Unit.EM);
 
         setWidget(panel);
     }
@@ -46,6 +108,72 @@ public class LoginViewImpl extends SimplePanel implements LoginView {
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
 
+    }
+
+    @Override
+    public void challengeVerificationRequired() {
+        form.get(form.proto().captcha()).setVisible(true);
+
+    }
+
+    private void submit() {
+        form.setVisited(true);
+        if (!form.isValid()) {
+            throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+        }
+        presenter.login(form.getValue());
+    }
+
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+            @Override
+            public void onPreviewNativeEvent(NativePreviewEvent event) {
+                if ((ApplicationMode.isDevelopment()) && (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey())) {
+                    setDevLoginValues(event.getNativeEvent(), event.getNativeEvent().getKeyCode());
+                }
+                if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
+                    submit();
+                }
+            }
+        });
+    }
+
+    private void setDevLoginValues(NativeEvent event, int nativeKeyCode) {
+        String devLoginUserPrefix = null;
+        int max = DemoData.MAX_CUSTOMERS;
+        switch (nativeKeyCode) {
+        case 'A':
+            devLoginUserPrefix = DemoData.CRM_ADMIN_USER_PREFIX;
+            break;
+        case 'Q':
+            devLoginUserPrefix = DemoData.CRM_CUSTOMER_USER_PREFIX;
+            break;
+        }
+        if (devLoginUserPrefix != null) {
+            if (devKey != nativeKeyCode) {
+                devCount = 1;
+            } else {
+                devCount++;
+                if (devCount > max) {
+                    devCount = 1;
+                }
+            }
+            devKey = nativeKeyCode;
+            String devLogin = devLoginUserPrefix + CommonsStringUtils.d000(devCount) + DemoData.USERS_DOMAIN;
+            event.preventDefault();
+            form.get(form.proto().email()).setValue(devLogin);
+            form.get(form.proto().password()).setValue(devLogin);
+        }
+
+    }
+
+    @Override
+    protected void onUnload() {
+        super.onUnload();
+        handlerRegistration.removeHandler();
+        devCount = 1;
     }
 
 }

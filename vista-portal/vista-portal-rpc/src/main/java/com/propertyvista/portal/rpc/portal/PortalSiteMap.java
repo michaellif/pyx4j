@@ -57,7 +57,9 @@ public class PortalSiteMap implements SiteMap {
         public static class Login extends AppPlace {
         }
 
-        @PlaceProperties(caption = "Sign In")
+        public static class LoginInvitation extends AppPlace {
+        }
+
         @NavigationItem(navigLabel = "navig")
         public static class Navigator extends AppPlace {
             @PlaceProperties(caption = "Tenant Profile")

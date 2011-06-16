@@ -312,9 +312,29 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
     }
 
     @Override
-    public void changePlace(Place place) {
+    public void changePlace(Place place, List<NavigItem> secondaryNavigation) {
         NavigTab mainTag = tabsHolder.getTabByPlace(place);
         NavigTab selectedTab = tabsHolder.getSelectedTab();
+
+        if (secondaryNavigation != null && secondaryNavigation.size() > 0) {
+            NavigTabList secondaryTabsHolder = new NavigTabList(MenuType.Secondary);
+            selectedTab.setSecondaryNavig(secondaryTabsHolder);
+            secondaryTabsHolder.setActive(selectedTab.isSelected());
+
+            for (NavigItem secondaryItem : secondaryNavigation) {
+                NavigTab navigtab = new NavigTab(secondaryItem, SECONDARY_STYLE_PREFIX);
+                Place p = secondaryItem.getPlace();
+//TODO finish
+/*
+ * if (p != null && secondarySelected != null && p.equals(secondarySelected)) {
+ * navigtab.select();
+ * }
+ */
+                secondaryTabsHolder.add(navigtab);
+            }
+            // secondaryTabsHolder.setActive(true);
+            menuContainer.add(secondaryTabsHolder);
+        }
 
         if (mainTag != null) {//main navig tab
             if (selectedTab != null) {
@@ -336,7 +356,9 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                     if (secondarySelectedTab != null) {
                         secondarySelectedTab.deselect();
                     }
-                    secondaryTab.select();
+                    if (secondaryTab != null) {
+                        secondaryTab.select();
+                    }
                 }
 
             }

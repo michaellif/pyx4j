@@ -16,10 +16,10 @@ package com.propertyvista.portal.client.activity;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.pyx4j.site.rpc.AppPlace;
+
 import com.propertyvista.portal.domain.site.PageDescriptor;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-
-import com.pyx4j.site.rpc.AppPlace;
 
 public class NavigItem {
 
@@ -27,7 +27,7 @@ public class NavigItem {
 
     private final String caption;
 
-    private final List<NavigItem> secondaryNavigation;
+    private List<NavigItem> secondaryNavigation;
 
     public NavigItem(AppPlace place, String caption) {
         this.place = place;
@@ -72,6 +72,14 @@ public class NavigItem {
     public void addSecondaryNavigItem(NavigItem item) {
         if (item != null) {
             secondaryNavigation.add(item);
+        }
+    }
+
+    public void setSecondaryNavigation(List<NavigItem> secondaryNavigation) {
+        if (secondaryNavigation == null) {
+            this.secondaryNavigation = new LinkedList<NavigItem>();
+        } else {
+            this.secondaryNavigation = secondaryNavigation;
         }
     }
 

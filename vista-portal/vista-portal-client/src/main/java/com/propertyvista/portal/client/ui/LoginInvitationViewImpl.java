@@ -20,10 +20,10 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class ResidentsViewImpl extends SimplePanel implements ResidentsView {
+public class LoginInvitationViewImpl extends SimplePanel implements LoginInvitationView {
     private Presenter presenter;
 
-    public ResidentsViewImpl() {
+    public LoginInvitationViewImpl() {
 
         FlowPanel panel = new FlowPanel();
         HTML message = new HTML("Upon selecting <b>Login</b> button the portal has to be reloaded via https<br>"

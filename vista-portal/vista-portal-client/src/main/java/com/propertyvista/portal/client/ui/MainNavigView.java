@@ -18,8 +18,6 @@ import java.util.List;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.site.rpc.AppPlace;
-
 import com.propertyvista.portal.client.activity.NavigItem;
 
 public interface MainNavigView extends IsWidget {
@@ -28,14 +26,10 @@ public interface MainNavigView extends IsWidget {
 
     public void setMainNavig(List<NavigItem> items);
 
-    public void changePlace(Place place);
+    public void changePlace(Place place, List<NavigItem> secondaryNavigation);
 
     public interface MainNavigPresenter {
         public void navigTo(Place place);
-
-        public String getNavigLabel(AppPlace place);
-
-        public String getCaption(AppPlace place);
 
         public Place getWhere();
 

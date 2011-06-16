@@ -19,14 +19,16 @@ import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.client.activity.ApartmentDetailsActivity;
 import com.propertyvista.portal.client.activity.FloorplanDetailsActivity;
+import com.propertyvista.portal.client.activity.LoginActivity;
+import com.propertyvista.portal.client.activity.LoginInvitationActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
 import com.propertyvista.portal.client.activity.PaymentActivity;
 import com.propertyvista.portal.client.activity.PropertyMapActivity;
-import com.propertyvista.portal.client.activity.ResidentsActivity;
 import com.propertyvista.portal.client.activity.SearchApartmentActivity;
 import com.propertyvista.portal.client.activity.TenantProfileActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -46,8 +48,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                 Activity activity = null;
                 if (place instanceof PortalSiteMap.FindApartment) {
                     activity = new SearchApartmentActivity(place);
-                } else if (place instanceof PortalSiteMap.Residents) {
-                    activity = new ResidentsActivity(place);
+                } else if (place instanceof PortalSiteMap.Residents && !ClientContext.isAuthenticated()
+                        || place instanceof PortalSiteMap.Residents.LoginInvitation) {
+                    activity = new LoginInvitationActivity(place);
                 } else if (place instanceof PortalSiteMap.FindApartment.PropertyMap) {
                     activity = new PropertyMapActivity(place);
                 } else if (place instanceof PortalSiteMap.FindApartment.ApartmentDetails) {
@@ -62,6 +65,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PaymentActivity(place);
                 } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {
                     activity = new FloorplanDetailsActivity(place);
+                } else if (place instanceof PortalSiteMap.Residents.Login) {
+                    activity = new LoginActivity(place);
                 }
 
                 callback.onSuccess(activity);

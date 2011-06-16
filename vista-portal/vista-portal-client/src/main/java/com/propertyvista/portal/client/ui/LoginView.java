@@ -15,13 +15,21 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.security.rpc.AuthenticationRequest;
+
 public interface LoginView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
+    public void challengeVerificationRequired();
+
     public interface Presenter {
 
-        public void gotoResidentsNavig();
+        void login(AuthenticationRequest value);
+
+        public void gotoResidents();
+
+        public void gotoRetrievePassword();
 
     }
 

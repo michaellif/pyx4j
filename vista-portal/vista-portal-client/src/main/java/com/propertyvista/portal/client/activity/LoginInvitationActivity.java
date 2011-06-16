@@ -20,15 +20,15 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.client.ui.ResidentsView;
+import com.propertyvista.portal.client.ui.LoginInvitationView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class ResidentsActivity extends AbstractActivity implements ResidentsView.Presenter {
-    private final ResidentsView view;
+public class LoginInvitationActivity extends AbstractActivity implements LoginInvitationView.Presenter {
+    private final LoginInvitationView view;
 
-    public ResidentsActivity(Place place) {
-        this.view = (ResidentsView) PortalViewFactory.instance(ResidentsView.class);
+    public LoginInvitationActivity(Place place) {
+        this.view = (LoginInvitationView) PortalViewFactory.instance(LoginInvitationView.class);
         this.view.setPresenter(this);
         withPlace(place);
     }
@@ -39,7 +39,7 @@ public class ResidentsActivity extends AbstractActivity implements ResidentsView
 
     }
 
-    public ResidentsActivity withPlace(Place place) {
+    public LoginInvitationActivity withPlace(Place place) {
         return this;
     }
 

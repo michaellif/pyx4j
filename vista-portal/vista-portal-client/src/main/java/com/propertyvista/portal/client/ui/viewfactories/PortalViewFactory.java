@@ -27,8 +27,8 @@ import com.propertyvista.portal.client.ui.MaintenanceView;
 import com.propertyvista.portal.client.ui.MaintenanceViewImpl;
 import com.propertyvista.portal.client.ui.PaymentView;
 import com.propertyvista.portal.client.ui.PaymentViewImpl;
-import com.propertyvista.portal.client.ui.ResidentsView;
-import com.propertyvista.portal.client.ui.ResidentsViewImpl;
+import com.propertyvista.portal.client.ui.LoginInvitationView;
+import com.propertyvista.portal.client.ui.LoginInvitationViewImpl;
 import com.propertyvista.portal.client.ui.StaticPageView;
 import com.propertyvista.portal.client.ui.StaticPageViewImpl;
 import com.propertyvista.portal.client.ui.TenantProfileView;
@@ -52,8 +52,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new MainNavigViewImpl());
             } else if (PaymentView.class.equals(type)) {
                 map.put(type, new PaymentViewImpl());
-            } else if (ResidentsView.class.equals(type)) {
-                map.put(type, new ResidentsViewImpl());
+            } else if (LoginInvitationView.class.equals(type)) {
+                map.put(type, new LoginInvitationViewImpl());
             } else if (StaticPageView.class.equals(type)) {
                 map.put(type, new StaticPageViewImpl());
             } else if (TenantProfileView.class.equals(type)) {
