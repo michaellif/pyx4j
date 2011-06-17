@@ -94,6 +94,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         // editor forms:
         style = new Style(Selector.valueOf(VistaDecoratorsFlowPanel.DEFAULT_STYLE_NAME));
         style.addProperty("color", ThemeColor.TEXT);
+        style.addProperty("padding", "0.7em");
         addStyle(style);
     }
 

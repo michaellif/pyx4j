@@ -32,22 +32,23 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
     private boolean showMandatory = true;
 
     public VistaDecoratorsFlowPanel() {
+        setStyleName(DEFAULT_STYLE_NAME);
     }
 
     public VistaDecoratorsFlowPanel(double defaultLabelWidth) {
+        this();
         this.defaultLabelWidth = defaultLabelWidth;
-        setStyleName(DEFAULT_STYLE_NAME);
     }
 
     public VistaDecoratorsFlowPanel(boolean readOnlyMode) {
+        this();
         this.readOnlyMode = readOnlyMode;
-        setStyleName(DEFAULT_STYLE_NAME);
     }
 
     public VistaDecoratorsFlowPanel(boolean readOnlyMode, double defaultLabelWidth) {
+        this();
         this.readOnlyMode = readOnlyMode;
         this.defaultLabelWidth = defaultLabelWidth;
-        setStyleName(DEFAULT_STYLE_NAME);
     }
 
     public void add(final CComponent<?> component, double componentWidth) {

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.common.client.ui.decorations;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 public class VistaDecoratorsSplitFlowPanel extends HorizontalPanel {
@@ -24,6 +25,9 @@ public class VistaDecoratorsSplitFlowPanel extends HorizontalPanel {
     public VistaDecoratorsSplitFlowPanel() {
         this.add(left = new VistaDecoratorsFlowPanel(12));
         this.add(right = new VistaDecoratorsFlowPanel(12));
+
+        left.getElement().getStyle().setPadding(0, Unit.EM);
+        right.getElement().getStyle().setPadding(0, Unit.EM);
 
         left.setWidth("35em");
         right.setWidth("35em");
