@@ -30,9 +30,15 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
     public interface Presenter {
 
+        void setParentFiltering(Key parentID);
+
+        public List<FilterData> getPreDefinedFilters();
+
+        public void setPreDefinedFilters(List<FilterData> filters);
+
         public void populateData(final int pageNumber);
 
-        public void applyFiletering(List<FilterData> filters);
+        public void applyFiltering(List<FilterData> filters);
 
         public void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
 

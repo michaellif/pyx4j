@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.client.activity.crud;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -30,6 +31,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
@@ -38,6 +40,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.FilterData;
+import com.pyx4j.site.client.ui.crud.FilterData.Operands;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
@@ -49,6 +52,8 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     private final AbstractCrudService<E> service;
 
     private final Class<E> entityClass;
+
+    private List<FilterData> preDefinedFilters;
 
     public ListerActivityBase(IListerView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         this.view = view;
@@ -65,6 +70,25 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
         populateData(0);
+    }
+
+    @Override
+    public void setParentFiltering(Key parentID) {
+        if (preDefinedFilters == null) {
+            preDefinedFilters = new ArrayList<FilterData>();
+        }
+
+        preDefinedFilters.add(new FilterData(EntityFactory.getEntityMeta(entityClass).getOwnerMemberName(), Operands.is, parentID.toString()));
+    }
+
+    @Override
+    public List<FilterData> getPreDefinedFilters() {
+        return preDefinedFilters;
+    }
+
+    @Override
+    public void setPreDefinedFilters(List<FilterData> preDefinedFilters) {
+        this.preDefinedFilters = preDefinedFilters;
     }
 
     @Override
@@ -87,9 +111,16 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void applyFiletering(List<FilterData> filters) {
+    public void applyFiltering(List<FilterData> filters) {
+        List<FilterData> currentFilters = filters;
+        if (preDefinedFilters != null) {
+            currentFilters = new ArrayList<FilterData>();
+            currentFilters.addAll(preDefinedFilters);
+            currentFilters.addAll(filters);
+        }
+
         EntityQueryCriteria<E> criteria = new EntityQueryCriteria<E>(entityClass);
-        for (FilterData fd : filters) {
+        for (FilterData fd : currentFilters) {
             switch (fd.getOperand()) {
             case is:
                 criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.EQUAL, fd.getValue()));

@@ -195,7 +195,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.applyFiletering(filters.getFiltersData());
+                presenter.applyFiltering(filters.getFiltersData());
             }
         });
         btnApply.setEnabled(false);

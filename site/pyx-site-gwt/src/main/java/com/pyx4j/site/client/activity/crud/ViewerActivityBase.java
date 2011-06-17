@@ -65,7 +65,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         service.retrieve(new AsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
-                view.populate(result);
+                onPopulateSuccess(result);
             }
 
             @Override
@@ -73,6 +73,10 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
                 throw new UnrecoverableClientError(caught);
             }
         }, entityId);
+    }
+
+    public void onPopulateSuccess(E result) {
+        view.populate(result);
     }
 
     @Override

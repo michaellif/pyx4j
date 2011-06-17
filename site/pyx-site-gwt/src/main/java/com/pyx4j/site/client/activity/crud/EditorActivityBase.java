@@ -82,12 +82,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
         if (isNewItem()) {
             createNewEntity(new AsyncCallback<E>() {
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    throw new UnrecoverableClientError(caught);
-                }
-
                 @Override
                 public void onSuccess(E entity) {
                     if (parentID != null) {
@@ -99,13 +93,17 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                     view.populate(entity);
                 }
 
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new UnrecoverableClientError(caught);
+                }
             });
 
         } else {
             service.retrieve(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
-                    view.populate(result);
+                    onPopulateSuccess(result);
                 }
 
                 @Override
@@ -118,6 +116,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected void createNewEntity(AsyncCallback<E> callback) {
         callback.onSuccess(EntityFactory.create(entityClass));
+    }
+
+    public void onPopulateSuccess(E result) {
+        view.populate(result);
     }
 
     @Override
