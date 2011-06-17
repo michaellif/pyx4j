@@ -28,16 +28,14 @@ public class FilterData {
     @Translatable
     public enum Operands {
         is,
-
-        isNot,
-
-        contains,
 //        
 // TODO ? These criterias aren't supported by DB search engine currently, so postpone implementation ?          
+//        isNot,
+//        contains,
 //        doesNotContain,
 //        beginsWith,
 //        endsWith,
-
+//        
         lessThen,
 
         greaterThen;

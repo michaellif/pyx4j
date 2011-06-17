@@ -125,12 +125,12 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
             case is:
                 criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.EQUAL, fd.getValue()));
                 break;
-            case isNot:
-                criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.NOT_EQUAL, fd.getValue()));
-                break;
-            case contains:
-                criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.IN, fd.getValue()));
-                break;
+//            case isNot:
+//                criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.NOT_EQUAL, fd.getValue()));
+//                break;
+//            case contains:
+//                criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.IN, fd.getValue()));
+//                break;
             case greaterThen:
                 criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.GREATER_THAN, fd.getValue()));
                 break;
