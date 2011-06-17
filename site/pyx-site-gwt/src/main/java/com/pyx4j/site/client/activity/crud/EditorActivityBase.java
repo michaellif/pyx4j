@@ -158,11 +158,13 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     protected void onSaveSuccess(E result) {
-        History.back();
+        view.onSaveSuccess();
     }
 
     protected void onSaveFail(Throwable caught) {
-        throw new UnrecoverableClientError(caught);
+        if (!view.onSaveFail(caught)) {
+            throw new UnrecoverableClientError(caught);
+        }
     }
 
     protected boolean isNewItem() {

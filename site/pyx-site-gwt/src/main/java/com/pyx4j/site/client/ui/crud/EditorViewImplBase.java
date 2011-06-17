@@ -63,4 +63,13 @@ public class EditorViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
     public E getValue() {
         return form.getValue();
     }
+
+    @Override
+    public void onSaveSuccess() {
+    }
+
+    @Override
+    public boolean onSaveFail(Throwable caught) {
+        return false;
+    }
 }

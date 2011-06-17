@@ -44,4 +44,10 @@ public interface IEditorView<E extends IEntity> extends IView<E> {
     public void populate(E value);
 
     public E getValue();
+
+    void onSaveSuccess();
+
+    // returns TRUE in case of processed event and 
+    // no need to re-throw the exception further.
+    boolean onSaveFail(Throwable caught);
 }
