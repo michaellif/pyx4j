@@ -70,9 +70,8 @@ public class BuildingEditorActivity extends EditorActivityBase<BuildingDTO> impl
     }
 
     @Override
-    public void populate() {
-        super.populate();
-
-        delegate.populate();
+    public void onPopulateSuccess(BuildingDTO result) {
+        super.onPopulateSuccess(result);
+        delegate.populate(result.getPrimaryKey());
     }
 }

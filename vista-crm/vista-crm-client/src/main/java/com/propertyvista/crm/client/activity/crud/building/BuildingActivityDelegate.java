@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
@@ -99,13 +100,23 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
         return lockerAreaLister;
     }
 
-    public void populate() {
-        // internal lister activities:  
+    public void populate(Key parentID) {
+        unitLister.setParentFiltering(parentID);
         unitLister.populateData(0);
+
+        elevatorLister.setParentFiltering(parentID);
         elevatorLister.populateData(0);
+
+        boilerLister.setParentFiltering(parentID);
         boilerLister.populateData(0);
+
+        roofLister.setParentFiltering(parentID);
         roofLister.populateData(0);
+
+        parkingLister.setParentFiltering(parentID);
         parkingLister.populateData(0);
+
+        lockerAreaLister.setParentFiltering(parentID);
         lockerAreaLister.populateData(0);
     }
 }
