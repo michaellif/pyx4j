@@ -19,10 +19,14 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.client.SecurityControllerEvent;
+import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.ui.TopRightActionsView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 
@@ -41,11 +45,43 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        updateAuthenticatedView();
+        eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+            @Override
+            public void onSecurityContextChange(SecurityControllerEvent event) {
+                updateAuthenticatedView();
+            }
+        });
     }
 
     @Override
     public PlaceController getPlaceController() {
         return AppSite.getPlaceController();
+    }
+
+    @Override
+    public Place getWhere() {
+        return AppSite.getPlaceController().getWhere();
+    }
+
+    @Override
+    public void logout() {
+        ClientContext.logout(null);
+
+    }
+
+    @Override
+    public void login() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Login());
+
+    }
+
+    private void updateAuthenticatedView() {
+        if (ClientContext.isAuthenticated()) {
+            view.onLogedIn(ClientContext.getUserVisit().getName());
+        } else {
+            view.onLogedOut();
+        }
     }
 
 }

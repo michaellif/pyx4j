@@ -29,6 +29,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -96,15 +97,15 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
     public void setMainNavig(List<NavigItem> items) {
         Place secondarySelected = null;
         for (NavigItem item : items) {
-            List<NavigItem> secondaryNavig = item.getSecondaryNavigation();
+            List<NavigItem> secondaryItems = item.getSecondaryNavigation();
             NavigTab mainNavigTab = new NavigTab(item, DEFAULT_STYLE_PREFIX);
             tabsHolder.add(mainNavigTab);
 
             Place currentPlace = presenter.getWhere();
             if (item.getPlace().equals(currentPlace)) {
                 mainNavigTab.select();
-            } else if (secondaryNavig != null) {
-                for (NavigItem secondary : secondaryNavig) {
+            } else if (secondaryItems != null) {
+                for (NavigItem secondary : secondaryItems) {
                     if (secondary.getPlace().equals(currentPlace)) {
                         mainNavigTab.select();
                         secondarySelected = secondary.getPlace();
@@ -112,24 +113,31 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                     }
                 }
             }
-
-            if (secondaryNavig.size() > 0) {
-                NavigTabList secondaryTabsHolder = new NavigTabList(MenuType.Secondary);
-                mainNavigTab.setSecondaryNavig(secondaryTabsHolder);
-                secondaryTabsHolder.setActive(mainNavigTab.isSelected());
-
-                for (NavigItem secondaryItem : secondaryNavig) {
-                    NavigTab navigtab = new NavigTab(secondaryItem, SECONDARY_STYLE_PREFIX);
-                    Place p = secondaryItem.getPlace();
-                    if (p != null && secondarySelected != null && p.equals(secondarySelected)) {
-                        navigtab.select();
-                    }
-                    secondaryTabsHolder.add(navigtab);
-                }
-
-                menuContainer.add(secondaryTabsHolder);
+            if (secondaryItems != null && !secondaryItems.isEmpty()) {
+                setSecondaryNavig(item.getPlace(), secondaryItems);
             }
 
+            //TODO
+            /*
+             * for (NavigItem secondaryItem : secondaryNavig) {
+             * NavigTab navigtab = new NavigTab(secondaryItem, SECONDARY_STYLE_PREFIX);
+             * Place p = secondaryItem.getPlace();
+             * if (p != null && secondarySelected != null && p.equals(secondarySelected))
+             * {
+             * navigtab.select();
+             * }
+             */
+        }
+    }
+
+    @Override
+    public void setSecondaryNavig(Place mainItemPlace, List<NavigItem> secondayItems) {
+        if (mainItemPlace == null) {
+            return;
+        }
+        NavigTab mainTab = tabsHolder.getTabByPlace(mainItemPlace);
+        if (mainTab != null) {
+            mainTab.setSecondaryNavig(secondayItems, menuContainer);
         }
     }
 
@@ -305,36 +313,33 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             return secondaryNavig;
         }
 
-        public void setSecondaryNavig(NavigTabList secondaryNavig) {
-            this.secondaryNavig = secondaryNavig;
+        public void setSecondaryNavig(List<NavigItem> secondaryItems) {
+            if (secondaryNavig != null) {
+                secondaryNavig.removeFromParent();
+                secondaryNavig = null;
+            }
+            if (secondaryItems != null && !secondaryItems.isEmpty()) {
+                secondaryNavig = new NavigTabList(MenuType.Secondary);
+                secondaryNavig.setActive(isSelected());
+
+                for (NavigItem secondaryItem : secondaryItems) {
+                    secondaryNavig.add(new NavigTab(secondaryItem, SECONDARY_STYLE_PREFIX));
+                }
+            }
         }
 
+        public void setSecondaryNavig(List<NavigItem> secondaryItems, HasWidgets parent) {
+            setSecondaryNavig(secondaryItems);
+            if (parent != null && secondaryNavig != null) {
+                parent.add(secondaryNavig);
+            }
+        }
     }
 
     @Override
-    public void changePlace(Place place, List<NavigItem> secondaryNavigation) {
+    public void changePlace(Place place) {
         NavigTab mainTag = tabsHolder.getTabByPlace(place);
         NavigTab selectedTab = tabsHolder.getSelectedTab();
-
-        if (secondaryNavigation != null && secondaryNavigation.size() > 0) {
-            NavigTabList secondaryTabsHolder = new NavigTabList(MenuType.Secondary);
-            selectedTab.setSecondaryNavig(secondaryTabsHolder);
-            secondaryTabsHolder.setActive(selectedTab.isSelected());
-
-            for (NavigItem secondaryItem : secondaryNavigation) {
-                NavigTab navigtab = new NavigTab(secondaryItem, SECONDARY_STYLE_PREFIX);
-                Place p = secondaryItem.getPlace();
-//TODO finish
-/*
- * if (p != null && secondarySelected != null && p.equals(secondarySelected)) {
- * navigtab.select();
- * }
- */
-                secondaryTabsHolder.add(navigtab);
-            }
-            // secondaryTabsHolder.setActive(true);
-            menuContainer.add(secondaryTabsHolder);
-        }
 
         if (mainTag != null) {//main navig tab
             if (selectedTab != null) {

@@ -27,6 +27,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.client.SecurityControllerEvent;
+import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -40,11 +42,13 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
     private static boolean started = false;
 
-    private static boolean residentsNavigPopulated = false;
-
     private final MainNavigView view;
 
     private final Place place;
+
+    private static final Place ResidentsPlace = new PortalSiteMap.Residents();
+
+    private static List<NavigItem> items;
 
     private static I18n i18n = I18nFactory.getI18n(MainNavigActivity.class);
 
@@ -62,14 +66,31 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+            @Override
+            public void onSecurityContextChange(SecurityControllerEvent event) {
+                if (items != null && !items.isEmpty()) {
+                    for (NavigItem item : items) {
+                        Place place = item.getPlace();
+
+                        if (place != null && place.equals(ResidentsPlace))
+                            if (ClientContext.isAuthenticated()) {
+                                view.setSecondaryNavig(item.getPlace(), getSecondaryNavig(PageDescriptor.Type.residence));
+                            } else {
+                                view.setSecondaryNavig(place, null);
+                            }
+                    }
+                }
+            }
+        });
         if (started) {
-            view.changePlace(place, getSecondaryNavig(PageDescriptor.Type.residence));
+            view.changePlace(place);
 
         } else {
             PortalSite.getPortalSiteServices().retrieveMainNavig(new DefaultAsyncCallback<PageDescriptor>() {
                 @Override
                 public void onSuccess(PageDescriptor navig) {
-                    List<NavigItem> items = new ArrayList<NavigItem>();
+                    items = new ArrayList<NavigItem>();
                     for (PageDescriptor descriptor : navig.childPages()) {
                         if (PageDescriptor.Type.staticContent.equals(descriptor.type().getValue())) {
                             NavigItem mainNavig = new NavigItem(descriptor.caption().getStringView(), descriptor.caption().getStringView());
@@ -85,7 +106,9 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
                         } else {
                             AppPlace place = NavigItem.convertTypeToPlace(descriptor.type().getValue());
                             NavigItem mainNavig = new NavigItem(place, AppSite.getHistoryMapper().getPlaceInfo(place).getCaption());
-                            mainNavig.setSecondaryNavigation(getSecondaryNavig(descriptor.type().getValue()));
+                            if (ClientContext.isAuthenticated()) {
+                                mainNavig.setSecondaryNavigation(getSecondaryNavig(descriptor.type().getValue()));
+                            }
                             items.add(mainNavig);
                         }
                     }
@@ -108,12 +131,11 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
     private List<NavigItem> getSecondaryNavig(PageDescriptor.Type pagetype) {
         List<NavigItem> secondaryNavig = new LinkedList<NavigItem>();
-        if (PageDescriptor.Type.residence.equals(pagetype) && !residentsNavigPopulated && ClientContext.isAuthenticated()) {
+        if (PageDescriptor.Type.residence.equals(pagetype)) {
             secondaryNavig.add(new NavigItem(new PortalSiteMap.Residents.Navigator.LeaseApplication(), i18n.tr("Lease Application")));
             secondaryNavig.add(new NavigItem(new PortalSiteMap.Residents.Navigator.Maintenance(), i18n.tr("Maintenance")));
             secondaryNavig.add(new NavigItem(new PortalSiteMap.Residents.Navigator.Payment(), i18n.tr("Payment")));
             secondaryNavig.add(new NavigItem(new PortalSiteMap.Residents.Navigator.TenantProfile(), i18n.tr("Tenant Profile")));
-            residentsNavigPopulated = true;
         }
         return secondaryNavig;
     }

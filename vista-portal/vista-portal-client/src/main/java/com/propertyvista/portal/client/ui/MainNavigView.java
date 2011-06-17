@@ -26,7 +26,9 @@ public interface MainNavigView extends IsWidget {
 
     public void setMainNavig(List<NavigItem> items);
 
-    public void changePlace(Place place, List<NavigItem> secondaryNavigation);
+    public void setSecondaryNavig(Place mainItemPlace, List<NavigItem> secondayItems);
+
+    public void changePlace(Place place);
 
     public interface MainNavigPresenter {
         public void navigTo(Place place);
