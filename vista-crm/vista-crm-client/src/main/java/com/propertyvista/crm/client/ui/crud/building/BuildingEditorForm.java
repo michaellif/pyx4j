@@ -63,12 +63,14 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), "General");
         tabPanel.add(new ScrollPanel(createDetailsTab()), "Details");
-        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), "Units");
-        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getElevatorListerView().asWidget()), "Elevators");
-        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getBoilerListerView().asWidget()), "Boilers");
-        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getRoofListerView().asWidget()), "Roof");
-        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getParkingListerView().asWidget()), "Parking");
-        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getLockerAreaListerView().asWidget()), "Lolckers");
+        if (!isEditable()) {
+            tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), "Units");
+            tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getElevatorListerView().asWidget()), "Elevators");
+            tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getBoilerListerView().asWidget()), "Boilers");
+            tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getRoofListerView().asWidget()), "Roof");
+            tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getParkingListerView().asWidget()), "Parking");
+            tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getLockerAreaListerView().asWidget()), "Lolckers");
+        }
         tabPanel.add(new ScrollPanel(createFinancialTab()), "Financials & Marketing");
         tabPanel.add(new ScrollPanel(createContactTab()), "Contact Information");
 
@@ -161,5 +163,4 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
         };
     }
-
 }

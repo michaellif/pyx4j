@@ -39,12 +39,12 @@ public class BuildingViewDelegate implements BuildingView {
     private final IListerView<LockerAreaDTO> lockerAreaLister;
 
     public BuildingViewDelegate(boolean readOnly) {
-        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new UnitLister(readOnly));
-        elevatorLister = new ListerInternalViewImplBase<ElevatorDTO>(new ElevatorLister(readOnly));
-        boilerLister = new ListerInternalViewImplBase<BoilerDTO>(new BoilerLister(readOnly));
-        roofLister = new ListerInternalViewImplBase<RoofDTO>(new RoofLister(readOnly));
-        parkingLister = new ListerInternalViewImplBase<ParkingDTO>(new ParkingLister(readOnly));
-        lockerAreaLister = new ListerInternalViewImplBase<LockerAreaDTO>(new LockerAreaLister(readOnly));
+        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new UnitLister(/* readOnly */));
+        elevatorLister = new ListerInternalViewImplBase<ElevatorDTO>(new ElevatorLister(/* readOnly */));
+        boilerLister = new ListerInternalViewImplBase<BoilerDTO>(new BoilerLister(/* readOnly */));
+        roofLister = new ListerInternalViewImplBase<RoofDTO>(new RoofLister(/* readOnly */));
+        parkingLister = new ListerInternalViewImplBase<ParkingDTO>(new ParkingLister(/* readOnly */));
+        lockerAreaLister = new ListerInternalViewImplBase<LockerAreaDTO>(new LockerAreaLister(/* readOnly */));
     }
 
     @Override

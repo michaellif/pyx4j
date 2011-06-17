@@ -70,5 +70,4 @@ public class BuildingEditorViewImpl extends CrmEditorViewImplBase<BuildingDTO> i
     public IListerView<LockerAreaDTO> getLockerAreaListerView() {
         return delegate.getLockerAreaListerView();
     }
-
 }

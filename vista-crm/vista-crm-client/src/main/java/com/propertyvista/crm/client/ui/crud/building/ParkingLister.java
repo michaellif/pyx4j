@@ -24,6 +24,11 @@ import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingLister extends ListerBase<ParkingDTO> {
 
+    public ParkingLister() {
+        super(ParkingDTO.class, CrmSiteMap.Properties.Parking.class);
+        setFiltersVisible(false);
+    }
+
     public ParkingLister(boolean readOnly) {
         super(ParkingDTO.class, CrmSiteMap.Properties.Parking.class, readOnly);
         setFiltersVisible(false);

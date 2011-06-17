@@ -24,6 +24,11 @@ import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerLister extends ListerBase<BoilerDTO> {
 
+    public BoilerLister() {
+        super(BoilerDTO.class, CrmSiteMap.Properties.Boiler.class);
+        setFiltersVisible(false);
+    }
+
     public BoilerLister(boolean readOnly) {
         super(BoilerDTO.class, CrmSiteMap.Properties.Boiler.class, readOnly);
         setFiltersVisible(false);
