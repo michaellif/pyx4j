@@ -20,6 +20,8 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -46,6 +48,8 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
     protected final String defaultCaption;
 
+    protected Button btnSave;
+
     public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption), 3);
@@ -59,22 +63,38 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     }
 
     @Override
+    protected void setForm(CEntityForm<E> form) {
+        super.setForm(form);
+
+        form.addValueChangeHandler(new ValueChangeHandler<E>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<E> event) {
+                btnSave.setEnabled(true);
+            }
+        });
+    }
+
+    @Override
     public void populate(E value) {
         super.populate(value);
         header.setCaption(defaultCaption + " " + value.getStringView());
     }
 
+    @Override
+    public void onSaveSuccess() {
+        btnSave.setEnabled(false);
+    }
+
     private Widget createButtons() {
         HorizontalPanel buttons = new HorizontalPanel();
 
-        Button btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
+        btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 form.setVisited(true);
                 if (!form.isValid()) {
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
-
                 presenter.save();
             }
         });
@@ -86,8 +106,8 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
             }
         });
 
+        btnSave.setEnabled(false);
         btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
-
         btnSave.setWidth("7em");
         btnCancel.setWidth("5em");
 
