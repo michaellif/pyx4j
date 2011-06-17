@@ -36,15 +36,9 @@ import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
-import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
-import com.propertyvista.dto.ElevatorDTO;
-import com.propertyvista.dto.LockerAreaDTO;
-import com.propertyvista.dto.ParkingDTO;
-import com.propertyvista.dto.RoofDTO;
 
 public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
@@ -69,15 +63,14 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), "General");
         tabPanel.add(new ScrollPanel(createDetailsTab()), "Details");
-        tabPanel.add(new ScrollPanel(createElevatorsTab()), "Elevators");
-        tabPanel.add(new ScrollPanel(createBoilersTab()), "Boilers");
-        tabPanel.add(new ScrollPanel(createRoofsTab()), "Roofs");
-        tabPanel.add(new ScrollPanel(createParkingsTab()), "Parkings");
-        tabPanel.add(new ScrollPanel(createLockersTab()), "Lockers");
+        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), "Units");
+        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getElevatorListerView().asWidget()), "Elevators");
+        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getBoilerListerView().asWidget()), "Boilers");
+        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getRoofListerView().asWidget()), "Roof");
+        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getParkingListerView().asWidget()), "Parking");
+        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getLockerAreaListerView().asWidget()), "Lolckers");
         tabPanel.add(new ScrollPanel(createFinancialTab()), "Financials & Marketing");
         tabPanel.add(new ScrollPanel(createContactTab()), "Contact Information");
-
-        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), "Units");
 
         asWidget().setSize("100%", "100%");
         tabPanel.setSize("100%", "100%");
@@ -132,36 +125,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         return panel;
     }
 
-    private Widget createLockersTab() {
-        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
-        panel.add(inject(proto().lockers(), createLockerAreasListEditor()));
-        return panel;
-    }
-
-    private Widget createParkingsTab() {
-        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
-        panel.add(inject(proto().parkings(), createParkingsListEditor()));
-        return panel;
-    }
-
-    private Widget createRoofsTab() {
-        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
-        panel.add(inject(proto().roofs(), createRoofsListEditor()));
-        return panel;
-    }
-
-    private Widget createBoilersTab() {
-        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
-        panel.add(inject(proto().boilers(), createBoilersListEditor()));
-        return panel;
-    }
-
-    private Widget createElevatorsTab() {
-        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
-        panel.add(inject(proto().elevators(), createElevatorsListEditor()));
-        return panel;
-    }
-
     private Widget createDetailsTab() {
         VistaDecoratorsFlowPanel details = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
@@ -194,71 +157,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                 columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().rent(), "5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().deposit(), "5em"));
-                return columns;
-            }
-        };
-    }
-
-    private CEntityFolderEditor<ElevatorDTO> createElevatorsListEditor() {
-        return new CrmEntityFolder<ElevatorDTO>(ElevatorDTO.class, i18n.tr("Elevator"), isEditable(), CrmSiteMap.Properties.Elevator.class, this) {
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().model(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().isForMoveInOut(), "5em"));
-                return columns;
-            }
-        };
-    }
-
-    private CEntityFolderEditor<BoilerDTO> createBoilersListEditor() {
-        return new CrmEntityFolder<BoilerDTO>(BoilerDTO.class, i18n.tr("Boiler"), isEditable(), CrmSiteMap.Properties.Boiler.class, this) {
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().model(), "15em"));
-                return columns;
-            }
-        };
-    }
-
-    private CEntityFolderEditor<RoofDTO> createRoofsListEditor() {
-        return new CrmEntityFolder<RoofDTO>(RoofDTO.class, i18n.tr("Roof"), isEditable(), CrmSiteMap.Properties.Roof.class, this) {
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().year(), "8.2em"));
-                return columns;
-            }
-        };
-    }
-
-    private CEntityFolderEditor<ParkingDTO> createParkingsListEditor() {
-        return new CrmEntityFolder<ParkingDTO>(ParkingDTO.class, i18n.tr("Parking"), isEditable(), CrmSiteMap.Properties.Parking.class, this) {
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-                return columns;
-            }
-        };
-    }
-
-    private CEntityFolderEditor<LockerAreaDTO> createLockerAreasListEditor() {
-        return new CrmEntityFolder<LockerAreaDTO>(LockerAreaDTO.class, i18n.tr("Locker Area"), isEditable(), CrmSiteMap.Properties.LockerArea.class, this) {
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().totalLockers(), "5em"));
                 return columns;
             }
         };

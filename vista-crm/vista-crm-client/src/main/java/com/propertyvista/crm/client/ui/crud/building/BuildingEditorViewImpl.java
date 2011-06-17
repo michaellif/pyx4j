@@ -14,24 +14,26 @@
 package com.propertyvista.crm.client.ui.crud.building;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
-import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.dto.ElevatorDTO;
+import com.propertyvista.dto.LockerAreaDTO;
+import com.propertyvista.dto.ParkingDTO;
+import com.propertyvista.dto.RoofDTO;
 
 public class BuildingEditorViewImpl extends CrmEditorViewImplBase<BuildingDTO> implements BuildingEditorView {
 
-    private final IListerView<AptUnitDTO> unitLister;
+    private final BuildingViewDelegate delegate;
 
     public BuildingEditorViewImpl() {
         super(CrmSiteMap.Properties.Building.class);
 
-        // Internal lister views:
-        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new UnitLister(false));
+        delegate = new BuildingViewDelegate(false);
 
         // create/init/set main form here: 
         CrmEntityForm<BuildingDTO> form = new BuildingEditorForm(this);
@@ -41,6 +43,32 @@ public class BuildingEditorViewImpl extends CrmEditorViewImplBase<BuildingDTO> i
 
     @Override
     public IListerView<AptUnitDTO> getUnitListerView() {
-        return unitLister;
+        return delegate.getUnitListerView();
     }
+
+    @Override
+    public IListerView<ElevatorDTO> getElevatorListerView() {
+        return delegate.getElevatorListerView();
+    }
+
+    @Override
+    public IListerView<BoilerDTO> getBoilerListerView() {
+        return delegate.getBoilerListerView();
+    }
+
+    @Override
+    public IListerView<RoofDTO> getRoofListerView() {
+        return delegate.getRoofListerView();
+    }
+
+    @Override
+    public IListerView<ParkingDTO> getParkingListerView() {
+        return delegate.getParkingListerView();
+    }
+
+    @Override
+    public IListerView<LockerAreaDTO> getLockerAreaListerView() {
+        return delegate.getLockerAreaListerView();
+    }
+
 }

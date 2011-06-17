@@ -16,12 +16,37 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.pyx4j.site.client.ui.crud.IListerView;
 
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.BoilerDTO;
+import com.propertyvista.dto.ElevatorDTO;
+import com.propertyvista.dto.LockerAreaDTO;
+import com.propertyvista.dto.ParkingDTO;
+import com.propertyvista.dto.RoofDTO;
 
 public interface BuildingView {
 
     interface Presenter {
         IListerView.Presenter getUnitPresenter();
+
+        IListerView.Presenter getElevatorPresenter();
+
+        IListerView.Presenter getBoilerPresenter();
+
+        IListerView.Presenter getRoofPresenter();
+
+        IListerView.Presenter getParkingPresenter();
+
+        IListerView.Presenter getLockerAreaDTOPresenter();
     }
 
     IListerView<AptUnitDTO> getUnitListerView();
+
+    IListerView<ElevatorDTO> getElevatorListerView();
+
+    IListerView<BoilerDTO> getBoilerListerView();
+
+    IListerView<RoofDTO> getRoofListerView();
+
+    IListerView<ParkingDTO> getParkingListerView();
+
+    IListerView<LockerAreaDTO> getLockerAreaListerView();
 }
