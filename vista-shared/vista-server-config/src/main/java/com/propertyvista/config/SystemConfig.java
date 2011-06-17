@@ -25,9 +25,12 @@ public class SystemConfig extends HostConfig {
 
     private final static Logger log = LoggerFactory.getLogger(SystemConfig.class);
 
+    // This hosts have SSH tunnel open to dev server
+    private static List<String> localCaledonProxyHost = Arrays.asList("vlads-i7");
+
     private static List<String> noCaledonProxyHost = Arrays.asList("vlads-w520", "dev");
 
-    private static List<String> doxHost = Arrays.asList("vlads-i7", "michaellif01");
+    private static List<String> doxHost = Arrays.asList("XXvlads-i7", "michaellif01");
 
     protected ProxyConfig caledonProxy;
 
@@ -54,7 +57,9 @@ public class SystemConfig extends HostConfig {
 
     @Override
     protected void configure(String hostName) {
-        if (doxHost.contains(hostName)) {
+        if (localCaledonProxyHost.contains(hostName)) {
+            setVistaLocalCaledonProxy();
+        } else if (doxHost.contains(hostName)) {
             setDoxProxy();
         } else if (!noCaledonProxyHost.contains(hostName)) {
             setVistaCaledonProxy();
@@ -69,6 +74,10 @@ public class SystemConfig extends HostConfig {
 
     private void setVistaCaledonProxy() {
         setCaledonProxy("dev.birchwoodsoftwaregroup.com", 8888, "vista", "Vista1102");
+    }
+
+    private void setVistaLocalCaledonProxy() {
+        setCaledonProxy("localhost", 3130, null, null);
     }
 
     private void setCaledonProxy(String proxyHost, int proxyPort, String user, String password) {
