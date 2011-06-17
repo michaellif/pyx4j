@@ -111,7 +111,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
         // -------------------------
         HorizontalPanel newItem = new HorizontalPanel();
-        newItem.add(btnNewItem = new Button(i18n.tr("Add new lister item...")));
+        newItem.add(btnNewItem = new Button(i18n.tr("Add new item...")));
         newItem.setCellHorizontalAlignment(btnNewItem, HasHorizontalAlignment.ALIGN_RIGHT);
         btnNewItem.getElement().getStyle().setMarginRight(1, Unit.EM);
         btnNewItem.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
