@@ -37,12 +37,7 @@ public interface Floorplan extends IEntity {
     @Translatable
     public enum Type {
 
-// TODO: ask Artur which types goes here:
-
-        // VladS: Subset of AptUnitType ?   loft, studio, bachelor, oneBedroom,
-        loft, studio, bachelor, appartement,
-
-        other;
+        internal, external, other;
 
         @Override
         public String toString() {
