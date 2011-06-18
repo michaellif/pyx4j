@@ -49,4 +49,10 @@ public class LoginInvitationActivity extends AbstractActivity implements LoginIn
 
     }
 
+    @Override
+    public void gotoCreatrAccountForm() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.CreateAccount());
+
+    }
+
 }

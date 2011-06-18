@@ -115,18 +115,15 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             }
             if (secondaryItems != null && !secondaryItems.isEmpty()) {
                 setSecondaryNavig(item.getPlace(), secondaryItems);
-            }
+                if (secondarySelected != null) {
+                    NavigTab secondaryTab = mainNavigTab.getSecondaryNavig().getTabByPlace(secondarySelected);
+                    if (secondaryTab != null) {
+                        secondaryTab.select();
+                    }
 
-            //TODO
-            /*
-             * for (NavigItem secondaryItem : secondaryNavig) {
-             * NavigTab navigtab = new NavigTab(secondaryItem, SECONDARY_STYLE_PREFIX);
-             * Place p = secondaryItem.getPlace();
-             * if (p != null && secondarySelected != null && p.equals(secondarySelected))
-             * {
-             * navigtab.select();
-             * }
-             */
+                }
+
+            }
         }
     }
 

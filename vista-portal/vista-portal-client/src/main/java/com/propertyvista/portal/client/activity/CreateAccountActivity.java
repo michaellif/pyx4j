@@ -7,11 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2011
- * @author Dad
+ * Created on Feb 1, 2011
+ * @author Misha
  * @version $Id$
  */
 package com.propertyvista.portal.client.activity;
+
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -20,71 +23,54 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.client.ui.LoginView;
+import com.propertyvista.portal.client.ui.CreateAccountView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
+import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
+import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
-public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
-    LoginView view;
+public class CreateAccountActivity extends AbstractActivity implements CreateAccountView.Presenter {
 
-    public LoginActivity(Place place) {
-        this.view = (LoginView) PortalViewFactory.instance(LoginView.class);
-        this.view.setPresenter(this);
+    private static I18n i18n = I18nFactory.getI18n(CreateAccountActivity.class);
+
+    private final CreateAccountView view;
+
+    public CreateAccountActivity(Place place) {
+        view = (CreateAccountView) PortalViewFactory.instance(CreateAccountView.class);
+        assert (view != null);
+        view.setPresenter(this);
         withPlace(place);
     }
 
-    public LoginActivity withPlace(Place place) {
+    public CreateAccountActivity withPlace(Place place) {
         return this;
     }
 
     @Override
-    public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
-        containerWidget.setWidget(view);
-
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        panel.setWidget(view);
     }
 
     @Override
-    public void gotoResidents() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Navigator());
-
+    public void goToLogin() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Login());
     }
 
     @Override
-    public void login(AuthenticationRequest request) {
+    public void createAccount(AccountCreationRequest request) {
         AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
 
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 ClientContext.authenticated(result);
-                gotoResidents();
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                if (caught instanceof ChallengeVerificationRequired) {
-                    view.challengeVerificationRequired();
-                }
-                throw new UnrecoverableClientError(caught);
             }
 
         };
-
-        ((AuthenticationService) GWT.create(AuthenticationService.class)).authenticate(callback, request);
-
-    }
-
-    @Override
-    public void gotoRetrievePassword() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.RetirevePassword());
-
+        ((ActivationService) GWT.create(ActivationService.class)).createAccount(callback, request);
     }
 }

@@ -7,24 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
- * @author vadims
+ * Created on Feb 1, 2011
+ * @author Misha
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface LoginInvitationView extends IsWidget {
+import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
+
+public interface CreateAccountView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
     public interface Presenter {
 
-        public void gotoLoginForm();
+        void goToLogin();
 
-        public void gotoCreatrAccountForm();
-
+        void createAccount(AccountCreationRequest request);
     }
 
 }

@@ -23,12 +23,14 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.client.activity.ApartmentDetailsActivity;
+import com.propertyvista.portal.client.activity.CreateAccountActivity;
 import com.propertyvista.portal.client.activity.FloorplanDetailsActivity;
 import com.propertyvista.portal.client.activity.LoginActivity;
 import com.propertyvista.portal.client.activity.LoginInvitationActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
 import com.propertyvista.portal.client.activity.PaymentActivity;
 import com.propertyvista.portal.client.activity.PropertyMapActivity;
+import com.propertyvista.portal.client.activity.RetrievePasswordActivity;
 import com.propertyvista.portal.client.activity.SearchApartmentActivity;
 import com.propertyvista.portal.client.activity.TenantProfileActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -67,6 +69,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new FloorplanDetailsActivity(place);
                 } else if (place instanceof PortalSiteMap.Residents.Login) {
                     activity = new LoginActivity(place);
+                } else if (place instanceof PortalSiteMap.Residents.RetirevePassword) {
+                    activity = new RetrievePasswordActivity(place);
+                } else if (place instanceof PortalSiteMap.Residents.CreateAccount) {
+                    activity = new CreateAccountActivity(place);
                 }
 
                 callback.onSuccess(activity);

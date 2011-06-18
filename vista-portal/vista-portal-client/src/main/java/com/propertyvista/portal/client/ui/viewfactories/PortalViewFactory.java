@@ -15,8 +15,12 @@ package com.propertyvista.portal.client.ui.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.portal.client.ui.CreateAccountView;
+import com.propertyvista.portal.client.ui.CreateAccountViewImpl;
 import com.propertyvista.portal.client.ui.FooterView;
 import com.propertyvista.portal.client.ui.FooterViewImpl;
+import com.propertyvista.portal.client.ui.LoginInvitationView;
+import com.propertyvista.portal.client.ui.LoginInvitationViewImpl;
 import com.propertyvista.portal.client.ui.LoginView;
 import com.propertyvista.portal.client.ui.LoginViewImpl;
 import com.propertyvista.portal.client.ui.LogoView;
@@ -27,8 +31,8 @@ import com.propertyvista.portal.client.ui.MaintenanceView;
 import com.propertyvista.portal.client.ui.MaintenanceViewImpl;
 import com.propertyvista.portal.client.ui.PaymentView;
 import com.propertyvista.portal.client.ui.PaymentViewImpl;
-import com.propertyvista.portal.client.ui.LoginInvitationView;
-import com.propertyvista.portal.client.ui.LoginInvitationViewImpl;
+import com.propertyvista.portal.client.ui.RetrievePasswordView;
+import com.propertyvista.portal.client.ui.RetrievePasswordViewImpl;
 import com.propertyvista.portal.client.ui.StaticPageView;
 import com.propertyvista.portal.client.ui.StaticPageViewImpl;
 import com.propertyvista.portal.client.ui.TenantProfileView;
@@ -60,6 +64,10 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new TenantProfileViewImpl());
             } else if (TopRightActionsView.class.equals(type)) {
                 map.put(type, new TopRightActionsViewImpl());
+            } else if (RetrievePasswordView.class.equals(type)) {
+                map.put(type, new RetrievePasswordViewImpl());
+            } else if (CreateAccountView.class.equals(type)) {
+                map.put(type, new CreateAccountViewImpl());
             }
 
         }

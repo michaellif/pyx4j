@@ -13,6 +13,10 @@
  */
 package com.propertyvista.portal.client.ui;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -23,6 +27,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class LoginInvitationViewImpl extends SimplePanel implements LoginInvitationView {
     private Presenter presenter;
 
+    private static I18n i18n = I18nFactory.getI18n(LoginInvitationViewImpl.class);
+
     public LoginInvitationViewImpl() {
 
         FlowPanel panel = new FlowPanel();
@@ -30,7 +36,7 @@ public class LoginInvitationViewImpl extends SimplePanel implements LoginInvitat
                 + "The portal should navigate a user to this very point and depict a login form<br>");
 
         panel.add(message);
-        Button btn = new Button("Login");
+        Button btn = new Button(i18n.tr("Login"));
         btn.addClickHandler(new ClickHandler() {
 
             @Override
@@ -40,6 +46,19 @@ public class LoginInvitationViewImpl extends SimplePanel implements LoginInvitat
 
         });
         panel.add(btn);
+
+        btn = new Button(i18n.tr("Sign Up(to be removed)"));
+        btn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.gotoCreatrAccountForm();
+            }
+
+        });
+        btn.getElement().getStyle().setMarginLeft(2, Unit.EM);
+        panel.add(btn);
+
         setWidget(panel);
 
     }

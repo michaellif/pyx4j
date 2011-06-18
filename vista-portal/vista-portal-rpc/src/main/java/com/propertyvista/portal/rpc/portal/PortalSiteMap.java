@@ -57,7 +57,13 @@ public class PortalSiteMap implements SiteMap {
         public static class Login extends AppPlace {
         }
 
+        public static class RetirevePassword extends AppPlace {
+        }
+
         public static class LoginInvitation extends AppPlace {
+        }
+
+        public static class CreateAccount extends AppPlace {
         }
 
         @NavigationItem(navigLabel = "navig")
