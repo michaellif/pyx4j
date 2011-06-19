@@ -23,6 +23,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsView;
 import com.propertyvista.portal.client.ui.viewfactories.PropertySearchViewFactory;
@@ -63,7 +64,7 @@ public class FloorplanDetailsActivity extends AbstractActivity implements Floorp
 
     @Override
     public void apply() {
-        String url = Window.Location.getPath() + DeploymentConsts.PTAPP_URL + "?" + PtSiteMap.ARG_FLOORPLAN_ID + "=" + floorplanId;
+        String url = ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.PTAPP_URL + "?" + PtSiteMap.ARG_FLOORPLAN_ID + "=" + floorplanId;
         Window.Location.replace(url);
     }
 
