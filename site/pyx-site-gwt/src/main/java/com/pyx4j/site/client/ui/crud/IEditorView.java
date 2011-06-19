@@ -28,6 +28,8 @@ public interface IEditorView<E extends IEntity> extends IView<E> {
 
         public void populate();
 
+        public void apply();
+
         public void save();
 
         public void cancel();
@@ -44,6 +46,8 @@ public interface IEditorView<E extends IEntity> extends IView<E> {
     public void populate(E value);
 
     public E getValue();
+
+    void onApplySuccess();
 
     void onSaveSuccess();
 

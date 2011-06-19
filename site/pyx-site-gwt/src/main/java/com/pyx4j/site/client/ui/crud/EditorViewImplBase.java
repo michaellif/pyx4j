@@ -65,6 +65,10 @@ public class EditorViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
     }
 
     @Override
+    public void onApplySuccess() {
+    }
+
+    @Override
     public void onSaveSuccess() {
     }
 

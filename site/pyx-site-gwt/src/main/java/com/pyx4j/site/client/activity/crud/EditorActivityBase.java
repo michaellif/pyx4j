@@ -123,13 +123,31 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
+    public void apply() {
+        trySave(true);
+    }
+
+    @Override
     public void save() {
+        trySave(false);
+    }
+
+    @Override
+    public void cancel() {
+        History.back();
+    }
+
+    public void trySave(final boolean apply) {
 
         if (isNewItem()) {
             service.create(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
-                    onSaveSuccess(result);
+                    if (apply) {
+                        onApplySuccess(result);
+                    } else {
+                        onSaveSuccess(result);
+                    }
                 }
 
                 @Override
@@ -141,7 +159,11 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
             service.save(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
-                    onSaveSuccess(result);
+                    if (apply) {
+                        onApplySuccess(result);
+                    } else {
+                        onSaveSuccess(result);
+                    }
                 }
 
                 @Override
@@ -152,13 +174,13 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         }
     }
 
-    @Override
-    public void cancel() {
-        History.back();
+    protected void onApplySuccess(E result) {
+        view.onApplySuccess();
     }
 
     protected void onSaveSuccess(E result) {
         view.onSaveSuccess();
+        History.back();
     }
 
     protected void onSaveFail(Throwable caught) {
