@@ -48,6 +48,8 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
     protected final String defaultCaption;
 
+    protected Button btnApply;
+
     protected Button btnSave;
 
     public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
@@ -69,6 +71,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         form.addValueChangeHandler(new ValueChangeHandler<E>() {
             @Override
             public void onValueChange(ValueChangeEvent<E> event) {
+                btnApply.setEnabled(true);
                 btnSave.setEnabled(true);
             }
         });
@@ -76,17 +79,31 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
     @Override
     public void populate(E value) {
-        super.populate(value);
+        btnApply.setEnabled(false);
+        btnSave.setEnabled(false);
         header.setCaption(defaultCaption + " " + value.getStringView());
+        super.populate(value);
     }
 
     @Override
     public void onSaveSuccess() {
+        btnApply.setEnabled(false);
         btnSave.setEnabled(false);
     }
 
     private Widget createButtons() {
         HorizontalPanel buttons = new HorizontalPanel();
+
+        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                form.setVisited(true);
+                if (!form.isValid()) {
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                }
+                presenter.save();
+            }
+        });
 
         btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
@@ -106,13 +123,19 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
             }
         });
 
+        btnApply.setEnabled(false);
+        btnApply.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
+        btnApply.setWidth("7em");
+
         btnSave.setEnabled(false);
         btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
         btnSave.setWidth("7em");
         btnCancel.setWidth("5em");
 
+        buttons.add(btnApply);
         buttons.add(btnSave);
         buttons.add(btnCancel);
+
         buttons.setCellHorizontalAlignment(btnCancel, HasHorizontalAlignment.ALIGN_CENTER);
         buttons.setCellVerticalAlignment(btnCancel, HasVerticalAlignment.ALIGN_MIDDLE);
         buttons.setSpacing(10);
