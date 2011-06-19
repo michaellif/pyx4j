@@ -16,9 +16,9 @@ package com.propertyvista.yardi.bean;
 import javax.xml.bind.annotation.XmlElement;
 
 public class Property {
-    private String code;
+    private String code; // building.info.propertyCode
 
-    private String marketingName;
+    private String marketingName; // building.marketing.name
 
     private String addressLine1;
 

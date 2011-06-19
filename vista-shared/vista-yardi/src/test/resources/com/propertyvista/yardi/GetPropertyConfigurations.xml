@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<Properties>
+<Properties xmlns="">
     <Property>
         <Code>prvista1</Code>
         <MarketingName>Property Vista 1 Test Property</MarketingName>
@@ -21,6 +21,42 @@
         <City>Santa Barbara</City>
         <State>CA</State>
         <PostalCode>93110</PostalCode>
+        <AccountsReceivable>01/2011</AccountsReceivable>
+        <AccountsPayable>01/2011</AccountsPayable>
+    </Property>
+    <Property>
+        <Code>anya_3</Code>
+        <MarketingName>Anya 3 Test Property</MarketingName>
+        <AddressLine1>430 S Fairview Avenue</AddressLine1>
+        <AddressLine2 />
+        <AddressLine3 />
+        <City>Goleta</City>
+        <State>CA</State>
+        <PostalCode>93117</PostalCode>
+        <AccountsReceivable>01/2011</AccountsReceivable>
+        <AccountsPayable>01/2011</AccountsPayable>
+    </Property>
+    <Property>
+        <Code>anya_1</Code>
+        <MarketingName>Anya's test property</MarketingName>
+        <AddressLine1>15 Vicora Linkway</AddressLine1>
+        <AddressLine2 />
+        <AddressLine3 />
+        <City>Red Wood Shore</City>
+        <State>CA</State>
+        <PostalCode />
+        <AccountsReceivable>01/2011</AccountsReceivable>
+        <AccountsPayable>01/2011</AccountsPayable>
+    </Property>
+    <Property>
+        <Code>anya_2</Code>
+        <MarketingName>Anya 2 Test Property</MarketingName>
+        <AddressLine1>430 S Fairview Avenue</AddressLine1>
+        <AddressLine2 />
+        <AddressLine3 />
+        <City>Goleta</City>
+        <State>CA</State>
+        <PostalCode>93117</PostalCode>
         <AccountsReceivable>01/2011</AccountsReceivable>
         <AccountsPayable>01/2011</AccountsPayable>
     </Property>

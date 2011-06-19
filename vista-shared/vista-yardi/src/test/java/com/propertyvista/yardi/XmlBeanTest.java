@@ -19,6 +19,7 @@ import javax.xml.bind.JAXBException;
 
 import junit.framework.Assert;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +27,13 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
 import com.propertyvista.yardi.bean2.PhysicalProperty;
 import com.propertyvista.yardi.bean2.ResidentTransactions;
+import com.propertyvista.yardi.mapper.Mapper;
 
 public class XmlBeanTest {
 
@@ -49,7 +53,7 @@ public class XmlBeanTest {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetPropertyConfigurations.xml", getClass()));
         Properties properties = MarshallUtil.unmarshall(Properties.class, xml);
 
-        log.debug("Loaded properties: " + properties);
+        log.info("Loaded {} properties", properties.getProperties().size());
 
         Assert.assertTrue("Has properties", !properties.getProperties().isEmpty());
 
@@ -65,6 +69,16 @@ public class XmlBeanTest {
             Assert.assertNotNull(property.getPostalCode());
             Assert.assertNotNull(property.getState());
             Assert.assertNotNull(property.getMarketingName());
+        }
+
+        // convert them into vista buildings
+        Mapper mapper = new Mapper();
+        mapper.map(properties);
+
+        Assert.assertEquals("Converted size", properties.getProperties().size(), mapper.getBuildings().size());
+        for (Building building : mapper.getBuildings()) {
+            log.info("Building {}", building);
+            Assert.assertNotNull(building.info().propertyCode());
         }
     }
 
@@ -88,20 +102,9 @@ public class XmlBeanTest {
 
         log.info("Loaded transactions {}", transactions);
     }
-//    private void validate(Object o) {
-//        Method[] methods = o.getClass().getMethods();
-//        for (Method method : methods) {
-//            if (!method.getName().startsWith("get")) {
-//                continue;
-//            }
-//
-//            Annotation[] annotations = method.getAnnotations();
-//            for (Annotation annotation : annotations) {
-//                log.info("Annotation: " + annotation);
-//                if (annotation.getClass() == NotNull.class) {
-//                    log.info("Checking [" + method.getName() + "] has not null annotation");
-//                }
-//            }
-//        }
-//    }
+
+    @BeforeClass
+    public static void init() {
+        SharedData.init();
+    }
 }

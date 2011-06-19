@@ -31,6 +31,7 @@ import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Email.Type;
 import com.propertyvista.domain.Phone;
 import com.propertyvista.portal.server.preloader.RandomUtil;
+import com.propertyvista.server.common.reference.SharedData;
 
 public class CommonsGenerator {
 

@@ -33,7 +33,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.portal.server.generator.CommonsGenerator;
-import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.importer.bean.City;
 import com.propertyvista.portal.server.importer.bean.Include;
 import com.propertyvista.portal.server.importer.bean.Property;
@@ -41,6 +40,7 @@ import com.propertyvista.portal.server.importer.bean.Region;
 import com.propertyvista.portal.server.importer.bean.Residential;
 import com.propertyvista.portal.server.importer.bean.Room;
 import com.propertyvista.portal.server.importer.csv.AvailableUnit;
+import com.propertyvista.server.common.reference.SharedData;
 
 public class Mapper {
     private static final Logger log = LoggerFactory.getLogger(Mapper.class);

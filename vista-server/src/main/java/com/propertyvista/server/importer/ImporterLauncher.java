@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 
-import com.propertyvista.portal.server.generator.SharedData;
 import com.propertyvista.portal.server.importer.Importer;
+import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 public class ImporterLauncher {

@@ -19,6 +19,7 @@ import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.server.TestUtil;
+import com.propertyvista.server.common.reference.SharedData;
 
 public class VistaDataGeneratorTest extends TestCase {
 
