@@ -77,7 +77,7 @@ public class XmlBeanTest {
 
         Assert.assertEquals("Converted size", properties.getProperties().size(), mapper.getBuildings().size());
         for (Building building : mapper.getBuildings()) {
-            log.info("Building {}", building);
+            log.debug("Building {}", building);
             Assert.assertNotNull(building.info().propertyCode());
         }
     }
@@ -100,7 +100,7 @@ public class XmlBeanTest {
 //        log.info(xml);
         ResidentTransactions transactions = MarshallUtil.unmarshall(ResidentTransactions.class, xml);
 
-        log.info("Loaded transactions {}", transactions);
+        log.debug("Loaded transactions {}", transactions);
     }
 
     @BeforeClass
