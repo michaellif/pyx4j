@@ -242,12 +242,12 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             sb.append("\n");
 
             // get the units
-            EntityQueryCriteria<AptUnitDTO> criteria = new EntityQueryCriteria<AptUnitDTO>(AptUnitDTO.class);
+            EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
             criteria.add(new PropertyCriterion(criteria.proto().belongsTo(), Restriction.EQUAL, building.getPrimaryKey()));
-            List<AptUnitDTO> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
+            List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
             sb.append("\tBuilding has ").append(units.size()).append(" units\n");
 
-            for (AptUnitDTO unit : units) {
+            for (AptUnit unit : units) {
                 sb.append("\t");
                 sb.append(unit.info().floor().getStringView()).append(" floor");
                 sb.append(" ");
@@ -262,8 +262,6 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 sb.append("\t\t").append(unit.financial().concessions()).append("\n");
                 sb.append("\n");
                 sb.append("\t\t").append(unit.info().utilities()).append("\n");
-                sb.append("\t\t").append(unit.amenities()).append("\n");
-                sb.append("\t\t").append(unit.details()).append("\n");
                 sb.append("\t\t").append(unit.addOns()).append("\n");
                 sb.append("\t\t").append(unit.financial().concessions()).append("\n");
             }
