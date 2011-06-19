@@ -135,7 +135,7 @@ public class MemberMetaImpl implements MemberMeta {
         } else if ((lengthAnnotation != null) && (PrimitiveHandler.BYTE_ARRAY_CLASS.equals(valueClass))) {
             length = lengthAnnotation.value();
         } else if (lengthAnnotation != null) {
-            throw new RuntimeException("Unexpected @Length annotation in member " + fieldName);
+            throw new RuntimeException("Unexpected @Length annotation in member " + fieldName + " of " + method.getDeclaringClass().getSimpleName());
         } else {
             length = 0;
         }
