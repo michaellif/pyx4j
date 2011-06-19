@@ -99,7 +99,7 @@ public class IServiceAdapterImpl implements IServiceAdapter {
                 return runMethod(serviceInstance, method, request.getArgs());
             }
         }
-        throw new UnRecoverableRuntimeException("Fatal system error, Method not found");
+        throw new UnRecoverableRuntimeException("Fatal system error, Method [" + serviceMethodName + "] not found");
     }
 
     private void assertToken(Class<? extends IService> clazz, Method method) {
