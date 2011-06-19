@@ -22,6 +22,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
+@Transient
 public interface AptUnitDTO extends AptUnit {
 
     IList<AptUnitAmenity> amenities();
