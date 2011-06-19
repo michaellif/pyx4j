@@ -25,6 +25,7 @@ import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
+import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.i18n.rebind.AbstractResource.ResourceList;
@@ -35,36 +36,42 @@ import com.google.gwt.user.rebind.AbstractMethodCreator;
 
 public class IServiceImplMethodCreator extends AbstractMethodCreator {
 
-    private final TypeOracle oracle;
+    private final JClassType asyncCallbackType;
 
-    public IServiceImplMethodCreator(AbstractGeneratorClassCreator classCreator, TypeOracle oracle) {
+    private final JClassType iEntityType;
+
+    public IServiceImplMethodCreator(AbstractGeneratorClassCreator classCreator, TypeOracle oracle) throws UnableToCompleteException {
         super(classCreator);
-        this.oracle = oracle;
+        try {
+            asyncCallbackType = oracle.getType(AsyncCallback.class.getName());
+            iEntityType = oracle.getType("com.pyx4j.entity.shared.IEntity");
+        } catch (NotFoundException e) {
+            throw new UnableToCompleteException();
+        }
     }
 
     @Override
     public void createMethodFor(TreeLogger logger, JMethod targetMethod, String key, ResourceList resourceList, GwtLocale locale)
             throws UnableToCompleteException {
+
+        int signature = getMethodSignature(targetMethod);
+
         print("execute(");
         print("\"");
         print(currentCreator.getTarget().getQualifiedSourceName());
         print("\", \"");
         print(targetMethod.getName());
         print("\", ");
-        print(String.valueOf(getMethodSignature(targetMethod)));
+        print(String.valueOf(signature));
 
         if (targetMethod.getParameters().length == 0) {
             logger.log(Type.ERROR, "Should have at least one argument");
             throw new UnableToCompleteException();
         }
 
-        try {
-            JClassType classType = targetMethod.getParameters()[0].getType().isInterface();
-            if (classType == null || !classType.isAssignableTo(oracle.getType(AsyncCallback.class.getName()))) {
-                logger.log(Type.ERROR, "First parameter should be AsyncCallback");
-                throw new UnableToCompleteException();
-            }
-        } catch (NotFoundException e) {
+        JClassType classType = targetMethod.getParameters()[0].getType().isInterface();
+        if (classType == null || !classType.isAssignableTo(asyncCallbackType)) {
+            logger.log(Type.ERROR, "First parameter should be AsyncCallback");
             throw new UnableToCompleteException();
         }
 
@@ -75,10 +82,15 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
         println(");");
     }
 
-    private static int getMethodSignature(JMethod targetMethod) {
+    private int getMethodSignature(JMethod targetMethod) {
         int s = 0;
         for (int i = 0; i < targetMethod.getParameters().length; i++) {
-            s += targetMethod.getParameters()[i].getType().getSimpleSourceName().hashCode();
+            JType type = targetMethod.getParameters()[i].getType();
+            if ((type instanceof JClassType) && (iEntityType.isAssignableFrom((JClassType) type))) {
+                s = s * 31 + 123;
+            } else {
+                s = s * 31 + type.getSimpleSourceName().hashCode();
+            }
         }
         return s;
     }

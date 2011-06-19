@@ -33,6 +33,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
@@ -66,13 +67,18 @@ public class IServiceAdapterImpl implements IServiceAdapter {
         if (serviceFactory == null) {
             serviceFactory = new ReflectionServiceFactory();
         }
+        Class<? extends IService> serviceClass;
         Class<? extends IService> clazz;
         try {
+            serviceClass = (Class<? extends IService>) Class.forName(serviceInterfaceClassName);
             clazz = serviceFactory.getIServiceClass(serviceInterfaceClassName);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Service " + serviceInterfaceClassName + " not found");
         } catch (Throwable t) {
             log.error("Service call error", t);
+            throw new UnRecoverableRuntimeException("Fatal system error");
+        }
+        if (!IService.class.isAssignableFrom(serviceClass)) {
             throw new UnRecoverableRuntimeException("Fatal system error");
         }
 
@@ -87,13 +93,13 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
         }
 
-        for (Method method : clazz.getMethods()) {
-            if (method.getName().equals(serviceMethodName) && (request.getServiceMethodSignature() == getMethodSignature(method))) {
+        for (Method method : serviceClass.getMethods()) {
+            if ((method.getName().equals(serviceMethodName)) && (request.getServiceMethodSignature() == getMethodSignature(method))) {
                 assertToken(clazz, method);
                 return runMethod(serviceInstance, method, request.getArgs());
             }
         }
-        throw new UnRecoverableRuntimeException("Fatal system error");
+        throw new UnRecoverableRuntimeException("Fatal system error, Method not found");
     }
 
     private void assertToken(Class<? extends IService> clazz, Method method) {
@@ -115,7 +121,11 @@ public class IServiceAdapterImpl implements IServiceAdapter {
     public static int getMethodSignature(Method method) {
         int s = 0;
         for (Class<?> paramClass : method.getParameterTypes()) {
-            s += paramClass.getSimpleName().hashCode();
+            if (IEntity.class.isAssignableFrom(paramClass)) {
+                s = s * 31 + 123;
+            } else {
+                s = s * 31 + paramClass.getSimpleName().hashCode();
+            }
         }
         return s;
     }
