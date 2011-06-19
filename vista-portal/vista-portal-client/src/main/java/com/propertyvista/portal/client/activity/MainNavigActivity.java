@@ -37,6 +37,7 @@ import com.propertyvista.portal.client.ui.MainNavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.site.PageDescriptor;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
 
@@ -132,10 +133,11 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     private List<NavigItem> getSecondaryNavig(PageDescriptor.Type pagetype) {
         List<NavigItem> secondaryNavig = new LinkedList<NavigItem>();
         if (PageDescriptor.Type.residence.equals(pagetype)) {
-            secondaryNavig.add(new NavigItem(new PortalSiteMap.Residents.Navigator.LeaseApplication(), i18n.tr("Lease Application")));
-            secondaryNavig.add(new NavigItem(new PortalSiteMap.Residents.Navigator.Maintenance(), i18n.tr("Maintenance")));
-            secondaryNavig.add(new NavigItem(new PortalSiteMap.Residents.Navigator.Payment(), i18n.tr("Payment")));
-            secondaryNavig.add(new NavigItem(new PortalSiteMap.Residents.Navigator.TenantProfile(), i18n.tr("Tenant Profile")));
+            secondaryNavig.add(new NavigItem(new Residents.Dashboard(), i18n.tr("Dashboard")));
+            secondaryNavig.add(new NavigItem(new Residents.PersonalInfo(), i18n.tr("Personal Info")));
+            secondaryNavig.add(new NavigItem(new Residents.BillingInfo(), i18n.tr("Billing Info")));
+            secondaryNavig.add(new NavigItem(new Residents.LeaseTerm(), i18n.tr("Lease Terms")));
+            secondaryNavig.add(new NavigItem(new Residents.Maintenance(), i18n.tr("Maintenance")));
         }
         return secondaryNavig;
     }

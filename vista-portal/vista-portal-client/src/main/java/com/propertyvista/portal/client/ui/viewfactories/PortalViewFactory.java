@@ -15,10 +15,16 @@ package com.propertyvista.portal.client.ui.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.portal.client.ui.BillingInfoView;
+import com.propertyvista.portal.client.ui.BillingInfoViewImpl;
 import com.propertyvista.portal.client.ui.CreateAccountView;
 import com.propertyvista.portal.client.ui.CreateAccountViewImpl;
+import com.propertyvista.portal.client.ui.DashboardView;
+import com.propertyvista.portal.client.ui.DashboardViewImpl;
 import com.propertyvista.portal.client.ui.FooterView;
 import com.propertyvista.portal.client.ui.FooterViewImpl;
+import com.propertyvista.portal.client.ui.LeaseTermsView;
+import com.propertyvista.portal.client.ui.LeaseTermsViewImpl;
 import com.propertyvista.portal.client.ui.LoginInvitationView;
 import com.propertyvista.portal.client.ui.LoginInvitationViewImpl;
 import com.propertyvista.portal.client.ui.LoginView;
@@ -29,14 +35,14 @@ import com.propertyvista.portal.client.ui.MainNavigView;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ui.MaintenanceView;
 import com.propertyvista.portal.client.ui.MaintenanceViewImpl;
-import com.propertyvista.portal.client.ui.PaymentView;
-import com.propertyvista.portal.client.ui.PaymentViewImpl;
+import com.propertyvista.portal.client.ui.PersonalInfoView;
+import com.propertyvista.portal.client.ui.PersonalInfoViewImpl;
+import com.propertyvista.portal.client.ui.PotentialTenantView;
+import com.propertyvista.portal.client.ui.PotentialTenantViewImpl;
 import com.propertyvista.portal.client.ui.RetrievePasswordView;
 import com.propertyvista.portal.client.ui.RetrievePasswordViewImpl;
 import com.propertyvista.portal.client.ui.StaticPageView;
 import com.propertyvista.portal.client.ui.StaticPageViewImpl;
-import com.propertyvista.portal.client.ui.TenantProfileView;
-import com.propertyvista.portal.client.ui.TenantProfileViewImpl;
 import com.propertyvista.portal.client.ui.TopRightActionsView;
 import com.propertyvista.portal.client.ui.TopRightActionsViewImpl;
 
@@ -54,20 +60,26 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new MaintenanceViewImpl());
             } else if (MainNavigView.class.equals(type)) {
                 map.put(type, new MainNavigViewImpl());
-            } else if (PaymentView.class.equals(type)) {
-                map.put(type, new PaymentViewImpl());
+            } else if (BillingInfoView.class.equals(type)) {
+                map.put(type, new BillingInfoViewImpl());
             } else if (LoginInvitationView.class.equals(type)) {
                 map.put(type, new LoginInvitationViewImpl());
             } else if (StaticPageView.class.equals(type)) {
                 map.put(type, new StaticPageViewImpl());
-            } else if (TenantProfileView.class.equals(type)) {
-                map.put(type, new TenantProfileViewImpl());
+            } else if (PersonalInfoView.class.equals(type)) {
+                map.put(type, new PersonalInfoViewImpl());
             } else if (TopRightActionsView.class.equals(type)) {
                 map.put(type, new TopRightActionsViewImpl());
             } else if (RetrievePasswordView.class.equals(type)) {
                 map.put(type, new RetrievePasswordViewImpl());
             } else if (CreateAccountView.class.equals(type)) {
                 map.put(type, new CreateAccountViewImpl());
+            } else if (LeaseTermsView.class.equals(type)) {
+                map.put(type, new LeaseTermsViewImpl());
+            } else if (DashboardView.class.equals(type)) {
+                map.put(type, new DashboardViewImpl());
+            } else if (PotentialTenantView.class.equals(type)) {
+                map.put(type, new PotentialTenantViewImpl());
             }
 
         }

@@ -31,6 +31,8 @@ public interface PageDescriptor extends IEntity {
 
         findApartment,
 
+        potentialTenants,
+
         residence,
 
         landing;

@@ -24,24 +24,24 @@ public interface PortalImages extends ClientBundle {
     PortalImages INSTANCE = GWT.create(PortalImages.class);
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("add.png")
+    ImageResource addRow();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("del.png")
+    ImageResource delRow();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("add_hover.png")
+    ImageResource addRowHover();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("del_hover.png")
+    ImageResource delRowHover();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("map_marker.png")
     ImageResource mapMarker();
-
-    @ImageOptions(repeatStyle = RepeatStyle.None)
-    @Source("unit1.jpg")
-    ImageResource unit1();
-
-    @ImageOptions(repeatStyle = RepeatStyle.None)
-    @Source("unit2.jpg")
-    ImageResource unit2();
-
-    @ImageOptions(repeatStyle = RepeatStyle.None)
-    @Source("unit3.jpg")
-    ImageResource unit3();
-
-    @ImageOptions(repeatStyle = RepeatStyle.None)
-    @Source("unit4.jpg")
-    ImageResource unit4();
 
     @ImageOptions(repeatStyle = RepeatStyle.None)
     @Source("noImage.jpg")
@@ -50,5 +50,9 @@ public interface PortalImages extends ClientBundle {
     @ImageOptions(repeatStyle = RepeatStyle.None)
     @Source("map.png")
     ImageResource map();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("pointer_menu.png")
+    ImageResource pointer();
 
 }

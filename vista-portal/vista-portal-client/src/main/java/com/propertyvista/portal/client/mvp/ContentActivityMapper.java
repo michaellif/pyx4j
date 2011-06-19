@@ -23,17 +23,21 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.client.activity.ApartmentDetailsActivity;
+import com.propertyvista.portal.client.activity.BillingInfoActivity;
 import com.propertyvista.portal.client.activity.CreateAccountActivity;
+import com.propertyvista.portal.client.activity.DashboardActivity;
 import com.propertyvista.portal.client.activity.FloorplanDetailsActivity;
+import com.propertyvista.portal.client.activity.LeaseTermsActivity;
 import com.propertyvista.portal.client.activity.LoginActivity;
 import com.propertyvista.portal.client.activity.LoginInvitationActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
-import com.propertyvista.portal.client.activity.PaymentActivity;
+import com.propertyvista.portal.client.activity.PersonalInfoActivity;
+import com.propertyvista.portal.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.client.activity.PropertyMapActivity;
 import com.propertyvista.portal.client.activity.RetrievePasswordActivity;
 import com.propertyvista.portal.client.activity.SearchApartmentActivity;
-import com.propertyvista.portal.client.activity.TenantProfileActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -59,12 +63,12 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new ApartmentDetailsActivity(place);
                 } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {
                     activity = new FloorplanDetailsActivity(place);
-                } else if (place instanceof PortalSiteMap.Residents.Navigator.TenantProfile) {
-                    activity = new TenantProfileActivity(place);
-                } else if (place instanceof PortalSiteMap.Residents.Navigator.Maintenance) {
+                } else if (place instanceof Residents.PersonalInfo) {
+                    activity = new PersonalInfoActivity(place);
+                } else if (place instanceof Residents.Maintenance) {
                     activity = new MaintenanceAcitvity(place);
-                } else if (place instanceof PortalSiteMap.Residents.Navigator.Payment) {
-                    activity = new PaymentActivity(place);
+                } else if (place instanceof Residents.BillingInfo) {
+                    activity = new BillingInfoActivity(place);
                 } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {
                     activity = new FloorplanDetailsActivity(place);
                 } else if (place instanceof PortalSiteMap.Residents.Login) {
@@ -73,6 +77,12 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new RetrievePasswordActivity(place);
                 } else if (place instanceof PortalSiteMap.Residents.CreateAccount) {
                     activity = new CreateAccountActivity(place);
+                } else if (place instanceof Residents.LeaseTerm) {
+                    activity = new LeaseTermsActivity(place);
+                } else if (place instanceof Residents.Dashboard) {
+                    activity = new DashboardActivity(place);
+                } else if (place instanceof PortalSiteMap.PotentialTenants) {
+                    activity = new PotentialTenantActivity(place);
                 }
 
                 callback.onSuccess(activity);

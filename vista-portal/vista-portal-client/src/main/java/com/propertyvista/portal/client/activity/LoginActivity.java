@@ -54,7 +54,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
 
     @Override
     public void gotoResidents() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Navigator());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents());
 
     }
 

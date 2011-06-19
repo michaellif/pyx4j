@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 18, 2011
- * @author vadims
+ * Created on Jun 18, 2011
+ * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.activity;
@@ -18,26 +18,25 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.portal.client.ui.TenantProfileView;
+import com.propertyvista.portal.client.ui.LeaseTermsView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 
-public class TenantProfileActivity extends AbstractActivity {
+public class LeaseTermsActivity extends AbstractActivity {
 
-    private final TenantProfileView view;
+    private final LeaseTermsView view;
 
-    public TenantProfileActivity(Place place) {
-        this.view = (TenantProfileView) PortalViewFactory.instance(TenantProfileView.class);
+    public LeaseTermsActivity(Place place) {
+        this.view = (LeaseTermsView) PortalViewFactory.instance(LeaseTermsView.class);
         withPlace(place);
-    }
-
-    public TenantProfileActivity withPlace(Place place) {
-        return this;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+    }
 
+    public LeaseTermsActivity withPlace(Place place) {
+        return this;
     }
 
 }

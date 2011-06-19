@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 19, 2011
- * @author vadims
+ * Created on Jun 18, 2011
+ * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.activity;
@@ -18,18 +18,19 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.portal.client.ui.PaymentView;
+import com.propertyvista.portal.client.ui.PotentialTenantView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 
-public class PaymentActivity extends AbstractActivity {
-    private final PaymentView view;
+public class PotentialTenantActivity extends AbstractActivity {
+    private final PotentialTenantView view;
 
-    public PaymentActivity(Place place) {
-        this.view = (PaymentView) PortalViewFactory.instance(PaymentView.class);
+    public PotentialTenantActivity(Place place) {
+        this.view = (PotentialTenantView) PortalViewFactory.instance(PotentialTenantView.class);
         withPlace(place);
+
     }
 
-    public PaymentActivity withPlace(Place place) {
+    public PotentialTenantActivity withPlace(Place place) {
         return this;
     }
 
@@ -38,5 +39,4 @@ public class PaymentActivity extends AbstractActivity {
         panel.setWidget(view);
 
     }
-
 }

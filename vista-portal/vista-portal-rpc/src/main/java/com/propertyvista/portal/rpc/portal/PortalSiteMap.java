@@ -32,6 +32,10 @@ public class PortalSiteMap implements SiteMap {
     public static class Page extends AppPlace {
     }
 
+    @PlaceProperties(caption = "Potential Tenants")
+    public static class PotentialTenants extends AppPlace {
+    }
+
     @PlaceProperties(caption = "Find an Apartment")
     @NavigationItem(navigLabel = "FindApartment")
     public static class FindApartment extends AppPlace {
@@ -66,27 +70,19 @@ public class PortalSiteMap implements SiteMap {
         public static class CreateAccount extends AppPlace {
         }
 
-        @NavigationItem(navigLabel = "navig")
-        public static class Navigator extends AppPlace {
-            @PlaceProperties(caption = "Tenant Profile")
-            @NavigationItem(navigLabel = "Profile")
-            public static class TenantProfile extends AppPlace {
-            }
+        public static class PersonalInfo extends AppPlace {
+        }
 
-            @PlaceProperties(caption = "Maintenance")
-            @NavigationItem(navigLabel = "Maintenance")
-            public static class Maintenance extends AppPlace {
-            }
+        public static class Maintenance extends AppPlace {
+        }
 
-            @PlaceProperties(caption = "Payment")
-            @NavigationItem(navigLabel = "Payment")
-            public static class Payment extends AppPlace {
-            }
+        public static class BillingInfo extends AppPlace {
+        }
 
-            @PlaceProperties(caption = "Lease Application")
-            @NavigationItem(navigLabel = "LeaseApp")
-            public static class LeaseApplication extends AppPlace {
-            }
+        public static class LeaseTerm extends AppPlace {
+        }
+
+        public static class Dashboard extends AppPlace {
         }
 
     }

@@ -33,18 +33,27 @@ public class PortalSitePreload extends AbstractDataPreloader {
             landingPage.type().setValue(PageDescriptor.Type.landing);
             landingPage.content().content().setValue(IOUtils.getUTF8TextResource("site-landing.html", this.getClass()));
             landingPage.content().path().setValue(PageContent.PATH_SEPARATOR);
-
-            {
-                PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                page.type().setValue(PageDescriptor.Type.staticContent);
-                page.caption().setValue("Home");
-                page.content().content().setValue(IOUtils.getUTF8TextResource("site-home.html", this.getClass()));
-                landingPage.childPages().add(page);
-            }
+//TODO looks like this is obsolete
+/*
+ * {
+ * PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+ * page.type().setValue(PageDescriptor.Type.staticContent);
+ * page.caption().setValue("Home");
+ * page.content().content().setValue(IOUtils.getUTF8TextResource("site-home.html",
+ * this.getClass()));
+ * landingPage.childPages().add(page);
+ * }
+ */
 
             {
                 PageDescriptor page = EntityFactory.create(PageDescriptor.class);
                 page.type().setValue(PageDescriptor.Type.findApartment);
+                page.content().content().setValue(CommonsGenerator.lipsum());
+                landingPage.childPages().add(page);
+            }
+            {
+                PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                page.type().setValue(PageDescriptor.Type.potentialTenants);
                 page.content().content().setValue(CommonsGenerator.lipsum());
                 landingPage.childPages().add(page);
             }
@@ -80,8 +89,8 @@ public class PortalSitePreload extends AbstractDataPreloader {
             {
                 PageDescriptor page = EntityFactory.create(PageDescriptor.class);
                 page.type().setValue(PageDescriptor.Type.staticContent);
-                page.caption().setValue("Contact Us");
-                page.content().content().setValue(IOUtils.getUTF8TextResource("site-contact.html", this.getClass()));
+                page.caption().setValue("Customer Care");
+                page.content().content().setValue(IOUtils.getUTF8TextResource("site-customer-care.html", this.getClass()));
                 landingPage.childPages().add(page);
             }
 

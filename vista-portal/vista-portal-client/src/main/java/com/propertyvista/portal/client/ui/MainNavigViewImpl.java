@@ -20,10 +20,6 @@ import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -267,18 +263,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                     presenter.navigTo(place);
                 }
             }, ClickEvent.getType());
-            addDomHandler(new MouseOverHandler() {
-                @Override
-                public void onMouseOver(MouseOverEvent event) {
-                    label.getElement().getStyle().setProperty("color", "#555");
-                }
-            }, MouseOverEvent.getType());
-            addDomHandler(new MouseOutHandler() {
-                @Override
-                public void onMouseOut(MouseOutEvent event) {
-                    label.getElement().getStyle().setProperty("color", "#7B8388");
-                }
-            }, MouseOutEvent.getType());
+
             getElement().getStyle().setCursor(Cursor.POINTER);
 
         }

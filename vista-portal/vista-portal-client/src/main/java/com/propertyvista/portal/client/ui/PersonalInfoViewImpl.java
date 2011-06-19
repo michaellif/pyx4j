@@ -13,14 +13,33 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class PaymentViewImpl extends SimplePanel implements PaymentView {
+import com.propertyvista.portal.domain.dto.ResidentDTO;
 
-    public PaymentViewImpl() {
-        HTML label = new HTML("Payment");
-        setWidget(label);
+public class PersonalInfoViewImpl extends SimplePanel implements PersonalInfoView {
+
+    private final PersonalInfoForm form;
+
+    PersonalInfoView.Presenter presenter;
+
+    public PersonalInfoViewImpl() {
+        form = new PersonalInfoForm();
+        form.initialize();
+        setWidget(form);
 
     }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+
+    }
+
+    @Override
+    public void populate(ResidentDTO personalInfo) {
+        form.populate(personalInfo);
+
+    }
+
 }

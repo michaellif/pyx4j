@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
+ * Created on Jun 18, 2011
  * @author Dad
  * @version $Id$
  */
@@ -15,6 +15,6 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface TenantProfileView extends IsWidget {
+public interface DashboardView extends IsWidget {
 
 }

@@ -32,7 +32,7 @@ import com.propertyvista.portal.client.mvp.ContentActivityMapper;
 import com.propertyvista.portal.client.mvp.LogoActivityMapper;
 import com.propertyvista.portal.client.mvp.MainNavigActivityMapper;
 import com.propertyvista.portal.client.mvp.StaticContentActivityMapper;
-import com.propertyvista.portal.client.themes.GainsboroTheme;
+import com.propertyvista.portal.client.themes.BlueColdTheme;
 
 public class PortalView extends FlowPanel {
 
@@ -46,7 +46,7 @@ public class PortalView extends FlowPanel {
 
         EventBus eventBus = AppSite.getEventBus();
 
-        StyleManger.installTheme(new GainsboroTheme());
+        StyleManger.installTheme(new BlueColdTheme());
 
         String prefix = DEFAULT_STYLE_PREFIX;
 
