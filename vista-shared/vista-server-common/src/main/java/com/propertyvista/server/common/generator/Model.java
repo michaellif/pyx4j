@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.importer;
+package com.propertyvista.server.common.generator;
 
 import java.util.ArrayList;
 import java.util.List;

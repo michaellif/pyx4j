@@ -46,6 +46,7 @@ import com.propertyvista.portal.server.portal.PublicDataUpdater;
 import com.propertyvista.portal.server.preloader.MeidaGenerator;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
+import com.propertyvista.server.common.generator.Model;
 
 public class Importer {
 

@@ -40,6 +40,7 @@ import com.propertyvista.portal.server.importer.bean.Region;
 import com.propertyvista.portal.server.importer.bean.Residential;
 import com.propertyvista.portal.server.importer.bean.Room;
 import com.propertyvista.portal.server.importer.csv.AvailableUnit;
+import com.propertyvista.server.common.generator.Model;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class Mapper {

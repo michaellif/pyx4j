@@ -22,6 +22,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
 import com.propertyvista.portal.server.generator.CommonsGenerator;
+import com.propertyvista.server.common.generator.Model;
 
 public class Generator {
     private final Model model;
