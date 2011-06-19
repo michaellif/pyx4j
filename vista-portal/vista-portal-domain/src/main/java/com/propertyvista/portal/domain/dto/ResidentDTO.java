@@ -16,6 +16,7 @@ package com.propertyvista.portal.domain.dto;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.domain.Person;
@@ -23,6 +24,7 @@ import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.Vehicle;
 
+@Transient
 public interface ResidentDTO extends Person {
 
     @Owned
