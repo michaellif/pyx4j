@@ -32,7 +32,7 @@ public class VistaServerSideConfigurationST22 extends VistaServerSideConfigurati
 
     @Override
     public boolean isDevelopmentBehavior() {
-        return false;
+        return true;
     }
 
     @Override
