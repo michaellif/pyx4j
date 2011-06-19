@@ -20,6 +20,9 @@
  */
 package com.pyx4j.rpc.rebind;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.UnableToCompleteException;
@@ -40,6 +43,8 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
 
     private final JClassType iEntityType;
 
+    private final Set<String> signatures = new HashSet<String>();
+
     public IServiceImplMethodCreator(AbstractGeneratorClassCreator classCreator, TypeOracle oracle) throws UnableToCompleteException {
         super(classCreator);
         try {
@@ -55,6 +60,11 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
             throws UnableToCompleteException {
 
         int signature = getMethodSignature(targetMethod);
+        if (signatures.contains(targetMethod.getName() + signature)) {
+            logger.log(Type.ERROR, "Duplicate method signature: " + currentCreator.getTarget().getName() + "." + targetMethod.getName());
+            throw new UnableToCompleteException();
+        }
+        signatures.add(targetMethod.getName() + signature);
 
         print("execute(");
         print("\"");

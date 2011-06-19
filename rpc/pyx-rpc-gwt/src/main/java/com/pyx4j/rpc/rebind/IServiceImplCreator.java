@@ -33,14 +33,17 @@ public class IServiceImplCreator extends AbstractGeneratorClassCreator {
 
     private final TypeOracle oracle;
 
-    public IServiceImplCreator(SourceWriter sourceWriter, JClassType interfaceType, TypeOracle oracle) {
+    IServiceImplMethodCreator methodCreator;
+
+    public IServiceImplCreator(SourceWriter sourceWriter, JClassType interfaceType, TypeOracle oracle) throws UnableToCompleteException {
         super(sourceWriter, interfaceType);
         this.oracle = oracle;
+        methodCreator = new IServiceImplMethodCreator(this, oracle);
     }
 
     @Override
     protected void emitMethodBody(TreeLogger logger, JMethod method, GwtLocale locale) throws UnableToCompleteException {
-        IServiceImplMethodCreator methodCreator = new IServiceImplMethodCreator(this, oracle);
+
         methodCreator.createMethodFor(logger, method, null, null, locale);
     }
 }
