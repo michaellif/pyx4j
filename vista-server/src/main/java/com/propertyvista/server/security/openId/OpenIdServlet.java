@@ -15,9 +15,7 @@ package com.propertyvista.server.security.openId;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,10 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.security.shared.CoreBehavior;
-import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.essentials.server.dev.DevSession;
 
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 
@@ -54,17 +49,16 @@ public class OpenIdServlet extends HttpServlet {
             createResponsePage(response, true, "Login via Google Apps", OpenId.getDestinationUrl(OpenIdServlet.DOMAIN));
         } else {
             log.info("openIdResponse.email [{}]", openIdResponse.email);
-            String receivingURL = (String) Context.getVisit().getAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
-            Set<Behavior> behaviours = new HashSet<Behavior>();
-            behaviours.add(CoreBehavior.USER);
-            Lifecycle.beginSession(null, behaviours);
+            DevSession devSession = DevSession.getSession();
+            String receivingURL = (String) devSession.getAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
+            devSession.setAttribute(OpenIdFilter.ACCESS_GRANTED_ATTRIBUTE, Boolean.TRUE);
             if (receivingURL == null) {
                 receivingURL = ServerSideConfiguration.instance().getMainApplicationURL();
             } else {
-                Context.getVisit().removeAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
+                devSession.removeAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
             }
             if (openIdResponse.email != null) {
-                Context.getVisit().setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, openIdResponse.email.toLowerCase(Locale.ENGLISH));
+                devSession.setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, openIdResponse.email.toLowerCase(Locale.ENGLISH));
             }
             createResponsePage(response, false, "Login successful Continue to application", receivingURL);
         }

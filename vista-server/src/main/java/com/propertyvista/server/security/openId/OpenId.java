@@ -40,9 +40,8 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
+import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.gwt.server.ServletUtils;
-import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.config.SystemConfig;
 
@@ -92,8 +91,7 @@ public class OpenId {
 
             // store the discovery information in the user's session for later use
             // leave out for stateless operation / if there is no session
-            Lifecycle.beginAnonymousSession();
-            Context.getVisit().setAttribute(DISCOVERED_ATTRIBUTE, discovered);
+            DevSession.getSession().setAttribute(DISCOVERED_ATTRIBUTE, discovered);
 
             AuthRequest authReq = manager.authenticate(discovered, ServerSideConfiguration.instance().getMainApplicationURL() + returnServletPath);
 
@@ -161,7 +159,7 @@ public class OpenId {
      */
     public static OpenIdResponse readResponse(HttpServletRequest request, String userDomain) {
         try {
-            if (Context.getVisit() == null) {
+            if (DevSession.getSession() == null) {
                 log.debug("session is missing");
                 return null;
             }
@@ -170,7 +168,7 @@ public class OpenId {
             ParameterList responsePrams = new ParameterList(request.getParameterMap());
 
             // retrieve the previously stored discovery information
-            DiscoveryInformation discovered = (DiscoveryInformation) Context.getVisit().getAttribute(DISCOVERED_ATTRIBUTE);
+            DiscoveryInformation discovered = (DiscoveryInformation) DevSession.getSession().getAttribute(DISCOVERED_ATTRIBUTE);
             if (discovered == null) {
                 log.debug("Session terminated");
                 return null;

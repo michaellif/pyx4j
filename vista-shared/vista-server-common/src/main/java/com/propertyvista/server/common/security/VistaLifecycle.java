@@ -13,49 +13,20 @@
  */
 package com.propertyvista.server.common.security;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.security.shared.CoreBehavior;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
 public class VistaLifecycle {
 
     public static String beginSession(UserVisit userVisit, Set<Behavior> behaviours) {
-
-        //OpenId
-        if (SecurityController.checkBehavior(CoreBehavior.USER)) {
-            behaviours.add(CoreBehavior.USER);
-        }
-
-        String hasOpenIdEmail = null;
-        if (Context.getVisit() != null) {
-            hasOpenIdEmail = (String) Context.getVisit().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE);
-        }
-
         String sessionToken = Lifecycle.beginSession(userVisit, behaviours);
-
-        if (hasOpenIdEmail != null) {
-            Context.getVisit().setAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE, hasOpenIdEmail);
-        }
         return sessionToken;
     }
 
     public static void endSession() {
-        boolean hasOpenIdSession = SecurityController.checkBehavior(CoreBehavior.USER);
-        String hasOpenIdEmail = (String) Context.getVisit().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE);
         Lifecycle.endSession();
-        if (hasOpenIdSession) {
-            Set<Behavior> behaviours = new HashSet<Behavior>();
-            behaviours.add(CoreBehavior.USER);
-            Lifecycle.beginSession(null, behaviours);
-            if (hasOpenIdEmail != null) {
-                Context.getVisit().setAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE, hasOpenIdEmail);
-            }
-        }
     }
 }

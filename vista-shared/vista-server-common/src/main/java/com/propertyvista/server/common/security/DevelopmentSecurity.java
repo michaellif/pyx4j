@@ -16,7 +16,7 @@ package com.propertyvista.server.common.security;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.essentials.server.dev.DevSession;
 
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.server.domain.dev.DevelopmentUser;
@@ -88,7 +88,7 @@ public class DevelopmentSecurity {
     }
 
     private static DevelopmentUser findByOpenId() {
-        String email = (String) Context.getVisit().getAttribute(OPENID_USER_EMAIL_ATTRIBUTE);
+        String email = (String) DevSession.getSession().getAttribute(OPENID_USER_EMAIL_ATTRIBUTE);
         if (email == null) {
             return null;
         }
