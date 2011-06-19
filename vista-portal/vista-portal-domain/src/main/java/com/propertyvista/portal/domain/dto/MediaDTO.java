@@ -13,9 +13,11 @@
  */
 package com.propertyvista.portal.domain.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Transient
 public interface MediaDTO extends IEntity {
 
     IPrimitive<String> caption();
