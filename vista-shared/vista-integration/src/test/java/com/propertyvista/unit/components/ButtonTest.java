@@ -14,7 +14,7 @@
 package com.propertyvista.unit.components;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.selenium.BaseSeleniumTestCase;
+import com.pyx4j.selenium.SeleniumTestBase;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 
 import com.propertyvista.portal.tester.TestComponentDebugId;
@@ -23,7 +23,7 @@ import com.propertyvista.unit.VistaDevLogin;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
-public class ButtonTest extends BaseSeleniumTestCase {
+public class ButtonTest extends SeleniumTestBase {
 
     @Override
     protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {

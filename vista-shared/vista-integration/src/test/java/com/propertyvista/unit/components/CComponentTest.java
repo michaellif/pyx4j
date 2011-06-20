@@ -17,7 +17,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.selenium.BaseSeleniumTestCase;
+import com.pyx4j.selenium.SeleniumTestBase;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 
 import com.propertyvista.portal.tester.TestComponentDebugId;
@@ -26,7 +26,7 @@ import com.propertyvista.unit.VistaDevLogin;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
-public class CComponentTest extends BaseSeleniumTestCase {
+public class CComponentTest extends SeleniumTestBase {
 
     @Override
     protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {

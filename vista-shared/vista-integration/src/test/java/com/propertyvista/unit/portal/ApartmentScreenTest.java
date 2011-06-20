@@ -31,7 +31,7 @@ import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
-public class ApartmentScreenTest extends WizardBaseSeleniumTestCase {
+public class ApartmentScreenTest extends WizardSeleniumTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(ApartmentScreenTest.class);
 

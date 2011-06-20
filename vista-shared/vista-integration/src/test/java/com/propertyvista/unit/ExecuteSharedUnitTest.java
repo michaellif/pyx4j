@@ -19,13 +19,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
-import com.pyx4j.selenium.UnitTestExecutionTestCase;
+import com.pyx4j.selenium.UnitTestExecutionTestBase;
 
 import com.propertyvista.portal.tester.TesterDebugId;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
-public class ExecuteSharedUnitTest extends UnitTestExecutionTestCase {
+public class ExecuteSharedUnitTest extends UnitTestExecutionTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(ExecuteSharedUnitTest.class);
 

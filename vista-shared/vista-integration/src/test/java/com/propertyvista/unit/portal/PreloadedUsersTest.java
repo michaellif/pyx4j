@@ -30,7 +30,7 @@ import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.server.common.reference.SharedData;
 
-public class PreloadedUsersTest extends PortalVerificationTestCase {
+public class PreloadedUsersTest extends PortalVerificationTestBase {
 
     @Override
     protected void setUp() throws Exception {

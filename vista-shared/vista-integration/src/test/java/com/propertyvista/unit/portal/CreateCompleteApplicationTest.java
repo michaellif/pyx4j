@@ -60,7 +60,7 @@ import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.portal.server.ptapp.services.ApplicationServiceImpl;
 import com.propertyvista.server.common.reference.SharedData;
 
-public class CreateCompleteApplicationTest extends PortalVerificationTestCase {
+public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(CreateCompleteApplicationTest.class);
 

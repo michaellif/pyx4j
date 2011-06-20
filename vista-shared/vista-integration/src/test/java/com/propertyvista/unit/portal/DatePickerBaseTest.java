@@ -34,7 +34,7 @@ import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.server.common.reference.SharedData;
 
-public class DatePickerBaseTest extends WizardBaseSeleniumTestCase {
+public class DatePickerBaseTest extends WizardSeleniumTestBase {
 
     private final IDebugId gridId = new CompositeDebugId(DatePickerIDs.DatePicker, "0");
 

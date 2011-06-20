@@ -13,11 +13,11 @@
  */
 package com.propertyvista.unit;
 
-import com.pyx4j.selenium.BaseSeleniumTestCase;
+import com.pyx4j.selenium.SeleniumTestBase;
 
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
-public abstract class VistaBaseSeleniumTestCase extends BaseSeleniumTestCase {
+public abstract class VistaSeleniumTestBase extends SeleniumTestBase {
 
     @Override
     protected void setUp() throws Exception {

@@ -45,7 +45,7 @@ import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.server.ptapp.services.ApplicationServiceImpl;
 
-abstract class PortalVerificationTestCase extends WizardBaseSeleniumTestCase {
+abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
 
     protected void assertAptUnitForm(IDebugId formDebugId, AptUnitDTO aUnit) {
         assertValueOnForm(formDebugId, aUnit.unitType());

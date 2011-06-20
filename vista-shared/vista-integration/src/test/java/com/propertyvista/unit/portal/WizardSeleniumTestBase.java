@@ -28,11 +28,11 @@ import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.unit.VistaBaseSeleniumTestCase;
+import com.propertyvista.unit.VistaSeleniumTestBase;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
-abstract class WizardBaseSeleniumTestCase extends VistaBaseSeleniumTestCase {
+abstract class WizardSeleniumTestBase extends VistaSeleniumTestBase {
 
     @Override
     protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {

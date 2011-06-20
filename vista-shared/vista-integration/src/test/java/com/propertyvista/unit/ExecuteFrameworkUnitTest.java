@@ -20,9 +20,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.selenium.DefaultSeleniumTestConfiguration;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
-import com.pyx4j.selenium.UnitTestExecutionTestCase;
+import com.pyx4j.selenium.UnitTestExecutionTestBase;
 
-public class ExecuteFrameworkUnitTest extends UnitTestExecutionTestCase {
+public class ExecuteFrameworkUnitTest extends UnitTestExecutionTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(ExecuteFrameworkUnitTest.class);
 
