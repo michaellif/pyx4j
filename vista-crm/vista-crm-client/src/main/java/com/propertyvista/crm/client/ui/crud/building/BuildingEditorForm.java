@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -34,7 +36,6 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -60,19 +61,28 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         //  main.add(inject(proto().media()), 15);
 
         TabLayoutPanel tabPanel = new TabLayoutPanel(2.7, Unit.EM);
+        tabPanel.add(new ScrollPanel(new Label("Building dashboard goes here... ")), i18n.tr("Dashboard"));
 
-        tabPanel.add(new ScrollPanel(createGeneralTab()), "General");
-        tabPanel.add(new ScrollPanel(createDetailsTab()), "Details");
-        if (!isEditable()) {
-            tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), "Units");
-            tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getElevatorListerView().asWidget()), "Elevators");
-            tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getBoilerListerView().asWidget()), "Boilers");
-            tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getRoofListerView().asWidget()), "Roof");
-            tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getParkingListerView().asWidget()), "Parking");
-            tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getLockerAreaListerView().asWidget()), "Lolckers");
-        }
-        tabPanel.add(new ScrollPanel(createFinancialTab()), "Financials & Marketing");
-        tabPanel.add(new ScrollPanel(createContactTab()), "Contact Information");
+        tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
+        tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
+
+        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), i18n.tr("Units"));
+
+        FlowPanel combinedtab = new FlowPanel();
+        combinedtab.add(((BuildingView) getParentView()).getElevatorListerView().asWidget());
+        combinedtab.add(((BuildingView) getParentView()).getBoilerListerView().asWidget());
+        combinedtab.add(((BuildingView) getParentView()).getRoofListerView().asWidget());
+        tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Mechanicals"));
+
+        combinedtab = new FlowPanel();
+        combinedtab.add(((BuildingView) getParentView()).getParkingListerView().asWidget());
+        combinedtab.add(((BuildingView) getParentView()).getLockerAreaListerView().asWidget());
+        tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Parking @ Locker Area"));
+
+        tabPanel.add(new ScrollPanel(createFinancialTab()), i18n.tr("Financials"));
+        tabPanel.add(new ScrollPanel(createMarketingTab()), i18n.tr("Marketing"));
+        tabPanel.add(new ScrollPanel(createContactTab()), i18n.tr("Contact Information"));
+        tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 
         asWidget().setSize("100%", "100%");
         tabPanel.setSize("100%", "100%");
@@ -120,9 +130,13 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().financial().lastAppraisalDate()), 8.2);
         split.getRightPanel().add(inject(proto().financial().lastAppraisalValue()), 5);
         split.getRightPanel().add(inject(proto().financial().currency().name()), split.getRightPanel().getDefaultLabelWidth(), 10, i18n.tr("Currency Name"));
+        return panel;
+    }
 
-        panel.add(new CrmHeader1Decorator(i18n.tr("Marketing")));
-        panel.add(split = new VistaDecoratorsSplitFlowPanel());
+    private Widget createMarketingTab() {
+        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        panel.add(split);
         SubtypeInjectors.injectMarketing(panel, split, proto().marketing(), this);
         return panel;
     }

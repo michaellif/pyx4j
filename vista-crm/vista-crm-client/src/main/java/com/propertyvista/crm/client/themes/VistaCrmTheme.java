@@ -315,8 +315,12 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(buttonEx + ":hover");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE85);
+        style.addProperty("border", "1px solid #555");
+//        style.addProperty("background-color", ThemeColor.OBJECT_TONE85);
         addStyle(style);
+
+        style = new Style(buttonEx + "[disabled]:hover");
+        style.addProperty("border", "1px outset #555");
 
         //
         // default AnchorButton: 
