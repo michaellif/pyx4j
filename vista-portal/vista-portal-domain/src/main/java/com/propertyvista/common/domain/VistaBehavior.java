@@ -21,6 +21,8 @@ public enum VistaBehavior implements Behavior {
 
     POTENTIAL_TENANT,
 
+    TENANT,
+
     PROPERTY_MANAGER,
 
     PRODUCTION_SUPPORT,
