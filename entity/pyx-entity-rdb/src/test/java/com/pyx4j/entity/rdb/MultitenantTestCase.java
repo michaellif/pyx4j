@@ -84,8 +84,16 @@ public abstract class MultitenantTestCase extends DatastoreTestBase {
         emp2.firstName().setValue("Bob2 " + uniqueString());
         emp2.setPrimaryKey(emp.getPrimaryKey());
 
-        //TODO test error
-        //srv.persist(emp2);
+        boolean saved = false;
+        try {
+            srv.persist(emp2);
+            saved = true;
+        } catch (RuntimeException e) {
+            // OK
+        }
+        if (saved) {
+            fail("Should not save entity with ID in diferent namespace");
+        }
 
         NamespaceManager.setNamespace("1");
         Employee emp1 = srv.retrieve(Employee.class, emp.getPrimaryKey());
