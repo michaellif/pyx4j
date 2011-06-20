@@ -142,8 +142,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
-    private TableModel tableModel(EntityMeta entityMeta) {
-        return mappings.ensureTable(connectionProvider.getDialect(), entityMeta);
+    private TableModel tableModel(Connection connection, EntityMeta entityMeta) {
+        return mappings.ensureTable(connection, connectionProvider.getDialect(), entityMeta);
     }
 
     @Override
@@ -151,7 +151,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
-            persist(connection, tableModel(entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
+            persist(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -172,7 +172,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             entity.setPrimaryKey(ent.getPrimaryKey());
         } else {
             entity = adapter.onEntityCreation(entity);
-            persist(connection, tableModel(entity.getEntityMeta()), entity, now);
+            persist(connection, tableModel(connection, entity.getEntityMeta()), entity, now);
         }
     }
 
@@ -181,7 +181,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             MemberMeta memberMeta = member.getMemberMeta();
             IEntity childEntity = (IEntity) member.getMember(entity);
             if (memberMeta.isOwnedRelationships()) {
-                persist(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
+                persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
             } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
                 mergeReference(connection, memberMeta, childEntity, now);
             }
@@ -221,7 +221,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                     for (IEntity childEntity : iCollectionMember) {
                         if (memberMeta.isOwnedRelationships()) {
-                            persist(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
+                            persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
                         } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
                             mergeReference(connection, memberMeta, childEntity, now);
                         }
@@ -250,9 +250,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     for (IEntity childEntity : iCollectionMember) {
                         if (memberMeta.isOwnedRelationships()) {
                             if (doMerge) {
-                                merge(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
+                                merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
                             } else {
-                                persist(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
+                                persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
                             }
                         } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
                             mergeReference(connection, memberMeta, childEntity, now);
@@ -274,7 +274,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             connection = connectionProvider.getConnection();
             T entity = entityIterable.iterator().next();
-            persist(connection, tableModel(entity.getEntityMeta()), entityIterable, DateUtils.getRoundedNow());
+            persist(connection, tableModel(connection, entity.getEntityMeta()), entityIterable, DateUtils.getRoundedNow());
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -337,7 +337,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
-            merge(connection, tableModel(entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
+            merge(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -401,7 +401,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 Iterator<IEntity> iterator = collectionMember.iterator();
                 ICollection<IEntity, ?> baseCollectionMember = (ICollection<IEntity, ?>) member.getMember(baseEntity);
                 Iterator<IEntity> baseIterator = baseCollectionMember.iterator();
-                TableModel childTM = tableModel(EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
+                TableModel childTM = tableModel(connection, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
                 for (; iterator.hasNext() && baseIterator.hasNext();) {
                     IEntity childEntity = iterator.next();
                     IEntity childBaseEntity = baseIterator.next();
@@ -459,7 +459,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         delete(baseChildEntity);
                     }
                 }
-                merge(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
+                merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
             } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
                 mergeReference(connection, memberMeta, childEntity, now);
             }
@@ -505,7 +505,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private <T extends IEntity> T cascadeRetrieve(Connection connection, T entity) {
-        TableModel tm = tableModel(entity.getEntityMeta());
+        TableModel tm = tableModel(connection, entity.getEntityMeta());
         if (entity.getPrimaryKey() == null) {
             return null;
         }
@@ -541,7 +541,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
-            TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+            TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
             List<T> rs = tm.query(connection, criteria, 1);
             if (rs.isEmpty()) {
                 return null;
@@ -573,7 +573,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 final T entity = EntityFactory.create(entityClass);
                 entity.setPrimaryKey(pk);
                 if (count == 0) {
-                    tm = tableModel(entity.getEntityMeta());
+                    tm = tableModel(connection, entity.getEntityMeta());
                 }
                 entities.put(pk, entity);
                 count++;
@@ -627,7 +627,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
-            TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+            TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
             List<T> l = tm.query(connection, criteria, -1);
             for (T entity : l) {
                 cascadeRetrieveMembers(connection, tm, entity);
@@ -641,7 +641,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public <T extends IEntity> ICursorIterator<T> query(final String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
         final Connection connection = connectionProvider.getConnection();
-        final TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        final TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
         if (encodedCursorRefference != null) {
             log.info("Received encodedCursorReference:" + encodedCursorRefference + ", will use it");
             // TODO   
@@ -684,7 +684,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
-            TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+            TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
             return tm.queryKeys(connection, criteria, -1);
         } finally {
             SQLUtils.closeQuietly(connection);
@@ -702,7 +702,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
-            TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+            TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
             Number count = (Number) tm.aggregate(connection, criteria, SQLAggregateFunctions.COUNT, null);
             if (count == null) {
                 return 0;
@@ -740,7 +740,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             log.info(Trace.enter() + "cascadeDelete {} id={}", entityMeta.getPersistenceName(), primaryKey);
         }
         try {
-            TableModel tm = tableModel(entityMeta);
+            TableModel tm = tableModel(connection, entityMeta);
 
             if (cascadedeleteDataEntity != null) {
                 for (MemberOperationsMeta member : tm.operationsMeta().getCascadeDeleteMembers()) {
@@ -784,7 +784,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
-            TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+            TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
 
             List<T> entities = tm.query(connection, criteria, -1);
 
@@ -839,7 +839,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             connection = connectionProvider.getConnection();
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
-            TableModel tm = tableModel(entityMeta);
+            TableModel tm = tableModel(connection, entityMeta);
             for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 CollectionsTableModel.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
             }
@@ -855,7 +855,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             connection = connectionProvider.getConnection();
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
-            TableModel tm = tableModel(entityMeta);
+            TableModel tm = tableModel(connection, entityMeta);
             for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 CollectionsTableModel.truncate(connection, member);
             }

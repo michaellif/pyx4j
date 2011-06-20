@@ -92,28 +92,23 @@ public class TableModel {
         }
     }
 
-    public void ensureExists(ConnectionProvider connectionProvider) throws SQLException {
-        Connection connection = connectionProvider.getConnection();
-        try {
-            {
-                TableMetadata tableMetadata = TableMetadata.getTableMetadata(connection, tableName);
-                if (tableMetadata == null) {
-                    SQLUtils.execute(connection, TableDDL.sqlCreate(connectionProvider.getDialect(), this));
-                } else {
-                    SQLUtils.execute(connection, TableDDL.validateAndAlter(connectionProvider.getDialect(), tableMetadata, this));
-                }
+    public void ensureExists(Connection connection, Dialect dialect) throws SQLException {
+        {
+            TableMetadata tableMetadata = TableMetadata.getTableMetadata(connection, tableName);
+            if (tableMetadata == null) {
+                SQLUtils.execute(connection, TableDDL.sqlCreate(dialect, this));
+            } else {
+                SQLUtils.execute(connection, TableDDL.validateAndAlter(dialect, tableMetadata, this));
             }
+        }
 
-            for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
-                TableMetadata memberTableMetadata = TableMetadata.getTableMetadata(connection, member.sqlName());
-                if (memberTableMetadata == null) {
-                    SQLUtils.execute(connection, TableDDL.sqlCreateCollectionMember(connectionProvider.getDialect(), member));
-                } else {
-                    SQLUtils.execute(connection, TableDDL.validateAndAlterCollectionMember(connectionProvider.getDialect(), memberTableMetadata, member));
-                }
+        for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
+            TableMetadata memberTableMetadata = TableMetadata.getTableMetadata(connection, member.sqlName());
+            if (memberTableMetadata == null) {
+                SQLUtils.execute(connection, TableDDL.sqlCreateCollectionMember(dialect, member));
+            } else {
+                SQLUtils.execute(connection, TableDDL.validateAndAlterCollectionMember(dialect, memberTableMetadata, member));
             }
-        } finally {
-            SQLUtils.closeQuietly(connection);
         }
     }
 

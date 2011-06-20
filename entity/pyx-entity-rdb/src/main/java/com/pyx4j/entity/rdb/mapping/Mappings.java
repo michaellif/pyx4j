@@ -63,7 +63,7 @@ public class Mappings {
         }
     }
 
-    public TableModel ensureTable(Dialect dialect, EntityMeta entityMeta) {
+    public TableModel ensureTable(Connection connection, Dialect dialect, EntityMeta entityMeta) {
         if (entityMeta.isTransient()) {
             throw new Error("Can't operate on Transient Entity");
         }
@@ -75,7 +75,7 @@ public class Mappings {
                     log.warn("redefining/extending table {} for class {}", model.getTableName(), entityMeta.getEntityClass());
                 }
                 try {
-                    model.ensureExists(connectionProvider);
+                    model.ensureExists(connection, dialect);
                 } catch (SQLException e) {
                     log.error("table creation error", e);
                     throw new RuntimeException(e);
