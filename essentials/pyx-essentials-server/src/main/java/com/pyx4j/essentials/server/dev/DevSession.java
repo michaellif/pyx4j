@@ -42,7 +42,11 @@ public class DevSession {
 
     private static Map<String, DevSession> sessions = new Hashtable<String, DevSession>();
 
+    private static int sessionDuration = Consts.DAY2HOURS * Consts.HOURS2SEC;
+
     private String id;
+
+    private long eol;
 
     protected Map<String, Object> attributes = new Hashtable<String, Object>();
 
@@ -56,6 +60,10 @@ public class DevSession {
             Cookie sessionCookie = Util.getCookie(Context.getRequest(), DEV_SESSION_COOKIE_NAME, true);
             if (sessionCookie != null) {
                 session = sessions.get(sessionCookie.getValue());
+                if ((session != null && session.eol <= System.currentTimeMillis())) {
+                    sessions.remove(session.id);
+                    session = null;
+                }
             }
             if (session == null) {
                 session = new DevSession();
@@ -74,8 +82,9 @@ public class DevSession {
 
         Cookie sessionCookie = new Cookie(DEV_SESSION_COOKIE_NAME, session.id);
         sessionCookie.setPath("/");
-        sessionCookie.setMaxAge(Consts.DAY2HOURS * Consts.HOURS2SEC);
+        sessionCookie.setMaxAge(sessionDuration);
         Context.getResponse().addCookie(sessionCookie);
+        session.eol = System.currentTimeMillis() + sessionDuration * Consts.SEC2MILLISECONDS;
 
         sessions.put(session.id, session);
         Context.getRequest().setAttribute(DEV_SESSION_REQUEST_ATTRIBUTE, session);
@@ -86,7 +95,7 @@ public class DevSession {
     public static void endSession() {
         DevSession session = getSession();
         if (session != null) {
-            sessions.remove(session);
+            sessions.remove(session.id);
 
             // Remove Session Cookie 
             Cookie sessionCookie = new Cookie(DEV_SESSION_COOKIE_NAME, "");
