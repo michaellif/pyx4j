@@ -40,9 +40,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public class BaseSeleniumTestCase extends TestCase {
+public class SeleniumTestBase extends TestCase {
 
-    private static final Logger log = LoggerFactory.getLogger(BaseSeleniumTestCase.class);
+    private static final Logger log = LoggerFactory.getLogger(SeleniumTestBase.class);
 
     protected ISeleniumTestConfiguration testConfig;
 
@@ -52,11 +52,11 @@ public class BaseSeleniumTestCase extends TestCase {
 
     private boolean errorHappened;
 
-    public BaseSeleniumTestCase() {
+    public SeleniumTestBase() {
         super();
     }
 
-    public BaseSeleniumTestCase(String name) {
+    public SeleniumTestBase(String name) {
         super(name);
     }
 

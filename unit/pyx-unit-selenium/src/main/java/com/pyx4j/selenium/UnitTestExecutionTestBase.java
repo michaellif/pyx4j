@@ -24,7 +24,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.unit.shared.UnitDebugId;
 import com.pyx4j.widgets.client.dialog.DialogDebugId;
 
-public abstract class UnitTestExecutionTestCase extends BaseSeleniumTestCase {
+public abstract class UnitTestExecutionTestBase extends SeleniumTestBase {
 
     protected void executeAllClientUnitTests(int waitSeconds) {
         selenium.waitFor(UnitDebugId.JUnit_StartClientTests);

@@ -23,12 +23,12 @@ package com.pyx4j.selenium.tests;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.selenium.BaseSeleniumTestCase;
+import com.pyx4j.selenium.SeleniumTestBase;
 import com.pyx4j.selenium.DefaultSeleniumTestConfiguration;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.widgets.client.dialog.DialogDebugId;
 
-public class ExampleTest extends BaseSeleniumTestCase {
+public class ExampleTest extends SeleniumTestBase {
 
     @Override
     protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {
