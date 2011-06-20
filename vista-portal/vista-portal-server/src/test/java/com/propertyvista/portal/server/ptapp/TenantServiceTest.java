@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.config.tests.VistaDBTestCase;
+import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
@@ -29,7 +29,7 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
-public class TenantServiceTest extends VistaDBTestCase {
+public class TenantServiceTest extends VistaDBTestBase {
     private final static Logger log = LoggerFactory.getLogger(TenantServiceTest.class);
 
     private String email;

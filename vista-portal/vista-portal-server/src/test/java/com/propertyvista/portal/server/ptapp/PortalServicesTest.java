@@ -22,7 +22,7 @@ import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.config.tests.VistaDBTestCase;
+import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
@@ -35,7 +35,7 @@ import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
-public class PortalServicesTest extends VistaDBTestCase {
+public class PortalServicesTest extends VistaDBTestBase {
 
     private final static Logger log = LoggerFactory.getLogger(PortalServicesTest.class);
 

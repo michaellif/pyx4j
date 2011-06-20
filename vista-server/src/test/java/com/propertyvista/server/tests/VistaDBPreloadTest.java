@@ -19,10 +19,10 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.TimeUtils;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.config.tests.VistaDBTestCase;
+import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
-public class VistaDBPreloadTest extends VistaDBTestCase {
+public class VistaDBPreloadTest extends VistaDBTestBase {
 
 	private final static Logger log = LoggerFactory
 			.getLogger(VistaDBPreloadTest.class);

@@ -22,13 +22,13 @@ import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.config.tests.VistaDBTestCase;
+import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
-public class ApplicationServiceTest extends VistaDBTestCase {
+public class ApplicationServiceTest extends VistaDBTestBase {
     //    private final static Logger log = LoggerFactory.getLogger(ApplicationServiceTest.class);
 
     @Override

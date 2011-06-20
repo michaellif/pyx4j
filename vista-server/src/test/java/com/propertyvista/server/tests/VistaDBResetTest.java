@@ -25,9 +25,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
-import com.propertyvista.config.tests.VistaDBTestCase;
+import com.propertyvista.config.tests.VistaDBTestBase;
 
-public class VistaDBResetTest extends VistaDBTestCase {
+public class VistaDBResetTest extends VistaDBTestBase {
 
     public void testObjectsStructure() {
         List<String> allClasses = EntityClassFinder.findEntityClasses();

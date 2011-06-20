@@ -38,12 +38,12 @@ import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.config.tests.VistaDBTestCase;
+import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
-public class CleanOrphanApplicationDocumentDataRecordsJobTest extends VistaDBTestCase {
+public class CleanOrphanApplicationDocumentDataRecordsJobTest extends VistaDBTestBase {
     private final static Logger log = LoggerFactory.getLogger(CleanOrphanApplicationDocumentDataRecordsJobTest.class);
 
     private final static boolean RUN_TESTS = true;

@@ -15,11 +15,11 @@ package com.propertyvista.portal.domain;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.config.tests.VistaDBTestCase;
+import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.util.DomainUtil;
 
-public class ObjectsFormatTest extends VistaDBTestCase {
+public class ObjectsFormatTest extends VistaDBTestBase {
 
     public void testMoneyFormat() {
         assertEquals("10", "$10.00", DomainUtil.createMoney(10).getStringView());

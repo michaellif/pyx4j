@@ -15,7 +15,7 @@ package com.propertyvista.config.tests;
 
 import junit.framework.TestCase;
 
-public abstract class VistaDBTestCase extends TestCase {
+public abstract class VistaDBTestBase extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
