@@ -71,24 +71,26 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         form.addValueChangeHandler(new ValueChangeHandler<E>() {
             @Override
             public void onValueChange(ValueChangeEvent<E> event) {
-                btnApply.setEnabled(true);
-                btnSave.setEnabled(true);
+                enableButtons(true);
             }
         });
     }
 
     @Override
     public void populate(E value) {
-        btnApply.setEnabled(false);
-        btnSave.setEnabled(false);
+        enableButtons(false);
         header.setCaption(defaultCaption + " " + value.getStringView());
         super.populate(value);
     }
 
     @Override
     public void onSaveSuccess() {
-        btnApply.setEnabled(false);
-        btnSave.setEnabled(false);
+        enableButtons(false);
+    }
+
+    @Override
+    public void onApplySuccess() {
+        enableButtons(false);
     }
 
     private Widget createButtons() {
@@ -101,7 +103,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
                 if (!form.isValid()) {
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
-                presenter.save();
+                presenter.apply();
             }
         });
 
@@ -123,11 +125,11 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
             }
         });
 
-        btnApply.setEnabled(false);
+        enableButtons(false);
+
         btnApply.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
         btnApply.setWidth("7em");
 
-        btnSave.setEnabled(false);
         btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
         btnSave.setWidth("7em");
         btnCancel.setWidth("5em");
@@ -148,4 +150,10 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         wrap.setWidth("100%");
         return wrap;
     }
+
+    protected void enableButtons(boolean enable) {
+        btnApply.setEnabled(enable);
+        btnSave.setEnabled(enable);
+    }
+
 }
