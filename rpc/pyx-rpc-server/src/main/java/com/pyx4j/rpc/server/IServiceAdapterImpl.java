@@ -42,6 +42,7 @@ import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
@@ -66,24 +67,24 @@ public class IServiceAdapterImpl implements IServiceAdapter {
         if (serviceFactory == null) {
             serviceFactory = new ReflectionServiceFactory();
         }
-        Class<? extends IService> serviceClass;
-        Class<? extends IService> clazz;
+        Class<? extends IService> serviceInterfaceClass;
+        Class<? extends IService> serviceImplClass;
         try {
-            serviceClass = (Class<? extends IService>) Class.forName(serviceInterfaceClassName);
-            clazz = serviceFactory.getIServiceClass(serviceInterfaceClassName);
+            serviceInterfaceClass = (Class<? extends IService>) Class.forName(serviceInterfaceClassName);
+            serviceImplClass = serviceFactory.getIServiceClass(serviceInterfaceClassName);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Service " + serviceInterfaceClassName + " not found");
         } catch (Throwable t) {
             log.error("Service call error", t);
             throw new UnRecoverableRuntimeException("Fatal system error");
         }
-        if (!IService.class.isAssignableFrom(serviceClass)) {
+        if (!IService.class.isAssignableFrom(serviceInterfaceClass)) {
             throw new UnRecoverableRuntimeException("Fatal system error");
         }
 
         IService serviceInstance;
         try {
-            serviceInstance = clazz.newInstance();
+            serviceInstance = serviceImplClass.newInstance();
         } catch (Throwable e) {
             log.error("Fatal system error", e);
             if ((e.getCause() != null) && (e.getCause() != e)) {
@@ -92,29 +93,36 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
         }
 
-        for (Method method : serviceClass.getMethods()) {
+        for (Method method : serviceInterfaceClass.getMethods()) {
             if ((method.getName().equals(serviceMethodName)) && (request.getServiceMethodSignature() == getMethodSignature(method))) {
-                assertToken(clazz, method);
+                assertToken(serviceImplClass, method);
                 return runMethod(serviceInstance, method, request.getArgs());
             }
         }
         throw new UnRecoverableRuntimeException("Fatal system error, Method [" + serviceMethodName + "] not found");
     }
 
-    private void assertToken(Class<? extends IService> clazz, Method method) {
+    private void assertToken(Class<? extends IService> serviceImplClass, Method method) {
+        Method implMethod;
+        try {
+            implMethod = serviceImplClass.getMethod(method.getName(), method.getParameterTypes());
+        } catch (Throwable e) {
+            log.error("Fatal system error", e);
+            throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
+        }
+
         Visit visit = Context.getVisit();
         if (visit == null) {
             return;
         }
-        if ((clazz.getAnnotation(IgnoreSessionToken.class) != null) || (method.getAnnotation(IgnoreSessionToken.class) != null)) {
+        if ((serviceImplClass.getAnnotation(IgnoreSessionToken.class) != null) || (implMethod.getAnnotation(IgnoreSessionToken.class) != null)) {
             return;
         }
         if (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken())) {
-            log.error("X-XSRF error, Srv {}.{}", clazz.getName(), method.getName());
+            log.error("X-XSRF error, Srv {}.{}", serviceImplClass.getName(), method.getName());
             log.error("X-XSRF error, {} user {}", Context.getSessionId(), visit);
             log.error("X-XSRF tokens: session: {}, request: {}", visit.getSessionToken(), Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER));
-            //TODO make it work
-            //throw new SecurityViolationException("Request requires authentication.");
+            throw new SecurityViolationException("Request requires authentication.");
         }
     }
 
