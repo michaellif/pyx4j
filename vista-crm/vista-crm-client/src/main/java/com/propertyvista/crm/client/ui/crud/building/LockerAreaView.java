@@ -7,24 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 16, 2011
- * @author Misha
+ * Created on 2011-05-04
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.dashboard;
+package com.propertyvista.crm.client.ui.crud.building;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.ui.crud.IListerView;
 
-import com.propertyvista.crm.rpc.domain.DashboardMetadata;
+import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.domain.property.asset.Locker;
 
-public interface DashboardView extends IsWidget {
+public interface LockerAreaView {
 
-    public interface Presenter {
+    interface Presenter {
 
-        public void populate();
+        DashboardView.Presenter getDashboardPresenter();
 
-        void save(DashboardMetadata dashboardMetadata);
+        IListerView.Presenter getLockerPresenter();
+
     }
 
-    void fill(DashboardMetadata dashboardMetadata);
+    DashboardView getDashboardView();
+
+    IListerView<Locker> getLockerView();
 }

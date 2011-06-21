@@ -61,7 +61,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         //  main.add(inject(proto().media()), 15);
 
         TabLayoutPanel tabPanel = new TabLayoutPanel(2.7, Unit.EM);
-        tabPanel.add(new ScrollPanel(new Label("Building dashboard goes here... ")), i18n.tr("Dashboard"));
+        tabPanel.add(((BuildingView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
         tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
@@ -79,21 +79,19 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         combinedtab.add(((BuildingView) getParentView()).getLockerAreaListerView().asWidget());
         tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Parking @ Locker Area"));
 
-        tabPanel.add(new ScrollPanel(createFinancialTab()), i18n.tr("Financials"));
+        tabPanel.add(new ScrollPanel(createFinancialTab()), i18n.tr("Financial"));
         tabPanel.add(new ScrollPanel(createMarketingTab()), i18n.tr("Marketing"));
         tabPanel.add(new ScrollPanel(createContactTab()), i18n.tr("Contact Information"));
         tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 
-        asWidget().setSize("100%", "100%");
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }
 
     private Widget createGeneralTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
-        main.add(split);
+
         split.getLeftPanel().add(inject(proto().info().name()), 15);
         split.getLeftPanel().add(inject(proto().info().propertyCode()), 12);
         split.getLeftPanel().add(inject(proto().info().type()), 12);
@@ -102,6 +100,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().info().residentialStories()), 5);
         injectAddress(split, proto().info().address());
         split.getRightPanel().add(inject(proto().complex()), 15);
+        main.add(split);
 
         main.add(new CrmHeader2Decorator(proto().amenities().getMeta().getCaption()));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
@@ -110,19 +109,20 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private Widget createContactTab() {
-        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
-        panel.add(split);
+
         split.getLeftPanel().add(inject(proto().contacts().website()), 23);
         split.getRightPanel().add(inject(proto().contacts().email().address()), split.getRightPanel().getDefaultLabelWidth(), 23, i18n.tr("Email Address"));
-        SubtypeInjectors.injectPhones(panel, proto().contacts().phones(), this);
-        return panel;
+        SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this);
+        main.add(split);
+
+        return main;
     }
 
     private Widget createFinancialTab() {
-        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
-        panel.add(split);
 
         split.getLeftPanel().add(inject(proto().financial().dateAquired()), 8.2);
         split.getLeftPanel().add(inject(proto().financial().purchasePrice()), 5);
@@ -130,21 +130,25 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().financial().lastAppraisalDate()), 8.2);
         split.getRightPanel().add(inject(proto().financial().lastAppraisalValue()), 5);
         split.getRightPanel().add(inject(proto().financial().currency().name()), split.getRightPanel().getDefaultLabelWidth(), 10, i18n.tr("Currency Name"));
-        return panel;
+        main.add(split);
+
+        return main;
     }
 
     private Widget createMarketingTab() {
-        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
-        panel.add(split);
-        SubtypeInjectors.injectMarketing(panel, split, proto().marketing(), this);
-        return panel;
+
+        SubtypeInjectors.injectMarketing(main, split, proto().marketing(), this);
+        main.add(split);
+
+        return main;
     }
 
     private Widget createDetailsTab() {
-        VistaDecoratorsFlowPanel details = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
-        details.add(split);
+
         split.getLeftPanel().add(inject(proto().info().structureType()), 15);
         split.getLeftPanel().add(inject(proto().info().structureBuildYear()), 15);
         split.getLeftPanel().add(inject(proto().info().constructionType()), 15);
@@ -154,7 +158,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().info().waterSupply()), 15);
         split.getRightPanel().add(inject(proto().info().centralAir()), 15);
         split.getRightPanel().add(inject(proto().info().centralHeat()), 15);
-        return details;
+        main.add(split);
+
+        return main;
     }
 
     private void injectAddress(final VistaDecoratorsSplitFlowPanel split, final Address address) {

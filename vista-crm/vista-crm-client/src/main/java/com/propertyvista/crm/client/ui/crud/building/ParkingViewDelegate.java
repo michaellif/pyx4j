@@ -7,42 +7,37 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2011-06-16
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.domain.property.asset.ParkingSpot;
-import com.propertyvista.dto.ParkingDTO;
 
-public class ParkingEditorViewImpl extends CrmEditorViewImplBase<ParkingDTO> implements ParkingEditorView {
+public class ParkingViewDelegate implements ParkingView {
 
-    private final ParkingViewDelegate delegate;
+    private final DashboardView dashboardView;
 
-    public ParkingEditorViewImpl() {
-        super(CrmSiteMap.Properties.Parking.class);
+    private final IListerView<ParkingSpot> spotLister;
 
-        delegate = new ParkingViewDelegate(false);
-
-        // create/init/set main form here: 
-        ParkingEditorForm form = new ParkingEditorForm(this);
-        form.initialize();
-        setForm(form);
+    public ParkingViewDelegate(boolean readOnly) {
+        dashboardView = new DashboardViewImpl("");
+        spotLister = new ListerInternalViewImplBase<ParkingSpot>(new ParkingSpotLister(/* readOnly */));
     }
 
     @Override
     public DashboardView getDashboardView() {
-        return delegate.getDashboardView();
+        return dashboardView;
     }
 
     @Override
     public IListerView<ParkingSpot> getSpotView() {
-        return delegate.getSpotView();
+        return spotLister;
     }
 }

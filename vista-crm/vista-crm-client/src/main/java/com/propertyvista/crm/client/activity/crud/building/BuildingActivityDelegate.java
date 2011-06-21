@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
@@ -21,7 +22,9 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
+import com.propertyvista.crm.client.activity.DashboardActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingView;
+import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.LockerAreaCrudService;
@@ -37,6 +40,8 @@ import com.propertyvista.dto.RoofDTO;
 
 public class BuildingActivityDelegate implements BuildingView.Presenter {
 
+    private final DashboardView.Presenter dashboard;
+
     private final IListerView.Presenter unitLister;
 
     private final IListerView.Presenter elevatorLister;
@@ -50,7 +55,9 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
     private final IListerView.Presenter lockerAreaLister;
 
     @SuppressWarnings("unchecked")
-    public BuildingActivityDelegate(BuildingView view) {
+    public BuildingActivityDelegate(BuildingView view, Place place) {
+
+        dashboard = new DashboardActivity(view.getDashboardView(), place);
 
         unitLister = new ListerActivityBase<AptUnitDTO>(view.getUnitListerView(), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class),
                 AptUnitDTO.class);
@@ -68,6 +75,11 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
 
         lockerAreaLister = new ListerActivityBase<LockerAreaDTO>(view.getLockerAreaListerView(),
                 (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class), LockerAreaDTO.class);
+    }
+
+    @Override
+    public DashboardView.Presenter getDashboardPresenter() {
+        return dashboard;
     }
 
     @Override
@@ -101,6 +113,9 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
     }
 
     public void populate(Key parentID) {
+
+        dashboard.populate();
+
         unitLister.setParentFiltering(parentID);
         unitLister.populateData(0);
 

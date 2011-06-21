@@ -13,33 +13,51 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.widgets.client.TabLayoutPanel;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
 
-    public ParkingEditorForm() {
-        super(ParkingDTO.class, new CrmEditorsComponentFactory());
+    public ParkingEditorForm(IView<ParkingDTO> parentView) {
+        this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public ParkingEditorForm(IEditableComponentFactory factory) {
+    public ParkingEditorForm(IEditableComponentFactory factory, IView<ParkingDTO> parentView) {
         super(ParkingDTO.class, factory);
+        setParentView(parentView);
     }
 
     @Override
     public IsWidget createContent() {
+
+        TabLayoutPanel tabPanel = new TabLayoutPanel(2.7, Unit.EM);
+        tabPanel.add(((ParkingView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
+        tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
+        tabPanel.add(new ScrollPanel(((ParkingView) getParentView()).getSpotView().asWidget()), i18n.tr("Spots"));
+        tabPanel.add(new ScrollPanel(createFinancialTab()), i18n.tr("Financial"));
+        tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+
+        tabPanel.setSize("100%", "100%");
+        return tabPanel;
+    }
+
+    private Widget createFinancialTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
 
-        main.add(split);
         split.getLeftPanel().add(inject(proto().name()), 15);
         split.getLeftPanel().add(inject(proto().description()), 15);
         split.getLeftPanel().add(inject(proto().type()), 10);
@@ -50,16 +68,21 @@ public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
         split.getRightPanel().add(inject(proto().doubleSpaces()), 7);
         split.getRightPanel().add(inject(proto().narrowSpaces()), 7);
 
-        main.add(new CrmHeader1Decorator(i18n.tr("Financials")));
+        main.add(split);
+        return main;
+    }
 
-        main.add(split = new VistaDecoratorsSplitFlowPanel());
+    private Widget createDetailsTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+
         split.getLeftPanel().add(inject(proto().disableRent()), 7);
         split.getLeftPanel().add(inject(proto().regularRent()), 7);
         split.getLeftPanel().add(inject(proto().doubleRent()), 7);
         split.getRightPanel().add(inject(proto().narrowRent()), 7);
         split.getRightPanel().add(inject(proto().deposit()), 7);
 
-        main.setWidth("100%");
+        main.add(split);
         return main;
     }
 }

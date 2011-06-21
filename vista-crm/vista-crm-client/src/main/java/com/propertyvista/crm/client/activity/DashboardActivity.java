@@ -27,12 +27,18 @@ import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 
-public class DashboardActivity extends AbstractActivity {
+public class DashboardActivity extends AbstractActivity implements DashboardView.Presenter {
 
     private final DashboardView view;
 
     public DashboardActivity(Place place) {
         view = (DashboardView) DashboardVeiwFactory.instance(DashboardView.class);
+        assert (view != null);
+        withPlace(place);
+    }
+
+    public DashboardActivity(DashboardView view, Place place) {
+        this.view = view;
         assert (view != null);
         withPlace(place);
     }
@@ -44,9 +50,13 @@ public class DashboardActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
+        populate();
+    }
 
+    @Override
+    public void populate() {
         // TODO - load metadata with service...
-//        DashboardMetadataService dmds = GWT.create(DashboardMetadataService.class);
+//      DashboardMetadataService dmds = GWT.create(DashboardMetadataService.class);
 
         // just create a demo dashboard: 
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
@@ -60,11 +70,12 @@ public class DashboardActivity extends AbstractActivity {
             dmd.gadgets().add(gmd);
         }
 
-        GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.BuildingLister);
-        gmd.name().setValue("Building lister");
-        gmd.column().setValue(0);
-        dmd.gadgets().add(gmd);
+        GadgetMetadata gmd;
+//        gmd = EntityFactory.create(GadgetMetadata.class);
+//        gmd.type().setValue(GadgetType.BuildingLister);
+//        gmd.name().setValue("Building lister");
+//        gmd.column().setValue(0);
+//        dmd.gadgets().add(gmd);
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.BarChartDisplay);
@@ -84,6 +95,11 @@ public class DashboardActivity extends AbstractActivity {
         gmd.column().setValue(1);
         dmd.gadgets().add(gmd);
 
-        view.fillDashboard(dmd);
+        view.fill(dmd);
+    }
+
+    @Override
+    public void save(DashboardMetadata dashboardMetadata) {
+        // TODO Auto-generated method stub
     }
 }

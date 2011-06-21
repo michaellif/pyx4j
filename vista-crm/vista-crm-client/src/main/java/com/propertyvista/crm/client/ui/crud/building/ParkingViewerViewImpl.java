@@ -13,14 +13,37 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
+import com.pyx4j.site.client.ui.crud.IListerView;
+
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingViewerViewImpl extends CrmViewerViewImplBase<ParkingDTO> implements ParkingViewerView {
 
+    private final ParkingViewDelegate delegate;
+
     public ParkingViewerViewImpl() {
-        super(CrmSiteMap.Properties.Parking.class, new ParkingEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Properties.Parking.class);
+
+        delegate = new ParkingViewDelegate(true);
+
+        // create/init/set main form here: 
+        ParkingEditorForm form = new ParkingEditorForm(new CrmViewersComponentFactory(), this);
+        form.initialize();
+        setForm(form);
+    }
+
+    @Override
+    public DashboardView getDashboardView() {
+        return delegate.getDashboardView();
+    }
+
+    @Override
+    public IListerView<ParkingSpot> getSpotView() {
+        return delegate.getSpotView();
     }
 }

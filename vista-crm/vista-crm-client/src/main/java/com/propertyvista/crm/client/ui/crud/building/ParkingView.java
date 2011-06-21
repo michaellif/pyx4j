@@ -7,18 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-04
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
-import com.pyx4j.site.client.ui.crud.IViewerView;
+import com.pyx4j.site.client.ui.crud.IListerView;
 
-import com.propertyvista.dto.LockerAreaDTO;
+import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.domain.property.asset.ParkingSpot;
 
-public interface LockerAreaViewerView extends IViewerView<LockerAreaDTO>, LockerAreaView {
+public interface ParkingView {
 
-    interface Presenter extends IViewerView.Presenter, LockerAreaView.Presenter {
+    interface Presenter {
+
+        DashboardView.Presenter getDashboardPresenter();
+
+        IListerView.Presenter getSpotPresenter();
+
     }
+
+    DashboardView getDashboardView();
+
+    IListerView<ParkingSpot> getSpotView();
 }

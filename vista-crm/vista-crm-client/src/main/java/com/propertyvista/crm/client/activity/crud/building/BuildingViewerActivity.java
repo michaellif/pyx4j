@@ -23,6 +23,7 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.client.ui.crud.building.BuildingView;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
+import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.dto.BuildingDTO;
 
@@ -36,7 +37,12 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
                 .create(BuildingCrudService.class));
         withPlace(place);
 
-        delegate = new BuildingActivityDelegate((BuildingView) view);
+        delegate = new BuildingActivityDelegate((BuildingView) view, place);
+    }
+
+    @Override
+    public DashboardView.Presenter getDashboardPresenter() {
+        return delegate.getDashboardPresenter();
     }
 
     @Override

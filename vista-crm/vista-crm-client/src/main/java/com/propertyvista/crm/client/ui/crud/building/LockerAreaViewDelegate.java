@@ -7,42 +7,37 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2011-06-16
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.domain.property.asset.Locker;
-import com.propertyvista.dto.LockerAreaDTO;
 
-public class LockerAreaEditorViewImpl extends CrmEditorViewImplBase<LockerAreaDTO> implements LockerAreaEditorView {
+public class LockerAreaViewDelegate implements LockerAreaView {
 
-    private final LockerAreaView delegate;
+    private final DashboardView dashboardView;
 
-    public LockerAreaEditorViewImpl() {
-        super(CrmSiteMap.Properties.LockerArea.class);
+    private final IListerView<Locker> lockerLister;
 
-        delegate = new LockerAreaViewDelegate(false);
-
-        // create/init/set main form here: 
-        LockerAreaEditorForm form = new LockerAreaEditorForm(this);
-        form.initialize();
-        setForm(form);
+    public LockerAreaViewDelegate(boolean readOnly) {
+        dashboardView = new DashboardViewImpl("");
+        lockerLister = new ListerInternalViewImplBase<Locker>(new LockerLister(/* readOnly */));
     }
 
     @Override
     public DashboardView getDashboardView() {
-        return delegate.getDashboardView();
+        return dashboardView;
     }
 
     @Override
     public IListerView<Locker> getLockerView() {
-        return delegate.getLockerView();
+        return lockerLister;
     }
 }

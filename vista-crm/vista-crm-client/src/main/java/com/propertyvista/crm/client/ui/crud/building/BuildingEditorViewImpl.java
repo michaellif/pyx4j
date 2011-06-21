@@ -17,6 +17,7 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
@@ -39,6 +40,11 @@ public class BuildingEditorViewImpl extends CrmEditorViewImplBase<BuildingDTO> i
         CrmEntityForm<BuildingDTO> form = new BuildingEditorForm(this);
         form.initialize();
         setForm(form);
+    }
+
+    @Override
+    public DashboardView getDashboardView() {
+        return delegate.getDashboardView();
     }
 
     @Override

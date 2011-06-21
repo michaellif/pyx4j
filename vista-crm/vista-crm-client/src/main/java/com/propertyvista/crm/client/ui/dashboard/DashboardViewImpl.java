@@ -34,7 +34,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.dashboard.Dashboard;
@@ -49,34 +48,35 @@ import com.propertyvista.crm.rpc.domain.DashboardMetadata;
 import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
 import com.propertyvista.crm.rpc.domain.GadgetMetadata;
 
-public class DashboardViewImpl extends SimplePanel implements DashboardView {
+public class DashboardViewImpl extends VerticalPanel implements DashboardView {
 
     private static I18n i18n = I18nFactory.getI18n(DashboardViewImpl.class);
 
     private final LayoutsSet layouts = new LayoutsSet();
 
-    private final ScrollPanel scroll;
+    private final ScrollPanel scroll = new ScrollPanel();
 
     private Dashboard dashboard;
 
     public DashboardViewImpl() {
-        VerticalPanel main = new VerticalPanel();
-        main.add(new CrmHeaderDecorator(i18n.tr("Dashboard"), layouts));
+        this(i18n.tr("Dashboard"));
+    }
 
-        scroll = new ScrollPanel();
+    public DashboardViewImpl(String caption) {
+        add(new CrmHeaderDecorator(caption, layouts));
+
         scroll.getElement().getStyle().setPosition(Position.ABSOLUTE);
         scroll.getElement().getStyle().setTop(2.5, Unit.EM);
         scroll.getElement().getStyle().setLeft(0, Unit.PX);
         scroll.getElement().getStyle().setRight(0, Unit.PX);
         scroll.getElement().getStyle().setBottom(0, Unit.PX);
-        main.add(scroll);
+        add(scroll);
 
-        main.setSize("100%", "100%");
-        setWidget(main);
+        setSize("100%", "100%");
     }
 
     @Override
-    public void fillDashboard(DashboardMetadata dashboardMetadata) {
+    public void fill(DashboardMetadata dashboardMetadata) {
         if (dashboardMetadata.isEmpty()) {
             return;
         }
@@ -84,7 +84,6 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
         dashboard = new Dashboard();
 
         // decode dashboard layout:
-
         if (dashboardMetadata.layoutType().getValue() == (LayoutType.One)) {
             layouts.setLayout1();
         } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two11) {

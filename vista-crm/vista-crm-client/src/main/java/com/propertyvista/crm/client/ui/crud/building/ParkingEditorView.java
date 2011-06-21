@@ -17,6 +17,8 @@ import com.pyx4j.site.client.ui.crud.IEditorView;
 
 import com.propertyvista.dto.ParkingDTO;
 
-public interface ParkingEditorView extends IEditorView<ParkingDTO> {
+public interface ParkingEditorView extends IEditorView<ParkingDTO>, ParkingView {
 
+    interface Presenter extends IEditorView.Presenter, ParkingView.Presenter {
+    }
 }
