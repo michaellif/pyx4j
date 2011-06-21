@@ -40,11 +40,11 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
 
         main.add(split);
-        split.getLeftPanel().add(inject(proto().name()));
-        split.getLeftPanel().add(inject(proto().email()));
-        split.getLeftPanel().add(inject(proto().description()));
-        split.getRightPanel().add(inject(proto().building()));
-        split.getRightPanel().add(inject(proto().unit()));
+        split.getLeftPanel().add(inject(proto().name()), 15);
+        split.getLeftPanel().add(inject(proto().email()), 15);
+        split.getLeftPanel().add(inject(proto().description()), 15);
+        split.getRightPanel().add(inject(proto().building()), 15);
+        split.getRightPanel().add(inject(proto().unit()), 15);
 
         SubtypeInjectors.injectPhones(main, proto().phones(), this);
 
