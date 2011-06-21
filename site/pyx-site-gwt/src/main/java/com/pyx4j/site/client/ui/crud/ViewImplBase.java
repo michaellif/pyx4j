@@ -22,8 +22,8 @@ package com.pyx4j.site.client.ui.crud;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
@@ -61,7 +61,7 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
     protected void setForm(CEntityForm<E> form) {
 
         if (getCenter() == null) { // finalise UI here:
-            add(new SimplePanel());
+            add(new LayoutPanel());
             setSize("100%", "100%");
         }
 
@@ -71,11 +71,12 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
 
         this.form = form;
 
-        SimplePanel center = (SimplePanel) getCenter();
+        LayoutPanel center = (LayoutPanel) getCenter();
+        center.clear(); // remove current form...
         if (form.asWidget().getWidget() instanceof TabLayoutPanel) {
-            center.setWidget(this.form);
+            center.add(this.form);
         } else {
-            center.setWidget(new ScrollPanel(this.form.asWidget()));
+            center.add(new ScrollPanel(this.form.asWidget()));
         }
     }
 
