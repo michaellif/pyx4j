@@ -34,6 +34,7 @@ import com.propertyvista.yardi.bean.Property;
 import com.propertyvista.yardi.bean2.PhysicalProperty;
 import com.propertyvista.yardi.bean2.ResidentTransactions;
 import com.propertyvista.yardi.mapper.Mapper;
+import com.propertyvista.yardi.mapper.YardiXmlUtil;
 
 public class XmlBeanTest {
 
@@ -94,10 +95,8 @@ public class XmlBeanTest {
     public void testGetResidentTransactions() throws IOException, JAXBException {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetResidentTransactions.xml", getClass()));
 
-        String token = "xsi:schemaLocation=\"http://yardi.com/ResidentTransactions20 .\\Itf_MITS_ResidentTransactions2.0.xsd\"";
-        xml = xml.replace(token, "");
-
 //        log.info(xml);
+        xml = YardiXmlUtil.stripGetResidentTransactions(xml);
         ResidentTransactions transactions = MarshallUtil.unmarshall(ResidentTransactions.class, xml);
 
         log.debug("Loaded transactions {}", transactions);
