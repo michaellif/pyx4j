@@ -15,7 +15,6 @@ package com.propertyvista.portal.domain.dto;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
@@ -27,18 +26,17 @@ import com.propertyvista.portal.domain.ptapp.Vehicle;
 @Transient
 public interface ResidentDTO extends Person {
 
-    @Owned
+    @Transient
     @Caption(name = "Address")
     Address currentAddress();
 
-    @Owned
+    @Transient
     @Length(3)
     @Caption(name = "Vehicls")
     IList<Vehicle> vehicles();
 
-    @Owned
+    @Transient
     @Length(3)
-    @Caption(name = "Emergency Contact")
-    EmergencyContact emergencyContact();
-
+    @Caption(name = "Emergency Contacts")
+    IList<EmergencyContact> emergencyContacts();
 }

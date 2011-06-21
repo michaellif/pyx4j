@@ -18,8 +18,11 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.portal.client.ui.PersonalInfoView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.domain.dto.ResidentDTO;
 
 public class PersonalInfoActivity extends AbstractActivity {
 
@@ -37,6 +40,9 @@ public class PersonalInfoActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        //TODO Implement a service call
+        ResidentDTO resident = EntityFactory.create(ResidentDTO.class);
+        view.populate(resident);
 
     }
 

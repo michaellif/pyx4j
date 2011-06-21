@@ -27,6 +27,7 @@ import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.LogoViewImpl;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalView;
+import com.propertyvista.portal.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.portal.client.ui.decorations.BasicCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
@@ -51,6 +52,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         initDecoratorsStyles();
         initSiteViewStyles();
         initLogoViewStyles();
+        initTopActionStyles();
         initVistaMainNavigViewStyles();
         initPropertyListStyles();
         initSearchPanelStyles();
@@ -73,7 +75,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
         putThemeColor(ThemeColor.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
         putThemeColor(ThemeColor.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
-        putThemeColor(ThemeColor.BORDER, 0xf0f0f0);
+        putThemeColor(ThemeColor.BORDER, 0xe7e7e7);
         putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
         putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
         putThemeColor(ThemeColor.TEXT, 0x000000);
@@ -81,7 +83,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
         putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xe5e5e5);
         putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
-        putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
+        putThemeColor(ThemeColor.SEPARATOR, 0xcccccc);
     }
 
     @Override
@@ -107,10 +109,23 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("margin", "0 auto");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.Header));
+        String headerstyle = Selector.valueOf(prefix, PortalView.StyleSuffix.Header);
+        style = new Style(headerstyle);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
+        style.addProperty("font-size", "14px");
         style.addProperty("color", ThemeColor.OBJECT_TONE95);
         style.addProperty("height", "115px");
+        addStyle(style);
+
+        //TODO  think of a better way
+        style = new Style(headerstyle + " a:link, a:visited, a:active");
+        style.addProperty("text-decoration", "none");
+        style.addProperty("font-size", "14px");
+        style.addProperty("color", ThemeColor.OBJECT_TONE95);
+        addStyle(style);
+
+        style = new Style(headerstyle + " a:hover");
+        style.addProperty("text-decoration", "underline");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.MainNavig));
@@ -187,6 +202,23 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("padding-top", "20px");
         addStyle(style);
 
+    }
+
+    private void initTopActionStyles() {
+        String prefix = TopRightActionsViewImpl.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, TopRightActionsViewImpl.StyleSuffix.PhoneLabel));
+        style.addProperty("font-size", "2em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-right", "20px");
+        style.addProperty("padding-top", "20px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, TopRightActionsViewImpl.StyleSuffix.GreetingLabel));
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
     }
 
     private void initVistaMainNavigViewStyles() {
@@ -289,38 +321,12 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
     private void initPropertyListStyles() {
         String prefix = PropertyMapViewImpl.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.TableBody));
-        style.addProperty("table-layout", "fixed");
-        style.addProperty("border-spacing", "0px !important");
-        addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Numerator));
-        style.addProperty("font-size", "30px");
-        style.addProperty("color", "#7B8388");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Header));
-        style.addProperty("font-size", "15px");
-        style.addProperty("color", "#7B8388");
-        style.addProperty("text-align", "left");
-        style.addProperty("height", "30px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Cell));
-        style.addProperty("border-color", "#999999");
-        style.addProperty("border-top-style", "dotted");
-        style.addProperty("border-top-width", "1px");
-        style.addProperty("vertical-align", "top");
-        style.addProperty("padding-top", "10px");
-        style.addProperty("padding-bottom", "10px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Left));
-        style.addProperty("float", "left");
+        Style style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Left));
+        style.addProperty("margin-right", "20px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Center));
-        style.addProperty("float", "right");
         addStyle(style);
 
     }
@@ -329,15 +335,20 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         String prefix = VistaHeaderDecorator.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("border-bottom", "dotted 1px");
-        // style.addProperty("border-width","3")
         style.addProperty("padding-top", "30px");
         style.addProperty("padding-bottom", "10px");
+        style.addProperty("margin-bottom", "10px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, VistaHeaderDecorator.StyleSuffix.Caption));
         style.addProperty("font-size", "20px");
         style.addProperty("font-weight", "bold");
         addStyle(style);
+
+        prefix = VistaWidgetDecorator.DEFAULT_STYLE_PREFIX;
+        style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
     }
 
     private void initCriteriaWidgetDecoratorStyles() {
@@ -353,7 +364,9 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("padding", "10px");
-        style.addProperty("border", "1px solid #ccc");
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.SEPARATOR);
+
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SearchApartmentForm.StyleSuffix.Row));
@@ -374,7 +387,8 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         String prefix = RefineApartmentSearchForm.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("margin-right", "5px");
-        style.addProperty("border", "1px solid #ccc");
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.SEPARATOR);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.SearchHeader));
@@ -403,6 +417,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Left));
+        style.addProperty("margin-right", "20px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Center));
@@ -449,8 +464,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         String prefix = BasicCardDecorator.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("border", "solid 1px");
-        style.addProperty("border-color", ThemeColor.BORDER);
-        style.addProperty("border-bottom-color", "transparent");
+        style.addProperty("border-color", ThemeColor.SEPARATOR);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.Menu));
@@ -459,18 +473,19 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         //TODO change colors
         style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.MenuItem));
         style.addProperty("text-decoration", "none");
-        style.addProperty("color", "#7B8388");
+        style.addProperty("color", ThemeColor.OBJECT_TONE95);
         addStyle(style);
 
         //TODO  think of a better way
         style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.MenuItem) + ":hover");
         style.addProperty("text-decoration", "underline");
-        style.addProperty("color", "#7B8388");
+        style.addProperty("color", ThemeColor.OBJECT_TONE95);
         addStyle(style);
 
         //TODO need prefix+dependent Selector.valueOf implementation
         style = new Style("." + prefix + "-" + BasicCardDecorator.StyleDependent.hover);
-        style.addProperty("border-color", "#7B8388!important");
+        //TODO Not sure how to combine ThemeColor.OBJECT_TONE with !important declaration
+        style.addProperty("border-color", "#8699B9!important");
         style.addProperty("border", "solid 1px");
         addStyle(style);
 
@@ -482,7 +497,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Image));
-        style.addProperty("border-color", "#7B8388!important");
+        style.addProperty("border-color", "#cccccc!important");
         style.addProperty("border", "solid 1px");
         style.addProperty("padding", "2px");
 
@@ -517,7 +532,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardImage));
-        style.addProperty("border-color", "#7B8388!important");
+        style.addProperty("border-color", "#cccccc!important");
         style.addProperty("border", "solid 1px");
         style.addProperty("padding", "2px");
 
@@ -546,12 +561,12 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
 
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardMenuItem));
         style.addProperty("text-decoration", "none");
-        style.addProperty("color", "#7B8388");
+        style.addProperty("color", ThemeColor.OBJECT_TONE95);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardMenuItem) + ":hover");
         style.addProperty("text-decoration", "underline");
-        style.addProperty("color", "#7B8388");
+        style.addProperty("color", ThemeColor.OBJECT_TONE95);
         addStyle(style);
 
     }

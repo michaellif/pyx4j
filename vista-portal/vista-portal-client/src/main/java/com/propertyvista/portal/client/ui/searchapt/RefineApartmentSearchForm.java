@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityDataSource;
@@ -53,7 +54,7 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
 
     private PropertyMapView.Presenter presenter;
 
-    private FlowPanel container;
+    private VerticalPanel container;
 
     public RefineApartmentSearchForm() {
         super(PropertySearchCriteria.class);
@@ -61,7 +62,7 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
 
     @Override
     public IsWidget createContent() {
-        container = new FlowPanel();
+        container = new VerticalPanel();
         container.setStyleName(DEFAULT_STYLE_PREFIX);
 
         Label label = new Label(i18n.tr("LOCATION"));

@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ui.searchapt;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.widgets.client.style.IStyleSuffix;
@@ -25,12 +26,10 @@ import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
-public class PropertyMapViewImpl extends FlowPanel implements PropertyMapView {
+public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Left, Center, Header, Footer, TableBody, Row, Numerator, Cell, CellSize, CellDetails,
-
-        MapButton, DetailsButton
+        Left, Center
     }
 
     public static String DEFAULT_STYLE_PREFIX = "PropertyList";
@@ -52,16 +51,15 @@ public class PropertyMapViewImpl extends FlowPanel implements PropertyMapView {
     public PropertyMapViewImpl() {
         setWidth("100%");
         setHeight("100%");
-        leftPanel = new FlowPanel();
-        leftPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Left.name());
-        leftPanel.setWidth("20%");
         searchForm = new RefineApartmentSearchForm();
         searchForm.initialize();
+
+        leftPanel = new FlowPanel();
+        leftPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Left.name());
         leftPanel.add(searchForm);
-        add(leftPanel);
+        add(leftPanel, DockPanel.WEST);
 
         centerPanel = new FlowPanel();
-        centerPanel.setWidth("80%");
         centerPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Center.name());
 
         map = new PropertiesMapWidget();
@@ -71,7 +69,7 @@ public class PropertyMapViewImpl extends FlowPanel implements PropertyMapView {
         propertyListForm.initialize();
         centerPanel.add(propertyListForm);
 
-        add(centerPanel);
+        add(centerPanel, DockPanel.CENTER);
 
     }
 

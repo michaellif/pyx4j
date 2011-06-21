@@ -16,8 +16,8 @@ package com.propertyvista.portal.client.ui.searchapt;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -27,7 +27,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.propertyvista.portal.client.ui.maps.PropertyMapWidget;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 
-public class ApartmentDetailsViewImpl extends FlowPanel implements ApartmentDetailsView {
+public class ApartmentDetailsViewImpl extends DockPanel implements ApartmentDetailsView {
 
     public static String DEFAULT_STYLE_PREFIX = "ApartmentDetails";
 
@@ -61,13 +61,11 @@ public class ApartmentDetailsViewImpl extends FlowPanel implements ApartmentDeta
         HTML pagetitle = new HTML(i18n.tr("Apartment Details"));
         pagetitle.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.PageHeader);
         header.add(pagetitle);
-        add(header);
+        add(header, DockPanel.NORTH);
 
         leftPanel = new FlowPanel();
         leftPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Left);
-        leftPanel.getElement().getStyle().setFloat(Float.LEFT);
-        leftPanel.setWidth("35%");
-        add(leftPanel);
+        add(leftPanel, DockPanel.WEST);
 
         slidesPanel = new SlidesPanel();
         leftPanel.add(slidesPanel);
@@ -83,10 +81,7 @@ public class ApartmentDetailsViewImpl extends FlowPanel implements ApartmentDeta
 
         centerPanel = new FlowPanel();
         centerPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Center);
-        centerPanel.getElement().getStyle().setFloat(Float.RIGHT);
-        centerPanel.setWidth("63%");
-
-        add(centerPanel);
+        add(centerPanel, DockPanel.CENTER);
 
         centerPanel.add(apartmentForm);
     }

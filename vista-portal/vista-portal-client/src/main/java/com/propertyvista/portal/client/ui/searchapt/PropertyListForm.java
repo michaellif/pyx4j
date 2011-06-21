@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.searchapt;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -28,7 +27,6 @@ import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
-import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
@@ -41,11 +39,8 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
     private PropertyMapView.Presenter presenter;
 
-    private final DecorationData decor;
-
     public PropertyListForm() {
         super(PropertyListDTO.class);
-        decor = new DecorationData(10, Unit.PCT, 90, Unit.PCT);
     }
 
     @Override

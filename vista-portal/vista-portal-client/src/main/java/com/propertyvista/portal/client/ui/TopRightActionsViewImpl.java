@@ -3,15 +3,15 @@ package com.propertyvista.portal.client.ui;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class TopRightActionsViewImpl extends FlowPanel implements TopRightActionsView {
 
@@ -19,28 +19,31 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private static final String GREETING_MESSAGE = i18n.tr("Welcome");
 
-    private final HorizontalPanel topLinksPanel;
-
     private Presenter presenter;
 
     private final CHyperlink logout;
 
-    private final CHyperlink login;
+    private final Label greetings;
 
-    private final HTML greetings;
+    public static String DEFAULT_STYLE_PREFIX = "TopRightActionsViewImpl";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        PhoneLabel, GreetingLabel
+    }
 
     public TopRightActionsViewImpl() {
-        setStyleName(PortalView.DEFAULT_STYLE_PREFIX + PortalView.StyleSuffix.Header);
+        setStyleName(DEFAULT_STYLE_PREFIX);
         setSize("100%", "100%");
         getElement().getStyle().setFontSize(0.9, Unit.EM);
 
-        topLinksPanel = new HorizontalPanel();
+        FlowPanel topLinksPanel = new FlowPanel();
         topLinksPanel.getElement().getStyle().setMargin(4, Unit.PX);
         add(topLinksPanel);
 
-        greetings = new HTML(GREETING_MESSAGE);
-        greetings.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        greetings = new Label(GREETING_MESSAGE);
+        greetings.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.GreetingLabel);
         greetings.getElement().getStyle().setMarginRight(2, Unit.EM);
+        greetings.getElement().getStyle().setDisplay(Display.INLINE);
         topLinksPanel.add(greetings);
 
         logout = new CHyperlink(null, new Command() {
@@ -53,19 +56,13 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         logout.setValue(i18n.tr("LogOut"));
         logout.setVisible(false);
         logout.asWidget().getElement().getStyle().setMarginRight(2, Unit.EM);
+        logout.asWidget().getElement().getStyle().setDisplay(Display.INLINE);
         topLinksPanel.add(logout);
-        //TODO login is probably not needed here because the login screen is available only under residents
-        login = new CHyperlink(null, new Command() {
-            @Override
-            public void execute() {
-                presenter.login();
-            }
-        });
-        login.setDebugId(new StringDebugId("login"));
-        login.setValue(i18n.tr("LogIn"));
-        login.asWidget().getElement().getStyle().setMarginRight(2, Unit.EM);
-        //TODO
-        //   topLinksPanel.add(login);
+
+        Label phone = new Label("1-888-310-7000");
+        phone.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.PhoneLabel);
+        phone.getElement().getStyle().setDisplay(Display.BLOCK);
+        topLinksPanel.add(phone);
 
     }
 
@@ -77,17 +74,14 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     @Override
     public void onLogedOut() {
         logout.setVisible(false);
-        login.setVisible(true);
-        greetings.setHTML("");
+        greetings.setText("");
 
     }
 
     @Override
     public void onLogedIn(String userName) {
         logout.setVisible(true);
-        login.setVisible(false);
-
-        greetings.setHTML(GREETING_MESSAGE + "&nbsp;" + userName);
+        greetings.setText(GREETING_MESSAGE + " " + userName);
 
     }
 }
