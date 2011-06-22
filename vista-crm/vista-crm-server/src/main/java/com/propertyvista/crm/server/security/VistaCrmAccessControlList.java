@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.security;
 
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
+import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
@@ -26,6 +27,7 @@ import com.propertyvista.crm.rpc.services.AuthenticationService;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
+import com.propertyvista.crm.rpc.services.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.InquiryCrudService;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
@@ -39,6 +41,8 @@ import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.crm.rpc.services.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
 import com.propertyvista.domain.Company;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -55,6 +59,7 @@ import com.propertyvista.domain.tenant.Inquiry;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.server.common.security.SharedUserEntityInstanceAccess;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
@@ -72,6 +77,15 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         }
 
         grant(new IServiceExecutePermission(AuthenticationService.class));
+
+// - Dashboard:
+        InstanceAccess sharedUserEntityAccess = new SharedUserEntityInstanceAccess();
+        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(DashboardMetadata.class, sharedUserEntityAccess, EntityPermission.ALL));
+        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(GadgetMetadata.class, sharedUserEntityAccess, EntityPermission.ALL));
+        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(DashboardMetadataService.class));
+
+        // Add All GadgetSettings
+        //grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(MyGadgetSettings.class, EntityPermission.ALL));
 
 // - Building-related:
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Building.class, EntityPermission.ALL));

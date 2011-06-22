@@ -14,11 +14,13 @@
 package com.propertyvista.domain.dashboard;
 
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface GadgetMetadata extends IEntity {
+import com.propertyvista.common.domain.ISharedUserEntity;
+
+public interface GadgetMetadata extends ISharedUserEntity {
 
     public static enum GadgetType {
         Test, Demo, BuildingLister, BarChartDisplay, PieChartDisplay, LineChartDisplay
@@ -31,9 +33,11 @@ public interface GadgetMetadata extends IEntity {
 
     IPrimitive<String> description();
 
-    //This is temporary solution for multiple settings types
+    //This is temporary solution for multiple settings types, Managed on back-end
+    @RpcTransient
     IPrimitive<String> settingsClass();
 
+    // Save gadgets Settings separately
     @Transient
     AbstractGadgetSettings settings();
 

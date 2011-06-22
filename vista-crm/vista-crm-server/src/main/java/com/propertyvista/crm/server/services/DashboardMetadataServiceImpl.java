@@ -18,40 +18,93 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.EntityCriteriaByPK;
+import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.crm.rpc.services.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.server.common.security.VistaContext;
 
 public class DashboardMetadataServiceImpl implements DashboardMetadataService {
 
     @Override
     public void listMetadata(AsyncCallback<Vector<DashboardMetadata>> callback) {
-        // TODO Auto-generated method stub
+        EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user().id(), Key.DORMANT_KEY));
+
+        Vector<DashboardMetadata> rc = EntityServicesImpl.secureQuery(criteria);
+
+        criteria = EntityQueryCriteria.create(DashboardMetadata.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user().id(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+
+        rc.addAll(EntityServicesImpl.secureQuery(criteria));
+
+        callback.onSuccess(rc);
     }
 
     @Override
     public void retrieveMetadata(AsyncCallback<DashboardMetadata> callback, Key entityId) {
-        // TODO Auto-generated method stub
-
+        DashboardMetadata dm = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
+        callback.onSuccess(dm);
     }
 
     @Override
-    public void saveMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata editableEntity) {
-        // TODO Auto-generated method stub
+    public void saveMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata dm) {
+        if (!dm.id().isNull()) {
+            //Assert Permission
+            EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, dm.getPrimaryKey()));
+        }
+
+        if (!Key.DORMANT_KEY.equals(dm.user().getPrimaryKey())) {
+            dm.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
+        }
+
+        //??? Set  gadgets  settingsClass
+        for (GadgetMetadata gm : dm.gadgets()) {
+            if (!Key.DORMANT_KEY.equals(gm.user().getPrimaryKey())) {
+                gm.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
+            }
+
+            if (gm.settings().isNull()) {
+                gm.settingsClass().setValue(null);
+            } else {
+                gm.settingsClass().setValue(gm.settings().getInstanceValueClass().getName());
+            }
+        }
+
+        EntityServicesImpl.secureSave(dm);
+        callback.onSuccess(dm);
 
     }
 
     @Override
     public void retrieveSettings(AsyncCallback<AbstractGadgetSettings> callback, Key gadgetMetadataId) {
-        // TODO Auto-generated method stub
+        GadgetMetadata gm = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(GadgetMetadata.class, gadgetMetadataId));
+
+        if (gm.settingsClass().isNull()) {
+            callback.onSuccess(null);
+        } else {
+            Class<? extends AbstractGadgetSettings> settingsClass = ServerEntityFactory.entityClass(gm.settingsClass().getValue());
+            callback.onSuccess(EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(settingsClass, gadgetMetadataId)));
+        }
 
     }
 
     @Override
-    public void saveSettings(AsyncCallback<AbstractGadgetSettings> callback, Key gadgetMetadataId, AbstractGadgetSettings editableEntity) {
-        // TODO Auto-generated method stub
-
+    public void saveSettings(AsyncCallback<AbstractGadgetSettings> callback, Key gadgetMetadataId, AbstractGadgetSettings settings) {
+        GadgetMetadata gm = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(GadgetMetadata.class, settings.getPrimaryKey()));
+        if (!settings.getInstanceValueClass().getName().equals(gm.settingsClass().getValue())) {
+            gm.settingsClass().setValue(settings.getInstanceValueClass().getName());
+            EntityServicesImpl.secureSave(gm);
+        }
+        EntityServicesImpl.secureSave(settings);
+        callback.onSuccess(settings);
     }
 
 }

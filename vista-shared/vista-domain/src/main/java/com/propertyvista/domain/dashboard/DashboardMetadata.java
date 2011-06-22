@@ -13,23 +13,22 @@
  */
 package com.propertyvista.domain.dashboard;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface DashboardMetadata extends IEntity {
+import com.propertyvista.common.domain.ISharedUserEntity;
+
+public interface DashboardMetadata extends ISharedUserEntity {
 
     enum LayoutType {
         One, Two11, Two12, Two21, Three
     }
 
-    // To make it public set key to '0' (Zero)
-    IPrimitive<Key> ownedBy();
-
     IPrimitive<String> name();
 
     IPrimitive<LayoutType> layoutType();
 
+    @Owned
     IList<GadgetMetadata> gadgets();
 }
