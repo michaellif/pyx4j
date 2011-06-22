@@ -185,7 +185,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             }
         });
 
-        btnViewItem.setEnabled(false);
         getListPanel().getDataTable().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -303,9 +302,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     @Override
     public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData) {
-        getListPanel().populateData(entityes, pageNumber, hasMoreData);
         setActionsActive(false);
         btnViewItem.setEnabled(false);
+        getListPanel().populateData(entityes, pageNumber, hasMoreData);
     }
 
     protected void populateData(int pageNumber) {
