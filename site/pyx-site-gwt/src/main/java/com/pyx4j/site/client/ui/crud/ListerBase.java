@@ -106,6 +106,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             }
         });
 
+        showChecksColumn(true);
+        showHeaderColumnSelector(true);
         listPanel.removeUpperActionsBar();
         DOM.setStyleAttribute(listPanel.getDataTable().getElement(), "tableLayout", "auto");
 
@@ -181,6 +183,20 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         filtersPanel.setVisible(visible);
     }
 
+    public void showChecksColumn(boolean show) {
+        listPanel.getDataTable().setCheckboxColumnShown(show);
+    }
+
+    public void showHeaderColumnSelector(boolean show) {
+        if (show) {
+            ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
+            fillAvailableColumnDescriptors(columnDescriptors, listPanel.proto());
+            listPanel.getDataTable().setUseHeaderColumnSelector(columnDescriptors);
+        } else {
+            listPanel.getDataTable().setUseHeaderColumnSelector(null);
+        }
+    }
+
     private Widget createAddApplyPanel() {
 
         ImageButton btnAdd = new ImageButton(SiteImages.INSTANCE.add(), SiteImages.INSTANCE.addHover());
@@ -225,10 +241,18 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     /*
-     * Implement in derived class to set default table structure.
+     * Implement in derived class to set default table columns set.
      * Note, that it's called from within constructor!
      */
     protected abstract void fillDefaultColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
+
+    /*
+     * Override in derived class to set available table columns set.
+     * Note, that it's called from within constructor!
+     */
+    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto) {
+        columnDescriptors.addAll(listPanel.getDataTable().getDataTableModel().getColumnDescriptors());
+    }
 
     // IListerView implementation:
 

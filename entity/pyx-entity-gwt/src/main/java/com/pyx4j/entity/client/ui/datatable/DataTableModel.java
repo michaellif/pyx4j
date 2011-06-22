@@ -100,6 +100,10 @@ public class DataTableModel<E extends IEntity> {
         return getColumnNames().get(index);
     }
 
+    public EntityMeta getEntityMeta() {
+        return entityMeta;
+    }
+
     /**
      * Adds a listener to the list that's notified each time a change to the data model
      * occurs.
@@ -197,7 +201,7 @@ public class DataTableModel<E extends IEntity> {
     }
 
     public boolean isAllChecked() {
-        for (DataItem dataItem : data) {
+        for (DataItem<E> dataItem : data) {
             if (!dataItem.isChecked()) {
                 return false;
             }

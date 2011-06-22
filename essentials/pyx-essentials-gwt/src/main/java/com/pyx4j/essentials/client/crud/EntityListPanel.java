@@ -59,7 +59,7 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
     public EntityListPanel(Class<E> clazz) {
         setWidth("100%");
 
-        entityPrototype = EntityFactory.create(clazz);
+        entityPrototype = EntityFactory.getEntityPrototype(clazz);
 
         add(upperActionsBar = new DataTableActionsBar());
         add(dataTable = new DataTable<E>(false));
@@ -177,5 +177,4 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
             throw new RuntimeException("dataTableModel is not set");
         }
     }
-
 }
