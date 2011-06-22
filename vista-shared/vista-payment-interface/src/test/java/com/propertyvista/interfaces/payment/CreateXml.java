@@ -44,6 +44,10 @@ public class CreateXml {
             ccpay.paymentInstrument = new CreditCardInfo();
             ((CreditCardInfo) ccpay.paymentInstrument).cardNumber = "6011111111111117";
             ((CreditCardInfo) ccpay.paymentInstrument).expiryDate = new Date();
+
+            ccpay.amount = 900;
+            ccpay.reference = "August Rent, 46 Yonge, Appt 18";
+
             r.request = ccpay;
 
             m.marshal(r, System.out);
@@ -59,6 +63,7 @@ public class CreateXml {
             TokenActionRequest addToken = new TokenActionRequest();
             addToken.action = TokenAction.ADD;
             addToken.code = "DC1107";
+            addToken.reference = "46 Yonge, Appt 18";
             addToken.card = new CreditCardInfo();
             addToken.card.cardNumber = "6011111111111117";
             addToken.card.expiryDate = new Date();
@@ -93,5 +98,4 @@ public class CreateXml {
         });
 
     }
-
 }
