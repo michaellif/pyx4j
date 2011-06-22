@@ -22,10 +22,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardVeiwFactory;
-import com.propertyvista.crm.rpc.domain.DashboardMetadata;
-import com.propertyvista.crm.rpc.domain.DashboardMetadata.LayoutType;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
+import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class DashboardActivity extends AbstractActivity implements DashboardView.Presenter {
 

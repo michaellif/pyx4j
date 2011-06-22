@@ -11,31 +11,25 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.domain;
+package com.propertyvista.domain.dashboard;
 
-import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface GadgetMetadata extends IEntity {
+public interface DashboardMetadata extends IEntity {
 
-    public static enum GadgetType {
-        Test, Demo, BuildingLister, BarChartDisplay, PieChartDisplay, LineChartDisplay
+    enum LayoutType {
+        One, Two11, Two12, Two21, Three
     }
 
-    @MemberColumn(name = "gadgetType")
-    IPrimitive<GadgetType> type();
+    // To make it public set key to '0' (Zero)
+    IPrimitive<Key> ownedBy();
 
     IPrimitive<String> name();
 
-    IPrimitive<String> description();
+    IPrimitive<LayoutType> layoutType();
 
-    IEntity settings();
-
-    /*
-     * Dashboard: 0, 1, 2;
-     * Report : -1, 0, 1;
-     */
-    @MemberColumn(name = "gadgetColumn")
-    IPrimitive<Integer> column();
+    IList<GadgetMetadata> gadgets();
 }

@@ -11,21 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.domain;
+package com.propertyvista.domain.dashboard;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
 
-public interface DashboardMetadata extends IEntity {
-
-    enum LayoutType {
-        One, Two11, Two12, Two21, Three
-    }
-
-    IPrimitive<String> name();
-
-    IPrimitive<LayoutType> layoutType();
+public interface ReportMetadata extends IEntity {
 
     IList<GadgetMetadata> gadgets();
 }

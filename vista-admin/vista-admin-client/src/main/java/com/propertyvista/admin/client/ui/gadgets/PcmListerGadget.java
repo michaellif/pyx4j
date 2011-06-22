@@ -23,8 +23,8 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
+import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class PcmListerGadget extends ListerGadgetBase<PmcDTO> {
 

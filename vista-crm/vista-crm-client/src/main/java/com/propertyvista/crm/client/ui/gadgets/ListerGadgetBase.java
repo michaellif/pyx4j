@@ -46,7 +46,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translation;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.domain.dashboard.GadgetMetadata;
 
 public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 

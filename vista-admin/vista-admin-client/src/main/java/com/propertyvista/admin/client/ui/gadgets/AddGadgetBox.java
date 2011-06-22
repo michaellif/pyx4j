@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
-import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
+import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class AddGadgetBox extends DialogPanel {
 

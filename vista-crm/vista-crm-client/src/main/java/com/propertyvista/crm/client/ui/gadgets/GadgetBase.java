@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.domain.dashboard.GadgetMetadata;
 
 public abstract class GadgetBase implements IGadget {
 

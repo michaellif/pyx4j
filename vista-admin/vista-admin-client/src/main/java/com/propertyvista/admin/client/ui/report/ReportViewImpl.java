@@ -43,8 +43,8 @@ import com.propertyvista.admin.client.resources.AdminImages;
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
 import com.propertyvista.admin.client.ui.gadgets.AddGadgetBox;
 import com.propertyvista.admin.client.ui.gadgets.GadgetsFactory;
-import com.propertyvista.crm.rpc.domain.DashboardMetadata;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.GadgetMetadata;
 
 public class ReportViewImpl extends SimplePanel implements ReportView {
 

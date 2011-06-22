@@ -21,9 +21,9 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.rpc.domain.GadgetMetadata;
-import com.propertyvista.crm.rpc.domain.GadgetMetadata.GadgetType;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {

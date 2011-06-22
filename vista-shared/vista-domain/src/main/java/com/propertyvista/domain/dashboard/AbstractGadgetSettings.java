@@ -7,16 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-04-22
- * @author Vlad
+ * Created on 2011-06-22
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.domain;
+package com.propertyvista.domain.dashboard;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 
-public interface ReportMetadata extends IEntity {
+@AbstractEntity
+@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = GadgetMetadata.class)
+public interface AbstractGadgetSettings extends IEntity {
 
-    IList<GadgetMetadata> gadgets();
 }
