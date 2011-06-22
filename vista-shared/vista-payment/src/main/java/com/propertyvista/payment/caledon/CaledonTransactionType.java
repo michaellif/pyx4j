@@ -15,20 +15,28 @@ package com.propertyvista.payment.caledon;
 
 enum CaledonTransactionType {
 
+    //external api
     SALE("S", "Sale"),
 
+    //external api
     AUTH_ONLY("A", "Auth Only"),
 
     VOID("V", "Void"),
 
+    //external api
+    AUTH_REVERSE("A", "Auth Reversal"),
+
     PREAUTH("P", "Pre-Authorization"),
 
+    //external api
     RETURN("R", "Return"),
 
+    //external api
     RETURN_VOID("M", "Return Void"),
 
     FORCE_POST("F", "Force Post"),
 
+    //external api
     COMPLETION("C", "Completion"),
 
     BALANCE_REQ("B", "Balance Request"),
@@ -45,10 +53,12 @@ enum CaledonTransactionType {
 
     LEVEL_3_DETAIL("L", "Level 3 detail delivery"),
 
+    //external api
     CANADIAN_AVS("I", "Canadian Address Verification Service(AVS)"),
 
     COMMERCIAL("K", "Commercial"),
 
+    //external api
     TOKEN("G", "Token");
 
     private final String value;
