@@ -33,7 +33,7 @@ import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.AclBuilder;
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.security.shared.PermitionAntipode;
+import com.pyx4j.security.shared.PermissionAntipode;
 
 public class AclBuilderTest extends TestCase {
 
@@ -59,7 +59,7 @@ public class AclBuilderTest extends TestCase {
             grant(TestBehavior.ADMIN, new ServiceExecutePermission("*"));
 
             grant(TestBehavior.EMPLOYEE, new ServiceExecutePermission("Emps.*"));
-            revoke(TestBehavior.EMPLOYEE, new PermitionAntipode(new ServiceExecutePermission("Emps.Reports.*")));
+            revoke(TestBehavior.EMPLOYEE, new PermissionAntipode(new ServiceExecutePermission("Emps.Reports.*")));
             freeze();
         }
     }

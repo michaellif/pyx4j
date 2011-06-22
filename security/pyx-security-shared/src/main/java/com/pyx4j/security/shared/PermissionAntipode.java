@@ -20,13 +20,13 @@
  */
 package com.pyx4j.security.shared;
 
-public class PermitionAntipode implements Restriction {
+public class PermissionAntipode implements Restriction {
 
     private static final long serialVersionUID = 8581568958891141336L;
 
     private final Permission permission;
 
-    public PermitionAntipode(Permission permission) {
+    public PermissionAntipode(Permission permission) {
         this.permission = permission;
     }
 

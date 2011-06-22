@@ -107,7 +107,7 @@ public class AclBuilder implements AclCreator {
     }
 
     protected void revoke(Permission restriction) {
-        revoke(new PermitionAntipode(restriction));
+        revoke(new PermissionAntipode(restriction));
     }
 
     protected void revoke(Restriction restriction) {
@@ -135,7 +135,7 @@ public class AclBuilder implements AclCreator {
     }
 
     protected void revoke(Behavior behavior, Permission restriction) {
-        revoke(behavior, new PermitionAntipode(restriction));
+        revoke(behavior, new PermissionAntipode(restriction));
     }
 
     protected void revoke(Behavior behavior, Restriction restriction) {
