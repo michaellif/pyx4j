@@ -357,7 +357,7 @@ public abstract class VistaAdminTheme extends VistaTheme {
 
         // Lister filters:
         prefix = ListerBase.DEFAULT_STYLE_PREFIX;
-        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filetersPanel));
+        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filtersPanel));
         style.addProperty("padding-top", "0.5em");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
         addStyle(style);

@@ -15,6 +15,10 @@ package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
+
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.client.ui.crud.ListerBase;
@@ -26,6 +30,22 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
 
     public BuildingLister() {
         super(BuildingDTO.class, CrmSiteMap.Properties.Building.class);
+
+        // add custom actions (Buttons) here:
+
+        addActionButton(new Button("Action1", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // TODO Auto-generated method stub
+            }
+        }));
+
+        addActionButton(new Button("Action2", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // TODO Auto-generated method stub
+            }
+        }));
     }
 
     @Override
