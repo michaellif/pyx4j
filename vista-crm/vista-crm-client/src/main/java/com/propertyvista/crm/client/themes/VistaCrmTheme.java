@@ -490,14 +490,24 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE60);
         style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + " a:link, a:visited, a:active");
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + ":hover");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnMenu));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE10);
         style.addProperty("color", ThemeColor.OBJECT_TONE90);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.BORDER);
-        style.addProperty("padding", "3px 7px");
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE90);
+        style.addProperty("padding", "5px 7px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row));
