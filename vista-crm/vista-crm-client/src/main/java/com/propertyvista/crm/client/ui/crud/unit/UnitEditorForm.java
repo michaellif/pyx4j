@@ -16,11 +16,16 @@ package com.propertyvista.crm.client.ui.crud.unit;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.widgets.client.TabLayoutPanel;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
@@ -50,10 +55,86 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
     @Override
     public IsWidget createContent() {
+        TabLayoutPanel tabPanel = new TabLayoutPanel(2.7, Unit.EM);
+
+        tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
+        tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
+        tabPanel.add(new ScrollPanel(createUtilitiesTab()), i18n.tr("Utilities"));
+        tabPanel.add(new ScrollPanel(createAddonsTab()), i18n.tr("Add ons"));
+        tabPanel.add(new ScrollPanel(createAmenitiesTab()), i18n.tr("Amenities"));
+        tabPanel.add(new ScrollPanel(createOccupanciesTab()), i18n.tr("Occupancies"));
+        tabPanel.add(new ScrollPanel(createFinancialsTab()), i18n.tr("Financial"));
+        tabPanel.add(new ScrollPanel(createConcessionsTab()), i18n.tr("Concessions"));
+        tabPanel.add(new ScrollPanel(createMarketingTab()), i18n.tr("Marketing"));
+        tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+
+        tabPanel.setSize("100%", "100%");
+        return tabPanel;
+    }
+
+    private Widget createMarketingTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
 
+        SubtypeInjectors.injectMarketing(main, split, proto().marketing(), this);
         main.add(split);
+
+        return main;
+    }
+
+    private Widget createConcessionsTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        main.add(inject(proto().financial().concessions(), createConcessionsListEditor()));
+        return main;
+    }
+
+    private Widget createFinancialsTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+
+        main.add(split = new VistaDecoratorsSplitFlowPanel());
+        split.getLeftPanel().add(inject(proto().financial().unitRent()), 15);
+        split.getRightPanel().add(inject(proto().financial().marketRent()), 15);
+        main.add(split);
+
+        return main;
+    }
+
+    private Widget createOccupanciesTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        main.add(inject(proto().occupancies(), createOccupanciesListEditor()));
+        return main;
+    }
+
+    private Widget createAmenitiesTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        main.add(inject(proto().amenities(), createAmenitiesListEditor()));
+        return main;
+    }
+
+    private Widget createAddonsTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        main.add(inject(proto().addOns(), createAddOnsListEditor()));
+        return main;
+    }
+
+    private Widget createUtilitiesTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        main.add(inject(proto().info().utilities(), createUtilitiesListEditor()));
+        return main;
+    }
+
+    private Widget createDetailsTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        main.add(inject(proto().details(), createDetailsListEditor()));
+        main.add(new CrmHeader1Decorator(i18n.tr(proto().info().utilities().getMeta().getCaption())));
+        return main;
+    }
+
+    private Widget createGeneralTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+
         split.getLeftPanel().add(inject(proto().info().name()), 15);
         split.getLeftPanel().add(inject(proto().marketing().name()), 15);
 
@@ -71,38 +152,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         split.getRightPanel().add(inject(proto().info().bedrooms()), 15);
         split.getRightPanel().add(inject(proto().info().bathrooms()), 15);
+        main.add(split);
 
-        main.add(new CrmHeader1Decorator(i18n.tr("Details")));
-        main.add(inject(proto().details(), createDetailsListEditor()));
-
-        main.add(new CrmHeader1Decorator(i18n.tr(proto().info().utilities().getMeta().getCaption())));
-        main.add(inject(proto().info().utilities(), createUtilitiesListEditor()));
-
-        main.add(new CrmHeader1Decorator(i18n.tr(proto().addOns().getMeta().getCaption())));
-        main.add(inject(proto().addOns(), createAddOnsListEditor()));
-
-        main.add(new CrmHeader1Decorator(i18n.tr(proto().amenities().getMeta().getCaption())));
-        main.add(inject(proto().amenities(), createAmenitiesListEditor()));
-
-        main.add(new CrmHeader1Decorator(i18n.tr(proto().occupancies().getMeta().getCaption())));
-        main.add(inject(proto().occupancies(), createOccupanciesListEditor()));
-
-        main.add(new CrmHeader1Decorator(i18n.tr("Financials")));
-        main.add(split = new VistaDecoratorsSplitFlowPanel());
-        split.getLeftPanel().add(inject(proto().financial().unitRent()), 15);
-        split.getRightPanel().add(inject(proto().financial().marketRent()), 15);
-
-        main.add(new CrmHeader1Decorator(i18n.tr(proto().financial().concessions().getMeta().getCaption())));
-        main.add(inject(proto().financial().concessions(), createConcessionsListEditor()));
-// just select from predefines ones:        
-//        main.add(inject(proto().financial().concessions()), 15);
-
-        main.add(new CrmHeader1Decorator(i18n.tr("Marketing")));
-        main.add(split = new VistaDecoratorsSplitFlowPanel());
-        SubtypeInjectors.injectMarketing(main, split, proto().marketing(), this);
-        split.getLeftPanel().add(inject(proto().marketing().floorplan()), 15);
-
-        main.setWidth("100%");
         return main;
     }
 
