@@ -27,10 +27,21 @@ public class Response {
     /**
      * This is the 4-digit response code from the transaction. "0000" constitutes a successful transaction, and any other 4-digit code constitutes a failure.
      */
+    @XmlElement(required = true)
     public String code;
 
+    /**
+     * This is the response text of the message. Historically this is what would appear on the screen or printout of a credit card terminal. The authorization
+     * number and amount are displayed here on an approval-type transaction. For errors and decline responses this field contains the error message or decline
+     * message.
+     */
+    @XmlElement(required = true)
     public String text;
 
+    /**
+     * For transactions which return authorization numbers (Sale, PreAuthorization, Completion, AuthOnly) this is the authorization number. The
+     * authorization number is also returned in the TEXT field,
+     */
     public String auth;
 
     /**

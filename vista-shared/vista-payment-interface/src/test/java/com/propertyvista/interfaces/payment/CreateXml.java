@@ -13,6 +13,7 @@
  */
 package com.propertyvista.interfaces.payment;
 
+import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
@@ -27,7 +28,11 @@ import com.propertyvista.interfaces.payment.TokenActionRequest.TokenAction;
 public class CreateXml {
 
     public static void main(String[] args) throws Exception {
+        requestExamples();
+        responseExamples();
+    }
 
+    public static void requestExamples() throws Exception {
         JAXBContext context = JAXBContext.newInstance(RequestMessage.class);
         Marshaller m = context.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -49,6 +54,18 @@ public class CreateXml {
 
             ccpay.amount = 900;
             ccpay.reference = "August Rent, 46 Yonge, Appt 18";
+
+            r.requests.add(ccpay);
+
+            ccpay = new TransactionRequest();
+            ccpay.requestID = "payProc#2";
+            ccpay.txnType = TransactionRequest.TransactionType.Sale;
+            ccpay.paymentInstrument = new CreditCardInfo();
+            ((CreditCardInfo) ccpay.paymentInstrument).cardNumber = "378282246310005";
+            ((CreditCardInfo) ccpay.paymentInstrument).expiryDate = new Date();
+
+            ccpay.amount = 940;
+            ccpay.reference = "August Rent, 46 Yonge, Appt 19";
 
             r.requests.add(ccpay);
 
@@ -92,18 +109,87 @@ public class CreateXml {
         }
 
         boolean printSchema = true;
-        System.out.println("\n\n-- Schema");
+        System.out.println("\n\n-- RequestMessage Schema");
         if (printSchema) {
             context.generateSchema(new SchemaOutputResolver() {
 
                 @Override
                 public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
-                    StreamResult sr = new StreamResult(System.out);
+                    StreamResult sr = new StreamResult(new FilterOutputStream(System.out) {
+                        @Override
+                        public void close() {
+                        }
+
+                    });
                     sr.setSystemId("");
                     return sr;
                 }
             });
         }
 
+    }
+
+    private static void responseExamples() throws Exception {
+        JAXBContext context = JAXBContext.newInstance(ResponseMessage.class);
+        Marshaller m = context.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        {
+            System.out.println("\n\n-- Sale/Token transaction Response(s)");
+
+            ResponseMessage rm = new ResponseMessage();
+            rm.merchantId = "BIRCHWTT";
+            rm.status = StatusCode.OK;
+
+            Response r = new Response();
+            r.requestID = "payProc#1";
+            r.code = "0000";
+            r.auth = "T03006";
+            r.text = "T03006 $255.59";
+            rm.response.add(r);
+
+            r = new Response();
+            r.requestID = "payProc#2";
+            r.code = "0000";
+            r.text = "TOKEN ADDED";
+            rm.response.add(r);
+
+            r = new Response();
+            r.requestID = "payProc#3";
+            r.code = "1254";
+            r.text = "EXPIRED CARD";
+            rm.response.add(r);
+
+            m.marshal(rm, System.out);
+        }
+
+        {
+            System.out.println("\n\n-- System Not Avalable");
+
+            ResponseMessage rm = new ResponseMessage();
+            rm.status = StatusCode.SystemDown;
+            rm.response = null;
+
+            m.marshal(rm, System.out);
+        }
+
+        boolean printSchema = true;
+        System.out.println("\n\n-- ResponseMessage Schema");
+        if (printSchema) {
+            context.generateSchema(new SchemaOutputResolver() {
+
+                @Override
+                public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
+                    StreamResult sr = new StreamResult(new FilterOutputStream(System.out) {
+                        @Override
+                        public void close() {
+                        }
+
+                    });
+                    sr.setSystemId("");
+                    return sr;
+                }
+            });
+        }
     }
 }

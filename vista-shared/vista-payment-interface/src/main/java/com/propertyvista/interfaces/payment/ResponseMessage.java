@@ -29,6 +29,7 @@ public class ResponseMessage {
     @XmlElement(required = true)
     public String merchantId;
 
+    @XmlElement(required = true)
     public StatusCode status;
 
     @XmlElementWrapper

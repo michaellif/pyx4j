@@ -17,6 +17,8 @@ public enum StatusCode {
 
     OK,
 
+    AuthenticationFailed,
+
     ReadOnly,
 
     SystemDown

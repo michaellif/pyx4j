@@ -79,10 +79,25 @@ public class TransactionRequest extends Request {
 
     //@formatter:off
     @XmlElements({ 
-        @XmlElement(name = "CreditCard", type = CreditCardInfo.class), 
-        @XmlElement(name = "Token", type = TokenPaymentInstrument.class)})
+        @XmlElement(name = "creditCard", type = CreditCardInfo.class), 
+        @XmlElement(name = "token", type = TokenPaymentInstrument.class)})
     public PaymentInstrument paymentInstrument;
     //@formatter:on
+
+    /**
+     * This 3 or 4 character field is used to ensure the physical presence of a card in an environment where the cardholder is not present at the time of the
+     * purchase. This value appears as additional characters following the credit card number which is printed within the signature panel on the back of the
+     * card.
+     */
+    @XmlElement(required = false)
+    public String cvv;
+
+    /**
+     * Address Verification Service (AVS) allows cardholder address information to be included with a credit card transaction for comparison with the address
+     * that the card issuer has on file.
+     */
+    @XmlElement(required = false)
+    public String avs;
 
     /**
      * The amount of money for which the transaction is being performed.

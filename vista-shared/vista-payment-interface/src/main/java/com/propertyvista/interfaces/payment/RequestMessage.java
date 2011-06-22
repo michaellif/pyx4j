@@ -42,9 +42,9 @@ public class RequestMessage {
     //@formatter:off
     @XmlElementWrapper
     @XmlElements({ 
-        @XmlElement(name = "Transaction", type = TransactionRequest.class), 
-        @XmlElement(name = "TokenAction", type = TokenActionRequest.class),
-        @XmlElement(name = "CanadianAVS", type = CanadianAVSRequest.class), })
+        @XmlElement(name = "transaction", type = TransactionRequest.class), 
+        @XmlElement(name = "tokenAction", type = TokenActionRequest.class),
+        @XmlElement(name = "canadianAVS", type = CanadianAVSRequest.class), })
     public List<Request> requests = new Vector<Request>();
 
 }
