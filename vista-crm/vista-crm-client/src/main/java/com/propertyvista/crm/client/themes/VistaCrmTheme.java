@@ -487,6 +487,19 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("color", ThemeColor.OBJECT_TONE95);
         addStyle(style);
 
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE60);
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnMenu));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE10);
+        style.addProperty("color", ThemeColor.OBJECT_TONE90);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("padding", "3px 7px");
+        addStyle(style);
+
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row));
         style.addProperty("cursor", "pointer");
         addStyle(style);

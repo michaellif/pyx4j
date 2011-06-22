@@ -77,7 +77,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         combinedtab = new FlowPanel();
         combinedtab.add(((BuildingView) getParentView()).getParkingListerView().asWidget());
         combinedtab.add(((BuildingView) getParentView()).getLockerAreaListerView().asWidget());
-        tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Parking @ Locker Area"));
+        tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Parking & Locker Area"));
 
         tabPanel.add(new ScrollPanel(createFinancialTab()), i18n.tr("Financial"));
         tabPanel.add(new ScrollPanel(createMarketingTab()), i18n.tr("Marketing"));
