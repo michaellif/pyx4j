@@ -57,6 +57,7 @@ public abstract class VistaAdminTheme extends VistaTheme {
         initButtonStylesEx();
         initHeadersStyle();
         initDashboardReport();
+        initListerStyles();
         initEntityDataTableStyles();
     }
 
@@ -354,13 +355,6 @@ public abstract class VistaAdminTheme extends VistaTheme {
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bold");
         addStyle(style);
-
-        // Lister filters:
-        prefix = ListerBase.DEFAULT_STYLE_PREFIX;
-        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filtersPanel));
-        style.addProperty("padding-top", "0.5em");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
-        addStyle(style);
     }
 
     protected void initDashboardReport() {
@@ -426,6 +420,25 @@ public abstract class VistaAdminTheme extends VistaTheme {
         // overriding gwt-dnd styles:
         style = new Style(".dragdrop-handle");
         style.addProperty("cursor", "pointer");
+        addStyle(style);
+    }
+
+    protected void initListerStyles() {
+        String prefix = ListerBase.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("padding-top", "0.5em");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.actionsPanel));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filtersPanel));
+        style.addProperty("padding-top", "0.5em");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.listPanel));
         addStyle(style);
     }
 
