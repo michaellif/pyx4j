@@ -147,6 +147,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         if (isUseHeaderColumnSelector()) {
             setWidget(0, colIndex, createHeaderColumnSelector());
             getCellFormatter().setWidth(0, colIndex, "5px");
+            getCellFormatter().setStyleName(0, colIndex, BASE_NAME + StyleSuffix.ColumnSelector);
         }
 
         Element rowElement = getRowFormatter().getElement(0);
@@ -291,7 +292,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         assert (availableColumns != null);
 
         final Anchor selector = new Anchor("...");
-        selector.setStyleName(BASE_NAME + StyleSuffix.ColumnSelector);
         selector.addClickHandler(new ClickHandler() {
 
             private final List<CheckBox> columnChecksList = new ArrayList<CheckBox>();
