@@ -13,7 +13,12 @@
  */
 package com.propertyvista.interfaces.payment;
 
+import java.util.List;
+import java.util.Vector;
+
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -25,12 +30,21 @@ public class RequestMessage {
     @XmlElement(required = true)
     public String interfaceEntity;
 
+    /**
+     * You must provide your password for every HTTP request.
+     */
     @XmlElement(required = true)
     public String password;
 
     @XmlElement(required = true)
     public String merchantId;
 
-    public Request request;
+    //@formatter:off
+    @XmlElementWrapper
+    @XmlElements({ 
+        @XmlElement(name = "Transaction", type = TransactionRequest.class), 
+        @XmlElement(name = "TokenAction", type = TokenActionRequest.class),
+        @XmlElement(name = "CanadianAVS", type = CanadianAVSRequest.class), })
+    public List<Request> requests = new Vector<Request>();
 
 }

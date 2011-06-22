@@ -19,31 +19,40 @@ public class TokenActionRequest extends Request {
 
     public enum TokenAction {
 
-        ADD("ADD/CREATE the token"),
+        /**
+         * Used to add/create the token
+         */
+        Add,
 
-        UPDATE("Used to modify credit card number, expiry and reference data related to the token"),
+        /**
+         * Used to modify credit card number, expiry and reference data related to the token
+         */
+        Update,
 
-        DEACTIVATE("Used to deactivate the token. Tokens which are deactivated will be deleted after 1 year"),
+        /**
+         * Used to deactivate the token. Tokens which are deactivated will be deleted after 1 year
+         */
+        Deactivate,
 
-        REACTIVATE("Used to reactivate the token");
+        /**
+         * Used to reactivate the token
+         */
+        Reactivate;
 
-        private final String description;
-
-        private TokenAction(String description) {
-            this.description = description;
-        }
-
-        public String getDescription() {
-            return description;
-        }
     }
 
+    /**
+     * This field is used to determine what action is to be performed for the token.
+     */
     @XmlElement(required = true)
     public TokenAction action;
 
     @XmlElement(required = true)
     public String code;
 
+    /**
+     * A reference data field that can be associated with the token.
+     */
     @XmlElement(required = false)
     public String reference;
 

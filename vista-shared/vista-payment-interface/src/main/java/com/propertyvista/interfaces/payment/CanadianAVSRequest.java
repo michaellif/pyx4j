@@ -13,6 +13,9 @@
  */
 package com.propertyvista.interfaces.payment;
 
+/**
+ * Canadian Address Verification Service(AVS)
+ */
 public class CanadianAVSRequest extends Request {
 
 }

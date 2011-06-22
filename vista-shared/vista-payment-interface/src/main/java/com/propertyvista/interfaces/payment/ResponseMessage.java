@@ -13,27 +13,24 @@
  */
 package com.propertyvista.interfaces.payment;
 
-public enum TransactionType {
+import java.util.List;
+import java.util.Vector;
 
-    SALE("Sale"),
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
-    AUTH_ONLY("Auth Only"),
+@XmlRootElement
+public class ResponseMessage {
 
-    AUTH_REVERSE("Auth Reversal"),
+    @XmlElement(required = false)
+    public String messageID;
 
-    RETURN("Return"),
+    @XmlElement(required = true)
+    public String merchantId;
 
-    RETURN_VOID("Return Void"),
+    public StatusCode status;
 
-    COMPLETION("Completion");
-
-    private final String description;
-
-    private TransactionType(String description) {
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
+    @XmlElementWrapper
+    public List<Response> response = new Vector<Response>();
 }

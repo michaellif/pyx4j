@@ -13,9 +13,18 @@
  */
 package com.propertyvista.interfaces.payment;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 @XmlSeeAlso({ TransactionRequest.class, TokenActionRequest.class, CanadianAVSRequest.class })
 public abstract class Request {
 
+    @XmlElement(required = false)
+    public String requestID;
+
+    /**
+     * Data that is in this field is returned in the reply. This can be useful for transaction tracking in single-process or batch applications.
+     * This field is returned in the 'ECHO' field of the transaction Response.
+     */
+    public String echo;
 }

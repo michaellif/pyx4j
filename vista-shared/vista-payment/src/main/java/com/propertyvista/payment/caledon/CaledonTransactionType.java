@@ -31,7 +31,6 @@ enum CaledonTransactionType {
     //external api
     RETURN("R", "Return"),
 
-    //external api
     RETURN_VOID("M", "Return Void"),
 
     FORCE_POST("F", "Force Post"),

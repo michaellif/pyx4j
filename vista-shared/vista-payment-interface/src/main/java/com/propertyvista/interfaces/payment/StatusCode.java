@@ -13,13 +13,12 @@
  */
 package com.propertyvista.interfaces.payment;
 
-public enum RequestType {
+public enum StatusCode {
 
-    CardProcessing,
+    OK,
 
-    TokenAction,
+    ReadOnly,
 
-    //Canadian Address Verification Service(AVS)
-    CanadianAVS,
+    SystemDown
 
 }

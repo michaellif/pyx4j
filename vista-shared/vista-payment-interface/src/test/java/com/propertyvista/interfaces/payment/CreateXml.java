@@ -33,14 +33,16 @@ public class CreateXml {
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
         {
-            System.out.println("-- Sale transaction");
+            System.out.println("\n\n-- Sale transaction");
 
             RequestMessage r = new RequestMessage();
             r.interfaceEntity = "PaymentProcessor1";
             r.merchantId = "BIRCHWTT";
             r.password = "top-secret";
             TransactionRequest ccpay = new TransactionRequest();
-            ccpay.txnType = TransactionType.SALE;
+            ccpay.requestID = "payProc#1";
+            ccpay.resend = false;
+            ccpay.txnType = TransactionRequest.TransactionType.Sale;
             ccpay.paymentInstrument = new CreditCardInfo();
             ((CreditCardInfo) ccpay.paymentInstrument).cardNumber = "6011111111111117";
             ((CreditCardInfo) ccpay.paymentInstrument).expiryDate = new Date();
@@ -48,54 +50,60 @@ public class CreateXml {
             ccpay.amount = 900;
             ccpay.reference = "August Rent, 46 Yonge, Appt 18";
 
-            r.request = ccpay;
+            r.requests.add(ccpay);
 
             m.marshal(r, System.out);
         }
 
         {
-            System.out.println("-- Token Add transaction");
+            System.out.println("\n\n-- Token Add transaction");
 
             RequestMessage r = new RequestMessage();
             r.interfaceEntity = "PaymentProcessor1";
             r.merchantId = "BIRCHWTT";
             r.password = "top-secret";
             TokenActionRequest addToken = new TokenActionRequest();
-            addToken.action = TokenAction.ADD;
+            addToken.action = TokenAction.Add;
             addToken.code = "DC1107";
             addToken.reference = "46 Yonge, Appt 18";
             addToken.card = new CreditCardInfo();
             addToken.card.cardNumber = "6011111111111117";
             addToken.card.expiryDate = new Date();
-            r.request = addToken;
+            r.requests.add(addToken);
             m.marshal(r, System.out);
         }
 
         {
-            System.out.println("-- Sale using a token");
+            System.out.println("\n\n-- Sale using a token");
 
             RequestMessage r = new RequestMessage();
             r.interfaceEntity = "PaymentProcessor1";
             r.merchantId = "BIRCHWTT";
             r.password = "top-secret";
             TransactionRequest tcpay = new TransactionRequest();
-            tcpay.txnType = TransactionType.SALE;
+            tcpay.txnType = TransactionRequest.TransactionType.Sale;
             tcpay.paymentInstrument = new TokenPaymentInstrument();
             ((TokenPaymentInstrument) tcpay.paymentInstrument).code = "DC1107";
-            r.request = tcpay;
+            tcpay.amount = 500.78f;
+            tcpay.reference = "September Rent, 14 Yonge, Appt 456";
+            r.requests.add(tcpay);
 
             m.marshal(r, System.out);
         }
 
-        context.generateSchema(new SchemaOutputResolver() {
+        boolean printSchema = true;
+        System.out.println("\n\n-- Schema");
+        if (printSchema) {
+            context.generateSchema(new SchemaOutputResolver() {
 
-            @Override
-            public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
-                StreamResult sr = new StreamResult(System.out);
-                sr.setSystemId("");
-                return sr;
-            }
-        });
+                @Override
+                public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
+                    StreamResult sr = new StreamResult(System.out);
+                    sr.setSystemId("");
+                    return sr;
+                }
+            });
+        }
 
     }
 }
