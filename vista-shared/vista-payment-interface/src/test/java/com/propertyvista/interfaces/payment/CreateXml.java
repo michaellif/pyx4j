@@ -23,6 +23,7 @@ import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
+import com.propertyvista.interfaces.payment.ResponseMessage.StatusCode;
 import com.propertyvista.interfaces.payment.TokenActionRequest.TokenAction;
 
 public class CreateXml {
@@ -139,7 +140,7 @@ public class CreateXml {
 
             ResponseMessage rm = new ResponseMessage();
             rm.merchantId = "BIRCHWTT";
-            rm.status = StatusCode.OK;
+            rm.status = ResponseMessage.StatusCode.OK;
 
             Response r = new Response();
             r.requestID = "payProc#1";

@@ -23,6 +23,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ResponseMessage {
 
+    public enum StatusCode {
+
+        OK,
+
+        AuthenticationFailed,
+
+        ReadOnly,
+
+        SystemDown
+
+    }
+
     @XmlElement(required = false)
     public String messageID;
 
