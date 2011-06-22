@@ -82,6 +82,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private static final String CHECK_MARK_COLUMN_SIZE = "22px";
 
+    private List<CheckSelectionHandler> checkSelectionHandlers;
+
     public DataTable(boolean checkboxColumnShown) {
         super();
         this.checkboxColumnShown = checkboxColumnShown;
@@ -148,6 +150,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             setWidget(0, colIndex, createHeaderColumnSelector());
             getCellFormatter().setWidth(0, colIndex, "5px");
             getCellFormatter().setStyleName(0, colIndex, BASE_NAME + StyleSuffix.ColumnSelector);
+            getCellFormatter().setVerticalAlignment(0, colIndex, HasVerticalAlignment.ALIGN_MIDDLE);
+            getCellFormatter().setHorizontalAlignment(0, colIndex, HasHorizontalAlignment.ALIGN_CENTER);
         }
 
         Element rowElement = getRowFormatter().getElement(0);
@@ -235,6 +239,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     public int getSelectedRow() {
         return selectedRow;
+    }
+
+    public E getSelectedItem() {
+        int selectedRow = getSelectedRow();
+        if (selectedRow > 0 && selectedRow < getDataTableModel().getData().size()) {
+            return getDataTableModel().getData().get(selectedRow).getEntity();
+        }
+        return null;
     }
 
     public List<E> getCheckedItems() {
@@ -354,6 +366,18 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         return selector;
     }
 
+    // Check box selection class: 
+    public interface CheckSelectionHandler {
+        void oncheck(boolean isAnyChecked);
+    }
+
+    public void addCheckSelectionHandler(CheckSelectionHandler handler) {
+        if (checkSelectionHandlers == null) {
+            checkSelectionHandlers = new ArrayList<CheckSelectionHandler>(1);
+        }
+        checkSelectionHandlers.add(handler);
+    }
+
     // Check box column item class: 
     class SelectionCheckBox extends CheckBox {
 
@@ -380,6 +404,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                             }
                         }
                         selectionCheckBoxAll.setValue(allChecked);
+                    }
+
+                    // notify listeners:
+                    if (!checkSelectionHandlers.isEmpty()) {
+                        boolean isAnyChecked = model.isAnyChecked();
+                        for (CheckSelectionHandler handler : checkSelectionHandlers) {
+                            handler.oncheck(isAnyChecked);
+                        }
                     }
                 }
             });

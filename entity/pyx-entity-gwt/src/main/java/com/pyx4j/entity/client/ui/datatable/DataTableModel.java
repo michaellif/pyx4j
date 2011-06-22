@@ -209,4 +209,12 @@ public class DataTableModel<E extends IEntity> {
         return data.size() > 0 ? true : false;
     }
 
+    public boolean isAnyChecked() {
+        for (DataItem<E> dataItem : data) {
+            if (dataItem.isChecked()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -36,6 +36,7 @@ import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -49,7 +50,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.site.client.resources.SiteImages;
@@ -63,12 +64,16 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     public static String DEFAULT_STYLE_PREFIX = "vista_Lister";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        filetersPanel
+        actionsPanel, filtersPanel, listPanel
     }
 
     private static I18n i18n = I18nFactory.getI18n(ListerBase.class);
 
     protected Button btnNewItem;
+
+    protected Button btnViewItem;
+
+    protected final HorizontalPanel actionsPanel;
 
     protected final HorizontalPanel filtersPanel;
 
@@ -81,6 +86,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     protected Presenter presenter;
 
     public ListerBase(Class<E> clazz) {
+        setStyleName(DEFAULT_STYLE_PREFIX);
 
         listPanel = new EntityListPanel<E>(clazz) {
             @Override
@@ -90,9 +96,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 return columnDescriptors;
             }
         };
-
         listPanel.setPageSize(ApplicationMode.isDevelopment() ? 10 : 30);
-
         listPanel.setPrevActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -106,37 +110,42 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             }
         });
 
+        listPanel.getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
+            @Override
+            public void oncheck(boolean isAnyChecked) {
+                setActionsActive(isAnyChecked);
+            }
+        });
+
         showChecksColumn(true);
         showHeaderColumnSelector(true);
         listPanel.removeUpperActionsBar();
+        listPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.listPanel);
         DOM.setStyleAttribute(listPanel.getDataTable().getElement(), "tableLayout", "auto");
 
-        // -------------------------
-        HorizontalPanel newItem = new HorizontalPanel();
-        newItem.add(btnNewItem = new Button(i18n.tr("Add new item...")));
-        newItem.setCellHorizontalAlignment(btnNewItem, HasHorizontalAlignment.ALIGN_RIGHT);
-        btnNewItem.getElement().getStyle().setMarginRight(1, Unit.EM);
-        btnNewItem.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-        btnNewItem.setVisible(false);
-        newItem.setWidth("100%");
+        // actions & filters:
+        actionsPanel = new HorizontalPanel();
+        actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
+        actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        actionsPanel.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
+        actionsPanel.setWidth("100%");
+        actionsPanel.add(new HTML()); // just for %-tage cells alignment...
 
         filtersPanel = new HorizontalPanel();
+        filtersPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.filtersPanel);
         filtersPanel.add(filters = new Filters());
 
         Widget widgetAddApply = createAddApplyPanel();
         filtersPanel.add(widgetAddApply);
         filtersPanel.setCellWidth(widgetAddApply, "25%");
         filtersPanel.setCellVerticalAlignment(widgetAddApply, HasVerticalAlignment.ALIGN_BOTTOM);
-        filtersPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.filetersPanel);
         filtersPanel.setWidth("100%");
 
         // put UI bricks together:
-        add(newItem);
+        add(actionsPanel);
         add(filtersPanel);
         add(listPanel);
         setWidth("100%");
-        getElement().getStyle().setMarginTop(0.5, Unit.EM);
-        getElement().getStyle().setMarginBottom(0.5, Unit.EM);
     }
 
     public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> itemOpenPlaceClass) {
@@ -150,15 +159,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> itemOpenPlaceClass, final boolean openEditor, boolean allowAddNew) {
         this(clazz);
 
-        // add editing on double-click: 
         getListPanel().getDataTable().addDoubleClickHandler(new DoubleClickHandler() {
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
-                // put selected item ID in link arguments:
-                DataTable<E> dt = getListPanel().getDataTable();
-                int selectedRow = dt.getSelectedRow();
-                if (selectedRow >= 0 && selectedRow < dt.getDataTableModel().getData().size()) {
-                    E item = dt.getDataTableModel().getData().get(selectedRow).getEntity();
+                E item = getListPanel().getDataTable().getSelectedItem();
+                if (item != null) {
                     if (openEditor) {
                         presenter.edit(itemOpenPlaceClass, item.getPrimaryKey());
                     } else {
@@ -168,8 +173,32 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             }
         });
 
+// view item button stuff:
+        addActionButton(btnViewItem = new Button(i18n.tr("Veiw&nbspitem...")));
+        btnViewItem.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                E item = getListPanel().getDataTable().getSelectedItem();
+                if (item != null) {
+                    presenter.view(itemOpenPlaceClass, item.getPrimaryKey());
+                }
+            }
+        });
+
+        btnViewItem.setEnabled(false);
+        getListPanel().getDataTable().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (getListPanel().getDataTable().getSelectedRow() > 0) {
+                    btnViewItem.setEnabled(true);
+                }
+            }
+        });
+// new item button stuff:
         if (allowAddNew) {
-            btnNewItem.setVisible(true);
+            actionsPanel.add(btnNewItem = new Button(i18n.tr("Add&nbspnew&nbspitem...")));
+            actionsPanel.setCellWidth(btnNewItem, "1%");
+            btnNewItem.getElement().getStyle().setMarginRight(1, Unit.EM);
             btnNewItem.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -177,6 +206,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 }
             });
         }
+    }
+
+    protected void addActionButton(Button action) {
+        actionsPanel.insert(action, 1);
+        actionsPanel.setCellWidth(action, "1%");
+        action.getElement().getStyle().setMarginRight(1, Unit.EM);
     }
 
     public void setFiltersVisible(boolean visible) {
@@ -269,6 +304,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     @Override
     public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData) {
         getListPanel().populateData(entityes, pageNumber, hasMoreData);
+        setActionsActive(false);
+        btnViewItem.setEnabled(false);
     }
 
     protected void populateData(int pageNumber) {
@@ -286,6 +323,14 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     protected void onNextPage() {
         populateData(getListPanel().getDataTable().getDataTableModel().getPageNumber() + 1);
+    }
+
+    private void setActionsActive(boolean active) {
+        for (Widget w : actionsPanel) {
+            if (!w.equals(btnNewItem) && !w.equals(btnViewItem) && w instanceof FocusWidget) {
+                ((FocusWidget) w).setEnabled(active);
+            }
+        }
     }
 
     // ------------------------------------------------
