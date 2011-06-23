@@ -8,7 +8,7 @@
 
     <parent>
         <groupId>com.propertyvista</groupId>
-        <artifactId>vista-tester</artifactId>
+        <artifactId>vista-paypad</artifactId>
         <version>1.0.0-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -24,19 +24,19 @@
             <artifactId>vista-paypad-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-paypad-interface</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-payment</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <!-- ensure proper version, NOT from gwt-dev.jar -->
         <dependency>
             <groupId>commons-codec</groupId>
