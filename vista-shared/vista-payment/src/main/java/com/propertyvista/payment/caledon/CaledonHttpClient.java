@@ -27,7 +27,9 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.contrib.ssl.EasySSLProtocolSocketFactory;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.protocol.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,11 +42,23 @@ class CaledonHttpClient {
 
     private final static Logger log = LoggerFactory.getLogger(CaledonHttpClient.class);
 
-    private final String
-    // url = "https://lt3test1.caledoncard.com:1443/"; 
-    url = "https://lt3a.caledoncard.com/";
+    private final boolean useTestServer = true;
+
+    private final boolean easySSLEnabled = true;
+
+    private final String urlTests = "https://216.185.82.37:1443/";
+
+    private final String urlProd = "https://lt3a.caledoncard.com/";
 
     CaledonResponse transaction(CaledonRequest request) {
+
+        String url;
+
+        if (useTestServer) {
+            url = urlTests;
+        } else {
+            url = urlProd;
+        }
 
         GetMethod httpMethod = new GetMethod(url);
         httpMethod.setFollowRedirects(false);
@@ -59,6 +73,12 @@ class CaledonHttpClient {
                 Credentials proxyCreds = new UsernamePasswordCredentials(proxy.getUser(), proxy.getPassword());
                 httpClient.getState().setProxyCredentials(AuthScope.ANY, proxyCreds);
             }
+        }
+
+        if (useTestServer && easySSLEnabled) {
+            @SuppressWarnings("deprecation")
+            Protocol easyhttps = new Protocol("https", new EasySSLProtocolSocketFactory(), 1443);
+            Protocol.registerProtocol("https", easyhttps);
         }
 
         try {

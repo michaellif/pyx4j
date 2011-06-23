@@ -31,7 +31,7 @@ public class CaledonTokenTest extends CaledonTestCase {
 
     }
 
-    public void OFF_testCreateToken() {
+    public void testCreateToken() {
         IPaymentProcessor proc = new CaledonPaymentProcessor();
         Token token = EntityFactory.create(Token.class);
         token.code().setValue(String.valueOf(System.currentTimeMillis()));
@@ -41,7 +41,7 @@ public class CaledonTokenTest extends CaledonTestCase {
 
     }
 
-    public void OFF_testTokenTransaction() {
+    public void testTokenTransaction() {
         IPaymentProcessor proc = new CaledonPaymentProcessor();
         Token token = EntityFactory.create(Token.class);
         token.code().setValue(String.valueOf(System.currentTimeMillis()));
