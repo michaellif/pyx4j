@@ -11,7 +11,11 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.interfaces.payment;
+package com.propertyvista.interfaces.payment.examples.xml;
+
+import com.propertyvista.interfaces.payment.RequestMessage;
+import com.propertyvista.interfaces.payment.ResponseMessage;
+import com.propertyvista.interfaces.payment.examples.utils.MarshallUtil;
 
 public class CreateXml {
 

@@ -11,13 +11,20 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.interfaces.payment;
+package com.propertyvista.interfaces.payment.examples.xml;
 
 import java.util.Date;
 
 import javax.xml.bind.JAXBException;
 
+import com.propertyvista.interfaces.payment.CreditCardInfo;
+import com.propertyvista.interfaces.payment.RequestMessage;
+import com.propertyvista.interfaces.payment.TokenActionRequest;
+import com.propertyvista.interfaces.payment.TokenPaymentInstrument;
+import com.propertyvista.interfaces.payment.TransactionRequest;
 import com.propertyvista.interfaces.payment.TokenActionRequest.TokenAction;
+import com.propertyvista.interfaces.payment.TransactionRequest.TransactionType;
+import com.propertyvista.interfaces.payment.examples.utils.MarshallUtil;
 
 public class RequestMessageCreator {
 

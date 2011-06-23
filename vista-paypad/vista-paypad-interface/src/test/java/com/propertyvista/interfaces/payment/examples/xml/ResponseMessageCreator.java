@@ -11,11 +11,14 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.interfaces.payment;
+package com.propertyvista.interfaces.payment.examples.xml;
 
 import javax.xml.bind.JAXBException;
 
+import com.propertyvista.interfaces.payment.Response;
+import com.propertyvista.interfaces.payment.ResponseMessage;
 import com.propertyvista.interfaces.payment.ResponseMessage.StatusCode;
+import com.propertyvista.interfaces.payment.examples.utils.MarshallUtil;
 
 public class ResponseMessageCreator {
 

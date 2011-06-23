@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.interfaces.payment;
+package com.propertyvista.interfaces.payment.examples.utils;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;

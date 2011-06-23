@@ -22,7 +22,6 @@ import java.net.URL;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
-import com.propertyvista.interfaces.payment.MarshallUtil;
 import com.propertyvista.interfaces.payment.RequestMessage;
 import com.propertyvista.interfaces.payment.ResponseMessage;
 
