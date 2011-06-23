@@ -19,6 +19,7 @@
 
     <modules>
         <module>vista-paypad-domain</module>
+        <module>vista-paypad-interface</module>
         <module>vista-paypad-server</module>
     </modules>
 
