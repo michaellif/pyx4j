@@ -6,43 +6,30 @@
     <!-- @version $Revision$ ($Author$) $Date$ -->
     <modelVersion>4.0.0</modelVersion>
 
+    <!--  comment this out if you have no access to vista svn -->
     <parent>
-         <groupId>com.propertyvista</groupId>
+        <groupId>com.propertyvista</groupId>
         <artifactId>vista-shared</artifactId>
         <version>1.0.0-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <groupId>com.propertyvista</groupId>
     <artifactId>vista-payment-interface</artifactId>
     <name>vista-payment-interface</name>
 
     <dependencies>
 
-		<dependency>
+		<!--  DO not add any dependencies form our projects here, since this is standalone module -->
+        
+        <dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
+            <scope>test</scope>
+            <optional>true</optional>
+            <version>3.1</version>
 		</dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-        	<groupId>com.pyx4j</groupId>
-        	<artifactId>pyx-essentials-j2se</artifactId>
-        	<version>2.0.3-SNAPSHOT</version>
-        	<scope>compile</scope>
-        </dependency>
+       
     </dependencies>
 
 

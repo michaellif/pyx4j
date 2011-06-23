@@ -17,8 +17,6 @@ import java.util.Date;
 
 import javax.xml.bind.JAXBException;
 
-import com.pyx4j.essentials.j2se.util.MarshallUtil;
-
 import com.propertyvista.interfaces.payment.TokenActionRequest.TokenAction;
 
 public class RequestMessageCreator {

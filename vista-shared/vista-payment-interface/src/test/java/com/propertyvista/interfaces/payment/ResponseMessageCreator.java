@@ -15,8 +15,6 @@ package com.propertyvista.interfaces.payment;
 
 import javax.xml.bind.JAXBException;
 
-import com.pyx4j.essentials.j2se.util.MarshallUtil;
-
 import com.propertyvista.interfaces.payment.ResponseMessage.StatusCode;
 
 public class ResponseMessageCreator {

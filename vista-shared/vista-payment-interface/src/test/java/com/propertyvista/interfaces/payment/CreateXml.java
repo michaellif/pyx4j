@@ -13,8 +13,6 @@
  */
 package com.propertyvista.interfaces.payment;
 
-import com.pyx4j.essentials.j2se.util.MarshallUtil;
-
 public class CreateXml {
 
     public static void main(String[] args) throws Exception {
