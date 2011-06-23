@@ -19,11 +19,11 @@ import java.util.Calendar;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.selenium.D;
 import com.pyx4j.widgets.client.datepicker.DatePickerIDs;
 
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsIds;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 
@@ -32,6 +32,8 @@ public class DatePickerTest extends DatePickerTestBase {
     private final IDebugId datePickerTextBoxId = D.id(D.id(proto(PotentialTenantList.class).tenants(), 0), D.id(proto(PotentialTenantInfo.class).birthDate()));
 
     private final IDebugId datePickerId = D.id(datePickerTextBoxId, CCompDebugId.trigger);
+
+    private final IDebugId validation = new CompositeDebugId(D.id(proto(PotentialTenantList.class).tenants(), 0), IFolderEditorDecorator.DecoratorsIds.Label);
 
     public void testDatePicker() throws Exception {
         login();
@@ -54,11 +56,8 @@ public class DatePickerTest extends DatePickerTestBase {
 
     private void validateValidationMessage() {
         Calendar calendar = Calendar.getInstance();
-        IDebugId validation = new CompositeDebugId(datePickerTextBoxId, VistaDecoratorsIds.Validation.name());
         navigateToDateAndClick(datePickerId, calendar);
-        //TODO Leon
-        //not sure how to do it yet
-        //assertVisible(validation.debugId());
+        assertVisible(validation.debugId());
         calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -20);
         navigateToDateAndClick(datePickerId, calendar);

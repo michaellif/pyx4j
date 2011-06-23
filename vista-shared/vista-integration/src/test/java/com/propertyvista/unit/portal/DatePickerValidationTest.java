@@ -13,7 +13,9 @@
  */
 package com.propertyvista.unit.portal;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.selenium.D;
 
@@ -25,6 +27,8 @@ public class DatePickerValidationTest extends DatePickerTestBase {
     private final IDebugId datePickerTextBoxId = D.id(D.id(proto(PotentialTenantList.class).tenants(), 0), D.id(proto(PotentialTenantInfo.class).birthDate()));
 
     private final IDebugId datePickerId = D.id(datePickerTextBoxId, CCompDebugId.trigger);
+
+    private final IDebugId validation = new CompositeDebugId(D.id(proto(PotentialTenantList.class).tenants(), 0), IFolderEditorDecorator.DecoratorsIds.Label);
 
     public void testDatePickerValidation() {
         login();
