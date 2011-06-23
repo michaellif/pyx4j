@@ -24,7 +24,7 @@ import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
 
-public class Mapper {
+public class GetPropertyConfigurationsMapper {
 
     // TODO this later will go into the Model
     private List<Building> buildings = new ArrayList<Building>();
@@ -65,9 +65,5 @@ public class Mapper {
 
     public List<Building> getBuildings() {
         return buildings;
-    }
-
-    public void setBuildings(List<Building> buildings) {
-        this.buildings = buildings;
     }
 }

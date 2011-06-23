@@ -13,7 +13,9 @@
  */
 package com.propertyvista.yardi;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 
 import javax.xml.bind.JAXBException;
@@ -28,9 +30,9 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.yardi.bean.out.Charge;
 import com.propertyvista.yardi.bean.out.Detail;
 
-public class YardiExample {
+public class YardiInteractiveExample {
 
-    private final static Logger log = LoggerFactory.getLogger(YardiExample.class);
+    private final static Logger log = LoggerFactory.getLogger(YardiInteractiveExample.class);
 
     public static void main(String[] args) {
         YardiClient c = new YardiClient();
@@ -48,19 +50,46 @@ public class YardiExample {
 
         // execute different actions
         try {
-            // the order of this call should match the document order
-            YardiTransactions.ping(c);
-            YardiTransactions.getResidentTransactions(c, yp);
+            while (true) {
+                System.out.println("Enter command: \n" + "0: Exit\n" + "1: GetPropertyConfigurations\n" + "2: GetResidentTransactions");
+                String command = read();
+                System.out.println("Entered [" + command + "]");
+                if (command.equals("0")) {
+                    break;
+                }
+                process(command, c, yp);
+            }
+            System.out.println("You are done");
+//            // the order of this call should match the document order
+//            YardiTransactions.ping(c);
+//            YardiTransactions.getResidentTransactions(c, yp);
+//
+//            // ANYA, use the first line if you want to send stuff, second to retrieve
+//            //send(c, yp);
+//            retrieve(c, yp);
+//
+//            //YardiTransactions.getResidentTransactions(c, yp);
+//            //YardiTransactions.getResidentsLeaseCharges(c, yp);
 
-            // ANYA, use the first line if you want to send stuff, second to retrieve
-            //send(c, yp);
-            retrieve(c, yp);
-
-            //YardiTransactions.getResidentTransactions(c, yp);
-            //YardiTransactions.getResidentsLeaseCharges(c, yp);
         } catch (Throwable e) {
             log.error("error", e);
         }
+    }
+
+    private static void process(String command, YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
+        if (command.equals("1")) {
+            YardiTransactions.getPropertyConfigurations(c, yp);
+        } else if (command.equals("2")) {
+            YardiTransactions.getResidentTransactions(c, yp);
+        }
+    }
+
+    private static String read() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        String token;
+        token = br.readLine();
+        return token;
     }
 
     private static void send(YardiClient c, YardiParameters yp) throws JAXBException, XMLStreamException, IOException {
@@ -94,7 +123,6 @@ public class YardiExample {
     }
 
     private static void retrieve(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
-        YardiTransactions.getResidentTransactions(c, yp);
 //    YardiTransactions.getResidentTransaction(c, yp);
         YardiTransactions.getResidentTransactionsByChargeDate(c, yp);
         YardiTransactions.getResidentTransactionsByApplicationDate(c, yp);
@@ -103,6 +131,5 @@ public class YardiExample {
         YardiTransactions.getUnitInformationLogin(c, yp);
         YardiTransactions.getVendors(c, yp);
         YardiTransactions.getExportChartOfAccounts(c, yp);
-        YardiTransactions.getPropertyConfigurations(c, yp);
     }
 }

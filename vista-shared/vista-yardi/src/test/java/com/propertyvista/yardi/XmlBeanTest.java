@@ -33,7 +33,8 @@ import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
 import com.propertyvista.yardi.bean2.PhysicalProperty;
 import com.propertyvista.yardi.bean2.ResidentTransactions;
-import com.propertyvista.yardi.mapper.Mapper;
+import com.propertyvista.yardi.mapper.GetPropertyConfigurationsMapper;
+import com.propertyvista.yardi.mapper.GetResidentTransactionsMapper;
 import com.propertyvista.yardi.mapper.YardiXmlUtil;
 
 public class XmlBeanTest {
@@ -73,7 +74,7 @@ public class XmlBeanTest {
         }
 
         // convert them into vista buildings
-        Mapper mapper = new Mapper();
+        GetPropertyConfigurationsMapper mapper = new GetPropertyConfigurationsMapper();
         mapper.map(properties);
 
         Assert.assertEquals("Converted size", properties.getProperties().size(), mapper.getBuildings().size());
@@ -100,6 +101,9 @@ public class XmlBeanTest {
         ResidentTransactions transactions = MarshallUtil.unmarshall(ResidentTransactions.class, xml);
 
         log.debug("Loaded transactions {}", transactions);
+
+        GetResidentTransactionsMapper mapper = new GetResidentTransactionsMapper();
+        mapper.map(transactions);
     }
 
     @BeforeClass
