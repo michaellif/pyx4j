@@ -30,10 +30,6 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
 
     private boolean disabledMode = false;
 
-    public interface DisableCriterion {
-        boolean isDisable();
-    }
-
     private final List<IsWidget> disableTabs = new ArrayList<IsWidget>();
 
     public VistaTabLayoutPanel(double barHeight, Unit barUnit) {
@@ -49,6 +45,13 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
                 }
             }
         });
+    }
+
+    /**
+     * Implement it and pass to appropriate constructor to disable on-the-fly.
+     */
+    public interface DisableCriterion {
+        boolean isDisable();
     }
 
     public VistaTabLayoutPanel(double barHeight, Unit barUnit, final DisableCriterion disableCriterion) {
@@ -101,6 +104,9 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
         return isDisabledTab(getWidget(index).asWidget());
     }
 
+    //
+    // add/insert/remove/clear method complements:
+    //
     public void addDisable(IsWidget w) {
         disableTabs.add(w);
         super.add(w);
