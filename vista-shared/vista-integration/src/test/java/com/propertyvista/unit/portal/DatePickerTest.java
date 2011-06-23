@@ -45,11 +45,9 @@ public class DatePickerTest extends DatePickerTestBase {
     }
 
     private void validateTextBoxPropagation() {
-        Format formatter = new SimpleDateFormat("MM/dd/yyyy");
         Calendar testDate = Calendar.getInstance();
         testDate.set(2011, 5, 23);
-
-        selenium.setValue(datePickerTextBoxId, formatter.format(testDate.getTime()));
+        typeInDate(datePickerTextBoxId, testDate);
         selenium.click(datePickerId);
         assertEquals(getMonth(testDate), selenium.getText(DatePickerIDs.MonthSelectorLabel_Month));
     }

@@ -40,18 +40,30 @@ abstract class WizardSeleniumTestBase extends VistaSeleniumTestBase {
     }
 
     protected void saveAndContinue() {
-        assertNoMessages();
+        saveAndContinue(true);
+    }
+
+    protected void saveAndContinue(boolean checkMessage) {
+        if (checkMessage) {
+            assertNoMessages();
+        }
         String url = selenium.getCurrentUrl();
         selenium.click(CrudDebugId.Crud_Save);
-        assertNoMessages();
-
-        assertNotEquals("URL did not changed", url, selenium.getCurrentUrl());
+        if (checkMessage) {
+            assertNoMessages();
+            assertNotEquals("URL did not changed", url, selenium.getCurrentUrl());
+        }
     }
 
     public void assertNoMessages() {
         for (UserMessageType type : UserMessageType.values()) {
             assertNotVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, type));
         }
+
+    }
+
+    public void assertMessages(UserMessageType type) {
+        assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, type));
     }
 
     protected User createTestUser() {

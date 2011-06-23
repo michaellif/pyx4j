@@ -13,6 +13,8 @@
  */
 package com.propertyvista.unit.portal;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -80,6 +82,11 @@ public class DatePickerTestBase extends WizardSeleniumTestBase {
 
     protected String getMonth(Calendar calendar) {
         return DatePickerIDs.monthName[calendar.get(Calendar.MONTH)];
+    }
+
+    protected void typeInDate(IDebugId id, Calendar calendar) {
+        Format formatter = new SimpleDateFormat("MM/dd/yyyy");
+        selenium.setValue(id, formatter.format(calendar.getTime()));
     }
 
     protected void navigateToDateAndClick(IDebugId id, Calendar calendar) {
