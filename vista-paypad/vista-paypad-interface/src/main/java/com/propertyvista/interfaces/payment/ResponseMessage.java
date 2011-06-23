@@ -27,6 +27,8 @@ public class ResponseMessage {
 
         OK,
 
+        MessageFormatError,
+
         AuthenticationFailed,
 
         ReadOnly,
