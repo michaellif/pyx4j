@@ -78,7 +78,7 @@ public class RequestMessage {
     @XmlElements({ 
         @XmlElement(name = "transaction", type = TransactionRequest.class), 
         @XmlElement(name = "tokenAction", type = TokenActionRequest.class),
-        @XmlElement(name = "canadianAVS", type = CanadianAVSRequest.class), })
+        @XmlElement(name = "canadianAVS", type = CanadianAVSRequest.class) })
     //@formatter:on    
     public List<Request> getRequests() {
         return requests;
