@@ -35,15 +35,20 @@ import javax.xml.transform.stream.StreamResult;
 
 public class MarshallUtil {
 
-    public static <T> void printSchema(Class<T> clazz) throws JAXBException, IOException {
+    public static <T> void printSchema(Class<T> clazz, final java.io.OutputStream os, final boolean allowClose) throws JAXBException, IOException {
+
         JAXBContext context = JAXBContext.newInstance(clazz);
         context.generateSchema(new SchemaOutputResolver() {
 
             @Override
             public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
-                StreamResult sr = new StreamResult(new FilterOutputStream(System.out) {
+                StreamResult sr = new StreamResult(new FilterOutputStream(os) {
+
                     @Override
-                    public void close() {
+                    public void close() throws IOException {
+                        if (allowClose) {
+                            super.close();
+                        }
                     }
 
                 });
@@ -53,7 +58,7 @@ public class MarshallUtil {
         });
     }
 
-    public static <T> T unmarshall(Class<T> clazz, String xml) throws JAXBException {
+    public static <T> T unmarshal(Class<T> clazz, String xml) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(clazz);
         Unmarshaller um = context.createUnmarshaller();
         @SuppressWarnings("unchecked")
@@ -61,14 +66,14 @@ public class MarshallUtil {
         return result;
     }
 
-    public static <T> void marshall(T data) throws JAXBException {
+    public static <T> void marshal(T data, java.io.OutputStream os) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(data.getClass());
         Marshaller m = context.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        m.marshal(data, System.out);
+        m.marshal(data, os);
     }
 
-    public static <T> String marshalls(T data) throws JAXBException {
+    public static <T> String marshall(T data) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(data.getClass());
         Marshaller m = context.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
