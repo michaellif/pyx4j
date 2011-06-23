@@ -24,13 +24,13 @@ public class CreateXml {
 
     public static void requestExamples() throws Exception {
         System.out.println("\n\n-- Sale transaction --");
-        PaymentMessageCreator.makeSaleTransaction();
+        RequestMessageCreator.makeSaleTransaction();
 
         System.out.println("\n\n-- Token Add transaction --");
-        PaymentMessageCreator.makeTokenAddTransction();
+        RequestMessageCreator.makeTokenAddTransction();
 
         System.out.println("\n\n-- Sale using a token --");
-        PaymentMessageCreator.makeSaleUsingToken();
+        RequestMessageCreator.makeSaleUsingToken();
 
         System.out.println("\n\n-- RequestMessage Schema --");
         MarshallUtil.printSchema(RequestMessage.class);
