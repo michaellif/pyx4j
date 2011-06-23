@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -30,6 +29,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
+import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
@@ -41,7 +41,7 @@ import com.propertyvista.domain.Address;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
+public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> implements VistaTabLayoutPanel.DisableCriterion {
 
     public BuildingEditorForm(IView<BuildingDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
@@ -60,30 +60,31 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         // TODO - add this data processing later! :
         //  main.add(inject(proto().media()), 15);
 
-        TabLayoutPanel tabPanel = new TabLayoutPanel(2.7, Unit.EM);
-        tabPanel.add(((BuildingView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
+        VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(2.7, Unit.EM, this);
+        tabPanel.addDisable(((BuildingView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
         tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
 
-        tabPanel.add(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), i18n.tr("Units"));
+        tabPanel.addDisable(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), i18n.tr("Units"));
 
         FlowPanel combinedtab = new FlowPanel();
         combinedtab.add(((BuildingView) getParentView()).getElevatorListerView().asWidget());
         combinedtab.add(((BuildingView) getParentView()).getBoilerListerView().asWidget());
         combinedtab.add(((BuildingView) getParentView()).getRoofListerView().asWidget());
-        tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Mechanicals"));
+        tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Mechanicals"));
 
         combinedtab = new FlowPanel();
         combinedtab.add(((BuildingView) getParentView()).getParkingListerView().asWidget());
         combinedtab.add(((BuildingView) getParentView()).getLockerAreaListerView().asWidget());
-        tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Parking & Locker Area"));
+        tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Parking & Locker Area"));
 
         tabPanel.add(new ScrollPanel(createFinancialTab()), i18n.tr("Financial"));
         tabPanel.add(new ScrollPanel(createMarketingTab()), i18n.tr("Marketing"));
         tabPanel.add(new ScrollPanel(createContactTab()), i18n.tr("Contact Information"));
-        tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+        tabPanel.addDisable(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 
+        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }
@@ -182,5 +183,10 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                 return columns;
             }
         };
+    }
+
+    @Override
+    public boolean isDisable() {
+        return isEditable();
     }
 }

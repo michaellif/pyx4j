@@ -22,6 +22,7 @@ import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
 import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.CrmView;
@@ -58,6 +59,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         initSearchBoxStyles();
         initButtonStylesEx();
         initHeadersStyle();
+        initVistaTabStyles();
         initDashboardReport();
         initListerStyles();
         initEntityDataTableStyles();
@@ -400,6 +402,15 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("padding", "0.5em 1em 0.5em 1.5em");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bold");
+        addStyle(style);
+    }
+
+    protected void initVistaTabStyles() {
+        String prefix = VistaTabLayoutPanel.TAB_DIASBLED_STYLE;
+
+        Style style = new Style(Selector.valueOf(prefix));
+//        style.addProperty("background-color", ThemeColor.DISABLED_TEXT_BACKGROUND);
+        style.addProperty("color", ThemeColor.OBJECT_TONE55);
         addStyle(style);
     }
 
