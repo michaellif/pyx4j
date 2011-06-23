@@ -13,6 +13,9 @@
  */
 package com.propertyvista.payment.caledon;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.payment.IPaymentProcessor;
@@ -22,30 +25,31 @@ import com.propertyvista.payment.Token;
 
 public class CaledonTokenTest extends CaledonTestCase {
 
+    private final static Logger log = LoggerFactory.getLogger(CaledonTokenTest.class);
+
     public void testNothing() {
 
     }
 
-    public void WORK_IN_PROGRESS_testCreateToken() {
+    public void OFF_testCreateToken() {
         IPaymentProcessor proc = new CaledonPaymentProcessor();
         Token token = EntityFactory.create(Token.class);
-        token.code().setValue("" + System.currentTimeMillis());
+        token.code().setValue(String.valueOf(System.currentTimeMillis()));
         PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2015-01"), token);
-        String rCode = pr.code().getValue();
-        //System.out.println("rCode=" + rCode);
-        assertEquals(CaledonTokenResponse.TOKEN_SUCCESS.getValue(), rCode);
+        log.debug("responce code {}", pr.code().getValue());
+        assertEquals(CaledonTokenResponse.TOKEN_SUCCESS.getValue(), pr.code().getValue());
 
     }
 
-    public void WORK_IN_PROGRESS_testTokenTransaction() {
+    public void OFF_testTokenTransaction() {
         IPaymentProcessor proc = new CaledonPaymentProcessor();
         Token token = EntityFactory.create(Token.class);
-        token.code().setValue("" + System.currentTimeMillis());
+        token.code().setValue(String.valueOf(System.currentTimeMillis()));
 
-        //System.out.println("Token value=" + token.code().getValue());
+        log.debug("Token value", token.code().getValue());
         PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2015-01"), token);
 
-        //System.out.println(pr.code().getValue());
+        log.debug("responce code {}", pr.code().getValue());
 
         assertEquals(CaledonTokenResponse.TOKEN_SUCCESS.getValue(), pr.code().getValue());
 
@@ -53,7 +57,7 @@ public class CaledonTokenTest extends CaledonTestCase {
         request.paymentInstrument().setValue(token);
         PaymentResponse pr1 = proc.realTimeSale(testMerchant, request);
 
-        //System.out.println(pr1.code().getValue());
+        log.debug("responce code {}", pr1.code().getValue());
         assertEquals(CaledonTokenResponse.TOKEN_SUCCESS.getValue(), pr1.code().getValue());
 
     }

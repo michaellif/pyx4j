@@ -40,7 +40,9 @@ class CaledonHttpClient {
 
     private final static Logger log = LoggerFactory.getLogger(CaledonHttpClient.class);
 
-    private final String url = "https://lt3a.caledoncard.com/";
+    private final String
+    // url = "https://lt3test1.caledoncard.com:1443/"; 
+    url = "https://lt3a.caledoncard.com/";
 
     CaledonResponse transaction(CaledonRequest request) {
 
