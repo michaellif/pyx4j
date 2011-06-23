@@ -17,7 +17,6 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -28,27 +27,38 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.dashboard.Dashboard;
 import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
+import com.pyx4j.widgets.client.dashboard.DashboardEvent;
 import com.pyx4j.widgets.client.dashboard.IGadget;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.client.ui.gadgets.AddGadgetBox;
 import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
+import com.propertyvista.domain.dashboard.GadgetMetadata;
 
-public class DashboardViewImpl extends VerticalPanel implements DashboardView {
+public class DashboardViewImpl extends DockLayoutPanel implements DashboardView {
+
+    public static String DEFAULT_STYLE_PREFIX = "vista_DashboardView";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        actionsPanel
+    }
 
     private static I18n i18n = I18nFactory.getI18n(DashboardViewImpl.class);
 
@@ -56,56 +66,96 @@ public class DashboardViewImpl extends VerticalPanel implements DashboardView {
 
     private final ScrollPanel scroll = new ScrollPanel();
 
+    protected final HorizontalPanel actionsPanel;
+
     private Dashboard dashboard;
+
+    private Presenter presenter;
+
+    private DashboardMetadata dashboardMetadata;
+
+    private Button btnSave;
 
     public DashboardViewImpl() {
         this(i18n.tr("Dashboard"));
     }
 
     public DashboardViewImpl(String caption) {
-        add(new CrmHeaderDecorator(caption, layouts));
+        super(Unit.EM);
 
-        scroll.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        scroll.getElement().getStyle().setTop(2.5, Unit.EM);
-        scroll.getElement().getStyle().setLeft(0, Unit.PX);
-        scroll.getElement().getStyle().setRight(0, Unit.PX);
-        scroll.getElement().getStyle().setBottom(0, Unit.PX);
+        addNorth(new CrmHeaderDecorator(caption, layouts), VistaCrmTheme.defaultHeaderHeight);
+
+        actionsPanel = new HorizontalPanel();
+        actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
+        actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        actionsPanel.setWidth("100%");
+        actionsPanel.add(new HTML()); // just for %-tage cells alignment...
+        addNorth(actionsPanel, VistaCrmTheme.defaultHeaderHeight);
+
+        addActionButton(btnSave = new Button(i18n.tr("Save")));
+        btnSave.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.save();
+                btnSave.setEnabled(false);
+            }
+        });
+
         add(scroll);
-
         setSize("100%", "100%");
     }
 
     @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
     public void fill(DashboardMetadata dashboardMetadata) {
-        if (dashboardMetadata.isEmpty()) {
-            return;
-        }
+        this.dashboardMetadata = dashboardMetadata;
 
         dashboard = new Dashboard();
+        dashboard.addEventHandler(new DashboardEvent() {
+            @Override
+            public void onEvent(Reason reason) {
+                // TODO just save immediately:
+                //presenter.save();
+                btnSave.setEnabled(true);
+            }
+        });
 
-        // decode dashboard layout:
-        if (dashboardMetadata.layoutType().getValue() == (LayoutType.One)) {
-            layouts.setLayout1();
-        } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two11) {
-            layouts.setLayout22();
-        } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two12) {
-            layouts.setLayout12();
-        } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two21) {
-            layouts.setLayout21();
-        } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Three) {
-            layouts.setLayout3();
-        }
+        if (!dashboardMetadata.isEmpty()) {
+            // decode dashboard layout:
+            if (dashboardMetadata.layoutType().getValue() == (LayoutType.One)) {
+                layouts.setLayout1();
+            } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two11) {
+                layouts.setLayout22();
+            } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two12) {
+                layouts.setLayout12();
+            } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two21) {
+                layouts.setLayout21();
+            } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Three) {
+                layouts.setLayout3();
+            }
 
-        // fill the dashboard with gadgets:
-        for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
-            IGadget gadget = GadgetsFactory.createGadget(gmd.type().getValue(), gmd);
-            if (gadget != null) {
-                dashboard.addGadget(gadget, gmd.column().getValue());
-                gadget.start(); // allow gadget execution... 
+            // fill the dashboard with gadgets:
+            for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
+                IGadget gadget = GadgetsFactory.createGadget(gmd.type().getValue(), gmd);
+                if (gadget != null) {
+                    dashboard.addGadget(gadget, gmd.column().getValue());
+                    gadget.start(); // allow gadget execution... 
+                }
             }
         }
 
         scroll.setWidget(dashboard);
+        btnSave.setEnabled(false);
+    }
+
+    @Override
+    public DashboardMetadata getData() {
+        // TODO Auto-generated method stub
+        return dashboardMetadata;
     }
 
     private class LayoutsSet extends HorizontalPanel {
@@ -262,5 +312,11 @@ public class DashboardViewImpl extends VerticalPanel implements DashboardView {
             layout22.setResource(CrmImages.INSTANCE.dashboardLayout22_0());
             layout3.setResource(CrmImages.INSTANCE.dashboardLayout3_0());
         }
+    }
+
+    protected void addActionButton(Button action) {
+        actionsPanel.insert(action, 1);
+        actionsPanel.setCellWidth(action, "1%");
+        action.getElement().getStyle().setMarginRight(1, Unit.EM);
     }
 }

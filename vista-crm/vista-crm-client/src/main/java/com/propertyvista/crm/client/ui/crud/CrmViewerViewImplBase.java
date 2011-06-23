@@ -44,7 +44,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         this.placeClass = placeClass;
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
-        addNorth(header = new CrmHeaderDecorator(defaultCaption, createActionsPanel()), 3);
+        addNorth(header = new CrmHeaderDecorator(defaultCaption, createActionsPanel()), VistaCrmTheme.defaultHeaderHeight);
     }
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {

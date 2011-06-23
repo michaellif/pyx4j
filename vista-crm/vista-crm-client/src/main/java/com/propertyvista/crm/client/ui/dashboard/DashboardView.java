@@ -23,8 +23,12 @@ public interface DashboardView extends IsWidget {
 
         public void populate();
 
-        void save(DashboardMetadata dashboardMetadata);
+        void save();
     }
 
+    void setPresenter(Presenter presenter);
+
     void fill(DashboardMetadata dashboardMetadata);
+
+    DashboardMetadata getData();
 }

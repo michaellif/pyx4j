@@ -32,11 +32,16 @@ import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
+import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
 public abstract class VistaCrmTheme extends VistaTheme {
+
+    public static double defaultHeaderHeight = 3;
+
+    public static double defaultFooterHeight = 4;
 
     public static enum StyleSuffixEx implements IStyleSuffix {
         SaveButton, CancelButton, EditButton;
@@ -60,6 +65,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         initButtonStylesEx();
         initHeadersStyle();
         initVistaTabStyles();
+        initDashboardView();
         initDashboardReport();
         initListerStyles();
         initEntityDataTableStyles();
@@ -415,6 +421,18 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
     }
 
+    protected void initDashboardView() {
+        String prefix = DashboardViewImpl.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DashboardViewImpl.StyleSuffix.actionsPanel));
+        style.addProperty("margin-top", "0.5em");
+        style.addProperty("margin-bottom", "0.5em");
+        addStyle(style);
+    }
+
     protected void initDashboardReport() {
         String prefix = CSSNames.BASE_NAME;
 
@@ -485,10 +503,11 @@ public abstract class VistaCrmTheme extends VistaTheme {
         String prefix = ListerBase.DEFAULT_STYLE_PREFIX;
 
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("padding-top", "0.5em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.actionsPanel));
+        style.addProperty("margin-top", "0.5em");
+        style.addProperty("margin-bottom", "0.5em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filtersPanel));
@@ -504,7 +523,6 @@ public abstract class VistaCrmTheme extends VistaTheme {
         String prefix = DataTable.BASE_NAME;
 
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("margin", "2px 0 2px 0");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));

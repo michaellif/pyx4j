@@ -13,37 +13,47 @@
  */
 package com.propertyvista.crm.client.activity;
 
+import java.util.Vector;
+
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.commons.Key;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardVeiwFactory;
+import com.propertyvista.crm.rpc.services.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.GadgetMetadata;
-import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
-import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class DashboardActivity extends AbstractActivity implements DashboardView.Presenter {
 
     private final DashboardView view;
 
+    private final DashboardMetadataService service = GWT.create(DashboardMetadataService.class);
+
+    private Key entityId;
+
     public DashboardActivity(Place place) {
         view = (DashboardView) DashboardVeiwFactory.instance(DashboardView.class);
         assert (view != null);
+        view.setPresenter(this);
         withPlace(place);
     }
 
     public DashboardActivity(DashboardView view, Place place) {
         this.view = view;
         assert (view != null);
+        view.setPresenter(this);
         withPlace(place);
     }
 
     public DashboardActivity withPlace(Place place) {
+//        entityId = new Key(((AppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID));
         return this;
     }
 
@@ -55,51 +65,36 @@ public class DashboardActivity extends AbstractActivity implements DashboardView
 
     @Override
     public void populate() {
-        // TODO - load metadata with service...
-//      DashboardMetadataService dmds = GWT.create(DashboardMetadataService.class);
+        service.listMetadata(new AsyncCallback<Vector<DashboardMetadata>>() {
+            @Override
+            public void onSuccess(Vector<DashboardMetadata> result) {
+                view.fill(result.get(0));
+            }
 
-        // just create a demo dashboard: 
-        DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.name().setValue("test dashboard");
-        dmd.layoutType().setValue(LayoutType.Two21);
-        for (int i = 0; i < 3; ++i) {
-            GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
-            gmd.type().setValue(GadgetType.Demo);
-            gmd.name().setValue("Gadget #" + i);
-            gmd.column().setValue(1);
-            dmd.gadgets().add(gmd);
-        }
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        });
+    }
 
-        GadgetMetadata gmd;
-//        gmd = EntityFactory.create(GadgetMetadata.class);
-//        gmd.type().setValue(GadgetType.BuildingLister);
-//        gmd.name().setValue("Building lister");
-//        gmd.column().setValue(0);
-//        dmd.gadgets().add(gmd);
+    public void populate2() {
+        service.retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
+            @Override
+            public void onSuccess(DashboardMetadata result) {
+                view.fill(result);
+            }
 
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.BarChartDisplay);
-        gmd.name().setValue("Bar Chart Demo");
-        gmd.column().setValue(0);
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.LineChartDisplay);
-        gmd.name().setValue("Line Chart Demo");
-        gmd.column().setValue(0);
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.PieChartDisplay);
-        gmd.name().setValue("Pie Chart Demo");
-        gmd.column().setValue(1);
-        dmd.gadgets().add(gmd);
-
-        view.fill(dmd);
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        }, entityId);
     }
 
     @Override
-    public void save(DashboardMetadata dashboardMetadata) {
+    public void save() {
+        DashboardMetadata dmd = view.getData();
         // TODO Auto-generated method stub
     }
 }

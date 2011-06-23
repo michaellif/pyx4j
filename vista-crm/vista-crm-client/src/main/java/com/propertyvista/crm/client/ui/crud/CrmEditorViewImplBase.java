@@ -54,8 +54,8 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
     public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
-        addNorth(header = new CrmHeaderDecorator(defaultCaption), 3);
-        addSouth(createButtons(), 4);
+        addNorth(header = new CrmHeaderDecorator(defaultCaption), VistaCrmTheme.defaultHeaderHeight);
+        addSouth(createButtons(), VistaCrmTheme.defaultFooterHeight);
     }
 
     public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CEntityForm<E> form) {

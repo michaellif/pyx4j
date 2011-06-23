@@ -22,8 +22,6 @@ import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.crm.rpc.services.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
@@ -36,14 +34,14 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
     @Override
     public void listMetadata(AsyncCallback<Vector<DashboardMetadata>> callback) {
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user().id(), Key.DORMANT_KEY));
+//        criteria.add(PropertyCriterion.eq(criteria.proto().user().id(), Key.DORMANT_KEY));
 
         Vector<DashboardMetadata> rc = EntityServicesImpl.secureQuery(criteria);
 
-        criteria = EntityQueryCriteria.create(DashboardMetadata.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user().id(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+//        criteria = EntityQueryCriteria.create(DashboardMetadata.class);
+//        criteria.add(PropertyCriterion.eq(criteria.proto().user().id(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
 
-        rc.addAll(EntityServicesImpl.secureQuery(criteria));
+//        rc.addAll(EntityServicesImpl.secureQuery(criteria));
 
         callback.onSuccess(rc);
     }
