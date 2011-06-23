@@ -411,6 +411,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         Style style = new Style(Selector.valueOf(prefix));
 //        style.addProperty("background-color", ThemeColor.DISABLED_TEXT_BACKGROUND);
         style.addProperty("color", ThemeColor.OBJECT_TONE55);
+        style.addProperty("cursor", "default");
         addStyle(style);
     }
 

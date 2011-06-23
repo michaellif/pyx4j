@@ -41,7 +41,7 @@ import com.propertyvista.domain.Address;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> implements VistaTabLayoutPanel.DisableCriterion {
+public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
     public BuildingEditorForm(IView<BuildingDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
@@ -60,7 +60,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> implements Vi
         // TODO - add this data processing later! :
         //  main.add(inject(proto().media()), 15);
 
-        VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(2.7, Unit.EM, this);
+        VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(2.7, Unit.EM);
         tabPanel.addDisable(((BuildingView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
@@ -183,10 +183,5 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> implements Vi
                 return columns;
             }
         };
-    }
-
-    @Override
-    public boolean isDisable() {
-        return isEditable();
     }
 }

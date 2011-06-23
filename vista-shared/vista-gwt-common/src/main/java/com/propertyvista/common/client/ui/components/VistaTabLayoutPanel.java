@@ -28,11 +28,28 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
 
     public static final String TAB_DIASBLED_STYLE = "vista-TabLayoutPanelTabDisabled";
 
+    private boolean disabledMode = false;
+
     public interface DisableCriterion {
         boolean isDisable();
     }
 
     private final List<IsWidget> disableTabs = new ArrayList<IsWidget>();
+
+    public VistaTabLayoutPanel(double barHeight, Unit barUnit) {
+        super(barHeight, barUnit);
+
+        addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
+            @Override
+            public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+                if (disabledMode) {
+                    if (disableTabs.contains(getWidget(event.getItem()).asWidget())) {
+                        event.cancel();
+                    }
+                }
+            }
+        });
+    }
 
     public VistaTabLayoutPanel(double barHeight, Unit barUnit, final DisableCriterion disableCriterion) {
         super(barHeight, barUnit);
@@ -50,6 +67,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
     }
 
     public void setDisableMode(boolean disable) {
+        disabledMode = disable;
         for (IsWidget w : disableTabs) {
             if (disable) {
                 getTabWidget(w).asWidget().addStyleName(TAB_DIASBLED_STYLE);
