@@ -20,6 +20,7 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.propertyvista.interfaces.payment.ResponseMessage.StatusCode;
 
 public class ResponseMessageCreator {
+
     public static void makeSaleTransactionResponse() throws JAXBException {
         ResponseMessage rm = new ResponseMessage();
         rm.merchantId = "BIRCHWTT";
@@ -44,7 +45,7 @@ public class ResponseMessageCreator {
         r.text = "EXPIRED CARD";
         rm.response.add(r);
 
-        MarshallUtil.marshall(rm);
+        MarshallUtil.marshal(rm, System.out);
     }
 
     public static void makeSystemDown() throws JAXBException {
@@ -52,6 +53,6 @@ public class ResponseMessageCreator {
         rm.status = StatusCode.SystemDown;
         rm.response = null;
 
-        MarshallUtil.marshall(rm);
+        MarshallUtil.marshal(rm, System.out);
     }
 }

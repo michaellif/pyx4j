@@ -22,6 +22,7 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.propertyvista.interfaces.payment.TokenActionRequest.TokenAction;
 
 public class PaymentMessageCreator {
+
     public static void makeSaleTransaction() throws JAXBException {
         RequestMessage r = new RequestMessage();
         r.interfaceEntity = "PaymentProcessor1";
@@ -52,7 +53,7 @@ public class PaymentMessageCreator {
 
         r.requests.add(ccpay);
 
-        MarshallUtil.marshall(r);
+        MarshallUtil.marshal(r, System.out);
     }
 
     public static void makeTokenAddTransction() throws JAXBException {
@@ -68,7 +69,7 @@ public class PaymentMessageCreator {
         addToken.card.cardNumber = "6011111111111117";
         addToken.card.expiryDate = new Date();
         r.requests.add(addToken);
-        MarshallUtil.marshall(r);
+        MarshallUtil.marshal(r, System.out);
     }
 
     public static void makeSaleUsingToken() throws JAXBException {
@@ -84,6 +85,6 @@ public class PaymentMessageCreator {
         tcpay.reference = "September Rent, 14 Yonge, Appt 456";
         r.requests.add(tcpay);
 
-        MarshallUtil.marshall(r);
+        MarshallUtil.marshal(r, System.out);
     }
 }

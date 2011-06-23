@@ -53,7 +53,7 @@ public class XmlBeanTest {
     @Test
     public void testGetPropertyConfigurations() throws IOException, JAXBException {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetPropertyConfigurations.xml", getClass()));
-        Properties properties = MarshallUtil.unmarshall(Properties.class, xml);
+        Properties properties = MarshallUtil.unmarshal(Properties.class, xml);
 
         log.info("Loaded {} properties", properties.getProperties().size());
 
@@ -87,7 +87,7 @@ public class XmlBeanTest {
     @Test
     public void testGetUnitInformation() throws IOException, JAXBException {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetUnitInformation.xml", getClass()));
-        PhysicalProperty property = MarshallUtil.unmarshall(PhysicalProperty.class, xml);
+        PhysicalProperty property = MarshallUtil.unmarshal(PhysicalProperty.class, xml);
 
         log.debug("Loaded properties {}", property);
     }
@@ -98,7 +98,7 @@ public class XmlBeanTest {
 
 //        log.info(xml);
         xml = YardiXmlUtil.stripGetResidentTransactions(xml);
-        ResidentTransactions transactions = MarshallUtil.unmarshall(ResidentTransactions.class, xml);
+        ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
 
         log.debug("Loaded transactions {}", transactions);
 

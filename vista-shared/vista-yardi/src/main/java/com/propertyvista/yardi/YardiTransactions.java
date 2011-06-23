@@ -108,7 +108,7 @@ public class YardiTransactions {
         String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
 
         log.debug("Result: {}", xml);
-        Properties properties = MarshallUtil.unmarshall(Properties.class, xml);
+        Properties properties = MarshallUtil.unmarshal(Properties.class, xml);
         log.info("\n--- GetPropertyConfigurations ---\n{}\n", properties);
         return properties;
     }
@@ -138,7 +138,7 @@ public class YardiTransactions {
         String xml = response.getGetUnitInformation_LoginResult().getExtraElement().toString();
         log.info("UnitInformationLogin: {}", xml);
 
-        PhysicalProperty physicalProperty = MarshallUtil.unmarshall(PhysicalProperty.class, xml);
+        PhysicalProperty physicalProperty = MarshallUtil.unmarshal(PhysicalProperty.class, xml);
         log.info("\n--- GetUnitInformation ---\n{}\n", physicalProperty);
     }
 

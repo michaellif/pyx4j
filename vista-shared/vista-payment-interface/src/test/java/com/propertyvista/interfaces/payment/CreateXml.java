@@ -33,7 +33,7 @@ public class CreateXml {
         RequestMessageCreator.makeSaleUsingToken();
 
         System.out.println("\n\n-- RequestMessage Schema --");
-        MarshallUtil.printSchema(RequestMessage.class);
+        MarshallUtil.printSchema(RequestMessage.class, System.out, false);
     }
 
     private static void responseExamples() throws Exception {
@@ -44,6 +44,6 @@ public class CreateXml {
         ResponseMessageCreator.makeSystemDown();
 
         System.out.println("\n\n-- ResponseMessage Schema --");
-        MarshallUtil.printSchema(ResponseMessage.class);
+        MarshallUtil.printSchema(ResponseMessage.class, System.out, false);
     }
 }

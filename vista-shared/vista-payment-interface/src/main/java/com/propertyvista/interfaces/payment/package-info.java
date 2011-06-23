@@ -11,6 +11,6 @@
  * @author vlads
  * @version $Id$
  */
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://interfaces.birchwoodsoftwaregroup.com/payment/2011/")
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://interfaces.birchwoodsoftwaregroup.com/payment")
 package com.propertyvista.interfaces.payment;
 
