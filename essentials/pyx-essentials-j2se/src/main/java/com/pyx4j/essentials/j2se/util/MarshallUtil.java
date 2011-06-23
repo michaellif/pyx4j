@@ -20,15 +20,38 @@
  */
 package com.pyx4j.essentials.j2se.util;
 
+import java.io.FilterOutputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
 
 public class MarshallUtil {
+
+    public static <T> void printSchema(Class<T> clazz) throws JAXBException, IOException {
+        JAXBContext context = JAXBContext.newInstance(clazz);
+        context.generateSchema(new SchemaOutputResolver() {
+
+            @Override
+            public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
+                StreamResult sr = new StreamResult(new FilterOutputStream(System.out) {
+                    @Override
+                    public void close() {
+                    }
+
+                });
+                sr.setSystemId("");
+                return sr;
+            }
+        });
+    }
 
     public static <T> T unmarshall(Class<T> clazz, String xml) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(clazz);
