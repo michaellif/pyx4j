@@ -43,7 +43,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
             @Override
             public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
                 if (disabledMode) {
-                    if (disableTabs.contains(getWidget(event.getItem()).asWidget())) {
+                    if (isDisabledTab(event.getItem())) {
                         event.cancel();
                     }
                 }
@@ -58,7 +58,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
             @Override
             public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
                 if (disableCriterion.isDisable()) {
-                    if (disableTabs.contains(getWidget(event.getItem()).asWidget())) {
+                    if (isDisabledTab(event.getItem())) {
                         event.cancel();
                     }
                 }
@@ -75,6 +75,30 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
                 getTabWidget(w).asWidget().removeStyleName(TAB_DIASBLED_STYLE);
             }
         }
+
+        if (disable && isDisabledTab(getSelectedIndex())) {
+            selectFirstAvailableTab();
+        }
+    }
+
+    public void selectFirstAvailableTab() {
+        if (disabledMode) {
+            for (int i = getWidgetCount() - 1; i >= 0; --i) { // iterate backward! - the tabs stored in reverse order!?
+                if (!isDisabledTab(i)) {
+                    selectTab(i, false);
+                }
+            }
+        } else {
+            selectTab(0, false);
+        }
+    }
+
+    protected boolean isDisabledTab(IsWidget widget) {
+        return disableTabs.contains(widget);
+    }
+
+    protected boolean isDisabledTab(int index) {
+        return isDisabledTab(getWidget(index).asWidget());
     }
 
     public void addDisable(IsWidget w) {

@@ -43,6 +43,8 @@ import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(2.7, Unit.EM);
+
     public BuildingEditorForm(IView<BuildingDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
     }
@@ -60,7 +62,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         // TODO - add this data processing later! :
         //  main.add(inject(proto().media()), 15);
 
-        VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(2.7, Unit.EM);
         tabPanel.addDisable(((BuildingView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
@@ -87,6 +88,12 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
+    }
+
+    @Override
+    public void populate(BuildingDTO value) {
+        tabPanel.selectFirstAvailableTab();
+        super.populate(value);
     }
 
     private Widget createGeneralTab() {
