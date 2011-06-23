@@ -33,7 +33,6 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
@@ -127,7 +126,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     private Widget createDetailsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         main.add(inject(proto().details(), createDetailsListEditor()));
-        main.add(new CrmHeader1Decorator(i18n.tr(proto().info().utilities().getMeta().getCaption())));
         return main;
     }
 
