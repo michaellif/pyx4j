@@ -29,9 +29,9 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.interfaces.payment.MarshallUtil;
 import com.propertyvista.interfaces.payment.RequestMessage;
 import com.propertyvista.interfaces.payment.ResponseMessage;
 import com.propertyvista.interfaces.payment.ResponseMessage.StatusCode;
