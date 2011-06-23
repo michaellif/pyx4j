@@ -53,6 +53,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.dashboard.CSSNames.StyleSuffix;
+import com.pyx4j.widgets.client.dashboard.DashboardEvent.Reason;
 import com.pyx4j.widgets.client.dashboard.IGadget.ISetup;
 import com.pyx4j.widgets.client.dashboard.images.DashboardImages;
 
@@ -319,6 +320,7 @@ final class GadgetHolder extends SimplePanel {
             public void onClick(ClickEvent event) {
                 setupGadget.onOk();
                 switchViewToNormal();
+                root.onEvent(Reason.updateGadget);
             }
         }));
         buttons.add(new Button(i18n.tr("Cancel"), new ClickHandler() {

@@ -127,7 +127,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         actionsPanel = new HorizontalPanel();
         actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
         actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        actionsPanel.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
         actionsPanel.setWidth("100%");
         actionsPanel.add(new HTML()); // just for %-tage cells alignment...
 

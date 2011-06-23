@@ -14,19 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-05-01
+ * Created on 2011-06-23
  * @author Vlad
  * @version $Id$
  */
 package com.pyx4j.widgets.client.dashboard;
 
-import com.google.gwt.user.client.ui.Widget;
+public interface DashboardEvent {
 
-interface IBoardRoot extends DashboardEvent {
+    enum Reason {
+        addGadget, removeGadget, repositionGadget, updateGadget, newLayout
+    }
 
-    boolean isMaximized(Widget widget);
-
-    boolean showMaximized(Widget widget);
-
-    boolean showNormal(Widget widget);
+    void onEvent(Reason reason);
 }

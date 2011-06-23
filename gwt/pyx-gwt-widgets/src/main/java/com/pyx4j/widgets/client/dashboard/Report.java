@@ -87,4 +87,10 @@ public class Report extends SimplePanel implements IBoardRoot {
     public boolean isMaximized(Widget widget) {
         return (getWidget().equals(widget));
     }
+
+    @Override
+    public void onEvent(Reason reason) {
+        // TODO Auto-generated method stub
+
+    }
 }

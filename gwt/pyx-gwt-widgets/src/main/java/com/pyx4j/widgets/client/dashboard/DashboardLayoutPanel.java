@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
 
-class DashboardLayoutPanel extends FlowPanel {
+class DashboardLayoutPanel extends FlowPanel implements DashboardEvent {
 
     protected Layout layoutType = Layout.Three;
 
@@ -38,8 +38,12 @@ class DashboardLayoutPanel extends FlowPanel {
 
     private final boolean isRefreshAllowed = true;
 
-    public DashboardLayoutPanel(PickupDragController gadgetDragController) {
+    private final DashboardEvent handler;
+
+    public DashboardLayoutPanel(PickupDragController gadgetDragController, DashboardEvent handler) {
         this.gadgetDragController = gadgetDragController;
+        this.handler = handler;
+
         getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         setWidth("100%");
         initColumns();
@@ -80,6 +84,7 @@ class DashboardLayoutPanel extends FlowPanel {
                 // if row is negative - just add at the end:
                 getColumnPanel(column).add(widget);
             }
+            onEvent(Reason.addGadget);
             return true;
         }
         return false;
@@ -107,7 +112,11 @@ class DashboardLayoutPanel extends FlowPanel {
     }
 
     public boolean removeGadget(int column, int row) {
-        return (checkIndexes(column, row, false) && getColumnPanel(column).remove(row));
+        if ((checkIndexes(column, row, false) && getColumnPanel(column).remove(row))) {
+            onEvent(Reason.removeGadget);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -157,6 +166,7 @@ class DashboardLayoutPanel extends FlowPanel {
             }
         }
 
+        onEvent(Reason.newLayout);
         return true;
     }
 
@@ -169,7 +179,7 @@ class DashboardLayoutPanel extends FlowPanel {
 
         for (int col = 0; col < layoutType.columns(); ++col) {
             // vertical panel to hold the heading and a second vertical panel for widgets:
-            DashboardColumnFlowPanel columnPanel = new DashboardColumnFlowPanel();
+            DashboardColumnFlowPanel columnPanel = new DashboardColumnFlowPanel(this);
             columnPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             columnPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
 
@@ -214,5 +224,10 @@ class DashboardLayoutPanel extends FlowPanel {
         }
 
         return true;
+    }
+
+    @Override
+    public void onEvent(Reason reason) {
+        handler.onEvent(reason);
     }
 }

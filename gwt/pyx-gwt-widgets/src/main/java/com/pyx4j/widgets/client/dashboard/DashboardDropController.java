@@ -26,6 +26,8 @@ import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.widgets.client.dashboard.DashboardEvent.Reason;
+
 class DashboardDropController extends FlowPanelDropController {
 
     /**
@@ -53,5 +55,14 @@ class DashboardDropController extends FlowPanelDropController {
         }
 
         return new DashboardGadgetPositioner(width, height);
+    }
+
+    @Override
+    public void onDrop(DragContext context) {
+        super.onDrop(context);
+
+        if (getDropTarget() instanceof DashboardColumnFlowPanel) {
+            ((DashboardColumnFlowPanel) getDropTarget()).onEvent(Reason.repositionGadget);
+        }
     }
 }

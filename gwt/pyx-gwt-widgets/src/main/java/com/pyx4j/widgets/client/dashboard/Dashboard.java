@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -50,6 +53,8 @@ public class Dashboard extends SimplePanel implements IBoardRoot {
 
     private final HTML placeholder = new HTML("dashboard_placeholder");
 
+    private final List<DashboardEvent> handlers = new ArrayList<DashboardEvent>();
+
     public Dashboard() {
         addStyleName(CSSNames.BASE_NAME);
 
@@ -59,7 +64,7 @@ public class Dashboard extends SimplePanel implements IBoardRoot {
         gadgetDragController = new PickupDragController(boundaryPanel, false);
         gadgetDragController.setBehaviorMultipleSelection(false);
 
-        dashboardLayoutPanel = new DashboardLayoutPanel(gadgetDragController);
+        dashboardLayoutPanel = new DashboardLayoutPanel(gadgetDragController, this);
         boundaryPanel.add(dashboardLayoutPanel);
     }
 
@@ -114,5 +119,18 @@ public class Dashboard extends SimplePanel implements IBoardRoot {
     @Override
     public boolean isMaximized(Widget widget) {
         return (getWidget().equals(widget));
+    }
+
+    @Override
+    public void onEvent(Reason reason) {
+        if (!handlers.isEmpty()) {
+            for (DashboardEvent handler : handlers) {
+                handler.onEvent(reason);
+            }
+        }
+    }
+
+    public void addEventHandler(DashboardEvent handler) {
+        handlers.add(handler);
     }
 }

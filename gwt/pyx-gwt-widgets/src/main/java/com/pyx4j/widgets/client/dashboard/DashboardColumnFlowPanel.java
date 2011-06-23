@@ -29,9 +29,12 @@ import com.google.gwt.user.client.ui.Widget;
  * {@link VerticalPanel} which has a permanent spacer at the end to prevent CSS collapse
  * of the panel and its parent.
  */
-class DashboardColumnFlowPanel extends FlowPanel {
+class DashboardColumnFlowPanel extends FlowPanel implements DashboardEvent {
 
-    public DashboardColumnFlowPanel() {
+    private final DashboardEvent handler;
+
+    public DashboardColumnFlowPanel(DashboardEvent handler) {
+        this.handler = handler;
         addStyleName(CSSNames.BASE_NAME + CSSNames.StyleSuffix.Column);
         clear();
     }
@@ -61,5 +64,10 @@ class DashboardColumnFlowPanel extends FlowPanel {
         Label spacerLabel = new Label("");
         spacerLabel.setStylePrimaryName(CSSNames.BASE_NAME + CSSNames.StyleSuffix.ColumnSpacer);
         super.add(spacerLabel);
+    }
+
+    @Override
+    public void onEvent(Reason reason) {
+        handler.onEvent(reason);
     }
 }
