@@ -20,12 +20,12 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
-import com.pyx4j.widgets.client.TabLayoutPanel;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
@@ -74,9 +74,9 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     private Widget createMarketingTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        main.add(split);
 
         SubtypeInjectors.injectMarketing(main, split, proto().marketing(), this);
-        main.add(split);
 
         return main;
     }
@@ -91,7 +91,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
 
-        main.add(split = new VistaDecoratorsSplitFlowPanel());
         split.getLeftPanel().add(inject(proto().financial().unitRent()), 15);
         split.getRightPanel().add(inject(proto().financial().marketRent()), 15);
         main.add(split);
