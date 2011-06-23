@@ -19,12 +19,28 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlSeeAlso({ TransactionRequest.class, TokenActionRequest.class, CanadianAVSRequest.class })
 public abstract class Request {
 
-    @XmlElement(required = false)
-    public String requestID;
+    private String requestID;
 
     /**
      * Data that is in this field is returned in the reply. This can be useful for transaction tracking in single-process or batch applications.
      * This field is returned in the 'ECHO' field of the transaction Response.
      */
-    public String echo;
+    private String echo;
+
+    @XmlElement(required = false)
+    public String getRequestID() {
+        return requestID;
+    }
+
+    public void setRequestID(String requestID) {
+        this.requestID = requestID;
+    }
+
+    public String getEcho() {
+        return echo;
+    }
+
+    public void setEcho(String echo) {
+        this.echo = echo;
+    }
 }

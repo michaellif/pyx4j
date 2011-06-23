@@ -13,8 +13,8 @@
  */
 package com.propertyvista.interfaces.payment;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -24,20 +24,54 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class RequestMessage {
 
-    @XmlElement(required = false)
-    public String messageID;
+    private String messageID;
 
-    @XmlElement(required = true)
-    public String interfaceEntity;
+    private String interfaceEntity;
 
     /**
      * You must provide your password for every HTTP request.
      */
-    @XmlElement(required = true)
-    public String password;
+    private String password;
+
+    private String merchantId;
+
+    private List<Request> requests;
+
+    @XmlElement(required = false)
+    public String getMessageID() {
+        return messageID;
+    }
+
+    public void setMessageID(String messageID) {
+        this.messageID = messageID;
+    }
 
     @XmlElement(required = true)
-    public String merchantId;
+    public String getInterfaceEntity() {
+        return interfaceEntity;
+    }
+
+    public void setInterfaceEntity(String interfaceEntity) {
+        this.interfaceEntity = interfaceEntity;
+    }
+
+    @XmlElement(required = true)
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @XmlElement(required = true)
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
+    }
 
     //@formatter:off
     @XmlElementWrapper
@@ -45,6 +79,20 @@ public class RequestMessage {
         @XmlElement(name = "transaction", type = TransactionRequest.class), 
         @XmlElement(name = "tokenAction", type = TokenActionRequest.class),
         @XmlElement(name = "canadianAVS", type = CanadianAVSRequest.class), })
-    public List<Request> requests = new Vector<Request>();
+    //@formatter:on    
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
+    }
+
+    public void addRequest(Request request) {
+        if (requests == null) {
+            requests = new ArrayList<Request>();
+        }
+        this.requests.add(request);
+    }
 
 }

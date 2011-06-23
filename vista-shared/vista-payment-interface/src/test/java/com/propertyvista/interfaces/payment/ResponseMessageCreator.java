@@ -21,35 +21,34 @@ public class ResponseMessageCreator {
 
     public static void makeSaleTransactionResponse() throws JAXBException {
         ResponseMessage rm = new ResponseMessage();
-        rm.merchantId = "BIRCHWTT";
-        rm.status = ResponseMessage.StatusCode.OK;
+        rm.setMerchantId("BIRCHWTT");
+        rm.setStatus(ResponseMessage.StatusCode.OK);
 
         Response r = new Response();
-        r.requestID = "payProc#1";
-        r.code = "0000";
-        r.auth = "T03006";
-        r.text = "T03006 $255.59";
-        rm.response.add(r);
+        r.setRequestID("payProc#1");
+        r.setCode("0000");
+        r.setAuth("T03006");
+        r.setText("T03006 $255.59");
+        rm.addResponse(r);
 
         r = new Response();
-        r.requestID = "payProc#2";
-        r.code = "0000";
-        r.text = "TOKEN ADDED";
-        rm.response.add(r);
+        r.setRequestID("payProc#2");
+        r.setCode("0000");
+        r.setText("TOKEN ADDED");
+        rm.addResponse(r);
 
         r = new Response();
-        r.requestID = "payProc#3";
-        r.code = "1254";
-        r.text = "EXPIRED CARD";
-        rm.response.add(r);
+        r.setRequestID("payProc#3");
+        r.setCode("1254");
+        r.setText("EXPIRED CARD");
+        rm.addResponse(r);
 
         MarshallUtil.marshal(rm, System.out);
     }
 
     public static void makeSystemDown() throws JAXBException {
         ResponseMessage rm = new ResponseMessage();
-        rm.status = StatusCode.SystemDown;
-        rm.response = null;
+        rm.setStatus(StatusCode.SystemDown);
 
         MarshallUtil.marshal(rm, System.out);
     }

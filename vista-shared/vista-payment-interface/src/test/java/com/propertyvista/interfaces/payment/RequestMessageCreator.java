@@ -23,65 +23,76 @@ public class RequestMessageCreator {
 
     public static void makeSaleTransaction() throws JAXBException {
         RequestMessage r = new RequestMessage();
-        r.interfaceEntity = "PaymentProcessor1";
-        r.merchantId = "BIRCHWTT";
-        r.password = "top-secret";
-        TransactionRequest ccpay = new TransactionRequest();
-        ccpay.requestID = "payProc#1";
-        ccpay.resend = false;
-        ccpay.txnType = TransactionRequest.TransactionType.Sale;
-        ccpay.paymentInstrument = new CreditCardInfo();
-        ((CreditCardInfo) ccpay.paymentInstrument).cardNumber = "6011111111111117";
-        ((CreditCardInfo) ccpay.paymentInstrument).expiryDate = new Date();
+        r.setInterfaceEntity("PaymentProcessor1");
+        r.setMerchantId("BIRCHWTT");
+        r.setPassword("top-secret");
 
-        ccpay.amount = 900;
-        ccpay.reference = "August Rent, 46 Yonge, Appt 18";
+        {
+            TransactionRequest ccpay = new TransactionRequest();
+            ccpay.setRequestID("payProc#1");
+            ccpay.setResend(false);
+            ccpay.setTxnType(TransactionRequest.TransactionType.Sale);
+            CreditCardInfo cc = new CreditCardInfo();
+            cc.setCardNumber("6011111111111117");
+            cc.setExpiryDate(new Date());
+            ccpay.setPaymentInstrument(cc);
 
-        r.requests.add(ccpay);
+            ccpay.setAmount(900);
+            ccpay.setReference("August Rent, 46 Yonge, Appt 18");
 
-        ccpay = new TransactionRequest();
-        ccpay.requestID = "payProc#2";
-        ccpay.txnType = TransactionRequest.TransactionType.Sale;
-        ccpay.paymentInstrument = new CreditCardInfo();
-        ((CreditCardInfo) ccpay.paymentInstrument).cardNumber = "378282246310005";
-        ((CreditCardInfo) ccpay.paymentInstrument).expiryDate = new Date();
+            r.addRequest(ccpay);
+        }
 
-        ccpay.amount = 940;
-        ccpay.reference = "August Rent, 46 Yonge, Appt 19";
+        {
+            TransactionRequest ccpay = new TransactionRequest();
+            ccpay.setRequestID("payProc#2");
+            ccpay.setTxnType(TransactionRequest.TransactionType.Sale);
+            CreditCardInfo cc = new CreditCardInfo();
+            cc.setCardNumber("378282246310005");
+            cc.setExpiryDate(new Date());
+            ccpay.setPaymentInstrument(cc);
 
-        r.requests.add(ccpay);
+            ccpay.setAmount(940);
+            ccpay.setReference("August Rent, 46 Yonge, Appt 19");
+
+            r.addRequest(ccpay);
+        }
 
         MarshallUtil.marshal(r, System.out);
     }
 
     public static void makeTokenAddTransction() throws JAXBException {
         RequestMessage r = new RequestMessage();
-        r.interfaceEntity = "PaymentProcessor1";
-        r.merchantId = "BIRCHWTT";
-        r.password = "top-secret";
+        r.setInterfaceEntity("PaymentProcessor1");
+        r.setMerchantId("BIRCHWTT");
+        r.setPassword("top-secret");
         TokenActionRequest addToken = new TokenActionRequest();
-        addToken.action = TokenAction.Add;
-        addToken.code = "DC1107";
-        addToken.reference = "46 Yonge, Appt 18";
-        addToken.card = new CreditCardInfo();
-        addToken.card.cardNumber = "6011111111111117";
-        addToken.card.expiryDate = new Date();
-        r.requests.add(addToken);
+        addToken.setAction(TokenAction.Add);
+        addToken.setCode("DC1107");
+        addToken.setReference("46 Yonge, Appt 18");
+        addToken.setCard(new CreditCardInfo());
+        addToken.getCard().setCardNumber("6011111111111117");
+        addToken.getCard().setExpiryDate(new Date());
+        r.addRequest(addToken);
         MarshallUtil.marshal(r, System.out);
     }
 
     public static void makeSaleUsingToken() throws JAXBException {
         RequestMessage r = new RequestMessage();
-        r.interfaceEntity = "PaymentProcessor1";
-        r.merchantId = "BIRCHWTT";
-        r.password = "top-secret";
+        r.setInterfaceEntity("PaymentProcessor1");
+        r.setMerchantId("BIRCHWTT");
+        r.setPassword("top-secret");
+
         TransactionRequest tcpay = new TransactionRequest();
-        tcpay.txnType = TransactionRequest.TransactionType.Sale;
-        tcpay.paymentInstrument = new TokenPaymentInstrument();
-        ((TokenPaymentInstrument) tcpay.paymentInstrument).code = "DC1107";
-        tcpay.amount = 500.78f;
-        tcpay.reference = "September Rent, 14 Yonge, Appt 456";
-        r.requests.add(tcpay);
+        tcpay.setTxnType(TransactionRequest.TransactionType.Sale);
+
+        TokenPaymentInstrument token = new TokenPaymentInstrument();
+        token.setCode("DC1107");
+        tcpay.setPaymentInstrument(token);
+
+        tcpay.setAmount(500.78f);
+        tcpay.setReference("September Rent, 14 Yonge, Appt 456");
+        r.addRequest(tcpay);
 
         MarshallUtil.marshal(r, System.out);
     }

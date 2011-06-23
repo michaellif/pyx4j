@@ -24,17 +24,33 @@ public class CreditCardInfo extends PaymentInstrument {
     /**
      * The number on the card, no spaces, dashes, hyphens or any other punctuation are allowed.
      */
-    @XmlElement(required = true)
-    public String cardNumber;
+    private String cardNumber;
 
     /**
      * The expiry date of the card.
      * 
      * Day value in java.util.Date are ignored.
      */
+    private Date expiryDate;
+
+    @XmlElement(required = true)
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
     @XmlSchemaType(name = "date")
     @XmlElement(required = true)
     @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
-    public Date expiryDate;
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 
 }

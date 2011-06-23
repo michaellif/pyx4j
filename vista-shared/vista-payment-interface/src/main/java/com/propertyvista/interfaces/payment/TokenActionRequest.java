@@ -44,19 +44,51 @@ public class TokenActionRequest extends Request {
     /**
      * This field is used to determine what action is to be performed for the token.
      */
-    @XmlElement(required = true)
-    public TokenAction action;
+    private TokenAction action;
 
-    @XmlElement(required = true)
-    public String code;
+    private String code;
 
     /**
      * A reference data field that can be associated with the token.
      */
-    @XmlElement(required = false)
-    public String reference;
+    private String reference;
+
+    private CreditCardInfo card;
+
+    @XmlElement(required = true)
+    public TokenAction getAction() {
+        return action;
+    }
+
+    public void setAction(TokenAction action) {
+        this.action = action;
+    }
+
+    @XmlElement(required = true)
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     @XmlElement(required = false)
-    public CreditCardInfo card;
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    @XmlElement(required = false)
+    public CreditCardInfo getCard() {
+        return card;
+    }
+
+    public void setCard(CreditCardInfo card) {
+        this.card = card;
+    }
 
 }

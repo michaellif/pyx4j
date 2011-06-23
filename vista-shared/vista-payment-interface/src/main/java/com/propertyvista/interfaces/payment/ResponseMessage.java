@@ -13,8 +13,8 @@
  */
 package com.propertyvista.interfaces.payment;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -35,15 +35,54 @@ public class ResponseMessage {
 
     }
 
+    private String messageID;
+
+    private String merchantId;
+
+    private StatusCode status;
+
+    private List<Response> responses;
+
     @XmlElement(required = false)
-    public String messageID;
+    public String getMessageID() {
+        return messageID;
+    }
+
+    public void setMessageID(String messageID) {
+        this.messageID = messageID;
+    }
+
+    @XmlElement(required = false)
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
+    }
 
     @XmlElement(required = true)
-    public String merchantId;
+    public StatusCode getStatus() {
+        return status;
+    }
 
-    @XmlElement(required = true)
-    public StatusCode status;
+    public void setStatus(StatusCode status) {
+        this.status = status;
+    }
 
     @XmlElementWrapper
-    public List<Response> response = new Vector<Response>();
+    public List<Response> getResponse() {
+        return responses;
+    }
+
+    public void setResponse(List<Response> response) {
+        this.responses = response;
+    }
+
+    public void addResponse(Response response) {
+        if (responses == null) {
+            responses = new ArrayList<Response>();
+        }
+        responses.add(response);
+    }
 }
