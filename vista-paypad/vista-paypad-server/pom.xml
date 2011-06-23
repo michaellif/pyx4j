@@ -19,6 +19,24 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-paypad-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-paypad-interface</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-payment</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
         <!-- ensure proper version, NOT from gwt-dev.jar -->
         <dependency>
             <groupId>commons-codec</groupId>
@@ -65,13 +83,13 @@
     </dependencies>
 
     <properties>
-        <deployableName>vista-paypad</deployableName>
-        <deployContext>vista-paypad</deployContext>
+        <deployableName>vista-paymentpad</deployableName>
+        <deployContext>vista-paymentpad</deployContext>
         <vista-tomcat-url>http://dev.birchwoodsoftwaregroup.com</vista-tomcat-url>
         <vista-tomcat-username>vista</vista-tomcat-username>
         <vista-tomcat-pwd>Vista1102</vista-tomcat-pwd>
 
-        <vista-app-ping-url>http://secure.birchwoodsoftwaregroup.com</vista-app-ping-url>
+        <vista-app-ping-url>http://interfaces.birchwoodsoftwaregroup.com</vista-app-ping-url>
 
     </properties>
 
