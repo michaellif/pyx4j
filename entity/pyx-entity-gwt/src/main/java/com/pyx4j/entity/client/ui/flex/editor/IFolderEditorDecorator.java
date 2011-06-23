@@ -25,6 +25,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
@@ -35,5 +36,14 @@ public interface IFolderEditorDecorator<E extends IEntity> extends IsWidget, Val
     HandlerRegistration addItemAddClickHandler(ClickHandler handler);
 
     void setFolder(CEntityFolderEditor<?> w);
+
+    public enum DecoratorsIds implements IDebugId {
+        Validation, Label;
+
+        @Override
+        public String debugId() {
+            return name();
+        }
+    }
 
 }

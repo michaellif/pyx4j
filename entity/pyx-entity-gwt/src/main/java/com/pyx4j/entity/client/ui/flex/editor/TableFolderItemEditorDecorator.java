@@ -27,6 +27,7 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -66,7 +67,6 @@ public class TableFolderItemEditorDecorator<E extends IEntity> extends BaseFolde
         validationMessageHolder = new HTML();
         validationMessageHolder.getElement().getStyle().setColor("red");
         mainPanel.add(validationMessageHolder);
-
     }
 
     @Override
@@ -129,5 +129,11 @@ public class TableFolderItemEditorDecorator<E extends IEntity> extends BaseFolde
         if (getImageHolder() != null) {
             getImageHolder().setVisible(removable);
         }
+    }
+
+    @Override
+    protected void onEnsureDebugId(String baseID) {
+        super.onEnsureDebugId(baseID);
+        validationMessageHolder.ensureDebugId(new CompositeDebugId(baseID, IFolderEditorDecorator.DecoratorsIds.Label).debugId());
     }
 }
