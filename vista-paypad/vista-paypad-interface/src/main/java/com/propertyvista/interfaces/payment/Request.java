@@ -16,7 +16,7 @@ package com.propertyvista.interfaces.payment;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
-@XmlSeeAlso({ TransactionRequest.class, TokenActionRequest.class, CanadianAVSRequest.class })
+@XmlSeeAlso({ TransactionRequest.class, TokenActionRequest.class })
 public abstract class Request {
 
     private String requestID;

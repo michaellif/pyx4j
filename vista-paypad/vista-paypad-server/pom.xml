@@ -89,7 +89,7 @@
         <vista-tomcat-username>vista</vista-tomcat-username>
         <vista-tomcat-pwd>Vista1102</vista-tomcat-pwd>
 
-        <vista-app-ping-url>http://interfaces.birchwoodsoftwaregroup.com</vista-app-ping-url>
+        <vista-app-ping-url>https://interfaces.birchwoodsoftwaregroup.com</vista-app-ping-url>
 
     </properties>
 

@@ -13,17 +13,17 @@
  */
 package com.propertyvista.payment.caledon;
 
-class CaledonResponse {
+public class CaledonResponse {
 
     @HttpResponseField("CODE")
-    String code;
+    public String code;
 
     @HttpResponseField("TEXT")
-    String text;
+    public String text;
 
     @HttpResponseField("AUTH")
-    String authorizationNumber;
+    public String authorizationNumber;
 
     @HttpResponseField("ECHO")
-    String echo;
+    public String echo;
 }

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.payment.caledon;
 
-enum CaledonTokenAction {
+public enum CaledonTokenAction {
 
     ADD("ADD", "ADD/CREATE the token"),
 

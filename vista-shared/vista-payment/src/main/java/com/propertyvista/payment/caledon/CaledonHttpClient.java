@@ -38,9 +38,11 @@ import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.payment.PaymentProcessingException;
 
-class CaledonHttpClient {
+public class CaledonHttpClient {
 
     private final static Logger log = LoggerFactory.getLogger(CaledonHttpClient.class);
+
+    private final boolean debug = true;
 
     private final boolean useTestServer = true;
 
@@ -50,7 +52,7 @@ class CaledonHttpClient {
 
     private final String urlProd = "https://lt3a.caledoncard.com/";
 
-    CaledonResponse transaction(CaledonRequest request) {
+    public CaledonResponse transaction(CaledonRequest request) {
 
         String url;
 
@@ -63,7 +65,10 @@ class CaledonHttpClient {
         GetMethod httpMethod = new GetMethod(url);
         httpMethod.setFollowRedirects(false);
         httpMethod.setQueryString(caledoneQueryEncoding(buildRequestQuery(request)));
-        System.out.println(httpMethod.getQueryString());
+
+        if (debug) {
+            log.info("Query: {}", httpMethod.getQueryString());
+        }
 
         HttpClient httpClient = new HttpClient();
         ProxyConfig proxy = SystemConfig.instance().getCaledonProxy();

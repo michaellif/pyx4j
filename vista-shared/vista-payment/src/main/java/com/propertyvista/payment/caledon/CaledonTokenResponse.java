@@ -13,7 +13,7 @@
  */
 package com.propertyvista.payment.caledon;
 
-enum CaledonTokenResponse {
+public enum CaledonTokenResponse {
 
     TOKEN_SUCCESS("0000", "Token operation SUCCESSFULLY executed"),
 

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.payment.caledon;
 
-enum CaledonTransactionType {
+public enum CaledonTransactionType {
 
     //external api
     SALE("S", "Sale"),
@@ -51,9 +51,6 @@ enum CaledonTransactionType {
     CONTRA_QUERY("Q", "Contra query"),
 
     LEVEL_3_DETAIL("L", "Level 3 detail delivery"),
-
-    //external api
-    CANADIAN_AVS("I", "Canadian Address Verification Service(AVS)"),
 
     COMMERCIAL("K", "Commercial"),
 

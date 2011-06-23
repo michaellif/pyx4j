@@ -85,6 +85,7 @@ public class PaymentServlet extends HttpServlet {
 
         try {
             ResponseMessage rm = PaymentProcessor.execute(message);
+            log.info("reply {}", MarshallUtil.marshall(rm));
             response.setContentType("text/xml");
             MarshallUtil.marshal(rm, response.getOutputStream());
         } catch (Throwable e) {

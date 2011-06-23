@@ -17,7 +17,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-class CaledonRequest {
+public class CaledonRequest {
 
     @HttpRequestField("TERMID")
     public String terminalID;
@@ -31,6 +31,9 @@ class CaledonRequest {
     public void setExpiryDate(Date expiry) {
         this.expiryDate = new SimpleDateFormat("MMyy").format(expiry);
     }
+
+    @HttpRequestField("TOKEN")
+    public String token;
 
     @HttpRequestField("DESC")
     public String merchantDescription;
