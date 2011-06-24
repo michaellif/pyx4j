@@ -111,8 +111,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder = new NavigFolder("Dashboards", CrmImages.INSTANCE.dashboardsNormal(), CrmImages.INSTANCE.dashboardsHover(),
                 CrmImages.INSTANCE.dashboardsActive());
 
-        folder.addNavigItem(new CrmSiteMap.Dashboard.DashboardManagement());
-        folder.addNavigItem(new CrmSiteMap.Dashboard.SystemDashboard());
+        folder.addNavigItem(new CrmSiteMap.Dashboard.Management());
+        folder.addNavigItem(new CrmSiteMap.Dashboard.System());
 
         fillDashboards(folder);
 

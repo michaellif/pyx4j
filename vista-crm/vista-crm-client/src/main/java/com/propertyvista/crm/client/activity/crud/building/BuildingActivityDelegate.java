@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
@@ -56,10 +55,9 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
     private final IListerView.Presenter lockerAreaLister;
 
     @SuppressWarnings("unchecked")
-    public BuildingActivityDelegate(BuildingView view, Place place) {
+    public BuildingActivityDelegate(BuildingView view) {
 
-        // TODO VladL - form correct path for Building dashboard here:
-        dashboard = new DashboardViewActivity(view.getDashboardView(), new CrmSiteMap.Dashboard());
+        dashboard = new DashboardViewActivity(view.getDashboardView(), new CrmSiteMap.Dashboard.Building());
 
         unitLister = new ListerActivityBase<AptUnitDTO>(view.getUnitListerView(), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class),
                 AptUnitDTO.class);

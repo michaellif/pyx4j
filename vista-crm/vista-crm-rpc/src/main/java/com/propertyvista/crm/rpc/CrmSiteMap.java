@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.rpc;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
@@ -128,7 +127,6 @@ public class CrmSiteMap implements SiteMap {
         public static class Concession extends CrudAppPlace {
 
         }
-
     }
 
     public static class Tenants extends AppPlace {
@@ -152,7 +150,6 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Inquies")
         public static class Inquiry extends CrudAppPlace {
         }
-
     }
 
     public static class Marketing extends AppPlace {
@@ -172,19 +169,25 @@ public class CrmSiteMap implements SiteMap {
     @NavigationItem(navigLabel = "Dashboard")
     public static class Dashboard extends CrudAppPlace {
 
+        @PlaceProperties(caption = "Edit")
+        @NavigationItem(navigLabel = "Edit")
+        public static class Edit extends CrudAppPlace {
+        }
+
         @PlaceProperties(caption = "Dashboard Management")
         @NavigationItem(navigLabel = "Manage Dashboards")
-        public static class DashboardManagement extends AppPlace {
+        public static class Management extends AppPlace {
 
         }
 
         @PlaceProperties(caption = "System Dashboard")
         @NavigationItem(navigLabel = "System Dashboard")
-        public static class SystemDashboard extends AppPlace {
-            public SystemDashboard() {
-                super();
-                putArg(CrudAppPlace.ARG_NAME_ITEM_ID, new Key(1).toString());
-            }
+        public static class System extends AppPlace {
+        }
+
+        @PlaceProperties(caption = "Building Dashboard")
+        @NavigationItem(navigLabel = "Building Dashboard")
+        public static class Building extends AppPlace {
         }
     }
 

@@ -37,7 +37,7 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
                 .create(BuildingCrudService.class));
         withPlace(place);
 
-        delegate = new BuildingActivityDelegate((BuildingView) view, place);
+        delegate = new BuildingActivityDelegate((BuildingView) view);
     }
 
     @Override

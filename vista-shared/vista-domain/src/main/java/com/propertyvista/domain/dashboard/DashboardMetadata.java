@@ -13,21 +13,55 @@
  */
 package com.propertyvista.domain.dashboard;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.common.domain.ISharedUserEntity;
 
 public interface DashboardMetadata extends ISharedUserEntity {
 
-    enum LayoutType {
-        One, Two11, Two12, Two21, Three
+    @Translatable
+    public enum Type {
+        system, building
     }
 
+    public enum LayoutType {
+
+        @Translation("One whole width column")
+        One,
+
+        @Translation("Two equal columns")
+        Two11,
+
+        @Translation("Two columns (33/67)")
+        Two12,
+
+        @Translation("Two columns (67/33)")
+        Two21,
+
+        @Translation("Three equal columns")
+        Three
+    }
+
+    @ToString(index = 1)
+    @MemberColumn(name = "dashboardType")
+    IPrimitive<Type> type();
+
+    @ToString(index = 0)
     IPrimitive<String> name();
 
+    IPrimitive<String> description();
+
     IPrimitive<LayoutType> layoutType();
+
+    IPrimitive<Boolean> isFavorite();
+
+    IPrimitive<Boolean> isShared();
 
     @Owned
     IList<GadgetMetadata> gadgets();

@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
@@ -16,19 +16,19 @@ package com.propertyvista.crm.client.activity.dashboard;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.dashboard.DashboardManagementView;
-import com.propertyvista.crm.client.ui.viewfactories.DashboardVeiwFactory;
+import com.propertyvista.crm.client.ui.dashboard.DashboardEditor;
+import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.DashboardCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardManagementViewActivity extends ListerActivityBase<DashboardMetadata> {
+public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadata> {
 
     @SuppressWarnings("unchecked")
-    public DashboardManagementViewActivity(Place place) {
-        super((DashboardManagementView) DashboardVeiwFactory.instance(DashboardManagementView.class), (AbstractCrudService<DashboardMetadata>) GWT
+    public DashboardEditorActivity(Place place) {
+        super((DashboardEditor) DashboardViewFactory.instance(DashboardEditor.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(DashboardCrudService.class), DashboardMetadata.class);
         withPlace(place);
     }

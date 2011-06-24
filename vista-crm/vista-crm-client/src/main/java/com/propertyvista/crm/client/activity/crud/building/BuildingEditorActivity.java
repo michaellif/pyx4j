@@ -37,7 +37,7 @@ public class BuildingEditorActivity extends EditorActivityBase<BuildingDTO> impl
                 .create(BuildingCrudService.class), BuildingDTO.class);
         withPlace(place);
 
-        delegate = new BuildingActivityDelegate((BuildingView) view, place);
+        delegate = new BuildingActivityDelegate((BuildingView) view);
     }
 
     @Override

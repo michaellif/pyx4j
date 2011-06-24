@@ -46,7 +46,7 @@ public class CrmSite extends VistaSite {
 
         DefaultErrorHandlerDialog.register();
 
-        getHistoryHandler().register(getPlaceController(), getEventBus(), new CrmSiteMap.Dashboard.SystemDashboard());
+        getHistoryHandler().register(getPlaceController(), getEventBus(), new CrmSiteMap.Dashboard.System());
 
         RootPanel.get().add(RootLayoutPanel.get());
 
@@ -77,7 +77,7 @@ public class CrmSite extends VistaSite {
     private void init() {
         if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
             if (CrmSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard.SystemDashboard());
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard.System());
             } else {
                 CrmSite.getHistoryHandler().handleCurrentHistory();
             }

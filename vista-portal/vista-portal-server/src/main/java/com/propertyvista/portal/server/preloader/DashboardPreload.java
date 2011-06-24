@@ -31,7 +31,10 @@ public class DashboardPreload extends AbstractDataPreloader {
 // first demo dashboard:        
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
         dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.name().setValue("System dashboard");
+        dmd.type().setValue(DashboardMetadata.Type.system);
+        dmd.isShared().setValue(true);
+        dmd.name().setValue("System Dashboard");
+        dmd.description().setValue("Shows default system data");
         dmd.layoutType().setValue(LayoutType.One);
 
         GadgetMetadata gmd;
@@ -64,8 +67,12 @@ public class DashboardPreload extends AbstractDataPreloader {
 
 // the second one:
         dmd = EntityFactory.create(DashboardMetadata.class);
+        dmd.type().setValue(DashboardMetadata.Type.building);
+        dmd.isShared().setValue(true);
         dmd.name().setValue("Building dashboard");
+        dmd.description().setValue("Shows default building data");
         dmd.layoutType().setValue(LayoutType.Two21);
+
         for (int i = 0; i < 3; ++i) {
             gmd = EntityFactory.create(GadgetMetadata.class);
             gmd.type().setValue(GadgetType.Demo);

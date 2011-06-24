@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.dashboard;
 
+import java.util.Vector;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -21,13 +23,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
-import com.propertyvista.crm.client.ui.viewfactories.DashboardVeiwFactory;
+import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -40,8 +42,10 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
 
     private Key entityId;
 
+    private DashboardMetadata.Type dashboardType;
+
     public DashboardViewActivity(Place place) {
-        view = (DashboardView) DashboardVeiwFactory.instance(DashboardView.class);
+        view = (DashboardView) DashboardViewFactory.instance(DashboardView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
@@ -56,14 +60,18 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
 
     public DashboardViewActivity withPlace(Place place) {
         entityId = null;
+        dashboardType = null;
+
         String id;
         if ((id = ((AppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
             entityId = new Key(id);
-        } else { // building dashboard?
-            entityId = new Key(2);
+        } else if (place instanceof CrmSiteMap.Dashboard.System) {
+            dashboardType = DashboardMetadata.Type.system;
+        } else if (place instanceof CrmSiteMap.Dashboard.Building) {
+            dashboardType = DashboardMetadata.Type.building;
         }
 
-        assert (entityId != null);
+        assert (entityId != null || dashboardType != null);
         return this;
     }
 
@@ -75,8 +83,22 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
 
     @Override
     public void populate() {
-        if (isNewItem()) {
-            view.fill(EntityFactory.create(DashboardMetadata.class));
+        if (isTypedDashboard()) {
+            service.listMetadata(new AsyncCallback<Vector<DashboardMetadata>>() {
+                @Override
+                public void onSuccess(Vector<DashboardMetadata> result) {
+                    for (DashboardMetadata dmd : result) {
+                        if (dmd.type().getValue().equals(dashboardType)) {
+                            view.fill(dmd);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new UnrecoverableClientError(caught);
+                }
+            });
         } else {
 
             service.retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
@@ -140,8 +162,7 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
         service.retrieveSettings(callback, gadgetId);
     }
 
-    protected boolean isNewItem() {
-        assert (entityId != null);
-        return (entityId.toString().equals(CrudAppPlace.ARG_VALUE_NEW_ITEM));
+    protected boolean isTypedDashboard() {
+        return (entityId == null);
     }
 }

@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.client.ui.report.ReportView;
-import com.propertyvista.crm.client.ui.viewfactories.DashboardVeiwFactory;
+import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
@@ -32,7 +32,7 @@ public class ReportActivity extends AbstractActivity {
     private final ReportView view;
 
     public ReportActivity(Place place) {
-        view = (ReportView) DashboardVeiwFactory.instance(ReportView.class);
+        view = (ReportView) DashboardViewFactory.instance(ReportView.class);
         assert (view != null);
         withPlace(place);
     }

@@ -25,19 +25,19 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 public class DashboardLister extends ListerBase<DashboardMetadata> {
 
     public DashboardLister() {
-        super(DashboardMetadata.class, CrmSiteMap.Dashboard.class);
+        super(DashboardMetadata.class, CrmSiteMap.Dashboard.Edit.class);
         setFiltersVisible(false);
     }
 
     public DashboardLister(boolean readOnly) {
-        super(DashboardMetadata.class, CrmSiteMap.Dashboard.class, readOnly);
+        super(DashboardMetadata.class, CrmSiteMap.Dashboard.Edit.class, readOnly);
         setFiltersVisible(false);
     }
 
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<DashboardMetadata>> columnDescriptors, DashboardMetadata proto) {
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.layoutType()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.user().name()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
     }
 }

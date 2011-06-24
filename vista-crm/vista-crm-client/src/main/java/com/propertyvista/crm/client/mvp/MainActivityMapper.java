@@ -69,7 +69,8 @@ import com.propertyvista.crm.client.activity.crud.unit.UnitListerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyViewerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitViewerActivity;
-import com.propertyvista.crm.client.activity.dashboard.DashboardManagementViewActivity;
+import com.propertyvista.crm.client.activity.dashboard.DashboardEditorActivity;
+import com.propertyvista.crm.client.activity.dashboard.DashboardManagementActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -276,11 +277,15 @@ public class MainActivityMapper implements AppActivityMapper {
                     }
 
 // Dashboards:
-                } else if (place instanceof CrmSiteMap.Dashboard.DashboardManagement) {
-                    activity = new DashboardManagementViewActivity(place);
-                } else if (place instanceof CrmSiteMap.Dashboard.SystemDashboard) {
-                    activity = new DashboardViewActivity(place);
                 } else if (place instanceof CrmSiteMap.Dashboard) {
+                    activity = new DashboardViewActivity(place);
+                } else if (place instanceof CrmSiteMap.Dashboard.Edit) {
+                    activity = new DashboardEditorActivity(place);
+                } else if (place instanceof CrmSiteMap.Dashboard.Management) {
+                    activity = new DashboardManagementActivity(place);
+                } else if (place instanceof CrmSiteMap.Dashboard.System) {
+                    activity = new DashboardViewActivity(place);
+                } else if (place instanceof CrmSiteMap.Dashboard.Building) {
                     activity = new DashboardViewActivity(place);
 // - Other:
                 } else if (place instanceof CrmSiteMap.Report) {
