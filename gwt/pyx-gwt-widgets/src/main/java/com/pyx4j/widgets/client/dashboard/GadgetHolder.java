@@ -301,6 +301,7 @@ final class GadgetHolder extends SimplePanel {
         gadgetDragController.makeNotDraggable(this);
         holdedGadget.onDelete();
         this.removeFromParent();
+        root.onEvent(Reason.removeGadget);
     }
 
     // --------------------------------------------------------------

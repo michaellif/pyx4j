@@ -55,6 +55,8 @@ public class Dashboard extends SimplePanel implements IBoardRoot {
 
     private final List<DashboardEvent> handlers = new ArrayList<DashboardEvent>();
 
+    private boolean inhibitEvents = false;
+
     public Dashboard() {
         addStyleName(CSSNames.BASE_NAME);
 
@@ -95,7 +97,9 @@ public class Dashboard extends SimplePanel implements IBoardRoot {
             DashboardLayoutPanel.Location loc = new DashboardLayoutPanel.Location();
             if (dashboardLayoutPanel.getWidgetLocation(widget, loc)) {
                 setWidget(widget);
+                inhibitEvents = true;
                 dashboardLayoutPanel.addGadget(placeholder, loc.col, loc.row);
+                inhibitEvents = false;
                 return true;
             }
         }
@@ -107,9 +111,11 @@ public class Dashboard extends SimplePanel implements IBoardRoot {
         if (getWidget().equals(widget)) {
             DashboardLayoutPanel.Location loc = new DashboardLayoutPanel.Location();
             if (dashboardLayoutPanel.getWidgetLocation(placeholder, loc)) {
+                inhibitEvents = true;
                 dashboardLayoutPanel.removeGadget(loc.col, loc.row);
                 dashboardLayoutPanel.addGadget(widget, loc.col, loc.row);
                 setWidget(boundaryPanel);
+                inhibitEvents = false;
                 return true;
             }
         }
@@ -123,7 +129,7 @@ public class Dashboard extends SimplePanel implements IBoardRoot {
 
     @Override
     public void onEvent(Reason reason) {
-        if (!handlers.isEmpty()) {
+        if (!inhibitEvents && !handlers.isEmpty()) {
             for (DashboardEvent handler : handlers) {
                 handler.onEvent(reason);
             }
