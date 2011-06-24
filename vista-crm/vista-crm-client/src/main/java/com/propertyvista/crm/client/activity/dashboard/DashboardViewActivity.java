@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.activity.dashboard;
 
-import java.util.Vector;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -23,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -74,33 +73,24 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
         populate();
     }
 
-    public void populate1() {
-        service.listMetadata(new AsyncCallback<Vector<DashboardMetadata>>() {
-            @Override
-            public void onSuccess(Vector<DashboardMetadata> result) {
-                view.fill(result.get(0));
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-            }
-        });
-    }
-
     @Override
     public void populate() {
-        service.retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
-            @Override
-            public void onSuccess(DashboardMetadata result) {
-                view.fill(result);
-            }
+        if (isNewItem()) {
+            view.fill(EntityFactory.create(DashboardMetadata.class));
+        } else {
 
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-            }
-        }, entityId);
+            service.retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
+                @Override
+                public void onSuccess(DashboardMetadata result) {
+                    view.fill(result);
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new UnrecoverableClientError(caught);
+                }
+            }, entityId);
+        }
     }
 
     @Override
@@ -148,5 +138,10 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
     @Override
     public void retrieve(Key gadgetId, AsyncCallback<AbstractGadgetSettings> callback) {
         service.retrieveSettings(callback, gadgetId);
+    }
+
+    protected boolean isNewItem() {
+        assert (entityId != null);
+        return (entityId.toString().equals(CrudAppPlace.ARG_VALUE_NEW_ITEM));
     }
 }
