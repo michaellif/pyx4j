@@ -21,6 +21,7 @@
 package com.pyx4j.widgets.client.dashboard;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
@@ -139,4 +140,14 @@ public class Dashboard extends SimplePanel implements IBoardRoot {
     public void addEventHandler(DashboardEvent handler) {
         handlers.add(handler);
     }
+
+    // Iteration stuff:
+    public interface IGadgetIterator extends Iterator<IGadget> {
+        public int getColumn();
+    }
+
+    public IGadgetIterator getGadgetIterator() {
+        return dashboardLayoutPanel.getGadgetIterator();
+    }
+
 }

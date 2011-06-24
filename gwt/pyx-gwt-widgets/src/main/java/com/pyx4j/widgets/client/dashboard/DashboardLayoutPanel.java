@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
+import java.util.NoSuchElementException;
 import java.util.Vector;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
@@ -28,6 +29,7 @@ import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.widgets.client.dashboard.Dashboard.IGadgetIterator;
 import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
 
 class DashboardLayoutPanel extends FlowPanel implements DashboardEvent {
@@ -211,7 +213,7 @@ class DashboardLayoutPanel extends FlowPanel implements DashboardEvent {
     }
 
     protected boolean checkIndexes(int column, int row, boolean insert) {
-        if (column >= getWidgetCount()) {
+        if (column < 0 || column >= getWidgetCount()) {
             return false;
         }
 
@@ -219,7 +221,7 @@ class DashboardLayoutPanel extends FlowPanel implements DashboardEvent {
             if (row > getColumnPanel(column).getWidgetCount()) {
                 return false;
             }
-        } else if (row >= getColumnPanel(column).getWidgetCount()) {
+        } else if (row < 0 || row >= getColumnPanel(column).getWidgetCount()) {
             return false;
         }
 
@@ -229,5 +231,48 @@ class DashboardLayoutPanel extends FlowPanel implements DashboardEvent {
     @Override
     public void onEvent(Reason reason) {
         handler.onEvent(reason);
+    }
+
+    // Iteration stuff:
+    private class GadgetIterator implements IGadgetIterator {
+
+        private int col = 0;
+
+        private int row = -1;
+
+        @Override
+        public boolean hasNext() {
+            return ((col + 1) < getColumnsCount() || (row + 1) < getColumnPanel(col).getWidgetCount());
+        }
+
+        @Override
+        public IGadget next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            if ((row + 1) < getColumnPanel(col).getWidgetCount()) {
+                return ((GadgetHolder) getColumnPanel(col).getWidget(++row)).getGadget(); // current column...
+            } else {
+                return ((GadgetHolder) getColumnPanel(++col).getWidget(row = 0)).getGadget(); // next column...
+            }
+        }
+
+        @Override
+        public void remove() {
+            if (!checkIndexes(col, row, false)) {
+                throw new NoSuchElementException();
+            }
+            removeGadget(col, row--);
+        }
+
+        @Override
+        public int getColumn() {
+            return col;
+        }
+    }
+
+    public IGadgetIterator getGadgetIterator() {
+        return new GadgetIterator();
     }
 }
