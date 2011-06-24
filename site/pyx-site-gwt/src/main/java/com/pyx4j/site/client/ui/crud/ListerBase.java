@@ -31,8 +31,6 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -70,8 +68,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     private static I18n i18n = I18nFactory.getI18n(ListerBase.class);
 
     protected Button btnNewItem;
-
-    protected Button btnViewItem;
 
     protected final HorizontalPanel actionsPanel;
 
@@ -158,40 +154,22 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> itemOpenPlaceClass, final boolean openEditor, boolean allowAddNew) {
         this(clazz);
 
-        getListPanel().getDataTable().addDoubleClickHandler(new DoubleClickHandler() {
+        getListPanel().getDataTable().addClickHandler(new ClickHandler() {
             @Override
-            public void onDoubleClick(DoubleClickEvent event) {
-                E item = getListPanel().getDataTable().getSelectedItem();
-                if (item != null) {
-                    if (openEditor) {
-                        presenter.edit(itemOpenPlaceClass, item.getPrimaryKey());
-                    } else {
-                        presenter.view(itemOpenPlaceClass, item.getPrimaryKey());
+            public void onClick(ClickEvent event) {
+                if (getListPanel().getDataTable().getSelectedRow() >= 0) {
+                    E item = getListPanel().getDataTable().getSelectedItem();
+                    if (item != null) {
+                        if (openEditor) {
+                            presenter.edit(itemOpenPlaceClass, item.getPrimaryKey());
+                        } else {
+                            presenter.view(itemOpenPlaceClass, item.getPrimaryKey());
+                        }
                     }
                 }
             }
         });
 
-// view item button stuff:
-        addActionButton(btnViewItem = new Button(i18n.tr("Veiw&nbspitem...")));
-        btnViewItem.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                E item = getListPanel().getDataTable().getSelectedItem();
-                if (item != null) {
-                    presenter.view(itemOpenPlaceClass, item.getPrimaryKey());
-                }
-            }
-        });
-
-        getListPanel().getDataTable().addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (getListPanel().getDataTable().getSelectedRow() >= 0) {
-                    btnViewItem.setEnabled(true);
-                }
-            }
-        });
 // new item button stuff:
         if (allowAddNew) {
             actionsPanel.add(btnNewItem = new Button(i18n.tr("Add&nbspnew&nbspitem...")));
@@ -302,7 +280,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     @Override
     public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData) {
         setActionsActive(false);
-        btnViewItem.setEnabled(false);
         getListPanel().populateData(entityes, pageNumber, hasMoreData);
     }
 
@@ -325,7 +302,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     private void setActionsActive(boolean active) {
         for (Widget w : actionsPanel) {
-            if (!w.equals(btnNewItem) && !w.equals(btnViewItem) && w instanceof FocusWidget) {
+            if (!w.equals(btnNewItem) && w instanceof FocusWidget) {
                 ((FocusWidget) w).setEnabled(active);
             }
         }
