@@ -15,6 +15,6 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface DashboardView extends IsWidget {
+public interface CurrentBillView extends IsWidget {
 
 }

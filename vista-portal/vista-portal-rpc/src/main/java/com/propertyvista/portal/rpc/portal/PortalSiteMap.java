@@ -76,13 +76,13 @@ public class PortalSiteMap implements SiteMap {
         public static class Maintenance extends AppPlace {
         }
 
-        public static class BillingInfo extends AppPlace {
+        public static class BillingHistory extends AppPlace {
         }
 
-        public static class LeaseTerm extends AppPlace {
+        public static class PaymentMethods extends AppPlace {
         }
 
-        public static class Dashboard extends AppPlace {
+        public static class CurrentBill extends AppPlace {
         }
 
     }

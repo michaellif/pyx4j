@@ -13,8 +13,15 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface LeaseTermsView extends IsWidget {
+public class PaymentMethodsViewImpl extends SimplePanel implements PaymentMethodsView {
+
+    public PaymentMethodsViewImpl() {
+        HTML label = new HTML("Payment Methods");
+        setWidget(label);
+
+    }
 
 }

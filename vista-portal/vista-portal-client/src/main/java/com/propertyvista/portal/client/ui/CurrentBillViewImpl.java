@@ -16,12 +16,11 @@ package com.propertyvista.portal.client.ui;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class LeaseTermsViewImpl extends SimplePanel implements LeaseTermsView {
+public class CurrentBillViewImpl extends SimplePanel implements CurrentBillView {
 
-    public LeaseTermsViewImpl() {
-        HTML label = new HTML("Lease Terms");
+    public CurrentBillViewImpl() {
+        HTML label = new HTML("Current Bill");
         setWidget(label);
 
     }
-
 }

@@ -18,18 +18,18 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.portal.client.ui.DashboardView;
+import com.propertyvista.portal.client.ui.CurrentBillView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 
-public class DashboardActivity extends AbstractActivity {
-    private final DashboardView view;
+public class CurrentBillActivity extends AbstractActivity {
+    private final CurrentBillView view;
 
-    public DashboardActivity(Place place) {
-        this.view = (DashboardView) PortalViewFactory.instance(DashboardView.class);
+    public CurrentBillActivity(Place place) {
+        this.view = (CurrentBillView) PortalViewFactory.instance(CurrentBillView.class);
         withPlace(place);
     }
 
-    public DashboardActivity withPlace(Place place) {
+    public CurrentBillActivity withPlace(Place place) {
         return this;
     }
 

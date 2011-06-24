@@ -133,10 +133,10 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     private List<NavigItem> getSecondaryNavig(PageDescriptor.Type pagetype) {
         List<NavigItem> secondaryNavig = new LinkedList<NavigItem>();
         if (PageDescriptor.Type.residence.equals(pagetype)) {
-            secondaryNavig.add(new NavigItem(new Residents.Dashboard(), i18n.tr("Dashboard")));
             secondaryNavig.add(new NavigItem(new Residents.PersonalInfo(), i18n.tr("Personal Info")));
-            secondaryNavig.add(new NavigItem(new Residents.BillingInfo(), i18n.tr("Billing Info")));
-            secondaryNavig.add(new NavigItem(new Residents.LeaseTerm(), i18n.tr("Lease Terms")));
+            secondaryNavig.add(new NavigItem(new Residents.CurrentBill(), i18n.tr("Current Bill")));
+            secondaryNavig.add(new NavigItem(new Residents.PaymentMethods(), i18n.tr("Payment Methods")));
+            secondaryNavig.add(new NavigItem(new Residents.BillingHistory(), i18n.tr("Billing History")));
             secondaryNavig.add(new NavigItem(new Residents.Maintenance(), i18n.tr("Maintenance")));
         }
         return secondaryNavig;

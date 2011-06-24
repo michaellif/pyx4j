@@ -15,16 +15,16 @@ package com.propertyvista.portal.client.ui.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.client.ui.BillingInfoView;
-import com.propertyvista.portal.client.ui.BillingInfoViewImpl;
+import com.propertyvista.portal.client.ui.BillingHistoryView;
+import com.propertyvista.portal.client.ui.BillingHistoryViewImpl;
 import com.propertyvista.portal.client.ui.CreateAccountView;
 import com.propertyvista.portal.client.ui.CreateAccountViewImpl;
-import com.propertyvista.portal.client.ui.DashboardView;
-import com.propertyvista.portal.client.ui.DashboardViewImpl;
+import com.propertyvista.portal.client.ui.CurrentBillView;
+import com.propertyvista.portal.client.ui.CurrentBillViewImpl;
 import com.propertyvista.portal.client.ui.FooterView;
 import com.propertyvista.portal.client.ui.FooterViewImpl;
-import com.propertyvista.portal.client.ui.LeaseTermsView;
-import com.propertyvista.portal.client.ui.LeaseTermsViewImpl;
+import com.propertyvista.portal.client.ui.PaymentMethodsView;
+import com.propertyvista.portal.client.ui.PaymentMethodsViewImpl;
 import com.propertyvista.portal.client.ui.LoginInvitationView;
 import com.propertyvista.portal.client.ui.LoginInvitationViewImpl;
 import com.propertyvista.portal.client.ui.LoginView;
@@ -60,8 +60,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new MaintenanceViewImpl());
             } else if (MainNavigView.class.equals(type)) {
                 map.put(type, new MainNavigViewImpl());
-            } else if (BillingInfoView.class.equals(type)) {
-                map.put(type, new BillingInfoViewImpl());
+            } else if (BillingHistoryView.class.equals(type)) {
+                map.put(type, new BillingHistoryViewImpl());
             } else if (LoginInvitationView.class.equals(type)) {
                 map.put(type, new LoginInvitationViewImpl());
             } else if (StaticPageView.class.equals(type)) {
@@ -74,10 +74,10 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new RetrievePasswordViewImpl());
             } else if (CreateAccountView.class.equals(type)) {
                 map.put(type, new CreateAccountViewImpl());
-            } else if (LeaseTermsView.class.equals(type)) {
-                map.put(type, new LeaseTermsViewImpl());
-            } else if (DashboardView.class.equals(type)) {
-                map.put(type, new DashboardViewImpl());
+            } else if (PaymentMethodsView.class.equals(type)) {
+                map.put(type, new PaymentMethodsViewImpl());
+            } else if (CurrentBillView.class.equals(type)) {
+                map.put(type, new CurrentBillViewImpl());
             } else if (PotentialTenantView.class.equals(type)) {
                 map.put(type, new PotentialTenantViewImpl());
             }

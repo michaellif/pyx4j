@@ -23,11 +23,11 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.client.activity.ApartmentDetailsActivity;
-import com.propertyvista.portal.client.activity.BillingInfoActivity;
+import com.propertyvista.portal.client.activity.BillingHistoryActivity;
 import com.propertyvista.portal.client.activity.CreateAccountActivity;
-import com.propertyvista.portal.client.activity.DashboardActivity;
+import com.propertyvista.portal.client.activity.CurrentBillActivity;
 import com.propertyvista.portal.client.activity.FloorplanDetailsActivity;
-import com.propertyvista.portal.client.activity.LeaseTermsActivity;
+import com.propertyvista.portal.client.activity.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.LoginActivity;
 import com.propertyvista.portal.client.activity.LoginInvitationActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
@@ -67,8 +67,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PersonalInfoActivity(place);
                 } else if (place instanceof Residents.Maintenance) {
                     activity = new MaintenanceAcitvity(place);
-                } else if (place instanceof Residents.BillingInfo) {
-                    activity = new BillingInfoActivity(place);
+                } else if (place instanceof Residents.BillingHistory) {
+                    activity = new BillingHistoryActivity(place);
                 } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {
                     activity = new FloorplanDetailsActivity(place);
                 } else if (place instanceof PortalSiteMap.Residents.Login) {
@@ -77,10 +77,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new RetrievePasswordActivity(place);
                 } else if (place instanceof PortalSiteMap.Residents.CreateAccount) {
                     activity = new CreateAccountActivity(place);
-                } else if (place instanceof Residents.LeaseTerm) {
-                    activity = new LeaseTermsActivity(place);
-                } else if (place instanceof Residents.Dashboard) {
-                    activity = new DashboardActivity(place);
+                } else if (place instanceof Residents.PaymentMethods) {
+                    activity = new PaymentMethodsActivity(place);
+                } else if (place instanceof Residents.CurrentBill) {
+                    activity = new CurrentBillActivity(place);
                 } else if (place instanceof PortalSiteMap.PotentialTenants) {
                     activity = new PotentialTenantActivity(place);
                 }

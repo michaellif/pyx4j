@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 19, 2011
- * @author vadims
+ * Created on Jun 18, 2011
+ * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.activity;
@@ -18,25 +18,25 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.portal.client.ui.BillingInfoView;
+import com.propertyvista.portal.client.ui.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 
-public class BillingInfoActivity extends AbstractActivity {
-    private final BillingInfoView view;
+public class PaymentMethodsActivity extends AbstractActivity {
 
-    public BillingInfoActivity(Place place) {
-        this.view = (BillingInfoView) PortalViewFactory.instance(BillingInfoView.class);
+    private final PaymentMethodsView view;
+
+    public PaymentMethodsActivity(Place place) {
+        this.view = (PaymentMethodsView) PortalViewFactory.instance(PaymentMethodsView.class);
         withPlace(place);
-    }
-
-    public BillingInfoActivity withPlace(Place place) {
-        return this;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+    }
 
+    public PaymentMethodsActivity withPlace(Place place) {
+        return this;
     }
 
 }

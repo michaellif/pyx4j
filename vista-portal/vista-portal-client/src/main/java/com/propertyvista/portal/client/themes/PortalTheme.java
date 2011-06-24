@@ -115,6 +115,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("font-size", "14px");
         style.addProperty("color", ThemeColor.OBJECT_TONE95);
         style.addProperty("height", "115px");
+        style.addProperty("display", "table");
         addStyle(style);
 
         //TODO  think of a better way
@@ -182,15 +183,6 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("padding-top", "2px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf("logo"));
-        style.addProperty("font-size", "30px");
-        style.addProperty("line-height", "1.2em");
-        style.addProperty("text-align", "center");
-        style.addProperty("vertical-align", "middle");
-        style.addProperty("display", "block");
-        style.addProperty("color", ThemeColor.OBJECT_TONE95);
-        addStyle(style);
-
     }
 
     private void initLogoViewStyles() {
@@ -199,7 +191,7 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("font-size", "2em");
         style.addProperty("font-weight", "bold");
         style.addProperty("padding-left", "20px");
-        style.addProperty("padding-top", "20px");
+        style.addProperty("padding-top", "40px");
         addStyle(style);
 
     }
@@ -207,17 +199,18 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
     private void initTopActionStyles() {
         String prefix = TopRightActionsViewImpl.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("padding-top", "40px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TopRightActionsViewImpl.StyleSuffix.PhoneLabel));
         style.addProperty("font-size", "2em");
         style.addProperty("font-weight", "bold");
-        style.addProperty("padding-right", "20px");
-        style.addProperty("padding-top", "20px");
+        style.addProperty("padding-right", "30px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TopRightActionsViewImpl.StyleSuffix.GreetingLabel));
         style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "1em");
         addStyle(style);
     }
 
@@ -334,9 +327,11 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
     private void initDecoratorsStyles() {
         String prefix = VistaHeaderDecorator.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("border-bottom", "dotted 1px");
-        style.addProperty("padding-top", "30px");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE25);
+        style.addProperty("margin-top", "10px");
+        style.addProperty("padding-top", "10px");
         style.addProperty("padding-bottom", "10px");
+        style.addProperty("padding-left", "20px");
         style.addProperty("margin-bottom", "10px");
         addStyle(style);
 

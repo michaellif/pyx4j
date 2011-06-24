@@ -56,6 +56,7 @@ public class PortalView extends FlowPanel {
 
         FlowPanel headerWrapper = new FlowPanel();
         headerWrapper.setStyleName(prefix + StyleSuffix.Header);
+        headerWrapper.setWidth("100%");
         add(headerWrapper);
 
         DisplayPanel logoDisplayPanel = new DisplayPanel();

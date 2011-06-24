@@ -17,7 +17,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private static I18n i18n = I18nFactory.getI18n(TopRightActionsViewImpl.class);
 
-    private static final String GREETING_MESSAGE = i18n.tr("Welcome");
+//    private static final String GREETING_MESSAGE = i18n.tr("Welcome");
 
     private Presenter presenter;
 
@@ -34,13 +34,12 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     public TopRightActionsViewImpl() {
         setStyleName(DEFAULT_STYLE_PREFIX);
         setSize("100%", "100%");
-        getElement().getStyle().setFontSize(0.9, Unit.EM);
 
         FlowPanel topLinksPanel = new FlowPanel();
         topLinksPanel.getElement().getStyle().setMargin(4, Unit.PX);
         add(topLinksPanel);
 
-        greetings = new Label(GREETING_MESSAGE);
+        greetings = new Label();
         greetings.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.GreetingLabel);
         greetings.getElement().getStyle().setMarginRight(2, Unit.EM);
         greetings.getElement().getStyle().setDisplay(Display.INLINE);
@@ -55,13 +54,13 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         logout.setDebugId(new StringDebugId("logout"));
         logout.setValue(i18n.tr("LogOut"));
         logout.setVisible(false);
-        logout.asWidget().getElement().getStyle().setMarginRight(2, Unit.EM);
+        logout.asWidget().getElement().getStyle().setMarginRight(15, Unit.EM);
         logout.asWidget().getElement().getStyle().setDisplay(Display.INLINE);
         topLinksPanel.add(logout);
 
         Label phone = new Label("1-888-310-7000");
         phone.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.PhoneLabel);
-        phone.getElement().getStyle().setDisplay(Display.BLOCK);
+        phone.getElement().getStyle().setDisplay(Display.INLINE);
         topLinksPanel.add(phone);
 
     }
@@ -81,7 +80,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     @Override
     public void onLogedIn(String userName) {
         logout.setVisible(true);
-        greetings.setText(GREETING_MESSAGE + " " + userName);
+        greetings.setText(userName);
 
     }
 }
