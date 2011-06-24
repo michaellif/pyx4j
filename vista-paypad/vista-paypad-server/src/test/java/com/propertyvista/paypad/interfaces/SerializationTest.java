@@ -43,7 +43,7 @@ public class SerializationTest {
         RequestMessage r = new RequestMessage();
         r.setInterfaceEntity("PaymentProcessor1");
         r.setMerchantId("BIRCHWTT");
-        r.setPassword("top-secret");
+        r.setInterfaceEntityPassword("top-secret");
 
         {
             TransactionRequest ccpay = new TransactionRequest();

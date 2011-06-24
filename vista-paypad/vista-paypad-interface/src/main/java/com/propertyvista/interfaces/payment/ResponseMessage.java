@@ -37,10 +37,20 @@ public class ResponseMessage {
 
     }
 
+    /**
+     * Unique identifier for the XML message.
+     * Returned unchanged from the request.
+     */
     private String messageID;
 
+    /**
+     * Returned unchanged from the request.
+     */
     private String merchantId;
 
+    /**
+     * Status of the processing of complete request.
+     */
     private StatusCode status;
 
     private List<Response> responses;

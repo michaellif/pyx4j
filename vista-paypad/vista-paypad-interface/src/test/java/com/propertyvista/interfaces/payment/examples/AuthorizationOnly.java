@@ -28,7 +28,7 @@ public class AuthorizationOnly {
         r.setMerchantId("BIRCHWTT");
 
         r.setInterfaceEntity("PaymentProcessor1");
-        r.setPassword("top-secret");
+        r.setInterfaceEntityPassword("top-secret");
 
         TransactionRequest ccpay = new TransactionRequest();
         ccpay.setRequestID("payProc#1");

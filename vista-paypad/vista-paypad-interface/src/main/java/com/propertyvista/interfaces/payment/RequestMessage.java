@@ -24,6 +24,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class RequestMessage {
 
+    /**
+     * Optional unique identifier for the XML message
+     */
     private String messageID;
 
     private String interfaceEntity;
@@ -31,9 +34,19 @@ public class RequestMessage {
     /**
      * You must provide your password for every HTTP request.
      */
-    private String password;
+    private String interfaceEntityPassword;
 
+    /**
+     * The MerchantId or Terminal ID is your "account number" at Caledon. This "account number" is 8 characters long, and is often alphanumeric (EBOOKSTR or
+     * PIZZA001).
+     */
     private String merchantId;
+
+    /**
+     * For added security, your "account number" at Caledon can be set up with a password. This password, if enabled, is required for all transactions to this
+     * terminal ID.
+     */
+    private String merchantPassword;
 
     private List<Request> requests;
 
@@ -56,12 +69,12 @@ public class RequestMessage {
     }
 
     @XmlElement(required = true)
-    public String getPassword() {
-        return password;
+    public String getInterfaceEntityPassword() {
+        return interfaceEntityPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setInterfaceEntityPassword(String password) {
+        this.interfaceEntityPassword = password;
     }
 
     @XmlElement(required = true)
@@ -71,6 +84,15 @@ public class RequestMessage {
 
     public void setMerchantId(String merchantId) {
         this.merchantId = merchantId;
+    }
+
+    @XmlElement(required = false)
+    public String getMerchantPassword() {
+        return merchantPassword;
+    }
+
+    public void setMerchantPassword(String merchantPassword) {
+        this.merchantPassword = merchantPassword;
     }
 
     //@formatter:off

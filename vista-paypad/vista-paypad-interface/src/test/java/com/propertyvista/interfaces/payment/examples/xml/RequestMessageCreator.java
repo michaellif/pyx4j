@@ -32,7 +32,7 @@ public class RequestMessageCreator {
         RequestMessage r = new RequestMessage();
         r.setInterfaceEntity("PaymentProcessor1");
         r.setMerchantId("BIRCHWTT");
-        r.setPassword("top-secret");
+        r.setInterfaceEntityPassword("top-secret");
 
         {
             TransactionRequest ccpay = new TransactionRequest();
@@ -72,7 +72,7 @@ public class RequestMessageCreator {
         RequestMessage r = new RequestMessage();
         r.setInterfaceEntity("PaymentProcessor1");
         r.setMerchantId("BIRCHWTT");
-        r.setPassword("top-secret");
+        r.setInterfaceEntityPassword("top-secret");
         TokenActionRequest addToken = new TokenActionRequest();
         addToken.setAction(TokenAction.Add);
         addToken.setCode("DC1107");
@@ -88,7 +88,7 @@ public class RequestMessageCreator {
         RequestMessage r = new RequestMessage();
         r.setInterfaceEntity("PaymentProcessor1");
         r.setMerchantId("BIRCHWTT");
-        r.setPassword("top-secret");
+        r.setInterfaceEntityPassword("top-secret");
 
         TransactionRequest tcpay = new TransactionRequest();
         tcpay.setTxnType(TransactionRequest.TransactionType.Sale);
