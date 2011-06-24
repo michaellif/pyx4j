@@ -22,9 +22,10 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.activity.DashboardActivity;
+import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.LockerAreaCrudService;
@@ -57,7 +58,7 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
     @SuppressWarnings("unchecked")
     public BuildingActivityDelegate(BuildingView view, Place place) {
 
-        dashboard = new DashboardActivity(view.getDashboardView(), place);
+        dashboard = new DashboardViewActivity(view.getDashboardView(), new CrmSiteMap.Dashboard());
 
         unitLister = new ListerActivityBase<AptUnitDTO>(view.getUnitListerView(), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class),
                 AptUnitDTO.class);

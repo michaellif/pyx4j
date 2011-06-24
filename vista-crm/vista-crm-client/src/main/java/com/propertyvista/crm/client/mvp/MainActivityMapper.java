@@ -25,7 +25,6 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.AccountActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
-import com.propertyvista.crm.client.activity.DashboardActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.ReportActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerEditorActivity;
@@ -70,6 +69,8 @@ import com.propertyvista.crm.client.activity.crud.unit.UnitListerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyViewerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitViewerActivity;
+import com.propertyvista.crm.client.activity.dashboard.DashboardManagementViewActivity;
+import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
@@ -274,9 +275,14 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                    // - Other:
+// Dashboards:
+                } else if (place instanceof CrmSiteMap.Dashboard.DashboardManagement) {
+                    activity = new DashboardManagementViewActivity(place);
+                } else if (place instanceof CrmSiteMap.Dashboard.SystemDashboard) {
+                    activity = new DashboardViewActivity(place);
                 } else if (place instanceof CrmSiteMap.Dashboard) {
-                    activity = new DashboardActivity(place);
+                    activity = new DashboardViewActivity(place);
+// - Other:
                 } else if (place instanceof CrmSiteMap.Report) {
                     activity = new ReportActivity(place);
                 } else if (place instanceof CrmSiteMap.Account) {

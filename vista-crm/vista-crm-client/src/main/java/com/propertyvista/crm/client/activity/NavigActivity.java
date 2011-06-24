@@ -15,19 +15,26 @@ package com.propertyvista.crm.client.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.DashboardMetadataService;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter {
 
@@ -104,9 +111,34 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder = new NavigFolder("Dashboards", CrmImages.INSTANCE.dashboardsNormal(), CrmImages.INSTANCE.dashboardsHover(),
                 CrmImages.INSTANCE.dashboardsActive());
 
-        folder.addNavigItem(new CrmSiteMap.Dashboard());
+        folder.addNavigItem(new CrmSiteMap.Dashboard.DashboardManagement());
+        folder.addNavigItem(new CrmSiteMap.Dashboard.SystemDashboard());
+
+        fillDashboards(folder);
+
+        // fill shared and favourite dashboards:  
         list.add(folder);
 
         return list;
     }
+
+    private void fillDashboards(final NavigFolder folder) {
+        DashboardMetadataService service = GWT.create(DashboardMetadataService.class);
+        service.listMetadata(new AsyncCallback<Vector<DashboardMetadata>>() {
+            @Override
+            public void onSuccess(Vector<DashboardMetadata> result) {
+                for (DashboardMetadata dmd : result) {
+                    CrudAppPlace place = new CrmSiteMap.Dashboard();
+                    place.formDashboardPlace(dmd.getPrimaryKey());
+                    folder.addNavigItem(place);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        });
+    }
+
 }

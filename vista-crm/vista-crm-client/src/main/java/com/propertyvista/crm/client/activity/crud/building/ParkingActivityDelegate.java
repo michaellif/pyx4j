@@ -22,7 +22,7 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.activity.DashboardActivity;
+import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.ParkingView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.services.ParkingSpotCrudService;
@@ -37,7 +37,7 @@ public class ParkingActivityDelegate implements ParkingView.Presenter {
     @SuppressWarnings("unchecked")
     public ParkingActivityDelegate(ParkingView view, Place place) {
 
-        dashboard = new DashboardActivity(view.getDashboardView(), place);
+        dashboard = new DashboardViewActivity(view.getDashboardView(), place);
 
         spotLister = new ListerActivityBase<ParkingSpot>(view.getSpotView(), (AbstractCrudService<ParkingSpot>) GWT.create(ParkingSpotCrudService.class),
                 ParkingSpot.class);

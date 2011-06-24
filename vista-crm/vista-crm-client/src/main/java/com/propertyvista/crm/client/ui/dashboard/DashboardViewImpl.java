@@ -93,6 +93,7 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
         addNorth(actionsPanel, VistaCrmTheme.defaultHeaderHeight);
 
         addActionButton(btnSave = new Button(i18n.tr("Save")));
+        btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
         btnSave.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -118,9 +119,25 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
         dashboard.addEventHandler(new DashboardEvent() {
             @Override
             public void onEvent(Reason reason) {
-                // TODO just save immediately:
-                //presenter.save();
-                btnSave.setEnabled(true);
+                boolean save = true;
+                switch (reason) {
+                case addGadget:
+                case removeGadget:
+                    break;
+                case repositionGadget:
+                    break;
+                case newLayout:
+                    save = (DashboardViewImpl.this.dashboardMetadata.layoutType().getValue() != translateLayout(dashboard.getLayout()));
+                    break;
+                case updateGadget:
+                    break;
+                }
+
+                if (save) {
+                    // TODO just save immediately:
+                    //presenter.save();
+                    btnSave.setEnabled(true);
+                }
             }
         });
 
@@ -318,5 +335,27 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
         actionsPanel.insert(action, 1);
         actionsPanel.setCellWidth(action, "1%");
         action.getElement().getStyle().setMarginRight(1, Unit.EM);
+    }
+
+    protected LayoutType translateLayout(Layout layout) {
+        LayoutType layoutType = null;
+        switch (layout) {
+        case One:
+            layoutType = LayoutType.One;
+            break;
+        case Two11:
+            layoutType = LayoutType.Two11;
+            break;
+        case Two12:
+            layoutType = LayoutType.Two12;
+            break;
+        case Two21:
+            layoutType = LayoutType.Two21;
+            break;
+        case Three:
+            layoutType = LayoutType.Three;
+            break;
+        }
+        return layoutType;
     }
 }

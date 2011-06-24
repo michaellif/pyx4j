@@ -27,24 +27,47 @@ public class DashboardPreload extends AbstractDataPreloader {
 
     @Override
     public String create() {
-        // just create a demo dashboard:
+
+// first demo dashboard:        
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.name().setValue("Demo dashboard");
+        dmd = EntityFactory.create(DashboardMetadata.class);
+        dmd.name().setValue("System dashboard");
+        dmd.layoutType().setValue(LayoutType.One);
+
+        GadgetMetadata gmd;
+        gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.type().setValue(GadgetType.BuildingLister);
+        gmd.name().setValue("Building lister");
+        gmd.column().setValue(0);
+        dmd.gadgets().add(gmd);
+
+        gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.type().setValue(GadgetType.BarChartDisplay);
+        gmd.name().setValue("Bar Chart Demo");
+        gmd.column().setValue(0);
+        dmd.gadgets().add(gmd);
+
+        gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.type().setValue(GadgetType.LineChartDisplay);
+        gmd.name().setValue("Line Chart Demo");
+        gmd.column().setValue(0);
+        dmd.gadgets().add(gmd);
+
+        dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+
+        PersistenceServicesFactory.getPersistenceService().persist(dmd);
+
+// the second one:
+        dmd = EntityFactory.create(DashboardMetadata.class);
+        dmd.name().setValue("Building dashboard");
         dmd.layoutType().setValue(LayoutType.Two21);
         for (int i = 0; i < 3; ++i) {
-            GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
+            gmd = EntityFactory.create(GadgetMetadata.class);
             gmd.type().setValue(GadgetType.Demo);
             gmd.name().setValue("Gadget #" + i);
             gmd.column().setValue(1);
             dmd.gadgets().add(gmd);
         }
-
-        GadgetMetadata gmd;
-//        gmd = EntityFactory.create(GadgetMetadata.class);
-//        gmd.type().setValue(GadgetType.BuildingLister);
-//        gmd.name().setValue("Building lister");
-//        gmd.column().setValue(0);
-//        dmd.gadgets().add(gmd);
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.BarChartDisplay);
@@ -64,11 +87,11 @@ public class DashboardPreload extends AbstractDataPreloader {
         gmd.column().setValue(1);
         dmd.gadgets().add(gmd);
 
-        dmd.user().id().setValue(Key.DORMANT_KEY);
+        dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
 
         PersistenceServicesFactory.getPersistenceService().persist(dmd);
 
-        return "Created " + 1 + "demo dashboard";
+        return "Created " + 2 + "demo dashboards";
     }
 
     @SuppressWarnings("unchecked")

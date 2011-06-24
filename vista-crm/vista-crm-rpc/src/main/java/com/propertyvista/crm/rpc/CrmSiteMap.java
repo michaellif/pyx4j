@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.rpc;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
@@ -167,8 +168,24 @@ public class CrmSiteMap implements SiteMap {
     public static class Report extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Default Dashboard")
-    public static class Dashboard extends AppPlace {
+    @PlaceProperties(caption = "Dashboard")
+    @NavigationItem(navigLabel = "Dashboard")
+    public static class Dashboard extends CrudAppPlace {
+
+        @PlaceProperties(caption = "Dashboard Management")
+        @NavigationItem(navigLabel = "Manage Dashboards")
+        public static class DashboardManagement extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "System Dashboard")
+        @NavigationItem(navigLabel = "System Dashboard")
+        public static class SystemDashboard extends AppPlace {
+            public SystemDashboard() {
+                super();
+                putArg(CrudAppPlace.ARG_NAME_ITEM_ID, new Key(1).toString());
+            }
+        }
     }
 
     @NavigationItem(navigLabel = "User Account")

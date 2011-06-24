@@ -22,7 +22,7 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.activity.DashboardActivity;
+import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.LockerAreaView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.services.LockerCrudService;
@@ -37,7 +37,7 @@ public class LockerAreaActivityDelegate implements LockerAreaView.Presenter {
     @SuppressWarnings("unchecked")
     public LockerAreaActivityDelegate(LockerAreaView view, Place place) {
 
-        dashboard = new DashboardActivity(view.getDashboardView(), place);
+        dashboard = new DashboardViewActivity(view.getDashboardView(), place);
 
         lockerLister = new ListerActivityBase<Locker>(view.getLockerView(), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class), Locker.class);
     }

@@ -70,5 +70,4 @@ public class NavigFolder {
     public ImageResource getImageActive() {
         return active;
     }
-
 }
