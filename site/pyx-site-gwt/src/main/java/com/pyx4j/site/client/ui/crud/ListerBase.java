@@ -187,7 +187,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         getListPanel().getDataTable().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (getListPanel().getDataTable().getSelectedRow() > 0) {
+                if (getListPanel().getDataTable().getSelectedRow() >= 0) {
                     btnViewItem.setEnabled(true);
                 }
             }

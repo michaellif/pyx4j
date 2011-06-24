@@ -243,7 +243,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     public E getSelectedItem() {
         int selectedRow = getSelectedRow();
-        if (selectedRow > 0 && selectedRow < getDataTableModel().getData().size()) {
+        if (selectedRow >= 0 && selectedRow < getDataTableModel().getData().size()) {
             return getDataTableModel().getData().get(selectedRow).getEntity();
         }
         return null;

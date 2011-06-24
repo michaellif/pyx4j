@@ -31,7 +31,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.IViewerView;
-import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
@@ -50,7 +49,12 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     public ViewerActivityBase<E> withPlace(Place place) {
-        entityId = new Key(((AppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID));
+        entityId = null;
+        String id;
+        if ((id = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
+            entityId = new Key(id);
+        }
+        assert (entityId != null);
         return this;
     }
 
