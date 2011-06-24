@@ -33,11 +33,15 @@ public abstract class CrudAppPlace extends AppPlace {
     public static final String ARG_VALUE_NEW_ITEM = "new";
 
     public static enum Type {
-        editor, viewer, lister
+        editor, viewer, lister, dashboard, report
     }
 
     public CrudAppPlace() {
         setType(Type.lister);
+    }
+
+    public CrudAppPlace(Type type) {
+        setType(type);
     }
 
     public void setType(Type type) {
@@ -65,4 +69,10 @@ public abstract class CrudAppPlace extends AppPlace {
             putArg(ARG_NAME_PARENT_ID, parentID.toString());
         }
     }
+
+    public void formDashboardPlace(Key itemID) {
+        setType(Type.dashboard);
+        putArg(ARG_NAME_ITEM_ID, itemID.toString());
+    }
+
 }
