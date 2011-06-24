@@ -16,22 +16,24 @@ package com.propertyvista.crm.client.ui.gadgets;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.widgets.client.dashboard.IGadget;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
+import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 
-public abstract class GadgetBase implements IGadget {
+public abstract class GadgetBase implements IGadgetBase {
 
     protected static I18n i18n = I18nFactory.getI18n(GadgetBase.class);
 
     protected final GadgetMetadata gadgetMetadata;
 
-    public GadgetBase(GadgetMetadata gmd) {
-        super();
+    protected IGadgetPresenter presenter;
 
+    public GadgetBase(GadgetMetadata gmd) {
         if (gmd == null) {
             gmd = EntityFactory.create(GadgetMetadata.class);
             assert (gmd != null);
@@ -50,8 +52,38 @@ public abstract class GadgetBase implements IGadget {
      */
     protected abstract void selfInit(GadgetMetadata gmd);
 
+    @Override
+    public void setPresenter(IGadgetPresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    /*
+     * Persisting helpers - can be used from within derived class in order to save/load gadget setting,
+     * stored in GadgetMetadata separately. Can be called within/after setPresenter invoked!..
+     */
+    protected void saveSettings() {
+        assert (presenter != null);
+        presenter.save(gadgetMetadata.getPrimaryKey(), gadgetMetadata.settings());
+    }
+
+    protected void loadSettings() {
+        assert (presenter != null);
+        presenter.retrieve(gadgetMetadata.getPrimaryKey(), new AsyncCallback<AbstractGadgetSettings>() {
+            @Override
+            public void onSuccess(AbstractGadgetSettings result) {
+                gadgetMetadata.settings().set(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        });
+    }
+
     // info:
 
+    @Override
     public GadgetMetadata getGadgetMetadata() {
         return gadgetMetadata;
     }

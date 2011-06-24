@@ -30,6 +30,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardVeiwFactory;
 import com.propertyvista.crm.rpc.services.DashboardMetadataService;
+import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardViewActivity extends AbstractActivity implements DashboardView.Presenter {
@@ -104,7 +105,48 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
 
     @Override
     public void save() {
-        DashboardMetadata dmd = view.getData();
-        // TODO Auto-generated method stub
+        service.saveMetadata(new AsyncCallback<DashboardMetadata>() {
+            @Override
+            public void onSuccess(DashboardMetadata result) {
+                onSaveSuccess(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                onSaveFail(caught);
+            }
+        }, view.getData());
+    }
+
+    protected void onSaveSuccess(DashboardMetadata result) {
+        view.onSaveSuccess();
+    }
+
+    protected void onSaveFail(Throwable caught) {
+        if (!view.onSaveFail(caught)) {
+            throw new UnrecoverableClientError(caught);
+        }
+    }
+
+// GadgetPresenter:
+
+    @Override
+    public void save(Key gadgetId, AbstractGadgetSettings settings) {
+        service.saveSettings(new AsyncCallback<AbstractGadgetSettings>() {
+            @Override
+            public void onSuccess(AbstractGadgetSettings result) {
+                view.onSaveSuccess();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                onSaveFail(caught);
+            }
+        }, gadgetId, settings);
+    }
+
+    @Override
+    public void retrieve(Key gadgetId, AsyncCallback<AbstractGadgetSettings> callback) {
+        service.retrieveSettings(callback, gadgetId);
     }
 }

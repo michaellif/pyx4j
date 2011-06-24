@@ -58,6 +58,7 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
     @SuppressWarnings("unchecked")
     public BuildingActivityDelegate(BuildingView view, Place place) {
 
+        // TODO VladL - form correct path for Building dashboard here:
         dashboard = new DashboardViewActivity(view.getDashboardView(), new CrmSiteMap.Dashboard());
 
         unitLister = new ListerActivityBase<AptUnitDTO>(view.getUnitListerView(), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class),

@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.widgets.client.dashboard.Dashboard;
+import com.pyx4j.widgets.client.dashboard.Dashboard.IGadgetIterator;
 import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
 import com.pyx4j.widgets.client.dashboard.DashboardEvent;
 import com.pyx4j.widgets.client.dashboard.IGadget;
@@ -48,6 +49,7 @@ import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.client.ui.gadgets.AddGadgetBox;
 import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
+import com.propertyvista.crm.client.ui.gadgets.IGadgetBase;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
@@ -98,7 +100,6 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
             @Override
             public void onClick(ClickEvent event) {
                 presenter.save();
-                btnSave.setEnabled(false);
             }
         });
 
@@ -142,23 +143,12 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
         });
 
         if (!dashboardMetadata.isEmpty()) {
-            // decode dashboard layout:
-            if (dashboardMetadata.layoutType().getValue() == (LayoutType.One)) {
-                layouts.setLayout1();
-            } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two11) {
-                layouts.setLayout22();
-            } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two12) {
-                layouts.setLayout12();
-            } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Two21) {
-                layouts.setLayout21();
-            } else if (dashboardMetadata.layoutType().getValue() == LayoutType.Three) {
-                layouts.setLayout3();
-            }
-
+            layouts.setLayout(dashboardMetadata.layoutType().getValue());
             // fill the dashboard with gadgets:
-            for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
-                IGadget gadget = GadgetsFactory.createGadget(gmd.type().getValue(), gmd);
+            for (final GadgetMetadata gmd : dashboardMetadata.gadgets()) {
+                IGadgetBase gadget = GadgetsFactory.createGadget(gmd.type().getValue(), gmd);
                 if (gadget != null) {
+                    gadget.setPresenter(presenter);
                     dashboard.addGadget(gadget, gmd.column().getValue());
                     gadget.start(); // allow gadget execution... 
                 }
@@ -171,8 +161,63 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
 
     @Override
     public DashboardMetadata getData() {
-        // TODO Auto-generated method stub
+        dashboardMetadata.layoutType().setValue(translateLayout(dashboard.getLayout()));
+        dashboardMetadata.gadgets().clear();
+
+        IGadgetIterator it = dashboard.getGadgetIterator();
+        while (it.hasNext()) {
+            IGadget gadget = it.next();
+            if (gadget instanceof IGadgetBase) {
+                GadgetMetadata gmd = ((IGadgetBase) gadget).getGadgetMetadata(); // gadget meta should be up to date!.. 
+                gmd.column().setValue(it.getColumn()); // update current gadget column...
+                dashboardMetadata.gadgets().add(gmd);
+            }
+        }
+
         return dashboardMetadata;
+    }
+
+    @Override
+    public void onSaveSuccess() {
+        btnSave.setEnabled(false);
+    }
+
+    @Override
+    public boolean onSaveFail(Throwable caught) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    //
+    // Internals:
+    //
+
+    protected void addActionButton(Button action) {
+        actionsPanel.insert(action, 1);
+        actionsPanel.setCellWidth(action, "1%");
+        action.getElement().getStyle().setMarginRight(1, Unit.EM);
+    }
+
+    protected LayoutType translateLayout(Layout layout) {
+        LayoutType layoutType = null;
+        switch (layout) {
+        case One:
+            layoutType = LayoutType.One;
+            break;
+        case Two11:
+            layoutType = LayoutType.Two11;
+            break;
+        case Two12:
+            layoutType = LayoutType.Two12;
+            break;
+        case Two21:
+            layoutType = LayoutType.Two21;
+            break;
+        case Three:
+            layoutType = LayoutType.Three;
+            break;
+        }
+        return layoutType;
     }
 
     private class LayoutsSet extends HorizontalPanel {
@@ -188,7 +233,6 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
         final Image layout3 = new Image();
 
         public LayoutsSet() {
-            super();
             setDefaultImages();
 
             layout1.setTitle(i18n.tr("Switch layout"));
@@ -196,7 +240,7 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
             layout1.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    setLayout1();
+                    setLayout(LayoutType.One);
                 }
             });
 
@@ -205,7 +249,7 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
             layout12.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    setLayout12();
+                    setLayout(LayoutType.Two12);
                 }
             });
 
@@ -214,7 +258,7 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
             layout21.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    setLayout21();
+                    setLayout(LayoutType.Two21);
                 }
             });
 
@@ -223,7 +267,7 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
             layout22.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    setLayout22();
+                    setLayout(LayoutType.Two11);
                 }
             });
 
@@ -232,7 +276,7 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
             layout3.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    setLayout3();
+                    setLayout(LayoutType.Three);
                 }
             });
 
@@ -287,38 +331,33 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
             this.setSpacing(4);
         }
 
-        public void setLayout1() {
-            if (dashboard.setLayout(Layout.One)) {
+        public void setLayout(LayoutType layoutType) {
+            switch (layoutType) {
+            case One:
+                dashboard.setLayout(Layout.One);
                 setDefaultImages();
                 layout1.setResource(CrmImages.INSTANCE.dashboardLayout1_1());
-            }
-        }
-
-        public void setLayout12() {
-            if (dashboard.setLayout(Layout.Two12)) {
-                setDefaultImages();
-                layout12.setResource(CrmImages.INSTANCE.dashboardLayout12_1());
-            }
-        }
-
-        public void setLayout21() {
-            if (dashboard.setLayout(Layout.Two21)) {
-                setDefaultImages();
-                layout21.setResource(CrmImages.INSTANCE.dashboardLayout21_1());
-            }
-        }
-
-        public void setLayout22() {
-            if (dashboard.setLayout(Layout.Two11)) {
+                break;
+            case Two11:
+                dashboard.setLayout(Layout.Two11);
                 setDefaultImages();
                 layout22.setResource(CrmImages.INSTANCE.dashboardLayout22_1());
-            }
-        }
-
-        public void setLayout3() {
-            if (dashboard.setLayout(Layout.Three)) {
+                break;
+            case Two12:
+                dashboard.setLayout(Layout.Two12);
+                setDefaultImages();
+                layout12.setResource(CrmImages.INSTANCE.dashboardLayout12_1());
+                break;
+            case Two21:
+                dashboard.setLayout(Layout.Two21);
+                setDefaultImages();
+                layout21.setResource(CrmImages.INSTANCE.dashboardLayout21_1());
+                break;
+            case Three:
+                dashboard.setLayout(Layout.Three);
                 setDefaultImages();
                 layout3.setResource(CrmImages.INSTANCE.dashboardLayout3_1());
+                break;
             }
         }
 
@@ -329,33 +368,5 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
             layout22.setResource(CrmImages.INSTANCE.dashboardLayout22_0());
             layout3.setResource(CrmImages.INSTANCE.dashboardLayout3_0());
         }
-    }
-
-    protected void addActionButton(Button action) {
-        actionsPanel.insert(action, 1);
-        actionsPanel.setCellWidth(action, "1%");
-        action.getElement().getStyle().setMarginRight(1, Unit.EM);
-    }
-
-    protected LayoutType translateLayout(Layout layout) {
-        LayoutType layoutType = null;
-        switch (layout) {
-        case One:
-            layoutType = LayoutType.One;
-            break;
-        case Two11:
-            layoutType = LayoutType.Two11;
-            break;
-        case Two12:
-            layoutType = LayoutType.Two12;
-            break;
-        case Two21:
-            layoutType = LayoutType.Two21;
-            break;
-        case Three:
-            layoutType = LayoutType.Three;
-            break;
-        }
-        return layoutType;
     }
 }

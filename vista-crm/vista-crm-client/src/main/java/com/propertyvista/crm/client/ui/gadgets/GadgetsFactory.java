@@ -13,14 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
-import com.pyx4j.widgets.client.dashboard.IGadget;
-
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class GadgetsFactory {
 
-    public static IGadget createGadget(GadgetType type, GadgetMetadata metaData) {
+    public static IGadgetBase createGadget(GadgetType type, GadgetMetadata metaData) {
         switch (type) {
         case Demo:
             return new DemoGadget(metaData);

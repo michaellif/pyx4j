@@ -34,6 +34,9 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
     @Override
     public void listMetadata(AsyncCallback<Vector<DashboardMetadata>> callback) {
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
+
+// TODO VladS - something is wrong with User key while serialising?..
+//  com.pyx4j.rpc.shared.UnRecoverableRuntimeException: Unknown member DashboardMetadata/user/id/ in com.propertyvista.domain.dashboard.DashboardMetadata
 //        criteria.add(PropertyCriterion.eq(criteria.proto().user().id(), Key.DORMANT_KEY));
 
         Vector<DashboardMetadata> rc = EntityServicesImpl.secureQuery(criteria);
@@ -78,7 +81,6 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
 
         EntityServicesImpl.secureSave(dm);
         callback.onSuccess(dm);
-
     }
 
     @Override
@@ -91,7 +93,6 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
             Class<? extends AbstractGadgetSettings> settingsClass = ServerEntityFactory.entityClass(gm.settingsClass().getValue());
             callback.onSuccess(EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(settingsClass, gadgetMetadataId)));
         }
-
     }
 
     @Override
@@ -104,5 +105,4 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
         EntityServicesImpl.secureSave(settings);
         callback.onSuccess(settings);
     }
-
 }
