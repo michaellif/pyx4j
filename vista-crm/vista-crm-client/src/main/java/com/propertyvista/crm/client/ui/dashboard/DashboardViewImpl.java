@@ -64,6 +64,8 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
 
     private static I18n i18n = I18nFactory.getI18n(DashboardViewImpl.class);
 
+    private final CrmHeaderDecorator header;
+
     private final LayoutsSet layouts = new LayoutsSet();
 
     private final ScrollPanel scroll = new ScrollPanel();
@@ -85,7 +87,7 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
     public DashboardViewImpl(String caption) {
         super(Unit.EM);
 
-        addNorth(new CrmHeaderDecorator(caption, layouts), VistaCrmTheme.defaultHeaderHeight);
+        addNorth(header = new CrmHeaderDecorator(caption, layouts), VistaCrmTheme.defaultHeaderHeight);
 
         actionsPanel = new HorizontalPanel();
         actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
@@ -143,6 +145,7 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
         });
 
         if (!dashboardMetadata.isEmpty()) {
+            header.setCaption(dashboardMetadata.name().getStringView());
             layouts.setLayout(dashboardMetadata.layoutType().getValue());
             // fill the dashboard with gadgets:
             for (final GadgetMetadata gmd : dashboardMetadata.gadgets()) {

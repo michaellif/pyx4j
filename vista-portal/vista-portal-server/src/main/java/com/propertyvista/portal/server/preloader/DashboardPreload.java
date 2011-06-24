@@ -39,22 +39,27 @@ public class DashboardPreload extends AbstractDataPreloader {
         gmd.type().setValue(GadgetType.BuildingLister);
         gmd.name().setValue("Building lister");
         gmd.column().setValue(0);
+
+        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.gadgets().add(gmd);
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.BarChartDisplay);
         gmd.name().setValue("Bar Chart Demo");
         gmd.column().setValue(0);
+
+        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.gadgets().add(gmd);
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.LineChartDisplay);
         gmd.name().setValue("Line Chart Demo");
         gmd.column().setValue(0);
+
+        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.gadgets().add(gmd);
 
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-
         PersistenceServicesFactory.getPersistenceService().persist(dmd);
 
 // the second one:
@@ -66,6 +71,8 @@ public class DashboardPreload extends AbstractDataPreloader {
             gmd.type().setValue(GadgetType.Demo);
             gmd.name().setValue("Gadget #" + i);
             gmd.column().setValue(1);
+
+            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
             dmd.gadgets().add(gmd);
         }
 
@@ -73,22 +80,27 @@ public class DashboardPreload extends AbstractDataPreloader {
         gmd.type().setValue(GadgetType.BarChartDisplay);
         gmd.name().setValue("Bar Chart Demo");
         gmd.column().setValue(0);
+
+        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.gadgets().add(gmd);
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.LineChartDisplay);
         gmd.name().setValue("Line Chart Demo");
         gmd.column().setValue(0);
+
+        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.gadgets().add(gmd);
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.PieChartDisplay);
         gmd.name().setValue("Pie Chart Demo");
         gmd.column().setValue(1);
+
+        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.gadgets().add(gmd);
 
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-
         PersistenceServicesFactory.getPersistenceService().persist(dmd);
 
         return "Created " + 2 + "demo dashboards";

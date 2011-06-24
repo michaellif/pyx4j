@@ -104,7 +104,8 @@ public abstract class GadgetBase implements IGadgetBase {
         return (gadgetMetadata.description().isNull() ? "" : gadgetMetadata.description().getValue());
     }
 
-    // runtime scope:
+    // runtime:
+
     @Override
     public void start() {
     }
@@ -163,5 +164,4 @@ public abstract class GadgetBase implements IGadgetBase {
     @Override
     public void onDelete() {
     }
-
 }
