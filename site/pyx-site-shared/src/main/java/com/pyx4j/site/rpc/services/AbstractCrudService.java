@@ -36,6 +36,7 @@ public interface AbstractCrudService<EditableEntity extends IEntity> extends ISe
 
     public void save(AsyncCallback<EditableEntity> callback, EditableEntity editableEntity);
 
-    public void search(AsyncCallback<EntitySearchResult<EditableEntity>> callback, EntitySearchCriteria<EditableEntity> criteria);
+//TODO - VladL :extract 'search' to ListerService (it'll be used by Listers) and inherit AbstractCrudService from it.     
 
+    public void search(AsyncCallback<EntitySearchResult<EditableEntity>> callback, EntitySearchCriteria<EditableEntity> criteria);
 }
