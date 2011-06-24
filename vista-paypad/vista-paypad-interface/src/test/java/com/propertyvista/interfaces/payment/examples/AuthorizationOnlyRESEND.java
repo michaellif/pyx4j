@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-23
+ * Created on 2011-06-24
  * @author vlads
  * @version $Id$
  */
@@ -21,7 +21,7 @@ import com.propertyvista.interfaces.payment.ResponseMessage;
 import com.propertyvista.interfaces.payment.TransactionRequest;
 import com.propertyvista.interfaces.payment.examples.utils.ExampleClient;
 
-public class AuthorizationOnly {
+public class AuthorizationOnlyRESEND {
 
     public static void main(String[] args) throws Exception {
         RequestMessage r = new RequestMessage();
@@ -31,8 +31,9 @@ public class AuthorizationOnly {
         r.setInterfaceEntityPassword("top-secret");
 
         TransactionRequest ccReq = new TransactionRequest();
-        ccReq.setRequestID("payProc#1");
+        ccReq.setRequestID("payProc#1r");
         ccReq.setTxnType(TransactionRequest.TransactionType.AuthorizeOnly);
+        ccReq.setResend(true);
         CreditCardInfo cc = new CreditCardInfo();
         cc.setCardNumber("5191111111111111");
         cc.setExpiryDate(new SimpleDateFormat("yyyy-MM").parse("2014-12"));

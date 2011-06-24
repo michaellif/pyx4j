@@ -23,7 +23,7 @@ import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
 import com.propertyvista.payment.Token;
 
-public class CaledonTokenTest extends CaledonTestCase {
+public class CaledonTokenTest extends CaledonTestBase {
 
     private final static Logger log = LoggerFactory.getLogger(CaledonTokenTest.class);
 

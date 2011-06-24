@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.Merchant;
 
-public abstract class CaledonTestCase extends TestCase {
+public abstract class CaledonTestBase extends TestCase {
 
     protected static Merchant testMerchant = createTestCaledonMerchant(TestData.TEST_TERMID);
 

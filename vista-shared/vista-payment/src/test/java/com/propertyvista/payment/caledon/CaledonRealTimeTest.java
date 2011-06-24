@@ -22,7 +22,7 @@ import com.propertyvista.payment.PaymentProcessingException;
 import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
 
-public class CaledonRealTimeTest extends CaledonTestCase {
+public class CaledonRealTimeTest extends CaledonTestBase {
 
     private static PaymentRequest createRequest(String creditCardNumber, String exp, double amount) {
         PaymentRequest request = EntityFactory.create(PaymentRequest.class);
