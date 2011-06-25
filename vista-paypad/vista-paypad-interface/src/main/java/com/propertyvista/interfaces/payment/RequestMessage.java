@@ -16,6 +16,9 @@ package com.propertyvista.interfaces.payment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
@@ -27,25 +30,35 @@ public class RequestMessage {
     /**
      * Optional unique identifier for the XML message
      */
+    @Size(max = 60)
     private String messageID;
 
+    @Size(max = 60)
+    @NotNull
     private String interfaceEntity;
 
     /**
      * You must provide your password for every HTTP request.
      */
+    @Size(max = 60)
+    @NotNull
     private String interfaceEntityPassword;
 
     /**
      * The MerchantId or Terminal ID is your "account number" at Caledon. This "account number" is 8 characters long, and is often alphanumeric (EBOOKSTR or
      * PIZZA001).
      */
+    @Size(max = 8)
+    @NotNull
+    @Pattern(regexp = "[A-Za-z0-9]+")
     private String merchantId;
 
     /**
      * For added security, your "account number" at Caledon can be set up with a password. This password, if enabled, is required for all transactions to this
      * terminal ID.
      */
+    @Size(max = 16)
+    @Pattern(regexp = "[A-Za-z0-9]+")
     private String merchantPassword;
 
     private List<Request> requests;

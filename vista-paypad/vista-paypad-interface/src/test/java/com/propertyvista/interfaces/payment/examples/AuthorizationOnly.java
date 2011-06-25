@@ -40,6 +40,7 @@ public class AuthorizationOnly {
 
         ccReq.setAmount(1000);
         ccReq.setReference("1234");
+        ccReq.setEcho("sys-000/001");
 
         r.addRequest(ccReq);
 
@@ -51,5 +52,6 @@ public class AuthorizationOnly {
         System.out.println("response Code   " + response.getResponse().get(0).getCode());
         System.out.println("response Auth   " + response.getResponse().get(0).getAuth());
         System.out.println("response Text   " + response.getResponse().get(0).getText());
+        System.out.println("response Echo   " + response.getResponse().get(0).getEcho());
     }
 }

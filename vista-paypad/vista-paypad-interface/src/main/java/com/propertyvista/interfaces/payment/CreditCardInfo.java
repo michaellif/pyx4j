@@ -15,6 +15,9 @@ package com.propertyvista.interfaces.payment;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -24,6 +27,9 @@ public class CreditCardInfo extends PaymentInstrument {
     /**
      * The number on the card, no spaces, dashes, hyphens or any other punctuation are allowed.
      */
+    @Size(max = 25)
+    @NotNull
+    @Pattern(regexp = "\\d+")
     private String cardNumber;
 
     /**
@@ -31,6 +37,7 @@ public class CreditCardInfo extends PaymentInstrument {
      * 
      * Day value in java.util.Date are ignored.
      */
+    @NotNull
     private Date expiryDate;
 
     @XmlElement(required = true)

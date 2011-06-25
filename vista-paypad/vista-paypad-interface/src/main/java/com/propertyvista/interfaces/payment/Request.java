@@ -13,18 +13,23 @@
  */
 package com.propertyvista.interfaces.payment;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 @XmlSeeAlso({ TransactionRequest.class, TokenActionRequest.class })
 public abstract class Request {
 
+    @Size(max = 60)
     private String requestID;
 
     /**
      * Data that is in this field is returned in the reply. This can be useful for transaction tracking in single-process or batch applications.
      * This field is returned in the 'ECHO' field of the transaction Response.
      */
+    @Size(max = 60)
+    @Pattern(regexp = "[A-Za-z0-9-/]+")
     private String echo;
 
     @XmlElement(required = false)

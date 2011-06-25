@@ -13,6 +13,9 @@
  */
 package com.propertyvista.interfaces.payment;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 
@@ -64,6 +67,7 @@ public class TransactionRequest extends Request {
     /**
      * This is the kind of transaction you are performing.
      */
+    @NotNull
     private TransactionType txnType;
 
     /**
@@ -75,6 +79,7 @@ public class TransactionRequest extends Request {
      */
     private Boolean resend;
 
+    @NotNull
     private PaymentInstrument paymentInstrument;
 
     /**
@@ -82,12 +87,16 @@ public class TransactionRequest extends Request {
      * purchase. This value appears as additional characters following the credit card number which is printed within the signature panel on the back of the
      * card.
      */
+    @Size(min = 3, max = 4)
+    @Pattern(regexp = "\\d+")
     private String cvv;
 
     /**
      * Address Verification Service (AVS) allows cardholder address information to be included with a credit card transaction for comparison with the address
      * that the card issuer has on file.
      */
+    @Size(max = 29)
+    @Pattern(regexp = "[A-Za-z0-9]+")
     private String avs;
 
     /**
@@ -96,6 +105,8 @@ public class TransactionRequest extends Request {
      */
     private float amount;
 
+    @Size(max = 60)
+    @Pattern(regexp = "[A-Za-z0-9-/]+")
     private String reference;
 
     @XmlElement(required = true)
@@ -118,8 +129,8 @@ public class TransactionRequest extends Request {
 
     //@formatter:off
     @XmlElements({ 
-        @XmlElement(name = "creditCard", type = CreditCardInfo.class), 
-        @XmlElement(name = "token", type = TokenPaymentInstrument.class)})
+        @XmlElement(name = "creditCard", type = CreditCardInfo.class, required = true), 
+        @XmlElement(name = "token", type = TokenPaymentInstrument.class, required = true)})
     //@formatter:on    
     public PaymentInstrument getPaymentInstrument() {
         return paymentInstrument;

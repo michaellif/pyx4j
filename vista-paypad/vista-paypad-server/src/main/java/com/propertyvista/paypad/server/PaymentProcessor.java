@@ -13,6 +13,13 @@
  */
 package com.propertyvista.paypad.server;
 
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +43,19 @@ public class PaymentProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(PaymentProcessor.class);
 
-    public static ResponseMessage execute(RequestMessage requestMessage) {
+    private final Validator validator;
+
+    PaymentProcessor() {
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+    }
+
+    public <T> boolean isValid(T r) {
+        Set<ConstraintViolation<T>> constraintViolations = validator.validate(r);
+        return constraintViolations.size() == 0;
+    }
+
+    public ResponseMessage execute(RequestMessage requestMessage) {
         ResponseMessage response = new ResponseMessage();
         response.setMessageID(requestMessage.getMessageID());
         response.setMerchantId(requestMessage.getMerchantId());
@@ -49,13 +68,14 @@ public class PaymentProcessor {
         return response;
     }
 
-    private static Response execute(RequestMessage requestMessage, Request request) {
+    private Response execute(RequestMessage requestMessage, Request request) {
         Response response = new Response();
         response.setRequestID(request.getRequestID());
-        response.setEcho(request.getEcho());
 
         try {
-            if (request instanceof TokenActionRequest) {
+            if (!isValid(request)) {
+                setErrorCode(response, "7000", "MALFORMED REQUEST");
+            } else if (request instanceof TokenActionRequest) {
                 executeTokenActionRequest(requestMessage, (TokenActionRequest) request, response);
             } else if (request instanceof TransactionRequest) {
                 executeTransactionRequest(requestMessage, (TransactionRequest) request, response);
@@ -75,7 +95,7 @@ public class PaymentProcessor {
         response.setText(text);
     }
 
-    private static void executeTokenActionRequest(RequestMessage requestMessage, TokenActionRequest tokenActionRequest, Response response) {
+    private void executeTokenActionRequest(RequestMessage requestMessage, TokenActionRequest tokenActionRequest, Response response) {
         CaledonHttpClient client = new CaledonHttpClient();
         CaledonRequestToken crequest = new CaledonRequestToken();
         crequest.terminalID = requestMessage.getMerchantId();
@@ -83,6 +103,7 @@ public class PaymentProcessor {
 
         crequest.transactionType = CaledonTransactionType.TOKEN.getValue();
         crequest.token = tokenActionRequest.getCode();
+        crequest.echo = tokenActionRequest.getEcho();
 
         switch (tokenActionRequest.getAction()) {
         case Add:
@@ -103,6 +124,10 @@ public class PaymentProcessor {
         }
 
         if ((tokenActionRequest.getAction() == TokenAction.Add) || (tokenActionRequest.getAction() == TokenAction.Update)) {
+            if (!isValid(tokenActionRequest.getCard())) {
+                setErrorCode(response, "7000", "MALFORMED REQUEST");
+                return;
+            }
             crequest.creditCardNumber = tokenActionRequest.getCard().getCardNumber();
             crequest.setExpiryDate(tokenActionRequest.getCard().getExpiryDate());
             crequest.tokenRef = tokenActionRequest.getReference();
@@ -115,14 +140,17 @@ public class PaymentProcessor {
         response.setEcho(cresponse.echo);
     }
 
-    private static void executeTransactionRequest(RequestMessage requestMessage, TransactionRequest transactionRequest, Response response) {
+    private void executeTransactionRequest(RequestMessage requestMessage, TransactionRequest transactionRequest, Response response) {
         CaledonHttpClient client = new CaledonHttpClient();
 
         CaledonRequest crequest = new CaledonRequest();
         crequest.terminalID = requestMessage.getMerchantId();
         crequest.password = requestMessage.getMerchantPassword();
+        crequest.echo = transactionRequest.getEcho();
 
-        if (transactionRequest.getPaymentInstrument() instanceof TokenPaymentInstrument) {
+        if (!isValid(transactionRequest.getPaymentInstrument())) {
+            setErrorCode(response, "7000", "MALFORMED REQUEST");
+        } else if (transactionRequest.getPaymentInstrument() instanceof TokenPaymentInstrument) {
             crequest.token = ((TokenPaymentInstrument) transactionRequest.getPaymentInstrument()).getCode();
         } else if (transactionRequest.getPaymentInstrument() instanceof CreditCardInfo) {
             crequest.creditCardNumber = ((CreditCardInfo) transactionRequest.getPaymentInstrument()).getCardNumber();

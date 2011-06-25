@@ -16,6 +16,7 @@ package com.propertyvista.interfaces.payment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -41,11 +42,13 @@ public class ResponseMessage {
      * Unique identifier for the XML message.
      * Returned unchanged from the request.
      */
+    @Size(max = 60)
     private String messageID;
 
     /**
      * Returned unchanged from the request.
      */
+    @Size(max = 8)
     private String merchantId;
 
     /**

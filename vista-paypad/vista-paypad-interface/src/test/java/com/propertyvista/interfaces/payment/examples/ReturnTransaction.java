@@ -39,7 +39,7 @@ public class ReturnTransaction {
         ccReq.setPaymentInstrument(cc);
 
         ccReq.setAmount(2500);
-        ccReq.setReference("RETURN DEMO");
+        ccReq.setReference("RETURNDEMO");
 
         r.addRequest(ccReq);
 

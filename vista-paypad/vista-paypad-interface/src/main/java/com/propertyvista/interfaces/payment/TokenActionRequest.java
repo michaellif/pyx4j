@@ -13,6 +13,9 @@
  */
 package com.propertyvista.interfaces.payment;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 
 public class TokenActionRequest extends Request {
@@ -44,13 +47,20 @@ public class TokenActionRequest extends Request {
     /**
      * This field is used to determine what action is to be performed for the token.
      */
+    @NotNull
     private TokenAction action;
 
+    @Size(max = 30)
+    @NotNull
+    @Pattern(regexp = "[A-Za-z0-9-]+")
     private String code;
 
     /**
      * A reference data field that can be associated with the token.
      */
+    //size TBD
+    @Size(max = 30)
+    @Pattern(regexp = "[A-Za-z0-9-/]+")
     private String reference;
 
     private CreditCardInfo card;

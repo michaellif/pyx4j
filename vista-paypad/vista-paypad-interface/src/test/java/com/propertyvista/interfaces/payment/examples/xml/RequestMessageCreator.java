@@ -46,7 +46,7 @@ public class RequestMessageCreator {
             ccpay.setPaymentInstrument(cc);
 
             ccpay.setAmount(900);
-            ccpay.setReference("August Rent, 46 Yonge, Appt 18");
+            ccpay.setReference("AugustRent46YongeAppt18");
 
             r.addRequest(ccpay);
         }
@@ -61,7 +61,7 @@ public class RequestMessageCreator {
             ccpay.setPaymentInstrument(cc);
 
             ccpay.setAmount(940);
-            ccpay.setReference("August Rent, 46 Yonge, Appt 19");
+            ccpay.setReference("AugustRent46YongeAppt19");
 
             r.addRequest(ccpay);
         }
@@ -80,7 +80,7 @@ public class RequestMessageCreator {
         TokenActionRequest addToken = new TokenActionRequest();
         addToken.setAction(TokenAction.Add);
         addToken.setCode("DC1107");
-        addToken.setReference("46 Yonge, Appt 18");
+        addToken.setReference("46YongeAppt18");
         addToken.setCard(new CreditCardInfo());
         addToken.getCard().setCardNumber("6011111111111117");
         addToken.getCard().setExpiryDate(new Date());
@@ -104,7 +104,7 @@ public class RequestMessageCreator {
         tcpay.setPaymentInstrument(token);
 
         tcpay.setAmount(500.78f);
-        tcpay.setReference("September Rent, 14 Yonge, Appt 456");
+        tcpay.setReference("SeptemberRent14YongeAppt456");
         r.addRequest(tcpay);
 
         MarshallUtil.marshal(r, System.out);

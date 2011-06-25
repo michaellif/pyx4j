@@ -13,6 +13,8 @@
  */
 package com.propertyvista.interfaces.payment;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 
 public class Response {
@@ -21,11 +23,13 @@ public class Response {
      * If you submitted a Request with the 'requestID' field, this field will be present in the reply and will contain the exact data you placed in the
      * requestID field of the Request.
      */
+    @Size(max = 60)
     private String requestID;
 
     /**
      * This is the 4-digit response code from the transaction. "0000" constitutes a successful transaction, and any other 4-digit code constitutes a failure.
      */
+    @Size(max = 4)
     private String code;
 
     /**
@@ -45,12 +49,15 @@ public class Response {
      * For transactions where AVS is used (Sale, Pre-Authorization, Auth Only) and AVS data has been provided, this field returns the AVS result code. This code
      * is a 1-letter response indicating the closeness of the address match.
      */
+    @Size(max = 1)
     private String avsResultCode;
 
     /**
      * If you submitted a Request with the 'ECHO' field, this field will be present in the reply and will contain the exact data you placed in the ECHO
      * field of the Request.
      */
+    @Size(max = 60)
+    @Pattern(regexp = "[A-Za-z0-9-/]+")
     private String echo;
 
     @XmlElement(required = false)

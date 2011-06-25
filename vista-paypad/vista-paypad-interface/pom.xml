@@ -20,6 +20,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+        </dependency>
+        
 		<!--  DO not add any dependencies form our projects here, since this is standalone module -->
 
         <dependency>

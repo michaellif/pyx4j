@@ -45,7 +45,7 @@ public class TokenTransactions {
         addToken.setReference("JSMITH-MCRD");
         addToken.setCard(new CreditCardInfo());
         addToken.getCard().setCardNumber("5191111111111111");
-        addToken.getCard().setExpiryDate(new SimpleDateFormat("yyyy-MM").parse("2012-13"));
+        addToken.getCard().setExpiryDate(new SimpleDateFormat("yyyy-MM").parse("2012-12"));
         r.addRequest(addToken);
 
         ResponseMessage response = ExampleClient.execute(r);
@@ -72,7 +72,7 @@ public class TokenTransactions {
         pReq.setPaymentInstrument(token);
 
         pReq.setAmount(142.59f);
-        pReq.setReference("TOKEN TRANS EXAMPLE");
+        pReq.setReference("TOKENTRANSEXAMPLE");
 
         r.addRequest(pReq);
 
