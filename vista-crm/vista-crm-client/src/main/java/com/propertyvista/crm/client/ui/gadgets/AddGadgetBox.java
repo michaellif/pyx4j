@@ -32,11 +32,11 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.dashboard.IGadget;
-import com.pyx4j.widgets.client.dialog.DialogPanel;
+import com.pyx4j.widgets.client.dialog.DialogPanelNew;
 
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
-public class AddGadgetBox extends DialogPanel {
+public class AddGadgetBox extends DialogPanelNew {
 
     private final I18n i18n = I18nFactory.getI18n(AddGadgetBox.class);
 
@@ -70,14 +70,14 @@ public class AddGadgetBox extends DialogPanel {
         cell.getStyle().setBorderColor("#bbb");
 
         HorizontalPanel buttons = new HorizontalPanel();
-        buttons.add(new Button("Add", new ClickHandler() {
+        buttons.add(new Button(i18n.tr("Add"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 createSelectedGadget();
                 hide();
             }
         }));
-        buttons.add(new Button("Cancel", new ClickHandler() {
+        buttons.add(new Button(i18n.tr("Cancel"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 hide();
@@ -92,7 +92,7 @@ public class AddGadgetBox extends DialogPanel {
         vPanel.setSpacing(8);
         vPanel.setSize("100%", "100%");
 
-        setWidget(vPanel);
+        setContentWidget(vPanel);
         setSize("400px", "150px");
 //        getElement().getStyle().setProperty("minWidth", "400px");
 //        getElement().getStyle().setProperty("minHeight", "150px");

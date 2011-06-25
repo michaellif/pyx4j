@@ -19,4 +19,5 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public interface DashboardEditor extends IEditorView<DashboardMetadata> {
 
+    DashboardMetadata.Type showSelectTypePopUp();
 }

@@ -13,12 +13,92 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
+import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.VerticalPanel;
+
+import com.pyx4j.widgets.client.dialog.DialogPanelNew;
+
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.Type;
 
 public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata> implements DashboardEditor {
     public DashboardEditorImpl() {
         super(CrmSiteMap.Dashboard.Edit.class, new DashboardEditorForm());
+    }
+
+    @Override
+    public Type showSelectTypePopUp() {
+
+        final SelectTypeBox box = new SelectTypeBox();
+        box.setPopupPositionAndShow(new PositionCallback() {
+            @Override
+            public void setPosition(int offsetWidth, int offsetHeight) {
+                box.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 2);
+            }
+        });
+        box.addCloseHandler(new CloseHandler<PopupPanel>() {
+            @Override
+            public void onClose(CloseEvent<PopupPanel> event) {
+                box.getSelectedType();
+            }
+        });
+
+        box.show();
+        return box.getSelectedType();
+    }
+
+    private class SelectTypeBox extends DialogPanelNew {
+
+        private final I18n i18n = I18nFactory.getI18n(SelectTypeBox.class);
+
+        private final RadioButton system;
+
+        public SelectTypeBox() {
+            super(false, true);
+            setCaption(i18n.tr("Select Dashboard Type"));
+
+            Button btnOk = new Button(i18n.tr("Ok"), new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    hide();
+                }
+            });
+
+            HorizontalPanel hPanel = new HorizontalPanel();
+            hPanel.add(system = new RadioButton("DashboardType", Type.system.toString()));
+            hPanel.add(new RadioButton("DashboardType", Type.building.toString()));
+            hPanel.setSpacing(8);
+            hPanel.setWidth("100%");
+
+            VerticalPanel vPanel = new VerticalPanel();
+            vPanel.add(hPanel);
+            vPanel.add(btnOk);
+            vPanel.setCellHorizontalAlignment(btnOk, HasHorizontalAlignment.ALIGN_CENTER);
+            vPanel.setSpacing(8);
+            vPanel.setSize("100%", "100%");
+
+            system.setValue(true);
+            setContentWidget(vPanel);
+            setSize("200px", "100px");
+        }
+
+        public Type getSelectedType() {
+            return (system.getValue() ? Type.system : Type.building);
+        }
     }
 }

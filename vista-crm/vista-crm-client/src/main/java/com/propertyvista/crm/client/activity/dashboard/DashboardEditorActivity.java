@@ -23,6 +23,7 @@ import com.propertyvista.crm.client.ui.dashboard.DashboardEditor;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.DashboardCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadata> {
 
@@ -31,5 +32,13 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
         super((DashboardEditor) DashboardViewFactory.instance(DashboardEditor.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(DashboardCrudService.class), DashboardMetadata.class);
         withPlace(place);
+    }
+
+    @Override
+    protected void initNewItem(DashboardMetadata entity) {
+        if (isNewItem()) {
+            entity.type().setValue(((DashboardEditor) view).showSelectTypePopUp());
+            entity.layoutType().setValue(LayoutType.Two12);
+        }
     }
 }
