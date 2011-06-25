@@ -79,6 +79,8 @@ public class PaymentProcessor {
         CaledonHttpClient client = new CaledonHttpClient();
         CaledonRequestToken crequest = new CaledonRequestToken();
         crequest.terminalID = requestMessage.getMerchantId();
+        crequest.password = requestMessage.getMerchantPassword();
+
         crequest.transactionType = CaledonTransactionType.TOKEN.getValue();
         crequest.token = tokenActionRequest.getCode();
 
@@ -110,6 +112,7 @@ public class PaymentProcessor {
 
         response.setCode(cresponse.code);
         response.setText(cresponse.text);
+        response.setEcho(cresponse.echo);
     }
 
     private static void executeTransactionRequest(RequestMessage requestMessage, TransactionRequest transactionRequest, Response response) {
@@ -117,6 +120,7 @@ public class PaymentProcessor {
 
         CaledonRequest crequest = new CaledonRequest();
         crequest.terminalID = requestMessage.getMerchantId();
+        crequest.password = requestMessage.getMerchantPassword();
 
         if (transactionRequest.getPaymentInstrument() instanceof TokenPaymentInstrument) {
             crequest.token = ((TokenPaymentInstrument) transactionRequest.getPaymentInstrument()).getCode();
@@ -160,6 +164,7 @@ public class PaymentProcessor {
         response.setCode(cresponse.code);
         response.setText(cresponse.text);
         response.setAuth(cresponse.authorizationNumber);
+        response.setEcho(cresponse.echo);
 
     }
 }

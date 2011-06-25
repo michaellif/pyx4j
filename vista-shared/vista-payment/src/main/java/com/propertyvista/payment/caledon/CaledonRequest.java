@@ -22,6 +22,9 @@ public class CaledonRequest {
     @HttpRequestField("TERMID")
     public String terminalID;
 
+    @HttpRequestField("PASS")
+    public String password;
+
     @HttpRequestField("CARD")
     public String creditCardNumber;
 
@@ -55,4 +58,11 @@ public class CaledonRequest {
 
     @HttpRequestField("ECHO")
     public String echo;
+
+    @HttpRequestField("CVV2")
+    public String cvv;
+
+    @HttpRequestField("AVS")
+    public String avs;
+
 }

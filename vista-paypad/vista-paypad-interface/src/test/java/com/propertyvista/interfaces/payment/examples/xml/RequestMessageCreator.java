@@ -20,10 +20,9 @@ import javax.xml.bind.JAXBException;
 import com.propertyvista.interfaces.payment.CreditCardInfo;
 import com.propertyvista.interfaces.payment.RequestMessage;
 import com.propertyvista.interfaces.payment.TokenActionRequest;
+import com.propertyvista.interfaces.payment.TokenActionRequest.TokenAction;
 import com.propertyvista.interfaces.payment.TokenPaymentInstrument;
 import com.propertyvista.interfaces.payment.TransactionRequest;
-import com.propertyvista.interfaces.payment.TokenActionRequest.TokenAction;
-import com.propertyvista.interfaces.payment.TransactionRequest.TransactionType;
 import com.propertyvista.interfaces.payment.examples.utils.MarshallUtil;
 
 public class RequestMessageCreator {
@@ -31,8 +30,10 @@ public class RequestMessageCreator {
     public static void makeSaleTransaction() throws JAXBException {
         RequestMessage r = new RequestMessage();
         r.setInterfaceEntity("PaymentProcessor1");
-        r.setMerchantId("BIRCHWTT");
         r.setInterfaceEntityPassword("top-secret");
+
+        r.setMerchantId("TESTMERC");
+        r.setMerchantPassword("classified");
 
         {
             TransactionRequest ccpay = new TransactionRequest();
@@ -71,8 +72,11 @@ public class RequestMessageCreator {
     public static void makeTokenAddTransction() throws JAXBException {
         RequestMessage r = new RequestMessage();
         r.setInterfaceEntity("PaymentProcessor1");
-        r.setMerchantId("BIRCHWTT");
         r.setInterfaceEntityPassword("top-secret");
+
+        r.setMerchantId("TESTMERC");
+        r.setMerchantPassword("classified");
+
         TokenActionRequest addToken = new TokenActionRequest();
         addToken.setAction(TokenAction.Add);
         addToken.setCode("DC1107");
@@ -87,8 +91,10 @@ public class RequestMessageCreator {
     public static void makeSaleUsingToken() throws JAXBException {
         RequestMessage r = new RequestMessage();
         r.setInterfaceEntity("PaymentProcessor1");
-        r.setMerchantId("BIRCHWTT");
         r.setInterfaceEntityPassword("top-secret");
+
+        r.setMerchantId("TESTMERC");
+        r.setMerchantPassword("classified");
 
         TransactionRequest tcpay = new TransactionRequest();
         tcpay.setTxnType(TransactionRequest.TransactionType.Sale);
