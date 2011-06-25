@@ -90,6 +90,8 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                             ((IEntity) entity.getMember(ownerName)).setPrimaryKey(parentID);
                         }
                     }
+
+                    initNewItem(entity); // let descendant to initialise item... 
                     view.populate(entity);
                 }
 
@@ -192,5 +194,8 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     protected boolean isNewItem() {
         assert (entityID != null);
         return (entityID.toString().equals(CrudAppPlace.ARG_VALUE_NEW_ITEM));
+    }
+
+    protected void initNewItem(E entity) {
     }
 }
