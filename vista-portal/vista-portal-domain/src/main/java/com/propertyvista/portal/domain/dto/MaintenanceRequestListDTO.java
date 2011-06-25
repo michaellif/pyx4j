@@ -7,28 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
- * @author Dad
+ * Created on Jun 25, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.domain.dto;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
+public interface MaintenanceRequestListDTO extends IEntity {
 
-public interface MaintenanceView extends IsWidget {
-
-    void setPresenter(Presenter presenter);
-
-    void populate(MaintenanceRequestDTO problem);
-
-    interface Presenter {
-
-        public void showSystemStatus();
-
-        public void showSupportHistory();
-
-    }
+    IList<MaintenanceRequestDTO> maintenanceHistory();
 
 }

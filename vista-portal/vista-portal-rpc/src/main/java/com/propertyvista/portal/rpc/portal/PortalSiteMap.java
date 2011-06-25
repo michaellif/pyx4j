@@ -14,6 +14,7 @@
 package com.propertyvista.portal.rpc.portal;
 
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.SiteMap;
@@ -25,6 +26,8 @@ public class PortalSiteMap implements SiteMap {
     public static String ARG_PROPERTY_ID = "property-id";
 
     public static String ARG_FLOORPLAN_ID = "floorplan-id";
+
+    public static String ARG_MAINTENANCE_ID = "maintenance-id";
 
     public static class Landing extends AppPlace {
     }
@@ -74,6 +77,12 @@ public class PortalSiteMap implements SiteMap {
         }
 
         public static class Maintenance extends AppPlace {
+        }
+
+        public static class MaintenanceHistory extends AppPlace {
+        }
+
+        public static class MaintenanceListHistory extends CrudAppPlace {
         }
 
         public static class BillingHistory extends AppPlace {

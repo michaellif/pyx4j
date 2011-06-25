@@ -23,8 +23,6 @@ import com.propertyvista.portal.client.ui.CurrentBillView;
 import com.propertyvista.portal.client.ui.CurrentBillViewImpl;
 import com.propertyvista.portal.client.ui.FooterView;
 import com.propertyvista.portal.client.ui.FooterViewImpl;
-import com.propertyvista.portal.client.ui.PaymentMethodsView;
-import com.propertyvista.portal.client.ui.PaymentMethodsViewImpl;
 import com.propertyvista.portal.client.ui.LoginInvitationView;
 import com.propertyvista.portal.client.ui.LoginInvitationViewImpl;
 import com.propertyvista.portal.client.ui.LoginView;
@@ -33,8 +31,14 @@ import com.propertyvista.portal.client.ui.LogoView;
 import com.propertyvista.portal.client.ui.LogoViewImpl;
 import com.propertyvista.portal.client.ui.MainNavigView;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
+import com.propertyvista.portal.client.ui.MaintenanceHistoryView;
+import com.propertyvista.portal.client.ui.MaintenanceHistoryViewImpl;
+import com.propertyvista.portal.client.ui.MaintenanceListerView;
+import com.propertyvista.portal.client.ui.MaintenanceListerViewImpl;
 import com.propertyvista.portal.client.ui.MaintenanceView;
 import com.propertyvista.portal.client.ui.MaintenanceViewImpl;
+import com.propertyvista.portal.client.ui.PaymentMethodsView;
+import com.propertyvista.portal.client.ui.PaymentMethodsViewImpl;
 import com.propertyvista.portal.client.ui.PersonalInfoView;
 import com.propertyvista.portal.client.ui.PersonalInfoViewImpl;
 import com.propertyvista.portal.client.ui.PotentialTenantView;
@@ -80,6 +84,10 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new CurrentBillViewImpl());
             } else if (PotentialTenantView.class.equals(type)) {
                 map.put(type, new PotentialTenantViewImpl());
+            } else if (MaintenanceHistoryView.class.equals(type)) {
+                map.put(type, new MaintenanceHistoryViewImpl());
+            } else if (MaintenanceListerView.class.equals(type)) {
+                map.put(type, new MaintenanceListerViewImpl());
             }
 
         }

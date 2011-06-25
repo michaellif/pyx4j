@@ -27,10 +27,12 @@ import com.propertyvista.portal.client.activity.BillingHistoryActivity;
 import com.propertyvista.portal.client.activity.CreateAccountActivity;
 import com.propertyvista.portal.client.activity.CurrentBillActivity;
 import com.propertyvista.portal.client.activity.FloorplanDetailsActivity;
-import com.propertyvista.portal.client.activity.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.LoginActivity;
 import com.propertyvista.portal.client.activity.LoginInvitationActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
+import com.propertyvista.portal.client.activity.MaintenanceHistoryActivity;
+import com.propertyvista.portal.client.activity.MaintenanceListerActivity;
+import com.propertyvista.portal.client.activity.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.client.activity.PropertyMapActivity;
@@ -67,6 +69,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PersonalInfoActivity(place);
                 } else if (place instanceof Residents.Maintenance) {
                     activity = new MaintenanceAcitvity(place);
+                } else if (place instanceof Residents.MaintenanceHistory) {
+                    activity = new MaintenanceHistoryActivity(place);
+                } else if (place instanceof Residents.MaintenanceListHistory) {
+                    activity = new MaintenanceListerActivity(place);
                 } else if (place instanceof Residents.BillingHistory) {
                     activity = new BillingHistoryActivity(place);
                 } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {

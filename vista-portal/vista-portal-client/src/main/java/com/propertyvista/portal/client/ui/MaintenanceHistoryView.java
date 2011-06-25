@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
- * @author Dad
+ * Created on Jun 25, 2011
+ * @author vadims
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui;
@@ -16,18 +16,18 @@ package com.propertyvista.portal.client.ui;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
+import com.propertyvista.portal.domain.dto.MaintenanceRequestListDTO;
 
-public interface MaintenanceView extends IsWidget {
-
+public interface MaintenanceHistoryView extends IsWidget {
     void setPresenter(Presenter presenter);
 
-    void populate(MaintenanceRequestDTO problem);
+    void populate(MaintenanceRequestListDTO maintanenceHistory);
 
     interface Presenter {
 
         public void showSystemStatus();
 
-        public void showSupportHistory();
+        public void showDetails(MaintenanceRequestDTO maintanenceRequest);
 
     }
 

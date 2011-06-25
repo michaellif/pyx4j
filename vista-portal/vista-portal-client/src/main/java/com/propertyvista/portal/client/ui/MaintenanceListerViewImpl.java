@@ -7,28 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
+ * Created on Jun 25, 2011
  * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.ui.crud.ListerViewImplBase;
 
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 
-public interface MaintenanceView extends IsWidget {
+public class MaintenanceListerViewImpl extends ListerViewImplBase<MaintenanceRequestDTO> implements MaintenanceListerView {
 
-    void setPresenter(Presenter presenter);
-
-    void populate(MaintenanceRequestDTO problem);
-
-    interface Presenter {
-
-        public void showSystemStatus();
-
-        public void showSupportHistory();
-
+    public MaintenanceListerViewImpl() {
+        super();
+        setLister(new MaintenanceLister());
     }
 
 }

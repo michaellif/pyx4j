@@ -7,45 +7,44 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 18, 2011
+ * Created on Jun 25, 2011
  * @author vadims
  * @version $Id$
  */
 package com.propertyvista.portal.client.activity;
+
+import java.util.Map;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.client.ui.MaintenanceView;
+import com.propertyvista.portal.client.ui.MaintenanceHistoryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class MaintenanceAcitvity extends AbstractActivity implements MaintenanceView.Presenter {
-    private final MaintenanceView view;
+public class MaintenanceHistoryActivity extends AbstractActivity implements MaintenanceHistoryView.Presenter {
 
-    public MaintenanceAcitvity(Place place) {
-        this.view = (MaintenanceView) PortalViewFactory.instance(MaintenanceView.class);
+    MaintenanceHistoryView view;
+
+    public MaintenanceHistoryActivity(Place place) {
+        this.view = (MaintenanceHistoryView) PortalViewFactory.instance(MaintenanceHistoryView.class);
         this.view.setPresenter(this);
         withPlace(place);
+
     }
 
-    public MaintenanceAcitvity withPlace(Place place) {
+    public MaintenanceHistoryActivity withPlace(Place place) {
+        Map<String, String> args = ((AppPlace) place).getArgs();
         return this;
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-        //TODO Implement a service call
-        MaintenanceRequestDTO problem = EntityFactory.create(MaintenanceRequestDTO.class);
-        view.populate(problem);
+    public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
+        containerWidget.setWidget(view);
 
     }
 
@@ -56,12 +55,9 @@ public class MaintenanceAcitvity extends AbstractActivity implements Maintenance
     }
 
     @Override
-    public void showSupportHistory() {
-        //this line navigates to form
-        AppPlace place = new PortalSiteMap.Residents.MaintenanceListHistory();
-        //this line navigates to lister
-        // AppPlace place = new PortalSiteMap.Residents.MaintenanceHistory();
-        AppSite.getPlaceController().goTo(place);
+    public void showDetails(MaintenanceRequestDTO maintanenceRequest) {
+        // TODO Auto-generated method stub
 
     }
+
 }

@@ -56,11 +56,13 @@ public class CriteriaWidgetDecorator extends VerticalPanel {
 
     private final SpaceHolder infoImageHolder;
 
+    //  private final SimplePanel nativeComponentHolder;
+
     public CriteriaWidgetDecorator(final CComponent<?> component) {
-        this(component, 160);
+        this(component, "160px");
     }
 
-    public CriteriaWidgetDecorator(final CComponent<?> component, int componentWidth) {
+    public CriteriaWidgetDecorator(final CComponent<?> component, String componentWidth) {
         this.component = component;
         setStyleName(DEFAULT_STYLE_PREFIX);
 
@@ -115,7 +117,8 @@ public class CriteriaWidgetDecorator extends VerticalPanel {
         nativeComponentHolder.getElement().getStyle().setFloat(Float.LEFT);
         nativeComponentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        nativeComponentHolder.getElement().getStyle().setWidth(componentWidth, Unit.PX);
+        //  nativeComponentHolder.getElement().getStyle().setWidth(componentWidth, Unit.PX);
+        nativeComponentHolder.setWidth(componentWidth);
 
         nativeComponentHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
         nativeComponentHolder.setWidget(nativeComponent);
