@@ -16,6 +16,7 @@ package com.propertyvista.interfaces.payment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -43,6 +44,7 @@ public class ResponseMessage {
      * Returned unchanged from the request.
      */
     @Size(max = 60)
+    @NotNull
     private String messageID;
 
     /**
@@ -58,7 +60,7 @@ public class ResponseMessage {
 
     private List<Response> responses;
 
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     public String getMessageID() {
         return messageID;
     }

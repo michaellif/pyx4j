@@ -13,8 +13,21 @@
  */
 package com.propertyvista.paypad.server.config;
 
+import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
+
+import com.propertyvista.paypad.server.ci.preloader.PaymentPadDatePreloaders;
 
 public class PaymentPadServerSideConfiguration extends EssentialsServerSideConfiguration {
 
+    @Override
+    public IPersistenceConfiguration getPersistenceConfiguration() {
+        return new PaymentPadConfigurationMySQL();
+    }
+
+    @Override
+    public DataPreloaderCollection getDataPreloaders() {
+        return new PaymentPadDatePreloaders();
+    }
 }

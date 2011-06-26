@@ -53,6 +53,17 @@
         <url-pattern>/o/status</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>DBResetServlet</servlet-name>
+        <servlet-class>com.propertyvista.paypad.server.ci.DBResetServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DBResetServlet</servlet-name>
+        <url-pattern>/o/db-reset</url-pattern>
+    </servlet-mapping>
+    
+    
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>

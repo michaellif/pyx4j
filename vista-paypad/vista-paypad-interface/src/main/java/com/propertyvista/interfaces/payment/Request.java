@@ -13,6 +13,7 @@
  */
 package com.propertyvista.interfaces.payment;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
@@ -22,6 +23,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 public abstract class Request {
 
     @Size(max = 60)
+    @NotNull
     private String requestID;
 
     /**
@@ -32,7 +34,7 @@ public abstract class Request {
     @Pattern(regexp = "[A-Za-z0-9-/]+")
     private String echo;
 
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     public String getRequestID() {
         return requestID;
     }

@@ -86,10 +86,14 @@ public class PaymentServlet extends HttpServlet {
         try {
             PaymentProcessor pp = new PaymentProcessor();
             if (pp.isValid(message)) {
-                ResponseMessage rm = pp.execute(message);
-                log.info("reply {}", MarshallUtil.marshall(rm));
-                response.setContentType("text/xml");
-                MarshallUtil.marshal(rm, response.getOutputStream());
+                if (PaymentSecurity.enter(message)) {
+                    ResponseMessage rm = pp.execute(message);
+                    log.info("reply {}", MarshallUtil.marshall(rm));
+                    response.setContentType("text/xml");
+                    MarshallUtil.marshal(rm, response.getOutputStream());
+                } else {
+                    replyWithStatusCode(response, ResponseMessage.StatusCode.AuthenticationFailed);
+                }
             } else {
                 replyWithStatusCode(response, ResponseMessage.StatusCode.MessageFormatError);
             }
