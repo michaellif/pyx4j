@@ -13,6 +13,8 @@
  */
 package com.propertyvista.interfaces.payment.examples.xml;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.xml.bind.JAXBException;
@@ -69,7 +71,7 @@ public class RequestMessageCreator {
         MarshallUtil.marshal(r, System.out);
     }
 
-    public static void makeTokenAddTransction() throws JAXBException {
+    public static void makeTokenAddTransction() throws JAXBException, ParseException {
         RequestMessage r = new RequestMessage();
         r.setInterfaceEntity("PaymentProcessor1");
         r.setInterfaceEntityPassword("top-secret");
@@ -83,7 +85,7 @@ public class RequestMessageCreator {
         addToken.setReference("46YongeAppt18");
         addToken.setCard(new CreditCardInfo());
         addToken.getCard().setCardNumber("6011111111111117");
-        addToken.getCard().setExpiryDate(new Date());
+        addToken.getCard().setExpiryDate(new SimpleDateFormat("yyyy-MM").parse("2017-09"));
         r.addRequest(addToken);
         MarshallUtil.marshal(r, System.out);
     }

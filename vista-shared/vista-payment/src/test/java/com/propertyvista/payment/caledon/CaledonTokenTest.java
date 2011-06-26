@@ -27,10 +27,6 @@ public class CaledonTokenTest extends CaledonTestBase {
 
     private final static Logger log = LoggerFactory.getLogger(CaledonTokenTest.class);
 
-    public void testNothing() {
-
-    }
-
     public void testCreateToken() {
         IPaymentProcessor proc = new CaledonPaymentProcessor();
         Token token = EntityFactory.create(Token.class);
@@ -39,6 +35,7 @@ public class CaledonTokenTest extends CaledonTestBase {
         log.debug("responce code {}", pr.code().getValue());
         assertEquals(CaledonTokenResponse.TOKEN_SUCCESS.getValue(), pr.code().getValue());
 
+        proc.deactivateToken(testMerchant, token);
     }
 
     public void testTokenTransaction() {
@@ -47,7 +44,7 @@ public class CaledonTokenTest extends CaledonTestBase {
         token.code().setValue(String.valueOf(System.currentTimeMillis()));
 
         log.debug("Token value", token.code().getValue());
-        PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2015-01"), token);
+        PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2017-09"), token);
 
         log.debug("responce code {}", pr.code().getValue());
 
@@ -55,10 +52,15 @@ public class CaledonTokenTest extends CaledonTestBase {
 
         PaymentRequest request = EntityFactory.create(PaymentRequest.class);
         request.paymentInstrument().setValue(token);
-        PaymentResponse pr1 = proc.realTimeSale(testMerchant, request);
+        request.amount().setValue(10f);
+        request.referenceNumber().setValue("Test212");
+        try {
+            PaymentResponse pr1 = proc.realTimeSale(testMerchant, request);
 
-        log.debug("responce code {}", pr1.code().getValue());
-        assertEquals(CaledonTokenResponse.TOKEN_SUCCESS.getValue(), pr1.code().getValue());
-
+            log.debug("responce code {}", pr1.code().getValue());
+            assertEquals(CaledonTokenResponse.TOKEN_SUCCESS.getValue(), pr1.code().getValue());
+        } finally {
+            proc.deactivateToken(testMerchant, token);
+        }
     }
 }

@@ -28,7 +28,6 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.contrib.ssl.EasySSLProtocolSocketFactory;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.protocol.Protocol;
@@ -39,6 +38,7 @@ import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.payment.PaymentProcessingException;
+import com.propertyvista.payment.caledon.dev.DevSSLProtocolSocketFactory;
 
 public class CaledonHttpClient {
 
@@ -46,7 +46,7 @@ public class CaledonHttpClient {
 
     private final boolean debug = true;
 
-    private final boolean useTestServer = false;
+    private final boolean useTestServer = true;
 
     private final boolean easySSLEnabled = true;
 
@@ -85,14 +85,14 @@ public class CaledonHttpClient {
 
         if (useTestServer && easySSLEnabled) {
             @SuppressWarnings("deprecation")
-            Protocol easyhttps = new Protocol("https", new EasySSLProtocolSocketFactory(), 1443);
+            Protocol easyhttps = new Protocol("https", new DevSSLProtocolSocketFactory(), 1443);
             Protocol.registerProtocol("https", easyhttps);
         }
 
         try {
             int httpResponseCode = httpClient.executeMethod(httpMethod);
             if (httpResponseCode != HttpURLConnection.HTTP_OK) {
-                throw new PaymentProcessingException("Unexpected rerver Response " + httpResponseCode);
+                throw new PaymentProcessingException("Unexpected server response " + httpResponseCode);
             }
             return buildResponse(httpMethod.getResponseBodyAsString());
         } catch (HttpException e) {
@@ -132,7 +132,12 @@ public class CaledonHttpClient {
             try {
                 Object value = field.get(request);
                 if (value != null) {
-                    pairs.add(new NameValuePair(nameDeclared.value(), value.toString()));
+                    NameValuePair nv = new NameValuePair(nameDeclared.value(), value.toString());
+                    if (nameDeclared.first() && (pairs.size() != 0)) {
+                        pairs.add(0, nv);
+                    } else {
+                        pairs.add(nv);
+                    }
                 }
             } catch (Exception e) {
                 log.error("object value access error", e);

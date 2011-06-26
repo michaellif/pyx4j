@@ -19,7 +19,7 @@ import java.util.Date;
 
 public class CaledonRequest {
 
-    @HttpRequestField("TERMID")
+    @HttpRequestField(value = "TERMID", first = true)
     public String terminalID;
 
     @HttpRequestField("PASS")

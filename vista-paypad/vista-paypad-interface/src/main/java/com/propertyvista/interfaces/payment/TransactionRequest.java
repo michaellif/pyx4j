@@ -105,8 +105,17 @@ public class TransactionRequest extends Request {
      */
     private float amount;
 
+    /**
+     * REFERENCE NUMBER
+     * Should be unique in order to facilitate transaction tracking.
+     * 
+     * The reference number you want to attach to this transaction. The reference number can be up to 60 characters (alphanumeric) and may not contain spaces.
+     * The reference number may also contain hyphens ("-") and slashes ("/"). Certain restrictions may be placed on the reference number depending on your
+     * individual situation.
+     */
     @Size(max = 60)
     @Pattern(regexp = "[A-Za-z0-9-/]+")
+    @NotNull
     private String reference;
 
     @XmlElement(required = true)

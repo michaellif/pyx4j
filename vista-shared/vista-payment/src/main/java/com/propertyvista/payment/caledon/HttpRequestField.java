@@ -24,4 +24,6 @@ import java.lang.annotation.Target;
 
     String value();
 
+    boolean first() default false;
+
 }

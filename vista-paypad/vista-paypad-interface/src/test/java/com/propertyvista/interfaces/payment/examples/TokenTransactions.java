@@ -28,11 +28,12 @@ public class TokenTransactions {
 
     public static void main(String[] args) throws Exception {
         addToken();
-        deactivateToken();
         saleUsingToken();
+        deactivateToken();
     }
 
     public static void addToken() throws Exception {
+        System.out.println("\n-- Token Add transaction --");
         RequestMessage r = new RequestMessage();
         r.setInterfaceEntity("PaymentProcessor1");
         r.setInterfaceEntityPassword("top-secret");
@@ -45,7 +46,7 @@ public class TokenTransactions {
         addToken.setReference("JSMITH-MCRD");
         addToken.setCard(new CreditCardInfo());
         addToken.getCard().setCardNumber("5191111111111111");
-        addToken.getCard().setExpiryDate(new SimpleDateFormat("yyyy-MM").parse("2012-12"));
+        addToken.getCard().setExpiryDate(new SimpleDateFormat("yyyy-MM").parse("2017-09"));
         r.addRequest(addToken);
 
         ResponseMessage response = ExampleClient.execute(r);
@@ -57,6 +58,7 @@ public class TokenTransactions {
     }
 
     public static void saleUsingToken() throws Exception {
+        System.out.println("\n\n-- Sale using a token --");
         RequestMessage r = new RequestMessage();
         r.setInterfaceEntity("PaymentProcessor1");
         r.setInterfaceEntityPassword("top-secret");
@@ -86,6 +88,7 @@ public class TokenTransactions {
     }
 
     public static void deactivateToken() throws Exception {
+        System.out.println("\n-- Deactivate token transaction --");
         RequestMessage r = new RequestMessage();
         r.setInterfaceEntity("PaymentProcessor1");
         r.setInterfaceEntityPassword("top-secret");
