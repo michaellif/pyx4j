@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+@Transient
 public interface MaintenanceRequestDTO extends IEntity {
 
     @Translatable
@@ -48,22 +49,17 @@ public interface MaintenanceRequestDTO extends IEntity {
     }
 
     @Caption(name = "Select a category")
-    @Transient
     IPrimitive<MaintenanceType> maintenanceType();
 
-    @Transient
     @Editor(type = EditorType.textarea)
     @Caption(name = "Describe the problem")
     IPrimitive<String> problemDescription();
 
-    @Transient
     IPrimitive<LogicalDate> whenRequested();
 
-    @Transient
     @Caption(name = "Last updated")
     IPrimitive<LogicalDate> updated();
 
-    @Transient
     IPrimitive<StatusType> status();
 
 }

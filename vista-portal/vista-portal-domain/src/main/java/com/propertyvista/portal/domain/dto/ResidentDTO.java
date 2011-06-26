@@ -26,16 +26,13 @@ import com.propertyvista.portal.domain.ptapp.Vehicle;
 @Transient
 public interface ResidentDTO extends Person {
 
-    @Transient
     @Caption(name = "Address")
     Address currentAddress();
 
-    @Transient
     @Length(3)
     @Caption(name = "Vehicls")
     IList<Vehicle> vehicles();
 
-    @Transient
     @Length(3)
     @Caption(name = "Emergency Contacts")
     IList<EmergencyContact> emergencyContacts();
