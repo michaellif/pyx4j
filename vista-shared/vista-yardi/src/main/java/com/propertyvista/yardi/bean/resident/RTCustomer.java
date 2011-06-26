@@ -11,13 +11,14 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean2;
+package com.propertyvista.yardi.bean.resident;
 
 import javax.xml.bind.annotation.XmlElement;
 
-
 public class RTCustomer {
     private String customerId;
+
+    private Customers customers;
 
     private RTUnit rtunit;
 
@@ -26,6 +27,7 @@ public class RTCustomer {
 
         sb.append(customerId);
         sb.append("\n").append(rtunit);
+        sb.append("\n").append(customers);
 
         return sb.toString();
     }
@@ -46,5 +48,14 @@ public class RTCustomer {
 
     public void setRtunit(RTUnit rtunit) {
         this.rtunit = rtunit;
+    }
+
+    @XmlElement(name = "Customers")
+    public Customers getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(Customers customers) {
+        this.customers = customers;
     }
 }

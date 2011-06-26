@@ -1,12 +1,9 @@
-<ResidentTransactions xmlns="http://yardi.com/ResidentTransactions20"
-    xmlns:MITS="http://my-company.com/namespace"
-    xsi:schemaLocation="http://yardi.com/ResidentTransactions20 .\Itf_MITS_ResidentTransactions2.0.xsd">
+<ResidentTransactions xmlns="http://yardi.com/ResidentTransactions20" xmlns:MITS="http://my-company.com/namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://yardi.com/ResidentTransactions20 .\Itf_MITS_ResidentTransactions2.0.xsd">
     <Property>
         <PropertyID>
             <MITS:Identification Type="other">
                 <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                <MITS:MarketingName>Property Vista 1 Test Property
-                </MITS:MarketingName>
+                <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
             </MITS:Identification>
             <MITS:Address Type="property">
                 <MITS:Address1>430 S Fairview Avenue</MITS:Address1>
@@ -23,8 +20,7 @@
                     <MITS:CustomerID>t0005518</MITS:CustomerID>
                     <MITS:Property>
                         <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                        <MITS:MarketingName>Property Vista 1 Test
-                            Property</MITS:MarketingName>
+                        <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                         <MITS:UnitID>141</MITS:UnitID>
                     </MITS:Property>
                     <MITS:Name>
@@ -42,13 +38,10 @@
                     </MITS:Address>
                     <MITS:Lease>
                         <MITS:CurrentRent>850.00</MITS:CurrentRent>
-                        <MITS:ExpectedMoveInDate>2011-06-24
-                        </MITS:ExpectedMoveInDate>
-                        <MITS:LeaseFromDate>2011-06-24
-                        </MITS:LeaseFromDate>
+                        <MITS:ExpectedMoveInDate>2011-06-24</MITS:ExpectedMoveInDate>
+                        <MITS:LeaseFromDate>2011-06-24</MITS:LeaseFromDate>
                         <MITS:LeaseToDate>2012-06-30</MITS:LeaseToDate>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
                 <MITS:Customer Type="customer">
@@ -59,10 +52,8 @@
                     </MITS:Name>
                     <MITS:Address Type="current" />
                     <MITS:Lease>
-                        <MITS:ActualMoveIn>0001-01-01
-                        </MITS:ActualMoveIn>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ActualMoveIn>0001-01-01</MITS:ActualMoveIn>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
             </Customers>
@@ -74,26 +65,19 @@
                         <MITS:UnitID>141</MITS:UnitID>
                         <MITS:UnitType>prv11b1</MITS:UnitType>
                         <MITS:UnitBedrooms>1</MITS:UnitBedrooms>
-                        <MITS:UnitBathrooms>1.000000
-                        </MITS:UnitBathrooms>
+                        <MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
                         <MITS:MinSquareFeet>900</MITS:MinSquareFeet>
                         <MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
                         <MITS:UnitRent>850.00</MITS:UnitRent>
                         <MITS:MarketRent>850.000000</MITS:MarketRent>
-                        <MITS:UnitEconomicStatus>residential
-                        </MITS:UnitEconomicStatus>
-                        <MITS:UnitOccupancyStatus>vacant
-                        </MITS:UnitOccupancyStatus>
-                        <MITS:UnitLeasedStatus>leased reserved
-                        </MITS:UnitLeasedStatus>
+                        <MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+                        <MITS:UnitOccupancyStatus>vacant</MITS:UnitOccupancyStatus>
+                        <MITS:UnitLeasedStatus>leased reserved</MITS:UnitLeasedStatus>
                         <MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
-                        <MITS:FloorplanName>1 Bedroom 1 Bath
-                        </MITS:FloorplanName>
+                        <MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
                     </MITS:Information>
-                    <MITS:PropertyPrimaryID>prvista1
-                    </MITS:PropertyPrimaryID>
-                    <MITS:MarketingName>Property Vista 1 Test Property
-                    </MITS:MarketingName>
+                    <MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+                    <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                 </Unit>
             </RT_Unit>
             <PaymentAccepted>0</PaymentAccepted>
@@ -122,8 +106,7 @@
                     <Charge>
                         <Detail>
                             <Description>Administration</Description>
-                            <TransactionDate>2011-05-24
-                            </TransactionDate>
+                            <TransactionDate>2011-05-24</TransactionDate>
                             <TransactionID>700031079</TransactionID>
                             <ChargeCode>admin</ChargeCode>
                             <GLAccountNumber>53000000</GLAccountNumber>
@@ -140,8 +123,7 @@
                     <Charge>
                         <Detail>
                             <Description>Administration</Description>
-                            <TransactionDate>2011-05-24
-                            </TransactionDate>
+                            <TransactionDate>2011-05-24</TransactionDate>
                             <TransactionID>700031080</TransactionID>
                             <ChargeCode>admin</ChargeCode>
                             <GLAccountNumber>53000000</GLAccountNumber>
@@ -158,8 +140,7 @@
                     <Charge>
                         <Detail>
                             <Description>Cam Pool A</Description>
-                            <TransactionDate>2011-06-07
-                            </TransactionDate>
+                            <TransactionDate>2011-06-07</TransactionDate>
                             <TransactionID>700031207</TransactionID>
                             <ChargeCode>cam-a</ChargeCode>
                             <GLAccountNumber>51090000</GLAccountNumber>
@@ -182,8 +163,7 @@
                     <MITS:CustomerID>t0005344</MITS:CustomerID>
                     <MITS:Property>
                         <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                        <MITS:MarketingName>Property Vista 1 Test
-                            Property</MITS:MarketingName>
+                        <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                         <MITS:UnitID>146</MITS:UnitID>
                     </MITS:Property>
                     <MITS:Name>
@@ -193,21 +173,17 @@
                     </MITS:Name>
                     <MITS:Address Type="property">
                         <MITS:Description>current</MITS:Description>
-                        <MITS:Address1>459 Southern Avenue
-                        </MITS:Address1>
+                        <MITS:Address1>459 Southern Avenue</MITS:Address1>
                         <MITS:City>Santa Barbara</MITS:City>
                         <MITS:State>CA</MITS:State>
                         <MITS:PostalCode>93110</MITS:PostalCode>
                     </MITS:Address>
                     <MITS:Lease>
                         <MITS:CurrentRent>850.00</MITS:CurrentRent>
-                        <MITS:ExpectedMoveInDate>2011-04-15
-                        </MITS:ExpectedMoveInDate>
-                        <MITS:LeaseFromDate>2011-04-15
-                        </MITS:LeaseFromDate>
+                        <MITS:ExpectedMoveInDate>2011-04-15</MITS:ExpectedMoveInDate>
+                        <MITS:LeaseFromDate>2011-04-15</MITS:LeaseFromDate>
                         <MITS:LeaseToDate>2012-04-30</MITS:LeaseToDate>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
             </Customers>
@@ -219,26 +195,19 @@
                         <MITS:UnitID>146</MITS:UnitID>
                         <MITS:UnitType>prv11b1</MITS:UnitType>
                         <MITS:UnitBedrooms>1</MITS:UnitBedrooms>
-                        <MITS:UnitBathrooms>1.000000
-                        </MITS:UnitBathrooms>
+                        <MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
                         <MITS:MinSquareFeet>900</MITS:MinSquareFeet>
                         <MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
                         <MITS:UnitRent>850.00</MITS:UnitRent>
                         <MITS:MarketRent>850.000000</MITS:MarketRent>
-                        <MITS:UnitEconomicStatus>residential
-                        </MITS:UnitEconomicStatus>
-                        <MITS:UnitOccupancyStatus>vacant
-                        </MITS:UnitOccupancyStatus>
-                        <MITS:UnitLeasedStatus>available
-                        </MITS:UnitLeasedStatus>
+                        <MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+                        <MITS:UnitOccupancyStatus>vacant</MITS:UnitOccupancyStatus>
+                        <MITS:UnitLeasedStatus>available</MITS:UnitLeasedStatus>
                         <MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
-                        <MITS:FloorplanName>1 Bedroom 1 Bath
-                        </MITS:FloorplanName>
+                        <MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
                     </MITS:Information>
-                    <MITS:PropertyPrimaryID>prvista1
-                    </MITS:PropertyPrimaryID>
-                    <MITS:MarketingName>Property Vista 1 Test Property
-                    </MITS:MarketingName>
+                    <MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+                    <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                 </Unit>
             </RT_Unit>
             <PaymentAccepted>0</PaymentAccepted>
@@ -247,8 +216,7 @@
                     <Charge>
                         <Detail>
                             <Description>Administration</Description>
-                            <TransactionDate>2011-03-21
-                            </TransactionDate>
+                            <TransactionDate>2011-03-21</TransactionDate>
                             <TransactionID>700030762</TransactionID>
                             <ChargeCode>admin</ChargeCode>
                             <GLAccountNumber>53000000</GLAccountNumber>
@@ -265,8 +233,7 @@
                     <Charge>
                         <Detail>
                             <Description>Administration</Description>
-                            <TransactionDate>2011-03-21
-                            </TransactionDate>
+                            <TransactionDate>2011-03-21</TransactionDate>
                             <TransactionID>700030763</TransactionID>
                             <ChargeCode>admin</ChargeCode>
                             <GLAccountNumber>53000000</GLAccountNumber>
@@ -289,8 +256,7 @@
                     <MITS:CustomerID>t0005345</MITS:CustomerID>
                     <MITS:Property>
                         <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                        <MITS:MarketingName>Property Vista 1 Test
-                            Property</MITS:MarketingName>
+                        <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                         <MITS:UnitID>149</MITS:UnitID>
                     </MITS:Property>
                     <MITS:Name>
@@ -300,21 +266,17 @@
                     </MITS:Name>
                     <MITS:Address Type="property">
                         <MITS:Description>current</MITS:Description>
-                        <MITS:Address1>430 S Fairview Avenue
-                        </MITS:Address1>
+                        <MITS:Address1>430 S Fairview Avenue</MITS:Address1>
                         <MITS:City>Goleta</MITS:City>
                         <MITS:State>CA</MITS:State>
                         <MITS:PostalCode>93117</MITS:PostalCode>
                     </MITS:Address>
                     <MITS:Lease>
                         <MITS:CurrentRent>850.00</MITS:CurrentRent>
-                        <MITS:ExpectedMoveInDate>2011-05-01
-                        </MITS:ExpectedMoveInDate>
-                        <MITS:LeaseFromDate>2011-05-01
-                        </MITS:LeaseFromDate>
+                        <MITS:ExpectedMoveInDate>2011-05-01</MITS:ExpectedMoveInDate>
+                        <MITS:LeaseFromDate>2011-05-01</MITS:LeaseFromDate>
                         <MITS:LeaseToDate>2012-04-30</MITS:LeaseToDate>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
             </Customers>
@@ -326,26 +288,19 @@
                         <MITS:UnitID>149</MITS:UnitID>
                         <MITS:UnitType>prv11b1</MITS:UnitType>
                         <MITS:UnitBedrooms>1</MITS:UnitBedrooms>
-                        <MITS:UnitBathrooms>1.000000
-                        </MITS:UnitBathrooms>
+                        <MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
                         <MITS:MinSquareFeet>900</MITS:MinSquareFeet>
                         <MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
                         <MITS:UnitRent>850.00</MITS:UnitRent>
                         <MITS:MarketRent>850.000000</MITS:MarketRent>
-                        <MITS:UnitEconomicStatus>residential
-                        </MITS:UnitEconomicStatus>
-                        <MITS:UnitOccupancyStatus>vacant
-                        </MITS:UnitOccupancyStatus>
-                        <MITS:UnitLeasedStatus>leased reserved
-                        </MITS:UnitLeasedStatus>
+                        <MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+                        <MITS:UnitOccupancyStatus>vacant</MITS:UnitOccupancyStatus>
+                        <MITS:UnitLeasedStatus>leased reserved</MITS:UnitLeasedStatus>
                         <MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
-                        <MITS:FloorplanName>1 Bedroom 1 Bath
-                        </MITS:FloorplanName>
+                        <MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
                     </MITS:Information>
-                    <MITS:PropertyPrimaryID>prvista1
-                    </MITS:PropertyPrimaryID>
-                    <MITS:MarketingName>Property Vista 1 Test Property
-                    </MITS:MarketingName>
+                    <MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+                    <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                 </Unit>
             </RT_Unit>
             <PaymentAccepted>0</PaymentAccepted>
@@ -394,8 +349,7 @@
                     <Charge>
                         <Detail>
                             <Description>Administration</Description>
-                            <TransactionDate>2011-03-21
-                            </TransactionDate>
+                            <TransactionDate>2011-03-21</TransactionDate>
                             <TransactionID>700030764</TransactionID>
                             <ChargeCode>admin</ChargeCode>
                             <GLAccountNumber>53000000</GLAccountNumber>
@@ -412,8 +366,7 @@
                     <Charge>
                         <Detail>
                             <Description>Administration</Description>
-                            <TransactionDate>2011-03-21
-                            </TransactionDate>
+                            <TransactionDate>2011-03-21</TransactionDate>
                             <TransactionID>700030765</TransactionID>
                             <ChargeCode>admin</ChargeCode>
                             <GLAccountNumber>53000000</GLAccountNumber>
@@ -436,8 +389,7 @@
                     <MITS:CustomerID>t0005517</MITS:CustomerID>
                     <MITS:Property>
                         <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                        <MITS:MarketingName>Property Vista 1 Test
-                            Property</MITS:MarketingName>
+                        <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                         <MITS:UnitID>411</MITS:UnitID>
                     </MITS:Property>
                     <MITS:Name>
@@ -447,21 +399,17 @@
                     </MITS:Name>
                     <MITS:Address Type="property">
                         <MITS:Description>current</MITS:Description>
-                        <MITS:Address1>430 S Fairview Avenue
-                        </MITS:Address1>
+                        <MITS:Address1>430 S Fairview Avenue</MITS:Address1>
                         <MITS:City>Goleta</MITS:City>
                         <MITS:State>CA</MITS:State>
                         <MITS:PostalCode>93117</MITS:PostalCode>
                     </MITS:Address>
                     <MITS:Lease>
                         <MITS:CurrentRent>850.00</MITS:CurrentRent>
-                        <MITS:ExpectedMoveInDate>2011-04-06
-                        </MITS:ExpectedMoveInDate>
-                        <MITS:LeaseFromDate>2011-01-06
-                        </MITS:LeaseFromDate>
+                        <MITS:ExpectedMoveInDate>2011-04-06</MITS:ExpectedMoveInDate>
+                        <MITS:LeaseFromDate>2011-01-06</MITS:LeaseFromDate>
                         <MITS:LeaseToDate>2012-01-06</MITS:LeaseToDate>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
             </Customers>
@@ -473,26 +421,19 @@
                         <MITS:UnitID>411</MITS:UnitID>
                         <MITS:UnitType>prv11b1</MITS:UnitType>
                         <MITS:UnitBedrooms>1</MITS:UnitBedrooms>
-                        <MITS:UnitBathrooms>1.000000
-                        </MITS:UnitBathrooms>
+                        <MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
                         <MITS:MinSquareFeet>900</MITS:MinSquareFeet>
                         <MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
                         <MITS:UnitRent>850.00</MITS:UnitRent>
                         <MITS:MarketRent>850.000000</MITS:MarketRent>
-                        <MITS:UnitEconomicStatus>residential
-                        </MITS:UnitEconomicStatus>
-                        <MITS:UnitOccupancyStatus>occupied
-                        </MITS:UnitOccupancyStatus>
-                        <MITS:UnitLeasedStatus>on notice
-                        </MITS:UnitLeasedStatus>
+                        <MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+                        <MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+                        <MITS:UnitLeasedStatus>on notice</MITS:UnitLeasedStatus>
                         <MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
-                        <MITS:FloorplanName>1 Bedroom 1 Bath
-                        </MITS:FloorplanName>
+                        <MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
                     </MITS:Information>
-                    <MITS:PropertyPrimaryID>prvista1
-                    </MITS:PropertyPrimaryID>
-                    <MITS:MarketingName>Property Vista 1 Test Property
-                    </MITS:MarketingName>
+                    <MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+                    <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                 </Unit>
             </RT_Unit>
             <PaymentAccepted>0</PaymentAccepted>
@@ -506,8 +447,7 @@
                     <MITS:CustomerID>t0005337</MITS:CustomerID>
                     <MITS:Property>
                         <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                        <MITS:MarketingName>Property Vista 1 Test
-                            Property</MITS:MarketingName>
+                        <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                         <MITS:UnitID>142</MITS:UnitID>
                     </MITS:Property>
                     <MITS:Name>
@@ -517,23 +457,18 @@
                     </MITS:Name>
                     <MITS:Address Type="property">
                         <MITS:Description>current</MITS:Description>
-                        <MITS:Address1>430 S Fairview Avenue
-                        </MITS:Address1>
+                        <MITS:Address1>430 S Fairview Avenue</MITS:Address1>
                         <MITS:City>Goleta</MITS:City>
                         <MITS:State>CA</MITS:State>
                         <MITS:PostalCode>93117</MITS:PostalCode>
                     </MITS:Address>
                     <MITS:Lease>
                         <MITS:CurrentRent>950.00</MITS:CurrentRent>
-                        <MITS:ExpectedMoveInDate>2010-01-01
-                        </MITS:ExpectedMoveInDate>
-                        <MITS:LeaseFromDate>2010-01-01
-                        </MITS:LeaseFromDate>
+                        <MITS:ExpectedMoveInDate>2010-01-01</MITS:ExpectedMoveInDate>
+                        <MITS:LeaseFromDate>2010-01-01</MITS:LeaseFromDate>
                         <MITS:LeaseToDate>2010-12-31</MITS:LeaseToDate>
-                        <MITS:ActualMoveIn>2010-01-01
-                        </MITS:ActualMoveIn>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ActualMoveIn>2010-01-01</MITS:ActualMoveIn>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
             </Customers>
@@ -545,26 +480,19 @@
                         <MITS:UnitID>142</MITS:UnitID>
                         <MITS:UnitType>prv11b1</MITS:UnitType>
                         <MITS:UnitBedrooms>1</MITS:UnitBedrooms>
-                        <MITS:UnitBathrooms>1.000000
-                        </MITS:UnitBathrooms>
+                        <MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
                         <MITS:MinSquareFeet>900</MITS:MinSquareFeet>
                         <MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
                         <MITS:UnitRent>850.00</MITS:UnitRent>
                         <MITS:MarketRent>850.000000</MITS:MarketRent>
-                        <MITS:UnitEconomicStatus>residential
-                        </MITS:UnitEconomicStatus>
-                        <MITS:UnitOccupancyStatus>occupied
-                        </MITS:UnitOccupancyStatus>
-                        <MITS:UnitLeasedStatus>leased
-                        </MITS:UnitLeasedStatus>
+                        <MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+                        <MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+                        <MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
                         <MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
-                        <MITS:FloorplanName>1 Bedroom 1 Bath
-                        </MITS:FloorplanName>
+                        <MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
                     </MITS:Information>
-                    <MITS:PropertyPrimaryID>prvista1
-                    </MITS:PropertyPrimaryID>
-                    <MITS:MarketingName>Property Vista 1 Test Property
-                    </MITS:MarketingName>
+                    <MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+                    <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                 </Unit>
             </RT_Unit>
             <PaymentAccepted>0</PaymentAccepted>
@@ -613,8 +541,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-01-01
-                            </TransactionDate>
+                            <TransactionDate>2011-01-01</TransactionDate>
                             <TransactionID>700030743</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -631,8 +558,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-02-01
-                            </TransactionDate>
+                            <TransactionDate>2011-02-01</TransactionDate>
                             <TransactionID>700030749</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -649,8 +575,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-03-01
-                            </TransactionDate>
+                            <TransactionDate>2011-03-01</TransactionDate>
                             <TransactionID>700030755</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -673,8 +598,7 @@
                     <MITS:CustomerID>t0005338</MITS:CustomerID>
                     <MITS:Property>
                         <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                        <MITS:MarketingName>Property Vista 1 Test
-                            Property</MITS:MarketingName>
+                        <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                         <MITS:UnitID>144</MITS:UnitID>
                     </MITS:Property>
                     <MITS:Name>
@@ -684,25 +608,19 @@
                     </MITS:Name>
                     <MITS:Address Type="property">
                         <MITS:Description>current</MITS:Description>
-                        <MITS:Address1>430 S Fairview Avenue
-                        </MITS:Address1>
+                        <MITS:Address1>430 S Fairview Avenue</MITS:Address1>
                         <MITS:City>Goleta</MITS:City>
                         <MITS:State>CA</MITS:State>
                         <MITS:PostalCode>93117</MITS:PostalCode>
                     </MITS:Address>
                     <MITS:Lease>
                         <MITS:CurrentRent>975.00</MITS:CurrentRent>
-                        <MITS:ExpectedMoveInDate>2010-02-01
-                        </MITS:ExpectedMoveInDate>
-                        <MITS:ExpectedMoveOutDate>2011-03-31
-                        </MITS:ExpectedMoveOutDate>
-                        <MITS:LeaseFromDate>2010-02-01
-                        </MITS:LeaseFromDate>
+                        <MITS:ExpectedMoveInDate>2010-02-01</MITS:ExpectedMoveInDate>
+                        <MITS:ExpectedMoveOutDate>2011-03-31</MITS:ExpectedMoveOutDate>
+                        <MITS:LeaseFromDate>2010-02-01</MITS:LeaseFromDate>
                         <MITS:LeaseToDate>2011-01-31</MITS:LeaseToDate>
-                        <MITS:ActualMoveIn>2010-02-01
-                        </MITS:ActualMoveIn>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ActualMoveIn>2010-02-01</MITS:ActualMoveIn>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
             </Customers>
@@ -714,26 +632,19 @@
                         <MITS:UnitID>144</MITS:UnitID>
                         <MITS:UnitType>prv11b1</MITS:UnitType>
                         <MITS:UnitBedrooms>1</MITS:UnitBedrooms>
-                        <MITS:UnitBathrooms>1.000000
-                        </MITS:UnitBathrooms>
+                        <MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
                         <MITS:MinSquareFeet>900</MITS:MinSquareFeet>
                         <MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
                         <MITS:UnitRent>850.00</MITS:UnitRent>
                         <MITS:MarketRent>850.000000</MITS:MarketRent>
-                        <MITS:UnitEconomicStatus>residential
-                        </MITS:UnitEconomicStatus>
-                        <MITS:UnitOccupancyStatus>occupied
-                        </MITS:UnitOccupancyStatus>
-                        <MITS:UnitLeasedStatus>on notice
-                        </MITS:UnitLeasedStatus>
+                        <MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+                        <MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+                        <MITS:UnitLeasedStatus>on notice</MITS:UnitLeasedStatus>
                         <MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
-                        <MITS:FloorplanName>1 Bedroom 1 Bath
-                        </MITS:FloorplanName>
+                        <MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
                     </MITS:Information>
-                    <MITS:PropertyPrimaryID>prvista1
-                    </MITS:PropertyPrimaryID>
-                    <MITS:MarketingName>Property Vista 1 Test Property
-                    </MITS:MarketingName>
+                    <MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+                    <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                 </Unit>
             </RT_Unit>
             <PaymentAccepted>0</PaymentAccepted>
@@ -782,8 +693,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-01-01
-                            </TransactionDate>
+                            <TransactionDate>2011-01-01</TransactionDate>
                             <TransactionID>700030744</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -800,8 +710,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-02-01
-                            </TransactionDate>
+                            <TransactionDate>2011-02-01</TransactionDate>
                             <TransactionID>700030750</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -818,8 +727,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-03-01
-                            </TransactionDate>
+                            <TransactionDate>2011-03-01</TransactionDate>
                             <TransactionID>700030756</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -836,8 +744,7 @@
                     <Charge>
                         <Detail>
                             <Description>Misc Fees</Description>
-                            <TransactionDate>2011-03-21
-                            </TransactionDate>
+                            <TransactionDate>2011-03-21</TransactionDate>
                             <TransactionID>700030760</TransactionID>
                             <ChargeCode>fees</ChargeCode>
                             <GLAccountNumber>57000000</GLAccountNumber>
@@ -860,8 +767,7 @@
                     <MITS:CustomerID>t0005339</MITS:CustomerID>
                     <MITS:Property>
                         <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                        <MITS:MarketingName>Property Vista 1 Test
-                            Property</MITS:MarketingName>
+                        <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                         <MITS:UnitID>145</MITS:UnitID>
                     </MITS:Property>
                     <MITS:Name>
@@ -871,23 +777,18 @@
                     </MITS:Name>
                     <MITS:Address Type="property">
                         <MITS:Description>current</MITS:Description>
-                        <MITS:Address1>430 S Fairview Avenue
-                        </MITS:Address1>
+                        <MITS:Address1>430 S Fairview Avenue</MITS:Address1>
                         <MITS:City>Goleta</MITS:City>
                         <MITS:State>CA</MITS:State>
                         <MITS:PostalCode>93117</MITS:PostalCode>
                     </MITS:Address>
                     <MITS:Lease>
                         <MITS:CurrentRent>925.00</MITS:CurrentRent>
-                        <MITS:ExpectedMoveInDate>2010-02-05
-                        </MITS:ExpectedMoveInDate>
-                        <MITS:LeaseFromDate>2010-02-05
-                        </MITS:LeaseFromDate>
+                        <MITS:ExpectedMoveInDate>2010-02-05</MITS:ExpectedMoveInDate>
+                        <MITS:LeaseFromDate>2010-02-05</MITS:LeaseFromDate>
                         <MITS:LeaseToDate>2011-01-31</MITS:LeaseToDate>
-                        <MITS:ActualMoveIn>2010-02-05
-                        </MITS:ActualMoveIn>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ActualMoveIn>2010-02-05</MITS:ActualMoveIn>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
                 <MITS:Customer Type="customer">
@@ -898,10 +799,8 @@
                     </MITS:Name>
                     <MITS:Address Type="current" />
                     <MITS:Lease>
-                        <MITS:ActualMoveIn>0001-01-01
-                        </MITS:ActualMoveIn>
-                        <MITS:ResponsibleForLease>false
-                        </MITS:ResponsibleForLease>
+                        <MITS:ActualMoveIn>0001-01-01</MITS:ActualMoveIn>
+                        <MITS:ResponsibleForLease>false</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
                 <MITS:Customer Type="customer">
@@ -912,10 +811,8 @@
                     </MITS:Name>
                     <MITS:Address Type="current" />
                     <MITS:Lease>
-                        <MITS:ActualMoveIn>0001-01-01
-                        </MITS:ActualMoveIn>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ActualMoveIn>0001-01-01</MITS:ActualMoveIn>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
                 <MITS:Customer Type="customer">
@@ -926,10 +823,8 @@
                     </MITS:Name>
                     <MITS:Address Type="current" />
                     <MITS:Lease>
-                        <MITS:ActualMoveIn>0001-01-01
-                        </MITS:ActualMoveIn>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ActualMoveIn>0001-01-01</MITS:ActualMoveIn>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
             </Customers>
@@ -941,26 +836,19 @@
                         <MITS:UnitID>145</MITS:UnitID>
                         <MITS:UnitType>prv11b1</MITS:UnitType>
                         <MITS:UnitBedrooms>1</MITS:UnitBedrooms>
-                        <MITS:UnitBathrooms>1.000000
-                        </MITS:UnitBathrooms>
+                        <MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
                         <MITS:MinSquareFeet>900</MITS:MinSquareFeet>
                         <MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
                         <MITS:UnitRent>850.00</MITS:UnitRent>
                         <MITS:MarketRent>850.000000</MITS:MarketRent>
-                        <MITS:UnitEconomicStatus>residential
-                        </MITS:UnitEconomicStatus>
-                        <MITS:UnitOccupancyStatus>occupied
-                        </MITS:UnitOccupancyStatus>
-                        <MITS:UnitLeasedStatus>leased
-                        </MITS:UnitLeasedStatus>
+                        <MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+                        <MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+                        <MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
                         <MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
-                        <MITS:FloorplanName>1 Bedroom 1 Bath
-                        </MITS:FloorplanName>
+                        <MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
                     </MITS:Information>
-                    <MITS:PropertyPrimaryID>prvista1
-                    </MITS:PropertyPrimaryID>
-                    <MITS:MarketingName>Property Vista 1 Test Property
-                    </MITS:MarketingName>
+                    <MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+                    <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                 </Unit>
             </RT_Unit>
             <PaymentAccepted>0</PaymentAccepted>
@@ -1009,8 +897,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-01-01
-                            </TransactionDate>
+                            <TransactionDate>2011-01-01</TransactionDate>
                             <TransactionID>700030745</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -1027,8 +914,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-02-01
-                            </TransactionDate>
+                            <TransactionDate>2011-02-01</TransactionDate>
                             <TransactionID>700030751</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -1045,8 +931,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-03-01
-                            </TransactionDate>
+                            <TransactionDate>2011-03-01</TransactionDate>
                             <TransactionID>700030757</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -1063,8 +948,7 @@
                     <Charge>
                         <Detail>
                             <Description>Security Deposit</Description>
-                            <TransactionDate>2011-03-24
-                            </TransactionDate>
+                            <TransactionDate>2011-03-24</TransactionDate>
                             <TransactionID>700030785</TransactionID>
                             <ChargeCode>deposit</ChargeCode>
                             <GLAccountNumber>22500000</GLAccountNumber>
@@ -1087,8 +971,7 @@
                     <MITS:CustomerID>t0005340</MITS:CustomerID>
                     <MITS:Property>
                         <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                        <MITS:MarketingName>Property Vista 1 Test
-                            Property</MITS:MarketingName>
+                        <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                         <MITS:UnitID>147</MITS:UnitID>
                     </MITS:Property>
                     <MITS:Name>
@@ -1098,23 +981,18 @@
                     </MITS:Name>
                     <MITS:Address Type="property">
                         <MITS:Description>current</MITS:Description>
-                        <MITS:Address1>430 S Fairview Avenue
-                        </MITS:Address1>
+                        <MITS:Address1>430 S Fairview Avenue</MITS:Address1>
                         <MITS:City>Goleta</MITS:City>
                         <MITS:State>CA</MITS:State>
                         <MITS:PostalCode>93117</MITS:PostalCode>
                     </MITS:Address>
                     <MITS:Lease>
                         <MITS:CurrentRent>850.00</MITS:CurrentRent>
-                        <MITS:ExpectedMoveInDate>2011-03-01
-                        </MITS:ExpectedMoveInDate>
-                        <MITS:LeaseFromDate>2011-03-01
-                        </MITS:LeaseFromDate>
+                        <MITS:ExpectedMoveInDate>2011-03-01</MITS:ExpectedMoveInDate>
+                        <MITS:LeaseFromDate>2011-03-01</MITS:LeaseFromDate>
                         <MITS:LeaseToDate>2011-03-01</MITS:LeaseToDate>
-                        <MITS:ActualMoveIn>2011-03-01
-                        </MITS:ActualMoveIn>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ActualMoveIn>2011-03-01</MITS:ActualMoveIn>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
             </Customers>
@@ -1126,26 +1004,19 @@
                         <MITS:UnitID>147</MITS:UnitID>
                         <MITS:UnitType>prv11b1</MITS:UnitType>
                         <MITS:UnitBedrooms>1</MITS:UnitBedrooms>
-                        <MITS:UnitBathrooms>1.000000
-                        </MITS:UnitBathrooms>
+                        <MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
                         <MITS:MinSquareFeet>900</MITS:MinSquareFeet>
                         <MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
                         <MITS:UnitRent>850.00</MITS:UnitRent>
                         <MITS:MarketRent>850.000000</MITS:MarketRent>
-                        <MITS:UnitEconomicStatus>residential
-                        </MITS:UnitEconomicStatus>
-                        <MITS:UnitOccupancyStatus>occupied
-                        </MITS:UnitOccupancyStatus>
-                        <MITS:UnitLeasedStatus>leased
-                        </MITS:UnitLeasedStatus>
+                        <MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+                        <MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+                        <MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
                         <MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
-                        <MITS:FloorplanName>1 Bedroom 1 Bath
-                        </MITS:FloorplanName>
+                        <MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
                     </MITS:Information>
-                    <MITS:PropertyPrimaryID>prvista1
-                    </MITS:PropertyPrimaryID>
-                    <MITS:MarketingName>Property Vista 1 Test Property
-                    </MITS:MarketingName>
+                    <MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+                    <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                 </Unit>
             </RT_Unit>
             <PaymentAccepted>0</PaymentAccepted>
@@ -1200,8 +1071,7 @@
                     <MITS:CustomerID>t0005341</MITS:CustomerID>
                     <MITS:Property>
                         <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                        <MITS:MarketingName>Property Vista 1 Test
-                            Property</MITS:MarketingName>
+                        <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                         <MITS:UnitID>148</MITS:UnitID>
                     </MITS:Property>
                     <MITS:Name>
@@ -1211,23 +1081,18 @@
                     </MITS:Name>
                     <MITS:Address Type="property">
                         <MITS:Description>current</MITS:Description>
-                        <MITS:Address1>430 S Fairview Avenue
-                        </MITS:Address1>
+                        <MITS:Address1>430 S Fairview Avenue</MITS:Address1>
                         <MITS:City>Goleta</MITS:City>
                         <MITS:State>CA</MITS:State>
                         <MITS:PostalCode>93117</MITS:PostalCode>
                     </MITS:Address>
                     <MITS:Lease>
                         <MITS:CurrentRent>850.00</MITS:CurrentRent>
-                        <MITS:ExpectedMoveInDate>2011-03-01
-                        </MITS:ExpectedMoveInDate>
-                        <MITS:LeaseFromDate>2011-03-01
-                        </MITS:LeaseFromDate>
+                        <MITS:ExpectedMoveInDate>2011-03-01</MITS:ExpectedMoveInDate>
+                        <MITS:LeaseFromDate>2011-03-01</MITS:LeaseFromDate>
                         <MITS:LeaseToDate>2011-03-01</MITS:LeaseToDate>
-                        <MITS:ActualMoveIn>2011-03-01
-                        </MITS:ActualMoveIn>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ActualMoveIn>2011-03-01</MITS:ActualMoveIn>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
             </Customers>
@@ -1239,26 +1104,19 @@
                         <MITS:UnitID>148</MITS:UnitID>
                         <MITS:UnitType>prv11b1</MITS:UnitType>
                         <MITS:UnitBedrooms>1</MITS:UnitBedrooms>
-                        <MITS:UnitBathrooms>1.000000
-                        </MITS:UnitBathrooms>
+                        <MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
                         <MITS:MinSquareFeet>900</MITS:MinSquareFeet>
                         <MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
                         <MITS:UnitRent>850.00</MITS:UnitRent>
                         <MITS:MarketRent>850.000000</MITS:MarketRent>
-                        <MITS:UnitEconomicStatus>residential
-                        </MITS:UnitEconomicStatus>
-                        <MITS:UnitOccupancyStatus>occupied
-                        </MITS:UnitOccupancyStatus>
-                        <MITS:UnitLeasedStatus>leased
-                        </MITS:UnitLeasedStatus>
+                        <MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+                        <MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+                        <MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
                         <MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
-                        <MITS:FloorplanName>1 Bedroom 1 Bath
-                        </MITS:FloorplanName>
+                        <MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
                     </MITS:Information>
-                    <MITS:PropertyPrimaryID>prvista1
-                    </MITS:PropertyPrimaryID>
-                    <MITS:MarketingName>Property Vista 1 Test Property
-                    </MITS:MarketingName>
+                    <MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+                    <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                 </Unit>
             </RT_Unit>
             <PaymentAccepted>0</PaymentAccepted>
@@ -1313,8 +1171,7 @@
                     <MITS:CustomerID>t0005342</MITS:CustomerID>
                     <MITS:Property>
                         <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                        <MITS:MarketingName>Property Vista 1 Test
-                            Property</MITS:MarketingName>
+                        <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                         <MITS:UnitID>150</MITS:UnitID>
                     </MITS:Property>
                     <MITS:Name>
@@ -1324,23 +1181,18 @@
                     </MITS:Name>
                     <MITS:Address Type="property">
                         <MITS:Description>current</MITS:Description>
-                        <MITS:Address1>430 S Fairview Avenue
-                        </MITS:Address1>
+                        <MITS:Address1>430 S Fairview Avenue</MITS:Address1>
                         <MITS:City>Goleta</MITS:City>
                         <MITS:State>CA</MITS:State>
                         <MITS:PostalCode>93117</MITS:PostalCode>
                     </MITS:Address>
                     <MITS:Lease>
                         <MITS:CurrentRent>900.00</MITS:CurrentRent>
-                        <MITS:ExpectedMoveInDate>2010-05-01
-                        </MITS:ExpectedMoveInDate>
-                        <MITS:LeaseFromDate>2010-05-01
-                        </MITS:LeaseFromDate>
+                        <MITS:ExpectedMoveInDate>2010-05-01</MITS:ExpectedMoveInDate>
+                        <MITS:LeaseFromDate>2010-05-01</MITS:LeaseFromDate>
                         <MITS:LeaseToDate>2010-05-01</MITS:LeaseToDate>
-                        <MITS:ActualMoveIn>2010-05-01
-                        </MITS:ActualMoveIn>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ActualMoveIn>2010-05-01</MITS:ActualMoveIn>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
             </Customers>
@@ -1352,26 +1204,19 @@
                         <MITS:UnitID>150</MITS:UnitID>
                         <MITS:UnitType>prv11b1</MITS:UnitType>
                         <MITS:UnitBedrooms>1</MITS:UnitBedrooms>
-                        <MITS:UnitBathrooms>1.000000
-                        </MITS:UnitBathrooms>
+                        <MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
                         <MITS:MinSquareFeet>900</MITS:MinSquareFeet>
                         <MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
                         <MITS:UnitRent>850.00</MITS:UnitRent>
                         <MITS:MarketRent>850.000000</MITS:MarketRent>
-                        <MITS:UnitEconomicStatus>residential
-                        </MITS:UnitEconomicStatus>
-                        <MITS:UnitOccupancyStatus>occupied
-                        </MITS:UnitOccupancyStatus>
-                        <MITS:UnitLeasedStatus>leased
-                        </MITS:UnitLeasedStatus>
+                        <MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+                        <MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+                        <MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
                         <MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
-                        <MITS:FloorplanName>1 Bedroom 1 Bath
-                        </MITS:FloorplanName>
+                        <MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
                     </MITS:Information>
-                    <MITS:PropertyPrimaryID>prvista1
-                    </MITS:PropertyPrimaryID>
-                    <MITS:MarketingName>Property Vista 1 Test Property
-                    </MITS:MarketingName>
+                    <MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+                    <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                 </Unit>
             </RT_Unit>
             <PaymentAccepted>0</PaymentAccepted>
@@ -1420,8 +1265,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-01-01
-                            </TransactionDate>
+                            <TransactionDate>2011-01-01</TransactionDate>
                             <TransactionID>700030746</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -1438,8 +1282,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-02-01
-                            </TransactionDate>
+                            <TransactionDate>2011-02-01</TransactionDate>
                             <TransactionID>700030752</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -1456,8 +1299,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-03-01
-                            </TransactionDate>
+                            <TransactionDate>2011-03-01</TransactionDate>
                             <TransactionID>700030758</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -1480,8 +1322,7 @@
                     <MITS:CustomerID>t0005343</MITS:CustomerID>
                     <MITS:Property>
                         <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                        <MITS:MarketingName>Property Vista 1 Test
-                            Property</MITS:MarketingName>
+                        <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                         <MITS:UnitID>411</MITS:UnitID>
                     </MITS:Property>
                     <MITS:Name>
@@ -1491,25 +1332,19 @@
                     </MITS:Name>
                     <MITS:Address Type="property">
                         <MITS:Description>current</MITS:Description>
-                        <MITS:Address1>430 S Fairview Avenue
-                        </MITS:Address1>
+                        <MITS:Address1>430 S Fairview Avenue</MITS:Address1>
                         <MITS:City>Goleta</MITS:City>
                         <MITS:State>CA</MITS:State>
                         <MITS:PostalCode>93117</MITS:PostalCode>
                     </MITS:Address>
                     <MITS:Lease>
                         <MITS:CurrentRent>975.00</MITS:CurrentRent>
-                        <MITS:ExpectedMoveInDate>2010-05-01
-                        </MITS:ExpectedMoveInDate>
-                        <MITS:ExpectedMoveOutDate>2011-03-15
-                        </MITS:ExpectedMoveOutDate>
-                        <MITS:LeaseFromDate>2010-05-01
-                        </MITS:LeaseFromDate>
+                        <MITS:ExpectedMoveInDate>2010-05-01</MITS:ExpectedMoveInDate>
+                        <MITS:ExpectedMoveOutDate>2011-03-15</MITS:ExpectedMoveOutDate>
+                        <MITS:LeaseFromDate>2010-05-01</MITS:LeaseFromDate>
                         <MITS:LeaseToDate>2010-05-01</MITS:LeaseToDate>
-                        <MITS:ActualMoveIn>2010-05-01
-                        </MITS:ActualMoveIn>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ActualMoveIn>2010-05-01</MITS:ActualMoveIn>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
             </Customers>
@@ -1521,26 +1356,19 @@
                         <MITS:UnitID>411</MITS:UnitID>
                         <MITS:UnitType>prv11b1</MITS:UnitType>
                         <MITS:UnitBedrooms>1</MITS:UnitBedrooms>
-                        <MITS:UnitBathrooms>1.000000
-                        </MITS:UnitBathrooms>
+                        <MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
                         <MITS:MinSquareFeet>900</MITS:MinSquareFeet>
                         <MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
                         <MITS:UnitRent>850.00</MITS:UnitRent>
                         <MITS:MarketRent>850.000000</MITS:MarketRent>
-                        <MITS:UnitEconomicStatus>residential
-                        </MITS:UnitEconomicStatus>
-                        <MITS:UnitOccupancyStatus>occupied
-                        </MITS:UnitOccupancyStatus>
-                        <MITS:UnitLeasedStatus>on notice
-                        </MITS:UnitLeasedStatus>
+                        <MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+                        <MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+                        <MITS:UnitLeasedStatus>on notice</MITS:UnitLeasedStatus>
                         <MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
-                        <MITS:FloorplanName>1 Bedroom 1 Bath
-                        </MITS:FloorplanName>
+                        <MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
                     </MITS:Information>
-                    <MITS:PropertyPrimaryID>prvista1
-                    </MITS:PropertyPrimaryID>
-                    <MITS:MarketingName>Property Vista 1 Test Property
-                    </MITS:MarketingName>
+                    <MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+                    <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                 </Unit>
             </RT_Unit>
             <PaymentAccepted>1</PaymentAccepted>
@@ -1589,8 +1417,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-01-01
-                            </TransactionDate>
+                            <TransactionDate>2011-01-01</TransactionDate>
                             <TransactionID>700030747</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -1607,8 +1434,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-02-01
-                            </TransactionDate>
+                            <TransactionDate>2011-02-01</TransactionDate>
                             <TransactionID>700030753</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -1625,8 +1451,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-03-01
-                            </TransactionDate>
+                            <TransactionDate>2011-03-01</TransactionDate>
                             <TransactionID>700030759</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -1649,8 +1474,7 @@
                     <MITS:CustomerID>t0005529</MITS:CustomerID>
                     <MITS:Property>
                         <MITS:PrimaryID>prvista1</MITS:PrimaryID>
-                        <MITS:MarketingName>Property Vista 1 Test
-                            Property</MITS:MarketingName>
+                        <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                         <MITS:UnitID>413</MITS:UnitID>
                     </MITS:Property>
                     <MITS:Name>
@@ -1660,23 +1484,18 @@
                     </MITS:Name>
                     <MITS:Address Type="property">
                         <MITS:Description>current</MITS:Description>
-                        <MITS:Address1>430 S Fairview Avenue
-                        </MITS:Address1>
+                        <MITS:Address1>430 S Fairview Avenue</MITS:Address1>
                         <MITS:City>Goleta</MITS:City>
                         <MITS:State>CA</MITS:State>
                         <MITS:PostalCode>93117</MITS:PostalCode>
                     </MITS:Address>
                     <MITS:Lease>
                         <MITS:CurrentRent>850.00</MITS:CurrentRent>
-                        <MITS:ExpectedMoveInDate>2011-06-01
-                        </MITS:ExpectedMoveInDate>
-                        <MITS:LeaseFromDate>2011-06-01
-                        </MITS:LeaseFromDate>
+                        <MITS:ExpectedMoveInDate>2011-06-01</MITS:ExpectedMoveInDate>
+                        <MITS:LeaseFromDate>2011-06-01</MITS:LeaseFromDate>
                         <MITS:LeaseToDate>2012-05-31</MITS:LeaseToDate>
-                        <MITS:ActualMoveIn>2011-06-01
-                        </MITS:ActualMoveIn>
-                        <MITS:ResponsibleForLease>true
-                        </MITS:ResponsibleForLease>
+                        <MITS:ActualMoveIn>2011-06-01</MITS:ActualMoveIn>
+                        <MITS:ResponsibleForLease>true</MITS:ResponsibleForLease>
                     </MITS:Lease>
                 </MITS:Customer>
             </Customers>
@@ -1688,26 +1507,19 @@
                         <MITS:UnitID>413</MITS:UnitID>
                         <MITS:UnitType>prv11b1</MITS:UnitType>
                         <MITS:UnitBedrooms>1</MITS:UnitBedrooms>
-                        <MITS:UnitBathrooms>1.000000
-                        </MITS:UnitBathrooms>
+                        <MITS:UnitBathrooms>1.000000</MITS:UnitBathrooms>
                         <MITS:MinSquareFeet>900</MITS:MinSquareFeet>
                         <MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
                         <MITS:UnitRent>850.00</MITS:UnitRent>
                         <MITS:MarketRent>850.000000</MITS:MarketRent>
-                        <MITS:UnitEconomicStatus>residential
-                        </MITS:UnitEconomicStatus>
-                        <MITS:UnitOccupancyStatus>occupied
-                        </MITS:UnitOccupancyStatus>
-                        <MITS:UnitLeasedStatus>leased
-                        </MITS:UnitLeasedStatus>
+                        <MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+                        <MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+                        <MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
                         <MITS:FloorPlanID>prv11b1</MITS:FloorPlanID>
-                        <MITS:FloorplanName>1 Bedroom 1 Bath
-                        </MITS:FloorplanName>
+                        <MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
                     </MITS:Information>
-                    <MITS:PropertyPrimaryID>prvista1
-                    </MITS:PropertyPrimaryID>
-                    <MITS:MarketingName>Property Vista 1 Test Property
-                    </MITS:MarketingName>
+                    <MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+                    <MITS:MarketingName>Property Vista 1 Test Property</MITS:MarketingName>
                 </Unit>
             </RT_Unit>
             <PaymentAccepted>0</PaymentAccepted>
@@ -1716,8 +1528,7 @@
                     <Charge>
                         <Detail>
                             <Description>Administration</Description>
-                            <TransactionDate>2011-06-05
-                            </TransactionDate>
+                            <TransactionDate>2011-06-05</TransactionDate>
                             <TransactionID>700031165</TransactionID>
                             <ChargeCode>admin</ChargeCode>
                             <GLAccountNumber>53000000</GLAccountNumber>
@@ -1734,8 +1545,7 @@
                     <Charge>
                         <Detail>
                             <Description>Base Rent</Description>
-                            <TransactionDate>2011-06-06
-                            </TransactionDate>
+                            <TransactionDate>2011-06-06</TransactionDate>
                             <TransactionID>700031172</TransactionID>
                             <ChargeCode>.rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -1752,8 +1562,7 @@
                     <Charge>
                         <Detail>
                             <Description>Electric</Description>
-                            <TransactionDate>2011-06-06
-                            </TransactionDate>
+                            <TransactionDate>2011-06-06</TransactionDate>
                             <TransactionID>700031173</TransactionID>
                             <ChargeCode>elect</ChargeCode>
                             <GLAccountNumber>54700000</GLAccountNumber>
@@ -1770,8 +1579,7 @@
                     <Charge>
                         <Detail>
                             <Description>Security Deposit</Description>
-                            <TransactionDate>2011-06-06
-                            </TransactionDate>
+                            <TransactionDate>2011-06-06</TransactionDate>
                             <TransactionID>700031174</TransactionID>
                             <ChargeCode>deposit</ChargeCode>
                             <GLAccountNumber>22500000</GLAccountNumber>
@@ -1788,8 +1596,7 @@
                     <Charge>
                         <Detail>
                             <Description>Insurance</Description>
-                            <TransactionDate>2011-06-06
-                            </TransactionDate>
+                            <TransactionDate>2011-06-06</TransactionDate>
                             <TransactionID>700031175</TransactionID>
                             <ChargeCode>insur</ChargeCode>
                             <GLAccountNumber>53200000</GLAccountNumber>
@@ -1806,8 +1613,7 @@
                     <Charge>
                         <Detail>
                             <Description>Legal</Description>
-                            <TransactionDate>2011-06-06
-                            </TransactionDate>
+                            <TransactionDate>2011-06-06</TransactionDate>
                             <TransactionID>700031176</TransactionID>
                             <ChargeCode>legal</ChargeCode>
                             <GLAccountNumber>76100000</GLAccountNumber>
@@ -1824,8 +1630,7 @@
                     <Charge>
                         <Detail>
                             <Description>Tax1</Description>
-                            <TransactionDate>2011-06-06
-                            </TransactionDate>
+                            <TransactionDate>2011-06-06</TransactionDate>
                             <TransactionID>700031177</TransactionID>
                             <ChargeCode>tax1</ChargeCode>
                             <GLAccountNumber>23100000</GLAccountNumber>
@@ -1842,8 +1647,7 @@
                     <Charge>
                         <Detail>
                             <Description>rent</Description>
-                            <TransactionDate>2011-06-06
-                            </TransactionDate>
+                            <TransactionDate>2011-06-06</TransactionDate>
                             <TransactionID>700031178</TransactionID>
                             <ChargeCode>rent</ChargeCode>
                             <GLAccountNumber>45000000</GLAccountNumber>
@@ -1860,8 +1664,7 @@
                     <Charge>
                         <Detail>
                             <Description>Parking</Description>
-                            <TransactionDate>2011-06-06
-                            </TransactionDate>
+                            <TransactionDate>2011-06-06</TransactionDate>
                             <TransactionID>700031179</TransactionID>
                             <ChargeCode>parking</ChargeCode>
                             <GLAccountNumber>57000000</GLAccountNumber>

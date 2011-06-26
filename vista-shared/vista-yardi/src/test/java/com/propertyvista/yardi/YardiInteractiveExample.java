@@ -76,7 +76,19 @@ public class YardiInteractiveExample {
         if (command.equals("1")) {
             doGetPropertyConfigurations(c, yp);
         } else if (command.equals("2")) {
-            YardiTransactions.getResidentTransactions(c, yp);
+            doGetResidentTransactions(c, yp);
+        }
+    }
+
+    private static void doGetResidentTransactions(YardiClient c, YardiParameters yp) throws IOException, JAXBException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("- GetResidentTransactions -\n");
+        sb.append("1: Download from Yardi\n");
+        System.out.println(sb);
+        String command = read();
+        GetResidentTransactionsLifecycle lifecycle = new GetResidentTransactionsLifecycle();
+        if (command.equals("1")) {
+            lifecycle.download(c, yp);
         }
     }
 

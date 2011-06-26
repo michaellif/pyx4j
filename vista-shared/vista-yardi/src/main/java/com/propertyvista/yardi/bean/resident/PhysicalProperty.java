@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 1, 2011
+ * Created on May 28, 2011
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean2;
+package com.propertyvista.yardi.bean.resident;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +19,25 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "ResidentTransactions")
-public class ResidentTransactions {
+
+@XmlRootElement(name = "PhysicalProperty")
+public class PhysicalProperty {
     private List<Property> properties = new ArrayList<Property>();
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(properties.size()).append(" properties");
         for (Property property : properties) {
-            sb.append("\n").append(property);
+            sb.append("\n");
+
+            sb.append(property);
+
+//            List<RTCustomer> customers = property.getRTCustomer();
+//            sb.append(customers.size()).append(" customers");
+//            for (RTCustomer customer : customers) {
+//                sb.append("customerId=").append(customer.getCustomerID());
+//                sb.append("\n");
+//            }
         }
 
         return sb.toString();

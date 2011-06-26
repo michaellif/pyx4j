@@ -58,7 +58,7 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.bean.Properties;
-import com.propertyvista.yardi.bean2.PhysicalProperty;
+import com.propertyvista.yardi.bean.resident.PhysicalProperty;
 
 public class YardiTransactions {
 

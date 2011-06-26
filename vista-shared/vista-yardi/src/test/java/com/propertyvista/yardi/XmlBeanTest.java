@@ -14,8 +14,11 @@
 package com.propertyvista.yardi;
 
 import java.io.IOException;
+import java.io.StringReader;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import junit.framework.Assert;
 
@@ -31,8 +34,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
-import com.propertyvista.yardi.bean2.PhysicalProperty;
-import com.propertyvista.yardi.bean2.ResidentTransactions;
+import com.propertyvista.yardi.bean.resident.PhysicalProperty;
+import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.mapper.GetPropertyConfigurationsMapper;
 import com.propertyvista.yardi.mapper.GetResidentTransactionsMapper;
 import com.propertyvista.yardi.mapper.YardiXmlUtil;
@@ -96,11 +99,15 @@ public class XmlBeanTest {
     public void testGetResidentTransactions() throws IOException, JAXBException {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetResidentTransactions.xml", getClass()));
 
-//        log.info(xml);
         xml = YardiXmlUtil.stripGetResidentTransactions(xml);
-        ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
+        log.info(xml);
+        JAXBContext context = JAXBContext.newInstance(ResidentTransactions.class);
+        Unmarshaller um = context.createUnmarshaller();
+        ResidentTransactions transactions = (ResidentTransactions) um.unmarshal(new StringReader(xml));
 
-        log.debug("Loaded transactions {}", transactions);
+//        ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
+
+        log.info("Loaded transactions {}", transactions);
 
         GetResidentTransactionsMapper mapper = new GetResidentTransactionsMapper();
         mapper.map(transactions);

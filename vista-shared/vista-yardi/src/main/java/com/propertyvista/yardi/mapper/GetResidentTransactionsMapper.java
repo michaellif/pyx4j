@@ -13,9 +13,9 @@
  */
 package com.propertyvista.yardi.mapper;
 
-import com.propertyvista.yardi.bean2.Property;
-import com.propertyvista.yardi.bean2.RTCustomer;
-import com.propertyvista.yardi.bean2.ResidentTransactions;
+import com.propertyvista.yardi.bean.resident.Property;
+import com.propertyvista.yardi.bean.resident.RTCustomer;
+import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 
 public class GetResidentTransactionsMapper {
 

@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean2;
+package com.propertyvista.yardi.bean.resident;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -28,11 +28,9 @@ public class Unit {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("propertyPrimaryId=");
+        sb.append("(");
         sb.append(propertyPrimaryId);
-        sb.append(" marketingName=");
-        sb.append(marketingName);
-        sb.append(" information=");
+        sb.append(") ");
         sb.append(information);
 
         return sb.toString();

@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean2;
+package com.propertyvista.yardi.bean.resident;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
