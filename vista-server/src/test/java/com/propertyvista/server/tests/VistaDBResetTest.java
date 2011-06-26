@@ -39,7 +39,7 @@ public class VistaDBResetTest extends VistaDBTestBase {
                 continue;
             }
             if (className.endsWith("DTO")) {
-                Assert.fail("TDO Object " + className + "  should be @Transient");
+                Assert.fail("DTO Object " + className + "  should be @Transient");
             }
             if (srv.isTableExists(meta.getEntityClass())) {
                 srv.dropTable(meta.getEntityClass());
