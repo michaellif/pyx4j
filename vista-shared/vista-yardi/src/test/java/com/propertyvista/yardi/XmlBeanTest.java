@@ -34,7 +34,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
-import com.propertyvista.yardi.bean.resident.PhysicalProperty;
 import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.mapper.GetPropertyConfigurationsMapper;
 import com.propertyvista.yardi.mapper.GetResidentTransactionsMapper;
@@ -90,9 +89,19 @@ public class XmlBeanTest {
     @Test
     public void testGetUnitInformation() throws IOException, JAXBException {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetUnitInformation.xml", getClass()));
-        PhysicalProperty property = MarshallUtil.unmarshal(PhysicalProperty.class, xml);
+//        PhysicalProperty property = MarshallUtil.unmarshal(PhysicalProperty.class, xml);
+//
+//        log.debug("Loaded properties {}", property);
+    }
 
-        log.debug("Loaded properties {}", property);
+    @Test
+    public void testGenerateGetResidentTransactions() throws IOException, JAXBException {
+        ResidentTransactions transactions = new ResidentTransactions();
+        com.propertyvista.yardi.bean.resident.Property property = new com.propertyvista.yardi.bean.resident.Property();
+        transactions.getProperties().add(property);
+
+        String xml = MarshallUtil.marshall(transactions);
+        log.info(xml);
     }
 
     @Test
