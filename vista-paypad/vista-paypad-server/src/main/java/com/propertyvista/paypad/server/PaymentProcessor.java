@@ -123,12 +123,23 @@ public class PaymentProcessor {
             return;
         }
 
-        if ((tokenActionRequest.getAction() == TokenAction.Add) || (tokenActionRequest.getAction() == TokenAction.Update)) {
+        if (tokenActionRequest.getAction() == TokenAction.Add) {
             if (!isValid(tokenActionRequest.getCard())) {
                 setErrorCode(response, "7000", "MALFORMED REQUEST");
                 return;
             }
             crequest.creditCardNumber = tokenActionRequest.getCard().getCardNumber();
+            crequest.setExpiryDate(tokenActionRequest.getCard().getExpiryDate());
+            crequest.tokenRef = tokenActionRequest.getReference();
+        } else if (tokenActionRequest.getAction() == TokenAction.Update) {
+            // validate card number if any
+            if (tokenActionRequest.getCard().getCardNumber() != null) {
+                Set<ConstraintViolation<CreditCardInfo>> constraintViolations = validator.validateProperty(tokenActionRequest.getCard(), "cardNumber");
+                if (constraintViolations.size() > 0) {
+                    setErrorCode(response, "7000", "MALFORMED REQUEST");
+                    return;
+                }
+            }
             crequest.setExpiryDate(tokenActionRequest.getCard().getExpiryDate());
             crequest.tokenRef = tokenActionRequest.getReference();
         }
