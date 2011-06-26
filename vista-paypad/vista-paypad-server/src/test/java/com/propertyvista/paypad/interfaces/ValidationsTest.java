@@ -37,7 +37,17 @@ public class ValidationsTest {
         Validator validator = factory.getValidator();
 
         Set<ConstraintViolation<T>> constraintViolations = validator.validate(r);
-        Assert.assertEquals(violationsSize, constraintViolations.size());
+        boolean ok = false;
+        try {
+            Assert.assertEquals(violationsSize, constraintViolations.size());
+            ok = true;
+        } finally {
+            if (!ok) {
+                for (ConstraintViolation<T> v : constraintViolations) {
+                    System.err.println(v.getPropertyPath() + " " + v.getMessage());
+                }
+            }
+        }
     }
 
     @Test
@@ -63,8 +73,9 @@ public class ValidationsTest {
     @Test
     public void testTransactionRequest() throws JAXBException {
         TransactionRequest tr = new TransactionRequest();
-        assertViolations(3, tr);
+        assertViolations(4, tr);
 
+        tr.setRequestID("1");
         tr.setTxnType(TransactionRequest.TransactionType.Sale);
         tr.setReference("12345678");
         CreditCardInfo cc = new CreditCardInfo();
