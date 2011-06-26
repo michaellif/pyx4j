@@ -39,7 +39,7 @@ public class Property {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(code).append(" ar=$").append(accountsReceivable).append(" ap=$").append(accountsPayable);
+        sb.append(code).append("\tar=").append(accountsReceivable).append(" ap=").append(accountsPayable);
 
         return sb.toString();
     }

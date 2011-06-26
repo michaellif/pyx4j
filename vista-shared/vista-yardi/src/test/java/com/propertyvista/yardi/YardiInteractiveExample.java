@@ -16,19 +16,23 @@ package com.propertyvista.yardi;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.rmi.RemoteException;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLStreamException;
 
-import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.yardi.bean.out.Charge;
-import com.propertyvista.yardi.bean.out.Detail;
+import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.server.common.reference.SharedData;
+import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.mapper.GetPropertyConfigurationsMapper;
+import com.propertyvista.yardi.merger.BuildingsMerger;
 
 public class YardiInteractiveExample {
 
@@ -46,41 +50,72 @@ public class YardiInteractiveExample {
         yp.setPlatform(YardiConstants.PLATFORM);
         yp.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
         yp.setYardiPropertyId(YardiConstants.YARDI_PROPERTY_ID);
-//        yp.setYardiPropertyId("anya_2");
+
+        // init db
+        VistaTestsServerSideConfiguration conf = new VistaTestsServerSideConfiguration(true);
+        ServerSideConfiguration.setInstance(conf);
+        SharedData.init();
 
         // execute different actions
         try {
             while (true) {
-                System.out.println("Enter command: \n" + "0: Exit\n" + "1: GetPropertyConfigurations\n" + "2: GetResidentTransactions");
+                StringBuilder sb = new StringBuilder();
+                sb.append("Enter command: \n");
+                sb.append("1: GetPropertyConfigurations\n");
+                sb.append("2: GetResidentTransactions\n");
+                sb.append("0: Exit\n");
+                System.out.println(sb.toString());
                 String command = read();
-                System.out.println("Entered [" + command + "]");
                 if (command.equals("0")) {
                     break;
                 }
                 process(command, c, yp);
             }
-            System.out.println("You are done");
-//            // the order of this call should match the document order
-//            YardiTransactions.ping(c);
-//            YardiTransactions.getResidentTransactions(c, yp);
-//
-//            // ANYA, use the first line if you want to send stuff, second to retrieve
-//            //send(c, yp);
-//            retrieve(c, yp);
-//
-//            //YardiTransactions.getResidentTransactions(c, yp);
-//            //YardiTransactions.getResidentsLeaseCharges(c, yp);
-
+            System.out.println("Interactive session is finished");
         } catch (Throwable e) {
             log.error("error", e);
         }
     }
 
-    private static void process(String command, YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
+    private static void process(String command, YardiClient c, YardiParameters yp) throws JAXBException, IOException {
         if (command.equals("1")) {
-            YardiTransactions.getPropertyConfigurations(c, yp);
+            doGetPropertyConfigurations(c, yp);
         } else if (command.equals("2")) {
             YardiTransactions.getResidentTransactions(c, yp);
+        }
+    }
+
+    private static void doGetPropertyConfigurations(YardiClient c, YardiParameters yp) throws JAXBException, IOException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("- GetPropertyConfigurations -\n");
+        sb.append("1: Download from Yardi\n");
+        sb.append("2: Read from local database\n");
+        sb.append("3: Merge\n");
+        System.out.println(sb);
+        String command = read();
+        if (command.equals("1")) {
+            Properties properties = YardiTransactions.getPropertyConfigurations(c, yp);
+            GetPropertyConfigurationsMapper mapper = new GetPropertyConfigurationsMapper();
+            mapper.map(properties);
+            List<Building> buildings = mapper.getBuildings();
+            log.info("Has {} buildings", buildings.size());
+        } else if (command.equals("2")) {
+            List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Building>(Building.class));
+            log.info("Has {} buildings", buildings.size());
+        } else if (command.equals("3")) {
+            Properties properties = YardiTransactions.getPropertyConfigurations(c, yp);
+            GetPropertyConfigurationsMapper mapper = new GetPropertyConfigurationsMapper();
+            mapper.map(properties);
+            List<Building> imported = mapper.getBuildings();
+            List<Building> existing = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Building>(Building.class));
+            List<Building> merged = new BuildingsMerger().merge(imported, existing);
+            for (Building building : merged) {
+                PersistenceServicesFactory.getPersistenceService().persist(building.info().address());
+                PersistenceServicesFactory.getPersistenceService().persist(building.info());
+                PersistenceServicesFactory.getPersistenceService().persist(building.marketing());
+                PersistenceServicesFactory.getPersistenceService().persist(building);
+            }
+            log.info("Merged {} buildings", merged.size());
         }
     }
 
@@ -90,46 +125,5 @@ public class YardiInteractiveExample {
         String token;
         token = br.readLine();
         return token;
-    }
-
-    private static void send(YardiClient c, YardiParameters yp) throws JAXBException, XMLStreamException, IOException {
-
-        Charge charge = new Charge();
-        Detail detail = new Detail();
-        charge.setDetail(detail);
-
-        // TODO - the code below does not do anything yet, just use the Charge.xml file
-        detail.setBatchId("05/2010 Vista Charges");
-        detail.setDescription("Application Fee");
-        detail.setTransactionDate("2011-06-05");
-        detail.setChargeCode("appfee");
-        detail.setGlAccountNumber("58200000");
-        detail.setCustomerId("t0000188");
-        detail.setUnitId("104");
-        detail.setAmountPaid("0");
-        detail.setAmount("20.00");
-        detail.setComment("Application Fee");
-        detail.setPropertyPrimaryId(yp.getYardiPropertyId());
-
-//        String xml = MarshallUtil.marshalls(charge);
-
-        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("Payment.xml", XmlBeanTest.class));
-
-        log.info("Sending\n{}\n", xml);
-        yp.setTransactionXml(xml);
-
-        YardiTransactions.importResidentTransactions(c, yp);
-
-    }
-
-    private static void retrieve(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
-//    YardiTransactions.getResidentTransaction(c, yp);
-        YardiTransactions.getResidentTransactionsByChargeDate(c, yp);
-        YardiTransactions.getResidentTransactionsByApplicationDate(c, yp);
-        YardiTransactions.getResidentsLeaseCharges(c, yp);
-//    YardiTransactions.getResidentLeaseCharges(c, yp);
-        YardiTransactions.getUnitInformationLogin(c, yp);
-        YardiTransactions.getVendors(c, yp);
-        YardiTransactions.getExportChartOfAccounts(c, yp);
     }
 }

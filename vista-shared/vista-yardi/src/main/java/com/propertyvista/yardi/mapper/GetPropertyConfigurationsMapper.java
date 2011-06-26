@@ -36,6 +36,19 @@ public class GetPropertyConfigurationsMapper {
         }
     }
 
+    /**
+     * Fields that get mapped are:
+     * 
+     * building.info:
+     * propertyCode
+     * address
+     * 
+     * building.marketing:
+     * name
+     * 
+     * @param property
+     * @return
+     */
     public Building map(Property property) {
         Building building = EntityFactory.create(Building.class);
 

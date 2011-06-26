@@ -43,6 +43,9 @@ public class SharedData {
     }
 
     public static Province findProvinceByCode(String code) {
+        if (provinces == null) {
+            throw new IllegalStateException("SharedData is not initialized");
+        }
         for (Province province : provinces) {
             if (province.code().getValue().equals(code)) {
                 return province;
