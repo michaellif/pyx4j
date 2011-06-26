@@ -24,15 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.server.common.reference.SharedData;
-import com.propertyvista.yardi.bean.Properties;
-import com.propertyvista.yardi.mapper.GetPropertyConfigurationsMapper;
-import com.propertyvista.yardi.merger.BuildingsMerger;
 
 public class YardiInteractiveExample {
 
@@ -89,33 +84,20 @@ public class YardiInteractiveExample {
         StringBuilder sb = new StringBuilder();
         sb.append("- GetPropertyConfigurations -\n");
         sb.append("1: Download from Yardi\n");
-        sb.append("2: Read from local database\n");
+        sb.append("2: Load from local database\n");
         sb.append("3: Merge\n");
         System.out.println(sb);
         String command = read();
+        GetPropertyConfigurationLifecycle lifecycle = new GetPropertyConfigurationLifecycle();
         if (command.equals("1")) {
-            Properties properties = YardiTransactions.getPropertyConfigurations(c, yp);
-            GetPropertyConfigurationsMapper mapper = new GetPropertyConfigurationsMapper();
-            mapper.map(properties);
-            List<Building> buildings = mapper.getBuildings();
+            List<Building> buildings = lifecycle.download(c, yp);
             log.info("Has {} buildings", buildings.size());
         } else if (command.equals("2")) {
-            List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Building>(Building.class));
+            List<Building> buildings = lifecycle.load();
             log.info("Has {} buildings", buildings.size());
         } else if (command.equals("3")) {
-            Properties properties = YardiTransactions.getPropertyConfigurations(c, yp);
-            GetPropertyConfigurationsMapper mapper = new GetPropertyConfigurationsMapper();
-            mapper.map(properties);
-            List<Building> imported = mapper.getBuildings();
-            List<Building> existing = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Building>(Building.class));
-            List<Building> merged = new BuildingsMerger().merge(imported, existing);
-            for (Building building : merged) {
-                PersistenceServicesFactory.getPersistenceService().persist(building.info().address());
-                PersistenceServicesFactory.getPersistenceService().persist(building.info());
-                PersistenceServicesFactory.getPersistenceService().persist(building.marketing());
-                PersistenceServicesFactory.getPersistenceService().persist(building);
-            }
-            log.info("Merged {} buildings", merged.size());
+            List<Building> buildings = lifecycle.merge(c, yp);
+            log.info("Merged {} buildings", buildings.size());
         }
     }
 
