@@ -63,9 +63,10 @@ public class ValidationsTest {
     @Test
     public void testTransactionRequest() throws JAXBException {
         TransactionRequest tr = new TransactionRequest();
-        assertViolations(2, tr);
+        assertViolations(3, tr);
 
         tr.setTxnType(TransactionRequest.TransactionType.Sale);
+        tr.setReference("12345678");
         CreditCardInfo cc = new CreditCardInfo();
         tr.setPaymentInstrument(cc);
         assertViolations(0, tr); // CC files are invalid but beans a are validated individually
