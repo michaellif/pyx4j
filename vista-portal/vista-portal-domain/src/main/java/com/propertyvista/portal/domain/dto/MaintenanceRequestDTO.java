@@ -48,16 +48,16 @@ public interface MaintenanceRequestDTO extends IEntity {
         }
     }
 
-    @Caption(name = "Select a category")
+    @Caption(name = "Category")
     IPrimitive<MaintenanceType> maintenanceType();
 
     @Editor(type = EditorType.textarea)
-    @Caption(name = "Describe the problem")
+    @Caption(name = "Problem Description")
     IPrimitive<String> problemDescription();
 
     IPrimitive<LogicalDate> whenRequested();
 
-    @Caption(name = "Last updated")
+    @Caption(name = "Last Updated")
     IPrimitive<LogicalDate> updated();
 
     IPrimitive<StatusType> status();

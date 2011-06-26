@@ -7,45 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 25, 2011
+ * Created on Jun 26, 2011
  * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.activity;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.portal.client.ui.MaintenanceListerView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
-import com.propertyvista.portal.rpc.portal.services.MaintenanceRequestCrudService;
-
-public class MaintenanceListerActivity extends ListerActivityBase<MaintenanceRequestDTO> {
-
-    @SuppressWarnings("unchecked")
-    public MaintenanceListerActivity(Place place) {
-        super((MaintenanceListerView) PortalViewFactory.instance(MaintenanceListerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
-                .create(MaintenanceRequestCrudService.class), MaintenanceRequestDTO.class);
-        withPlace(place);
-    }
+public abstract class SecurityAwareActivity extends AbstractActivity {
 
     @Override
-    public void start(final AcceptsOneWidget containerWidget, EventBus eventBus) {
-        super.start(containerWidget, eventBus);
+    public void start(final AcceptsOneWidget panel, EventBus eventBus) {
         eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
                 if (!ClientContext.isAuthenticated()) {
-                    containerWidget.setWidget(null);
+                    panel.setWidget(null);
                 }
 
             }

@@ -13,12 +13,15 @@
  */
 package com.propertyvista.portal.client.themes;
 
+import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.site.client.ui.crud.ListerBase;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
@@ -38,7 +41,7 @@ import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentForm;
 
-public abstract class PortalTheme extends com.propertyvista.common.client.theme.VistaTheme {
+public abstract class PortalTheme extends VistaTheme {
 
     public PortalTheme() {
         super();
@@ -49,6 +52,8 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         super.initStyles();
         initBodyStyles();
         initListBoxStyle();
+        initListerStyles();
+        initEntityDataTableStyles();
         initDecoratorsStyles();
         initSiteViewStyles();
         initLogoViewStyles();
@@ -183,6 +188,85 @@ public abstract class PortalTheme extends com.propertyvista.common.client.theme.
         style.addProperty("padding-top", "2px");
         addStyle(style);
 
+    }
+
+    protected void initListerStyles() {
+        String prefix = ListerBase.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.actionsPanel));
+        style.addProperty("margin-top", "0.5em");
+        style.addProperty("margin-bottom", "0.5em");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filtersPanel));
+        style.addProperty("padding-top", "0.5em");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.listPanel));
+        addStyle(style);
+    }
+
+    protected void initEntityDataTableStyles() {
+        String prefix = DataTable.BASE_NAME;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
+        style.addProperty("color", ThemeColor.OBJECT_TONE95);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE60);
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + " a:link, a:visited, a:active");
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + ":hover");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnMenu));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE10);
+        style.addProperty("color", ThemeColor.OBJECT_TONE90);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE90);
+        style.addProperty("padding", "5px 7px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row));
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.even));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.odd));
+        style.addProperty("background-color", "white");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.nodetails));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.selected));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE30);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.BORDER);
+        addStyle(style);
     }
 
     private void initLogoViewStyles() {

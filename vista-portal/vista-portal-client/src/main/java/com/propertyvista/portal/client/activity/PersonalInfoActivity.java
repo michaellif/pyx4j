@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.activity;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -24,7 +23,7 @@ import com.propertyvista.portal.client.ui.PersonalInfoView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
-public class PersonalInfoActivity extends AbstractActivity {
+public class PersonalInfoActivity extends SecurityAwareActivity {
 
     private final PersonalInfoView view;
 
@@ -39,6 +38,7 @@ public class PersonalInfoActivity extends AbstractActivity {
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        super.start(panel, eventBus);
         panel.setWidget(view);
         //TODO Implement a service call
         ResidentDTO resident = EntityFactory.create(ResidentDTO.class);

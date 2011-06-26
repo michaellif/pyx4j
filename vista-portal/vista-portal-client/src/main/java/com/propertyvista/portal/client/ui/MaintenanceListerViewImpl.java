@@ -13,14 +13,34 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import com.pyx4j.site.client.ui.crud.ListerViewImplBase;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.site.client.ui.crud.ListerViewImplBasePanel;
+
+import com.propertyvista.portal.client.ui.decorations.PortalHeaderDecorator;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 
-public class MaintenanceListerViewImpl extends ListerViewImplBase<MaintenanceRequestDTO> implements MaintenanceListerView {
+public class MaintenanceListerViewImpl extends ListerViewImplBasePanel<MaintenanceRequestDTO> implements MaintenanceListerView {
+
+    private static I18n i18n = I18nFactory.getI18n(MaintenanceListerViewImpl.class);
 
     public MaintenanceListerViewImpl() {
         super();
+        CHyperlink systemStatus = new CHyperlink(null, new Command() {
+            @Override
+            public void execute() {
+                //TODO finish
+                // presenter.showSystemStatus();
+            }
+        });
+        systemStatus.setValue(i18n.tr("System Status"));
+        PortalHeaderDecorator header = new PortalHeaderDecorator(i18n.tr("Support Request History (to be finalized)"), "100%");
+        header.addToTheRight(systemStatus);
+        setHeader(header);
         setLister(new MaintenanceLister());
     }
 

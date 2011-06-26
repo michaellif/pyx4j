@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.activity;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -27,7 +26,7 @@ import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class MaintenanceAcitvity extends AbstractActivity implements MaintenanceView.Presenter {
+public class MaintenanceAcitvity extends SecurityAwareActivity implements MaintenanceView.Presenter {
     private final MaintenanceView view;
 
     public MaintenanceAcitvity(Place place) {
@@ -41,12 +40,12 @@ public class MaintenanceAcitvity extends AbstractActivity implements Maintenance
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+    public void start(final AcceptsOneWidget panel, EventBus eventBus) {
+        super.start(panel, eventBus);
         panel.setWidget(view);
         //TODO Implement a service call
         MaintenanceRequestDTO problem = EntityFactory.create(MaintenanceRequestDTO.class);
         view.populate(problem);
-
     }
 
     @Override
@@ -57,9 +56,9 @@ public class MaintenanceAcitvity extends AbstractActivity implements Maintenance
 
     @Override
     public void showSupportHistory() {
-        //this line navigates to form
-        AppPlace place = new PortalSiteMap.Residents.MaintenanceListHistory();
         //this line navigates to lister
+        AppPlace place = new PortalSiteMap.Residents.MaintenanceListHistory();
+        //this line navigates to form
         // AppPlace place = new PortalSiteMap.Residents.MaintenanceHistory();
         AppSite.getPlaceController().goTo(place);
 

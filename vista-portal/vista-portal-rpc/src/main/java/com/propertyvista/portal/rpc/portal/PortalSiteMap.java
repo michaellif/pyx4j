@@ -79,9 +79,6 @@ public class PortalSiteMap implements SiteMap {
         public static class Maintenance extends AppPlace {
         }
 
-        public static class MaintenanceHistory extends AppPlace {
-        }
-
         public static class MaintenanceListHistory extends CrudAppPlace {
         }
 

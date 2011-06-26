@@ -31,8 +31,6 @@ import com.propertyvista.portal.client.ui.LogoView;
 import com.propertyvista.portal.client.ui.LogoViewImpl;
 import com.propertyvista.portal.client.ui.MainNavigView;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
-import com.propertyvista.portal.client.ui.MaintenanceHistoryView;
-import com.propertyvista.portal.client.ui.MaintenanceHistoryViewImpl;
 import com.propertyvista.portal.client.ui.MaintenanceListerView;
 import com.propertyvista.portal.client.ui.MaintenanceListerViewImpl;
 import com.propertyvista.portal.client.ui.MaintenanceView;
@@ -84,8 +82,6 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new CurrentBillViewImpl());
             } else if (PotentialTenantView.class.equals(type)) {
                 map.put(type, new PotentialTenantViewImpl());
-            } else if (MaintenanceHistoryView.class.equals(type)) {
-                map.put(type, new MaintenanceHistoryViewImpl());
             } else if (MaintenanceListerView.class.equals(type)) {
                 map.put(type, new MaintenanceListerViewImpl());
             }

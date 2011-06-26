@@ -30,7 +30,6 @@ import com.propertyvista.portal.client.activity.FloorplanDetailsActivity;
 import com.propertyvista.portal.client.activity.LoginActivity;
 import com.propertyvista.portal.client.activity.LoginInvitationActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
-import com.propertyvista.portal.client.activity.MaintenanceHistoryActivity;
 import com.propertyvista.portal.client.activity.MaintenanceListerActivity;
 import com.propertyvista.portal.client.activity.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.PersonalInfoActivity;
@@ -69,8 +68,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PersonalInfoActivity(place);
                 } else if (place instanceof Residents.Maintenance) {
                     activity = new MaintenanceAcitvity(place);
-                } else if (place instanceof Residents.MaintenanceHistory) {
-                    activity = new MaintenanceHistoryActivity(place);
                 } else if (place instanceof Residents.MaintenanceListHistory) {
                     activity = new MaintenanceListerActivity(place);
                 } else if (place instanceof Residents.BillingHistory) {
