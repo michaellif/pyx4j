@@ -26,4 +26,7 @@ public class CaledonResponse {
 
     @HttpResponseField("ECHO")
     public String echo;
+
+    @HttpResponseField("DUP")
+    public String duplicate;
 }

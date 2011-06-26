@@ -33,10 +33,13 @@ public interface RequestLog extends IEntity {
 
     IPrimitive<String> transactionType();
 
+    IPrimitive<Boolean> resend();
+
     IPrimitive<Float> amount();
 
     IPrimitive<String> reference();
 
     IPrimitive<String> responseCode();
 
+    IPrimitive<Boolean> duplicate();
 }

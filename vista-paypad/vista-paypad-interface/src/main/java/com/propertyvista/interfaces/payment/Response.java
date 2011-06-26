@@ -13,6 +13,7 @@
  */
 package com.propertyvista.interfaces.payment;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
@@ -24,6 +25,7 @@ public class Response {
      * requestID field of the Request.
      */
     @Size(max = 60)
+    @NotNull
     private String requestID;
 
     /**
@@ -53,6 +55,13 @@ public class Response {
     private String avsResultCode;
 
     /**
+     * If you submitted "RESEND" with the transaction the returned response will contain TRUE if the transaction was a duplicate, or FALSE if not. TRUE means
+     * that you are being shown the original transaction
+     * response.
+     */
+    private Boolean duplicate;
+
+    /**
      * If you submitted a Request with the 'ECHO' field, this field will be present in the reply and will contain the exact data you placed in the ECHO
      * field of the Request.
      */
@@ -60,7 +69,7 @@ public class Response {
     @Pattern(regexp = "[A-Za-z0-9-/]+")
     private String echo;
 
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     public String getRequestID() {
         return requestID;
     }
@@ -103,6 +112,15 @@ public class Response {
         this.avsResultCode = avsResultCode;
     }
 
+    @XmlElement(required = false)
+    public Boolean getDuplicate() {
+        return duplicate;
+    }
+
+    public void setDuplicate(Boolean duplicate) {
+        this.duplicate = duplicate;
+    }
+
     public String getEcho() {
         return echo;
     }
@@ -110,4 +128,5 @@ public class Response {
     public void setEcho(String echo) {
         this.echo = echo;
     }
+
 }

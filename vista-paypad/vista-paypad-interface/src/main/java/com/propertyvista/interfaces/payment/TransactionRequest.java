@@ -76,6 +76,8 @@ public class TransactionRequest extends Request {
      * You can set this field in order to receive the response to an already submitted transaction within the past 48 hours.
      * If the system didn't receive the original transaction, it will be processed as a new transaction. The end result is the same, regardless of the cause of
      * the communications problem. You may resubmit the transaction as many times as necessary in order to receive your response.
+     * 
+     * Your transaction response will contain a flag indicating whether this transaction is a duplicate or not.
      */
     private Boolean resend;
 

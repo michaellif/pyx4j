@@ -44,6 +44,12 @@ public class CaledonRequest {
     @HttpRequestField("REF")
     public String referenceNumber;
 
+    @HttpRequestField("RESEND")
+    public String resend;
+
+    @HttpRequestField("SHOWDUP")
+    public String showDuplicate;
+
     @HttpRequestField("AMT")
     public String amount;
 

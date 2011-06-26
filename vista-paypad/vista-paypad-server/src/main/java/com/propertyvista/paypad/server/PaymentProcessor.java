@@ -174,6 +174,11 @@ public class PaymentProcessor {
         crequest.setAmount(transactionRequest.getAmount());
         crequest.referenceNumber = transactionRequest.getReference();
 
+        if (Boolean.TRUE.equals(transactionRequest.getResend())) {
+            crequest.resend = "Y";
+            crequest.showDuplicate = "Y";
+        }
+
         switch (transactionRequest.getTxnType()) {
         case Sale:
             crequest.transactionType = CaledonTransactionType.SALE.getValue();
@@ -204,6 +209,14 @@ public class PaymentProcessor {
         response.setText(cresponse.text);
         response.setAuth(cresponse.authorizationNumber);
         response.setEcho(cresponse.echo);
+
+        if (Boolean.TRUE.equals(transactionRequest.getResend())) {
+            if ("Y".equals(cresponse.duplicate)) {
+                response.setDuplicate(Boolean.TRUE);
+            } else if ("N".equals(cresponse.duplicate)) {
+                response.setDuplicate(Boolean.FALSE);
+            }
+        }
 
     }
 }
