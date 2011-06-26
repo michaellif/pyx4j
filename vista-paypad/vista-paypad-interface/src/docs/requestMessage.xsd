@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://interfaces.birchwoodsoftwaregroup.com/payment" xmlns:tns="http://interfaces.birchwoodsoftwaregroup.com/payment" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="requestMessage" type="tns:requestMessage"/>
+
+  <xs:complexType name="requestMessage">
+    <xs:sequence>
+      <xs:element name="messageID" type="xs:string" minOccurs="0"/>
+      <xs:element name="interfaceEntity" type="xs:string"/>
+      <xs:element name="interfaceEntityPassword" type="xs:string"/>
+      <xs:element name="merchantId" type="xs:string"/>
+      <xs:element name="merchantPassword" type="xs:string" minOccurs="0"/>
+      <xs:element name="requests" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="transaction" type="tns:transactionRequest"/>
+              <xs:element name="tokenAction" type="tns:tokenActionRequest"/>
+            </xs:choice>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="request" abstract="true">
+    <xs:sequence>
+      <xs:element name="requestID" type="xs:string" minOccurs="0"/>
+      <xs:element name="echo" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="transactionRequest">
+    <xs:complexContent>
+      <xs:extension base="tns:request">
+        <xs:sequence>
+          <xs:element name="txnType" type="tns:transactionType"/>
+          <xs:element name="amount" type="xs:float"/>
+          <xs:choice>
+            <xs:element name="creditCard" type="tns:creditCardInfo"/>
+            <xs:element name="token" type="tns:tokenPaymentInstrument"/>
+          </xs:choice>
+          <xs:element name="reference" type="xs:string"/>
+          <xs:element name="avs" type="xs:string" minOccurs="0"/>
+          <xs:element name="cvv" type="xs:string" minOccurs="0"/>
+          <xs:element name="resend" type="xs:boolean" default="false" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="creditCardInfo">
+    <xs:complexContent>
+      <xs:extension base="tns:paymentInstrument">
+        <xs:sequence>
+          <xs:element name="cardNumber" type="xs:string"/>
+          <xs:element name="expiryDate" type="xs:date"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="paymentInstrument">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="tokenPaymentInstrument">
+    <xs:complexContent>
+      <xs:extension base="tns:paymentInstrument">
+        <xs:sequence>
+          <xs:element name="code" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="tokenActionRequest">
+    <xs:complexContent>
+      <xs:extension base="tns:request">
+        <xs:sequence>
+          <xs:element name="action" type="tns:tokenAction"/>
+          <xs:element name="code" type="xs:string"/>
+          <xs:element name="card" type="tns:creditCardInfo" minOccurs="0"/>
+          <xs:element name="reference" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:simpleType name="transactionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Sale"/>
+      <xs:enumeration value="AuthorizeOnly"/>
+      <xs:enumeration value="Return"/>
+      <xs:enumeration value="PreAuthorization"/>
+      <xs:enumeration value="AuthReversal"/>
+      <xs:enumeration value="Completion"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="tokenAction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Add"/>
+      <xs:enumeration value="Update"/>
+      <xs:enumeration value="Deactivate"/>
+      <xs:enumeration value="Reactivate"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
