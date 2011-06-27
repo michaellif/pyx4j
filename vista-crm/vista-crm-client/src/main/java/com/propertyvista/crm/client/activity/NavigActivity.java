@@ -29,6 +29,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.event.NavigationUpdateEvent;
+import com.propertyvista.crm.client.event.NavigationUpdateHandler;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
@@ -36,9 +38,11 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter {
+public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, NavigationUpdateHandler {
 
     private final NavigView view;
+
+    private List<NavigFolder> currentfolders;
 
     public NavigActivity(Place place) {
         view = (NavigView) CrmVeiwFactory.instance(NavigView.class);
@@ -53,7 +57,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        view.setNavigFolders(currentfolders = createNavigFolders());
         panel.setWidget(view);
+        eventBus.addHandler(NavigationUpdateEvent.getType(), this);
     }
 
     @Override
@@ -63,6 +69,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
     @Override
     public String getNavigLabel(AppPlace place) {
+        if (place instanceof CrmSiteMap.Dashboard) {
+            return ((CrmSiteMap.Dashboard) place).getName();
+        }
         return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
     }
 
@@ -71,8 +80,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         return AppSite.getPlaceController().getWhere();
     }
 
-    @Override
-    public List<NavigFolder> getNavigFolders() {
+    public List<NavigFolder> createNavigFolders() {
         ArrayList<NavigFolder> list = new ArrayList<NavigFolder>();
 
         //Properties
@@ -112,7 +120,10 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
                 CrmImages.INSTANCE.dashboardsActive());
 
         folder.addNavigItem(new CrmSiteMap.Dashboard.Management());
-        folder.addNavigItem(new CrmSiteMap.Dashboard.System());
+// TOT: this dashboard is populated below (in fillDashboards())... 
+//        so we should decide how muxh we'll have system dashborads and if > 1 
+//        - should we show here link to 'most' system one ;)            
+//        folder.addNavigItem(new CrmSiteMap.Dashboard.System());
 
         fillDashboards(folder);
 
@@ -129,9 +140,11 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
             public void onSuccess(Vector<DashboardMetadata> result) {
                 for (DashboardMetadata dmd : result) {
                     CrudAppPlace place = new CrmSiteMap.Dashboard();
-                    place.formDashboardPlace(dmd.getPrimaryKey());
+                    place.formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView());
                     folder.addNavigItem(place);
                 }
+                // update UI:
+                view.setNavigFolders(currentfolders);
             }
 
             @Override
@@ -141,4 +154,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         });
     }
 
+    @Override
+    public void onNavigationUpdate(NavigationUpdateEvent event) {
+        view.setNavigFolders(currentfolders = createNavigFolders());
+    }
 }

@@ -45,6 +45,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        view.setNavigFolders(createNavigFolders());
         panel.setWidget(view);
     }
 
@@ -63,8 +64,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         return AppSite.getPlaceController().getWhere();
     }
 
-    @Override
-    public List<NavigFolder> getNavigFolders() {
+    public List<NavigFolder> createNavigFolders() {
         ArrayList<NavigFolder> list = new ArrayList<NavigFolder>();
 
         //Properties

@@ -83,19 +83,20 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
         }
 
         this.presenter = presenter;
+    }
 
-        /**
-         * TODO when navigation item structure is finalized review this algorithm again
-         * 
-         * NOTE: the algorithm needs to be thoroughly tested with different data sets
-         * To refresh the stack every time uncomment the lines below
-         * 
-         * this.clear();
-         * lastKnownPlaces = null;
-         */
-
-        List<NavigFolder> folders = presenter.getNavigFolders();
-        List<NavigFolderWidget> obsoleteFolders = new ArrayList<NavigFolderWidget>(5);
+    @Override
+    public void setNavigFolders(List<NavigFolder> folders) {
+/*
+ * TODO when navigation item structure is finalized review this algorithm again
+ * 
+ * NOTE: the algorithm needs to be thoroughly tested with different data sets
+ * To refresh the stack every time uncomment the lines below
+ * 
+ * this.clear();
+ * lastKnownPlaces = null;
+ */
+        List<NavigFolderWidget> obsoleteFolders = new ArrayList<NavigFolderWidget>(10);
         if (lastKnownPlaces != null && lastKnownPlaces.size() > 0) {
             for (NavigFolderWidget nw : lastKnownPlaces) {
 

@@ -19,6 +19,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
@@ -37,8 +38,11 @@ public abstract class GadgetBase implements IGadgetBase {
         if (gmd == null) {
             gmd = EntityFactory.create(GadgetMetadata.class);
             assert (gmd != null);
-            selfInit(gmd);
 
+            // TODO: get current user Key here: 
+            gmd.user().id().setValue(Key.DORMANT_KEY);
+
+            selfInit(gmd);
         }
         gadgetMetadata = gmd;
     }

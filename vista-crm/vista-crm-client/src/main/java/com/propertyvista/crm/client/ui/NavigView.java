@@ -27,13 +27,13 @@ public interface NavigView extends IsWidget {
     public void setPresenter(MainNavigPresenter presenter);
 
     public interface MainNavigPresenter {
+
         public void navigTo(Place place);
 
         public String getNavigLabel(AppPlace place);
 
-        public List<NavigFolder> getNavigFolders();
-
         public Place getWhere();
-
     }
+
+    public void setNavigFolders(List<NavigFolder> folders);
 }
