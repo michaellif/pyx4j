@@ -39,6 +39,7 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.util.ValidationUtils;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.validators.BirthdayDateValidator;
+import com.propertyvista.portal.ptapp.client.ui.validators.OldAgeValidator;
 
 final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantInfo> {
 
@@ -70,6 +71,8 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
 
     @Override
     public void addValidations() {
+
+        get(proto().birthDate()).addValueValidator(new OldAgeValidator());
 
         get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
 
@@ -151,8 +154,8 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
 
     @Override
     public IFolderItemEditorDecorator createFolderItemDecorator() {
-        return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), TenantsViewForm.i18n.tr("Remove person"),
-                !isFirst());
+        return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                TenantsViewForm.i18n.tr("Remove person"), !isFirst());
     }
 
     private void setMandatoryDependant() {
