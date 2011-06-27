@@ -173,6 +173,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 selectionCheckBox.setWidth(CHECK_MARK_COLUMN_SIZE);
                 setWidget(rowIndex, 0, selectionCheckBox);
                 getCellFormatter().setWidth(rowIndex, 0, CHECK_MARK_COLUMN_SIZE);
+                getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
                 colIndex = 1;
             }
 
