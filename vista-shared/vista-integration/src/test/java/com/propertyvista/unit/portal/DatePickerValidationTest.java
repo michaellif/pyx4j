@@ -39,7 +39,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         //Test co-applicant        
         validateCoApplicant();
         //Test second applicant
-        validateSecondApplicant();
+        validateDependant();
         //Test future dates
         validateBirthDateInFuture(0);
         //Test missing date
@@ -51,21 +51,65 @@ public class DatePickerValidationTest extends DatePickerTestBase {
     }
 
     private void validateOldAge() {
-        // TODO Auto-generated method stub
+        // TODO Leon
+        // Open bug
 
     }
 
     private void validateIncorrectFormat() {
-        // TODO Auto-generated method stub
-
+        int index = 1;
+        assertNotVisible(validation(index));
+        selenium.setValue(datePickerTextBoxId(index), "not a date");
+        selenium.click(statusId(index));
+        assertVisible(validation(index));
+        clearDateValidation(index);
+        selenium.setValue(datePickerTextBoxId(index), "not a date 2");
+        saveAndContinue(false);
+        assertMessages(UserMessageType.WARN);
+        assertVisible(validation(index));
+        clearDateValidation(index);
     }
 
     private void validateMissingDate() {
-        //selenium.setValue(datePickerTextBoxId(0), "");
+        int index = 1;
+        assertNotVisible(validation(index));
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -20);
+        //On lost focus
+        selenium.setValue(datePickerTextBoxId(index), "");
+        selenium.click(statusId(index));
+        assertVisible(validation(index));
+        clearDateValidation(index);
+        //on save
+        selenium.setValue(datePickerTextBoxId(index), "");
+        saveAndContinue(false);
+        assertMessages(UserMessageType.WARN);
+        assertVisible(validation(index));
+        clearDateValidation(index);
     }
 
-    private void validateSecondApplicant() {
-        //TODO Leon 2.3
+    private void validateDependant() {
+        //Dependant < 18
+        int index = 1;
+        //Make sure status is editable
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -20);
+        navigateToDateAndClick(datePickerId(index), calendar);
+        setStatus(index, Status.Dependant);
+        calendar.add(Calendar.YEAR, 10);
+        navigateToDateAndClick(datePickerId(index), calendar);
+        assertNotEditable(statusId(index));
+        assertNotEditable(ownershipId(index));
+        assertEquals("on", selenium.getValue(ownershipId(index)));
+        //Dependant > 18
+        calendar.add(Calendar.YEAR, -10);
+        navigateToDateAndClick(datePickerId(index), calendar);
+        assertEditable(statusId(index));
+        assertEditable(ownershipId(index));
+        setStatus(index, Status.Dependant);
+        //TODO 
+        //ask anya about this test
+        //assertEquals("off", selenium.getValue(ownershipId(index)));
     }
 
     private void validateCoApplicant() {
@@ -74,8 +118,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -20);
         navigateToDate(datePickerId(index), calendar);
-        selenium.setValue(D.id(D.id(proto(PotentialTenantList.class).tenants(), index), D.id(proto(PotentialTenantInfo.class).status())),
-                Status.CoApplicant.toString());
+        setStatus(index, Status.CoApplicant);
         validateBirthDateLessThen18(index);
     }
 
@@ -84,18 +127,14 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         Calendar calendar = Calendar.getInstance();
         navigateToDateAndClick(datePickerId(index), calendar);
         assertVisible(validation(index));
-        //clear validation message
-        calendar.add(Calendar.YEAR, -20);
-        navigateToDate(datePickerId(index), calendar);
+        clearDateValidation(index);
         //Validate less then 18 on save
         calendar.add(Calendar.YEAR, 5);
         typeInDate(datePickerTextBoxId(index), calendar);
         saveAndContinue(false);
         assertMessages(UserMessageType.WARN);
         assertVisible(validation(index));
-        //clear validation message
-        calendar.add(Calendar.YEAR, -20);
-        navigateToDate(datePickerId(index), calendar);
+        clearDateValidation(index);
     }
 
     private void validateBirthDateInFuture(int index) {
@@ -104,22 +143,41 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         calendar.add(Calendar.DATE, 1);
         navigateToDateAndClick(datePickerId(index), calendar);
         assertVisible(validation(index));
-        //clear validation message
-        calendar.add(Calendar.YEAR, -20);
-        navigateToDate(datePickerId(index), calendar);
+        clearDateValidation(index);
         //Validate with click on save
         calendar.add(Calendar.YEAR, 22);
         typeInDate(datePickerTextBoxId(index), calendar);
         saveAndContinue(false);
         assertMessages(UserMessageType.WARN);
         assertVisible(validation(index));
-        //clear validation message
+        clearDateValidation(index);
+    }
+
+    private void clearDateValidation(int index) {
+        Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -22);
-        navigateToDateAndClick(datePickerId(index), calendar);
+        typeInDate(datePickerTextBoxId(index), calendar);
+        selenium.click(lastNameId(index));
+    }
+
+    private void setStatus(int index, Status status) {
+        selenium.setValue(statusId(index), status.toString());
+    }
+
+    private IDebugId ownershipId(int index) {
+        return D.id(baseID(index), D.id(proto(PotentialTenantInfo.class).takeOwnership()));
+    }
+
+    private IDebugId statusId(int index) {
+        return D.id(baseID(index), D.id(proto(PotentialTenantInfo.class).status()));
+    }
+
+    private IDebugId lastNameId(int index) {
+        return D.id(baseID(index), D.id(proto(PotentialTenantInfo.class).name().lastName()));
     }
 
     private IDebugId datePickerTextBoxId(int index) {
-        return D.id(D.id(proto(PotentialTenantList.class).tenants(), index), D.id(proto(PotentialTenantInfo.class).birthDate()));
+        return D.id(baseID(index), D.id(proto(PotentialTenantInfo.class).birthDate()));
     }
 
     private IDebugId datePickerId(int index) {
@@ -127,6 +185,10 @@ public class DatePickerValidationTest extends DatePickerTestBase {
     }
 
     private IDebugId validation(int index) {
-        return new CompositeDebugId(D.id(proto(PotentialTenantList.class).tenants(), index), IFolderEditorDecorator.DecoratorsIds.Label);
+        return new CompositeDebugId(baseID(index), IFolderEditorDecorator.DecoratorsIds.Label);
+    }
+
+    private IDebugId baseID(int index) {
+        return D.id(proto(PotentialTenantList.class).tenants(), index);
     }
 }
