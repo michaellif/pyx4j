@@ -36,6 +36,16 @@ public abstract class CrudAppPlace extends AppPlace {
         editor, viewer, lister, dashboard, report
     }
 
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public CrudAppPlace() {
         setType(Type.lister);
     }
@@ -75,4 +85,9 @@ public abstract class CrudAppPlace extends AppPlace {
         putArg(ARG_NAME_ITEM_ID, itemID.toString());
     }
 
+    public void formDashboardPlace(Key itemID, String name) {
+        setType(Type.dashboard);
+        putArg(ARG_NAME_ITEM_ID, itemID.toString());
+        setName(name);
+    }
 }
