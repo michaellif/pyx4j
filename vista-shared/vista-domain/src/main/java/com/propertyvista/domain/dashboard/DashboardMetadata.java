@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.i18n.shared.Translation;
 
@@ -27,7 +28,12 @@ public interface DashboardMetadata extends ISharedUserEntity {
 
     @Translatable
     public enum Type {
-        system, building
+        system, building;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     public enum LayoutType {
@@ -45,7 +51,12 @@ public interface DashboardMetadata extends ISharedUserEntity {
         Two21,
 
         @Translation("Three equal columns")
-        Three
+        Three;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     @ToString(index = 1)
