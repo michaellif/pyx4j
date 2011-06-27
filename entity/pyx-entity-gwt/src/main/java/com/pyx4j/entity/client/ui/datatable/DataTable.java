@@ -125,6 +125,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             selectionCheckBoxAll = new SelectionCheckBox(HEADER_RAW_INDEX, model.isAllChecked());
             setWidget(0, 0, selectionCheckBoxAll);
             getCellFormatter().setWidth(0, 0, CHECK_MARK_COLUMN_SIZE);
+            getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
         }
 
         List<ColumnDescriptor<E>> columnDescriptors = model.getColumnDescriptors();
