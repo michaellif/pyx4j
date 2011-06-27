@@ -21,6 +21,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -42,24 +43,22 @@ public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata
     }
 
     @Override
-    public Type showSelectTypePopUp() {
-
+    public void showSelectTypePopUp(final AsyncCallback<Type> callback) {
         final SelectTypeBox box = new SelectTypeBox();
         box.setPopupPositionAndShow(new PositionCallback() {
             @Override
             public void setPosition(int offsetWidth, int offsetHeight) {
-                box.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 2);
+                box.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 3);
             }
         });
         box.addCloseHandler(new CloseHandler<PopupPanel>() {
             @Override
             public void onClose(CloseEvent<PopupPanel> event) {
-                box.getSelectedType();
+                callback.onSuccess(box.getSelectedType());
             }
         });
 
         box.show();
-        return box.getSelectedType();
     }
 
     private class SelectTypeBox extends DialogPanelNew {

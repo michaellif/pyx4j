@@ -13,11 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.site.client.ui.crud.IEditorView;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public interface DashboardEditor extends IEditorView<DashboardMetadata> {
 
-    DashboardMetadata.Type showSelectTypePopUp();
+    void showSelectTypePopUp(AsyncCallback<DashboardMetadata.Type> callback);
 }

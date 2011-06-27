@@ -14,9 +14,13 @@
 package com.propertyvista.crm.client.activity.dashboard;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
@@ -27,8 +31,11 @@ import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.DashboardCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
+import com.propertyvista.domain.dashboard.DashboardMetadata.Type;
 
 public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadata> {
+
+    private DashboardMetadata.Type dashboardType;
 
     @SuppressWarnings("unchecked")
     public DashboardEditorActivity(Place place) {
@@ -38,9 +45,29 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
     }
 
     @Override
+    public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
+        if (isNewItem()) {
+            ((DashboardEditor) view).showSelectTypePopUp(new AsyncCallback<DashboardMetadata.Type>() {
+                @Override
+                public void onSuccess(Type result) {
+                    dashboardType = result;
+                    DashboardEditorActivity.super.start(panel, eventBus);
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new UnrecoverableClientError(caught);
+                }
+            });
+        } else {
+            super.start(panel, eventBus);
+        }
+    }
+
+    @Override
     protected void initNewItem(DashboardMetadata entity) {
         if (isNewItem()) {
-            entity.type().setValue(((DashboardEditor) view).showSelectTypePopUp());
+            entity.type().setValue(dashboardType);
             entity.layoutType().setValue(LayoutType.Two12);
 
             // TODO: get current user Key here: 
