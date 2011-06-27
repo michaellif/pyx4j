@@ -20,6 +20,8 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
+import java.util.NoSuchElementException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +33,14 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ReportLayoutPanel extends FlowPanel {
+public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
 
     protected static final Logger log = LoggerFactory.getLogger(ReportLayoutPanel.class);
 
-    public ReportLayoutPanel() {
+    private final DashboardEvent handler;
+
+    public ReportLayoutPanel(DashboardEvent handler) {
+        this.handler = handler;
         getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         setWidth("100%");
     }
@@ -257,5 +262,63 @@ public class ReportLayoutPanel extends FlowPanel {
                 super("&nbsp;");
             }
         }
+    }
+
+    @Override
+    public void onEvent(Reason reason) {
+        handler.onEvent(reason);
+    }
+
+    // Iteration stuff:
+    private class GadgetIterator implements IGadgetIterator {
+
+        private int index = -1;
+
+        @Override
+        public boolean hasNext() {
+            return checkIndex(index + 1);
+        }
+
+        @Override
+        public IGadget next() {
+            Widget w = getGadget(++index);
+            if (w == null || !(w instanceof GadgetHolder)) {
+                throw new NoSuchElementException();
+            }
+            return ((GadgetHolder) w).getGadget();
+        }
+
+        @Override
+        public void remove() {
+            if (!checkIndex(index)) {
+                throw new NoSuchElementException();
+            }
+            removeGadget(index--);
+        }
+
+        @Override
+        public int getColumn() {
+            if (!checkIndex(index)) {
+                throw new NoSuchElementException();
+            }
+
+            int col = -1;
+            switch (getGadgetLocation(getGadget(index))) {
+            case Full:
+                col = -1;
+                break;
+            case Left:
+                col = 0;
+                break;
+            case Right:
+                col = 1;
+                break;
+            }
+            return col;
+        }
+    }
+
+    public IGadgetIterator getGadgetIterator() {
+        return new GadgetIterator();
     }
 }

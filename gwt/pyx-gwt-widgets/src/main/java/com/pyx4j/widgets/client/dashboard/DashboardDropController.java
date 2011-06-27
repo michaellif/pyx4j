@@ -61,8 +61,8 @@ class DashboardDropController extends FlowPanelDropController {
     public void onDrop(DragContext context) {
         super.onDrop(context);
 
-        if (getDropTarget() instanceof DashboardColumnFlowPanel) {
-            ((DashboardColumnFlowPanel) getDropTarget()).onEvent(Reason.repositionGadget);
+        if (getDropTarget() instanceof DashboardEvent) {
+            ((DashboardEvent) getDropTarget()).onEvent(Reason.repositionGadget);
         }
     }
 }

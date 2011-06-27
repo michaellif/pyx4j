@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -40,13 +43,15 @@ public class Report extends SimplePanel implements IBoardRoot {
 
     private final HTML placeholder = new HTML("report_placeholder");
 
+    private final List<DashboardEvent> handlers = new ArrayList<DashboardEvent>();
+
     public Report() {
         addStyleName(CSSNames.BASE_NAME);
 
         boundaryPanel.setSize("100%", "100%");
         setWidget(boundaryPanel);
 
-        reportLayoutPanel = new ReportLayoutPanel();
+        reportLayoutPanel = new ReportLayoutPanel(this);
         boundaryPanel.add(reportLayoutPanel);
 
         gadgetDragController = new PickupDragController(boundaryPanel, false);
@@ -56,10 +61,12 @@ public class Report extends SimplePanel implements IBoardRoot {
 
     public void addGadget(IGadget gadget, Report.Location location) {
         reportLayoutPanel.addGadget(new GadgetHolder(gadget, gadgetDragController, this), location);
+        onEvent(Reason.addGadget);
     }
 
     public void insertGadget(IGadget gadget, Report.Location location, int beforeRow) {
         reportLayoutPanel.insertGadget(new GadgetHolder(gadget, gadgetDragController, this), location, beforeRow);
+        onEvent(Reason.addGadget);
     }
 
     // Maximize Gadget mechanics:
@@ -90,7 +97,18 @@ public class Report extends SimplePanel implements IBoardRoot {
 
     @Override
     public void onEvent(Reason reason) {
-        // TODO Auto-generated method stub
+        if (!handlers.isEmpty()) {
+            for (DashboardEvent handler : handlers) {
+                handler.onEvent(reason);
+            }
+        }
+    }
 
+    public void addEventHandler(DashboardEvent handler) {
+        handlers.add(handler);
+    }
+
+    public IGadgetIterator getGadgetIterator() {
+        return reportLayoutPanel.getGadgetIterator();
     }
 }

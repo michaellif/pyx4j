@@ -32,6 +32,7 @@ import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.widgets.client.dashboard.DashboardEvent.Reason;
 import com.pyx4j.widgets.client.dashboard.ReportLayoutPanel.CellPanel;
 
 class ReportDropController extends AbstractPositioningDropController {
@@ -65,6 +66,10 @@ class ReportDropController extends AbstractPositioningDropController {
             throw new Error("Only single Gadget can be selected");
         }
         super.onDrop(context);
+
+        if (getDropTarget() instanceof DashboardEvent) {
+            ((DashboardEvent) getDropTarget()).onEvent(Reason.repositionGadget);
+        }
     }
 
     @Override
@@ -111,7 +116,6 @@ class ReportDropController extends AbstractPositioningDropController {
             dropTarget.setGadget(keeper, positionerIndex);
             dropTarget.insertGadget(positioner, location, insertionIndex);
             dropTarget.removeGadget(keeper);
-
         }
     }
 

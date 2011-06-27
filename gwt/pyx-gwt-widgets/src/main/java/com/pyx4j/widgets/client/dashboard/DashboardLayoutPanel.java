@@ -29,7 +29,6 @@ import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.dashboard.Dashboard.IGadgetIterator;
 import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
 
 class DashboardLayoutPanel extends FlowPanel implements DashboardEvent {
@@ -114,11 +113,7 @@ class DashboardLayoutPanel extends FlowPanel implements DashboardEvent {
     }
 
     public boolean removeGadget(int column, int row) {
-        if ((checkIndexes(column, row, false) && getColumnPanel(column).remove(row))) {
-            onEvent(Reason.removeGadget);
-            return true;
-        }
-        return false;
+        return (checkIndexes(column, row, false) && getColumnPanel(column).remove(row));
     }
 
     @Override
