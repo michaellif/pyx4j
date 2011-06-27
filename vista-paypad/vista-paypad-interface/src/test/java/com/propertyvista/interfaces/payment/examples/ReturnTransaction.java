@@ -31,7 +31,7 @@ public class ReturnTransaction {
         r.setInterfaceEntityPassword("top-secret");
 
         TransactionRequest ccReq = new TransactionRequest();
-        ccReq.setRequestID("payProc#3");
+        ccReq.setRequestId("payProc#3");
         ccReq.setTxnType(TransactionRequest.TransactionType.Return);
         CreditCardInfo cc = new CreditCardInfo();
         cc.setCardNumber("5191111111111111");
@@ -47,7 +47,7 @@ public class ReturnTransaction {
 
         System.out.println("response Status " + response.getStatus());
 
-        System.out.println("response Req.   " + response.getResponse().get(0).getRequestID());
+        System.out.println("response Req.   " + response.getResponse().get(0).getRequestId());
         System.out.println("response Code   " + response.getResponse().get(0).getCode());
         System.out.println("response Text   " + response.getResponse().get(0).getText());
     }

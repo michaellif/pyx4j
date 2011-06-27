@@ -31,7 +31,7 @@ public class RequestMessage {
      * Optional unique identifier for the XML message
      */
     @Size(max = 60)
-    private String messageID;
+    private String messageId;
 
     @Size(max = 60)
     @NotNull
@@ -64,12 +64,12 @@ public class RequestMessage {
     private List<Request> requests;
 
     @XmlElement(required = false)
-    public String getMessageID() {
-        return messageID;
+    public String getMessageId() {
+        return messageId;
     }
 
-    public void setMessageID(String messageID) {
-        this.messageID = messageID;
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 
     @XmlElement(required = true)

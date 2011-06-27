@@ -45,7 +45,7 @@ public class ResponseMessage {
      */
     @Size(max = 60)
     @NotNull
-    private String messageID;
+    private String messageId;
 
     /**
      * Returned unchanged from the request.
@@ -61,12 +61,12 @@ public class ResponseMessage {
     private List<Response> responses;
 
     @XmlElement(required = true)
-    public String getMessageID() {
-        return messageID;
+    public String getMessageId() {
+        return messageId;
     }
 
-    public void setMessageID(String messageID) {
-        this.messageID = messageID;
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 
     @XmlElement(required = false)

@@ -28,20 +28,20 @@ public class ResponseMessageCreator {
         rm.setStatus(ResponseMessage.StatusCode.OK);
 
         Response r = new Response();
-        r.setRequestID("payProc#1");
+        r.setRequestId("payProc#1");
         r.setCode("0000");
         r.setAuth("T03006");
         r.setText("T03006 $255.59");
         rm.addResponse(r);
 
         r = new Response();
-        r.setRequestID("payProc#2");
+        r.setRequestId("payProc#2");
         r.setCode("0000");
         r.setText("TOKEN ADDED");
         rm.addResponse(r);
 
         r = new Response();
-        r.setRequestID("payProc#3");
+        r.setRequestId("payProc#3");
         r.setCode("1254");
         r.setText("EXPIRED CARD");
         rm.addResponse(r);

@@ -57,7 +57,7 @@ public class PaymentProcessor {
 
     public ResponseMessage execute(RequestMessage requestMessage) {
         ResponseMessage response = new ResponseMessage();
-        response.setMessageID(requestMessage.getMessageID());
+        response.setMessageId(requestMessage.getMessageId());
         response.setMerchantId(requestMessage.getMerchantId());
 
         for (Request request : requestMessage.getRequests()) {
@@ -70,7 +70,8 @@ public class PaymentProcessor {
 
     private Response execute(RequestMessage requestMessage, Request request) {
         Response response = new Response();
-        response.setRequestID(request.getRequestID());
+        response.setRequestId(request.getRequestId());
+        log.info("processing request {}", request.getRequestId());
 
         try {
             if (!isValid(request)) {

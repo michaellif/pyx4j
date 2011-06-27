@@ -31,7 +31,7 @@ public class AuthorizationOnly {
         r.setInterfaceEntityPassword("top-secret");
 
         TransactionRequest ccReq = new TransactionRequest();
-        ccReq.setRequestID("payProc#1");
+        ccReq.setRequestId("payProc#1");
         ccReq.setTxnType(TransactionRequest.TransactionType.AuthorizeOnly);
         CreditCardInfo cc = new CreditCardInfo();
         cc.setCardNumber("5191111111111111");
@@ -48,7 +48,7 @@ public class AuthorizationOnly {
 
         System.out.println("response Status " + response.getStatus());
 
-        System.out.println("response Req.   " + response.getResponse().get(0).getRequestID());
+        System.out.println("response Req.   " + response.getResponse().get(0).getRequestId());
         System.out.println("response Code   " + response.getResponse().get(0).getCode());
         System.out.println("response Auth   " + response.getResponse().get(0).getAuth());
         System.out.println("response Text   " + response.getResponse().get(0).getText());

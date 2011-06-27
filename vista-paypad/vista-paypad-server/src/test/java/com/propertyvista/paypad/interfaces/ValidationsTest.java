@@ -75,7 +75,7 @@ public class ValidationsTest {
         TransactionRequest tr = new TransactionRequest();
         assertViolations(4, tr);
 
-        tr.setRequestID("1");
+        tr.setRequestId("1");
         tr.setTxnType(TransactionRequest.TransactionType.Sale);
         tr.setReference("12345678");
         CreditCardInfo cc = new CreditCardInfo();

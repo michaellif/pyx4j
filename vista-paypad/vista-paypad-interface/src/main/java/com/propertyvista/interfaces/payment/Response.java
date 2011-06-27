@@ -21,12 +21,12 @@ import javax.xml.bind.annotation.XmlElement;
 public class Response {
 
     /**
-     * If you submitted a Request with the 'requestID' field, this field will be present in the reply and will contain the exact data you placed in the
+     * If you submitted a Request with the 'requestId' field, this field will be present in the reply and will contain the exact data you placed in the
      * requestID field of the Request.
      */
     @Size(max = 60)
     @NotNull
-    private String requestID;
+    private String requestId;
 
     /**
      * This is the 4-digit response code from the transaction. "0000" constitutes a successful transaction, and any other 4-digit code constitutes a failure.
@@ -56,8 +56,7 @@ public class Response {
 
     /**
      * If you submitted "RESEND" with the transaction the returned response will contain TRUE if the transaction was a duplicate, or FALSE if not. TRUE means
-     * that you are being shown the original transaction
-     * response.
+     * that you are being shown the original transaction response.
      */
     private Boolean duplicate;
 
@@ -70,12 +69,12 @@ public class Response {
     private String echo;
 
     @XmlElement(required = true)
-    public String getRequestID() {
-        return requestID;
+    public String getRequestId() {
+        return requestId;
     }
 
-    public void setRequestID(String requestID) {
-        this.requestID = requestID;
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 
     @XmlElement(required = true)

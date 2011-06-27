@@ -41,6 +41,7 @@ public class TokenTransactions {
         r.setMerchantId("BIRCHWTT");
 
         TokenActionRequest addToken = new TokenActionRequest();
+        addToken.setRequestId("0");
         addToken.setAction(TokenAction.Add);
         addToken.setCode("45125206MCRD5111");
         addToken.setReference("JSMITH-MCRD");
@@ -66,7 +67,7 @@ public class TokenTransactions {
         r.setMerchantId("BIRCHWTT");
 
         TransactionRequest pReq = new TransactionRequest();
-        pReq.setRequestID("payProc#t1");
+        pReq.setRequestId("payProc#t1");
         pReq.setTxnType(TransactionRequest.TransactionType.Sale);
 
         TokenPaymentInstrument token = new TokenPaymentInstrument();
@@ -82,7 +83,7 @@ public class TokenTransactions {
 
         System.out.println("response Status " + response.getStatus());
 
-        System.out.println("response Req.   " + response.getResponse().get(0).getRequestID());
+        System.out.println("response Req.   " + response.getResponse().get(0).getRequestId());
         System.out.println("response Code   " + response.getResponse().get(0).getCode());
         System.out.println("response Text   " + response.getResponse().get(0).getText());
     }
@@ -96,6 +97,7 @@ public class TokenTransactions {
         r.setMerchantId("BIRCHWTT");
 
         TokenActionRequest deactivateToken = new TokenActionRequest();
+        deactivateToken.setRequestId("0");
         deactivateToken.setAction(TokenAction.Deactivate);
         deactivateToken.setCode("45125206MCRD5111");
         r.addRequest(deactivateToken);

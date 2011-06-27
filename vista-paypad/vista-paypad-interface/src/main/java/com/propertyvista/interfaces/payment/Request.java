@@ -24,7 +24,7 @@ public abstract class Request {
 
     @Size(max = 60)
     @NotNull
-    private String requestID;
+    private String requestId;
 
     /**
      * Data that is in this field is returned in the reply. This can be useful for transaction tracking in single-process or batch applications.
@@ -35,12 +35,12 @@ public abstract class Request {
     private String echo;
 
     @XmlElement(required = true)
-    public String getRequestID() {
-        return requestID;
+    public String getRequestId() {
+        return requestId;
     }
 
-    public void setRequestID(String requestID) {
-        this.requestID = requestID;
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 
     public String getEcho() {

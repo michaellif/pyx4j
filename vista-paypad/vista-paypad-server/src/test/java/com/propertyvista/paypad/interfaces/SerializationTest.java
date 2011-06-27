@@ -47,7 +47,7 @@ public class SerializationTest {
 
         {
             TransactionRequest ccpay = new TransactionRequest();
-            ccpay.setRequestID("payProc#1");
+            ccpay.setRequestId("payProc#1");
             ccpay.setResend(false);
             ccpay.setTxnType(TransactionRequest.TransactionType.Sale);
             CreditCardInfo cc = new CreditCardInfo();
@@ -74,7 +74,7 @@ public class SerializationTest {
         rm.setStatus(ResponseMessage.StatusCode.OK);
 
         Response r = new Response();
-        r.setRequestID("payProc#1");
+        r.setRequestId("payProc#1");
         r.setCode("0000");
         r.setAuth("T03006");
         r.setText("T03006 $255.59");

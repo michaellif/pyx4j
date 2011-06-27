@@ -39,7 +39,7 @@ public class RequestMessageCreator {
 
         {
             TransactionRequest ccpay = new TransactionRequest();
-            ccpay.setRequestID("payProc#1");
+            ccpay.setRequestId("payProc#1");
             ccpay.setResend(false);
             ccpay.setTxnType(TransactionRequest.TransactionType.Sale);
             CreditCardInfo cc = new CreditCardInfo();
@@ -55,7 +55,7 @@ public class RequestMessageCreator {
 
         {
             TransactionRequest ccpay = new TransactionRequest();
-            ccpay.setRequestID("payProc#2");
+            ccpay.setRequestId("payProc#2");
             ccpay.setTxnType(TransactionRequest.TransactionType.Sale);
             CreditCardInfo cc = new CreditCardInfo();
             cc.setCardNumber("378282246310005");
@@ -80,6 +80,7 @@ public class RequestMessageCreator {
         r.setMerchantPassword("classified");
 
         TokenActionRequest addToken = new TokenActionRequest();
+        addToken.setRequestId("Store001");
         addToken.setAction(TokenAction.Add);
         addToken.setCode("DC1107");
         addToken.setReference("46YongeAppt18");
@@ -99,6 +100,7 @@ public class RequestMessageCreator {
         r.setMerchantPassword("classified");
 
         TransactionRequest tcpay = new TransactionRequest();
+        tcpay.setRequestId("pay#101");
         tcpay.setTxnType(TransactionRequest.TransactionType.Sale);
 
         TokenPaymentInstrument token = new TokenPaymentInstrument();

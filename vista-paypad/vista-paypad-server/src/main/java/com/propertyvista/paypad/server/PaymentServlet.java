@@ -85,6 +85,7 @@ public class PaymentServlet extends HttpServlet {
 
         try {
             PaymentProcessor pp = new PaymentProcessor();
+            log.info("processing message {}", message.getMessageId());
             if (pp.isValid(message)) {
                 if (PaymentSecurity.enter(message)) {
                     ResponseMessage rm = pp.execute(message);

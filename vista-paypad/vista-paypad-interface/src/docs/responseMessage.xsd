@@ -5,7 +5,7 @@
 
   <xs:complexType name="responseMessage">
     <xs:sequence>
-      <xs:element name="messageID" type="xs:string" minOccurs="0"/>
+      <xs:element name="messageId" type="xs:string" minOccurs="0"/>
       <xs:element name="merchantId" type="xs:string" minOccurs="0"/>
       <xs:element name="status" type="tns:statusCode"/>
       <xs:element name="response" minOccurs="0">
@@ -20,7 +20,7 @@
 
   <xs:complexType name="response">
     <xs:sequence>
-      <xs:element name="requestID" type="xs:string"/>
+      <xs:element name="requestId" type="xs:string"/>
       <xs:element name="code" type="xs:string"/>
       <xs:element name="duplicate" type="xs:boolean" minOccurs="0"/>
       <xs:element name="text" type="xs:string"/>
