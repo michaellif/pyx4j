@@ -18,8 +18,10 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name = "Property")
+@XmlType(propOrder = { "propertyId", "customers" })
 public class Property {
 
     private PropertyId propertyId;
@@ -42,15 +44,6 @@ public class Property {
         return sb.toString();
     }
 
-    @XmlElement(name = "RT_Customer")
-    public List<RTCustomer> getCustomers() {
-        return customers;
-    }
-
-    public void setCustomers(List<RTCustomer> customers) {
-        this.customers = customers;
-    }
-
     @XmlElement(name = "PropertyID")
     public PropertyId getPropertyId() {
         return propertyId;
@@ -58,5 +51,14 @@ public class Property {
 
     public void setPropertyId(PropertyId propertyId) {
         this.propertyId = propertyId;
+    }
+
+    @XmlElement(name = "RT_Customer")
+    public List<RTCustomer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<RTCustomer> customers) {
+        this.customers = customers;
     }
 }

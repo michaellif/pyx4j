@@ -11,14 +11,13 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean.resident;
+package com.propertyvista.yardi.bean.mits;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
-import com.propertyvista.yardi.bean.mits.Customer;
 
 public class Customers {
     private List<Customer> customers = new ArrayList<Customer>();

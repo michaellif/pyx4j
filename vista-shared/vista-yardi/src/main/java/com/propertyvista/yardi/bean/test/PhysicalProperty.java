@@ -11,13 +11,15 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean.resident;
+package com.propertyvista.yardi.bean.test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.propertyvista.yardi.bean.resident.Property;
 
 
 @XmlRootElement(name = "PhysicalProperty")

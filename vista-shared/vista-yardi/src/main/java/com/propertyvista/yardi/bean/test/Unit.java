@@ -11,10 +11,12 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean.resident;
+package com.propertyvista.yardi.bean.test;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.propertyvista.yardi.bean.mits.Information;
 
 @XmlRootElement
 public class Unit {

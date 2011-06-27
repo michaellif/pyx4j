@@ -11,21 +11,20 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean.resident;
+package com.propertyvista.yardi.bean.mits;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class RTUnit {
+public class Information {
 
     private String unitId;
 
-    private Unit unit;
+    private String unitEconomicStatusDescription;
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(unitId);
-        sb.append(" ").append(unit);
+        sb.append("unitId=").append(unitId);
 
         return sb.toString();
     }
@@ -39,13 +38,12 @@ public class RTUnit {
         this.unitId = unitId;
     }
 
-    @XmlElement(name = "Unit")
-    public Unit getUnit() {
-        return unit;
+    @XmlElement(name = "UnitEconomicStatusDescription")
+    public String getUnitEconomicStatusDescription() {
+        return unitEconomicStatusDescription;
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
+    public void setUnitEconomicStatusDescription(String unitEconomicStatusDescription) {
+        this.unitEconomicStatusDescription = unitEconomicStatusDescription;
     }
-
 }

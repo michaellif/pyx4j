@@ -26,9 +26,9 @@ public class GetResidentTransactionsMapper {
     }
 
     public void map(Property property) {
-        for (RTCustomer customer : property.getCustomers()) {
-            map(customer);
-        }
+//        for (RTCustomer customer : property.getCustomers()) {
+//            map(customer);
+//        }
     }
 
     public void map(RTCustomer customer) {

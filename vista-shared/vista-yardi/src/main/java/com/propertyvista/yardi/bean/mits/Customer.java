@@ -26,12 +26,18 @@ public class Customer {
 
     private String customerId;
 
+    private Name name;
+
+    private Lease lease;
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
         sb.append("[").append(type).append("] ");
         sb.append(description).append(" ");
         sb.append(customerId);
+        sb.append("\n").append(name);
+        sb.append("\n").append(lease);
 
         return sb.toString();
     }
@@ -63,4 +69,21 @@ public class Customer {
         this.customerId = customerId;
     }
 
+    @XmlElement(name = "Name")
+    public Name getName() {
+        return name;
+    }
+
+    public void setName(Name name) {
+        this.name = name;
+    }
+
+    @XmlElement(name = "Lease")
+    public Lease getLease() {
+        return lease;
+    }
+
+    public void setLease(Lease lease) {
+        this.lease = lease;
+    }
 }

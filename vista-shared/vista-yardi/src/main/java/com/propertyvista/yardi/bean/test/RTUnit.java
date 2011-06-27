@@ -11,25 +11,28 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean.resident;
+package com.propertyvista.yardi.bean.test;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class Information {
+
+
+public class RTUnit {
 
     private String unitId;
 
-    private String unitEconomicStatusDescription;
+    private Unit unit;
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("unitId=").append(unitId);
+        sb.append(unitId);
+        sb.append(" ").append(unit);
 
         return sb.toString();
     }
 
-    @XmlElement(name = "UnitID", namespace = "http://my-company.com/namespace")
+    @XmlElement(name = "UnitID")
     public String getUnitId() {
         return unitId;
     }
@@ -38,12 +41,13 @@ public class Information {
         this.unitId = unitId;
     }
 
-    @XmlElement(name = "UnitEconomicStatusDescription")
-    public String getUnitEconomicStatusDescription() {
-        return unitEconomicStatusDescription;
+    @XmlElement(name = "Unit")
+    public Unit getUnit() {
+        return unit;
     }
 
-    public void setUnitEconomicStatusDescription(String unitEconomicStatusDescription) {
-        this.unitEconomicStatusDescription = unitEconomicStatusDescription;
+    public void setUnit(Unit unit) {
+        this.unit = unit;
     }
+
 }

@@ -34,6 +34,10 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
+import com.propertyvista.yardi.bean.mits.Customer;
+import com.propertyvista.yardi.bean.mits.Customers;
+import com.propertyvista.yardi.bean.resident.PropertyId;
+import com.propertyvista.yardi.bean.resident.RTCustomer;
 import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.mapper.GetPropertyConfigurationsMapper;
 import com.propertyvista.yardi.mapper.GetResidentTransactionsMapper;
@@ -99,6 +103,21 @@ public class XmlBeanTest {
         ResidentTransactions transactions = new ResidentTransactions();
         com.propertyvista.yardi.bean.resident.Property property = new com.propertyvista.yardi.bean.resident.Property();
         transactions.getProperties().add(property);
+
+        PropertyId propertyId = new PropertyId();
+        property.setPropertyId(propertyId);
+
+        RTCustomer rtCustomer = new RTCustomer();
+        property.getCustomers().add(rtCustomer);
+
+        Customers customers = new Customers();
+        rtCustomer.setCustomers(customers);
+
+        Customer customer = new Customer();
+        customer.setDescription("277");
+        customer.setCustomerId("0007");
+        customer.setType("future_resident");
+        customers.getCustomers().add(customer);
 
         String xml = MarshallUtil.marshall(transactions);
         log.info(xml);

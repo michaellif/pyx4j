@@ -15,18 +15,21 @@ package com.propertyvista.yardi.bean.resident;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import com.propertyvista.yardi.bean.mits.Customers;
+
+
 public class RTCustomer {
     private String customerId;
 
     private Customers customers;
 
-    private RTUnit rtunit;
+//    private RTUnit rtunit;
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
         sb.append(customerId);
-        sb.append("\n").append(rtunit);
+//        sb.append("\n").append(rtunit);
         sb.append("\n").append(customers);
 
         return sb.toString();
@@ -41,14 +44,14 @@ public class RTCustomer {
         this.customerId = customerId;
     }
 
-    @XmlElement(name = "RT_Unit")
-    public RTUnit getRtunit() {
-        return rtunit;
-    }
-
-    public void setRtunit(RTUnit rtunit) {
-        this.rtunit = rtunit;
-    }
+//    @XmlElement(name = "RT_Unit")
+//    public RTUnit getRtunit() {
+//        return rtunit;
+//    }
+//
+//    public void setRtunit(RTUnit rtunit) {
+//        this.rtunit = rtunit;
+//    }
 
     @XmlElement(name = "Customers")
     public Customers getCustomers() {
