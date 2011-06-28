@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -189,6 +190,10 @@ public class EntityServicesImpl {
             v.add(ent);
         }
         return v;
+    }
+
+    public static <T extends IEntity> T secureRetrieve(Class<T> entityClass, Key primaryKey) {
+        return EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(entityClass, primaryKey));
     }
 
     public static <T extends IEntity> T secureRetrieve(EntityQueryCriteria<T> criteria) {
