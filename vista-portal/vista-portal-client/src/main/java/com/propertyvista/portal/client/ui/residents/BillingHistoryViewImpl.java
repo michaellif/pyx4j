@@ -7,14 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 18, 2011
+ * Created on May 15, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.ui.residents;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface PaymentMethodsView extends IsWidget {
+public class BillingHistoryViewImpl extends SimplePanel implements BillingHistoryView {
 
+    public BillingHistoryViewImpl() {
+        HTML label = new HTML("Billing History");
+        setWidget(label);
+
+    }
 }

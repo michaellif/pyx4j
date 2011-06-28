@@ -7,25 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Jun 25, 2011
+ * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.ui.residents;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.ui.crud.IListerView;
 
-import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
+import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 
-public interface CreateAccountView extends IsWidget {
-
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
-
-        void goToLogin();
-
-        void createAccount(AccountCreationRequest request);
-    }
+public interface MaintenanceListerView extends IListerView<MaintenanceRequestDTO> {
 
 }

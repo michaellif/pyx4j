@@ -7,16 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 25, 2011
+ * Created on Jun 18, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.ui.residents;
 
-import com.pyx4j.site.client.ui.crud.IListerView;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
+import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
-public interface MaintenanceListerView extends IListerView<MaintenanceRequestDTO> {
+public interface PaymentMethodsView extends IsWidget {
+
+    public void populate(PaymentMethodListDTO paymentMethods);
 
 }

@@ -7,20 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 18, 2011
- * @author Dad
+ * Created on Feb 1, 2011
+ * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.ui.residents;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class CurrentBillViewImpl extends SimplePanel implements CurrentBillView {
+import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 
-    public CurrentBillViewImpl() {
-        HTML label = new HTML("Current Bill");
-        setWidget(label);
+public interface CreateAccountView extends IsWidget {
 
+    public void setPresenter(Presenter presenter);
+
+    public interface Presenter {
+
+        void goToLogin();
+
+        void createAccount(AccountCreationRequest request);
     }
+
 }

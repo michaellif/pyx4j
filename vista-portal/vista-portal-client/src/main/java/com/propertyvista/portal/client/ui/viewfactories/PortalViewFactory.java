@@ -15,12 +15,6 @@ package com.propertyvista.portal.client.ui.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.client.ui.BillingHistoryView;
-import com.propertyvista.portal.client.ui.BillingHistoryViewImpl;
-import com.propertyvista.portal.client.ui.CreateAccountView;
-import com.propertyvista.portal.client.ui.CreateAccountViewImpl;
-import com.propertyvista.portal.client.ui.CurrentBillView;
-import com.propertyvista.portal.client.ui.CurrentBillViewImpl;
 import com.propertyvista.portal.client.ui.FooterView;
 import com.propertyvista.portal.client.ui.FooterViewImpl;
 import com.propertyvista.portal.client.ui.LoginInvitationView;
@@ -31,14 +25,6 @@ import com.propertyvista.portal.client.ui.LogoView;
 import com.propertyvista.portal.client.ui.LogoViewImpl;
 import com.propertyvista.portal.client.ui.MainNavigView;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
-import com.propertyvista.portal.client.ui.MaintenanceListerView;
-import com.propertyvista.portal.client.ui.MaintenanceListerViewImpl;
-import com.propertyvista.portal.client.ui.MaintenanceView;
-import com.propertyvista.portal.client.ui.MaintenanceViewImpl;
-import com.propertyvista.portal.client.ui.PaymentMethodsView;
-import com.propertyvista.portal.client.ui.PaymentMethodsViewImpl;
-import com.propertyvista.portal.client.ui.PersonalInfoView;
-import com.propertyvista.portal.client.ui.PersonalInfoViewImpl;
 import com.propertyvista.portal.client.ui.PotentialTenantView;
 import com.propertyvista.portal.client.ui.PotentialTenantViewImpl;
 import com.propertyvista.portal.client.ui.RetrievePasswordView;
@@ -47,6 +33,22 @@ import com.propertyvista.portal.client.ui.StaticPageView;
 import com.propertyvista.portal.client.ui.StaticPageViewImpl;
 import com.propertyvista.portal.client.ui.TopRightActionsView;
 import com.propertyvista.portal.client.ui.TopRightActionsViewImpl;
+import com.propertyvista.portal.client.ui.residents.BillingHistoryView;
+import com.propertyvista.portal.client.ui.residents.BillingHistoryViewImpl;
+import com.propertyvista.portal.client.ui.residents.CreateAccountView;
+import com.propertyvista.portal.client.ui.residents.CreateAccountViewImpl;
+import com.propertyvista.portal.client.ui.residents.CurrentBillView;
+import com.propertyvista.portal.client.ui.residents.CurrentBillViewImpl;
+import com.propertyvista.portal.client.ui.residents.MaintenanceListerView;
+import com.propertyvista.portal.client.ui.residents.MaintenanceListerViewImpl;
+import com.propertyvista.portal.client.ui.residents.MaintenanceView;
+import com.propertyvista.portal.client.ui.residents.MaintenanceViewImpl;
+import com.propertyvista.portal.client.ui.residents.PaymentMethodView;
+import com.propertyvista.portal.client.ui.residents.PaymentMethodViewImpl;
+import com.propertyvista.portal.client.ui.residents.PaymentMethodsView;
+import com.propertyvista.portal.client.ui.residents.PaymentMethodsViewImpl;
+import com.propertyvista.portal.client.ui.residents.PersonalInfoView;
+import com.propertyvista.portal.client.ui.residents.PersonalInfoViewImpl;
 
 public class PortalViewFactory extends ViewFactoryBase {
 
@@ -84,6 +86,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new PotentialTenantViewImpl());
             } else if (MaintenanceListerView.class.equals(type)) {
                 map.put(type, new MaintenanceListerViewImpl());
+            } else if (PaymentMethodView.class.equals(type)) {
+                map.put(type, new PaymentMethodViewImpl());
             }
 
         }

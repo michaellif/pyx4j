@@ -24,7 +24,7 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.portal.client.ui.MaintenanceListerView;
+import com.propertyvista.portal.client.ui.residents.MaintenanceListerView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.services.MaintenanceRequestCrudService;

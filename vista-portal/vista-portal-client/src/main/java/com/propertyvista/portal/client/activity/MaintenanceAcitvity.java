@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.client.ui.MaintenanceView;
+import com.propertyvista.portal.client.ui.residents.MaintenanceView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;

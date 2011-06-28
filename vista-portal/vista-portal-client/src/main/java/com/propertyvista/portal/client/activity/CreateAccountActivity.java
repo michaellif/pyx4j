@@ -28,7 +28,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.client.ui.CreateAccountView;
+import com.propertyvista.portal.client.ui.residents.CreateAccountView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;

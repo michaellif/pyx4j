@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.portal.client.ui.PersonalInfoView;
+import com.propertyvista.portal.client.ui.residents.PersonalInfoView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 

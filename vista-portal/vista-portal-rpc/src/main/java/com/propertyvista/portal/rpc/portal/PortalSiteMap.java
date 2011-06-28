@@ -88,6 +88,9 @@ public class PortalSiteMap implements SiteMap {
         public static class PaymentMethods extends AppPlace {
         }
 
+        public static class PaymentMethod extends AppPlace {
+        }
+
         public static class CurrentBill extends AppPlace {
         }
 

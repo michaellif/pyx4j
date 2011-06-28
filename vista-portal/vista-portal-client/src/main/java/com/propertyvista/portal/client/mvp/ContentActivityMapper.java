@@ -31,6 +31,7 @@ import com.propertyvista.portal.client.activity.LoginActivity;
 import com.propertyvista.portal.client.activity.LoginInvitationActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
 import com.propertyvista.portal.client.activity.MaintenanceListerActivity;
+import com.propertyvista.portal.client.activity.PaymentMethodActivity;
 import com.propertyvista.portal.client.activity.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
@@ -86,6 +87,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new CurrentBillActivity(place);
                 } else if (place instanceof PortalSiteMap.PotentialTenants) {
                     activity = new PotentialTenantActivity(place);
+                } else if (place instanceof PortalSiteMap.Residents.PaymentMethod) {
+                    activity = new PaymentMethodActivity(place);
                 }
 
                 callback.onSuccess(activity);

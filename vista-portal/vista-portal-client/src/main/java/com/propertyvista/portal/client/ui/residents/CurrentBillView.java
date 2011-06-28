@@ -11,17 +11,10 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.ui.residents;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class PaymentMethodsViewImpl extends SimplePanel implements PaymentMethodsView {
-
-    public PaymentMethodsViewImpl() {
-        HTML label = new HTML("Payment Methods");
-        setWidget(label);
-
-    }
+public interface CurrentBillView extends IsWidget {
 
 }

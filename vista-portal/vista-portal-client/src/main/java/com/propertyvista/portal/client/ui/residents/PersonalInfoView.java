@@ -7,14 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 18, 2011
+ * Created on May 14, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.ui.residents;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface CurrentBillView extends IsWidget {
+import com.propertyvista.portal.domain.dto.ResidentDTO;
 
+public interface PersonalInfoView extends IsWidget {
+    void setPresenter(Presenter presenter);
+
+    void populate(ResidentDTO personalInfo);
+
+    interface Presenter {
+
+    }
 }
