@@ -89,4 +89,8 @@ public class PieChart2DGadget extends GadgetBase {
         return scroll;
     }
 
+    @Override
+    public boolean isFullWidth() {
+        return false;
+    }
 }

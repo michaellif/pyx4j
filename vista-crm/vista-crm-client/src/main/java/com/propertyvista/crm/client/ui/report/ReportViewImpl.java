@@ -56,7 +56,7 @@ import com.propertyvista.domain.dashboard.GadgetMetadata;
 
 public class ReportViewImpl extends DockLayoutPanel implements ReportView {
 
-    public static String DEFAULT_STYLE_PREFIX = "vista_ReportView";
+    public static String DEFAULT_STYLE_PREFIX = "vista_DashboardView";
 
     public static enum StyleSuffix implements IStyleSuffix {
         actionsPanel

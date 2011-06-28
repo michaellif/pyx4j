@@ -26,8 +26,6 @@ import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class DemoGadget extends GadgetBase {
 
-    private boolean fullWidth = true;
-
     private final HTML widget = new HTML();
 
     public DemoGadget(GadgetMetadata gmd) {
@@ -59,14 +57,10 @@ public class DemoGadget extends GadgetBase {
 
     @Override
     public boolean isFullWidth() {
-        return fullWidth;
+        return false;
     }
 
     // setup:
-
-    public void setFullWidth(boolean fullWidth) {
-        this.fullWidth = fullWidth;
-    }
 
     @Override
     public ISetup getSetup() {
