@@ -26,7 +26,6 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.activity.AccountActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
-import com.propertyvista.crm.client.activity.ReportActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.BuildingEditorActivity;
@@ -73,6 +72,7 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardEditorActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
+import com.propertyvista.crm.client.activity.report.ReportViewActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class MainActivityMapper implements AppActivityMapper {
@@ -276,6 +276,15 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
+// Reports:
+                } else if (place instanceof CrmSiteMap.Report) {
+                    activity = new ReportViewActivity(place);
+//                } else if (place instanceof CrmSiteMap.Report.Edit) {
+//                    activity = new DashboardEditorActivity(place);
+//                } else if (place instanceof CrmSiteMap.Report.Management) {
+//                    activity = new DashboardManagementActivity(place);
+                } else if (place instanceof CrmSiteMap.Report.System) {
+                    activity = new ReportViewActivity(place);
 // Dashboards:
                 } else if (place instanceof CrmSiteMap.Dashboard) {
                     activity = new DashboardViewActivity(place);
@@ -288,8 +297,6 @@ public class MainActivityMapper implements AppActivityMapper {
                 } else if (place instanceof CrmSiteMap.Dashboard.Building) {
                     activity = new DashboardViewActivity(place);
 // - Other:
-                } else if (place instanceof CrmSiteMap.Report) {
-                    activity = new ReportActivity(place);
                 } else if (place instanceof CrmSiteMap.Account) {
                     activity = new AccountActivity(place);
                 } else if (place instanceof CrmSiteMap.Alert) {

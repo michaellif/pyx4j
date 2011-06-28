@@ -27,5 +27,6 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new PortalSitePreload());
         add(new DevelopmentSecurityPreload());
         add(new DashboardPreload());
+        add(new ReportPreload());
     }
 }

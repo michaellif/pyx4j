@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.report;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 
-import com.propertyvista.domain.dashboard.DashboardMetadata;
-
-public interface ReportView extends IsWidget {
-
-    void fillDashboard(DashboardMetadata dashboardMetadata);
+public interface ReportView extends DashboardView {
 }

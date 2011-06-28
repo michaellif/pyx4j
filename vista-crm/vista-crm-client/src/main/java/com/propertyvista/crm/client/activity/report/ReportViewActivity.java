@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.dashboard;
+package com.propertyvista.crm.client.activity.report;
 
 import java.util.Vector;
 
@@ -27,7 +27,7 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.client.ui.report.ReportView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.DashboardMetadataService;
@@ -35,9 +35,9 @@ import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
-public class DashboardViewActivity extends AbstractActivity implements DashboardView.Presenter {
+public class ReportViewActivity extends AbstractActivity implements ReportView.Presenter {
 
-    private final DashboardView view;
+    private final ReportView view;
 
     private final DashboardMetadataService service = GWT.create(DashboardMetadataService.class);
 
@@ -45,31 +45,29 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
 
     private DashboardMetadata.Type dashboardType;
 
-    public DashboardViewActivity(Place place) {
-        view = (DashboardView) DashboardViewFactory.instance(DashboardView.class);
+    public ReportViewActivity(Place place) {
+        view = (ReportView) DashboardViewFactory.instance(ReportView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }
 
-    public DashboardViewActivity(DashboardView view, Place place) {
+    public ReportViewActivity(ReportView view, Place place) {
         this.view = view;
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }
 
-    public DashboardViewActivity withPlace(Place place) {
+    public ReportViewActivity withPlace(Place place) {
         entityId = null;
         dashboardType = null;
 
         String id;
         if ((id = ((AppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
             entityId = new Key(id);
-        } else if (place instanceof CrmSiteMap.Dashboard.System) {
+        } else if (place instanceof CrmSiteMap.Report.System) {
             dashboardType = DashboardMetadata.Type.system;
-        } else if (place instanceof CrmSiteMap.Dashboard.Building) {
-            dashboardType = DashboardMetadata.Type.building;
         }
 
         assert (entityId != null || dashboardType != null);
@@ -89,7 +87,7 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
                 @Override
                 public void onSuccess(Vector<DashboardMetadata> result) {
                     for (DashboardMetadata dmd : result) {
-                        if (dmd.type().getValue().equals(dashboardType) && !dmd.layoutType().getValue().equals(LayoutType.Report)) {
+                        if (dmd.type().getValue().equals(dashboardType) && dmd.layoutType().getValue().equals(LayoutType.Report)) {
                             view.fill(dmd);
                             break;
                         }

@@ -28,7 +28,7 @@ public interface DashboardMetadata extends ISharedUserEntity {
 
     @Translatable
     public enum Type {
-        system, building;
+        system, building, other;
 
         @Override
         public String toString() {
@@ -51,7 +51,9 @@ public interface DashboardMetadata extends ISharedUserEntity {
         Two21,
 
         @Translation("Three equal columns")
-        Three;
+        Three,
+
+        Report;
 
         @Override
         public String toString() {

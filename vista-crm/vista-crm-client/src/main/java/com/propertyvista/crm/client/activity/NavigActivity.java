@@ -37,6 +37,7 @@ import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, NavigationUpdateHandler {
 
@@ -69,7 +70,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
     @Override
     public String getNavigLabel(AppPlace place) {
-        if (place instanceof CrmSiteMap.Dashboard) {
+        if (place instanceof CrmSiteMap.Report) {
+            return ((CrmSiteMap.Report) place).getName();
+        } else if (place instanceof CrmSiteMap.Dashboard) {
             return ((CrmSiteMap.Dashboard) place).getName();
         }
         return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
@@ -112,7 +115,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
         //Reports
         folder = new NavigFolder("Reports", CrmImages.INSTANCE.reportsNormal(), CrmImages.INSTANCE.reportsHover(), CrmImages.INSTANCE.reportsActive());
-        folder.addNavigItem(new CrmSiteMap.Report());
+//        folder.addNavigItem(new CrmSiteMap.Report.System());
+        fillReports(folder);
         list.add(folder);
 
         //Dashboards
@@ -120,7 +124,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
                 CrmImages.INSTANCE.dashboardsActive());
 
         folder.addNavigItem(new CrmSiteMap.Dashboard.Management());
-// TOT: this dashboard is populated below (in fillDashboards())... 
+
+// TODO: this dashboard is populated below (in fillDashboards())... 
 //        so we should decide how muxh we'll have system dashborads and if > 1 
 //        - should we show here link to 'most' system one ;)            
 //        folder.addNavigItem(new CrmSiteMap.Dashboard.System());
@@ -133,15 +138,40 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         return list;
     }
 
+    private void fillReports(final NavigFolder folder) {
+        DashboardMetadataService service = GWT.create(DashboardMetadataService.class);
+        service.listMetadata(new AsyncCallback<Vector<DashboardMetadata>>() {
+            @Override
+            public void onSuccess(Vector<DashboardMetadata> result) {
+                for (DashboardMetadata dmd : result) {
+                    if (dmd.layoutType().getValue().equals(LayoutType.Report)) {
+                        CrudAppPlace place = new CrmSiteMap.Report();
+                        place.formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView());
+                        folder.addNavigItem(place);
+                    }
+                }
+                // update UI:
+                view.setNavigFolders(currentfolders);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        });
+    }
+
     private void fillDashboards(final NavigFolder folder) {
         DashboardMetadataService service = GWT.create(DashboardMetadataService.class);
         service.listMetadata(new AsyncCallback<Vector<DashboardMetadata>>() {
             @Override
             public void onSuccess(Vector<DashboardMetadata> result) {
                 for (DashboardMetadata dmd : result) {
-                    CrudAppPlace place = new CrmSiteMap.Dashboard();
-                    place.formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView());
-                    folder.addNavigItem(place);
+                    if (!dmd.layoutType().getValue().equals(LayoutType.Report)) {
+                        CrudAppPlace place = new CrmSiteMap.Dashboard();
+                        place.formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView());
+                        folder.addNavigItem(place);
+                    }
                 }
                 // update UI:
                 view.setNavigFolders(currentfolders);

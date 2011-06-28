@@ -38,10 +38,10 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.widgets.client.dashboard.Dashboard;
-import com.pyx4j.widgets.client.dashboard.Dashboard.IGadgetIterator;
 import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
 import com.pyx4j.widgets.client.dashboard.DashboardEvent;
 import com.pyx4j.widgets.client.dashboard.IGadget;
+import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.crm.client.resources.CrmImages;

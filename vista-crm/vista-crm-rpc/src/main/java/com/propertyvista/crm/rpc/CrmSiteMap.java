@@ -161,8 +161,24 @@ public class CrmSiteMap implements SiteMap {
     public static class Finance extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Some Report")
-    public static class Report extends AppPlace {
+    @NavigationItem(navigLabel = "Report")
+    public static class Report extends CrudAppPlace {
+
+        @PlaceProperties(caption = "Edit")
+        @NavigationItem(navigLabel = "Edit")
+        public static class Edit extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Report Management")
+        @NavigationItem(navigLabel = "Manage Reports")
+        public static class Management extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "System Report")
+        @NavigationItem(navigLabel = "System Report")
+        public static class System extends AppPlace {
+        }
     }
 
     @PlaceProperties(caption = "Dashboard")
