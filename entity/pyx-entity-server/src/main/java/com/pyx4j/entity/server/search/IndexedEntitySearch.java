@@ -100,6 +100,11 @@ public class IndexedEntitySearch<E extends IEntity> {
             if (me.getValue() == null) {
                 continue;
             }
+            if (me.getValue() instanceof PropertyCriterion) {
+                queryCriteria.add((PropertyCriterion) me.getValue());
+                continue;
+            }
+
             PathSearch path = me.getKey();
             final int pathLength = path.getPathMembers().size();
             boolean inMemoryFilterOnly = false;
