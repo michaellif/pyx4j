@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.server.services.dashboard;
 
 import java.util.Vector;
 
@@ -23,7 +23,7 @@ import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.crm.rpc.services.DashboardMetadataService;
+import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata;

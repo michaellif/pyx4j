@@ -28,7 +28,7 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.client.event.NavigationUpdateEvent;
 import com.propertyvista.crm.client.ui.dashboard.DashboardEditor;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
-import com.propertyvista.crm.rpc.services.DashboardCrudService;
+import com.propertyvista.crm.rpc.services.dashboard.DashboardCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.Type;

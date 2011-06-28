@@ -35,7 +35,7 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.DashboardMetadataService;
+import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 

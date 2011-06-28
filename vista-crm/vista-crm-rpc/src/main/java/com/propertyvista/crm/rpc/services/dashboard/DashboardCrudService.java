@@ -11,14 +11,12 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.rpc.services.dashboard;
 
-import com.propertyvista.crm.rpc.services.DashboardCrudService;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
+
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardCrudServiceImpl extends GenericCrudServiceImpl<DashboardMetadata> implements DashboardCrudService {
+public interface DashboardCrudService extends AbstractCrudService<DashboardMetadata> {
 
-    public DashboardCrudServiceImpl() {
-        super(DashboardMetadata.class);
-    }
 }
