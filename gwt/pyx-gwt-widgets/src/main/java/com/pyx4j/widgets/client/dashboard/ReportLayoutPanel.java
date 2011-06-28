@@ -50,7 +50,7 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
     }
 
     public void insertGadget(Widget widget, Report.Location location, int beforeIndex) {
-        if (!checkIndex(beforeIndex)) {
+        if (!checkIndex(beforeIndex, true)) {
             return;
         }
 
@@ -112,16 +112,15 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
     }
 
     public void setGadget(Widget widget, int index) {
-        if (!checkIndex(index)) {
+        if (!checkIndex(index, false)) {
             return;
         }
 
-        CellPanel cell = (CellPanel) getWidget(index);
-        cell.setWidget(widget);
+        ((CellPanel) getWidget(index)).setWidget(widget);
     }
 
     public void removeGadget(int index) {
-        if (!checkIndex(index)) {
+        if (!checkIndex(index, false)) {
             return;
         }
 
@@ -153,25 +152,24 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
 
     public void removeGadget(Widget widget) {
         for (int i = 0; i < getWidgetCount(); i++) {
-            if (widget != null && widget.equals(((CellPanel) getWidget(i)).getWidget())) {
+            if (widget.equals(((CellPanel) getWidget(i)).getWidget())) {
                 removeGadget(i);
             }
         }
     }
 
     public Widget getGadget(int index) {
-        if (checkIndex(index)) {
+        if (!checkIndex(index, false)) {
             return null;
         }
 
-        CellPanel cell = (CellPanel) getWidget(index);
-        return (cell == null ? null : cell.getWidget());
+        return ((CellPanel) getWidget(index)).getWidget();
     }
 
     public Report.Location getGadgetLocation(Widget widget) {
         for (int i = 0; i < getWidgetCount(); i++) {
             CellPanel cellPanel = (CellPanel) getWidget(i);
-            if (widget != null && widget.equals(cellPanel.getWidget())) {
+            if (widget.equals(cellPanel.getWidget())) {
                 return cellPanel.getLocation();
             }
         }
@@ -180,7 +178,7 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
 
     public int getGadgetIndex(Widget widget) {
         for (int i = 0; i < getWidgetCount(); i++) {
-            if (widget != null && widget.equals(((CellPanel) getWidget(i)).getWidget())) {
+            if (widget.equals(((CellPanel) getWidget(i)).getWidget())) {
                 return i;
             }
         }
@@ -200,14 +198,14 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
 
     public void replaceGadget(Widget widget, Widget widgetReplaceTo) {
         for (int i = 0; i < getWidgetCount(); i++) {
-            if (widget != null && widget.equals(((CellPanel) getWidget(i)).getWidget())) {
+            if (widget.equals(((CellPanel) getWidget(i)).getWidget())) {
                 ((CellPanel) getWidget(i)).setWidget(widgetReplaceTo);
             }
         }
     }
 
-    private boolean checkIndex(int index) {
-        if (index < 0 || index > getWidgetCount()) {
+    private boolean checkIndex(int index, boolean insert) {
+        if (index < 0 || (!insert && index >= getWidgetCount()) || (insert && index > getWidgetCount())) {
             log.debug("Wrong index - {}", index);
             return false;
         }
@@ -276,21 +274,26 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
 
         @Override
         public boolean hasNext() {
-            return checkIndex(index + 1);
+            while (checkIndex(index + 1, false)) {
+                if (getGadget(index + 1) instanceof GadgetHolder) {
+                    return true;
+                }
+                ++index;
+            }
+            return false;
         }
 
         @Override
         public IGadget next() {
-            Widget w = getGadget(++index);
-            if (w == null || !(w instanceof GadgetHolder)) {
+            if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            return ((GadgetHolder) w).getGadget();
+            return ((GadgetHolder) getGadget(++index)).getGadget();
         }
 
         @Override
         public void remove() {
-            if (!checkIndex(index)) {
+            if (!checkIndex(index, false)) {
                 throw new NoSuchElementException();
             }
             removeGadget(index--);
@@ -298,7 +301,7 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
 
         @Override
         public int getColumn() {
-            if (!checkIndex(index)) {
+            if (!checkIndex(index, false)) {
                 throw new NoSuchElementException();
             }
 
