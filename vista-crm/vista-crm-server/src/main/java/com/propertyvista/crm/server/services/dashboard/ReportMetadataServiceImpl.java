@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-22
+ * Created on 2011-06-28
  * @author vlads
  * @version $Id$
  */
@@ -17,17 +17,17 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
-import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
+import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardMetadataServiceImpl extends AbstractMetadataServiceImpl implements DashboardMetadataService {
+public class ReportMetadataServiceImpl extends AbstractMetadataServiceImpl implements ReportMetadataService {
 
-    public DashboardMetadataServiceImpl() {
+    public ReportMetadataServiceImpl() {
         super();
     }
 
     @Override
     void addTypeCriteria(EntityQueryCriteria<DashboardMetadata> criteria) {
-        criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.NOT_EQUAL, DashboardMetadata.LayoutType.Report));
+        criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.EQUAL, DashboardMetadata.LayoutType.Report));
     }
 }

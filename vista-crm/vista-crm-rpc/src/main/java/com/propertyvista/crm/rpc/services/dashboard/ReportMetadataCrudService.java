@@ -7,13 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-21
+ * Created on 2011-06-28
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.dashboard;
 
 
-public interface DashboardCrudService extends AbstractMetadataCrudService {
+public interface ReportMetadataCrudService extends AbstractMetadataCrudService {
 
 }

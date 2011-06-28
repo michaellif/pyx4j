@@ -7,13 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-21
+ * Created on 2011-06-28
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.dashboard;
 
+import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-public interface DashboardCrudService extends AbstractMetadataCrudService {
+import com.propertyvista.domain.dashboard.DashboardMetadata;
+
+public interface AbstractMetadataCrudService extends AbstractCrudService<DashboardMetadata> {
 
 }
