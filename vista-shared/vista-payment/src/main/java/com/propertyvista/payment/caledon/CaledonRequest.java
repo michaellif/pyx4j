@@ -59,6 +59,10 @@ public class CaledonRequest {
         this.amount = nf.format(amount * 100);
     }
 
+    public void setAmountCents(int amount) {
+        this.amount = String.valueOf(amount);
+    }
+
     @HttpRequestField("TYPE")
     public String transactionType;
 
