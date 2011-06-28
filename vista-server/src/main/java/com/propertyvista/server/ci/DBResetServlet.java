@@ -36,7 +36,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.quartz.SchedulerHelper;
+import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 @SuppressWarnings("serial")
@@ -72,6 +74,13 @@ public class DBResetServlet extends HttpServlet {
 
                 buf.append(conf.getDataPreloaders().preloadAll());
                 buf.append("\nTotal time: " + TimeUtils.secSince(start));
+
+                if (NamespaceManager.getNamespace().equals(VistaNamespaceResolver.demoNamespace)) {
+                    NamespaceManager.setNamespace(VistaNamespaceResolver.demoSLNamespace);
+                    buf.append("\n---Preload SL---");
+                    buf.append(conf.getDataPreloaders().preloadAll());
+                    buf.append("\nTotal time: " + TimeUtils.secSince(start));
+                }
 
             } catch (Throwable t) {
                 log.error("DB reset error", t);

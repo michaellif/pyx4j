@@ -24,6 +24,8 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 
     public static final String demoNamespace = "vista";
 
+    public static final String demoSLNamespace = "star";
+
     @Override
     public String getNamespace(HttpServletRequest httprequest) {
         // Dev: Get the 4th part of URL.
