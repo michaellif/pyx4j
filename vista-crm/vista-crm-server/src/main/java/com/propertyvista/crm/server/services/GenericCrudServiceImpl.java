@@ -18,11 +18,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.EntityServicesImpl;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
-
 
 /**
  * DBO - Data Base Object
@@ -37,18 +35,18 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> implements Abs
 
     @Override
     public void create(AsyncCallback<DBO> callback, DBO entity) {
-        PersistenceServicesFactory.getPersistenceService().persist(entity);
+        EntityServicesImpl.secureSave(entity);
         callback.onSuccess(entity);
     }
 
     @Override
     public void retrieve(AsyncCallback<DBO> callback, Key entityId) {
-        callback.onSuccess(PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId));
+        callback.onSuccess(EntityServicesImpl.secureRetrieve(dboClass, entityId));
     }
 
     @Override
     public void save(AsyncCallback<DBO> callback, DBO entity) {
-        PersistenceServicesFactory.getPersistenceService().merge(entity);
+        EntityServicesImpl.secureSave(entity);
         callback.onSuccess(entity);
     }
 

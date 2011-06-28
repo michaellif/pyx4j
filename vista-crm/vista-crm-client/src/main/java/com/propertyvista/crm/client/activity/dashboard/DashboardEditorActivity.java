@@ -19,7 +19,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
@@ -71,7 +70,7 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
             entity.layoutType().setValue(LayoutType.Two12);
 
             // TODO: get current user Key here: 
-            entity.user().id().setValue(Key.DORMANT_KEY);
+            //entity.user().id().setValue(Key.DORMANT_KEY);
         }
     }
 

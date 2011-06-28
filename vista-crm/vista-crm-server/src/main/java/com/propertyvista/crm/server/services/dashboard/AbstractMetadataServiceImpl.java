@@ -70,7 +70,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
     public void saveMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata dm) {
         if (!dm.id().isNull()) {
             //Assert Permission
-            EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, dm.getPrimaryKey()));
+            EntityServicesImpl.secureRetrieve(DashboardMetadata.class, dm.getPrimaryKey());
         }
 
         if (!Key.DORMANT_KEY.equals(dm.user().getPrimaryKey())) {
