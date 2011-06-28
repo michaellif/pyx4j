@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
@@ -44,12 +45,21 @@ import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
-    public UnitEditorForm() {
-        super(AptUnitDTO.class, new CrmEditorsComponentFactory());
+//    public UnitEditorForm() {
+//        super(AptUnitDTO.class, new CrmEditorsComponentFactory());
+//    }
+//
+//    public UnitEditorForm(IEditableComponentFactory factory) {
+//        super(AptUnitDTO.class, factory);
+//    }
+
+    public UnitEditorForm(IView<AptUnitDTO> parentView) {
+        this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public UnitEditorForm(IEditableComponentFactory factory) {
+    public UnitEditorForm(IEditableComponentFactory factory, IView<AptUnitDTO> parentView) {
         super(AptUnitDTO.class, factory);
+        setParentView(parentView);
     }
 
     @Override
