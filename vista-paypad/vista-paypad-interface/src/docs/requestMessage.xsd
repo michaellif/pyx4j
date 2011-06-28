@@ -5,11 +5,11 @@
 
   <xs:complexType name="requestMessage">
     <xs:sequence>
-      <xs:element name="messageId" type="xs:string"/>
       <xs:element name="interfaceEntity" type="xs:string"/>
       <xs:element name="interfaceEntityPassword" type="xs:string"/>
       <xs:element name="merchantId" type="xs:string"/>
       <xs:element name="merchantPassword" type="xs:string" minOccurs="0"/>
+      <xs:element name="messageId" type="xs:string" minOccurs="0"/>
       <xs:element name="requests" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
@@ -23,23 +23,16 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="request" abstract="true">
-    <xs:sequence>
-      <xs:element name="requestId" type="xs:string"/>
-      <xs:element name="echo" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
   <xs:complexType name="transactionRequest">
     <xs:complexContent>
       <xs:extension base="tns:request">
         <xs:sequence>
           <xs:element name="txnType" type="tns:transactionType"/>
-          <xs:element name="amount" type="xs:float"/>
           <xs:choice>
-            <xs:element name="creditCard" type="tns:creditCardInfo"/>
+            <xs:element name="card" type="tns:creditCardInfo"/>
             <xs:element name="token" type="tns:tokenPaymentInstrument"/>
           </xs:choice>
+          <xs:element name="amount" type="xs:int"/>
           <xs:element name="reference" type="xs:string"/>
           <xs:element name="avs" type="xs:string" minOccurs="0"/>
           <xs:element name="cvv" type="xs:string" minOccurs="0"/>
@@ -47,6 +40,13 @@
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="request" abstract="true">
+    <xs:sequence>
+      <xs:element name="requestId" type="xs:string"/>
+      <xs:element name="echo" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="creditCardInfo">

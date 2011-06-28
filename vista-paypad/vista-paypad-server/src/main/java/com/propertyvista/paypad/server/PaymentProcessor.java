@@ -172,7 +172,7 @@ public class PaymentProcessor {
             return;
         }
 
-        crequest.setAmount(transactionRequest.getAmount());
+        crequest.setAmountCents(transactionRequest.getAmount());
         crequest.referenceNumber = transactionRequest.getReference();
 
         if (Boolean.TRUE.equals(transactionRequest.getResend())) {

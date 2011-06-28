@@ -74,7 +74,7 @@ public class TokenTransactions {
         token.setCode("45125206MCRD5111");
         pReq.setPaymentInstrument(token);
 
-        pReq.setAmount(142.59f);
+        pReq.setAmount(14259);
         pReq.setReference("TOKENTRANSEXAMPLE");
 
         r.addRequest(pReq);

@@ -27,9 +27,7 @@ import com.propertyvista.interfaces.payment.ResponseMessage;
 
 public class ExampleClient {
 
-    //public static String serverUrl = "https://interfaces.birchwoodsoftwaregroup.com/payment";
-
-    public static String serverUrl = "http://localhost:8889/payment";
+    public static String serverUrl = "https://secure.paymentpad.com/payment";
 
     public static ResponseMessage execute(RequestMessage requestMessage) throws Exception {
         HttpURLConnection conn = null;

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.interfaces.payment;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -102,10 +103,10 @@ public class TransactionRequest extends Request {
     private String avs;
 
     /**
-     * The amount of money for which the transaction is being performed.
-     * Fractions of cents are ignored.
+     * The amount of money in cents for which the transaction is being performed.
      */
-    private float amount;
+    @Min(0)
+    private int amount;
 
     /**
      * REFERENCE NUMBER
@@ -140,7 +141,7 @@ public class TransactionRequest extends Request {
 
     //@formatter:off
     @XmlElements({ 
-        @XmlElement(name = "creditCard", type = CreditCardInfo.class, required = true), 
+        @XmlElement(name = "card", type = CreditCardInfo.class, required = true), 
         @XmlElement(name = "token", type = TokenPaymentInstrument.class, required = true)})
     //@formatter:on    
     public PaymentInstrument getPaymentInstrument() {
@@ -170,11 +171,11 @@ public class TransactionRequest extends Request {
     }
 
     @XmlElement(required = true)
-    public float getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 

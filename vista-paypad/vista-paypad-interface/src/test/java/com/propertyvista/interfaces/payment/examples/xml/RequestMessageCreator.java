@@ -107,7 +107,7 @@ public class RequestMessageCreator {
         token.setCode("DC1107");
         tcpay.setPaymentInstrument(token);
 
-        tcpay.setAmount(500.78f);
+        tcpay.setAmount(50078);
         tcpay.setReference("SeptemberRent14YongeAppt456");
         r.addRequest(tcpay);
 
