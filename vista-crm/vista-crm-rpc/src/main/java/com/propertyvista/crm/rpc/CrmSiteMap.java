@@ -133,12 +133,6 @@ public class CrmSiteMap implements SiteMap {
         public static class Detail extends CrudAppPlace {
 
         }
-
-        @PlaceProperties(caption = "Occupancies")
-        @NavigationItem(navigLabel = "Occupancies")
-        public static class Occupancy extends CrudAppPlace {
-
-        }
     }
 
     public static class Tenants extends AppPlace {

@@ -17,19 +17,40 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.unit.UnitEditorView;
+import com.propertyvista.crm.client.ui.crud.unit.UnitView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitEditorActivity extends EditorActivityBase<AptUnitDTO> {
+public class UnitEditorActivity extends EditorActivityBase<AptUnitDTO> implements UnitEditorView.Presenter {
+
+    private final UnitActivityDelegate delegate;
 
     @SuppressWarnings("unchecked")
     public UnitEditorActivity(Place place) {
         super((UnitEditorView) UnitViewFactory.instance(UnitEditorView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class),
                 AptUnitDTO.class);
         withPlace(place);
+
+        delegate = new UnitActivityDelegate((UnitView) view);
+    }
+
+    @Override
+    public Presenter getDetailsPresenter() {
+        return delegate.getDetailsPresenter();
+    }
+
+    @Override
+    public Presenter getOccupanciesPresenter() {
+        return delegate.getOccupanciesPresenter();
+    }
+
+    @Override
+    public Presenter getConcessionsPresenter() {
+        return delegate.getConcessionsPresenter();
     }
 }

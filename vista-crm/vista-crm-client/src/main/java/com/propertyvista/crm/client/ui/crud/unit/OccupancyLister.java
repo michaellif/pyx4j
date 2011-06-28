@@ -24,12 +24,12 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 public class OccupancyLister extends ListerBase<AptUnitOccupancy> {
     public OccupancyLister() {
-        super(AptUnitOccupancy.class, CrmSiteMap.Properties.Occupancy.class);
+        super(AptUnitOccupancy.class, CrmSiteMap.Properties.UnitOccupancy.class);
         setFiltersVisible(false);
     }
 
     public OccupancyLister(boolean readOnly) {
-        super(AptUnitOccupancy.class, CrmSiteMap.Properties.Occupancy.class, readOnly);
+        super(AptUnitOccupancy.class, CrmSiteMap.Properties.UnitOccupancy.class, readOnly);
         setFiltersVisible(false);
     }
 

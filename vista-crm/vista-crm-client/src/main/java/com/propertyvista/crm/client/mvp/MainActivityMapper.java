@@ -223,6 +223,17 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
+                } else if (place instanceof CrmSiteMap.Properties.Detail) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    //TODO for Leon
+                    case editor:
+                        //activity = new DetailEditorActivity(place);
+                        break;
+                    case viewer:
+                        //activity = new ConcessionViewerActivity(place);
+                        break;
+                    }
+
                     // - Tenant-related:
                 } else if (place instanceof CrmSiteMap.Tenants.Tenant) {
                     switch (((CrudAppPlace) place).getType()) {
