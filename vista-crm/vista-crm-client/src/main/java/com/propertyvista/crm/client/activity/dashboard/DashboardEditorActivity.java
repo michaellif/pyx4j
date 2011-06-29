@@ -27,7 +27,7 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.client.event.NavigationUpdateEvent;
 import com.propertyvista.crm.client.ui.dashboard.DashboardEditor;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
-import com.propertyvista.crm.rpc.services.dashboard.DashboardCrudService;
+import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.Type;
@@ -39,7 +39,7 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
     @SuppressWarnings("unchecked")
     public DashboardEditorActivity(Place place) {
         super((DashboardEditor) DashboardViewFactory.instance(DashboardEditor.class), (AbstractCrudService<DashboardMetadata>) GWT
-                .create(DashboardCrudService.class), DashboardMetadata.class);
+                .create(DashboardMetadataCrudService.class), DashboardMetadata.class);
         withPlace(place);
     }
 

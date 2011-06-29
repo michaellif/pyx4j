@@ -14,6 +14,6 @@
 package com.propertyvista.crm.rpc.services.dashboard;
 
 
-public interface ReportCrudService extends AbstractMetadataCrudService {
+public interface ReportMetadataCrudService extends AbstractMetadataCrudService {
 
 }

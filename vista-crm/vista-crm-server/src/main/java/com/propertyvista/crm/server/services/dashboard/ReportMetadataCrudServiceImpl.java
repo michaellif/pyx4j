@@ -17,12 +17,12 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
-import com.propertyvista.crm.rpc.services.dashboard.ReportCrudService;
+import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class ReportCrudServiceImpl extends AbstractCrudServiceImpl implements ReportCrudService {
+public class ReportMetadataCrudServiceImpl extends AbstractCrudServiceImpl implements ReportMetadataCrudService {
 
-    public ReportCrudServiceImpl() {
+    public ReportMetadataCrudServiceImpl() {
         super();
     }
 

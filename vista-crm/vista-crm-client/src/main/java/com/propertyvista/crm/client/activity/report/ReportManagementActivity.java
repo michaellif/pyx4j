@@ -21,7 +21,7 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.report.ReportManagement;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
-import com.propertyvista.crm.rpc.services.dashboard.ReportCrudService;
+import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class ReportManagementActivity extends ListerActivityBase<DashboardMetadata> {
@@ -29,7 +29,7 @@ public class ReportManagementActivity extends ListerActivityBase<DashboardMetada
     @SuppressWarnings("unchecked")
     public ReportManagementActivity(Place place) {
         super((ReportManagement) DashboardViewFactory.instance(ReportManagement.class), (AbstractCrudService<DashboardMetadata>) GWT
-                .create(ReportCrudService.class), DashboardMetadata.class);
+                .create(ReportMetadataCrudService.class), DashboardMetadata.class);
         withPlace(place);
     }
 }
