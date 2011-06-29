@@ -13,11 +13,13 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 
+@Transient
 public interface FloorplanDTO extends Floorplan {
 
     IList<FloorplanAmenity> amenities();
