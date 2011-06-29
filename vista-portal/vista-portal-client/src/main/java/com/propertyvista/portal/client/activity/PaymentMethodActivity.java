@@ -17,15 +17,20 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.site.client.AppSite;
+
 import com.propertyvista.portal.client.ui.residents.PaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class PaymentMethodActivity extends SecurityAwareActivity {
+public class PaymentMethodActivity extends SecurityAwareActivity implements PaymentMethodView.Presenter {
 
     private final PaymentMethodView view;
 
     public PaymentMethodActivity(Place place) {
         this.view = (PaymentMethodView) PortalViewFactory.instance(PaymentMethodView.class);
+        this.view.setPresenter(this);
         withPlace(place);
     }
 
@@ -37,6 +42,14 @@ public class PaymentMethodActivity extends SecurityAwareActivity {
 
     public PaymentMethodActivity withPlace(Place place) {
         return this;
+    }
+
+    @Override
+    public void save(PaymentMethodDTO paymentmethod) {
+        // TODO Implement
+        //Just for presentation
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
+
     }
 
 }

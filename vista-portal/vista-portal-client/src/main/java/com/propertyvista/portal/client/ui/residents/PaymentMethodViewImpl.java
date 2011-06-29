@@ -24,9 +24,13 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
+
 public class PaymentMethodViewImpl extends FlowPanel implements PaymentMethodView {
 
     private final PaymentMethodForm form;
+
+    private Presenter presenter;
 
     private static I18n i18n = I18nFactory.getI18n(MaintenanceViewImpl.class);
 
@@ -44,11 +48,24 @@ public class PaymentMethodViewImpl extends FlowPanel implements PaymentMethodVie
                 if (!form.isValid()) {
                     Window.scrollTo(0, 0);
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                } else {
+                    presenter.save(form.getValue());
                 }
-                Window.scrollTo(0, 0);
             }
         });
         add(submitButton);
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+
+    }
+
+    @Override
+    public void populate(PaymentMethodDTO paymentMethod) {
+        form.populate(paymentMethod);
+
     }
 
 }

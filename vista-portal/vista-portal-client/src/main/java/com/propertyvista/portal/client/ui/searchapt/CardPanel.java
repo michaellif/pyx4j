@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class CardPanel extends DockPanel {
@@ -36,7 +35,7 @@ public class CardPanel extends DockPanel {
 
     private final SimplePanel content;
 
-    protected static I18n i18n = I18nFactory.getI18n(BaseFolderItemViewerDecorator.class);
+    protected static I18n i18n = I18nFactory.getI18n(CardPanel.class);
 
     public static enum StyleSuffix implements IStyleSuffix {
         Header, Content, Image

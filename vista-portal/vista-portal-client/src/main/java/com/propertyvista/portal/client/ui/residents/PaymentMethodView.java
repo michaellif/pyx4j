@@ -15,6 +15,17 @@ package com.propertyvista.portal.client.ui.residents;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
+
 public interface PaymentMethodView extends IsWidget {
+    void setPresenter(Presenter presenter);
+
+    public void populate(PaymentMethodDTO paymentMethod);
+
+    interface Presenter {
+
+        public void save(PaymentMethodDTO paymentmethod);
+
+    }
 
 }

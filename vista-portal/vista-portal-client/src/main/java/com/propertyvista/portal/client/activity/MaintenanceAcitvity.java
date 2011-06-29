@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.ui.residents.MaintenanceView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
@@ -56,11 +55,7 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
 
     @Override
     public void showSupportHistory() {
-        //this line navigates to lister
-        AppPlace place = new PortalSiteMap.Residents.MaintenanceListHistory();
-        //this line navigates to form
-        // AppPlace place = new PortalSiteMap.Residents.MaintenanceHistory();
-        AppSite.getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.MaintenanceListHistory());
 
     }
 }

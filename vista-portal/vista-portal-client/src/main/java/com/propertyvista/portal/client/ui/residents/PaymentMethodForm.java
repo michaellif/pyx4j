@@ -89,7 +89,7 @@ public class PaymentMethodForm extends CEntityForm<PaymentMethodDTO> {
     public IsWidget createContent() {
 
         VistaDecoratorsFlowPanel container = new VistaDecoratorsFlowPanel();
-        container.add(new VistaHeaderDecorator(proto().type()));
+        container.add(new VistaHeaderDecorator(proto().type(), "100%"));
         CRadioGroupEnum<PaymentType> radioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, CRadioGroup.Layout.VERTICAL);
         radioGroup.setStylePrefix(PAYMENT_BUTTONS_STYLE_PREFIX);
 
@@ -171,11 +171,12 @@ public class PaymentMethodForm extends CEntityForm<PaymentMethodDTO> {
 
         setPaymentTableVisibility(0);
 
-        container.add(new VistaHeaderDecorator(proto().billingAddress()));
+        container.add(new VistaHeaderDecorator(proto().billingAddress(), "100%"));
         AddressUtils.injectIAddress(container, proto().billingAddress(), this);
 
         container.add(inject(proto().billingAddress().phone()), 12);
         container.setWidth("100%");
+        setInstrumentsVisibility(PaymentType.Echeck);
         return container;
 
     }

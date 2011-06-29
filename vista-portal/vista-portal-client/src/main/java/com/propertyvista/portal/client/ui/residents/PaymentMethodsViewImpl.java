@@ -33,4 +33,9 @@ public class PaymentMethodsViewImpl extends SimplePanel implements PaymentMethod
         form.populate(paymentMethods);
     }
 
+    @Override
+    public void setPresenter(Presenter presenter) {
+        form.setPresenter(presenter);
+    }
+
 }

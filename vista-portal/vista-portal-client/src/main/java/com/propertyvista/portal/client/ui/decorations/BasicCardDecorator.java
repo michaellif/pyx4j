@@ -34,7 +34,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
 import com.pyx4j.entity.shared.IEntity;
@@ -57,7 +56,7 @@ public class BasicCardDecorator<E extends IEntity> extends SimplePanel implement
 
     private CEntityFolderItemViewer<E> viewer;
 
-    protected static I18n i18n = I18nFactory.getI18n(BaseFolderItemViewerDecorator.class);
+    protected static I18n i18n = I18nFactory.getI18n(BasicCardDecorator.class);
 
     public static enum StyleSuffix implements IStyleSuffix {
         Menu, MenuItem, Content

@@ -17,20 +17,25 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.ui.residents.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 import com.propertyvista.portal.domain.payment.PaymentType;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class PaymentMethodsActivity extends SecurityAwareActivity {
+public class PaymentMethodsActivity extends SecurityAwareActivity implements PaymentMethodsView.Presenter {
 
     private final PaymentMethodsView view;
 
     public PaymentMethodsActivity(Place place) {
         this.view = (PaymentMethodsView) PortalViewFactory.instance(PaymentMethodsView.class);
+        this.view.setPresenter(this);
         withPlace(place);
     }
 
@@ -42,6 +47,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity {
         PaymentMethodListDTO paymentMethods = EntityFactory.create(PaymentMethodListDTO.class);
 
         PaymentMethodDTO paymentmethod = EntityFactory.create(PaymentMethodDTO.class);
+        paymentmethod.id().setValue(new Key(1l));
         paymentmethod.type().setValue(PaymentType.Visa);
         paymentmethod.primary().setValue(true);
         paymentmethod.billingAddress().city().setValue("Toronto");
@@ -51,6 +57,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity {
         paymentMethods.paymentMethods().add(paymentmethod);
 
         paymentmethod = EntityFactory.create(PaymentMethodDTO.class);
+        paymentmethod.id().setValue(new Key(2l));
         paymentmethod.type().setValue(PaymentType.MasterCard);
         paymentmethod.primary().setValue(false);
         paymentmethod.billingAddress().city().setValue("Richmond Hill");
@@ -63,6 +70,26 @@ public class PaymentMethodsActivity extends SecurityAwareActivity {
 
     public PaymentMethodsActivity withPlace(Place place) {
         return this;
+    }
+
+    @Override
+    public void editPaymentMethod(PaymentMethodDTO paymentmethod) {
+        AppPlace place = new PortalSiteMap.Residents.PaymentMethod();
+        place.putArg(PortalSiteMap.ARG_PAYMENT_METHOD_ID, paymentmethod.id().getValue().toString());
+        AppSite.getPlaceController().goTo(place);
+
+    }
+
+    @Override
+    public void addPaymentMethod() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethod());
+
+    }
+
+    @Override
+    public void removePaymentMethod(PaymentMethodDTO paymentmethod) {
+        // TODO Auto-generated method stub
+
     }
 
 }

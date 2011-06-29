@@ -40,7 +40,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.CircleOverlay;
@@ -74,7 +73,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
         CardHeader, CardContent, CardImage, CardMenu, CardMenuItem
     }
 
-    private static I18n i18n = I18nFactory.getI18n(BaseFolderItemViewerDecorator.class);
+    private static I18n i18n = I18nFactory.getI18n(PropertiesMapWidget.class);
 
     public PropertiesMapWidget() {
         super("100%", "500px");

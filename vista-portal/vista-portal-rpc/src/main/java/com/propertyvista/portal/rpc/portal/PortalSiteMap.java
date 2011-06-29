@@ -29,6 +29,8 @@ public class PortalSiteMap implements SiteMap {
 
     public static String ARG_MAINTENANCE_ID = "maintenance-id";
 
+    public static String ARG_PAYMENT_METHOD_ID = "payment-method-id";
+
     public static class Landing extends AppPlace {
     }
 

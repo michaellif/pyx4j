@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.themes;
 
 import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.style.ColorFactory;
@@ -34,6 +35,7 @@ import com.propertyvista.portal.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.portal.client.ui.decorations.BasicCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
+import com.propertyvista.portal.client.ui.residents.PaymentMethodForm;
 import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.CardPanel;
 import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsViewImpl;
@@ -68,6 +70,7 @@ public abstract class PortalTheme extends VistaTheme {
         initCardPanelDecoratorStyle();
         initPropertiesMapWidgetStyle();
         initFloorplanDetailsStyles();
+        initPaymentRadioButtonGroupStyles();
     }
 
     @Override
@@ -648,5 +651,88 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("color", ThemeColor.OBJECT_TONE95);
         addStyle(style);
 
+    }
+
+    private void initPaymentRadioButtonGroupStyles() {
+
+        String prefix = PaymentMethodForm.PAYMENT_BUTTONS_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("margin-top", "10px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item));
+        style.addProperty("width", "100%");
+        style.addProperty("padding-top", "3px");
+        style.addProperty("height", "27px");
+        style.addProperty("border-top", "1px solid #F7F7F7");
+        style.addProperty("border-bottom", "1px solid #F7F7F7");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item) + " input");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item) + " label");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item, NativeRadioGroup.StyleDependent.selected));
+        style.addProperty("border-top", "1px solid #bbb");
+        style.addProperty("border-bottom", "1px solid #bbb");
+        style.addProperty("background-color", "white");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentForm));
+        style.addProperty("border-radius", "5px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentImages));
+        style.addProperty("margin-top", "10px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentImages) + " div");
+        style.addProperty("height", "27px");
+        style.addProperty("padding-top", "5px");
+        style.addProperty("padding-right", "10px");
+        style.addProperty("padding-left", "10px");
+        style.addProperty("border-top-left-radius", "3px");
+        style.addProperty("border-bottom-left-radius", "3px");
+        style.addProperty("border-left", "1px solid #F7F7F7");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentImages) + " div.selected");
+        style.addProperty("padding-top", "4px");
+        style.addProperty("height", "26px");
+        style.addProperty("border-top", "1px solid #bbb");
+        style.addProperty("border-bottom", "1px solid #bbb");
+        style.addProperty("border-left", "1px solid #bbb");
+        style.addProperty("background-color", "white");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentImages) + " div img");
+        style.addProperty("padding-left", "10px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentFee));
+        style.addProperty("margin-top", "10px");
+        style.addProperty("position", "relative");
+        style.addProperty("z-index", "2");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentFee) + " div");
+        style.addProperty("padding-right", "50px");
+        style.addProperty("padding-top", "8px");
+        style.addProperty("height", "24px");
+        style.addProperty("padding-left", "50px");
+        style.addProperty("padding-right", "20px");
+        style.addProperty("z-index", "2");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentFee) + " div.selected");
+        style.addProperty("padding-top", "7px");
+        style.addProperty("height", "23px");
+        style.addProperty("border-top", "1px solid #bbb");
+        style.addProperty("border-bottom", "1px solid #bbb");
+        style.addProperty("background-color", "white");
+        addStyle(style);
     }
 }
