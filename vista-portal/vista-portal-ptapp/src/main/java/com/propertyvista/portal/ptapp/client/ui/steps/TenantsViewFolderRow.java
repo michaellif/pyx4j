@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
+import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.util.ValidationUtils;
@@ -114,6 +115,8 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
                     }
                 }
             });
+
+            get(proto().status()).addValueChangeHandler(new RevalidationTrigger<Status>(get(proto().birthDate())));
         }
     }
 
