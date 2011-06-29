@@ -204,9 +204,6 @@ public class ClientContext {
             serverSession = null;
         }
         String sessionToken = authenticationResponse.getSessionToken();
-        if (HTML5Storage.isSupported()) {
-            HTML5Storage.getLocalStorage().setItem(TOKEN_STORAGE_ATTRIBUTE, sessionToken);
-        }
         if (sessionToken != null) {
             if (sessionToken.equals("")) {
                 ClientContext.sessionToken = null;
@@ -225,6 +222,9 @@ public class ClientContext {
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
         if (eventBus != null) {
             eventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
+        }
+        if (HTML5Storage.isSupported()) {
+            HTML5Storage.getLocalStorage().setItem(TOKEN_STORAGE_ATTRIBUTE, sessionToken);
         }
         if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
             RPCManager.enableAppEngineUsageStats();

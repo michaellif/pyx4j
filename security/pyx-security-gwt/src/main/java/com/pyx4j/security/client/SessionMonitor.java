@@ -25,6 +25,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.event.logical.shared.InitializeEvent;
+import com.google.gwt.event.logical.shared.InitializeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Cookies;
@@ -76,6 +78,12 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
 
     static void initialize(ClientSecurityController clientSecurityController) {
         instance = new SessionMonitor();
+        clientSecurityController.addInitializeHandler(new InitializeHandler() {
+            @Override
+            public void onInitialize(InitializeEvent event) {
+                instance.update();
+            }
+        });
         clientSecurityController.addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
             @Override
             public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
@@ -127,9 +135,6 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
                 stop();
             }
         }
-        if (HTML5Storage.isSupported()) {
-            HTML5Storage.getLocalStorage().setItem(SESSION_ID_KEY, sessionCookieValueHashCode);
-        }
     }
 
     @Override
@@ -176,6 +181,10 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
         } else {
             sessionCookieValueHashCode = String.valueOf(ClientContext.visitHashCode()) + String.valueOf(sessionCookieValue.hashCode());
         }
+        if (HTML5Storage.isSupported()) {
+            log.debug("set session code {}", sessionCookieValueHashCode);
+            HTML5Storage.getLocalStorage().setItem(SESSION_ID_KEY, sessionCookieValueHashCode);
+        }
     }
 
     private void stop() {
@@ -219,7 +228,7 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
     public void onStorageChange(StorageEvent event) {
         String newHashCode = HTML5Storage.getLocalStorage().getItem(SESSION_ID_KEY);
         if (!CommonsStringUtils.equals(sessionCookieValueHashCode, newHashCode)) {
-            log.debug("Session change {} -> {}", newHashCode, sessionCookieValueHashCode);
+            log.debug("Session change {} -> {}", sessionCookieValueHashCode, newHashCode);
             ClientContext.obtainAuthenticationData(null, null, true, false);
         }
 
