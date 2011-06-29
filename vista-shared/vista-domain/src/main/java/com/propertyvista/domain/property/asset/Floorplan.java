@@ -16,60 +16,25 @@ package com.propertyvista.domain.property.asset;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.common.domain.RangeGroup;
 import com.propertyvista.domain.Media;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.building.Building;
 
-@ToStringFormat("{0} {1}")
 public interface Floorplan extends IEntity {
 
-    @Translatable
-    public enum Type {
-
-        internal, external, other;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
-    // ----------- Infromation ----------------------
-
-    @ToString(index = 1)
-    @MemberColumn(name = "floorplanType")
-    IPrimitive<Type> type();
+    // ----------- Information ----------------------
 
     @ToString(index = 0)
     IPrimitive<String> name();
 
     IPrimitive<String> description();
 
-    IPrimitive<Integer> unitCount();
-
-    IPrimitive<String> availabilityUrl();
-
-    @Transient
-    IPrimitive<Integer> unitsAvailable();
-
-    @Transient
-    IPrimitive<Integer> displayedUnitsAvailable();
-
     IPrimitive<Integer> floorCount();
-
-    //V.S. Removed to add bedrooms() and bathrooms()
-    //IPrimitive<Integer> totalRoomCount();
 
     @Format("#0.#")
     @Caption(name = "Beds")
@@ -79,19 +44,7 @@ public interface Floorplan extends IEntity {
     @Caption(name = "Baths")
     IPrimitive<Double> bathrooms();
 
-    /**
-     * Min-Max value of square ft. size of unit
-     */
-    RangeGroup area();
-
-    RangeGroup marketRent();
-
-    RangeGroup effectiveRent();
-
     IList<Concession> concessions();
-
-    @Transient
-    IList<FloorplanAmenity> amenities();
 
     @Detached
     IList<Media> media();
@@ -99,5 +52,4 @@ public interface Floorplan extends IEntity {
     @Detached
     @com.pyx4j.entity.annotations.Owner
     Building building();
-
 }

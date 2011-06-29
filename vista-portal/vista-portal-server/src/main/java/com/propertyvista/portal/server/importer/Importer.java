@@ -39,6 +39,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.server.geo.GeoLocator;
 import com.propertyvista.portal.server.geo.GeoLocator.Mode;
@@ -101,11 +102,13 @@ public class Importer {
             persist(amenity);
         }
 
-        for (Floorplan floorplan : model.getFloorplans()) {
-            loadFloorplanMedia(floorplan);
+        for (FloorplanDTO floorplanDTO : model.getFloorplans()) {
+            loadFloorplanMedia(floorplanDTO);
+
+            Floorplan floorplan = down(floorplanDTO, Floorplan.class);
             persist(floorplan);
 
-            for (FloorplanAmenity amenity : floorplan.amenities()) {
+            for (FloorplanAmenity amenity : floorplanDTO.amenities()) {
                 persist(amenity);
             }
         }

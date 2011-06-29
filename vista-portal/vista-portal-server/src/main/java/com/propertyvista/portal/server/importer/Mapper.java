@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
-import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -32,6 +31,7 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo.StructureTy
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.server.generator.CommonsGenerator;
 import com.propertyvista.portal.server.importer.bean.City;
 import com.propertyvista.portal.server.importer.bean.Include;
@@ -162,7 +162,7 @@ public class Mapper {
     }
 
     private void createFloorplan(Property property, Room room, Building building) {
-        Floorplan floorplan = EntityFactory.create(Floorplan.class);
+        FloorplanDTO floorplan = EntityFactory.create(FloorplanDTO.class);
 
         floorplan.building().set(building);
         //floorplan.name().setValue(room.getName());
@@ -178,6 +178,7 @@ public class Mapper {
         } else {
             floorplan.bedrooms().setValue(3d);
         }
+
         floorplan.bathrooms().setValue(1d);
 
         // Removed, now we use only generated images for preloader

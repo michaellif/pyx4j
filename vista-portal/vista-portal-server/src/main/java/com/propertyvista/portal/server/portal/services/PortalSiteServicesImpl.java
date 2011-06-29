@@ -30,7 +30,6 @@ import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.domain.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
@@ -158,9 +157,6 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         dto.set(Converter.convert(building, floorplans));
 
         for (Floorplan floorplan : floorplans) {
-            EntityQueryCriteria<FloorplanAmenity> floorplanAmenityCriteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-            floorplanAmenityCriteria.add(PropertyCriterion.eq(floorplanAmenityCriteria.proto().belongsTo(), floorplan));
-            floorplan.amenities().addAll(PersistenceServicesFactory.getPersistenceService().query(floorplanAmenityCriteria));
             dto.floorplans().add(Converter.convert(floorplan));
         }
 
@@ -181,10 +177,6 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
             callback.onSuccess(null);
             return;
         }
-
-        EntityQueryCriteria<FloorplanAmenity> floorplanAmenityCriteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-        floorplanAmenityCriteria.add(PropertyCriterion.eq(floorplanAmenityCriteria.proto().belongsTo(), floorplan));
-        floorplan.amenities().addAll(PersistenceServicesFactory.getPersistenceService().query(floorplanAmenityCriteria));
 
         FloorplanDetailsDTO dto = EntityFactory.create(FloorplanDetailsDTO.class);
         dto.set(Converter.convert(floorplan));

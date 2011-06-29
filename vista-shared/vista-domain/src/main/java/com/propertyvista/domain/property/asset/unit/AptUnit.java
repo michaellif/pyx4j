@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.Media;
 import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -61,7 +60,4 @@ public interface AptUnit extends IEntity {
 
     @Owned
     IList<AddOn> addOns();
-
-    @Detached
-    IList<Media> media();
 }

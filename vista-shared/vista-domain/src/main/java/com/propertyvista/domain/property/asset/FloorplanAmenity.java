@@ -19,16 +19,122 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.marketing.yield.Amenity;
-import com.propertyvista.domain.property.asset.unit.AptUnitAmenity.SubType;
-import com.propertyvista.domain.property.asset.unit.AptUnitAmenity.Type;
 
 @ToStringFormat("{0} {1}")
 public interface FloorplanAmenity extends Amenity {
 
+    @Translatable
+    public enum Type {
+
+        additionalStorage,
+
+        airConditioner,
+
+        alarm,
+
+        balcony,
+
+        cable,
+
+        carport,
+
+        ceilingFan,
+
+        controlledAccess,
+
+        courtyard,
+
+        dishWasher,
+
+        disposal,
+
+        dryer,
+
+        fireplace,
+
+        furnished,
+
+        garage,
+
+        handrails,
+
+        heat,
+
+        individualClimateControl,
+
+        largeClosets,
+
+        microwave,
+
+        patio,
+
+        privateBalcony,
+
+        privatePatio,
+
+        range,
+
+        refrigerator,
+
+        satellite,
+
+        skylight,
+
+        view,
+
+        washer,
+
+        wheelChair,
+
+        wdHookup,
+
+        windowCoverings,
+
+        other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @Translatable
+    public enum SubType {
+
+        central,
+
+        window,
+
+        wall,
+
+        gas,
+
+        gasOrElectric,
+
+        luxury,
+
+        wood,
+
+        electric,
+
+        radiant,
+
+        decorative,
+
+        unspecified;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
     @ToString(index = 0)
-    @MemberColumn(name = "atype")
+    @MemberColumn(name = "floorplanType")
     IPrimitive<Type> type();
 
     @ToString(index = 1)

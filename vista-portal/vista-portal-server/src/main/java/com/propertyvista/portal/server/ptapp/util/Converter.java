@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.ptapp.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -34,6 +35,7 @@ import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.MediaDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.server.generator.CommonsGenerator;
 
 public class Converter {
 
@@ -42,15 +44,20 @@ public class Converter {
 
         to.id().set(from.id());
         to.name().setValue(from.name().getValue());
-        to.area().set(from.area());
-        to.marketRent().set(from.marketRent());
+        to.area().set(CommonsGenerator.createRange(1200d, 2600d));
+        to.marketRent().set(CommonsGenerator.createRange(600d, 1600d));
         to.description().setValue(from.description().getValue());
 
         if (!from.media().isEmpty()) {
             to.mainMedia().setValue(from.media().get(0).getPrimaryKey());
         }
 
-        for (FloorplanAmenity amenity : from.amenities()) {
+        List<FloorplanAmenity> amenities = new ArrayList<FloorplanAmenity>();
+        EntityQueryCriteria<FloorplanAmenity> floorplanAmenityCriteria = EntityQueryCriteria.create(FloorplanAmenity.class);
+        floorplanAmenityCriteria.add(PropertyCriterion.eq(floorplanAmenityCriteria.proto().belongsTo(), from));
+        amenities.addAll(PersistenceServicesFactory.getPersistenceService().query(floorplanAmenityCriteria));
+
+        for (FloorplanAmenity amenity : amenities) {
             AmenityDTO amntDTO = EntityFactory.create(AmenityDTO.class);
             amntDTO.name().setValue(amenity.getStringView());
             to.amenities().add(amntDTO);
@@ -128,7 +135,7 @@ public class Converter {
         // List of Floorplans
         for (Floorplan fp : floorplans) {
             to.floorplanNames().add(fp.getStringView());
-            minMax(fp.marketRent(), to.price());
+            minMax(CommonsGenerator.createRange(600d, 1600d), to.price());
         }
 
         if (!from.media().isEmpty()) {

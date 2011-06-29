@@ -25,6 +25,9 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 @Transient
 public interface AptUnitDTO extends AptUnit {
 
+// TODO all Deprecated items should be removed after Unit form will be refactored by Leon.
+
+    @Deprecated
     IList<AptUnitAmenity> amenities();
 
     @Deprecated

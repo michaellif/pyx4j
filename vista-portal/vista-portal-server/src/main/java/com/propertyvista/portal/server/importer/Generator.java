@@ -16,10 +16,10 @@ package com.propertyvista.portal.server.importer;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
 import com.propertyvista.portal.server.generator.CommonsGenerator;
 import com.propertyvista.server.common.generator.Model;
@@ -44,16 +44,14 @@ public class Generator {
             }
         }
 
-        for (Floorplan floorplan : model.getFloorplans()) {
-            floorplan.area().set(CommonsGenerator.createRange(1200d, 2600d));
-            floorplan.marketRent().set(CommonsGenerator.createRange(600d, 1600d));
-            if (floorplan.description().isNull()) {
-                floorplan.description().setValue(CommonsGenerator.lipsum());
+        for (FloorplanDTO floorplanDTO : model.getFloorplans()) {
+            if (floorplanDTO.description().isNull()) {
+                floorplanDTO.description().setValue(CommonsGenerator.lipsum());
             }
             for (int i = 0; i < 2 + DataGenerator.randomInt(6); i++) {
                 FloorplanAmenity amenity = BuildingsGenerator.createFloorplanAmenity();
-                amenity.belongsTo().set(floorplan);
-                floorplan.amenities().add(amenity);
+                amenity.belongsTo().set(floorplanDTO);
+                floorplanDTO.amenities().add(amenity);
             }
         }
     }

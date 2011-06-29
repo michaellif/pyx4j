@@ -16,10 +16,10 @@ package com.propertyvista.server.common.generator;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.FloorplanDTO;
 
 public class Model {
 
@@ -27,7 +27,7 @@ public class Model {
 
     private final List<AptUnitDTO> units = new ArrayList<AptUnitDTO>();
 
-    private final List<Floorplan> floorplans = new ArrayList<Floorplan>();
+    private final List<FloorplanDTO> floorplans = new ArrayList<FloorplanDTO>();
 
     private final List<BuildingAmenity> buildingAmenities = new ArrayList<BuildingAmenity>();
 
@@ -39,7 +39,7 @@ public class Model {
         return units;
     }
 
-    public List<Floorplan> getFloorplans() {
+    public List<FloorplanDTO> getFloorplans() {
         return floorplans;
     }
 

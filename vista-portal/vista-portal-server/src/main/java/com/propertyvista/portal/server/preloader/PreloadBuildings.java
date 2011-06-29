@@ -44,6 +44,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
 import com.propertyvista.portal.server.importer.Importer;
@@ -91,11 +92,14 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 persist(locker);
             }
 
-            List<Floorplan> floorplans = generator.createFloorplans(building, DemoData.NUM_FLOORPLANS);
-            for (Floorplan floorplan : floorplans) {
-                MeidaGenerator.attachGeneratedFloorplanMedia(floorplan);
+            List<FloorplanDTO> floorplans = generator.createFloorplans(building, DemoData.NUM_FLOORPLANS);
+            for (FloorplanDTO floorplanDTO : floorplans) {
+                MeidaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
+
+                Floorplan floorplan = down(floorplanDTO, Floorplan.class);
                 persist(floorplan);
-                for (FloorplanAmenity amenity : floorplan.amenities()) {
+
+                for (FloorplanAmenity amenity : floorplanDTO.amenities()) {
                     persist(amenity);
                 }
             }

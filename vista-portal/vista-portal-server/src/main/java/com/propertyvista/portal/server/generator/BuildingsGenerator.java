@@ -52,6 +52,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PetChargeRule;
 import com.propertyvista.portal.domain.ptapp.PropertyProfile;
@@ -182,27 +183,26 @@ public class BuildingsGenerator {
         return parking;
     }
 
-    public List<Floorplan> createFloorplans(Building building, int numFloorplans) {
-        List<Floorplan> floorplans = new ArrayList<Floorplan>();
-        // create floorplans
+    public List<FloorplanDTO> createFloorplans(Building building, int numFloorplans) {
+        List<FloorplanDTO> floorplans = new ArrayList<FloorplanDTO>();
+        // create floorplans for the building
         for (int i = 0; i < numFloorplans; i++) {
             String floorplanName = building.info().propertyCode().getStringView() + "-" + i;
             if (i == 1) {
                 floorplanName = DemoData.REGISTRATION_DEFAULT_FLOORPLAN;
             }
 
-            Floorplan floorplan = createFloorplan(floorplanName);
+            FloorplanDTO floorplan = createFloorplan(floorplanName);
             floorplan.building().set(building);
             floorplans.add(floorplan);
         }
         return floorplans;
     }
 
-    public List<AptUnitDTO> createUnits(Building building, List<Floorplan> floorplans, int numFloors, int numUnitsPerFloor) {
+    public List<AptUnitDTO> createUnits(Building building, List<FloorplanDTO> floorplans, int numFloors, int numUnitsPerFloor) {
         List<AptUnitDTO> units = new ArrayList<AptUnitDTO>();
         // now create units for the building
         for (int floor = 1; floor < numFloors + 1; floor++) {
-
             // for each floor we want to create the same number of units
             for (int j = 1; j < numUnitsPerFloor + 1; j++) {
 
@@ -215,7 +215,7 @@ public class BuildingsGenerator {
                     throw new IllegalStateException("No floorplan");
                 }
 
-                double uarea = CommonsGenerator.randomFromRange(floorplan.area());
+                double uarea = CommonsGenerator.randomFromRange(CommonsGenerator.createRange(1200d, 2600d));
                 AptUnitDTO unit = createUnit(building, suiteNumber, floor, uarea, bedrooms, bathrooms, floorplan);
                 units.add(unit);
             }
@@ -251,17 +251,14 @@ public class BuildingsGenerator {
         return building;
     }
 
-    private Floorplan createFloorplan(String name) {
-        Floorplan floorplan = EntityFactory.create(Floorplan.class);
+    private FloorplanDTO createFloorplan(String name) {
+        FloorplanDTO floorplan = EntityFactory.create(FloorplanDTO.class);
 
         floorplan.name().setValue(name);
         floorplan.description().setValue(CommonsGenerator.lipsum());
 
         floorplan.bedrooms().setValue(1 + (double) DataGenerator.randomInt(6));
         floorplan.bathrooms().setValue(1 + (double) DataGenerator.randomInt(3));
-
-        floorplan.area().set(CommonsGenerator.createRange(1200d, 2600d));
-        floorplan.marketRent().set(CommonsGenerator.createRange(600d, 1600d));
 
         for (int i = 0; i < 2 + DataGenerator.randomInt(6); i++) {
             FloorplanAmenity amenity = BuildingsGenerator.createFloorplanAmenity();
@@ -274,7 +271,7 @@ public class BuildingsGenerator {
 
     public static FloorplanAmenity createFloorplanAmenity() {
         FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
-        amenity.type().setValue(RandomUtil.random(AptUnitAmenity.Type.values()));
+        amenity.type().setValue(RandomUtil.random(FloorplanAmenity.Type.values()));
         return amenity;
     }
 

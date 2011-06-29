@@ -7,28 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-19
+ * Created on 2011-06-29
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset.unit;
+package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.marketing.yield.Concession;
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
 
-public interface AptUnitFinancial extends IEntity {
+public interface FloorplanDTO extends Floorplan {
 
-    @Format("#0.00")
-    IPrimitive<Double> unitRent();
-
-    @Format("#0.00")
-    IPrimitive<Double> marketRent();
-
-// TODO should be removed after Unit form will be refactored by Leon.     
-    @Deprecated
-    IList<Concession> concessions();
+    IList<FloorplanAmenity> amenities();
 }
