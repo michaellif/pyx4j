@@ -301,7 +301,7 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
             addGadget.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    final AddGadgetBox agb = new AddGadgetBox();
+                    final AddGadgetBox agb = new AddGadgetBox(dashboardMetadata.type().getValue());
                     agb.setPopupPositionAndShow(new PositionCallback() {
                         @Override
                         public void setPosition(int offsetWidth, int offsetHeight) {

@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dialog.DialogPanelNew;
 
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class AddGadgetBox extends DialogPanelNew {
@@ -46,8 +47,11 @@ public class AddGadgetBox extends DialogPanelNew {
 
     private IGadget selectedGadget = null;
 
-    public AddGadgetBox() {
+    private final DashboardMetadata.Type dashboardType;
+
+    public AddGadgetBox(DashboardMetadata.Type dashboardType) {
         super(false, true);
+        this.dashboardType = dashboardType;
         setCaption(i18n.tr("Gadget Directory"));
 
         listAvailableGadgets();
@@ -94,8 +98,6 @@ public class AddGadgetBox extends DialogPanelNew {
 
         setContentWidget(vPanel);
         setSize("400px", "150px");
-//        getElement().getStyle().setProperty("minWidth", "400px");
-//        getElement().getStyle().setProperty("minHeight", "150px");
     }
 
     public IGadget getSelectedGadget() {
