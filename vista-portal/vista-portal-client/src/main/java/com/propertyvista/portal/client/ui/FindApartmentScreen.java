@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -26,15 +25,10 @@ import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.StyleManger;
 
-import com.propertyvista.portal.client.mvp.ActionsActivityMapper;
-import com.propertyvista.portal.client.mvp.BottomActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
-import com.propertyvista.portal.client.mvp.LogoActivityMapper;
-import com.propertyvista.portal.client.mvp.MainNavigActivityMapper;
-import com.propertyvista.portal.client.mvp.StaticContentActivityMapper;
 import com.propertyvista.portal.client.themes.BlueColdTheme;
 
-public class PortalView extends FlowPanel {
+public class FindApartmentScreen extends FlowPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "PortalView";
 
@@ -42,7 +36,7 @@ public class PortalView extends FlowPanel {
         Content, Header, Footer, MainNavig, Center, Main, Left, Right, Display, SecondaryNavig, StaticContent
     }
 
-    public PortalView() {
+    public FindApartmentScreen() {
 
         EventBus eventBus = AppSite.getEventBus();
 
@@ -52,60 +46,17 @@ public class PortalView extends FlowPanel {
 
         setStyleName(prefix);
 
-        //============ Header  ============
-
-        FlowPanel headerWrapper = new FlowPanel();
-        headerWrapper.setStyleName(prefix + StyleSuffix.Header);
-        headerWrapper.setWidth("100%");
-        add(headerWrapper);
-
-        DisplayPanel logoDisplayPanel = new DisplayPanel();
-        logoDisplayPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
-        headerWrapper.add(logoDisplayPanel);
-
-        DisplayPanel actionsDisplayPanel = new DisplayPanel();
-        actionsDisplayPanel.getElement().getStyle().setFloat(Style.Float.RIGHT);
-        headerWrapper.add(actionsDisplayPanel);
-
         //================ Main application area ======= 
-        FlowPanel mainNavigWrapper = new FlowPanel();
-        mainNavigWrapper.setStyleName(prefix + StyleSuffix.MainNavig);
-        add(mainNavigWrapper);
-
-        DisplayPanel mainNavigDisplayPanel = new DisplayPanel();
-        mainNavigWrapper.add(mainNavigDisplayPanel);
-
-        SimplePanel centerWrapper = new SimplePanel();
-        centerWrapper.setStyleName(prefix + StyleSuffix.Center);
-        add(centerWrapper);
 
         FlowPanel mainWrapper = new FlowPanel();
         mainWrapper.setStyleName(prefix + StyleSuffix.Main);
-        centerWrapper.add(mainWrapper);
+        add(mainWrapper);
 
         DisplayPanel contentDisplayPanel = new DisplayPanel();
         contentDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
         mainWrapper.add(contentDisplayPanel);
 
-        DisplayPanel statictDisplayPanel = new DisplayPanel();
-        statictDisplayPanel.setStyleName(prefix + StyleSuffix.StaticContent);
-        mainWrapper.add(statictDisplayPanel);
-
-        //================== Footer ========================
-        FlowPanel footerWrapper = new FlowPanel();
-        footerWrapper.setStyleName(prefix + StyleSuffix.Footer);
-        footerWrapper.getElement().getStyle().setProperty("clear", "left");
-        add(footerWrapper);
-
-        DisplayPanel bottomDisplayPanel = new DisplayPanel();
-        footerWrapper.add(bottomDisplayPanel);
-
-        bind(new LogoActivityMapper(), logoDisplayPanel, eventBus);
-        bind(new ActionsActivityMapper(), actionsDisplayPanel, eventBus);
-        bind(new MainNavigActivityMapper(), mainNavigDisplayPanel, eventBus);
         bind(new ContentActivityMapper(), contentDisplayPanel, eventBus);
-        bind(new BottomActivityMapper(), bottomDisplayPanel, eventBus);
-        bind(new StaticContentActivityMapper(), statictDisplayPanel, eventBus);
 
     }
 

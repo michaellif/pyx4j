@@ -30,7 +30,7 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.Style
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.LogoViewImpl;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
-import com.propertyvista.portal.client.ui.PortalView;
+import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.portal.client.ui.decorations.BasicCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
@@ -103,7 +103,7 @@ public abstract class PortalTheme extends VistaTheme {
     }
 
     protected void initSiteViewStyles() {
-        String prefix = PortalView.DEFAULT_STYLE_PREFIX;
+        String prefix = PortalScreen.DEFAULT_STYLE_PREFIX;
 
         int minWidth = 960;
         int maxWidth = 960;
@@ -117,7 +117,7 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("margin", "0 auto");
         addStyle(style);
 
-        String headerstyle = Selector.valueOf(prefix, PortalView.StyleSuffix.Header);
+        String headerstyle = Selector.valueOf(prefix, PortalScreen.StyleSuffix.Header);
         style = new Style(headerstyle);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
         style.addProperty("font-size", "14px");
@@ -137,46 +137,46 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("text-decoration", "underline");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.MainNavig));
+        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.MainNavig));
         style.addProperty("width", "100%");
         style.addProperty("height", "9.2em");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.Center));
+        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Center));
         style.addProperty("width", "100%");
         //   style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.Main));
+        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Main));
         style.addProperty("height", "100%");
         style.addProperty("margin", "0 " + rightColumnWidth + "px 0 " + leftColumnWidth + "px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.Content));
+        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Content));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.SecondaryNavig));
+        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.SecondaryNavig));
         style.addProperty("margin", "5px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.Left));
+        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Left));
         style.addProperty("float", "left");
         style.addProperty("width", leftColumnWidth + "px");
         style.addProperty("margin-left", "-100%");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.Right));
+        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Right));
         style.addProperty("float", "left");
         style.addProperty("width", rightColumnWidth + "px");
         style.addProperty("margin-left", "-" + rightColumnWidth + "px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.Footer));
+        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Footer));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("clear", "left");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalView.StyleSuffix.Display));
+        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Display));
         addStyle(style);
 
         style = new Style(Selector.valueOf(VistaLineSeparator.DEFAULT_STYLE_PREFIX));
@@ -402,11 +402,12 @@ public abstract class PortalTheme extends VistaTheme {
     private void initPropertyListStyles() {
         String prefix = PropertyMapViewImpl.DEFAULT_STYLE_PREFIX;
 
-        Style style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Left));
+        Style style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Refine));
         style.addProperty("margin-right", "20px");
+        style.addProperty("width", "200px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Center));
+        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Map));
         addStyle(style);
 
     }

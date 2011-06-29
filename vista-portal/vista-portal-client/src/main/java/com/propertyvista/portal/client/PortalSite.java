@@ -22,11 +22,11 @@ import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.portal.client.ui.PortalView;
+import com.propertyvista.portal.client.ui.FindApartmentScreen;
+import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
@@ -34,6 +34,8 @@ import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 public class PortalSite extends VistaSite {
 
     private static PortalSiteServices srv = GWT.create(PortalSiteServices.class);
+
+    public static final String APT_SEARCH_INSERTION_ID = "vista.aptsearch";
 
     public PortalSite() {
         super(PortalSiteMap.class);
@@ -46,10 +48,13 @@ public class PortalSite extends VistaSite {
         // Key for .birchwoodsoftwaregroup.com
         GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
 
-        final AppPlace defaultplace = new PortalSiteMap.Landing();
-        getHistoryHandler().register(getPlaceController(), getEventBus(), defaultplace);
-
-        RootPanel.get().add(new PortalView());
+        if (RootPanel.get(APT_SEARCH_INSERTION_ID) != null) {
+            getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.FindApartment.PropertyMap());
+            RootPanel.get(APT_SEARCH_INSERTION_ID).add(new FindApartmentScreen());
+        } else {
+            getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Landing());
+            RootPanel.get().add(new PortalScreen());
+        }
 
         hideLoadingIndicator();
 

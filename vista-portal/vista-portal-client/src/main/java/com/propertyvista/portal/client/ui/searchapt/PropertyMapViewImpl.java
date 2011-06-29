@@ -29,7 +29,7 @@ import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Left, Center
+        Refine, Map, List
     }
 
     public static String DEFAULT_STYLE_PREFIX = "PropertyList";
@@ -37,8 +37,6 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
     private Presenter presenter;
 
     private final PropertiesMapWidget map;
-
-    private final FlowPanel centerPanel;
 
     private final RefineApartmentSearchForm searchForm;
 
@@ -55,21 +53,19 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
         searchForm.initialize();
 
         leftPanel = new FlowPanel();
-        leftPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Left.name());
+        leftPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Refine.name());
         leftPanel.add(searchForm);
         add(leftPanel, DockPanel.WEST);
-
-        centerPanel = new FlowPanel();
-        centerPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Center.name());
+        setCellWidth(leftPanel, "220px");
 
         map = new PropertiesMapWidget();
-        centerPanel.add(map);
+        map.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Map.name());
+        add(map, DockPanel.NORTH);
 
         propertyListForm = new PropertyListForm();
         propertyListForm.initialize();
-        centerPanel.add(propertyListForm);
 
-        add(centerPanel, DockPanel.CENTER);
+        add(propertyListForm, DockPanel.CENTER);
 
     }
 
