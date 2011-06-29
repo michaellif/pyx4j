@@ -36,8 +36,8 @@ import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
+import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, NavigationUpdateHandler {
 
@@ -115,6 +115,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
         //Reports
         folder = new NavigFolder("Reports", CrmImages.INSTANCE.reportsNormal(), CrmImages.INSTANCE.reportsHover(), CrmImages.INSTANCE.reportsActive());
+        folder.addNavigItem(new CrmSiteMap.Report.Management());
 //        folder.addNavigItem(new CrmSiteMap.Report.System());
         fillReports(folder);
         list.add(folder);
@@ -122,9 +123,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         //Dashboards
         folder = new NavigFolder("Dashboards", CrmImages.INSTANCE.dashboardsNormal(), CrmImages.INSTANCE.dashboardsHover(),
                 CrmImages.INSTANCE.dashboardsActive());
-
         folder.addNavigItem(new CrmSiteMap.Dashboard.Management());
-
 // TODO: this dashboard is populated below (in fillDashboards())... 
 //        so we should decide how muxh we'll have system dashborads and if > 1 
 //        - should we show here link to 'most' system one ;)            
@@ -139,16 +138,14 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
     }
 
     private void fillReports(final NavigFolder folder) {
-        DashboardMetadataService service = GWT.create(DashboardMetadataService.class);
+        ReportMetadataService service = GWT.create(ReportMetadataService.class);
         service.listMetadata(new AsyncCallback<Vector<DashboardMetadata>>() {
             @Override
             public void onSuccess(Vector<DashboardMetadata> result) {
                 for (DashboardMetadata dmd : result) {
-                    if (dmd.layoutType().getValue().equals(LayoutType.Report)) {
-                        CrudAppPlace place = new CrmSiteMap.Report();
-                        place.formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView());
-                        folder.addNavigItem(place);
-                    }
+                    CrudAppPlace place = new CrmSiteMap.Report();
+                    place.formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView());
+                    folder.addNavigItem(place);
                 }
                 // update UI:
                 view.setNavigFolders(currentfolders);
@@ -167,11 +164,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
             @Override
             public void onSuccess(Vector<DashboardMetadata> result) {
                 for (DashboardMetadata dmd : result) {
-                    if (!dmd.layoutType().getValue().equals(LayoutType.Report)) {
-                        CrudAppPlace place = new CrmSiteMap.Dashboard();
-                        place.formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView());
-                        folder.addNavigItem(place);
-                    }
+                    CrudAppPlace place = new CrmSiteMap.Dashboard();
+                    place.formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView());
+                    folder.addNavigItem(place);
                 }
                 // update UI:
                 view.setNavigFolders(currentfolders);

@@ -25,9 +25,9 @@ import com.propertyvista.crm.server.services.GenericCrudServiceImpl;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.server.common.security.VistaContext;
 
-abstract class AbstractMetadataCrudServiceImpl extends GenericCrudServiceImpl<DashboardMetadata> implements AbstractMetadataCrudService {
+abstract class AbstractCrudServiceImpl extends GenericCrudServiceImpl<DashboardMetadata> implements AbstractMetadataCrudService {
 
-    protected AbstractMetadataCrudServiceImpl() {
+    protected AbstractCrudServiceImpl() {
         super(DashboardMetadata.class);
     }
 

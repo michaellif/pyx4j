@@ -72,6 +72,8 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardEditorActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
+import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
+import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
@@ -89,7 +91,7 @@ public class MainActivityMapper implements AppActivityMapper {
                 Activity activity = null;
                 if (place instanceof CrmSiteMap.ResetPassword) {
                     activity = new ResetPasswordActivity(place);
-                    // - Building-related:
+// - Building-related:
                 } else if (place instanceof CrmSiteMap.Properties.Building) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
@@ -178,8 +180,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new LockerListerActivity(place);
                         break;
                     }
-
-                    // - Unit-related:
+// - Unit-related:
                 } else if (place instanceof CrmSiteMap.Properties.Unit) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
@@ -233,8 +234,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         //activity = new ConcessionViewerActivity(place);
                         break;
                     }
-
-                    // - Tenant-related:
+// - Tenant-related:
                 } else if (place instanceof CrmSiteMap.Tenants.Tenant) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
@@ -286,14 +286,13 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new InquiryListerActivity(place);
                         break;
                     }
-
 // Reports:
                 } else if (place instanceof CrmSiteMap.Report) {
                     activity = new ReportViewActivity(place);
-//                } else if (place instanceof CrmSiteMap.Report.Edit) {
-//                    activity = new DashboardEditorActivity(place);
-//                } else if (place instanceof CrmSiteMap.Report.Management) {
-//                    activity = new DashboardManagementActivity(place);
+                } else if (place instanceof CrmSiteMap.Report.Edit) {
+                    activity = new ReportEditorActivity(place);
+                } else if (place instanceof CrmSiteMap.Report.Management) {
+                    activity = new ReportManagementActivity(place);
                 } else if (place instanceof CrmSiteMap.Report.System) {
                     activity = new ReportViewActivity(place);
 // Dashboards:
@@ -315,7 +314,7 @@ public class MainActivityMapper implements AppActivityMapper {
                 } else if (place instanceof CrmSiteMap.Message) {
                     activity = new MessageActivity(place);
 
-                    // - Settings:
+// - Settings:
                 } else if (place instanceof CrmSiteMap.Settings.Content) {
                     if (((AppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID) == null) {
                         activity = new ContentActivity(place);
