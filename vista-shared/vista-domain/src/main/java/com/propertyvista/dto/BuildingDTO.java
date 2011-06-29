@@ -23,14 +23,4 @@ import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 public interface BuildingDTO extends Building {
 
     IList<BuildingAmenity> amenities();
-
-    IList<ElevatorDTO> elevators();
-
-    IList<BoilerDTO> boilers();
-
-    IList<RoofDTO> roofs();
-
-    IList<ParkingDTO> parkings();
-
-    IList<LockerAreaDTO> lockers();
 }

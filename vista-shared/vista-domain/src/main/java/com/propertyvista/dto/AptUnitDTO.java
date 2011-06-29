@@ -27,8 +27,10 @@ public interface AptUnitDTO extends AptUnit {
 
     IList<AptUnitAmenity> amenities();
 
+    @Deprecated
     IList<AptUnitItem> details();
 
+    @Deprecated
     IList<AptUnitOccupancy> occupancies();
 
     @Transient
