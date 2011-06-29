@@ -11,7 +11,7 @@
  * @author TPRGLET
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.propertyvista.crm.client.ui.crud.unit;
+package com.propertyvista.crm.client.ui.crud.marketing;
 
 import java.util.List;
 

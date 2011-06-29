@@ -67,16 +67,16 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         TabLayoutPanel tabPanel = new TabLayoutPanel(2.7, Unit.EM);
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
-        tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
-        //tabPanel.add(((UnitView) getParentView()).getDetailsListerView().asWidget(), i18n.tr("Details"));
+        //tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
+        tabPanel.add(((UnitView) getParentView()).getDetailsListerView().asWidget(), i18n.tr("Details"));
         tabPanel.add(new ScrollPanel(createUtilitiesTab()), i18n.tr("Utilities"));
         tabPanel.add(new ScrollPanel(createAddonsTab()), i18n.tr("Add ons"));
         tabPanel.add(new ScrollPanel(createAmenitiesTab()), i18n.tr("Amenities"));
-        tabPanel.add(new ScrollPanel(createOccupanciesTab()), i18n.tr("Occupancies"));
-        //tabPanel.add(((UnitView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancies"));
+        //tabPanel.add(new ScrollPanel(createOccupanciesTab()), i18n.tr("Occupancies"));
+        tabPanel.add(((UnitView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancies"));
         tabPanel.add(new ScrollPanel(createFinancialsTab()), i18n.tr("Financial"));
-        tabPanel.add(new ScrollPanel(createConcessionsTab()), i18n.tr("Concessions"));
-        //tabPanel.add(((UnitView) getParentView()).getConcessionsListerView().asWidget(), i18n.tr("Concessions"));
+        //tabPanel.add(new ScrollPanel(createConcessionsTab()), i18n.tr("Concessions"));
+        tabPanel.add(((UnitView) getParentView()).getConcessionsListerView().asWidget(), i18n.tr("Concessions"));
         tabPanel.add(new ScrollPanel(createMarketingTab()), i18n.tr("Marketing"));
         tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 

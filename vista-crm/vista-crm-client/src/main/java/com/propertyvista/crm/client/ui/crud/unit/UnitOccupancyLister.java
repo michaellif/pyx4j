@@ -22,13 +22,13 @@ import com.pyx4j.site.client.ui.crud.ListerBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
-public class OccupancyLister extends ListerBase<AptUnitOccupancy> {
-    public OccupancyLister() {
+public class UnitOccupancyLister extends ListerBase<AptUnitOccupancy> {
+    public UnitOccupancyLister() {
         super(AptUnitOccupancy.class, CrmSiteMap.Properties.UnitOccupancy.class);
         setFiltersVisible(false);
     }
 
-    public OccupancyLister(boolean readOnly) {
+    public UnitOccupancyLister(boolean readOnly) {
         super(AptUnitOccupancy.class, CrmSiteMap.Properties.UnitOccupancy.class, readOnly);
         setFiltersVisible(false);
     }

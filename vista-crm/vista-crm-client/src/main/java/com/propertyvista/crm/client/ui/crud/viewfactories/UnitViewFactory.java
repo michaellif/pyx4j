@@ -16,6 +16,10 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
+import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorView;
+import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerView;
+import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.unit.UnitEditorView;
 import com.propertyvista.crm.client.ui.crud.unit.UnitEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.unit.UnitItemEditorView;
@@ -51,6 +55,11 @@ public class UnitViewFactory extends ViewFactoryBase {
                 map.put(type, new UnitOccupancyEditorViewImpl());
             } else if (UnitOccupancyViewerView.class.equals(type)) {
                 map.put(type, new UnitOccupancyViewerViewImpl());
+
+            } else if (ConcessionViewerView.class.equals(type)) {
+                map.put(type, new ConcessionViewerViewImpl());
+            } else if (ConcessionEditorView.class.equals(type)) {
+                map.put(type, new ConcessionEditorViewImpl());
             }
         }
         return map.get(type);

@@ -20,7 +20,7 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
 import com.propertyvista.domain.marketing.yield.Concession;
 
@@ -28,7 +28,7 @@ public class ConcessionViewerActivity extends ViewerActivityBase<Concession> {
 
     @SuppressWarnings("unchecked")
     public ConcessionViewerActivity(Place place) {
-        super((ConcessionViewerView) MarketingViewFactory.instance(ConcessionViewerView.class), (AbstractCrudService<Concession>) GWT
+        super((ConcessionViewerView) UnitViewFactory.instance(ConcessionViewerView.class), (AbstractCrudService<Concession>) GWT
                 .create(ConcessionCrudService.class));
         withPlace(place);
     }
