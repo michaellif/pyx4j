@@ -128,6 +128,9 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
 
         dashboard.populate();
 
+        floorplanLister.setParentFiltering(parentID);
+        floorplanLister.populateData(0);
+
         unitLister.setParentFiltering(parentID);
         unitLister.populateData(0);
 
