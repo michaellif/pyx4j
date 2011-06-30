@@ -128,9 +128,9 @@ public class CrmSiteMap implements SiteMap {
 
         }
 
-        @PlaceProperties(caption = "Details")
-        @NavigationItem(navigLabel = "Details")
-        public static class Detail extends CrudAppPlace {
+        @PlaceProperties(caption = "Floorplan")
+        @NavigationItem(navigLabel = "Floorplan")
+        public static class Floorplan extends CrudAppPlace {
 
         }
     }

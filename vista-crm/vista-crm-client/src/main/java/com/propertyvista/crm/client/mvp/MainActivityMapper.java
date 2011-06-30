@@ -45,6 +45,8 @@ import com.propertyvista.crm.client.activity.crud.building.ParkingSpotViewerActi
 import com.propertyvista.crm.client.activity.crud.building.ParkingViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.RoofEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.RoofViewerActivity;
+import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
+import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.ConcessionEditorActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.ConcessionViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentActivity;
@@ -180,6 +182,28 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new LockerListerActivity(place);
                         break;
                     }
+// - Floorplan-related:
+
+                } else if (place instanceof CrmSiteMap.Properties.Floorplan) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new FloorplanEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new FloorplanViewerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof CrmSiteMap.Properties.Concession) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ConcessionEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ConcessionViewerActivity(place);
+                        break;
+                    }
+
 // - Unit-related:
                 } else if (place instanceof CrmSiteMap.Properties.Unit) {
                     switch (((CrudAppPlace) place).getType()) {
@@ -214,26 +238,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof CrmSiteMap.Properties.Concession) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new ConcessionEditorActivity(place);
-                        break;
-                    case viewer:
-                        activity = new ConcessionViewerActivity(place);
-                        break;
-                    }
-
-                } else if (place instanceof CrmSiteMap.Properties.Detail) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    //TODO for Leon
-                    case editor:
-                        //activity = new DetailEditorActivity(place);
-                        break;
-                    case viewer:
-                        //activity = new ConcessionViewerActivity(place);
-                        break;
-                    }
 // - Tenant-related:
                 } else if (place instanceof CrmSiteMap.Tenants.Tenant) {
                     switch (((CrudAppPlace) place).getType()) {

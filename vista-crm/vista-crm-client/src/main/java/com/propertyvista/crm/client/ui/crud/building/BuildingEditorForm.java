@@ -67,6 +67,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
         tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
 
+        tabPanel.addDisable(new ScrollPanel(((BuildingView) getParentView()).getFloorplanListerView().asWidget()), i18n.tr("Floorplans"));
         tabPanel.addDisable(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), i18n.tr("Units"));
 
         FlowPanel combinedtab = new FlowPanel();

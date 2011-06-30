@@ -27,8 +27,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public interface Floorplan extends IEntity {
 
-    // ----------- Information ----------------------
-
     @ToString(index = 0)
     IPrimitive<String> name();
 

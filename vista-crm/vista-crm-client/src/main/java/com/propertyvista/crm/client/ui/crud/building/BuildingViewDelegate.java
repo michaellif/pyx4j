@@ -16,12 +16,14 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
+import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.ElevatorDTO;
+import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
@@ -29,6 +31,8 @@ import com.propertyvista.dto.RoofDTO;
 public class BuildingViewDelegate implements BuildingView {
 
     private final DashboardView dashboardView;
+
+    private final IListerView<FloorplanDTO> floorplanLister;
 
     private final IListerView<AptUnitDTO> unitLister;
 
@@ -44,6 +48,7 @@ public class BuildingViewDelegate implements BuildingView {
 
     public BuildingViewDelegate(boolean readOnly) {
         dashboardView = new DashboardViewImpl("");
+        floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister(/* readOnly */));
         unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new UnitLister(/* readOnly */));
         elevatorLister = new ListerInternalViewImplBase<ElevatorDTO>(new ElevatorLister(/* readOnly */));
         boilerLister = new ListerInternalViewImplBase<BoilerDTO>(new BoilerLister(/* readOnly */));
@@ -55,6 +60,11 @@ public class BuildingViewDelegate implements BuildingView {
     @Override
     public DashboardView getDashboardView() {
         return dashboardView;
+    }
+
+    @Override
+    public IListerView<FloorplanDTO> getFloorplanListerView() {
+        return floorplanLister;
     }
 
     @Override

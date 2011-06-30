@@ -24,6 +24,7 @@ import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ElevatorDTO;
+import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
@@ -46,6 +47,11 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     @Override
     public DashboardView getDashboardView() {
         return delegate.getDashboardView();
+    }
+
+    @Override
+    public IListerView<FloorplanDTO> getFloorplanListerView() {
+        return delegate.getFloorplanListerView();
     }
 
     @Override

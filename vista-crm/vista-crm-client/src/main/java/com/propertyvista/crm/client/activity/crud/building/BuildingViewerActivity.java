@@ -46,6 +46,11 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
     }
 
     @Override
+    public Presenter getFloorplanPresenter() {
+        return delegate.getFloorplanPresenter();
+    }
+
+    @Override
     public Presenter getUnitPresenter() {
         return delegate.getUnitPresenter();
     }

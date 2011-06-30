@@ -46,6 +46,11 @@ public class BuildingEditorActivity extends EditorActivityBase<BuildingDTO> impl
     }
 
     @Override
+    public Presenter getFloorplanPresenter() {
+        return delegate.getFloorplanPresenter();
+    }
+
+    @Override
     public Presenter getUnitPresenter() {
         return delegate.getUnitPresenter();
     }

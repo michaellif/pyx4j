@@ -27,6 +27,7 @@ import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.ElevatorCrudService;
+import com.propertyvista.crm.rpc.services.FloorplanCrudService;
 import com.propertyvista.crm.rpc.services.LockerAreaCrudService;
 import com.propertyvista.crm.rpc.services.ParkingCrudService;
 import com.propertyvista.crm.rpc.services.RoofCrudService;
@@ -34,6 +35,7 @@ import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.ElevatorDTO;
+import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
@@ -41,6 +43,8 @@ import com.propertyvista.dto.RoofDTO;
 public class BuildingActivityDelegate implements BuildingView.Presenter {
 
     private final DashboardView.Presenter dashboard;
+
+    private final IListerView.Presenter floorplanLister;
 
     private final IListerView.Presenter unitLister;
 
@@ -58,6 +62,9 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
     public BuildingActivityDelegate(BuildingView view) {
 
         dashboard = new DashboardViewActivity(view.getDashboardView(), new CrmSiteMap.Dashboard.Building());
+
+        floorplanLister = new ListerActivityBase<FloorplanDTO>(view.getFloorplanListerView(),
+                (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class), FloorplanDTO.class);
 
         unitLister = new ListerActivityBase<AptUnitDTO>(view.getUnitListerView(), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class),
                 AptUnitDTO.class);
@@ -80,6 +87,11 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
     @Override
     public DashboardView.Presenter getDashboardPresenter() {
         return dashboard;
+    }
+
+    @Override
+    public Presenter getFloorplanPresenter() {
+        return floorplanLister;
     }
 
     @Override

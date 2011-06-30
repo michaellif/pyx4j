@@ -19,6 +19,7 @@ import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.ElevatorDTO;
+import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
@@ -28,6 +29,8 @@ public interface BuildingView {
     interface Presenter {
 
         DashboardView.Presenter getDashboardPresenter();
+
+        IListerView.Presenter getFloorplanPresenter();
 
         IListerView.Presenter getUnitPresenter();
 
@@ -43,6 +46,8 @@ public interface BuildingView {
     }
 
     DashboardView getDashboardView();
+
+    IListerView<FloorplanDTO> getFloorplanListerView();
 
     IListerView<AptUnitDTO> getUnitListerView();
 

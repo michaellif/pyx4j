@@ -25,12 +25,12 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 public class DetailLister extends ListerBase<AptUnitItem> {
 
     public DetailLister() {
-        super(AptUnitItem.class, CrmSiteMap.Properties.Detail.class);
+        super(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class);
         setFiltersVisible(false);
     }
 
     public DetailLister(boolean readOnly) {
-        super(AptUnitItem.class, CrmSiteMap.Properties.Detail.class, readOnly);
+        super(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class, readOnly);
         setFiltersVisible(false);
     }
 
