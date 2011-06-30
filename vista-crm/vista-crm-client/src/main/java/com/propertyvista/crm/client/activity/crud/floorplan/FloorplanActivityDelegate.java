@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.activity.crud.floorplan;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
@@ -38,5 +39,10 @@ public class FloorplanActivityDelegate implements FloorplanView.Presenter {
     @Override
     public Presenter getConcessionsPresenter() {
         return concessionsLister;
+    }
+
+    public void populate(Key parentID) {
+        concessionsLister.setParentFiltering(parentID);
+        concessionsLister.populateData(0);
     }
 }

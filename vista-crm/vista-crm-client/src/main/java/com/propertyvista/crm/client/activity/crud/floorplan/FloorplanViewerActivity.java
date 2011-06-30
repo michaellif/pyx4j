@@ -43,4 +43,10 @@ public class FloorplanViewerActivity extends ViewerActivityBase<FloorplanDTO> im
     public Presenter getConcessionsPresenter() {
         return delegate.getConcessionsPresenter();
     }
+
+    @Override
+    public void onPopulateSuccess(FloorplanDTO result) {
+        super.onPopulateSuccess(result);
+        delegate.populate(result.getPrimaryKey());
+    }
 }

@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.floorplan;
 import com.pyx4j.site.client.ui.crud.IListerView;
 
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.marketing.yield.Concession;
@@ -31,7 +32,7 @@ public class FloorplanViewerViewImpl extends CrmViewerViewImplBase<FloorplanDTO>
         delegate = new FloorplanViewDelegate(true);
 
         // create/init/set main form here: 
-        CrmEntityForm<FloorplanDTO> form = new FloorplanEditorForm(this);
+        CrmEntityForm<FloorplanDTO> form = new FloorplanEditorForm(new CrmViewersComponentFactory(), this);
         form.initialize();
         setForm(form);
     }
