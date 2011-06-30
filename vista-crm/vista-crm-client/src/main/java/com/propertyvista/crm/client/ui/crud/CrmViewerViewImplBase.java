@@ -16,9 +16,14 @@ package com.propertyvista.crm.client.ui.crud;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -45,6 +50,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         this.placeClass = placeClass;
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption, createActionsPanel()), VistaCrmTheme.defaultHeaderHeight);
+        addSouth(createButtons(), VistaCrmTheme.defaultFooterHeight);
     }
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
@@ -74,5 +80,31 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     protected CrmEntityForm<E> getForm() {
         return (CrmEntityForm<E>) form;
+    }
+
+    private Widget createButtons() {
+        HorizontalPanel buttons = new HorizontalPanel();
+
+        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.cancel();
+            }
+        });
+
+        btnCancel.setWidth("5em");
+        buttons.add(btnCancel);
+
+        buttons.setCellHorizontalAlignment(btnCancel, HasHorizontalAlignment.ALIGN_CENTER);
+        buttons.setCellVerticalAlignment(btnCancel, HasVerticalAlignment.ALIGN_MIDDLE);
+        buttons.setSpacing(10);
+
+        SimplePanel wrap = new SimplePanel();
+        wrap.getElement().getStyle().setProperty("borderTop", "1px solid #bbb");
+        buttons.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        buttons.getElement().getStyle().setRight(0, Unit.EM);
+        wrap.setWidget(buttons);
+        wrap.setWidth("100%");
+        return wrap;
     }
 }
