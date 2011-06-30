@@ -13,14 +13,39 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
-public class CurrentBillViewImpl extends SimplePanel implements CurrentBillView {
+import com.google.gwt.user.client.ui.FlowPanel;
+
+import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.portal.domain.dto.BillDTO;
+
+public class CurrentBillViewImpl extends FlowPanel implements CurrentBillView {
+
+    private final CurrentBillForm billForm;
+
+    private CurrentBillView.Presenter presenter;
+
+    private static I18n i18n = I18nFactory.getI18n(PaymentMethodsForm.class);
 
     public CurrentBillViewImpl() {
-        HTML label = new HTML("Current Bill");
-        setWidget(label);
+        billForm = new CurrentBillForm();
+        billForm.initialize();
+        add(new VistaHeaderDecorator(i18n.tr("Current Bill"), "100%"));
+        add(billForm);
+
+    }
+
+    @Override
+    public void populate(BillDTO bill) {
+        billForm.populate(bill);
+
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        presenter = this.presenter;
 
     }
 }

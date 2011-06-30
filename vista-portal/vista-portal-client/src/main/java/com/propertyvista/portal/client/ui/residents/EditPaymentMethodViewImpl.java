@@ -7,24 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 18, 2011
+ * Created on Jun 29, 2011
  * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.propertyvista.portal.domain.dto.BillDTO;
-
-public interface CurrentBillView extends IsWidget {
-
-    public void populate(BillDTO bill);
-
-    void setPresenter(Presenter presenter);
-
-    interface Presenter {
-
-    }
+public class EditPaymentMethodViewImpl extends FlowPanel implements EditPaymentMethodView {
 
 }

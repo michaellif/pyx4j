@@ -7,24 +7,37 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 18, 2011
+ * Created on Jun 29, 2011
  * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui.residents;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
+
+import com.propertyvista.portal.client.ui.components.ChargeLineFolder;
 import com.propertyvista.portal.domain.dto.BillDTO;
 
-public interface CurrentBillView extends IsWidget {
+public class CurrentBillForm extends CEntityForm<BillDTO> {
 
-    public void populate(BillDTO bill);
+    private static I18n i18n = I18nFactory.getI18n(CurrentBillForm.class);
 
-    void setPresenter(Presenter presenter);
+    public CurrentBillForm() {
+        super(BillDTO.class);
+    }
 
-    interface Presenter {
+    @Override
+    public IsWidget createContent() {
+        FlowPanel container = new FlowPanel();
+        container.add(inject(proto().charges(), new ChargeLineFolder()));
 
+        return container;
     }
 
 }

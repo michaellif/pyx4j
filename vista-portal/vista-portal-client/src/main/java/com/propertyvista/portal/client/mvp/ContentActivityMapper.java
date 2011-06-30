@@ -89,6 +89,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PotentialTenantActivity(place);
                 } else if (place instanceof PortalSiteMap.Residents.PaymentMethod) {
                     activity = new PaymentMethodActivity(place);
+                } else if (place instanceof PortalSiteMap.Residents.CurrentBill) {
+                    activity = new CurrentBillActivity(place);
                 }
 
                 callback.onSuccess(activity);

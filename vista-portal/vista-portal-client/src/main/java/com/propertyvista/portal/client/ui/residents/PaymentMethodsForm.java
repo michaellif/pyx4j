@@ -142,7 +142,6 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
         }
     }
 
-    //TODO finish implementation
     private CEntityFolderViewer<PaymentMethodDTO> createPaymentMethodsViewer() {
 
         return new CEntityFolderViewer<PaymentMethodDTO>(PaymentMethodDTO.class) {
