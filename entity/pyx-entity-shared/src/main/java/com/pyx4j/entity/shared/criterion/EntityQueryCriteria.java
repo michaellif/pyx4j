@@ -100,6 +100,12 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         return this;
     }
 
+    public void resetCriteria() {
+        if (filters != null) {
+            filters.clear();
+        }
+    }
+
     public EntityQueryCriteria<E> asc(String propertyName) {
         return sort(new Sort(propertyName, false));
     }
@@ -189,5 +195,14 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
     @Override
     public String getServiceCallMarker() {
         return this.entityPrototype.getEntityMeta().getCaption().replace(' ', '_');
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("domainName=").append(this.entityPrototype.getEntityMeta().getCaption());
+        builder.append(" filters=").append(getFilters());
+        builder.append(" sorts=").append(getSorts());
+        return builder.toString();
     }
 }

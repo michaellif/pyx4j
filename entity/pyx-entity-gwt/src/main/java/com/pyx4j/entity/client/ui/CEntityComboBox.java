@@ -104,6 +104,10 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         return this.criteria.add(criterion);
     }
 
+    public void resetCriteria() {
+        this.criteria.resetCriteria();
+    }
+
     public void setOptionsFilter(OptionsFilter<E> optionsFilter) {
         this.optionsFilter = optionsFilter;
         setOptions(getOptions());
