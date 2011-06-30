@@ -28,6 +28,7 @@ import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
 import com.propertyvista.crm.rpc.services.ElevatorCrudService;
+import com.propertyvista.crm.rpc.services.FloorplanCrudService;
 import com.propertyvista.crm.rpc.services.InquiryCrudService;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.rpc.services.LockerAreaCrudService;
@@ -49,6 +50,7 @@ import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Elevator;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Locker;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
@@ -115,6 +117,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(LockerAreaCrudService.class));
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Locker.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(LockerCrudService.class));
+
+        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Floorplan.class, EntityPermission.ALL));
+        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(FloorplanCrudService.class));
 
 // - Unit-related:
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(AptUnit.class, EntityPermission.ALL));
