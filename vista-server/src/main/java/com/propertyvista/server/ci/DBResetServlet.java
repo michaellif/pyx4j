@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
@@ -46,6 +47,14 @@ public class DBResetServlet extends HttpServlet {
 
     private static final Logger log = LoggerFactory.getLogger(DBResetServlet.class);
 
+    private static enum ResetType {
+
+        all,
+
+        // Use http://localhost:8888/vista/o/db-rest?type=preload
+        preload,
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         synchronized (DBResetServlet.class) {
@@ -54,17 +63,26 @@ public class DBResetServlet extends HttpServlet {
             try {
                 VistaServerSideConfiguration conf = (VistaServerSideConfiguration) ServerSideConfiguration.instance();
                 EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) PersistenceServicesFactory.getPersistenceService();
-                List<String> allClasses = EntityClassFinder.findEntityClasses();
-                for (String className : allClasses) {
-                    Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
-                    EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-                    if (meta.isTransient()) {
-                        continue;
-                    }
-                    if (srv.isTableExists(meta.getEntityClass())) {
-                        log.warn("drop table {}", meta.getEntityClass());
-                        buf.append("drop table " + meta.getEntityClass() + "\n");
-                        srv.dropTable(meta.getEntityClass());
+
+                ResetType type = ResetType.all;
+                String tp = req.getParameter("type");
+                if (CommonsStringUtils.isStringSet(tp)) {
+                    type = ResetType.valueOf(tp);
+                }
+
+                if (type == ResetType.all) {
+                    List<String> allClasses = EntityClassFinder.findEntityClasses();
+                    for (String className : allClasses) {
+                        Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
+                        EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
+                        if (meta.isTransient()) {
+                            continue;
+                        }
+                        if (srv.isTableExists(meta.getEntityClass())) {
+                            log.warn("drop table {}", meta.getEntityClass());
+                            buf.append("drop table " + meta.getEntityClass() + "\n");
+                            srv.dropTable(meta.getEntityClass());
+                        }
                     }
                 }
 
@@ -75,7 +93,7 @@ public class DBResetServlet extends HttpServlet {
                 buf.append(conf.getDataPreloaders().preloadAll());
                 buf.append("\nTotal time: " + TimeUtils.secSince(start));
 
-                if (NamespaceManager.getNamespace().equals(VistaNamespaceResolver.demoNamespace)) {
+                if ((type == ResetType.all) && NamespaceManager.getNamespace().equals(VistaNamespaceResolver.demoNamespace)) {
                     NamespaceManager.setNamespace(VistaNamespaceResolver.demoSLNamespace);
                     buf.append("\n---Preload SL---");
                     buf.append(conf.getDataPreloaders().preloadAll());
