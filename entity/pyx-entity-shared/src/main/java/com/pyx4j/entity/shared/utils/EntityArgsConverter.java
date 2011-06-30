@@ -73,24 +73,25 @@ public class EntityArgsConverter {
     public static <E extends IEntity> E createFromArgs(Class<E> clazz, Map<String, String> args) {
 
         E entity = EntityFactory.create(clazz);
+        if (args != null) {
+            for (String memberName : args.keySet()) {
+                Path path = convertDotNotationToPath(clazz, memberName);
+                MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(path);
 
-        for (String memberName : args.keySet()) {
-            Path path = convertDotNotationToPath(clazz, memberName);
-            MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(path);
-
-            if (memberMeta != null) {
-                if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
-                    IPrimitive<?> member = (IPrimitive<?>) entity.getMember(path);
-                    if (memberMeta.getValueClass().equals(Date.class)) {
-                        entity.setValue(path, TimeUtils.simpleParse(args.get(memberName), DATE_TIME_FORMAT));
-                    } else if (memberMeta.getValueClass().equals(LogicalDate.class)) {
-                        entity.setValue(path, new LogicalDate(TimeUtils.simpleParse(args.get(memberName), DATE_FORMAT)));
-                    } else {
-                        entity.setValue(path, member.parse(args.get(memberName)));
+                if (memberMeta != null) {
+                    if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
+                        IPrimitive<?> member = (IPrimitive<?>) entity.getMember(path);
+                        if (memberMeta.getValueClass().equals(Date.class)) {
+                            entity.setValue(path, TimeUtils.simpleParse(args.get(memberName), DATE_TIME_FORMAT));
+                        } else if (memberMeta.getValueClass().equals(LogicalDate.class)) {
+                            entity.setValue(path, new LogicalDate(TimeUtils.simpleParse(args.get(memberName), DATE_FORMAT)));
+                        } else {
+                            entity.setValue(path, member.parse(args.get(memberName)));
+                        }
                     }
                 }
-            }
 
+            }
         }
 
         return entity;
