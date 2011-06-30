@@ -7,7 +7,7 @@
     <!--
 		@version $Revision$ ($Author$) $Date$
 	-->
-    <display-name>Vista Portal ${buildLabel} svn:${scm.revision}</display-name>
+    <display-name>Vista Portal ${buildLabel} svn:${scm.revision} ts:${timestamp}</display-name>
 
     <context-param>
         <param-name>com.pyx4j.config.server.ServerSideConfiguration</param-name>
