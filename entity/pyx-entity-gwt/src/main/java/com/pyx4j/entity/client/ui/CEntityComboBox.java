@@ -106,6 +106,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
     public void resetCriteria() {
         this.criteria.resetCriteria();
+        resetOptions();
     }
 
     public void setOptionsFilter(OptionsFilter<E> optionsFilter) {
@@ -151,7 +152,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     }
 
     public void resetOptions() {
-        if ((optionsLoaded) || (criteria != null)) {
+        if (optionsLoaded) {
             optionsLoaded = false;
         }
     }
@@ -162,9 +163,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     @Override
     protected void onWidgetCreated() {
         super.onWidgetCreated();
-        if (criteria != null) {
-            retriveOptions(null);
-        }
+        retriveOptions(null);
     }
 
     private class OptionsReadyPropertyChangeHandler implements OptionsChangeHandler<List<E>> {
@@ -187,7 +186,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
     @Override
     public void retriveOptions(final AsyncOptionsReadyCallback<E> callback) {
-        if ((optionsLoaded) || (criteria == null)) {
+        if (optionsLoaded) {
             super.retriveOptions(callback);
         } else {
             if (isLoading) {
