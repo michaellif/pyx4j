@@ -35,6 +35,7 @@ import com.propertyvista.yardi.bean.mits.Customer;
 import com.propertyvista.yardi.bean.mits.Customers;
 import com.propertyvista.yardi.bean.mits.Identification;
 import com.propertyvista.yardi.bean.mits.PropertyId;
+import com.propertyvista.yardi.bean.resident.PhysicalProperty;
 import com.propertyvista.yardi.bean.resident.RTCustomer;
 import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.mapper.GetPropertyConfigurationsMapper;
@@ -91,9 +92,10 @@ public class XmlBeanTest {
     @Test
     public void testGetUnitInformation() throws IOException, JAXBException {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetUnitInformation.xml", getClass()));
-//        PhysicalProperty property = MarshallUtil.unmarshal(PhysicalProperty.class, xml);
-//
-//        log.debug("Loaded properties {}", property);
+        xml = YardiXmlUtil.stripGetUnitInformation(xml);
+        PhysicalProperty property = MarshallUtil.unmarshal(PhysicalProperty.class, xml);
+
+        log.info("Loaded properties {}", property);
     }
 
     @Test
@@ -143,8 +145,6 @@ public class XmlBeanTest {
     @Test
     public void testGetResidentTransactions() throws IOException, JAXBException {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetResidentTransactions.xml", getClass()));
-
-        xml = YardiXmlUtil.stripGetResidentTransactions(xml);
 
         ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
 

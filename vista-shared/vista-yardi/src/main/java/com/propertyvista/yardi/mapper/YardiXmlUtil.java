@@ -30,20 +30,12 @@ public class YardiXmlUtil {
     }
 
     /**
-     * <ResidentTransactions xmlns="http://yardi.com/ResidentTransactions20"
-     * xmlns:MITS="http://my-company.com/namespace"
-     * xsi:schemaLocation="http://yardi.com/ResidentTransactions20 .\Itf_MITS_ResidentTransactions2.0.xsd">
-     * 
+     * <PhysicalProperty xmlns="" xmlns:MITS="http://my-company.com/namespace">
      */
-    public static String stripGetResidentTransactions(String xml) {
+    public static String stripGetUnitInformation(String xml) {
 
-//        String token = "xsi:schemaLocation=\"http://yardi.com/ResidentTransactions20 .\\Itf_MITS_ResidentTransactions2.0.xsd\"";
-//        xml = xml.replace(token, "");
-
-//        token = "xmlns=\"http://yardi.com/ResidentTransactions20\"";
-//        xml = xml.replace(token, "");
+        xml = xml.replace("xmlns=\"\"", "xmlns=\"http://yardi.com/ResidentTransactions20\"");
 
         return xml;
     }
-
 }

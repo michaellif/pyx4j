@@ -30,8 +30,10 @@ public class Unit {
 
         sb.append(propertyPrimaryId);
         sb.append(", ").append(marketingName);
-        sb.append("\n");
-        sb.append(information);
+        if (information != null) {
+            sb.append("\n");
+            sb.append(information);
+        }
 
         return sb.toString();
     }

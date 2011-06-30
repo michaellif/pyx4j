@@ -31,11 +31,16 @@ public class RTCustomer {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-//        sb.append(customerId);
-        sb.append(customers);
-        sb.append("\nUnit:\n").append(rtunit);
-        sb.append("\n").append(paymentAccepted).append(" payments accepted\n");
-        sb.append(serviceTransactions);
+        if (customers != null) {
+            sb.append(customers).append("\n");
+        }
+        sb.append("Unit: ").append(rtunit);
+        if (paymentAccepted != null) {
+            sb.append("\n").append(paymentAccepted).append(" payments accepted\n");
+        }
+        if (serviceTransactions != null) {
+            sb.append(serviceTransactions);
+        }
 
         return sb.toString();
     }

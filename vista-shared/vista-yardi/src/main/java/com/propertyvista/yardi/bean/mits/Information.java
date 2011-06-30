@@ -64,17 +64,40 @@ public class Information {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("(").append(unitType).append(") ");
-        sb.append(unitBedrooms).append(" bedrooms, ");
-        sb.append(unitBathrooms).append(" bathrooms ");
-        sb.append(minSquareFeet).append(" sq ft to ");
-        sb.append(maxSquareFeet).append(" sq ft\n");
-        sb.append("$").append(unitRent).append(", $");
-        sb.append(marketRent).append("\n");
-        sb.append("Economic: ").append(unitEconomicStatus);
-        sb.append(", Occupancy: ").append(unitOccupancyStatus);
-        sb.append(", Leased: ").append(unitLeasedStatus);
-        sb.append("\n").append(floorplanId).append(" ").append(floorplanName);
+        if (unitType != null) {
+            sb.append("(").append(unitType).append(") ");
+        }
+
+        if (unitBedrooms != null) {
+            sb.append(unitBedrooms).append(" bedrooms, ");
+        }
+        if (unitBathrooms != null) {
+            sb.append(unitBathrooms).append(" bathrooms ");
+        }
+        if (minSquareFeet != null) {
+            sb.append(minSquareFeet).append(" sq ft to ");
+        }
+        if (maxSquareFeet != null) {
+            sb.append(maxSquareFeet).append(" sq ft\n");
+        }
+        if (unitRent != null) {
+            sb.append("$").append(unitRent).append(", $");
+        }
+        if (marketRent != null) {
+            sb.append(marketRent).append("\n");
+        }
+        if (unitEconomicStatus != null) {
+            sb.append("Economic: ").append(unitEconomicStatus);
+        }
+        if (unitOccupancyStatus != null) {
+            sb.append(", Occupancy: ").append(unitOccupancyStatus);
+        }
+        if (unitLeasedStatus != null) {
+            sb.append(", Leased: ").append(unitLeasedStatus);
+        }
+        if (floorplanId != null) {
+            sb.append("\n").append(floorplanId).append(" ").append(floorplanName);
+        }
 
         return sb.toString();
     }

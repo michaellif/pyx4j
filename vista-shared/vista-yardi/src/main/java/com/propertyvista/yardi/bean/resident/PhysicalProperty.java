@@ -11,16 +11,13 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean.test;
+package com.propertyvista.yardi.bean.resident;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.propertyvista.yardi.bean.resident.Property;
-
 
 @XmlRootElement(name = "PhysicalProperty")
 public class PhysicalProperty {
@@ -30,16 +27,7 @@ public class PhysicalProperty {
         StringBuilder sb = new StringBuilder();
 
         for (Property property : properties) {
-            sb.append("\n");
-
-            sb.append(property);
-
-//            List<RTCustomer> customers = property.getRTCustomer();
-//            sb.append(customers.size()).append(" customers");
-//            for (RTCustomer customer : customers) {
-//                sb.append("customerId=").append(customer.getCustomerID());
-//                sb.append("\n");
-//            }
+            sb.append(property).append("\n");
         }
 
         return sb.toString();

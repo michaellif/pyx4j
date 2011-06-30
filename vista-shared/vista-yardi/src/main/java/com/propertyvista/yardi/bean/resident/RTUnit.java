@@ -31,8 +31,12 @@ public class RTUnit {
         sb.append("#");
         sb.append(unitId);
         sb.append(", ");
-        sb.append(numberOccupants.getTotal()).append(" occupants");
-        sb.append("\n").append(unit);
+        if (numberOccupants != null) {
+            sb.append(numberOccupants.getTotal()).append(" occupants");
+        }
+        if (unit != null) {
+            sb.append("\n").append(unit);
+        }
 
         return sb.toString();
     }

@@ -30,15 +30,14 @@ public class Property {
 
     private List<RTCustomer> customers = new ArrayList<RTCustomer>();
 
-    public Property() {
-        System.out.println("Property");
-    }
-
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(propertyId);
+        if (propertyId != null) {
+            sb.append(propertyId).append("\n");
+        }
 
+        sb.append(customers.size()).append(" rt-customers");
         for (RTCustomer customer : customers) {
             sb.append("\n").append(customer);
         }
