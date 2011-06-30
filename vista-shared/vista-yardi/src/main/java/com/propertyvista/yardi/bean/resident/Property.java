@@ -20,6 +20,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.propertyvista.yardi.bean.mits.PropertyId;
+
 @XmlRootElement(name = "Property")
 @XmlType(propOrder = { "propertyId", "customers" })
 public class Property {
@@ -35,7 +37,7 @@ public class Property {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("Property ").append(propertyId).append("\n");
+        sb.append(propertyId);
 
         for (RTCustomer customer : customers) {
             sb.append("\n").append(customer);

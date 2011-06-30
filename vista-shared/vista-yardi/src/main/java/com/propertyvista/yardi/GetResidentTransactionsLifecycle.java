@@ -15,10 +15,19 @@ package com.propertyvista.yardi;
 
 import java.rmi.RemoteException;
 
+import javax.xml.bind.JAXBException;
+
 import org.apache.axis2.AxisFault;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 
 public class GetResidentTransactionsLifecycle {
-    public void download(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
-        YardiTransactions.getResidentTransactions(c, yp);
+    private final static Logger log = LoggerFactory.getLogger(GetResidentTransactionsLifecycle.class);
+
+    public void download(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
+        ResidentTransactions transactions = YardiTransactions.getResidentTransactions(c, yp);
+        log.info("{}", transactions);
     }
 }

@@ -58,6 +58,7 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.bean.test.PhysicalProperty;
 
 public class YardiTransactions {
@@ -144,8 +145,10 @@ public class YardiTransactions {
 
     /**
      * Allows export of resident/transactional data for a given property/property list.
+     * 
+     * @throws JAXBException
      */
-    public static void getResidentTransactions(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
+    public static ResidentTransactions getResidentTransactions(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
         c.transactionId++;
         c.setCurrentAction(Action.GetResidentTransactions);
 
@@ -160,7 +163,10 @@ public class YardiTransactions {
 
         GetResidentTransactions_LoginResponse response = c.getResidentTransactionsService().getResidentTransactions_Login(l);
         String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
-        log.info("GetResidentTransactions: {}", xml);
+        log.debug("GetResidentTransactions: {}", xml);
+
+        ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
+        return transactions;
     }
 
     /**

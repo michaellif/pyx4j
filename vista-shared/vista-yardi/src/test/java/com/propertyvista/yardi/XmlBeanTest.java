@@ -14,11 +14,8 @@
 package com.propertyvista.yardi;
 
 import java.io.IOException;
-import java.io.StringReader;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import junit.framework.Assert;
 
@@ -36,7 +33,8 @@ import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
 import com.propertyvista.yardi.bean.mits.Customer;
 import com.propertyvista.yardi.bean.mits.Customers;
-import com.propertyvista.yardi.bean.resident.PropertyId;
+import com.propertyvista.yardi.bean.mits.Identification;
+import com.propertyvista.yardi.bean.mits.PropertyId;
 import com.propertyvista.yardi.bean.resident.RTCustomer;
 import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.mapper.GetPropertyConfigurationsMapper;
@@ -104,9 +102,17 @@ public class XmlBeanTest {
         com.propertyvista.yardi.bean.resident.Property property = new com.propertyvista.yardi.bean.resident.Property();
         transactions.getProperties().add(property);
 
+        // property
         PropertyId propertyId = new PropertyId();
         property.setPropertyId(propertyId);
 
+        Identification identification = new Identification();
+        identification.setType("other");
+        identification.setMarketingName("Vasya");
+        identification.setPrimaryId("anya");
+        propertyId.setIdentification(identification);
+
+        // rt customer
         RTCustomer rtCustomer = new RTCustomer();
         property.getCustomers().add(rtCustomer);
 
@@ -119,6 +125,17 @@ public class XmlBeanTest {
         customer.setType("future_resident");
         customers.getCustomers().add(customer);
 
+//        JAXBContext context = JAXBContext.newInstance(data.getClass());
+//        Marshaller m = context.createMarshaller();
+//        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+//        NamespaceP
+//        NamespacePrefixMapper prefixMapper = new MyPrefixMapperImpl();
+//        m.setProperty("com.sun.xml.bind.namespacePrefixMapper", prefixMapper);
+//
+//        StringWriter sw = new StringWriter();
+//        m.marshal(transactions, sw);
+//        String xml = sw.toString();
+
         String xml = MarshallUtil.marshall(transactions);
         log.info(xml);
     }
@@ -128,14 +145,10 @@ public class XmlBeanTest {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetResidentTransactions.xml", getClass()));
 
         xml = YardiXmlUtil.stripGetResidentTransactions(xml);
-        log.info(xml);
-        JAXBContext context = JAXBContext.newInstance(ResidentTransactions.class);
-        Unmarshaller um = context.createUnmarshaller();
-        ResidentTransactions transactions = (ResidentTransactions) um.unmarshal(new StringReader(xml));
 
-//        ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
+        ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
 
-        log.info("Loaded transactions {}", transactions);
+        log.info("Loaded transactions:\n{}", transactions);
 
         GetResidentTransactionsMapper mapper = new GetResidentTransactionsMapper();
         mapper.map(transactions);

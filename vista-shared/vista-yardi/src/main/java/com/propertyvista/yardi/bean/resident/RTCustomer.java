@@ -17,20 +17,25 @@ import javax.xml.bind.annotation.XmlElement;
 
 import com.propertyvista.yardi.bean.mits.Customers;
 
-
 public class RTCustomer {
     private String customerId;
 
     private Customers customers;
 
-//    private RTUnit rtunit;
+    private RTUnit rtunit;
+
+    private Integer paymentAccepted;
+
+    private RTServiceTransactions serviceTransactions;
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(customerId);
-//        sb.append("\n").append(rtunit);
-        sb.append("\n").append(customers);
+//        sb.append(customerId);
+        sb.append(customers);
+        sb.append("\nUnit:\n").append(rtunit);
+        sb.append("\n").append(paymentAccepted).append(" payments accepted\n");
+        sb.append(serviceTransactions);
 
         return sb.toString();
     }
@@ -44,14 +49,14 @@ public class RTCustomer {
         this.customerId = customerId;
     }
 
-//    @XmlElement(name = "RT_Unit")
-//    public RTUnit getRtunit() {
-//        return rtunit;
-//    }
-//
-//    public void setRtunit(RTUnit rtunit) {
-//        this.rtunit = rtunit;
-//    }
+    @XmlElement(name = "RT_Unit")
+    public RTUnit getRtunit() {
+        return rtunit;
+    }
+
+    public void setRtunit(RTUnit rtunit) {
+        this.rtunit = rtunit;
+    }
 
     @XmlElement(name = "Customers")
     public Customers getCustomers() {
@@ -60,5 +65,23 @@ public class RTCustomer {
 
     public void setCustomers(Customers customers) {
         this.customers = customers;
+    }
+
+    @XmlElement(name = "PaymentAccepted")
+    public Integer getPaymentAccepted() {
+        return paymentAccepted;
+    }
+
+    public void setPaymentAccepted(Integer paymentAccepted) {
+        this.paymentAccepted = paymentAccepted;
+    }
+
+    @XmlElement(name = "RTServiceTransactions")
+    public RTServiceTransactions getServiceTransactions() {
+        return serviceTransactions;
+    }
+
+    public void setServiceTransactions(RTServiceTransactions serviceTransactions) {
+        this.serviceTransactions = serviceTransactions;
     }
 }

@@ -11,12 +11,10 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean.test;
+package com.propertyvista.yardi.bean.mits;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.propertyvista.yardi.bean.mits.Information;
 
 @XmlRootElement
 public class Unit {
@@ -30,15 +28,15 @@ public class Unit {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("(");
         sb.append(propertyPrimaryId);
-        sb.append(") ");
+        sb.append(", ").append(marketingName);
+        sb.append("\n");
         sb.append(information);
 
         return sb.toString();
     }
 
-    @XmlElement(name = "MarketingName", required = true, namespace = "http://my-company.com/namespace")
+    @XmlElement(name = "MarketingName", required = true)
     public String getMarketingName() {
         return marketingName;
     }
@@ -47,7 +45,7 @@ public class Unit {
         this.marketingName = marketingName;
     }
 
-    @XmlElement(name = "PropertyPrimaryID", required = true, namespace = "http://my-company.com/namespace")
+    @XmlElement(name = "PropertyPrimaryID", required = true)
     public String getPropertyPrimaryId() {
         return propertyPrimaryId;
     }
@@ -56,7 +54,7 @@ public class Unit {
         this.propertyPrimaryId = propertyPrimaryId;
     }
 
-    @XmlElement(name = "Information", required = true, namespace = "http://my-company.com/namespace")
+    @XmlElement(name = "Information", required = true)
     public Information getInformation() {
         return information;
     }

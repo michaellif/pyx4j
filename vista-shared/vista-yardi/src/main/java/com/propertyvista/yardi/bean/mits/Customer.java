@@ -33,9 +33,9 @@ public class Customer {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("[").append(type).append("] ");
-        sb.append(description).append(" ");
-        sb.append(customerId);
+        sb.append("(").append(type).append(") ");
+        sb.append(customerId).append(" ");
+        sb.append(description);
         sb.append("\n").append(name);
         sb.append("\n").append(lease);
 

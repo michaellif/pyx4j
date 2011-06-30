@@ -11,23 +11,28 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi.bean.test;
+package com.propertyvista.yardi.bean.resident;
 
 import javax.xml.bind.annotation.XmlElement;
 
-
+import com.propertyvista.yardi.bean.mits.Unit;
 
 public class RTUnit {
 
     private String unitId;
+
+    private NumberOccupants numberOccupants;
 
     private Unit unit;
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
+        sb.append("#");
         sb.append(unitId);
-        sb.append(" ").append(unit);
+        sb.append(", ");
+        sb.append(numberOccupants.getTotal()).append(" occupants");
+        sb.append("\n").append(unit);
 
         return sb.toString();
     }
@@ -41,6 +46,15 @@ public class RTUnit {
         this.unitId = unitId;
     }
 
+    @XmlElement(name = "NumberOccupants")
+    public NumberOccupants getNumberOccupants() {
+        return numberOccupants;
+    }
+
+    public void setNumberOccupants(NumberOccupants numberOccupants) {
+        this.numberOccupants = numberOccupants;
+    }
+
     @XmlElement(name = "Unit")
     public Unit getUnit() {
         return unit;
@@ -49,5 +63,4 @@ public class RTUnit {
     public void setUnit(Unit unit) {
         this.unit = unit;
     }
-
 }

@@ -17,6 +17,8 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import com.propertyvista.yardi.mapper.YardiXmlUtil;
+
 /**
  * <MITS:Lease>
  * <MITS:CurrentRent>850.00</MITS:CurrentRent>
@@ -43,12 +45,18 @@ public class Lease {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
+        sb.append("Lease:\n$");
         sb.append(currentRent);
-        sb.append(" ").append(expectedMoveInDate);
-        if (actualMoveIn != null) {
-            sb.append(" actualMoveIn=").append(actualMoveIn);
+        if (expectedMoveInDate != null) {
+            sb.append(" expectedMoveIn=").append(YardiXmlUtil.strDate(expectedMoveInDate));
         }
-        sb.append(" [").append(leaseFromDate).append("-").append(leaseToDate).append("] ");
+        if (actualMoveIn != null) {
+            sb.append(" actualMoveIn=").append(YardiXmlUtil.strDate(actualMoveIn));
+        }
+        if (leaseFromDate != null && leaseToDate != null) {
+            sb.append(" Terms: ").append(YardiXmlUtil.strDate(leaseFromDate)).append("-");
+            sb.append(YardiXmlUtil.strDate(leaseToDate)).append(" ");
+        }
         sb.append(responsibleForLease);
 
         return sb.toString();

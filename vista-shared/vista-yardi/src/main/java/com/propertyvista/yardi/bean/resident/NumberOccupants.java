@@ -7,15 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 1, 2011
+ * Created on Jun 29, 2011
  * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.yardi.bean.resident;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAttribute;
 
-@XmlRootElement(name = "PropertyID")
-public class PropertyId {
+public class NumberOccupants {
 
+    private Integer total;
+
+    @XmlAttribute(name = "Total")
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
 }

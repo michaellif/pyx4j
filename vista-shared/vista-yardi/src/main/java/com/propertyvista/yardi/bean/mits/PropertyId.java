@@ -7,38 +7,45 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 26, 2011
+ * Created on Jun 1, 2011
  * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.yardi.bean.mits;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class Customers {
-    private List<Customer> customers = new ArrayList<Customer>();
+@XmlRootElement(name = "PropertyID")
+public class PropertyId {
+    private Identification identification;
+
+    private Address address;
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("--- ");
-        sb.append(customers.size()).append(" customers ---");
-        for (Customer customer : customers) {
-            sb.append("\n").append(customer);
-        }
+        sb.append(identification);
+        sb.append("\n").append(address);
 
         return sb.toString();
     }
 
-    @XmlElement(name = "Customer")
-    public List<Customer> getCustomers() {
-        return customers;
+    @XmlElement(name = "Identification")
+    public Identification getIdentification() {
+        return identification;
     }
 
-    public void setCustomers(List<Customer> customers) {
-        this.customers = customers;
+    public void setIdentification(Identification identification) {
+        this.identification = identification;
+    }
+
+    @XmlElement(name = "Address")
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

@@ -13,7 +13,21 @@
  */
 package com.propertyvista.yardi.mapper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class YardiXmlUtil {
+
+    private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd MMM yyyy");
+
+    public static String strDate(Date date) {
+        if (date == null) {
+            return "null";
+        }
+        synchronized (DATE_FORMAT) {
+            return DATE_FORMAT.format(date);
+        }
+    }
 
     /**
      * <ResidentTransactions xmlns="http://yardi.com/ResidentTransactions20"
