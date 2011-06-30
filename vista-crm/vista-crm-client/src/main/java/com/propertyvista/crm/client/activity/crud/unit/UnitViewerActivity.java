@@ -33,9 +33,8 @@ public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implement
     @SuppressWarnings("unchecked")
     public UnitViewerActivity(Place place) {
         super((UnitViewerView) UnitViewFactory.instance(UnitViewerView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
-        withPlace(place);
-
         delegate = new UnitActivityDelegate((UnitView) view);
+        withPlace(place);
     }
 
     @Override
@@ -46,10 +45,5 @@ public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implement
     @Override
     public Presenter getOccupanciesPresenter() {
         return delegate.getOccupanciesPresenter();
-    }
-
-    @Override
-    public Presenter getConcessionsPresenter() {
-        return delegate.getConcessionsPresenter();
     }
 }

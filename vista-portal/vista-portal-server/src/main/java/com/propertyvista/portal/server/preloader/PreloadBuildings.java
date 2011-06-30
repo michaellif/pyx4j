@@ -40,7 +40,6 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
@@ -96,10 +95,17 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             for (FloorplanDTO floorplanDTO : floorplans) {
                 MeidaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
 
-                Floorplan floorplan = down(floorplanDTO, Floorplan.class);
-                persist(floorplan);
+                // persist plain internal lists:
+                for (Concession concession : floorplanDTO.concessions()) {
+                    persist(concession);
+                }
 
+                Floorplan floorplan = down(floorplanDTO, Floorplan.class);
+                persist(floorplan); // persist real unit here, not DTO!..
+
+                // persist internal lists and with belongness: 
                 for (FloorplanAmenity amenity : floorplanDTO.amenities()) {
+                    amenity.belongsTo().set(floorplan);
                     persist(amenity);
                 }
             }
@@ -107,24 +113,18 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             List<AptUnitDTO> units = generator.createUnits(building, floorplans, DemoData.NUM_FLOORS, DemoData.NUM_UNITS_PER_FLOOR);
             unitCount += units.size();
             for (AptUnitDTO unitDTO : units) {
-                AptUnit unit = down(unitDTO, AptUnit.class);
-
+                // persist plain internal lists:
                 for (Utility utility : unitDTO.info().utilities()) {
                     persist(utility);
-                }
-                for (AptUnitAmenity amenity : unitDTO.amenities()) {
-                    persist(amenity);
                 }
                 for (AddOn addOn : unitDTO.addOns()) {
                     persist(addOn);
                 }
-                for (Concession concession : unitDTO.financial().concessions()) {
-                    persist(concession);
-                }
 
+                AptUnit unit = down(unitDTO, AptUnit.class);
                 persist(unit); // persist real unit here, not DTO!..
 
-                // persist internal lists and set correct belongness: 
+                // persist internal lists and with belongness: 
                 for (AptUnitOccupancy occupancy : unitDTO.occupancies()) {
                     occupancy.unit().set(unit);
                     persist(occupancy);
@@ -263,11 +263,8 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 sb.append(" | ");
                 sb.append(unit.marketing().floorplan().name().getStringView()); // .append(" ").append(unit.floorplan().pictures());
                 sb.append("\n");
-                sb.append("\t\t").append(unit.financial().concessions()).append("\n");
-                sb.append("\n");
                 sb.append("\t\t").append(unit.info().utilities()).append("\n");
                 sb.append("\t\t").append(unit.addOns()).append("\n");
-                sb.append("\t\t").append(unit.financial().concessions()).append("\n");
             }
         }
         sb.append("\n");

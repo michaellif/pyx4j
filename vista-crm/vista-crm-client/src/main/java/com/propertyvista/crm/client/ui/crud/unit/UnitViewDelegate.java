@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud.unit;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionLister;
-import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
@@ -27,12 +25,9 @@ public class UnitViewDelegate implements UnitView {
 
     private final IListerView<AptUnitOccupancy> OccupanciesLister;
 
-    private final IListerView<Concession> concessionsLister;
-
     public UnitViewDelegate(boolean readOnly) {
         detailsLister = new ListerInternalViewImplBase<AptUnitItem>(new DetailLister());
         OccupanciesLister = new ListerInternalViewImplBase<AptUnitOccupancy>(new UnitOccupancyLister());
-        concessionsLister = new ListerInternalViewImplBase<Concession>(new ConcessionLister());
     }
 
     @Override
@@ -44,10 +39,4 @@ public class UnitViewDelegate implements UnitView {
     public IListerView<AptUnitOccupancy> getOccupanciesListerView() {
         return OccupanciesLister;
     }
-
-    @Override
-    public IListerView<Concession> getConcessionsListerView() {
-        return concessionsLister;
-    }
-
 }

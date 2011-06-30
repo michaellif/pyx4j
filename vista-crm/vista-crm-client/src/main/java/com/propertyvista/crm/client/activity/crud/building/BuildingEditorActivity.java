@@ -35,9 +35,8 @@ public class BuildingEditorActivity extends EditorActivityBase<BuildingDTO> impl
     public BuildingEditorActivity(Place place) {
         super((BuildingEditorView) BuildingViewFactory.instance(BuildingEditorView.class), (AbstractCrudService<BuildingDTO>) GWT
                 .create(BuildingCrudService.class), BuildingDTO.class);
-        withPlace(place);
-
         delegate = new BuildingActivityDelegate((BuildingView) view);
+        withPlace(place);
     }
 
     @Override

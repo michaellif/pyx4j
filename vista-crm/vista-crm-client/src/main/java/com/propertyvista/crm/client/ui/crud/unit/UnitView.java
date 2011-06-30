@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
 
-import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
@@ -26,13 +25,9 @@ public interface UnitView {
         IListerView.Presenter getDetailsPresenter();
 
         IListerView.Presenter getOccupanciesPresenter();
-
-        IListerView.Presenter getConcessionsPresenter();
     }
 
     IListerView<AptUnitItem> getDetailsListerView();
 
     IListerView<AptUnitOccupancy> getOccupanciesListerView();
-
-    IListerView<Concession> getConcessionsListerView();
 }

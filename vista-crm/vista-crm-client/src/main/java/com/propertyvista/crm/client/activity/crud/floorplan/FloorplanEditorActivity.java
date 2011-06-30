@@ -34,9 +34,8 @@ public class FloorplanEditorActivity extends EditorActivityBase<FloorplanDTO> im
     public FloorplanEditorActivity(Place place) {
         super((FloorplanEditorView) BuildingViewFactory.instance(FloorplanEditorView.class), (AbstractCrudService<FloorplanDTO>) GWT
                 .create(FloorplanCrudService.class), FloorplanDTO.class);
-        withPlace(place);
-
         delegate = new FloorplanActivityDelegate((FloorplanView) view);
+        withPlace(place);
     }
 
     @Override

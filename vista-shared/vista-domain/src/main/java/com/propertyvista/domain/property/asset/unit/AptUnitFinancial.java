@@ -15,10 +15,7 @@ package com.propertyvista.domain.property.asset.unit;
 
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-
-import com.propertyvista.domain.marketing.yield.Concession;
 
 public interface AptUnitFinancial extends IEntity {
 
@@ -27,8 +24,4 @@ public interface AptUnitFinancial extends IEntity {
 
     @Format("#0.00")
     IPrimitive<Double> marketRent();
-
-// TODO should be removed after Unit form will be refactored by Leon.     
-    @Deprecated
-    IList<Concession> concessions();
 }

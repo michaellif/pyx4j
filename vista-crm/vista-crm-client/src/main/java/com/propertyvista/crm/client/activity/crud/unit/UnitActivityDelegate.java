@@ -21,10 +21,8 @@ import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.unit.UnitView;
-import com.propertyvista.crm.rpc.services.ConcessionCrudService;
 import com.propertyvista.crm.rpc.services.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
-import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
@@ -34,8 +32,6 @@ public class UnitActivityDelegate implements UnitView.Presenter {
 
     private final IListerView.Presenter OccupanciesLister;
 
-    private final IListerView.Presenter concessionsLister;
-
     @SuppressWarnings("unchecked")
     public UnitActivityDelegate(UnitView view) {
 
@@ -44,9 +40,6 @@ public class UnitActivityDelegate implements UnitView.Presenter {
 
         OccupanciesLister = new ListerActivityBase<AptUnitOccupancy>(view.getOccupanciesListerView(),
                 (AbstractCrudService<AptUnitOccupancy>) GWT.create(UnitOccupancyCrudService.class), AptUnitOccupancy.class);
-
-        concessionsLister = new ListerActivityBase<Concession>(view.getConcessionsListerView(),
-                (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class);
     }
 
     @Override
@@ -58,10 +51,4 @@ public class UnitActivityDelegate implements UnitView.Presenter {
     public Presenter getOccupanciesPresenter() {
         return OccupanciesLister;
     }
-
-    @Override
-    public Presenter getConcessionsPresenter() {
-        return concessionsLister;
-    }
-
 }

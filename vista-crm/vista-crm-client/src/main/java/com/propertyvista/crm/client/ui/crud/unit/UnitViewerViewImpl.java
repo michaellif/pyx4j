@@ -19,7 +19,6 @@ import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
@@ -46,10 +45,5 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     @Override
     public IListerView<AptUnitOccupancy> getOccupanciesListerView() {
         return delegate.getOccupanciesListerView();
-    }
-
-    @Override
-    public IListerView<Concession> getConcessionsListerView() {
-        return delegate.getConcessionsListerView();
     }
 }

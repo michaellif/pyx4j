@@ -266,12 +266,21 @@ public class BuildingsGenerator {
             floorplan.amenities().add(amenity);
         }
 
+        // concessions
+        if (RandomUtil.randomBoolean()) {
+            floorplan.concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(3), 0));
+        }
+        if (RandomUtil.randomBoolean()) {
+            floorplan.concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(11), 15.8));
+        }
+
         return floorplan;
     }
 
     public static FloorplanAmenity createFloorplanAmenity() {
         FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
         amenity.type().setValue(RandomUtil.random(FloorplanAmenity.Type.values()));
+        amenity.subType().setValue(RandomUtil.random(FloorplanAmenity.SubType.values()));
         return amenity;
     }
 
@@ -369,14 +378,6 @@ public class BuildingsGenerator {
             unit.info().utilities().add(createUtility(Utility.Type.internet));
         }
 
-        // amenity, all optional
-        if (RandomUtil.randomBoolean()) {
-            unit.amenities().add(createUnitAmenity(RandomUtil.random(AptUnitAmenity.Type.values())));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.amenities().add(createUnitAmenity(RandomUtil.random(AptUnitAmenity.Type.values())));
-        }
-
         // info items
         if (RandomUtil.randomBoolean()) {
             unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
@@ -394,14 +395,6 @@ public class BuildingsGenerator {
         }
         if (RandomUtil.randomBoolean()) {
             unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
-        }
-
-        // concessions
-        if (RandomUtil.randomBoolean()) {
-            unit.financial().concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(3), 0));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.financial().concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(11), 15.8));
         }
 
         // add-ons

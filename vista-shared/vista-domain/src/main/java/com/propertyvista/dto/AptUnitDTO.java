@@ -18,19 +18,12 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 @Transient
 public interface AptUnitDTO extends AptUnit {
 
-// TODO all Deprecated items should be removed after Unit form will be refactored by Leon.
-
-    @Deprecated
-    IList<AptUnitAmenity> amenities();
-
-    @Deprecated
     IList<AptUnitItem> details();
 
     @Deprecated
