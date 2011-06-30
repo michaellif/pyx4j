@@ -51,7 +51,7 @@ public class DBResetServlet extends HttpServlet {
 
         all,
 
-        // Use http://localhost:8888/vista/o/db-rest?type=preload
+        // Use http://localhost:8888/vista/o/db-reset?type=preload
         preload,
     }
 
