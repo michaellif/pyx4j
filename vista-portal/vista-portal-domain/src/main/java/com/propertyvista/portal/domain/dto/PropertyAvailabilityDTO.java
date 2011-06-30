@@ -7,39 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-07
+ * Created on 2011-06-30
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.domain.dto;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.RangeGroup;
-
-@Transient
-public interface FloorplanDTO extends IEntity {
-
-    @Caption(name = "Plan")
-    IPrimitive<String> name();
-
-    RangeGroup area();
-
-    RangeGroup marketRent();
+public interface PropertyAvailabilityDTO extends IEntity {
 
     IPrimitive<LogicalDate> avalableForRent();
-
-    @Caption(name = "Description")
-    IPrimitive<String> description();
-
-    IList<AmenityDTO> amenities();
-
-    IPrimitive<Key> mainMedia();
-
 }
