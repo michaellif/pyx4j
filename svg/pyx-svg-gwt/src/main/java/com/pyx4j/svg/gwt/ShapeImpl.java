@@ -38,7 +38,7 @@ public class ShapeImpl extends GraphicsElementImpl implements Shape {
         SvgDOM.setAttributeNS(getElement(), "id", id);
         setStrokeWidth(String.valueOf(1));
         setStroke("black");
-        setFill("transparent");
+        setFill("none");
     }
 
     public ShapeImpl(Element elem, Animator animator) {
