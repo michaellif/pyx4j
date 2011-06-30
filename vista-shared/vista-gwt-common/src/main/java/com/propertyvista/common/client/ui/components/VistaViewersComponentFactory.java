@@ -63,6 +63,8 @@ public class VistaViewersComponentFactory extends EntityFormComponentFactory {
             return new CEntityLabel();
         } else if (member.getValueClass().equals(Money.class)) {
             return new CMoneyLabel();
+        } else if (!mm.isOwnedRelationships() && mm.isEntity()) {
+            return new CEntityLabel();
         }
         return super.create(member);
     }
