@@ -23,6 +23,7 @@ package com.pyx4j.site.client.activity.crud;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -88,5 +89,10 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         CrudAppPlace place = AppSite.getHistoryMapper().createPlace(editPlaceClass);
         place.formEditorPlace(entityId);
         AppSite.getPlaceController().goTo(place);
+    }
+
+    @Override
+    public void cancel() {
+        History.back();
     }
 }

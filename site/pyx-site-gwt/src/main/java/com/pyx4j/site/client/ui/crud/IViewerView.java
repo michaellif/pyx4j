@@ -30,6 +30,8 @@ public interface IViewerView<E extends IEntity> extends IView<E> {
         public void populate();
 
         public void edit(Class<? extends CrudAppPlace> editPlaceClass);
+
+        public void cancel();
     }
 
     void setPresenter(Presenter presenter);

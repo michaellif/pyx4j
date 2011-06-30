@@ -29,11 +29,13 @@ public class CAbstractLabel<E> extends CReference<E, NativeLabel<E>> {
     public CAbstractLabel(String title) {
         super(title);
         setWidth("100%");
+        setWordWrap(true);
     }
 
     @Override
     protected NativeLabel<E> createWidget() {
         NativeLabel<E> widget = new NativeLabel<E>(this);
+//      widget.getElement().getStyle().setOverflowX(Overflow.AUTO);
         widget.setWordWrap(this.isWordWrap());
         widget.setWidth(this.getWidth());
         return widget;
