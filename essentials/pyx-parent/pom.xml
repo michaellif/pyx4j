@@ -149,6 +149,9 @@
     <properties>
         <buildLabel>${project.version}</buildLabel>
 
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+        <timestamp>${maven.build.timestamp}</timestamp>
+
         <gwtVersion>2.3.0</gwtVersion>
         <gaeVersion>1.4.3</gaeVersion>
         <gae.version>${gaeVersion}</gae.version>
