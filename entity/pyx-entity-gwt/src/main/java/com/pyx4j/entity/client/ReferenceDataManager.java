@@ -49,7 +49,7 @@ public class ReferenceDataManager {
 
     private static final Map<EntityQueryCriteria<?>, List<AsyncCallback<List<?>>>> concurrentLoad = new HashMap<EntityQueryCriteria<?>, List<AsyncCallback<List<?>>>>();
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <T extends IEntity> void obtain(EntityQueryCriteria<T> criteria, AsyncCallback<List<T>> handlingCallback, boolean background) {
         obtainImpl((EntityQueryCriteria<?>) criteria, (AsyncCallback) handlingCallback, background);
     }
@@ -57,15 +57,16 @@ public class ReferenceDataManager {
     /**
      * The second function to avoid Generics problem
      */
-    private static void obtainImpl(final EntityQueryCriteria<?> criteria, AsyncCallback<List<?>> handlingCallback, boolean background) {
+    private static void obtainImpl(EntityQueryCriteria<?> criteria, AsyncCallback<List<?>> handlingCallback, boolean background) {
         final boolean inCache = cache.containsKey(criteria);
         if (!inCache) {
+            final EntityQueryCriteria<?> originalCriteria = (EntityQueryCriteria<?>) criteria.clone();
             // Handle concurrent load
-            List<AsyncCallback<List<?>>> loading = concurrentLoad.get(criteria);
+            List<AsyncCallback<List<?>>> loading = concurrentLoad.get(originalCriteria);
             if (loading == null) {
                 loading = new Vector<AsyncCallback<List<?>>>();
                 loading.add(handlingCallback);
-                concurrentLoad.put(criteria, loading);
+                concurrentLoad.put(originalCriteria, loading);
             } else {
                 loading.add(handlingCallback);
                 return;
@@ -76,8 +77,8 @@ public class ReferenceDataManager {
                 @Override
                 public void onSuccess(Vector<? extends IEntity> result) {
                     try {
-                        cache.put(criteria, result);
-                        List<AsyncCallback<List<?>>> callbacks = concurrentLoad.remove(criteria);
+                        cache.put(originalCriteria, result);
+                        List<AsyncCallback<List<?>>> callbacks = concurrentLoad.remove(originalCriteria);
                         for (AsyncCallback<List<?>> cb : callbacks) {
                             try {
                                 cb.onSuccess(result);
@@ -93,7 +94,7 @@ public class ReferenceDataManager {
 
                 @Override
                 public void onFailure(Throwable caught) {
-                    List<AsyncCallback<List<?>>> callbacks = concurrentLoad.remove(criteria);
+                    List<AsyncCallback<List<?>>> callbacks = concurrentLoad.remove(originalCriteria);
                     for (AsyncCallback<List<?>> cb : callbacks) {
                         try {
                             cb.onFailure(caught);
@@ -122,6 +123,7 @@ public class ReferenceDataManager {
     /**
      * Update the reference data when Entity is modified by user.
      */
+    @SuppressWarnings("unchecked")
     public static <T extends IEntity> void update(T ent) {
         for (Map.Entry<EntityQueryCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
             if (me.getKey().getEntityClass().equals(ent.getObjectClass())) {

@@ -22,6 +22,7 @@ package com.pyx4j.entity.shared.criterion;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -192,6 +193,23 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         return hashCode;
     }
 
+    // N.B. Do not use @Override for GWT to compile
+    //@Override
+    public Object clone() {
+        EntityQueryCriteria<E> c = create(getEntityClass());
+        if (this.getSorts() != null) {
+            for (Sort s : this.getSorts()) {
+                c.sort(s);
+            }
+        }
+        if (this.getFilters() != null) {
+            for (Criterion f : this.getFilters()) {
+                c.add(f);
+            }
+        }
+        return c;
+    }
+    
     @Override
     public String getServiceCallMarker() {
         return this.entityPrototype.getEntityMeta().getCaption().replace(' ', '_');
