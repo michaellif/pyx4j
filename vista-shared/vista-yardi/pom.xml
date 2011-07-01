@@ -33,7 +33,6 @@
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-j2se</artifactId>
-            <version>${pyxVersion}</version>
         </dependency>
 
         <dependency>
@@ -80,7 +79,6 @@
         <dependency>
         	<groupId>mysql</groupId>
         	<artifactId>mysql-connector-java</artifactId>
-        	<version>5.1.16</version>
         	<type>jar</type>
         	<scope>compile</scope>
         </dependency>
@@ -144,6 +142,36 @@
   -->
 
         </plugins>
+        
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.axis2</groupId>
+                                        <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+                                        <versionRange>[1.5.4,)</versionRange>
+                                        <goals>
+                                            <goal>wsdl2code</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>
