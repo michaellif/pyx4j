@@ -737,6 +737,21 @@
                                         <versionRange>[1.0,)</versionRange>
                                         <goals>
                                             <goal>copy-dependencies</goal>
+                                            <goal>unpack-dependencies</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.xnap.commons</groupId>
+                                        <artifactId>maven-gettext-plugin</artifactId>
+                                        <versionRange>[1.0,)</versionRange>
+                                        <goals>
+                                            <goal>dist</goal>
+                                            <goal>merge</goal>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
