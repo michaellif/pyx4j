@@ -153,7 +153,7 @@
         <timestamp>${maven.build.timestamp}</timestamp>
 
         <gwtVersion>2.3.0</gwtVersion>
-        <gaeVersion>1.4.3</gaeVersion>
+        <gaeVersion>1.5.1</gaeVersion>
         <gae.version>${gaeVersion}</gae.version>
         <pyx4jGwtVersion>0.5.6-SNAPSHOT</pyx4jGwtVersion>
 
