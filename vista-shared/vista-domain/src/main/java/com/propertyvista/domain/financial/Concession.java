@@ -14,6 +14,7 @@
 package com.propertyvista.domain.financial;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -50,12 +51,14 @@ public interface Concession extends IEntity {
      * for monetaryOff - amount
      * for skipFirstPayment - number of terms
      */
+    @MemberColumn(name = "concessionValue")
     IPrimitive<Double> value();
 
     IPrimitive<LogicalDate> offeringStartDate();
 
     IPrimitive<LogicalDate> offeringEndDate();
 
+    @MemberColumn(name = "conditionValue")
     IPrimitive<Condition> condition();
 
     IPrimitive<Status> status();
