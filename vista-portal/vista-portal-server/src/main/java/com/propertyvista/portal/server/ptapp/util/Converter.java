@@ -75,7 +75,6 @@ public class Converter {
         to.floorplan().set(convert(from.marketing().floorplan()));
         to.concessions().setValue(from.marketing().floorplan().concessions().getStringView());
         to.utilities().setValue(from.info().utilities().getStringView());
-        to.addOns().setValue(from.addOns().getStringView());
 
         //TODO is it necessary to pull out all unit details here (IList<AptUnitItem>)?
         // it seems that it should be different details or somehow converted... 

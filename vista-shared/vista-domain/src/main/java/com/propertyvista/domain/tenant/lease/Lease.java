@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.Document;
+import com.propertyvista.domain.financial.LeaseFinancialTerms;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Rentable;
 import com.propertyvista.domain.property.asset.Utility;
@@ -79,4 +80,7 @@ public interface Lease extends IEntity {
     IList<Document> documents();
 
     IList<LeaseEvent> events();
+
+    LeaseFinancialTerms leaseAgreement();
+
 }

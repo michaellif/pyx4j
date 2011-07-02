@@ -38,7 +38,6 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
-import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.dto.AptUnitDTO;
@@ -63,7 +62,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
         tabPanel.add(((UnitView) getParentView()).getDetailsListerView().asWidget(), i18n.tr("Details"));
         tabPanel.add(new ScrollPanel(createUtilitiesTab()), i18n.tr("Utilities"));
-        tabPanel.add(new ScrollPanel(createAddonsTab()), i18n.tr("Add ons"));
         tabPanel.add(((UnitView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancies"));
         tabPanel.add(new ScrollPanel(createFinancialsTab()), i18n.tr("Financial"));
         tabPanel.add(new ScrollPanel(createMarketingTab()), i18n.tr("Marketing"));
@@ -114,12 +112,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         return main;
     }
 
-    private Widget createAddonsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        main.add(inject(proto().addOns(), createAddOnsListEditor()));
-        return main;
-    }
-
     private Widget createUtilitiesTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         main.add(inject(proto().info().utilities(), createUtilitiesListEditor()));
@@ -164,18 +156,4 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         };
     }
 
-    private CEntityFolderEditor<AddOn> createAddOnsListEditor() {
-        return new CrmEntityFolder<AddOn>(AddOn.class, "Add-on", isEditable()) {
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                List<EntityFolderColumnDescriptor> columns;
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().term(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
-                return columns;
-            }
-        };
-    }
 }

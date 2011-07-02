@@ -34,7 +34,6 @@ import com.propertyvista.common.domain.financial.ChargeType;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Phone;
-import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Complex;
@@ -341,13 +340,6 @@ public class BuildingsGenerator {
         return amenity;
     }
 
-    public static AddOn createAddOn(String name, double monthlyCost) {
-        AddOn addOn = EntityFactory.create(AddOn.class);
-        addOn.type().setValue(name);
-        addOn.value().setValue(monthlyCost);
-        return addOn;
-    }
-
     private AptUnitDTO createUnit(Building building, String suiteNumber, int floor, double area, double bedrooms, double bathrooms, Floorplan floorplan) {
         AptUnitDTO unit = EntityFactory.create(AptUnitDTO.class);
 
@@ -395,29 +387,6 @@ public class BuildingsGenerator {
         }
         if (RandomUtil.randomBoolean()) {
             unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
-        }
-
-        // add-ons
-        if (RandomUtil.randomBoolean()) {
-            unit.addOns().add(createAddOn("2nd Parking", 50));
-            if (RandomUtil.randomBoolean()) {
-                unit.addOns().add(createAddOn("3rd Parking", 50));
-            }
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.addOns().add(createAddOn("2nd Locker", 30));
-            if (RandomUtil.randomBoolean()) {
-                unit.addOns().add(createAddOn("3rd Locker", 20));
-            }
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.addOns().add(createAddOn("Conditioner", 100));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.addOns().add(createAddOn("Espresso Machine", 30));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.addOns().add(createAddOn("Dishwasher", 30));
         }
 
         Calendar avalable = new GregorianCalendar();

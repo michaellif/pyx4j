@@ -170,7 +170,6 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         addonsPanel.add(new HTML(h3(i18n.tr("Available add-ons"))));
         addonsPanel.setWidth("33%");
         unitDetailPanel.add(addonsPanel);
-        addonsPanel.add(new HTML(unit.addOns().getStringView()));
 
         sp = new VistaLineSeparator(98, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
         sp.getElement().getStyle().setPaddingLeft(0, Unit.EM);

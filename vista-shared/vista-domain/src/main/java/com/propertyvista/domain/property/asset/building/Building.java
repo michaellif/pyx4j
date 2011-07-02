@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.Media;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.Complex;
 
@@ -44,4 +45,6 @@ public interface Building extends IEntity {
 
     @Detached
     IList<Media> media();
+
+    IList<Feature> featureCatalog();
 }

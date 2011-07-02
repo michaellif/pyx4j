@@ -119,5 +119,4 @@ public interface AptUnitDTO extends IEntity {
 
     IPrimitive<String> concessions();
 
-    IPrimitive<String> addOns();
 }

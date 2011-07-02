@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.Media;
-import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
@@ -123,9 +122,6 @@ public class Importer {
             // persist plain internal lists:
             for (Utility utility : unitDTO.info().utilities()) {
                 persist(utility);
-            }
-            for (AddOn addOn : unitDTO.addOns()) {
-                persist(addOn);
             }
 
             AptUnit unit = down(unitDTO, AptUnit.class);

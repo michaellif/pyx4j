@@ -29,7 +29,6 @@ import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Media;
 import com.propertyvista.domain.Phone;
-import com.propertyvista.domain.marketing.yield.AddOn;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.Complex;
@@ -60,8 +59,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Building.class, AptUnit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, AptUnitItem.class,
-                    Amenity.class, Concession.class, AddOn.class, LeaseTerms.class, Parking.class, Locker.class, Media.class, ThumbnailBlob.class,
-                    FileBlob.class);
+                    Amenity.class, Concession.class, LeaseTerms.class, Parking.class, Locker.class, Media.class, ThumbnailBlob.class, FileBlob.class);
         } else {
             return "This is production";
         }
@@ -116,9 +114,6 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 // persist plain internal lists:
                 for (Utility utility : unitDTO.info().utilities()) {
                     persist(utility);
-                }
-                for (AddOn addOn : unitDTO.addOns()) {
-                    persist(addOn);
                 }
 
                 AptUnit unit = down(unitDTO, AptUnit.class);
@@ -264,7 +259,6 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 sb.append(unit.marketing().floorplan().name().getStringView()); // .append(" ").append(unit.floorplan().pictures());
                 sb.append("\n");
                 sb.append("\t\t").append(unit.info().utilities()).append("\n");
-                sb.append("\t\t").append(unit.addOns()).append("\n");
             }
         }
         sb.append("\n");

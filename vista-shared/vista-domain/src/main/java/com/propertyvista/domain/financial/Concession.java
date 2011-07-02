@@ -7,31 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-22
- * @author aroytbur
+ * Created on Jun 30, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.marketing.yield;
+package com.propertyvista.domain.financial;
 
-import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@ToStringFormat("{0} {1}")
-public interface AddOn extends IEntity {
+public interface Concession extends IEntity {
 
-    @ToString
-    @MemberColumn(name = "addOnType")
-    IPrimitive<String> type();
+    enum ConcessionType {
+        gift, percentageOff, monetaryOff, skipFirstPayment, skipLastPayment, noDeposit, free
+    }
 
-    IPrimitive<String> description();
+    ConcessionType concessionType();
 
-    IPrimitive<String> term();
-
-    @Format("#0.00")
-    @MemberColumn(name = "addOnValue")
+    /*
+     * for Gift - gift price
+     * for percentageOff - percentage
+     * for monetaryOff - amount
+     */
     IPrimitive<Double> value();
+
 }
