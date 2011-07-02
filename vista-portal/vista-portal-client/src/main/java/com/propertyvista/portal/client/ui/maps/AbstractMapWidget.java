@@ -61,6 +61,12 @@ public abstract class AbstractMapWidget extends SimplePanel {
     }
 
     @Override
+    protected void onUnload() {
+        super.onUnload();
+        mapLoadComplete = false;
+    }
+
+    @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         if (isAttached() && !mapLoadComplete) {
