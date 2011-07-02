@@ -13,16 +13,17 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.widgets.client.photoalbum.Slideshow;
 
+import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.MediaDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class SlidesPanel extends SimplePanel {
 
@@ -56,8 +57,7 @@ public class SlidesPanel extends SimplePanel {
         banner.removeAllItems();
         for (MediaDTO photo : mediaList) {
             AbsolutePanel infoBunner = new AbsolutePanel();
-            Image infoBunnerImage = new Image("media/" + photo.id().getValue().toString() + "/large.jpg");
-            infoBunner.add(infoBunnerImage, 0, 0);
+            infoBunner.add(MediaUtils.createPublicMediaImage(photo.id(), ThumbnailSize.large), 0, 0);
             banner.addItem(infoBunner);
         }
 

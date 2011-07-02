@@ -14,7 +14,6 @@
 package com.propertyvista.portal.client.ui.searchapt;
 
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
@@ -28,7 +27,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
 import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.portal.client.resources.PortalImages;
+import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
@@ -98,11 +97,7 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
     private CardPanel createAppartmentCard(PropertyDTO value) {
 
         CardPanel card = new CardPanel();
-        if (value.mainMedia().isNull()) {
-            card.setCardImage(new Image(PortalImages.INSTANCE.noImage()));
-        } else {
-            card.setCardImage(new Image("media/" + value.mainMedia().getValue().toString() + "/" + ThumbnailSize.medium.name() + ".jpg"));
-        }
+        card.setCardImage(MediaUtils.createPublicMediaImage(value.mainMedia(), ThumbnailSize.medium));
 
         card.setCardHeader(new Label(formatAddress(value.address())));
 

@@ -15,7 +15,6 @@ package com.propertyvista.portal.client.ui.searchapt;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
@@ -32,7 +31,7 @@ import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.common.domain.RangeGroup;
-import com.propertyvista.portal.client.resources.PortalImages;
+import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.client.ui.decorations.FloorplanCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.PortalListDecorator;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
@@ -190,11 +189,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
     private CardPanel createFloorplanCard(FloorplanDTO value) {
 
         CardPanel card = new CardPanel();
-        if (!value.mainMedia().isNull()) {
-            card.setCardImage(new Image("media/" + value.mainMedia().getValue().toString() + "/" + ThumbnailSize.medium.name() + ".jpg"));
-        } else {
-            card.setCardImage(new Image(PortalImages.INSTANCE.noImage()));
-        }
+        card.setCardImage(MediaUtils.createPublicMediaImage(value.mainMedia(), ThumbnailSize.medium));
 
         FlowPanel content = new FlowPanel();
 

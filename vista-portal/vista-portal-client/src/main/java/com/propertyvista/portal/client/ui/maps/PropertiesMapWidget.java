@@ -36,7 +36,6 @@ import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -49,6 +48,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.common.domain.IAddress;
+import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
@@ -206,11 +206,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             SimplePanel imageHolder = new SimplePanel();
             imageHolder.setSize("100%", "100%");
             imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
-            if (property.mainMedia().isNull()) {
-                imageHolder.setWidget(new Image(PortalImages.INSTANCE.noImage()));
-            } else {
-                imageHolder.setWidget(new Image("media/" + property.mainMedia().getValue().toString() + "/" + ThumbnailSize.small.name() + ".jpg"));
-            }
+            imageHolder.setWidget(MediaUtils.createPublicMediaImage(property.mainMedia(), ThumbnailSize.small));
             imgEnvelope.setWidget(imageHolder);
 
             SimplePanel cEnvelope = new SimplePanel();
