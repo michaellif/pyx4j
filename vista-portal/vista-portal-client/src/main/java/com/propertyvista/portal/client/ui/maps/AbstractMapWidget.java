@@ -40,13 +40,32 @@ public abstract class AbstractMapWidget extends SimplePanel {
 
         getElement().getStyle().setMarginBottom(10, Unit.PX);
         GoogleAPI.ensureInitialized();
+
+    }
+
+    private void loadMaps() {
         AjaxLoader.loadApi("maps", "2", new Runnable() {
             @Override
             public void run() {
                 mapsLoaded();
             }
         }, null);
+    }
 
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        if (isVisible()) {
+            loadMaps();
+        }
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (isAttached()) {
+            loadMaps();
+        }
     }
 
     protected void mapsLoaded() {

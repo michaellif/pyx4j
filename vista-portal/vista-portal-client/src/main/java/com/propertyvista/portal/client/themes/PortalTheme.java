@@ -39,7 +39,6 @@ import com.propertyvista.portal.client.ui.residents.PaymentMethodForm;
 import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.CardPanel;
 import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsViewImpl;
-import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentForm;
 
@@ -61,7 +60,6 @@ public abstract class PortalTheme extends VistaTheme {
         initLogoViewStyles();
         initTopActionStyles();
         initVistaMainNavigViewStyles();
-        initPropertyListStyles();
         initSearchPanelStyles();
         initRefineSearchStyles();
         initApartmentDetailsStyles();
@@ -395,19 +393,6 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("font-style", "normal");
         style.addProperty("padding-left", "29px");
         style.addProperty("padding-right", "29px");
-        addStyle(style);
-
-    }
-
-    private void initPropertyListStyles() {
-        String prefix = PropertyMapViewImpl.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Refine));
-        style.addProperty("margin-right", "20px");
-        style.addProperty("width", "200px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Map));
         addStyle(style);
 
     }

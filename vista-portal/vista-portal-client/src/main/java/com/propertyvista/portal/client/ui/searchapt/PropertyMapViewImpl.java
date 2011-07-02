@@ -16,21 +16,17 @@ package com.propertyvista.portal.client.ui.searchapt;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
-
-import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
-
-    public static enum StyleSuffix implements IStyleSuffix {
-        Refine, Map, List
-    }
 
     public static String DEFAULT_STYLE_PREFIX = "PropertyList";
 
@@ -39,8 +35,6 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
     private final PropertiesMapWidget map;
 
     private final RefineApartmentSearchForm searchForm;
-
-    private final FlowPanel leftPanel;
 
     private final PropertyListForm propertyListForm;
 
@@ -52,20 +46,37 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
         searchForm = new RefineApartmentSearchForm();
         searchForm.initialize();
 
-        leftPanel = new FlowPanel();
-        leftPanel.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Refine.name());
-        leftPanel.add(searchForm);
-        add(leftPanel, DockPanel.WEST);
-        setCellWidth(leftPanel, "220px");
+        add(searchForm, DockPanel.WEST);
+        setCellWidth(searchForm, "220px");
+
+        final DeckPanel deck = new DeckPanel();
+
+        Button viewSelector = new Button("Map/List");
+        viewSelector.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                if (deck.getVisibleWidget() == 0) {
+                    deck.showWidget(1);
+                } else {
+                    deck.showWidget(0);
+                }
+            }
+        });
+
+        add(viewSelector, DockPanel.NORTH);
 
         map = new PropertiesMapWidget();
-        map.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Map.name());
-        add(map, DockPanel.NORTH);
 
         propertyListForm = new PropertyListForm();
         propertyListForm.initialize();
 
-        add(propertyListForm, DockPanel.CENTER);
+        deck.add(propertyListForm);
+        deck.add(map);
+
+        deck.showWidget(0);
+
+        add(deck, DockPanel.CENTER);
 
     }
 
@@ -78,13 +89,9 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
 
     @Override
     public void populate(PropertySearchCriteria criteria, PropertyListDTO propertyList) {
-        map.populate(propertyList);
         searchForm.populate(criteria);
+        map.populate(propertyList);
         propertyListForm.populate(propertyList);
-    }
-
-    void setMarker(PropertyDTO property) {
-        map.showMarker(property);
     }
 
     @Override
