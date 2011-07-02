@@ -22,7 +22,7 @@ public interface Concession extends IEntity {
         gift, percentageOff, monetaryOff, skipFirstPayment, skipLastPayment, noDeposit, free
     }
 
-    ConcessionType concessionType();
+    IPrimitive<ConcessionType> concessionType();
 
     /*
      * for Gift - gift price
