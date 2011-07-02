@@ -28,6 +28,7 @@ public interface Concession extends IEntity {
      * for Gift - gift price
      * for percentageOff - percentage
      * for monetaryOff - amount
+     * for skipFirstPayment - number of terms
      */
     IPrimitive<Double> value();
 
