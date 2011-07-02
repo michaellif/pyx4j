@@ -27,7 +27,6 @@ import junit.framework.Assert;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
 import org.slf4j.Logger;
@@ -57,7 +56,7 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     public static String GWT_LOG_PREFIX = "Selenium: ";
 
-    private RenderedWebElement glassPanel;
+    private WebElement glassPanel;
 
     private boolean propagateLogToClient;
 
@@ -104,7 +103,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     public void setGlassPanelAware() {
-        glassPanel = (RenderedWebElement) driver.findElement(elementLocator("GlassPanel"));
+        glassPanel = driver.findElement(elementLocator("GlassPanel"));
     }
 
     public void waitWhileWorking() {
@@ -225,7 +224,7 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     public boolean isVisible(By paramBy) {
         try {
-            return ((RenderedWebElement) driver.findElement(paramBy)).isDisplayed();
+            return driver.findElement(paramBy).isDisplayed();
         } catch (org.openqa.selenium.NoSuchElementException notFound) {
             return false;
         }
@@ -414,7 +413,7 @@ public class SeleniumExtended extends WebDriverWrapper {
                 focus(element);
             }
         }
-        String text = element.getValue();
+        String text = InputHelper.getValue(driver, element);
         log("value of element <{}> id={} text={}", tagName, element.getAttribute("id"), text);
         return text;
     }
@@ -436,7 +435,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     private <T extends Enum<T>> T getEnumValue(WebElement element, Class<T> enumClass) {
-        T value = InputHelper.getEnumValue(element, enumClass, focusOnGetValue);
+        T value = InputHelper.getEnumValue(driver, element, enumClass, focusOnGetValue);
         log("value of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), value);
         return value;
     }
@@ -474,7 +473,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     private Date getDateValue(WebElement element, String format) {
-        Date value = InputHelper.getDateValue(element, (format == null) ? applicationDateFormat : format, focusOnGetValue);
+        Date value = InputHelper.getDateValue(driver, element, (format == null) ? applicationDateFormat : format, focusOnGetValue);
         log("value of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), value);
         return value;
     }
@@ -494,7 +493,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     public void setDateValue(IDebugId debugId, Date dateValue, String format) {
         WebElement element = driver.findElement(by(debugId));
         log("setValue of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), dateValue);
-        InputHelper.setDateValue(element, dateValue, (format == null) ? applicationDateFormat : format);
+        InputHelper.setDateValue(driver, element, dateValue, (format == null) ? applicationDateFormat : format);
     }
 
     public void select(String id) {

@@ -33,6 +33,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
+import org.openqa.selenium.remote.DriverCommand;
+import org.openqa.selenium.remote.ExecuteMethod;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.RemoteWebElement;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.gwt.server.DateUtils;
@@ -92,7 +96,7 @@ class InputHelper {
         }
     }
 
-    static void setSelectValue(WebElement element, String textValue) {
+    static void setSelectValue(WebDriver driver, WebElement element, String textValue) {
         List<WebElement> allOptions = element.findElements(By.tagName("option"));
         boolean optionFound = false;
         for (WebElement opt : allOptions) {
@@ -101,7 +105,7 @@ class InputHelper {
                 if (opt.isSelected()) {
                     opt.toggle();
                 }
-            } else if (textValue.equals(opt.getValue())) {
+            } else if (textValue.equals(getValue(driver, opt))) {
                 opt.setSelected();
                 optionFound = true;
                 break;
@@ -189,13 +193,13 @@ class InputHelper {
         return value;
     }
 
-    static Date getDateValue(WebElement element, String format, boolean focusOnGetValue) {
+    static Date getDateValue(WebDriver driver, WebElement element, String format, boolean focusOnGetValue) {
         Date value = null;
         if (element.getTagName().equalsIgnoreCase("input")) {
             if (focusOnGetValue) {
                 element.click();
             }
-            String text = element.getValue();
+            String text = getValue(driver, element);
             if (CommonsStringUtils.isStringSet(text)) {
                 if (format != null) {
                     try {
@@ -215,7 +219,7 @@ class InputHelper {
             try {
                 WebElement elementYY = element.findElement(By.id(parentId + "_yy"));
                 inputsFound = true;
-                y = Integer.valueOf(elementYY.getValue());
+                y = Integer.valueOf(getValue(driver, elementYY));
             } catch (org.openqa.selenium.NoSuchElementException notFound) {
             }
 
@@ -223,7 +227,7 @@ class InputHelper {
             try {
                 WebElement elementMM = element.findElement(By.id(parentId + "_mm"));
                 inputsFound = true;
-                m = Integer.valueOf(elementMM.getValue()) - 1;
+                m = Integer.valueOf(getValue(driver, elementMM)) - 1;
             } catch (org.openqa.selenium.NoSuchElementException notFound) {
             }
 
@@ -238,7 +242,7 @@ class InputHelper {
         return value;
     }
 
-    static void setDateValue(WebElement element, Date dateValue, String format) {
+    static void setDateValue(WebDriver driver, WebElement element, Date dateValue, String format) {
         if (element.getTagName().equalsIgnoreCase("input")) {
             element.clear();
             if (dateValue != null) {
@@ -252,11 +256,11 @@ class InputHelper {
                 WebElement elementYY = element.findElement(By.id(parentId + "_yy"));
                 inputsFound = true;
                 if (dateValue == null) {
-                    setSelectValue(elementYY, "");
+                    setSelectValue(driver, elementYY, "");
                 } else {
                     Calendar calendar = new GregorianCalendar();
                     calendar.setTime(dateValue);
-                    setSelectValue(elementYY, String.valueOf(calendar.get(Calendar.YEAR)));
+                    setSelectValue(driver, elementYY, String.valueOf(calendar.get(Calendar.YEAR)));
                 }
             } catch (org.openqa.selenium.NoSuchElementException notFound) {
             }
@@ -265,11 +269,11 @@ class InputHelper {
                 WebElement elementMM = element.findElement(By.id(parentId + "_mm"));
                 inputsFound = true;
                 if (dateValue == null) {
-                    setSelectValue(elementMM, "");
+                    setSelectValue(driver, elementMM, "");
                 } else {
                     Calendar calendar = new GregorianCalendar();
                     calendar.setTime(dateValue);
-                    setSelectValue(elementMM, String.valueOf(calendar.get(Calendar.MONTH)));
+                    setSelectValue(driver, elementMM, String.valueOf(calendar.get(Calendar.MONTH)));
                 }
             } catch (org.openqa.selenium.NoSuchElementException notFound) {
             }
@@ -289,7 +293,13 @@ class InputHelper {
         throw new IllegalArgumentException("No enum " + enumClass.getModifiers() + " text " + text);
     }
 
-    static <T extends Enum<T>> T getEnumValue(WebElement element, Class<T> enumClass, boolean focusOnGetValue) {
+    // getValue() as removed from rc3
+    public static String getValue(WebDriver driver, WebElement element) {
+        return (String) new ExecuteMethod((RemoteWebDriver) driver).execute(DriverCommand.GET_ELEMENT_VALUE,
+                com.google.common.collect.ImmutableMap.of("id", (((RemoteWebElement) element).getId())));
+    }
+
+    static <T extends Enum<T>> T getEnumValue(WebDriver driver, WebElement element, Class<T> enumClass, boolean focusOnGetValue) {
         String tagName = element.getTagName();
         if (tagName.equalsIgnoreCase("input") || tagName.equalsIgnoreCase("select")) {
             // ComboBox or Text
@@ -299,7 +309,7 @@ class InputHelper {
                 }
             }
             //This is textual representation of Enum, i18n.tr(), not is name!
-            String text = element.getValue();
+            String text = getValue(driver, element);
             if (CommonsStringUtils.isEmpty(text)) {
                 return null;
             } else {
