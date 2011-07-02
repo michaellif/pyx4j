@@ -13,13 +13,33 @@
  */
 package com.propertyvista.domain.financial;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 public interface Concession extends IEntity {
 
     enum ConcessionType {
         gift, percentageOff, monetaryOff, skipFirstPayment, skipLastPayment, noDeposit, free
+    }
+
+    enum Condition {
+        compliance, none
+    }
+
+    @Translatable
+    public enum Status {
+
+        suggested,
+
+        approved;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     IPrimitive<ConcessionType> concessionType();
@@ -31,5 +51,15 @@ public interface Concession extends IEntity {
      * for skipFirstPayment - number of terms
      */
     IPrimitive<Double> value();
+
+    IPrimitive<LogicalDate> offeringStartDate();
+
+    IPrimitive<LogicalDate> offeringEndDate();
+
+    IPrimitive<Condition> condition();
+
+    IPrimitive<Status> status();
+
+    IPrimitive<String> approvedBy();
 
 }
