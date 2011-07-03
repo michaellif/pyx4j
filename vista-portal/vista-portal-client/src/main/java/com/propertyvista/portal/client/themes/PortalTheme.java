@@ -127,7 +127,6 @@ public abstract class PortalTheme extends VistaTheme {
         //TODO  think of a better way
         style = new Style(headerstyle + " a:link, a:visited, a:active");
         style.addProperty("text-decoration", "none");
-        style.addProperty("font-size", "14px");
         style.addProperty("color", ThemeColor.OBJECT_TONE95);
         addStyle(style);
 
@@ -142,7 +141,6 @@ public abstract class PortalTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Center));
         style.addProperty("width", "100%");
-        //   style.addProperty("float", "left");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Main));

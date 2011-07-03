@@ -92,7 +92,7 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
         container.add(label);
 
         tabsHolder = new NavigTabList();
-        NavigTab selectedTab = new NavigTab(i18n.tr("BY TYPE"), SearchType.ByCity);
+        NavigTab selectedTab = new NavigTab(i18n.tr("BY CITY"), SearchType.ByCity);
         selectedTab.select();
         tabsHolder.add(selectedTab);
         tabsHolder.add(new NavigTab(i18n.tr("BY PROXIMITY"), SearchType.ByProximity));
