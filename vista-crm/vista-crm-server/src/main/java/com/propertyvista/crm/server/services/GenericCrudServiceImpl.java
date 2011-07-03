@@ -21,7 +21,6 @@ import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 /**
@@ -50,11 +49,6 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> implements Abs
     public void save(AsyncCallback<DBO> callback, DBO entity) {
         EntityServicesImpl.secureSave(entity);
         callback.onSuccess(entity);
-    }
-
-    @Override
-    public void search(AsyncCallback<EntitySearchResult<DBO>> callback, EntitySearchCriteria<DBO> criteria) {
-        callback.onSuccess(EntityServicesImpl.secureSearch(criteria));
     }
 
     @Override

@@ -19,7 +19,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO.MaintenanceType;
@@ -30,7 +29,7 @@ import com.propertyvista.portal.rpc.portal.services.MaintenanceRequestCrudServic
 public class MaintenanceRequestCrudServiceImpl implements MaintenanceRequestCrudService {
 
     @Override
-    public void search(AsyncCallback<EntitySearchResult<MaintenanceRequestDTO>> callback, EntitySearchCriteria<MaintenanceRequestDTO> criteria) {
+    public void list(AsyncCallback<EntitySearchResult<MaintenanceRequestDTO>> callback, EntityListCriteria<MaintenanceRequestDTO> criteria) {
         EntitySearchResult<MaintenanceRequestDTO> result = new EntitySearchResult<MaintenanceRequestDTO>();
         MaintenanceRequestDTO entity = EntityFactory.create(MaintenanceRequestDTO.class);
         entity.maintenanceType().setValue(MaintenanceType.Plumbing);
@@ -59,12 +58,6 @@ public class MaintenanceRequestCrudServiceImpl implements MaintenanceRequestCrud
 
     @Override
     public void save(AsyncCallback<MaintenanceRequestDTO> callback, MaintenanceRequestDTO editableEntity) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void list(AsyncCallback<EntitySearchResult<MaintenanceRequestDTO>> callback, EntityListCriteria<MaintenanceRequestDTO> criteria) {
         // TODO Auto-generated method stub
 
     }

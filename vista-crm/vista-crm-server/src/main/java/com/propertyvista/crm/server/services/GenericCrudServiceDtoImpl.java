@@ -17,7 +17,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
@@ -77,13 +76,6 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
     }
 
     protected void enhanceSearchCriteria(EntitySearchCriteria<DBO> searchCriteria, EntitySearchCriteria<DTO> in) {
-    }
-
-    @Override
-    public void search(AsyncCallback<EntitySearchResult<DTO>> callback, EntitySearchCriteria<DTO> criteria) {
-        EntitySearchCriteria<DBO> c = GenericConverter.convertDTO2DBO(criteria, dboClass);
-        enhanceSearchCriteria(c, criteria);
-        callback.onSuccess(GenericConverter.convertDBO2DTO(EntityServicesImpl.secureSearch(c), dtoClass));
     }
 
     protected void enhanceListCriteria(EntityListCriteria<DBO> dbCriteria, EntityListCriteria<DTO> in) {

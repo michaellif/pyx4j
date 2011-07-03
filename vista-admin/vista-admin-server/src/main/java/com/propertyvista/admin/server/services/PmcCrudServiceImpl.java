@@ -25,12 +25,10 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.rpc.PmcDTO;
@@ -123,31 +121,6 @@ public class PmcCrudServiceImpl implements PmcCrudService {
             NamespaceManager.remove();
         }
         callback.onSuccess(convertDBO2DTO(entity));
-    }
-
-    @Override
-    public void search(AsyncCallback<EntitySearchResult<PmcDTO>> callback, EntitySearchCriteria<PmcDTO> criteria) {
-        EntitySearchResult<PmcDTO> result;
-        try {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
-            EntitySearchCriteria<Pmc> c = EntitySearchCriteria.create(Pmc.class);
-            c.setPageNumber(criteria.getPageNumber());
-            c.setPageSize(criteria.getPageSize());
-            // TODO enhanceSearchCriteria
-
-            EntitySearchResult<Pmc> data = EntityServicesImpl.secureSearch(c);
-
-            result = new EntitySearchResult<PmcDTO>();
-            result.setEncodedCursorReference(data.getEncodedCursorReference());
-            result.hasMoreData(data.hasMoreData());
-            result.setData(new Vector<PmcDTO>());
-            for (Pmc entity : data.getData()) {
-                result.getData().add(convertDBO2DTO(entity));
-            }
-        } finally {
-            NamespaceManager.remove();
-        }
-        callback.onSuccess(result);
     }
 
     @Override

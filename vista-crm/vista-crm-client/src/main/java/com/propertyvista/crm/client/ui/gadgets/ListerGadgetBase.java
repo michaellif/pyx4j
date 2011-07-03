@@ -38,7 +38,7 @@ import com.pyx4j.entity.client.ui.datatable.MemberPrimitiveColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -136,11 +136,11 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     protected abstract void fillDefaultColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
 
     protected void populateData(final int pageNumber) {
-        EntitySearchCriteria<E> criteria = new EntitySearchCriteria<E>(entityClass);
+        EntityListCriteria<E> criteria = new EntityListCriteria<E>(entityClass);
         criteria.setPageSize(getListPanel().getPageSize());
         criteria.setPageNumber(pageNumber);
 
-        service.search(new AsyncCallback<EntitySearchResult<E>>() {
+        service.list(new AsyncCallback<EntitySearchResult<E>>() {
             @Override
             public void onFailure(Throwable caught) {
                 throw new UnrecoverableClientError(caught);

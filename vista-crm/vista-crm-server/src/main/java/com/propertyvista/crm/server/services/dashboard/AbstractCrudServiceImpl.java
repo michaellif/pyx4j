@@ -33,7 +33,7 @@ abstract class AbstractCrudServiceImpl extends GenericCrudServiceImpl<DashboardM
 
     abstract void addTypeCriteria(EntitySearchCriteria<DashboardMetadata> criteria);
 
-    @Override
+// TODO VladS - here should be list now, but I do not know how to substitute EntityServicesImpl.secureSearch...    
     public void search(AsyncCallback<EntitySearchResult<DashboardMetadata>> callback, EntitySearchCriteria<DashboardMetadata> criteria) {
         addTypeCriteria(criteria);
 
