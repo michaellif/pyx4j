@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.EntityServicesImpl;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataCrudService;
 import com.propertyvista.crm.server.services.GenericCrudServiceImpl;
@@ -31,15 +31,15 @@ abstract class AbstractCrudServiceImpl extends GenericCrudServiceImpl<DashboardM
         super(DashboardMetadata.class);
     }
 
-    abstract void addTypeCriteria(EntitySearchCriteria<DashboardMetadata> criteria);
+    abstract void addTypeCriteria(EntityListCriteria<DashboardMetadata> criteria);
 
-// TODO VladS - here should be list now, but I do not know how to substitute EntityServicesImpl.secureSearch...    
-    public void search(AsyncCallback<EntitySearchResult<DashboardMetadata>> callback, EntitySearchCriteria<DashboardMetadata> criteria) {
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<DashboardMetadata>> callback, EntityListCriteria<DashboardMetadata> criteria) {
         addTypeCriteria(criteria);
 
-        //TODO add or for public or private user keys
+        //TODO add or for public or private user keys?..
 
-        callback.onSuccess(EntityServicesImpl.secureSearch(criteria));
+        super.list(callback, criteria);
     }
 
     @Override

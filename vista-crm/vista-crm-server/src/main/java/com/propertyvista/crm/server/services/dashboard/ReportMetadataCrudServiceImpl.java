@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.server.services.dashboard;
 
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
@@ -27,7 +27,7 @@ public class ReportMetadataCrudServiceImpl extends AbstractCrudServiceImpl imple
     }
 
     @Override
-    void addTypeCriteria(EntitySearchCriteria<DashboardMetadata> criteria) {
-        criteria.setValue(null, new PropertyCriterion(criteria.proto().layoutType(), Restriction.EQUAL, DashboardMetadata.LayoutType.Report));
+    void addTypeCriteria(EntityListCriteria<DashboardMetadata> criteria) {
+        criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.EQUAL, DashboardMetadata.LayoutType.Report));
     }
 }
