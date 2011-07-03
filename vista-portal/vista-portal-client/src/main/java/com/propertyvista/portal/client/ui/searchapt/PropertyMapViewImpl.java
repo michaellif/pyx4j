@@ -43,9 +43,9 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
     public PropertyMapViewImpl() {
         setWidth("100%");
         setHeight("100%");
+        setStyleName(DEFAULT_STYLE_PREFIX);
         searchForm = new RefineApartmentSearchForm();
         searchForm.initialize();
-
         add(searchForm, DockPanel.WEST);
         setCellWidth(searchForm, "220px");
 

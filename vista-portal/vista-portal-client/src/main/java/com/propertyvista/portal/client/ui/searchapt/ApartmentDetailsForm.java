@@ -196,7 +196,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         Label lbl;
         if (!value.name().isNull()) {
             lbl = new Label(value.name().getStringView());
-            card.setCardHeader(lbl);
+            card.setMinorContent(lbl);
         }
 
         if (!value.description().isNull()) {
@@ -212,7 +212,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
         }
 
-        card.setCardContent(content);
+        card.setMajorContent(content);
 
         return card;
 

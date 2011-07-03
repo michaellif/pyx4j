@@ -16,7 +16,6 @@ package com.propertyvista.portal.client.ui.searchapt;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -29,16 +28,16 @@ public class CardPanel extends DockPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "cardPanel";
 
-    private final SimplePanel header;
+    private final SimplePanel minorContent;
 
     private final SimplePanel imageHolder;
 
-    private final SimplePanel content;
+    private final SimplePanel majorContent;
 
     protected static I18n i18n = I18nFactory.getI18n(CardPanel.class);
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Header, Content, Image
+        MinorContent, Content, Image
     }
 
     public CardPanel() {
@@ -46,39 +45,33 @@ public class CardPanel extends DockPanel {
         setSize("100%", "100%");
         getElement().getStyle().setProperty("minHeight", "130px");
 
-        header = new SimplePanel();
-        header.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Header);
+        minorContent = new SimplePanel();
+        minorContent.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.MinorContent);
 
-        SimplePanel imgEnvelope = new SimplePanel();
-        imgEnvelope.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Image);
-        imgEnvelope.getElement().getStyle().setHeight(100, Unit.PX);
-        imgEnvelope.getElement().getStyle().setWidth(150, Unit.PX);
         imageHolder = new SimplePanel();
-        imageHolder.setSize("100%", "100%");
+        imageHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Image);
+        imageHolder.getElement().getStyle().setHeight(100, Unit.PX);
+        imageHolder.getElement().getStyle().setWidth(150, Unit.PX);
         imageHolder.getElement().getStyle().setProperty("minHeight", "100px");
-        imgEnvelope.setWidget(imageHolder);
 
-        SimplePanel cEnvelope = new SimplePanel();
-        cEnvelope.getElement().getStyle().setHeight(100, Unit.PCT);
-        cEnvelope.getElement().getStyle().setFloat(Float.LEFT);
-        content = new SimplePanel();
-        content.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content);
-        content.setHeight("100%");
-        content.getElement().getStyle().setMarginLeft(20, Unit.PX);
-        cEnvelope.setWidget(content);
+        majorContent = new SimplePanel();
+        majorContent.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content);
+        majorContent.getElement().getStyle().setHeight(100, Unit.PCT);
+        majorContent.setHeight("100%");
+        majorContent.getElement().getStyle().setMarginLeft(20, Unit.PX);
 
-        add(header, DockPanel.NORTH);
-        add(imgEnvelope, DockPanel.WEST);
-        add(cEnvelope, DockPanel.CENTER);
+        add(minorContent, DockPanel.EAST);
+        add(imageHolder, DockPanel.WEST);
+        add(majorContent, DockPanel.CENTER);
 
     }
 
-    public void setCardContent(Widget w) {
-        content.setWidget(w);
+    public void setMajorContent(Widget w) {
+        majorContent.setWidget(w);
     }
 
-    public void setCardContent(IsWidget w) {
-        content.setWidget(w.asWidget());
+    public void setMajorContent(IsWidget w) {
+        majorContent.setWidget(w.asWidget());
     }
 
     public void setCardImage(Widget w) {
@@ -89,11 +82,11 @@ public class CardPanel extends DockPanel {
         imageHolder.setWidget(w.asWidget());
     }
 
-    public void setCardHeader(Widget w) {
-        header.setWidget(w);
+    public void setMinorContent(Widget w) {
+        minorContent.setWidget(w);
     }
 
-    public void setCardHeader(IsWidget w) {
-        setCardHeader(w.asWidget());
+    public void setMinorContent(IsWidget w) {
+        setMinorContent(w.asWidget());
     }
 }

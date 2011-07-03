@@ -17,9 +17,6 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -28,7 +25,10 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -40,11 +40,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
+import com.propertyvista.portal.client.resources.PortalImages;
+
 public class BasicCardDecorator<E extends IEntity> extends SimplePanel implements IFolderItemViewerDecorator<E> {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_BaseFolderItemViewerDecorator";
 
-    private final VerticalPanel container;
+    private final DockPanel container;
 
     private final SimplePanel content;
 
@@ -52,14 +54,14 @@ public class BasicCardDecorator<E extends IEntity> extends SimplePanel implement
 
     private final Anchor viewDetailsItem;
 
-    private final FlowPanel menuContainer;
+    private final VerticalPanel menuContainer;
 
     private CEntityFolderItemViewer<E> viewer;
 
     protected static I18n i18n = I18nFactory.getI18n(BasicCardDecorator.class);
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Menu, MenuItem, Content
+        Menu, MenuItem, MenuItemLine, Content
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -70,42 +72,29 @@ public class BasicCardDecorator<E extends IEntity> extends SimplePanel implement
 
         setStyleName(DEFAULT_STYLE_PREFIX);
         setSize("100%", "100%");
-        container = new VerticalPanel();
+        container = new DockPanel();
         container.setSize("100%", "100%");
-        container.getElement().getStyle().setPadding(5, Unit.PX);
+        container.setSpacing(5);
 
-        menuContainer = new FlowPanel();
-        menuContainer.setSize("100%", "20%");
+        menuContainer = new VerticalPanel();
         menuContainer.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Menu);
+        menuContainer.setHeight("100%");
+        menuContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        menuContainer.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
-        SimplePanel menuPanel = new SimplePanel();
-        menuPanel.setHeight("100%");
-        menuPanel.getElement().getStyle().setFloat(Float.LEFT);
         menu = new FlowPanel();
-        menuPanel.setWidget(menu);
-        menu.setHeight("100%");
-        menu.getElement().getStyle().setPaddingTop(5, Unit.PX);
         menuContainer.getElement().getStyle().setVisibility(Style.Visibility.HIDDEN);
-        menuContainer.add(menuPanel);
+        menuContainer.add(menu);
 
-        viewDetailsItem = new Anchor(i18n.tr("View Details"));
-        viewDetailsItem.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.MenuItem);
-        viewDetailsItem.getElement().getStyle().setFloat(Float.RIGHT);
-        viewDetailsItem.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-
-        SimplePanel viewDetailsPanel = new SimplePanel();
-        viewDetailsPanel.setSize("10em", "100%");
-        viewDetailsPanel.getElement().getStyle().setFloat(Float.RIGHT);
-        viewDetailsPanel.add(viewDetailsItem);
-        menuContainer.add(viewDetailsPanel);
+        viewDetailsItem = new Anchor(i18n.tr("Details"));
+        //TODO change the image
+        addMenuItem(viewDetailsItem, PortalImages.INSTANCE.map());
 
         content = new SimplePanel();
         content.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content);
-        content.setSize("100%", "80%");
-        content.getElement().getStyle().setFloat(Float.RIGHT);
 
-        container.add(content);
-        container.add(menuContainer);
+        container.add(content, DockPanel.CENTER);
+        container.add(menuContainer, DockPanel.EAST);
 
         addDomHandler(new MouseOverHandler() {
             @Override
@@ -136,16 +125,28 @@ public class BasicCardDecorator<E extends IEntity> extends SimplePanel implement
         return viewer;
     }
 
+    public void setContentWidth(String width) {
+        content.setWidth(width);
+    }
+
+    public void setMenuWidth(String width) {
+        menuContainer.setWidth(width);
+    }
+
     public void addMenuItem(Anchor anchor, ImageResource imageResource) {
         anchor.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.MenuItem);
-        anchor.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-
         HorizontalPanel item = new HorizontalPanel();
         Image image = new Image(imageResource);
         item.add(image);
         item.add(anchor);
-        menu.add(item);
-
+        item.setCellHorizontalAlignment(anchor, HasHorizontalAlignment.ALIGN_LEFT);
+        item.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.MenuItemLine);
+        int i = menu.getWidgetCount();
+        if (i == 0) {
+            menu.add(item);
+        } else {
+            menu.insert(item, i - 1);
+        }
     }
 
     public HandlerRegistration addViewDetailsClickHandler(ClickHandler h) {

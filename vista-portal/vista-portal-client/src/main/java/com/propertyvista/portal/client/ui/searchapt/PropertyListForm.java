@@ -13,7 +13,12 @@
  */
 package com.propertyvista.portal.client.ui.searchapt;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
@@ -37,6 +42,10 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
     private PropertyMapView.Presenter presenter;
+
+    protected static I18n i18n = I18nFactory.getI18n(PropertyListForm.class);
+
+    private final String POSTFIX = " \u2022 ";
 
     public PropertyListForm() {
         super(PropertyListDTO.class);
@@ -99,20 +108,51 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
         CardPanel card = new CardPanel();
         card.setCardImage(MediaUtils.createPublicMediaImage(value.mainMedia(), ThumbnailSize.medium));
 
-        card.setCardHeader(new Label(formatAddress(value.address())));
-
         FlowPanel content = new FlowPanel();
-        Label lbl = new Label(formatFloorplans(value.floorplanNames()));
-        content.add(lbl);
 
-        lbl = new Label(formatAmenities(value.amenities()));
-        content.add(lbl);
+        content.add(formatCardLine(i18n.tr("Address"), formatAddress(value.address())));
+        content.add(formatCardLine(i18n.tr("Type"), formatFloorplans(value.floorplanNames())));
+        content.add(formatCardLine(i18n.tr("Amenities"), formatAmenities(value.amenities())));
+        content.add(formatCardLine(i18n.tr("Notes"), value.description().getStringView()));
+        card.setMajorContent(content);
 
-        lbl = new Label(value.description().getStringView());
-        content.add(lbl);
+        content = new FlowPanel();
+        //from date
+        Label item = new Label(i18n.tr("Starting from"));
+        content.add(item);
+        item = new Label(value.avalableForRent().getStringView());
+        item.getElement().getStyle().setMarginBottom(5d, Unit.PX);
+        content.add(item);
 
-        card.setCardContent(content);
+        //from price
+        item = new Label(i18n.tr("from"));
+        content.add(item);
+        item = new Label("$" + value.price().min().getStringView());
+        content.add(item);
+        card.setMinorContent(content);
+
         return card;
+
+    }
+
+    private String formatListItem(String item) {
+        if (item == null || item.isEmpty()) {
+            return "";
+        }
+        return item.toUpperCase() + POSTFIX;
+
+    }
+
+    private HorizontalPanel formatCardLine(String label, String value) {
+        HorizontalPanel item = new HorizontalPanel();
+        item.setWidth("100%");
+        Label lbl = new Label(label + ":");
+        item.add(lbl);
+        item.setCellWidth(lbl, "15%");
+        lbl = new Label(value);
+        item.add(new Label(value));
+        item.setCellWidth(lbl, "85%");
+        return item;
 
     }
 
@@ -134,7 +174,7 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
         }
 
         if (!address.province().isNull()) {
-            addrString.append(" ");
+            addrString.append(", ");
             addrString.append(address.province().getStringView());
         }
 
@@ -146,44 +186,41 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
         return addrString.toString();
     }
 
-    private String formatFloorplans(IPrimitiveSet<String> floorplans) {
-        final String delimiter = "/ ";
+    private String formatAmenities(IList<AmenityDTO> amenities) {
+        if (amenities.isNull() || amenities.isEmpty()) {
+            return "";
+        }
+        StringBuffer strbuffer = new StringBuffer();
+        for (AmenityDTO amenity : amenities) {
+            if (!amenity.isNull() && !amenity.isEmpty()) {
+                strbuffer.append(formatListItem(amenity.getStringView()));
+            }
+        }
+        String finalString = strbuffer.toString();
+        int idx = finalString.lastIndexOf(POSTFIX);
+        if (idx > -1) {
+            finalString = finalString.substring(0, idx);
+        }
 
-        if (floorplans.isNull())
+        return finalString;
+
+    }
+
+    private String formatFloorplans(IPrimitiveSet<String> floorplans) {
+        if (floorplans.isNull() || floorplans.isEmpty())
             return "";
 
-        StringBuffer planString = new StringBuffer();
+        StringBuffer strbuffer = new StringBuffer();
 
         for (String planName : floorplans.getValue()) {
             if (planName != null && !planName.isEmpty()) {
-                planString.append(planName);
-                planString.append(delimiter);
+                strbuffer.append(formatListItem(planName));
             }
         }
-        String finalString = planString.toString();
-        if (!finalString.isEmpty()) {
-            finalString = finalString.substring(0, finalString.lastIndexOf(delimiter));
-        }
-        return finalString;
-    }
-
-    private String formatAmenities(IList<AmenityDTO> amenities) {
-        final String delimiter = "/ ";
-
-        if (amenities.isNull())
-            return "";
-
-        StringBuffer planString = new StringBuffer();
-
-        for (AmenityDTO amenity : amenities) {
-            if (!amenity.isNull() && !amenity.isEmpty()) {
-                planString.append(amenity.name().getStringView());
-                planString.append(delimiter);
-            }
-        }
-        String finalString = planString.toString();
-        if (!finalString.isEmpty()) {
-            finalString = finalString.substring(0, finalString.lastIndexOf(delimiter));
+        String finalString = strbuffer.toString();
+        int idx = finalString.lastIndexOf(POSTFIX);
+        if (idx > -1) {
+            finalString = finalString.substring(0, idx);
         }
         return finalString;
     }

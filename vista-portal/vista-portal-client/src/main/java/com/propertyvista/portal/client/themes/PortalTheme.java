@@ -454,29 +454,60 @@ public abstract class PortalTheme extends VistaTheme {
     private void initRefineSearchStyles() {
         String prefix = RefineApartmentSearchForm.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("margin-right", "5px");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.SEPARATOR);
+        style.addProperty("margin-left", "10px");
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.SearchHeader));
-        style.addProperty("text-align", "center");
         style.addProperty("font-weight", "bold");
-        style.addProperty("padding-top", "10px");
+        style.addProperty("font-size", "14px");
+        style.addProperty("padding-top", "20px");
         style.addProperty("padding-bottom", "10px");
-        style.addProperty("margin-left", "10px");
-        style.addProperty("margin-right", "10px");
-        style.addProperty("border-bottom", "dotted 1px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.ButtonPanel));
-        style.addProperty("padding-top", "10px");
+        style.addProperty("padding-top", "30px");
         style.addProperty("padding-bottom", "10px");
-        style.addProperty("margin-left", "10px");
         style.addProperty("margin-right", "10px");
-        style.addProperty("border-top", "dotted 1px");
-        style.addProperty("text-align", "center");
         addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Holder));
+        style.addProperty("margin-top", "20px");
+        style.addProperty("margin-bottom", "10px");
+        style.addProperty("padding", "0");
+        style.addProperty("list-style", "none");
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Tab));
+        style.addProperty("border", "none");
+        style.addProperty("border-radius", "8px");
+        style.addProperty("-moz-border-radius", "8px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.LabelHolder));
+        style.addProperty("position", "relative");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.StatusHolder));
+        style.addProperty("background", "transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Label, RefineApartmentSearchForm.StyleDependent.current));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE95);
+        style.addProperty("color", "white");
+        style.addProperty("border-radius", "8px");
+        style.addProperty("-moz-border-radius", "8px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Label));
+        style.addProperty("height", "20px");
+        style.addProperty("line-height", "20px");
+        style.addProperty("font-style", "normal");
+        style.addProperty("padding-left", "5px");
+        style.addProperty("padding-right", "5px");
+        addStyle(style);
+
     }
 
     private void initApartmentDetailsStyles() {
@@ -531,17 +562,27 @@ public abstract class PortalTheme extends VistaTheme {
     private void initBaseFolderItemViewerDecoratorStyles() {
         String prefix = BasicCardDecorator.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("border", "solid 1px");
+        style.addProperty("border-top", "solid 1px");
         style.addProperty("border-color", ThemeColor.SEPARATOR);
+        style.addProperty("padding", "15px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.Content));
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.Menu));
+        style.addProperty("border-color", ThemeColor.SEPARATOR);
         addStyle(style);
 
-        //TODO change colors
         style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.MenuItem));
         style.addProperty("text-decoration", "none");
         style.addProperty("color", ThemeColor.OBJECT_TONE95);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.MenuItemLine));
+        style.addProperty("border-bottom", "solid 1px");
+        style.addProperty("border-color", ThemeColor.SEPARATOR);
+        style.addProperty("margin-bottom", "10px");
         addStyle(style);
 
         //TODO  think of a better way
@@ -553,22 +594,21 @@ public abstract class PortalTheme extends VistaTheme {
         //TODO need prefix+dependent Selector.valueOf implementation
         style = new Style("." + prefix + "-" + BasicCardDecorator.StyleDependent.hover);
         //TODO Not sure how to combine ThemeColor.OBJECT_TONE with !important declaration
-        style.addProperty("border-color", "#8699B9!important");
-        style.addProperty("border", "solid 1px");
+        style.addProperty("background-color", "#eeeeee!important");
         addStyle(style);
 
     }
 
     private void initCardPanelDecoratorStyle() {
         String prefix = CardPanel.DEFAULT_STYLE_PREFIX;
+
         Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("font-size", "12px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Image));
         style.addProperty("border-color", "#cccccc!important");
         style.addProperty("border", "solid 1px");
-        style.addProperty("padding", "2px");
-
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Image) + " img");
@@ -581,15 +621,11 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("background-size", "100% 100%!important");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Header));
-        style.addProperty("font-weight", "bold");
-        style.addProperty("padding-bottom", "5px");
-        style.addProperty("font-size", "16px");
-        style.addProperty("margin-left", "30px");
+        style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.MinorContent));
+        style.addProperty("width", "6em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Content));
-        style.addProperty("font-size", "12px");
         addStyle(style);
 
     }
@@ -602,8 +638,6 @@ public abstract class PortalTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardImage));
         style.addProperty("border-color", "#cccccc!important");
         style.addProperty("border", "solid 1px");
-        style.addProperty("padding", "2px");
-
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardImage) + " img");
@@ -616,15 +650,23 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("background-size", "100% 100%!important");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardHeader));
-        style.addProperty("font-weight", "bold");
-        style.addProperty("padding-bottom", "5px");
-        style.addProperty("font-size", "12px");
-        style.addProperty("margin-left", "10px");
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardContent));
         style.addProperty("font-size", "12px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardContentItem));
+        style.addProperty("border-bottom", "1px solid");
+        style.addProperty("border-color", ThemeColor.SEPARATOR);
+        style.addProperty("margin-bottom", "5px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardLeft));
+        style.addProperty("font-size", "12px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardLeftItem));
+        style.addProperty("font-weight", "bold");
+        style.addProperty("margin-bottom", "5px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardMenuItem));

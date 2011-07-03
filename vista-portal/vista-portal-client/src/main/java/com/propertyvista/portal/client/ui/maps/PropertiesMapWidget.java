@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.CircleOverlay;
@@ -50,6 +51,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.client.resources.PortalImages;
+import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
@@ -70,7 +72,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
     public static String PROPERTY_CARD_STYLE_PREFIX = "PropertyCard";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        CardHeader, CardContent, CardImage, CardMenu, CardMenuItem
+        CardLeft, CardLeftItem, CardContent, CardContentItem, CardImage, CardMenuItem
     }
 
     private static I18n i18n = I18nFactory.getI18n(PropertiesMapWidget.class);
@@ -184,47 +186,51 @@ public class PropertiesMapWidget extends AbstractMapWidget {
 
         private final Anchor viewDetailsItem;
 
+        private final String POSTFIX = " \u2022 ";
+
         public PropertyCard(final PropertyDTO property) {
             setStyleName(PROPERTY_CARD_STYLE_PREFIX);
             setSize("100%", "100%");
             getElement().getStyle().setProperty("minHeight", "100px");
-            getElement().getStyle().setPadding(10, Unit.PX);
-            SimplePanel header = new SimplePanel();
-            header.setSize("100%", "15%");
-            header.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardHeader);
-            header.setWidget(new Label(formatAddress(property.address())));
+            getElement().getStyle().setMarginTop(10d, Unit.PX);
 
-            FlowPanel contentHolder = new FlowPanel();
-            contentHolder.setSize("100%", "70%");
-
-            SimplePanel imgEnvelope = new SimplePanel();
-            imgEnvelope.getElement().getStyle().setHeight(50, Unit.PX);
-            imgEnvelope.getElement().getStyle().setWidth(70, Unit.PX);
-            imgEnvelope.getElement().getStyle().setFloat(Float.LEFT);
-            imgEnvelope.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardImage);
-
-            SimplePanel imageHolder = new SimplePanel();
-            imageHolder.setSize("100%", "100%");
-            imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
-            imageHolder.setWidget(MediaUtils.createPublicMediaImage(property.mainMedia(), ThumbnailSize.small));
-            imgEnvelope.setWidget(imageHolder);
-
-            SimplePanel cEnvelope = new SimplePanel();
-            cEnvelope.getElement().getStyle().setHeight(100, Unit.PCT);
-            cEnvelope.getElement().getStyle().setFloat(Float.LEFT);
-            SimplePanel content = new SimplePanel();
+            //format content
+            FlowPanel content = new FlowPanel();
             content.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContent);
             content.setHeight("100%");
             content.getElement().getStyle().setMarginLeft(15, Unit.PX);
-            content.setWidget(new Label(formatFloorplans(property.floorplanNames())));
-            cEnvelope.setWidget(content);
-            contentHolder.add(imgEnvelope);
-            contentHolder.add(cEnvelope);
+            content.getElement().getStyle().setMarginRight(15, Unit.PX);
+            //address
+            Label item = new Label(formatAddress(property.address()));
+            item.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);
+            item.setWidth("100%");
+            content.add(item);
 
-            SimplePanel footer = new SimplePanel();
-            footer.setSize("100%", "15%");
-            footer.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardMenu);
-            viewDetailsItem = new Anchor(i18n.tr("View Details"));
+            //unit(floor plan) types
+            String floorString = formatFloorplans(property.floorplanNames());
+            if (floorString != null && !floorString.isEmpty()) {
+                item = new Label(floorString);
+                item.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);
+                content.add(item);
+            }
+
+            //amenities
+            String amenityString = formatAmenities(property.amenities());
+            if (amenityString != null && !amenityString.isEmpty()) {
+                item = new Label(amenityString);
+                item.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);
+                content.add(item);
+            }
+
+/*
+ * SimplePanel imageHolder = new SimplePanel();
+ * imageHolder.setSize("100%", "100%");
+ * imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
+ * imageHolder.setWidget(MediaUtils.createPublicMediaImage(property.mainMedia(), ThumbnailSize.small));
+ * >>>>>>> .r2209
+ */
+
+            viewDetailsItem = new Anchor(i18n.tr("Details >>"));
             viewDetailsItem.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardMenuItem);
             viewDetailsItem.getElement().getStyle().setFloat(Float.LEFT);
             viewDetailsItem.getElement().getStyle().setFontWeight(FontWeight.BOLD);
@@ -239,12 +245,43 @@ public class PropertiesMapWidget extends AbstractMapWidget {
                     AppSite.getPlaceController().goTo(place);
                 }
             });
+            content.add(viewDetailsItem);
 
-            footer.setWidget(viewDetailsItem);
+            FlowPanel left = new FlowPanel();
+            left.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeft);
+            //image
+            SimplePanel imageHolder = new SimplePanel();
+            imageHolder.getElement().getStyle().setHeight(50, Unit.PX);
+            imageHolder.getElement().getStyle().setWidth(70, Unit.PX);
+            imageHolder.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardImage);
 
-            add(header, DockPanel.NORTH);
-            add(contentHolder, DockPanel.CENTER);
-            add(footer, DockPanel.SOUTH);
+            imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
+            imageHolder.setWidget(MediaUtils.createPublicMediaImage(property.mainMedia(), ThumbnailSize.small));
+/*
+ * if (property.mainMedia().isNull()) {
+ * imageHolder.setWidget(new Image(PortalImages.INSTANCE.noImage()));
+ * } else {
+ * imageHolder.setWidget(new Image("media/" + property.mainMedia().getValue().toString() + "/" + ThumbnailSize.small.name() + ".jpg"));
+ * }
+ */
+            left.add(imageHolder);
+
+            //from date
+            item = new Label(i18n.tr("Starting from"));
+            left.add(item);
+            item = new Label(property.avalableForRent().getStringView());
+            item.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftItem);
+            left.add(item);
+
+            //from price
+            item = new Label(i18n.tr("from"));
+            left.add(item);
+            item = new Label("$" + property.price().min().getStringView());
+            item.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftItem);
+            left.add(item);
+
+            add(content, DockPanel.CENTER);
+            add(left, DockPanel.WEST);
 
         }
 
@@ -270,7 +307,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             }
 
             if (!address.province().isNull()) {
-                addrString.append(" ");
+                addrString.append(", ");
                 addrString.append(address.province().getStringView());
             }
 
@@ -282,23 +319,49 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             return addrString.toString();
         }
 
-        private String formatFloorplans(IPrimitiveSet<String> floorplans) {
-            final String delimiter = "/ ";
+        private String formatListItem(String item) {
+            if (item == null || item.isEmpty()) {
+                return "";
+            }
+            return item.toUpperCase() + POSTFIX;
 
-            if (floorplans.isNull())
+        }
+
+        private String formatAmenities(IList<AmenityDTO> amenities) {
+            if (amenities.isNull() || amenities.isEmpty()) {
+                return "";
+            }
+            StringBuffer strbuffer = new StringBuffer();
+            for (AmenityDTO amenity : amenities) {
+                if (!amenity.isNull() && !amenity.isEmpty()) {
+                    strbuffer.append(formatListItem(amenity.getStringView()));
+                }
+            }
+            String finalString = strbuffer.toString();
+            int idx = finalString.lastIndexOf(POSTFIX);
+            if (idx > -1) {
+                finalString = finalString.substring(0, idx);
+            }
+
+            return finalString;
+
+        }
+
+        private String formatFloorplans(IPrimitiveSet<String> floorplans) {
+            if (floorplans.isNull() || floorplans.isEmpty())
                 return "";
 
-            StringBuffer planString = new StringBuffer();
+            StringBuffer strbuffer = new StringBuffer();
 
             for (String planName : floorplans.getValue()) {
                 if (planName != null && !planName.isEmpty()) {
-                    planString.append(planName);
-                    planString.append(delimiter);
+                    strbuffer.append(formatListItem(planName));
                 }
             }
-            String finalString = planString.toString();
-            if (!finalString.isEmpty()) {
-                finalString = finalString.substring(0, finalString.lastIndexOf(delimiter));
+            String finalString = strbuffer.toString();
+            int idx = finalString.lastIndexOf(POSTFIX);
+            if (idx > -1) {
+                finalString = finalString.substring(0, idx);
             }
             return finalString;
         }
