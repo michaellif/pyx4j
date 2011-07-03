@@ -222,14 +222,6 @@ public class PropertiesMapWidget extends AbstractMapWidget {
                 content.add(item);
             }
 
-/*
- * SimplePanel imageHolder = new SimplePanel();
- * imageHolder.setSize("100%", "100%");
- * imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
- * imageHolder.setWidget(MediaUtils.createPublicMediaImage(property.mainMedia(), ThumbnailSize.small));
- * >>>>>>> .r2209
- */
-
             viewDetailsItem = new Anchor(i18n.tr("Details >>"));
             viewDetailsItem.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardMenuItem);
             viewDetailsItem.getElement().getStyle().setFloat(Float.LEFT);
@@ -257,13 +249,6 @@ public class PropertiesMapWidget extends AbstractMapWidget {
 
             imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
             imageHolder.setWidget(MediaUtils.createPublicMediaImage(property.mainMedia(), ThumbnailSize.small));
-/*
- * if (property.mainMedia().isNull()) {
- * imageHolder.setWidget(new Image(PortalImages.INSTANCE.noImage()));
- * } else {
- * imageHolder.setWidget(new Image("media/" + property.mainMedia().getValue().toString() + "/" + ThumbnailSize.small.name() + ".jpg"));
- * }
- */
             left.add(imageHolder);
 
             //from date
