@@ -33,10 +33,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
-import org.openqa.selenium.remote.DriverCommand;
-import org.openqa.selenium.remote.ExecuteMethod;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.RemoteWebElement;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.gwt.server.DateUtils;
@@ -82,10 +78,12 @@ class InputHelper {
             if (textValue == null) {
                 // Select nothing
                 if (opt.isSelected()) {
-                    opt.toggle();
+                    opt.click();
                 }
             } else if (textValue.equals(opt.getText())) {
-                opt.setSelected();
+                if (!opt.isSelected()) {
+                    opt.click();
+                }
                 optionFound = true;
                 break;
             }
@@ -96,17 +94,19 @@ class InputHelper {
         }
     }
 
-    static void setSelectValue(WebDriver driver, WebElement element, String textValue) {
+    static void setSelectValue(WebElement element, String textValue) {
         List<WebElement> allOptions = element.findElements(By.tagName("option"));
         boolean optionFound = false;
         for (WebElement opt : allOptions) {
             if (textValue == null) {
                 // Select nothing
                 if (opt.isSelected()) {
-                    opt.toggle();
+                    opt.click();
                 }
-            } else if (textValue.equals(getValue(driver, opt))) {
-                opt.setSelected();
+            } else if (textValue.equals(getValue(opt))) {
+                if (!opt.isSelected()) {
+                    opt.click();
+                }
                 optionFound = true;
                 break;
             }
@@ -117,10 +117,10 @@ class InputHelper {
         }
     }
 
-    static void setValue(WebDriver driver, WebElement element, boolean selectionValue) {
+    static void setValue(WebElement element, boolean selectionValue) {
         if (element.getTagName().equalsIgnoreCase("input")) {
             // CheckBox
-            setSelectionValue(driver, element, selectionValue);
+            setSelectionValue(element, selectionValue);
         } else {
             // RadioGroup
             String parentId = element.getAttribute("id");
@@ -147,17 +147,9 @@ class InputHelper {
         }
     }
 
-    private static void setSelectionValue(WebDriver driver, WebElement element, boolean selectionValue) {
-        if (element.isSelected()) {
-            if (!selectionValue) {
-                element.toggle();
-                fireEvent(driver, element, "click");
-            }
-        } else {
-            if (selectionValue) {
-                element.toggle();
-                fireEvent(driver, element, "click");
-            }
+    private static void setSelectionValue(WebElement element, boolean selectionValue) {
+        if (element.isSelected() != selectionValue) {
+            element.click();
         }
     }
 
@@ -193,13 +185,13 @@ class InputHelper {
         return value;
     }
 
-    static Date getDateValue(WebDriver driver, WebElement element, String format, boolean focusOnGetValue) {
+    static Date getDateValue(WebElement element, String format, boolean focusOnGetValue) {
         Date value = null;
         if (element.getTagName().equalsIgnoreCase("input")) {
             if (focusOnGetValue) {
                 element.click();
             }
-            String text = getValue(driver, element);
+            String text = getValue(element);
             if (CommonsStringUtils.isStringSet(text)) {
                 if (format != null) {
                     try {
@@ -219,7 +211,7 @@ class InputHelper {
             try {
                 WebElement elementYY = element.findElement(By.id(parentId + "_yy"));
                 inputsFound = true;
-                y = Integer.valueOf(getValue(driver, elementYY));
+                y = Integer.valueOf(getValue(elementYY));
             } catch (org.openqa.selenium.NoSuchElementException notFound) {
             }
 
@@ -227,7 +219,7 @@ class InputHelper {
             try {
                 WebElement elementMM = element.findElement(By.id(parentId + "_mm"));
                 inputsFound = true;
-                m = Integer.valueOf(getValue(driver, elementMM)) - 1;
+                m = Integer.valueOf(getValue(elementMM)) - 1;
             } catch (org.openqa.selenium.NoSuchElementException notFound) {
             }
 
@@ -242,7 +234,7 @@ class InputHelper {
         return value;
     }
 
-    static void setDateValue(WebDriver driver, WebElement element, Date dateValue, String format) {
+    static void setDateValue(WebElement element, Date dateValue, String format) {
         if (element.getTagName().equalsIgnoreCase("input")) {
             element.clear();
             if (dateValue != null) {
@@ -256,11 +248,11 @@ class InputHelper {
                 WebElement elementYY = element.findElement(By.id(parentId + "_yy"));
                 inputsFound = true;
                 if (dateValue == null) {
-                    setSelectValue(driver, elementYY, "");
+                    setSelectValue(elementYY, "");
                 } else {
                     Calendar calendar = new GregorianCalendar();
                     calendar.setTime(dateValue);
-                    setSelectValue(driver, elementYY, String.valueOf(calendar.get(Calendar.YEAR)));
+                    setSelectValue(elementYY, String.valueOf(calendar.get(Calendar.YEAR)));
                 }
             } catch (org.openqa.selenium.NoSuchElementException notFound) {
             }
@@ -269,11 +261,11 @@ class InputHelper {
                 WebElement elementMM = element.findElement(By.id(parentId + "_mm"));
                 inputsFound = true;
                 if (dateValue == null) {
-                    setSelectValue(driver, elementMM, "");
+                    setSelectValue(elementMM, "");
                 } else {
                     Calendar calendar = new GregorianCalendar();
                     calendar.setTime(dateValue);
-                    setSelectValue(driver, elementMM, String.valueOf(calendar.get(Calendar.MONTH)));
+                    setSelectValue(elementMM, String.valueOf(calendar.get(Calendar.MONTH)));
                 }
             } catch (org.openqa.selenium.NoSuchElementException notFound) {
             }
@@ -293,13 +285,11 @@ class InputHelper {
         throw new IllegalArgumentException("No enum " + enumClass.getModifiers() + " text " + text);
     }
 
-    // getValue() as removed from rc3
-    public static String getValue(WebDriver driver, WebElement element) {
-        return (String) new ExecuteMethod((RemoteWebDriver) driver).execute(DriverCommand.GET_ELEMENT_VALUE,
-                com.google.common.collect.ImmutableMap.of("id", (((RemoteWebElement) element).getId())));
+    public static String getValue(WebElement element) {
+        return element.getAttribute("value");
     }
 
-    static <T extends Enum<T>> T getEnumValue(WebDriver driver, WebElement element, Class<T> enumClass, boolean focusOnGetValue) {
+    static <T extends Enum<T>> T getEnumValue(WebElement element, Class<T> enumClass, boolean focusOnGetValue) {
         String tagName = element.getTagName();
         if (tagName.equalsIgnoreCase("input") || tagName.equalsIgnoreCase("select")) {
             // ComboBox or Text
@@ -309,7 +299,7 @@ class InputHelper {
                 }
             }
             //This is textual representation of Enum, i18n.tr(), not is name!
-            String text = getValue(driver, element);
+            String text = getValue(element);
             if (CommonsStringUtils.isEmpty(text)) {
                 return null;
             } else {
@@ -346,7 +336,7 @@ class InputHelper {
         }
     }
 
-    static void setEnumValue(WebDriver driver, WebElement element, Enum<?> enumValue) {
+    static void setEnumValue(WebElement element, Enum<?> enumValue) {
         String tagName = element.getTagName();
         if (tagName.equalsIgnoreCase("input") || tagName.equalsIgnoreCase("select")) {
             setValue(element, enumValue.toString());
@@ -359,8 +349,9 @@ class InputHelper {
                     // Enum name is a part of element debugId
                     String enumName = id.substring(parentId.length() + 1);
                     if (enumName.equals(enumValue.name())) {
-                        childElement.setSelected();
-                        fireEvent(driver, childElement, "click");
+                        if (!childElement.isSelected()) {
+                            childElement.click();
+                        }
                         return;
                     }
                 }

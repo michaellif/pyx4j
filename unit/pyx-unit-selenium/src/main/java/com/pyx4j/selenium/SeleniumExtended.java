@@ -413,7 +413,7 @@ public class SeleniumExtended extends WebDriverWrapper {
                 focus(element);
             }
         }
-        String text = InputHelper.getValue(driver, element);
+        String text = InputHelper.getValue(element);
         log("value of element <{}> id={} text={}", tagName, element.getAttribute("id"), text);
         return text;
     }
@@ -435,7 +435,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     private <T extends Enum<T>> T getEnumValue(WebElement element, Class<T> enumClass) {
-        T value = InputHelper.getEnumValue(driver, element, enumClass, focusOnGetValue);
+        T value = InputHelper.getEnumValue(element, enumClass, focusOnGetValue);
         log("value of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), value);
         return value;
     }
@@ -473,7 +473,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     private Date getDateValue(WebElement element, String format) {
-        Date value = InputHelper.getDateValue(driver, element, (format == null) ? applicationDateFormat : format, focusOnGetValue);
+        Date value = InputHelper.getDateValue(element, (format == null) ? applicationDateFormat : format, focusOnGetValue);
         log("value of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), value);
         return value;
     }
@@ -493,13 +493,13 @@ public class SeleniumExtended extends WebDriverWrapper {
     public void setDateValue(IDebugId debugId, Date dateValue, String format) {
         WebElement element = driver.findElement(by(debugId));
         log("setValue of element <{}> id={} text={}", element.getTagName(), element.getAttribute("id"), dateValue);
-        InputHelper.setDateValue(driver, element, dateValue, (format == null) ? applicationDateFormat : format);
+        InputHelper.setDateValue(element, dateValue, (format == null) ? applicationDateFormat : format);
     }
 
     public void select(String id) {
         WebElement we = driver.findElement(By.id(id));
         if (!we.isSelected() && we.isEnabled()) {
-            we.setSelected();
+            we.click();
         }
     }
 
@@ -539,7 +539,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     //CheckBox special case
     public void setValue(WebElement element, boolean selectionValue) {
         log("setValue of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), selectionValue);
-        InputHelper.setValue(driver, element, selectionValue);
+        InputHelper.setValue(element, selectionValue);
     }
 
     //CheckBox special case
@@ -559,7 +559,7 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     private void setEnumValue(WebElement element, Enum<?> enumValue) {
         log("setValue of element <{}> id={} value={}", element.getTagName(), element.getAttribute("id"), enumValue);
-        InputHelper.setEnumValue(driver, element, enumValue);
+        InputHelper.setEnumValue(element, enumValue);
     }
 
     public void setEnumValue(IDebugId debugId, Enum<?> enumValue) {
