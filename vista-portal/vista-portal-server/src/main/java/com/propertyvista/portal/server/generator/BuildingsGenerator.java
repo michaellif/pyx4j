@@ -34,7 +34,7 @@ import com.propertyvista.common.domain.financial.ChargeType;
 import com.propertyvista.domain.Address;
 import com.propertyvista.domain.Email;
 import com.propertyvista.domain.Phone;
-import com.propertyvista.domain.marketing.yield.Concession;
+import com.propertyvista.domain.financial.Concession;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -50,12 +50,12 @@ import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
-import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PetChargeRule;
 import com.propertyvista.portal.domain.ptapp.PropertyProfile;
 import com.propertyvista.portal.server.preloader.RandomUtil;
+import com.propertyvista.server.common.generator.UnitRelatedData;
 
 public class BuildingsGenerator {
 
@@ -171,13 +171,14 @@ public class BuildingsGenerator {
         parking.doubleSpaces().setValue(doubleSpaces);
         parking.narrowSpaces().setValue(narrowSpaces);
 
-        double regularRent = 20d + RandomUtil.randomInt(100);
-        parking.disableRent().setValue(regularRent * 0.8);
-        parking.regularRent().setValue(regularRent);
-        parking.doubleRent().setValue(regularRent * 1.2);
-        parking.narrowRent().setValue(regularRent * 0.9);
-
-        parking.deposit().setValue(50d + RandomUtil.randomInt(100));
+// TODO - move this to ParkingRent!..
+//        double regularRent = 20d + RandomUtil.randomInt(100);
+//        parking.disableRent().setValue(regularRent * 0.8);
+//        parking.regularRent().setValue(regularRent);
+//        parking.doubleRent().setValue(regularRent * 1.2);
+//        parking.narrowRent().setValue(regularRent * 0.9);
+//
+//        parking.deposit().setValue(50d + RandomUtil.randomInt(100));
 
         return parking;
     }
@@ -198,8 +199,8 @@ public class BuildingsGenerator {
         return floorplans;
     }
 
-    public List<AptUnitDTO> createUnits(Building building, List<FloorplanDTO> floorplans, int numFloors, int numUnitsPerFloor) {
-        List<AptUnitDTO> units = new ArrayList<AptUnitDTO>();
+    public List<UnitRelatedData> createUnits(Building building, List<FloorplanDTO> floorplans, int numFloors, int numUnitsPerFloor) {
+        List<UnitRelatedData> units = new ArrayList<UnitRelatedData>();
         // now create units for the building
         for (int floor = 1; floor < numFloors + 1; floor++) {
             // for each floor we want to create the same number of units
@@ -215,7 +216,7 @@ public class BuildingsGenerator {
                 }
 
                 double uarea = CommonsGenerator.randomFromRange(CommonsGenerator.createRange(1200d, 2600d));
-                AptUnitDTO unit = createUnit(building, suiteNumber, floor, uarea, bedrooms, bathrooms, floorplan);
+                UnitRelatedData unit = createUnit(building, suiteNumber, floor, uarea, bedrooms, bathrooms, floorplan);
                 units.add(unit);
             }
         }
@@ -265,13 +266,14 @@ public class BuildingsGenerator {
             floorplan.amenities().add(amenity);
         }
 
-        // concessions
-        if (RandomUtil.randomBoolean()) {
-            floorplan.concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(3), 0));
-        }
-        if (RandomUtil.randomBoolean()) {
-            floorplan.concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(11), 15.8));
-        }
+// TODO Concession moved to Feature:         
+//        // concessions
+//        if (RandomUtil.randomBoolean()) {
+//            floorplan.concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(3), 0));
+//        }
+//        if (RandomUtil.randomBoolean()) {
+//            floorplan.concessions().add(createConcession(RandomUtil.random(Concession.AppliedTo.values()), 1.0 + RandomUtil.randomInt(11), 15.8));
+//        }
 
         return floorplan;
     }
@@ -302,28 +304,13 @@ public class BuildingsGenerator {
         return item;
     }
 
-    public static Concession createConcession(Concession.AppliedTo appliedTo, double months, double percentage) {
+    public static Concession createConcession(Concession.Type type, double value) {
         Concession concession = EntityFactory.create(Concession.class);
 
-        StringBuilder sb = new StringBuilder();
-
-        if (appliedTo == Concession.AppliedTo.monthly) {
-            sb.append(months).append(" free month");
-            if (months != 1) {
-                sb.append("s");
-            }
-        } else if (appliedTo == Concession.AppliedTo.amount) {
-            sb.append(percentage).append("% discount for ");
-            sb.append(months).append(" month");
-            if (months != 1) {
-                sb.append("s");
-            }
-        }
-
-        concession.type().setValue(sb.toString());
-        concession.termType().setValue("month");
-        concession.numberOfTerms().setValue(months);
-        concession.percentage().setValue(percentage);
+        concession.type().setValue(type);
+        concession.value().setValue(value);
+        concession.status().setValue(RandomUtil.random(Concession.Status.values()));
+        concession.condition().setValue(RandomUtil.random(Concession.Condition.values()));
 
         return concession;
     }
@@ -340,8 +327,8 @@ public class BuildingsGenerator {
         return amenity;
     }
 
-    private AptUnitDTO createUnit(Building building, String suiteNumber, int floor, double area, double bedrooms, double bathrooms, Floorplan floorplan) {
-        AptUnitDTO unit = EntityFactory.create(AptUnitDTO.class);
+    private UnitRelatedData createUnit(Building building, String suiteNumber, int floor, double area, double bedrooms, double bathrooms, Floorplan floorplan) {
+        UnitRelatedData unit = EntityFactory.create(UnitRelatedData.class);
 
         unit.belongsTo().set(building);
 

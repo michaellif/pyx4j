@@ -29,5 +29,4 @@ public interface Feature extends IEntity {
     IPrimitive<String> description();
 
     IList<Concession> concessions();
-
 }

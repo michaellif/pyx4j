@@ -19,5 +19,4 @@ import com.propertyvista.domain.property.asset.Parking;
 
 @Transient
 public interface ParkingDTO extends Parking {
-
 }

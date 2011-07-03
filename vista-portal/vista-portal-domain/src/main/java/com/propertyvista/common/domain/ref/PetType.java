@@ -7,13 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 30, 2011
- * @author michaellif
+ * Created on 2011-07-02
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.financial.offering;
+package com.propertyvista.common.domain.ref;
 
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translation;
 
-public interface ShortTermResidentialLease extends Feature {
+public enum PetType {
 
+    @Translation("Dog")
+    dog,
+
+    @Translation("Cat")
+    cat;
+
+    @Override
+    public String toString() {
+        return I18nEnum.tr(this);
+    }
 }

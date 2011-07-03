@@ -13,14 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
@@ -31,19 +25,6 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
 
     @Override
     protected void enhanceRetrieveDTO(AptUnit in, AptUnitDTO dto) {
-
-        EntityQueryCriteria<AptUnitItem> unitItemCriteria = EntityQueryCriteria.create(AptUnitItem.class);
-        unitItemCriteria.add(PropertyCriterion.eq(unitItemCriteria.proto().belongsTo(), in));
-        for (AptUnitItem unitItem : PersistenceServicesFactory.getPersistenceService().query(unitItemCriteria)) {
-            dto.details().add(unitItem);
-        }
-
-        EntityQueryCriteria<AptUnitOccupancy> occupancyCriteria = EntityQueryCriteria.create(AptUnitOccupancy.class);
-        occupancyCriteria.add(PropertyCriterion.eq(occupancyCriteria.proto().unit().getPath().toString(), in));
-        for (AptUnitOccupancy occupancy : PersistenceServicesFactory.getPersistenceService().query(occupancyCriteria)) {
-            dto.occupancies().add(occupancy);
-        }
-
         //TODO: calculate value here:
         dto.numberOfOccupants().setValue(0.0);
     }

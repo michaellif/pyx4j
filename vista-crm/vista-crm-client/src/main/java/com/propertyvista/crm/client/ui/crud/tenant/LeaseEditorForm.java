@@ -26,7 +26,6 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
-import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.domain.property.asset.Rentable;
 import com.propertyvista.domain.property.asset.Utility;
@@ -66,7 +65,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.add(inject(proto().currentRent()), 7);
         main.add(inject(proto().paymentAccepted()), 15);
         main.add(inject(proto().charges(), createChargesListViewer()));
-        main.add(inject(proto().concessions(), SubtypeInjectors.injectConcessions(isEditable())));
         main.add(inject(proto().specialStatus()), 15);
         //TODO Leon
         //Not sure how to do tenant

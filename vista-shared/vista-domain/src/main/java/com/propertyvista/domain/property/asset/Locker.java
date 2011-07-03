@@ -14,9 +14,38 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
+//TODO - replace inheritance on IEntity!!
 public interface Locker extends Rentable {
+
+    @Translatable
+    public enum Type {
+
+        regular,
+
+        large,
+
+        small;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @ToString(index = 1)
+    @MemberColumn(name = "spotType")
+    IPrimitive<Type> type();
+
+    @Override
+    @ToString(index = 0)
+    IPrimitive<String> name();
 
     @Owner
     @Detached

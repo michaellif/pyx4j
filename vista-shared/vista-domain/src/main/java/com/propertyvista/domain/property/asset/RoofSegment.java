@@ -15,10 +15,17 @@ package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.IPrimitive;
 
+// TODO - replace inheritance on IEntity!!
 public interface RoofSegment extends Rentable {
 
     @Owner
     @Detached
     Roof belongsTo();
+
+    @Override
+    @ToString(index = 0)
+    IPrimitive<String> name();
 }

@@ -15,6 +15,8 @@ package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
@@ -48,7 +50,7 @@ public interface LockerArea extends IEntity {
     @Detached
     Building belongsTo();
 
-    // ----------- Infromation --------------------------------------------------------------------------
+    // ----------- Infromation:
 
     @ToString(index = 0)
     IPrimitive<String> name();
@@ -64,25 +66,16 @@ public interface LockerArea extends IEntity {
     @Format("#0.#")
     IPrimitive<Double> levels();
 
+    // Read-Only info:     
+    @Editor(type = EditorType.label)
     IPrimitive<Integer> totalLockers();
 
+    @Editor(type = EditorType.label)
     IPrimitive<Integer> largeLockers();
 
+    @Editor(type = EditorType.label)
     IPrimitive<Integer> regularLockers();
 
+    @Editor(type = EditorType.label)
     IPrimitive<Integer> smallLockers();
-
-    // ------------------ Financials ------------------------------------------------------------------
-
-    @Format("#0.00")
-    IPrimitive<Double> largeRent();
-
-    @Format("#0.00")
-    IPrimitive<Double> regularRent();
-
-    @Format("#0.00")
-    IPrimitive<Double> smallRent();
-
-    @Format("#0.00")
-    IPrimitive<Double> deposit();
 }

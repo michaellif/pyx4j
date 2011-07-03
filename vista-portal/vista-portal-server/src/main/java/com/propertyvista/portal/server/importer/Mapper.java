@@ -30,7 +30,6 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.StructureType;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
-import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.server.generator.CommonsGenerator;
 import com.propertyvista.portal.server.importer.bean.City;
@@ -41,6 +40,7 @@ import com.propertyvista.portal.server.importer.bean.Residential;
 import com.propertyvista.portal.server.importer.bean.Room;
 import com.propertyvista.portal.server.importer.csv.AvailableUnit;
 import com.propertyvista.server.common.generator.Model;
+import com.propertyvista.server.common.generator.UnitRelatedData;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class Mapper {
@@ -136,7 +136,7 @@ public class Mapper {
     }
 
     private void createUnit(Property property, AvailableUnit availableUnit, Building building) {
-        AptUnitDTO unit = EntityFactory.create(AptUnitDTO.class);
+        UnitRelatedData unit = EntityFactory.create(UnitRelatedData.class);
 
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
         occupancy.status().setValue(AptUnitOccupancy.StatusType.available);

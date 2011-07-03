@@ -13,7 +13,9 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.entity.shared.IList;
 
 public interface Pet extends Feature {
 
+    IList<PetPrice> prices();
 }

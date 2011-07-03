@@ -7,19 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
- * @author Vlad
+ * Created on Jun 30, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.marketing;
+package com.propertyvista.domain.financial.offering;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.Concession;
 
-public class ConcessionEditorViewImpl extends CrmEditorViewImplBase<Concession> implements ConcessionEditorView {
+public interface ResidentialRent extends Feature {
 
-    public ConcessionEditorViewImpl() {
-        super(CrmSiteMap.Properties.Concession.class, new ConcessionEditorForm());
-    }
 }

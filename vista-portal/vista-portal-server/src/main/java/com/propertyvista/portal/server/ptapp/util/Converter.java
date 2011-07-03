@@ -73,7 +73,8 @@ public class Converter {
 
         // iEntity
         to.floorplan().set(convert(from.marketing().floorplan()));
-        to.concessions().setValue(from.marketing().floorplan().concessions().getStringView());
+// TODO get consession from list of Features here:        
+//        to.concessions().setValue(from.marketing().floorplan().concessions().getStringView());
         to.utilities().setValue(from.info().utilities().getStringView());
 
         //TODO is it necessary to pull out all unit details here (IList<AptUnitItem>)?

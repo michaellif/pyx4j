@@ -18,14 +18,13 @@ import java.util.List;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
-import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.FloorplanDTO;
 
 public class Model {
 
     private final List<Building> buildings = new ArrayList<Building>();
 
-    private final List<AptUnitDTO> units = new ArrayList<AptUnitDTO>();
+    private final List<UnitRelatedData> units = new ArrayList<UnitRelatedData>();
 
     private final List<FloorplanDTO> floorplans = new ArrayList<FloorplanDTO>();
 
@@ -35,7 +34,7 @@ public class Model {
         return buildings;
     }
 
-    public List<AptUnitDTO> getUnits() {
+    public List<UnitRelatedData> getUnits() {
         return units;
     }
 

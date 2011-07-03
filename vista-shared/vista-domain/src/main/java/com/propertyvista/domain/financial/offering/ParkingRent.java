@@ -13,10 +13,27 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.shared.IPrimitive;
+
 import com.propertyvista.domain.property.asset.Parking;
 
 public interface ParkingRent extends Feature {
 
     Parking parking();
 
+    @Format("#0.00")
+    IPrimitive<Double> disableRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> regularRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> doubleRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> narrowRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> deposit();
 }

@@ -23,7 +23,7 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanView;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
-import com.propertyvista.domain.marketing.yield.Concession;
+import com.propertyvista.domain.financial.Concession;
 
 public class FloorplanActivityDelegate implements FloorplanView.Presenter {
 

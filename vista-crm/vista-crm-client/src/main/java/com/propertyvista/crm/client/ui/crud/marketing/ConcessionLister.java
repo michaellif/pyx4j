@@ -20,7 +20,7 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.marketing.yield.Concession;
+import com.propertyvista.domain.financial.Concession;
 
 public class ConcessionLister extends ListerBase<Concession> {
     public ConcessionLister() {
@@ -36,9 +36,8 @@ public class ConcessionLister extends ListerBase<Concession> {
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Concession>> columnDescriptors, Concession proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.appliedTo()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.value()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.percentage()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.condition()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.start()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.end()));

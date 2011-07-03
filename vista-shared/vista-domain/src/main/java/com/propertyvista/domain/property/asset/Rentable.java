@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@Deprecated
 @ToStringFormat("{0} {1}")
 public interface Rentable extends IEntity {
 

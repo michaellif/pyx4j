@@ -25,21 +25,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translation;
 
+import com.propertyvista.common.domain.ref.PetType;
+
 public interface Pet extends IEntity {
-
-    public enum PetType {
-
-        @Translation("Dog")
-        dog,
-
-        @Translation("Cat")
-        cat;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
 
     public enum WeightUnit {
 

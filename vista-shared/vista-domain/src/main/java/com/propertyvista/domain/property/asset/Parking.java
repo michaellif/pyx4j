@@ -14,6 +14,8 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -66,30 +68,19 @@ public interface Parking extends IEntity {
     @Format("#0.#")
     IPrimitive<Double> levels();
 
+    // Read-Only items:     
+    @Editor(type = EditorType.label)
     IPrimitive<Integer> totalSpaces();
 
+    @Editor(type = EditorType.label)
     IPrimitive<Integer> disabledSpaces();
 
+    @Editor(type = EditorType.label)
     IPrimitive<Integer> regularSpaces();
 
+    @Editor(type = EditorType.label)
     IPrimitive<Integer> doubleSpaces();
 
+    @Editor(type = EditorType.label)
     IPrimitive<Integer> narrowSpaces();
-
-    // ----- Financials -----------------
-
-    @Format("#0.00")
-    IPrimitive<Double> disableRent();
-
-    @Format("#0.00")
-    IPrimitive<Double> regularRent();
-
-    @Format("#0.00")
-    IPrimitive<Double> doubleRent();
-
-    @Format("#0.00")
-    IPrimitive<Double> narrowRent();
-
-    @Format("#0.00")
-    IPrimitive<Double> deposit();
 }

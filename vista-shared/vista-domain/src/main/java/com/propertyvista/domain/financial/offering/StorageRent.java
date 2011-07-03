@@ -13,9 +13,24 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.shared.IPrimitive;
+
 import com.propertyvista.domain.property.asset.LockerArea;
 
 public interface StorageRent extends Feature {
 
     LockerArea lockerArea();
+
+    @Format("#0.00")
+    IPrimitive<Double> largeRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> regularRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> smallRent();
+
+    @Format("#0.00")
+    IPrimitive<Double> deposit();
 }

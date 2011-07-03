@@ -7,13 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 30, 2011
- * @author michaellif
+ * Created on 2011-07-02
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.financial.offering;
+package com.propertyvista.server.common.generator;
 
+import com.pyx4j.entity.shared.IList;
 
-public interface LongTermResidentialLease extends Feature {
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
+public interface UnitRelatedData extends AptUnit {
+
+    IList<AptUnitItem> details();
+
+    IList<AptUnitOccupancy> occupancies();
 }

@@ -45,7 +45,6 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
 
         TabLayoutPanel tabPanel = new TabLayoutPanel(2.7, Unit.EM);
         tabPanel.add(((LockerAreaView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
-        tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
         tabPanel.add(new ScrollPanel(((LockerAreaView) getParentView()).getLockerView().asWidget()), i18n.tr("Lockers"));
         tabPanel.add(new ScrollPanel(createFinancialTab()), i18n.tr("Financial"));
         tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
@@ -67,18 +66,6 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
         split.getRightPanel().add(inject(proto().largeLockers()), 7);
         split.getRightPanel().add(inject(proto().regularLockers()), 7);
         split.getRightPanel().add(inject(proto().smallLockers()), 7);
-
-        main.add(split);
-        return main;
-    }
-
-    private Widget createDetailsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
-
-        split.getLeftPanel().add(inject(proto().largeRent()), 7);
-        split.getLeftPanel().add(inject(proto().regularRent()), 7);
-        split.getRightPanel().add(inject(proto().smallRent()), 7);
 
         main.add(split);
         return main;

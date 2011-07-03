@@ -7,19 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-07-02
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.marketing;
+package com.propertyvista.domain.financial.offering;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.Concession;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public class ConcessionEditorViewImpl extends CrmEditorViewImplBase<Concession> implements ConcessionEditorView {
+import com.propertyvista.common.domain.ref.PetType;
 
-    public ConcessionEditorViewImpl() {
-        super(CrmSiteMap.Properties.Concession.class, new ConcessionEditorForm());
-    }
+public interface PetPrice extends IEntity {
+
+    @MemberColumn(name = "petType")
+    IPrimitive<PetType> type();
+
+    IPrimitive<Double> price();
 }

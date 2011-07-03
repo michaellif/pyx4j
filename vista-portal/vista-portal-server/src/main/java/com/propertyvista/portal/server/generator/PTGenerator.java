@@ -39,6 +39,7 @@ import com.propertyvista.common.domain.IAddressFull.StreetDirection;
 import com.propertyvista.common.domain.IAddressFull.StreetType;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.common.domain.ref.PetType;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.domain.ptapp.Address;
@@ -261,7 +262,7 @@ public class PTGenerator {
         for (int i = 0; i < maxPets; i++) {
             Pet pet = EntityFactory.create(Pet.class);
 
-            pet.type().setValue(Pet.PetType.dog);
+            pet.type().setValue(PetType.dog);
             pet.name().setValue(RandomUtil.random(DemoData.PET_NAMES));
             pet.color().setValue(RandomUtil.random(DemoData.PET_COLORS));
             pet.breed().setValue(RandomUtil.random(DemoData.PET_BREEDS));

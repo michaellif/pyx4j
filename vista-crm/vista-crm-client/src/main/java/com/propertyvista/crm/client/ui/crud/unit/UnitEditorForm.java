@@ -78,7 +78,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             floorplanCompbo.resetCriteria();
             PropertyCriterion criterion = PropertyCriterion.eq(EntityFactory.getEntityPrototype(Floorplan.class).building(), value.belongsTo());
 // TODO refine search mechanics  - currently it doesn't work!..             
-//            floorplanCompbo.addCriterion(criterion);
+            floorplanCompbo.addCriterion(criterion);
         }
 
         super.populate(value);

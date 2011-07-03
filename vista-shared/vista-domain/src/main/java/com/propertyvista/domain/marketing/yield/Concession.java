@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+@Deprecated
 @ToStringFormat("{0} {1}")
 public interface Concession extends IEntity {
 

@@ -23,7 +23,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.Media;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.marketing.yield.Concession;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface Floorplan extends IEntity {
@@ -43,8 +42,6 @@ public interface Floorplan extends IEntity {
     @Caption(name = "Baths")
     IPrimitive<Double> bathrooms();
 
-    IList<Concession> concessions();
-
     @Detached
     IList<Media> media();
 
@@ -52,6 +49,5 @@ public interface Floorplan extends IEntity {
     @com.pyx4j.entity.annotations.Owner
     Building building();
 
-    IList<Feature> featureCatalog();
-
+    IList<Feature> features();
 }

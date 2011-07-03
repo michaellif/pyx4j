@@ -27,7 +27,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.Media;
-import com.propertyvista.domain.marketing.yield.Concession;
+import com.propertyvista.domain.financial.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Utility;
@@ -36,7 +37,6 @@ import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
-import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.server.geo.GeoLocator;
@@ -46,6 +46,7 @@ import com.propertyvista.portal.server.preloader.MeidaGenerator;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 import com.propertyvista.server.common.generator.Model;
+import com.propertyvista.server.common.generator.UnitRelatedData;
 
 public class Importer {
 
@@ -104,8 +105,11 @@ public class Importer {
             loadFloorplanMedia(floorplanDTO);
 
             // persist plain internal lists:
-            for (Concession concession : floorplanDTO.concessions()) {
-                persist(concession);
+            for (Feature feature : floorplanDTO.features()) {
+                for (Concession concession : feature.concessions()) {
+                    persist(concession);
+                }
+                persist(feature);
             }
 
             Floorplan floorplan = down(floorplanDTO, Floorplan.class);
@@ -118,21 +122,21 @@ public class Importer {
             }
         }
 
-        for (AptUnitDTO unitDTO : model.getUnits()) {
+        for (UnitRelatedData unitData : model.getUnits()) {
             // persist plain internal lists:
-            for (Utility utility : unitDTO.info().utilities()) {
+            for (Utility utility : unitData.info().utilities()) {
                 persist(utility);
             }
 
-            AptUnit unit = down(unitDTO, AptUnit.class);
+            AptUnit unit = down(unitData, AptUnit.class);
             persist(unit); // persist real unit here, not DTO!..
 
             // persist internal lists and with belongness: 
-            for (AptUnitOccupancy occupancy : unitDTO.occupancies()) {
+            for (AptUnitOccupancy occupancy : unitData.occupancies()) {
                 occupancy.unit().set(unit);
                 persist(occupancy);
             }
-            for (AptUnitItem detail : unitDTO.details()) {
+            for (AptUnitItem detail : unitData.details()) {
                 detail.belongsTo().set(unit);
                 persist(detail);
             }
