@@ -39,6 +39,7 @@ import com.propertyvista.portal.client.ui.residents.PaymentMethodForm;
 import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.CardPanel;
 import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsViewImpl;
+import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.RefineApartmentSearchForm;
 import com.propertyvista.portal.client.ui.searchapt.SearchApartmentForm;
 
@@ -61,6 +62,7 @@ public abstract class PortalTheme extends VistaTheme {
         initTopActionStyles();
         initVistaMainNavigViewStyles();
         initSearchPanelStyles();
+        initPropertyMapStyles();
         initRefineSearchStyles();
         initApartmentDetailsStyles();
         initCriteriaWidgetDecoratorStyles();
@@ -624,6 +626,17 @@ public abstract class PortalTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Content));
+        addStyle(style);
+
+    }
+
+    private void initPropertyMapStyles() {
+        String prefix = PropertyMapViewImpl.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+        //TODO not very reliable
+        style = new Style(Selector.valueOf(prefix) + " td[rowspan=\"2\"]");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
         addStyle(style);
 
     }

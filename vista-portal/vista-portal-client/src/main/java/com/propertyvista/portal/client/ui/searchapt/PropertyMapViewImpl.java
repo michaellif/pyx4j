@@ -50,7 +50,6 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
         setCellWidth(searchForm, "220px");
 
         final DeckPanel deck = new DeckPanel();
-
         Button viewSelector = new Button("Map/List");
         viewSelector.addClickHandler(new ClickHandler() {
 
