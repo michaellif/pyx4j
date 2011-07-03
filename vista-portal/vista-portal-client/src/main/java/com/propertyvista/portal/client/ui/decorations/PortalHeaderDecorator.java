@@ -29,7 +29,7 @@ public class PortalHeaderDecorator extends VistaHeaderDecorator {
         rightpanel = new HorizontalPanel();
         rightpanel.getElement().getStyle().setFloat(Style.Float.RIGHT);
         rightpanel.getElement().getStyle().setMarginRight(15d, Unit.PX);
-        rightpanel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+        rightpanel.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
         add(rightpanel);
         setCellVerticalAlignment(rightpanel, HorizontalPanel.ALIGN_MIDDLE);
     }
