@@ -19,10 +19,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
-
 
 /**
  * Generic parameters:
@@ -80,5 +81,17 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         EntitySearchCriteria<DBO> c = GenericConverter.convertDTO2DBO(criteria, dboClass);
         enhanceSearchCriteria(c, criteria);
         callback.onSuccess(GenericConverter.convertDBO2DTO(EntityServicesImpl.secureSearch(c), dtoClass));
+    }
+
+    protected void enhanceListCriteria(EntityListCriteria<DBO> searchCriteria, EntityListCriteria<DTO> in) {
+    }
+
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<DTO>> callback, EntityListCriteria<DTO> criteria) {
+        EntityListCriteria<DBO> c = EntityListCriteria.create(dboClass);
+        c.setPageNumber(criteria.getPageNumber());
+        c.setPageSize(criteria.getPageSize());
+        enhanceListCriteria(c, criteria);
+        callback.onSuccess(GenericConverter.convertDBO2DTO(EntityLister.secureQuery(c), dtoClass));
     }
 }

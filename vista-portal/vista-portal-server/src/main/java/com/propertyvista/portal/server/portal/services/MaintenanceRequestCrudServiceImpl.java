@@ -18,6 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
@@ -58,6 +59,12 @@ public class MaintenanceRequestCrudServiceImpl implements MaintenanceRequestCrud
 
     @Override
     public void save(AsyncCallback<MaintenanceRequestDTO> callback, MaintenanceRequestDTO editableEntity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<MaintenanceRequestDTO>> callback, EntityListCriteria<MaintenanceRequestDTO> criteria) {
         // TODO Auto-generated method stub
 
     }

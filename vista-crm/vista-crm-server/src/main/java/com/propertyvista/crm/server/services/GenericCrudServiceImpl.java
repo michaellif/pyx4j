@@ -18,7 +18,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
@@ -53,5 +55,10 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> implements Abs
     @Override
     public void search(AsyncCallback<EntitySearchResult<DBO>> callback, EntitySearchCriteria<DBO> criteria) {
         callback.onSuccess(EntityServicesImpl.secureSearch(criteria));
+    }
+
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<DBO>> callback, EntityListCriteria<DBO> criteria) {
+        callback.onSuccess(EntityLister.secureQuery(criteria));
     }
 }
