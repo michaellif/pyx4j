@@ -623,6 +623,11 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
         addStyle(style);
 
+        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Header));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE25);
+        style.addProperty("height", "3em");
+        addStyle(style);
+
     }
 
     private void initPropertiesMapWidgetStyle() {

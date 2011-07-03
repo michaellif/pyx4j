@@ -18,10 +18,13 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DockPanel;
 
+import com.pyx4j.widgets.client.style.IStyleSuffix;
+
+import com.propertyvista.portal.client.ui.decorations.PortalHeaderDecorator;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
@@ -30,6 +33,26 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
 
     public static String DEFAULT_STYLE_PREFIX = "PropertyList";
 
+    private static I18n i18n = I18nFactory.getI18n(PropertyMapViewImpl.class);
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        Header
+    }
+
+    public enum ViewType {
+        MapView, ListView;
+
+        public static String getName(ViewType tp) {
+            if (tp == MapView) {
+                return i18n.tr("MAP VIEW");
+            } else if (tp == ListView) {
+                return i18n.tr("LIST VIEW");
+            } else {
+                return "";
+            }
+        }
+    }
+
     private Presenter presenter;
 
     private final PropertiesMapWidget map;
@@ -37,8 +60,6 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
     private final RefineApartmentSearchForm searchForm;
 
     private final PropertyListForm propertyListForm;
-
-    private static I18n i18n = I18nFactory.getI18n(PropertyMapViewImpl.class);
 
     public PropertyMapViewImpl() {
         setWidth("100%");
@@ -50,20 +71,30 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
         setCellWidth(searchForm, "220px");
 
         final DeckPanel deck = new DeckPanel();
-        Button viewSelector = new Button("Map/List");
+
+        PortalHeaderDecorator header = new PortalHeaderDecorator(i18n.tr("SEARCH RESULTS"), "100%");
+        header.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Header.name());
+
+        final Anchor viewSelector = new Anchor(ViewType.getName(ViewType.MapView));
         viewSelector.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
+
                 if (deck.getVisibleWidget() == 0) {
                     deck.showWidget(1);
+                    viewSelector.setText(ViewType.getName(ViewType.ListView));
+
                 } else {
                     deck.showWidget(0);
+                    viewSelector.setText(ViewType.getName(ViewType.MapView));
+
                 }
+
             }
         });
-
-        add(viewSelector, DockPanel.NORTH);
+        header.addToTheRight(viewSelector);
+        add(header, DockPanel.NORTH);
 
         map = new PropertiesMapWidget();
 
