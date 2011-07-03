@@ -15,15 +15,16 @@ package com.propertyvista.crm.client.activity.crud.unit;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+
+import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
+
 import com.propertyvista.crm.client.ui.crud.unit.UnitView;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.dto.AptUnitDTO;
-
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
-import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implements UnitViewerView.Presenter {
 
@@ -37,8 +38,8 @@ public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implement
     }
 
     @Override
-    public Presenter getDetailsPresenter() {
-        return delegate.getDetailsPresenter();
+    public Presenter getUnitItemsPresenter() {
+        return delegate.getUnitItemsPresenter();
     }
 
     @Override

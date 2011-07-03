@@ -22,14 +22,14 @@ import com.pyx4j.site.client.ui.crud.ListerBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
-public class DetailLister extends ListerBase<AptUnitItem> {
+public class UnitItemLister extends ListerBase<AptUnitItem> {
 
-    public DetailLister() {
+    public UnitItemLister() {
         super(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class);
         setFiltersVisible(false);
     }
 
-    public DetailLister(boolean readOnly) {
+    public UnitItemLister(boolean readOnly) {
         super(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class, readOnly);
         setFiltersVisible(false);
     }

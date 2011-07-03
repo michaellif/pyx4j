@@ -38,8 +38,8 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     }
 
     @Override
-    public IListerView<AptUnitItem> getDetailsListerView() {
-        return delegate.getDetailsListerView();
+    public IListerView<AptUnitItem> getUnitItemsListerView() {
+        return delegate.getUnitItemsListerView();
     }
 
     @Override

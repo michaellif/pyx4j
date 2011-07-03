@@ -21,6 +21,16 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.entity.client.ui.CEntityComboBox;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.site.client.ui.crud.IView;
+
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
@@ -31,15 +41,6 @@ import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.dto.AptUnitDTO;
-
-import com.pyx4j.entity.client.ui.CEntityComboBox;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.site.client.ui.crud.IView;
 
 public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
@@ -59,7 +60,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(2.7, Unit.EM);
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
-        tabPanel.addDisable(((UnitView) getParentView()).getDetailsListerView().asWidget(), i18n.tr("Details"));
+        tabPanel.addDisable(((UnitView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
         tabPanel.add(new ScrollPanel(createUtilitiesTab()), i18n.tr("Utilities"));
         tabPanel.addDisable(((UnitView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancies"));
         tabPanel.add(new ScrollPanel(createFinancialsTab()), i18n.tr("Financial"));

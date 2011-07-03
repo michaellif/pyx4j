@@ -21,18 +21,18 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 public class UnitViewDelegate implements UnitView {
 
-    private final IListerView<AptUnitItem> detailsLister;
+    private final IListerView<AptUnitItem> unitItemsLister;
 
     private final IListerView<AptUnitOccupancy> OccupanciesLister;
 
     public UnitViewDelegate(boolean readOnly) {
-        detailsLister = new ListerInternalViewImplBase<AptUnitItem>(new DetailLister());
+        unitItemsLister = new ListerInternalViewImplBase<AptUnitItem>(new UnitItemLister());
         OccupanciesLister = new ListerInternalViewImplBase<AptUnitOccupancy>(new UnitOccupancyLister());
     }
 
     @Override
-    public IListerView<AptUnitItem> getDetailsListerView() {
-        return detailsLister;
+    public IListerView<AptUnitItem> getUnitItemsListerView() {
+        return unitItemsLister;
     }
 
     @Override

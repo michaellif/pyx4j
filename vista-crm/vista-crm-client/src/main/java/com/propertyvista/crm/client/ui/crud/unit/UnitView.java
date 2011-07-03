@@ -22,12 +22,12 @@ public interface UnitView {
 
     interface Presenter {
 
-        IListerView.Presenter getDetailsPresenter();
+        IListerView.Presenter getUnitItemsPresenter();
 
         IListerView.Presenter getOccupanciesPresenter();
     }
 
-    IListerView<AptUnitItem> getDetailsListerView();
+    IListerView<AptUnitItem> getUnitItemsListerView();
 
     IListerView<AptUnitOccupancy> getOccupanciesListerView();
 }

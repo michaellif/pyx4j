@@ -14,11 +14,6 @@
 package com.propertyvista.crm.client.activity.crud.unit;
 
 import com.google.gwt.core.client.GWT;
-import com.propertyvista.crm.client.ui.crud.unit.UnitView;
-import com.propertyvista.crm.rpc.services.UnitItemCrudService;
-import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
-import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
@@ -26,16 +21,22 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
+import com.propertyvista.crm.client.ui.crud.unit.UnitView;
+import com.propertyvista.crm.rpc.services.UnitItemCrudService;
+import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+
 public class UnitActivityDelegate implements UnitView.Presenter {
 
-    private final IListerView.Presenter detailsLister;
+    private final IListerView.Presenter unitItemsLister;
 
     private final IListerView.Presenter OccupanciesLister;
 
     @SuppressWarnings("unchecked")
     public UnitActivityDelegate(UnitView view) {
 
-        detailsLister = new ListerActivityBase<AptUnitItem>(view.getDetailsListerView(),
+        unitItemsLister = new ListerActivityBase<AptUnitItem>(view.getUnitItemsListerView(),
                 (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class), AptUnitItem.class);
 
         OccupanciesLister = new ListerActivityBase<AptUnitOccupancy>(view.getOccupanciesListerView(),
@@ -43,8 +44,8 @@ public class UnitActivityDelegate implements UnitView.Presenter {
     }
 
     @Override
-    public Presenter getDetailsPresenter() {
-        return detailsLister;
+    public Presenter getUnitItemsPresenter() {
+        return unitItemsLister;
     }
 
     @Override
@@ -53,11 +54,11 @@ public class UnitActivityDelegate implements UnitView.Presenter {
     }
 
     public void populate(Key parentID) {
+//TODO temporary commented!..
+//        unitItemsLister.setParentFiltering(parentID);
+        unitItemsLister.populateData(0);
 
-        detailsLister.setParentFiltering(parentID);
-        detailsLister.populateData(0);
-
-        OccupanciesLister.setParentFiltering(parentID);
+//        OccupanciesLister.setParentFiltering(parentID);
         OccupanciesLister.populateData(0);
     }
 }
