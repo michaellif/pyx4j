@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.themes;
 
+import java.util.List;
+
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.site.client.ui.crud.ListerBase;
@@ -188,6 +190,23 @@ public abstract class PortalTheme extends VistaTheme {
         style = new Style(Selector.valueOf(VistaWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));
         style.addProperty("padding-top", "2px");
         addStyle(style);
+
+        String gwtButton = (".gwt-Button");
+        List<Style> styles = getStyles(gwtButton);
+        if (styles != null && styles.size() > 0) {
+            for (Style st : styles) {
+                if (st.getSelector().equals(gwtButton)) {
+                    st.addProperty("border-radius", "5px");
+                    st.addProperty("-moz-border-radius", "5px");
+                    st.addProperty("background-color", ThemeColor.OBJECT_TONE50);
+                    st.addProperty("border", "1px solid");
+                    st.addProperty("border-color", "black");
+                    st.addProperty("min-width", "100px");
+                    break;
+                }
+            }
+
+        }
 
     }
 
@@ -616,6 +635,7 @@ public abstract class PortalTheme extends VistaTheme {
 
     private void initPropertyMapStyles() {
         String prefix = PropertyMapViewImpl.DEFAULT_STYLE_PREFIX;
+
         Style style = new Style(Selector.valueOf(prefix));
         addStyle(style);
         //TODO not very reliable

@@ -71,6 +71,7 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
         setCellWidth(searchForm, "220px");
 
         final DeckPanel deck = new DeckPanel();
+        deck.setHeight("100%");
 
         PortalHeaderDecorator header = new PortalHeaderDecorator(i18n.tr("SEARCH RESULTS"), "100%");
         header.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Header.name());
