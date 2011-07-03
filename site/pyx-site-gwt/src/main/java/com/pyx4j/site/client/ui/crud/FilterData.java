@@ -20,6 +20,8 @@
  */
 package com.pyx4j.site.client.ui.crud;
 
+import java.io.Serializable;
+
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
@@ -28,9 +30,10 @@ public class FilterData {
     @Translatable
     public enum Operands {
         is,
+
+        isNot,
 //        
 // TODO ? These criterias aren't supported by DB search engine currently, so postpone implementation ?          
-//        isNot,
 //        contains,
 //        doesNotContain,
 //        beginsWith,
@@ -50,9 +53,9 @@ public class FilterData {
 
     private final Operands operand;
 
-    private final String value;
+    private final Serializable value;
 
-    public FilterData(String memberPath, Operands operand, String value) {
+    public FilterData(String memberPath, Operands operand, Serializable value) {
         this.path = memberPath;
         this.operand = operand;
         this.value = value;
@@ -66,7 +69,7 @@ public class FilterData {
         return operand;
     }
 
-    public String getValue() {
+    public Serializable getValue() {
         return value;
     }
 }
