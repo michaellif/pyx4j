@@ -335,7 +335,7 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("margin-right", "4px");
         style.addProperty("border", "none");
         style.addProperty("border-top-left-radius", "8px");
-        style.addProperty("border-top-rigth-radius", "8px");
+        style.addProperty("border-top-right-radius", "8px");
         style.addProperty("-moz-border-radius-topleft", "8px");
         style.addProperty("-moz-border-radius-topright", "8px");
         addStyle(style);
