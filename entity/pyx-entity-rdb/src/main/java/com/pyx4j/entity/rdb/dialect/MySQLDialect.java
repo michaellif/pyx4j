@@ -50,4 +50,9 @@ public class MySQLDialect extends Dialect {
     public String getGeneratedIdColumnString() {
         return "NOT NULL AUTO_INCREMENT";
     }
+
+    @Override
+    public String applyLimitCriteria(String sql) {
+        return sql + " LIMIT ? OFFSET ?";
+    }
 }

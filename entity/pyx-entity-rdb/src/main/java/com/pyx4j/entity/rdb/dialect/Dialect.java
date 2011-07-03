@@ -181,4 +181,8 @@ public abstract class Dialect {
     public String getDropSequenceSql(String sequenceName) {
         throw new Error("Dialect does not support sequences");
     }
+
+    public String applyLimitCriteria(String sql) {
+        throw new Error("Dialect does not support limit");
+    }
 }

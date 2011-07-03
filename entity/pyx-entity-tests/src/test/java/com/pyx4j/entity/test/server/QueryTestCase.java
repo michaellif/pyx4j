@@ -127,33 +127,33 @@ public abstract class QueryTestCase extends DatastoreTestBase {
     }
 
     public void testQueryByEntity() {
-        Employee mrg = EntityFactory.create(Employee.class);
+        Employee mgr = EntityFactory.create(Employee.class);
         String mgrName = "Manager " + uniqueString();
-        mrg.firstName().setValue(mgrName);
-        srv.persist(mrg);
+        mgr.firstName().setValue(mgrName);
+        srv.persist(mgr);
 
         Employee emp = EntityFactory.create(Employee.class);
         String empName = "Bob " + uniqueString();
         emp.firstName().setValue(empName);
 
-        emp.manager().set(mrg);
+        emp.manager().set(mgr);
 
         srv.persist(emp);
 
         EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
-        criteria1.add(PropertyCriterion.eq(criteria1.proto().manager(), mrg));
+        criteria1.add(PropertyCriterion.eq(criteria1.proto().manager(), mgr));
 
         Employee emp1 = srv.retrieve(criteria1);
         Assert.assertNotNull("retrieve", emp1);
         Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
-        Assert.assertEquals("Search Value", mrg, emp1.manager());
+        Assert.assertEquals("Search Value", mgr, emp1.manager());
         Assert.assertEquals("Verify Value", empName, emp1.firstName().getValue());
 
         List<Employee> emps = srv.query(criteria1);
         Assert.assertEquals("result set size", 1, emps.size());
         emp1 = emps.get(0);
         Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
-        Assert.assertEquals("Search Value", mrg, emp1.manager());
+        Assert.assertEquals("Search Value", mgr, emp1.manager());
         Assert.assertEquals("Verify Value", empName, emp1.firstName().getValue());
     }
 

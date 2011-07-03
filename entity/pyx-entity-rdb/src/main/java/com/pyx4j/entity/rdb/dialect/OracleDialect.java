@@ -103,4 +103,13 @@ public class OracleDialect extends Dialect {
     public String getDropSequenceSql(String sequenceName) {
         return "drop sequence " + sequenceName;
     }
+
+    @Override
+    public String applyLimitCriteria(String sql) {
+        StringBuffer msql = new StringBuffer(sql.length() + 128);
+        msql.append("SELECT * FROM ( SELECT _row_.*, rownum _rownum_ FROM ( ");
+        msql.append(sql);
+        msql.append(" ) _row_ WHERE rownum <= ?) WHERE _rownum_ > ?");
+        return msql.toString();
+    }
 }

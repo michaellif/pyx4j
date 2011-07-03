@@ -646,7 +646,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             log.info("Received encodedCursorReference:" + encodedCursorRefference + ", will use it");
             // TODO   
         }
-        final ResultSetIterator<T> iterable = tm.queryIterable(connection, criteria, -1);
+        final ResultSetIterator<T> iterable = tm.queryIterable(connection, criteria);
 
         return new ICursorIterator<T>() {
 

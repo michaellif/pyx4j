@@ -33,8 +33,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -93,11 +93,11 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void populateData(final int pageNumber) {
-        EntitySearchCriteria<E> criteria = new EntitySearchCriteria<E>(entityClass);
+        EntityListCriteria<E> criteria = new EntityListCriteria<E>(entityClass);
         criteria.setPageSize(view.getPageSize());
         criteria.setPageNumber(pageNumber);
 
-        service.search(new AsyncCallback<EntitySearchResult<E>>() {
+        service.list(new AsyncCallback<EntitySearchResult<E>>() {
             @Override
             public void onFailure(Throwable caught) {
                 throw new UnrecoverableClientError(caught);

@@ -244,7 +244,7 @@ public class QueryBuilder<T extends IEntity> {
         }
     }
 
-    void bindParameters(PreparedStatement stmt) throws SQLException {
+    int bindParameters(PreparedStatement stmt) throws SQLException {
         int parameterIndex = 1;
         if (multitenant) {
             stmt.setString(parameterIndex, NamespaceManager.getNamespace());
@@ -254,5 +254,6 @@ public class QueryBuilder<T extends IEntity> {
             stmt.setObject(parameterIndex, encodeValue(param));
             parameterIndex++;
         }
+        return parameterIndex;
     }
 }

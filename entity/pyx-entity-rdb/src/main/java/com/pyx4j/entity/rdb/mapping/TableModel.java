@@ -46,6 +46,7 @@ import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -514,17 +515,33 @@ public class TableModel {
         }
     }
 
-    public <T extends IEntity> ResultSetIterator<T> queryIterable(final Connection connection, EntityQueryCriteria<T> criteria, int limit) {
+    public <T extends IEntity> ResultSetIterator<T> queryIterable(final Connection connection, EntityQueryCriteria<T> criteria) {
         String sql = null;
         QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, entityOperationsMeta, criteria);
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement(sql = "SELECT m1.* FROM " + qb.getSQL(tableName));
+            int limit = -1;
+            int offset = 0;
+            sql = "SELECT m1.* FROM " + qb.getSQL(tableName);
+            if (criteria instanceof EntityListCriteria) {
+                EntityListCriteria<T> c = (EntityListCriteria<T>) criteria;
+                if (c.getPageSize() > 0) {
+                    offset = c.getPageSize() * c.getPageNumber();
+                    limit = c.getPageSize() + 1;
+                    sql = dialect.applyLimitCriteria(sql);
+                }
+            }
+            stmt = connection.prepareStatement(sql);
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             }
-            qb.bindParameters(stmt);
+            int parameterIndex = qb.bindParameters(stmt);
+            if (limit > 0) {
+                stmt.setInt(parameterIndex, limit);
+                parameterIndex++;
+                stmt.setInt(parameterIndex, offset);
+            }
 
             rs = stmt.executeQuery();
         } catch (SQLException e) {
