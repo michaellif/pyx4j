@@ -15,16 +15,16 @@ package com.propertyvista.unit.portal;
 
 import java.util.Calendar;
 
+import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.selenium.D;
-
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 
 public class DatePickerValidationTest extends DatePickerTestBase {
 
@@ -51,9 +51,13 @@ public class DatePickerValidationTest extends DatePickerTestBase {
     }
 
     private void validateOldAge() {
-        // TODO Leon
-        // Open bug
-
+        int index = 1;
+        assertNotVisible(validation(index));
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -220);
+        typeInDate(datePickerTextBoxId(index), calendar);
+        selenium.click(statusId(index));
+        assertVisible(validation(index));
     }
 
     private void validateIncorrectFormat() {
