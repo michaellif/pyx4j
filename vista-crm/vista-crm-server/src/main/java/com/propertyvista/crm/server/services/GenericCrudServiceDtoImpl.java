@@ -21,8 +21,11 @@ import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 /**
@@ -83,7 +86,19 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         callback.onSuccess(GenericConverter.convertDBO2DTO(EntityServicesImpl.secureSearch(c), dtoClass));
     }
 
-    protected void enhanceListCriteria(EntityListCriteria<DBO> searchCriteria, EntityListCriteria<DTO> in) {
+    protected void enhanceListCriteria(EntityListCriteria<DBO> dbCriteria, EntityListCriteria<DTO> in) {
+        if ((in.getFilters() != null) && (!in.getFilters().isEmpty())) {
+            for (Criterion cr : in.getFilters()) {
+                if (cr instanceof PropertyCriterion) {
+                    PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
+                    String path = propertyCriterion.getPropertyName();
+                    if (path.startsWith(in.proto().getObjectClass().getSimpleName())) {
+                        String dbObjectPath = dbCriteria.proto().getObjectClass().getSimpleName() + path.substring(path.indexOf(Path.PATH_SEPARATOR));
+                        dbCriteria.add(new PropertyCriterion(dbObjectPath, propertyCriterion.getRestriction(), propertyCriterion.getValue()));
+                    }
+                }
+            }
+        }
     }
 
     @Override
