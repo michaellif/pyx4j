@@ -26,7 +26,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.rpc.shared.IService;
 
 public interface AbstractCrudService<EditableEntity extends IEntity> extends IService {
@@ -37,10 +36,7 @@ public interface AbstractCrudService<EditableEntity extends IEntity> extends ISe
 
     public void save(AsyncCallback<EditableEntity> callback, EditableEntity editableEntity);
 
-//TODO - VladL :extract 'search' to ListerService (it'll be used by Listers) and inherit AbstractCrudService from it.     
-
-    @Deprecated
-    public void search(AsyncCallback<EntitySearchResult<EditableEntity>> callback, EntitySearchCriteria<EditableEntity> criteria);
-
+// TODO - VladL :extract 'list' to ListerService (it'll be used by Listers) and inherit AbstractCrudService from it.  
+// VladL: not sure now if we need it, but let's leave it as TODO for further re-thinking...     
     public void list(AsyncCallback<EntitySearchResult<EditableEntity>> callback, EntityListCriteria<EditableEntity> criteria);
 }

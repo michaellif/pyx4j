@@ -34,7 +34,6 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -54,6 +53,8 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     private final Class<E> entityClass;
 
     private List<FilterData> preDefinedFilters;
+
+    private List<FilterData> userDefinedFilters;
 
     public ListerActivityBase(IListerView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         this.view = view;
@@ -93,7 +94,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void populateData(final int pageNumber) {
-        EntityListCriteria<E> criteria = new EntityListCriteria<E>(entityClass);
+        EntityListCriteria<E> criteria = constructSearchCriteria();
         criteria.setPageSize(view.getPageSize());
         criteria.setPageNumber(pageNumber);
 
@@ -112,35 +113,8 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void applyFiltering(List<FilterData> filters) {
-        List<FilterData> currentFilters = filters;
-        if (preDefinedFilters != null) {
-            currentFilters = new ArrayList<FilterData>();
-            currentFilters.addAll(preDefinedFilters);
-            currentFilters.addAll(filters);
-        }
-
-        EntityQueryCriteria<E> criteria = new EntityQueryCriteria<E>(entityClass);
-        for (FilterData fd : currentFilters) {
-            switch (fd.getOperand()) {
-            case is:
-                criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.EQUAL, fd.getValue()));
-                break;
-//            case isNot:
-//                criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.NOT_EQUAL, fd.getValue()));
-//                break;
-//            case contains:
-//                criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.IN, fd.getValue()));
-//                break;
-            case greaterThen:
-                criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.GREATER_THAN, fd.getValue()));
-                break;
-            case lessThen:
-                criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.LESS_THAN, fd.getValue()));
-                break;
-            }
-        }
-
-        // TODO (VladS/L) - search using formed criteria - not implemented in service still...
+        userDefinedFilters = filters;
+        populateData(0);
     }
 
     @Override
@@ -162,5 +136,41 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         CrudAppPlace place = AppSite.getHistoryMapper().createPlace(openPlaceClass);
         place.formNewItemPlace(parentID);
         AppSite.getPlaceController().goTo(place);
+    }
+
+    protected EntityListCriteria<E> constructSearchCriteria() {
+        List<FilterData> currentFilters = new ArrayList<FilterData>();
+
+        // combine filters:
+        if (preDefinedFilters != null) {
+            currentFilters.addAll(preDefinedFilters);
+        }
+        if (userDefinedFilters != null) {
+            currentFilters.addAll(userDefinedFilters);
+        }
+
+        // construct search criteria:
+        EntityListCriteria<E> criteria = new EntityListCriteria<E>(entityClass);
+        for (FilterData fd : currentFilters) {
+            switch (fd.getOperand()) {
+            case is:
+                criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.EQUAL, fd.getValue()));
+                break;
+//        case isNot:
+//            criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.NOT_EQUAL, fd.getValue()));
+//            break;
+//        case contains:
+//            criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.IN, fd.getValue()));
+//            break;
+            case greaterThen:
+                criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.GREATER_THAN, fd.getValue()));
+                break;
+            case lessThen:
+                criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.LESS_THAN, fd.getValue()));
+                break;
+            }
+        }
+
+        return criteria;
     }
 }
