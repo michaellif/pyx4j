@@ -14,17 +14,17 @@
 package com.propertyvista.crm.client.activity.crud.unit;
 
 import com.google.gwt.core.client.GWT;
-
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.client.ui.crud.IListerView;
-import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
-
 import com.propertyvista.crm.client.ui.crud.unit.UnitView;
 import com.propertyvista.crm.rpc.services.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 public class UnitActivityDelegate implements UnitView.Presenter {
 
@@ -50,5 +50,14 @@ public class UnitActivityDelegate implements UnitView.Presenter {
     @Override
     public Presenter getOccupanciesPresenter() {
         return OccupanciesLister;
+    }
+
+    public void populate(Key parentID) {
+
+        detailsLister.setParentFiltering(parentID);
+        detailsLister.populateData(0);
+
+        OccupanciesLister.setParentFiltering(parentID);
+        OccupanciesLister.populateData(0);
     }
 }
