@@ -39,8 +39,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.CircleOverlay;
 import com.pyx4j.gwt.geo.MapUtils;
@@ -48,10 +46,9 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.domain.dto.AmenityDTO;
+import com.propertyvista.portal.client.ui.util.Formatter;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
@@ -188,8 +185,6 @@ public class PropertiesMapWidget extends AbstractMapWidget {
 
         private final Anchor viewDetailsItem;
 
-        private final String POSTFIX = " \u2022 ";
-
         public PropertyCard(final PropertyDTO property) {
             setStyleName(PROPERTY_CARD_STYLE_PREFIX);
             setSize("100%", "100%");
@@ -203,13 +198,13 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             content.getElement().getStyle().setMarginLeft(10, Unit.PX);
             content.getElement().getStyle().setMarginRight(10, Unit.PX);
             //address
-            Label item = new Label(formatAddress(property.address()));
+            Label item = new Label(Formatter.formatAddress(property.address()));
             item.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);
             item.setWidth("100%");
             content.add(item);
 
             //unit(floor plan) types
-            String floorString = formatFloorplans(property.floorplanNames());
+            String floorString = Formatter.formatFloorplans(property.floorplanNames());
             if (floorString != null && !floorString.isEmpty()) {
                 item = new Label(floorString);
                 item.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);
@@ -217,7 +212,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             }
 
             //amenities
-            String amenityString = formatAmenities(property.amenities());
+            String amenityString = Formatter.formatAmenities(property.amenities());
             if (amenityString != null && !amenityString.isEmpty()) {
                 item = new Label(amenityString);
                 item.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);
@@ -274,83 +269,6 @@ public class PropertiesMapWidget extends AbstractMapWidget {
 
         public HandlerRegistration addViewDetailsClickHandler(ClickHandler h) {
             return viewDetailsItem.addClickHandler(h);
-        }
-
-        private String formatAddress(IAddress address) {
-            if (address.isNull())
-                return "";
-
-            StringBuffer addrString = new StringBuffer();
-
-            addrString.append(address.street1().getStringView());
-            if (!address.street2().isNull()) {
-                addrString.append(" ");
-                addrString.append(address.street2().getStringView());
-            }
-
-            if (!address.city().isNull()) {
-                addrString.append(", ");
-                addrString.append(address.city().getStringView());
-            }
-
-            if (!address.province().isNull()) {
-                addrString.append(", ");
-                addrString.append(address.province().getStringView());
-            }
-
-            if (!address.postalCode().isNull()) {
-                addrString.append(" ");
-                addrString.append(address.postalCode().getStringView());
-            }
-
-            return addrString.toString();
-        }
-
-        private String formatListItem(String item) {
-            if (item == null || item.isEmpty()) {
-                return "";
-            }
-            return item.toUpperCase() + POSTFIX;
-
-        }
-
-        private String formatAmenities(IList<AmenityDTO> amenities) {
-            if (amenities.isNull() || amenities.isEmpty()) {
-                return "";
-            }
-            StringBuffer strbuffer = new StringBuffer();
-            for (AmenityDTO amenity : amenities) {
-                if (!amenity.isNull() && !amenity.isEmpty()) {
-                    strbuffer.append(formatListItem(amenity.getStringView()));
-                }
-            }
-            String finalString = strbuffer.toString();
-            int idx = finalString.lastIndexOf(POSTFIX);
-            if (idx > -1) {
-                finalString = finalString.substring(0, idx);
-            }
-
-            return finalString;
-
-        }
-
-        private String formatFloorplans(IPrimitiveSet<String> floorplans) {
-            if (floorplans.isNull() || floorplans.isEmpty())
-                return "";
-
-            StringBuffer strbuffer = new StringBuffer();
-
-            for (String planName : floorplans.getValue()) {
-                if (planName != null && !planName.isEmpty()) {
-                    strbuffer.append(formatListItem(planName));
-                }
-            }
-            String finalString = strbuffer.toString();
-            int idx = finalString.lastIndexOf(POSTFIX);
-            if (idx > -1) {
-                finalString = finalString.substring(0, idx);
-            }
-            return finalString;
         }
     }
 }

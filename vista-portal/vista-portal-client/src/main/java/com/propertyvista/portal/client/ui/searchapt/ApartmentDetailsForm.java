@@ -18,7 +18,6 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
@@ -38,6 +37,7 @@ import com.propertyvista.common.domain.RangeGroup;
 import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.client.ui.decorations.FloorplanCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.PortalListDecorator;
+import com.propertyvista.portal.client.ui.util.Formatter;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
@@ -81,14 +81,14 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         container.add(new VistaWidgetDecorator(inject(proto().address(), new CEntityViewer<IAddress>() {
             @Override
             public IsWidget createContent(IAddress value) {
-                return formatAddress(value);
+                return new Label(Formatter.formatAddress(value));
             }
         }), decor));
 
         container.add(new VistaWidgetDecorator(inject(proto().price(), new CEntityViewer<RangeGroup>() {
             @Override
             public IsWidget createContent(RangeGroup value) {
-                return new Label(formatRange(value, "$"));
+                return new Label(Formatter.formatRange(value, "$"));
             }
         }), decor));
 
@@ -108,56 +108,6 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
     public Presenter getPresenter() {
         return presenter;
 
-    }
-
-    private String formatRange(RangeGroup range, String prefix) {
-        if (range.isNull())
-            return "";
-
-        //TODO remove $ for production
-        StringBuffer rangeString = new StringBuffer((prefix != null ? prefix : ""));
-        if (!range.min().isNull()) {
-            rangeString.append(range.min().getStringView());
-        }
-
-        if (!range.max().isNull()) {
-            rangeString.append(" - ");
-            rangeString.append(range.max().getStringView());
-        }
-
-        return rangeString.toString();
-
-    }
-
-    private Label formatAddress(IAddress address) {
-
-        if (address.isNull())
-            return new Label("");
-
-        StringBuffer addrString = new StringBuffer();
-
-        addrString.append(address.street1().getStringView());
-        if (!address.street2().isNull()) {
-            addrString.append(" ");
-            addrString.append(address.street2().getStringView());
-        }
-
-        if (!address.city().isNull()) {
-            addrString.append(", ");
-            addrString.append(address.city().getStringView());
-        }
-
-        if (!address.province().isNull()) {
-            addrString.append(", ");
-            addrString.append(address.province().getStringView());
-        }
-
-        if (!address.postalCode().isNull()) {
-            addrString.append(" ");
-            addrString.append(address.postalCode().getStringView());
-        }
-
-        return new Label(addrString.toString());
     }
 
     private CEntityFolderViewer<FloorplanDTO> createFloorplanFolderViewer() {
@@ -201,10 +151,10 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
         FlowPanel content = new FlowPanel();
 
-        content.add(formatCardLine(i18n.tr("Type"), value.name().getStringView()));
-        content.add(formatCardLine(i18n.tr("Amenities"), formatAmenities(value.amenities())));
-        content.add(formatCardLine(i18n.tr("Area"), formatRange(value.area(), "")));
-        content.add(formatCardLine(i18n.tr("Notes"), value.description().getStringView()));
+        content.add(Formatter.formatCardLine(i18n.tr("Type"), value.name().getStringView()));
+        content.add(Formatter.formatCardLine(i18n.tr("Amenities"), Formatter.formatAmenities(value.amenities())));
+        content.add(Formatter.formatCardLine(i18n.tr("Area"), Formatter.formatRange(value.area(), "")));
+        content.add(Formatter.formatCardLine(i18n.tr("Notes"), value.description().getStringView()));
         card.setMajorContent(content);
 
         content = new FlowPanel();
@@ -218,46 +168,4 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         return card;
 
     }
-
-    private String formatListItem(String item) {
-        if (item == null || item.isEmpty()) {
-            return "";
-        }
-        return item.toUpperCase() + POSTFIX;
-
-    }
-
-    private HorizontalPanel formatCardLine(String label, String value) {
-        HorizontalPanel item = new HorizontalPanel();
-        item.setWidth("100%");
-        Label lbl = new Label(label + ":");
-        item.add(lbl);
-        item.setCellWidth(lbl, "18%");
-        lbl = new Label(value);
-        item.add(new Label(value));
-        item.setCellWidth(lbl, "82%");
-        return item;
-
-    }
-
-    private String formatAmenities(IList<AmenityDTO> amenities) {
-        if (amenities.isNull() || amenities.isEmpty()) {
-            return "";
-        }
-        StringBuffer strbuffer = new StringBuffer();
-        for (AmenityDTO amenity : amenities) {
-            if (!amenity.isNull() && !amenity.isEmpty()) {
-                strbuffer.append(formatListItem(amenity.getStringView()));
-            }
-        }
-        String finalString = strbuffer.toString();
-        int idx = finalString.lastIndexOf(POSTFIX);
-        if (idx > -1) {
-            finalString = finalString.substring(0, idx);
-        }
-
-        return finalString;
-
-    }
-
 }

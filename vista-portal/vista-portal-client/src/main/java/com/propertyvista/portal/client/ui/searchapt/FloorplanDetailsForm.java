@@ -26,6 +26,7 @@ import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.domain.RangeGroup;
 import com.propertyvista.portal.client.ui.decorations.PortalListDecorator;
+import com.propertyvista.portal.client.ui.util.Formatter;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 
@@ -57,7 +58,7 @@ public class FloorplanDetailsForm extends CEntityForm<FloorplanDetailsDTO> imple
 
             @Override
             public IsWidget createContent(RangeGroup value) {
-                return formatArea(value);
+                return new Label(Formatter.formatRange(value, ""));
             }
         }), decor));
 
@@ -69,24 +70,6 @@ public class FloorplanDetailsForm extends CEntityForm<FloorplanDetailsDTO> imple
         }), decor));
 
         return container;
-    }
-
-    private Label formatArea(RangeGroup area) {
-        if (area.isNull())
-            return new Label("");
-
-        StringBuffer areaString = new StringBuffer();
-        if (!area.min().isNull()) {
-            areaString.append(area.min().getStringView());
-        }
-
-        if (!area.max().isNull()) {
-            areaString.append(" - ");
-            areaString.append(area.max().getStringView());
-        }
-
-        return new Label(areaString.toString());
-
     }
 
     @Override
