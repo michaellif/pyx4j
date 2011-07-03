@@ -42,7 +42,7 @@ public class CardPanel extends DockPanel {
 
     public CardPanel() {
         setStyleName(DEFAULT_STYLE_PREFIX);
-        setSize("100%", "100%");
+        setHeight("100%");
         getElement().getStyle().setProperty("minHeight", "130px");
 
         minorContent = new SimplePanel();

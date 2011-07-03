@@ -127,6 +127,7 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
         //from price
         item = new Label(i18n.tr("from"));
         content.add(item);
+        //TODO think of a better way
         item = new Label("$" + value.price().min().getStringView());
         content.add(item);
         card.setMinorContent(content);

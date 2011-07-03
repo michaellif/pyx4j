@@ -71,7 +71,7 @@ public class BasicCardDecorator<E extends IEntity> extends SimplePanel implement
     public BasicCardDecorator() {
 
         setStyleName(DEFAULT_STYLE_PREFIX);
-        setSize("100%", "100%");
+        setHeight("100%");
         container = new DockPanel();
         container.setSize("100%", "100%");
         container.setSpacing(5);
