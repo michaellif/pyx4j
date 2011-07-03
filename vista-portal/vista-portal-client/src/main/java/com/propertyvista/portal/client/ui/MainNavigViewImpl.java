@@ -17,14 +17,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -44,7 +42,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
     public static String SECONDARY_STYLE_PREFIX = "SecondaryMenu";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Holder, Tab, LabelHolder, StatusHolder, Label
+        Holder, Tab, Label
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -139,16 +137,10 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         private final MenuType menuType;
 
-        private boolean active;
-
-        private final String id;
-
         public NavigTabList(MenuType menuType) {
             this.menuType = menuType;
             setElement(DOM.createElement("ul"));
             tabs = new LinkedList<MainNavigViewImpl.NavigTab>();
-            id = DOM.createUniqueId();
-            this.getElement().setAttribute("id", id);
             if (menuType == MenuType.Secondary) {
                 setStyleName(SECONDARY_STYLE_PREFIX + StyleSuffix.Holder.name());
                 setActive(false);
@@ -167,19 +159,10 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         public void setActive(boolean active) {
             this.setVisible(active);
-            this.active = active;
         }
 
         public MenuType getMenuType() {
             return menuType;
-        }
-
-        public boolean isActive() {
-            return active;
-        }
-
-        public String getId() {
-            return id;
         }
 
         public List<NavigTab> getTabs() {
@@ -212,10 +195,6 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
     class NavigTab extends ComplexPanel {
 
-        private final FlowPanel labelHolder;
-
-        private final SimplePanel statusHolder;
-
         private final Label label;
 
         private boolean selected;
@@ -243,19 +222,9 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
             sinkEvents(Event.ONCLICK);
 
-            labelHolder = new FlowPanel();
-            labelHolder.setStyleName(styleName + StyleSuffix.LabelHolder.name());
-            add(labelHolder);
-
-            statusHolder = new SimplePanel();
-            statusHolder.setStyleName(styleName + StyleSuffix.StatusHolder.name());
-            labelHolder.add(statusHolder);
-
             label = new Label(caption);
             label.setStyleName(styleName + StyleSuffix.Label.name());
-            statusHolder.add(label);
-            getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            getElement().getStyle().setCursor(Cursor.DEFAULT);
+            add(label);
 
             addDomHandler(new ClickHandler() {
                 @Override
@@ -263,7 +232,6 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                     presenter.navigTo(place);
                 }
             }, ClickEvent.getType());
-
             getElement().getStyle().setCursor(Cursor.POINTER);
 
         }

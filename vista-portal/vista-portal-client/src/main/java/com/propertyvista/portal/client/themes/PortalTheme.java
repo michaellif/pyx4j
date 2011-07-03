@@ -344,22 +344,6 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("background-color", ThemeColor.OBJECT_TONE95);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder));
-        style.addProperty("position", "relative");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.LabelHolder));
-        style.addProperty("position", "relative");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder));
-        style.addProperty("background", "transparent");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.StatusHolder));
-        style.addProperty("background", "transparent");
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE95);
         style.addProperty("color", "white");
