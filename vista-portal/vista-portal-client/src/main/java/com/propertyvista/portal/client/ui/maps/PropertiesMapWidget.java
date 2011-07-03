@@ -179,7 +179,9 @@ public class PropertiesMapWidget extends AbstractMapWidget {
     }
 
     public void showMarker(PropertyDTO property) {
-        getMap().getInfoWindow().open(markers.get(property), new InfoWindowContent(new PropertyCard(property)));
+        InfoWindowContent bubble = new InfoWindowContent(new PropertyCard(property));
+        bubble.setMaxWidth(250);
+        getMap().getInfoWindow().open(markers.get(property), bubble);
     }
 
     public class PropertyCard extends DockPanel {
@@ -198,8 +200,8 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             FlowPanel content = new FlowPanel();
             content.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContent);
             content.setHeight("100%");
-            content.getElement().getStyle().setMarginLeft(15, Unit.PX);
-            content.getElement().getStyle().setMarginRight(15, Unit.PX);
+            content.getElement().getStyle().setMarginLeft(10, Unit.PX);
+            content.getElement().getStyle().setMarginRight(10, Unit.PX);
             //address
             Label item = new Label(formatAddress(property.address()));
             item.setStyleName(PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);
