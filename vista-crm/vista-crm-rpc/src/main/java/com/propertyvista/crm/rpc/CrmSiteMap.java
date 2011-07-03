@@ -71,67 +71,61 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Elevator")
         @NavigationItem(navigLabel = "Elevators")
         public static class Elevator extends CrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "Boiler")
         @NavigationItem(navigLabel = "Boilers")
         public static class Boiler extends CrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "Roof")
         @NavigationItem(navigLabel = "Roofs")
         public static class Roof extends CrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "Parking")
         @NavigationItem(navigLabel = "Parkings")
         public static class Parking extends CrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "Parking Spot")
         @NavigationItem(navigLabel = "Parking Spots")
         public static class ParkingSpot extends CrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "Locker Area")
         @NavigationItem(navigLabel = "Locker Areas")
         public static class LockerArea extends CrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "Locker")
         @NavigationItem(navigLabel = "Lockers")
         public static class Locker extends CrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "Unit Item")
         @NavigationItem(navigLabel = "Unit Items")
         public static class UnitItem extends CrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "Unit Occupancy")
         @NavigationItem(navigLabel = "Unit Occupancies")
         public static class UnitOccupancy extends CrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "Concession")
         @NavigationItem(navigLabel = "Concessions")
         public static class Concession extends CrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "Floorplan")
         @NavigationItem(navigLabel = "Floorplan")
         public static class Floorplan extends CrudAppPlace {
+        }
 
+        @PlaceProperties(caption = "Feature")
+        @NavigationItem(navigLabel = "Feature")
+        public static class Feature extends CrudAppPlace {
         }
     }
 
@@ -178,7 +172,6 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Report Management")
         @NavigationItem(navigLabel = "Manage Reports")
         public static class Management extends AppPlace {
-
         }
 
         @PlaceProperties(caption = "System Report")
@@ -223,25 +216,21 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Policy Management")
         @NavigationItem(navigLabel = "Policy Management")
         public static class Policy extends AppPlace {
-
         }
 
         @PlaceProperties(caption = "User Role")
         @NavigationItem(navigLabel = "User Role")
         public static class UserRole extends AppPlace {
-
         }
 
         @PlaceProperties(caption = "General")
         @NavigationItem(navigLabel = "General")
         public static class General extends AppPlace {
-
         }
 
         @PlaceProperties(caption = "Content")
         @NavigationItem(navigLabel = "Content")
         public static class Content extends CrudAppPlace {
-
         }
     }
 

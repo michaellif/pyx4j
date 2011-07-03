@@ -14,6 +14,8 @@
 package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,9 +24,13 @@ import com.propertyvista.domain.financial.Concession;
 
 public interface Feature extends IEntity {
 
-    IPrimitive<LogicalDate> offeringStartDate();
+    @Caption(name = "Offering Start")
+    @MemberColumn(name = "featureStart")
+    IPrimitive<LogicalDate> start();
 
-    IPrimitive<LogicalDate> offeringEndDate();
+    @Caption(name = "Offering End")
+    @MemberColumn(name = "featureEnd")
+    IPrimitive<LogicalDate> end();
 
     IPrimitive<String> description();
 

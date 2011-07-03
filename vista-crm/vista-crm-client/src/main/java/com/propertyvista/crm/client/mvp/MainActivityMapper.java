@@ -49,6 +49,8 @@ import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActiv
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.ConcessionEditorActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.ConcessionViewerActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.FeatureEditorActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.FeatureViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.ApplicationEditorActivity;
@@ -93,6 +95,7 @@ public class MainActivityMapper implements AppActivityMapper {
                 Activity activity = null;
                 if (place instanceof CrmSiteMap.ResetPassword) {
                     activity = new ResetPasswordActivity(place);
+
 // - Building-related:
                 } else if (place instanceof CrmSiteMap.Properties.Building) {
                     switch (((CrudAppPlace) place).getType()) {
@@ -182,7 +185,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new LockerListerActivity(place);
                         break;
                     }
-// - Floorplan-related:
 
                 } else if (place instanceof CrmSiteMap.Properties.Floorplan) {
                     switch (((CrudAppPlace) place).getType()) {
@@ -191,16 +193,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case viewer:
                         activity = new FloorplanViewerActivity(place);
-                        break;
-                    }
-
-                } else if (place instanceof CrmSiteMap.Properties.Concession) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new ConcessionEditorActivity(place);
-                        break;
-                    case viewer:
-                        activity = new ConcessionViewerActivity(place);
                         break;
                     }
 
@@ -235,6 +227,27 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case viewer:
                         activity = new UnitOccupancyViewerActivity(place);
+                        break;
+                    }
+
+// - Marketing-related:
+                } else if (place instanceof CrmSiteMap.Properties.Feature) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new FeatureEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new FeatureViewerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof CrmSiteMap.Properties.Concession) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ConcessionEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ConcessionViewerActivity(place);
                         break;
                     }
 

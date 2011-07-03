@@ -11,18 +11,18 @@
  * @author TPRGLET
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.floorplan;
+package com.propertyvista.crm.client.ui.crud.marketing;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
 
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.Concession;
 
-public interface FloorplanView {
+public interface FeatureView {
 
     interface Presenter {
 
-        IListerView.Presenter getFeaturesPresenter();
+        IListerView.Presenter getConcessionsPresenter();
     }
 
-    IListerView<Feature> getFeaturesListerView();
+    IListerView<Concession> getConcessionsListerView();
 }

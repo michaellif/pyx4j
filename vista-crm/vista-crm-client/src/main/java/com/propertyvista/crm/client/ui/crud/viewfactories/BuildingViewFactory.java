@@ -58,10 +58,6 @@ import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanEditorView;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanViewerView;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorView;
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerView;
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerViewImpl;
 
 public class BuildingViewFactory extends ViewFactoryBase {
 
@@ -117,11 +113,6 @@ public class BuildingViewFactory extends ViewFactoryBase {
                 map.put(type, new FloorplanViewerViewImpl());
             } else if (FloorplanEditorView.class.equals(type)) {
                 map.put(type, new FloorplanEditorViewImpl());
-
-            } else if (ConcessionViewerView.class.equals(type)) {
-                map.put(type, new ConcessionViewerViewImpl());
-            } else if (ConcessionEditorView.class.equals(type)) {
-                map.put(type, new ConcessionEditorViewImpl());
             }
         }
         return map.get(type);

@@ -7,22 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-28
- * @author TPRGLET
+ * Created on 2011-06-29
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.floorplan;
+package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.domain.financial.offering.Feature;
 
-public interface FloorplanView {
-
-    interface Presenter {
-
-        IListerView.Presenter getFeaturesPresenter();
-    }
-
-    IListerView<Feature> getFeaturesListerView();
+public interface FeatureCrudService extends AbstractCrudService<Feature> {
 }

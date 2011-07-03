@@ -18,7 +18,7 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.dto.FloorplanDTO;
 
 public class FloorplanEditorViewImpl extends CrmEditorViewImplBase<FloorplanDTO> implements FloorplanEditorView {
@@ -37,7 +37,7 @@ public class FloorplanEditorViewImpl extends CrmEditorViewImplBase<FloorplanDTO>
     }
 
     @Override
-    public IListerView<Concession> getConcessionsListerView() {
-        return delegate.getConcessionsListerView();
+    public IListerView<Feature> getFeaturesListerView() {
+        return delegate.getFeaturesListerView();
     }
 }

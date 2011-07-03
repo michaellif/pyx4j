@@ -20,12 +20,20 @@ import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorView;
 import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerView;
 import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.FeatureEditorView;
+import com.propertyvista.crm.client.ui.crud.marketing.FeatureEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.FeatureViewerView;
+import com.propertyvista.crm.client.ui.crud.marketing.FeatureViewerViewImpl;
 
 public class MarketingViewFactory extends ViewFactoryBase {
 
     public static IView<? extends IEntity> instance(Class<? extends IView<? extends IEntity>> type) {
         if (!map.containsKey(type)) {
-            if (ConcessionViewerView.class.equals(type)) {
+            if (FeatureViewerView.class.equals(type)) {
+                map.put(type, new FeatureViewerViewImpl());
+            } else if (FeatureEditorView.class.equals(type)) {
+                map.put(type, new FeatureEditorViewImpl());
+            } else if (ConcessionViewerView.class.equals(type)) {
                 map.put(type, new ConcessionViewerViewImpl());
             } else if (ConcessionEditorView.class.equals(type)) {
                 map.put(type, new ConcessionEditorViewImpl());

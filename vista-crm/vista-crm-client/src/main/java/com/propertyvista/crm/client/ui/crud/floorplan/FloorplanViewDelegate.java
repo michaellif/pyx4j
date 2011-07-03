@@ -16,19 +16,19 @@ package com.propertyvista.crm.client.ui.crud.floorplan;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionLister;
-import com.propertyvista.domain.financial.Concession;
+import com.propertyvista.crm.client.ui.crud.marketing.FeatureLister;
+import com.propertyvista.domain.financial.offering.Feature;
 
 public class FloorplanViewDelegate implements FloorplanView {
 
-    private final IListerView<Concession> concessionsLister;
+    private final IListerView<Feature> featuresLister;
 
     public FloorplanViewDelegate(boolean readOnly) {
-        concessionsLister = new ListerInternalViewImplBase<Concession>(new ConcessionLister());
+        featuresLister = new ListerInternalViewImplBase<Feature>(new FeatureLister());
     }
 
     @Override
-    public IListerView<Concession> getConcessionsListerView() {
-        return concessionsLister;
+    public IListerView<Feature> getFeaturesListerView() {
+        return featuresLister;
     }
 }

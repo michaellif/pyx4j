@@ -53,7 +53,7 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
     public IsWidget createContent() {
         tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
 
-        tabPanel.addDisable(((FloorplanView) getParentView()).getConcessionsListerView().asWidget(), i18n.tr("Concessions"));
+        tabPanel.addDisable(((FloorplanView) getParentView()).getFeaturesListerView().asWidget(), i18n.tr("Features"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");

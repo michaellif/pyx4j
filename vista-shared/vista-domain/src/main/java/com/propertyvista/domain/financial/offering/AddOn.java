@@ -14,6 +14,7 @@
 package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -23,12 +24,13 @@ import com.propertyvista.domain.financial.Pricing;
 @ToStringFormat("{0} {1}")
 public interface AddOn extends Feature {
 
-    enum AddOnType {
+    enum Type {
 
     }
 
     @ToString
-    IPrimitive<AddOnType> addOnType();
+    @MemberColumn(name = "addonType")
+    IPrimitive<Type> type();
 
     @EmbeddedEntity
     Pricing pricing();

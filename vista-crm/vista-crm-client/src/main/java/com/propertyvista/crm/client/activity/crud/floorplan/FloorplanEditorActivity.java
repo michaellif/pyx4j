@@ -39,8 +39,8 @@ public class FloorplanEditorActivity extends EditorActivityBase<FloorplanDTO> im
     }
 
     @Override
-    public Presenter getConcessionsPresenter() {
-        return delegate.getConcessionsPresenter();
+    public Presenter getFeaturesPresenter() {
+        return delegate.getFeaturesPresenter();
     }
 
     @Override

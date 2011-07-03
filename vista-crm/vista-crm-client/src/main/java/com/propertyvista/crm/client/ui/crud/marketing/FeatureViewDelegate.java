@@ -11,18 +11,23 @@
  * @author TPRGLET
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.floorplan;
+package com.propertyvista.crm.client.ui.crud.marketing;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.Concession;
 
-public interface FloorplanView {
+public class FeatureViewDelegate implements FeatureView {
 
-    interface Presenter {
+    private final IListerView<Concession> concessionsLister;
 
-        IListerView.Presenter getFeaturesPresenter();
+    public FeatureViewDelegate(boolean readOnly) {
+        concessionsLister = new ListerInternalViewImplBase<Concession>(new ConcessionLister());
     }
 
-    IListerView<Feature> getFeaturesListerView();
+    @Override
+    public IListerView<Concession> getConcessionsListerView() {
+        return concessionsLister;
+    }
 }

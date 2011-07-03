@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.floorplan;
+package com.propertyvista.crm.client.ui.crud.marketing;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
 
@@ -19,26 +19,26 @@ import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.financial.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.dto.FloorplanDTO;
 
-public class FloorplanViewerViewImpl extends CrmViewerViewImplBase<FloorplanDTO> implements FloorplanViewerView {
+public class FeatureViewerViewImpl extends CrmViewerViewImplBase<Feature> implements FeatureViewerView {
 
-    private final FloorplanViewDelegate delegate;
+    private final FeatureViewDelegate delegate;
 
-    public FloorplanViewerViewImpl() {
-        super(CrmSiteMap.Properties.Floorplan.class);
+    public FeatureViewerViewImpl() {
+        super(CrmSiteMap.Properties.Feature.class);
 
-        delegate = new FloorplanViewDelegate(true);
+        delegate = new FeatureViewDelegate(true);
 
         // create/init/set main form here: 
-        CrmEntityForm<FloorplanDTO> form = new FloorplanEditorForm(new CrmViewersComponentFactory(), this);
+        CrmEntityForm<Feature> form = new FeatureEditorForm(new CrmViewersComponentFactory(), this);
         form.initialize();
         setForm(form);
     }
 
     @Override
-    public IListerView<Feature> getFeaturesListerView() {
-        return delegate.getFeaturesListerView();
+    public IListerView<Concession> getConcessionsListerView() {
+        return delegate.getConcessionsListerView();
     }
 }

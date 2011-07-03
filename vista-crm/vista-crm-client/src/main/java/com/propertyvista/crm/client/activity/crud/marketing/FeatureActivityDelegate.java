@@ -11,7 +11,7 @@
  * @author TPRGLET
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.floorplan;
+package com.propertyvista.crm.client.activity.crud.marketing;
 
 import com.google.gwt.core.client.GWT;
 
@@ -21,27 +21,28 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanView;
-import com.propertyvista.crm.rpc.services.FeatureCrudService;
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.crm.client.ui.crud.marketing.FeatureView;
+import com.propertyvista.crm.rpc.services.ConcessionCrudService;
+import com.propertyvista.domain.financial.Concession;
 
-public class FloorplanActivityDelegate implements FloorplanView.Presenter {
+public class FeatureActivityDelegate implements FeatureView.Presenter {
 
-    private final IListerView.Presenter featuresLister;
+    private final IListerView.Presenter concessionsLister;
 
     @SuppressWarnings("unchecked")
-    public FloorplanActivityDelegate(FloorplanView view) {
+    public FeatureActivityDelegate(FeatureView view) {
 
-        featuresLister = new ListerActivityBase<Feature>(view.getFeaturesListerView(), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class),
-                Feature.class);
+        concessionsLister = new ListerActivityBase<Concession>(view.getConcessionsListerView(),
+                (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class);
     }
 
     @Override
-    public Presenter getFeaturesPresenter() {
-        return featuresLister;
+    public Presenter getConcessionsPresenter() {
+        return concessionsLister;
     }
 
     public void populate(Key parentID) {
-        featuresLister.populateData(0);
+        concessionsLister.setParentFiltering(parentID);
+        concessionsLister.populateData(0);
     }
 }
