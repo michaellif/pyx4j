@@ -24,10 +24,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.site.client.ui.crud.IView;
 
@@ -43,8 +42,6 @@ import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
-
-    private CEntityComboBox<Floorplan> floorplanCompbo;
 
     public UnitEditorForm(IView<AptUnitDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
@@ -72,19 +69,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         return tabPanel;
     }
 
-    @Override
-    public void populate(AptUnitDTO value) {
-
-        if (floorplanCompbo != null) { // restrict floorplan combo here to current building:
-            floorplanCompbo.resetCriteria();
-            PropertyCriterion criterion = PropertyCriterion.eq(EntityFactory.getEntityPrototype(Floorplan.class).building(), value.belongsTo());
-// TODO refine search mechanics  - currently it doesn't work!..             
-            floorplanCompbo.addCriterion(criterion);
-        }
-
-        super.populate(value);
-    }
-
     @SuppressWarnings("unchecked")
     private Widget createMarketingTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
@@ -94,9 +78,21 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         SubtypeInjectors.injectMarketing(main, split, proto().marketing(), this);
 
         main.add(inject(proto().marketing().floorplan()), 15);
+
+        // restrict floorplan combo here to current building:
         CEditableComponent<Floorplan, ?> comp = get(proto().marketing().floorplan());
         if (comp instanceof CEntityComboBox<?>) {
-            floorplanCompbo = (CEntityComboBox<Floorplan>) comp;
+            CEntityComboBox<Floorplan> floorplanCompbo = (CEntityComboBox<Floorplan>) comp;
+            floorplanCompbo.setOptionsFilter(new OptionsFilter<Floorplan>() {
+
+                public boolean acceptOption(Floorplan entity) {
+                    if ((getValue() == null) || getValue().isNull()) {
+                        return false;
+                    } else {
+                        return entity.building().equals(getValue().belongsTo());
+                    }
+                }
+            });
         }
 
         return main;
