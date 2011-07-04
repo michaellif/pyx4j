@@ -51,6 +51,10 @@ public class Path implements Serializable, IDebugId {
         this.path = path;
     }
 
+    public Path(Class<? extends IEntity> entityClass, String memberName) {
+        this.path = GWTJava5Helper.getSimpleName(entityClass) + PATH_SEPARATOR + memberName + PATH_SEPARATOR;
+    }
+
     public Path(IObject<?> object) {
         path = "";
         List<String> members = new Vector<String>();

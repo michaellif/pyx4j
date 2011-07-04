@@ -33,6 +33,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
@@ -78,8 +79,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         if (preDefinedFilters == null) {
             preDefinedFilters = new ArrayList<FilterData>();
         }
-
-        preDefinedFilters.add(new FilterData(EntityFactory.getEntityMeta(entityClass).getOwnerMemberName(), Operands.is, parentID.toString()));
+        preDefinedFilters.add(new FilterData(new Path(entityClass, EntityFactory.getEntityMeta(entityClass).getOwnerMemberName()), Operands.is, parentID));
     }
 
     @Override
