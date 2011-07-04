@@ -86,7 +86,6 @@ public class PropertiesMapWidget extends AbstractMapWidget {
                 }
                 marker.setMarkerType(MarkerType.inbound);
                 markers.put(property, marker);
-                System.out.println("+++++++++++" + property.getStringView());
             }
             for (PropertyDTO property : outboundPropertyList.properties()) {
                 if (origMarkers.containsKey(property)) {
@@ -97,7 +96,6 @@ public class PropertiesMapWidget extends AbstractMapWidget {
                 }
                 marker.setMarkerType(MarkerType.outbound);
                 markers.put(property, marker);
-                System.out.println("-----------" + property.getStringView());
             }
 
             for (Marker oldMarker : origMarkers.values()) {

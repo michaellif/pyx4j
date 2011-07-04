@@ -90,21 +90,12 @@ public class PropertyMarker extends Marker {
     }
 
     public void setMarkerType(MarkerType markerType) {
-        Icon icon = MarkerImpl.impl.getIcon(this);
         switch (markerType) {
         case inbound:
-            icon.setImageURL(PortalImages.INSTANCE.mapMarker().getURL());
-            icon.setIconSize(Size.newInstance(38, 41));
-            icon.setShadowSize(Size.newInstance(44, 35));
-            icon.setIconAnchor(Point.newInstance(15, 20));
-            icon.setInfoWindowAnchor(Point.newInstance(15, 5));
+            MarkerImpl.impl.setImage(this, PortalImages.INSTANCE.mapMarker().getURL());
             break;
         case outbound:
-            icon.setImageURL(PortalImages.INSTANCE.mapMarkerOutbound().getURL());
-            icon.setIconSize(Size.newInstance(10, 10));
-            icon.setShadowSize(Size.newInstance(15, 15));
-            icon.setIconAnchor(Point.newInstance(0, 0));
-            icon.setInfoWindowAnchor(Point.newInstance(15, 5));
+            MarkerImpl.impl.setImage(this, PortalImages.INSTANCE.mapMarkerOutbound().getURL());
             break;
         }
     }
