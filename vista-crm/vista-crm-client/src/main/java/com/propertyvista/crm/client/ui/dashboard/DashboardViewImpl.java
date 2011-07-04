@@ -144,11 +144,11 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
             }
         });
 
-        if (!dashboardMetadata.isEmpty()) {
-            header.setCaption(dashboardMetadata.name().getStringView());
-            layouts.setLayout(dashboardMetadata.layoutType().getValue());
+        if (this.dashboardMetadata != null && !this.dashboardMetadata.isEmpty()) {
+            header.setCaption(this.dashboardMetadata.name().getStringView());
+            layouts.setLayout(this.dashboardMetadata.layoutType().getValue());
             // fill the dashboard with gadgets:
-            for (final GadgetMetadata gmd : dashboardMetadata.gadgets()) {
+            for (final GadgetMetadata gmd : this.dashboardMetadata.gadgets()) {
                 IGadgetBase gadget = GadgetsFactory.createGadget(gmd.type().getValue(), gmd);
                 if (gadget != null) {
                     gadget.setPresenter(presenter);

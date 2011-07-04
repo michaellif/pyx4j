@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -26,6 +27,10 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface Floorplan extends IEntity {
+
+    @Owner
+    @Detached
+    Building building();
 
     @ToString(index = 0)
     IPrimitive<String> name();
@@ -44,10 +49,6 @@ public interface Floorplan extends IEntity {
 
     @Detached
     IList<Media> media();
-
-    @Detached
-    @com.pyx4j.entity.annotations.Owner
-    Building building();
 
     IList<Feature> features();
 }

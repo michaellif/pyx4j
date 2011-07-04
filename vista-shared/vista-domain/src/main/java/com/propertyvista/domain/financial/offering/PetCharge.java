@@ -13,9 +13,11 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IList;
 
-public interface Pet extends Feature {
+public interface PetCharge extends Feature {
 
+    @EmbeddedEntity
     IList<PetPrice> prices();
 }

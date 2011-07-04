@@ -31,6 +31,10 @@ import com.propertyvista.domain.Media;
 import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.financial.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ParkingRent;
+import com.propertyvista.domain.financial.offering.PetCharge;
+import com.propertyvista.domain.financial.offering.ResidentialRent;
+import com.propertyvista.domain.financial.offering.StorageRent;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -63,7 +67,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class,
                     Amenity.class, Concession.class, LeaseTerms.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, Media.class,
-                    ThumbnailBlob.class, FileBlob.class);
+                    ThumbnailBlob.class, FileBlob.class, Feature.class, ResidentialRent.class, ParkingRent.class, StorageRent.class, PetCharge.class);
         } else {
             return "This is production";
         }
@@ -81,10 +85,11 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             // TODO Need to be saving PropertyProfile, PetCharge
             persist(building);
 
-// Parkings:
+// Parking:
             List<Parking> parkings = generator.createParkings(building, DemoData.NUM_PARKINGS);
             for (Parking parking : parkings) {
                 persist(parking);
+
                 List<ParkingSpot> spots = generator.createParkingSpots(parking, DemoData.NUM_PARKINGSPOTS);
                 for (ParkingSpot spot : spots) {
                     persist(spot);
@@ -119,6 +124,11 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 persist(floorplan); // persist real unit here, not DTO!..
 
                 // persist internal lists and with belongness: 
+                for (Feature feature : floorplanDTO.features()) {
+//                    feature.belongsTo().set(floorplan);
+                    persist(feature);
+                }
+
                 for (FloorplanAmenity amenity : floorplanDTO.amenities()) {
                     amenity.belongsTo().set(floorplan);
                     persist(amenity);

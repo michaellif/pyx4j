@@ -23,6 +23,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.Concession;
 
 public interface Feature extends IEntity {
+//
+//    @Owner
+//    @Detached
+//    Floorplan belongsTo();
 
     @Caption(name = "Offering Start")
     @MemberColumn(name = "featureStart")
