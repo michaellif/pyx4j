@@ -1,3 +1,16 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Feb 1, 2011
+ * @author Misha
+ * @version $Id$
+ */
 package com.propertyvista.portal.ptapp.client.ui;
 
 import org.xnap.commons.i18n.I18n;
@@ -11,7 +24,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
@@ -94,21 +106,6 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
     @Override
     public void setPresenter(final Presenter presenter) {
         this.presenter = presenter;
-    }
-
-    private class NavigLink extends CHyperlink {
-
-        public NavigLink(String name, final AppPlace place) {
-            super(null, new Command() {
-                @Override
-                public void execute() {
-                    presenter.getPlaceController().goTo(place);
-                }
-            });
-            setDebugId(new StringDebugId(name));
-            setValue(i18n.tr(name));
-        }
-
     }
 
     @Override
