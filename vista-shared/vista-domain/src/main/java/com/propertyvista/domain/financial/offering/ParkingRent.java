@@ -29,7 +29,7 @@ public interface ParkingRent extends Feature {
     IPrimitive<Double> regularRent();
 
     @Format("#0.00")
-    IPrimitive<Double> doubleRent();
+    IPrimitive<Double> wideRent();
 
     @Format("#0.00")
     IPrimitive<Double> narrowRent();

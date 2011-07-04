@@ -52,13 +52,25 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
 
     public FeatureEditorViewImpl() {
         super(CrmSiteMap.Properties.Feature.class);
-
         delegate = new FeatureViewDelegate(false);
+    }
 
-        // create/init/set main form here: 
-        CrmEntityForm<Feature> form = new FeatureEditorForm(this);
-        form.initialize();
-        setForm(form);
+    @Override
+    public void populate(Feature value) {
+        if (value instanceof ResidentialRent) {
+            CrmEntityForm<ResidentialRent> formResidential = new ResidentialRentEditorForm(this);
+            formResidential.initialize();
+            setForm(formResidential);
+        } else if (value instanceof ParkingRent) {
+            CrmEntityForm<ParkingRent> formParking = new ParkingRentEditorForm(this);
+            formParking.initialize();
+            setForm(formParking);
+        } else if (value instanceof StorageRent) {
+            CrmEntityForm<StorageRent> formStorage = new StorageRentEditorForm(this);
+            formStorage.initialize();
+            setForm(formStorage);
+        }
+        super.populate(value);
     }
 
     @Override

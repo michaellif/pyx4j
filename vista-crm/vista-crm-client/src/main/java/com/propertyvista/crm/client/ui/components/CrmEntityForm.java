@@ -25,7 +25,7 @@ public abstract class CrmEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     protected static I18n i18n = I18nFactory.getI18n(CrmEntityForm.class);
 
-    private IView<E> parentView;
+    private IView<? extends IEntity> parentView;
 
     public CrmEntityForm(Class<E> rootClass) {
         super(rootClass, new CrmEditorsComponentFactory());
@@ -40,11 +40,11 @@ public abstract class CrmEntityForm<E extends IEntity> extends CEntityForm<E> {
         return (this.factory instanceof CrmEditorsComponentFactory);
     }
 
-    public void setParentView(IView<E> parentView) {
+    public void setParentView(IView<? extends IEntity> parentView) {
         this.parentView = parentView;
     }
 
-    protected IView<E> getParentView() {
+    protected IView<? extends IEntity> getParentView() {
         return parentView;
     }
 }

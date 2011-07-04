@@ -65,10 +65,10 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     }
 
     @Override
-    protected void setForm(CEntityForm<E> form) {
+    protected void setForm(CEntityForm<? extends E> form) {
         super.setForm(form);
 
-        form.addValueChangeHandler(new ValueChangeHandler<E>() {
+        this.form.addValueChangeHandler(new ValueChangeHandler<E>() {
             @Override
             public void onValueChange(ValueChangeEvent<E> event) {
                 enableButtons(true);

@@ -19,27 +19,26 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.Feature;
 
-public class FeatureEditorForm extends CrmEntityForm<Feature> {
+public abstract class FeatureEditorForm<T extends Feature> extends CrmEntityForm<T> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(2.7, Unit.EM);
 
-    public FeatureEditorForm(IView<Feature> parentView) {
-        this(new CrmEditorsComponentFactory(), parentView);
+    public FeatureEditorForm(Class<T> rootClass) {
+        super(rootClass);
     }
 
-    public FeatureEditorForm(IEditableComponentFactory factory, IView<Feature> parentView) {
-        super(Feature.class, factory);
-        setParentView(parentView);
+    public FeatureEditorForm(Class<T> rootClass, IEditableComponentFactory factory) {
+        super(rootClass, factory);
     }
+
+    protected abstract void addMoreTabs(VistaTabLayoutPanel tabPanel);
 
     @Override
     public IsWidget createContent() {
@@ -47,13 +46,15 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
 
         tabPanel.addDisable(((FeatureView) getParentView()).getConcessionsListerView().asWidget(), i18n.tr("Concessions"));
 
+        addMoreTabs(tabPanel);
+
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }
 
     @Override
-    public void populate(Feature value) {
+    public void populate(T value) {
         tabPanel.selectFirstAvailableTab();
         super.populate(value);
     }

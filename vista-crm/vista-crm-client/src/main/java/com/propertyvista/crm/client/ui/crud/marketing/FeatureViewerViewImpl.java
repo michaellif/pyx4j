@@ -16,11 +16,13 @@ package com.propertyvista.crm.client.ui.crud.marketing;
 import com.pyx4j.site.client.ui.crud.IListerView;
 
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
-import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ParkingRent;
+import com.propertyvista.domain.financial.offering.ResidentialRent;
+import com.propertyvista.domain.financial.offering.StorageRent;
 
 public class FeatureViewerViewImpl extends CrmViewerViewImplBase<Feature> implements FeatureViewerView {
 
@@ -28,13 +30,25 @@ public class FeatureViewerViewImpl extends CrmViewerViewImplBase<Feature> implem
 
     public FeatureViewerViewImpl() {
         super(CrmSiteMap.Properties.Feature.class);
-
         delegate = new FeatureViewDelegate(true);
+    }
 
-        // create/init/set main form here: 
-        CrmEntityForm<Feature> form = new FeatureEditorForm(new CrmViewersComponentFactory(), this);
-        form.initialize();
-        setForm(form);
+    @Override
+    public void populate(Feature value) {
+        if (value instanceof ResidentialRent) {
+            CrmEntityForm<ResidentialRent> formResidential = new ResidentialRentEditorForm(this);
+            formResidential.initialize();
+            setForm(formResidential);
+        } else if (value instanceof ParkingRent) {
+            CrmEntityForm<ParkingRent> formParking = new ParkingRentEditorForm(this);
+            formParking.initialize();
+            setForm(formParking);
+        } else if (value instanceof StorageRent) {
+            CrmEntityForm<StorageRent> formStorage = new StorageRentEditorForm(this);
+            formStorage.initialize();
+            setForm(formStorage);
+        }
+        super.populate(value);
     }
 
     @Override

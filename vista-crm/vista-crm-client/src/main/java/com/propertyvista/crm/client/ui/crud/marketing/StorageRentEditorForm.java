@@ -13,40 +13,33 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.site.client.ui.crud.IView;
 
+import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.StorageRent;
 
-public class StorageRentEditorForm extends CrmEntityForm<StorageRent> {
+public class StorageRentEditorForm extends FeatureEditorForm<StorageRent> {
 
-    public StorageRentEditorForm(IView<StorageRent> parentView) {
+    public StorageRentEditorForm(IView<Feature> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public StorageRentEditorForm(IEditableComponentFactory factory, IView<StorageRent> parentView) {
+    public StorageRentEditorForm(IEditableComponentFactory factory, IView<Feature> parentView) {
         super(StorageRent.class, factory);
         setParentView(parentView);
     }
 
     @Override
-    public IsWidget createContent() {
-
-        TabLayoutPanel tabPanel = new TabLayoutPanel(2.7, Unit.EM);
+    protected void addMoreTabs(VistaTabLayoutPanel tabPanel) {
         tabPanel.add(new ScrollPanel(createFinancialTab()), i18n.tr("Financial"));
-
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
     }
 
     private Widget createFinancialTab() {

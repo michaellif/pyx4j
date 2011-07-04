@@ -205,7 +205,9 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
 
     @Override
     public boolean remove(int index) {
-        disableTabs.remove(index);
+        if (index < disableTabs.size()) {
+            disableTabs.remove(index);
+        }
         return super.remove(index);
     }
 
