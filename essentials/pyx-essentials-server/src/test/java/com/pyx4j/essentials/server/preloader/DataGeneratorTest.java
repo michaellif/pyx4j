@@ -20,13 +20,13 @@
  */
 package com.pyx4j.essentials.server.preloader;
 
-import java.util.Date;
-
 import junit.framework.TestCase;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+
+import com.pyx4j.commons.LogicalDate;
 
 public class DataGeneratorTest extends TestCase {
 
@@ -36,7 +36,7 @@ public class DataGeneratorTest extends TestCase {
 
         String phone;
 
-        Date date;
+        LogicalDate date;
 
         String lastName1;
 

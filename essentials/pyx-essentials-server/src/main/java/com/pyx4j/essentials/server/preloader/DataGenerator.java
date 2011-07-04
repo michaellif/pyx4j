@@ -22,7 +22,6 @@ package com.pyx4j.essentials.server.preloader;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -31,6 +30,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.pyx4j.commons.FIFO;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
@@ -250,7 +250,7 @@ public class DataGenerator {
         return array[index];
     }
 
-    public static Date randomDate(int month) {
+    public static LogicalDate randomDate(int month) {
         Calendar c = new GregorianCalendar();
         c.set(Calendar.YEAR, 2011);
         c.set(Calendar.MONTH, 1);
@@ -263,7 +263,7 @@ public class DataGenerator {
         c.add(Calendar.MONTH, (month > 0) ? random().nextInt(month) : -random().nextInt(-month));
         // DB does not store Milliseconds
         c.set(Calendar.MILLISECOND, 0);
-        return c.getTime();
+        return new LogicalDate(c.getTime());
     }
 
     public static String random(GeneratorType type) {
