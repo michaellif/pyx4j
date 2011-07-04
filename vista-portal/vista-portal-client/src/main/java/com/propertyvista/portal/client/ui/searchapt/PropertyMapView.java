@@ -15,6 +15,8 @@ package com.propertyvista.portal.client.ui.searchapt;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.geo.GeoPoint;
+
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
@@ -23,7 +25,7 @@ public interface PropertyMapView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
-    public void populate(PropertySearchCriteria criteria, PropertyListDTO propertyList);
+    public void populate(PropertySearchCriteria criteria, GeoPoint geoPoint, PropertyListDTO propertyList);
 
     PropertySearchCriteria getValue();
 

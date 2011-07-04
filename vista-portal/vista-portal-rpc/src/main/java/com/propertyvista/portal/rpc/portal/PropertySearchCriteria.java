@@ -13,89 +13,50 @@
  */
 package com.propertyvista.portal.rpc.portal;
 
-import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.common.domain.ref.City;
-import com.propertyvista.common.domain.ref.Province;
 
 @Transient
 public interface PropertySearchCriteria extends IEntity {
 
-    @Translatable
-    enum BedroomType {
-
-        all,
-
-        oneBedroom,
-
-        twoBedroom,
-
-        threeBedroom,
-
-        fourBedroom,
-
-        fiveBedroomAndMore;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
+    public enum SearchType {
+        city, proximity;
     }
 
-    @Translatable
-    enum BathroomType {
+    @NotNull
+    IPrimitive<SearchType> searchType();
 
-        all,
-
-        oneBath,
-
-        twoBath,
-
-        threeBathAndMore;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
-    // TODO Use real range, the price may be different in different countries
-    @Deprecated
-    enum PriceRangeType {
-
-        all,
-
-        under600,
-
-        between600and699,
-
-        between700and799,
-
-        between800and899,
-
-        between900and999,
-
-        over1000;
-    }
-
-    @Caption(name = "Province")
-    Province province();
-
-    @Caption(name = "City")
     City city();
 
-    @Caption(name = "Beds")
-    IPrimitive<BedroomType> numOfBeds();
+    IPrimitive<String> location();
 
-    @Caption(name = "Baths")
-    IPrimitive<BathroomType> numOfBath();
+    IPrimitive<Integer> distance();
 
-    @Caption(name = "Price")
-    IPrimitive<PriceRangeType> price();
+    IPrimitive<LogicalDate> startingFrom();
+
+    IPrimitive<Integer> minBeds();
+
+    IPrimitive<Integer> maxBeds();
+
+    IPrimitive<Integer> minBath();
+
+    IPrimitive<Integer> maxBath();
+
+    IPrimitive<Integer> minPrice();
+
+    IPrimitive<Integer> maxPrice();
+
+    IPrimitive<Boolean> elevator();
+
+    IPrimitive<Boolean> fitness();
+
+    IPrimitive<Boolean> parking();
+
+    IPrimitive<Boolean> pool();
 
 }

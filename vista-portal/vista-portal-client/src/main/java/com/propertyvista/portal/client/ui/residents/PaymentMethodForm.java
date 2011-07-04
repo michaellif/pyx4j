@@ -48,7 +48,7 @@ import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.validators.CreditCardNumberValidator;
@@ -89,7 +89,7 @@ public class PaymentMethodForm extends CEntityForm<PaymentMethodDTO> {
     public IsWidget createContent() {
 
         VistaDecoratorsFlowPanel container = new VistaDecoratorsFlowPanel();
-        container.add(new VistaHeaderDecorator(proto().type(), "100%"));
+        container.add(new VistaHeaderBar(proto().type(), "100%"));
         CRadioGroupEnum<PaymentType> radioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, CRadioGroup.Layout.VERTICAL);
         radioGroup.setStylePrefix(PAYMENT_BUTTONS_STYLE_PREFIX);
 
@@ -171,7 +171,7 @@ public class PaymentMethodForm extends CEntityForm<PaymentMethodDTO> {
 
         setPaymentTableVisibility(0);
 
-        container.add(new VistaHeaderDecorator(proto().billingAddress(), "100%"));
+        container.add(new VistaHeaderBar(proto().billingAddress(), "100%"));
         AddressUtils.injectIAddress(container, proto().billingAddress(), this);
 
         container.add(inject(proto().billingAddress().phone()), 12);

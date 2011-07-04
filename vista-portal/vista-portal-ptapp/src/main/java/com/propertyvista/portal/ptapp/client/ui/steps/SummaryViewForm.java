@@ -60,7 +60,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
@@ -108,11 +108,11 @@ public class SummaryViewForm extends CEntityForm<Summary> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        main.add(alignWidth(new VistaHeaderDecorator(i18n.tr("Apartment"))));
+        main.add(alignWidth(new VistaHeaderBar(i18n.tr("Apartment"))));
 
         main.add(new ApartmentView());
 
-        main.add(alignWidth(new VistaHeaderDecorator(i18n.tr("Lease Term"))));
+        main.add(alignWidth(new VistaHeaderBar(i18n.tr("Lease Term"))));
         main.add(new LeaseTermView());
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Tenants"), new PtSiteMap.Tenants())));
@@ -128,12 +128,12 @@ public class SummaryViewForm extends CEntityForm<Summary> {
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Pets"), new PtSiteMap.Pets())));
         main.add(inject(proto().pets(), new PetsViewForm(this)));
 
-        main.add(alignWidth(new VistaHeaderDecorator(i18n.tr("Lease Terms"))));
+        main.add(alignWidth(new VistaHeaderBar(i18n.tr("Lease Terms"))));
         main.add(new LeaseTermsCheck());
 
         main.add(inject(proto().charges(), new ChargesViewForm(this)));
 
-        main.add(alignWidth(new VistaHeaderDecorator(i18n.tr("Digital Signature"))));
+        main.add(alignWidth(new VistaHeaderBar(i18n.tr("Digital Signature"))));
         main.add(new SignatureView());
 
         // last step - add building picture on the right:
@@ -197,7 +197,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             }
         });
 
-        return new VistaHeaderDecorator(captionTxt, edit);
+        return new VistaHeaderBar(captionTxt, edit);
     }
 
     private Widget alignWidth(Widget e) {

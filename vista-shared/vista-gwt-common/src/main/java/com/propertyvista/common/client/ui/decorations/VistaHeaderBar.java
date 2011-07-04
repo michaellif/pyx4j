@@ -21,9 +21,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class VistaHeaderDecorator extends HorizontalPanel {
+public class VistaHeaderBar extends HorizontalPanel {
 
-    public static String DEFAULT_STYLE_PREFIX = "vista_HeaderDecorator";
+    public static String DEFAULT_STYLE_PREFIX = "vista_HeaderBar";
 
     public static enum StyleSuffix implements IStyleSuffix {
         Caption
@@ -31,7 +31,7 @@ public class VistaHeaderDecorator extends HorizontalPanel {
 
     private final HTML captionHolder;
 
-    public VistaHeaderDecorator(String caption, Widget widget, String width) {
+    public VistaHeaderBar(String caption, Widget widget, String width) {
         captionHolder = new HTML(caption);
         setStyleName(getStylePrefix());
         captionHolder.setStyleName(getStylePrefix() + StyleSuffix.Caption.name());
@@ -49,23 +49,23 @@ public class VistaHeaderDecorator extends HorizontalPanel {
             setWidth(width);
     }
 
-    public VistaHeaderDecorator(String caption, Widget widget) {
+    public VistaHeaderBar(String caption, Widget widget) {
         this(caption, widget, null);
     }
 
-    public VistaHeaderDecorator(String caption, String width) {
+    public VistaHeaderBar(String caption, String width) {
         this(caption, null, width);
     }
 
-    public VistaHeaderDecorator(String caption) {
+    public VistaHeaderBar(String caption) {
         this(caption, (String) null);
     }
 
-    public VistaHeaderDecorator(IObject<?> member, String width) {
+    public VistaHeaderBar(IObject<?> member, String width) {
         this(member.getMeta().getCaption(), null, width);
     }
 
-    public VistaHeaderDecorator(IObject<?> member) {
+    public VistaHeaderBar(IObject<?> member) {
         this(member, null);
     }
 

@@ -17,9 +17,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
 
-import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 
-public class CrmHeaderDecorator extends VistaHeaderDecorator {
+public class CrmHeaderDecorator extends VistaHeaderBar {
 
     public static String DEFAULT_STYLE_PREFIX = "vista_CrmHeaderDecorator";
 

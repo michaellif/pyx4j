@@ -25,7 +25,7 @@ import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.forms.client.ui.CHyperlink;
 
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
-import com.propertyvista.portal.client.ui.decorations.PortalHeaderDecorator;
+import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 
 public class MaintenanceForm extends CEntityForm<MaintenanceRequestDTO> implements MaintenanceView {
@@ -58,7 +58,7 @@ public class MaintenanceForm extends CEntityForm<MaintenanceRequestDTO> implemen
         });
         supportHistory.setValue(i18n.tr("Support History"));
 
-        PortalHeaderDecorator header = new PortalHeaderDecorator(i18n.tr("Report a Problem"), "100%");
+        PortalHeaderBar header = new PortalHeaderBar(i18n.tr("Report a Problem"), "100%");
         header.addToTheRight(systemStatus);
         header.addToTheRight(supportHistory);
 

@@ -25,7 +25,7 @@ import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
@@ -401,7 +401,7 @@ public abstract class PortalTheme extends VistaTheme {
     }
 
     private void initDecoratorsStyles() {
-        String prefix = VistaHeaderDecorator.DEFAULT_STYLE_PREFIX;
+        String prefix = VistaHeaderBar.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE25);
         style.addProperty("margin-top", "10px");
@@ -411,9 +411,11 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("margin-bottom", "10px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, VistaHeaderDecorator.StyleSuffix.Caption));
-        style.addProperty("font-size", "20px");
+        style = new Style(Selector.valueOf(prefix, VistaHeaderBar.StyleSuffix.Caption));
+        style.addProperty("font-size", "14px");
         style.addProperty("font-weight", "bold");
+        style.addProperty("color", "#888888");
+        style.addProperty("padding-left", "20px");
         addStyle(style);
 
         prefix = VistaWidgetDecorator.DEFAULT_STYLE_PREFIX;
@@ -457,15 +459,14 @@ public abstract class PortalTheme extends VistaTheme {
     private void initRefineSearchStyles() {
         String prefix = RefineApartmentSearchForm.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("margin-left", "10px");
         style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.SearchHeader));
         style.addProperty("font-weight", "bold");
         style.addProperty("font-size", "14px");
-        style.addProperty("padding-top", "20px");
         style.addProperty("padding-bottom", "10px");
+        style.addProperty("color", "#888");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.ButtonPanel));

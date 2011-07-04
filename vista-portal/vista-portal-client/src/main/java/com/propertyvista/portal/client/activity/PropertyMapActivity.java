@@ -15,12 +15,20 @@ package com.propertyvista.portal.client.activity;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.maps.client.geocode.LatLngCallback;
+import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
+import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -35,9 +43,15 @@ import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class PropertyMapActivity extends AbstractActivity implements PropertyMapView.Presenter {
 
+    private static Logger log = LoggerFactory.getLogger(PropertyMapActivity.class);
+
+    private static PropertyListDTO properties;
+
     private final PropertyMapView view;
 
     private PropertySearchCriteria criteria;
+
+    private GeoPoint geoPoint;
 
     public PropertyMapActivity(Place place) {
         this.view = (PropertyMapView) PropertySearchViewFactory.instance(PropertyMapView.class);
@@ -55,14 +69,54 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
 
-        PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
-            @Override
-            public void onSuccess(PropertyListDTO properties) {
-                view.populate(criteria, properties);
-                //System.out.println(properties);
-            }
-        }, criteria);
+        if (PropertyMapActivity.properties == null) {
+            PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
+                @Override
+                public void onSuccess(PropertyListDTO properties) {
+                    PropertyMapActivity.properties = properties;
+                    obtainGeopoint();
+                }
+            });
+        } else {
+            obtainGeopoint();
+        }
 
+    }
+
+    private void obtainGeopoint() {
+
+        if (PropertySearchCriteria.SearchType.proximity.equals(criteria.searchType().getValue())) {
+            MapUtils.obtainLatLang(criteria.location().getValue(), new LatLngCallback() {
+
+                @Override
+                public void onSuccess(LatLng fromCoordinates) {
+
+                    geoPoint = MapUtils.newGeoPointInstance(fromCoordinates);
+                    populateView();
+
+                }
+
+                @Override
+                public void onFailure() {
+                    log.warn("Can't find LatLng for distanceOverlay");
+                }
+            });
+        } else {
+            populateView();
+        }
+
+    }
+
+    private void populateView() {
+        PropertyListDTO filteredProperties = EntityFactory.create(PropertyListDTO.class);
+        for (PropertyDTO property : properties.properties()) {
+            if (criteria.city().isNull() || !criteria.city().name().equals(property.address().city())
+                    || !criteria.city().province().name().equals(property.address().province().name())) {
+                continue;
+            }
+            filteredProperties.properties().add(property);
+        }
+        view.populate(criteria, geoPoint, filteredProperties);
     }
 
     @Override
@@ -74,11 +128,8 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
 
     @Override
     public void refineSearch() {
-        PropertySearchCriteria criteria = view.getValue();
-        Map<String, String> args = EntityArgsConverter.convertToArgs(criteria);
-        AppPlace place = new PortalSiteMap.FindApartment.PropertyMap();
-        place.putAllArgs(args);
-        AppSite.getPlaceController().goTo(place);
+        criteria = view.getValue();
+        obtainGeopoint();
     }
 
 }

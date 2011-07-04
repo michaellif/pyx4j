@@ -67,12 +67,12 @@ public class SearchApartmentForm extends CEntityForm<PropertySearchCriteria> imp
         container.setStyleName(DEFAULT_STYLE_PREFIX);
 
         addField(new CriteriaWidgetDecorator(inject(proto().city())));
-        addField(new CriteriaWidgetDecorator(inject(proto().price())));
+        addField(new CriteriaWidgetDecorator(inject(proto().minPrice())));
 
         addBreak();
 
-        addField(new CriteriaWidgetDecorator(inject(proto().numOfBeds())));
-        addField(new CriteriaWidgetDecorator(inject(proto().numOfBath())));
+        addField(new CriteriaWidgetDecorator(inject(proto().minBeds())));
+        addField(new CriteriaWidgetDecorator(inject(proto().minBath())));
 
         addBreak();
 

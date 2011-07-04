@@ -13,42 +13,39 @@
  */
 package com.propertyvista.portal.client.ui.searchapt;
 
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityDataSource;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.common.domain.ref.City;
-import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 
 public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteria> {
@@ -63,59 +60,123 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
         hover, current
     }
 
-    public static enum SearchType {
-        ByCity, ByProximity;
-
-        public static String getName() {
-            return "SearchType";
-        }
-    }
-
     private static I18n i18n = I18nFactory.getI18n(PropertyMapViewImpl.class);
 
     private PropertyMapView.Presenter presenter;
 
-    private final VerticalPanel container;
-
-    private final NavigTabList tabsHolder;
-
-    private final FlowPanel citySearchPanel;
-
-    private final FlowPanel proximityPanel;
+    private VerticalPanel container;
 
     public RefineApartmentSearchForm() {
         super(PropertySearchCriteria.class);
-        container = new VerticalPanel();
-        container.setStyleName(DEFAULT_STYLE_PREFIX);
-        Label label = new Label(i18n.tr("FIND AN APARTMENT"));
-        label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchHeader.name());
-        container.add(label);
-
-        tabsHolder = new NavigTabList();
-        NavigTab selectedTab = new NavigTab(i18n.tr("BY CITY"), SearchType.ByCity);
-        selectedTab.select();
-        tabsHolder.add(selectedTab);
-        tabsHolder.add(new NavigTab(i18n.tr("BY PROXIMITY"), SearchType.ByProximity));
-        container.add(tabsHolder);
-
-        citySearchPanel = new FlowPanel();
-        citySearchPanel.setWidth("100%");
-        container.add(citySearchPanel);
-
-        proximityPanel = new FlowPanel();
-        proximityPanel.setWidth("100%");
-        proximityPanel.setVisible(false);
-        container.add(citySearchPanel);
 
     }
 
     @Override
     public IsWidget createContent() {
 
-        addFieldTo(new CriteriaWidgetDecorator(inject(proto().city())), citySearchPanel);
+        container = new VerticalPanel();
+        container.setStyleName(DEFAULT_STYLE_PREFIX);
+        Label label = new Label(i18n.tr("FIND AN APARTMENT"));
+        label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchHeader.name());
+        container.add(label);
 
-        addField(new CriteriaWidgetDecorator(inject(proto().numOfBeds())));
-        addField(new CriteriaWidgetDecorator(inject(proto().numOfBath())));
+        container.add(inject(proto().searchType()));
+
+        get(proto().searchType()).addValueChangeHandler(new ValueChangeHandler<SearchType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<SearchType> event) {
+                setSearchType(event.getValue());
+            }
+        });
+
+        container.add(inject(proto().city()));
+        ((CComboBox<City>) get(proto().city())).setNoSelectionText("Select City");
+
+        container.add(inject(proto().location()));
+
+        container.add(inject(proto().distance()));
+
+        container.add(inject(proto().startingFrom()));
+
+        HorizontalPanel bedsPanel = new HorizontalPanel();
+
+        CComboBox<Integer> minBedsCombo = new CComboBox<Integer>();
+        {
+            minBedsCombo.setNoSelectionText("Min");
+            minBedsCombo.setOptions(Arrays.asList(new Integer[] { 1, 2, 3, 4, 5 }));
+            bedsPanel.add(inject(proto().minBeds(), minBedsCombo));
+        }
+
+        CComboBox<Integer> maxBedsCombo = new CComboBox<Integer>();
+        {
+            maxBedsCombo.setNoSelectionText("Max");
+            maxBedsCombo.setOptions(Arrays.asList(new Integer[] { 1, 2, 3, 4, 5 }));
+            bedsPanel.add(inject(proto().maxBeds(), maxBedsCombo));
+        }
+
+        container.add(bedsPanel);
+
+        HorizontalPanel bathsPanel = new HorizontalPanel();
+
+        CComboBox<Integer> minBathsCombo = new CComboBox<Integer>();
+        {
+            minBathsCombo.setNoSelectionText("Min");
+            minBathsCombo.setOptions(Arrays.asList(new Integer[] { 1, 2, 3 }));
+            bathsPanel.add(inject(proto().minBath(), minBathsCombo));
+        }
+
+        CComboBox<Integer> maxBathsCombo = new CComboBox<Integer>();
+        {
+            maxBathsCombo.setNoSelectionText("Max");
+            maxBathsCombo.setOptions(Arrays.asList(new Integer[] { 1, 2, 3 }));
+            bathsPanel.add(inject(proto().maxBath(), maxBathsCombo));
+        }
+
+        container.add(bathsPanel);
+
+        HorizontalPanel pricePanel = new HorizontalPanel();
+
+        pricePanel.add(inject(proto().maxPrice()));
+
+        pricePanel.add(inject(proto().minPrice()));
+
+        container.add(pricePanel);
+
+        HorizontalPanel amenities1Panel = new HorizontalPanel();
+
+        amenities1Panel.add(inject(proto().elevator()));
+        amenities1Panel.setCellWidth(get(proto().elevator()), "10%");
+        get(proto().elevator()).asWidget().removeStyleName(CSSClass.pyx4j_CheckBox.name());
+        Label elevatorLabel = new Label("Elevator");
+        amenities1Panel.add(elevatorLabel);
+        amenities1Panel.setCellWidth(elevatorLabel, "40%");
+
+        amenities1Panel.add(inject(proto().fitness()));
+        amenities1Panel.setCellWidth(get(proto().fitness()), "10%");
+        get(proto().fitness()).asWidget().removeStyleName(CSSClass.pyx4j_CheckBox.name());
+        Label fitnessLabel = new Label("Fitness");
+        amenities1Panel.add(fitnessLabel);
+        amenities1Panel.setCellWidth(fitnessLabel, "40%");
+
+        container.add(amenities1Panel);
+
+        HorizontalPanel amenities2Panel = new HorizontalPanel();
+
+        amenities2Panel.add(inject(proto().parking()));
+        amenities2Panel.setCellWidth(get(proto().parking()), "10%");
+        get(proto().parking()).asWidget().removeStyleName(CSSClass.pyx4j_CheckBox.name());
+        Label parkingLabel = new Label("Parking");
+        amenities2Panel.add(parkingLabel);
+        amenities2Panel.setCellWidth(parkingLabel, "40%");
+
+        amenities2Panel.add(inject(proto().pool()));
+        amenities2Panel.setCellWidth(get(proto().pool()), "10%");
+        get(proto().pool()).asWidget().removeStyleName(CSSClass.pyx4j_CheckBox.name());
+        Label poolLabel = new Label("Pool");
+        amenities2Panel.add(poolLabel);
+        amenities2Panel.setCellWidth(poolLabel, "40%");
+
+        container.add(amenities2Panel);
 
         FlowPanel updatePanel = new FlowPanel();
         Button updateBtn = new Button(i18n.tr("Search"));
@@ -130,7 +191,21 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
         updatePanel.add(updateBtn);
 
         container.add(updatePanel);
+
         return container;
+    }
+
+    private void setSearchType(SearchType searchType) {
+        boolean searchByCity = SearchType.city.equals(searchType);
+        get(proto().city()).setVisible(searchByCity);
+        get(proto().location()).setVisible(!searchByCity);
+        get(proto().distance()).setVisible(!searchByCity);
+    }
+
+    @Override
+    public void populate(PropertySearchCriteria value) {
+        super.populate(value);
+        setSearchType(value.searchType().getValue());
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -150,146 +225,12 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
         return c;
     }
 
-    private void addField(Widget widget) {
-        widget.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        container.add(widget);
-    }
-
-    private void addFieldTo(Widget widget, Panel parent) {
-        widget.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        parent.add(widget);
-    }
-
     public PropertyMapView.Presenter getPresenter() {
         return presenter;
     }
 
     public void setPresenter(PropertyMapView.Presenter presenter) {
         this.presenter = presenter;
-    }
-
-    private void onTabChange(NavigTab tab) {
-        NavigTab selected = tabsHolder.getSelectedTab();
-        selected.deselect();
-        tab.select();
-        boolean bycity = tab.getSearchtype() == SearchType.ByCity;
-        citySearchPanel.setVisible(bycity);
-        proximityPanel.setVisible(!bycity);
-    }
-
-    class NavigTabList extends ComplexPanel {
-        private final List<NavigTab> tabs;
-
-        public NavigTabList() {
-            setElement(DOM.createElement("ul"));
-            tabs = new LinkedList<RefineApartmentSearchForm.NavigTab>();
-            setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Holder.name());
-        }
-
-        @Override
-        public void add(Widget w) {
-            NavigTab tab = (NavigTab) w;
-            tabs.add(tab);
-            super.add(w, getElement());
-        }
-
-        public List<NavigTab> getTabs() {
-            return tabs;
-        }
-
-        public NavigTab getSelectedTab() {
-            if (tabs == null)
-                return null;
-            for (NavigTab tab : tabs) {
-                if (tab.isSelected()) {
-                    return tab;
-                }
-            }
-            return null;
-        }
-
-    }
-
-    class NavigTab extends ComplexPanel {
-
-        private final FlowPanel labelHolder;
-
-        private final SimplePanel statusHolder;
-
-        private final Label label;
-
-        private final String caption;
-
-        private boolean selected;
-
-        private final SearchType searchtype;
-
-        private final NavigTab me;
-
-        private NavigTab(String caption, SearchType searchtype) {
-            super();
-            me = this;
-            selected = false;
-            this.caption = caption;
-            this.searchtype = searchtype;
-
-            setElement(DOM.createElement("li"));
-            setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
-            getElement().setAttribute(SearchType.getName(), searchtype.name());
-
-            getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-            sinkEvents(Event.ONCLICK);
-
-            labelHolder = new FlowPanel();
-            labelHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.LabelHolder.name());
-            add(labelHolder);
-
-            statusHolder = new SimplePanel();
-            statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
-            labelHolder.add(statusHolder);
-
-            label = new Label(this.caption);
-            label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
-            statusHolder.add(label);
-            getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            getElement().getStyle().setCursor(Cursor.DEFAULT);
-
-            addDomHandler(new ClickHandler() {
-
-                @Override
-                public void onClick(ClickEvent event) {
-                    onTabChange(me);
-
-                }
-            }, ClickEvent.getType());
-
-            getElement().getStyle().setCursor(Cursor.POINTER);
-
-        }
-
-        public SearchType getSearchtype() {
-            return searchtype;
-        }
-
-        public void deselect() {
-            selected = false;
-            label.removeStyleDependentName(StyleDependent.current.name());
-        }
-
-        public void select() {
-            label.addStyleDependentName(StyleDependent.current.name());
-            selected = true;
-        }
-
-        @Override
-        public void add(Widget w) {
-            super.add(w, getElement());
-        }
-
-        public boolean isSelected() {
-            return selected;
-        }
-
     }
 
 }

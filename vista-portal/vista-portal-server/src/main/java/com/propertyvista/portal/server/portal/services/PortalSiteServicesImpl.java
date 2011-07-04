@@ -19,7 +19,6 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -38,7 +37,6 @@ import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.domain.site.PageContent;
 import com.propertyvista.portal.domain.site.PageDescriptor;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.server.ptapp.util.Converter;
 
@@ -53,20 +51,11 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     }
 
     @Override
-    public void retrievePropertyListByCity(AsyncCallback<PropertyListDTO> callback, City city) {
-        PropertySearchCriteria criteria = EntityFactory.create(PropertySearchCriteria.class);
-        criteria.city().set(city);
-        retrievePropertyList(callback, criteria);
-    }
-
-    @Override
-    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, PropertySearchCriteria criteria) {
+    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback) {
         //TODO move this all to special table for starte retrival
 
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
-        if ((!criteria.city().name().isNull())) {
-            dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), criteria.city().name().getValue()));
-        }
+
         List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
 
         PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
@@ -81,63 +70,9 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
             floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
             List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
 
-            if (!criteria.numOfBeds().isNull() || !criteria.numOfBath().isNull() || !criteria.price().isNull()) {
-                boolean match = true;
-                for (Floorplan fp : floorplans) {
-                    if (matchCriteria(fp, criteria)) {
-                        match = true;
-                        break;
-                    }
-                }
-                if (!match) {
-                    continue;
-                }
-            }
-
             ret.properties().add(Converter.convert(building, floorplans));
         }
         callback.onSuccess(ret);
-    }
-
-    private boolean matchCriteria(Floorplan floorplan, PropertySearchCriteria criteria) {
-        if (!criteria.numOfBeds().isNull()) {
-            switch (criteria.numOfBeds().getValue()) {
-            case all:
-                break;
-            case oneBedroom:
-                return floorplan.bedrooms().getValue() == 1;
-            case twoBedroom:
-                return floorplan.bedrooms().getValue() == 2;
-            case threeBedroom:
-                return floorplan.bedrooms().getValue() == 3;
-            case fourBedroom:
-                return floorplan.bedrooms().getValue() == 4;
-            case fiveBedroomAndMore:
-                return floorplan.bedrooms().getValue() >= 5;
-            }
-        }
-        if (!criteria.numOfBath().isNull()) {
-            switch (criteria.numOfBath().getValue()) {
-            case all:
-                break;
-            case oneBath:
-                return floorplan.bathrooms().getValue() == 1;
-            case twoBath:
-                return floorplan.bathrooms().getValue() == 2;
-            case threeBathAndMore:
-                return floorplan.bathrooms().getValue() >= 3;
-            }
-        }
-        if (!criteria.price().isNull()) {
-
-        }
-        return false;
-    }
-
-    @Override
-    public void retrievePropertyListByGeo(AsyncCallback<PropertyListDTO> callback, GeoCriteria geoCriteria) {
-        // TODO Auto-generated method stub
-        retrievePropertyListByCity(callback, (City) null);
     }
 
     @Override

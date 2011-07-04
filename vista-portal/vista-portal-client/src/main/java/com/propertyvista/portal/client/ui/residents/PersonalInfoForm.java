@@ -45,7 +45,7 @@ import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.domain.ref.Country;
@@ -72,7 +72,7 @@ public class PersonalInfoForm extends CEntityForm<ResidentDTO> implements Person
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel container = new VistaDecoratorsFlowPanel();
         //contact details
-        container.add(new VistaHeaderDecorator(i18n.tr("Contact Details"), "100%"));
+        container.add(new VistaHeaderBar(i18n.tr("Contact Details"), "100%"));
         container.add(new VistaWidgetDecorator(inject(proto().name().firstName()), decor));
         container.add(new VistaWidgetDecorator(inject(proto().name().middleName()), decor));
         container.add(new VistaWidgetDecorator(inject(proto().name().lastName()), decor));
@@ -81,10 +81,10 @@ public class PersonalInfoForm extends CEntityForm<ResidentDTO> implements Person
         container.add(new VistaWidgetDecorator(inject(proto().workPhone()), decor));
         container.add(new VistaWidgetDecorator(inject(proto().email()), decor));
         //Emergency Contacts
-        container.add(new VistaHeaderDecorator(proto().emergencyContacts(), "100%"));
+        container.add(new VistaHeaderBar(proto().emergencyContacts(), "100%"));
         container.add(inject(proto().emergencyContacts(), createEmergencyContactFolderEditor()));
         //Vehicles
-        container.add(new VistaHeaderDecorator(i18n.tr("Vehicles"), "100%"));
+        container.add(new VistaHeaderBar(i18n.tr("Vehicles"), "100%"));
         container.add(inject(proto().vehicles(), createVehicleFolderEditorColumns()));
         return container;
     }

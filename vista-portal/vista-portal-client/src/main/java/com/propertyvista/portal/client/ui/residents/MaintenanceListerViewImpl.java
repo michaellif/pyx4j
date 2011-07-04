@@ -21,7 +21,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.site.client.ui.crud.ListerViewImplBasePanel;
 
-import com.propertyvista.portal.client.ui.decorations.PortalHeaderDecorator;
+import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 
 public class MaintenanceListerViewImpl extends ListerViewImplBasePanel<MaintenanceRequestDTO> implements MaintenanceListerView {
@@ -38,7 +38,7 @@ public class MaintenanceListerViewImpl extends ListerViewImplBasePanel<Maintenan
             }
         });
         systemStatus.setValue(i18n.tr("System Status"));
-        PortalHeaderDecorator header = new PortalHeaderDecorator(i18n.tr("Support Request History (to be finalized)"), "100%");
+        PortalHeaderBar header = new PortalHeaderBar(i18n.tr("Support Request History (to be finalized)"), "100%");
         header.addToTheRight(systemStatus);
         setHeader(header);
         setLister(new MaintenanceLister());

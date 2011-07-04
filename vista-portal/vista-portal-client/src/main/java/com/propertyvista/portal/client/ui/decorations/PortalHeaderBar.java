@@ -18,13 +18,13 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 
-public class PortalHeaderDecorator extends VistaHeaderDecorator {
+public class PortalHeaderBar extends VistaHeaderBar {
 
     private final HorizontalPanel rightpanel;
 
-    public PortalHeaderDecorator(String caption, String width) {
+    public PortalHeaderBar(String caption, String width) {
         super(caption, width);
         rightpanel = new HorizontalPanel();
         rightpanel.getElement().getStyle().setFloat(Style.Float.RIGHT);

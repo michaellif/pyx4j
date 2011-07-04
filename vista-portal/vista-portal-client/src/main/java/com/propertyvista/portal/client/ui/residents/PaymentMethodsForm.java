@@ -42,7 +42,7 @@ import com.pyx4j.widgets.client.ImageButton;
 
 import com.propertyvista.common.domain.IAddressFull;
 import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.client.ui.decorations.PortalHeaderDecorator;
+import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
@@ -83,7 +83,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
         TableFolderViewer() {
             content = new FlowPanel();
             content.setWidth("100%");
-            content.add(new PortalHeaderDecorator(i18n.tr("Current Payment Methods"), "100%"));
+            content.add(new PortalHeaderBar(i18n.tr("Current Payment Methods"), "100%"));
 
             HorizontalPanel header = new HorizontalPanel();
             header.setWidth("100%");

@@ -16,18 +16,21 @@ package com.propertyvista.portal.client.ui.searchapt;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DockPanel;
 
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-import com.propertyvista.portal.client.ui.decorations.PortalHeaderDecorator;
+import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
 
 public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
 
@@ -68,12 +71,13 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
         searchForm = new RefineApartmentSearchForm();
         searchForm.initialize();
         add(searchForm, DockPanel.WEST);
-        setCellWidth(searchForm, "220px");
+        setCellWidth(searchForm, "200px");
+        searchForm.asWidget().getElement().getStyle().setPadding(10, Unit.PX);
 
         final DeckPanel deck = new DeckPanel();
         deck.setHeight("100%");
 
-        PortalHeaderDecorator header = new PortalHeaderDecorator(i18n.tr("SEARCH RESULTS"), "100%");
+        PortalHeaderBar header = new PortalHeaderBar(i18n.tr("SEARCH RESULTS"), "100%");
         header.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Header.name());
 
         final Anchor viewSelector = new Anchor(ViewType.getName(ViewType.MapView));
@@ -96,6 +100,7 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
         });
         header.addToTheRight(viewSelector);
         add(header, DockPanel.NORTH);
+        setCellHeight(header, "100%");
 
         map = new PropertiesMapWidget();
 
@@ -119,9 +124,13 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
     }
 
     @Override
-    public void populate(PropertySearchCriteria criteria, PropertyListDTO propertyList) {
+    public void populate(PropertySearchCriteria criteria, GeoPoint geoPoint, PropertyListDTO propertyList) {
         searchForm.populate(criteria);
         map.populate(propertyList);
+        if (SearchType.proximity.equals(criteria.searchType().getValue()) && geoPoint != null && !criteria.distance().isNull()
+                && criteria.distance().getValue() > 0) {
+            map.setDistanceOverlay(geoPoint, criteria.distance().getValue());
+        }
         propertyListForm.populate(propertyList);
     }
 

@@ -37,7 +37,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
@@ -97,7 +97,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         header.add(changeBtn);
         header.getElement().getStyle().setMarginTop(7, Unit.PX);
 
-        main.add(new VistaHeaderDecorator(i18n.tr("Available Units"), header, "100%"));
+        main.add(new VistaHeaderBar(i18n.tr("Available Units"), header, "100%"));
 
         // units table:
         main.add(inject(proto().availableUnits().units(), new ApartmentUnitsTable(new ValueChangeHandler<AptUnitDTO>() {
@@ -126,7 +126,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         main.add(new VistaLineSeparator(0, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
 
         DecorationData captionDecoration = new DecorationData(16d, 8.2);
-        captionDecoration.labelStyleName = VistaHeaderDecorator.DEFAULT_STYLE_PREFIX + VistaHeaderDecorator.StyleSuffix.Caption.name();
+        captionDecoration.labelStyleName = VistaHeaderBar.DEFAULT_STYLE_PREFIX + VistaHeaderBar.StyleSuffix.Caption.name();
         main.add(new VistaWidgetDecorator(inject(proto().rentStart()), captionDecoration));
 
         // last step - add building picture on the right:

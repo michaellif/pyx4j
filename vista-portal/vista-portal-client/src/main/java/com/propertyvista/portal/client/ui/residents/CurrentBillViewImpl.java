@@ -18,7 +18,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.portal.domain.dto.BillDTO;
 
 public class CurrentBillViewImpl extends FlowPanel implements CurrentBillView {
@@ -32,7 +32,7 @@ public class CurrentBillViewImpl extends FlowPanel implements CurrentBillView {
     public CurrentBillViewImpl() {
         billForm = new CurrentBillForm();
         billForm.initialize();
-        add(new VistaHeaderDecorator(i18n.tr("Current Bill"), "100%"));
+        add(new VistaHeaderBar(i18n.tr("Current Bill"), "100%"));
         add(billForm);
 
     }

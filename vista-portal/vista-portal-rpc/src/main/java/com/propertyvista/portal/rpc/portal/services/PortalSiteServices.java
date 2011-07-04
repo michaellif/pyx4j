@@ -18,7 +18,6 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.common.domain.ref.City;
@@ -27,7 +26,6 @@ import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.domain.site.PageContent;
 import com.propertyvista.portal.domain.site.PageDescriptor;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public interface PortalSiteServices extends IService {
 
@@ -40,11 +38,7 @@ public interface PortalSiteServices extends IService {
      */
     public void retrieveCityList(AsyncCallback<Vector<City>> callback);
 
-    public void retrievePropertyListByCity(AsyncCallback<PropertyListDTO> callback, City city);
-
-    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, PropertySearchCriteria criteria);
-
-    public void retrievePropertyListByGeo(AsyncCallback<PropertyListDTO> callback, GeoCriteria geoCriteria);
+    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback);
 
     public void retrievePropertyDetails(AsyncCallback<PropertyDetailsDTO> callback, Key propertyId);
 

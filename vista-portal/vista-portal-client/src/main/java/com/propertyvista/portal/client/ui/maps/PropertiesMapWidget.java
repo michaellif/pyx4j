@@ -113,8 +113,6 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             //TODO calc base on  markers
             getMap().setCenter(bounds.getCenter());
 
-            setDistanceOverlay(new GeoPoint(bounds.getCenter().getLatitude() + 0.2, bounds.getCenter().getLongitude() + 0.2), 10.0);
-
             int zoomLevel = getMap().getBoundsZoomLevel(bounds) - 1;
             if (zoomLevel > 10) {
                 zoomLevel = 10;

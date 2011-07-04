@@ -52,7 +52,7 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.domain.ref.Country;
@@ -91,7 +91,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new VistaHeaderDecorator(proto().applicationCharges()));
+        main.add(new VistaHeaderBar(proto().applicationCharges()));
         main.add(inject(proto().applicationCharges().charges(), new ChargeLineFolder()));
 
         VistaLineSeparator sp = new VistaLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
@@ -111,7 +111,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         info.getElement().getStyle().setMarginBottom(1, Unit.EM);
         main.add(info);
 
-        main.add(new VistaHeaderDecorator(proto().type()));
+        main.add(new VistaHeaderBar(proto().type()));
         CRadioGroupEnum<PaymentType> radioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, CRadioGroup.Layout.VERTICAL);
         radioGroup.setStylePrefix(PAYMENT_BUTTONS_STYLE_PREFIX);
 
@@ -193,7 +193,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
         setPaymentTableVisibility(0);
 
-        main.add(new VistaHeaderDecorator(proto().billingAddress()));
+        main.add(new VistaHeaderBar(proto().billingAddress()));
         CCheckBox sameAsCurrent = (CCheckBox) inject(proto().sameAsCurrent());
         main.add(sameAsCurrent, 12);
         sameAsCurrent.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -207,7 +207,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
 
         main.add(inject(proto().billingAddress().phone()), 12);
 
-        main.add(new VistaHeaderDecorator(i18n.tr("Pre-Authorized Payment")));
+        main.add(new VistaHeaderBar(i18n.tr("Pre-Authorized Payment")));
         HorizontalPanel preauthorisedNotes = new HorizontalPanel();
         preauthorisedNotes.add(new HTML(PortalResources.INSTANCE.paymentPreauthorisedNotes().getText()));
         main.add(preauthorisedNotes);

@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
@@ -72,7 +72,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        main.add(new VistaHeaderDecorator(proto().monthlyCharges(), "700px"));
+        main.add(new VistaHeaderBar(proto().monthlyCharges(), "700px"));
         main.add(inject(proto().monthlyCharges().charges()));
         if (!summaryViewMode) {
             main.add(createHeader2(proto().monthlyCharges().upgradeCharges()));
@@ -81,16 +81,16 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
         main.add(createTotal(proto().monthlyCharges().total()));
 
-        main.add(new VistaHeaderDecorator(proto().proRatedCharges(), "700px"));
+        main.add(new VistaHeaderBar(proto().proRatedCharges(), "700px"));
         main.add(inject(proto().proRatedCharges().charges()));
         main.add(createTotal(proto().proRatedCharges().total()));
 
-        main.add(new VistaHeaderDecorator(proto().applicationCharges(), "700px"));
+        main.add(new VistaHeaderBar(proto().applicationCharges(), "700px"));
         main.add(inject(proto().applicationCharges().charges()));
         main.add(createTotal(proto().applicationCharges().total()));
 
         // could be hided from resulting form:
-        splitCharges.add(new VistaHeaderDecorator(proto().paymentSplitCharges(), "700px"));
+        splitCharges.add(new VistaHeaderBar(proto().paymentSplitCharges(), "700px"));
 
         splitCharges.add(inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(summaryViewMode)));
         splitCharges.add(createTotal(proto().paymentSplitCharges().total()));

@@ -20,7 +20,7 @@ import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
-import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
@@ -163,13 +163,13 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Display));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(VistaHeaderDecorator.DEFAULT_STYLE_PREFIX));
+        style = new Style(Selector.valueOf(VistaHeaderBar.DEFAULT_STYLE_PREFIX));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
         style.addProperty("margin", "0.4em 0 0.4em 0");
         style.addProperty("width", "960px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(VistaHeaderDecorator.DEFAULT_STYLE_PREFIX, VistaHeaderDecorator.StyleSuffix.Caption));
+        style = new Style(Selector.valueOf(VistaHeaderBar.DEFAULT_STYLE_PREFIX, VistaHeaderBar.StyleSuffix.Caption));
         style.addProperty("padding", "0.3em 1em 0.4em 1em");
         style.addProperty("font-size", "1.3em");
         style.addProperty("font-weight", "bold");

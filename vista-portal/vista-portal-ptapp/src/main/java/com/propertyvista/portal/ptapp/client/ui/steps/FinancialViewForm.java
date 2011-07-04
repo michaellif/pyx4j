@@ -50,7 +50,7 @@ import com.propertyvista.common.client.ui.components.CMoney;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.domain.financial.Money;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.TenantAsset;
@@ -111,7 +111,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
             header.getElement().getStyle().setMarginTop(1, Unit.EM);
             return header;
         } else {
-            return new VistaHeaderDecorator(member);
+            return new VistaHeaderBar(member);
         }
     }
 
