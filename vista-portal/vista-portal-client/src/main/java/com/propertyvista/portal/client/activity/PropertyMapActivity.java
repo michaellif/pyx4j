@@ -46,7 +46,11 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
 
     private static Logger log = LoggerFactory.getLogger(PropertyMapActivity.class);
 
-    private static PropertyListDTO properties;
+    private static PropertyListDTO allProperties;
+
+    private PropertyListDTO inboundProperties;
+
+    private PropertyListDTO shownProperties;
 
     private final PropertyMapView view;
 
@@ -70,11 +74,11 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
 
-        if (PropertyMapActivity.properties == null) {
+        if (PropertyMapActivity.allProperties == null) {
             PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
                 @Override
                 public void onSuccess(PropertyListDTO properties) {
-                    PropertyMapActivity.properties = properties;
+                    PropertyMapActivity.allProperties = properties;
                     obtainGeopoint();
                 }
             });
@@ -109,16 +113,26 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     }
 
     private void populateView() {
-        view.populate(criteria, geoPoint, filter());
+        inboundProperties = filterForList();
+        view.populate(criteria, geoPoint, inboundProperties);
     }
 
-    private void updateView() {
-        view.update(filter());
+    @Override
+    public void updateMap(LatLngBounds latLngBounds) {
+        shownProperties = filterByBounds(latLngBounds);
+        PropertyListDTO outboundProperties = EntityFactory.create(PropertyListDTO.class);
+        for (PropertyDTO property : shownProperties.properties()) {
+            if (!inboundProperties.properties().contains(property)) {
+                outboundProperties.properties().add(property);
+
+            }
+        }
+        view.updateMarkers(inboundProperties, outboundProperties);
     }
 
-    private PropertyListDTO filter() {
+    private PropertyListDTO filterForList() {
         PropertyListDTO filteredProperties = EntityFactory.create(PropertyListDTO.class);
-        for (PropertyDTO property : properties.properties()) {
+        for (PropertyDTO property : allProperties.properties()) {
             if (criteria.city().isNull() || !criteria.city().name().equals(property.address().city())
                     || !criteria.city().province().name().equals(property.address().province().name())) {
                 continue;
@@ -126,6 +140,10 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
             filteredProperties.properties().add(property);
         }
         return filteredProperties;
+    }
+
+    private PropertyListDTO filterByBounds(LatLngBounds latLngBounds) {
+        return allProperties;
     }
 
     @Override
@@ -139,11 +157,6 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     public void refineSearch() {
         criteria = view.getValue();
         obtainGeopoint();
-    }
-
-    @Override
-    public void onMapMoveEnd(LatLngBounds latLngBounds) {
-        updateView();
     }
 
 }

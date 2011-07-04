@@ -24,21 +24,21 @@ import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public interface PropertyMapView extends IsWidget {
 
-    public void setPresenter(Presenter presenter);
+    void setPresenter(Presenter presenter);
 
-    public void populate(PropertySearchCriteria criteria, GeoPoint geoPoint, PropertyListDTO propertyList);
+    void populate(PropertySearchCriteria criteria, GeoPoint geoPoint, PropertyListDTO propertyList);
 
-    public void update(PropertyListDTO filter);
+    void updateMarkers(PropertyListDTO inboundPropertyList, PropertyListDTO outboundPropertyList);
 
     PropertySearchCriteria getValue();
 
     public interface Presenter {
 
-        public void showPropertyDetails(PropertyDTO property);
+        void showPropertyDetails(PropertyDTO property);
 
-        public void refineSearch();
+        void refineSearch();
 
-        public void onMapMoveEnd(LatLngBounds latLngBounds);
+        void updateMap(LatLngBounds latLngBounds);
 
     }
 

@@ -70,7 +70,7 @@ public abstract class PortalTheme extends VistaTheme {
         initCriteriaWidgetDecoratorStyles();
         initBaseFolderItemViewerDecoratorStyles();
         initCardPanelDecoratorStyle();
-        initPropertiesMapWidgetStyle();
+        initPropertyMarkerStyle();
         initFloorplanDetailsStyles();
         initPaymentRadioButtonGroupStyles();
     }
@@ -651,7 +651,7 @@ public abstract class PortalTheme extends VistaTheme {
 
     }
 
-    private void initPropertiesMapWidgetStyle() {
+    private void initPropertyMarkerStyle() {
         String prefix = PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
         addStyle(style);

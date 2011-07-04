@@ -20,11 +20,13 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.maps.client.event.MapMoveEndHandler;
+import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DockPanel;
 
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
@@ -103,15 +105,20 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
         add(header, DockPanel.NORTH);
         setCellHeight(header, "100%");
 
-        map = new PropertiesMapWidget();
-
-        map.addMapMoveEndHandler(new MapMoveEndHandler() {
-
+        map = new PropertiesMapWidget() {
             @Override
-            public void onMoveEnd(MapMoveEndEvent event) {
-                presenter.onMapMoveEnd(event.getSender().getBounds());
+            protected void mapsLoaded() {
+                super.mapsLoaded();
+                addMapMoveEndHandler(new MapMoveEndHandler() {
+
+                    @Override
+                    public void onMoveEnd(MapMoveEndEvent event) {
+                        presenter.updateMap(event.getSender().getBounds());
+                    }
+                });
+
             }
-        });
+        };
 
         propertyListForm = new PropertyListForm();
         propertyListForm.initialize();
@@ -135,22 +142,29 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
     @Override
     public void populate(PropertySearchCriteria criteria, GeoPoint geoPoint, PropertyListDTO propertyList) {
         searchForm.populate(criteria);
-        map.populate(propertyList);
+        DefaultAsyncCallback<LatLngBounds> callback = new DefaultAsyncCallback<LatLngBounds>() {
+            @Override
+            public void onSuccess(LatLngBounds result) {
+                presenter.updateMap(result);
+            }
+        };
         if (SearchType.proximity.equals(criteria.searchType().getValue()) && geoPoint != null && !criteria.distance().isNull()
                 && criteria.distance().getValue() > 0) {
-            map.setDistanceOverlay(geoPoint, criteria.distance().getValue());
+            map.setDistanceOverlay(geoPoint, criteria.distance().getValue(), callback);
+        } else {
+            map.setBounds(propertyList, callback);
         }
         propertyListForm.populate(propertyList);
     }
 
     @Override
-    public PropertySearchCriteria getValue() {
-        return searchForm.getValue();
+    public void updateMarkers(PropertyListDTO inboundPropertyList, PropertyListDTO outboundPropertyList) {
+        map.populateMarkers(inboundPropertyList, outboundPropertyList);
     }
 
     @Override
-    public void update(PropertyListDTO propertyList) {
-        map.populate(propertyList);
+    public PropertySearchCriteria getValue() {
+        return searchForm.getValue();
     }
 
 }

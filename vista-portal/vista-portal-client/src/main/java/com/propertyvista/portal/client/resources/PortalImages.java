@@ -43,6 +43,10 @@ public interface PortalImages extends ClientBundle {
     @Source("map_marker.png")
     ImageResource mapMarker();
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("map_marker_outbound.jpg")
+    ImageResource mapMarkerOutbound();
+
     @ImageOptions(repeatStyle = RepeatStyle.None)
     @Source("noImage.jpg")
     ImageResource noImage();
