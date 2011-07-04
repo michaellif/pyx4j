@@ -105,7 +105,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
                         @Override
                         public void execute() {
                             if (PropertyChangeEvent.PropertyName.VALIDITY.equals(event.getPropertyName())) {
-                                log.debug("CEntityEditableComponent.onPropertyChange fired from {}. Changed property is {}.", CEntityEditor.this.getTitle(),
+                                log.trace("CEntityEditor.onPropertyChange fired from {}. Changed property is {}.", CEntityEditor.this.getTitle(),
                                         event.getPropertyName());
                                 revalidate();
                                 PropertyChangeEvent.fire(CEntityEditor.this, PropertyChangeEvent.PropertyName.VALIDITY);
@@ -129,7 +129,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
                         @Override
                         public void execute() {
                             revalidate();
-                            log.debug("CEntityEditableComponent.onValueChange fired from {}. New value is {}.", CEntityEditor.this.getTitle(), event.getValue());
+                            log.trace("CEntityEditor.onValueChange fired from {}. New value is {}.", CEntityEditor.this.getTitle(), event.getValue());
                             ValueChangeEvent.fire(CEntityEditor.this, getValue());
                             sheduled = false;
                         }
