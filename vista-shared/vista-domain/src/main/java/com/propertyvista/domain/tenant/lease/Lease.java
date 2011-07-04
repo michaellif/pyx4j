@@ -21,7 +21,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.Document;
 import com.propertyvista.domain.financial.LeaseFinancialTerms;
-import com.propertyvista.domain.property.asset.Rentable;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
@@ -68,9 +67,6 @@ public interface Lease extends IEntity {
     IList<Tenant> tenants();
 
     IList<Pets> pets();
-
-    @Deprecated
-    IList<Rentable> rentableItems();
 
     // TODO : there are utilities in the Unit already... is it the same? 
     IList<Utility> utilities();

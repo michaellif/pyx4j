@@ -40,8 +40,9 @@ import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Locker;
+import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
-import com.propertyvista.domain.property.asset.Parking.Type;
+import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -117,47 +118,69 @@ public class BuildingsGenerator {
         return building;
     }
 
-    public List<Locker> createLockers(Building building, int numLockers) {
-        List<Locker> lockers = new ArrayList<Locker>();
-
-        for (int i = 0; i < numLockers; i++) {
-            Locker locker = createLocker(building, (i + 1));
-            lockers.add(locker);
+// Lockers:
+    public List<LockerArea> createLockerAreas(Building owner, int num) {
+        List<LockerArea> lockerAreas = new ArrayList<LockerArea>();
+        for (int i = 0; i < num; i++) {
+            lockerAreas.add(createLockerArea(owner, (i + 1)));
         }
+        return lockerAreas;
+    }
 
+    private LockerArea createLockerArea(Building owner, int index) {
+        LockerArea lockerArea = EntityFactory.create(LockerArea.class);
+        lockerArea.belongsTo().set(owner);
+
+        lockerArea.name().setValue("LockerArea" + index);
+        lockerArea.isPrivate().setValue(RandomUtil.randomBoolean());
+        lockerArea.levels().setValue((double) RandomUtil.randomInt(3));
+
+        int total = 1 + RandomUtil.randomInt(100);
+        int large = (int) (total * 0.1);
+        int regular = (int) (total * 0.07);
+        int small = total - (large + regular);
+        lockerArea.totalLockers().setValue(total);
+        lockerArea.largeLockers().setValue(large);
+        lockerArea.regularLockers().setValue(regular);
+        lockerArea.smallLockers().setValue(small);
+
+        return lockerArea;
+    }
+
+    public List<Locker> createLockers(LockerArea owner, int num) {
+        List<Locker> lockers = new ArrayList<Locker>();
+        for (int i = 0; i < num; i++) {
+            lockers.add(createLocker(owner, (i + 1)));
+        }
         return lockers;
     }
 
-    public Locker createLocker(Building building, int index) {
+    private Locker createLocker(LockerArea owner, int index) {
         Locker locker = EntityFactory.create(Locker.class);
-
-        locker.belongsTo().set(building);
+        locker.belongsTo().set(owner);
 
         locker.name().setValue("Locker" + index);
-        locker.price().setValue(10d + RandomUtil.randomInt(30));
-
+        locker.type().setValue(RandomUtil.random(Locker.Type.values()));
         return locker;
     }
 
-    public List<Parking> createParkings(Building building, int numParkings) {
+    public List<Parking> createParkings(Building owner, int numParkings) {
         List<Parking> parkings = new ArrayList<Parking>();
-
         for (int i = 0; i < numParkings; i++) {
-            Parking parking = createParking(building, (i + 1));
-            parkings.add(parking);
+            parkings.add(createParking(owner, (i + 1)));
         }
         return parkings;
     }
 
-    public Parking createParking(Building building, int index) {
+// Parkings:
+    private Parking createParking(Building building, int index) {
         Parking parking = EntityFactory.create(Parking.class);
+        parking.belongsTo().set(building);
 
         int levels = 1 + RandomUtil.randomInt(5);
-
-        parking.belongsTo().set(building);
         parking.name().setValue("Parking" + index);
         parking.description().setValue(levels + "-level parking" + index + " at " + building.info().name().getValue());
-        parking.type().setValue(RandomUtil.random(Type.values()));
+        parking.type().setValue(RandomUtil.random(Parking.Type.values()));
         parking.levels().setValue((double) levels);
 
         int totalSpaces = 1 + RandomUtil.randomInt(100);
@@ -168,7 +191,7 @@ public class BuildingsGenerator {
         parking.totalSpaces().setValue(totalSpaces);
         parking.disabledSpaces().setValue(disabledSpaces);
         parking.regularSpaces().setValue(regularSpaces);
-        parking.doubleSpaces().setValue(doubleSpaces);
+        parking.wideSpaces().setValue(doubleSpaces);
         parking.narrowSpaces().setValue(narrowSpaces);
 
 // TODO - move this to ParkingRent!..
@@ -181,6 +204,23 @@ public class BuildingsGenerator {
 //        parking.deposit().setValue(50d + RandomUtil.randomInt(100));
 
         return parking;
+    }
+
+    public List<ParkingSpot> createParkingSpots(Parking owner, int num) {
+        List<ParkingSpot> parkings = new ArrayList<ParkingSpot>();
+        for (int i = 0; i < num; i++) {
+            parkings.add(createParkingSpot(owner, (i + 1)));
+        }
+        return parkings;
+    }
+
+    private ParkingSpot createParkingSpot(Parking owner, int index) {
+        ParkingSpot spot = EntityFactory.create(ParkingSpot.class);
+        spot.belongsTo().set(owner);
+
+        spot.name().setValue("Spot" + index);
+        spot.type().setValue(RandomUtil.random(ParkingSpot.Type.values()));
+        return spot;
     }
 
     public List<FloorplanDTO> createFloorplans(Building building, int numFloorplans) {

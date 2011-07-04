@@ -7,25 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-20
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset;
+package com.propertyvista.crm.server.services;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.propertyvista.crm.rpc.services.ParkingSpotCrudService;
+import com.propertyvista.domain.property.asset.ParkingSpot;
 
-// TODO - replace inheritance on IEntity!!
-public interface RoofSegment extends IEntity {
+public class ParkingSpotCrudServiceImpl extends GenericCrudServiceImpl<ParkingSpot> implements ParkingSpotCrudService {
 
-    @Owner
-    @Detached
-    Roof belongsTo();
-
-    @ToString(index = 0)
-    IPrimitive<String> name();
+    public ParkingSpotCrudServiceImpl() {
+        super(ParkingSpot.class);
+    }
 }

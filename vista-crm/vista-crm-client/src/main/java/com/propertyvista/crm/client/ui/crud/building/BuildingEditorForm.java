@@ -91,12 +91,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         return tabPanel;
     }
 
-    @Override
-    public void populate(BuildingDTO value) {
-        tabPanel.selectFirstAvailableTab();
-        super.populate(value);
-    }
-
     private Widget createGeneralTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();

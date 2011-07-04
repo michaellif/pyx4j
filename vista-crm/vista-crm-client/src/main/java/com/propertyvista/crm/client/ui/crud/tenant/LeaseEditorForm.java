@@ -27,7 +27,6 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
-import com.propertyvista.domain.property.asset.Rentable;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.tenant.lease.LeaseEvent;
 import com.propertyvista.dto.LeaseDTO;
@@ -69,8 +68,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         //TODO Leon
         //Not sure how to do tenant
         main.add(inject(proto().pets(), createPetListViewer()));
-        main.add(inject(proto().rentableItems(), createRentableListViewer()));
-        main.add(inject(proto().rentableItems(), createUtilityListViewer()));
+        main.add(inject(proto().utilities(), createUtilityListViewer()));
         //TODO Leon
         //What are documents?
         main.add(inject(proto().events(), createLeaseEventsListViewer()));
@@ -101,18 +99,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 columns.add(new EntityFolderColumnDescriptor(proto().color(), "10em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().weight(), "7em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().weightUnit(), "7em"));
-                return columns;
-            }
-        };
-    }
-
-    private CEntityFolderEditor<Rentable> createRentableListViewer() {
-        return new CrmEntityFolder<Rentable>(Rentable.class, i18n.tr("Rentable Items"), isEditable()) {
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().price(), "10em"));
                 return columns;
             }
         };

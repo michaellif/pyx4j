@@ -53,12 +53,6 @@ public abstract class FeatureEditorForm<T extends Feature> extends CrmEntityForm
         return tabPanel;
     }
 
-    @Override
-    public void populate(T value) {
-        tabPanel.selectFirstAvailableTab();
-        super.populate(value);
-    }
-
     private Widget createGeneralTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();

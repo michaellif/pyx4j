@@ -31,6 +31,6 @@ public class ParkingSpotLister extends ListerBase<ParkingSpot> {
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<ParkingSpot>> columnDescriptors, ParkingSpot proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.price()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
     }
 }

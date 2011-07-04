@@ -36,7 +36,9 @@ import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Locker;
+import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
+import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -59,8 +61,9 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Building.class, AptUnit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, AptUnitItem.class,
-                    Amenity.class, Concession.class, LeaseTerms.class, Parking.class, Locker.class, Media.class, ThumbnailBlob.class, FileBlob.class);
+            return deleteAll(Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class,
+                    Amenity.class, Concession.class, LeaseTerms.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, Media.class,
+                    ThumbnailBlob.class, FileBlob.class);
         } else {
             return "This is production";
         }
@@ -78,18 +81,28 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
             // TODO Need to be saving PropertyProfile, PetCharge
             persist(building);
 
-            // parkings
+// Parkings:
             List<Parking> parkings = generator.createParkings(building, DemoData.NUM_PARKINGS);
             for (Parking parking : parkings) {
                 persist(parking);
+                List<ParkingSpot> spots = generator.createParkingSpots(parking, DemoData.NUM_PARKINGSPOTS);
+                for (ParkingSpot spot : spots) {
+                    persist(spot);
+                }
             }
 
-            // lockers
-            List<Locker> lockers = generator.createLockers(building, DemoData.NUM_LOCKERS);
-            for (Locker locker : lockers) {
-                persist(locker);
+// Lockers:
+            List<LockerArea> lockerAreas = generator.createLockerAreas(building, DemoData.NUM_LOCKERAREAS);
+            for (LockerArea lockerArea : lockerAreas) {
+                persist(lockerArea);
+
+                List<Locker> lockers = generator.createLockers(lockerArea, DemoData.NUM_LOCKERS);
+                for (Locker locker : lockers) {
+                    persist(locker);
+                }
             }
 
+// Floorplans:
             List<FloorplanDTO> floorplans = generator.createFloorplans(building, DemoData.NUM_FLOORPLANS);
             for (FloorplanDTO floorplanDTO : floorplans) {
                 MeidaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
@@ -112,6 +125,7 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 }
             }
 
+// Units:
             List<UnitRelatedData> units = generator.createUnits(building, floorplans, DemoData.NUM_FLOORS, DemoData.NUM_UNITS_PER_FLOOR);
             unitCount += units.size();
             for (UnitRelatedData unitData : units) {

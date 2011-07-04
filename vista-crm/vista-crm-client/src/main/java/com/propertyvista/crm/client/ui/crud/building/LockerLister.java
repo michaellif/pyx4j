@@ -31,6 +31,6 @@ public class LockerLister extends ListerBase<Locker> {
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Locker>> columnDescriptors, Locker proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.price()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
     }
 }

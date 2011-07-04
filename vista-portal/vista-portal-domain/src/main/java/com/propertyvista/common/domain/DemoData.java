@@ -49,7 +49,11 @@ public class DemoData {
 
     public static int NUM_PARKINGS = 1;
 
-    public static int NUM_LOCKERS = 2;
+    public static int NUM_PARKINGSPOTS = 128;
+
+    public static int NUM_LOCKERAREAS = 2;
+
+    public static int NUM_LOCKERS = 35;
 
     public static int NUM_UNITS_PER_FLOOR = 4;
 

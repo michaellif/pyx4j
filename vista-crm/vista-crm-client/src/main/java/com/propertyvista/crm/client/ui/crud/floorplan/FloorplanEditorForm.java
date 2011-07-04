@@ -60,12 +60,6 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
         return tabPanel;
     }
 
-    @Override
-    public void populate(FloorplanDTO value) {
-        tabPanel.selectFirstAvailableTab();
-        super.populate(value);
-    }
-
     private Widget createGeneralTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();

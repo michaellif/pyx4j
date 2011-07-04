@@ -17,12 +17,13 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
 //TODO - replace inheritance on IEntity!!
-public interface Locker extends Rentable {
+public interface Locker extends IEntity {
 
     @Translatable
     public enum Type {
@@ -39,15 +40,14 @@ public interface Locker extends Rentable {
         }
     }
 
+    @Owner
+    @Detached
+    LockerArea belongsTo();
+
     @ToString(index = 1)
     @MemberColumn(name = "spotType")
     IPrimitive<Type> type();
 
-    @Override
     @ToString(index = 0)
     IPrimitive<String> name();
-
-    @Owner
-    @Detached
-    LockerArea belongsTo();
 }

@@ -20,7 +20,6 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -28,7 +27,6 @@ import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
-@ToStringFormat("{0} {1}")
 public interface Parking extends IEntity {
 
     @Translatable
@@ -73,13 +71,13 @@ public interface Parking extends IEntity {
     IPrimitive<Integer> totalSpaces();
 
     @Editor(type = EditorType.label)
-    IPrimitive<Integer> disabledSpaces();
-
-    @Editor(type = EditorType.label)
     IPrimitive<Integer> regularSpaces();
 
     @Editor(type = EditorType.label)
-    IPrimitive<Integer> doubleSpaces();
+    IPrimitive<Integer> disabledSpaces();
+
+    @Editor(type = EditorType.label)
+    IPrimitive<Integer> wideSpaces();
 
     @Editor(type = EditorType.label)
     IPrimitive<Integer> narrowSpaces();
