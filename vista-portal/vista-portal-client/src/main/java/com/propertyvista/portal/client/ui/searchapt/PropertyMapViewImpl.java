@@ -19,6 +19,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.maps.client.event.MapMoveEndHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -104,6 +105,14 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
 
         map = new PropertiesMapWidget();
 
+        map.addMapMoveEndHandler(new MapMoveEndHandler() {
+
+            @Override
+            public void onMoveEnd(MapMoveEndEvent event) {
+                presenter.onMapMoveEnd(event.getSender().getBounds());
+            }
+        });
+
         propertyListForm = new PropertyListForm();
         propertyListForm.initialize();
 
@@ -137,6 +146,11 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
     @Override
     public PropertySearchCriteria getValue() {
         return searchForm.getValue();
+    }
+
+    @Override
+    public void update(PropertyListDTO propertyList) {
+        map.populate(propertyList);
     }
 
 }

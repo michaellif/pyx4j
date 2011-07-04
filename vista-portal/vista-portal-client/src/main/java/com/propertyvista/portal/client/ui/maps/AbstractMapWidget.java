@@ -17,6 +17,7 @@ import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.LargeMapControl;
+import com.google.gwt.maps.client.event.MapMoveEndHandler;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -79,6 +80,7 @@ public abstract class AbstractMapWidget extends SimplePanel {
         LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
 
         map = new MapWidget(pos, 10);
+
         map.setScrollWheelZoomEnabled(true);
         map.setSize(width, height);
 
@@ -91,6 +93,10 @@ public abstract class AbstractMapWidget extends SimplePanel {
 
         mapLoadComplete = true;
 
+    }
+
+    public void addMapMoveEndHandler(final MapMoveEndHandler handler) {
+        map.addMapMoveEndHandler(handler);
     }
 
     protected boolean isMapLoadComplete() {

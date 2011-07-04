@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.searchapt;
 
+import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.geo.GeoPoint;
@@ -27,6 +28,8 @@ public interface PropertyMapView extends IsWidget {
 
     public void populate(PropertySearchCriteria criteria, GeoPoint geoPoint, PropertyListDTO propertyList);
 
+    public void update(PropertyListDTO filter);
+
     PropertySearchCriteria getValue();
 
     public interface Presenter {
@@ -34,6 +37,8 @@ public interface PropertyMapView extends IsWidget {
         public void showPropertyDetails(PropertyDTO property);
 
         public void refineSearch();
+
+        public void onMapMoveEnd(LatLngBounds latLngBounds);
 
     }
 

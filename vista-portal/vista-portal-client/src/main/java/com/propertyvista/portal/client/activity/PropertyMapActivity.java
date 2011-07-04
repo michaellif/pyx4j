@@ -22,6 +22,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -108,6 +109,14 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     }
 
     private void populateView() {
+        view.populate(criteria, geoPoint, filter());
+    }
+
+    private void updateView() {
+        view.update(filter());
+    }
+
+    private PropertyListDTO filter() {
         PropertyListDTO filteredProperties = EntityFactory.create(PropertyListDTO.class);
         for (PropertyDTO property : properties.properties()) {
             if (criteria.city().isNull() || !criteria.city().name().equals(property.address().city())
@@ -116,7 +125,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
             }
             filteredProperties.properties().add(property);
         }
-        view.populate(criteria, geoPoint, filteredProperties);
+        return filteredProperties;
     }
 
     @Override
@@ -130,6 +139,11 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     public void refineSearch() {
         criteria = view.getValue();
         obtainGeopoint();
+    }
+
+    @Override
+    public void onMapMoveEnd(LatLngBounds latLngBounds) {
+        updateView();
     }
 
 }
