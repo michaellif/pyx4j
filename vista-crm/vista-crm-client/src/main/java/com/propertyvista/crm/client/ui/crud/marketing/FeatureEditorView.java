@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.site.client.ui.crud.IEditorView;
 
 import com.propertyvista.domain.financial.offering.Feature;
@@ -21,4 +23,6 @@ public interface FeatureEditorView extends IEditorView<Feature>, FeatureView {
 
     interface Presenter extends IEditorView.Presenter, FeatureView.Presenter {
     }
+
+    void showSelectTypePopUp(AsyncCallback<Class<? extends Feature>> callback);
 }

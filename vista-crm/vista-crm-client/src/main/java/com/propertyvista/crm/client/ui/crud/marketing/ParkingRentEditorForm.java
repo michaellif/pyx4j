@@ -43,7 +43,6 @@ public class ParkingRentEditorForm extends CrmEntityForm<ParkingRent> {
     public IsWidget createContent() {
 
         TabLayoutPanel tabPanel = new TabLayoutPanel(2.7, Unit.EM);
-
         tabPanel.add(new ScrollPanel(createFinancialTab()), i18n.tr("Financial"));
 
         tabPanel.setSize("100%", "100%");

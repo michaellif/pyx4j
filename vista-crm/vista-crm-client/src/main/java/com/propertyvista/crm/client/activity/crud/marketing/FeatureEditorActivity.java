@@ -14,8 +14,13 @@
 package com.propertyvista.crm.client.activity.crud.marketing;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
@@ -30,12 +35,34 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> implement
 
     private final FeatureActivityDelegate delegate;
 
+    private Class<? extends Feature> featureClass;
+
     @SuppressWarnings("unchecked")
     public FeatureEditorActivity(Place place) {
         super((FeatureEditorView) MarketingViewFactory.instance(FeatureEditorView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class),
                 Feature.class);
         delegate = new FeatureActivityDelegate((FeatureView) view);
         withPlace(place);
+    }
+
+    @Override
+    public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
+        if (isNewItem()) {
+            ((FeatureEditorView) view).showSelectTypePopUp(new AsyncCallback<Class<? extends Feature>>() {
+                @Override
+                public void onSuccess(Class<? extends Feature> result) {
+                    featureClass = result;
+                    FeatureEditorActivity.super.start(panel, eventBus);
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new UnrecoverableClientError(caught);
+                }
+            });
+        } else {
+            super.start(panel, eventBus);
+        }
     }
 
     @Override
@@ -47,5 +74,11 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> implement
     public void onPopulateSuccess(Feature result) {
         super.onPopulateSuccess(result);
         delegate.populate(result.getPrimaryKey());
+    }
+
+    @Override
+    protected void createNewEntity(AsyncCallback<Feature> callback) {
+        assert (featureClass != null);
+        callback.onSuccess(EntityFactory.create(featureClass));
     }
 }

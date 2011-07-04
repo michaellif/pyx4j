@@ -46,7 +46,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
     protected final CrmHeaderDecorator header;
 
-    protected final String defaultCaption;
+    protected String defaultCaption;
 
     protected Button btnApply;
 

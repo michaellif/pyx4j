@@ -62,7 +62,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
 
-        main.add(inject(proto().description()), 25);
+        main.add(inject(proto().description()), 43);
 
         main.add(split);
         split.getLeftPanel().add(inject(proto().start()), 8.2);

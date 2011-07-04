@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.marketing;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -27,7 +26,6 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.building.LockerAreaView;
 import com.propertyvista.domain.financial.offering.StorageRent;
 
 public class StorageRentEditorForm extends CrmEntityForm<StorageRent> {
@@ -45,10 +43,7 @@ public class StorageRentEditorForm extends CrmEntityForm<StorageRent> {
     public IsWidget createContent() {
 
         TabLayoutPanel tabPanel = new TabLayoutPanel(2.7, Unit.EM);
-        tabPanel.add(((LockerAreaView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
         tabPanel.add(new ScrollPanel(createFinancialTab()), i18n.tr("Financial"));
-        tabPanel.add(new ScrollPanel(((LockerAreaView) getParentView()).getLockerView().asWidget()), i18n.tr("Lockers"));
-        tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
