@@ -23,7 +23,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
@@ -75,7 +74,8 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         callback.onSuccess(GenericConverter.convertDBO2DTO(entity, dtoClass));
     }
 
-    protected void enhanceSearchCriteria(EntitySearchCriteria<DBO> searchCriteria, EntitySearchCriteria<DTO> in) {
+    protected void enhancePropertyCriterion(EntityListCriteria<DBO> dbCriteria, PropertyCriterion propertyCriterion) {
+        throw new Error("Unsupported property");
     }
 
     protected void enhanceListCriteria(EntityListCriteria<DBO> dbCriteria, EntityListCriteria<DTO> in) {
@@ -87,6 +87,8 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
                     if (path.startsWith(in.proto().getObjectClass().getSimpleName())) {
                         String dbObjectPath = dbCriteria.proto().getObjectClass().getSimpleName() + path.substring(path.indexOf(Path.PATH_SEPARATOR));
                         dbCriteria.add(new PropertyCriterion(dbObjectPath, propertyCriterion.getRestriction(), propertyCriterion.getValue()));
+                    } else {
+                        enhancePropertyCriterion(dbCriteria, propertyCriterion);
                     }
                 }
             }
