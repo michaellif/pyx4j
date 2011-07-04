@@ -58,7 +58,8 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
     /*
      * Should be called by descendant upon initialisation.
      */
-    protected void setForm(CEntityForm<E> form) {
+    @SuppressWarnings("unchecked")
+    protected void setForm(CEntityForm<? extends E> form) {
 
         if (getCenter() == null) { // finalise UI here:
             add(new LayoutPanel());
@@ -69,7 +70,7 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
             return; // already!?.
         }
 
-        this.form = form;
+        this.form = (CEntityForm<E>) form;
 
         LayoutPanel center = (LayoutPanel) getCenter();
         center.clear(); // remove current form...
