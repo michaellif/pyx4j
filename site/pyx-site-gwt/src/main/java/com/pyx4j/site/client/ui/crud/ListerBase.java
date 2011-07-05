@@ -53,8 +53,10 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
+import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
@@ -122,8 +124,17 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
         listPanel.getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
             @Override
-            public void oncheck(boolean isAnyChecked) {
+            public void onCheck(boolean isAnyChecked) {
                 setActionsActive(isAnyChecked);
+            }
+        });
+
+        listPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
+            @Override
+            public void onChange(ColumnDescriptor<E> column) {
+                List<Sort> sorts = new ArrayList<Sort>(1);
+                sorts.add(new Sort(column.getColumnName(), !column.isSortAscending()));
+                presenter.applySorting(sorts);
             }
         });
 

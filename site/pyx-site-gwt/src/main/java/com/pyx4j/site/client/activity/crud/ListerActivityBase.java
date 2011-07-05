@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -56,6 +57,8 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     private List<FilterData> preDefinedFilters;
 
     private List<FilterData> userDefinedFilters;
+
+    private List<Sort> userDefinedSorts;
 
     public ListerActivityBase(IListerView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         this.view = view;
@@ -118,6 +121,12 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
+    public void applySorting(List<Sort> sorts) {
+        userDefinedSorts = sorts;
+        populateData(0);
+    }
+
+    @Override
     public void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
         CrudAppPlace place = AppSite.getHistoryMapper().createPlace(openPlaceClass);
         place.formViewerPlace(itemID);
@@ -172,6 +181,9 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
                 }
             }
         }
+
+        // apply sorts:
+        criteria.setSorts(userDefinedSorts);
 
         return criteria;
     }

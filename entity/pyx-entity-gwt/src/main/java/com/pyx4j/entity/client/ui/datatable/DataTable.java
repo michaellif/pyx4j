@@ -62,6 +62,16 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         disabled, selected, hover, even, odd, nodetails
     }
 
+    // Events:
+    public interface SortChangeHandler<E> {
+        void onChange(ColumnDescriptor<E> column);
+    }
+
+    public interface CheckSelectionHandler {
+        void onCheck(boolean isAnyChecked);
+    }
+
+    // Data:
     private static final Logger log = LoggerFactory.getLogger(DataTable.class);
 
     private DataTableModel<E> model;
@@ -82,6 +92,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private static final String CHECK_MARK_COLUMN_SIZE = "22px";
 
+    private List<SortChangeHandler<E>> sortChangeHandlers;
+
     private List<CheckSelectionHandler> checkSelectionHandlers;
 
     public DataTable(boolean checkboxColumnShown) {
@@ -92,10 +104,13 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             @Override
             public void onClick(ClickEvent event) {
                 Cell cell = getCellForEvent(event);
-                if (cell == null || cell.getRowIndex() == 0) {
-                    return; // do not process empty and header clicks!...
+                if (cell == null) {
+                    return; // do not process empty clicks!...
+                } else if (cell.getRowIndex() == 0) {
+                    processHeaderClick(isCheckboxColumnShown() ? cell.getCellIndex() - 1 : cell.getCellIndex()); // actual table column index - without the first check one!...
+                } else {
+                    setSelectedRow(cell.getRowIndex() - 1); // actual table row index - without the header!...
                 }
-                setSelectedRow(cell.getRowIndex() - 1); // actual table row index - without the header!...
             }
         });
         setStyleName(BASE_NAME);
@@ -120,7 +135,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         }
 
         int colIndex = 0;
-        if (checkboxColumnShown) {
+        if (isCheckboxColumnShown()) {
             colIndex = 1;
             selectionCheckBoxAll = new SelectionCheckBox(HEADER_RAW_INDEX, model.isAllChecked());
             setWidget(0, 0, selectionCheckBoxAll);
@@ -128,16 +143,15 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
         }
 
-        List<ColumnDescriptor<E>> columnDescriptors = model.getColumnDescriptors();
-        for (ColumnDescriptor<E> columnDescriptor : columnDescriptors) {
+        for (ColumnDescriptor<E> columnDescriptor : model.getColumnDescriptors()) {
             String columnTitle = columnDescriptor.getColumnTitle();
             StringBuffer headerText = new StringBuffer();
             headerText.append(columnTitle);
             if (columnDescriptor.equals(model.getSortColumn())) {
                 if (columnDescriptor.isSortAscending()) {
-                    headerText.append("&nbsp;&#x2191;");
+                    headerText.append("&nbsp;&nbsp;&#x2191;");
                 } else {
-                    headerText.append("&nbsp;&#x2193;");
+                    headerText.append("&nbsp;&nbsp;&#x2193;");
                 }
             }
             setHTML(0, colIndex, headerText.toString());
@@ -166,7 +180,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         int rowIndex = 1;
         for (DataItem<E> dataItem : data) {
             int colIndex = 0;
-            if (checkboxColumnShown) {
+            if (isCheckboxColumnShown()) {
                 SelectionCheckBox selectionCheckBox = new SelectionCheckBox(rowIndex, dataItem.isChecked());
                 selectionCheckBoxes.add(selectionCheckBox);
 
@@ -261,6 +275,32 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         }
 
         return checked;
+    }
+
+    public void addSortChangeHandler(SortChangeHandler<E> handler) {
+        if (sortChangeHandlers == null) {
+            sortChangeHandlers = new ArrayList<SortChangeHandler<E>>(1);
+        }
+
+        sortChangeHandlers.add(handler);
+    }
+
+    protected void processHeaderClick(int column) {
+        ColumnDescriptor<E> columnDescriptor = model.getColumnDescriptors().get(column);
+        if (columnDescriptor.equals(model.getSortColumn())) {
+            columnDescriptor.setSortAscending(!columnDescriptor.isSortAscending());
+        } else {
+            model.setSortColumn(columnDescriptor);
+        }
+
+        renderHeader();
+
+        // notify listeners:
+        if (!sortChangeHandlers.isEmpty()) {
+            for (SortChangeHandler<E> handler : sortChangeHandlers) {
+                handler.onChange(columnDescriptor);
+            }
+        }
     }
 
     protected void setSelectedRow(int selectedRow) {
@@ -369,10 +409,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     // Check box selection class: 
-    public interface CheckSelectionHandler {
-        void oncheck(boolean isAnyChecked);
-    }
-
     public void addCheckSelectionHandler(CheckSelectionHandler handler) {
         if (checkSelectionHandlers == null) {
             checkSelectionHandlers = new ArrayList<CheckSelectionHandler>(1);
@@ -412,7 +448,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                     if (!checkSelectionHandlers.isEmpty()) {
                         boolean isAnyChecked = model.isAnyChecked();
                         for (CheckSelectionHandler handler : checkSelectionHandlers) {
-                            handler.oncheck(isAnyChecked);
+                            handler.onCheck(isAnyChecked);
                         }
                     }
                 }

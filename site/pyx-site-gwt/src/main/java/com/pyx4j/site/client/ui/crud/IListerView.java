@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public interface IListerView<E extends IEntity> extends IView<E> {
@@ -39,6 +40,8 @@ public interface IListerView<E extends IEntity> extends IView<E> {
         public void populateData(final int pageNumber);
 
         public void applyFiltering(List<FilterData> filters);
+
+        public void applySorting(List<Sort> sorts);
 
         public void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
 
