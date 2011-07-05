@@ -77,4 +77,8 @@ public class FilterData {
     public Serializable getValue() {
         return value;
     }
+
+    public boolean isFilterOK() {
+        return (getMemberPath() != null && getOperand() != null && getValue() != null);
+    }
 }

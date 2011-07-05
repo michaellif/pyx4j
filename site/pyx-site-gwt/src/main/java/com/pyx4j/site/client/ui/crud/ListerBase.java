@@ -454,15 +454,18 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             }
 
             public FilterData getFilterData() {
-                String path = "";
+                String path = null;
                 if (fieldsList.getValue() != null) {
                     path = fieldsList.getValue().getPath();
                 }
+
                 Operands operand = operandsList.getValue();
-                String value = "";
+
+                String value = null;
                 if (((INativeEditableComponent<?>) valueHolder.getWidget()).getNativeValue() != null) {
                     value = ((INativeEditableComponent<?>) valueHolder.getWidget()).getNativeValue().toString();
                 }
+
                 return new FilterData(path, operand, value);
             }
 
