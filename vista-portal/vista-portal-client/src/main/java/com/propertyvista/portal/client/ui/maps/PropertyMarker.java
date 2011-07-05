@@ -129,7 +129,7 @@ public class PropertyMarker extends Marker {
             content.add(item);
 
             //unit(floor plan) types
-            String floorString = Formatter.formatFloorplans(property.floorplanNames());
+            String floorString = Formatter.formatStringList(property.floorplanNames());
             if (floorString != null && !floorString.isEmpty()) {
                 item = new Label(floorString);
                 item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);

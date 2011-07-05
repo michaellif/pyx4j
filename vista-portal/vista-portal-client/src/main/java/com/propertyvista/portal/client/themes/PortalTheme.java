@@ -462,46 +462,25 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.SearchHeader));
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Title));
         style.addProperty("font-weight", "bold");
         style.addProperty("font-size", "14px");
         style.addProperty("padding-bottom", "10px");
         style.addProperty("color", "#888");
         addStyle(style);
 
+        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Header));
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "12px");
+        style.addProperty("margin-top", "10px");
+        style.addProperty("margin-bottom", "10px");
+        style.addProperty("color", ThemeColor.OBJECT_TONE85);
+        addStyle(style);
+
         style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.ButtonPanel));
         style.addProperty("padding-top", "30px");
         style.addProperty("padding-bottom", "10px");
         style.addProperty("margin-right", "10px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Holder));
-        style.addProperty("margin-top", "20px");
-        style.addProperty("margin-bottom", "10px");
-        style.addProperty("padding", "0");
-        style.addProperty("list-style", "none");
-        style.addProperty("overflow", "hidden");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Tab));
-        style.addProperty("border", "none");
-        style.addProperty("border-radius", "8px");
-        style.addProperty("-moz-border-radius", "8px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.LabelHolder));
-        style.addProperty("position", "relative");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.StatusHolder));
-        style.addProperty("background", "transparent");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Label, RefineApartmentSearchForm.StyleDependent.current));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE95);
-        style.addProperty("color", "white");
-        style.addProperty("border-radius", "8px");
-        style.addProperty("-moz-border-radius", "8px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Label));

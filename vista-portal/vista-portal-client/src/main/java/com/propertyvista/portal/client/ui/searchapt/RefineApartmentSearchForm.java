@@ -53,7 +53,7 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
     public static String DEFAULT_STYLE_PREFIX = "RefineApartmentSearch";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        SearchHeader, RowHeader, ButtonPanel, Holder, LabelHolder, Tab, StatusHolder, Label
+        Title, ButtonPanel, Label, Header
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -66,6 +66,10 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
 
     private VerticalPanel container;
 
+    private Label locationLbl;
+
+    private Label distanceLbl;
+
     public RefineApartmentSearchForm() {
         super(PropertySearchCriteria.class);
 
@@ -76,10 +80,9 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
 
         container = new VerticalPanel();
         container.setStyleName(DEFAULT_STYLE_PREFIX);
-        Label label = new Label(i18n.tr("FIND AN APARTMENT"));
-        label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchHeader.name());
-        container.add(label);
+        container.add(createLabel("FIND AN APARTMENT", DEFAULT_STYLE_PREFIX + StyleSuffix.Title));
 
+        container.add(createLabel(proto().searchType(), DEFAULT_STYLE_PREFIX + StyleSuffix.Header));
         container.add(inject(proto().searchType()));
 
         get(proto().searchType()).addValueChangeHandler(new ValueChangeHandler<SearchType>() {
@@ -88,18 +91,25 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
                 setSearchType(event.getValue());
             }
         });
-
+        //add spacer
+        container.add(createLabel(""));
         container.add(inject(proto().city()));
         ((CComboBox<City>) get(proto().city())).setNoSelectionText("Select City");
 
+        locationLbl = createLabel(proto().location());
+        container.add(locationLbl);
         container.add(inject(proto().location()));
 
+        distanceLbl = createLabel(proto().distance());
+        container.add(distanceLbl);
         container.add(inject(proto().distance()));
 
+        container.add(createLabel(proto().startingFrom()));
         container.add(inject(proto().startingFrom()));
 
         HorizontalPanel bedsPanel = new HorizontalPanel();
 
+        container.add(createLabel("Bedrooms"));
         CComboBox<Integer> minBedsCombo = new CComboBox<Integer>();
         {
             minBedsCombo.setNoSelectionText("Min");
@@ -116,6 +126,7 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
 
         container.add(bedsPanel);
 
+        container.add(createLabel("Bathrooms"));
         HorizontalPanel bathsPanel = new HorizontalPanel();
 
         CComboBox<Integer> minBathsCombo = new CComboBox<Integer>();
@@ -134,16 +145,14 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
 
         container.add(bathsPanel);
 
+        container.add(createLabel("Price"));
         HorizontalPanel pricePanel = new HorizontalPanel();
-
         pricePanel.add(inject(proto().maxPrice()));
-
         pricePanel.add(inject(proto().minPrice()));
-
         container.add(pricePanel);
 
+        container.add(createLabel("AMENITIES", DEFAULT_STYLE_PREFIX + StyleSuffix.Header));
         HorizontalPanel amenities1Panel = new HorizontalPanel();
-
         amenities1Panel.add(inject(proto().elevator()));
         amenities1Panel.setCellWidth(get(proto().elevator()), "10%");
         get(proto().elevator()).asWidget().removeStyleName(CSSClass.pyx4j_CheckBox.name());
@@ -200,6 +209,8 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
         get(proto().city()).setVisible(searchByCity);
         get(proto().location()).setVisible(!searchByCity);
         get(proto().distance()).setVisible(!searchByCity);
+        distanceLbl.setVisible(!searchByCity);
+        locationLbl.setVisible(!searchByCity);
     }
 
     @Override
@@ -233,4 +244,21 @@ public class RefineApartmentSearchForm extends CEntityForm<PropertySearchCriteri
         this.presenter = presenter;
     }
 
+    private Label createLabel(IObject<?> member) {
+        return createLabel(member.getMeta().getCaption());
+    }
+
+    private Label createLabel(IObject<?> member, String styleName) {
+        return createLabel(member.getMeta().getCaption(), styleName);
+    }
+
+    private Label createLabel(String caption) {
+        return createLabel(caption, DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
+    }
+
+    private Label createLabel(String caption, String styleName) {
+        Label lbl = new Label(i18n.tr(caption));
+        lbl.setStyleName(styleName);
+        return lbl;
+    }
 }

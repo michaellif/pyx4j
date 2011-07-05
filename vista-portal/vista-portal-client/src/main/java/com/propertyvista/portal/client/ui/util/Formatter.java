@@ -95,7 +95,7 @@ public class Formatter {
 
     }
 
-    public static String formatFloorplans(IPrimitiveSet<String> floorplans) {
+    public static String formatStringList(IPrimitiveSet<String> floorplans) {
         if (floorplans.isNull() || floorplans.isEmpty())
             return "";
 

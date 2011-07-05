@@ -14,6 +14,7 @@
 package com.propertyvista.portal.rpc.portal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -29,6 +30,7 @@ public interface PropertySearchCriteria extends IEntity {
     }
 
     @NotNull
+    @Caption(name = "SEARCH BY")
     IPrimitive<SearchType> searchType();
 
     City city();
