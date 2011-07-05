@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.geo.GeoUtils;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
@@ -41,6 +42,7 @@ import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
 
 public class PropertyMapActivity extends AbstractActivity implements PropertyMapView.Presenter {
 
@@ -56,7 +58,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
 
     private PropertySearchCriteria criteria;
 
-    private GeoPoint geoPoint;
+    private GeoPoint proximityCenter;
 
     public PropertyMapActivity(Place place) {
         this.view = (PropertyMapView) PropertySearchViewFactory.instance(PropertyMapView.class);
@@ -96,7 +98,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
                 @Override
                 public void onSuccess(LatLng fromCoordinates) {
 
-                    geoPoint = MapUtils.newGeoPointInstance(fromCoordinates);
+                    proximityCenter = MapUtils.newGeoPointInstance(fromCoordinates);
                     populateView();
 
                 }
@@ -114,7 +116,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
 
     private void populateView() {
         inboundProperties = filterForList();
-        view.populate(criteria, geoPoint, inboundProperties);
+        view.populate(criteria, proximityCenter, inboundProperties);
     }
 
     @Override
@@ -132,17 +134,28 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
 
     private PropertyListDTO filterForList() {
         PropertyListDTO filteredProperties = EntityFactory.create(PropertyListDTO.class);
-        for (PropertyDTO property : allProperties.properties()) {
-            if (criteria.city().isNull() || !criteria.city().name().equals(property.address().city())
-                    || !criteria.city().province().name().equals(property.address().province().name())) {
-                continue;
+        if (SearchType.city.equals(criteria.searchType().getValue()) && !criteria.city().isNull()) {
+            for (PropertyDTO property : allProperties.properties()) {
+                if (!criteria.city().name().equals(property.address().city())
+                        || !criteria.city().province().name().equals(property.address().province().name())) {
+                    continue;
+                }
+                filteredProperties.properties().add(property);
             }
-            filteredProperties.properties().add(property);
+        } else if (SearchType.proximity.equals(criteria.searchType().getValue()) && (proximityCenter != null) && (criteria.distance().getValue() > 0)) {
+            for (PropertyDTO property : allProperties.properties()) {
+                GeoPoint location = property.location().getValue();
+                if (GeoUtils.distance(location, proximityCenter) > criteria.distance().getValue()) {
+                    continue;
+                }
+                filteredProperties.properties().add(property);
+            }
         }
         return filteredProperties;
     }
 
     private PropertyListDTO filterByBounds(LatLngBounds latLngBounds) {
+        //TODO load only the properties that fit into map (optimisation can not be needed at all)
         return allProperties;
     }
 
