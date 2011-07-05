@@ -123,12 +123,6 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 Floorplan floorplan = down(floorplanDTO, Floorplan.class);
                 persist(floorplan); // persist real unit here, not DTO!..
 
-                // persist internal lists and with belongness: 
-                for (Feature feature : floorplanDTO.features()) {
-//                    feature.belongsTo().set(floorplan);
-                    persist(feature);
-                }
-
                 for (FloorplanAmenity amenity : floorplanDTO.amenities()) {
                     amenity.belongsTo().set(floorplan);
                     persist(amenity);

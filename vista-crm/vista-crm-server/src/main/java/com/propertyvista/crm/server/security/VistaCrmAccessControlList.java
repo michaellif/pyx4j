@@ -50,6 +50,10 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.financial.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ParkingRent;
+import com.propertyvista.domain.financial.offering.PetCharge;
+import com.propertyvista.domain.financial.offering.ResidentialRent;
+import com.propertyvista.domain.financial.offering.StorageRent;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -147,6 +151,11 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 // - Marketing-related:
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Feature.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(FeatureCrudService.class));
+
+        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(ResidentialRent.class, EntityPermission.ALL));
+        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(ParkingRent.class, EntityPermission.ALL));
+        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(StorageRent.class, EntityPermission.ALL));
+        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(PetCharge.class, EntityPermission.ALL));
 
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Concession.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ConcessionCrudService.class));
