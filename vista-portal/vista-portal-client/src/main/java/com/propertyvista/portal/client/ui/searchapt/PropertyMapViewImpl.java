@@ -152,6 +152,7 @@ public class PropertyMapViewImpl extends DockPanel implements PropertyMapView {
                 && criteria.distance().getValue() > 0) {
             map.setDistanceOverlay(geoPoint, criteria.distance().getValue(), callback);
         } else {
+            map.removeDistanceOverlay();
             map.setBounds(propertyList, callback);
         }
         propertyListForm.populate(propertyList);

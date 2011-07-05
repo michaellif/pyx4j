@@ -146,6 +146,13 @@ public class PropertiesMapWidget extends AbstractMapWidget {
         }
     }
 
+    public void removeDistanceOverlay() {
+        if (distanceOverlay != null) {
+            getMap().removeOverlay(distanceOverlay);
+            distanceOverlay = null;
+        }
+    }
+
     private PropertyMarker createMarker(final PropertyDTO property) {
         if (!property.location().isNull()) {
             final PropertyMarker marker = new PropertyMarker(property, getMap());
