@@ -130,26 +130,38 @@ public class BuildingsGenerator {
         Building building = EntityFactory.create(Building.class);
 
         building.info().propertyCode().setValue(propertyCode);
-
-        building.info().type().setValue(buildingType);
-        // building.complex().
-        building.contacts().website().setValue(website);
-
+        building.info().name().setValue(RandomUtil.randomLetters(5));
         building.info().address().set(address);
+        building.info().type().setValue(buildingType);
+        building.info().shape().setValue(RandomUtil.random(BuildingInfo.Shape.values()));
+        building.info().totalStories().setValue("" + (1 + RandomUtil.randomInt(20)));
+        building.info().residentialStories().setValue("" + RandomUtil.randomInt(20));
+        building.info().structureType().setValue(RandomUtil.random(BuildingInfo.StructureType.values()));
+        building.info().structureBuildYear().setValue(RandomUtil.randomYear(1700, 2011));
+        building.info().constructionType().setValue(RandomUtil.random(BuildingInfo.ConstructionType.values()));
+        building.info().foundationType().setValue(RandomUtil.random(BuildingInfo.FoundationType.values()));
+        building.info().floorType().setValue(RandomUtil.random(BuildingInfo.FloorType.values()));
+        building.info().landArea().setValue(1000 + RandomUtil.randomInt(12000) + "sq Ft.");
+        building.info().waterSupply().setValue(RandomUtil.random(BuildingInfo.WaterSupply.values()));
+        building.info().centralAir().setValue(RandomUtil.randomBoolean());
+        building.info().centralHeat().setValue(RandomUtil.randomBoolean());
+
+        building.financial().dateAquired().setValue(RandomUtil.randomLogicalDate(1950, 2011));
+        building.financial().purchasePrice().setValue(100d + RandomUtil.randomDouble(2000000));
+        building.financial().marketPrice().setValue(100d + RandomUtil.randomDouble(2000000));
+        building.financial().lastAppraisalDate().setValue(RandomUtil.randomLogicalDate(2000, 2011));
+        building.financial().lastAppraisalValue().setValue(100d + RandomUtil.randomDouble(2000000));
+        building.financial().currency().name().setValue("CAD");
+
+        building.marketing().name().setValue(RandomUtil.randomLetters(4) + " " + RandomUtil.randomLetters(6));
+        building.marketing().description().setValue(CommonsGenerator.lipsum());
 
         for (Phone phone : phones) {
             building.contacts().phones().add(phone);
         }
-
-        building.info().name().setValue(RandomUtil.randomLetters(3));
-
-        building.marketing().description().setValue(CommonsGenerator.lipsum());
-
-        building.marketing().name().setValue(RandomUtil.randomLetters(4) + " " + RandomUtil.randomLetters(6));
-
+        building.contacts().website().setValue(website);
         building.contacts().email().set(email); // not sure yet what to do about
                                                 // the email and its type
-
         return building;
     }
 
