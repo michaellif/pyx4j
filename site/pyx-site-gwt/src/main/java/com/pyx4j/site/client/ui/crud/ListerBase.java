@@ -21,6 +21,8 @@
 package com.pyx4j.site.client.ui.crud;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.xnap.commons.i18n.I18n;
@@ -31,6 +33,8 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -40,17 +44,26 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CDatePicker;
+import com.pyx4j.forms.client.ui.CDoubleField;
+import com.pyx4j.forms.client.ui.CIntegerField;
+import com.pyx4j.forms.client.ui.CLongField;
+import com.pyx4j.forms.client.ui.CRadioGroup;
+import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
+import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.crud.FilterData.Operands;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -339,13 +352,28 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
         private class Filter extends HorizontalPanel {
 
-            protected final ListBox fieldsList = new ListBox();
+            protected final CComboBox<FieldData> fieldsList = new CComboBox<FieldData>(true);
 
-            protected final ListBox operandsList = new ListBox();
+            protected final CComboBox<Operands> operandsList = new CComboBox<Operands>(true);
 
-            protected final ListBox valuesList = new ListBox();
+            protected final SimplePanel valueHolder = new SimplePanel();
 
-            protected final TextBox valueText = new TextBox();
+            private class FieldData {
+                private final ColumnDescriptor<E> cd;
+
+                public FieldData(ColumnDescriptor<E> cd) {
+                    this.cd = cd;
+                }
+
+                public String getPath() {
+                    return cd.getColumnName();
+                }
+
+                @Override
+                public String toString() {
+                    return cd.getColumnTitle();
+                }
+            }
 
             Filter() {
                 Image btnDel = new ImageButton(SiteImages.INSTANCE.del(), SiteImages.INSTANCE.delHover(), i18n.tr("Remove filter"));
@@ -353,7 +381,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                     @Override
                     public void onClick(ClickEvent event) {
                         Filters.this.remove(Filter.this);
-                        btnApply.setEnabled(getFilterCount() > 0);
+                        if (filters.getFilterCount() == 0) {
+                            btnApply.setEnabled(false);
+                            presenter.applyFiltering(filters.getFiltersData());
+                        }
                     }
                 });
 
@@ -364,36 +395,75 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 add(wrap);
                 formatCell(wrap);
 
+                Collection<FieldData> fds = new ArrayList<FieldData>();
                 for (ColumnDescriptor<E> cd : getListPanel().getDataTable().getDataTableModel().getColumnDescriptors()) {
-                    fieldsList.addItem(cd.getColumnTitle());
-                    fieldsList.setValue(fieldsList.getItemCount() - 1, cd.getColumnName());
+                    fds.add(new FieldData(cd));
                 }
+
+                fieldsList.setOptions(fds);
+                if (!fds.isEmpty()) {
+                    fieldsList.setValue(fds.iterator().next());
+                }
+                fieldsList.addValueChangeHandler(new ValueChangeHandler<FieldData>() {
+                    @SuppressWarnings({ "unchecked", "rawtypes" })
+                    @Override
+                    public void onValueChange(ValueChangeEvent<FieldData> event) {
+                        String path = event.getValue().getPath();
+                        Class<?> valueClass = getListPanel().proto().getMember(new Path(path)).getValueClass();
+                        if (valueClass.isEnum()) {
+                            CComboBox valuesList = new CComboBox(true);
+                            valuesList.setOptions(EnumSet.allOf((Class<Enum>) valueClass));
+                            valueHolder.setWidget(valuesList);
+                        } else if (valueClass.equals(LogicalDate.class)) {
+                            valueHolder.setWidget(new CDatePicker());
+                        } else if (valueClass.equals(Boolean.class)) {
+                            valueHolder.setWidget(new CRadioGroupBoolean(CRadioGroup.Layout.HORISONTAL));
+                        } else if (valueClass.equals(Double.class)) {
+                            valueHolder.setWidget(new CDoubleField());
+                        } else if (valueClass.equals(Integer.class)) {
+                            valueHolder.setWidget(new CLongField());
+                        } else if (valueClass.equals(Integer.class)) {
+                            valueHolder.setWidget(new CIntegerField());
+                        } else {
+                            valueHolder.setWidget(new CTextField());
+                        }
+                    }
+                });
                 fieldsList.setWidth("100%");
+
                 add(fieldsList);
                 setCellWidth(fieldsList, "40%");
-                formatCell(fieldsList);
+                formatCell(fieldsList.asWidget());
 
-                for (Operands op : Operands.values()) {
-                    operandsList.addItem(op.toString());
-                    operandsList.setValue(operandsList.getItemCount() - 1, op.name());
-                }
+                operandsList.setOptions(EnumSet.allOf(Operands.class));
+                operandsList.setValue(Operands.is);
                 operandsList.setWidth("100%");
+
                 add(operandsList);
                 setCellWidth(operandsList, "20%");
-                formatCell(operandsList);
+                formatCell(operandsList.asWidget());
 
-                valueText.setWidth("100%");
-                add(valueText);
-                setCellWidth(valueText, "40%");
-                formatCell(valueText);
+                valueHolder.setWidget(new CTextField());
+                valueHolder.setWidth("100%");
+
+                add(valueHolder);
+                setCellWidth(valueHolder, "40%");
+                formatCell(valueHolder);
 
                 setWidth("100%");
             }
 
             public FilterData getFilterData() {
-                String path = fieldsList.getValue(fieldsList.getSelectedIndex());
-                Operands operand = Operands.valueOf(operandsList.getValue(operandsList.getSelectedIndex()));
-                return new FilterData(path, operand, valueText.getText());
+                String path = "";
+                if (fieldsList.getValue() != null) {
+                    path = fieldsList.getValue().getPath();
+                }
+                Operands operand = operandsList.getValue();
+                String value = "";
+                if (((INativeEditableComponent<?>) valueHolder.getWidget()).getNativeValue() != null) {
+                    value = ((INativeEditableComponent<?>) valueHolder.getWidget()).getNativeValue().toString();
+                }
+                return new FilterData(path, operand, value);
             }
 
             private void formatCell(Widget w) {

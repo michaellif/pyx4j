@@ -51,6 +51,10 @@ public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> imple
         this(title, null);
     }
 
+    public CComboBox(boolean mandatory) {
+        this(null, mandatory);
+    }
+
     public CComboBox(String title, boolean mandatory) {
         this(title);
         this.setMandatory(mandatory);
