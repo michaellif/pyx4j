@@ -28,6 +28,10 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnitFinancial;
+import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
+import com.propertyvista.domain.property.asset.unit.AptUnitMarketing;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
@@ -152,6 +156,31 @@ public class XmlBeanTest {
 
         GetResidentTransactionsMapper mapper = new GetResidentTransactionsMapper();
         mapper.map(transactions);
+
+        Assert.assertTrue("Has units", !mapper.getUnits().isEmpty());
+        for (AptUnit unit : mapper.getUnits()) {
+            log.info("Unit {}", unit);
+
+            // info
+            AptUnitInfo info = unit.info();
+            Assert.assertFalse(info.name().isNull());
+            Assert.assertFalse(info.number().isNull());
+            Assert.assertFalse(info.type().isNull());
+            Assert.assertFalse(info.bedrooms().isNull());
+            Assert.assertFalse(info.bathrooms().isNull());
+            Assert.assertFalse(info.area().isNull());
+            Assert.assertFalse(info.areaUnits().isNull());
+            Assert.assertFalse(info.economicStatus().isNull());
+
+            // marketing
+            AptUnitMarketing marketing = unit.marketing();
+            Assert.assertFalse(marketing.name().isNull());
+
+            // financial
+            AptUnitFinancial financial = unit.financial();
+            Assert.assertFalse(financial.unitRent().isNull());
+            Assert.assertFalse(financial.marketRent().isNull());
+        }
     }
 
     @BeforeClass

@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.yardi.bean.mits.Information;
@@ -39,6 +40,8 @@ public class GetResidentTransactionsMapper {
     private List<AptUnit> units = new ArrayList<AptUnit>();
 
     private List<Tenant> tenants = new ArrayList<Tenant>();
+
+    private List<AptUnitOccupancy> occupancies = new ArrayList<AptUnitOccupancy>();
 
     // TODO later we will need to do transactions here
 
@@ -61,11 +64,10 @@ public class GetResidentTransactionsMapper {
     public void map(RTUnit unitFrom) {
         AptUnit unitTo = EntityFactory.create(AptUnit.class);
 
-        unitTo.info().name().setValue(unitFrom.getUnitId());
-
-        unitTo.marketing().name().setValue(unitFrom.getUnit().getMarketingName());
-
+        // info
         Information info = unitFrom.getUnit().getInformation();
+        unitTo.info().name().setValue(unitFrom.getUnitId());
+        unitTo.info().number().setValue(info.getUnitId());
         unitTo.info().type().setValue(AptUnitType.oneBedroom); // TODO this later needs to be dynamic
         unitTo.info().bedrooms().setValue(info.getUnitBedrooms());
         unitTo.info().bathrooms().setValue(info.getUnitBathrooms());
@@ -79,6 +81,36 @@ public class GetResidentTransactionsMapper {
             unitTo.info().economicStatus().setValue(EconomicStatus.other);
         }
 
+        // marketing
+        unitTo.marketing().name().setValue(unitFrom.getUnit().getMarketingName());
+
+        // financial
+        unitTo.financial().unitRent().setValue(info.getUnitRent());
+        unitTo.financial().marketRent().setValue(info.getMarketRent());
+
         units.add(unitTo);
+
+//        mapOccupancy(info);
+    }
+
+    /**
+     * TODO for now we are not using this method
+     */
+    public void mapOccupancy(Information info) {
+        AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
+
+        occupancies.add(occupancy);
+    }
+
+    public List<AptUnit> getUnits() {
+        return units;
+    }
+
+    public List<Tenant> getTenants() {
+        return tenants;
+    }
+
+    public List<AptUnitOccupancy> getOccupancies() {
+        return occupancies;
     }
 }

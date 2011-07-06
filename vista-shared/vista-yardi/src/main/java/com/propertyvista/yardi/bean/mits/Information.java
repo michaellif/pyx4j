@@ -47,9 +47,9 @@ public class Information {
 
     private Integer maxSquareFeet; // unit.info.area
 
-    private Double unitRent;
+    private Double unitRent; // unit.financial.unitRent
 
-    private Double marketRent;
+    private Double marketRent; // unit.financial.marketRent
 
     private String unitEconomicStatus; // unit.info.economicStatus
 
@@ -57,9 +57,9 @@ public class Information {
 
     private String unitLeasedStatus;
 
-    private String floorplanId;
+    private String floorplanId; // TODO bind it to floorplans
 
-    private String floorplanName;
+    private String floorplanName; // TODO bind it to floorplans
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
