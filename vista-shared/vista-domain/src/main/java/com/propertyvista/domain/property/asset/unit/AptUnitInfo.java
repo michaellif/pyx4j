@@ -32,7 +32,7 @@ import com.propertyvista.domain.property.asset.Utility;
 public interface AptUnitInfo extends IEntity {
 
     @Translatable
-    public enum EcomomicStatus {
+    public enum EconomicStatus {
 
         residential,
 
@@ -57,7 +57,7 @@ public interface AptUnitInfo extends IEntity {
 
     IPrimitive<String> typeDescription();
 
-    IPrimitive<EcomomicStatus> economicStatus();
+    IPrimitive<EconomicStatus> economicStatus();
 
     IPrimitive<String> economicStatusDescription();
 

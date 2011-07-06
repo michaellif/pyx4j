@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EcomomicStatus;
+import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.yardi.bean.mits.Information;
@@ -73,10 +73,10 @@ public class GetResidentTransactionsMapper {
         unitTo.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
 
         if (info.getUnitEconomicStatus().equals("residential")) {
-            unitTo.info().economicStatus().setValue(EcomomicStatus.residential);
+            unitTo.info().economicStatus().setValue(EconomicStatus.residential);
         } else {
             log.info("Unknown economic status {}", info.getUnitEconomicStatus());
-            unitTo.info().economicStatus().setValue(EcomomicStatus.other);
+            unitTo.info().economicStatus().setValue(EconomicStatus.other);
         }
 
         units.add(unitTo);
