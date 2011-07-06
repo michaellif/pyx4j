@@ -111,7 +111,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                             && cell.getCellIndex() < getCellCount(0) - (isUseHeaderColumnSelector() ? 1 : 0)) {
                         processHeaderClick(isCheckboxColumnShown() ? cell.getCellIndex() - 1 : cell.getCellIndex()); // actual table column index - without the first check one!...
                     }
-                } else {
+                } else if (cell.getCellIndex() >= (isCheckboxColumnShown() ? 1 : 0)) {
                     setSelectedRow(cell.getRowIndex() - 1); // actual table row index - without the header!...
                 }
             }
