@@ -17,17 +17,26 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 public interface Email extends IEntity {
 
+    @Translatable
     public enum Type {
-        home, work, other
+        home, work, other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
+    @ToString(index = 1)
     @MemberColumn(name = "emailType")
     IPrimitive<Type> type();
 
-    @ToString
+    @ToString(index = 0)
     IPrimitive<String> address();
 
 }
