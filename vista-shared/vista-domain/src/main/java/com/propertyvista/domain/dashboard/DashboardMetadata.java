@@ -27,8 +27,8 @@ import com.propertyvista.common.domain.ISharedUserEntity;
 public interface DashboardMetadata extends ISharedUserEntity {
 
     @Translatable
-    public enum Type {
-        system, building, other;
+    public enum DashboardType {
+        system, building;
 
         @Override
         public String toString() {
@@ -63,7 +63,7 @@ public interface DashboardMetadata extends ISharedUserEntity {
 
     @ToString(index = 1)
     @MemberColumn(name = "dashboardType")
-    IPrimitive<Type> type();
+    IPrimitive<DashboardType> type();
 
     @ToString(index = 0)
     IPrimitive<String> name();

@@ -30,11 +30,11 @@ import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
-import com.propertyvista.domain.dashboard.DashboardMetadata.Type;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
 public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadata> {
 
-    private DashboardMetadata.Type dashboardType;
+    private DashboardMetadata.DashboardType dashboardType;
 
     @SuppressWarnings("unchecked")
     public DashboardEditorActivity(Place place) {
@@ -46,9 +46,9 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         if (isNewItem()) {
-            ((DashboardEditor) view).showSelectTypePopUp(new AsyncCallback<DashboardMetadata.Type>() {
+            ((DashboardEditor) view).showSelectTypePopUp(new AsyncCallback<DashboardMetadata.DashboardType>() {
                 @Override
-                public void onSuccess(Type result) {
+                public void onSuccess(DashboardType result) {
                     dashboardType = result;
                     DashboardEditorActivity.super.start(panel, eventBus);
                 }

@@ -21,6 +21,7 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
@@ -32,7 +33,7 @@ public class ReportPreload extends AbstractDataPreloader {
 
 // first demo report:        
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.type().setValue(DashboardMetadata.Type.system);
+        dmd.type().setValue(DashboardType.system);
         dmd.layoutType().setValue(LayoutType.Report);
         dmd.name().setValue("System Report");
 
@@ -75,7 +76,7 @@ public class ReportPreload extends AbstractDataPreloader {
 
 // the second one:
         dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.type().setValue(DashboardMetadata.Type.other);
+        dmd.type().setValue(DashboardType.system);
         dmd.layoutType().setValue(LayoutType.Report);
         dmd.name().setValue("Test Report");
 

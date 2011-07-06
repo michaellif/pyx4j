@@ -13,11 +13,43 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
+/*
+ * In order to work properly in VISTA environment every  
+ * gadget should be registered here in 3 places:
+ *      1. Compatibility lists;
+ *      2  Creation routine;
+ *      3  Description.
+ */
 public class GadgetsFactory {
 
+    /*
+     * Gadgets<->Dashboards(Reports) authorisation lists:
+     */
+
+    //@formatter:off
+    private static GadgetType[] systemDashboardGadgets = 
+    {
+        GadgetType.Demo,
+        GadgetType.BuildingLister,
+        GadgetType.LineChartDisplay,
+        GadgetType.BarChartDisplay,
+        GadgetType.PieChartDisplay
+    };
+    private static GadgetType[] buildingDashboardGadgets = 
+    {
+        GadgetType.Demo,
+        GadgetType.BarChartDisplayBuilding,
+        GadgetType.PieChartDisplayBuilding
+    };
+    //@formatter:on
+
+    /*
+     * Gadgets creation:
+     */
     public static IGadgetBase createGadget(GadgetType type, GadgetMetadata metaData) {
         switch (type) {
         case Demo:
@@ -27,14 +59,21 @@ public class GadgetsFactory {
         case LineChartDisplay:
             return new LineChartGadget(metaData);
         case BarChartDisplay:
-            return new BarChart2DGadget(metaData); //new BarChartDisplayGadget(metaData);
+            return new BarChart2DGadget(metaData);
         case PieChartDisplay:
-            return new PieChart2DGadget(metaData); //PieChartDisplayGadget(metaData);
+            return new PieChart2DGadget(metaData);
+        case BarChartDisplayBuilding:
+            return new BarChartDisplayGadget(metaData);
+        case PieChartDisplayBuilding:
+            return new PieChartDisplayGadget(metaData);
         }
         return null;
     }
 
-    public static String getGadgetTypeDescription(GadgetType type) {
+    /*
+     * Gadgets description:
+     */
+    public static String getGadgetDescription(GadgetType type) {
         switch (type) {
         case Test:
             return "There is no such gadget - do not select it, sorry ;o)...";
@@ -48,7 +87,34 @@ public class GadgetsFactory {
             return "Gadget intended to demonstrate Pie Chart display functionality...";
         case LineChartDisplay:
             return "Gadget intended to demonstrate Line Chart display functionality...";
+        case BarChartDisplayBuilding:
+            return "Gadget intended to demonstrate Bar Chart display (Building only!)";
+        case PieChartDisplayBuilding:
+            return "Gadget intended to demonstrate Pie Chart display (Building only!)";
         }
         return "";
+    }
+
+    // internals:
+    public static boolean isGadgetAllowed(GadgetType gadget, DashboardType dashboard) {
+        boolean answer = false;
+        switch (dashboard) {
+        case system:
+            answer = contains(systemDashboardGadgets, gadget);
+            break;
+        case building:
+            answer = contains(buildingDashboardGadgets, gadget);
+            break;
+        }
+        return answer;
+    }
+
+    private static boolean contains(GadgetType[] array, GadgetType gadget) {
+        for (GadgetType type : array) {
+            if (type == gadget) {
+                return true;
+            }
+        }
+        return false;
     }
 }

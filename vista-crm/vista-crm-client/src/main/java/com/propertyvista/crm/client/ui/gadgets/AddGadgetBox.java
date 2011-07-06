@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dialog.DialogPanelNew;
 
-import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class AddGadgetBox extends DialogPanelNew {
@@ -47,9 +47,9 @@ public class AddGadgetBox extends DialogPanelNew {
 
     private IGadget selectedGadget = null;
 
-    private final DashboardMetadata.Type dashboardType;
+    private final DashboardType dashboardType;
 
-    public AddGadgetBox(DashboardMetadata.Type dashboardType) {
+    public AddGadgetBox(DashboardType dashboardType) {
         super(false, true);
         this.dashboardType = dashboardType;
         setCaption(i18n.tr("Gadget Directory"));
@@ -106,8 +106,10 @@ public class AddGadgetBox extends DialogPanelNew {
 
     private void listAvailableGadgets() {
         gadgetsList.clear();
-        for (GadgetType gt : GadgetType.values()) {
-            gadgetsList.addItem(gt.name());
+        for (GadgetType gadgetType : GadgetType.values()) {
+            if (GadgetsFactory.isGadgetAllowed(gadgetType, dashboardType)) {
+                gadgetsList.addItem(gadgetType.name());
+            }
         }
         gadgetsList.setSelectedIndex(-1);
         gadgetsList.setVisibleItemCount(8);
@@ -115,7 +117,7 @@ public class AddGadgetBox extends DialogPanelNew {
             @Override
             public void onChange(ChangeEvent event) {
                 if (gadgetsList.getSelectedIndex() >= 0) {
-                    gadgetDesc.setText(GadgetsFactory.getGadgetTypeDescription(GadgetType.valueOf(gadgetsList.getItemText(gadgetsList.getSelectedIndex()))));
+                    gadgetDesc.setText(GadgetsFactory.getGadgetDescription(GadgetType.valueOf(gadgetsList.getItemText(gadgetsList.getSelectedIndex()))));
                 }
             }
         });

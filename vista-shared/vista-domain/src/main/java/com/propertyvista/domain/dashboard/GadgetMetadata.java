@@ -23,7 +23,21 @@ import com.propertyvista.common.domain.ISharedUserEntity;
 public interface GadgetMetadata extends ISharedUserEntity {
 
     public static enum GadgetType {
-        Test, Demo, BuildingLister, BarChartDisplay, PieChartDisplay, LineChartDisplay
+        Test,
+
+        Demo,
+
+        BuildingLister,
+
+        BarChartDisplay,
+
+        PieChartDisplay,
+
+        LineChartDisplay,
+
+        BarChartDisplayBuilding,
+
+        PieChartDisplayBuilding
     }
 
     @MemberColumn(name = "gadgetType")

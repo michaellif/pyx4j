@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.dialog.DialogPanelNew;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.DashboardMetadata.Type;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
 public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata> implements DashboardEditor {
     public DashboardEditorImpl() {
@@ -43,7 +43,7 @@ public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata
     }
 
     @Override
-    public void showSelectTypePopUp(final AsyncCallback<Type> callback) {
+    public void showSelectTypePopUp(final AsyncCallback<DashboardType> callback) {
         final SelectTypeBox box = new SelectTypeBox();
         box.setPopupPositionAndShow(new PositionCallback() {
             @Override
@@ -79,8 +79,8 @@ public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata
             });
 
             HorizontalPanel hPanel = new HorizontalPanel();
-            hPanel.add(system = new RadioButton("DashboardType", Type.system.toString()));
-            hPanel.add(new RadioButton("DashboardType", Type.building.toString()));
+            hPanel.add(system = new RadioButton("DashboardType", DashboardType.system.toString()));
+            hPanel.add(new RadioButton("DashboardType", DashboardType.building.toString()));
             hPanel.setSpacing(8);
             hPanel.setWidth("100%");
 
@@ -96,8 +96,8 @@ public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata
             setSize("200px", "100px");
         }
 
-        public Type getSelectedType() {
-            return (system.getValue() ? Type.system : Type.building);
+        public DashboardType getSelectedType() {
+            return (system.getValue() ? DashboardType.system : DashboardType.building);
         }
     }
 }

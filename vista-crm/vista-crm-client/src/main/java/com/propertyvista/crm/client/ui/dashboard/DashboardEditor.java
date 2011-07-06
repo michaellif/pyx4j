@@ -18,8 +18,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.ui.crud.IEditorView;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
 public interface DashboardEditor extends IEditorView<DashboardMetadata> {
 
-    void showSelectTypePopUp(AsyncCallback<DashboardMetadata.Type> callback);
+    void showSelectTypePopUp(AsyncCallback<DashboardType> callback);
 }

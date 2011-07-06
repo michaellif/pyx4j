@@ -33,6 +33,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class ReportViewActivity extends AbstractActivity implements ReportView.Presenter {
@@ -43,7 +44,7 @@ public class ReportViewActivity extends AbstractActivity implements ReportView.P
 
     private Key entityId;
 
-    private DashboardMetadata.Type dashboardType;
+    private DashboardType dashboardType;
 
     public ReportViewActivity(Place place) {
         view = (ReportView) DashboardViewFactory.instance(ReportView.class);
@@ -67,7 +68,7 @@ public class ReportViewActivity extends AbstractActivity implements ReportView.P
         if ((id = ((AppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
             entityId = new Key(id);
         } else if (place instanceof CrmSiteMap.Report.System) {
-            dashboardType = DashboardMetadata.Type.system;
+            dashboardType = DashboardType.system;
         }
 
         assert (entityId != null || dashboardType != null);

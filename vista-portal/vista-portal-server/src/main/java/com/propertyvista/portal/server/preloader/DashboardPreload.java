@@ -19,6 +19,7 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
@@ -31,7 +32,7 @@ public class DashboardPreload extends AbstractDataPreloader {
 // first demo dashboard:        
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
         dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.type().setValue(DashboardMetadata.Type.system);
+        dmd.type().setValue(DashboardType.system);
         dmd.isShared().setValue(true);
         dmd.name().setValue("System Dashboard");
         dmd.description().setValue("Shows default system data");
@@ -67,7 +68,7 @@ public class DashboardPreload extends AbstractDataPreloader {
 
 // the second one:
         dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.type().setValue(DashboardMetadata.Type.building);
+        dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
         dmd.name().setValue("Building dashboard");
         dmd.description().setValue("Shows default building data");

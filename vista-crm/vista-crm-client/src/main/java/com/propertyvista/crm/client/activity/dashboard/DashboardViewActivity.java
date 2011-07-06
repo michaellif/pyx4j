@@ -33,6 +33,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class DashboardViewActivity extends AbstractActivity implements DashboardView.Presenter {
@@ -43,7 +44,7 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
 
     private Key entityId;
 
-    private DashboardMetadata.Type dashboardType;
+    private DashboardType dashboardType;
 
     public DashboardViewActivity(Place place) {
         view = (DashboardView) DashboardViewFactory.instance(DashboardView.class);
@@ -67,9 +68,9 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
         if ((id = ((AppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
             entityId = new Key(id);
         } else if (place instanceof CrmSiteMap.Dashboard.System) {
-            dashboardType = DashboardMetadata.Type.system;
+            dashboardType = DashboardType.system;
         } else if (place instanceof CrmSiteMap.Dashboard.Building) {
-            dashboardType = DashboardMetadata.Type.building;
+            dashboardType = DashboardType.building;
         }
 
         assert (entityId != null || dashboardType != null);
