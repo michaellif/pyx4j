@@ -19,9 +19,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Unit {
 
-    protected String propertyPrimaryId;
+    protected String propertyPrimaryId; // TODO this needs to be mapped to an actual building
 
-    private String marketingName;
+    private String marketingName; // aptUnit.marketing.name
 
     private Information information;
 

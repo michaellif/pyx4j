@@ -35,23 +35,23 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class Information {
 
-    private String unitId;
+    private String unitId; // same as unitId in the two classes above
 
-    private String unitType;
+    private String unitType; // TODO prv11b1 - not sure how to decipher this (b1 - 1 bedroom?)
 
-    private Double unitBedrooms;
+    private Double unitBedrooms; // unit.info.bedrooms
 
-    private Double unitBathrooms;
+    private Double unitBathrooms; // unit.info.bathrooms
 
-    private Integer minSquareFeet;
+    private Integer minSquareFeet; // TODO not found yet 
 
-    private Integer maxSquareFeet;
+    private Integer maxSquareFeet; // unit.info.area
 
     private Double unitRent;
 
     private Double marketRent;
 
-    private String unitEconomicStatus;
+    private String unitEconomicStatus; // unit.info.economicStatus
 
     private String unitOccupancyStatus;
 

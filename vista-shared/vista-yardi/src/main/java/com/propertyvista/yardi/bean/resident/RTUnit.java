@@ -19,9 +19,9 @@ import com.propertyvista.yardi.bean.mits.Unit;
 
 public class RTUnit {
 
-    private String unitId;
+    private String unitId; // aptUnit.info.name
 
-    private NumberOccupants numberOccupants;
+    private NumberOccupants numberOccupants; // TODO no mapping found for Vista
 
     private Unit unit;
 
