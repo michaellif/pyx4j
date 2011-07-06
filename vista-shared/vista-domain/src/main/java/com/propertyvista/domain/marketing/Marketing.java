@@ -15,6 +15,7 @@ package com.propertyvista.domain.marketing;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface Marketing extends IEntity {
 
     @Caption(name = "Marketing Name")
+    @ToString
     IPrimitive<String> name();
 
     IPrimitive<String> description();

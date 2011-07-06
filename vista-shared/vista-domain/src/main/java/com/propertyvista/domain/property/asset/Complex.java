@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,6 +27,7 @@ public interface Complex extends IEntity {
      * Legal name of the property (max 120 char)
      */
     @ToString
+    @Caption(name = "Legal Name")
     IPrimitive<String> name();
 
     ISet<Building> buildings();
