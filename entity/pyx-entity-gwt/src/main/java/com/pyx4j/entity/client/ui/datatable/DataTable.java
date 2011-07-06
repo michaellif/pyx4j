@@ -106,8 +106,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 Cell cell = getCellForEvent(event);
                 if (cell == null) {
                     return; // do not process empty clicks!...
-                } else if (cell.getRowIndex() == 0 && cell.getCellIndex() > 0 && cell.getCellIndex() < getCellCount(0) - 1) {
-                    processHeaderClick(isCheckboxColumnShown() ? cell.getCellIndex() - 1 : cell.getCellIndex()); // actual table column index - without the first check one!...
+                } else if (cell.getRowIndex() == 0) {
+                    if (cell.getCellIndex() >= (isCheckboxColumnShown() ? 1 : 0)
+                            && cell.getCellIndex() < getCellCount(0) - (isUseHeaderColumnSelector() ? 1 : 0)) {
+                        processHeaderClick(isCheckboxColumnShown() ? cell.getCellIndex() - 1 : cell.getCellIndex()); // actual table column index - without the first check one!...
+                    }
                 } else {
                     setSelectedRow(cell.getRowIndex() - 1); // actual table row index - without the header!...
                 }
