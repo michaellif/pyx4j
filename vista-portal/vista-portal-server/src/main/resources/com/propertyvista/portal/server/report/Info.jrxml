@@ -7,13 +7,13 @@
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DIGITAL_SIG" class="java.lang.String"/>
-	<field name="name/firstName" class="java.lang.String"/>
-	<field name="name/middleName" class="java.lang.String"/>
-	<field name="name/lastName" class="java.lang.String"/>
-	<field name="homePhone" class="java.lang.String"/>
-	<field name="mobilePhone" class="java.lang.String"/>
-	<field name="workPhone" class="java.lang.String"/>
-	<field name="email" class="java.lang.String"/>
+	<field name="person/name/firstName" class="java.lang.String"/>
+	<field name="person/name/middleName" class="java.lang.String"/>
+	<field name="person/name/lastName" class="java.lang.String"/>
+	<field name="person/homePhone" class="java.lang.String"/>
+	<field name="person/mobilePhone" class="java.lang.String"/>
+	<field name="person/workPhone" class="java.lang.String"/>
+	<field name="person/email" class="java.lang.String"/>
 	<field name="driversLicense" class="java.lang.String"/>
 	<field name="driversLicenseState/name" class="java.lang.String"/>
 	<field name="secureIdentifier" class="java.lang.String"/>
