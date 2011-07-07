@@ -12,7 +12,7 @@
 	<field name="address/unitNumber" class="java.lang.String"/>
 	<field name="address/streetNumber" class="java.lang.String"/>
 	<field name="address/streetName" class="java.lang.String"/>
-	<field name="address/streetType" class="com.propertyvista.common.domain.IAddressFull.StreetType"/>
+	<field name="address/streetType" class="com.propertyvista.common.domain.contact.IAddressFull.StreetType"/>
 	<field name="address/city" class="java.lang.String"/>
 	<field name="address/province/name" class="java.lang.String"/>
 	<field name="address/country/name" class="java.lang.String"/>

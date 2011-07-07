@@ -26,8 +26,8 @@
 	<field name="currentAddress/streetNumber" class="java.lang.String"/>
 	<field name="currentAddress/streetNumberSuffix" class="java.lang.String"/>
 	<field name="currentAddress/streetName" class="java.lang.String"/>
-	<field name="currentAddress/streetType" class="com.propertyvista.common.domain.IAddressFull.StreetType"/>
-	<field name="currentAddress/streetDirection" class="com.propertyvista.common.domain.IAddressFull.StreetDirection"/>
+	<field name="currentAddress/streetType" class="com.propertyvista.common.domain.contact.IAddressFull.StreetType"/>
+	<field name="currentAddress/streetDirection" class="com.propertyvista.common.domain.contact.IAddressFull.StreetDirection"/>
 	<field name="currentAddress/moveInDate" class="java.util.Date"/>
 	<field name="currentAddress/moveOutDate" class="java.util.Date"/>
 	<field name="currentAddress/payment" class="java.lang.Double"/>
@@ -43,8 +43,8 @@
 	<field name="previousAddress/streetNumber" class="java.lang.String"/>
 	<field name="previousAddress/streetNumberSuffix" class="java.lang.String"/>
 	<field name="previousAddress/streetName" class="java.lang.String"/>
-	<field name="previousAddress/streetType" class="com.propertyvista.common.domain.IAddressFull.StreetType"/>
-	<field name="previousAddress/streetDirection" class="com.propertyvista.common.domain.IAddressFull.StreetDirection"/>
+	<field name="previousAddress/streetType" class="com.propertyvista.common.domain.contact.IAddressFull.StreetType"/>
+	<field name="previousAddress/streetDirection" class="com.propertyvista.common.domain.contact.IAddressFull.StreetDirection"/>
 	<field name="previousAddress/moveInDate" class="java.util.Date"/>
 	<field name="previousAddress/moveOutDate" class="java.util.Date"/>
 	<field name="previousAddress/payment" class="java.lang.Double"/>

@@ -13,7 +13,7 @@
 	<field name="employer/unitNumber" class="java.lang.String"/>
 	<field name="employer/streetNumber" class="java.lang.String"/>
 	<field name="employer/streetName" class="java.lang.String"/>
-	<field name="employer/streetType" class="com.propertyvista.common.domain.IAddressFull.StreetType"/>
+	<field name="employer/streetType" class="com.propertyvista.common.domain.contact.IAddressFull.StreetType"/>
 	<field name="employer/supervisorName" class="java.lang.String"/>
 	<field name="employer/supervisorPhone" class="java.lang.String"/>
 	<field name="employer/monthlyAmount/amount" class="java.lang.Double"/>

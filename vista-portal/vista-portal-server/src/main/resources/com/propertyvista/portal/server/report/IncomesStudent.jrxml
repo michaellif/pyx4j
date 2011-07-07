@@ -11,7 +11,7 @@
 	<field name="unitNumber" class="java.lang.String"/>
 	<field name="streetNumber" class="java.lang.String"/>
 	<field name="streetName" class="java.lang.String"/>
-	<field name="streetType" class="com.propertyvista.common.domain.IAddressFull.StreetType"/>
+	<field name="streetType" class="com.propertyvista.common.domain.contact.IAddressFull.StreetType"/>
 	<field name="monthlyAmount/amount" class="java.lang.Double"/>
 	<field name="starts" class="java.util.Date"/>
 	<field name="ends" class="java.util.Date"/>
