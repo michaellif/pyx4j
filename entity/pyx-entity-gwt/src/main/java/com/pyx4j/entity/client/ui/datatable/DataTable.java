@@ -90,7 +90,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private static final int HEADER_RAW_INDEX = 0;
 
-    private static final String CHECK_MARK_COLUMN_SIZE = "22px";
+    private static final String CHECK_MARK_COLUMN_SIZE = "20px";
+
+    private static final String COLUMNS_SELECTOR_COLUMN_SIZE = "10px";
 
     private List<SortChangeHandler<E>> sortChangeHandlers;
 
@@ -139,11 +141,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
         int colIndex = 0;
         if (isCheckboxColumnShown()) {
-            colIndex = 1;
             selectionCheckBoxAll = new SelectionCheckBox(HEADER_RAW_INDEX, model.isAllChecked());
             setWidget(0, 0, selectionCheckBoxAll);
-            getCellFormatter().setWidth(0, 0, CHECK_MARK_COLUMN_SIZE);
+            getColumnFormatter().setWidth(colIndex, CHECK_MARK_COLUMN_SIZE);
             getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+            ++colIndex;
         }
 
         for (ColumnDescriptor<E> columnDescriptor : model.getColumnDescriptors()) {
@@ -158,15 +160,15 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 }
             }
             setHTML(0, colIndex, headerText.toString());
-            getCellFormatter().setWidth(0, colIndex, columnDescriptor.getWidth());
+            getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
             getCellFormatter().setWordWrap(0, colIndex, false);
             getCellFormatter().setAlignment(0, colIndex, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-            colIndex++;
+            ++colIndex;
         }
 
         if (isUseHeaderColumnSelector()) {
             setWidget(0, colIndex, createHeaderColumnSelector());
-            getCellFormatter().setWidth(0, colIndex, "5px");
+            getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE);
             getCellFormatter().setStyleName(0, colIndex, BASE_NAME + StyleSuffix.ColumnSelector);
             getCellFormatter().setVerticalAlignment(0, colIndex, HasVerticalAlignment.ALIGN_MIDDLE);
             getCellFormatter().setHorizontalAlignment(0, colIndex, HasHorizontalAlignment.ALIGN_CENTER);
@@ -189,9 +191,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
                 selectionCheckBox.setWidth(CHECK_MARK_COLUMN_SIZE);
                 setWidget(rowIndex, 0, selectionCheckBox);
-                getCellFormatter().setWidth(rowIndex, 0, CHECK_MARK_COLUMN_SIZE);
                 getCellFormatter().setAlignment(rowIndex, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-                colIndex = 1;
+                ++colIndex;
             }
 
             for (ColumnDescriptor<E> columnDescriptor : columnDescriptors) {
@@ -207,9 +208,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                     }
                 }
                 setWidget(rowIndex, colIndex, contentHtml);
-                getCellFormatter().setWidth(rowIndex, colIndex, columnDescriptor.getWidth());
                 getCellFormatter().setWordWrap(rowIndex, colIndex, columnDescriptor.isWordWrap());
-                colIndex++;
+                ++colIndex;
             }
 
             Element rowElement = getRowFormatter().getElement(rowIndex);
@@ -223,7 +223,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Row + "-" + StyleDependent.nodetails.name(), true);
             }
 
-            rowIndex++;
+            ++rowIndex;
         }
         this.ensureDebugId(model.getDebugId());
     }
