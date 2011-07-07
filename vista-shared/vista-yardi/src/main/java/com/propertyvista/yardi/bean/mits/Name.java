@@ -16,11 +16,11 @@ package com.propertyvista.yardi.bean.mits;
 import javax.xml.bind.annotation.XmlElement;
 
 public class Name {
-    private String firstName;
+    private String firstName; // tenant.person.name.firstName
 
-    private String lastName;
+    private String lastName; // tenant.person.name.lastName
 
-    private String middleName;
+    private String middleName; // tenant.person.name.middleName
 
     public String toString() {
         StringBuilder sb = new StringBuilder();

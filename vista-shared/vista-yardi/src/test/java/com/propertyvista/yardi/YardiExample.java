@@ -64,7 +64,6 @@ public class YardiExample {
     }
 
     private static void send(YardiClient c, YardiParameters yp) throws JAXBException, XMLStreamException, IOException {
-
         Charge charge = new Charge();
         Detail detail = new Detail();
         charge.setDetail(detail);

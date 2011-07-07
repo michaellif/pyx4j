@@ -27,6 +27,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
+import com.propertyvista.yardi.bean.mits.Customer;
 import com.propertyvista.yardi.bean.mits.Information;
 import com.propertyvista.yardi.bean.resident.Property;
 import com.propertyvista.yardi.bean.resident.RTCustomer;
@@ -41,6 +42,7 @@ public class GetResidentTransactionsMapper {
 
     private List<Tenant> tenants = new ArrayList<Tenant>();
 
+    // TODO for now we are not converting these just yet
     private List<AptUnitOccupancy> occupancies = new ArrayList<AptUnitOccupancy>();
 
     // TODO later we will need to do transactions here
@@ -57,8 +59,23 @@ public class GetResidentTransactionsMapper {
         }
     }
 
-    public void map(RTCustomer customer) {
-        map(customer.getRtunit());
+    public void map(RTCustomer rtCustomer) {
+        map(rtCustomer.getRtunit());
+        for (Customer customer : rtCustomer.getCustomers().getCustomers()) {
+            map(customer);
+        }
+    }
+
+    public void map(Customer customer) {
+        Tenant tenant = EntityFactory.create(Tenant.class);
+
+        tenant.person().name().firstName().setValue(customer.getName().getFirstName());
+        tenant.person().name().lastName().setValue(customer.getName().getLastName());
+        if (customer.getName().getMiddleName() != null && !customer.getName().getMiddleName().isEmpty()) {
+            tenant.person().name().middleName().setValue(customer.getName().getMiddleName());
+        }
+
+        tenants.add(tenant);
     }
 
     public void map(RTUnit unitFrom) {

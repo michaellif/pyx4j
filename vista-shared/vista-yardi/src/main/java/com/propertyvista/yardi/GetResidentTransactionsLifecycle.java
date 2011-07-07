@@ -22,12 +22,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.yardi.bean.resident.ResidentTransactions;
+import com.propertyvista.yardi.mapper.GetResidentTransactionsMapper;
 
 public class GetResidentTransactionsLifecycle {
     private final static Logger log = LoggerFactory.getLogger(GetResidentTransactionsLifecycle.class);
 
     public void download(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
         ResidentTransactions transactions = YardiTransactions.getResidentTransactions(c, yp);
-        log.info("{}", transactions);
+
+        GetResidentTransactionsMapper mapper = new GetResidentTransactionsMapper();
+        mapper.map(transactions);
+
+        log.info("Downloaded {} units", mapper.getUnits().size());
+        log.info("Downloaded {} tenants", mapper.getTenants().size());
     }
 }

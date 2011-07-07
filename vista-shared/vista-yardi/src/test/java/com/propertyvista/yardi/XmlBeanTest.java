@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.common.domain.Name;
+import com.propertyvista.common.domain.tenant.Tenant;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitFinancial;
@@ -159,7 +161,7 @@ public class XmlBeanTest {
 
         Assert.assertTrue("Has units", !mapper.getUnits().isEmpty());
         for (AptUnit unit : mapper.getUnits()) {
-            log.info("Unit {}", unit);
+            log.debug("Unit {}", unit);
 
             // info
             AptUnitInfo info = unit.info();
@@ -180,6 +182,16 @@ public class XmlBeanTest {
             AptUnitFinancial financial = unit.financial();
             Assert.assertFalse(financial.unitRent().isNull());
             Assert.assertFalse(financial.marketRent().isNull());
+        }
+
+        Assert.assertTrue("Has tenants", !mapper.getTenants().isEmpty());
+        for (Tenant tenant : mapper.getTenants()) {
+            log.info("Tenant {}", tenant);
+
+            // name
+            Name name = tenant.person().name();
+            Assert.assertFalse(name.firstName().isNull());
+            Assert.assertFalse(name.lastName().isNull());
         }
     }
 
