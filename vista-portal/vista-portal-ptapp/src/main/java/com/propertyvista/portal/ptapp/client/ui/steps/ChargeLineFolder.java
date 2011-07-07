@@ -51,8 +51,8 @@ public class ChargeLineFolder extends CEntityFolderEditor<ChargeLine> {
         return new CEntityFolderItemEditor<ChargeLine>(ChargeLine.class) {
 
             @Override
-            public IFolderItemEditorDecorator createFolderItemDecorator() {
-                return new BoxReadOnlyFolderItemDecorator(!isFirst(), "400px");
+            public IFolderItemEditorDecorator<ChargeLine> createFolderItemDecorator() {
+                return new BoxReadOnlyFolderItemDecorator<ChargeLine>(!isFirst(), "400px");
             }
 
             @Override

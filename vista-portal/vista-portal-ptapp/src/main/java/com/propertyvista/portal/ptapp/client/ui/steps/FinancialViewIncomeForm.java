@@ -101,11 +101,11 @@ public class FinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncom
     }
 
     @Override
-    public IFolderItemEditorDecorator createFolderItemDecorator() {
+    public IFolderItemEditorDecorator<TenantIncome> createFolderItemDecorator() {
         if (summaryViewMode) {
-            return new BoxReadOnlyFolderItemDecorator(!isFirst());
+            return new BoxReadOnlyFolderItemDecorator<TenantIncome>(!isFirst());
         } else {
-            return new BoxFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover());
+            return new BoxFolderItemEditorDecorator<TenantIncome>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover());
         }
     }
 

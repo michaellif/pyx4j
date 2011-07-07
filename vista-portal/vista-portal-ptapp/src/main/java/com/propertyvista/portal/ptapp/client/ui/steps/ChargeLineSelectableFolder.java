@@ -56,11 +56,10 @@ public class ChargeLineSelectableFolder extends CEntityFolderEditor<ChargeLineSe
         return new CEntityFolderItemEditor<ChargeLineSelectable>(ChargeLineSelectable.class) {
 
             @Override
-            public IFolderItemEditorDecorator createFolderItemDecorator() {
-                return new BoxReadOnlyFolderItemDecorator(!isFirst(), "400px");
+            public IFolderItemEditorDecorator<ChargeLineSelectable> createFolderItemDecorator() {
+                return new BoxReadOnlyFolderItemDecorator<ChargeLineSelectable>(!isFirst(), "400px");
             }
 
-            @SuppressWarnings("unchecked")
             @Override
             public IsWidget createContent() {
 

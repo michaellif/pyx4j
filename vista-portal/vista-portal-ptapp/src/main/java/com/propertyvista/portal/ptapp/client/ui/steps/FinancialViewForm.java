@@ -200,11 +200,11 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                 return new CEntityFolderRowEditor<TenantAsset>(TenantAsset.class, columns) {
 
                     @Override
-                    public IFolderItemEditorDecorator createFolderItemDecorator() {
+                    public IFolderItemEditorDecorator<TenantAsset> createFolderItemDecorator() {
                         if (isSummaryViewMode()) {
-                            return new BoxReadOnlyFolderItemDecorator(false);
+                            return new BoxReadOnlyFolderItemDecorator<TenantAsset>(false);
                         } else {
-                            return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                            return new TableFolderItemEditorDecorator<TenantAsset>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
                                     i18n.tr("Remove asset"));
                         }
                     }
@@ -292,11 +292,11 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator createFolderItemDecorator() {
+                    public IFolderItemEditorDecorator<TenantGuarantor> createFolderItemDecorator() {
                         if (isSummaryViewMode()) {
-                            return new BoxReadOnlyFolderItemDecorator(false);
+                            return new BoxReadOnlyFolderItemDecorator<TenantGuarantor>(false);
                         } else {
-                            return new BoxFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                            return new BoxFolderItemEditorDecorator<TenantGuarantor>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
                                     i18n.tr("Remove guarantor"));
                         }
                     }

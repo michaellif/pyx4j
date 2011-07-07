@@ -156,8 +156,8 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
     }
 
     @Override
-    public IFolderItemEditorDecorator createFolderItemDecorator() {
-        return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+    public IFolderItemEditorDecorator<PotentialTenantInfo> createFolderItemDecorator() {
+        return new TableFolderItemEditorDecorator<PotentialTenantInfo>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
                 TenantsViewForm.i18n.tr("Remove person"), !isFirst());
     }
 

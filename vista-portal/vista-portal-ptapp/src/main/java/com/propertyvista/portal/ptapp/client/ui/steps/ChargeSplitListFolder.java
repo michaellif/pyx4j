@@ -121,8 +121,8 @@ public class ChargeSplitListFolder extends CEntityFolderEditor<TenantCharge> {
         return new CEntityFolderRowEditor<TenantCharge>(TenantCharge.class, columns) {
 
             @Override
-            public IFolderItemEditorDecorator createFolderItemDecorator() {
-                TableFolderItemEditorDecorator dec = new TableFolderItemEditorDecorator(null);
+            public IFolderItemEditorDecorator<TenantCharge> createFolderItemDecorator() {
+                TableFolderItemEditorDecorator<TenantCharge> dec = new TableFolderItemEditorDecorator<TenantCharge>(null);
                 if (!isFirst()) {
                     Widget sp = new VistaLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
                     sp.getElement().getStyle().setPadding(0, Unit.EM);

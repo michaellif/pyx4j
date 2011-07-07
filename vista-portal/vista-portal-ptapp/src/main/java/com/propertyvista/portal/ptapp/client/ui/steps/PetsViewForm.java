@@ -161,11 +161,11 @@ public class PetsViewForm extends CEntityForm<Pets> {
                 return new CEntityFolderRowEditor<Pet>(Pet.class, columns) {
 
                     @Override
-                    public IFolderItemEditorDecorator createFolderItemDecorator() {
+                    public IFolderItemEditorDecorator<Pet> createFolderItemDecorator() {
                         if (isSummaryViewMode()) {
-                            return new BoxReadOnlyFolderItemDecorator(false);
+                            return new BoxReadOnlyFolderItemDecorator<Pet>(false);
                         } else {
-                            return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                            return new TableFolderItemEditorDecorator<Pet>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
                                     i18n.tr("Remove pet"));
                         }
                     }

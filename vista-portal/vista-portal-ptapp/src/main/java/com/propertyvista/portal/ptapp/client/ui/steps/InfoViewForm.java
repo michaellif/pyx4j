@@ -409,8 +409,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
                 return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns) {
 
                     @Override
-                    public IFolderItemEditorDecorator createFolderItemDecorator() {
-                        return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                    public IFolderItemEditorDecorator<Vehicle> createFolderItemDecorator() {
+                        return new TableFolderItemEditorDecorator<Vehicle>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
                                 i18n.tr("Remove vehicle"));
                     }
 
@@ -488,9 +488,9 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             }
 
             @Override
-            public IFolderItemEditorDecorator createFolderItemDecorator() {
-                return new BoxFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove contact"),
-                        !isFirst());
+            public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
+                return new BoxFolderItemEditorDecorator<EmergencyContact>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                        i18n.tr("Remove contact"), !isFirst());
             }
         };
     }
