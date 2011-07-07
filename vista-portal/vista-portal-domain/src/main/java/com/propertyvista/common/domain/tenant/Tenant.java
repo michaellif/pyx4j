@@ -11,18 +11,42 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.tenant;
+package com.propertyvista.common.domain.tenant;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.common.domain.Person;
-import com.propertyvista.domain.Company;
 
 public interface Tenant extends IEntity {
 
+    @Translatable
+    public enum Type {
+
+        person,
+
+        company;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @ToString(index = 1)
+    @MemberColumn(name = "tenantType")
+    IPrimitive<Type> type();
+
     @ToString
+    @EmbeddedEntity
     Person person();
 
-    Company company();
+// TODD - company should be moved to common domains also!..    
+//    @EmbeddedEntity
+//    Company company();
 }

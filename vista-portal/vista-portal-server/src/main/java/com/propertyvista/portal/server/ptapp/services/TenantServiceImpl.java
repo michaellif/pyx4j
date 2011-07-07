@@ -46,7 +46,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             log.info("Creating new tenant list");
             tenants = EntityFactory.create(PotentialTenantList.class);
             PotentialTenantInfo first = tenants.tenants().$();
-            first.email().setValue(Context.getVisit().getUserVisit().getEmail());
+            first.person().email().setValue(Context.getVisit().getUserVisit().getEmail());
             first.status().setValue(Status.Applicant);
             tenants.tenants().add(first);
         }

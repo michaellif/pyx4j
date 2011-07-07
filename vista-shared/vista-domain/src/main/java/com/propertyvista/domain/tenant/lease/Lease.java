@@ -19,11 +19,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.common.domain.tenant.Tenant;
 import com.propertyvista.domain.Document;
 import com.propertyvista.domain.financial.LeaseFinancialTerms;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.ptapp.Pets;

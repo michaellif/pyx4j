@@ -68,7 +68,7 @@ public class TenantServiceTest extends VistaDBTestBase {
         PotentialTenantInfo tenant = tenantList.tenants().get(0);
 
         Assert.assertEquals("Applicant status", PotentialTenant.Status.Applicant, tenant.status().getValue());
-        Assert.assertEquals("Email", email, tenant.email().getValue());
+        Assert.assertEquals("Email", email, tenant.person().email().getValue());
     }
 
     public void testLoadAndSave() {

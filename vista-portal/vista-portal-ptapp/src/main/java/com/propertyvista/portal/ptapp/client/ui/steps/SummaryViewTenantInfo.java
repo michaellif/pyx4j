@@ -61,7 +61,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
 
     @Override
     public IsWidget getTenantFullName() {
-        return DecorationUtils.formFullName(this, proto());
+        return DecorationUtils.formFullName(this, proto().person());
     }
 
     @Override
@@ -78,10 +78,10 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
         subviewPanel.getElement().getStyle().setMarginTop(0.3, Unit.EM);
 
         FlowPanel panel = new FlowPanel();
-        panel.add(new VistaReadOnlyDecorator(inject(proto().homePhone()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().mobilePhone()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().workPhone()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().email()), dd2ColumnsTable));
+        panel.add(new VistaReadOnlyDecorator(inject(proto().person().homePhone()), dd2ColumnsTable));
+        panel.add(new VistaReadOnlyDecorator(inject(proto().person().mobilePhone()), dd2ColumnsTable));
+        panel.add(new VistaReadOnlyDecorator(inject(proto().person().workPhone()), dd2ColumnsTable));
+        panel.add(new VistaReadOnlyDecorator(inject(proto().person().email()), dd2ColumnsTable));
         subviewPanel.add(panel);
         subviewPanel.setCellWidth(panel, LEFT_COLUMN_WIDTH);
 

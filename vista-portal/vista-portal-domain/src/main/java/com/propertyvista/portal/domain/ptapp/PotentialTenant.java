@@ -15,23 +15,19 @@ package com.propertyvista.portal.domain.ptapp;
 
 import java.io.Serializable;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.i18n.shared.Translation;
 
-import com.propertyvista.common.domain.Person;
+import com.propertyvista.common.domain.tenant.Tenant;
 
 @AbstractEntity
-@ToStringFormat("{0} {1} {2}")
-public interface PotentialTenant extends Person, IBoundToApplication {
+public interface PotentialTenant extends Tenant, IBoundToApplication {
 
     @Translatable
     public enum Relationship implements Serializable {
@@ -77,16 +73,11 @@ public interface PotentialTenant extends Person, IBoundToApplication {
         }
     }
 
-    @Caption(name = "Birth Date")
-    @NotNull
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> birthDate();
-
     @ToString(index = 0)
     @NotNull
     IPrimitive<Relationship> relationship();
 
-    @ToString(index = 0)
+    @ToString(index = 1)
     @NotNull
     IPrimitive<Status> status();
 

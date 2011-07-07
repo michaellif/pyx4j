@@ -111,7 +111,8 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
                     if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
                         SummaryPotentialTenantFinancial sf = summary.tenantFinancials().$();
                         sf.tenantFullName().setValue(
-                                EntityFromatUtils.nvl_concat(" ", tenant.name().firstName(), tenant.name().middleName(), tenant.name().lastName()));
+                                EntityFromatUtils.nvl_concat(" ", tenant.person().name().firstName(), tenant.person().name().middleName(), tenant.person()
+                                        .name().lastName()));
                         sf.tenantFinancial().set(fin);
                         summary.tenantFinancials().add(sf);
                     }
@@ -134,7 +135,8 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
                 if (tenant.equals(charge.tenant())) {
                     charge.tenantFullName().setValue(
-                            EntityFromatUtils.nvl_concat(" ", tenant.name().firstName(), tenant.name().middleName(), tenant.name().lastName()));
+                            EntityFromatUtils.nvl_concat(" ", tenant.person().name().firstName(), tenant.person().name().middleName(), tenant.person().name()
+                                    .lastName()));
                     continue loopOverTenantCharge;
                 }
             }

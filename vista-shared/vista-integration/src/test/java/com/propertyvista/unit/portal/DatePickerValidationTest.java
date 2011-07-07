@@ -15,16 +15,16 @@ package com.propertyvista.unit.portal;
 
 import java.util.Calendar;
 
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
-
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.selenium.D;
+
+import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 
 public class DatePickerValidationTest extends DatePickerTestBase {
 
@@ -177,11 +177,11 @@ public class DatePickerValidationTest extends DatePickerTestBase {
     }
 
     private IDebugId lastNameId(int index) {
-        return D.id(baseID(index), D.id(proto(PotentialTenantInfo.class).name().lastName()));
+        return D.id(baseID(index), D.id(proto(PotentialTenantInfo.class).person().name().lastName()));
     }
 
     private IDebugId datePickerTextBoxId(int index) {
-        return D.id(baseID(index), D.id(proto(PotentialTenantInfo.class).birthDate()));
+        return D.id(baseID(index), D.id(proto(PotentialTenantInfo.class).person().birthDate()));
     }
 
     private IDebugId datePickerId(int index) {

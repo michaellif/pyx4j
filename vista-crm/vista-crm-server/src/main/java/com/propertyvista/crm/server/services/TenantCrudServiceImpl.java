@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.propertyvista.common.domain.tenant.Tenant;
 import com.propertyvista.crm.rpc.services.TenantCrudService;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantCrudServiceImpl extends GenericCrudServiceDtoImpl<Tenant, TenantDTO> implements TenantCrudService {

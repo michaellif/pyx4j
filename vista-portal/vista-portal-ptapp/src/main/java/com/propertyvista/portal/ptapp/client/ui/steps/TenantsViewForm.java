@@ -91,11 +91,11 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
             private List<EntityFolderColumnDescriptor> columns;
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name().firstName(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().name().middleName(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().name().lastName(), "12em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "8.2em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().email(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().person().name().firstName(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().person().name().middleName(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().person().name().lastName(), "12em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().person().birthDate(), "8.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().person().email(), "15em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().status(), "8.5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "5em"));

@@ -13,30 +13,13 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.ref.Province;
+import com.propertyvista.common.domain.tenant.TenantScreening;
 
-public interface PotentialTenantInfo extends PotentialTenant {
-
-    // secure information
-    IPrimitive<String> driversLicense();
-
-    @Caption(name = "Province/State", description = "Province/State, in which a license has been issued.")
-    @Editor(type = EditorType.combo)
-    Province driversLicenseState();
-
-    @Caption(name = "SIN")
-    IPrimitive<String> secureIdentifier();
-
-    @Caption(name = "I'm not resident of Canada")
-    IPrimitive<Boolean> notCanadianCitizen();
+public interface PotentialTenantInfo extends PotentialTenant, TenantScreening {
 
     /**
      * TODO I think that it is better to have a list here since some forms may ask for
@@ -53,14 +36,6 @@ public interface PotentialTenantInfo extends PotentialTenant {
     IList<Vehicle> vehicles();
 
     @Owned
-    @Caption(name = "General Questions")
-    LegalQuestions legalQuestions();
-
-    @Owned
     @Length(3)
     IList<EmergencyContact> emergencyContacts();
-
-    @Owned
-    IList<ApplicationDocument> documents();
-
 }

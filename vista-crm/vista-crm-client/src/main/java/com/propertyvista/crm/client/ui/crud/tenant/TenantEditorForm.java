@@ -21,7 +21,6 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
-import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.dto.TenantDTO;
 
@@ -56,16 +55,16 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         person.add(inject(proto().person().workPhone()), 7);
         person.add(inject(proto().person().email()), 7);
 
-        //Company
-        company.add(new CrmHeader1Decorator(i18n.tr("Company")));
-        company.add(inject(proto().company().name()), 15);
-        //TODO Leon
-        //Is a new sub page necessary for addresses?
-        SubtypeInjectors.injectPhones(company, proto().company().phones(), this);
-        company.add(inject(proto().company().website()), 23);
-        SubtypeInjectors.injectEmails(company, proto().company().emails(), this);
-        //TODO Leon
-        //Is a new sub page necessary for OrganizationContacts?
+//        //Company
+//        company.add(new CrmHeader1Decorator(i18n.tr("Company")));
+//        company.add(inject(proto().company().name()), 15);
+//        //TODO Leon
+//        //Is a new sub page necessary for addresses?
+//        SubtypeInjectors.injectPhones(company, proto().company().phones(), this);
+//        company.add(inject(proto().company().website()), 23);
+//        SubtypeInjectors.injectEmails(company, proto().company().emails(), this);
+//        //TODO Leon
+//        //Is a new sub page necessary for OrganizationContacts?
 
         FlowPanel main = new FlowPanel();
         main.add(person);

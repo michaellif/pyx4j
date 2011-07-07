@@ -245,7 +245,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         if (!tenant.takeOwnership().isBooleanTrue()) {
             return false;
         }
-        return (TimeUtils.isOlderThen(tenant.birthDate().getValue(), 18));
+        return (TimeUtils.isOlderThen(tenant.person().birthDate().getValue(), 18));
     }
 
     public static void invalidateChargesStep(Application application) {
@@ -352,7 +352,9 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         ApplicationWizardSubstep step = EntityFactory.create(ApplicationWizardSubstep.class);
         //TODO serialize key.
         step.placeArgument().setValue(tenantNew.getPrimaryKey().toString());
-        step.name().setValue(EntityFromatUtils.nvl_concat(" ", tenantNew.name().firstName(), tenantNew.name().middleName(), tenantNew.name().lastName()));
+        step.name().setValue(
+                EntityFromatUtils.nvl_concat(" ", tenantNew.person().name().firstName(), tenantNew.person().name().middleName(), tenantNew.person().name()
+                        .lastName()));
         step.status().setValue(ApplicationWizardStep.Status.notVisited);
 
         // find original
@@ -364,8 +366,8 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
                 // see if something changed between tenantNew and tenantOrig
                 if ((tenantOrig != null)
                         && (step.status().getValue() == ApplicationWizardStep.Status.complete)
-                        && !EntityGraph.memebersEquals(tenantNew, tenantOrig, tenantNew.name().firstName(), tenantNew.name().middleName(), tenantNew.name()
-                                .lastName())) {
+                        && !EntityGraph.memebersEquals(tenantNew, tenantOrig, tenantNew.person().name().firstName(), tenantNew.person().name().middleName(),
+                                tenantNew.person().name().lastName())) {
                     step.status().setValue(ApplicationWizardStep.Status.invalid);
                 }
             }

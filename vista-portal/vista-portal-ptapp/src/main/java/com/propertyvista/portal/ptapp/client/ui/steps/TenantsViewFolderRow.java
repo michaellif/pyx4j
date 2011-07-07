@@ -59,7 +59,7 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
                 // Don't show relation and takeOwnership 
                 if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
                     component.setVisible(false);
-                } else if (column.getObject() == proto().email()) {
+                } else if (column.getObject() == proto().person().email()) {
                     ((CEditableComponent) component).setEditable(false);
                 }
                 main.add(createCellDecorator(column, component, column.getWidth()));
@@ -73,11 +73,11 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
     @Override
     public void addValidations() {
 
-        get(proto().birthDate()).addValueValidator(new OldAgeValidator());
+        get(proto().person().birthDate()).addValueValidator(new OldAgeValidator());
 
-        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
+        get(proto().person().birthDate()).addValueValidator(new BirthdayDateValidator());
 
-        get(proto().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+        get(proto().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
@@ -97,7 +97,7 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
         });
 
         if (!isFirst()) { // all this stuff isn't for primary applicant:  
-            get(proto().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+            get(proto().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
 
                 @Override
                 public void onValueChange(ValueChangeEvent<LogicalDate> event) {
@@ -116,7 +116,7 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
                 }
             });
 
-            get(proto().status()).addValueChangeHandler(new RevalidationTrigger<Status>(get(proto().birthDate())));
+            get(proto().status()).addValueChangeHandler(new RevalidationTrigger<Status>(get(proto().person().birthDate())));
         }
     }
 
@@ -124,8 +124,8 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
     public void populate(PotentialTenantInfo value) {
         super.populate(value);
 
-        if (!isFirst() && !value.birthDate().isNull()) {
-            if (ValidationUtils.isOlderThen18(value.birthDate().getValue())) {
+        if (!isFirst() && !value.person().birthDate().isNull()) {
+            if (ValidationUtils.isOlderThen18(value.person().birthDate().getValue())) {
                 enableStatusAndOwnership();
             } else {
                 setMandatoryDependant();

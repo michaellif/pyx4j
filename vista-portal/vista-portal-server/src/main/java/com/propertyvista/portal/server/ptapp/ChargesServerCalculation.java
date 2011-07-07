@@ -166,7 +166,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         if (tenant.status().getValue() == Status.Applicant) {
             return true;
         } else {
-            return TimeUtils.isOlderThen(tenant.birthDate().getValue(), 18);
+            return TimeUtils.isOlderThen(tenant.person().birthDate().getValue(), 18);
         }
     }
 
@@ -243,7 +243,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         charges.paymentSplitCharges().charges().clear();
         for (PotentialTenantInfo tenant : tenantList.tenants()) {
             Status status = tenant.status().getValue();
-            log.debug("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.birthDate().getValue());
+            log.debug("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.person().birthDate().getValue());
 
             if (!isEligibleForPaymentSplit(tenant)) { // make sure that it is eligible
                 log.info("This tenant was not eligible");

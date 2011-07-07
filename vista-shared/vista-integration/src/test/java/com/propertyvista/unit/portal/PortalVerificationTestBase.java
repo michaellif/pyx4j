@@ -67,7 +67,8 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             num++;
         }
 
-        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantList.class).tenants(), num, proto(PotentialTenantInfo.class).name().firstName())));
+        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantList.class).tenants(), num, proto(PotentialTenantInfo.class).person().name()
+                .firstName())));
 
         if (doSave) {
             saveAndContinue();
@@ -75,14 +76,14 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
     }
 
     protected void assertTenantRow(IDebugId formDebugId, PotentialTenantInfo tenant, boolean fullInfo) {
-        assertValueOnForm(formDebugId, tenant.name().firstName());
-        assertValueOnForm(formDebugId, tenant.name().lastName());
-        assertValueOnForm(formDebugId, tenant.name().middleName());
+        assertValueOnForm(formDebugId, tenant.person().name().firstName());
+        assertValueOnForm(formDebugId, tenant.person().name().lastName());
+        assertValueOnForm(formDebugId, tenant.person().name().middleName());
 
-        assertValueOnForm(formDebugId, tenant.birthDate());
+        assertValueOnForm(formDebugId, tenant.person().birthDate());
 
         if (fullInfo) {
-            assertValueOnForm(formDebugId, tenant.email());
+            assertValueOnForm(formDebugId, tenant.person().email());
             assertValueOnForm(formDebugId, tenant.relationship());
             assertValueOnForm(formDebugId, tenant.status());
             assertValueOnForm(formDebugId, tenant.takeOwnership());
@@ -113,13 +114,13 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
     }
 
     protected void assertInfoPage(PotentialTenantInfo tenant) {
-        assertValueOnForm(tenant.name().firstName());
-        assertValueOnForm(tenant.name().lastName());
-        assertValueOnForm(tenant.name().middleName());
-        assertValueOnForm(tenant.email());
-        assertValueOnForm(tenant.homePhone());
-        assertValueOnForm(tenant.mobilePhone());
-        assertValueOnForm(tenant.workPhone());
+        assertValueOnForm(tenant.person().name().firstName());
+        assertValueOnForm(tenant.person().name().lastName());
+        assertValueOnForm(tenant.person().name().middleName());
+        assertValueOnForm(tenant.person().email());
+        assertValueOnForm(tenant.person().homePhone());
+        assertValueOnForm(tenant.person().mobilePhone());
+        assertValueOnForm(tenant.person().workPhone());
         assertValueOnForm(tenant.driversLicenseState());
         assertValueOnForm(tenant.driversLicense());
         assertValueOnForm(tenant.notCanadianCitizen());

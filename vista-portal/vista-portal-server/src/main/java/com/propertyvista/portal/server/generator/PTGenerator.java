@@ -429,20 +429,20 @@ public class PTGenerator {
 
     private void populatePotentialTenant(PotentialTenantInfo pt, Relationship relationship, Status status) {
 
-        pt.name().firstName().setValue(DataGenerator.randomFirstName());
-        pt.name().lastName().setValue(DataGenerator.randomLastName());
+        pt.person().name().firstName().setValue(DataGenerator.randomFirstName());
+        pt.person().name().lastName().setValue(DataGenerator.randomLastName());
         if (status == Status.Applicant) {
-            pt.name().middleName().setValue("");
+            pt.person().name().middleName().setValue("");
         } else {
-            pt.name().middleName().setValue(RandomUtil.randomInt(100) % 7 == 0 ? "M" : "");
+            pt.person().name().middleName().setValue(RandomUtil.randomInt(100) % 7 == 0 ? "M" : "");
         }
 
-        pt.birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
-        pt.homePhone().setValue(RandomUtil.randomPhone());
-        pt.mobilePhone().setValue(RandomUtil.randomPhone());
-        pt.workPhone().setValue(RandomUtil.randomPhone());
+        pt.person().birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
+        pt.person().homePhone().setValue(RandomUtil.randomPhone());
+        pt.person().mobilePhone().setValue(RandomUtil.randomPhone());
+        pt.person().workPhone().setValue(RandomUtil.randomPhone());
 
-        pt.email().setValue(RandomUtil.randomPersonEmail(pt));
+        pt.person().email().setValue(RandomUtil.randomPersonEmail(pt.person()));
 
         pt.payment().setValue(1.0d + RandomUtil.randomInt(3000));
 
@@ -472,7 +472,7 @@ public class PTGenerator {
         populatePotentialTenant(pti, pti.relationship().getValue(), pti.status().getValue());
 
         if (index == 0) {
-            pti.email().setValue(application.user().email().getValue());
+            pti.person().email().setValue(application.user().email().getValue());
         }
 
         String driversLicense = "JTVMX" + RandomUtil.randomInt(10) + "VMIEK";

@@ -71,7 +71,7 @@ public class PortalServicesTest extends VistaDBTestBase {
 
     public void subTestTenants(PTGenerator generator, String email) {
         tenantList = generator.createPotentialTenantList(application);
-        tenantList.tenants().get(0).email().setValue(email);
+        tenantList.tenants().get(0).person().email().setValue(email);
 
         // go through tenants
         //DataDump.dump("generated", tenantList);
@@ -82,7 +82,7 @@ public class PortalServicesTest extends VistaDBTestBase {
             @Override
             public void onSuccess(PotentialTenantList result) {
                 Assert.assertEquals("We expect first Tenant prepopulated", 1, result.tenants().size());
-                Assert.assertEquals("prepopulated email", tenantList.tenants().get(0).email(), result.tenants().get(0).email());
+                Assert.assertEquals("prepopulated email", tenantList.tenants().get(0).person().email(), result.tenants().get(0).person().email());
             }
         }, null);
 

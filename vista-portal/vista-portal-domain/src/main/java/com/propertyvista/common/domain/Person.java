@@ -13,12 +13,15 @@
  */
 package com.propertyvista.common.domain;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -41,4 +44,9 @@ public interface Person extends IEntity {
     @Editor(type = EditorType.email)
     @Caption(name = "Email Address")
     IPrimitive<String> email();
+
+    @Caption(name = "Birth Date")
+    @NotNull
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> birthDate();
 }

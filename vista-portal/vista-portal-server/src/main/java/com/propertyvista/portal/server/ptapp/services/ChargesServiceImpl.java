@@ -73,8 +73,9 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
             PotentialTenantInfo tenant = PersistenceServicesFactory.getPersistenceService()
                     .retrieve(PotentialTenantInfo.class, charge.tenant().getPrimaryKey());
-            charge.tenantFullName()
-                    .setValue(EntityFromatUtils.nvl_concat(" ", tenant.name().firstName(), tenant.name().middleName(), tenant.name().lastName()));
+            charge.tenantFullName().setValue(
+                    EntityFromatUtils.nvl_concat(" ", tenant.person().name().firstName(), tenant.person().name().middleName(), tenant.person().name()
+                            .lastName()));
         }
     }
 }

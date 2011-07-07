@@ -98,19 +98,19 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         DecorationData decorData = new DecorationData(14d, 12);
         decorData.editable = false;
-        main.add(new VistaWidgetDecorator(inject(proto().name().firstName()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().name().middleName()), new DecorationData(14d, 12)));
+        main.add(new VistaWidgetDecorator(inject(proto().person().name().firstName()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().person().name().middleName()), new DecorationData(14d, 12)));
 
         decorData = new DecorationData(14d, 20);
         decorData.editable = false;
-        main.add(new VistaWidgetDecorator(inject(proto().name().lastName()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().homePhone()), new DecorationData(14d, 15)));
-        main.add(new VistaWidgetDecorator(inject(proto().mobilePhone()), new DecorationData(14d, 15)));
-        main.add(new VistaWidgetDecorator(inject(proto().workPhone()), new DecorationData(14d, 15)));
+        main.add(new VistaWidgetDecorator(inject(proto().person().name().lastName()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().person().homePhone()), new DecorationData(14d, 15)));
+        main.add(new VistaWidgetDecorator(inject(proto().person().mobilePhone()), new DecorationData(14d, 15)));
+        main.add(new VistaWidgetDecorator(inject(proto().person().workPhone()), new DecorationData(14d, 15)));
 
         decorData = new DecorationData(14d, 25);
         decorData.editable = false;
-        main.add(new VistaWidgetDecorator(inject(proto().email()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().person().email()), decorData));
 
         main.add(new VistaHeaderBar(i18n.tr("Secure Information")));
         main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), new DecorationData(14d, 20)));

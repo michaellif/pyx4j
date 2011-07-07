@@ -89,22 +89,22 @@ public class VistaDataPrinter {
         sb.append(tenant.status().getStringView());
         sb.append(", ");
 
-        sb.append(tenant.name().firstName().getStringView());
+        sb.append(tenant.person().name().firstName().getStringView());
         sb.append(" ");
-        if (tenant.name().middleName().getStringView().length() > 0) {
-            sb.append(tenant.name().middleName().getStringView());
+        if (tenant.person().name().middleName().getStringView().length() > 0) {
+            sb.append(tenant.person().name().middleName().getStringView());
             sb.append(" ");
         }
-        sb.append(tenant.name().lastName().getStringView());
+        sb.append(tenant.person().name().lastName().getStringView());
 
         sb.append("\t\t Born on ");
-        sb.append(tenant.birthDate().getValue());
+        sb.append(tenant.person().birthDate().getValue());
 
         sb.append("\t");
-        sb.append(tenant.homePhone().getStringView()).append(" | ").append(tenant.mobilePhone().getStringView());
+        sb.append(tenant.person().homePhone().getStringView()).append(" | ").append(tenant.person().mobilePhone().getStringView());
 
         sb.append("\t");
-        sb.append(tenant.email().getStringView());
+        sb.append(tenant.person().email().getStringView());
 
         sb.append("\t");
 
@@ -345,7 +345,8 @@ public class VistaDataPrinter {
         sb.append("\nTenants Payment Split ").append(charges.paymentSplitCharges().total().amount().getStringView()).append("\n");
         for (TenantCharge line : charges.paymentSplitCharges().charges()) {
             sb.append("\t").append(line.tenant().relationship().getStringView());
-            sb.append(" ").append(line.tenant().name().firstName().getStringView()).append(" ").append(line.tenant().name().lastName().getStringView());
+            sb.append(" ").append(line.tenant().person().name().firstName().getStringView()).append(" ")
+                    .append(line.tenant().person().name().lastName().getStringView());
             sb.append(" \t").append(line.percentage().getValue()).append("% $");
             sb.append(line.charge().amount().getValue());
             sb.append("\n");

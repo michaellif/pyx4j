@@ -22,6 +22,7 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.common.domain.ref.Country;
+import com.propertyvista.common.domain.tenant.Tenant;
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.crm.rpc.services.AuthenticationService;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
@@ -67,7 +68,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.tenant.Inquiry;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.server.common.security.SharedUserEntityInstanceAccess;

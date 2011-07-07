@@ -155,13 +155,13 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     }
 
     private void enterTenantRow(IDebugId fromDebugId, PotentialTenantInfo tenant, boolean fullInfo) {
-        setValueOnForm(fromDebugId, tenant.name().firstName());
-        setValueOnForm(fromDebugId, tenant.name().lastName());
-        setValueOnForm(fromDebugId, tenant.name().middleName());
-        setValueOnForm(fromDebugId, tenant.birthDate());
+        setValueOnForm(fromDebugId, tenant.person().name().firstName());
+        setValueOnForm(fromDebugId, tenant.person().name().lastName());
+        setValueOnForm(fromDebugId, tenant.person().name().middleName());
+        setValueOnForm(fromDebugId, tenant.person().birthDate());
 
         if (fullInfo) {
-            setValueOnForm(fromDebugId, tenant.email());
+            setValueOnForm(fromDebugId, tenant.person().email());
             setValueOnForm(fromDebugId, tenant.relationship());
             setValueOnForm(fromDebugId, tenant.status());
             setValueOnForm(fromDebugId, tenant.takeOwnership());
@@ -180,16 +180,16 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     }
 
     private void enterTestInfo(PotentialTenantInfo tenant) {
-        assertValueOnForm(tenant.name().firstName());
-        assertValueOnForm(tenant.name().lastName());
-        //setValueOnForm(tenant.name().firstName());
-        //setValueOnForm(tenant.name().lastName());
-        setValueOnForm(tenant.name().middleName());
+        assertValueOnForm(tenant.person().name().firstName());
+        assertValueOnForm(tenant.person().name().lastName());
+        //setValueOnForm(tenant.person().name().firstName());
+        //setValueOnForm(tenant.person().name().lastName());
+        setValueOnForm(tenant.person().name().middleName());
 
-        setValueOnForm(tenant.email());
-        setValueOnForm(tenant.homePhone());
-        setValueOnForm(tenant.mobilePhone());
-        setValueOnForm(tenant.workPhone());
+        setValueOnForm(tenant.person().email());
+        setValueOnForm(tenant.person().homePhone());
+        setValueOnForm(tenant.person().mobilePhone());
+        setValueOnForm(tenant.person().workPhone());
         setValueOnForm(tenant.driversLicenseState());
         setValueOnForm(tenant.driversLicense());
         setValueOnForm(tenant.notCanadianCitizen());
@@ -457,7 +457,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         summary.agree().setValue(Boolean.TRUE);
 
         PotentialTenantInfo mainTenant = summary.tenantList().tenants().get(0);
-        summary.fullName().setValue(EntityFromatUtils.nvl_concat(" ", mainTenant.name().firstName(), mainTenant.name().lastName()));
+        summary.fullName().setValue(EntityFromatUtils.nvl_concat(" ", mainTenant.person().name().firstName(), mainTenant.person().name().lastName()));
 
         setValueOnForm(summary.agree());
         setValueOnForm(summary.fullName());

@@ -24,8 +24,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.Person;
+import com.propertyvista.common.domain.tenant.Tenant;
 import com.propertyvista.domain.Company;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.server.generator.TenantsGenerator;
 
 public class PreloadTenants extends BaseVistaDataPreloader {

@@ -368,9 +368,9 @@ public class SummaryViewForm extends CEntityForm<Summary> {
                             FlowPanel content = new FlowPanel();
                             content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                             content.getElement().getStyle().setPaddingRight(1, Unit.EM);
-                            addCell(tableLayout, content, "Name", DecorationUtils.formFullName(this, proto()));
-                            addCell(tableLayout, content, "Date of Birht", inject(proto().birthDate()).asWidget());
-                            addCell(tableLayout, content, "Email", inject(proto().email()).asWidget());
+                            addCell(tableLayout, content, "Name", DecorationUtils.formFullName(this, proto().person()));
+                            addCell(tableLayout, content, "Date of Birht", inject(proto().person().birthDate()).asWidget());
+                            addCell(tableLayout, content, "Email", inject(proto().person().email()).asWidget());
                             if (isFirst()) {
                                 addCell(tableLayout, content, "Relationship", new HTML("&nbsp;"));
                             } else {
@@ -534,7 +534,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
         }
         for (PotentialTenantInfo pti : getValue().tenantList().tenants()) {
             if (pti.status().getValue() == Status.Applicant) {
-                return isCombinationMatch(signature, pti.name().firstName(), pti.name().lastName(), pti.name().middleName());
+                return isCombinationMatch(signature, pti.person().name().firstName(), pti.person().name().lastName(), pti.person().name().middleName());
             }
         }
         return false;

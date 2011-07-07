@@ -30,8 +30,6 @@ public interface LockerArea extends IEntity {
     @Detached
     Building belongsTo();
 
-    // ----------- Infromation:
-
     @ToString(index = 0)
     IPrimitive<String> name();
 

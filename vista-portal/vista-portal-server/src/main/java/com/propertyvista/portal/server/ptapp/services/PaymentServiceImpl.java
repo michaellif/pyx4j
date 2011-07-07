@@ -103,7 +103,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         for (PotentialTenantInfo tenantInfo : secureRetrieve(criteria).tenants()) {
             if (tenantInfo.status().getValue().equals(Status.Applicant)) {
                 paymentInfo.currentAddress().set(tenantInfo.currentAddress());
-                paymentInfo.currentPhone().set(tenantInfo.homePhone());
+                paymentInfo.currentPhone().set(tenantInfo.person().homePhone());
                 break;
             }
         }

@@ -29,7 +29,8 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 
 public class DatePickerTest extends DatePickerTestBase {
 
-    private final IDebugId datePickerTextBoxId = D.id(D.id(proto(PotentialTenantList.class).tenants(), 0), D.id(proto(PotentialTenantInfo.class).birthDate()));
+    private final IDebugId datePickerTextBoxId = D.id(D.id(proto(PotentialTenantList.class).tenants(), 0),
+            D.id(proto(PotentialTenantInfo.class).person().birthDate()));
 
     private final IDebugId datePickerId = D.id(datePickerTextBoxId, CCompDebugId.trigger);
 
