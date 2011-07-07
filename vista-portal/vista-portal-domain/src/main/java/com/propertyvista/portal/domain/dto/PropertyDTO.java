@@ -26,8 +26,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.geo.GeoPoint;
 
-import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.common.domain.RangeGroup;
+import com.propertyvista.common.domain.contact.IAddress;
 
 //VladS Notes:  consider having this a table for performance
 @Transient

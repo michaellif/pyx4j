@@ -33,14 +33,15 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.common.domain.IAddressFull;
-import com.propertyvista.common.domain.IAddressFull.StreetDirection;
-import com.propertyvista.common.domain.IAddressFull.StreetType;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.common.domain.contact.IAddress;
+import com.propertyvista.common.domain.contact.IAddressFull;
+import com.propertyvista.common.domain.contact.IAddressFull.StreetDirection;
+import com.propertyvista.common.domain.contact.IAddressFull.StreetType;
 import com.propertyvista.common.domain.ref.PetType;
 import com.propertyvista.common.domain.ref.Province;
+import com.propertyvista.common.domain.tenant.Tenant.Type;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Application;
@@ -429,6 +430,7 @@ public class PTGenerator {
 
     private void populatePotentialTenant(PotentialTenantInfo pt, Relationship relationship, Status status) {
 
+        pt.type().setValue(Type.person);
         pt.person().name().firstName().setValue(DataGenerator.randomFirstName());
         pt.person().name().lastName().setValue(DataGenerator.randomLastName());
         if (status == Status.Applicant) {
@@ -479,13 +481,12 @@ public class PTGenerator {
         pti.driversLicense().setValue(driversLicense);
         pti.driversLicenseState().set(RandomUtil.random(SharedData.getProvinces()));
 
-        pti.secureIdentifier().setValue("649 951 282");
-
         pti.notCanadianCitizen().setValue(RandomUtil.randomBoolean());
-
         if (pti.notCanadianCitizen().isBooleanTrue()) {
             ApplicationDocument.DocumentType documentType = ApplicationDocument.DocumentType.securityInfo;
             pti.documents().add(createApplicationDocument(pti, "doc-security" + RandomUtil.randomInt(3) + ".jpg", documentType));
+        } else {
+            pti.secureIdentifier().setValue("649 951 282");
         }
 
         Address currentAddress = createAddress();

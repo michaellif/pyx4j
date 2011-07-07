@@ -11,31 +11,32 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.common.domain;
+package com.propertyvista.common.domain.contact;
 
-import com.pyx4j.entity.annotations.BusinessEqualValue;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
-public interface Name extends IEntity {
+public interface Email extends IEntity {
 
-    IPrimitive<String> namePrefix();
+    @Translatable
+    public enum Type {
+        home, work, other;
 
-    @NotNull
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
     @ToString(index = 1)
-    @BusinessEqualValue
-    IPrimitive<String> firstName();
+    @MemberColumn(name = "emailType")
+    IPrimitive<Type> type();
 
-    IPrimitive<String> middleName();
+    @ToString(index = 0)
+    IPrimitive<String> address();
 
-    @NotNull
-    @ToString(index = 2)
-    @BusinessEqualValue
-    IPrimitive<String> lastName();
-
-    IPrimitive<String> maidenName();
-
-    IPrimitive<String> nameSuffix();
 }

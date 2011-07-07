@@ -18,7 +18,7 @@ import java.util.Map;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 
-import com.propertyvista.domain.Media;
+import com.propertyvista.common.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.server.importer.PictureUtil;

@@ -19,8 +19,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.common.domain.media.Document;
 import com.propertyvista.common.domain.tenant.Tenant;
-import com.propertyvista.domain.Document;
 import com.propertyvista.domain.financial.LeaseFinancialTerms;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;

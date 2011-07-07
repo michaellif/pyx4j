@@ -19,17 +19,17 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.IAddressFull.StreetDirection;
-import com.propertyvista.common.domain.IAddressFull.StreetType;
-import com.propertyvista.common.domain.Name;
-import com.propertyvista.common.domain.Person;
 import com.propertyvista.common.domain.RangeGroup;
+import com.propertyvista.common.domain.contact.Address;
+import com.propertyvista.common.domain.contact.Address.AddressType;
+import com.propertyvista.common.domain.contact.Email;
+import com.propertyvista.common.domain.contact.Email.Type;
+import com.propertyvista.common.domain.contact.IAddressFull.StreetDirection;
+import com.propertyvista.common.domain.contact.IAddressFull.StreetType;
+import com.propertyvista.common.domain.contact.Phone;
+import com.propertyvista.common.domain.person.Name;
+import com.propertyvista.common.domain.person.Person;
 import com.propertyvista.common.domain.ref.Province;
-import com.propertyvista.domain.Address;
-import com.propertyvista.domain.Address.AddressType;
-import com.propertyvista.domain.Email;
-import com.propertyvista.domain.Email.Type;
-import com.propertyvista.domain.Phone;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 import com.propertyvista.server.common.reference.SharedData;
 
@@ -61,6 +61,7 @@ public class CommonsGenerator {
         if (RandomUtil.randomInt() % 15 == 0) {
             name.nameSuffix().setValue(RandomUtil.random(DemoData.NAME_SUFFIX));
         }
+
 //        IPrimitive<String> maidenName();
 
         return name;
@@ -71,6 +72,8 @@ public class CommonsGenerator {
 
         Name name = createName();
         person.name().set(name);
+        person.birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
+
         person.homePhone().setValue(createPhone().getStringView());
         person.mobilePhone().setValue(createPhone().getStringView());
         person.workPhone().setValue(createPhone().getStringView());

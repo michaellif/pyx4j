@@ -22,8 +22,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.common.domain.User;
+import com.propertyvista.common.domain.contact.IAddress;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.ApplicationDocument;

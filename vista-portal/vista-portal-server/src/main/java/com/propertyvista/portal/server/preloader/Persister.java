@@ -19,12 +19,12 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.common.domain.company.Company;
+import com.propertyvista.common.domain.company.OrganizationContact;
+import com.propertyvista.common.domain.company.OrganizationContacts;
+import com.propertyvista.common.domain.contact.Email;
+import com.propertyvista.common.domain.contact.Phone;
 import com.propertyvista.common.domain.tenant.Tenant;
-import com.propertyvista.domain.Company;
-import com.propertyvista.domain.Email;
-import com.propertyvista.domain.OrganizationContact;
-import com.propertyvista.domain.OrganizationContacts;
-import com.propertyvista.domain.Phone;
 
 public class Persister {
     private final static Logger log = LoggerFactory.getLogger(Persister.class);
@@ -50,9 +50,16 @@ public class Persister {
     }
 
     public static void persistTenant(Tenant tenant) {
-        log.debug("Persisting tenant {}", tenant.person().name());
-        persist(tenant.person());
-//        persistCompany(tenant.company());
+        switch (tenant.type().getValue()) {
+        case person:
+            log.debug("Persisting tenant {}", tenant.person().name());
+            persist(tenant.person());
+            break;
+        case company:
+            log.debug("Persisting tenant {}", tenant.company().name());
+            persistCompany(tenant.company());
+            break;
+        }
         persist(tenant);
     }
 

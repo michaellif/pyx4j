@@ -11,29 +11,31 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.common.domain.person;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Company extends IEntity {
+public interface Name extends IEntity {
 
-    @ToString
-    IPrimitive<String> name();
+    IPrimitive<String> namePrefix();
 
-    IList<Address> addresses();
+    @NotNull
+    @ToString(index = 1)
+    @BusinessEqualValue
+    IPrimitive<String> firstName();
 
-    IList<Phone> phones();
+    IPrimitive<String> middleName();
 
-    IPrimitive<String> website();
+    @NotNull
+    @ToString(index = 2)
+    @BusinessEqualValue
+    IPrimitive<String> lastName();
 
-    IList<Email> emails();
+    IPrimitive<String> maidenName();
 
-    IList<OrganizationContacts> contacts();
-
-    @EmbeddedEntity
-    Media logo();
+    IPrimitive<String> nameSuffix();
 }

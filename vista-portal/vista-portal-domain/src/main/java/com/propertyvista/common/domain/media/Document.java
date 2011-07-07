@@ -11,14 +11,8 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.common.domain.media;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.ISet;
+public interface Document extends File {
 
-public interface OrganizationContacts extends IEntity {
-
-    CompanyRole companyRole();
-
-    ISet<OrganizationContact> contactList();
 }

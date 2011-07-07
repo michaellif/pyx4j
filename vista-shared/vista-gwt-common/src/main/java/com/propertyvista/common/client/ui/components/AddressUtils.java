@@ -21,8 +21,8 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
-import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.common.domain.IAddressFull;
+import com.propertyvista.common.domain.contact.IAddress;
+import com.propertyvista.common.domain.contact.IAddressFull;
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.Province;
 

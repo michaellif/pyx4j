@@ -29,11 +29,11 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.common.domain.company.Company;
+import com.propertyvista.common.domain.contact.Email;
+import com.propertyvista.common.domain.contact.Phone;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
-import com.propertyvista.domain.Company;
-import com.propertyvista.domain.Email;
-import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.financial.Concession;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;

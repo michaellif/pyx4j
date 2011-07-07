@@ -19,9 +19,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.Email;
-import com.propertyvista.domain.OrganizationContacts;
-import com.propertyvista.domain.Phone;
+import com.propertyvista.common.domain.company.OrganizationContacts;
+import com.propertyvista.common.domain.contact.Email;
+import com.propertyvista.common.domain.contact.Phone;
 
 public interface BuildingContactInfo extends IEntity {
 

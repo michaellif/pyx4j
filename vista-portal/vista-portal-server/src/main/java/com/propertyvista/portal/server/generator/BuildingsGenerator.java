@@ -30,11 +30,11 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.contact.Address;
+import com.propertyvista.common.domain.contact.Email;
+import com.propertyvista.common.domain.contact.Phone;
 import com.propertyvista.common.domain.financial.ChargeType;
 import com.propertyvista.common.domain.ref.PetType;
-import com.propertyvista.domain.Address;
-import com.propertyvista.domain.Email;
-import com.propertyvista.domain.Phone;
 import com.propertyvista.domain.financial.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ParkingRent;

@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.Address;
+import com.propertyvista.common.domain.contact.Address;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.yardi.bean.Properties;

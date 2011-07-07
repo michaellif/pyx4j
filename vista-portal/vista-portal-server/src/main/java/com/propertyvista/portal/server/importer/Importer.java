@@ -26,7 +26,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.Media;
+import com.propertyvista.common.domain.media.Media;
 import com.propertyvista.domain.financial.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.property.asset.Floorplan;

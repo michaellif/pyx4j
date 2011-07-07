@@ -11,14 +11,12 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.common.domain.company;
 
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ContactRole extends IEntity {
+public interface CompanyRole extends IEntity {
 
-    @ToString
     IPrimitive<String> name();
 }

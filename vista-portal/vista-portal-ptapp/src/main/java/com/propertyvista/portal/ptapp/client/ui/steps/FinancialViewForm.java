@@ -174,7 +174,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
             private List<EntityFolderColumnDescriptor> columns;
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().assetType(), "14em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().assetType(), "11em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().percent(), "7em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().assetValue(), "15em"));
             }

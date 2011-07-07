@@ -21,7 +21,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.Person;
+import com.propertyvista.common.domain.person.Person;
 
 public class RandomUtil extends DataGenerator {
 

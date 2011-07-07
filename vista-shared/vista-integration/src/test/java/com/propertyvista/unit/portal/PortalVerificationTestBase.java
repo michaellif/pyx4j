@@ -18,8 +18,8 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.common.domain.IAddress;
-import com.propertyvista.common.domain.IAddressFull;
+import com.propertyvista.common.domain.contact.IAddress;
+import com.propertyvista.common.domain.contact.IAddressFull;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;

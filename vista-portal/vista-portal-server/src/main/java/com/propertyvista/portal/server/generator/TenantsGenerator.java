@@ -20,10 +20,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.company.Company;
+import com.propertyvista.common.domain.company.OrganizationContact;
+import com.propertyvista.common.domain.company.OrganizationContacts;
 import com.propertyvista.common.domain.tenant.Tenant;
-import com.propertyvista.domain.Company;
-import com.propertyvista.domain.OrganizationContact;
-import com.propertyvista.domain.OrganizationContacts;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 
 public class TenantsGenerator {
@@ -43,8 +43,15 @@ public class TenantsGenerator {
     public Tenant createTenant() {
         Tenant tenant = EntityFactory.create(Tenant.class);
 
-        tenant.person().set(CommonsGenerator.createPerson());
-//        tenant.company().set(createCompany());
+        tenant.type().setValue(RandomUtil.random(Tenant.Type.values()));
+        switch (tenant.type().getValue()) {
+        case person:
+            tenant.person().set(CommonsGenerator.createPerson());
+            break;
+        case company:
+            tenant.company().set(createCompany());
+            break;
+        }
 
         return tenant;
     }

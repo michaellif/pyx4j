@@ -18,7 +18,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.common.domain.Person;
+import com.propertyvista.common.domain.person.Person;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.Vehicle;

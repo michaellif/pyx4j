@@ -78,9 +78,9 @@ public class FinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncom
                     setVisibility(event.getValue());
                 }
             });
-            main.add(incomeSource, 14, 20);
+            main.add(incomeSource, 20);
         } else {
-            main.add(inject(proto().incomeSource()), 14, 20);
+            main.add(inject(proto().incomeSource()), 20);
         }
 
         main.add(inject(proto().employer(), createEmployerEditor()));
@@ -205,13 +205,13 @@ public class FinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncom
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
-                main.add(inject(proto().name()), 14, 12);
-                main.add(inject(proto().employedForYears()), 14, 4);
+                main.add(inject(proto().name()), 12);
+                main.add(inject(proto().employedForYears()), 4);
                 AddressUtils.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
 
-                main.add(inject(proto().starts()), 14, 8.2);
-                main.add(inject(proto().ends()), 14, 8.2);
+                main.add(inject(proto().starts()), 8.2);
+                main.add(inject(proto().ends()), 8.2);
                 return main;
             }
 
@@ -228,12 +228,12 @@ public class FinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncom
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
-                main.add(inject(proto().name()), 14, 10);
+                main.add(inject(proto().name()), 10);
                 AddressUtils.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
 
-                main.add(inject(proto().starts()), 14, 8.2);
-                main.add(inject(proto().ends()), 14, 8.2);
+                main.add(inject(proto().starts()), 8.2);
+                main.add(inject(proto().ends()), 8.2);
                 return main;
             }
 
@@ -250,17 +250,17 @@ public class FinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncom
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
-                main.add(inject(proto().name()), 14, 10);
+                main.add(inject(proto().name()), 10);
                 AddressUtils.injectIAddress(main, proto(), this);
 
-                main.add(inject(proto().program()), 14, 10);
-                main.add(inject(proto().fieldOfStudy()), 14, 10);
-                main.add(inject(proto().fundingChoices()), 14, 10);
+                main.add(inject(proto().program()), 10);
+                main.add(inject(proto().fieldOfStudy()), 10);
+                main.add(inject(proto().fundingChoices()), 10);
 
-                main.add(inject(proto().monthlyAmount()), 14, 10);
+                main.add(inject(proto().monthlyAmount()), 10);
 
-                main.add(inject(proto().starts()), 14, 8.2);
-                main.add(inject(proto().ends()), 14, 8.2);
+                main.add(inject(proto().starts()), 8.2);
+                main.add(inject(proto().ends()), 8.2);
                 return main;
             }
 
@@ -277,15 +277,15 @@ public class FinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncom
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
-                main.add(inject(proto().name()), 14, 10);
+                main.add(inject(proto().name()), 10);
                 AddressUtils.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
-                main.add(inject(proto().fullyOwned()), 14, 10);
-                main.add(inject(proto().monthlyRevenue()), 14, 10);
-                main.add(inject(proto().numberOfEmployees()), 14, 4);
+                main.add(inject(proto().fullyOwned()), 10);
+                main.add(inject(proto().monthlyRevenue()), 10);
+                main.add(inject(proto().numberOfEmployees()), 4);
 
-                main.add(inject(proto().starts()), 14, 8.2);
-                main.add(inject(proto().ends()), 14, 8.2);
+                main.add(inject(proto().starts()), 8.2);
+                main.add(inject(proto().ends()), 8.2);
                 return main;
             }
 
@@ -302,12 +302,12 @@ public class FinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncom
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
-                main.add(inject(proto().name()), 14, 10);
+                main.add(inject(proto().name()), 10);
                 AddressUtils.injectIAddress(main, proto(), this);
                 injectIEmploymentInfo(main, proto(), this);
 
-                main.add(inject(proto().starts()), 14, 8.2);
-                main.add(inject(proto().ends()), 14, 8.2);
+                main.add(inject(proto().starts()), 8.2);
+                main.add(inject(proto().ends()), 8.2);
                 return main;
             }
 
@@ -324,9 +324,9 @@ public class FinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncom
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
-                main.add(inject(proto().name()), 14, 10);
-                main.add(inject(proto().monthlyAmount()), 14, 10);
-                main.add(inject(proto().ends()), 14, 8.2);
+                main.add(inject(proto().name()), 10);
+                main.add(inject(proto().monthlyAmount()), 10);
+                main.add(inject(proto().ends()), 8.2);
                 return main;
             }
         };

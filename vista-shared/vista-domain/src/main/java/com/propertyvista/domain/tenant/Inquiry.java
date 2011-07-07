@@ -18,9 +18,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.Name;
-import com.propertyvista.domain.Email;
-import com.propertyvista.domain.Phone;
+import com.propertyvista.common.domain.contact.Email;
+import com.propertyvista.common.domain.contact.Phone;
+import com.propertyvista.common.domain.person.Name;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 

@@ -26,9 +26,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.domain.Email;
-import com.propertyvista.domain.Media;
-import com.propertyvista.domain.Phone;
+import com.propertyvista.common.domain.contact.Email;
+import com.propertyvista.common.domain.contact.Phone;
+import com.propertyvista.common.domain.media.Media;
 import com.propertyvista.domain.financial.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ParkingRent;

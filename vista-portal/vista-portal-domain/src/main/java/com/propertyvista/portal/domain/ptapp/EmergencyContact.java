@@ -16,7 +16,7 @@ package com.propertyvista.portal.domain.ptapp;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.common.domain.Person;
+import com.propertyvista.common.domain.person.Person;
 
 public interface EmergencyContact extends IEntity, Person {
 

@@ -7,30 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 28, 2011
+ * Created on Jan 27, 2011
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.common.domain.company;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
-public interface File extends IEntity {
+import com.propertyvista.common.domain.person.Person;
 
-    IPrimitive<String> caption();
+public interface OrganizationContact extends IEntity {
 
-    IPrimitive<String> accessKey();
+    ContactRole contactRole();
 
-    IPrimitive<Key> blobKey();
-
-    IPrimitive<Integer> cacheVersion();
-
-    IPrimitive<String> filename();
-
-    IPrimitive<Integer> fileSize();
-
-    IPrimitive<String> contentType();
-
+    Person person();
 }

@@ -19,7 +19,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.IAddressFull;
+import com.propertyvista.common.domain.contact.IAddressFull;
 import com.propertyvista.common.domain.financial.Money;
 
 public interface IEmploymentInfo extends IAddressFull, IIncomeInfo {

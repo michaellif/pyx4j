@@ -23,9 +23,9 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.Person;
+import com.propertyvista.common.domain.company.Company;
+import com.propertyvista.common.domain.person.Person;
 import com.propertyvista.common.domain.tenant.Tenant;
-import com.propertyvista.domain.Company;
 import com.propertyvista.portal.server.generator.TenantsGenerator;
 
 public class PreloadTenants extends BaseVistaDataPreloader {
@@ -48,7 +48,6 @@ public class PreloadTenants extends BaseVistaDataPreloader {
         TenantsGenerator generator = new TenantsGenerator(DemoData.TENANTS_GENERATION_SEED);
 
         List<Tenant> tenants = generator.createTenants(DemoData.NUM_TENANTS);
-
         for (Tenant tenant : tenants) {
             Persister.persistTenant(tenant);
         }

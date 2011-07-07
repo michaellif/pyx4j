@@ -7,19 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 27, 2011
+ * Created on Jan 28, 2011
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.common.domain.company;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.Person;
+public interface ContactRole extends IEntity {
 
-public interface OrganizationContact extends IEntity {
-
-    ContactRole contactRole();
-
-    Person person();
+    @ToString
+    IPrimitive<String> name();
 }

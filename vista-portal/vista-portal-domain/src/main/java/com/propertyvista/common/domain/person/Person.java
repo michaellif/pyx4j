@@ -11,7 +11,7 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.common.domain;
+package com.propertyvista.common.domain.person;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
@@ -45,7 +45,6 @@ public interface Person extends IEntity {
     @Caption(name = "Email Address")
     IPrimitive<String> email();
 
-    @Caption(name = "Birth Date")
     @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> birthDate();

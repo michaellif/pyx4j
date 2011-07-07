@@ -11,32 +11,34 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.common.domain.company;
 
-import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
-public interface Email extends IEntity {
+import com.propertyvista.common.domain.contact.Address;
+import com.propertyvista.common.domain.contact.Email;
+import com.propertyvista.common.domain.contact.Phone;
+import com.propertyvista.common.domain.media.Media;
 
-    @Translatable
-    public enum Type {
-        home, work, other;
+public interface Company extends IEntity {
 
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
+    @ToString
+    IPrimitive<String> name();
 
-    @ToString(index = 1)
-    @MemberColumn(name = "emailType")
-    IPrimitive<Type> type();
+    IList<Address> addresses();
 
-    @ToString(index = 0)
-    IPrimitive<String> address();
+    IList<Phone> phones();
 
+    IPrimitive<String> website();
+
+    IList<Email> emails();
+
+    IList<OrganizationContacts> contacts();
+
+    @EmbeddedEntity
+    Media logo();
 }

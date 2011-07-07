@@ -15,7 +15,7 @@ package com.propertyvista.domain.organization;
 
 import com.pyx4j.entity.annotations.Owned;
 
-import com.propertyvista.domain.Company;
+import com.propertyvista.common.domain.company.Company;
 import com.propertyvista.domain.organization.portal.PortalPreferences;
 
 

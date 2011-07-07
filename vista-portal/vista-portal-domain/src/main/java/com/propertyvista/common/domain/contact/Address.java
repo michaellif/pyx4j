@@ -11,31 +11,41 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.common.domain.contact;
 
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-// TODO define basic phone + contactPhone + BuildingPhone etc. which has different types enum...
-public interface Phone extends IEntity {
+
+@EmbeddedEntity
+@ToStringFormat("{0} {1} {2} {3}, {4} {5}")
+public interface Address extends IEntity, IAddressFull {
 
     @Translatable
-    public enum Type {
+    public enum AddressType {
 
-        mobile,
+        property,
 
-        work,
+        mailing,
 
-        home,
+        shipping,
 
-        work_fax,
+        billing,
 
-        home_fax,
+        current,
+
+        previous,
+
+        forwarding, // on move out this is the address
+
+        legal_notice,
+
+        termination_notice,
 
         other;
 
@@ -45,18 +55,7 @@ public interface Phone extends IEntity {
         }
     }
 
-    @MemberColumn(name = "phoneType")
-    IPrimitive<Type> type();
+    IPrimitive<GeoPoint> location();
 
-    /**
-     * (max 20 char)
-     */
-    @MemberColumn(name = "phoneNumber")
-    @Editor(type = EditorType.phone)
-    IPrimitive<String> number();
-
-    /**
-     * (max 20 char)
-     */
-    IPrimitive<String> extension();
+    IPrimitive<AddressType> addressType();
 }

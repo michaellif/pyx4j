@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-13
- * @author Vlad
+ * Created on 2011-02-20
+ * @author antonk
  * @version $Id$
  */
-package com.propertyvista.common.domain;
+package com.propertyvista.common.domain.contact;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -20,101 +20,35 @@ import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.common.domain.ref.Country;
 import com.propertyvista.common.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.common.domain.ref.ProvinceReferenceAdapter;
 
-public interface IAddressFull extends IEntity {
+public interface IAddress extends IEntity {
 
-    IPrimitive<String> unitNumber();
-
-    IPrimitive<String> streetNumber();
-
-    IPrimitive<String> streetNumberSuffix();
-
+    @Caption(name = "Address 1")
     @NotNull
-    IPrimitive<String> streetName();
+    IPrimitive<String> street1();
 
-    @Translatable
-    public enum StreetType {
-
-        street,
-
-        avenue,
-
-        boulevard,
-
-        road,
-
-        lane,
-
-        court,
-
-        crescent,
-
-        way,
-
-        highway,
-
-        other;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
-    @NotNull
-    IPrimitive<StreetType> streetType();
-
-    @Translatable
-    public enum StreetDirection {
-
-        east,
-
-        north,
-
-        south,
-
-        west,
-
-        southEast,
-
-        southWest,
-
-        northEast,
-
-        northWest;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
-    IPrimitive<StreetDirection> streetDirection();
+    @Caption(name = "Address 2")
+    IPrimitive<String> street2();
 
     @NotNull
     IPrimitive<String> city();
 
-    IPrimitive<String> county();
-
-    @NotNull
     @Caption(name = "Province/State")
+    @NotNull
     @Editor(type = EditorType.combo)
     @Reference(adapter = ProvinceReferenceAdapter.class)
     Province province();
 
-    @NotNull
     @Editor(type = EditorType.suggest)
+    @NotNull
     @Reference(adapter = CountryReferenceAdapter.class)
     Country country();
 
     @NotNull
-    @Caption(name = "Zip/Postal Code")
     IPrimitive<String> postalCode();
 }

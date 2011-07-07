@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
-import com.propertyvista.common.domain.IAddress;
 import com.propertyvista.common.domain.RangeGroup;
+import com.propertyvista.common.domain.contact.IAddress;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 
 public class Formatter {

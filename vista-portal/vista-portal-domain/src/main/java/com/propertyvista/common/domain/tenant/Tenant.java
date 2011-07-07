@@ -21,7 +21,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.common.domain.Person;
+import com.propertyvista.common.domain.company.Company;
+import com.propertyvista.common.domain.person.Person;
 
 public interface Tenant extends IEntity {
 
@@ -46,7 +47,6 @@ public interface Tenant extends IEntity {
     @EmbeddedEntity
     Person person();
 
-// TODD - company should be moved to common domains also!..    
-//    @EmbeddedEntity
-//    Company company();
+    @EmbeddedEntity
+    Company company();
 }

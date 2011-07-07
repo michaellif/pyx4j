@@ -7,16 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 28, 2011
- * @author Misha
+ * Created on 2011-05-13
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.common.domain.media;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
-public interface CompanyRole extends IEntity {
+public interface Media extends IEntity {
 
-    IPrimitive<String> name();
+    @EmbeddedEntity
+    @MemberColumn(name = "mediumFile")
+    com.propertyvista.common.domain.media.File file();
 }
