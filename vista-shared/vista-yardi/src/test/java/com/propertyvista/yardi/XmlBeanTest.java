@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.common.domain.Name;
+import com.propertyvista.common.domain.person.Name;
 import com.propertyvista.common.domain.tenant.Tenant;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
