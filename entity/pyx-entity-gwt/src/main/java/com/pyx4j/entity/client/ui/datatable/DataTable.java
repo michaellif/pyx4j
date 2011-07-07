@@ -160,19 +160,20 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
         for (ColumnDescriptor<E> columnDescriptor : model.getColumnDescriptors()) {
             String columnTitle = columnDescriptor.getColumnTitle();
-            StringBuffer headerText = new StringBuffer();
+            StringBuffer headerText = new StringBuffer("&nbsp;");
             headerText.append(columnTitle);
             if (columnDescriptor.equals(model.getSortColumn())) {
                 if (columnDescriptor.isSortAscending()) {
-                    headerText.append("&nbsp;&nbsp;&#x2191;");
+                    headerText.append("&nbsp;&#x2191;");
                 } else {
-                    headerText.append("&nbsp;&nbsp;&#x2193;");
+                    headerText.append("&nbsp;&#x2193;");
                 }
+            } else {
+                headerText.append("&nbsp;&nbsp;&nbsp;");
             }
             setHTML(0, colIndex, headerText.toString());
             getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
             getCellFormatter().setWordWrap(0, colIndex, false);
-            getCellFormatter().setAlignment(0, colIndex, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
             ++colIndex;
         }
 
