@@ -26,7 +26,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 
-public class BoxFolderItemEditorDecorator extends BaseFolderItemEditorDecorator {
+import com.pyx4j.entity.shared.IEntity;
+
+public class BoxFolderItemEditorDecorator<E extends IEntity> extends BaseFolderItemEditorDecorator<E> {
 
     public BoxFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
         super(removeButton, removeButtonHover, title, removable);
