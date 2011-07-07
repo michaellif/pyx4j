@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date: 2011-05-12
+        14:25:23 -0400 (Thu, 12 May 2011) $ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.propertyvista</groupId>
+        <artifactId>vista-shared</artifactId>
+        <version>1.0.0-SNAPSHOT</version><!--vista-version -->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>vista-yardi-wsdl</artifactId>
+    <name>vista-yardi-wsdl</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-adb</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+                <configuration>
+                    <generateServerSide>true</generateServerSide>
+                    <generateServerSideInterface>true</generateServerSideInterface>
+                    <generateAllClasses>true</generateAllClasses>
+                    <unpackClasses>true</unpackClasses>
+                    <syncMode>sync</syncMode>
+                    <databindingName>adb</databindingName>
+                    <namespaceURIs>
+                        <namespaceURI>
+                            <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfResidentTransactions20</uri>
+                            <packageName>com.yardi.ws.operations</packageName>
+                        </namespaceURI>
+                    </namespaceURIs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>wsdl2code-client-yardi</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFile>${basedir}/src/main/resources/ItfResidentTransactions20.wsdl</wsdlFile>
+                            <packageName>com.yardi.ws</packageName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+<!--
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.7.3</version>
+                <configuration>
+                    <schemaDirectory>src/main/resources</schemaDirectory>
+                    <schemaIncludes>
+                        <include>Itf_MITS_CoreData2.0.xsd</include>
+                        <include>Itf_MITS_ResidentTransactions2.0.xsd</include>
+                    </schemaIncludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+  -->
+
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.axis2</groupId>
+                                        <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+                                        <versionRange>[1.5.4,)</versionRange>
+                                        <goals>
+                                            <goal>wsdl2code</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

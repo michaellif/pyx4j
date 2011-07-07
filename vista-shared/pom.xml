@@ -24,6 +24,7 @@
         <module>vista-server-common</module>
         <module>vista-gwt-common</module>
         <module>vista-callfire</module>
+        <module>vista-yardi-wsdl</module>
         <module>vista-yardi</module>
         <module>vista-payment</module>
         <module>vista-integration</module>
