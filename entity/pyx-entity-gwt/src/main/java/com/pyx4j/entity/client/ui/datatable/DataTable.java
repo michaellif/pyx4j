@@ -80,9 +80,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private int selectedRow = -1;
 
-    private boolean checkboxColumnShown;
+    private boolean autoColumnsWidth = false;
 
-    private boolean hasDetailsNavigation;
+    private boolean checkboxColumnShown = false;
+
+    private boolean hasDetailsNavigation = false;
 
     private final List<SelectionCheckBox> selectionCheckBoxes = new ArrayList<SelectionCheckBox>();
 
@@ -90,17 +92,16 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private static final int HEADER_RAW_INDEX = 0;
 
-    private static final String CHECK_MARK_COLUMN_SIZE = "20px";
+    private static final String CHECK_MARK_COLUMN_SIZE = "22px";
 
-    private static final String COLUMNS_SELECTOR_COLUMN_SIZE = "10px";
+    private static final String COLUMNS_SELECTOR_COLUMN_SIZE = "12px";
 
     private List<SortChangeHandler<E>> sortChangeHandlers;
 
     private List<CheckSelectionHandler> checkSelectionHandlers;
 
-    public DataTable(boolean checkboxColumnShown) {
+    public DataTable() {
         super();
-        this.checkboxColumnShown = checkboxColumnShown;
         this.addClickHandler(new ClickHandler() {
 
             @Override
@@ -122,14 +123,23 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
     }
 
-    public DataTable(DataTableModel<E> model, boolean checkboxColumnShown) {
-        this(checkboxColumnShown);
+    public DataTable(DataTableModel<E> model) {
+        this();
         setDataTableModel(model);
     }
 
-    private void renderTable() {
+    public void renderTable() {
         clear();
         clearTableData();
+
+        // auto calculate column widths (actually make them equals in % and fill all 100%):
+        if (isAutoColumnsWidth() && !model.getColumnDescriptors().isEmpty()) {
+            int width = (int) (100. / model.getColumnDescriptors().size() + 0.5);
+            for (ColumnDescriptor<E> columnDescriptor : model.getColumnDescriptors()) {
+                columnDescriptor.setWidth(width + "%");
+            }
+        }
+
         renderHeader();
         renderBody();
     }
@@ -335,6 +345,18 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     public void setUseHeaderColumnSelector(List<ColumnDescriptor<E>> availableColumns) {
         this.availableColumns = availableColumns;
+    }
+
+    public boolean isAutoColumnsWidth() {
+        return autoColumnsWidth;
+    }
+
+    public void setAutoColumnsWidth(boolean autoColumnsWidth) {
+        if (this.autoColumnsWidth = autoColumnsWidth) {
+            DOM.setStyleAttribute(getElement(), "tableLayout", "auto");
+        } else {
+            DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
+        }
     }
 
     public boolean hasDetailsNavigation() {

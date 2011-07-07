@@ -140,9 +140,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
         showChecksColumn(true);
         showHeaderColumnSelector(true);
-        listPanel.removeUpperActionsBar();
+        listPanel.getDataTable().setAutoColumnsWidth(true);
+        listPanel.getDataTable().renderTable();
         listPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.listPanel);
-        DOM.setStyleAttribute(listPanel.getDataTable().getElement(), "tableLayout", "auto");
 
         // actions & filters:
         actionsPanel = new HorizontalPanel();

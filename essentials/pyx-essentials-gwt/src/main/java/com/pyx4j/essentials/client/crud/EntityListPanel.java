@@ -62,26 +62,22 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
 
         add(upperActionsBar = new DataTableActionsBar());
-        add(dataTable = new DataTable<E>(false));
+        add(dataTable = new DataTable<E>(dataTableModel = new DataTableModel<E>(entityPrototype.getEntityMeta(), getColumnDescriptors())));
         add(lowerActionsBar = new DataTableActionsBar());
 
         dataTable.setWidth("100%");
         setCellWidth(dataTable, "100%");
 
-        dataTableModel = new DataTableModel<E>(entityPrototype.getEntityMeta(), getColumnDescriptors());
-
-        dataTable.setDataTableModel(dataTableModel);
         dataTable.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                if (editorPage == null) {
-                    return;
-                }
-                Cell cell = dataTable.getCellForEvent(event);
-                if (cell != null && cell.getRowIndex() > 0) {
-                    E entity = dataTableModel.getData().get(cell.getRowIndex() - 1).getEntity();
-                    AbstractSiteDispatcher.show(new NavigationUri(editorPage, NavigUtils.ENTITY_ID, entity.getPrimaryKey().toString()));
+                if (editorPage != null) {
+                    Cell cell = dataTable.getCellForEvent(event);
+                    if (cell != null && cell.getRowIndex() > 0) {
+                        E entity = dataTableModel.getData().get(cell.getRowIndex() - 1).getEntity();
+                        AbstractSiteDispatcher.show(new NavigationUri(editorPage, NavigUtils.ENTITY_ID, entity.getPrimaryKey().toString()));
+                    }
                 }
             }
         });

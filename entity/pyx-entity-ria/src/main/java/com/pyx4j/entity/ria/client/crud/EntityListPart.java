@@ -46,7 +46,7 @@ public abstract class EntityListPart<E extends IEntity> extends SimplePanel {
         setWidth("100%");
 
         metaEntity = EntityFactory.create(clazz);
-        dataTable = new DataTable<E>(false);
+        dataTable = new DataTable<E>();
         dataTable.setWidth("100%");
 
         setWidget(dataTable);
