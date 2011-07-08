@@ -21,7 +21,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -34,11 +33,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.client.ui.datatable.MemberPrimitiveColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -55,6 +56,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     private final AbstractCrudService<E> service;
 
     private final Class<E> entityClass;
+
+    private List<Sort> userDefinedSorts;
 
     public enum RefreshInterval {
 
@@ -104,9 +107,6 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                 return columnDescriptors;
             }
         };
-
-        listPanel.setPageSize(10);
-
         listPanel.setPrevActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -119,9 +119,21 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                 onNextPage();
             }
         });
+        listPanel.getDataTable().setColumnClickSorting(true);
+        listPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
+            @Override
+            public void onChange(ColumnDescriptor<E> column) {
+                List<Sort> sorts = new ArrayList<Sort>(1);
+                sorts.add(new Sort(column.getColumnName(), !column.isSortAscending()));
+                applySorting(sorts);
+            }
+        });
 
+        listPanel.setPageSize(10);
         listPanel.removeUpperActionsBar();
-        DOM.setStyleAttribute(listPanel.getDataTable().getElement(), "tableLayout", "auto");
+
+        listPanel.getDataTable().setAutoColumnsWidth(true);
+        listPanel.getDataTable().renderTable();
     }
 
     // EntityListPanel access:
@@ -135,10 +147,13 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
      */
     protected abstract void fillDefaultColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
 
+    //
+    // Activity part:
     protected void populateData(final int pageNumber) {
         EntityListCriteria<E> criteria = new EntityListCriteria<E>(entityClass);
         criteria.setPageSize(getListPanel().getPageSize());
         criteria.setPageNumber(pageNumber);
+        criteria.setSorts(userDefinedSorts);
 
         service.list(new AsyncCallback<EntitySearchResult<E>>() {
             @Override
@@ -162,6 +177,11 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     protected void onNextPage() {
         populateData(getListPanel().getDataTable().getDataTableModel().getPageNumber() + 1);
+    }
+
+    public void applySorting(List<Sort> sorts) {
+        userDefinedSorts = sorts;
+        populateData(0);
     }
 
     protected RefreshInterval getRefreshInterval() {

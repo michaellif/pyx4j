@@ -468,6 +468,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("font-weight", "bold");
         style.addProperty("height", "20px");
         style.addProperty("padding-left", "1em");
+        style.addProperty("cursor", "move");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption) + ":hover");
@@ -495,7 +496,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         // overriding gwt-dnd styles:
         style = new Style(".dragdrop-handle");
-        style.addProperty("cursor", "pointer");
+//        style.addProperty("cursor", "pointer");
         addStyle(style);
     }
 
@@ -528,6 +529,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
         style.addProperty("color", ThemeColor.OBJECT_TONE95);
+        style.addProperty("font-weight", "bold");
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
