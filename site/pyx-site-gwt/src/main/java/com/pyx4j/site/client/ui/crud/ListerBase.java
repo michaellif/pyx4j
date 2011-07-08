@@ -108,7 +108,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 return columnDescriptors;
             }
         };
-        listPanel.setPageSize(ApplicationMode.isDevelopment() ? 10 : 30);
         listPanel.setPrevActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -121,14 +120,14 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 onNextPage();
             }
         });
-
+        listPanel.getDataTable().setCheckboxColumnShown(true);
         listPanel.getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
             @Override
             public void onCheck(boolean isAnyChecked) {
                 setActionsActive(isAnyChecked);
             }
         });
-
+        listPanel.getDataTable().setColumnClickSorting(true);
         listPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange(ColumnDescriptor<E> column) {
@@ -138,11 +137,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             }
         });
 
-        showChecksColumn(true);
-        showHeaderColumnSelector(true);
+        showColumnSelector(true);
+        listPanel.removeUpperActionsBar();
+        listPanel.setPageSize(ApplicationMode.isDevelopment() ? 10 : 30);
+        listPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.listPanel);
         listPanel.getDataTable().setAutoColumnsWidth(true);
         listPanel.getDataTable().renderTable();
-        listPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.listPanel);
 
         // actions & filters:
         actionsPanel = new HorizontalPanel();
@@ -219,17 +219,13 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         filtersPanel.setVisible(visible);
     }
 
-    public void showChecksColumn(boolean show) {
-        listPanel.getDataTable().setCheckboxColumnShown(show);
-    }
-
-    public void showHeaderColumnSelector(boolean show) {
+    public void showColumnSelector(boolean show) {
         if (show) {
             ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
             fillAvailableColumnDescriptors(columnDescriptors, listPanel.proto());
-            listPanel.getDataTable().setUseHeaderColumnSelector(columnDescriptors);
+            listPanel.getDataTable().setUseColumnSelector(columnDescriptors);
         } else {
-            listPanel.getDataTable().setUseHeaderColumnSelector(null);
+            listPanel.getDataTable().setUseColumnSelector(null);
         }
     }
 

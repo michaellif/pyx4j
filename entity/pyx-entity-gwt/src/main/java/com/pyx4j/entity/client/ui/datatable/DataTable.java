@@ -80,11 +80,13 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private int selectedRow = -1;
 
+    private boolean hasDetailsNavigation = false;
+
+    private boolean columnClickSorting = false;
+
     private boolean autoColumnsWidth = false;
 
     private boolean checkboxColumnShown = false;
-
-    private boolean hasDetailsNavigation = false;
 
     private final List<SelectionCheckBox> selectionCheckBoxes = new ArrayList<SelectionCheckBox>();
 
@@ -110,8 +112,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 if (cell == null) {
                     return; // do not process empty clicks!...
                 } else if (cell.getRowIndex() == 0) {
-                    if (cell.getCellIndex() >= (isCheckboxColumnShown() ? 1 : 0)
-                            && cell.getCellIndex() < getCellCount(0) - (isUseHeaderColumnSelector() ? 1 : 0)) {
+                    if (cell.getCellIndex() >= (isCheckboxColumnShown() ? 1 : 0) && cell.getCellIndex() < getCellCount(0) - (isUseColumnSelector() ? 1 : 0)) {
                         processHeaderClick(isCheckboxColumnShown() ? cell.getCellIndex() - 1 : cell.getCellIndex()); // actual table column index - without the first check one!...
                     }
                 } else if (cell.getCellIndex() >= (isCheckboxColumnShown() ? 1 : 0)) {
@@ -177,7 +178,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             ++colIndex;
         }
 
-        if (isUseHeaderColumnSelector()) {
+        if (isUseColumnSelector()) {
             setWidget(0, colIndex, createHeaderColumnSelector());
             getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE);
             getCellFormatter().setStyleName(0, colIndex, BASE_NAME + StyleSuffix.ColumnSelector);
@@ -300,19 +301,22 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     protected void processHeaderClick(int column) {
-        ColumnDescriptor<E> columnDescriptor = model.getColumnDescriptors().get(column);
-        if (columnDescriptor.equals(model.getSortColumn())) {
-            columnDescriptor.setSortAscending(!columnDescriptor.isSortAscending());
-        } else {
-            model.setSortColumn(columnDescriptor);
-        }
 
-        renderHeader();
+        if (isColumnClickSorting()) {
+            ColumnDescriptor<E> columnDescriptor = model.getColumnDescriptors().get(column);
+            if (columnDescriptor.equals(model.getSortColumn())) {
+                columnDescriptor.setSortAscending(!columnDescriptor.isSortAscending());
+            } else {
+                model.setSortColumn(columnDescriptor);
+            }
 
-        // notify listeners:
-        if (!sortChangeHandlers.isEmpty()) {
-            for (SortChangeHandler<E> handler : sortChangeHandlers) {
-                handler.onChange(columnDescriptor);
+            renderHeader();
+
+            // notify listeners:
+            if (sortChangeHandlers != null) {
+                for (SortChangeHandler<E> handler : sortChangeHandlers) {
+                    handler.onChange(columnDescriptor);
+                }
             }
         }
     }
@@ -332,6 +336,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         }
     }
 
+    public boolean isColumnClickSorting() {
+        return columnClickSorting;
+    }
+
+    public void setColumnClickSorting(boolean columnClickSorting) {
+        this.columnClickSorting = columnClickSorting;
+    }
+
     public boolean isCheckboxColumnShown() {
         return checkboxColumnShown;
     }
@@ -340,11 +352,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         this.checkboxColumnShown = checkboxColumnShown;
     }
 
-    public boolean isUseHeaderColumnSelector() {
+    public boolean isUseColumnSelector() {
         return (availableColumns != null);
     }
 
-    public void setUseHeaderColumnSelector(List<ColumnDescriptor<E>> availableColumns) {
+    public void setUseColumnSelector(List<ColumnDescriptor<E>> availableColumns) {
         this.availableColumns = availableColumns;
     }
 
@@ -423,7 +435,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             private boolean isSameColumn(String columnName) {
                 List<ColumnDescriptor<E>> currentColumns = model.getColumnDescriptors();
                 for (ColumnDescriptor<E> column : currentColumns) {
-                    if (columnName.equals(column.getColumnName())) {
+                    if (columnName.contentEquals(column.getColumnName())) {
                         return true;
                     }
                 }
@@ -471,7 +483,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                     }
 
                     // notify listeners:
-                    if (!checkSelectionHandlers.isEmpty()) {
+                    if (checkSelectionHandlers != null) {
                         boolean isAnyChecked = model.isAnyChecked();
                         for (CheckSelectionHandler handler : checkSelectionHandlers) {
                             handler.onCheck(isAnyChecked);

@@ -98,7 +98,6 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
                     model.setPageSize(Integer.valueOf(pageSizeSelector.getValue(pageSizeSelector.getSelectedIndex())));
                     //TODO make it work, Actually fire event
                 }
-
             }
         });
     }
