@@ -51,7 +51,7 @@ public class JasperReportProcessor {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void createReport(final JasperReportModel model, JasperFileFormat format, OutputStream out) {
 
-        JasperReport jasperReport = JasperReportFactory.create(model.getDesignName());
+        JasperReport jasperReport = JasperReportFactory.create(model);
 
         Map parameters = model.getParameters();
         if (parameters == null) {

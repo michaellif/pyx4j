@@ -33,10 +33,17 @@ public class JasperReportModel {
 
     private final Map<String, Object> parameters;
 
+    private final String jrXml; // in memory Jasper report XML.
+
     public JasperReportModel(String designName, List<? extends IEntity> data, Map<String, Object> parameters) {
+        this(designName, data, parameters, null);
+    }
+
+    public JasperReportModel(String designName, List<? extends IEntity> data, Map<String, Object> parameters, String jrXml) {
         this.designName = designName;
         this.data = data;
         this.parameters = parameters;
+        this.jrXml = jrXml;
     }
 
     public String getDesignName() {
@@ -51,4 +58,7 @@ public class JasperReportModel {
         return parameters;
     }
 
+    public String getJrXml() {
+        return jrXml;
+    }
 }

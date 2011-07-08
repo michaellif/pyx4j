@@ -21,6 +21,7 @@
 package com.pyx4j.entity.report;
 
 import java.io.InputStream;
+import java.io.StringBufferInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,17 +54,47 @@ public class JasperReportFactory {
         return reportName.replace(".", "/") + REPORT_COMPILED_EXT;
     }
 
-    public static JasperReport create(String reportName) {
-        log.debug("creating report {}", reportName);
-        JasperReport jasperReport = null;
-        if (!ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-            jasperReport = cashReports.get(reportName);
-            if (jasperReport != null) {
-                return jasperReport;
+    @SuppressWarnings("deprecation")
+    public static JasperReport create(JasperReportModel model) {
+
+        if (model.getJrXml() != null) {
+            log.debug("creating report {}", model.getDesignName());
+
+            JasperReport jasperReport = findInCahsOrCompiled(model.getDesignName());
+            if (jasperReport == null) {
+                jasperReport = create(model.getDesignName(), new StringBufferInputStream(model.getJrXml()));
             }
 
-            InputStream compiledStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(getCompiledResourceName(reportName));
-            if (compiledStream != null) {
+            return jasperReport;
+        }
+
+        return create(model.getDesignName());
+    }
+
+    public static JasperReport create(String reportName) {
+        log.debug("creating report {}", reportName);
+
+        JasperReport jasperReport = findInCahsOrCompiled(reportName);
+        if (jasperReport == null) {
+            InputStream designStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(getDesignResourceName(reportName));
+            if (designStream == null) {
+                throw new RuntimeException("Report Design " + reportName + " not found in resources");
+            }
+
+            jasperReport = create(reportName, designStream);
+        }
+
+        return jasperReport;
+    }
+
+    // internals:
+    private static JasperReport findInCahsOrCompiled(String reportName) {
+        JasperReport jasperReport = null;
+
+        if (!ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+            jasperReport = cashReports.get(reportName);
+            if (jasperReport == null) {
+                InputStream compiledStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(getCompiledResourceName(reportName));
                 try {
                     jasperReport = (JasperReport) JRLoader.loadObject(compiledStream);
                 } catch (JRException e) {
@@ -71,27 +102,31 @@ public class JasperReportFactory {
                 } finally {
                     IOUtils.closeQuietly(compiledStream);
                 }
+                // Save in cash:
+                cashReports.put(reportName, jasperReport);
             }
         }
 
-        if (jasperReport == null) {
-            InputStream designStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(getDesignResourceName(reportName));
-            if (designStream == null) {
-                throw new RuntimeException("Report Design " + reportName + " not found in resources");
-            }
-            try {
-                jasperReport = JasperCompileManager.compileReport(designStream);
-            } catch (JRException e) {
-                throw new RuntimeException("Compile Report " + reportName + " error", e);
-            } finally {
-                IOUtils.closeQuietly(designStream);
-            }
-        }
+        return jasperReport;
+    }
 
+    private static JasperReport create(String reportName, InputStream designStream) {
+        JasperReport jasperReport = null;
+
+        log.debug("compiling report {}", reportName);
+
+        try {
+            jasperReport = JasperCompileManager.compileReport(designStream);
+        } catch (JRException e) {
+            throw new RuntimeException("Compile Report " + reportName + " error", e);
+        } finally {
+            IOUtils.closeQuietly(designStream);
+        }
+        // Save in cash:
         if (!ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-            // Save in cash
             cashReports.put(reportName, jasperReport);
         }
+
         return jasperReport;
     }
 }
