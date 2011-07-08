@@ -103,9 +103,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     private List<CheckSelectionHandler> checkSelectionHandlers;
 
     public DataTable() {
-        super();
-        this.addClickHandler(new ClickHandler() {
+        setStyleName(BASE_NAME);
+        DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
 
+        this.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 Cell cell = getCellForEvent(event);
@@ -120,8 +121,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 }
             }
         });
-        setStyleName(BASE_NAME);
-        DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
     }
 
     public DataTable(DataTableModel<E> model) {
@@ -130,8 +129,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     public void renderTable() {
-        clear();
-        clearTableData();
+        removeAllRows();
 
         // auto calculate column widths (actually make them equals in % and fill all 100%):
         if (isAutoColumnsWidth() && !model.getColumnDescriptors().isEmpty()) {
@@ -191,6 +189,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     private void renderBody() {
+        clearTableData();
+
         List<DataItem<E>> data = model.getData();
         List<ColumnDescriptor<E>> columnDescriptors = model.getColumnDescriptors();
 
@@ -301,7 +301,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     protected void processHeaderClick(int column) {
-
         if (isColumnClickSorting()) {
             ColumnDescriptor<E> columnDescriptor = model.getColumnDescriptors().get(column);
             if (columnDescriptor.equals(model.getSortColumn())) {
