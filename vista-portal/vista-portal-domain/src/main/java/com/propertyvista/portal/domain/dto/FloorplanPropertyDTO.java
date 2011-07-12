@@ -13,41 +13,20 @@
  */
 package com.propertyvista.portal.domain.dto;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.common.domain.RangeGroup;
 
 @Transient
-public interface FloorplanDTO extends IEntity {
+public interface FloorplanPropertyDTO extends IEntity {
 
-    @Caption(name = "Plan")
     IPrimitive<String> name();
 
-    RangeGroup area();
+    RangeGroup price();
 
-    RangeGroup marketRent();
-
-    IPrimitive<LogicalDate> avalableForRent();
-
-    @Caption(name = "Description")
-    IPrimitive<String> description();
-
-    IList<AmenityDTO> amenities();
-
-    IPrimitive<Key> mainMedia();
-
-    @Format("#0.#")
-    @Caption(name = "Beds")
     IPrimitive<Double> bedrooms();
 
-    @Format("#0.#")
-    @Caption(name = "Baths")
     IPrimitive<Double> bathrooms();
 }

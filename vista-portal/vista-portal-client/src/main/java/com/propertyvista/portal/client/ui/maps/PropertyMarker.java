@@ -45,6 +45,7 @@ import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget.MarkerType;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget.StyleSuffix;
+import com.propertyvista.portal.client.ui.searchapt.PropertyListForm;
 import com.propertyvista.portal.client.ui.util.Formatter;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
@@ -129,7 +130,7 @@ public class PropertyMarker extends Marker {
             content.add(item);
 
             //unit(floor plan) types
-            String floorString = Formatter.formatStringList(property.floorplanNames());
+            String floorString = PropertyListForm.formatFloorplanList(property.floorplansProperty());
             if (floorString != null && !floorString.isEmpty()) {
                 item = new Label(floorString);
                 item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);
@@ -195,5 +196,6 @@ public class PropertyMarker extends Marker {
         public HandlerRegistration addViewDetailsClickHandler(ClickHandler h) {
             return viewDetailsItem.addClickHandler(h);
         }
+
     }
 }

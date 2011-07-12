@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitiveSet;
 
 import com.propertyvista.common.domain.RangeGroup;
 import com.propertyvista.common.domain.contact.IAddress;
@@ -95,25 +94,6 @@ public class Formatter {
 
     }
 
-    public static String formatStringList(IPrimitiveSet<String> floorplans) {
-        if (floorplans.isNull() || floorplans.isEmpty())
-            return "";
-
-        StringBuffer strbuffer = new StringBuffer();
-
-        for (String planName : floorplans.getValue()) {
-            if (planName != null && !planName.isEmpty()) {
-                strbuffer.append(formatListItem(planName));
-            }
-        }
-        String finalString = strbuffer.toString();
-        int idx = finalString.lastIndexOf(POSTFIX);
-        if (idx > -1) {
-            finalString = finalString.substring(0, idx);
-        }
-        return finalString;
-    }
-
     public static HorizontalPanel formatCardLine(String label, String value) {
         HorizontalPanel item = new HorizontalPanel();
         item.setWidth("100%");
@@ -127,7 +107,7 @@ public class Formatter {
 
     }
 
-    private static String formatListItem(String item) {
+    public static String formatListItem(String item) {
         if (item == null || item.isEmpty()) {
             return "";
         }

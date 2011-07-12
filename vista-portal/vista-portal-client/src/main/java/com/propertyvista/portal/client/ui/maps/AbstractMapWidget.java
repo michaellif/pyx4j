@@ -64,6 +64,7 @@ public abstract class AbstractMapWidget extends SimplePanel {
     @Override
     protected void onUnload() {
         super.onUnload();
+        setWidget(null);
         mapLoadComplete = false;
     }
 

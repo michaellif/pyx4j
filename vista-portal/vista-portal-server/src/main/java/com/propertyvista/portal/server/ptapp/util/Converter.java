@@ -33,6 +33,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
+import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.MediaDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.server.generator.CommonsGenerator;
@@ -134,8 +135,12 @@ public class Converter {
 
         // List of Floorplans
         for (Floorplan fp : floorplans) {
-            to.floorplanNames().add(fp.getStringView());
-            minMax(CommonsGenerator.createRange(600d, 1600d), to.price());
+            FloorplanPropertyDTO fpto = EntityFactory.create(FloorplanPropertyDTO.class);
+            fpto.name().set(fp.name());
+            fpto.bedrooms().set(fp.bedrooms());
+            fpto.bathrooms().set(fp.bathrooms());
+            fpto.price().set(CommonsGenerator.createRange(600d, 1600d));
+            to.floorplansProperty().add(fpto);
         }
 
         if (!from.media().isEmpty()) {

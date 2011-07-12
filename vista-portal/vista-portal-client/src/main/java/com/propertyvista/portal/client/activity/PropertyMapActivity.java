@@ -24,6 +24,7 @@ import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -80,6 +81,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
             PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
                 @Override
                 public void onSuccess(PropertyListDTO properties) {
+                    System.out.println(properties);
                     PropertyMapActivity.allProperties = properties;
                     obtainGeopoint();
                 }
@@ -91,7 +93,6 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     }
 
     private void obtainGeopoint() {
-
         if (PropertySearchCriteria.SearchType.proximity.equals(criteria.searchType().getValue())) {
             MapUtils.obtainLatLang(criteria.location().getValue(), new LatLngCallback() {
 
@@ -121,12 +122,14 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
 
     @Override
     public void updateMap(LatLngBounds latLngBounds) {
+        if (inboundProperties == null) {
+            return;
+        }
         shownProperties = filterByBounds(latLngBounds);
         PropertyListDTO outboundProperties = EntityFactory.create(PropertyListDTO.class);
         for (PropertyDTO property : shownProperties.properties()) {
             if (!inboundProperties.properties().contains(property)) {
                 outboundProperties.properties().add(property);
-
             }
         }
         view.updateMarkers(inboundProperties, outboundProperties);
@@ -170,6 +173,10 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     public void refineSearch() {
         criteria = view.getValue();
         obtainGeopoint();
+        Map<String, String> args = EntityArgsConverter.convertToArgs(criteria);
+        AppPlace place = new PortalSiteMap.FindApartment.PropertyMap();
+        place.putAllArgs(args);
+        History.newItem(place.getToken(), false);
     }
 
 }

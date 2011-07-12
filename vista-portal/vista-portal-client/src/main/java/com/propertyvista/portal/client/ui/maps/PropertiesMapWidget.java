@@ -58,6 +58,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
 
     @Override
     protected void mapsLoaded() {
+        markers.clear();
 
         super.mapsLoaded();
 
@@ -107,6 +108,8 @@ public class PropertiesMapWidget extends AbstractMapWidget {
     public void setBounds(PropertyListDTO propertyList, DefaultAsyncCallback<LatLngBounds> callback) {
         this.propertyList = propertyList;
         this.callback = callback;
+        this.geoPoint = null;
+        this.distance = 0;
         if (isMapLoadComplete()) {
             LatLngBounds bounds = LatLngBounds.newInstance();
             for (PropertyDTO property : propertyList.properties()) {
@@ -126,6 +129,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
         this.geoPoint = geoPoint;
         this.distance = distance;
         this.callback = callback;
+        this.propertyList = null;
         if (isMapLoadComplete()) {
             LatLng latLng = MapUtils.newLatLngInstance(geoPoint);
             if (distanceOverlay != null) {

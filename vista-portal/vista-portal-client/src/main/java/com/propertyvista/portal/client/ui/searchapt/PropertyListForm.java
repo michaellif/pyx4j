@@ -29,12 +29,13 @@ import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitiveSet;
 
 import com.propertyvista.common.domain.contact.IAddress;
 import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
+import com.propertyvista.portal.client.ui.util.Formatter;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
+import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
@@ -111,7 +112,7 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
         FlowPanel content = new FlowPanel();
 
         content.add(formatCardLine(i18n.tr("Address"), formatAddress(value.address())));
-        content.add(formatCardLine(i18n.tr("Type"), formatFloorplans(value.floorplanNames())));
+        content.add(formatCardLine(i18n.tr("Type"), formatFloorplanList(value.floorplansProperty())));
         content.add(formatCardLine(i18n.tr("Amenities"), formatAmenities(value.amenities())));
         content.add(formatCardLine(i18n.tr("Notes"), value.description().getStringView()));
         card.setMajorContent(content);
@@ -207,19 +208,19 @@ public class PropertyListForm extends CEntityForm<PropertyListDTO> {
 
     }
 
-    private String formatFloorplans(IPrimitiveSet<String> floorplans) {
-        if (floorplans.isNull() || floorplans.isEmpty())
+    public static String formatFloorplanList(IList<FloorplanPropertyDTO> floorplansProperty) {
+        if (floorplansProperty.isNull() || floorplansProperty.isEmpty())
             return "";
 
         StringBuffer strbuffer = new StringBuffer();
 
-        for (String planName : floorplans.getValue()) {
-            if (planName != null && !planName.isEmpty()) {
-                strbuffer.append(formatListItem(planName));
+        for (FloorplanPropertyDTO plan : floorplansProperty) {
+            if (!plan.name().isNull() && !plan.name().getValue().isEmpty()) {
+                strbuffer.append(Formatter.formatListItem(plan.name().getStringView()));
             }
         }
         String finalString = strbuffer.toString();
-        int idx = finalString.lastIndexOf(POSTFIX);
+        int idx = finalString.lastIndexOf(Formatter.POSTFIX);
         if (idx > -1) {
             finalString = finalString.substring(0, idx);
         }
