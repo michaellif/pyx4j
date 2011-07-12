@@ -49,6 +49,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
         PaymentMethodDTO paymentmethod = EntityFactory.create(PaymentMethodDTO.class);
         paymentmethod.id().setValue(new Key(1l));
         paymentmethod.type().setValue(PaymentType.Visa);
+        paymentmethod.cardNumber().setValue("XXX 5566");
         paymentmethod.primary().setValue(true);
         paymentmethod.billingAddress().city().setValue("Toronto");
         paymentmethod.billingAddress().streetName().setValue("Clark Ave");
@@ -59,6 +60,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
         paymentmethod = EntityFactory.create(PaymentMethodDTO.class);
         paymentmethod.id().setValue(new Key(2l));
         paymentmethod.type().setValue(PaymentType.MasterCard);
+        paymentmethod.cardNumber().setValue("XXX 1290");
         paymentmethod.primary().setValue(false);
         paymentmethod.billingAddress().city().setValue("Richmond Hill");
         paymentmethod.billingAddress().streetName().setValue("Some Street");
@@ -74,7 +76,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
 
     @Override
     public void editPaymentMethod(PaymentMethodDTO paymentmethod) {
-        AppPlace place = new PortalSiteMap.Residents.PaymentMethod();
+        AppPlace place = new PortalSiteMap.Residents.EditPaymentMethod();
         place.putArg(PortalSiteMap.ARG_PAYMENT_METHOD_ID, paymentmethod.id().getValue().toString());
         AppSite.getPlaceController().goTo(place);
 
@@ -82,7 +84,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
 
     @Override
     public void addPaymentMethod() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethod());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.NewPaymentMethod());
 
     }
 

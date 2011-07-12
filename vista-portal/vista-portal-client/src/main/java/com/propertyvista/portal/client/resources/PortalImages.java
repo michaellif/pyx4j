@@ -18,6 +18,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
+import com.google.gwt.resources.client.TextResource;
 
 public interface PortalImages extends ClientBundle {
 
@@ -86,5 +87,20 @@ public interface PortalImages extends ClientBundle {
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("cheque-guide.jpg")
     ImageResource chequeGuide();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("info_orange.png")
+    ImageResource warning();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("info_side_orange.png")
+    ImageResource warningSide();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("user_message_info.png")
+    ImageResource userMessageInfo();
+
+    @Source("paymentPreauthorisedNotes.html")
+    TextResource paymentPreauthorisedNotes();
 
 }

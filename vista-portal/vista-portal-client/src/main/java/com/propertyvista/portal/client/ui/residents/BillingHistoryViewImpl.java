@@ -13,14 +13,30 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
+
+import com.propertyvista.portal.domain.dto.BillListDTO;
 
 public class BillingHistoryViewImpl extends SimplePanel implements BillingHistoryView {
 
+    BillingHistoryForm billingForm;
+
     public BillingHistoryViewImpl() {
-        HTML label = new HTML("Billing History");
-        setWidget(label);
+        billingForm = new BillingHistoryForm();
+        billingForm.initialize();
+        setWidget(billingForm);
+
+    }
+
+    @Override
+    public void populate(BillListDTO bills) {
+        billingForm.populate(bills);
+
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        billingForm.setPresenter(presenter);
 
     }
 }

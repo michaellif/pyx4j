@@ -25,6 +25,11 @@ public interface CurrentBillView extends IsWidget {
 
     interface Presenter {
 
+        void changePaymentMethod();
+
+        void changeAuthorization(boolean authorized);
+
+        void payBill();
     }
 
 }

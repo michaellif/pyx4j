@@ -35,7 +35,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
@@ -49,10 +48,6 @@ public class SearchApartmentForm extends CEntityForm<PropertySearchCriteria> imp
     private static I18n i18n = I18nFactory.getI18n(SearchApartmentViewImpl.class);
 
     private FlowPanel container;
-
-    public static enum StyleSuffix implements IStyleSuffix {
-        Row, RowHeader, Button, ButtonPanel, Element
-    }
 
     private SearchApartmentView.Presenter presenter;
 
@@ -86,8 +81,6 @@ public class SearchApartmentForm extends CEntityForm<PropertySearchCriteria> imp
             }
 
         });
-        searchBtn.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Button);
-        search.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.ButtonPanel);
         search.add(searchBtn);
         container.add(search);
 

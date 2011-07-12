@@ -24,18 +24,18 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
+import com.propertyvista.portal.domain.dto.PaymentMethodGenericDTO;
 
-public class PaymentMethodViewImpl extends FlowPanel implements PaymentMethodView {
+public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMethodView {
 
-    private final PaymentMethodForm form;
+    private final NewPaymentMethodForm form;
 
     private Presenter presenter;
 
-    private static I18n i18n = I18nFactory.getI18n(MaintenanceViewImpl.class);
+    private static I18n i18n = I18nFactory.getI18n(NewPaymentMethodViewImpl.class);
 
-    public PaymentMethodViewImpl() {
-        form = new PaymentMethodForm();
+    public NewPaymentMethodViewImpl() {
+        form = new NewPaymentMethodForm();
         form.initialize();
         add(form);
 
@@ -63,7 +63,7 @@ public class PaymentMethodViewImpl extends FlowPanel implements PaymentMethodVie
     }
 
     @Override
-    public void populate(PaymentMethodDTO paymentMethod) {
+    public void populate(PaymentMethodGenericDTO paymentMethod) {
         form.populate(paymentMethod);
 
     }

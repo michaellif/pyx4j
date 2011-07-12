@@ -25,8 +25,6 @@ public class CurrentBillViewImpl extends FlowPanel implements CurrentBillView {
 
     private final CurrentBillForm billForm;
 
-    private CurrentBillView.Presenter presenter;
-
     private static I18n i18n = I18nFactory.getI18n(PaymentMethodsForm.class);
 
     public CurrentBillViewImpl() {
@@ -45,7 +43,7 @@ public class CurrentBillViewImpl extends FlowPanel implements CurrentBillView {
 
     @Override
     public void setPresenter(Presenter presenter) {
-        presenter = this.presenter;
+        billForm.setPresenter(presenter);
 
     }
 }

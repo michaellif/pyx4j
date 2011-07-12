@@ -51,8 +51,6 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
 
     private final DecorationData listDecor;
 
-    private final String POSTFIX = " \u2022 ";
-
     protected static I18n i18n = I18nFactory.getI18n(ApartmentDetailsForm.class);
 
     public ApartmentDetailsForm() {

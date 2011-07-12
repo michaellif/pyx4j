@@ -13,8 +13,73 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.rpc.shared.UserRuntimeException;
+
+import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
+
 public class EditPaymentMethodViewImpl extends FlowPanel implements EditPaymentMethodView {
+
+    private Presenter presenter;
+
+    private static I18n i18n = I18nFactory.getI18n(EditPaymentMethodViewImpl.class);
+
+    private final EditPaymentMethodForm form;
+
+    public EditPaymentMethodViewImpl() {
+        form = new EditPaymentMethodForm();
+        form.initialize();
+        add(form);
+
+        Button submitButton = new Button(i18n.tr("Save"));
+        //TODO implement
+        submitButton.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                if (!form.isValid()) {
+                    Window.scrollTo(0, 0);
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                } else {
+                    presenter.save(form.getValue());
+                }
+            }
+        });
+        submitButton.getElement().getStyle().setMarginRight(1d, Unit.EM);
+        add(DecorationUtils.inline(submitButton));
+
+        CHyperlink cancel = new CHyperlink(null, new Command() {
+            @Override
+            public void execute() {
+                presenter.cancel();
+            }
+        });
+        cancel.setValue(i18n.tr("Cancel"));
+        add(cancel);
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+
+    }
+
+    @Override
+    public void populate(PaymentMethodDTO paymentMethod) {
+        form.populate(paymentMethod);
+
+    }
 
 }

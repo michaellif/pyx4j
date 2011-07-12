@@ -7,27 +7,39 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 9, 2011
- * @author dad
+ * Created on Jun 27, 2011
+ * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.domain.dto;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.portal.domain.payment.BillingAddress;
 import com.propertyvista.portal.domain.payment.CreditCardInfo;
+import com.propertyvista.portal.domain.payment.EcheckInfo;
+import com.propertyvista.portal.domain.payment.InteracInfo;
 import com.propertyvista.portal.domain.payment.PaymentType;
 
 @Transient
-public interface PaymentMethodDTO extends CreditCardInfo {
-//TODO to be finalized
+public interface PaymentMethodGenericDTO extends IEntity {
+
+    @Caption(name = "Payment types")
+    @Editor(type = EditorType.radiogroup)
     IPrimitive<PaymentType> type();
 
-    BillingAddress billingAddress();
+    EcheckInfo echeck();
 
-    IPrimitive<String> nameOnAccount();
+    CreditCardInfo creditCard();
+
+    InteracInfo interac();
+
+    BillingAddress billingAddress();
 
     IPrimitive<Boolean> primary();
 

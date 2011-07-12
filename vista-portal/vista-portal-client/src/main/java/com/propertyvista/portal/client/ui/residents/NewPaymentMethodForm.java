@@ -52,14 +52,14 @@ import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.validators.CreditCardNumberValidator;
-import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
+import com.propertyvista.portal.domain.dto.PaymentMethodGenericDTO;
 import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
 import com.propertyvista.portal.domain.payment.PaymentType;
 
-public class PaymentMethodForm extends CEntityForm<PaymentMethodDTO> {
+public class NewPaymentMethodForm extends CEntityForm<PaymentMethodGenericDTO> {
 
-    private static I18n i18n = I18nFactory.getI18n(PaymentMethodForm.class);
+    private static I18n i18n = I18nFactory.getI18n(NewPaymentMethodForm.class);
 
     private FlowPanel paymentTypeImagesPanel;
 
@@ -75,12 +75,12 @@ public class PaymentMethodForm extends CEntityForm<PaymentMethodDTO> {
         item, selected
     }
 
-    public PaymentMethodForm() {
-        super(PaymentMethodDTO.class, new VistaEditorsComponentFactory());
+    public NewPaymentMethodForm() {
+        super(PaymentMethodGenericDTO.class, new VistaEditorsComponentFactory());
     }
 
     @Override
-    public void populate(PaymentMethodDTO value) {
+    public void populate(PaymentMethodGenericDTO value) {
         super.populate(value);
         setInstrumentsVisibility(value.type().getValue());
     }
@@ -94,7 +94,7 @@ public class PaymentMethodForm extends CEntityForm<PaymentMethodDTO> {
         radioGroup.setStylePrefix(PAYMENT_BUTTONS_STYLE_PREFIX);
 
         paymentTypeImagesPanel = new FlowPanel();
-        paymentTypeImagesPanel.setStyleName(Selector.getStyleName(PAYMENT_BUTTONS_STYLE_PREFIX, PaymentMethodForm.StyleSuffix.PaymentImages));
+        paymentTypeImagesPanel.setStyleName(Selector.getStyleName(PAYMENT_BUTTONS_STYLE_PREFIX, NewPaymentMethodForm.StyleSuffix.PaymentImages));
         Image paymentTypeImage;
         FlowPanel holder;
         for (int i = 0; i < PaymentType.values().length; i++) {
@@ -138,7 +138,7 @@ public class PaymentMethodForm extends CEntityForm<PaymentMethodDTO> {
         paymentType.asWidget().getElement().getStyle().setFloat(Float.LEFT);
 
         paymentFeesPanel = new FlowPanel();
-        paymentFeesPanel.setStyleName(Selector.getStyleName(PAYMENT_BUTTONS_STYLE_PREFIX, PaymentMethodForm.StyleSuffix.PaymentFee));
+        paymentFeesPanel.setStyleName(Selector.getStyleName(PAYMENT_BUTTONS_STYLE_PREFIX, NewPaymentMethodForm.StyleSuffix.PaymentFee));
         Label paymentFeesLabel;
         for (PaymentType type : PaymentType.values()) {
             paymentFeesLabel = new Label("Convenience fee: $1.99");

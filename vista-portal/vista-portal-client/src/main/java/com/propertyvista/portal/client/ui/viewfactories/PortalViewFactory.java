@@ -39,12 +39,14 @@ import com.propertyvista.portal.client.ui.residents.CreateAccountView;
 import com.propertyvista.portal.client.ui.residents.CreateAccountViewImpl;
 import com.propertyvista.portal.client.ui.residents.CurrentBillView;
 import com.propertyvista.portal.client.ui.residents.CurrentBillViewImpl;
+import com.propertyvista.portal.client.ui.residents.EditPaymentMethodView;
+import com.propertyvista.portal.client.ui.residents.EditPaymentMethodViewImpl;
 import com.propertyvista.portal.client.ui.residents.MaintenanceListerView;
 import com.propertyvista.portal.client.ui.residents.MaintenanceListerViewImpl;
 import com.propertyvista.portal.client.ui.residents.MaintenanceView;
 import com.propertyvista.portal.client.ui.residents.MaintenanceViewImpl;
-import com.propertyvista.portal.client.ui.residents.PaymentMethodView;
-import com.propertyvista.portal.client.ui.residents.PaymentMethodViewImpl;
+import com.propertyvista.portal.client.ui.residents.NewPaymentMethodView;
+import com.propertyvista.portal.client.ui.residents.NewPaymentMethodViewImpl;
 import com.propertyvista.portal.client.ui.residents.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.residents.PaymentMethodsViewImpl;
 import com.propertyvista.portal.client.ui.residents.PersonalInfoView;
@@ -86,8 +88,10 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new PotentialTenantViewImpl());
             } else if (MaintenanceListerView.class.equals(type)) {
                 map.put(type, new MaintenanceListerViewImpl());
-            } else if (PaymentMethodView.class.equals(type)) {
-                map.put(type, new PaymentMethodViewImpl());
+            } else if (NewPaymentMethodView.class.equals(type)) {
+                map.put(type, new NewPaymentMethodViewImpl());
+            } else if (EditPaymentMethodView.class.equals(type)) {
+                map.put(type, new EditPaymentMethodViewImpl());
             }
 
         }

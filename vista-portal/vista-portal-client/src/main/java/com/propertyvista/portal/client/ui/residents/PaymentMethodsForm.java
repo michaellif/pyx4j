@@ -22,16 +22,14 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.viewer.BaseFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
@@ -43,6 +41,9 @@ import com.pyx4j.widgets.client.ImageButton;
 import com.propertyvista.common.domain.contact.IAddressFull;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
+import com.propertyvista.portal.client.ui.decorations.TableFolderDecorator;
+import com.propertyvista.portal.client.ui.decorations.TableItemDecorator;
+import com.propertyvista.portal.client.ui.util.Utils;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
@@ -59,15 +60,8 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
     @Override
     public IsWidget createContent() {
         FlowPanel container = new FlowPanel();
-
         container.add(inject(proto().paymentMethods(), createPaymentMethodsViewer()));
-
         return container;
-    }
-
-    @Override
-    public void populate(PaymentMethodListDTO paymentMethods) {
-        super.populate(paymentMethods);
     }
 
     @Override
@@ -76,7 +70,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
 
     }
 
-    class TableFolderViewer<E extends IEntity> extends SimplePanel implements IFolderViewerDecorator<E> {
+    class TableFolderViewer<E extends IEntity> extends TableFolderDecorator<PaymentMethodDTO> {
 
         private final FlowPanel content;
 
@@ -86,24 +80,13 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
             content.add(new PortalHeaderBar(i18n.tr("Current Payment Methods"), "100%"));
 
             HorizontalPanel header = new HorizontalPanel();
+            header.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Header);
             header.setWidth("100%");
-            Label item = new Label(i18n.tr("Type"));
-            header.add(item);
-            header.setCellWidth(item, "15%");
-            header.setCellHorizontalAlignment(item, HasHorizontalAlignment.ALIGN_CENTER);
-            item = new Label(i18n.tr("Billing Address"));
-            header.add(item);
-            header.setCellHorizontalAlignment(item, HasHorizontalAlignment.ALIGN_CENTER);
-            header.setCellWidth(item, "60%");
-
-            item = new Label(i18n.tr("Primary"));
-            header.setCellHorizontalAlignment(item, HasHorizontalAlignment.ALIGN_CENTER);
-            header.add(item);
-            header.setCellWidth(item, "9%");
-
-            item = new Label("");
-            header.add(item);
-            header.setCellWidth(item, "16%");
+            formatHeader("Type", "15%", header);
+            formatHeader("Last 4 digits", "10%", header);
+            formatHeader("Billing Address", "50%", header);
+            formatHeader("Primary", "9%", header);
+            formatHeader("", "16%", header);
             content.add(header);
         }
 
@@ -136,9 +119,13 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
             imageHolder.add(btnLabel);
 
             content.add(imageHolder);
-
             setWidget(content);
+        }
 
+        private void formatHeader(String title, String width, CellPanel parent) {
+            Label item = new Label(i18n.tr(title));
+            parent.add(item);
+            parent.setCellWidth(item, width);
         }
     }
 
@@ -155,7 +142,6 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
             protected CEntityFolderItemViewer<PaymentMethodDTO> createItem() {
                 return createPaymenLineViewer();
             }
-
         };
     }
 
@@ -165,9 +151,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
 
             @Override
             public IFolderItemViewerDecorator<PaymentMethodDTO> createFolderItemDecorator() {
-                return new BaseFolderItemViewerDecorator<PaymentMethodDTO>() {
-
-                };
+                return new TableItemDecorator<PaymentMethodDTO>();
             }
 
             @Override
@@ -175,73 +159,82 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
                 return createPaymentMethodLine(value);
             }
 
+            private IsWidget createPaymentMethodLine(final PaymentMethodDTO paymentMethod) {
+                HorizontalPanel container = new HorizontalPanel();
+                container.setWidth("100%");
+                formatValue(Utils.getPaymentCardImage(paymentMethod.type().getValue()), "15%", container);
+                formatValue(paymentMethod.cardNumber().getStringView(), "10%", container);
+                formatValue(formatAddress(paymentMethod.billingAddress()), "50%", container);
+                formatValue(paymentMethod.primary().getStringView(), "9%", container);
+
+                //Edit link
+                CHyperlink link = new CHyperlink(null, new Command() {
+                    @Override
+                    public void execute() {
+                        presenter.editPaymentMethod(paymentMethod);
+                    }
+                });
+                link.setValue(i18n.tr("Edit"));
+                container.add(link);
+                container.setCellWidth(link, "8%");
+
+                link = new CHyperlink(null, new Command() {
+                    @Override
+                    public void execute() {
+                        presenter.removePaymentMethod(paymentMethod);
+                    }
+                });
+                link.setValue(i18n.tr("Remove"));
+                container.add(link);
+                container.setCellWidth(link, "8%");
+
+                return container;
+            }
+
+            private void formatValue(String value, String width, CellPanel parent) {
+                Label item = new Label(i18n.tr(value));
+                parent.add(item);
+                parent.setCellWidth(item, width);
+
+            }
+
+            private void formatValue(Image value, String width, CellPanel parent) {
+                if (value == null)
+                    return;
+                value.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.MIDDLE);
+                parent.add(value);
+                parent.setCellWidth(value, width);
+
+            }
+
+            private String formatAddress(IAddressFull address) {
+                if (address.isNull())
+                    return "";
+
+                StringBuffer addrString = new StringBuffer();
+
+                addrString.append(address.streetNumber().getStringView());
+                addrString.append(" ");
+                addrString.append(address.streetName().getStringView());
+
+                if (!address.city().isNull()) {
+                    addrString.append(", ");
+                    addrString.append(address.city().getStringView());
+                }
+
+                if (!address.province().isNull()) {
+                    addrString.append(" ");
+                    addrString.append(address.province().getStringView());
+                }
+
+                if (!address.postalCode().isNull()) {
+                    addrString.append(" ");
+                    addrString.append(address.postalCode().getStringView());
+                }
+
+                return addrString.toString();
+            }
         };
-    }
-
-    private IsWidget createPaymentMethodLine(final PaymentMethodDTO paymentMethod) {
-        HorizontalPanel container = new HorizontalPanel();
-        container.setWidth("100%");
-        Label item = new Label(paymentMethod.type().getStringView());
-        container.add(item);
-        container.setCellWidth(item, "15%");
-        item = new Label(formatAddress(paymentMethod.billingAddress()));
-        container.add(item);
-        container.setCellWidth(item, "60%");
-
-        item = new Label(paymentMethod.primary().getStringView());
-        container.add(item);
-        container.setCellWidth(item, "9%");
-
-        //Edit link
-        CHyperlink link = new CHyperlink(null, new Command() {
-            @Override
-            public void execute() {
-                presenter.editPaymentMethod(paymentMethod);
-            }
-        });
-        link.setValue(i18n.tr("Edit"));
-        container.add(link);
-        container.setCellWidth(link, "8%");
-
-        link = new CHyperlink(null, new Command() {
-            @Override
-            public void execute() {
-                presenter.removePaymentMethod(paymentMethod);
-            }
-        });
-        link.setValue(i18n.tr("Remove"));
-        container.add(link);
-        container.setCellWidth(link, "8%");
-
-        return container;
-    }
-
-    private String formatAddress(IAddressFull address) {
-        if (address.isNull())
-            return "";
-
-        StringBuffer addrString = new StringBuffer();
-
-        addrString.append(address.streetNumber().getStringView());
-        addrString.append(" ");
-        addrString.append(address.streetName().getStringView());
-
-        if (!address.city().isNull()) {
-            addrString.append(", ");
-            addrString.append(address.city().getStringView());
-        }
-
-        if (!address.province().isNull()) {
-            addrString.append(" ");
-            addrString.append(address.province().getStringView());
-        }
-
-        if (!address.postalCode().isNull()) {
-            addrString.append(" ");
-            addrString.append(address.postalCode().getStringView());
-        }
-
-        return addrString.toString();
     }
 
 }

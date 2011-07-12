@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 27, 2011
- * @author Dad
+ * Created on Jul 9, 2011
+ * @author dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.activity;
@@ -19,19 +19,18 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.client.ui.residents.PaymentMethodView;
+import com.propertyvista.portal.client.ui.residents.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class PaymentMethodActivity extends SecurityAwareActivity implements PaymentMethodView.Presenter {
+public class EditPaymentMethodActivity extends SecurityAwareActivity implements EditPaymentMethodView.Presenter {
 
-    private final PaymentMethodView view;
+    private final EditPaymentMethodView view;
 
-    public PaymentMethodActivity(Place place) {
-        this.view = (PaymentMethodView) PortalViewFactory.instance(PaymentMethodView.class);
+    public EditPaymentMethodActivity(Place place) {
+        this.view = (EditPaymentMethodView) PortalViewFactory.instance(EditPaymentMethodView.class);
         this.view.setPresenter(this);
-        withPlace(place);
     }
 
     @Override
@@ -40,12 +39,16 @@ public class PaymentMethodActivity extends SecurityAwareActivity implements Paym
         panel.setWidget(view);
     }
 
-    public PaymentMethodActivity withPlace(Place place) {
-        return this;
+    @Override
+    public void save(PaymentMethodDTO paymentmethod) {
+        // TODO Implement
+        //Just for presentation
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
+
     }
 
     @Override
-    public void save(PaymentMethodDTO paymentmethod) {
+    public void cancel() {
         // TODO Implement
         //Just for presentation
         AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());

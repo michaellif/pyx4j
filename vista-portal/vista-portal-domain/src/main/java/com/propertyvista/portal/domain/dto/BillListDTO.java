@@ -7,28 +7,36 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 9, 2011
+ * Created on Jul 11, 2011
  * @author dad
  * @version $Id$
  */
 package com.propertyvista.portal.domain.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-
-import com.propertyvista.portal.domain.payment.BillingAddress;
-import com.propertyvista.portal.domain.payment.CreditCardInfo;
-import com.propertyvista.portal.domain.payment.PaymentType;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 @Transient
-public interface PaymentMethodDTO extends CreditCardInfo {
-//TODO to be finalized
-    IPrimitive<PaymentType> type();
+public interface BillListDTO extends IEntity {
+    @Translatable
+    public enum SearchType {
 
-    BillingAddress billingAddress();
+        LastMonth, Last_2Months, Last_6Month, Last_12Months;
 
-    IPrimitive<String> nameOnAccount();
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
 
-    IPrimitive<Boolean> primary();
+    @NotNull
+    IPrimitive<SearchType> searchType();
+
+    IList<BillDTO> bills();
 
 }

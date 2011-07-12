@@ -26,12 +26,13 @@ import com.propertyvista.portal.client.activity.ApartmentDetailsActivity;
 import com.propertyvista.portal.client.activity.BillingHistoryActivity;
 import com.propertyvista.portal.client.activity.CreateAccountActivity;
 import com.propertyvista.portal.client.activity.CurrentBillActivity;
+import com.propertyvista.portal.client.activity.EditPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.FloorplanDetailsActivity;
 import com.propertyvista.portal.client.activity.LoginActivity;
 import com.propertyvista.portal.client.activity.LoginInvitationActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
 import com.propertyvista.portal.client.activity.MaintenanceListerActivity;
-import com.propertyvista.portal.client.activity.PaymentMethodActivity;
+import com.propertyvista.portal.client.activity.NewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
@@ -87,10 +88,12 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new CurrentBillActivity(place);
                 } else if (place instanceof PortalSiteMap.PotentialTenants) {
                     activity = new PotentialTenantActivity(place);
-                } else if (place instanceof PortalSiteMap.Residents.PaymentMethod) {
-                    activity = new PaymentMethodActivity(place);
+                } else if (place instanceof PortalSiteMap.Residents.NewPaymentMethod) {
+                    activity = new NewPaymentMethodActivity(place);
                 } else if (place instanceof PortalSiteMap.Residents.CurrentBill) {
                     activity = new CurrentBillActivity(place);
+                } else if (place instanceof PortalSiteMap.Residents.EditPaymentMethod) {
+                    activity = new EditPaymentMethodActivity(place);
                 }
 
                 callback.onSuccess(activity);

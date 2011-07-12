@@ -21,12 +21,17 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.ui.residents.CurrentBillView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.BillDTO;
+import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
+import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
+import com.propertyvista.portal.domain.util.DomainUtil;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class CurrentBillActivity extends SecurityAwareActivity implements CurrentBillView.Presenter {
     private final CurrentBillView view;
@@ -46,6 +51,14 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
         super.start(panel, eventBus);
         //TODO implement a service call
         BillDTO bill = EntityFactory.create(BillDTO.class);
+
+        PaymentMethodDTO paymentMethod = EntityFactory.create(PaymentMethodDTO.class);
+        paymentMethod.cardNumber().setValue("XXXX XXXXX XXXX 7890");
+        paymentMethod.type().setValue(PaymentType.Visa);
+
+        bill.paymentMethod().set(paymentMethod);
+        //TODO does not work for some reason
+        //  bill.preAuthorized().setValue(new Boolean(true));
 
         ChargeLine cLine = EntityFactory.create(ChargeLine.class);
         cLine.type().setValue(ChargeType.monthlyRent);
@@ -68,9 +81,29 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
         bill.charges().add(cLine4);
 
         bill.dueDate().setValue(new LogicalDate(new Date()));
+        bill.total().set(DomainUtil.createMoney(1490d));
         view.populate(bill);
 
         panel.setWidget(view);
+
+    }
+
+    @Override
+    public void changePaymentMethod() {
+        // TODO Implement
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
+
+    }
+
+    @Override
+    public void changeAuthorization(boolean authorized) {
+        // TODO Implement
+
+    }
+
+    @Override
+    public void payBill() {
+        // TODO Implement
 
     }
 }

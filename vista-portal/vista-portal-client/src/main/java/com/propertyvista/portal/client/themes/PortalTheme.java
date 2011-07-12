@@ -36,8 +36,10 @@ import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.portal.client.ui.decorations.BasicCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
+import com.propertyvista.portal.client.ui.decorations.TableFolderDecorator;
+import com.propertyvista.portal.client.ui.decorations.TableItemDecorator;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
-import com.propertyvista.portal.client.ui.residents.PaymentMethodForm;
+import com.propertyvista.portal.client.ui.residents.NewPaymentMethodForm;
 import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsViewImpl;
 import com.propertyvista.portal.client.ui.searchapt.CardPanel;
 import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsViewImpl;
@@ -63,6 +65,7 @@ public abstract class PortalTheme extends VistaTheme {
         initLogoViewStyles();
         initTopActionStyles();
         initVistaMainNavigViewStyles();
+        initTableDecorators();
         initSearchPanelStyles();
         initPropertyMapStyles();
         initRefineSearchStyles();
@@ -439,19 +442,6 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("padding", "10px");
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.SEPARATOR);
-
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SearchApartmentForm.StyleSuffix.Row));
-        style.addProperty("margin-bottom", "15px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SearchApartmentForm.StyleSuffix.RowHeader));
-        style.addProperty("margin-bottom", "5px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SearchApartmentForm.StyleSuffix.Element));
-        style.addProperty("padding-right", "10px");
         addStyle(style);
 
     }
@@ -516,6 +506,30 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("font-size", "20px");
         addStyle(style);
 
+    }
+
+    private void initTableDecorators() {
+
+        String prefix = TableFolderDecorator.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, TableFolderDecorator.StyleSuffix.Header));
+        style.addProperty("font-size", "12px");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("margin-top", "5px");
+        style.addProperty("padding-bottom", "10px");
+        style.addProperty("border-bottom", "solid 1px");
+        style.addProperty("border-color", ThemeColor.SEPARATOR);
+        addStyle(style);
+
+        prefix = TableItemDecorator.DEFAULT_STYLE_PREFIX;
+        style = new Style(Selector.valueOf(prefix));
+        style.addProperty("padding-top", "10px");
+        style.addProperty("padding-bottom", "10px");
+        style.addProperty("border-bottom", "solid 1px");
+        style.addProperty("border-color", ThemeColor.SEPARATOR);
+        addStyle(style);
     }
 
     private void initFloorplanDetailsStyles() {
@@ -683,7 +697,7 @@ public abstract class PortalTheme extends VistaTheme {
 
     private void initPaymentRadioButtonGroupStyles() {
 
-        String prefix = PaymentMethodForm.PAYMENT_BUTTONS_STYLE_PREFIX;
+        String prefix = NewPaymentMethodForm.PAYMENT_BUTTONS_STYLE_PREFIX;
 
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("margin-top", "10px");
@@ -709,15 +723,15 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("background-color", "white");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentForm));
+        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentForm));
         style.addProperty("border-radius", "5px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentImages));
+        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentImages));
         style.addProperty("margin-top", "10px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentImages) + " div");
+        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentImages) + " div");
         style.addProperty("height", "27px");
         style.addProperty("padding-top", "5px");
         style.addProperty("padding-right", "10px");
@@ -727,7 +741,7 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("border-left", "1px solid #F7F7F7");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentImages) + " div.selected");
+        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentImages) + " div.selected");
         style.addProperty("padding-top", "4px");
         style.addProperty("height", "26px");
         style.addProperty("border-top", "1px solid #bbb");
@@ -736,17 +750,17 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("background-color", "white");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentImages) + " div img");
+        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentImages) + " div img");
         style.addProperty("padding-left", "10px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentFee));
+        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentFee));
         style.addProperty("margin-top", "10px");
         style.addProperty("position", "relative");
         style.addProperty("z-index", "2");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentFee) + " div");
+        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentFee) + " div");
         style.addProperty("padding-right", "50px");
         style.addProperty("padding-top", "8px");
         style.addProperty("height", "24px");
@@ -755,7 +769,7 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("z-index", "2");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PaymentMethodForm.StyleSuffix.PaymentFee) + " div.selected");
+        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentFee) + " div.selected");
         style.addProperty("padding-top", "7px");
         style.addProperty("height", "23px");
         style.addProperty("border-top", "1px solid #bbb");
