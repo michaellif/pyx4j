@@ -29,6 +29,25 @@
         <plugins>
 
             <plugin>
+                <!-- Avoid extra warnings in build output -->
+                <artifactId>maven-clean-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>removet-generated-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals><goal>clean</goal></goals>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${project.build.directory}/generated-sources</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.axis2</groupId>
                 <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
                 <configuration>
