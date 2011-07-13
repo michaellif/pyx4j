@@ -72,10 +72,10 @@
     <profiles>
 
         <profile>
-            <id>build-env</id>
+            <id>build-selenium</id>
             <properties>
-                <seleniumJvm>/mnt/bamboo-ebs/opt/xvfb-run</seleniumJvm>
-                <seleniumJvmArgLine>--wait=10 --server-args="-screen 0 1050x1680x24" ${java.home}/bin/java</seleniumJvmArgLine>
+                <seleniumJvm>xvfb-run</seleniumJvm>
+                <seleniumJvmArgLine>--wait=10 --server-num=1 --server-args="-screen 0 1050x1680x24" ${java.home}/bin/java</seleniumJvmArgLine>
             </properties>
             <build>
                 <plugins>

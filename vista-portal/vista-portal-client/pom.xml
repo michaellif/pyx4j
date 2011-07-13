@@ -54,12 +54,12 @@
                 <exclusion><groupId>commons-io</groupId><artifactId>commons-io</artifactId></exclusion>
             </exclusions>
         </dependency>
-        
+
         <dependency>
 		    <groupId>com.google.gwt.google-apis</groupId>
 		    <artifactId>gwt-maps</artifactId>
 		</dependency>
-		
+
     </dependencies>
 
     <properties>
@@ -131,7 +131,7 @@
         </profile>
 
         <profile>
-            <id>build-env</id>
+            <id>build-full</id>
             <build>
 
                 <plugins>

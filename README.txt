@@ -35,8 +35,9 @@ maven profiles used in build:
 
 maven profiles for build server
 
-    * build-env
+    * build-full
     * build-ci (for cruisecontrol)
+    * build-selenium
     * deploy (deploy to tomcat)
     * deploy-target-www33
     * deploy-target-www44

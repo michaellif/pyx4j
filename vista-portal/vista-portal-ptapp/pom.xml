@@ -125,7 +125,7 @@
         </profile>
 
         <profile>
-            <id>build-env</id>
+            <id>build-full</id>
             <build>
 
                 <plugins>

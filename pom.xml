@@ -347,7 +347,7 @@
     <profiles>
 
         <profile>
-            <id>build-env</id>
+            <id>build-full</id>
             <properties>
                 <gwt.compiler.force>true</gwt.compiler.force>
                 <gwtCompileReport>true</gwtCompileReport>
