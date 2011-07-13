@@ -23,15 +23,15 @@
     <distributionManagement>
         <site>
             <id>test-pyx4j-site</id>
-            <url>file:///home/apache/pyx4j/snapshot/pyx/pyx-projects-parent</url>
+            <url>${scp-apache-site-snapshot-base}/pyx/pyx-projects-parent</url>
         </site>
         <repository>
             <id>pyx4j.com-file-release</id>
-            <url>file:///home/apache/pyx4j-repository/maven2-release</url>
+            <url>${scp-apache-repository-release}</url>
         </repository>
         <snapshotRepository>
             <id>pyx4j.com-file-development</id>
-            <url>file:///home/apache/pyx4j-repository/maven2-snapshot</url>
+            <url>${scp-apache-repository-snapshot}</url>
         </snapshotRepository>
     </distributionManagement>
 
