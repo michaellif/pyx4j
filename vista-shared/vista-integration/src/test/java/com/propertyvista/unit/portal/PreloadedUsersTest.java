@@ -75,7 +75,7 @@ public class PreloadedUsersTest extends PortalVerificationTestBase {
         }
 
         selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(AptUnitDTO.class).unitType()));
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, "leaseTerm_12"));
+        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, "leaseTerm_12_XX"));
         String avlDate = selenium.getText(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(AptUnitDTO.class).avalableForRent()));
         selenium.setValue(D.id(proto(UnitSelection.class).rentStart()), avlDate);
         saveAndContinue();
