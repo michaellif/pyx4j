@@ -54,15 +54,15 @@
     <distributionManagement>
         <site>
             <id>test-pyx4j-site</id>
-            <url>file:///home/apache/pyx4j/snapshot/pyx</url>
+            <url>${scp-apache-site-snapshot-base}/pyx</url>
         </site>
         <repository>
             <id>pyx4j.com-file-release</id>
-            <url>file:///home/apache/pyx4j-repository/maven2-release</url>
+            <url>${scp-apache-repository-release}</url>
         </repository>
         <snapshotRepository>
             <id>pyx4j.com-file-development</id>
-            <url>file:///home/apache/pyx4j-repository/maven2-snapshot</url>
+            <url>${scp-apache-repository-snapshot}</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -224,27 +224,9 @@
             <timezone>-5</timezone>
         </developer>
         <developer>
-            <name>Anton Kraev</name>
-            <id>antonk</id>
-            <email>amkraev@gmail.com</email>
-            <roles>
-                <role>contributor</role>
-            </roles>
-            <timezone>-5</timezone>
-        </developer>
-        <developer>
             <name>Leon Tager</name>
             <id>leont</id>
             <email>leontager@gmail.com</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>-5</timezone>
-        </developer>
-        <developer>
-            <name>Sergei Goshko</name>
-            <id>sergeig</id>
-            <email>sergeig@birchwoodsoftwaregroup.com</email>
             <roles>
                 <role>developer</role>
             </roles>
