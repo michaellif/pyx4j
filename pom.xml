@@ -35,18 +35,12 @@
         </license>
     </licenses>
 
-    <url>http://propertyvista.jira.com/builds/browse/VISTA-VISTA/latest/artifact/site/</url>
+    <url>http://jira.birchwoodsoftwaregroup.com/site/</url>
 
     <distributionManagement>
         <site>
             <id>vista-staging-site</id>
-            <!--
-                Bamboo Artifact:
-                    Artifact Label        : site
-                    Source Directory      : target/site-staging
-                    Artifact Copy Pattern : **/.*
-            -->
-            <url>file:///${user.dir}/target/site-staging</url>
+            <url>file:///data/apache/vista</url>
         </site>
         <!-- not public, no-deployment -->
         <repository>
