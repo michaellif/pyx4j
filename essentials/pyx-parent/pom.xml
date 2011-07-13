@@ -846,23 +846,30 @@
                         </configuration>
                     </execution>
 
-                    <execution>
-                        <id>clean.gwt-generated</id>
-                        <phase>clean</phase>
-                        <goals><goal>run</goal></goals>
-                        <configuration>
-                            <target>
-                                <delete quiet="true" includeemptydirs="true">
-                                    <fileset dir="${basedir}/logs"/>
-                                    <fileset dir="${basedir}/war/test"/>
-                                    <fileset dir="${basedir}/war/WEB-INF/classes"/>
-                                    <fileset dir="${basedir}/war/WEB-INF/lib"/>
-                                    <fileset dir="${basedir}/.gwt-cache"/>
-                                </delete>
-                            </target>
-                        </configuration>
-                    </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${basedir}/logs</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/.gwt-cache</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/war/test</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/war/WEB-INF/classes</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/war/WEB-INF/lib</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
             </plugin>
 
             <plugin>
