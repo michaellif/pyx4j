@@ -404,7 +404,7 @@
         <profile>
             <id>build-ci</id>
             <properties>
-                <ciSiteDirectory>/data/apache/vista</ciSiteDirectory>
+                <ciSiteDirectory>${scp-apache-site-snapshot-base}/vista</ciSiteDirectory>
             </properties>
             <build>
                 <plugins>

@@ -40,7 +40,7 @@
     <distributionManagement>
         <site>
             <id>vista-staging-site</id>
-            <url>file:///data/apache/vista</url>
+            <url>${scp-apache-site-snapshot-base}/vista</url>
         </site>
         <!-- not public, no-deployment -->
         <repository>
