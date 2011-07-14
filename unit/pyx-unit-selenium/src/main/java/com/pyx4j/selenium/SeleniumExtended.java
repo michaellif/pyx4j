@@ -121,6 +121,9 @@ public class SeleniumExtended extends WebDriverWrapper {
             }
             try {
                 if (!glassPanel.isDisplayed()) {
+                    if (second > 0) {
+                        log.debug("waited {} msec", System.currentTimeMillis() - start);
+                    }
                     return;
                 }
             } catch (Throwable ok) {
@@ -267,6 +270,9 @@ public class SeleniumExtended extends WebDriverWrapper {
             try {
                 WebElement el = driver.findElement(paramBy);
                 if (el != null) {
+                    if (second > 0) {
+                        log.debug("waited {} {} msec", paramBy, System.currentTimeMillis() - start);
+                    }
                     return el;
                 }
             } catch (Throwable ok) {
@@ -303,16 +309,23 @@ public class SeleniumExtended extends WebDriverWrapper {
 
     public void waitForText(By paramBy, String expected, int waitSeconds) {
         long start = System.currentTimeMillis();
+        boolean found = false;
         for (int second = 0;; second++) {
             if ((System.currentTimeMillis() - start) >= waitSeconds * Consts.SEC2MILLISECONDS) {
-                Assert.fail("Wait  " + paramBy + "; Timeout " + waitSeconds + " sec ...");
+                Assert.fail("Wait  " + paramBy + ";" + (found ? " for text " + expected : "") + " Timeout " + waitSeconds + " sec ...");
             }
             try {
                 WebElement el = driver.findElement(paramBy);
                 if (el != null) {
+                    if (second > 0) {
+                        log.debug("waited {} {} msec", paramBy, System.currentTimeMillis() - start);
+                    }
                     if (regExprEquals(expected, el.getText())) {
                         return;
                     }
+                    found = true;
+                } else {
+                    found = false;
                 }
             } catch (Throwable ok) {
             }
