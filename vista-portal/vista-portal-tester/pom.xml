@@ -72,37 +72,8 @@
     <properties>
         <gwtModule>tester</gwtModule>
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
+        <gwtDestinationWarFolder>${basedir}/../../vista-server/src/main/webapp</gwtDestinationWarFolder>
     </properties>
-
-    <build>
-
-        <plugins>
-
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>clean.app-gwt-generated</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <delete quiet="true" includeemptydirs="true">
-                                    <fileset dir="${basedir}/../../vista-server/src/main/webapp/${gwtModule}" />
-                                </delete>
-                                <delete quiet="true" includeemptydirs="true">
-                                    <fileset dir="${basedir}/../../vista-server/src/main/webapp/WEB-INF/deploy/${gwtModule}" />
-                                </delete>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-        </plugins>
-    </build>
 
     <profiles>
         <profile>
@@ -127,7 +98,7 @@
                             <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <webappDirectory>${basedir}/../../vista-server/src/main/webapp</webappDirectory>
+                            <webappDirectory>${gwtDestinationWarFolder}</webappDirectory>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
