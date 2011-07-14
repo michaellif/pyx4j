@@ -79,33 +79,8 @@
     <properties>
         <gwtModule>g.site</gwtModule>
         <gwtModuleCompile>${gwtModule}</gwtModuleCompile>
+        <gwtDestinationWarFolder>${basedir}/../examples-gae-server/war</gwtDestinationWarFolder>
     </properties>
-
-    <build>
-
-        <plugins>
-
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>clean.app-gwt-generated</id>
-                        <phase>clean</phase>
-                        <goals><goal>run</goal></goals>
-                        <configuration>
-                            <target>
-                                <delete quiet="true" includeemptydirs="true">
-                                    <fileset dir="${basedir}/../examples-gae-server/war/${gwtModule}"/>
-                                    <fileset dir="${basedir}/../examples-gae-server/war/WEB-INF/deploy/${gwtModule}"/>
-                                </delete>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-        </plugins>
-    </build>
 
     <profiles>
 
@@ -137,7 +112,7 @@
                             <module>${gwtModuleCompile}</module>
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <webappDirectory>${basedir}/../examples-gae-server/war</webappDirectory>
+                            <webappDirectory>${gwtDestinationWarFolder}</webappDirectory>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>

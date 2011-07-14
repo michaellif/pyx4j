@@ -184,6 +184,8 @@
         -->
         <dependency.details.enabled>false</dependency.details.enabled>
         <dependency.locations.enabled>false</dependency.locations.enabled>
+
+        <gwtDestinationWarFolder>${project.build.directory}/__/webapp</gwtDestinationWarFolder>
     </properties>
 
     <dependencyManagement>
@@ -867,6 +869,12 @@
                         </fileset>
                         <fileset>
                             <directory>${basedir}/war/WEB-INF/lib</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${gwtDestinationWarFolder}/${gwtModule}</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${gwtDestinationWarFolder}/WEB-INF/deploy/${gwtModule}</directory>
                         </fileset>
                     </filesets>
                 </configuration>
