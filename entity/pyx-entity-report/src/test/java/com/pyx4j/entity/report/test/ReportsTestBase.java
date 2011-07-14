@@ -44,6 +44,8 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.BlockJUnit4ClassRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -56,6 +58,7 @@ import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.gwt.server.IOUtils;
 
+@RunWith(BlockJUnit4ClassRunner.class)
 public abstract class ReportsTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(ReportsTestBase.class);

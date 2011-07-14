@@ -28,6 +28,7 @@ import com.google.appengine.tools.development.testing.LocalMemcacheServiceTestCo
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.apphosting.api.ApiProxy;
 
+import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
 public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment {
@@ -49,7 +50,7 @@ public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment
 
     @Override
     @Before
-    public void setupDatastore() {
+    public IEntityPersistenceService setupDatastore() {
         LocalDatastoreServiceTestConfig dsConfig = new LocalDatastoreServiceTestConfig();
 
         if (storageFileName() != null) {
@@ -62,11 +63,12 @@ public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment
             helper = new LocalServiceTestHelper(dsConfig);
         }
         helper.setUp();
+        return null;
     }
 
     @Override
     @After
-    public void teardownDatastore() {
+    public void teardownDatastore(IEntityPersistenceService srv) {
         if (storageFileName() != null) {
             LocalDatastoreServiceTestConfig.getLocalDatastoreService().stop();
         }

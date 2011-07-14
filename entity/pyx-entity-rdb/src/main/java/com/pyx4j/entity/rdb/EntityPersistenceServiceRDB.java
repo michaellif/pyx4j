@@ -45,6 +45,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.CollectionsTableModel;
 import com.pyx4j.entity.rdb.mapping.Mappings;
@@ -86,14 +87,20 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public static final boolean trace = false;
 
     public EntityPersistenceServiceRDB() {
-        try {
-            connectionProvider = new ConnectionProvider(RDBUtils.getRDBConfiguration());
-        } catch (SQLException e) {
-            log.error("RDB initialization error", e);
-            throw new RuntimeException(e.getMessage());
+        this(RDBUtils.getRDBConfiguration());
+    }
+
+    public EntityPersistenceServiceRDB(Configuration configuration) {
+        synchronized (configuration.getClass()) {
+            try {
+                connectionProvider = new ConnectionProvider(configuration);
+            } catch (SQLException e) {
+                log.error("RDB initialization error", e);
+                throw new RuntimeException(e.getMessage());
+            }
+            mappings = new Mappings(connectionProvider);
+            databaseVersion();
         }
-        mappings = new Mappings(connectionProvider);
-        databaseVersion();
     }
 
     @Override

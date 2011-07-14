@@ -23,25 +23,15 @@ package com.pyx4j.entity.rdb;
 import org.junit.After;
 import org.junit.Before;
 
-import com.pyx4j.config.server.IPersistenceConfiguration;
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.IEntityPersistenceService;
+import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 public class RDBDatastorePersistenceEnvironment extends PersistenceEnvironment {
 
-    private static Configuration configuration;
-
-    static {
-        ServerSideConfiguration.setInstance(new ServerSideConfiguration() {
-            @Override
-            public IPersistenceConfiguration getPersistenceConfiguration() {
-                return configuration;
-            }
-        });
-    }
+    private final Configuration configuration;
 
     public RDBDatastorePersistenceEnvironment(Configuration cfg) {
         configuration = cfg;
@@ -49,14 +39,17 @@ public class RDBDatastorePersistenceEnvironment extends PersistenceEnvironment {
 
     @Override
     @Before
-    public void setupDatastore() {
+    public IEntityPersistenceService setupDatastore() {
         NamespaceManager.setNamespace("-t");
+        return new EntityPersistenceServiceRDB(configuration);
     }
 
     @Override
     @After
-    public void teardownDatastore() {
-        PersistenceServicesFactory.dispose();
+    public void teardownDatastore(IEntityPersistenceService srv) {
+        if (srv instanceof IEntityPersistenceServiceExt) {
+            ((IEntityPersistenceServiceExt) srv).dispose();
+        }
         NamespaceManager.remove();
     }
 

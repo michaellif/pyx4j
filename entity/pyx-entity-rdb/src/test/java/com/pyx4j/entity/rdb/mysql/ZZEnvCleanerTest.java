@@ -30,4 +30,9 @@ public class ZZEnvCleanerTest extends EnvCleanerTestCase {
     protected PersistenceEnvironment getPersistenceEnvironment() {
         return PersistenceEnvironmentFactory.getMySQLPersistenceEnvironment();
     }
+
+    @Override
+    public void testCleanAll() {
+        //DO nothing when run in parallel
+    }
 }

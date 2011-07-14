@@ -173,6 +173,9 @@
         <gwtDisableCastChecking>false</gwtDisableCastChecking>
         <gwtDisableClassMetadata>false</gwtDisableClassMetadata>
 
+
+        <surefire.parallelThreadCount>8</surefire.parallelThreadCount>
+
         <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 
         <gaeDeployServerId>appengine.google.com-pyx</gaeDeployServerId>
@@ -609,6 +612,8 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.7.2</version>
                     <configuration>
+                        <!--parallel>classes</parallel>
+                        <threadCount>${surefire.parallelThreadCount}</threadCount-->
                         <argLine>-Djava.awt.headless=true -XX:MaxPermSize=64m -Xms64m -Xmx128m</argLine>
                     </configuration>
                 </plugin>

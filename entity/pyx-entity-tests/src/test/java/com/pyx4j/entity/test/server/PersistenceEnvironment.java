@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.test.server;
 
+import com.pyx4j.entity.server.IEntityPersistenceService;
+
 /**
  * Setup Persistence Tests environment, Required for GAE Persistence JVM test in JUnit.
  */
@@ -29,9 +31,9 @@ public abstract class PersistenceEnvironment {
         LocalJVM, GAEDevelopment, GAESandbox
     }
 
-    public abstract void setupDatastore();
+    public abstract IEntityPersistenceService setupDatastore();
 
-    public abstract void teardownDatastore();
+    public abstract void teardownDatastore(IEntityPersistenceService srv);
 
     public static EnvironmentType getEnvironmentType() {
         SecurityManager sm = System.getSecurityManager();

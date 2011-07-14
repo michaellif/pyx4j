@@ -56,16 +56,18 @@ public abstract class DatastoreTestBase extends TestCase {
         ConfigureTestsEnv.configure();
         persistenceEnvironment = getPersistenceEnvironment();
         if (persistenceEnvironment != null) {
-            persistenceEnvironment.setupDatastore();
+            srv = persistenceEnvironment.setupDatastore();
         }
-        srv = PersistenceServicesFactory.getPersistenceService();
+        if (srv == null) {
+            srv = PersistenceServicesFactory.getPersistenceService();
+        }
     }
 
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
         if (persistenceEnvironment != null) {
-            persistenceEnvironment.teardownDatastore();
+            persistenceEnvironment.teardownDatastore(srv);
         }
     }
 

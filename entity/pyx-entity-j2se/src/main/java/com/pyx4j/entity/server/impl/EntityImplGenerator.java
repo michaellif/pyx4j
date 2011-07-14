@@ -258,7 +258,7 @@ public class EntityImplGenerator {
     }
 
     @SuppressWarnings("unchecked")
-    public Class<IEntity> generateImplementation(String interfaceName) {
+    private Class<IEntity> generateImplementation(String interfaceName) {
         Class<IEntity> interfaceClass;
         try {
             interfaceClass = (Class<IEntity>) Class.forName(interfaceName, true, classLoader);
@@ -269,9 +269,15 @@ public class EntityImplGenerator {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IEntity> Class<T> generateImplementation(Class<T> interfaceClass) {
+    public synchronized <T extends IEntity> Class<T> generateImplementation(Class<T> interfaceClass) {
+        // synchronization
         try {
-            return createImplementationClass(interfaceClass).toClass();
+            return (Class<T>) Class.forName(interfaceClass.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX, true, getContextClassLoader());
+        } catch (ClassNotFoundException continueToCreationOfClass) {
+        }
+
+        try {
+            return createImplementationClass(interfaceClass).toClass(getContextClassLoader(), null);
         } catch (CannotCompileException e) {
             log.error("Impl compile error", e);
             throw new Error("Can't create class " + interfaceClass.getName());
@@ -279,7 +285,7 @@ public class EntityImplGenerator {
     }
 
     @SuppressWarnings("unchecked")
-    public CtClass createImplementation(String interfaceName) {
+    private CtClass createImplementation(String interfaceName) {
         Class<IEntity> interfaceClass;
         try {
             interfaceClass = (Class<IEntity>) Class.forName(interfaceName, true, classLoader);
@@ -289,7 +295,7 @@ public class EntityImplGenerator {
         return createImplementationClass(interfaceClass);
     }
 
-    public <T extends IEntity> CtClass createImplementationClass(Class<T> interfaceClass) {
+    private <T extends IEntity> CtClass createImplementationClass(Class<T> interfaceClass) {
         //        if (interfaceClass.getAnnotation(AbstractEntity.class) != null) {
         //            throw new Error(interfaceClass.getName() + " is AbstractEntity");
         //        }
