@@ -49,6 +49,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -67,6 +68,7 @@ import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.crud.FilterData.Operands;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -206,6 +208,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                     presenter.editNew(itemOpenPlaceClass, null);
                 }
             });
+            btnNewItem.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Button, NavigationIDs.ItemDescriptionIDs.Add_New_Item).toString());
         }
     }
 
