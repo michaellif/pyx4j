@@ -43,7 +43,7 @@ public class ExecuteFrameworkUnitTest extends UnitTestExecutionTestBase {
     }
 
     public void testUnitTests() throws Exception {
-        executeAllClientUnitTests(180);
+        executeAllClientUnitTests(260);
 
         ExecutionStatus status = getExecutionStatus();
 
