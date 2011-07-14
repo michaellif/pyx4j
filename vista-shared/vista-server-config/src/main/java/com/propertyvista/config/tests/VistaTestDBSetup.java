@@ -17,12 +17,12 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 
 public class VistaTestDBSetup {
 
-    private static boolean initOnce = true;
+    private static ServerSideConfiguration initOnce = null;
 
-    public static void init() {
-        if (initOnce) {
-            ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(false));
-            initOnce = false;
+    public static synchronized void init() {
+        if (initOnce == null) {
+            initOnce = new VistaTestsServerSideConfiguration(false);
+            ServerSideConfiguration.setInstance(initOnce);
         }
 
     }
