@@ -33,6 +33,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.SQLUtils;
@@ -53,6 +54,8 @@ public class Mappings {
     private final Set<String> sequences;
 
     private static final Map<Class<? extends IEntity>, Object> entityLocks = new Hashtable<Class<? extends IEntity>, Object>();
+
+    public static final boolean traceInit = false;
 
     public Mappings(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
@@ -84,8 +87,16 @@ public class Mappings {
             }
         }
 
+        if (traceInit) {
+            log.trace(Trace.enter() + "ensureTable {}", entityMeta.getPersistenceName());
+        }
+
         try {
             synchronized (lock) {
+                if (traceInit) {
+                    log.trace(Trace.id() + "ensureTable {} obtained lock", entityMeta.getPersistenceName());
+                }
+
                 // Got the lock, see if model already created
                 model = tables.get(entityMeta.getEntityClass());
                 if (model == null) {
@@ -114,6 +125,11 @@ public class Mappings {
         } finally {
             entityLocks.remove(entityMeta.getEntityClass());
         }
+
+        if (traceInit) {
+            log.trace(Trace.returns() + "ensureTable {}", entityMeta.getPersistenceName());
+        }
+
         return model;
     }
 

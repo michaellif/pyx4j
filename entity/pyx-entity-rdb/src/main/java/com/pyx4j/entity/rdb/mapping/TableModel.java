@@ -95,9 +95,15 @@ public class TableModel {
 
     public void ensureExists(Connection connection, Dialect dialect) throws SQLException {
         {
+            if (Mappings.traceInit) {
+                log.trace(Trace.id() + "getTableMetadata {}", tableName);
+            }
             TableMetadata tableMetadata = TableMetadata.getTableMetadata(connection, tableName);
             if (tableMetadata == null) {
                 SQLUtils.execute(connection, TableDDL.sqlCreate(dialect, this));
+                if (Mappings.traceInit) {
+                    log.trace(Trace.id() + "table created {}", tableName);
+                }
             } else {
                 SQLUtils.execute(connection, TableDDL.validateAndAlter(dialect, tableMetadata, this));
             }
@@ -744,6 +750,7 @@ public class TableModel {
                         entity.setPrimaryKey(new Key(keys.getLong(1)));
                     }
                 } catch (SQLException e) {
+                    log.error("{} SQL {}", tableName, sqlInsert);
                     log.error("{} SQL PrimaryKey retrieval error", tableName, e);
                     throw new RuntimeException(e);
                 } finally {
@@ -754,6 +761,7 @@ public class TableModel {
             return true; //good, we reached this without exceptions
 
         } catch (SQLException e) {
+            log.error("{} SQL {}", tableName, sqlInsert);
             log.error("{} SQL Batch Insert error", tableName, e);
             throw new RuntimeException(e);
         } finally {
