@@ -157,7 +157,10 @@ public class MemberMetaImpl implements MemberMeta {
         persistenceTransient = (method.getAnnotation(Transient.class) != null);
         rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
         Owned aOwned = method.getAnnotation(Owned.class);
-        boolean hasEmbedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
+        boolean hasEmbedded = (method.getAnnotation(EmbeddedEntity.class) != null);
+        if ((!hasEmbedded) && (objectClassType != ObjectClassType.Primitive) && (objectClassType != ObjectClassType.PrimitiveSet)) {
+            hasEmbedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null);
+        }
         if (hasEmbedded) {
             embedded = true;
         } else if (aOwned != null) {

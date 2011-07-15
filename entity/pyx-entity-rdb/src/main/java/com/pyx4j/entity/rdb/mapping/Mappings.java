@@ -52,6 +52,8 @@ public class Mappings {
 
     private final Set<String> sequences;
 
+    private static final Map<Class<? extends IEntity>, Object> entityLocks = new Hashtable<Class<? extends IEntity>, Object>();
+
     public Mappings(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
 
@@ -67,32 +69,52 @@ public class Mappings {
         if (entityMeta.isTransient()) {
             throw new Error("Can't operate on Transient Entity");
         }
-        synchronized (entityMeta.getEntityClass()) {
-            TableModel model = tables.get(entityMeta.getEntityClass());
-            if (model == null) {
-                model = new TableModel(dialect, entityMeta);
-                if (usedTableNames.contains(model.getTableName().toLowerCase(Locale.ENGLISH))) {
-                    log.warn("redefining/extending table {} for class {}", model.getTableName(), entityMeta.getEntityClass());
-                }
-                try {
-                    model.ensureExists(connection, dialect);
-                } catch (SQLException e) {
-                    log.error("table creation error", e);
-                    throw new RuntimeException(e);
-                }
-                if (dialect.isSequencesBaseIdentity()) {
-                    if (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
-                        ensureSequence(dialect, dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName()));
-                    }
-                    for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
-                        ensureSequence(dialect, member.getSqlSequenceName());
-                    }
-                }
-                tables.put(entityMeta.getEntityClass(), model);
-                usedTableNames.add(model.getTableName().toLowerCase(Locale.ENGLISH));
-            }
+        TableModel model = tables.get(entityMeta.getEntityClass());
+        if (model != null) {
             return model;
         }
+
+        // Avoid lock on EntityClass
+        Object lock;
+        synchronized (entityLocks) {
+            lock = entityLocks.get(entityMeta.getEntityClass());
+            if (lock == null) {
+                lock = new Object();
+                entityLocks.put(entityMeta.getEntityClass(), lock);
+            }
+        }
+
+        try {
+            synchronized (lock) {
+                // Got the lock, see if model already created
+                model = tables.get(entityMeta.getEntityClass());
+                if (model == null) {
+                    model = new TableModel(dialect, entityMeta);
+                    if (usedTableNames.contains(model.getTableName().toLowerCase(Locale.ENGLISH))) {
+                        log.warn("redefining/extending table {} for class {}", model.getTableName(), entityMeta.getEntityClass());
+                    }
+                    try {
+                        model.ensureExists(connection, dialect);
+                    } catch (SQLException e) {
+                        log.error("table creation error", e);
+                        throw new RuntimeException(e);
+                    }
+                    if (dialect.isSequencesBaseIdentity()) {
+                        if (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
+                            ensureSequence(dialect, dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName()));
+                        }
+                        for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
+                            ensureSequence(dialect, member.getSqlSequenceName());
+                        }
+                    }
+                    tables.put(entityMeta.getEntityClass(), model);
+                    usedTableNames.add(model.getTableName().toLowerCase(Locale.ENGLISH));
+                }
+            }
+        } finally {
+            entityLocks.remove(entityMeta.getEntityClass());
+        }
+        return model;
     }
 
     private void ensureSequence(Dialect dialect, String sequenceName) {

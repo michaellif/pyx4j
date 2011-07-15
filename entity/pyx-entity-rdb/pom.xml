@@ -121,6 +121,39 @@
     </build>
 
     <profiles>
+
+        <profile>
+            <id>test-generated</id>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <id>IEntity-generate-4tests</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <classpathScope>test</classpathScope>
+                                    <mainClass>com.pyx4j.entity.server.impl.EntityImplGenerator</mainClass>
+                                    <includePluginDependencies>true</includePluginDependencies>
+                                    <arguments>
+                                        <argument>${project.build.directory}/test-classes</argument>
+                                   </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
         <!-- Hack: have the 2nd profile's excludes override the 1st -->
         <profile>
             <id>pyx4j-no-mysql-tests</id>
