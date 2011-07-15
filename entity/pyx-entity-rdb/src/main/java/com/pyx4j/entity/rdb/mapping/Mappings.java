@@ -78,52 +78,50 @@ public class Mappings {
         }
 
         // Avoid lock on EntityClass
-        Object lock;
+        Object entityTypeLock;
         synchronized (entityLocks) {
-            lock = entityLocks.get(entityMeta.getEntityClass());
-            if (lock == null) {
-                lock = new Object();
-                entityLocks.put(entityMeta.getEntityClass(), lock);
+            entityTypeLock = entityLocks.get(entityMeta.getEntityClass());
+            if (entityTypeLock == null) {
+                entityTypeLock = new Object();
+                entityLocks.put(entityMeta.getEntityClass(), entityTypeLock);
             }
         }
 
         if (traceInit) {
-            log.trace(Trace.enter() + "ensureTable {}", entityMeta.getPersistenceName());
+            log.trace(Trace.enter() + "ensureTable {} lock {}", entityMeta.getPersistenceName(), System.identityHashCode(entityTypeLock));
         }
 
-        try {
-            synchronized (lock) {
-                if (traceInit) {
-                    log.trace(Trace.id() + "ensureTable {} obtained lock", entityMeta.getPersistenceName());
-                }
-
-                // Got the lock, see if model already created
-                model = tables.get(entityMeta.getEntityClass());
-                if (model == null) {
-                    model = new TableModel(dialect, entityMeta);
-                    if (usedTableNames.contains(model.getTableName().toLowerCase(Locale.ENGLISH))) {
-                        log.warn("redefining/extending table {} for class {}", model.getTableName(), entityMeta.getEntityClass());
-                    }
-                    try {
-                        model.ensureExists(connection, dialect);
-                    } catch (SQLException e) {
-                        log.error("table creation error", e);
-                        throw new RuntimeException(e);
-                    }
-                    if (dialect.isSequencesBaseIdentity()) {
-                        if (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
-                            ensureSequence(dialect, dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName()));
-                        }
-                        for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
-                            ensureSequence(dialect, member.getSqlSequenceName());
-                        }
-                    }
-                    tables.put(entityMeta.getEntityClass(), model);
-                    usedTableNames.add(model.getTableName().toLowerCase(Locale.ENGLISH));
-                }
+        synchronized (entityTypeLock) {
+            if (traceInit) {
+                log.trace(Trace.id() + "ensureTable {} obtained lock {}", entityMeta.getPersistenceName(), System.identityHashCode(entityTypeLock));
             }
-        } finally {
-            entityLocks.remove(entityMeta.getEntityClass());
+
+            // Got the lock, see if model already created
+            model = tables.get(entityMeta.getEntityClass());
+            if (model == null) {
+                model = new TableModel(dialect, entityMeta);
+                if (usedTableNames.contains(model.getTableName().toLowerCase(Locale.ENGLISH))) {
+                    log.warn("redefining/extending table {} for class {}", model.getTableName(), entityMeta.getEntityClass());
+                }
+                try {
+                    model.ensureExists(connection, dialect);
+                } catch (SQLException e) {
+                    log.error("table creation error", e);
+                    throw new RuntimeException(e);
+                }
+                if (dialect.isSequencesBaseIdentity()) {
+                    if (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
+                        ensureSequence(dialect, dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName()));
+                    }
+                    for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
+                        ensureSequence(dialect, member.getSqlSequenceName());
+                    }
+                }
+                tables.put(entityMeta.getEntityClass(), model);
+                usedTableNames.add(model.getTableName().toLowerCase(Locale.ENGLISH));
+            } else if (traceInit) {
+                log.trace(Trace.id() + "ensureTable {} TableModel alredy created", entityMeta.getPersistenceName());
+            }
         }
 
         if (traceInit) {
