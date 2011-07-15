@@ -18,7 +18,6 @@ import java.io.IOException;
 import junit.framework.Assert;
 
 import org.junit.After;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -43,8 +42,7 @@ import com.propertyvista.portal.server.ptapp.services.SummaryServiceImpl;
 
 public class SummaryReportTest extends ReportsTestBase {
 
-    @BeforeClass
-    public static void init() throws Exception {
+    public void init() throws Exception {
         if (!ServerSideConfiguration.isStartedUnderEclipse()) {
             //TODO I disabled test for now
             return;
@@ -103,6 +101,8 @@ public class SummaryReportTest extends ReportsTestBase {
 
     @Test
     public void testStaticText() throws Exception {
+        init();
+
         if (!ServerSideConfiguration.isStartedUnderEclipse()) {
             //TODO I disabled test for now
             return;
