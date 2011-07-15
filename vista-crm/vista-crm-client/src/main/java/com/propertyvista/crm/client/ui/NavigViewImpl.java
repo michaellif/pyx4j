@@ -36,6 +36,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
@@ -318,6 +320,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                 }
 
                 Label label = new Label(folder.getTitle());
+                label.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Folder, folder.getTitle()).toString());
                 add(label);
                 setCellVerticalAlignment(label, HasVerticalAlignment.ALIGN_MIDDLE);
                 setCellWidth(label, "100%");
@@ -357,6 +360,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                     presenter.navigTo(place);
                 }
             });
+            anchor.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Item, presenter.getNavigLabel(place)).toString());
             setWidget(anchor);
         }
 
