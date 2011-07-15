@@ -25,15 +25,17 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.report.JasperReportModel;
 
 public class StaticReportTest extends ReportsTestBase {
 
-    @BeforeClass
-    public static void init() throws Exception {
+    private static final Logger log = LoggerFactory.getLogger(StaticReportTest.class);
+
+    public void init() throws Exception {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("ReportTitle", "Static Report");
 
@@ -42,7 +44,17 @@ public class StaticReportTest extends ReportsTestBase {
 
     @Test
     public void testStaticText() throws Exception {
-        Assert.assertTrue("'Static Text' not found, ", containsText("Static text"));
+        init();
+
+        boolean ok = false;
+        try {
+            Assert.assertTrue("'Static Text' not found, ", containsText("Static text"));
+            ok = true;
+        } finally {
+            if (!ok) {
+                log.debug("avalable textItems {}", textItems);
+            }
+        }
     }
 
 }

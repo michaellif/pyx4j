@@ -44,8 +44,6 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.BlockJUnit4ClassRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -58,16 +56,15 @@ import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.gwt.server.IOUtils;
 
-@RunWith(BlockJUnit4ClassRunner.class)
 public abstract class ReportsTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(ReportsTestBase.class);
 
-    private static XPath xPath;
+    private XPath xPath;
 
-    private static Document document;
+    private Document document;
 
-    private static ArrayList<String> textItems = new ArrayList<String>();
+    protected ArrayList<String> textItems = new ArrayList<String>();
 
     protected static String debugFileName(String designName, String ext) {
         File dir = new File("target", "reports-dump");
@@ -87,7 +84,7 @@ public abstract class ReportsTestBase {
     }
 
     @Deprecated
-    protected static void createReport(String designName, Map<String, String> parameters, JRDataSource dataSource) throws Exception {
+    protected void createReport(String designName, Map<String, String> parameters, JRDataSource dataSource) throws Exception {
         ByteArrayOutputStream bos = null;
         try {
             JasperReport jasperReport = JasperReportFactory.create(designName);
@@ -116,7 +113,7 @@ public abstract class ReportsTestBase {
         }
     }
 
-    protected static void createReport(JasperReportModel model) throws Exception {
+    protected void createReport(JasperReportModel model) throws Exception {
         ByteArrayOutputStream bos = null;
         FileOutputStream pdf = null;
         try {
@@ -146,15 +143,15 @@ public abstract class ReportsTestBase {
         }
     }
 
-    protected static boolean containsText(String expression) {
+    protected boolean containsText(String expression) {
         return textItems.contains(expression);
     }
 
-    protected static NodeList evaluate(String expression) throws XPathExpressionException {
+    protected NodeList evaluate(String expression) throws XPathExpressionException {
         return (NodeList) xPath.evaluate(expression, document, XPathConstants.NODESET);
     }
 
-    private static Document parseXML(byte[] xml) throws SAXException, IOException, ParserConfigurationException {
+    private Document parseXML(byte[] xml) throws SAXException, IOException, ParserConfigurationException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setValidating(false);
         dbf.setNamespaceAware(true);

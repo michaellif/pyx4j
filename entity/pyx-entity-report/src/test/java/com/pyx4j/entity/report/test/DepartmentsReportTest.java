@@ -27,7 +27,6 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.pyx4j.entity.report.JasperReportModel;
@@ -41,28 +40,26 @@ public class DepartmentsReportTest extends ReportsTestBase {
 
     private static final String department2 = "Department2";
 
-    @BeforeClass
-    public static void init() throws Exception {
+    public void init() throws Exception {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("ReportTitle", "Departments Report");
 
         createReport(new JasperReportModel("reports.Departments", createDepartments(), parameters));
     }
 
-    private static Employee createEmploye() {
-        Employee employee = EntityFactory.create(Employee.class);
-        return employee;
-    }
-
     @Test
     public void testStaticText() throws Exception {
-        Assert.assertTrue("'Departments Report' not found, ", containsText("Departments Report"));
-    }
+        init();
 
-    @Test
-    public void testDynamicText() throws Exception {
+        Assert.assertTrue("'Departments Report' not found, ", containsText("Departments Report"));
+
         Assert.assertTrue("'" + department1 + "' not found, ", containsText(department1));
         Assert.assertTrue("'" + department2 + "' not found, ", containsText(department2));
+    }
+
+    static Employee createEmploye() {
+        Employee employee = EntityFactory.create(Employee.class);
+        return employee;
     }
 
     static List<Department> createDepartments() {
