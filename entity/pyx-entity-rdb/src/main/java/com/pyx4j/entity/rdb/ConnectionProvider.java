@@ -56,11 +56,13 @@ public class ConnectionProvider {
         setupDataSource(cfg);
     }
 
-    private synchronized void setupDataSource(Configuration cfg) throws SQLException {
-        try {
-            Class.forName(cfg.driverClass());
-        } catch (ClassNotFoundException e) {
-            throw new SQLException("JDBC driver " + cfg.driverClass() + " not found");
+    private void setupDataSource(Configuration cfg) throws SQLException {
+        synchronized (java.sql.DriverManager.class) {
+            try {
+                Class.forName(cfg.driverClass());
+            } catch (ClassNotFoundException e) {
+                throw new SQLException("JDBC driver " + cfg.driverClass() + " not found");
+            }
         }
 
         // connection pool
@@ -98,6 +100,7 @@ public class ConnectionProvider {
         default:
             throw new Error("Unsupported driver Dialect " + cfg.driverClass());
         }
+
     }
 
     public void dispose() {
